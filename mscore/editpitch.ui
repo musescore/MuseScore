@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>760</width>
-    <height>425</height>
+    <width>735</width>
+    <height>446</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,7 +35,7 @@
       <bool>false</bool>
      </property>
      <property name="rowCount">
-      <number>10</number>
+      <number>11</number>
      </property>
      <property name="columnCount">
       <number>13</number>
@@ -49,6 +49,11 @@
      <attribute name="verticalHeaderDefaultSectionSize">
       <number>32</number>
      </attribute>
+     <row>
+      <property name="text">
+       <string>Octave 9</string>
+      </property>
+     </row>
      <row>
       <property name="text">
        <string>Octave 8</string>
@@ -166,117 +171,72 @@
      </column>
      <item row="0" column="0">
       <property name="text">
-       <string>C 8</string>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEnabled</set>
+       <string>C 9</string>
       </property>
      </item>
      <item row="0" column="1">
       <property name="text">
-       <string>C♯ 8</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEnabled</set>
+       <string>C♯ 9</string>
       </property>
      </item>
      <item row="0" column="2">
       <property name="text">
-       <string>D 8</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEnabled</set>
+       <string>D 9</string>
       </property>
      </item>
      <item row="0" column="3">
       <property name="text">
-       <string>E♭ 8</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEnabled</set>
+       <string>E♭ 9</string>
       </property>
      </item>
      <item row="0" column="4">
       <property name="text">
-       <string>E 8</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEnabled</set>
+       <string>E 9</string>
       </property>
      </item>
      <item row="0" column="5">
       <property name="text">
-       <string>F 8</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEnabled</set>
+       <string>F 9</string>
       </property>
      </item>
      <item row="0" column="6">
       <property name="text">
-       <string>F♯ 8</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEnabled</set>
+       <string>F♯ 9</string>
       </property>
      </item>
      <item row="0" column="7">
       <property name="text">
-       <string>G 8</string>
-      </property>
-      <property name="flags">
-       <set>ItemIsSelectable|ItemIsEnabled</set>
+       <string>G 9</string>
       </property>
      </item>
      <item row="0" column="8">
-      <property name="text">
-       <string>A♭ 8</string>
-      </property>
       <property name="flags">
-       <set>ItemIsSelectable|ItemIsEnabled</set>
+       <set>NoItemFlags</set>
       </property>
      </item>
      <item row="0" column="9">
-      <property name="text">
-       <string>A 8</string>
-      </property>
       <property name="flags">
-       <set>ItemIsSelectable|ItemIsEnabled</set>
+       <set>NoItemFlags</set>
       </property>
      </item>
      <item row="0" column="10">
-      <property name="text">
-       <string>B♭ 8</string>
-      </property>
       <property name="flags">
-       <set>ItemIsSelectable|ItemIsEnabled</set>
+       <set>NoItemFlags</set>
       </property>
      </item>
      <item row="0" column="11">
-      <property name="text">
-       <string>B 8</string>
-      </property>
       <property name="flags">
-       <set>ItemIsSelectable|ItemIsEnabled</set>
+       <set>NoItemFlags</set>
       </property>
      </item>
      <item row="0" column="12">
-      <property name="text">
-       <string/>
-      </property>
       <property name="flags">
        <set>NoItemFlags</set>
       </property>
      </item>
      <item row="1" column="0">
       <property name="text">
-       <string>C 7</string>
+       <string>C 8</string>
       </property>
       <property name="font">
        <font>
@@ -290,7 +250,7 @@
      </item>
      <item row="1" column="1">
       <property name="text">
-       <string>C♯ 7</string>
+       <string>C♯ 8</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -298,7 +258,7 @@
      </item>
      <item row="1" column="2">
       <property name="text">
-       <string>D 7</string>
+       <string>D 8</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -306,7 +266,7 @@
      </item>
      <item row="1" column="3">
       <property name="text">
-       <string>E♭ 7</string>
+       <string>E♭ 8</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -314,7 +274,7 @@
      </item>
      <item row="1" column="4">
       <property name="text">
-       <string>E 7</string>
+       <string>E 8</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -322,7 +282,7 @@
      </item>
      <item row="1" column="5">
       <property name="text">
-       <string>F 7</string>
+       <string>F 8</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -330,7 +290,7 @@
      </item>
      <item row="1" column="6">
       <property name="text">
-       <string>F♯ 7</string>
+       <string>F♯ 8</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -338,7 +298,7 @@
      </item>
      <item row="1" column="7">
       <property name="text">
-       <string>G 7</string>
+       <string>G 8</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -346,7 +306,7 @@
      </item>
      <item row="1" column="8">
       <property name="text">
-       <string>A♭ 7</string>
+       <string>A♭ 8</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -354,7 +314,7 @@
      </item>
      <item row="1" column="9">
       <property name="text">
-       <string>A 7</string>
+       <string>A 8</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -362,7 +322,7 @@
      </item>
      <item row="1" column="10">
       <property name="text">
-       <string>B♭ 7</string>
+       <string>B♭ 8</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -370,7 +330,7 @@
      </item>
      <item row="1" column="11">
       <property name="text">
-       <string>B 7</string>
+       <string>B 8</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -378,7 +338,7 @@
      </item>
      <item row="1" column="12">
       <property name="text">
-       <string>C 8</string>
+       <string>C 9</string>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -386,7 +346,7 @@
      </item>
      <item row="2" column="0">
       <property name="text">
-       <string>C 6</string>
+       <string>C 7</string>
       </property>
       <property name="font">
        <font>
@@ -400,7 +360,7 @@
      </item>
      <item row="2" column="1">
       <property name="text">
-       <string>C♯ 6</string>
+       <string>C♯ 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -408,7 +368,7 @@
      </item>
      <item row="2" column="2">
       <property name="text">
-       <string>D 6</string>
+       <string>D 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -416,7 +376,7 @@
      </item>
      <item row="2" column="3">
       <property name="text">
-       <string>E♭ 6</string>
+       <string>E♭ 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -424,7 +384,7 @@
      </item>
      <item row="2" column="4">
       <property name="text">
-       <string>E 6</string>
+       <string>E 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -432,7 +392,7 @@
      </item>
      <item row="2" column="5">
       <property name="text">
-       <string>F 6</string>
+       <string>F 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -440,7 +400,7 @@
      </item>
      <item row="2" column="6">
       <property name="text">
-       <string>F♯ 6</string>
+       <string>F♯ 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -448,7 +408,7 @@
      </item>
      <item row="2" column="7">
       <property name="text">
-       <string>G 6</string>
+       <string>G 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -456,7 +416,7 @@
      </item>
      <item row="2" column="8">
       <property name="text">
-       <string>A♭ 6</string>
+       <string>A♭ 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -464,7 +424,7 @@
      </item>
      <item row="2" column="9">
       <property name="text">
-       <string>A 6</string>
+       <string>A 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -472,7 +432,7 @@
      </item>
      <item row="2" column="10">
       <property name="text">
-       <string>B♭ 6</string>
+       <string>B♭ 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -480,7 +440,7 @@
      </item>
      <item row="2" column="11">
       <property name="text">
-       <string>B 6</string>
+       <string>B 7</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -488,7 +448,7 @@
      </item>
      <item row="2" column="12">
       <property name="text">
-       <string>C 7</string>
+       <string>C 8</string>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -496,7 +456,7 @@
      </item>
      <item row="3" column="0">
       <property name="text">
-       <string>C 5</string>
+       <string>C 6</string>
       </property>
       <property name="font">
        <font>
@@ -510,7 +470,7 @@
      </item>
      <item row="3" column="1">
       <property name="text">
-       <string>C♯ 5</string>
+       <string>C♯ 6</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -518,7 +478,7 @@
      </item>
      <item row="3" column="2">
       <property name="text">
-       <string>D 5</string>
+       <string>D 6</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -526,7 +486,7 @@
      </item>
      <item row="3" column="3">
       <property name="text">
-       <string>E♭ 5</string>
+       <string>E♭ 6</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -534,7 +494,7 @@
      </item>
      <item row="3" column="4">
       <property name="text">
-       <string>E 5</string>
+       <string>E 6</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -542,7 +502,7 @@
      </item>
      <item row="3" column="5">
       <property name="text">
-       <string>F 5</string>
+       <string>F 6</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -550,7 +510,7 @@
      </item>
      <item row="3" column="6">
       <property name="text">
-       <string>F♯ 5</string>
+       <string>F♯ 6</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -558,7 +518,7 @@
      </item>
      <item row="3" column="7">
       <property name="text">
-       <string>G 5</string>
+       <string>G 6</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -566,7 +526,7 @@
      </item>
      <item row="3" column="8">
       <property name="text">
-       <string>A♭ 5</string>
+       <string>A♭ 6</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -574,7 +534,7 @@
      </item>
      <item row="3" column="9">
       <property name="text">
-       <string>A 5</string>
+       <string>A 6</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -582,7 +542,7 @@
      </item>
      <item row="3" column="10">
       <property name="text">
-       <string>B♭ 5</string>
+       <string>B♭ 6</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -590,7 +550,7 @@
      </item>
      <item row="3" column="11">
       <property name="text">
-       <string>B 5</string>
+       <string>B 6</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -598,7 +558,7 @@
      </item>
      <item row="3" column="12">
       <property name="text">
-       <string>C 6</string>
+       <string>C 7</string>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -606,7 +566,7 @@
      </item>
      <item row="4" column="0">
       <property name="text">
-       <string>C 4</string>
+       <string>C 5</string>
       </property>
       <property name="font">
        <font>
@@ -620,7 +580,7 @@
      </item>
      <item row="4" column="1">
       <property name="text">
-       <string>C♯ 4</string>
+       <string>C♯ 5</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -628,7 +588,7 @@
      </item>
      <item row="4" column="2">
       <property name="text">
-       <string>D 4</string>
+       <string>D 5</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -636,7 +596,7 @@
      </item>
      <item row="4" column="3">
       <property name="text">
-       <string>E♭ 4</string>
+       <string>E♭ 5</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -644,7 +604,7 @@
      </item>
      <item row="4" column="4">
       <property name="text">
-       <string>E 4</string>
+       <string>E 5</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -652,7 +612,7 @@
      </item>
      <item row="4" column="5">
       <property name="text">
-       <string>F 4</string>
+       <string>F 5</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -660,7 +620,7 @@
      </item>
      <item row="4" column="6">
       <property name="text">
-       <string>F♯ 4</string>
+       <string>F♯ 5</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -668,11 +628,7 @@
      </item>
      <item row="4" column="7">
       <property name="text">
-       <string>G 4</string>
-      </property>
-      <property name="icon">
-       <iconset resource="musescore.qrc">
-        <normaloff>:/data/icons/clef.svg</normaloff>:/data/icons/clef.svg</iconset>
+       <string>G 5</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -680,7 +636,7 @@
      </item>
      <item row="4" column="8">
       <property name="text">
-       <string>A♭ 4</string>
+       <string>A♭ 5</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -688,7 +644,7 @@
      </item>
      <item row="4" column="9">
       <property name="text">
-       <string>A 4</string>
+       <string>A 5</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -696,7 +652,7 @@
      </item>
      <item row="4" column="10">
       <property name="text">
-       <string>B♭ 4</string>
+       <string>B♭ 5</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -704,7 +660,7 @@
      </item>
      <item row="4" column="11">
       <property name="text">
-       <string>B 4</string>
+       <string>B 5</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -712,7 +668,7 @@
      </item>
      <item row="4" column="12">
       <property name="text">
-       <string>C 5</string>
+       <string>C 6</string>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -720,7 +676,7 @@
      </item>
      <item row="5" column="0">
       <property name="text">
-       <string>C 3</string>
+       <string>C 4</string>
       </property>
       <property name="font">
        <font>
@@ -734,7 +690,7 @@
      </item>
      <item row="5" column="1">
       <property name="text">
-       <string>C♯ 3</string>
+       <string>C♯ 4</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -742,7 +698,7 @@
      </item>
      <item row="5" column="2">
       <property name="text">
-       <string>D 3</string>
+       <string>D 4</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -750,7 +706,7 @@
      </item>
      <item row="5" column="3">
       <property name="text">
-       <string>E♭ 3</string>
+       <string>E♭ 4</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -758,7 +714,7 @@
      </item>
      <item row="5" column="4">
       <property name="text">
-       <string>E 3</string>
+       <string>E 4</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -766,11 +722,7 @@
      </item>
      <item row="5" column="5">
       <property name="text">
-       <string>F 3</string>
-      </property>
-      <property name="icon">
-       <iconset resource="musescore.qrc">
-        <normaloff>:/data/icons/clef-bass.svg</normaloff>:/data/icons/clef-bass.svg</iconset>
+       <string>F 4</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -778,7 +730,7 @@
      </item>
      <item row="5" column="6">
       <property name="text">
-       <string>F♯ 3</string>
+       <string>F♯ 4</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -786,7 +738,11 @@
      </item>
      <item row="5" column="7">
       <property name="text">
-       <string>G 3</string>
+       <string>G 4</string>
+      </property>
+      <property name="icon">
+       <iconset resource="musescore.qrc">
+        <normaloff>:/data/icons/clef.svg</normaloff>:/data/icons/clef.svg</iconset>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -794,7 +750,7 @@
      </item>
      <item row="5" column="8">
       <property name="text">
-       <string>A♭ 3</string>
+       <string>A♭ 4</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -802,7 +758,7 @@
      </item>
      <item row="5" column="9">
       <property name="text">
-       <string>A 3</string>
+       <string>A 4</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -810,7 +766,7 @@
      </item>
      <item row="5" column="10">
       <property name="text">
-       <string>B♭ 3</string>
+       <string>B♭ 4</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -818,7 +774,7 @@
      </item>
      <item row="5" column="11">
       <property name="text">
-       <string>B 3</string>
+       <string>B 4</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -826,7 +782,7 @@
      </item>
      <item row="5" column="12">
       <property name="text">
-       <string>C 4</string>
+       <string>C 5</string>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -834,7 +790,7 @@
      </item>
      <item row="6" column="0">
       <property name="text">
-       <string>C 2</string>
+       <string>C 3</string>
       </property>
       <property name="font">
        <font>
@@ -848,7 +804,7 @@
      </item>
      <item row="6" column="1">
       <property name="text">
-       <string>C♯ 2</string>
+       <string>C♯ 3</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -856,7 +812,7 @@
      </item>
      <item row="6" column="2">
       <property name="text">
-       <string>D 2</string>
+       <string>D 3</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -864,7 +820,7 @@
      </item>
      <item row="6" column="3">
       <property name="text">
-       <string>E♭ 2</string>
+       <string>E♭ 3</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -872,7 +828,7 @@
      </item>
      <item row="6" column="4">
       <property name="text">
-       <string>E 2</string>
+       <string>E 3</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -880,7 +836,11 @@
      </item>
      <item row="6" column="5">
       <property name="text">
-       <string>F 2</string>
+       <string>F 3</string>
+      </property>
+      <property name="icon">
+       <iconset resource="musescore.qrc">
+        <normaloff>:/data/icons/clef-bass.svg</normaloff>:/data/icons/clef-bass.svg</iconset>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -888,7 +848,7 @@
      </item>
      <item row="6" column="6">
       <property name="text">
-       <string>F♯ 2</string>
+       <string>F♯ 3</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -896,7 +856,7 @@
      </item>
      <item row="6" column="7">
       <property name="text">
-       <string>G 2</string>
+       <string>G 3</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -904,7 +864,7 @@
      </item>
      <item row="6" column="8">
       <property name="text">
-       <string>A♭ 2</string>
+       <string>A♭ 3</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -912,7 +872,7 @@
      </item>
      <item row="6" column="9">
       <property name="text">
-       <string>A 2</string>
+       <string>A 3</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -920,7 +880,7 @@
      </item>
      <item row="6" column="10">
       <property name="text">
-       <string>B♭ 2</string>
+       <string>B♭ 3</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -928,7 +888,7 @@
      </item>
      <item row="6" column="11">
       <property name="text">
-       <string>B 2</string>
+       <string>B 3</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -936,7 +896,7 @@
      </item>
      <item row="6" column="12">
       <property name="text">
-       <string>C 3</string>
+       <string>C 4</string>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -944,7 +904,7 @@
      </item>
      <item row="7" column="0">
       <property name="text">
-       <string>C 1</string>
+       <string>C 2</string>
       </property>
       <property name="font">
        <font>
@@ -958,7 +918,7 @@
      </item>
      <item row="7" column="1">
       <property name="text">
-       <string>C♯ 1</string>
+       <string>C♯ 2</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -966,7 +926,7 @@
      </item>
      <item row="7" column="2">
       <property name="text">
-       <string>D 1</string>
+       <string>D 2</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -974,7 +934,7 @@
      </item>
      <item row="7" column="3">
       <property name="text">
-       <string>E♭ 1</string>
+       <string>E♭ 2</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -982,7 +942,7 @@
      </item>
      <item row="7" column="4">
       <property name="text">
-       <string>E 1</string>
+       <string>E 2</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -990,7 +950,7 @@
      </item>
      <item row="7" column="5">
       <property name="text">
-       <string>F 1</string>
+       <string>F 2</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -998,7 +958,7 @@
      </item>
      <item row="7" column="6">
       <property name="text">
-       <string>F♯ 1</string>
+       <string>F♯ 2</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1006,7 +966,7 @@
      </item>
      <item row="7" column="7">
       <property name="text">
-       <string>G 1</string>
+       <string>G 2</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1014,7 +974,7 @@
      </item>
      <item row="7" column="8">
       <property name="text">
-       <string>A♭ 1</string>
+       <string>A♭ 2</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1022,7 +982,7 @@
      </item>
      <item row="7" column="9">
       <property name="text">
-       <string>A 1</string>
+       <string>A 2</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1030,7 +990,7 @@
      </item>
      <item row="7" column="10">
       <property name="text">
-       <string>B♭ 1</string>
+       <string>B♭ 2</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1038,7 +998,7 @@
      </item>
      <item row="7" column="11">
       <property name="text">
-       <string>B 1</string>
+       <string>B 2</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1046,7 +1006,7 @@
      </item>
      <item row="7" column="12">
       <property name="text">
-       <string>C 2</string>
+       <string>C 3</string>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -1054,7 +1014,7 @@
      </item>
      <item row="8" column="0">
       <property name="text">
-       <string>C 0</string>
+       <string>C 1</string>
       </property>
       <property name="font">
        <font>
@@ -1068,7 +1028,7 @@
      </item>
      <item row="8" column="1">
       <property name="text">
-       <string>C♯ 0</string>
+       <string>C♯ 1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1076,7 +1036,7 @@
      </item>
      <item row="8" column="2">
       <property name="text">
-       <string>D 0</string>
+       <string>D 1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1084,7 +1044,7 @@
      </item>
      <item row="8" column="3">
       <property name="text">
-       <string>E♭ 0</string>
+       <string>E♭ 1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1092,7 +1052,7 @@
      </item>
      <item row="8" column="4">
       <property name="text">
-       <string>E 0</string>
+       <string>E 1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1100,7 +1060,7 @@
      </item>
      <item row="8" column="5">
       <property name="text">
-       <string>F 0</string>
+       <string>F 1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1108,7 +1068,7 @@
      </item>
      <item row="8" column="6">
       <property name="text">
-       <string>F♯ 0</string>
+       <string>F♯ 1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1116,7 +1076,7 @@
      </item>
      <item row="8" column="7">
       <property name="text">
-       <string>G 0</string>
+       <string>G 1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1124,7 +1084,7 @@
      </item>
      <item row="8" column="8">
       <property name="text">
-       <string>A♭ 0</string>
+       <string>A♭ 1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1132,7 +1092,7 @@
      </item>
      <item row="8" column="9">
       <property name="text">
-       <string>A 0</string>
+       <string>A 1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1140,7 +1100,7 @@
      </item>
      <item row="8" column="10">
       <property name="text">
-       <string>B♭ 0</string>
+       <string>B♭ 1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1148,7 +1108,7 @@
      </item>
      <item row="8" column="11">
       <property name="text">
-       <string>B 0</string>
+       <string>B 1</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1156,7 +1116,7 @@
      </item>
      <item row="8" column="12">
       <property name="text">
-       <string>C 1</string>
+       <string>C 2</string>
       </property>
       <property name="flags">
        <set>NoItemFlags</set>
@@ -1164,7 +1124,7 @@
      </item>
      <item row="9" column="0">
       <property name="text">
-       <string>C -1</string>
+       <string>C 0</string>
       </property>
       <property name="font">
        <font>
@@ -1178,7 +1138,7 @@
      </item>
      <item row="9" column="1">
       <property name="text">
-       <string>C♯ -1</string>
+       <string>C♯ 0</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1186,7 +1146,7 @@
      </item>
      <item row="9" column="2">
       <property name="text">
-       <string>D -1</string>
+       <string>D 0</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1194,7 +1154,7 @@
      </item>
      <item row="9" column="3">
       <property name="text">
-       <string>E♭ -1</string>
+       <string>E♭ 0</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1202,7 +1162,7 @@
      </item>
      <item row="9" column="4">
       <property name="text">
-       <string>E -1</string>
+       <string>E 0</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1210,7 +1170,7 @@
      </item>
      <item row="9" column="5">
       <property name="text">
-       <string>F -1</string>
+       <string>F 0</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1218,7 +1178,7 @@
      </item>
      <item row="9" column="6">
       <property name="text">
-       <string>F♯ -1</string>
+       <string>F♯ 0</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1226,7 +1186,7 @@
      </item>
      <item row="9" column="7">
       <property name="text">
-       <string>G -1</string>
+       <string>G 0</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1234,7 +1194,7 @@
      </item>
      <item row="9" column="8">
       <property name="text">
-       <string>A♭ -1</string>
+       <string>A♭ 0</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1242,7 +1202,7 @@
      </item>
      <item row="9" column="9">
       <property name="text">
-       <string>A -1</string>
+       <string>A 0</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1250,7 +1210,7 @@
      </item>
      <item row="9" column="10">
       <property name="text">
-       <string>B♭ -1</string>
+       <string>B♭ 0</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1258,13 +1218,123 @@
      </item>
      <item row="9" column="11">
       <property name="text">
-       <string>B -1</string>
+       <string>B 0</string>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
      </item>
      <item row="9" column="12">
+      <property name="text">
+       <string>C 1</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="10" column="0">
+      <property name="text">
+       <string>C -1</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="1">
+      <property name="text">
+       <string>C♯ -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="2">
+      <property name="text">
+       <string>D -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="3">
+      <property name="text">
+       <string>E♭ -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="4">
+      <property name="text">
+       <string>E -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="5">
+      <property name="text">
+       <string>F -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="6">
+      <property name="text">
+       <string>F♯ -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="7">
+      <property name="text">
+       <string>G -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="8">
+      <property name="text">
+       <string>A♭ -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="9">
+      <property name="text">
+       <string>A -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="10">
+      <property name="text">
+       <string>B♭ -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="11">
+      <property name="text">
+       <string>B -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="12">
       <property name="text">
        <string>C 0</string>
       </property>
