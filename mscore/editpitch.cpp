@@ -34,7 +34,7 @@ EditPitch::EditPitch(QWidget *parent)
       setObjectName("EditPitchNew");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      tableWidget->setCurrentCell(4, 0);                    // select centre C by default
+      tableWidget->setCurrentCell(tableWidget->rowCount()-1-5, 0);                    // select centre C by default
       MuseScore::restoreGeometry(this);
       }
 
@@ -44,14 +44,9 @@ EditPitch::EditPitch(QWidget *parent, int midiCode)
       setObjectName("EditPitchEdit");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      tableWidget->setCurrentCell(9-(midiCode/12), midiCode%12);
+      tableWidget->setCurrentCell(tableWidget->rowCount()-1-(midiCode/12), midiCode%12);
       MuseScore::restoreGeometry(this);
       }
-
-EditPitch::~EditPitch()
-{
-
-}
 
 //---------------------------------------------------------
 //   hideEvent
@@ -65,16 +60,14 @@ void EditPitch::hideEvent(QHideEvent* ev)
 
 void EditPitch::accept()
       {
-      int   col = tableWidget->currentColumn();
-      int   row = tableWidget->currentRow();
-
-      // topmost row contains notes for 9-th MIDI octave (numbered as '8')
-      done( (9 - row)*12 + col);
+      on_tableWidget_cellDoubleClicked(tableWidget->currentRow(), tableWidget->currentColumn());
       }
 
 void EditPitch::on_tableWidget_cellDoubleClicked(int row, int col)
       {
-      done( (9 - row)*12 + col);
+      // topmost row contains notes for 10-th MIDI octave (numbered as '9')
+      int pitch = (tableWidget->rowCount()-1 - row) * 12 + col;
+      done((pitch > 127)? 127: pitch);
       }
 }
 
