@@ -42,7 +42,7 @@ class EditPitch : public QDialog, private Ui::EditPitchBase {
    public:
       EditPitch(QWidget *parent);
       EditPitch(QWidget * parent, int midiCode);
-      ~EditPitch();
+      ~EditPitch() {}
       };
 
 }
