@@ -630,9 +630,9 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
             return;
       QString cmd(a->data().toString());
       if (cmd == "print")
-            saveFotoAs(true, _foto->rect());
+            saveFotoAs(true, _foto->rect().normalized());
       else if (cmd == "screenshot")
-            saveFotoAs(false, _foto->rect());
+            saveFotoAs(false, _foto->rect().normalized());
       else if (cmd == "copy")
             ;
       else if (cmd == "set-res") {
@@ -688,7 +688,7 @@ void ScoreView::fotoModeCopy()
       double convDpi   = preferences.pngResolution;
       double mag       = convDpi / DPI;
 
-      QRectF r(_foto->rect());
+      QRectF r(_foto->rect().normalized());
 
       int w = lrint(r.width()  * mag);
       int h = lrint(r.height() * mag);
