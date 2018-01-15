@@ -365,7 +365,7 @@ void GuitarPro6::readGPX(QByteArray* buffer) {
                         if (fileBytes->length() >= fileSize) {
                               QByteArray filenameBytes = readString(buffer, indexFileName, 127);
                               const char* filename = filenameBytes.data();
-                              qDebug() << filename;
+                              //qDebug() << filename;
                               QByteArray data = getBytes(fileBytes, 0, fileSize);
                               parseFile(filename, &data);
                               }

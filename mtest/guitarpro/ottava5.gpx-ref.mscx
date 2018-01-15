@@ -273,7 +273,6 @@
         <Ottava id="3">
           <subtype>8va</subtype>
           <lid>30</lid>
-          <lineWidth>0.1</lineWidth>
           </Ottava>
         <Chord>
           <lid>21</lid>
@@ -783,7 +782,6 @@
           <Ottava id="6">
             <subtype>8va</subtype>
             <lid>30</lid>
-            <lineWidth>0.1</lineWidth>
             </Ottava>
           <Chord>
             <lid>21</lid>
@@ -873,7 +871,6 @@
           <Ottava id="7">
             <subtype>8va</subtype>
             <lid>30</lid>
-            <lineWidth>0.1</lineWidth>
             </Ottava>
           <Chord>
             <lid>21</lid>

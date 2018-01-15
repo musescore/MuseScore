@@ -201,7 +201,6 @@
         <Ottava id="2">
           <subtype>8va</subtype>
           <lid>31</lid>
-          <lineWidth>0.1</lineWidth>
           </Ottava>
         <Chord>
           <lid>6</lid>
@@ -233,7 +232,6 @@
         <Ottava id="3">
           <subtype>8vb</subtype>
           <lid>32</lid>
-          <lineWidth>0.1</lineWidth>
           </Ottava>
         <Chord>
           <lid>12</lid>
@@ -618,7 +616,6 @@
           <Ottava id="4">
             <subtype>8va</subtype>
             <lid>31</lid>
-            <lineWidth>0.1</lineWidth>
             </Ottava>
           <Chord>
             <lid>6</lid>
@@ -650,7 +647,6 @@
           <Ottava id="5">
             <subtype>8vb</subtype>
             <lid>32</lid>
-            <lineWidth>0.1</lineWidth>
             </Ottava>
           <Chord>
             <lid>12</lid>
@@ -764,7 +760,6 @@
           <Ottava id="6">
             <subtype>8va</subtype>
             <lid>31</lid>
-            <lineWidth>0.1</lineWidth>
             </Ottava>
           <Chord>
             <lid>6</lid>
@@ -795,7 +790,6 @@
           <Ottava id="7">
             <subtype>8vb</subtype>
             <lid>32</lid>
-            <lineWidth>0.1</lineWidth>
             </Ottava>
           <Chord>
             <lid>12</lid>
