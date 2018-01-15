@@ -84,7 +84,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Line type' value</string>
@@ -148,7 +148,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Direction' value</string>

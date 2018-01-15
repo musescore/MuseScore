@@ -77,6 +77,9 @@
      </property>
      <item row="1" column="3">
       <widget class="QToolButton" name="resetAutoscale">
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Scale to frame size' value</string>
        </property>
@@ -214,6 +217,9 @@
      </item>
      <item row="4" column="3">
       <widget class="QToolButton" name="resetLockAspectRatio">
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Lock aspect ratio' value</string>
        </property>
@@ -228,6 +234,9 @@
      </item>
      <item row="5" column="3">
       <widget class="QToolButton" name="resetSizeIsSpatium">
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Size in staff space units' value</string>
        </property>

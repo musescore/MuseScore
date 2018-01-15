@@ -104,7 +104,7 @@
      <item row="0" column="2">
       <widget class="QToolButton" name="resetType">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Style' value</string>
@@ -190,7 +190,7 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetSpan">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Spanned staves' value</string>
@@ -207,7 +207,7 @@
      <item row="2" column="2">
       <widget class="QToolButton" name="resetSpanFrom">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Span from' value</string>
@@ -224,7 +224,7 @@
      <item row="3" column="2">
       <widget class="QToolButton" name="resetSpanTo">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Span to' value</string>
@@ -261,7 +261,7 @@
      <item row="4" column="2">
       <widget class="QToolButton" name="resetSpanType">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Span preset' value</string>

@@ -81,7 +81,7 @@
      <item row="1" column="2">
       <widget class="QToolButton" name="resetNumberType">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Number type' value</string>
@@ -98,7 +98,7 @@
      <item row="2" column="2">
       <widget class="QToolButton" name="resetBracketType">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Bracket type' value</string>
@@ -201,6 +201,9 @@
      </item>
      <item row="0" column="2">
       <widget class="QToolButton" name="resetDirection">
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Direction' value</string>
        </property>

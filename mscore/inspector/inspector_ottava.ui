@@ -85,7 +85,7 @@
      <item row="0" column="3">
       <widget class="QToolButton" name="resetOttavaType">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Type' value</string>
@@ -163,7 +163,7 @@
      <item row="1" column="3">
       <widget class="QToolButton" name="resetPlacement">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Placement' value</string>
@@ -193,7 +193,7 @@
      <item row="2" column="3">
       <widget class="QToolButton" name="resetNumbersOnly">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Numbers only' value</string>

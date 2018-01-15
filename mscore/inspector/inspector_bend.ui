@@ -102,6 +102,9 @@
      </item>
      <item row="0" column="1">
       <widget class="QToolButton" name="resetPlayBend">
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Play' value</string>
        </property>
