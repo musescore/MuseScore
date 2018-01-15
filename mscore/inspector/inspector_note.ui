@@ -87,7 +87,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Tuning' value</string>
@@ -136,7 +136,7 @@
      <item row="9" column="2">
       <widget class="QToolButton" name="resetVelocity">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Velocity' value</string>
@@ -390,7 +390,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Velocity type' value</string>
@@ -429,7 +429,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Dot position' value</string>
@@ -459,7 +459,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Play' value</string>
@@ -482,7 +482,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Small' value</string>
@@ -550,7 +550,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Mirror head' value</string>
@@ -589,7 +589,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Head group' value</string>
@@ -612,7 +612,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Head type' value</string>
@@ -629,7 +629,7 @@
      <item row="10" column="2">
       <widget class="QToolButton" name="resetFixed">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Fix to line' value</string>
@@ -646,7 +646,7 @@
      <item row="11" column="2">
       <widget class="QToolButton" name="resetFixedLine">
        <property name="toolTip">
-        <string>Reset value</string>
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Line' value</string>

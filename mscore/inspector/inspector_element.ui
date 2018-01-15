@@ -152,6 +152,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Horizontal offset' value</string>
        </property>
@@ -197,6 +200,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Vertical offset' value</string>
        </property>
@@ -235,6 +241,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Color' value</string>
@@ -330,6 +339,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Reset to default</string>
        </property>
        <property name="accessibleName">
         <string>Reset 'Visible' value</string>

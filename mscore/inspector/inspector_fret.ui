@@ -109,6 +109,9 @@
      </item>
      <item row="0" column="2">
       <widget class="QToolButton" name="resetMag">
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
        <property name="accessibleName">
         <string>Reset 'Scale' value</string>
        </property>
