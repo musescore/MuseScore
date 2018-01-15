@@ -1406,7 +1406,6 @@ void GuitarPro::createOttava(bool hasOttava, int track, ChordRest* cr, QString v
             Ottava* currentOttava = ottava.at(track);
             ottava.at(track) = 0;
             currentOttava->setTick2(cr->tick());
-            currentOttava->setProperty(P_ID::LINE_WIDTH,0.1);
             //ottava.at(track)->staff()->updateOttava(ottava.at(track));
             }
       }
