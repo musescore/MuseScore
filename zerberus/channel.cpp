@@ -51,6 +51,8 @@ void Channel::pitchBend(int)
 
 void Channel::controller(int c, int val)
       {
+      if (!_msynth)
+            return;
       ctrl[c] = val;
       if (c == Ms::CTRL_SUSTAIN) {
             if (val < 0x40) {
