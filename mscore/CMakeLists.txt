@@ -425,6 +425,7 @@ if (MINGW)
             ${CROSS}/lib/libvorbis.dll
             ${CROSS}/lib/libvorbisfile.dll
             ${CROSS}/lib/portaudio.dll
+            ${CROSS}/lib/lame_enc.dll
             ${CROSS}/opt/bin/libeay32.dll
             ${CROSS}/opt/bin/ssleay32.dll
             ${CROSSQT}/bin/icudt53.dll
