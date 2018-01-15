@@ -171,7 +171,7 @@ void OttavaSegment::styleChanged()
 Ottava::Ottava(Score* s)
    : TextLine(s)
       {
-      _numbersOnly        = score()->styleB(StyleIdx::ottavaNumbersOnly);
+      _numbersOnly = score()->styleB(StyleIdx::ottavaNumbersOnly);
       setOttavaType(Type::OTTAVA_8VA);
       setLineWidth(score()->styleS(StyleIdx::ottavaLineWidth));
       setLineStyle(Qt::PenStyle(score()->styleI(StyleIdx::ottavaLineStyle)));
@@ -181,10 +181,16 @@ Ottava::Ottava(Score* s)
 Ottava::Ottava(const Ottava& o)
    : TextLine(o)
       {
-      _numbersOnly = o._numbersOnly;
-      _pitchShift  = o._pitchShift;
+      _ottavaType = o._ottavaType;
+      _numbersOnly = score()->styleB(StyleIdx::ottavaNumbersOnly);
+      numbersOnlyStyle = o.numbersOnlyStyle;
+      lineWidthStyle = o.lineWidthStyle;
       lineStyleStyle = o.lineStyleStyle;
-      setOttavaType(o._ottavaType);
+      beginTextStyle = o.beginTextStyle;
+      continueTextStyle = o.continueTextStyle;
+      setBeginText(o.beginText());
+      setContinueText(o.continueText());
+      _pitchShift  = o._pitchShift;
       }
 
 //---------------------------------------------------------
@@ -411,13 +417,9 @@ QVariant Ottava::propertyDefault(P_ID propertyId) const
             case P_ID::CONTINUE_TEXT:
                   {
                   const OttavaDefault* def = &ottavaDefault[int(_ottavaType)];
-                  SymId id = _numbersOnly ? def->numbersOnlyId : def->id;
-                  QString s;
-                  if (symIsValid(id))
-                        s = QString("<sym>%1</sym>").arg(Sym::id2name(id));
-                  else
-                        s = _numbersOnly ? def->numbersOnlyName : def->name;
-                  return s;
+                  const char* symId;
+                  symId = _numbersOnly ? Sym::id2name(def->numbersOnlyId) : Sym::id2name(def->id);
+                  return QString("<sym>%1</sym>").arg(symId);
                   }
 
             case P_ID::END_TEXT:
