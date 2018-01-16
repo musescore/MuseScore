@@ -3154,7 +3154,7 @@ System* Score::collectSystem(LayoutContext& lc)
             std::vector<Spanner*> spanner;
             for (auto interval : spanners) {
                   Spanner* sp = interval.value;
-                  if (sp->tick() < etick && sp->tick2() > stick) {
+                  if (sp->tick() < etick && sp->tick2() >= stick) {
                         if (sp->isSlur())
                               spanner.push_back(sp);
                         }
