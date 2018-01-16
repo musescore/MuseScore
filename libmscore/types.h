@@ -51,6 +51,7 @@ enum class ElementType {
       REPEAT_MEASURE,
       TIE,
       ARTICULATION,
+      FERMATA,
       CHORDLINE,
       DYNAMIC,
       BEAM,
@@ -154,6 +155,15 @@ enum class GlissandoType {
 enum class GlissandoStyle {
       CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC
       };
+
+//---------------------------------------------------------
+//   Placement
+//---------------------------------------------------------
+
+enum class Placement {
+      ABOVE, BELOW
+      };
+
 
 Q_ENUM_NS(ElementType)
 Q_ENUM_NS(Direction)

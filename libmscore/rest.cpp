@@ -185,7 +185,7 @@ bool Rest::acceptDrop(EditData& data) const
          || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::BEAM32)
          || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::BEAM64)
          || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::AUTOBEAM)
-         || (type == ElementType::ARTICULATION && toArticulation(e)->isFermata())
+         || (type == ElementType::FERMATA)
          || (type == ElementType::CLEF)
          || (type == ElementType::KEYSIG)
          || (type == ElementType::TIMESIG)

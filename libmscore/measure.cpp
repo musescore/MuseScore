@@ -2125,6 +2125,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                || tag == "InstrumentChange"
                || tag == "StaffState"
                || tag == "FiguredBass"
+               || tag == "Fermata"
                ) {
                   Element* el = Element::name2Element(tag, score());
                   // hack - needed because tick tags are unreliable in 1.3 scores

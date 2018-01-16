@@ -90,6 +90,7 @@
 #include "letring.h"
 #include "vibrato.h"
 #include "palmmute.h"
+#include "fermata.h"
 
 namespace Ms {
 
@@ -848,6 +849,7 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::GLISSANDO:         return new Glissando(score);
             case ElementType::BRACKET:           return new Bracket(score);
             case ElementType::ARTICULATION:      return new Articulation(score);
+            case ElementType::FERMATA:           return new Fermata(score);
             case ElementType::CHORDLINE:         return new ChordLine(score);
             case ElementType::ACCIDENTAL:        return new Accidental(score);
             case ElementType::DYNAMIC:           return new Dynamic(score);
@@ -1000,7 +1002,7 @@ QVariant Element::getProperty(P_ID propertyId) const
             case P_ID::USER_OFF:
                   return _userOff;
             case P_ID::PLACEMENT:
-                  return int(_placement);
+                  return int(placement());
             case P_ID::AUTOPLACE:
                   return autoplace();
             case P_ID::Z:
@@ -1039,7 +1041,7 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   _userOff = v.toPointF();
                   break;
             case P_ID::PLACEMENT:
-                  _placement = Placement(v.toInt());
+                  setPlacement(Placement(v.toInt()));
                   break;
             case P_ID::AUTOPLACE:
                   setAutoplace(v.toBool());

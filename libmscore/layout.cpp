@@ -2472,7 +2472,13 @@ void Score::getNextMeasure(LayoutContext& lc)
                   }
             else if (isMaster() && segment.isChordRestType()) {
                   for (Element* e : segment.annotations()) {
-                        if (!(e->isTempoText() || e->isDynamic() || e->isRehearsalMark() || e->isFretDiagram() || e->isStaffText() || e->isFiguredBass()))
+                        if (!(e->isTempoText()
+                           || e->isDynamic()
+                           || e->isFermata()
+                           || e->isRehearsalMark()
+                           || e->isFretDiagram()
+                           || e->isStaffText()
+                           || e->isFiguredBass()))
                               e->layout();
                         }
                   // TODO, this is not going to work, we just cleaned the tempomap
@@ -3323,6 +3329,12 @@ System* Score::collectSystem(LayoutContext& lc)
                                     s->staffShape(si).add(tt->shape().translated(e->pos()));
                                     m->staffShape(si).add(tt->shape().translated(s->pos() + e->pos()));
                                     }
+                              }
+                        else if (e->isFermata()) {
+                              e->layout();
+                              int si = e->staffIdx();
+                              s->staffShape(si).add(e->shape().translated(e->pos()));
+                              m->staffShape(si).add(e->shape().translated(s->pos() + e->pos()));
                               }
                         }
                   }
