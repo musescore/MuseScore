@@ -66,8 +66,6 @@ bool Fermata::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      printf("<<%s>>\n", qPrintable(tag.toString()));
-
       if (tag == "subtype") {
             QString s = e.readElementText();
             SymId id = Sym::name2id(s);

@@ -108,12 +108,12 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
+        <Fermata>
+          <subtype>fermataBelow</subtype>
+          <placement>below</placement>
+          </Fermata>
         <Chord>
           <durationType>eighth</durationType>
-          <Articulation>
-            <subtype>fermataBelow</subtype>
-            <anchor>1</anchor>
-            </Articulation>
           <Beam>1</Beam>
           <Note>
             <pitch>76</pitch>
@@ -136,13 +136,13 @@
             <tpc>15</tpc>
             </Note>
           </Chord>
+        <Fermata>
+          <subtype>fermataBelow</subtype>
+          <placement>below</placement>
+          </Fermata>
         <Chord>
           <BeamMode>no</BeamMode>
           <durationType>eighth</durationType>
-          <Articulation>
-            <subtype>fermataBelow</subtype>
-            <anchor>1</anchor>
-            </Articulation>
           <StemDirection>down</StemDirection>
           <Note>
             <pitch>67</pitch>
@@ -184,18 +184,10 @@
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <Chord>
-          <durationType>eighth</durationType>
-          <Articulation>
-            <subtype>fermataBelow</subtype>
-            <anchor>1</anchor>
-            </Articulation>
-          <Beam>2</Beam>
-          <Note>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            </Note>
-          </Chord>
+        <Fermata>
+          <subtype>fermataBelow</subtype>
+          <placement>below</placement>
+          </Fermata>
         <Chord>
           <durationType>eighth</durationType>
           <Beam>2</Beam>
@@ -212,12 +204,20 @@
             <tpc>17</tpc>
             </Note>
           </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Beam>2</Beam>
+          <Note>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        <Fermata>
+          <subtype>fermataBelow</subtype>
+          <placement>below</placement>
+          </Fermata>
         <Chord>
           <durationType>16th</durationType>
-          <Articulation>
-            <subtype>fermataBelow</subtype>
-            <anchor>1</anchor>
-            </Articulation>
           <Note>
             <pitch>69</pitch>
             <tpc>17</tpc>
