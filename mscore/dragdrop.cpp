@@ -335,6 +335,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case ElementType::GLISSANDO:
                   case ElementType::BRACKET:
                   case ElementType::ARTICULATION:
+                  case ElementType::FERMATA:
                   case ElementType::CHORDLINE:
                   case ElementType::BEND:
                   case ElementType::ACCIDENTAL:
@@ -365,10 +366,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case ElementType::FRET_DIAGRAM:
                   case ElementType::STAFFTYPE_CHANGE: {
                         QList<Element*> el = elementsAt(pos);
-printf("elements at\n");
-                        for (Element* e : el)
-                              printf("     %s\n", e->name());
-
                         bool found = false;
                         setDropTarget(0);
                         for (const Element* e : el) {
@@ -398,7 +395,6 @@ printf("elements at\n");
 
       const QMimeData* md = event->mimeData();
       if (md->hasUrls()) {
-printf("===drag move urls\n");
             QList<QUrl>ul = md->urls();
             QUrl u = ul.front();
             if (u.scheme() == "file" || u.scheme() == "http") {
@@ -541,6 +537,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::GLISSANDO:
                   case ElementType::BRACKET:
                   case ElementType::ARTICULATION:
+                  case ElementType::FERMATA:
                   case ElementType::CHORDLINE:
                   case ElementType::BEND:
                   case ElementType::ACCIDENTAL:

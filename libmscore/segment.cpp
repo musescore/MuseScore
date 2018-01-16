@@ -462,6 +462,7 @@ void Segment::add(Element* el)
             case ElementType::TREMOLOBAR:
             case ElementType::TAB_DURATION_SYMBOL:
             case ElementType::FIGURED_BASS:
+            case ElementType::FERMATA:
                   _annotations.push_back(el);
                   break;
 
@@ -610,6 +611,7 @@ void Segment::remove(Element* el)
             case ElementType::TEMPO_TEXT:
             case ElementType::TEXT:
             case ElementType::TREMOLOBAR:
+            case ElementType::FERMATA:
                   removeAnnotation(el);
                   break;
 
@@ -1830,6 +1832,8 @@ void Segment::createShape(int staffIdx)
                && !e->isSymbol()
                && !e->isFSymbol()
                && !e->isSystemText()
+               && !e->isArticulation()
+               && !e->isFermata()
                && !e->isStaffText())
                   s.add(e->shape().translated(e->pos()));
             }

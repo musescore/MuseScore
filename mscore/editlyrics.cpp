@@ -85,9 +85,9 @@ void ScoreView::lyricsUpDown(bool up, bool end)
       int track        = lyrics->track();
       ChordRest* cr    = lyrics->chordRest();
       int verse        = lyrics->no();
-      Element::Placement placement = lyrics->placement();
+      Placement placement = lyrics->placement();
 
-      if (placement == Element::Placement::ABOVE)
+      if (placement == Placement::ABOVE)
             up = !up;
       if (up) {
             if (verse == 0)
@@ -142,7 +142,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       int track        = lyrics->track();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
-      Element::Placement placement = lyrics->placement();
+      Placement placement = lyrics->placement();
 
       Segment* nextSegment = segment;
       if (back) {
@@ -261,7 +261,7 @@ void ScoreView::lyricsMinus()
       int track        = lyrics->track();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
-      Element::Placement placement = lyrics->placement();
+      Placement placement = lyrics->placement();
 
       changeState(ViewState::NORMAL);
 
@@ -351,7 +351,7 @@ void ScoreView::lyricsUnderscore()
       int track        = lyrics->track();
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
-      Element::Placement placement = lyrics->placement();
+      Placement placement = lyrics->placement();
       int endTick      = segment->tick(); // a previous melisma cannot extend beyond this point
 
       changeState(ViewState::NORMAL);
@@ -521,7 +521,7 @@ void ScoreView::lyricsEndEdit()
       // of an existing melisma from a previous lyrics; in case, shorten it
       else {
             int verse   = lyrics->no();
-            Element::Placement placement = lyrics->placement();
+            Placement placement = lyrics->placement();
             int track   = lyrics->track();
 
             // search previous lyric

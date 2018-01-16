@@ -3477,45 +3477,6 @@ void ScoreView::changeVoice(int voice)
       }
 
 //---------------------------------------------------------
-//   modifyElement
-//---------------------------------------------------------
-
-void ScoreView::modifyElement(Element* el)
-      {
-      if (el == 0) {
-            qDebug("modifyElement: el==0");
-            return;
-            }
-      Score* cs = el->score();
-      if (!cs->selection().isSingle()) {
-            qDebug("modifyElement: cs->selection().state() != SelState::SINGLE");
-            delete el;
-            return;
-            }
-      Element* e = cs->selection().element();
-      Chord* chord;
-      if (e->type() == ElementType::CHORD)
-            chord = static_cast<Chord*>(e);
-      else if (e->type() == ElementType::NOTE)
-            chord = static_cast<Note*>(e)->chord();
-      else {
-            qDebug("modifyElement: no note/Chord selected:");
-            e->dump();
-            delete el;
-            return;
-            }
-      switch (el->type()) {
-            case ElementType::ARTICULATION:
-                  chord->add(static_cast<Articulation*>(el));
-                  break;
-            default:
-                  qDebug("modifyElement: %s not ARTICULATION", el->name());
-                  delete el;
-                  return;
-            }
-      }
-
-//---------------------------------------------------------
 //   cmdTuplet
 //---------------------------------------------------------
 
@@ -3797,7 +3758,7 @@ void ScoreView::cmdAddText(TEXT type)
                   s = new StaffText(_score);
                   s->setTrack(cr->track());
                   s->initSubStyle(SubStyle::EXPRESSION);
-                  s->setPlacement(Element::Placement::BELOW);
+                  s->setPlacement(Placement::BELOW);
                   s->setParent(cr->segment());
                   }
                   break;

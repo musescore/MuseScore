@@ -307,7 +307,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void setForeground(const QColor&);
 
       Page* addPage();
-      void modifyElement(Element* obj);
       virtual void setScore(Score* s);
       virtual void removeScore()  { _score = 0; }
 

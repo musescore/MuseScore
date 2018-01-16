@@ -83,6 +83,7 @@
 #include "libmscore/letring.h"
 #include "libmscore/vibrato.h"
 #include "libmscore/palmmute.h"
+#include "libmscore/fermata.h"
 
 namespace Ms {
 
@@ -641,8 +642,10 @@ Palette* MuseScore::newArticulationsPalette(PaletteType t)
 
       switch (t) {
             case PaletteType::BASIC: {
+                  Fermata* f = new Fermata(SymId::fermataAbove, gscore);
+                  sp->append(f, f->userName());
+
                   static const std::vector<SymId> art {
-                        SymId::fermataAbove,
                         SymId::articAccentAbove,
                         SymId::articStaccatoAbove,
                         SymId::articTenutoAbove,
@@ -662,7 +665,7 @@ Palette* MuseScore::newArticulationsPalette(PaletteType t)
             case PaletteType::MASTER:
             case PaletteType::ADVANCED: {
                   // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
-                  static const std::vector<SymId> art {
+                  static const std::vector<SymId> fermatas {
                         SymId::fermataAbove,
                         SymId::fermataShortAbove,
                         SymId::fermataLongAbove,
@@ -670,7 +673,12 @@ Palette* MuseScore::newArticulationsPalette(PaletteType t)
                         SymId::fermataShortHenzeAbove,
                         SymId::fermataVeryLongAbove,
                         SymId::fermataVeryShortAbove,
-
+                        };
+                  for (auto i : fermatas) {
+                        Fermata* f = new Fermata(i, gscore);
+                        sp->append(f, f->userName());
+                        }
+                  static const std::vector<SymId> art {
                         SymId::articAccentAbove,
                         SymId::articStaccatoAbove,
                         SymId::articStaccatissimoAbove,
@@ -1174,7 +1182,7 @@ Palette* MuseScore::newLinesPalette(PaletteType t)
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_8VB);
       ottava->setLen(w);
-      ottava->setPlacement(Element::Placement::BELOW);
+      ottava->setPlacement(Placement::BELOW);
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8vb"));
 
       if (t != PaletteType::BASIC) {
@@ -1186,7 +1194,7 @@ Palette* MuseScore::newLinesPalette(PaletteType t)
             ottava = new Ottava(gscore);
             ottava->setOttavaType(OttavaType::OTTAVA_15MB);
             ottava->setLen(w);
-            ottava->setPlacement(Element::Placement::BELOW);
+            ottava->setPlacement(Placement::BELOW);
             sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15mb"));
 
             ottava = new Ottava(gscore);
@@ -1407,7 +1415,7 @@ Palette* MuseScore::newTextPalette()
 
       st = new StaffText(SubStyle::EXPRESSION, gscore);
       st->setXmlText(tr("Expression"));
-      st->setPlacement(Element::Placement::BELOW);
+      st->setPlacement(Placement::BELOW);
       sp->append(st, tr("Expression text"));
 
       InstrumentChange* is = new InstrumentChange(gscore);

@@ -56,7 +56,7 @@ enum class MxmlStartStop : char {
 struct MusicXmlTupletDesc {
       MusicXmlTupletDesc();
       MxmlStartStop type;
-      Element::Placement placement;
+      Placement placement;
       Tuplet::BracketType bracket;
       Tuplet::NumberType shownumber;
       };
