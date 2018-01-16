@@ -932,10 +932,11 @@ static void readChord(Chord* chord, XmlReader& e)
                   chord->add(note);
                   }
             else if (tag == "Attribute" || tag == "Articulation") {
-                  Articulation* atr = new Articulation(chord->score());
-                  atr->setTrack(chord->track());
-                  readArticulation(atr, e);
-                  chord->add(atr);
+                  Element* el = readArticulation(chord, e);
+                  if (el->isFermata())
+                        chord->segment()->add(el);
+                  else
+                        chord->add(el);
                   }
             else if (chord->readProperties(e))
                   ;
@@ -953,10 +954,11 @@ static void readRest(Rest* rest, XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Attribute" || tag == "Articulation") {
-                  Articulation* atr = new Articulation(rest->score());
-                  atr->setTrack(rest->track());
-                  readArticulation(atr, e);
-                  rest->add(atr);
+                  Element* el = readArticulation(rest, e);
+                  if (el->isFermata())
+                        rest->segment()->add(el);
+                  else
+                        rest->add(el);
                   }
             else if (rest->readProperties(e))
                   ;

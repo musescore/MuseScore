@@ -30,7 +30,7 @@ static const qreal TWICE = 2.0;
 //   searchNextLyrics
 //---------------------------------------------------------
 
-static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Element::Placement p)
+static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Placement p)
       {
       Lyrics* l = 0;
       while ((s = s->next1(SegmentType::ChordRest))) {

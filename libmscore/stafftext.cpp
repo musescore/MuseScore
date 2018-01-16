@@ -212,7 +212,7 @@ void StaffText::layout()
 
       // TODO: add above/below offset properties
       QPointF p(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
-      if (placement() == Element::Placement::BELOW)
+      if (placement() == Placement::BELOW)
             p.ry() =  - p.ry() + lineHeight();
       setPos(p);
       TextBase::layout1();
@@ -224,7 +224,7 @@ void StaffText::layout()
             Shape s1          = segment()->measure()->staffShape(staffIdx());
             Shape s2          = shape().translated(segment()->pos() + pos());
 
-            if (placement() == Element::Placement::ABOVE) {
+            if (placement() == Placement::ABOVE) {
                   qreal d = s2.minVerticalDistance(s1);
                   if (d > -minDistance)
                         rUserYoffset() = -d - minDistance;

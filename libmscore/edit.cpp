@@ -54,6 +54,7 @@
 #include "excerpt.h"
 #include "breath.h"
 #include "glissando.h"
+#include "fermata.h"
 
 namespace Ms {
 
@@ -1294,10 +1295,11 @@ void Score::cmdFlip()
                || e->isOttavaSegment()
                || e->isTextLineSegment()
                || e->isPedalSegment()
+               || e->isFermata()
                || e->isTrillSegment()) {
                   // getProperty() delegates call from spannerSegment to Spanner:
-                  Element::Placement p = Element::Placement(e->getProperty(P_ID::PLACEMENT).toInt());
-                  p = (p == Element::Placement::ABOVE) ? Element::Placement::BELOW : Element::Placement::ABOVE;
+                  Placement p = Placement(e->getProperty(P_ID::PLACEMENT).toInt());
+                  p = (p == Placement::ABOVE) ? Placement::BELOW : Placement::ABOVE;
                   e->undoChangeProperty(P_ID::AUTOPLACE, true);
                   e->undoChangeProperty(P_ID::PLACEMENT, int(p));
                   }

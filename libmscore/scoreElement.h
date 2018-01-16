@@ -119,6 +119,7 @@ class BagpipeEmbellishment;
 class LineSegment;
 class BSymbol;
 class TextLineBase;
+class Fermata;
 
 class LetRing;
 class LetRingSegment;
@@ -225,6 +226,7 @@ class ScoreElement {
       CONVERT(Chord,         CHORD)
       CONVERT(BarLine,       BAR_LINE)
       CONVERT(Articulation,  ARTICULATION)
+      CONVERT(Fermata,       FERMATA)
       CONVERT(Marker,        MARKER)
       CONVERT(Clef,          CLEF)
       CONVERT(KeySig,        KEYSIG)
@@ -441,6 +443,7 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(Chord)
       CONVERT(BarLine)
       CONVERT(Articulation)
+      CONVERT(Fermata)
       CONVERT(Marker)
       CONVERT(Clef)
       CONVERT(KeySig)

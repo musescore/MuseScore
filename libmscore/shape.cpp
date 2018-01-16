@@ -267,6 +267,16 @@ void ShapeElement::dump() const
       {
       printf("   %s: %f %f %f %f\n", text ? text : "", x(), y(), width(), height());
       }
+
+//---------------------------------------------------------
+//   add
+//---------------------------------------------------------
+
+void Shape::add(const QRectF& r, const char* t)
+      {
+      push_back(ShapeElement(r, t));
+      }
+
 #endif
 
 #ifdef DEBUG_SHAPES

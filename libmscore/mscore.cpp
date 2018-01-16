@@ -227,7 +227,6 @@ void MScore::init()
       qRegisterMetaType<Note::ValueType>   ("ValueType");
 
       qRegisterMetaType<MScore::DirectionH>("DirectionH");
-      qRegisterMetaType<Element::Placement>("Placement");
       qRegisterMetaType<Spanner::Anchor>   ("Anchor");
       qRegisterMetaType<NoteHead::Group>   ("NoteHeadGroup");
       qRegisterMetaType<NoteHead::Type>("NoteHeadType");

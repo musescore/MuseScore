@@ -351,8 +351,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             trillLinePlacement, vibratoLinePlacement, dynamicsPlacement, tempoTextPlacement, rehearsalMarkPlacement
             }) {
             cb->clear();
-            cb->addItem(tr("Above"), int(Element::Placement::ABOVE));
-            cb->addItem(tr("Below"), int(Element::Placement::BELOW));
+            cb->addItem(tr("Above"), int(Placement::ABOVE));
+            cb->addItem(tr("Below"), int(Placement::BELOW));
             }
 
       autoplaceVerticalAlignRange->clear();

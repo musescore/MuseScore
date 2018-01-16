@@ -2961,7 +2961,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
                         }
                   else if (el->isDynamic()) {
                         tagname += " placement=\"";
-                        tagname += el->placement() == Element::Placement::ABOVE
+                        tagname += el->placement() == Placement::ABOVE
                               ? "above" : "below";
                         tagname += "\"";
                         }

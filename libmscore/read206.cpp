@@ -49,6 +49,7 @@
 #include "rehearsalmark.h"
 #include "box.h"
 #include "textframe.h"
+#include "fermata.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -995,10 +996,11 @@ static void readChord(Chord* chord, XmlReader& e)
                   chord->add(note);
                   }
             else if (tag == "Articulation") {
-                  Articulation* atr = new Articulation(chord->score());
-                  atr->setTrack(chord->track());
-                  atr->read(e);
-                  chord->add(atr);
+                  Element* el = readArticulation(chord, e);
+                  if (el->isFermata())
+                        chord->segment()->add(el);
+                  else
+                        chord->add(el);
                   }
             else if (chord->readProperties(e))
                   ;
@@ -1323,23 +1325,50 @@ SymId oldArticulationNames2SymId(const QString& s)
       }
 
 //---------------------------------------------------------
+//   setFermataPlacement
+//    set fermata placement from old ArticulationAnchor
+//    for backwards compatibility
+//---------------------------------------------------------
+
+static void setFermataPlacement(Element* el, ArticulationAnchor anchor)
+      {
+      switch (anchor) {
+            case ArticulationAnchor::TOP_STAFF:
+            case ArticulationAnchor::TOP_CHORD:
+                  el->setPlacement(Placement::ABOVE);
+                  break;
+
+            case ArticulationAnchor::BOTTOM_STAFF:
+            case ArticulationAnchor::BOTTOM_CHORD:
+                  el->setPlacement(Placement::BELOW);
+                  break;
+            default:
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
 //   readArticulation
 //---------------------------------------------------------
 
-void readArticulation(Articulation* a, XmlReader& e)
+Element* readArticulation(ChordRest* cr, XmlReader& e)
       {
-      a->setSymId(SymId::fermataAbove);      // default -- backward compatibility (no type = ufermata in 1.2)
+      Element* el = 0;
+      SymId sym = SymId::fermataAbove;          // default -- backward compatibility (no type = ufermata in 1.2)
+      ArticulationAnchor anchor  = ArticulationAnchor::TOP_STAFF;
+      Direction direction = Direction::AUTO;
+
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype") {
                   QString s = e.readElementText();
                   if (s[0].isDigit()) {
                         int oldType = s.toInt();
-                        a->setSymId(articulationNames[oldType].id);
+                        sym = articulationNames[oldType].id;
                         }
                   else {
-                        a->setSymId(oldArticulationNames2SymId(s));
-                        if (a->symId() == SymId::noSym) {
+                        sym = oldArticulationNames2SymId(s);
+                        if (sym == SymId::noSym) {
                               struct {
                                     const char* name;
                                     bool up;
@@ -1374,22 +1403,68 @@ void readArticulation(Articulation* a, XmlReader& e)
                               int n = sizeof(al) / sizeof(*al);
                               for (i = 0; i < n; ++i) {
                                     if (s == al[i].name) {
-                                          a->setSymId(al[i].id);
-                                          a->setUp(al[i].up);
-                                          a->setDirection(a->up() ? Direction::UP : Direction::DOWN);
+                                          sym       = al[i].id;
+                                          bool up   = al[i].up;
+                                          direction = up ? Direction::UP : Direction::DOWN;
                                           break;
                                           }
                                     }
-                              if (i == n)
-                                    qDebug("Articulation: unknown type <%s>", qPrintable(s));
+                              if (i == n) {
+                                    sym = Sym::name2id(s);
+                                    if (sym == SymId::noSym)
+                                          qDebug("Articulation: unknown type <%s>", qPrintable(s));
+                                    }
                               }
                         }
+                  switch (sym) {
+                        case SymId::fermataAbove:
+                        case SymId::fermataBelow:
+                        case SymId::fermataShortAbove:
+                        case SymId::fermataShortBelow:
+                        case SymId::fermataLongAbove:
+                        case SymId::fermataLongBelow:
+                        case SymId::fermataVeryLongAbove:
+                        case SymId::fermataVeryLongBelow:
+                              el = new Fermata(sym, cr->score());
+                              setFermataPlacement(el, anchor);
+                              break;
+                        default:
+                              el = new Articulation(sym, cr->score());
+//                              toArticulation(el)->setAnchor(anchor);
+                              toArticulation(el)->setDirection(direction);
+                              break;
+                        };
                   }
-             else if (a->readProperties(e))
-                  ;
-            else
-                  e.unknown();
+            else if (tag == "anchor") {
+                  if (!el)
+                        anchor = ArticulationAnchor(e.readInt());
+                  else {
+                        if (el->isFermata()) {
+                              anchor = ArticulationAnchor(e.readInt());
+                              setFermataPlacement(el, anchor);
+                              }
+                        else
+                              el->readProperties(e);
+                        }
+                  }
+            else  if (tag == "direction") {
+                  if (!el)
+                        direction = toDirection(e.readElementText());
+                  else {
+                        if (!el->isFermata())
+                              el->readProperties(e);
+                        }
+                  }
+            else {
+                  if (!el) {
+                        qDebug("not handled <%s>", qPrintable(tag.toString()));
+                        }
+                  if (!el->readProperties(e))
+                        e.unknown();
+                  }
             }
+      el->setTrack(cr->staffIdx() * VOICES);
+      return el;
       }
 
 //---------------------------------------------------------
@@ -1403,8 +1478,11 @@ static void readRest(Rest* rest, XmlReader& e)
             if (tag == "Articulation") {
                   Articulation* atr = new Articulation(rest->score());
                   atr->setTrack(rest->track());
-                  readArticulation(atr, e);
-                  rest->add(atr);
+                  Element* el = readArticulation(rest, e);
+                  if (el->isFermata())
+                        rest->segment()->add(el);
+                  else
+                        rest->add(el);
                   }
             else if (rest->readProperties(e))
                   ;
@@ -1514,8 +1592,9 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Chord") {
                   Chord* chord = new Chord(score);
                   chord->setTrack(e.track());
-                  readChord(chord, e);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
+                  chord->setParent(segment);
+                  readChord(chord, e);
                   if (chord->noteType() != NoteType::NORMAL)
                         graceNotes.push_back(chord);
                   else {

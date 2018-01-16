@@ -143,16 +143,6 @@ class Element : public ScoreElement {
             | ElementFlag::VISIBLE
             };    // used for segments
 
-  protected:
-      mutable int _z;
-      QColor _color;              ///< element color attribute
-
-  public:
-      enum class Placement : char {
-            ABOVE, BELOW
-            };
-
-  private:
       Placement _placement;
       int _track;                 ///< staffIdx * VOICES + voice
       qreal _mag;                 ///< standard magnification (derived value)
@@ -162,6 +152,10 @@ class Element : public ScoreElement {
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
+
+  protected:
+      mutable int _z;
+      QColor _color;              ///< element color attribute
 
    public:
       Element(Score* s = 0);
@@ -521,7 +515,6 @@ extern void collectElements(void* data, Element* e);
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::ElementType);
-Q_DECLARE_METATYPE(Ms::Element::Placement);
 
 #endif
 

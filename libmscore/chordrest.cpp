@@ -452,7 +452,6 @@ void ChordRest::layoutArticulations()
       if (parent() == 0 || _articulations.empty())
             return;
       qreal _spatium = spatium();
-//      bool scale     = !staff()->isDrumStaff(tick());
       qreal pld      = staff()->lineDistance(tick());
       qreal _spStaff = _spatium * pld;    // scaled to staff line distance for vert. pos. within a staff
 
@@ -765,6 +764,7 @@ Element* ChordRest::drop(EditData& data)
             case ElementType::FRET_DIAGRAM:
             case ElementType::TREMOLOBAR:
             case ElementType::SYMBOL:
+            case ElementType::FERMATA:
                   e->setTrack(track());
                   e->setParent(segment());
                   score()->undoAddElement(e);
@@ -1492,11 +1492,11 @@ int ChordRest::lastVerse(Placement p) const
 
 void ChordRest::flipLyrics(Lyrics* l)
       {
-      Element::Placement p = l->placement();
-      if (p == Element::Placement::ABOVE)
-            p = Element::Placement::BELOW;
+      Placement p = l->placement();
+      if (p == Placement::ABOVE)
+            p = Placement::BELOW;
       else
-            p = Element::Placement::ABOVE;
+            p = Placement::ABOVE;
       int verses = lastVerse(p);
       l->undoChangeProperty(P_ID::VERSE, verses + 1);
       l->undoChangeProperty(P_ID::AUTOPLACE, true);

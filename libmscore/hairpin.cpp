@@ -772,7 +772,7 @@ QVariant Hairpin::propertyDefault(P_ID id) const
                         return int(Qt::SolidLine);
                   return int(Qt::CustomDashLine);
             case P_ID::PLACEMENT:
-                  return int(Element::Placement::BELOW);
+                  return int(Placement::BELOW);
 
             case P_ID::BEGIN_FONT_FACE:
             case P_ID::BEGIN_FONT_SIZE:

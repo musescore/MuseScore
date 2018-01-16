@@ -212,7 +212,7 @@ Vibrato::Vibrato(Score* s)
       {
       _vibratoType = Type::GUITAR_VIBRATO;
       setPlayArticulation(true);
-      setPlacement(Element::Placement::ABOVE);
+      setPlacement(Placement::ABOVE);
       }
 
 Vibrato::~Vibrato()
@@ -371,7 +371,7 @@ QVariant Vibrato::propertyDefault(P_ID propertyId) const
             case P_ID::PLAY:
                   return true;
             case P_ID::PLACEMENT:
-                  return int(Element::Placement::ABOVE);
+                  return int(Placement::ABOVE);
             default:
                   return SLine::propertyDefault(propertyId);
             }

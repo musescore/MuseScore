@@ -35,7 +35,7 @@ TempoText::TempoText(Score* s)
       _followText = false;
       _relative   = 1.0;
       _isRelative = false;
-      setPlacement(Element::Placement::ABOVE);
+      setPlacement(Placement::ABOVE);
       }
 
 //---------------------------------------------------------
@@ -334,7 +334,7 @@ QVariant TempoText::propertyDefault(P_ID id) const
             case P_ID::TEMPO_FOLLOW_TEXT:
                   return false;
             case P_ID::PLACEMENT:
-                  return int(Element::Placement::ABOVE);
+                  return int(Placement::ABOVE);
             default:
                   return TextBase::propertyDefault(id);
             }

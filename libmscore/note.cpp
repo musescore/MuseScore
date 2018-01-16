@@ -1553,6 +1553,7 @@ bool Note::acceptDrop(EditData& data) const
       bool isTablature = staff()->isTabStaff(tick());
       bool tabFingering = staff()->staffType(tick())->showTabFingering();
       return (type == ElementType::ARTICULATION
+         || type == ElementType::FERMATA
          || type == ElementType::CHORDLINE
          || type == ElementType::TEXT
          || type == ElementType::REHEARSAL_MARK

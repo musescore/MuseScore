@@ -651,14 +651,14 @@ void Palette::applyPaletteElement(PaletteCell* cell)
                               Element* e = s->element(track);
                               if (e == 0 || !score->selectionFilter().canSelect(e) || !score->selectionFilter().canSelectVoice(track))
                                     continue;
-                              if (e->type() == ElementType::CHORD) {
-                                    Chord* chord = static_cast<Chord*>(e);
+                              if (e->isChord()) {
+                                    Chord* chord = toChord(e);
                                     for (Note* n : chord->notes())
                                           applyDrop(score, viewer, n, element);
                                     }
                               else {
                                     // do not apply articulation to barline in a range selection
-                                    if(e->type() != ElementType::BAR_LINE || element->type() != ElementType::ARTICULATION)
+                                    if (!e->isBarLine() || !element->isArticulation())
                                           applyDrop(score, viewer, e, element);
                                     }
                               }
