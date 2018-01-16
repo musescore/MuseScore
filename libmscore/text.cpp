@@ -3179,12 +3179,22 @@ bool TextBase::edit(EditData& ed)
                         break;
 
                   case Qt::Key_Up:
+#if defined(Q_OS_MAC)
+                        if (!_cursor->movePosition(QTextCursor::Up, mm))
+                              _cursor->movePosition(QTextCursor::StartOfLine, mm);
+#else
                         _cursor->movePosition(QTextCursor::Up, mm);
+#endif
                         s.clear();
                         break;
 
                   case Qt::Key_Down:
+#if defined(Q_OS_MAC)
+                        if (!_cursor->movePosition(QTextCursor::Down, mm))
+                              _cursor->movePosition(QTextCursor::EndOfLine, mm);
+#else
                         _cursor->movePosition(QTextCursor::Down, mm);
+#endif
                         s.clear();
                         break;
 
