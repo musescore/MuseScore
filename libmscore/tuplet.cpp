@@ -1074,7 +1074,6 @@ StyleIdx Tuplet::getPropertyStyle(P_ID id) const
 
 void Tuplet::resetProperty(P_ID id)
       {
-printf("reset property %s\n", propertyQmlName(id));
       switch (id) {
             case P_ID::DIRECTION:
                   setProperty(id, propertyDefault(id));
