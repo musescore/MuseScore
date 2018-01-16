@@ -402,8 +402,7 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
 
 void ScoreView::fotoModeCopy()
       {
-      // oowriter wants transparent==false
-      bool transparent = false; // preferences.pngTransparent;
+      bool transparent = preferences.pngTransparent;
       double convDpi   = preferences.pngResolution;
       double mag       = convDpi / DPI;
 
