@@ -139,14 +139,14 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>11</lid>
+          <lid>10</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>ornamentTrill</subtype>
-            <lid>10</lid>
+            <lid>12</lid>
             </Articulation>
           <Note>
-            <lid>12</lid>
+            <lid>11</lid>
             <pitch>65</pitch>
             <tpc>13</tpc>
             <fret>6</fret>
@@ -327,14 +327,14 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>11</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>ornamentTrill</subtype>
-              <lid>10</lid>
+              <lid>12</lid>
               </Articulation>
             <Note>
-              <lid>12</lid>
+              <lid>11</lid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>6</fret>
@@ -386,14 +386,14 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>11</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>ornamentTrill</subtype>
-              <lid>10</lid>
+              <lid>12</lid>
               </Articulation>
             <Note>
-              <lid>12</lid>
+              <lid>11</lid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>6</fret>

@@ -37,7 +37,6 @@ Articulation::Articulation(Score* s)
       _anchor        = ArticulationAnchor::TOP_STAFF;
       _direction     = Direction::AUTO;
       _up            = true;
-      _timeStretch   = 1.0;
       _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
       setPlayArticulation(true);
       }
@@ -115,8 +114,6 @@ bool Articulation::readProperties(XmlReader& e)
             setProperty(P_ID::ORNAMENT_STYLE, Ms::getProperty(P_ID::ORNAMENT_STYLE, e));
       else if ( tag == "play")
             setPlayArticulation(e.readBool());
-      else if (tag == "timeStretch")
-            _timeStretch = e.readDouble();
       else if (tag == "offset") {
             if (score()->mscVersion() > 114)
                   Element::readProperties(e);
@@ -143,7 +140,6 @@ void Articulation::write(XmlWriter& xml) const
             xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
       writeProperty(xml, P_ID::DIRECTION);
       xml.tag("subtype", Sym::id2name(_symId));
-      writeProperty(xml, P_ID::TIME_STRETCH);
       writeProperty(xml, P_ID::PLAY);
       writeProperty(xml, P_ID::ORNAMENT_STYLE);
       Element::writeProperties(xml);
@@ -166,7 +162,7 @@ QString Articulation::userName() const
 
 void Articulation::draw(QPainter* painter) const
       {
-#if 0
+#if 0 //TODO
       SymId sym = symId();
       ArticulationShowIn flags = articulationList[int(articulationType())].flags;
       if (staff()) {
@@ -287,7 +283,6 @@ QVariant Articulation::getProperty(P_ID propertyId) const
       switch (propertyId) {
             case P_ID::DIRECTION:           return QVariant::fromValue<Direction>(direction());
             case P_ID::ARTICULATION_ANCHOR: return int(anchor());
-            case P_ID::TIME_STRETCH:        return timeStretch();
             case P_ID::ORNAMENT_STYLE:      return int(ornamentStyle());
             case P_ID::PLAY:                return bool(playArticulation());
             default:
@@ -313,10 +308,6 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::ORNAMENT_STYLE:
                   setOrnamentStyle(MScore::OrnamentStyle(v.toInt()));
-                  break;
-            case P_ID::TIME_STRETCH:
-                  setTimeStretch(v.toDouble());
-                  score()->fixTicks();
                   break;
             default:
                   return Element::setProperty(propertyId, v);
@@ -397,9 +388,6 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
                               return int(ArticulationAnchor::TOP_STAFF);
                         }
 
-            case P_ID::TIME_STRETCH:
-                  return 1.0; // articulationList[int(articulationType())].timeStretch;
-
             case P_ID::ORNAMENT_STYLE:
                   //return int(score()->style()->ornamentStyle(_ornamentStyle));
                   return int(MScore::OrnamentStyle::DEFAULT);
@@ -467,7 +455,6 @@ PropertyFlags& Articulation::propertyFlags(P_ID id)
 #if 0
       switch (id) {
             case P_ID::DIRECTION:
-            case P_ID::TIME_STRETCH:
             case P_ID::ARTICULATION_ANCHOR:
                   return PropertyFlags::NOSTYLE;
 
@@ -499,7 +486,6 @@ void Articulation::resetProperty(P_ID id)
       {
       switch (id) {
             case P_ID::DIRECTION:
-            case P_ID::TIME_STRETCH:
             case P_ID::ORNAMENT_STYLE:
                   setProperty(id, propertyDefault(id));
                   return;
@@ -521,20 +507,6 @@ qreal Articulation::mag() const
       {
       return parent() ? parent()->mag() * score()->styleD(StyleIdx::articulationMag): 1.0;
       }
-
-//---------------------------------------------------------
-//   isFermata
-//---------------------------------------------------------
-
-bool Articulation::isFermata() const
-      {
-      return _symId == SymId::fermataAbove           || _symId == SymId::fermataBelow
-          || _symId == SymId::fermataLongAbove       || _symId == SymId::fermataLongBelow
-          || _symId == SymId::fermataLongHenzeAbove  || _symId == SymId::fermataLongHenzeBelow
-          || _symId == SymId::fermataShortAbove      || _symId == SymId::fermataShortBelow
-          || _symId == SymId::fermataShortHenzeAbove || _symId == SymId::fermataShortHenzeBelow
-          || _symId == SymId::fermataVeryLongAbove   || _symId == SymId::fermataVeryLongBelow
-          || _symId == SymId::fermataVeryShortAbove  || _symId == SymId::fermataVeryShortBelow;      }
 
 bool Articulation::isTenuto() const
       {

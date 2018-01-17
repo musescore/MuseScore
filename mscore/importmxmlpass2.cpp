@@ -61,6 +61,7 @@
 #include "libmscore/articulation.h"
 #include "libmscore/ottava.h"
 #include "libmscore/rehearsalmark.h"
+#include "libmscore/fermata.h"
 
 #include "importmxmllogger.h"
 #include "importmxmlpass2.h"
@@ -1222,14 +1223,9 @@ void addTupletToChord(ChordRest* cr, Tuplet*& tuplet, bool& tuplImpl,
 //   addArticulationToChord
 //---------------------------------------------------------
 
-/**
- Add Articulation to Chord.
- */
-
 static void addArticulationToChord(ChordRest* cr, SymId articSym, QString dir)
       {
-      Articulation* na = new Articulation(cr->score());
-      na->setSymId(articSym);
+      Articulation* na = new Articulation(articSym, cr->score());
       if (dir == "up") {
             na->setUp(true);
             na->setAnchor(ArticulationAnchor::TOP_STAFF);
@@ -1239,6 +1235,18 @@ static void addArticulationToChord(ChordRest* cr, SymId articSym, QString dir)
             na->setAnchor(ArticulationAnchor::BOTTOM_STAFF);
             }
       cr->add(na);
+      }
+
+//---------------------------------------------------------
+//   addFermataToChord
+//---------------------------------------------------------
+
+static void addFermataToChord(ChordRest* cr, SymId articSym, bool up)
+      {
+      Fermata* na = new Fermata(articSym, cr->score());
+      na->setTrack(cr->track());
+      na->setPlacement(up ? Placement::ABOVE : Placement::BELOW);
+      cr->segment()->add(na);
       }
 
 //---------------------------------------------------------
@@ -1401,9 +1409,9 @@ static void addTextToNote(int l, int c, QString txt, SubStyle style, Score* scor
 static void addFermata(ChordRest* cr, const QString type, const SymId articSym)
       {
       if (type == "upright" || type == "")
-            addArticulationToChord(cr, articSym, "up");
+            addFermataToChord(cr, articSym, true);
       else if (type == "inverted")
-            addArticulationToChord(cr, articSym, "down");
+            addFermataToChord(cr, articSym, false);
       else
             qDebug("unknown fermata type '%s'", qPrintable(type));
       }

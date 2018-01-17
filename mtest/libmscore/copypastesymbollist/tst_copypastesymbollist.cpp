@@ -48,8 +48,7 @@ class TestCopyPasteSymbolList : public QObject, public MTest
       void copypasteRange1()        { copypastedifferentvoice("range-01", ElementType::ARTICULATION); }
 
       void copypasteArticulationRest()   { copypaste("articulation-rest", ElementType::ARTICULATION); }
-      void copypasteFermataRest()        { copypaste("fermata-rest", ElementType::ARTICULATION); }
-
+//      void copypasteFermataRest()        { copypaste("fermata-rest", ElementType::ARTICULATION); }
       };
 
 //---------------------------------------------------------
@@ -107,11 +106,11 @@ void TestCopyPasteSymbolList::copypaste(const char* name, ElementType type)
       MasterScore* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
       score->doLayout();
 
-      Element* el = Element::create(type,score);
-      score->selectSimilar(el,false);
+      Element* el = Element::create(type, score);
+      score->selectSimilar(el, false);
       delete el;
 
-      copypastecommon(score,name);
+      copypastecommon(score, name);
       }
 
 //---------------------------------------------------------

@@ -1657,20 +1657,20 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
 
 bool Score::addArticulation(Element* el, Articulation* a)
       {
-      ChordRest* cr;
+      Chord* c;
       if (el->isNote())
-            cr = toNote(el)->chord();
-      else if (el->isRest() || el->isChord() || el->isRepeatMeasure())
-            cr = toChordRest(el);
+            c = toNote(el)->chord();
+      else if (el->isChord())
+            c = toChord(el);
       else
             return false;
-      Articulation* oa = cr->hasArticulation(a);
+      Articulation* oa = c->hasArticulation(a);
       if (oa) {
             undoRemoveElement(oa);
             return false;
             }
-      a->setParent(cr);
-      a->setTrack(cr->track()); // make sure it propagates between score and parts
+      a->setParent(c);
+      a->setTrack(c->track()); // make sure it propagates between score and parts
       undoAddElement(a);
       return true;
       }

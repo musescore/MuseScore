@@ -126,14 +126,14 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>9</lid>
+          <lid>8</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>articAccentBelow</subtype>
-            <lid>8</lid>
+            <lid>10</lid>
             </Articulation>
           <Note>
-            <lid>10</lid>
+            <lid>9</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>3</fret>
@@ -309,14 +309,14 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>9</lid>
+            <lid>8</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articAccentBelow</subtype>
-              <lid>8</lid>
+              <lid>10</lid>
               </Articulation>
             <Note>
-              <lid>10</lid>
+              <lid>9</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
@@ -365,14 +365,14 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>9</lid>
+            <lid>8</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
-              <lid>8</lid>
+              <lid>10</lid>
               </Articulation>
             <Note>
-              <lid>10</lid>
+              <lid>9</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>

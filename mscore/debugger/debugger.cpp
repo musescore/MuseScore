@@ -1261,14 +1261,6 @@ void RestView::setElement(Element* e)
       crb.duration->setText(rest->duration().print());
       crb.move->setValue(rest->staffMove());
 
-      crb.attributes->clear();
-      for (Articulation* a : rest->articulations()) {
-            QString s;
-            s.setNum(qptrdiff(a), 16);
-            QListWidgetItem* item = new QListWidgetItem(s);
-            item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)a));
-            crb.attributes->addItem(item);
-            }
       crb.lyrics->clear();
       for (Lyrics* lyrics : rest->lyrics()) {
             QString s;

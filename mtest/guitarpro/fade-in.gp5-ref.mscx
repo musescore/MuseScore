@@ -82,15 +82,15 @@
           <lid>6</lid>
           </Dynamic>
         <Chord>
-          <lid>8</lid>
+          <lid>7</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>guitarFadeIn</subtype>
-            <lid>7</lid>
+            <lid>9</lid>
             <anchor>0</anchor>
             </Articulation>
           <Note>
-            <lid>9</lid>
+            <lid>8</lid>
             <pitch>59</pitch>
             <tpc>19</tpc>
             <fret>0</fret>
@@ -225,15 +225,15 @@
             <lid>6</lid>
             </Dynamic>
           <Chord>
-            <lid>8</lid>
+            <lid>7</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>guitarFadeIn</subtype>
-              <lid>7</lid>
+              <lid>9</lid>
               <anchor>0</anchor>
               </Articulation>
             <Note>
-              <lid>9</lid>
+              <lid>8</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -282,15 +282,15 @@
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <lid>8</lid>
+            <lid>7</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>guitarFadeIn</subtype>
-              <lid>7</lid>
+              <lid>9</lid>
               <anchor>0</anchor>
               </Articulation>
             <Note>
-              <lid>9</lid>
+              <lid>8</lid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>

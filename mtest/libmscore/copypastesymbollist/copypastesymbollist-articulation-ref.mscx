@@ -136,10 +136,10 @@
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Articulation>
             <subtype>ornamentMordent</subtype>
             </Articulation>
-          <Beam>1</Beam>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -147,10 +147,10 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Articulation>
             <subtype>articStaccatissimoAbove</subtype>
             </Articulation>
-          <Beam>1</Beam>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -158,10 +158,10 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Articulation>
             <subtype>articStaccatissimoAbove</subtype>
             </Articulation>
-          <Beam>1</Beam>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
@@ -169,10 +169,10 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>1</Beam>
           <Articulation>
             <subtype>articStaccatissimoAbove</subtype>
             </Articulation>
-          <Beam>1</Beam>
           <Note>
             <pitch>77</pitch>
             <tpc>13</tpc>
@@ -184,10 +184,10 @@
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Articulation>
             <subtype>ornamentTurnInverted</subtype>
             </Articulation>
-          <Beam>2</Beam>
           <Note>
             <pitch>79</pitch>
             <tpc>15</tpc>
@@ -195,10 +195,10 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Articulation>
             <subtype>articStaccatissimoAbove</subtype>
             </Articulation>
-          <Beam>2</Beam>
           <Note>
             <pitch>77</pitch>
             <tpc>13</tpc>
@@ -206,10 +206,10 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Articulation>
             <subtype>articStaccatissimoAbove</subtype>
             </Articulation>
-          <Beam>2</Beam>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
@@ -217,10 +217,10 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>2</Beam>
           <Articulation>
             <subtype>articStaccatissimoAbove</subtype>
             </Articulation>
-          <Beam>2</Beam>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -288,10 +288,10 @@
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Articulation>
             <subtype>articStaccatoAbove</subtype>
             </Articulation>
-          <Beam>3</Beam>
           <Note>
             <pitch>79</pitch>
             <tpc>15</tpc>
@@ -299,10 +299,10 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Articulation>
             <subtype>articStaccatoAbove</subtype>
             </Articulation>
-          <Beam>3</Beam>
           <Note>
             <pitch>77</pitch>
             <tpc>13</tpc>
@@ -310,10 +310,10 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Articulation>
             <subtype>ornamentMordent</subtype>
             </Articulation>
-          <Beam>3</Beam>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
@@ -321,10 +321,10 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>3</Beam>
           <Articulation>
             <subtype>articStaccatissimoAbove</subtype>
             </Articulation>
-          <Beam>3</Beam>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -336,10 +336,10 @@
           </Beam>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>4</Beam>
           <Articulation>
             <subtype>articStaccatissimoAbove</subtype>
             </Articulation>
-          <Beam>4</Beam>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -347,10 +347,10 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>4</Beam>
           <Articulation>
             <subtype>articStaccatissimoAbove</subtype>
             </Articulation>
-          <Beam>4</Beam>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -358,10 +358,10 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>4</Beam>
           <Articulation>
             <subtype>ornamentTurnInverted</subtype>
             </Articulation>
-          <Beam>4</Beam>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
@@ -369,10 +369,10 @@
           </Chord>
         <Chord>
           <durationType>eighth</durationType>
+          <Beam>4</Beam>
           <Articulation>
             <subtype>articStaccatissimoAbove</subtype>
             </Articulation>
-          <Beam>4</Beam>
           <Note>
             <pitch>77</pitch>
             <tpc>13</tpc>

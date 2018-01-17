@@ -98,6 +98,7 @@
 #include "libmscore/tie.h"
 #include "libmscore/undo.h"
 #include "libmscore/textline.h"
+#include "libmscore/fermata.h"
 #include "musicxmlfonthandler.h"
 
 namespace Ms {
@@ -1852,29 +1853,30 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
 //   fermatas
 //---------------------------------------------------------
 
-static void fermatas(const QVector<Articulation*>& cra, XmlWriter& xml, Notations& notations)
+static void fermatas(const QVector<Element*>& cra, XmlWriter& xml, Notations& notations)
       {
-      for (const Articulation* a : cra) {
-            if (a->isFermata()) {
-                  notations.tag(xml);
-                  QString tagName = "fermata";
-                  tagName += QString(" type=\"%1\"").arg(a->up() ? "upright" : "inverted");
-                  tagName += color2xml(a);
-                  SymId id = a->symId();
-                  if (id == SymId::fermataAbove || id == SymId::fermataBelow)
-                        xml.tagE(tagName);
-                  // MusicXML does not support the very short fermata nor short fermata (Henze),
-                  // export as short fermata (better than not exporting at all)
-                  else if (id == SymId::fermataShortAbove      || id == SymId::fermataShortBelow
-                        || id == SymId::fermataShortHenzeAbove || id == SymId::fermataShortHenzeBelow
-                        || id == SymId::fermataVeryShortAbove  || id == SymId::fermataVeryShortBelow)                        xml.tag(tagName, "angled");
-                  // MusicXML does not support the very long fermata  nor long fermata (Henze),
-                  // export as long fermata (better than not exporting at all)
-                  else if (id == SymId::fermataLongAbove       || id == SymId::fermataLongBelow
-                        || id == SymId::fermataLongHenzeAbove  || id == SymId::fermataLongHenzeBelow
-                        || id == SymId::fermataVeryLongAbove   || id == SymId::fermataVeryLongBelow)
-                        xml.tag(tagName, "square");
-                  }
+      for (const Element* e : cra) {
+            if (!e->isFermata())
+                  continue;
+            const Fermata* a = toFermata(e);
+            notations.tag(xml);
+            QString tagName = "fermata";
+            tagName += QString(" type=\"%1\"").arg(a->placement() == Placement::ABOVE ? "upright" : "inverted");
+            tagName += color2xml(a);
+            SymId id = a->symId();
+            if (id == SymId::fermataAbove || id == SymId::fermataBelow)
+                  xml.tagE(tagName);
+            // MusicXML does not support the very short fermata nor short fermata (Henze),
+            // export as short fermata (better than not exporting at all)
+            else if (id == SymId::fermataShortAbove      || id == SymId::fermataShortBelow
+                  || id == SymId::fermataShortHenzeAbove || id == SymId::fermataShortHenzeBelow
+                  || id == SymId::fermataVeryShortAbove  || id == SymId::fermataVeryShortBelow)                        xml.tag(tagName, "angled");
+            // MusicXML does not support the very long fermata  nor long fermata (Henze),
+            // export as long fermata (better than not exporting at all)
+            else if (id == SymId::fermataLongAbove       || id == SymId::fermataLongBelow
+                  || id == SymId::fermataLongHenzeAbove  || id == SymId::fermataLongHenzeBelow
+                  || id == SymId::fermataVeryLongAbove   || id == SymId::fermataVeryLongBelow)
+                  xml.tag(tagName, "square");
             }
       }
 
@@ -1885,14 +1887,19 @@ static void fermatas(const QVector<Articulation*>& cra, XmlWriter& xml, Notation
 void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technical& technical,
                                      TrillHash& trillStart, TrillHash& trillStop)
       {
-      const QVector<Articulation*>& na = chord->articulations();
-      // first output the fermatas
-      fermatas(na, xml, notations);
+      QVector<Element*> fl;
+      for (Element* e : chord->segment()->annotations()) {
+            if (e->track() == chord->track() && e->isFermata())
+                  fl.push_back(e);
+            }
+      fermatas(fl, xml, notations);
 
+      const QVector<Articulation*> na = chord->articulations();
       // then the attributes whose elements are children of <articulations>
       Articulations articulations;
       for (const Articulation* a : na) {
             switch (a->symId()) {
+#if 0
                   case SymId::fermataAbove:
                   case SymId::fermataBelow:
                   case SymId::fermataShortAbove:
@@ -1909,7 +1916,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                   case SymId::fermataVeryLongBelow:
                         // ignore, already handled
                         break;
-
+#endif
                   case SymId::articAccentAbove:
                   case SymId::articAccentBelow:
                         notations.tag(xml);
@@ -2860,7 +2867,14 @@ void ExportMusicXml::rest(Rest* rest, int staff)
             xml.tag("staff", staff);
 
       Notations notations;
-      fermatas(rest->articulations(), xml, notations);
+//      fermatas(rest->articulations(), xml, notations);
+      QVector<Element*> fl;
+      for (Element* e : rest->segment()->annotations()) {
+            if (e->isFermata() && e->track() == rest->track())
+                  fl.push_back(e);
+            }
+      fermatas(fl, xml, notations);
+
       tupletStartStop(rest, notations, xml);
       notations.etag(xml);
 

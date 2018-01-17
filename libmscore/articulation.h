@@ -62,7 +62,6 @@ class Articulation final : public Element {
       ArticulationAnchor _anchor;
 
       bool _up;
-      qreal _timeStretch;                       // for fermata
       MScore::OrnamentStyle _ornamentStyle;     // for use in ornaments such as trill
       bool _playArticulation;
 
@@ -77,7 +76,6 @@ class Articulation final : public Element {
       virtual ElementType type() const override    { return ElementType::ARTICULATION; }
 
       virtual qreal mag() const override;
-
 
       SymId symId() const                       { return _symId; }
       void setSymId(SymId id);
@@ -115,9 +113,6 @@ class Articulation final : public Element {
       ArticulationAnchor anchor() const     { return _anchor;      }
       void setAnchor(ArticulationAnchor v)  { _anchor = v;         }
 
-      qreal timeStretch() const             { return _timeStretch; }
-      void setTimeStretch(qreal val)        { _timeStretch = val;  }
-
       MScore::OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
       void setOrnamentStyle(MScore::OrnamentStyle val) { _ornamentStyle = val; }
 
@@ -129,7 +124,6 @@ class Articulation final : public Element {
 
       QString accessibleInfo() const override;
 
-      bool isFermata() const;
       bool isTenuto() const;
       bool isStaccato() const;
       bool isAccent() const;

@@ -61,6 +61,7 @@
 #include "articulation.h"
 #include "bracket.h"
 #include "spacer.h"
+#include "fermata.h"
 
 namespace Ms {
 
@@ -1962,11 +1963,12 @@ static bool validMMRestMeasure(Measure* m)
                         if (s->element(track))  {
                               if (!s->element(track)->isRest())
                                     return false;
-                              Rest* rest = toRest(s->element(track));
-                              if (rest->articulations().size() > 0) // break on fermata
-                                    return false;
                               restFound = true;
                               }
+                        }
+                  for (Element* e : s->annotations()) {
+                        if (e->isFermata())
+                              return false;
                         }
                   if (restFound)
                         ++n;
@@ -2440,8 +2442,8 @@ void Score::getNextMeasure(LayoutContext& lc)
                         layoutChords1(&segment, staffIdx);
                         for (int voice = 0; voice < VOICES; ++voice) {
                               ChordRest* cr = segment.cr(staffIdx * VOICES + voice);
-                              if (cr)
-                                    cr->layoutArticulations();
+                              if (cr && cr->isChord())
+                                    toChord(cr)->layoutArticulations();
                               }
                         }
                   }
@@ -2485,22 +2487,18 @@ void Score::getNextMeasure(LayoutContext& lc)
                   // it breaks the test midi/testBaroqueOrnaments.mscx where first note has stretch 2
                   // Also see fixTicks
                   qreal stretch = 0.0;
-                  for (Element* e : segment.elist()) {
-                        if (!e)
-                              continue;
-                        ChordRest* cr = toChordRest(e);
-                        for (Articulation* a : cr->articulations())
-                              stretch = qMax(a->timeStretch(), stretch);
-                        if (stretch != 0.0 && stretch != 1.0) {
-                              qreal otempo = tempomap()->tempo(cr->tick());
-                              qreal ntempo = otempo / stretch;
-                              setTempo(cr->tick(), ntempo);
-                              int etick = cr->tick() + cr->actualTicks() - 1;
-                              auto e = tempomap()->find(etick);
-                              if (e == tempomap()->end())
-                                    setTempo(etick, otempo);
-                              break;
-                              }
+                  for (Element* e : segment.annotations()) {
+                        if (e->isFermata())
+                              stretch = qMax(stretch, toFermata(e)->timeStretch());
+                        }
+                  if (stretch != 0.0 && stretch != 1.0) {
+                        qreal otempo = tempomap()->tempo(segment.tick());
+                        qreal ntempo = otempo / stretch;
+                        setTempo(segment.tick(), ntempo);
+                        int etick = segment.tick() + segment.ticks() - 1;
+                        auto e = tempomap()->find(etick);
+                        if (e == tempomap()->end())
+                              setTempo(etick, otempo);
                         }
                   }
             else if (segment.isChordRestType()) {
