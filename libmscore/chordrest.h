@@ -56,7 +56,6 @@ class ChordRest : public DurationElement {
       void processSiblings(std::function<void(Element*)> func);
 
    protected:
-      QVector<Articulation*> _articulations;
       std::vector<Lyrics*> _lyrics;
       TabDurationSymbol* _tabDur;         // stores a duration symbol in tablature staves
 
@@ -109,9 +108,6 @@ class ChordRest : public DurationElement {
       bool up() const                           { return _up;   }
       void setUp(bool val)                      { _up = val; }
 
-      QVector<Articulation*>& articulations()     { return _articulations; }
-      const QVector<Articulation*>& articulations() const { return _articulations; }
-      Articulation* hasArticulation(const Articulation*);
 
       bool small() const                        { return _small; }
       void setSmall(bool val);
@@ -120,9 +116,6 @@ class ChordRest : public DurationElement {
       int staffMove() const                     { return _staffMove; }
       void setStaffMove(int val)                { _staffMove = val; }
       virtual int vStaffIdx() const override    { return staffIdx() + _staffMove;  }
-
-//      void layout0(AccidentalState*);
-      void layoutArticulations();
 
       const TDuration durationType() const      { return _crossMeasure == CrossMeasure::FIRST ?
                                                       _crossMeasureTDur : _durationType;        }

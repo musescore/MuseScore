@@ -304,16 +304,16 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>30</lid>
+          <lid>29</lid>
           <track>1</track>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>articAccentBelow</subtype>
-            <lid>29</lid>
+            <lid>31</lid>
             <track>1</track>
             </Articulation>
           <Note>
-            <lid>31</lid>
+            <lid>30</lid>
             <track>1</track>
             <pitch>63</pitch>
             <tpc>11</tpc>
@@ -715,16 +715,16 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>99</lid>
+          <lid>98</lid>
           <track>11</track>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>articAccentBelow</subtype>
-            <lid>98</lid>
+            <lid>100</lid>
             <track>11</track>
             </Articulation>
           <Note>
-            <lid>100</lid>
+            <lid>99</lid>
             <track>11</track>
             <pitch>43</pitch>
             <tpc>15</tpc>
@@ -1110,14 +1110,14 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>30</lid>
+            <lid>29</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
-              <lid>29</lid>
+              <lid>31</lid>
               </Articulation>
             <Note>
-              <lid>31</lid>
+              <lid>30</lid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>
@@ -1532,14 +1532,14 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>99</lid>
+            <lid>98</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articAccentBelow</subtype>
-              <lid>98</lid>
+              <lid>100</lid>
               </Articulation>
             <Note>
-              <lid>100</lid>
+              <lid>99</lid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>

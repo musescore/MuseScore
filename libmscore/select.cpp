@@ -487,14 +487,14 @@ void Selection::updateSelectedElements()
                               if (e)
                                     appendFiltered(e);
                               }
-                        for (Articulation* art : cr->articulations())
-                              appendFiltered(art);
                         }
                   if (e->isChord()) {
                         Chord* chord = toChord(e);
                         for (Chord* graceNote : chord->graceNotes())
                               if (canSelect(graceNote)) appendChord(graceNote);
                         appendChord(chord);
+                        for (Articulation* art : chord->articulations())
+                              appendFiltered(art);
                         }
                   else {
                         appendFiltered(e);

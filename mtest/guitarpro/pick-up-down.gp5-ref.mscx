@@ -74,14 +74,14 @@
           <lid>4</lid>
           </Dynamic>
         <Chord>
-          <lid>6</lid>
+          <lid>5</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>stringsDownBow</subtype>
-            <lid>5</lid>
+            <lid>7</lid>
             </Articulation>
           <Note>
-            <lid>7</lid>
+            <lid>6</lid>
             <pitch>62</pitch>
             <tpc>16</tpc>
             <fret>7</fret>
@@ -100,14 +100,14 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>11</lid>
+          <lid>10</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>stringsUpBow</subtype>
-            <lid>10</lid>
+            <lid>12</lid>
             </Articulation>
           <Note>
-            <lid>12</lid>
+            <lid>11</lid>
             <pitch>47</pitch>
             <tpc>19</tpc>
             <fret>2</fret>
@@ -220,14 +220,14 @@
             <lid>4</lid>
             </Dynamic>
           <Chord>
-            <lid>6</lid>
+            <lid>5</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>stringsDownBow</subtype>
-              <lid>5</lid>
+              <lid>7</lid>
               </Articulation>
             <Note>
-              <lid>7</lid>
+              <lid>6</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>7</fret>
@@ -246,14 +246,14 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>11</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>stringsUpBow</subtype>
-              <lid>10</lid>
+              <lid>12</lid>
               </Articulation>
             <Note>
-              <lid>12</lid>
+              <lid>11</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -280,14 +280,14 @@
             <accidental>0</accidental>
             </KeySig>
           <Chord>
-            <lid>6</lid>
+            <lid>5</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>stringsDownBow</subtype>
-              <lid>5</lid>
+              <lid>7</lid>
               </Articulation>
             <Note>
-              <lid>7</lid>
+              <lid>6</lid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>7</fret>
@@ -306,14 +306,14 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>11</lid>
+            <lid>10</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>stringsUpBow</subtype>
-              <lid>10</lid>
+              <lid>12</lid>
               </Articulation>
             <Note>
-              <lid>12</lid>
+              <lid>11</lid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>

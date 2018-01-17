@@ -433,6 +433,7 @@ void Score::fixTicks()
                                     setTempo(tt->segment(), tt->tempo());
                                     }
                               }
+#if 0 // TODO::fermata
                         qreal stretch = 0.0;
                         for (unsigned i = 0; i < s->elist().size(); ++i) {
                               Element* e = s->elist().at(i);
@@ -453,6 +454,7 @@ void Score::fixTicks()
                                     break;
                                     }
                               }
+#endif
                         }
                   }
 
