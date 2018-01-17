@@ -3499,22 +3499,9 @@ void ScoreView::cmdTuplet(int n)
                   }
             }
       else {
-            QSet<ChordRest*> set;
-            for (Element* e : _score->selection().elements()) {
-                  if (e->type() == ElementType::NOTE) {
-                        Note* note = static_cast<Note*>(e);
-                        if (note->noteType() != NoteType::NORMAL) { //no tuplet on grace notes
-                              _score->endCmd();
-                              return;
-                              }
-                        e = note->chord();
-                        }
-                  if (e->isChordRest()) {
-                        ChordRest* cr = static_cast<ChordRest*>(e);
-                        if (!set.contains(cr)) {
-                              cmdTuplet(n, cr);
-                              set.insert(cr);
-                              }
+            for (ChordRest* cr : _score->getSelectedChordRests()) {
+                  if (!cr->isGrace()) {
+                        cmdTuplet(n, cr);
                         }
                   }
             }
