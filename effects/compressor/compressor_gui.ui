@@ -435,7 +435,7 @@
       <string>Makeup gain (dB)</string>
      </property>
      <property name="whatsThis">
-      <string>Controls the gain of the makeup input signal in dB's.</string>
+      <string>Controls the final gain after compression, in dB.</string>
      </property>
      <property name="value" stdset="0">
       <double>0.000000000000000</double>
