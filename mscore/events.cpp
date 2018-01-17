@@ -361,7 +361,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   break;
 
             case ViewState::EDIT: {
-                  if (editData.grips) {
+                  if (e == editData.element && editData.grips) {
                         qreal a = editData.grip[0].width() * 1.0;
                         for (int i = 0; i < editData.grips; ++i) {
                               if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
