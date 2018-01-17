@@ -197,14 +197,14 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>22</lid>
+          <lid>21</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>articAccentBelow</subtype>
-            <lid>21</lid>
+            <lid>23</lid>
             </Articulation>
           <Note>
-            <lid>23</lid>
+            <lid>22</lid>
             <pitch>67</pitch>
             <tpc>15</tpc>
             </Note>
@@ -1040,14 +1040,14 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>22</lid>
+            <lid>21</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articAccentBelow</subtype>
-              <lid>21</lid>
+              <lid>23</lid>
               </Articulation>
             <Note>
-              <lid>23</lid>
+              <lid>22</lid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>

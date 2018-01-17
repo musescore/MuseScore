@@ -238,7 +238,14 @@ Chord::Chord(const Chord& c, bool link)
             Chord* nc = new Chord(*gn, link);
             add(nc);
             }
-
+      for (Articulation* a : c._articulations) {    // make deep copy
+            Articulation* na = new Articulation(*a);
+            if (link)
+                  na->linkTo(a);
+            na->setParent(this);
+            na->setTrack(track());
+            _articulations.append(na);
+            }
       _stem          = 0;
       _hook          = 0;
       _endsGlissando = false;
@@ -297,7 +304,8 @@ void Chord::undoUnlink()
             n->undoUnlink();
       for (Chord* gn : graceNotes())
             gn->undoUnlink();
-
+      for (Articulation* a : _articulations)
+            a->undoUnlink();
 /*      if (_glissando)
             _glissando->undoUnlink(); */
       if (_arpeggio)
@@ -317,6 +325,7 @@ void Chord::undoUnlink()
 
 Chord::~Chord()
       {
+      qDeleteAll(_articulations);
       delete _arpeggio;
       if (_tremolo && _tremolo->chord1() == this) {
             if (_tremolo->chord2())
@@ -500,7 +509,9 @@ void Chord::add(Element* e)
             case ElementType::LEDGER_LINE:
                   qFatal("Chord::add ledgerline");
                   break;
-
+            case ElementType::ARTICULATION:
+                  _articulations.push_back(toArticulation(e));
+                  break;
             default:
                   ChordRest::add(e);
                   break;
@@ -587,6 +598,13 @@ void Chord::remove(Element* e)
                   Chord* grace = *i;
                   grace->setGraceIndex(i - _graceNotes.begin());
                   _graceNotes.erase(i);
+                  }
+                  break;
+            case ElementType::ARTICULATION:
+                  {
+                  Articulation* a = toArticulation(e);
+                  if (!_articulations.removeOne(a))
+                        qDebug("ChordRest::remove(): articulation not found");
                   }
                   break;
             default:
@@ -902,6 +920,8 @@ void Chord::write(XmlWriter& xml) const
             }
       xml.stag("Chord");
       ChordRest::writeProperties(xml);
+      for (const Articulation* a : _articulations)
+            a->write(xml);
       switch (_noteType) {
             case NoteType::NORMAL:
                   break;
@@ -1124,6 +1144,8 @@ qreal Chord::centerX() const
 
 void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
+      for (Articulation* a : _articulations)
+            func(data, a);
       if (_hook)
             func(data, _hook );
       if (_stem)
@@ -1167,6 +1189,8 @@ void Chord::processSiblings(std::function<void(Element*)> func) const
       for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
             func(ll);
 
+      for (Articulation* a : _articulations)
+            func(a);
       for (Note* note : _notes)
             func(note);
 
@@ -2893,6 +2917,253 @@ QPointF Chord::layoutArticulation(Articulation* a)
       a->setPos(x, y);
       a->adjustReadPos();
       return QPointF(x, y);
+      }
+
+//---------------------------------------------------------
+//   layoutArticulations
+//---------------------------------------------------------
+
+void Chord::layoutArticulations()
+      {
+      if (parent() == 0 || _articulations.empty())
+            return;
+      qreal _spatium = spatium();
+      qreal pld      = staff()->lineDistance(tick());
+      qreal _spStaff = _spatium * pld;    // scaled to staff line distance for vert. pos. within a staff
+
+      if (isChord() && _articulations.size() == 1) {
+            toChord(this)->layoutArticulation(_articulations[0]);
+            return;
+            }
+
+      qreal x         = centerX();
+      qreal distance0 = score()->styleP(StyleIdx::propertyDistance);
+      qreal distance1 = score()->styleP(StyleIdx::propertyDistanceHead);
+      qreal distance2 = score()->styleP(StyleIdx::propertyDistanceStem);
+
+      qreal chordTopY = upPos();    // note position of highest note
+      qreal chordBotY = downPos();  // note position of lowest note
+
+      qreal staffTopY = -distance2;
+      qreal staffBotY = staff()->height() + distance2;
+
+      // avoid collisions of staff articulations with chord notes:
+      // gap between note and staff articulation is distance0 + 0.5 spatium
+
+      if (isChord()) {
+            Chord* chord = toChord(this);
+            Stem* stem   = chord->stem();
+            if (stem) {
+                  qreal y = stem->pos().y() + pos().y();
+                  if (up() && stem->stemLen() < 0.0)
+                        y += stem->stemLen();
+                  else if (!up() && stem->stemLen() > 0.0)
+                        y -= stem->stemLen();
+
+                  if (beam()) {
+                        qreal bw = score()->styleS(StyleIdx::beamWidth).val() * _spatium;
+                        y += up() ? -bw : bw;
+                        }
+                  if (up())
+                        staffTopY = qMin(staffTopY, qreal(y - 0.5 * _spatium));
+                  else
+                        staffBotY = qMax(staffBotY, qreal(y + 0.5 * _spatium));
+                  }
+            }
+
+      staffTopY = qMin(staffTopY, chordTopY - distance0 - 0.5 * _spatium);
+      staffBotY = qMax(staffBotY, chordBotY + distance0 + 0.5 * _spatium);
+
+      qreal dy = 0.0;
+
+      int n = _articulations.size();
+      for (int i = 0; i < n; ++i) {
+            Articulation* a = _articulations.at(i);
+            //
+            // determine Direction
+            //
+            if (a->direction() != Direction::AUTO) {
+                  a->setUp(a->direction() == Direction::UP);
+                  }
+            else {
+                  if (a->anchor() == ArticulationAnchor::CHORD)
+                        a->setUp(!up());
+                  else
+                        a->setUp(a->anchor() == ArticulationAnchor::TOP_STAFF || a->anchor() == ArticulationAnchor::TOP_CHORD);
+                  }
+            }
+
+      //
+      //    pass 1
+      //    place tenuto and staccato
+      //
+
+      for (Articulation* a : _articulations) {
+            a->layout();
+            ArticulationAnchor aa = a->anchor();
+
+            if (!(a->isTenuto() || a->isStaccato()))
+                  continue;
+
+            if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD)
+                  continue;
+
+            bool bottom;
+            if ((aa == ArticulationAnchor::CHORD) && measure()->hasVoices(a->staffIdx()))
+                  bottom = !up();
+            else
+                  bottom = (aa == ArticulationAnchor::BOTTOM_CHORD) || (aa == ArticulationAnchor::CHORD && up());
+            bool headSide = bottom == up();
+
+            dy += distance1;
+            qreal y;
+            Chord* chord = toChord(this);
+            if (bottom) {
+                  int line = downLine();
+                  y = chordBotY + dy;
+                  if (!headSide && isChord() && chord->stem()) {
+                        Stem* stem = chord->stem();
+                        y          = chordTopY + stem->stemLen();
+                        if (chord->beam())
+                              y += score()->styleS(StyleIdx::beamWidth).val() * _spatium * .5;
+                        // aligning horizontally to stem makes sense only for staccato
+                        // and only if no other articulations on this side
+                        //x = stem->pos().x();
+                        int line   = lrint((y+0.5*_spStaff) / _spStaff);
+                        if (line < staff()->lines(tick()))  // align between staff lines
+                              y = line * _spStaff + _spatium * .5;
+                        else
+                              y += _spatium;
+                        }
+                  else {
+                        int lines = (staff()->lines(tick()) - 1) * 2;
+                        if (line < lines)
+                              y = ((line & ~1) + 3) * _spStaff;
+                        else
+                              y = line * _spStaff + 2 * _spatium;
+                        y *= .5;
+                        }
+                  }
+            else {
+                  int line = upLine();
+                  y        = chordTopY - dy;
+                  if (!headSide && type() == ElementType::CHORD && chord->stem()) {
+                        Stem* stem = chord->stem();
+                        y          = chordBotY + stem->stemLen();
+                        if (chord->beam())
+                              y -= score()->styleS(StyleIdx::beamWidth).val() * _spatium * .5;
+                        // aligning horizontally to stem makes sense only for staccato
+                        // and only if no other articulations on this side
+                        //x = stem->pos().x();
+                        int line   = lrint((y-0.5*_spStaff) / _spStaff);
+                        if (line >= 0)    // align between staff lines
+                              y = line * _spStaff - _spatium * .5;
+                        else
+                              y -= _spatium;
+                        }
+                  else {
+                        if (line > 0)
+                              y = (((line+1) & ~1) - 3) * _spStaff;
+                        else
+                              y = line * _spStaff - 2 * _spatium;
+                        y *= .5;
+                        }
+                  }
+            dy += _spatium * .5;
+            a->setPos(x, y);
+            }
+
+      // reserve space for slur
+      bool botGap = false;
+      bool topGap = false;
+
+      if (botGap)
+            chordBotY += _spatium;
+      if (topGap)
+            chordTopY -= _spatium;
+
+      //
+      //    pass 2
+      //    place all articulations with anchor at chord/rest
+      //
+      n = _articulations.size();
+      for (int i = 0; i < n; ++i) {
+            Articulation* a = _articulations.at(i);
+            a->layout();
+            ArticulationAnchor aa = a->anchor();
+            if (a->isTenuto() || a->isStaccato())
+                  continue;
+
+            if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD)
+                  continue;
+
+            // for tenuto and staccate check for staff line collision
+            bool staffLineCT = a->isTenuto() || a->isStaccato();
+
+            bool bottom = (aa == ArticulationAnchor::BOTTOM_CHORD) || (aa == ArticulationAnchor::CHORD && up());
+
+            dy += distance1;
+            if (bottom) {
+                  qreal y = chordBotY + dy;
+                  if (staffLineCT && (y <= staffBotY -.1 - dy)) {
+                        qreal l = y / _spStaff;
+                        qreal delta = fabs(l - round(l));
+                        if (delta < 0.4) {
+                              y  += _spatium * .5;
+                              dy += _spatium * .5;
+                              }
+                        }
+                  a->setPos(x, y); // - a->bbox().y() + a->bbox().height() * .5);
+                  }
+            else {
+                  qreal y = chordTopY - dy;
+                  if (staffLineCT && (y >= (staffTopY +.1 + dy))) {
+                        qreal l = y / _spStaff;
+                        qreal delta = fabs(l - round(l));
+                        if (delta < 0.4) {
+                              y  -= _spatium * .5;
+                              dy += _spatium * .5;
+                              }
+                        }
+                  a->setPos(x, y); // + a->bbox().y() - a->bbox().height() * .5);
+                  }
+            }
+
+      //
+      //    pass 3
+      //    now place all articulations with staff top or bottom anchor
+      //
+      qreal dyTop = staffTopY;
+      qreal dyBot = staffBotY;
+
+      for (Articulation* a : _articulations) {
+            ArticulationAnchor aa = a->anchor();
+            if (aa == ArticulationAnchor::TOP_STAFF || aa == ArticulationAnchor::BOTTOM_STAFF) {
+                  if (a->up()) {
+                        a->setPos(x, dyTop);
+                        dyTop -= distance0;
+                        }
+                  else {
+                        a->setPos(x, dyBot);
+                        dyBot += distance0;
+                        }
+                  }
+            a->adjustReadPos();
+            }
+      }
+
+//---------------------------------------------------------
+//   hasArticulation
+//---------------------------------------------------------
+
+Articulation* Chord::hasArticulation(const Articulation* aa)
+      {
+      SymId id = aa->symId();
+      for (Articulation* a : _articulations) {
+            if (id == a->symId())
+                  return a;
+            }
+      return 0;
       }
 
 //---------------------------------------------------------

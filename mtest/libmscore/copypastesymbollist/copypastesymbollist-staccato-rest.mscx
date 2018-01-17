@@ -87,11 +87,12 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>fermataAbove</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -101,7 +102,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>fermataAbove</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>74</pitch>
@@ -111,7 +112,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>fermataAbove</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>76</pitch>
@@ -121,7 +122,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>fermataAbove</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>77</pitch>
@@ -150,9 +151,6 @@
       <Measure number="5">
         <Chord>
           <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>fermataAbove</subtype>
-            </Articulation>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -160,9 +158,6 @@
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>fermataAbove</subtype>
-            </Articulation>
           <Note>
             <pitch>74</pitch>
             <tpc>16</tpc>
@@ -170,9 +165,6 @@
           </Chord>
         <Chord>
           <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>fermataAbove</subtype>
-            </Articulation>
           <Note>
             <pitch>76</pitch>
             <tpc>18</tpc>
@@ -180,9 +172,6 @@
           </Chord>
         <Rest>
           <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>fermataAbove</subtype>
-            </Articulation>
           </Rest>
         </Measure>
       <Measure number="6">

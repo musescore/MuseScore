@@ -80,6 +80,8 @@ class Chord final : public ChordRest {
       qreal _spaceLw;
       qreal _spaceRw;
 
+      QVector<Articulation*> _articulations;
+
       virtual qreal upPos()   const;
       virtual qreal downPos() const;
       virtual qreal centerX() const;
@@ -192,7 +194,13 @@ class Chord final : public ChordRest {
       void setPlayEventType(PlayEventType v)        { _playEventType = v;    }
 
       TremoloChordType tremoloChordType() const;
+
+      void layoutArticulations();
       QPointF layoutArticulation(Articulation*);
+      QVector<Articulation*>& articulations()     { return _articulations; }
+      const QVector<Articulation*>& articulations() const { return _articulations; }
+      Articulation* hasArticulation(const Articulation*);
+
       virtual void crossMeasureSetup(bool on);
 
       virtual QVariant getProperty(P_ID propertyId) const override;

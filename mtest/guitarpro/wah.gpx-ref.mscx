@@ -126,14 +126,14 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>9</lid>
+          <lid>8</lid>
           <durationType>quarter</durationType>
           <Articulation>
             <subtype>brassMuteOpen</subtype>
-            <lid>8</lid>
+            <lid>10</lid>
             </Articulation>
           <Note>
-            <lid>10</lid>
+            <lid>9</lid>
             <pitch>53</pitch>
             <tpc>13</tpc>
             <fret>3</fret>
@@ -152,14 +152,14 @@
             </Note>
           </Chord>
         <Chord>
-          <lid>14</lid>
+          <lid>13</lid>
           <durationType>half</durationType>
           <Articulation>
             <subtype>brassMuteClosed</subtype>
-            <lid>13</lid>
+            <lid>15</lid>
             </Articulation>
           <Note>
-            <lid>15</lid>
+            <lid>14</lid>
             <pitch>55</pitch>
             <tpc>15</tpc>
             <fret>5</fret>
@@ -313,14 +313,14 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>9</lid>
+            <lid>8</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>brassMuteOpen</subtype>
-              <lid>8</lid>
+              <lid>10</lid>
               </Articulation>
             <Note>
-              <lid>10</lid>
+              <lid>9</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
@@ -339,14 +339,14 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>14</lid>
+            <lid>13</lid>
             <durationType>half</durationType>
             <Articulation>
               <subtype>brassMuteClosed</subtype>
-              <lid>13</lid>
+              <lid>15</lid>
               </Articulation>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
@@ -373,14 +373,14 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>9</lid>
+            <lid>8</lid>
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>brassMuteOpen</subtype>
-              <lid>8</lid>
+              <lid>10</lid>
               </Articulation>
             <Note>
-              <lid>10</lid>
+              <lid>9</lid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
@@ -399,14 +399,14 @@
               </Note>
             </Chord>
           <Chord>
-            <lid>14</lid>
+            <lid>13</lid>
             <durationType>half</durationType>
             <Articulation>
               <subtype>brassMuteClosed</subtype>
-              <lid>13</lid>
+              <lid>15</lid>
               </Articulation>
             <Note>
-              <lid>15</lid>
+              <lid>14</lid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
