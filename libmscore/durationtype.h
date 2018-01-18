@@ -86,8 +86,8 @@ bool forceRhythmicSplit(bool isRest, BeatType startBeat, BeatType endBeat, int b
 bool forceRhythmicSplitSimple(bool isRest, BeatType startBeat, BeatType endBeat, int beatsCrossed, BeatType strongestBeatCrossed);
 bool forceRhythmicSplitCompound(bool isRest, BeatType startBeat, BeatType endBeat, int beatsCrossed, BeatType strongestBeatCrossed);
 
-void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, int maxDots);
-void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, int maxDots);
+void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, int maxDots, bool autoSplit);
+void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, int maxDots, bool autoSplit);
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::TDuration);

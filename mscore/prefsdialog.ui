@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>712</width>
-    <height>538</height>
+    <width>859</width>
+    <height>548</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -96,7 +96,7 @@
       <string>Preferences Tab Manager</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -1148,7 +1148,13 @@
          <property name="title">
           <string>Note Input</string>
          </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
          <layout class="QGridLayout" name="gridLayout_13">
+          <property name="leftMargin">
+           <number>9</number>
+          </property>
           <item row="0" column="0">
            <widget class="QCheckBox" name="enableMidiInput">
             <property name="accessibleName">
@@ -1160,6 +1166,16 @@
            </widget>
           </item>
           <item row="1" column="0">
+           <widget class="QCheckBox" name="enableAutoSplit">
+            <property name="accessibleName">
+             <string>Auto-split note duration into tied notes on important measure subdivisions</string>
+            </property>
+            <property name="text">
+             <string>Auto-split note duration into tied notes on important measure subdivisions</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
            <widget class="QCheckBox" name="warnPitchRange">
             <property name="accessibleName">
              <string>Color notes outside of usable pitch range</string>
@@ -1169,14 +1185,27 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="label_56">
             <property name="text">
              <string>Delay between notes in automatic Real-time mode:</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="3" column="2">
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="3" column="1">
            <widget class="QSpinBox" name="realtimeDelay">
             <property name="accessibleName">
              <string>Delay between notes in automatic Real-time mode</string>
@@ -1197,19 +1226,6 @@
              <number>750</number>
             </property>
            </widget>
-          </item>
-          <item row="2" column="2">
-           <spacer name="horizontalSpacer_4">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </widget>
@@ -2333,6 +2349,9 @@
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -4142,17 +4161,16 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>General</tabstop>
-  <tabstop>emptySession</tabstop>
-  <tabstop>lastSession</tabstop>
-  <tabstop>newSession</tabstop>
-  <tabstop>scoreSession</tabstop>
-  <tabstop>sessionScore</tabstop>
-  <tabstop>startWithButton</tabstop>
-  <tabstop>showSplashScreen</tabstop>
-  <tabstop>showStartcenter</tabstop>
+  <tabstop>enableMidiInput</tabstop>
+  <tabstop>enableAutoSplit</tabstop>
+  <tabstop>warnPitchRange</tabstop>
+  <tabstop>realtimeDelay</tabstop>
+  <tabstop>playNotes</tabstop>
+  <tabstop>defaultPlayDuration</tabstop>
+  <tabstop>playChordOnAddNote</tabstop>
+  <tabstop>rcGroup</tabstop>
   <tabstop>playPanelShow</tabstop>
-  <tabstop>navigatorShow</tabstop>
+  <tabstop>iconWidth</tabstop>
   <tabstop>myScores</tabstop>
   <tabstop>myScoresButton</tabstop>
   <tabstop>myStyles</tabstop>
@@ -4162,34 +4180,6 @@
   <tabstop>myPlugins</tabstop>
   <tabstop>myPluginsButton</tabstop>
   <tabstop>mySoundfonts</tabstop>
-  <tabstop>mySoundfontsButton</tabstop>
-  <tabstop>myImages</tabstop>
-  <tabstop>myImagesButton</tabstop>
-  <tabstop>language</tabstop>
-  <tabstop>updateTranslation</tabstop>
-  <tabstop>styleName</tabstop>
-  <tabstop>animations</tabstop>
-  <tabstop>iconWidth</tabstop>
-  <tabstop>iconHeight</tabstop>
-  <tabstop>autoSave</tabstop>
-  <tabstop>autoSaveTime</tabstop>
-  <tabstop>oscServer</tabstop>
-  <tabstop>oscPort</tabstop>
-  <tabstop>bgColorButton</tabstop>
-  <tabstop>bgColorLabel</tabstop>
-  <tabstop>bgWallpaperButton</tabstop>
-  <tabstop>bgWallpaper</tabstop>
-  <tabstop>bgWallpaperSelect</tabstop>
-  <tabstop>fgColorButton</tabstop>
-  <tabstop>fgColorLabel</tabstop>
-  <tabstop>fgWallpaperButton</tabstop>
-  <tabstop>fgWallpaper</tabstop>
-  <tabstop>fgWallpaperSelect</tabstop>
-  <tabstop>enableMidiInput</tabstop>
-  <tabstop>defaultPlayDuration</tabstop>
-  <tabstop>playChordOnAddNote</tabstop>
-  <tabstop>warnPitchRange</tabstop>
-  <tabstop>rcGroup</tabstop>
   <tabstop>rewindActive</tabstop>
   <tabstop>recordRewind</tabstop>
   <tabstop>togglePlayActive</tabstop>
@@ -4218,16 +4208,45 @@
   <tabstop>recordUndo</tabstop>
   <tabstop>rca9</tabstop>
   <tabstop>rcr9</tabstop>
+  <tabstop>rca12</tabstop>
+  <tabstop>rcr12</tabstop>
   <tabstop>rca10</tabstop>
   <tabstop>rcr10</tabstop>
   <tabstop>rca11</tabstop>
   <tabstop>rcr11</tabstop>
-  <tabstop>rca12</tabstop>
-  <tabstop>rcr12</tabstop>
   <tabstop>realtimeAdvanceActive</tabstop>
   <tabstop>recordRealtimeAdvance</tabstop>
   <tabstop>advanceOnRelease</tabstop>
   <tabstop>midiRemoteControlClear</tabstop>
+  <tabstop>resetToDefault</tabstop>
+  <tabstop>buttonBox</tabstop>
+  <tabstop>autoSaveTime</tabstop>
+  <tabstop>oscServer</tabstop>
+  <tabstop>oscPort</tabstop>
+  <tabstop>bgColorButton</tabstop>
+  <tabstop>bgColorLabel</tabstop>
+  <tabstop>bgWallpaperButton</tabstop>
+  <tabstop>bgWallpaper</tabstop>
+  <tabstop>bgWallpaperSelect</tabstop>
+  <tabstop>fgColorButton</tabstop>
+  <tabstop>fgColorLabel</tabstop>
+  <tabstop>fgWallpaperButton</tabstop>
+  <tabstop>fgWallpaper</tabstop>
+  <tabstop>fgWallpaperSelect</tabstop>
+  <tabstop>General</tabstop>
+  <tabstop>sessionScore</tabstop>
+  <tabstop>startWithButton</tabstop>
+  <tabstop>lastSession</tabstop>
+  <tabstop>mySoundfontsButton</tabstop>
+  <tabstop>myImages</tabstop>
+  <tabstop>myImagesButton</tabstop>
+  <tabstop>language</tabstop>
+  <tabstop>showSplashScreen</tabstop>
+  <tabstop>navigatorShow</tabstop>
+  <tabstop>updateTranslation</tabstop>
+  <tabstop>styleName</tabstop>
+  <tabstop>animations</tabstop>
+  <tabstop>showStartcenter</tabstop>
   <tabstop>instrumentList1</tabstop>
   <tabstop>instrumentList1Button</tabstop>
   <tabstop>instrumentList2</tabstop>
@@ -4278,10 +4297,22 @@
   <tabstop>clearShortcut</tabstop>
   <tabstop>defineShortcut</tabstop>
   <tabstop>printShortcuts</tabstop>
-  <tabstop>resetToDefault</tabstop>
-  <tabstop>buttonBox</tabstop>
+  <tabstop>iconHeight</tabstop>
+  <tabstop>autoSave</tabstop>
   <tabstop>drawAntialiased</tabstop>
   <tabstop>proximity</tabstop>
+  <tabstop>pageHorizontal</tabstop>
+  <tabstop>pageVertical</tabstop>
+  <tabstop>emptySession</tabstop>
+  <tabstop>newSession</tabstop>
+  <tabstop>scoreSession</tabstop>
+  <tabstop>showMidiControls</tabstop>
+  <tabstop>expandRepeats</tabstop>
+  <tabstop>exportRPNs</tabstop>
+  <tabstop>exportPdfDpi</tabstop>
+  <tabstop>exportMp3BitRate</tabstop>
+  <tabstop>filterShortcuts</tabstop>
+  <tabstop>checkUpdateStartup</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>
