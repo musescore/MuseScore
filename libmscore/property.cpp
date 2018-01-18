@@ -62,7 +62,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { P_ID::ARTICULATION_ANCHOR,     "articulation_anchor",     false, "anchor",                P_TYPE::INT             },
 
       { P_ID::DIRECTION,               "direction",               false, "direction",             P_TYPE::DIRECTION       },
-      { P_ID::STEM_DIRECTION,          "stem_direction",          true,  "StemDirection",         P_TYPE::DIRECTION       },
+      { P_ID::STEM_DIRECTION,          "stem_direction",          false, "StemDirection",         P_TYPE::DIRECTION       },
       { P_ID::NO_STEM,                 "no_stem",                 false, "noStem",                P_TYPE::INT             },
       { P_ID::SLUR_DIRECTION,          "slur_direction",          false, "up",                    P_TYPE::DIRECTION       },
       { P_ID::LEADING_SPACE,           "leading_space",           false, "leadingSpace",          P_TYPE::SPATIUM         },
