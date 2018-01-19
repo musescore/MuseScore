@@ -127,13 +127,18 @@ void InspectorBarLine::setElement()
 
 void InspectorBarLine::presetDefaultClicked()
       {
-      BarLine* bl = toBarLine(inspector->element());
-      Score* score = bl->score();
+      Score* score = inspector->element()->score();
       score->startCmd();
 
-      bl->undoResetProperty(P_ID::BARLINE_SPAN);
-      bl->undoResetProperty(P_ID::BARLINE_SPAN_FROM);
-      bl->undoResetProperty(P_ID::BARLINE_SPAN_TO);
+      BarLine* bl;
+      for (Element* e : *inspector->el()) {
+            if (e->isBarLine()) {
+                  bl = toBarLine(e);
+                  bl->undoResetProperty(P_ID::BARLINE_SPAN);
+                  bl->undoResetProperty(P_ID::BARLINE_SPAN_FROM);
+                  bl->undoResetProperty(P_ID::BARLINE_SPAN_TO);
+                  }
+            }
 
       score->endCmd();
       }
@@ -144,13 +149,18 @@ void InspectorBarLine::presetDefaultClicked()
 
 void InspectorBarLine::presetTick1Clicked()
       {
-      BarLine* bl = toBarLine(inspector->element());
-      Score* score = bl->score();
+      Score* score = inspector->element()->score();
       score->startCmd();
 
-      bl->undoChangeProperty(P_ID::BARLINE_SPAN, false);
-      bl->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, BARLINE_SPAN_TICK1_FROM);
-      bl->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   BARLINE_SPAN_TICK1_TO);
+      BarLine* bl;
+      for (Element* e : *inspector->el()) {
+            if (e->isBarLine()) {
+                  bl = toBarLine(e);
+                  bl->undoChangeProperty(P_ID::BARLINE_SPAN, false);
+                  bl->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, BARLINE_SPAN_TICK1_FROM);
+                  bl->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   BARLINE_SPAN_TICK1_TO);
+                  }
+            }
 
       score->endCmd();
       }
@@ -161,13 +171,18 @@ void InspectorBarLine::presetTick1Clicked()
 
 void InspectorBarLine::presetTick2Clicked()
       {
-      BarLine* bl = toBarLine(inspector->element());
-      Score* score = bl->score();
+      Score* score = inspector->element()->score();
       score->startCmd();
 
-      bl->undoChangeProperty(P_ID::BARLINE_SPAN, false);
-      bl->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, BARLINE_SPAN_TICK2_FROM);
-      bl->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   BARLINE_SPAN_TICK2_TO);
+      BarLine* bl;
+      for (Element* e : *inspector->el()) {
+            if (e->isBarLine()) {
+                  bl = toBarLine(e);
+                  bl->undoChangeProperty(P_ID::BARLINE_SPAN, false);
+                  bl->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, BARLINE_SPAN_TICK2_FROM);
+                  bl->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   BARLINE_SPAN_TICK2_TO);
+                  }
+            }
 
       score->endCmd();
       }
@@ -178,15 +193,19 @@ void InspectorBarLine::presetTick2Clicked()
 
 void InspectorBarLine::presetShort1Clicked()
       {
-      BarLine* bl = toBarLine(inspector->element());
-      Score* score = bl->score();
+      Score* score = inspector->element()->score();
       score->startCmd();
 
-      bl->undoChangeProperty(P_ID::BARLINE_SPAN, false);
-      bl->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, BARLINE_SPAN_SHORT1_FROM);
-      int shortDelta = bl->staff() ? (bl->staff()->lines(bl->tick()) - 5) * 2 : 0;
-      bl->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   BARLINE_SPAN_SHORT1_TO + shortDelta);
-
+      BarLine* bl;
+      for (Element* e : *inspector->el()) {
+            if (e->isBarLine()) {
+                  bl = toBarLine(e);
+                  bl->undoChangeProperty(P_ID::BARLINE_SPAN, false);
+                  bl->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, BARLINE_SPAN_SHORT1_FROM);
+                  int shortDelta = bl->staff() ? (bl->staff()->lines(bl->tick()) - 5) * 2 : 0;
+                  bl->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   BARLINE_SPAN_SHORT1_TO + shortDelta);
+                  }
+            }
       score->endCmd();
       }
 
@@ -196,15 +215,19 @@ void InspectorBarLine::presetShort1Clicked()
 
 void InspectorBarLine::presetShort2Clicked()
       {
-      BarLine* bl = toBarLine(inspector->element());
-      Score* score = bl->score();
+      Score* score = inspector->element()->score();
       score->startCmd();
 
-      bl->undoChangeProperty(P_ID::BARLINE_SPAN, false);
-      bl->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, BARLINE_SPAN_SHORT2_FROM);
-      int shortDelta = bl->staff() ? (bl->staff()->lines(bl->tick()) - 5) * 2 : 0;
-      bl->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   BARLINE_SPAN_SHORT2_TO + shortDelta);
-
+      BarLine* bl;
+      for (Element* e : *inspector->el()) {
+            if (e->isBarLine()) {
+                  bl = toBarLine(e);
+                  bl->undoChangeProperty(P_ID::BARLINE_SPAN, false);
+                  bl->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, BARLINE_SPAN_SHORT2_FROM);
+                  int shortDelta = bl->staff() ? (bl->staff()->lines(bl->tick()) - 5) * 2 : 0;
+                  bl->undoChangeProperty(P_ID::BARLINE_SPAN_TO,   BARLINE_SPAN_SHORT2_TO + shortDelta);
+                  }
+            }
       score->endCmd();
       }
 

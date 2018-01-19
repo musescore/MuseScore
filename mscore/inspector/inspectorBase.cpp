@@ -357,7 +357,14 @@ void InspectorBase::valueChanged(int idx, bool reset)
             else if (ps == PropertyFlags::STYLED)
                   ps = PropertyFlags::UNSTYLED;
             QVariant val1 = e->getProperty(id);
-            if (val1 != val2 || (reset && ps != PropertyFlags::NOSTYLE))
+            if (reset) {
+                  val2 = e->propertyDefault(id);
+                  }
+            if (val2.isValid() && val1 != val2)
+                  if (reset) {
+                        val2 = e->propertyDefault(id);
+                        setValue(ii, val2);
+                        }
                   e->undoChangeProperty(id, val2, ps);
             }
       inspector->setInspectorEdit(true);
@@ -377,23 +384,7 @@ void InspectorBase::valueChanged(int idx, bool reset)
 
 void InspectorBase::resetClicked(int i)
       {
-      Element* e   = inspector->element();
-      const InspectorItem& ii = iList[i];
-      P_ID id      = ii.t;
-      for (int i = 0; i < ii.parent; ++i)
-            e = e->parent();
-      QVariant def = e->propertyDefault(id);
-      if (!def.isValid()) {
-            qDebug("default value not valid");
-            return;
-            }
-      Score* s = e->score();
-      s->startCmd();
-      e->undoResetProperty(id);
-      inspector->setInspectorEdit(true);
-      s->endCmd();      // this may remove element
-      inspector->setInspectorEdit(false);
-      inspector->update(s);
+      valueChanged(i, true);
       }
 
 //---------------------------------------------------------
