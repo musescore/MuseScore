@@ -1813,7 +1813,8 @@ bool Element::edit(EditData& ed)
 void Element::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
-      eed->pushProperty(P_ID::USER_OFF);
+      if (eed)
+            eed->pushProperty(P_ID::USER_OFF);
       }
 
 //---------------------------------------------------------
