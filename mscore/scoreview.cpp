@@ -4823,6 +4823,11 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
       //    Example: an 1/8 has 240 midi ticks, in an 1/8 triplet the note
       //             has a tick duration of 240 / (3/2) = 160 ticks
       //
+      if (fr.denominator() > 128) {
+            delete tuplet;
+            mscore->noteTooShortForTupletDialog();
+            return;
+            }
 
       tuplet->setDuration(f);
       TDuration baseLen(fr);
