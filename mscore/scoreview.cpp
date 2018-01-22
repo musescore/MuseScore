@@ -400,7 +400,14 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       popup->addAction(getAction("paste"));
       popup->addAction(getAction("swap"));
       popup->addAction(getAction("delete"));
-      popup->addAction(getAction("insert-measure"));
+
+      QMenu* menuAdd = popup->addMenu(tr("Add"));
+      menuAdd->addAction(getAction("insert-measure"));
+      menuAdd->addAction(getAction("insert-measures"));
+      menuAdd->addAction(getAction("insert-hbox"));
+      menuAdd->addAction(getAction("insert-vbox"));
+      menuAdd->addAction(getAction("insert-textframe"));
+
       popup->addSeparator();
 
       a = popup->addAction(tr("Measure Properties..."));
