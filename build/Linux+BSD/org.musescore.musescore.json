@@ -1,0 +1,109 @@
+{
+	"app-id": "org.musescore.musescore",
+	"runtime": "org.kde.Platform",
+	"runtime-version": "master",
+	"sdk": "org.kde.Sdk",
+	"command": "musescore",
+	"rename-desktop-file": "mscore.desktop",
+	"rename-appdata": "mscore",
+	"rename-icon": "mscore",
+	"finish-args":[
+		"--share=network",
+		"--socket=x11",
+		"--socket=wayland"
+	],
+	"modules":[
+		{
+			"name": "libsndfile",
+			"buildsystem": "autotools",
+			"sources": [
+				{
+					"type": "archive",
+					"url": "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.27.tar.gz",
+					"sha256": "a391952f27f4a92ceb2b4c06493ac107896ed6c76be9a613a4731f076d30fac0"
+				}
+			]
+		},
+		{
+			"name": "libogg",
+			"buildsystem": "autotools",
+			"sources": [
+				{
+					"type": "archive",
+					"url": "http://downloads.xiph.org/releases/ogg/libogg-1.3.2.tar.xz",
+					"sha256": "3f687ccdd5ac8b52d76328fbbfebc70c459a40ea891dbf3dccb74a210826e79b"
+				}
+			]
+		},
+		{
+			"name": "libvorbis",
+			"buildsystem": "autotools",
+			"sources": [
+				{
+					"type": "archive",
+					"url": "http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.xz",
+					"sha256": "54f94a9527ff0a88477be0a71c0bab09a4c3febe0ed878b24824906cd4b0e1d1"
+				}
+			]
+		},
+		{
+			"name": "portaudio",
+			"buildsystem": "autotools",
+			"sources": [
+				{
+					"type": "archive",
+					"url": "http://www.portaudio.com/archives/pa_stable_v190600_20161030.tgz",
+					"sha256": "f5a21d7dcd6ee84397446fa1fa1a0675bb2e8a4a6dceb4305a8404698d8d1513"
+				}
+			]
+		},
+		{
+			"name": "jack",
+			"buildsystem": "simple",
+			"sources": [
+				{
+					"type": "git",
+					"url": "git://github.com/jackaudio/jack2.git"
+				}
+			],
+			"build-commands": ["./waf configure --prefix=/app", "./waf build", "./waf install"]
+		},
+		{
+			"name": "lame",
+			"buildsystem": "autotools",
+			"sources":[
+				{
+					"type": "archive",
+					"url": "https://sourceforge.net/projects/lame/files/lame/3.99/lame-3.99.5.tar.gz",
+					"sha256": "24346b4158e4af3bd9f2e194bb23eb473c75fb7377011523353196b19b9a23ff"
+				}
+			]
+		},
+		{
+			"name": "poppler",
+			"config-opts": ["-DENABLE_TESTING=OFF", "-DCMAKE_INSTALL_LIBDIR=lib"],
+            "cmake": true,
+            "builddir": true,
+			"sources": [
+				{
+					"type": "archive",
+					"url": "https://poppler.freedesktop.org/poppler-0.53.0.tar.xz",
+					"sha256": "592bf72960c6b5948b67657594b05e72d9a278daf7613c9f3cdff9a5b73096a8"
+				}
+			]
+		},
+
+		{
+			"name": "musescore",
+			"buildsystem": "cmake",
+			"config-opts": ["-DCMAKE_BUILD_TYPE=RELEASE"],
+			"sources":[
+				{
+					"type":"git",
+					"url": "git://github.com/Alexander-Wilms/MuseScore"
+				}
+			],
+			"build-commands": ["make lrelease", "make", "make install PREFIX=/app"]
+		}
+	]
+}
