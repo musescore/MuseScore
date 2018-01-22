@@ -1330,20 +1330,29 @@ SymId oldArticulationNames2SymId(const QString& s)
 //    for backwards compatibility
 //---------------------------------------------------------
 
-static void setFermataPlacement(Element* el, ArticulationAnchor anchor)
+static void setFermataPlacement(Element* el, ArticulationAnchor anchor, Direction direction)
       {
-      switch (anchor) {
-            case ArticulationAnchor::TOP_STAFF:
-            case ArticulationAnchor::TOP_CHORD:
-                  el->setPlacement(Placement::ABOVE);
-                  break;
+      if (direction == Direction::UP)
+            el->setPlacement(Placement::ABOVE);
+      else if (direction == Direction::DOWN)
+            el->setPlacement(Placement::BELOW);
+      else {
+            switch (anchor) {
+                  case ArticulationAnchor::TOP_STAFF:
+                  case ArticulationAnchor::TOP_CHORD:
+                        el->setPlacement(Placement::ABOVE);
+                        break;
 
-            case ArticulationAnchor::BOTTOM_STAFF:
-            case ArticulationAnchor::BOTTOM_CHORD:
-                  el->setPlacement(Placement::BELOW);
-                  break;
-            default:
-                  break;
+                  case ArticulationAnchor::BOTTOM_STAFF:
+                  case ArticulationAnchor::BOTTOM_CHORD:
+                        el->setPlacement(Placement::BELOW);
+                        break;
+
+                  case ArticulationAnchor::CHORD:
+                        break;
+                  default:
+                        break;
+                  }
             }
       }
 
@@ -1426,11 +1435,10 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
                         case SymId::fermataVeryLongAbove:
                         case SymId::fermataVeryLongBelow:
                               el = new Fermata(sym, cr->score());
-                              setFermataPlacement(el, anchor);
+                              setFermataPlacement(el, anchor, direction);
                               break;
                         default:
                               el = new Articulation(sym, cr->score());
-//                              toArticulation(el)->setAnchor(anchor);
                               toArticulation(el)->setDirection(direction);
                               break;
                         };
@@ -1441,7 +1449,7 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
                   else {
                         if (el->isFermata()) {
                               anchor = ArticulationAnchor(e.readInt());
-                              setFermataPlacement(el, anchor);
+                              setFermataPlacement(el, anchor, direction);
                               }
                         else
                               el->readProperties(e);

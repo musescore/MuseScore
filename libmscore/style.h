@@ -716,6 +716,10 @@ enum class StyleIdx {
       palmMuteBeginTextOffset,
       palmMuteText,
 
+      fermataPosAbove,
+      fermataPosBelow,
+      fermataMinDistance,
+
       STYLES
       };
 

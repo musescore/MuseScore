@@ -3194,13 +3194,7 @@ System* Score::collectSystem(LayoutContext& lc)
                               }
                         }
                   for (Element* e : s->annotations()) {
-                        if (e->visible() && (e->isRehearsalMark() || e->isStaffText() || e->isFretDiagram())) {
-                              e->layout();
-                              int si = e->staffIdx();
-                              s->staffShape(si).add(e->shape().translated(e->pos()));
-                              m->staffShape(si).add(e->shape().translated(s->pos() + e->pos()));
-                              }
-                        else if (e->visible() && e->isDynamic()) {
+                        if (e->visible() && e->isDynamic()) {
                               Dynamic* d = toDynamic(e);
                               d->layout();
 
@@ -3338,6 +3332,24 @@ System* Score::collectSystem(LayoutContext& lc)
                         }
                   }
             }
+
+      for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure())
+                  continue;
+            SegmentType st = SegmentType::ChordRest;
+            Measure* m = toMeasure(mb);
+            for (Segment* s = m->first(st); s; s = s->next(st)) {
+                  for (Element* e : s->annotations()) {
+                        if (e->visible() && (e->isRehearsalMark() || e->isStaffText() || e->isFretDiagram())) {
+                              e->layout();
+                              int si = e->staffIdx();
+                              s->staffShape(si).add(e->shape().translated(e->pos()));
+                              m->staffShape(si).add(e->shape().translated(s->pos() + e->pos()));
+                              }
+                        }
+                  }
+            }
+
       layoutLyrics(system);
 
       system->layout2();   // compute staff distances

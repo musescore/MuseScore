@@ -736,6 +736,9 @@ static const StyleType styleTypes[] {
       { StyleIdx::palmMuteBeginTextOffset,       "palmMuteBeginTextOffset",       QPointF(0.0, 0.15) },
       { StyleIdx::palmMuteText,                  "palmMuteText",                  "P.M." },
 
+      { StyleIdx::fermataPosAbove,               "fermataPosAbove",               Spatium(-1.0) },
+      { StyleIdx::fermataPosBelow,               "fermataPosBelow",               Spatium(1.0)  },
+      { StyleIdx::fermataMinDistance,            "fermataMinDistance",            Spatium(0.4)  },
       };
 #undef MM
 

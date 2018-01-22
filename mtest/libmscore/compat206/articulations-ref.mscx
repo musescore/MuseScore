@@ -123,7 +123,8 @@
             </Note>
           </Chord>
         <Fermata>
-          <subtype>fermataAbove</subtype>
+          <subtype>fermataBelow</subtype>
+          <placement>below</placement>
           </Fermata>
         <Chord>
           <durationType>quarter</durationType>
@@ -165,7 +166,8 @@
             </Note>
           </Chord>
         <Fermata>
-          <subtype>fermataShortAbove</subtype>
+          <subtype>fermataShortBelow</subtype>
+          <placement>below</placement>
           </Fermata>
         <Chord>
           <durationType>quarter</durationType>
@@ -207,7 +209,8 @@
             </Note>
           </Chord>
         <Fermata>
-          <subtype>fermataLongAbove</subtype>
+          <subtype>fermataLongBelow</subtype>
+          <placement>below</placement>
           </Fermata>
         <Chord>
           <durationType>quarter</durationType>
@@ -252,7 +255,8 @@
             </Note>
           </Chord>
         <Fermata>
-          <subtype>fermataVeryLongAbove</subtype>
+          <subtype>fermataVeryLongBelow</subtype>
+          <placement>below</placement>
           </Fermata>
         <Chord>
           <durationType>quarter</durationType>
