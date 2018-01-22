@@ -446,13 +446,14 @@ void BarLine::draw(QPainter* painter) const
                   break;
 
             case BarLineType::END_REPEAT: {
+                  qreal lw = score()->styleP(StyleIdx::barWidth) * mag();
+                  painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
+
                   qreal x = 0.0; // symBbox(SymId::repeatDot).width() * .5;
                   drawDots(painter, x);
 
                   x += score()->styleP(StyleIdx::repeatBarlineDotSeparation) * mag();
                   x += symBbox(SymId::repeatDot).width() * .5;
-                  qreal lw = score()->styleP(StyleIdx::barWidth) * mag();
-                  painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
                   painter->drawLine(QLineF(x, y1, x, y2));
 
                   x  += score()->styleP(StyleIdx::endBarDistance) * mag();
