@@ -118,6 +118,12 @@ Tuplet* MuseScore::tupletDialog()
          qPrintable(tuplet->ratio().print()),
          qPrintable(f.print()));
 
+      if (f.denominator() > 128) {
+            delete tuplet;
+            mscore->noteTooShortForTupletDialog();
+            return 0;
+            }
+
       tuplet->setBaseLen(Fraction(1, f.denominator()));
 
       if (tuplet->baseLen() == TDuration::DurationType::V_INVALID) {
