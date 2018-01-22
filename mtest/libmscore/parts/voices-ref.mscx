@@ -308,7 +308,7 @@
           <track>1</track>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>articAccentBelow</subtype>
+            <subtype>articAccentAbove</subtype>
             <lid>31</lid>
             <track>1</track>
             </Articulation>
@@ -719,7 +719,7 @@
           <track>11</track>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>articAccentBelow</subtype>
+            <subtype>articAccentAbove</subtype>
             <lid>100</lid>
             <track>11</track>
             </Articulation>
@@ -1113,7 +1113,7 @@
             <lid>29</lid>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articAccentAbove</subtype>
+              <subtype>articAccentBelow</subtype>
               <lid>31</lid>
               </Articulation>
             <Note>

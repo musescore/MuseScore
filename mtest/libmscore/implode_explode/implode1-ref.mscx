@@ -596,7 +596,7 @@
         <Chord>
           <durationType>eighth</durationType>
           <Articulation>
-            <subtype>articStaccatoAbove</subtype>
+            <subtype>articStaccatoBelow</subtype>
             </Articulation>
           <Note>
             <pitch>76</pitch>
@@ -623,7 +623,7 @@
           <track>1</track>
           <durationType>eighth</durationType>
           <Articulation>
-            <subtype>articStaccatoBelow</subtype>
+            <subtype>articStaccatoAbove</subtype>
             <track>1</track>
             </Articulation>
           <Note>
@@ -655,7 +655,7 @@
           <track>2</track>
           <durationType>eighth</durationType>
           <Articulation>
-            <subtype>articStaccatoAbove</subtype>
+            <subtype>articStaccatoBelow</subtype>
             <track>2</track>
             </Articulation>
           <Note>
@@ -688,7 +688,7 @@
           <track>3</track>
           <durationType>eighth</durationType>
           <Articulation>
-            <subtype>articStaccatoBelow</subtype>
+            <subtype>articStaccatoAbove</subtype>
             <track>3</track>
             </Articulation>
           <Note>
@@ -993,7 +993,7 @@
         <Chord>
           <durationType>eighth</durationType>
           <Articulation>
-            <subtype>articStaccatoAbove</subtype>
+            <subtype>articStaccatoBelow</subtype>
             </Articulation>
           <Note>
             <pitch>69</pitch>

@@ -68,6 +68,7 @@ void Articulation::setUp(bool val)
             if (s.endsWith(_up ? "Above" : "Below")) {
                   QString s2 = s.left(s.size() - 5) + (val ? "Above" : "Below");
                   _symId = Sym::name2id(s2);
+printf("%p setUp %s -> %s\n", this, qPrintable(s), qPrintable(s2));
                   }
             _up = val;
             }
@@ -546,6 +547,35 @@ bool Articulation::isLuteFingering() const
 QString Articulation::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(userName());
+      }
+
+//---------------------------------------------------------
+//   doAutoplace
+//    check for collisions
+//---------------------------------------------------------
+
+void Articulation::doAutoplace()
+      {
+      Segment* s = segment();
+      if (!(s && autoplace()))
+            return;
+
+      setUserOff(QPointF());
+
+      qreal minDistance = score()->styleP(StyleIdx::dynamicsMinDistance);
+      const Shape& s1   = s->measure()->staffShape(staffIdx());
+      Shape s2          = shape().translated(s->pos() + pos());
+
+      if (up()) {
+            qreal d = s2.minVerticalDistance(s1);
+            if (d > -minDistance)
+                  rUserYoffset() = -d - minDistance;
+            }
+      else {
+            qreal d = s1.minVerticalDistance(s2);
+            if (d > -minDistance)
+                  rUserYoffset() = d + minDistance;
+            }
       }
 
 }

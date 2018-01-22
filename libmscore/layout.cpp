@@ -3189,6 +3189,7 @@ System* Score::collectSystem(LayoutContext& lc)
                                     for (Chord* ch : c->graceNotes())
                                           layoutTies(ch, system, stick);
                                     layoutTies(c, system, stick);
+                                    c->layoutArticulations2();
                                     }
                               }
                         }
