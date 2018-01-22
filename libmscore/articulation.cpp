@@ -68,7 +68,6 @@ void Articulation::setUp(bool val)
             if (s.endsWith(_up ? "Above" : "Below")) {
                   QString s2 = s.left(s.size() - 5) + (val ? "Above" : "Below");
                   _symId = Sym::name2id(s2);
-printf("%p setUp %s -> %s\n", this, qPrintable(s), qPrintable(s2));
                   }
             _up = val;
             }
