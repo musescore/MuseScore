@@ -1870,7 +1870,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "BarLine") {
                   BarLine* barLine = new BarLine(score());
                   barLine->setTrack(e.track());
-
+                  barLine->read(e);
                   //
                   //  StartRepeatBarLine: at rtick == 0, always BarLineType::START_REPEAT
                   //  BarLine:            in the middle of a measure, has no semantic
@@ -1895,9 +1895,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   if (barLine) {
                         segment = getSegmentR(st, t);
                         segment->add(barLine);
+                        barLine->layout();
                         }
-                  barLine->read(e);
-                  barLine->layout();
                   }
             else if (tag == "Chord") {
                   Chord* chord = new Chord(score());
