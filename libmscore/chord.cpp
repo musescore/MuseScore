@@ -3234,7 +3234,6 @@ void Chord::layoutArticulations()
       qreal _spStaff  = _spatium * pld;    // scaled to staff line distance for vert. pos. within a staff
       qreal x         = centerX();
       qreal distance0 = score()->styleP(StyleIdx::propertyDistance);
-      qreal distance1 = score()->styleP(StyleIdx::propertyDistanceHead);
       qreal distance2 = score()->styleP(StyleIdx::propertyDistanceStem);
       qreal chordTopY = upPos();    // note position of highest note
       qreal chordBotY = downPos();  // note position of lowest note
@@ -3263,8 +3262,6 @@ void Chord::layoutArticulations()
 
       staffTopY = qMin(staffTopY, chordTopY - distance0 - 0.5 * _spatium);
       staffBotY = qMax(staffBotY, chordBotY + distance0 + 0.5 * _spatium);
-
-      qreal dy = 0.0;
 
       //
       // determine Direction
@@ -3300,16 +3297,13 @@ void Chord::layoutArticulations()
                   bottom = (aa == ArticulationAnchor::BOTTOM_CHORD) || (aa == ArticulationAnchor::CHORD && up());
             bool headSide = bottom == up();
 
-            dy += distance1;
             qreal y;
-            Chord* chord = toChord(this);
             if (bottom) {
                   int line = downLine();
-                  y = chordBotY + dy;
-                  if (!headSide && isChord() && chord->stem()) {
-                        Stem* stem = chord->stem();
-                        y          = chordTopY + stem->stemLen();
-                        if (chord->beam())
+                  y = chordBotY;
+                  if (!headSide && stem()) {
+                        y          = chordTopY + stem()->stemLen();
+                        if (beam())
                               y += score()->styleS(StyleIdx::beamWidth).val() * _spatium * .5;
                         // aligning horizontally to stem makes sense only for staccato
                         // and only if no other articulations on this side
@@ -3328,14 +3322,14 @@ void Chord::layoutArticulations()
                               y = line * _spStaff + 2 * _spatium;
                         y *= .5;
                         }
+                  y -= a->height() * .5;        // center symbol
                   }
             else {
                   int line = upLine();
-                  y        = chordTopY - dy;
-                  if (!headSide && type() == ElementType::CHORD && chord->stem()) {
-                        Stem* stem = chord->stem();
-                        y          = chordBotY + stem->stemLen();
-                        if (chord->beam())
+                  y        = chordTopY;
+                  if (!headSide && stem()) {
+                        y          = chordBotY + stem()->stemLen();
+                        if (beam())
                               y -= score()->styleS(StyleIdx::beamWidth).val() * _spatium * .5;
                         // aligning horizontally to stem makes sense only for staccato
                         // and only if no other articulations on this side
@@ -3353,8 +3347,8 @@ void Chord::layoutArticulations()
                               y = line * _spStaff - 2 * _spatium;
                         y *= .5;
                         }
+                  y += a->height() * .5;        // center symbol
                   }
-            dy += _spatium * .5;
             a->setPos(x, y);
             }
       }
