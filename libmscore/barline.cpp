@@ -295,7 +295,7 @@ void BarLine::getY() const
             from = BARLINE_SPAN_1LINESTAFF_FROM;
       if (!_spanStaff) {
             if (oneLine && _spanTo == 0)
-                  to = -BARLINE_SPAN_1LINESTAFF_TO;
+                  to = BARLINE_SPAN_1LINESTAFF_TO;
             }
 
       SysStaff* sysStaff1  = system->staff(staffIdx1);
@@ -306,9 +306,9 @@ void BarLine::getY() const
       qreal lw = score()->styleS(StyleIdx::staffLineWidth).val() * spatium1 * .5;
       y1       = yy + from * d * .5 - lw;
       if (spanStaves)
-             y2 = measure->staffLines(staffIdx2)->y1() - yp - to * d * .5;
+            y2 = measure->staffLines(staffIdx2)->y1() - yp - to * d * .5;
       else
-             y2 = yy + (st1->lines() * 2 - 2 + to) * d * .5 + lw;
+            y2 = yy + (st1->lines() * 2 - 2 + to) * d * .5 + lw;
       }
 
 //---------------------------------------------------------
