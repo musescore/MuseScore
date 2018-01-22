@@ -128,6 +128,8 @@ class Articulation final : public Element {
       bool isStaccato() const;
       bool isAccent() const;
       bool isLuteFingering() const;
+
+      void doAutoplace();
       };
 
 }     // namespace Ms
