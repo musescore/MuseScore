@@ -2462,7 +2462,7 @@
              <string>Choose Instrument list 1</string>
             </property>
             <property name="accessibleDescription">
-             <string>Opens a file dialog for selecting a instrument list file</string>
+             <string>Opens a file dialog for selecting an instrument list file</string>
             </property>
             <property name="text">
              <string/>
@@ -2592,7 +2592,7 @@
              <string>Choose Instrument list 2</string>
             </property>
             <property name="accessibleDescription">
-             <string>Opens a file dialog for selecting a instrument list file</string>
+             <string>Opens a file dialog for selecting an instrument list file</string>
             </property>
             <property name="text">
              <string notr="true"/>
