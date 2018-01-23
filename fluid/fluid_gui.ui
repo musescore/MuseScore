@@ -23,7 +23,7 @@
    <item row="0" column="0">
     <widget class="QListWidget" name="soundFonts">
      <property name="accessibleName">
-      <string>Sound Fonts</string>
+      <string>SoundFonts</string>
      </property>
     </widget>
    </item>
@@ -44,7 +44,7 @@
         <enum>Qt::TabFocus</enum>
        </property>
        <property name="toolTip">
-        <string>Move Soundfont up</string>
+        <string>Move SoundFont up</string>
        </property>
        <property name="accessibleDescription">
         <string/>
@@ -70,7 +70,7 @@
         <enum>Qt::TabFocus</enum>
        </property>
        <property name="toolTip">
-        <string>Move Soundfont down</string>
+        <string>Move SoundFont down</string>
        </property>
        <property name="text">
         <string notr="true"/>
