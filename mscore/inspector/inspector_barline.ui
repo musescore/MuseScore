@@ -254,7 +254,7 @@
      <item row="4" column="1">
       <widget class="QComboBox" name="spanType">
        <property name="accessibleName">
-        <string>Spantype</string>
+        <string>Span Type</string>
        </property>
       </widget>
      </item>
