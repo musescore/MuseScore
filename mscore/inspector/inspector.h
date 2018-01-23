@@ -45,6 +45,7 @@
 #include "ui_inspector_caesura.h"
 #include "ui_inspector_bracket.h"
 #include "ui_inspector_iname.h"
+#include "ui_inspector_fermata.h"
 
 namespace Ms {
 
@@ -137,6 +138,18 @@ class InspectorArticulation : public InspectorElementBase {
 
    public:
       InspectorArticulation(QWidget* parent);
+      };
+
+//---------------------------------------------------------
+//   InspectorFermata
+//---------------------------------------------------------
+
+class InspectorFermata : public InspectorElementBase {
+      Q_OBJECT
+      Ui::InspectorFermata f;
+
+   public:
+      InspectorFermata(QWidget* parent);
       };
 
 //---------------------------------------------------------
