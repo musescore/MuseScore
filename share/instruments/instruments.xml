@@ -8965,7 +8965,7 @@
             </Instrument>
             <Instrument id="contra-guitar">
                   <longName>Contra Guitar</longName>
-                  <shortName>C Guit.</shortName>
+                  <shortName>C. Guit.</shortName>
                   <description>Acoustic Contra Guitar</description>
                   <musicXMLid>pluck.guitar</musicXMLid>
                   <StringData>
@@ -9950,10 +9950,10 @@
 <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
             </Instrument>
-            <Instrument id="prima">
-                  <longName>Prima</longName>
+            <Instrument id="prim">
+                  <longName>Prim</longName>
                   <shortName>Pr.</shortName>
-                  <description>Prima</description>
+                  <description>Prim</description>
                   <musicXMLid>pluck.tambura</musicXMLid>
                   <StringData>
                         <frets>15</frets>
@@ -10500,7 +10500,7 @@
             </Instrument>
             <Instrument id="d-violone">
                   <longName>D Violone</longName>
-                  <shortName>Vne.</shortName>
+                  <shortName>D Vne.</shortName>
                   <description>Violone</description>
                   <musicXMLid>strings.viol.violone</musicXMLid>
                   <StringData>
