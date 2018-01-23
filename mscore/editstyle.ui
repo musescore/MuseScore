@@ -2208,7 +2208,7 @@
             <item>
              <widget class="QCheckBox" name="showRepeatBarTips">
               <property name="text">
-               <string>Show repeat bar tips (&quot;winged&quot; repeats)</string>
+               <string>Show repeat barline tips (&quot;winged&quot; repeats)</string>
               </property>
              </widget>
             </item>

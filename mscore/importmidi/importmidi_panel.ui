@@ -278,7 +278,7 @@
          </size>
         </property>
         <property name="toolTip">
-         <string>Cancel not applied MIDI import operations</string>
+         <string>Cancel non-applied MIDI import operations</string>
         </property>
         <property name="text">
          <string>Cancel</string>

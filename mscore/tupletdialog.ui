@@ -42,7 +42,7 @@
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>Relation:</string>
+             <string>Ratio:</string>
             </property>
            </widget>
           </item>
@@ -180,7 +180,7 @@
            <item>
             <widget class="QRadioButton" name="relation">
              <property name="text">
-              <string>Relation</string>
+              <string>Ratio</string>
              </property>
             </widget>
            </item>
