@@ -36,7 +36,6 @@ class Rest : public ChordRest {
       virtual QRectF drag(EditData&) override;
       virtual qreal upPos()   const override;
       virtual qreal downPos() const override;
-      virtual qreal centerX() const override;
       virtual void setUserOff(const QPointF& o) override;
 
 

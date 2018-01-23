@@ -135,6 +135,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_iname.ui
       inspector/inspector_fingering.ui
       inspector/inspector_frametext.ui
+      inspector/inspector_fermata.ui
       inspector/align_select.ui
       inspector/offset_select.ui
       inspector/scale_select.ui

@@ -228,25 +228,12 @@ Page* Articulation::page() const
 
 //---------------------------------------------------------
 //   layout
-//    height() and width() should return sensible
-//    values when calling this method
 //---------------------------------------------------------
 
 void Articulation::layout()
       {
       QRectF b(symBbox(_symId));
       setbbox(b.translated(-0.5 * b.width(), 0.0));
-      }
-
-//---------------------------------------------------------
-//   setDirection
-//---------------------------------------------------------
-
-void Articulation::setDirection(Direction d)
-      {
-      _direction = d;
-//      if (d != Direction::AUTO)
-//            _up = (d == Direction::UP);
       }
 
 //---------------------------------------------------------

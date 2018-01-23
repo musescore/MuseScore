@@ -200,6 +200,9 @@ void Inspector::update(Score* s)
                         case ElementType::ARTICULATION:
                               ie = new InspectorArticulation(this);
                               break;
+                        case ElementType::FERMATA:
+                              ie = new InspectorFermata(this);
+                              break;
                         case ElementType::SPACER:
                               ie = new InspectorSpacer(this);
                               break;
@@ -515,6 +518,24 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
             { P_ID::PLAY,                0, ar.playArticulation, ar.resetPlayArticulation }
             };
       const std::vector<InspectorPanel> ppList = { { ar.title, ar.panel } };
+      mapSignals(iiList, ppList);
+      }
+
+//---------------------------------------------------------
+//   InspectorFermata
+//---------------------------------------------------------
+
+InspectorFermata::InspectorFermata(QWidget* parent)
+   : InspectorElementBase(parent)
+      {
+      f.setupUi(addWidget());
+
+      const std::vector<InspectorItem> iiList = {
+            { P_ID::PLACEMENT,           0, f.placement,        f.resetPlacement        },
+            { P_ID::TIME_STRETCH,        0, f.timeStretch,      f.resetTimeStretch      },
+            { P_ID::PLAY,                0, f.playArticulation, f.resetPlayArticulation }
+            };
+      const std::vector<InspectorPanel> ppList = { { f.title, f.panel } };
       mapSignals(iiList, ppList);
       }
 

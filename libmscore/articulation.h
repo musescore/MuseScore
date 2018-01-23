@@ -101,7 +101,7 @@ class Articulation final : public Element {
 
       bool up() const                       { return _up; }
       void setUp(bool val);
-      void setDirection(Direction d);
+      void setDirection(Direction d)        { _direction = d;    }
       Direction direction() const           { return _direction; }
 
       ChordRest* chordRest() const;

@@ -525,7 +525,7 @@
         <Chord>
           <durationType>eighth</durationType>
           <Articulation>
-            <subtype>articStaccatoBelow</subtype>
+            <subtype>articStaccatoAbove</subtype>
             </Articulation>
           <Note>
             <pitch>69</pitch>

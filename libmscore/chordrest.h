@@ -95,7 +95,6 @@ class ChordRest : public DurationElement {
       int beams() const                         { return _durationType.hooks(); }
       virtual qreal upPos()   const = 0;
       virtual qreal downPos() const = 0;
-      virtual qreal centerX() const = 0;
 
       int line(bool up) const                   { return up ? upLine() : downLine(); }
       int line() const                          { return _up ? upLine() : downLine(); }

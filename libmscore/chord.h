@@ -84,7 +84,7 @@ class Chord final : public ChordRest {
 
       virtual qreal upPos()   const;
       virtual qreal downPos() const;
-      virtual qreal centerX() const;
+      qreal centerX() const;
       void addLedgerLines();
       void processSiblings(std::function<void(Element*)> func) const;
 
@@ -198,9 +198,10 @@ class Chord final : public ChordRest {
       void layoutArticulations();
       void layoutArticulations2();
 
-      QVector<Articulation*>& articulations()     { return _articulations; }
+      QVector<Articulation*>& articulations()             { return _articulations; }
       const QVector<Articulation*>& articulations() const { return _articulations; }
       Articulation* hasArticulation(const Articulation*);
+      bool hasSingleArticulation() const                  { return _articulations.size() == 1; }
 
       virtual void crossMeasureSetup(bool on);
 
