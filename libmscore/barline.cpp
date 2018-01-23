@@ -1153,8 +1153,18 @@ bool BarLine::setProperty(P_ID id, const QVariant& v)
 
 void BarLine::undoChangeProperty(P_ID id, const QVariant& v, PropertyFlags ps)
       {
-      if (id == P_ID::BARLINE_TYPE && segment())
-            undoChangeBarLineType(this, v.value<BarLineType>());
+      if (id == P_ID::BARLINE_TYPE && segment()) {
+            const BarLine* bl = this;
+            BarLineType blType = v.value<BarLineType>();
+            if (blType == BarLineType::START_REPEAT) { // change next measures endBarLine
+                  if (bl->measure()->nextMeasure())
+                        bl = bl->measure()->nextMeasure()->endBarLine();
+                  else
+                        bl = 0;
+                  }
+            if (bl)
+                  undoChangeBarLineType(const_cast<BarLine*>(bl), v.value<BarLineType>());
+            }
       else
             ScoreElement::undoChangeProperty(id, v, ps);
       }
