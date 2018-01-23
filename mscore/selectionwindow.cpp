@@ -57,7 +57,7 @@ const int numLabels = sizeof(labels)/sizeof(labels[0]);
 SelectionListWidget::SelectionListWidget(QWidget *parent) : QListWidget(parent)
       {
       setAccessibleName(tr("Selection filter"));
-      setAccessibleDescription(tr("Use Tab and Backtab to move through the check boxes"));
+      setAccessibleDescription(tr("Use Tab and Backtab (Shift+Tab) to move through the check boxes"));
       setFrameShape(QFrame::NoFrame);
       setSelectionMode(QAbstractItemView::SingleSelection);
       setFocusPolicy(Qt::TabFocus);

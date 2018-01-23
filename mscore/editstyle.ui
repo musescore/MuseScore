@@ -4259,7 +4259,7 @@
              <item>
               <widget class="QCheckBox" name="showRepeatBarTips">
                <property name="text">
-                <string>Show repeat bar tips (&quot;winged&quot; repeats)</string>
+                <string>Show repeat barline tips (&quot;winged&quot; repeats)</string>
                </property>
               </widget>
              </item>
@@ -7286,7 +7286,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page">
+      <widget class="QWidget" name="PageFermatas">
        <layout class="QVBoxLayout" name="verticalLayout_53">
         <item>
          <widget class="QGroupBox" name="groupBox_37">
@@ -9812,7 +9812,7 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>Relation</string>
+                  <string>Ratio</string>
                  </property>
                 </item>
                 <item>
