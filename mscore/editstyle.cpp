@@ -366,7 +366,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       tupletNumberType->clear();
       tupletNumberType->addItem(tr("Number"), int(Tuplet::NumberType::SHOW_NUMBER));
-      tupletNumberType->addItem(tr("Relation"), int(Tuplet::NumberType::SHOW_RELATION));
+      tupletNumberType->addItem(tr("Ratio"), int(Tuplet::NumberType::SHOW_RELATION));
       tupletNumberType->addItem(tr("Nothing"), int(Tuplet::NumberType::NO_TEXT));
 
       tupletBracketType->clear();
