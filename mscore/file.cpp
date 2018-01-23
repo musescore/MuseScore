@@ -276,7 +276,7 @@ void MuseScore::loadFiles()
          tr("MuseScore Files") + " (*.mscz *.mscx);;" +
          tr("MusicXML Files") + " (*.mxl *.musicxml *.xml);;" +
          tr("MIDI Files") + " (*.mid *.midi *.kar);;" +
-         tr("Muse Data Files") + " (*.md);;" +
+         tr("MuseData Files") + " (*.md);;" +
          tr("Capella Files") + " (*.cap *.capx);;" +
          tr("BB Files <experimental>") + " (*.mgu *.sgu);;" +
 #ifdef OMR
