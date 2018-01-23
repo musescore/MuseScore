@@ -413,7 +413,7 @@
            <item>
             <widget class="QCheckBox" name="crossMeasureValues">
              <property name="text">
-              <string>Display note values across measure bar (EXPERIMENTAL, early music only!)</string>
+              <string>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</string>
              </property>
             </widget>
            </item>
