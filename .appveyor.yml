@@ -43,13 +43,13 @@ before_build:
     XCOPY Jack "C:\Program Files (x86)\Jack" /E /I /Y &&
     XCOPY ccache "C:\ccache" /E /I /Y
   - SET OLD_PATH=%PATH%
-  - SET PATH=C:\Qt\5.9.2\mingw53_32\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%
+  - SET PATH=C:\Qt\5.9\mingw53_32\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%
   - CD C:\MuseScore
   # get revision number
   - mingw32-make -f Makefile.mingw revision
   - SET /p MSversion=<mscore\revision.h
   # CMake refuses to generate MinGW Makefiles if sh.exe is in the PATH (C:\Program Files\Git\usr\bin)
-  - SET PATH=C:\Qt\5.9.2\mingw53_32\bin;C:\Qt\Tools\mingw530_32\bin;C:\Program Files (x86)\CMake\bin;C:\Program Files\7-Zip;C:\ccache\bin;C:\Tools\curl\bin;C:\Windows\system32;C:\Windows
+  - SET PATH=C:\Qt\5.9\mingw53_32\bin;C:\Qt\Tools\mingw530_32\bin;C:\Program Files (x86)\CMake\bin;C:\Program Files\7-Zip;C:\ccache\bin;C:\Tools\curl\bin;C:\Windows\system32;C:\Windows
   - SET CCACHE_DIR=C:\ccache\cache
 
 
