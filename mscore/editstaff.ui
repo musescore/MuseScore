@@ -593,7 +593,7 @@
         <item>
          <widget class="QLabel" name="label_11">
           <property name="text">
-           <string>octaves +</string>
+           <string>Octave(s) +</string>
           </property>
           <property name="buddy">
            <cstring>octave</cstring>
