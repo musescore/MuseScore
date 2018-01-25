@@ -119,6 +119,9 @@ void AlbumManager::addClicked()
 void AlbumManager::addNewClicked()
       {
       MasterScore* score = mscore->getNewFile();
+      if (!score)
+            return;
+
       delete score->movements();
       MasterScore* topScore = album->front();
 
@@ -189,8 +192,11 @@ void AlbumManager::removeClicked()
 
 void AlbumManager::setAlbum(Movements* a)
       {
-      album = a;
       scoreList->clear();
+      if (!a)
+            return;
+
+      album = a;
 
       scoreList->blockSignals(true);
       for (MasterScore* score : *album) {
@@ -239,7 +245,8 @@ void MuseScore::showAlbumManager()
       {
       if (albumManager == 0)
             albumManager = new AlbumManager(this);
-      albumManager->setAlbum(currentScoreView()->score()->masterScore()->movements());
+
+      albumManager->setAlbum(currentScoreView() ? currentScoreView()->score()->masterScore()->movements() : 0);
       albumManager->show();
 
       // focus on album name on opening the Album Manager
