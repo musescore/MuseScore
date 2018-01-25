@@ -3669,6 +3669,7 @@ void Score::doLayoutRange(int stick, int etick)
                         }
                   for (SpannerSegment* ss : s->spannerSegments())
                         ss->setParent(0);
+                  s->setParent(nullptr);
                   }
             for (MeasureBase* mb = first(); mb; mb = mb->next()) {
                   mb->setSystem(0);
