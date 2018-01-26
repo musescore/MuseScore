@@ -418,54 +418,64 @@ void Lyrics::paste(MuseScoreView* scoreview)
       QClipboard::Mode mode = QClipboard::Selection;
 #endif
       QString txt = QApplication::clipboard()->text(mode);
-      QStringList sl = txt.split(QRegExp("\\s+"), QString::SkipEmptyParts);
-      if (sl.isEmpty())
+      if (txt.isEmpty())
             return;
 
-      QStringList hyph = sl[0].split("-");
       bool minus = false;
       bool underscore = false;
-      if(hyph.length() > 1) {
-            insertText(hyph[0]);
-            hyph.removeFirst();
-            sl[0] =  hyph.join("-");
-            minus = true;
-            }
-      else if (sl.length() > 1 && sl[1] == "-") {
-            insertText(sl[0]);
-            sl.removeFirst();
-            sl.removeFirst();
-            minus = true;
-            }
-      else if (sl[0].startsWith("_")) {
-            sl[0].remove(0, 1);
-            if (sl[0].isEmpty())
-                  sl.removeFirst();
-            underscore = true;
-            }
-      else if (sl[0].contains("_")) {
-            int p = sl[0].indexOf("_");
-            insertText(sl[0].left(p));
-            sl[0] = sl[0].mid(p + 1);
-            if (sl[0].isEmpty())
-                  sl.removeFirst();
-            underscore = true;
-            }
-      else if (sl.length() > 1 && sl[1] == "_") {
-            insertText(sl[0]);
-            sl.removeFirst();
-            sl.removeFirst();
-            underscore = true;
-            }
-      else {
-            insertText(sl[0]);
-            sl.removeFirst();
-            }
+      bool done = false;
+      QString syllable = "";
 
+      // ignore leading whitespace
+      while (!txt.isEmpty() && txt[0].isSpace())
+            txt = txt.remove(0, 1);
+
+      while (!txt.isEmpty()) {
+            if (txt[0].isSpace()) {
+                  // the syllable is complete, but we need to find the next
+                  // non-whitespace character in case it is a - or a _
+                  done = true;
+                  while (!txt.isEmpty() && txt[0].isSpace())
+                        txt = txt.remove(0, 1);
+                  }
+            else if (txt[0] == '-') {
+                  minus = true;
+                  txt = txt.remove(0, 1);
+                  break;
+                  }
+            else if (txt[0] == '_') {
+                  underscore = true;
+                  txt = txt.remove(0, 1);
+                  break;
+                  }
+            else if (txt[0] == '\\') {
+                  if (!done) {
+                        // remove the \ and append the next character
+                        // to the syllable, whatever it is
+                        txt = txt.remove(0, 1);
+                        if (!txt.isEmpty()) {
+                              syllable.append(txt[0]);
+                              txt = txt.remove(0, 1);
+                              }
+                        }
+                  else
+                        break;
+                  }
+            else {
+                  // not a special character, just plain text
+                  if (!done) {
+                        syllable.append(txt[0]);
+                        txt = txt.remove(0, 1);
+                        }
+                  else
+                        break;
+                  }
+      }
+
+      insertText(syllable);
       layout();
       score()->setLayoutAll(true);
       score()->end();
-      txt = sl.join(" ");
 
       QApplication::clipboard()->setText(txt, mode);
       if (minus)
