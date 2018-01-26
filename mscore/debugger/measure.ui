@@ -361,7 +361,7 @@
         <item row="0" column="0">
          <widget class="QCheckBox" name="lineBreak">
           <property name="text">
-           <string notr="true">Line Break</string>
+           <string notr="true">System Break</string>
           </property>
          </widget>
         </item>

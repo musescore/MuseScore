@@ -487,7 +487,7 @@ Palette* MuseScore::newBreaksPalette()
             };
       LayoutBreak* lb = new LayoutBreak(gscore);
       lb->setLayoutBreakType(LayoutBreak::Type::LINE);
-      PaletteCell* cell = sp->append(lb, tr("Line break"));
+      PaletteCell* cell = sp->append(lb, tr("System break"));
       cell->mag = 1.2;
 
       lb = new LayoutBreak(gscore);
