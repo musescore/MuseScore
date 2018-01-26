@@ -386,9 +386,8 @@ void Lyrics::layout1()
 //   paste
 //---------------------------------------------------------
 
-void Lyrics::paste(EditData& /*ed*/)
+void Lyrics::paste(EditData& ed)
       {
-#if 0 // TODO
       MuseScoreView* scoreview = ed.view;
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       QClipboard::Mode mode = QClipboard::Clipboard;
@@ -404,13 +403,13 @@ void Lyrics::paste(EditData& /*ed*/)
       bool minus = false;
       bool underscore = false;
       if(hyph.length() > 1) {
-            insertText(hyph[0]);
+            insertText(ed, hyph[0]);
             hyph.removeFirst();
             sl[0] =  hyph.join("-");
             minus = true;
             }
       else if (sl.length() > 1 && sl[1] == "-") {
-            insertText(sl[0]);
+            insertText(ed, sl[0]);
             sl.removeFirst();
             sl.removeFirst();
             minus = true;
@@ -423,20 +422,21 @@ void Lyrics::paste(EditData& /*ed*/)
             }
       else if (sl[0].contains("_")) {
             int p = sl[0].indexOf("_");
-            insertText(sl[0].left(p));
+            insertText(ed, sl[0].left(p));
             sl[0] = sl[0].mid(p + 1);
             if (sl[0].isEmpty())
                   sl.removeFirst();
             underscore = true;
             }
       else if (sl.length() > 1 && sl[1] == "_") {
-            insertText(sl[0]);
+            insertText(ed, sl[0]);
             sl.removeFirst();
             sl.removeFirst();
             underscore = true;
             }
       else {
-            insertText(sl[0]);
+            sl[0].replace('+', ' ');
+            insertText(ed, sl[0]);
             sl.removeFirst();
             }
 
@@ -452,7 +452,6 @@ void Lyrics::paste(EditData& /*ed*/)
             scoreview->lyricsUnderscore();
       else
             scoreview->lyricsTab(false, false, true);
-#endif
       }
 
 //---------------------------------------------------------
