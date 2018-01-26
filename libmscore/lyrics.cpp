@@ -435,7 +435,6 @@ void Lyrics::paste(EditData& ed)
             underscore = true;
             }
       else {
-            sl[0].replace('+', ' ');
             insertText(ed, sl[0]);
             sl.removeFirst();
             }
