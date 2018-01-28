@@ -26,6 +26,12 @@
 
 namespace Ms {
 
+#ifdef Q_OS_MAC
+#define CONTROL_MODIFIER Qt::AltModifier
+#else
+#define CONTROL_MODIFIER Qt::ControlModifier
+#endif
+
 static const qreal subScriptSize   = 0.6;
 static const qreal subScriptOffset = 0.5;       // of x-height
 static const qreal superScriptOffset = -.9;      // of x-height
@@ -1810,8 +1816,14 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                         break;
 
                   case Qt::Key_Tab:
-                  case Qt::Key_Space:
                         s = " ";
+                        modifiers = 0;
+                        break;
+                  case Qt::Key_Space:
+                        if (modifiers & CONTROL_MODIFIER)
+                              s = QString(QChar(0xa0)); // non-breaking space
+                        else
+                              s = " ";
                         modifiers = 0;
                         break;
 
