@@ -344,6 +344,9 @@ static QString addPositioningAttributes(QString& xml, Element const* const el, b
         if (!preferences.musicxmlExportLayout)
             return xml;
 
+           qDebug("single el %p _pos x,y %f %f _userOff x,y %f %f spatium %f",
+           el, el->ipos().x(), el->ipos().y(), el->userOff().x(), el->userOff().y(), el->spatium());
+
         const float positionElipson = 0.1f;
         float defaultX = 0, defaultY = 0, relativeX = 0, relativeY = 0;
         float spatium = el->spatium();
@@ -354,16 +357,26 @@ static QString addPositioningAttributes(QString& xml, Element const* const el, b
                 seg = span->spannerSegments().first();
                 QPointF userOff = seg->userOff();
                 QPointF p = seg->pos();
-                defaultX = userOff.x();
-                defaultY = p.y();
+                  relativeX = userOff.x();
+                  defaultY = p.y();
+
+                  qDebug("sline start seg %p seg->pos x,y %f %f seg->userOff x,y %f %f spatium %f",
+                         seg, p.x(), p.y(), seg->userOff().x(), seg->userOff().y(), seg->spatium());
+
             }
             else {
                 seg = span->spannerSegments().last();
                 QPointF userOff = seg->userOff(); // This is the offset accessible from the inspector
                 QPointF userOff2 = seg->userOff2(); // Offset of the actual dragged anchor, which doesn't affect the inspector offset
-                QPointF pos = seg->pos();
+                //QPointF pos = seg->pos();
                 QPointF pos2 = seg->pos2();
+                  qDebug("sline stop seg %p seg->pos2 x,y %f %f seg->userOff2 x,y %f %f spatium %f",
+                         seg, pos2.x(), pos2.y(), seg->userOff2().x(), seg->userOff2().y(), seg->spatium());
+                  // For an SLine, the actual offset equals the sum of userOff and userOff2,
+                  // as userOff moves the SLine as a whole
+                  relativeX = userOff.x() + userOff2.x();
 
+                  /*
                 Note* n = dynamic_cast<Note*>(span->endElement());
                 ChordRest* cr = n ? n->chord() : dynamic_cast<ChordRest*>(span->endElement());
                 int t = span->tick2();
@@ -384,7 +397,9 @@ static QString addPositioningAttributes(QString& xml, Element const* const el, b
                 // the x's go from the right edge of the measure for some reason in finale, while in the spec they're supposed to go from the left edge,
                 // so to keep compiant with finale we must subtract the measure width and multiply by -10 instead of 10 to get a negative
                 // LinePos includes the measureX, so we must subtract that because defaultX is relative to the current measure
-                defaultY = pos.y() + pos2.y();
+                   */
+                  // Following would probably required for non-horizontal SLines:
+                //defaultY = pos.y() + pos2.y();
 
              /* qDebug("CR SegPos X: %f", cr->segment()->pos().x());
                 qDebug("CR Pos X: %f", cr->pos().x());
@@ -398,12 +413,10 @@ static QString addPositioningAttributes(QString& xml, Element const* const el, b
             }
         }
         else {
-            // defaultX = el->ipos().x();
-            // finale doesn't play nicely with defaultX's for some reason, espeically dynamics, which causes an incorrect offset, but we can account
-            // for this by using pos() instead of userOff() for relativeX
-            defaultY = el->ipos().y();
-            relativeX = el->pos().x();
-            relativeY = el->userOff().y();
+              defaultX = el->ipos().x(); // Note: for some elemenr=ts, Finale Notepad seems to work slightly better w/o default-x
+              defaultY = el->ipos().y();
+              relativeX = el->userOff().x();
+              relativeY = el->userOff().y();
         }
 
         defaultX *=  10 / spatium; defaultY *=  -10 / spatium; // convert into spatium tenths for musicxml
