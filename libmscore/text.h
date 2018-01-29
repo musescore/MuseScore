@@ -341,7 +341,9 @@ class TextBase : public Element {
       QList<TextBlock>& textBlockList()          { return _layout; }
       int rows() const                           { return _layout.size(); }
 
-      void setTextInvalid()                      { textInvalid = true;  };
+      void setTextInvalid()                      { textInvalid = true;   };
+      bool isTextInvalid() const                 { return textInvalid;   }
+      bool isLayoutInvalid() const               { return layoutInvalid; }
 
       friend class TextCursor;
       };
