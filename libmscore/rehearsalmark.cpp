@@ -45,7 +45,6 @@ void RehearsalMark::layout()
             }
       setPos(QPointF(0.0, y));
       TextBase::layout1();
-
       Segment* s = segment();
       if (s) {
             if (!s->rtick()) {

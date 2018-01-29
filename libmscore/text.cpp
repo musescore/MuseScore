@@ -1,4 +1,3 @@
-
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
@@ -1719,6 +1718,7 @@ void TextBase::endEdit(EditData&)
 
 void TextBase::editInsertText(TextCursor* cursor, const QString& s)
       {
+      Q_ASSERT(!layoutInvalid);
       textInvalid = true;
 
       if (s.size() == 1 && (s[0] == QChar::CarriageReturn)) {
@@ -2766,6 +2766,8 @@ bool TextBase::setProperty(P_ID propertyId, const QVariant& v)
                   rv = Element::setProperty(propertyId, v);
                   break;
             }
+      if (textInvalid)
+            genText();
       layoutInvalid = true;
       triggerLayout();
       return rv;
