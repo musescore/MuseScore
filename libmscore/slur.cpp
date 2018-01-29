@@ -526,6 +526,7 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
       //
       // handle special case of tenuto and staccato;
       //
+#if 1
       const QVector<Articulation*>& al = c->articulations();
       if (al.size() >= 2) {
             Articulation* a = al.at(1);
@@ -541,6 +542,7 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
             else if (a->isTenuto() || a->isStaccato())
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
+#endif
       return yo;
       }
 
