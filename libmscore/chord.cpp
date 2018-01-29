@@ -3388,12 +3388,14 @@ void Chord::layoutArticulations2()
             if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD)
                   continue;
 
+            if (a->isStaccato() || a->isTenuto())
+                  continue;
             a->layout();
             dy += distance1;
             qreal y = a->up() ? chordTopY - dy : chordBotY + dy;
             a->setPos(x, y);
             a->doAutoplace();
-            measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos()));
+            measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
             }
       //
       //    now place all articulations with staff top or bottom anchor
@@ -3412,7 +3414,7 @@ void Chord::layoutArticulations2()
                         staffBotY += distance0;
                         }
                   a->doAutoplace();
-                  measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos()));
+                  measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
                   }
             }
       }
