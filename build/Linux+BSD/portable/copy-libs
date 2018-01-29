@@ -13,6 +13,7 @@ main() {
   [ "$1" ] && share_path="$1" || share_path="."
   lib_dest="$share_path/lib"
   qt_dest="$lib_dest/qt5"
+  opt_dest="$share_path/optional" # Workaround for Jack library loading
   echo "lib_dest: $lib_dest"
   echo "qt_dest: $qt_dest"
 
@@ -203,7 +204,6 @@ building_on_Debian_Jessie() {
   copyLib libasyncns.so.0
   copyLib libgmp.so.10
   copyLib libhogweed.so.2
-  copyLib libjack.so.0
   copyLib libjpeg.so.62
   copyLib libk5crypto.so.3
   copyLib libkeyutils.so && mv "$dest_dir/libkeyutils.so" "$dest_dir/libkeyutils.so.1" #renamed to .1 cause didn't have
@@ -236,6 +236,9 @@ building_on_Debian_Jessie() {
   copyLib libpulse.so.0
   copyLib libpulsecommon-5.0.so
 
+  # Workaround for Jack library
+  dest_dir="$opt_dest"
+  copyLib libjack.so.0
   # If AppImage is run with alsa, then will complain:
   # "Cannot open shared library /usr/lib/arm-linux-gnueabihf/alsa-lib/libasound_module_pcm_pulse.so"
   # but cannot seem to figure out how to get the AppImage, so exclude for now, hopefully figure out later.
@@ -246,7 +249,6 @@ building_on_Debian_Jessie() {
 building_on_CentOS_6() {
   # Needed by Centos 6.7:
   dest_dir="$lib_dest"
-  copyLib libjack.so.0
   copyLib libopenal.so.1
   dest_dir="$qt_dest/lib"
   copyLib libQt5Concurrent.so.5
@@ -272,6 +274,10 @@ building_on_CentOS_6() {
   copyLib libpng12.so.0
   copyLib libudev.so.0
   copyLib liblcms.so.1
+
+  # Workaround for Jack library
+  dest_dir="$opt_dest"
+  copyLib libjack.so.0
 
   # Needed if don't have pulseaudio installed. Ignoring, since only advanced distros
   # like Arch, Gentoo, Debian minimal, servers, etc. don't have pulse installed.
@@ -301,9 +307,6 @@ building_on_Ubuntu_12-04() {
   copyLib libQt5WebView.so.5
   copyLib libQt5WebEngineCore.so.5
 
-  # Needed by CentOS 7
-  copyLib libjack.so.0
-
   # Needed by Fedora 22
   copyLib libgstapp-0.10.so.0
   copyLib libgstbase-0.10.so.0
@@ -311,6 +314,10 @@ building_on_Ubuntu_12-04() {
   copyLib libgstpbutils-0.10.so.0
   copyLib libgstreamer-0.10.so.0
   copyLib libgstvideo-0.10.so.0
+
+  # Workaround for Jack library
+  dest_dir="$opt_dest"
+  copyLib libjack.so.0
 }
 
 locateLib() {
