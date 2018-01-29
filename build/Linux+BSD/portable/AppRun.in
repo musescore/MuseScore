@@ -9,6 +9,16 @@
 [ "${APPIMAGE}" ] || export APPIMAGE="${APPDIR}/AppRun"
 
 libs="${APPDIR}/lib"
+
+# Workaround for Jack library
+# Based on the solution https://github.com/LMMS/lmms/pull/3958/files
+if ldconfig -p | grep libjack.so.0 > /dev/null 2>&1; then
+   echo "Jack appears to be installed on this system, so we'll use it."
+else
+   echo "Jack does not appear to be installed.  That's OK, we'll use a dummy version instead."
+   export LD_LIBRARY_PATH="${APPDIR}/optional:${LD_LIBRARY_PATH}"
+fi
+
 # Setting LD_LIBRARY_PATH won't override AppImage libraries, but advanced users
 # can do that with APPIMAGE_LIBRARY_PATH if they really want to.
 export LD_LIBRARY_PATH="${APPIMAGE_LIBRARY_PATH}:${libs}:${libs}/qt5/lib:${LD_LIBRARY_PATH}"
