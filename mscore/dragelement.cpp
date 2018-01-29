@@ -82,8 +82,10 @@ void ScoreView::doDragElement(QMouseEvent* ev)
 
 void ScoreView::endDrag()
       {
-      for (Element* e : _score->selection().elements())
+      for (Element* e : _score->selection().elements()) {
             e->endDrag(editData);
+            e->triggerLayout();
+            }
       setDropTarget(0); // this also resets dropAnchor
       _score->endCmd();
       }
