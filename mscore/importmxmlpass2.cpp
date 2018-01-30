@@ -4247,6 +4247,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       MScore::Direction stemDir = MScore::Direction::AUTO;
       bool noStem = false;
       NoteHead::Group headGroup = NoteHead::Group::HEAD_NORMAL;
+      QColor noteColor = QColor::Invalid;
+      noteColor.setNamedColor(_e.attributes().value("color").toString());
       QColor noteheadColor = QColor::Invalid;
       bool noteheadParentheses = false;
       QString noteheadFilled;
@@ -4486,6 +4488,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   else
                         cr->setBeamMode(Beam::Mode::NONE);
                   cr->setSmall(small);
+                  if (noteColor != QColor::Invalid)
+                      cr->setColor(noteColor);
                   cr->setVisible(printObject);
                   handleDisplayStep(cr, displayStep, displayOctave, noteStartTime.ticks(), _score->spatium());
                   }
@@ -4537,8 +4541,10 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             note = new Note(_score);
             note->setSmall(small);
             note->setHeadGroup(headGroup);
-            if (noteheadColor != QColor::Invalid)
-                  note->setColor(noteheadColor);
+            if (noteColor != QColor::Invalid)
+                note->setColor(noteColor);
+            else if (noteheadColor != QColor::Invalid)
+                note->setColor(noteheadColor);
             note->setVisible(printObject); // TODO also set the stem to invisible
 
             if (noteheadParentheses) {
