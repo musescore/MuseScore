@@ -139,6 +139,13 @@ public:
       void rest(int& step, int& octave);
       void lyric(QMap<int, Lyrics*>& numbrdLyrics, QMap<int, Lyrics*>& defyLyrics,
                  QList<Lyrics*>& unNumbrdLyrics, QSet<Lyrics*>& extLyrics);
+      void slur(ChordRest* cr, const int tick, const int track, bool& lastGraceAFter);
+      void tied(Note* note, const int track);
+      void articulations(ChordRest* cr, SymId& breath, QString& chordLineType);
+      void dynamics(QString& placement, QStringList& dynamics);
+      void ornaments(ChordRest* cr, QString& wavyLineType, int& wavyLineNo, QString& tremoloType, int& tremoloNr, bool& lastGraceAFter);
+      void technical(Note* note, ChordRest* cr);
+      void glissando(Note* note, const int tick, const int ticks, const int track);
       void notations(Note* note, ChordRest* cr, const int tick, MusicXmlTupletDesc& tupletDesc, bool& lastGraceAFter);
       void stem(Direction& sd, bool& nost);
       void fermata(ChordRest* cr);
