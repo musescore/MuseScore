@@ -3766,6 +3766,7 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const int trk)
             if (l && !l->xmlText().isEmpty()) {
                   if ((l)->track() == trk) {
                         QString lyricXml = QString("lyric number=\"%1\"").arg((l)->no() + 1);
+                        lyricXml += color2xml(l);
                         lyricXml += addPositioningAttributes(l);
                         xml.stag(lyricXml);
                         Lyrics::Syllabic syl = (l)->syllabic();

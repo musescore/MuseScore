@@ -5487,6 +5487,8 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
 
       bool hasExtend = false;
       QString strLyricNo = _e.attributes().value("number").toString();
+      QColor lyricColor = QColor::Invalid;
+      lyricColor.setNamedColor(_e.attributes().value("color").toString());
       QString strDefaultY = _e.attributes().value("default-y").toString();
       QString extendType;
       QString formattedText;
@@ -5564,6 +5566,8 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
 
       //qDebug("formatted lyric '%s'", qPrintable(formattedText));
       l->setXmlText(formattedText);
+      if (lyricColor != QColor::Invalid)
+            l->setColor(lyricColor);
       }
 
 
