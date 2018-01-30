@@ -1156,6 +1156,7 @@ TextBase::TextBase(const TextBase& st)
 void TextBase::init(SubStyle st)
       {
       initSubStyle(st);
+      resetProperty(P_ID::PLACEMENT);
       }
 
 //---------------------------------------------------------

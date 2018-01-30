@@ -3,7 +3,6 @@
 #
 # edit file
 #
-
 MSCORE=../build.debug/mscore/mscore
 echo $MSCORE $1
 if test -f $1.mscz; then
