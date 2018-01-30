@@ -98,20 +98,27 @@ void Jump::layout()
 
       if (parent() && autoplace()) {
             setUserOff(QPointF());
-            int si            = staffIdx();
-            qreal minDistance = 0.5 * spatium(); // score()->styleP(StyleIdx::tempoMinDistance);
-            Shape s1          = measure()->staffShape(si);
-            Shape s2          = shape().translated(pos());
+            int si             = staffIdx();
+            qreal minDistance  = 0.5 * spatium(); // score()->styleP(StyleIdx::tempoMinDistance);
+            Shape& s1          = measure()->staffShape(si);
+            Shape s2           = shape().translated(pos());
             if (placeAbove()) {
                   qreal d = s2.minVerticalDistance(s1);
-                  if (d > -minDistance)
-                        rUserYoffset() = -d - minDistance;
+                  if (d > -minDistance) {
+                        qreal xd       = -d - minDistance;
+                        rUserYoffset() = xd;
+                        s2.translate(QPointF(xd, 0.0));
+                        }
                   }
             else {
                   qreal d = s1.minVerticalDistance(s2);
-                  if (d > -minDistance)
-                        rUserYoffset() = d + minDistance;
+                  if (d > -minDistance) {
+                        qreal xd       = d + minDistance;
+                        rUserYoffset() = xd;
+                        s2.translate(QPointF(xd, 0.0));
+                        }
                   }
+            s1.add(s2);
             }
       else {
             adjustReadPos();
