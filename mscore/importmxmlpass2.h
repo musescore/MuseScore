@@ -20,6 +20,8 @@
 #ifndef __IMPORTMXMLPASS2_H__
 #define __IMPORTMXMLPASS2_H__
 
+#include <array>
+
 #include "libmscore/score.h"
 #include "libmscore/tuplet.h"
 #include "importxmlfirstpass.h"
@@ -99,6 +101,13 @@ class Pedal;
 class Trill;
 class MxmlLogger;
 
+using SlurStack = std::array<SlurDesc, MAX_NUMBER_LEVEL>;
+using TrillStack = std::array<Trill*, MAX_NUMBER_LEVEL>;
+using BracketsStack = std::array<SLine*, MAX_BRACKETS>;
+using DashesStack = std::array<SLine*, MAX_DASHES>;
+using OttavasStack = std::array<SLine*, MAX_NUMBER_LEVEL>;
+using HairpinsStack = std::array<SLine*, MAX_NUMBER_LEVEL>;
+
 class MusicXMLParserPass2 {
 public:
       MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MxmlLogger* logger);
@@ -135,10 +144,16 @@ public:
       void forward(Fraction& dura);
       void backup(Fraction& dura);
       void timeModification(Fraction& timeMod, TDuration& normalType);
-      void pitch(int& step, int& alter, int& oct, AccidentalType& accid);
-      void rest(int& step, int& octave);
+      //void pitch(int& step, int& alter, int& oct, AccidentalType& accid);
       void lyric(QMap<int, Lyrics*>& numbrdLyrics, QMap<int, Lyrics*>& defyLyrics,
                  QList<Lyrics*>& unNumbrdLyrics, QSet<Lyrics*>& extLyrics);
+      void slur(ChordRest* cr, const int tick, const int track, bool& lastGraceAFter);
+      void tied(Note* note, const int track);
+      void articulations(ChordRest* cr, SymId& breath, QString& chordLineType);
+      void dynamics(QString& placement, QStringList& dynamics);
+      void ornaments(ChordRest* cr, QString& wavyLineType, int& wavyLineNo, QString& tremoloType, int& tremoloNr, bool& lastGraceAFter);
+      void technical(Note* note, ChordRest* cr);
+      void glissando(Note* note, const int tick, const int ticks, const int track);
       void notations(Note* note, ChordRest* cr, const int tick, MusicXmlTupletDesc& tupletDesc, bool& lastGraceAFter);
       void stem(Direction& sd, bool& nost);
       void fermata(ChordRest* cr);
@@ -173,15 +188,14 @@ private:
       // or use score->sigmap() ?
       Fraction _timeSigDura;
 
-      QVector<Tuplet*> _tuplets;                 ///< Current tuplet for each track in the current part
-      QVector<bool> _tuplImpls;                 ///< Current tuplet implicit flag for each track in the current part
-      SlurDesc _slur[MAX_NUMBER_LEVEL];
-      Trill* _trills[MAX_NUMBER_LEVEL];          ///< Current trills
-      SLine* _brackets[MAX_BRACKETS];
-      SLine* _dashes[MAX_DASHES];
-      SLine* _ottavas[MAX_NUMBER_LEVEL];        ///< Current ottavas
-      SLine* _hairpins[MAX_NUMBER_LEVEL];      ///< Current hairpins
-      // TODO SLine* trills[MAX_NUMBER_LEVEL];          ///< Current trills
+      QVector<Tuplet*> _tuplets;          ///< Current tuplet for each track in the current part
+      QVector<bool> _tuplImpls;           ///< Current tuplet implicit flag for each track in the current part
+      SlurStack _slurs {};
+      TrillStack _trills {};              ///< Current trills
+      BracketsStack _brackets {};
+      DashesStack _dashes {};
+      OttavasStack _ottavas {};           ///< Current ottavas
+      HairpinsStack _hairpins {};         ///< Current hairpins
 
       Glissando* _glissandi[MAX_NUMBER_LEVEL][2];   ///< Current slides ([0]) / glissandi ([1])
 
