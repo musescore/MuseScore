@@ -177,11 +177,32 @@ void Marker::layout()
       {
       setPos(QPointF(0.0, score()->styleP(StyleIdx::markerPosAbove)));
       TextBase::layout1();
+
       // although normally laid out to parent (measure) width,
       // force to center over barline if left-aligned
       if (layoutToParentWidth() && !(align() & (Align::RIGHT | Align::HCENTER)))
             rxpos() -= width() * 0.5;
-      adjustReadPos();
+
+      if (parent() && autoplace()) {
+            setUserOff(QPointF());
+            int si            = staffIdx();
+            qreal minDistance = 0.5 * spatium(); // score()->styleP(StyleIdx::tempoMinDistance);
+            Shape s1          = measure()->staffShape(si);
+            Shape s2          = shape().translated(pos());
+            if (placeAbove()) {
+                  qreal d = s2.minVerticalDistance(s1);
+                  if (d > -minDistance)
+                        rUserYoffset() = -d - minDistance;
+                  }
+            else {
+                  qreal d = s1.minVerticalDistance(s2);
+                  if (d > -minDistance)
+                        rUserYoffset() = d + minDistance;
+                  }
+            }
+      else {
+            adjustReadPos();
+            }
       }
 
 //---------------------------------------------------------
@@ -283,10 +304,10 @@ QVariant Marker::propertyDefault(P_ID propertyId) const
       switch (propertyId) {
             case P_ID::LABEL:
                   return QString();
-
             case P_ID::MARKER_TYPE:
                   return int(Type::FINE);
-
+            case P_ID::PLACEMENT:
+                  return int(Placement::ABOVE);
             default:
                   break;
             }
