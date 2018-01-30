@@ -395,7 +395,8 @@ void Lyrics::paste(EditData& ed)
       QClipboard::Mode mode = QClipboard::Selection;
 #endif
       QString txt = QApplication::clipboard()->text(mode);
-      QStringList sl = txt.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+      QString regex = QString("[^\\S") + QChar(0xa0) + QChar(0x202F) + "]+";
+      QStringList sl = txt.split(QRegExp(regex), QString::SkipEmptyParts);
       if (sl.empty())
             return;
 
