@@ -32,79 +32,12 @@
 #include "libmscore/bracketItem.h"
 
 #include "importmxmllogger.h"
+#include "importmxmlnoteduration.h"
 #include "importmxmlpass1.h"
 #include "importmxmlpass2.h"
 #include "preferences.h"
 
 namespace Ms {
-
-//---------------------------------------------------------
-//   noteTypeToFraction
-//---------------------------------------------------------
-
-/**
- Convert MusicXML note type to fraction.
- */
-
-static Fraction noteTypeToFraction(const QString& type)
-      {
-      if (type == "1024th")
-            return Fraction(1, 1024);
-      else if (type == "512th")
-            return Fraction(1, 512);
-      else if (type == "256th")
-            return Fraction(1, 256);
-      else if (type == "128th")
-            return Fraction(1, 128);
-      else if (type == "64th")
-            return Fraction(1, 64);
-      else if (type == "32nd")
-            return Fraction(1, 32);
-      else if (type == "16th")
-            return Fraction(1, 16);
-      else if (type == "eighth")
-            return Fraction(1, 8);
-      else if (type == "quarter")
-            return Fraction(1, 4);
-      else if (type == "half")
-            return Fraction(1, 2);
-      else if (type == "whole")
-            return Fraction(1, 1);
-      else if (type == "breve")
-            return Fraction(2, 1);
-      else if (type == "long")
-            return Fraction(4, 1);
-      else if (type == "maxima")
-            return Fraction(8, 1);
-      else
-            return Fraction(0, 0);
-      }
-
-//---------------------------------------------------------
-//   calculateFraction
-//---------------------------------------------------------
-
-/**
- Convert note type, number of dots and actual and normal notes into a duration
- */
-
-static Fraction calculateFraction(const QString& type, const int dots, const Fraction timeMod)
-      {
-      // type
-      Fraction f = noteTypeToFraction(type);
-      if (f.isValid()) {
-            // dot(s)
-            Fraction f_no_dots = f;
-            for (int i = 0; i < dots; ++i)
-                  f += (f_no_dots / (2 << i));
-            // tuplet
-            if (timeMod.isValid())
-                  f *= timeMod;
-            // clean up (just in case)
-            f.reduce();
-            }
-      return f;
-      }
 
 //---------------------------------------------------------
 //   allocateStaves
@@ -2109,7 +2042,7 @@ void MusicXMLParserPass1::attributes(const QString& partId)
             else if (_e.name() == "divisions")
                   divisions();
             else if (_e.name() == "staff-details")
-                  _e.skipCurrentElement(); // skip but don't log
+                  _e.skipCurrentElement();  // skip but don't log
             else if (_e.name() == "staves")
                   staves(partId);
             else if (_e.name() == "time")
@@ -2511,28 +2444,25 @@ void MusicXMLParserPass1::note(const QString& partId,
 
       //float alter = 0;
       bool chord = false;
-      int dots = 0;
       bool grace = false;
       //int octave = -1;
       bool bRest = false;
       int staff = 1;
       //int step = 0;
-      Fraction timeMod(1, 1);
       QString type;
       QString voice = "1";
       QString instrId;
 
+      mxmlNoteDuration mnd(_divs, _logger);
+
       while (_e.readNextStartElement()) {
-            if (_e.name() == "chord") {
+            if (mnd.readProperties(_e)) {
+                  // element handled
+                  }
+            else if (_e.name() == "chord") {
                   chord = true;
                   _e.readNext();
                   }
-            else if (_e.name() == "dot") {
-                  dots++;
-                  _e.readNext();
-                  }
-            else if (_e.name() == "duration")
-                  duration(dura);
             else if (_e.name() == "grace") {
                   grace = true;
                   _e.readNext();
@@ -2559,8 +2489,6 @@ void MusicXMLParserPass1::note(const QString& partId,
                         staff = 1;
                         }
                   }
-            else if (_e.name() == "time-modification")
-                  timeModification(timeMod);
             else if (_e.name() == "type")
                   type = _e.readElementText();
             else if (_e.name() == "voice")
@@ -2590,63 +2518,10 @@ void MusicXMLParserPass1::note(const QString& partId,
       if (mustInsert)
             _parts[partId]._instrList.setInstrument(instrId, sTime);
 
-      // normalize duration
-      if (dura.isValid())
-            dura.reduce();
-
-      // timing error check(s)
-      QString errorStr;
-      Fraction calcDura = calculateFraction(type, dots, timeMod);
-      if (dura.isValid() && calcDura.isValid()) {
-            if (dura != calcDura) {
-                  errorStr = QString("calculated duration (%1) not equal to specified duration (%2)")
-                        .arg(calcDura.print()).arg(dura.print());
-
-                  if (bRest && type == "whole" && dura.isValid()) {
-                        // Sibelius whole measure rest (not an error)
-                        errorStr = "";
-                        }
-                  else if (grace && dura == Fraction(0, 1)) {
-                        // grace note (not an error)
-                        errorStr = "";
-                        }
-                  else {
-                        const int maxDiff = 3; // maximum difference considered a rounding error
-                        if (qAbs(calcDura.ticks() - dura.ticks()) <= maxDiff) {
-                              errorStr += " -> assuming rounding error";
-                              dura = calcDura;
-                              }
-                        }
-
-                  // Special case:
-                  // Encore generates rests in tuplets w/o <tuplet> or <time-modification>.
-                  // Detect this by comparing the actual duration with the expected duration
-                  // based on note type. If actual is 2/3 of expected, the rest is part
-                  // of a tuplet.
-                  if (bRest && !timeMod.isValid()) {
-                        if (2 * calcDura.ticks() == 3 * dura.ticks()) {
-                              timeMod = Fraction(2, 3);
-                              errorStr += " -> assuming triplet";
-                              }
-                        }
-                  }
-            }
-      else if (dura.isValid()) {
-            // do not report an error for typeless (whole measure) rests
-            if (!(bRest && type == ""))
-                  errorStr = "calculated duration invalid, using specified duration";
-            }
-      else if (calcDura.isValid()) {
-            if (!grace) {
-                  errorStr = "specified duration invalid, using calculated duration";
-                  dura = calcDura; // overrule dura
-                  }
-            }
-      else {
-            errorStr = "calculated and specified duration invalid, using 4/4";
-            dura = Fraction(4, 4);
-            }
-
+      // check for timing error(s) and set dura
+      // keep in this order as checkTiming() might change dura
+      auto errorStr = mnd.checkTiming(type, bRest, grace);
+      dura = mnd.dura();
       if (errorStr != "")
             _logger->logError(errorStr, &_e);
 
