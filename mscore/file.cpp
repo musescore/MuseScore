@@ -826,11 +826,6 @@ QStringList MuseScore::getOpenScoreNames(const QString& filter, const QString& t
             loadScoreDialog->setWindowTitle(title);
             addScorePreview(loadScoreDialog);
 
-            // setup side bar urls
-            QList<QUrl> urls = sidebarUrls();
-            urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/demos"));
-            loadScoreDialog->setSidebarUrls(urls);
-
             loadScoreDialog->setNameFilter(filter);
             restoreDialogState("loadScoreDialog", loadScoreDialog);
             loadScoreDialog->setAcceptMode(QFileDialog::AcceptOpen);
@@ -841,6 +836,10 @@ QStringList MuseScore::getOpenScoreNames(const QString& filter, const QString& t
             loadScoreDialog->setWindowTitle(title);
             loadScoreDialog->setNameFilter(filter);
             }
+      // setup side bar urls
+      QList<QUrl> urls = sidebarUrls();
+      urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/demos"));
+      loadScoreDialog->setSidebarUrls(urls);
 
       QStringList result;
       if (loadScoreDialog->exec())
@@ -853,8 +852,7 @@ QStringList MuseScore::getOpenScoreNames(const QString& filter, const QString& t
 //   getSaveScoreName
 //---------------------------------------------------------
 
-QString MuseScore::getSaveScoreName(const QString& title,
-   QString& name, const QString& filter, bool selectFolder)
+QString MuseScore::getSaveScoreName(const QString& title, QString& name, const QString& filter, bool selectFolder)
       {
       QFileInfo myName(name);
       if (myName.isRelative())
@@ -878,11 +876,11 @@ QString MuseScore::getSaveScoreName(const QString& title,
             saveScoreDialog->setAcceptMode(QFileDialog::AcceptSave);
             addScorePreview(saveScoreDialog);
 
-            // setup side bar urls
-            saveScoreDialog->setSidebarUrls(sidebarUrls());
-
             restoreDialogState("saveScoreDialog", saveScoreDialog);
             }
+      // setup side bar urls
+      saveScoreDialog->setSidebarUrls(sidebarUrls());
+
       if (selectFolder)
             saveScoreDialog->setFileMode(QFileDialog::Directory);
 

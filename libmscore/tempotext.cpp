@@ -35,7 +35,6 @@ TempoText::TempoText(Score* s)
       _followText = false;
       _relative   = 1.0;
       _isRelative = false;
-      setPlacement(Placement::ABOVE);
       }
 
 //---------------------------------------------------------

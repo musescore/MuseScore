@@ -95,7 +95,27 @@ void Jump::layout()
       {
       setPos(QPointF(0.0, score()->styleP(StyleIdx::jumpPosAbove)));
       TextBase::layout1();
-      adjustReadPos();
+
+      if (parent() && autoplace()) {
+            setUserOff(QPointF());
+            int si            = staffIdx();
+            qreal minDistance = 0.5 * spatium(); // score()->styleP(StyleIdx::tempoMinDistance);
+            Shape s1          = measure()->staffShape(si);
+            Shape s2          = shape().translated(pos());
+            if (placeAbove()) {
+                  qreal d = s2.minVerticalDistance(s1);
+                  if (d > -minDistance)
+                        rUserYoffset() = -d - minDistance;
+                  }
+            else {
+                  qreal d = s1.minVerticalDistance(s2);
+                  if (d > -minDistance)
+                        rUserYoffset() = d + minDistance;
+                  }
+            }
+      else {
+            adjustReadPos();
+            }
       }
 
 //---------------------------------------------------------
@@ -222,10 +242,10 @@ QVariant Jump::propertyDefault(P_ID propertyId) const
             case P_ID::PLAY_UNTIL:
             case P_ID::CONTINUE_AT:
                   return QString("");
-
             case P_ID::PLAY_REPEATS:
                   return false;
-
+            case P_ID::PLACEMENT:
+                  return int(Placement::ABOVE);
             default:
                   break;
             }
