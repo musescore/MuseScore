@@ -2871,6 +2871,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
       attr.doAttr(xml, false);
 
       QString noteTag = QString("note");
+      noteTag += color2xml(rest);
       if (!rest->visible() ) {
             noteTag += QString(" print-object=\"no\"");
             }
