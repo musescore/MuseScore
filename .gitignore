@@ -11,6 +11,10 @@ win32build
 win32install
 build.xcode
 applebuild
+/*.config
+/*.creator
+/*.files
+/*.includes
 *.user
 *.qm
 share/manual/en
