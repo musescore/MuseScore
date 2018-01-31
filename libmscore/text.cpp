@@ -1790,12 +1790,22 @@ bool Text::edit(MuseScoreView*, Grip, int key, Qt::KeyboardModifiers modifiers, 
                         break;
 
                   case Qt::Key_Up:
+#if defined(Q_OS_MAC)
+                        if (!movePosition(QTextCursor::Up, mm))
+                              movePosition(QTextCursor::StartOfLine, mm);
+#else
                         movePosition(QTextCursor::Up, mm);
+#endif
                         s.clear();
                         break;
 
                   case Qt::Key_Down:
+#if defined(Q_OS_MAC)
+                        if (!movePosition(QTextCursor::Down, mm))
+                              movePosition(QTextCursor::EndOfLine, mm);
+#else
                         movePosition(QTextCursor::Down, mm);
+#endif
                         s.clear();
                         break;
 
