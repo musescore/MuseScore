@@ -20,6 +20,12 @@
 
 namespace Ms {
 
+#ifdef Q_OS_MAC
+#define CONTROL_MODIFIER Qt::AltModifier
+#else
+#define CONTROL_MODIFIER Qt::ControlModifier
+#endif
+
 #ifndef VOICES
 #define VOICES 4
 #endif
@@ -123,7 +129,7 @@ class EditData {
 
       ElementEditData* getData(const Element*) const;
       void addData(ElementEditData*);
-      bool control() const  { return modifiers & Qt::ControlModifier; }
+      bool control() const  { return modifiers & CONTROL_MODIFIER; }
       bool shift() const    { return modifiers & Qt::ShiftModifier; }
       bool isStartEndGrip() { return curGrip == Grip::START || curGrip == Grip::END; }
       };
