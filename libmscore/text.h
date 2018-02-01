@@ -235,7 +235,7 @@ class TextBase : public Element {
       void insertSym(EditData& ed, SymId id);
 
    public:
-      TextBase(Score* = 0);
+      TextBase(Score* = 0, ElementFlags = ElementFlag::NOTHING);
       TextBase(const TextBase&);
       void init(SubStyle st = SubStyle::DEFAULT);
 

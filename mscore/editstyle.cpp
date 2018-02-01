@@ -345,9 +345,14 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::textLinePosAbove,            false, textLinePosAbove,            resetTextLinePosAbove },
       { StyleIdx::textLinePosBelow,            false, textLinePosBelow,            resetTextLinePosBelow },
 
-      { StyleIdx::fermataPosAbove,         false, fermataPosAbove,       resetFermataPosAbove },
-      { StyleIdx::fermataPosBelow,         false, fermataPosBelow,       resetFermataPosBelow },
+      { StyleIdx::fermataPosAbove,         false, fermataPosAbove,       resetFermataPosAbove    },
+      { StyleIdx::fermataPosBelow,         false, fermataPosBelow,       resetFermataPosBelow    },
       { StyleIdx::fermataMinDistance,      false, fermataMinDistance,    resetFermataMinDistance },
+
+      { StyleIdx::staffTextPlacement,      false, staffTextPlacement,    resetStaffTextPlacement   },
+      { StyleIdx::staffTextPosAbove,       false, staffTextPosAbove,     resetStaffTextPosAbove    },
+      { StyleIdx::staffTextPosBelow,       false, staffTextPosBelow,     resetStaffTextPosBelow    },
+      { StyleIdx::staffTextMinDistance,    false, staffTextMinDistance,  resetStaffTextMinDistance },
       };
 
       for (QComboBox* cb : std::vector<QComboBox*> {
