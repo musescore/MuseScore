@@ -54,6 +54,7 @@ enum class Grip {
 //---------------------------------------------------------
 
 enum class ElementFlag {
+      NOTHING         = 0x00000000,
       DROP_TARGET     = 0x00000001,
       SELECTABLE      = 0x00000002,
       MOVABLE         = 0x00000004,
@@ -164,7 +165,7 @@ class Element : public ScoreElement {
       QColor _color;              ///< element color attribute
 
    public:
-      Element(Score* s = 0);
+      Element(Score* = 0, ElementFlags = ElementFlag::NOTHING);
       Element(const Element&);
       virtual ~Element();
 
@@ -356,7 +357,7 @@ class Element : public ScoreElement {
  */
       virtual bool mousePress(EditData&) { return false; }
 
-      mutable bool itemDiscovered;     ///< helper flag for bsp
+      mutable bool itemDiscovered      { false };     ///< helper flag for bsp
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 

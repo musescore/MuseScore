@@ -202,45 +202,24 @@ void Fermata::layout()
 
       setPos(QPointF(x, y));
 
-      if (!autoplace()) {
-            adjustReadPos();
-            return;
-            }
-      setUserOff(QPointF());
+      // check used symbol
 
-
-      qreal minDistance = score()->styleP(StyleIdx::fermataMinDistance);
-      const Shape& s1   = s->measure()->staffShape(staffIdx());
-      Shape s2          = shape().translated(s->pos() + pos());
-
-      // check for collisions
-
+      QString name = Sym::id2name(_symId);
       if (placeAbove()) {
-            QString name = Sym::id2name(_symId);
             if (name.endsWith("Below")) {
-                  QString st2 = name.left(name.size() - 5) + "Above";
-                  _symId = Sym::name2id(st2);
+                  _symId = Sym::name2id(name.left(name.size() - 5) + "Above");
                   QRectF b(symBbox(_symId));
                   setbbox(b.translated(-0.5 * b.width(), 0.0));
-                  s2 = shape().translated(s->pos() + pos());
                   }
-            qreal d = s2.minVerticalDistance(s1);
-printf("%f\n", d);
-            if (d > -minDistance)
-                  rUserYoffset() = -d - minDistance;
             }
       else {
-            QString name = Sym::id2name(_symId);
             if (name.endsWith("Above")) {
                   _symId = Sym::name2id(name.left(name.size() - 5) + "Below");
                   QRectF b(symBbox(_symId));
                   setbbox(b.translated(-0.5 * b.width(), 0.0));
-                  s2 = shape().translated(s->pos() + pos());
                   }
-            qreal d = s1.minVerticalDistance(s2);
-            if (d > -minDistance)
-                  rUserYoffset() = d + minDistance;
             }
+      autoplaceSegmentElement(score()->styleP(StyleIdx::fermataMinDistance));
       }
 
 //---------------------------------------------------------

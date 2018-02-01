@@ -1183,7 +1183,7 @@ static void defaults(XmlWriter& xml, Score* s, double& millimeters, const int& t
       // and LYRIC1 to get MusicXML defaults
 
       // TODO xml.tagE("music-font font-family=\"TBD\" font-size=\"TBD\"");
-      xml.tagE(QString("word-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(StyleIdx::staffFontFace)).arg(s->styleD(StyleIdx::staffFontSize)));
+      xml.tagE(QString("word-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(StyleIdx::staffTextFontFace)).arg(s->styleD(StyleIdx::staffTextFontSize)));
       xml.tagE(QString("lyric-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(StyleIdx::lyricsOddFontFace)).arg(s->styleD(StyleIdx::lyricsOddFontSize)));
       xml.etag();
       }
@@ -1197,8 +1197,8 @@ static void creditWords(XmlWriter& xml, Score* s, double x, double y, QString ju
       {
       const QString mtf = s->styleSt(StyleIdx::MusicalTextFont);
       CharFormat defFmt;
-      defFmt.setFontFamily(s->styleSt(StyleIdx::staffFontFace));
-      defFmt.setFontSize(s->styleD(StyleIdx::staffFontSize));
+      defFmt.setFontFamily(s->styleSt(StyleIdx::staffTextFontFace));
+      defFmt.setFontSize(s->styleD(StyleIdx::staffTextFontSize));
 
       // export formatted
       xml.stag("credit page=\"1\"");
@@ -3286,8 +3286,8 @@ static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text)
       // set the default words format
       const QString mtf = s->styleSt(StyleIdx::MusicalTextFont);
       CharFormat defFmt;
-      defFmt.setFontFamily(s->styleSt(StyleIdx::staffFontFace));
-      defFmt.setFontSize(s->styleD(StyleIdx::staffFontSize));
+      defFmt.setFontFamily(s->styleSt(StyleIdx::staffTextFontFace));
+      defFmt.setFontSize(s->styleD(StyleIdx::staffTextFontSize));
 
       if (findMetronome(list, wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
             if (wordsLeft.size() > 0) {
@@ -3406,8 +3406,8 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       // set the default words format
       const QString mtf = _score->styleSt(StyleIdx::MusicalTextFont);
       CharFormat defFmt;
-      defFmt.setFontFamily(_score->styleSt(StyleIdx::staffFontFace));
-      defFmt.setFontSize(_score->styleD(StyleIdx::staffFontSize));
+      defFmt.setFontFamily(_score->styleSt(StyleIdx::staffTextFontFace));
+      defFmt.setFontSize(_score->styleD(StyleIdx::staffTextFontSize));
       // write formatted
       MScoreTextToMXML mttm("rehearsal", attr, defFmt, mtf);
       mttm.writeTextFragments(rmk->fragmentList(), xml);

@@ -563,16 +563,21 @@ static const StyleType styleTypes[] {
       { StyleIdx::systemFontItalic,              "systemFontItalic",             false },
       { StyleIdx::systemFontUnderline,           "systemFontUnderline",          false },
       { StyleIdx::systemOffset,                  "systemOffset",                 QPointF(0.0, -4.0) },
-      { StyleIdx::systemOffsetType,              "defaultOffsetType",            int(OffsetType::SPATIUM)   },
+      { StyleIdx::systemOffsetType,              "systemOffsetType",             int(OffsetType::SPATIUM)   },
       { StyleIdx::systemAlign,                   "systemAlign",                  QVariant::fromValue(Align::LEFT | Align::BASELINE) },
 
-      { StyleIdx::staffFontFace,                 "staffFontFace",                "FreeSerif" },
-      { StyleIdx::staffFontSize,                 "staffFontSize",                10.0 },
-      { StyleIdx::staffFontBold,                 "staffFontBold",                false },
-      { StyleIdx::staffFontItalic,               "staffFontItalic",              false },
-      { StyleIdx::staffFontUnderline,            "staffFontUnderline",           false },
-      { StyleIdx::staffOffset,                   "staffOffset",                  QPointF(0.0, -4.0) },
-      { StyleIdx::staffOffsetType,               "defaultOffsetType",            int(OffsetType::SPATIUM)   },
+      { StyleIdx::staffTextFontFace,             "staffFontFace",                "FreeSerif" },
+      { StyleIdx::staffTextFontSize,             "staffFontSize",                10.0 },
+      { StyleIdx::staffTextFontBold,             "staffFontBold",                false },
+      { StyleIdx::staffTextFontItalic,           "staffFontItalic",              false },
+      { StyleIdx::staffTextFontUnderline,        "staffFontUnderline",           false },
+      { StyleIdx::staffTextAlign,                "staffAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+      { StyleIdx::staffTextOffset,               "staffOffset",                  QPointF(0.0, -4.0) },
+      { StyleIdx::staffTextOffsetType,           "systemOffsetType",             int(OffsetType::SPATIUM)   },
+      { StyleIdx::staffTextPlacement,            "staffTextPlacement",           int(Placement::ABOVE) },
+      { StyleIdx::staffTextPosAbove,             "staffTextPosAbove",            Spatium(-2.0) },
+      { StyleIdx::staffTextPosBelow,             "staffTextPosBelow",            Spatium(3.5)  },
+      { StyleIdx::staffTextMinDistance,          "staffTextMinDistance",         Spatium(0.5)  },
 
       { StyleIdx::chordSymbolFontFace,           "chordSymbolFontFace",          "FreeSerif" },
       { StyleIdx::chordSymbolFontSize,           "chordSymbolFontSize",          12.0 },
@@ -686,6 +691,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::instrumentChangeFontBold,      "instrumentChangeFontBold",     true },
       { StyleIdx::instrumentChangeFontItalic,    "instrumentChangeFontItalic",   false },
       { StyleIdx::instrumentChangeFontUnderline, "instrumentChangeFontUnderline",false },
+      { StyleIdx::instrumentChangeAlign,         "instrumentChangeAlign",        QVariant::fromValue(Align::LEFT | Align::BASELINE) },
       { StyleIdx::instrumentChangeOffset,        "instrumentChangeOffset",       QPointF(0, -3.0) },
 
       { StyleIdx::figuredBassFontFace,           "figuredBassFontFace",          "MScoreBC" },
@@ -1007,18 +1013,18 @@ const std::vector<StyledProperty> systemStyle {
       { StyleIdx::systemOffset,                       P_ID::OFFSET                 },
       { StyleIdx::systemOffsetType,                   P_ID::OFFSET_TYPE            },
       { StyleIdx::systemAlign,                        P_ID::ALIGN                  },
-//      { StyleIdx::systemSystemFlag,                   P_ID::SYSTEM_FLAG            },
       };
 
 const std::vector<StyledProperty> staffStyle {
-      { StyleIdx::staffFontFace,                      P_ID::FONT_FACE              },
-      { StyleIdx::staffFontSize,                      P_ID::FONT_SIZE              },
-      { StyleIdx::staffFontBold,                      P_ID::FONT_BOLD              },
-      { StyleIdx::staffFontItalic,                    P_ID::FONT_ITALIC            },
-      { StyleIdx::staffFontUnderline,                 P_ID::FONT_UNDERLINE         },
-      { StyleIdx::staffOffset,                        P_ID::OFFSET                 },
-      { StyleIdx::staffOffsetType,                    P_ID::OFFSET_TYPE            },
-//      { StyleIdx::staffSystemFlag,                    P_ID::SYSTEM_FLAG            },
+      { StyleIdx::staffTextFontFace,                  P_ID::FONT_FACE              },
+      { StyleIdx::staffTextFontSize,                  P_ID::FONT_SIZE              },
+      { StyleIdx::staffTextFontBold,                  P_ID::FONT_BOLD              },
+      { StyleIdx::staffTextFontItalic,                P_ID::FONT_ITALIC            },
+      { StyleIdx::staffTextFontUnderline,             P_ID::FONT_UNDERLINE         },
+      { StyleIdx::staffTextAlign,                     P_ID::ALIGN                  },
+      { StyleIdx::staffTextOffset,                    P_ID::OFFSET                 },
+      { StyleIdx::staffTextOffsetType,                P_ID::OFFSET_TYPE            },
+      { StyleIdx::staffTextPlacement,                 P_ID::PLACEMENT              },
       };
 
 const std::vector<StyledProperty> chordSymbolStyle {
@@ -1217,6 +1223,7 @@ const std::vector<StyledProperty> instrumentChangeStyle {
       { StyleIdx::instrumentChangeFontBold,           P_ID::FONT_BOLD              },
       { StyleIdx::instrumentChangeFontItalic,         P_ID::FONT_ITALIC            },
       { StyleIdx::instrumentChangeFontUnderline,      P_ID::FONT_UNDERLINE         },
+      { StyleIdx::instrumentChangeAlign,              P_ID::ALIGN                  },
       { StyleIdx::instrumentChangeOffset,             P_ID::OFFSET                 },
       };
 

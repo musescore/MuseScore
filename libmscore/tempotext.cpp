@@ -346,9 +346,6 @@ QVariant TempoText::propertyDefault(P_ID id) const
 
 void TempoText::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
-
       qreal y;
       if (placeAbove())
             y = score()->styleP(StyleIdx::tempoPosAbove);
@@ -371,25 +368,7 @@ void TempoText::layout()
                         rxpos() += e->x();
                   }
             }
-
-      if (s && autoplace()) {
-            int firstStaffIdx = s->measure()->system()->firstVisibleStaff();
-            qreal minDistance = score()->styleP(StyleIdx::tempoMinDistance);
-            Shape s1          = s->measure()->staffShape(firstStaffIdx);
-            Shape s2          = shape().translated(s->pos() + pos());
-            if (placeAbove()) {
-                  qreal d = s2.minVerticalDistance(s1);
-                  if (d > -minDistance)
-                        rUserYoffset() = -d - minDistance;
-                  }
-            else {
-                  qreal d = s1.minVerticalDistance(s2);
-                  if (d > -minDistance)
-                        rUserYoffset() = d + minDistance;
-                  }
-            }
-      if (!autoplace())
-            adjustReadPos();
+      autoplaceSegmentElement(score()->styleP(StyleIdx::tempoMinDistance));
       }
 
 //---------------------------------------------------------
