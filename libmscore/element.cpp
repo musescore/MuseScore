@@ -1852,4 +1852,45 @@ void Element::endEdit(EditData&)
       {
       }
 
+//---------------------------------------------------------
+//   autoplaceSegmentElement
+//---------------------------------------------------------
+
+void Element::autoplaceSegmentElement(qreal minDistance)
+      {
+      if (autoplace() && parent()) {
+            setUserOff(QPointF());
+            Segment* s        = toSegment(parent());
+            Measure* m        = s->measure();
+            int si            = staffIdx();
+            Shape s1          = m->staffShape(si);
+            Shape s2          = shape().translated(s->pos() + pos());
+
+            // look for collisions in the next measure
+            // if necessary
+
+            bool cnm = (s2.right() > m->width()) && m->nextMeasure() && m->nextMeasure()->system() == m->system();
+            if (cnm) {
+                  Measure* nm = m->nextMeasure();
+                  s1.add(nm->staffShape(si).translated(QPointF(m->width(), 0.0)));
+                  }
+            qreal d = placeAbove() ? s2.minVerticalDistance(s1) : s1.minVerticalDistance(s2);
+            if (d > -minDistance) {
+                  qreal yd = d + minDistance;
+                  if (placeAbove())
+                        yd *= -1.0;
+                  rUserYoffset() = yd;
+                  s2.translateY(yd);
+                  }
+            m->staffShape(si).add(s2);
+            if (cnm) {
+                  Measure* nm = m->nextMeasure();
+                  s2.translateX(-m->width());
+                  nm->staffShape(staffIdx()).add(s2);
+                  }
+            }
+      else
+            adjustReadPos();
+      }
+
 }

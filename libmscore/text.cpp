@@ -2570,7 +2570,7 @@ bool TextBase::validateText(QString& s)
 //   inputTransition
 //---------------------------------------------------------
 
-void TextBase::inputTransition(QInputMethodEvent* ie)
+void TextBase::inputTransition(QInputMethodEvent* /* ie */)
       {
 #if 0
       // remove preedit string

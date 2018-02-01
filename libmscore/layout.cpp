@@ -3304,7 +3304,9 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
             }
 
-      // tempo text
+      //
+      // TempoText, Fermata
+      //
 
       for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure())
@@ -3333,6 +3335,24 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
             }
 
+      //
+      // Jump, Marker
+      //
+
+      for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure())
+                  continue;
+            Measure* m = toMeasure(mb);
+            for (Element* e : m->el()) {
+                  if (e->visible() && (e->isJump() || e->isMarker()))
+                        e->layout();
+                  }
+            }
+
+      //
+      // RehearsalMark, StaffText, FretDiagram
+      //
+
       for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure())
                   continue;
@@ -3340,12 +3360,8 @@ System* Score::collectSystem(LayoutContext& lc)
             Measure* m = toMeasure(mb);
             for (Segment* s = m->first(st); s; s = s->next(st)) {
                   for (Element* e : s->annotations()) {
-                        if (e->visible() && (e->isRehearsalMark() || e->isStaffText() || e->isFretDiagram())) {
+                        if (e->visible() && (e->isRehearsalMark() || e->isStaffText() || e->isFretDiagram()))
                               e->layout();
-                              int si = e->staffIdx();
-                              s->staffShape(si).add(e->shape().translated(e->pos()));
-                              m->staffShape(si).add(e->shape().translated(s->pos() + e->pos()));
-                              }
                         }
                   }
             }
@@ -3698,7 +3714,7 @@ void Score::doLayoutRange(int stick, int etick)
       else {
             QList<System*>& systems = lc.page->systems();
             int i = systems.indexOf(lc.curSystem);
-            qDebug("clear page systems from %d", i);
+//            qDebug("clear page systems from %d", i);
             if (i <= -1)
                   systems.clear();
             else {

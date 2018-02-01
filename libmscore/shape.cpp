@@ -25,6 +25,21 @@ void Shape::translate(const QPointF& pt)
             r.translate(pt);
       }
 
+void Shape::translateX(qreal xo)
+      {
+      for (QRectF& r : *this) {
+            r.setLeft(r.left() + xo);
+            r.setRight(r.right() + xo);
+            }
+      }
+void Shape::translateY(qreal yo)
+      {
+      for (QRectF& r : *this) {
+            r.setTop(r.top() + yo);
+            r.setBottom(r.bottom() + yo);
+            }
+      }
+
 //---------------------------------------------------------
 //   translated
 //---------------------------------------------------------

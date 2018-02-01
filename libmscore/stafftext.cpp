@@ -207,35 +207,14 @@ bool StaffText::getAeolusStop(int group, int idx) const
 
 void StaffText::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
-
       // TODO: add above/below offset properties
       QPointF p(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
       if (placement() == Placement::BELOW)
-            p.ry() =  - p.ry() + lineHeight();
+            p.ry() = - p.ry() + lineHeight();
       setPos(p);
       TextBase::layout1();
-      if (!parent()) // palette & clone trick
-          return;
-
-      if (autoplace() && segment()) {
-            qreal minDistance = score()->styleP(StyleIdx::dynamicsMinDistance);  // TODO
-            const Shape& s1 = segment()->measure()->staffShape(staffIdx());
-            Shape s2        = shape().translated(segment()->pos() + pos());
-
-            if (placeAbove()) {
-                  qreal d = s2.minVerticalDistance(s1);
-                  if (d > -minDistance)
-                        rUserYoffset() = -d - minDistance;
-                  }
-            else {
-                  qreal d = s1.minVerticalDistance(s2);
-                  if (d > -minDistance)
-                        rUserYoffset() = d + minDistance;
-                  }
-            }
-      adjustReadPos();
+      if (parent()) // palette & clone trick
+            autoplaceSegmentElement(score()->styleP(StyleIdx::dynamicsMinDistance));  // TODO
       }
 
 //---------------------------------------------------------
