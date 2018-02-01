@@ -74,6 +74,7 @@
       <systemOffset x="0" y="-2"/>
       <staffFontFace>MuseJazz Text</staffFontFace>
       <staffFontSize>11</staffFontSize>
+      <staffAlign>left,top</staffAlign>
       <staffOffset x="0" y="5.5"/>
       <chordSymbolFontFace>MuseJazz Text</chordSymbolFontFace>
       <chordSymbolFontSize>15</chordSymbolFontSize>
@@ -97,6 +98,7 @@
       <headerFontFace>MuseJazz Text</headerFontFace>
       <footerFontFace>MuseJazz Text</footerFontFace>
       <instrumentChangeFontFace>MuseJazz Text</instrumentChangeFontFace>
+      <instrumentChangeAlign>left,bottom</instrumentChangeAlign>
       <Spatium>1.85</Spatium>
       </Style>
     <showInvisible>1</showInvisible>

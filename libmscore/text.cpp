@@ -1079,8 +1079,8 @@ QString TextBlock::text(int col1, int len) const
 //   Text
 //---------------------------------------------------------
 
-TextBase::TextBase(Score* s)
-   : Element(s)
+TextBase::TextBase(Score* s, ElementFlags f)
+   : Element(s, f | ElementFlag::MOVABLE)
       {
       _family                 = "FreeSerif";
       _size                   = 10.0;
@@ -1099,7 +1099,6 @@ TextBase::TextBase(Score* s)
       _frameRound             = 0;
       _offset                 = QPointF();
       _offsetType             = OffsetType::SPATIUM;
-      setFlag(ElementFlag::MOVABLE, true);
       }
 
 TextBase::TextBase(const TextBase& st)

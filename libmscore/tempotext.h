@@ -37,10 +37,12 @@ class TempoText final : public TextBase  {
       TempoText(Score*);
       virtual TempoText* clone() const override   { return new TempoText(*this); }
       virtual ElementType type() const override   { return ElementType::TEMPO_TEXT; }
+
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
-      Segment* segment() const   { return (Segment*)parent(); }
-      Measure* measure() const   { return (Measure*)parent()->parent(); }
+
+      Segment* segment() const   { return toSegment(parent()); }
+      Measure* measure() const   { return toMeasure(parent()->parent()); }
 
       qreal tempo() const        { return _tempo;      }
       void setTempo(qreal v);

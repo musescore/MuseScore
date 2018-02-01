@@ -148,15 +148,15 @@ QString Element::subtypeName() const
 //   Element
 //---------------------------------------------------------
 
-Element::Element(Score* s) :
-   ScoreElement(s)
+Element::Element(Score* s, ElementFlags f)
+   : ScoreElement(s)
       {
+      _flags         = f | ElementFlag::ENABLED | ElementFlag::EMPTY | ElementFlag::AUTOPLACE | ElementFlag::SELECTABLE | ElementFlag::VISIBLE;
       _placement     = Placement::BELOW;
       _track         = -1;
       _color         = MScore::defaultColor;
       _mag           = 1.0;
       _tag           = 1;
-      itemDiscovered = false;
       _z             = -1;
       }
 
@@ -1099,8 +1099,7 @@ QVariant Element::propertyDefault(P_ID id) const
 
 void Element::initSubStyle(SubStyle st)
       {
-      auto l = subStyle(st);
-      for (const StyledProperty& p : l) {
+      for (const StyledProperty& p : subStyle(st)) {
             setProperty(p.propertyIdx, score()->styleV(p.styleIdx));
             setPropertyFlags(p.propertyIdx, PropertyFlags::STYLED);
             }

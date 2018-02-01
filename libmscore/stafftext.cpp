@@ -28,7 +28,6 @@ StaffText::StaffText(Score* s)
       {
       init(SubStyle::STAFF);
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      setPlacement(Placement::ABOVE);     // default
       setSwingParameters(MScore::division / 2, 60);
       }
 
@@ -207,14 +206,14 @@ bool StaffText::getAeolusStop(int group, int idx) const
 
 void StaffText::layout()
       {
-      // TODO: add above/below offset properties
-      QPointF p(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
-      if (placement() == Placement::BELOW)
-            p.ry() = - p.ry() + lineHeight();
-      setPos(p);
+      qreal y;
+      if (placeAbove())
+            y = score()->styleP(StyleIdx::staffTextPosAbove);
+      else
+            y = score()->styleP(StyleIdx::staffTextPosBelow) + (staff() ? staff()->height() : 0);
+      setPos(QPointF(0.0, y));
       TextBase::layout1();
-      if (parent()) // palette & clone trick
-            autoplaceSegmentElement(score()->styleP(StyleIdx::dynamicsMinDistance));  // TODO
+      autoplaceSegmentElement(score()->styleP(StyleIdx::staffTextMinDistance));
       }
 
 //---------------------------------------------------------

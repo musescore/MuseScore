@@ -3319,11 +3319,6 @@ System* Score::collectSystem(LayoutContext& lc)
                               TempoText* tt = toTempoText(e);
                               setTempo(tt->segment(), tt->tempo());
                               tt->layout();
-                              if (tt->visible()) {
-                                    int si = tt->staffIdx();
-                                    s->staffShape(si).add(tt->shape().translated(e->pos()));
-                                    m->staffShape(si).add(tt->shape().translated(s->pos() + e->pos()));
-                                    }
                               }
                         else if (e->isFermata()) {
                               e->layout();
