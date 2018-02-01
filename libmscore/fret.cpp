@@ -384,17 +384,7 @@ void FretDiagram::layout()
             setPos(QPointF());
             return;
             }
-      if (autoplace()) {
-            int staffIdx      = track() / VOICES;
-            qreal minDistance = score()->styleP(StyleIdx::fretMinDistance);
-            Segment* s        = segment();
-            Shape s1          = s->measure()->staffShape(staffIdx);
-            Shape s2          = shape().translated(s->pos() + pos());
-            qreal d           = s2.minVerticalDistance(s1);
-            if (d > -minDistance)
-                  rUserYoffset() = -d - minDistance;
-            }
-
+      autoplaceSegmentElement(score()->styleP(StyleIdx::fretMinDistance));
       if (_harmony)
             _harmony->layout();
       }
