@@ -57,8 +57,12 @@ class Shape : std::vector<ShapeElement> {
 #endif
       void remove(const QRectF&);
       void remove(const Shape&);
+
       void translate(const QPointF&);
+      void translateX(qreal);
+      void translateY(qreal);
       Shape translated(const QPointF&) const;
+
       qreal minHorizontalDistance(const Shape&) const;
       qreal minVerticalDistance(const Shape&) const;
       qreal topDistance(const QPointF&) const;
