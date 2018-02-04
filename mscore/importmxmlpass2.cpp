@@ -4235,6 +4235,130 @@ static void displayStepOctave(QXmlStreamReader& e,
       }
 
 //---------------------------------------------------------
+//   doTimingChecksAndCorrections
+//---------------------------------------------------------
+
+/**
+ Check note timing.
+ */
+
+static QString doTimingChecksAndCorrections(Fraction& dura, Fraction& timeMod, const Fraction calcDura,
+                                            const bool isRest, const bool isGrace, const bool isWholeMeasureRest)
+      {
+      QString errorStr;
+
+      if (dura.isValid() && calcDura.isValid()) {
+            if (dura != calcDura) {
+                  errorStr = QString("calculated duration (%1) not equal to specified duration (%2)")
+                        .arg(calcDura.print()).arg(dura.print());
+
+                  if (isWholeMeasureRest) {
+                        // do not report an error for whole measure rests
+                        errorStr = "";
+                        }
+                  else if (isGrace && dura == Fraction(0, 1)) {
+                        // grace note (not an error)
+                        errorStr = "";
+                        }
+                  else {
+                        const int maxDiff = 3;       // maximum difference considered a rounding error
+                        if (qAbs(calcDura.ticks() - dura.ticks()) <= maxDiff) {
+                              errorStr += " -> assuming rounding error";
+                              dura = calcDura;
+                              }
+                        }
+
+                  // Special case:
+                  // Encore generates rests in tuplets w/o <tuplet> or <time-modification>.
+                  // Detect this by comparing the actual duration with the expected duration
+                  // based on note type. If actual is 2/3 of expected, the rest is part
+                  // of a tuplet.
+                  if (isRest && !timeMod.isValid()) {
+                        if (2 * calcDura.ticks() == 3 * dura.ticks()) {
+                              timeMod = Fraction(2, 3);
+                              errorStr += " -> assuming triplet";
+                              }
+                        }
+                  }
+            }
+      else if (dura.isValid()) {
+            // do not report an error for typeless (whole measure) rests
+            if (!isWholeMeasureRest)
+                  errorStr = QString("calculated duration invalid, using specified duration (%1)").arg(dura.print());
+            }
+      else if (calcDura.isValid()) {
+            if (!isGrace) {
+                  errorStr = QString("specified duration invalid, using calculated duration (%1)").arg(calcDura.print());
+                  dura = calcDura;       // overrule dura
+                  }
+            }
+      else {
+            errorStr = "calculated and specified duration invalid, using 4/4";
+            dura = Fraction(4, 4);
+            }
+
+      return errorStr;
+      }
+
+//---------------------------------------------------------
+//   setNoteHead
+//---------------------------------------------------------
+
+/**
+ Set the notehead parameters.
+ */
+
+static void setNoteHead(Note* note, const QColor noteheadColor, const bool noteheadParentheses, const QString& noteheadFilled)
+      {
+      const auto score = note->score();
+
+      if (noteheadColor != QColor::Invalid)
+            note->setColor(noteheadColor);
+      if (noteheadParentheses) {
+            auto s = new Symbol(score);
+            s->setSym(SymId::noteheadParenthesisLeft);
+            s->setParent(note);
+            score->addElement(s);
+            s = new Symbol(score);
+            s->setSym(SymId::noteheadParenthesisRight);
+            s->setParent(note);
+            score->addElement(s);
+            }
+
+      if (noteheadFilled == "no")
+            note->setHeadType(NoteHead::Type::HEAD_HALF);
+      else if (noteheadFilled == "yes")
+            note->setHeadType(NoteHead::Type::HEAD_QUARTER);
+      }
+
+//---------------------------------------------------------
+//   addFiguredBassElemens
+//---------------------------------------------------------
+
+/**
+ Add the figured bass elements.
+ */
+
+static void addFiguredBassElemens(FiguredBassList& fbl, const Fraction noteStartTime, const int msTrack,
+                                  const Fraction dura, Measure* measure)
+      {
+      if (!fbl.isEmpty()) {
+            auto sTick = noteStartTime.ticks();              // starting tick
+            foreach (FiguredBass* fb, fbl) {
+                  fb->setTrack(msTrack);
+                  // No duration tag defaults ticks() to 0; set to note value
+                  if (fb->ticks() == 0)
+                        fb->setTicks(dura.ticks());
+                  // TODO: set correct onNote value
+                  Segment* s = measure->getSegment(SegmentType::ChordRest, sTick);
+                  s->add(fb);
+                  sTick += fb->ticks();
+                  }
+            fbl.clear();
+            }
+      }
+
+//---------------------------------------------------------
 //   note
 //---------------------------------------------------------
 
@@ -4396,7 +4520,6 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       // timing error check(s)
       // note that all passes must calculate the same timing and other (TODO) checks
-      QString errorStr;
       Fraction calcDura = calculateFraction(type, dots, timeMod);
       /*
       _logger->logDebugInfo(e, QString("dura %1 valid %2 fraction %3 valid %4")
@@ -4406,55 +4529,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                    );
        */
       bool wholeMeasureRest = isWholeMeasureRest(bRest, type, dura, Fraction::fromTicks(measure->ticks()));
-      if (dura.isValid() && calcDura.isValid()) {
-            if (dura != calcDura) {
-                  errorStr = QString("calculated duration (%1) not equal to specified duration (%2)")
-                        .arg(calcDura.print()).arg(dura.print());
-
-                  if (wholeMeasureRest) {
-                        // do not report an error for whole measure rests
-                        errorStr = "";
-                        }
-                  else if (grace && dura == Fraction(0, 1)) {
-                        // grace note (not an error)
-                        errorStr = "";
-                        }
-                  else {
-                        const int maxDiff = 3; // maximum difference considered a rounding error
-                        if (qAbs(calcDura.ticks() - dura.ticks()) <= maxDiff) {
-                              errorStr += " -> assuming rounding error";
-                              dura = calcDura;
-                              }
-                        }
-
-                  // Special case:
-                  // Encore generates rests in tuplets w/o <tuplet> or <time-modification>.
-                  // Detect this by comparing the actual duration with the expected duration
-                  // based on note type. If actual is 2/3 of expected, the rest is part
-                  // of a tuplet.
-                  if (bRest && !timeMod.isValid()) {
-                        if (2 * calcDura.ticks() == 3 * dura.ticks()) {
-                              timeMod = Fraction(2, 3);
-                              errorStr += " -> assuming triplet";
-                              }
-                        }
-                  }
-            }
-      else if (dura.isValid()) {
-            // do not report an error for typeless (whole measure) rests
-            if (!wholeMeasureRest)
-                  errorStr = QString("calculated duration invalid, using specified duration (%1)").arg(dura.print());
-            }
-      else if (calcDura.isValid()) {
-            if (!grace) {
-                  errorStr = QString("specified duration invalid, using calculated duration (%1)").arg(calcDura.print());
-                  dura = calcDura; // overrule dura
-                  }
-            }
-      else {
-            errorStr = "calculated and specified duration invalid, using 4/4";
-            dura = Fraction(4, 4);
-            }
+      QString errorStr = doTimingChecksAndCorrections(dura, timeMod, calcDura, bRest, grace, wholeMeasureRest);
 
       if (errorStr != "")
             _logger->logError(errorStr, &_e);
@@ -4522,7 +4597,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                         cr->setBeamMode(Beam::Mode::NONE);
                   cr->setSmall(small);
                   if (noteColor != QColor::Invalid)
-                      cr->setColor(noteColor);
+                        cr->setColor(noteColor);
                   cr->setVisible(printObject);
                   handleDisplayStep(cr, displayStep, displayOctave, noteStartTime.ticks(), _score->spatium());
                   }
@@ -4575,26 +4650,9 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             note->setSmall(small);
             note->setHeadGroup(headGroup);
             if (noteColor != QColor::Invalid)
-                note->setColor(noteColor);
-            else if (noteheadColor != QColor::Invalid)
-                note->setColor(noteheadColor);
+                  note->setColor(noteColor);
+            setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
             note->setVisible(printObject); // TODO also set the stem to invisible
-
-            if (noteheadParentheses) {
-                  Symbol* s = new Symbol(_score);
-                  s->setSym(SymId::noteheadParenthesisLeft);
-                  s->setParent(note);
-                  _score->addElement(s);
-                  s = new Symbol(_score);
-                  s->setSym(SymId::noteheadParenthesisRight);
-                  s->setParent(note);
-                  _score->addElement(s);
-                  }
-
-            if (noteheadFilled == "no")
-                  note->setHeadType(NoteHead::Type::HEAD_HALF);
-            else if (noteheadFilled == "yes")
-                  note->setHeadType(NoteHead::Type::HEAD_QUARTER);
 
             if (velocity > 0) {
                   note->setVeloType(Note::ValueType::USER_VAL);
@@ -4751,20 +4809,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             }
 
       // add figured bass element
-      if (!fbl.isEmpty()) {
-            int sTick = noteStartTime.ticks();        // starting tick
-            foreach (FiguredBass* fb, fbl) {
-                  fb->setTrack(msTrack);
-                  // No duration tag defaults ticks() to 0; set to note value
-                  if (fb->ticks() == 0)
-                        fb->setTicks(dura.ticks());
-                  // TODO: set correct onNote value
-                  Segment* s = measure->getSegment(SegmentType::ChordRest, sTick);
-                  s->add(fb);
-                  sTick += fb->ticks();
-                  }
-            fbl.clear();
-            }
+      addFiguredBassElemens(fbl, noteStartTime, msTrack, dura, measure);
 
       // don't count chord or grace note duration
       // note that this does not check the MusicXML requirement that notes in a chord
