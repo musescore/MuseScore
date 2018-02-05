@@ -140,7 +140,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Continue at' value</string>
+         <string>Reset 'Play repeats' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
