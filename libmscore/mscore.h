@@ -352,6 +352,7 @@ class MScore : public QObject {
       static QColor layoutBreakColor;
       static QColor frameMarginColor;
       static QColor bgColor;
+      static bool enableAutoSplit;
       static bool warnPitchRange;
 
       static bool playRepeats;

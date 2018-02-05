@@ -93,6 +93,7 @@ QColor  MScore::layoutBreakColor;
 QColor  MScore::frameMarginColor;
 QColor  MScore::bgColor;
 QColor  MScore::dropColor;
+bool    MScore::enableAutoSplit;
 bool    MScore::warnPitchRange;
 
 bool    MScore::playRepeats;
@@ -280,6 +281,7 @@ void MScore::init()
       defaultColor        = Qt::black;
       dropColor           = QColor("#1778db");
       defaultPlayDuration = 300;      // ms
+      enableAutoSplit     = true;
       warnPitchRange      = true;
       playRepeats         = true;
       panPlayback         = true;

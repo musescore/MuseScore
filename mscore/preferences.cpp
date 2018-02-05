@@ -315,6 +315,7 @@ void Preferences::write()
       s.setValue("shortestNote", shortestNote);
       s.setValue("importCharsetOve", importCharsetOve);
       s.setValue("importCharsetGP", importCharsetGP);
+      s.setValue("enableAutoSplit", MScore::enableAutoSplit);
       s.setValue("warnPitchRange", MScore::warnPitchRange);
       s.setValue("followSong", followSong);
 
@@ -475,6 +476,7 @@ void Preferences::read()
       shortestNote           = s.value("shortestNote", shortestNote).toInt();
       importCharsetOve          = s.value("importCharsetOve", importCharsetOve).toString();
       importCharsetGP          = s.value("importCharsetGP", importCharsetGP).toString();
+      MScore::enableAutoSplit = s.value("enableAutoSplit", MScore::enableAutoSplit).toBool();
       MScore::warnPitchRange = s.value("warnPitchRange", MScore::warnPitchRange).toBool();
       followSong             = s.value("followSong", followSong).toBool();
 
@@ -1026,6 +1028,7 @@ void PreferenceDialog::updateValues()
             idx++;
             }
 
+      enableAutoSplit->setChecked(MScore::enableAutoSplit);
       warnPitchRange->setChecked(MScore::warnPitchRange);
 
       language->blockSignals(true);
@@ -1568,6 +1571,8 @@ void PreferenceDialog::apply()
 
       prefs.importCharsetOve = importCharsetListOve->currentText();
       prefs.importCharsetGP = importCharsetListGP->currentText();
+
+      MScore::enableAutoSplit = enableAutoSplit->isChecked();
       MScore::warnPitchRange = warnPitchRange->isChecked();
 
       prefs.useOsc  = oscServer->isChecked();

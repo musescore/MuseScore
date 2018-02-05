@@ -531,11 +531,11 @@ std::vector<TDuration> toRhythmicDurationList(const Fraction& l, bool isRest, in
             dList.push_back(d);
             return dList;
             }
-
+      bool autoSplit = MScore::enableAutoSplit;
       if (nominal.isCompound())
-            splitCompoundBeatsForList(&dList, l, isRest, rtickStart, nominal, maxDots);
+            splitCompoundBeatsForList(&dList, l, isRest, rtickStart, nominal, maxDots, autoSplit);
       else
-            populateRhythmicList(&dList, l, isRest, rtickStart, nominal, maxDots);
+            populateRhythmicList(&dList, l, isRest, rtickStart, nominal, maxDots, autoSplit);
 
       return dList;
       }
@@ -544,7 +544,7 @@ std::vector<TDuration> toRhythmicDurationList(const Fraction& l, bool isRest, in
 //   populateRhythmicList
 //---------------------------------------------------------
 
-void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, int maxDots)
+void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, int maxDots, bool autoSplit)
       {
       int rtickEnd = rtickStart + l.ticks();
 
@@ -592,7 +592,7 @@ void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool
             needToSplit = forceRhythmicSplit(isRest, startBeat, endBeat, dUnitsCrossed, strongestBeatCrossed, nominal);
             }
 
-      if (!needToSplit) {
+      if (!needToSplit || !autoSplit) {
             // CHECK THERE IS A DURATION THAT FITS
             // crossed beats/subbeats were not important so try to avoid splitting
             TDuration d = TDuration(l, true, maxDots);
@@ -609,8 +609,8 @@ void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool
       Fraction rightSplit = l - leftSplit;
 
       // Recurse to see if we need to split further before adding to list
-      populateRhythmicList(dList, leftSplit, isRest, rtickStart, nominal, maxDots);
-      populateRhythmicList(dList, rightSplit, isRest, rtickSplit , nominal, maxDots);
+      populateRhythmicList(dList, leftSplit, isRest, rtickStart, nominal, maxDots, autoSplit);
+      populateRhythmicList(dList, rightSplit, isRest, rtickSplit , nominal, maxDots, autoSplit);
       }
 
 //---------------------------------------------------------
@@ -618,7 +618,7 @@ void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool
 //    Split compound notes/rests where they enter a compound beat.
 //---------------------------------------------------------
 
-void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, int maxDots)
+void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, int maxDots, bool autoSplit)
       {
       int rtickEnd = rtickStart + l.ticks();
 
@@ -633,8 +633,8 @@ void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l,
                   // Duration extends into next beat so must split
                   Fraction leftSplit = Fraction::fromTicks(splitTicks);
                   Fraction rightSplit = l - leftSplit;
-                  populateRhythmicList(dList, leftSplit, isRest, rtickStart, nominal, maxDots); // this side is ok to proceed
-                  splitCompoundBeatsForList(dList, rightSplit, isRest, rtickStart + splitTicks, nominal, maxDots); // not checked yet
+                  populateRhythmicList(dList, leftSplit, isRest, rtickStart, nominal, maxDots, autoSplit); // this side is ok to proceed
+                  splitCompoundBeatsForList(dList, rightSplit, isRest, rtickStart + splitTicks, nominal, maxDots, autoSplit); // not checked yet
                   return;
                   }
             }
@@ -647,14 +647,14 @@ void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l,
                   // Duration extends into previous beat so must split
                   Fraction rightSplit = Fraction::fromTicks(splitTicks);
                   Fraction leftSplit = l - rightSplit;
-                  populateRhythmicList(dList, leftSplit, isRest, rtickStart, nominal, maxDots); // must add leftSplit to list first
-                  populateRhythmicList(dList, rightSplit, isRest, rtickEnd - splitTicks, nominal, maxDots);
+                  populateRhythmicList(dList, leftSplit, isRest, rtickStart, nominal, maxDots, autoSplit); // must add leftSplit to list first
+                  populateRhythmicList(dList, rightSplit, isRest, rtickEnd - splitTicks, nominal, maxDots, autoSplit);
                   return;
                   }
             }
 
       // Duration either starts and ends on compound beats, or it remains within a single compound beat
-      populateRhythmicList(dList, l, isRest, rtickStart, nominal, maxDots);
+      populateRhythmicList(dList, l, isRest, rtickStart, nominal, maxDots, autoSplit);
       }
 
 //---------------------------------------------------------
