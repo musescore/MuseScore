@@ -527,7 +527,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::tempoSystemFlag,               "tempoSystemFlag",              true },
       { StyleIdx::tempoPlacement,                "tempoPlacement",               int(Placement::ABOVE)  },
       { StyleIdx::tempoPosAbove,                 "tempoPosAbove",                Spatium(-2.0) },
-      { StyleIdx::tempoPosBelow,                 "tempoPosBelow",                Spatium(1.0)  },
+      { StyleIdx::tempoPosBelow,                 "tempoPosBelow",                Spatium(3.0)  },
       { StyleIdx::tempoMinDistance,              "tempoMinDistance",             Spatium(.5)  },
 
       { StyleIdx::metronomeFontFace,             "metronomeFontFace",            "FreeSerif" },
@@ -602,7 +602,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::rehearsalMarkFrameBgColor,     "rehearsalMarkFrameBgColor",    QColor(255, 255, 255, 0) },
       { StyleIdx::rehearsalMarkPlacement,        "rehearsalMarkPlacement",       int(Placement::ABOVE) },
       { StyleIdx::rehearsalMarkPosAbove,         "rehearsalMarkPosAbove",        Spatium(-3.0) },
-      { StyleIdx::rehearsalMarkPosBelow,         "rehearsalMarkPosBelow",        Spatium(2.0) },
+      { StyleIdx::rehearsalMarkPosBelow,         "rehearsalMarkPosBelow",        Spatium(4.0) },
       { StyleIdx::rehearsalMarkMinDistance,      "rehearsalMarkMinDistance",     Spatium(0.5) },
 
       { StyleIdx::repeatLeftFontFace,            "repeatLeftFontFace",           "FreeSerif" },

@@ -24,18 +24,16 @@ namespace Ms {
 //---------------------------------------------------------
 
 StaffText::StaffText(Score* s)
-   : TextBase(s)
+   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
       {
       init(SubStyle::STAFF);
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setSwingParameters(MScore::division / 2, 60);
       }
 
 StaffText::StaffText(SubStyle ss, Score* s)
-   : TextBase(s)
+   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
       {
       init(ss);
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setPlacement(Placement::ABOVE);     // default
       setSwingParameters(MScore::division / 2, 60);
       }
@@ -206,14 +204,10 @@ bool StaffText::getAeolusStop(int group, int idx) const
 
 void StaffText::layout()
       {
-      qreal y;
-      if (placeAbove())
-            y = score()->styleP(StyleIdx::staffTextPosAbove);
-      else
-            y = score()->styleP(StyleIdx::staffTextPosBelow) + (staff() ? staff()->height() : 0);
+      qreal y = placeAbove() ? styleP(StyleIdx::staffTextPosAbove) : styleP(StyleIdx::staffTextPosBelow) + staff()->height();
       setPos(QPointF(0.0, y));
       TextBase::layout1();
-      autoplaceSegmentElement(score()->styleP(StyleIdx::staffTextMinDistance));
+      autoplaceSegmentElement(styleP(StyleIdx::staffTextMinDistance));
       }
 
 //---------------------------------------------------------
