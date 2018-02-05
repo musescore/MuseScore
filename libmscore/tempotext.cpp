@@ -28,7 +28,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 TempoText::TempoText(Score* s)
-   : TextBase(s)
+   : TextBase(s, ElementFlag::SYSTEM)
       {
       init(SubStyle::TEMPO);
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
@@ -346,20 +346,17 @@ QVariant TempoText::propertyDefault(P_ID id) const
 
 void TempoText::layout()
       {
-      qreal y;
-      if (placeAbove())
-            y = score()->styleP(StyleIdx::tempoPosAbove);
-      else {
-            qreal sh = staff() ? staff()->height() : 0;
-            y = score()->styleP(StyleIdx::tempoPosBelow) + sh + lineSpacing();
-            }
+      qreal y = placeAbove() ? styleP(StyleIdx::tempoPosAbove) : styleP(StyleIdx::tempoPosBelow) + staff()->height();
       setPos(QPointF(0.0, y));
       TextBase::layout1();
 
+      Segment* s = segment();
+      if (!s)                       // for use in palette
+            return;
+
       // tempo text on first chordrest of measure should align over time sig if present
       //
-      Segment* s = segment();
-      if (s && !s->rtick()) {
+      if (!s->rtick()) {
             Segment* p = segment()->prev(SegmentType::TimeSig);
             if (p) {
                   rxpos() -= s->x() - p->x();
@@ -368,7 +365,7 @@ void TempoText::layout()
                         rxpos() += e->x();
                   }
             }
-      autoplaceSegmentElement(score()->styleP(StyleIdx::tempoMinDistance));
+      autoplaceSegmentElement(styleP(StyleIdx::tempoMinDistance));
       }
 
 //---------------------------------------------------------

@@ -198,7 +198,7 @@ void Fermata::layout()
             }
 
       qreal x = score()->noteHeadWidth() * staff()->mag(0) * .5;
-      qreal y = placeAbove() ? score()->styleP(StyleIdx::fermataPosAbove) : score()->styleP(StyleIdx::fermataPosBelow) + staff()->height();
+      qreal y = placeAbove() ? styleP(StyleIdx::fermataPosAbove) : styleP(StyleIdx::fermataPosBelow) + staff()->height();
 
       setPos(QPointF(x, y));
 
@@ -219,7 +219,7 @@ void Fermata::layout()
                   setbbox(b.translated(-0.5 * b.width(), 0.0));
                   }
             }
-      autoplaceSegmentElement(score()->styleP(StyleIdx::fermataMinDistance));
+      autoplaceSegmentElement(styleP(StyleIdx::fermataMinDistance));
       }
 
 //---------------------------------------------------------

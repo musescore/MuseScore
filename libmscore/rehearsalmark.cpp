@@ -34,13 +34,7 @@ RehearsalMark::RehearsalMark(Score* s)
 
 void RehearsalMark::layout()
       {
-      qreal y;
-      if (placeAbove())
-            y = score()->styleP(StyleIdx::rehearsalMarkPosAbove);
-      else {
-            qreal sh = staff() ? staff()->height() : 0;
-            y = score()->styleP(StyleIdx::rehearsalMarkPosBelow) + sh + lineSpacing();
-            }
+      qreal y = placeAbove() ? styleP(StyleIdx::rehearsalMarkPosAbove) : styleP(StyleIdx::rehearsalMarkPosBelow) + staff()->height();
       setPos(QPointF(0.0, y));
       TextBase::layout1();
       Segment* s = segment();
@@ -59,7 +53,7 @@ void RehearsalMark::layout()
                         rxpos() += qMin(leftX, barlineX) + width();
                         }
                   }
-            autoplaceSegmentElement(score()->styleP(StyleIdx::rehearsalMarkMinDistance));
+            autoplaceSegmentElement(styleP(StyleIdx::rehearsalMarkMinDistance));
             }
       }
 
