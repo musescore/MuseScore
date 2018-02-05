@@ -230,6 +230,7 @@ enum class P_ID : unsigned char {
       FRET_FRETS,
       FRET_BARRE,
       FRET_OFFSET,
+      PLAY_REPEATS,
       END
       };
 

@@ -41,6 +41,7 @@ class Jump : public Text {
       QString _jumpTo;
       QString _playUntil;
       QString _continueAt;
+      bool _playRepeats;
 
    public:
       enum class Type : char {
@@ -76,6 +77,8 @@ class Jump : public Text {
       void undoSetJumpTo(const QString& s);
       void undoSetPlayUntil(const QString& s);
       void undoSetContinueAt(const QString& s);
+      bool playRepeats() const             { return _playRepeats; }
+      void setPlayRepeats(bool val)        { _playRepeats = val;  }
 
       virtual bool systemFlag() const override      { return true;        }
 

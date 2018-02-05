@@ -29,14 +29,15 @@ InspectorJump::InspectorJump(QWidget* parent)
       j.setupUi(addWidget());
 
       iList = {
-            { P_ID::COLOR,              0, false, b.color,      b.resetColor      },
-            { P_ID::VISIBLE,            0, false, b.visible,    b.resetVisible    },
-            { P_ID::USER_OFF,           0, false, b.offsetX,    b.resetX          },
-            { P_ID::USER_OFF,           1, false, b.offsetY,    b.resetY          },
-            { P_ID::TEXT_STYLE_TYPE,    0, 0,     t.style,      t.resetStyle      },
-            { P_ID::JUMP_TO,            0, false, j.jumpTo,     j.resetJumpTo     },
-            { P_ID::PLAY_UNTIL,         0, false, j.playUntil,  j.resetPlayUntil  },
-            { P_ID::CONTINUE_AT,        0, false, j.continueAt, j.resetContinueAt }
+            { P_ID::COLOR,              0, false, b.color,       b.resetColor       },
+            { P_ID::VISIBLE,            0, false, b.visible,     b.resetVisible     },
+            { P_ID::USER_OFF,           0, false, b.offsetX,     b.resetX           },
+            { P_ID::USER_OFF,           1, false, b.offsetY,     b.resetY           },
+            { P_ID::TEXT_STYLE_TYPE,    0, 0,     t.style,       t.resetStyle       },
+            { P_ID::JUMP_TO,            0, false, j.jumpTo,      j.resetJumpTo      },
+            { P_ID::PLAY_UNTIL,         0, false, j.playUntil,   j.resetPlayUntil   },
+            { P_ID::CONTINUE_AT,        0, false, j.continueAt,  j.resetContinueAt  },
+            { P_ID::PLAY_REPEATS,       0, false, j.playRepeats, j.resetPlayRepeats }
             };
 
       mapSignals();
