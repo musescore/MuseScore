@@ -481,6 +481,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(hideEmptyStaves,     SIGNAL(clicked(bool)), dontHideStavesInFirstSystem, SLOT(setEnabled(bool)));
       connect(lyricsDashMinLength, SIGNAL(valueChanged(double)),      SLOT(lyricsDashMinLengthValueChanged(double)));
       connect(lyricsDashMaxLength, SIGNAL(valueChanged(double)),      SLOT(lyricsDashMaxLengthValueChanged(double)));
+      connect(minSystemDistance,   SIGNAL(valueChanged(double)),      SLOT(systemMinDistanceValueChanged(double)));
+      connect(maxSystemDistance,   SIGNAL(valueChanged(double)),      SLOT(systemMaxDistanceValueChanged(double)));
 
       QSignalMapper* mapper  = new QSignalMapper(this);     // reset style signals
       QSignalMapper* mapper2 = new QSignalMapper(this);     // value change signals
@@ -956,9 +958,29 @@ void EditStyle::lyricsDashMinLengthValueChanged(double val)
       {
       double otherVal = lyricsDashMaxLength->value();
       if (otherVal < val)
-            lyricsDashMaxLength->setValue(otherVal);
+            lyricsDashMinLength->setValue(otherVal);
       }
 
+//---------------------------------------------------------
+//   systemMin/MaxDistanceValueChanged
+//
+//    Ensure minSystemDistance <= maxSystemDistance
+//---------------------------------------------------------
+
+void EditStyle::systemMaxDistanceValueChanged(double val)
+      {
+      double otherVal = minSystemDistance->value();
+      if (otherVal > val)
+            maxSystemDistance->setValue(otherVal);
+      }
+
+
+void EditStyle::systemMinDistanceValueChanged(double val)
+      {
+      double otherVal = maxSystemDistance->value();
+      if (otherVal < val)
+            minSystemDistance->setValue(otherVal);
+      }
 //---------------------------------------------------------
 //   setPage
 //---------------------------------------------------------

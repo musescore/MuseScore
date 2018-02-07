@@ -69,6 +69,8 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void setSwingParams(bool);
       void lyricsDashMinLengthValueChanged(double);
       void lyricsDashMaxLengthValueChanged(double);
+      void systemMinDistanceValueChanged(double);
+      void systemMaxDistanceValueChanged(double);
       void resetStyleValue(int);
       void valueChanged(int);
 
