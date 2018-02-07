@@ -58,15 +58,15 @@ make -f Makefile.osx lupdate
 
 sudo pip install transifex-client
 
-#cat > ~/.transifexrc <<EOL
-#[https://www.transifex.com]
-#hostname = https://www.transifex.com
-#password = $TRANSIFEX_PASSWORD
-#token =
-#username = $TRANSIFEX_USER
-#EOL
-#
-#tx push -s
+cat > ~/.transifexrc <<EOL
+[https://www.transifex.com]
+hostname = https://www.transifex.com
+password = $TRANSIFEX_PASSWORD
+token =
+username = $TRANSIFEX_USER
+EOL
+
+tx push -s
 
 
 
