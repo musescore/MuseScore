@@ -70,6 +70,8 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void toggleFooterOddEven(bool);
       void buttonClicked(QAbstractButton*);
       void setSwingParams(bool);
+      void systemMinDistanceValueChanged(double);
+      void systemMaxDistanceValueChanged(double);
       void resetStyleValue(int i);
 
       void on_comboFBFont_currentIndexChanged(int index);
