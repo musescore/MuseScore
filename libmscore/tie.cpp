@@ -153,10 +153,9 @@ void TieSegment::editDrag(EditData& ed)
             //
             if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
                   Spanner* spanner = tie();
-                  Note* note = toNote(ed.view->elementNear(ed.pos));
-                  if (note && note->isNote()
-                     && ((g == Grip::END && note->tick() > tie()->tick()) || (g == Grip::START && note->tick() < tie()->tick2()))
-                     ) {
+                  Element* e = ed.view->elementNear(ed.pos);
+                  Note* note = (e && e->isNote()) ? toNote(e) : nullptr;
+                  if (note && ((g == Grip::END && note->tick() > tie()->tick()) || (g == Grip::START && note->tick() < tie()->tick2()))) {
                         if (g == Grip::END) {
                               Tie* tie = toTie(spanner);
                               if (tie->startNote()->pitch() == note->pitch()

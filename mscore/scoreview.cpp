@@ -1904,10 +1904,15 @@ void ScoreView::cmd(const char* s)
             }
       else if (cmd == "up-chord") {
             Element* el = score()->selection().element();
+            Element* oel = el;
             if (el && (el->isNote() || el->isRest()))
                   cmdGotoElement(score()->upAlt(el));
             el = score()->selection().element();
-            while (el->isRest() && toRest(el)->isGap() && el->voice() != 0) {
+            while (el && el->isRest() && toRest(el)->isGap()) {
+                  if (score()->upAlt(el) == el) {
+                        cmdGotoElement(oel);
+                        break;
+                        }
                   el = score()->upAlt(el);
                   cmdGotoElement(el);
                   }
@@ -1918,7 +1923,7 @@ void ScoreView::cmd(const char* s)
             if (el && (el->isNote() || el->isRest()))
                   cmdGotoElement(score()->downAlt(el));
             el = score()->selection().element();
-            while (el->isRest() && toRest(el)->isGap() && el->voice() != 3) {
+            while (el && el->isRest() && toRest(el)->isGap()) {
                   if (score()->downAlt(el) == el) {
                         cmdGotoElement(oel);
                         break;
