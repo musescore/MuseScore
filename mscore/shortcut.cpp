@@ -1798,7 +1798,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "toggle-midiimportpanel",
          QT_TRANSLATE_NOOP("action","MIDI Import Panel"),
-         QT_TRANSLATE_NOOP("action","Toggle 'MIDI Import Panel"),
+         QT_TRANSLATE_NOOP("action","Toggle 'MIDI Import Panel'"),
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
