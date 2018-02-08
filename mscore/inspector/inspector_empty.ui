@@ -14,7 +14,7 @@
    <string/>
   </property>
   <property name="accessibleName">
-   <string>&lt;Empty&gt; Inspector</string>
+   <string>«Empty» Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
