@@ -275,6 +275,7 @@ void Bracket::draw(QPainter* painter) const
 
 void Bracket::startEdit(EditData& ed)
       {
+      Element::startEdit(ed);
       ed.grips   = 1;
       ed.curGrip = Grip::START;
       }
