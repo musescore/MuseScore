@@ -52,7 +52,7 @@ class ExportMidi {
       MidiFile mf;
 
       ExportMidi(Score* s) { cs = s; }
-      bool write(const QString& name, bool midiExpandRepeats);
+      bool write(const QString& name, bool midiExpandRepeats, bool exportRPNs);
       };
 
 } // namespace Ms

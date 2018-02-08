@@ -796,7 +796,7 @@ void PartEdit::midiChannelChanged(int)
       // Update MIDI Out ports
       int maxPort = max(p, part->score()->masterScore()->midiPortCount());
       part->score()->masterScore()->setMidiPortCount(maxPort);
-      if (seq->driver() && (preferences.useJackMidi || preferences.useAlsaAudio))
+      if (seq->driver() && (preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO)))
             seq->driver()->updateOutPortCount(maxPort + 1);
       }
 }

@@ -114,7 +114,7 @@ void PaletteBoxButton::changeEvent(QEvent* ev)
 
 void PaletteBoxButton::showPalette(bool visible)
       {
-      if (visible && preferences.singlePalette) {
+      if (visible && preferences.getBool(PREF_APP_USESINGLEPALETTE)) {
             // close all palettes
             emit closeAll();
             }

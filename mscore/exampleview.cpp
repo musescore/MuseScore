@@ -34,12 +34,12 @@ ExampleView::ExampleView(QWidget* parent)
       setFocusPolicy(Qt::StrongFocus);
       resetMatrix();
       _fgPixmap = nullptr;
-      if (preferences.fgUseColor)
-            _fgColor = preferences.fgColor;
+      if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR))
+            _fgColor = preferences.getColor(PREF_UI_CANVAS_FG_COLOR);
       else {
-            _fgPixmap = new QPixmap(preferences.fgWallpaper);
+            _fgPixmap = new QPixmap(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER));
             if (_fgPixmap == 0 || _fgPixmap->isNull())
-                  qDebug("no valid pixmap %s", qPrintable(preferences.fgWallpaper));
+                  qDebug("no valid pixmap %s", qPrintable(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER)));
             }
       // setup drag canvas state
       sm          = new QStateMachine(this);
@@ -197,7 +197,7 @@ void ExampleView::paintEvent(QPaintEvent* ev)
       {
       if (_score) {
             QPainter p(this);
-            p.setRenderHint(QPainter::Antialiasing, preferences.antialiasedDrawing);
+            p.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
             p.setRenderHint(QPainter::TextAntialiasing, true);
             const QRect r(ev->rect());
 

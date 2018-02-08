@@ -62,7 +62,7 @@ TextTools::TextTools(QWidget* parent)
       cursor = nullptr;
 
       QToolBar* tb = new QToolBar(tr("Text Edit"));
-      tb->setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
+      tb->setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling, preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
 
       showKeyboard = getAction("show-keys");
       showKeyboard->setCheckable(true);
