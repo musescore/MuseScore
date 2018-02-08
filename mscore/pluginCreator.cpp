@@ -313,10 +313,10 @@ void PluginCreator::runClicked()
       run->setEnabled(false);
 
       item = qobject_cast<QmlPlugin*>(obj);
-      msg(tr("Plugin Details:\n"));
-      msg(tr("  Menupath: ") + item->menuPath() + "\n");
-      msg(tr("  Version: ") + item->version() + "\n");
-      msg(tr("  Description: ") + item->description() + "\n");
+      msg(tr("Plugin Details:") + "\n");
+      msg("  " + tr("Menu Path:") + " " + item->menuPath() + "\n");
+      msg("  " + tr("Version:") + " " + item->version() + "\n");
+      msg("  " + tr("Description:") + " " + item->description() + "\n");
       if (item->requiresScore()) msg(tr("  Requires Score\n"));
       if(MuseScoreCore::mscoreCore->currentScore() == nullptr && item->requiresScore() == true) {
             QMessageBox::information(0,

@@ -3597,7 +3597,7 @@ AboutBoxDialog::AboutBoxDialog()
       copyrightLabel->setText(QString("<span style=\"font-size:10pt;\">%1</span>")
                               .arg(tr(   "Visit %1www.musescore.org%2 for new versions and more information.\n"
                                          "Support MuseScore with your %3donation%4.\n\n"
-                                         "Copyright &copy; 1999-2017 Werner Schweer and Others.\n"
+                                         "Copyright &copy; 1999-2018 Werner Schweer and Others.\n"
                                          "Published under the GNU General Public License.")
                                    .arg("<a href=\"http://www.musescore.org/\">")
                                    .arg("</a>")
