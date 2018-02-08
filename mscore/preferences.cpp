@@ -187,7 +187,7 @@ void Preferences::init()
       myImagesPath    = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("images_directory",     "Images"))).absoluteFilePath();
       myTemplatesPath = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("templates_directory",  "Templates"))).absoluteFilePath();
       myPluginsPath   = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("plugins_directory",    "Plugins"))).absoluteFilePath();
-      mySoundfontsPath = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "Soundfonts"))).absoluteFilePath();
+      mySoundfontsPath = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("soundfonts_directory", "SoundFonts"))).absoluteFilePath();
       myShortcutPath = QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("shortcuts_directory", "Shortcuts"))).absoluteFilePath();
 
       MScore::setNudgeStep(.1);         // cursor key (default 0.1)
