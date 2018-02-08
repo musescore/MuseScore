@@ -45,6 +45,23 @@
       </Articulation>
       <InstrumentGroup id="woodwinds">
             <name>Woodwind</name>
+            <Instrument id="Winds">
+                  <longName>Winds</longName>
+                  <shortName>W.</shortName>
+                  <description>Winds Section</description>
+                  <musicXMLid>wind.group</musicXMLid>
+                  <staves>2</staves>
+                  <clef>G</clef>
+                  <bracket>1</bracket>
+                  <bracketSpan>2</bracketSpan>
+                  <barlineSpan>2</barlineSpan>
+                  <clef staff="2">F</clef>
+                  <aPitchRange>24-108</aPitchRange>
+                  <pPitchRange>24-108</pPitchRange>
+                  <Channel>
+                        <program value="73"/>
+                  </Channel>
+            </Instrument>
             <Instrument id="piccolo">
                   <longName>Piccolo</longName>
                   <shortName>Picc.</shortName>
@@ -10066,6 +10083,29 @@
       </InstrumentGroup>
       <InstrumentGroup id="strings">
             <name>Strings</name>
+            <Instrument id="strings">
+                  <longName>Strings</longName>
+                  <shortName>St.</shortName>
+                  <description>String Section</description>
+                  <musicXMLid>strings.group</musicXMLid>
+                  <staves>2</staves>
+                  <clef>G</clef>
+                  <bracket>1</bracket>
+                  <bracketSpan>2</bracketSpan>
+                  <barlineSpan>2</barlineSpan>
+                  <clef staff="2">F</clef>
+                  <aPitchRange>24-108</aPitchRange>
+                  <pPitchRange>24-108</pPitchRange>
+                  <Channel>
+                        <program value="48"/>
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <program value="45"/>
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/>
+                  </Channel>
+            </Instrument>
             <Instrument id="erhu">
                   <longName>Erhu</longName>
                   <shortName>Eh.</shortName>
