@@ -281,6 +281,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(swingEighth, SIGNAL(toggled(bool)), SLOT(setSwingParams(bool)));
       connect(swingSixteenth, SIGNAL(toggled(bool)), SLOT(setSwingParams(bool)));
       connect(hideEmptyStaves, SIGNAL(clicked(bool)), dontHideStavesInFirstSystem, SLOT(setEnabled(bool)));
+      connect(minSystemDistance,   SIGNAL(valueChanged(double)),      SLOT(systemMinDistanceValueChanged(double)));
+      connect(maxSystemDistance,   SIGNAL(valueChanged(double)),      SLOT(systemMaxDistanceValueChanged(double)));
 
       QSignalMapper* mapper = new QSignalMapper(this);
 
@@ -909,6 +911,27 @@ void EditStyle::toggleFooterOddEven(bool checked)
       else
             labelOddFooter->setText(odd + "\n" + even); // replace
       return;
+      }
+
+//---------------------------------------------------------
+//   systemMin/MaxDistanceValueChanged
+//
+//    Ensure minSystemDistance <= maxSystemDistance
+//---------------------------------------------------------
+
+void EditStyle::systemMaxDistanceValueChanged(double val)
+      {
+      double otherVal = minSystemDistance->value();
+      if (otherVal > val)
+            maxSystemDistance->setValue(otherVal);
+      }
+
+
+void EditStyle::systemMinDistanceValueChanged(double val)
+      {
+      double otherVal = maxSystemDistance->value();
+      if (otherVal < val)
+            minSystemDistance->setValue(otherVal);
       }
 
 //---------------------------------------------------------
