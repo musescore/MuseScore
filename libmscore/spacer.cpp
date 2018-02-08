@@ -122,6 +122,7 @@ void Spacer::spatiumChanged(qreal ov, qreal nv)
 
 void Spacer::startEdit(EditData& ed)
       {
+      Element::startEdit(ed);
       ed.grips   = 1;
       ed.curGrip = Grip::START;
       }

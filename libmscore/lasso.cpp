@@ -106,6 +106,7 @@ void Lasso::updateGrips(EditData& ed) const
 
 void Lasso::startEdit(EditData& ed)
       {
+      Element::startEdit(ed);
       ed.grips   = 8;
       ed.curGrip = Grip(7);
       }

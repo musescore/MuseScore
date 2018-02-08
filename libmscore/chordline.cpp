@@ -380,6 +380,7 @@ void ChordLine::updateGrips(EditData& ed) const
 
 void ChordLine::startEdit(EditData& ed)
       {
+      Element::startEdit(ed);
       if (_straight) {
             ed.curGrip = Grip(0);
             ed.grips   = 1;

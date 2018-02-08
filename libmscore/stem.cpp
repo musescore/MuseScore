@@ -239,6 +239,7 @@ void Stem::updateGrips(EditData& ed) const
 
 void Stem::startEdit(EditData& ed)
       {
+      Element::startEdit(ed);
       ed.grips   = 1;
       ed.curGrip = Grip::START;
       undoPushProperty(P_ID::USER_LEN);

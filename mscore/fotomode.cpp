@@ -31,6 +31,7 @@ namespace Ms {
 
 void FotoLasso::startEdit(EditData& ed)
       {
+      Element::startEdit(ed);
       ed.grips   = 8;
       ed.curGrip = Grip(0);
       QRectF view = ((ScoreView*)ed.view)->toLogical(QRect(0.0, 0.0, ed.view->geometry().width(), ed.view->geometry().height()));

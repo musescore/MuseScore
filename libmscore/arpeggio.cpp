@@ -326,6 +326,7 @@ QPointF Arpeggio::gripAnchor(Grip n) const
 
 void Arpeggio::startEdit(EditData& ed)
       {
+      Element::startEdit(ed);
       ed.grips   = 2;
       ed.curGrip = Grip::END;
       undoPushProperty(P_ID::ARP_USER_LEN1);
