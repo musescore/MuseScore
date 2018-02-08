@@ -92,7 +92,7 @@ float Mod::get_value(Channel* chan, Voice* voice)
        * described in section 8.4.2, but it matches the definition used in
        * several SF2.1 sound fonts (where it is used only to turn it off).
        */
-#if 0
+
       if ((mod->src2 == FLUID_MOD_VELOCITY) &&
          (mod->src1 == FLUID_MOD_VELOCITY) &&
          (mod->flags1 == (FLUID_MOD_GC | FLUID_MOD_UNIPOLAR
@@ -100,12 +100,18 @@ float Mod::get_value(Channel* chan, Voice* voice)
          (mod->flags2 == (FLUID_MOD_GC | FLUID_MOD_UNIPOLAR
             | FLUID_MOD_POSITIVE | FLUID_MOD_SWITCH)) &&
          (mod->dest == GEN_FILTERFC)) {
+// Disable default vel-to-filter cutoff modulator per upstream FluidSynth
+/*
             if (voice->vel < 64)
                   return (float) mod->amount / 2.0;
             else
                   return (float) mod->amount * (127 - voice->vel) / 127;
             }
-#endif
+*/
+     return 0; // (float) mod->amount / 2.0;
+  }
+// end vel-to-filter cutoff mod
+
       /* get the initial value of the first source */
       if (mod->src1 > 0) {
             if (mod->flags1 & FLUID_MOD_CC) {
