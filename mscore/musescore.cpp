@@ -3660,7 +3660,17 @@ AboutBoxDialog::AboutBoxDialog()
 void AboutBoxDialog::copyRevisionToClipboard()
       {
       QClipboard* cb = QApplication::clipboard();
-      cb->setText(QString("github-musescore-musescore-") + revision);
+      QString sysinfo = "OS: ";
+      sysinfo += QSysInfo::prettyProductName();
+      sysinfo += ", Arch.: ";
+      sysinfo += QSysInfo::currentCpuArchitecture();
+      // endianess?
+      sysinfo += ", MuseScore version (";
+      sysinfo += QSysInfo::WordSize==32?"32":"64";
+      sysinfo += "-bit): " VERSION ", revision: ";
+      sysinfo += "github-musescore-musescore-";
+      sysinfo += revision;
+      cb->setText(sysinfo);
       }
 
 //---------------------------------------------------------
