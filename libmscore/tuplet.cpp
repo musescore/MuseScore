@@ -786,6 +786,7 @@ bool Tuplet::isEditable() const
 
 void Tuplet::startEdit(EditData& ed)
       {
+      Element::startEdit(ed);
       ed.grips   = 2;
       ed.curGrip = Grip::END;
       }
