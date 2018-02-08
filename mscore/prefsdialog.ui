@@ -2810,7 +2810,13 @@
             <item>
              <widget class="QSpinBox" name="portMidiOutputLatencyMilliseconds">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Latency&lt;/span&gt; is a delay in milliseconds applied to timestamps, to inform the driver about when the output should actually occur.&lt;/p&gt;&lt;p&gt;If &lt;span style=&quot; font-weight:600;&quot;&gt;latency&lt;/span&gt; is zero, MIDI messages are delivered as fast as possible, but may contain jitter.&lt;/p&gt;&lt;p&gt;Setting &lt;span style=&quot; font-weight:600;&quot;&gt;latency&lt;/span&gt; greater than zero may help the driver alleviate any jitter.&lt;/p&gt;&lt;p&gt;Adjusting &lt;span style=&quot; font-weight:600;&quot;&gt;latency&lt;/span&gt; can help synchronize your midi hardware with MuseScore's internal audio synthesizer, so that they both sound notes at the same time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>Latency is a delay in milliseconds applied to timestamps, to inform the driver about when the output should actually occur.
+
+If latency is zero, MIDI messages are delivered as fast as possible, but may contain jitter.
+
+Setting latency greater than zero may help the driver alleviate any jitter.
+
+Adjusting latency can help synchronize your MIDI hardware with MuseScore's internal audio synthesizer, so that they both sound notes at the same time.</string>
               </property>
               <property name="accessibleName">
                <string>MIDI Output Latency</string>
