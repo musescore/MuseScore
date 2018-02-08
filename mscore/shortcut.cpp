@@ -3347,7 +3347,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL,
          "toggle-mmrest",
          QT_TRANSLATE_NOOP("action","Toggle Create Multimeasure Rest"),
-         QT_TRANSLATE_NOOP("action","Toggle 'Ceate Multimeasure Rest'"),
+         QT_TRANSLATE_NOOP("action","Toggle 'Create Multimeasure Rest'"),
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut,
