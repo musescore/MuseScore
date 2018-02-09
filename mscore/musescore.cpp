@@ -115,7 +115,7 @@
 #endif
 
 #ifdef Q_OS_MAC
-#include "cocoabridge.h"
+#include "macos/cocoabridge.h"
 #endif
 
 #ifdef AEOLUS

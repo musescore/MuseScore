@@ -208,7 +208,7 @@ endif (OMR)
 
 if (APPLE)
       file(GLOB_RECURSE INCS "*.h")
-      set(COCOABRIDGE "cocoabridge.mm")
+      set(COCOABRIDGE "macos/cocoabridge.mm")
 else (APPLE)
       set(INCS "")
       set(COCOABRIDGE "")
