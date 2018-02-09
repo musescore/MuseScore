@@ -1822,6 +1822,25 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             // to have it accessible to resources
             QString originalScoreFName(cs->masterScore()->fileInfo()->canonicalFilePath());
             cs->masterScore()->fileInfo()->setFile(fn);
+            if (!cs->isMaster()) { // clone metaTags from masterScore
+                  QMapIterator<QString, QString> j(cs->masterScore()->metaTags());
+                  while (j.hasNext()) {
+                        j.next();
+                        if (j.key() != "partName") // don't copy "partName" should that exist in masterScore
+                              cs->metaTags().insert(j.key(), j.value());
+#if defined(Q_OS_WIN)   // Update "platform", may not be worth the effort
+                        cs->metaTags().insert("platform", "Microsoft Windows");
+#elif defined(Q_OS_MAC)
+                        cs->metaTags().insert("platform", "Apple Macintosh");
+#elif defined(Q_OS_LINUX)
+                        cs->metaTags().insert("platform", "Linux");
+#else
+                        cs->metaTags().insert("platform", "Unknown");
+#endif
+                        cs->metaTags().insert("source", ""); // Empty "source" to avoid clashes with masterrScore when doing "Save online"
+                        cs->metaTags().insert("creationDate", QDate::currentDate().toString(Qt::ISODate)); // update "creationDate"
+                        }
+                  }
             try {
                   if (ext == "mscz")
                         cs->saveCompressedFile(fi, false);
@@ -1831,6 +1850,15 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
             catch (QString s) {
                   rv = false;
                   QMessageBox::critical(this, tr("Save As"), s);
+                  }
+            if (!cs->isMaster()) { // remove metaTags added above
+                  QMapIterator<QString, QString> j(cs->masterScore()->metaTags());
+                  while (j.hasNext()) {
+                        j.next();
+                        // remove all but "partName", should that exist in masterScore
+                        if (j.key() != "partName")
+                              cs->metaTags().remove(j.key());
+                        }
                   }
             cs->masterScore()->fileInfo()->setFile(originalScoreFName);          // restore original file name
 
