@@ -22,5 +22,6 @@
 
 void  CocoaBridge::setAllowsAutomaticWindowTabbing(bool flag)
 {
-      [NSWindow setAllowsAutomaticWindowTabbing: flag];
+    if ([NSWindow respondsToSelector:@selector(allowsAutomaticWindowTabbing)])
+        [NSWindow setAllowsAutomaticWindowTabbing: flag];
 }
