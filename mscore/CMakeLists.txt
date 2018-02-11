@@ -241,7 +241,7 @@ add_executable ( ${ExecutableName}
       scoreview.cpp editharmony.cpp editfiguredbass.cpp events.cpp
       editinstrument.cpp editstyle.cpp
       icons.cpp importbww.cpp
-      importmxml.cpp importmxmllogger.cpp importmxmlpass1.cpp importmxmlpass2.cpp
+      importmxml.cpp importmxmllogger.cpp importmxmlnoteduration.cpp importmxmlpass1.cpp importmxmlpass2.cpp
       instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp

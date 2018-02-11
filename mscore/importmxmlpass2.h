@@ -20,6 +20,8 @@
 #ifndef __IMPORTMXMLPASS2_H__
 #define __IMPORTMXMLPASS2_H__
 
+#include <array>
+
 #include "libmscore/score.h"
 #include "libmscore/tuplet.h"
 #include "importxmlfirstpass.h"
@@ -98,6 +100,13 @@ class Glissando;
 class Pedal;
 class Trill;
 class MxmlLogger;
+
+using SlurStack = std::array<SlurDesc, MAX_NUMBER_LEVEL>;
+using TrillStack = std::array<Trill*, MAX_NUMBER_LEVEL>;
+using BracketsStack = std::array<SLine*, MAX_BRACKETS>;
+using DashesStack = std::array<SLine*, MAX_DASHES>;
+using OttavasStack = std::array<SLine*, MAX_NUMBER_LEVEL>;
+using HairpinsStack = std::array<SLine*, MAX_NUMBER_LEVEL>;
 
 class MusicXMLParserPass2 {
 public:
@@ -180,15 +189,14 @@ private:
       // or use score->sigmap() ?
       Fraction _timeSigDura;
 
-      QVector<Tuplet*> _tuplets;                 ///< Current tuplet for each track in the current part
-      QVector<bool> _tuplImpls;                 ///< Current tuplet implicit flag for each track in the current part
-      SlurDesc _slur[MAX_NUMBER_LEVEL];
-      Trill* _trills[MAX_NUMBER_LEVEL];          ///< Current trills
-      SLine* _brackets[MAX_BRACKETS];
-      SLine* _dashes[MAX_DASHES];
-      SLine* _ottavas[MAX_NUMBER_LEVEL];        ///< Current ottavas
-      SLine* _hairpins[MAX_NUMBER_LEVEL];      ///< Current hairpins
-      // TODO SLine* trills[MAX_NUMBER_LEVEL];          ///< Current trills
+      QVector<Tuplet*> _tuplets;          ///< Current tuplet for each track in the current part
+      QVector<bool> _tuplImpls;           ///< Current tuplet implicit flag for each track in the current part
+      SlurStack _slurs {};
+      TrillStack _trills {};              ///< Current trills
+      BracketsStack _brackets {};
+      DashesStack _dashes {};
+      OttavasStack _ottavas {};           ///< Current ottavas
+      HairpinsStack _hairpins {};         ///< Current hairpins
 
       Glissando* _glissandi[MAX_NUMBER_LEVEL][2];   ///< Current slides ([0]) / glissandi ([1])
 
