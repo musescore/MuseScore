@@ -398,7 +398,10 @@ bool Bracket::edit(EditData& ed)
 
 QVariant Bracket::getProperty(P_ID id) const
       {
-      return _bi->getProperty(id);
+      QVariant v = Element::getProperty(id);
+      if (!v.isValid())
+            v = _bi->getProperty(id);
+      return v;
       }
 
 //---------------------------------------------------------
@@ -416,7 +419,10 @@ bool Bracket::setProperty(P_ID id, const QVariant& v)
 
 QVariant Bracket::propertyDefault(P_ID id) const
       {
-      return _bi->propertyDefault(id);
+      QVariant v = Element::propertyDefault(id);
+      if (!v.isValid())
+            v = _bi->propertyDefault(id);
+      return v;
       }
 
 //---------------------------------------------------------
