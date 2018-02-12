@@ -477,7 +477,7 @@ void Spanner::computeEndElement()
             case Anchor::SEGMENT: {
                   if (track2() == -1)
                         setTrack2(track());
-                  if (ticks() == 0 && isTextLine())
+                  if (ticks() == 0 && isTextLine() && parent())   // special case palette
                         setTicks(score()->lastSegment()->tick() - _tick);
                   // find last cr on this staff that ends before tick2
 
