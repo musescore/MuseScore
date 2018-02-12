@@ -398,7 +398,8 @@ bool Bracket::edit(EditData& ed)
 
 QVariant Bracket::getProperty(P_ID id) const
       {
-      return _bi->getProperty(id);
+      auto prop = _bi->getProperty(id);
+      return prop.isValid() ? prop : Element::getProperty(id);
       }
 
 //---------------------------------------------------------
