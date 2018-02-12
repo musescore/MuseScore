@@ -2846,13 +2846,21 @@ static void layoutTies(Chord* ch, System* system, int stick)
 //   processLines
 //---------------------------------------------------------
 
-static void processLines(System* system, std::vector<Spanner*> lines)
+static void processLines(System* system, std::vector<Spanner*> lines, bool align)
       {
       std::vector<SpannerSegment*> segments;
       for (Spanner* sp : lines) {
             SpannerSegment* ss = sp->layoutSystem(system);     // create/layout spanner segment for this system
             if (ss->autoplace())
                   segments.push_back(ss);
+            }
+
+      if (align && segments.size() > 1) {
+            qreal y = segments[0]->userOff().y();
+            for (unsigned i = 1; i < segments.size(); ++i)
+                  y = qMax(y, segments[i]->userOff().y());
+            for (auto ss : segments)
+                  ss->rUserYoffset() = y;
             }
 
       //
@@ -3163,7 +3171,7 @@ System* Score::collectSystem(LayoutContext& lc)
                               spanner.push_back(sp);
                         }
                   }
-            processLines(system, spanner);
+            processLines(system, spanner, false);
             }
 
       std::vector<Dynamic*> dynamics;
@@ -3246,19 +3254,23 @@ System* Score::collectSystem(LayoutContext& lc)
 
             std::vector<Spanner*> ottavas;
             std::vector<Spanner*> spanner;
+            std::vector<Spanner*> pedal;
 
             for (auto interval : spanners) {
                   Spanner* sp = interval.value;
                   if (sp->tick() < etick && sp->tick2() > stick) {
                         if (sp->isOttava())
                               ottavas.push_back(sp);
+                        else if (sp->isPedal())
+                              pedal.push_back(sp);
                         else if (!sp->isSlur())             // slurs are already handled
                               spanner.push_back(sp);
                         }
                   }
 
-            processLines(system, ottavas);
-            processLines(system, spanner);
+            processLines(system, ottavas, false);
+            processLines(system, pedal, true);
+            processLines(system, spanner, false);
 
             //
             // vertical align volta segments
