@@ -204,7 +204,8 @@ bool StaffText::getAeolusStop(int group, int idx) const
 
 void StaffText::layout()
       {
-      qreal y = placeAbove() ? styleP(StyleIdx::staffTextPosAbove) : styleP(StyleIdx::staffTextPosBelow) + staff()->height();
+      Staff* s = staff();
+      qreal y = placeAbove() ? styleP(StyleIdx::staffTextPosAbove) : styleP(StyleIdx::staffTextPosBelow) + (s ? s->height() : 0.0);
       setPos(QPointF(0.0, y));
       TextBase::layout1();
       autoplaceSegmentElement(styleP(StyleIdx::staffTextMinDistance));
