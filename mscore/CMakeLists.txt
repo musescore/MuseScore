@@ -223,8 +223,10 @@ endif (OMR)
 
 if (APPLE)
       file(GLOB_RECURSE INCS "*.h")
+      set(COCOABRIDGE "macos/cocoabridge.mm")
 else (APPLE)
       set(INCS "")
+      set(COCOABRIDGE "")
 endif (APPLE)
 
 add_executable ( ${ExecutableName}
@@ -345,6 +347,7 @@ add_executable ( ${ExecutableName}
       abstractdialog.cpp abstractdialog.h
       toolbuttonmenu.cpp
 
+      ${COCOABRIDGE}
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}

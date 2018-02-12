@@ -145,7 +145,8 @@ if (APPLE)
       find_library(CoreMidiFW            NAMES CoreMIDI)
       find_library(SystemConfigurationFW NAMES SystemConfiguration)
       find_library(CoreServicesFW        NAMES CoreServices)
-      set(OsxFrameworks ${AudioToolboxFW} ${AudioUnitFW} ${CoreAudioFW} ${CoreMidiFW} ${SystemConfigurationFW} ${CoreServicesFW})
+      find_library(AppKit                NAMES AppKit)
+      set(OsxFrameworks ${AudioToolboxFW} ${AudioUnitFW} ${CoreAudioFW} ${CoreMidiFW} ${SystemConfigurationFW} ${CoreServicesFW} ${AppKit})
 endif (APPLE)
 
 #
