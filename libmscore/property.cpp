@@ -220,7 +220,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { P_ID::FRET_OFFSET,             "fret_offset",             false, "fretOffset",            P_TYPE::INT             },
       { P_ID::SYSTEM_BRACKET,          "system_bracket",          false, "type",                  P_TYPE::INT             },
       { P_ID::GAP,                     "gap",                     false, 0,                       P_TYPE::BOOL            },
-      { P_ID::AUTOPLACE,               "autoplace",               false, 0,                       P_TYPE::BOOL            },
+      { P_ID::AUTOPLACE,               "autoplace",               false, "autoplace",             P_TYPE::BOOL            },
       { P_ID::DASH_LINE_LEN,           "dash_line_len",           false, "dashLineLength",        P_TYPE::REAL            },
       { P_ID::DASH_GAP_LEN,            "dash_gap_len",            false, "dashGapLength",         P_TYPE::REAL            },
       { P_ID::TICK,                    "tick",                    false, 0,                       P_TYPE::INT             },

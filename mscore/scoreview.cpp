@@ -898,7 +898,8 @@ void ScoreView::paintEvent(QPaintEvent* ev)
       if (_score->layoutMode() == LayoutMode::LINE)
             _continuousPanel->paint(ev->rect(), vp);
 
-      lasso->draw(&vp);
+      if (!lasso->bbox().isEmpty())
+            lasso->draw(&vp);
       shadowNote->draw(&vp);
 
       if (!dropAnchor.isNull()) {

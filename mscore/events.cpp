@@ -744,8 +744,15 @@ void ScoreView::changeState(ViewState s)
                   break;
             case ViewState::DRAG:
                   break;
-            case ViewState::DRAG_OBJECT:
             case ViewState::FOTO_DRAG_OBJECT:
+                  for (Element* e : _score->selection().elements()) {
+                        e->endDrag(editData);
+                        e->triggerLayout();
+                        }
+                  setDropTarget(0); // this also resets dropAnchor
+                  _score->endCmd();
+                  break;
+            case ViewState::DRAG_OBJECT:
                   endDrag();
                   break;
             case ViewState::FOTO_DRAG_EDIT:

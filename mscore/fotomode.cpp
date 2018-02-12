@@ -87,6 +87,15 @@ void ScoreView::startFotomode()
             _foto = new FotoLasso(_score);
       else
             _foto->setScore(_score);
+      QRectF view = toLogical(QRect(0.0, 0.0, width(), height()));
+      if (_foto->bbox().isEmpty() || !view.intersects(_foto->bbox())) {
+            // rect not found - construct new rect with default size & relative position
+            qreal w = view.width();
+            qreal h = view.height();
+            QRectF r(w * .3, h * .3, w * .4, h * .4);
+            // convert to absolute position
+            _foto->setbbox(toPhysical(r));
+            }
       _foto->setVisible(true);
       _score->select(_foto);
       editData.element = _foto;

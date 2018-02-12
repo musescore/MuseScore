@@ -4425,7 +4425,8 @@ void MasterScore::setLayoutAll()
 
 void MasterScore::setLayout(int t)
       {
-      _cmdState.setTick(t);
+      if (t >= 0)
+            _cmdState.setTick(t);
       }
 
 //---------------------------------------------------------
