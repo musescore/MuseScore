@@ -52,7 +52,7 @@ musical scores, released under the GNU General Public Licence (GPLv2).
 @END_section_to_only_appear_in_portable_builds@
 
 .SS Getting help
-This manual documents command line useage of
+This manual documents command line usage of
 .BR mscore@MSCORE_INSTALL_SUFFIX@ .
 For help with the full MuseScore program see:
 .RS

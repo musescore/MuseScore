@@ -31,12 +31,12 @@ export QML2_IMPORT_PATH="${PWD}/qt5/qml"
 mkdir "$HOME/software"
 export PATH="$PATH:$HOME/bin:$HOME/software/bin"
 
-# Prepare for post-install upload of artefacts to S3
+# Prepare for post-install upload of artifacts to S3
 export TRAVIS_SHORT_COMMIT="$(echo $TRAVIS_COMMIT | cut -c 1-8)"
 export ARTIFACTS_TARGET_PATHS="$TRAVIS_SHORT_COMMIT"
 export ARTIFACTS_PERMISSIONS=public-read
 export TRAVIS_BUILD_DIR=vtest/html
-#compatibility between ruby travis artefact and GO one
+#compatibility between ruby travis artifact and GO one
 export ARTIFACTS_KEY=$ARTIFACTS_AWS_ACCESS_KEY_ID
 export ARTIFACTS_SECRET=$ARTIFACTS_AWS_SECRET_ACCESS_KEY
 artifacts -v || curl -sL https://raw.githubusercontent.com/meatballhat/artifacts/master/install | bash

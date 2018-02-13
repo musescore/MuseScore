@@ -77,7 +77,7 @@ class Voice
 					        // it's used for noteoff's
 	unsigned char status;
 	unsigned char chan;             // the channel number, quick access for channel messages
-	unsigned char key;              // the key, quick acces for noteoff
+	unsigned char key;              // the key, quick access for noteoff
 	unsigned char vel;              // the velocity
 
 	Channel* channel;
