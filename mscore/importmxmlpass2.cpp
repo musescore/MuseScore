@@ -172,48 +172,6 @@ void MusicXmlLyricsExtend::setExtend(const int no, const int track, const int ti
       }
 
 //---------------------------------------------------------
-//   noteTypeToFraction
-//---------------------------------------------------------
-
-/**
- Convert MusicXML note type to fraction.
- */
-
-static Fraction noteTypeToFraction(const QString& type)
-      {
-      if (type == "1024th")
-            return Fraction(1, 1024);
-      else if (type == "512th")
-            return Fraction(1, 512);
-      else if (type == "256th")
-            return Fraction(1, 256);
-      else if (type == "128th")
-            return Fraction(1, 128);
-      else if (type == "64th")
-            return Fraction(1, 64);
-      else if (type == "32nd")
-            return Fraction(1, 32);
-      else if (type == "16th")
-            return Fraction(1, 16);
-      else if (type == "eighth")
-            return Fraction(1, 8);
-      else if (type == "quarter")
-            return Fraction(1, 4);
-      else if (type == "half")
-            return Fraction(1, 2);
-      else if (type == "whole")
-            return Fraction(1, 1);
-      else if (type == "breve")
-            return Fraction(2, 1);
-      else if (type == "long")
-            return Fraction(4, 1);
-      else if (type == "maxima")
-            return Fraction(8, 1);
-      else
-            return Fraction(0, 0);
-      }
-
-//---------------------------------------------------------
 //   MusicXMLStepAltOct2Pitch
 //---------------------------------------------------------
 
@@ -5417,7 +5375,7 @@ void MusicXMLParserPass2::dynamics(QString& placement, QStringList& dynamicslist
       Q_ASSERT(_e.isStartElement() && _e.name() == "dynamics");
 
       placement = _e.attributes().value("placement").toString();
-      if (preferences.musicxmlImportLayout) {
+      if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
             // ry        = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
             // rx        = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
             // yoffset   = _e.attributes().value("default-y").toDouble(&hasYoffset) * -0.1;
