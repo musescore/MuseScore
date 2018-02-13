@@ -2453,10 +2453,10 @@ void MusicXMLParserPass1::note(const QString& partId,
       QString voice = "1";
       QString instrId;
 
-      mxmlNoteTime mnt(_divs, _logger);
+      mxmlNoteDuration mnd(_divs, _logger);
 
       while (_e.readNextStartElement()) {
-            if (mnt.readProperties(_e)) {
+            if (mnd.readProperties(_e)) {
                   // element handled
                   }
             else if (_e.name() == "chord") {
@@ -2520,8 +2520,8 @@ void MusicXMLParserPass1::note(const QString& partId,
 
       // check for timing error(s) and set dura
       // keep in this order as checkTiming() might change dura
-      auto errorStr = mnt.checkTiming(type, bRest, grace);
-      dura = mnt.dura();
+      auto errorStr = mnd.checkTiming(type, bRest, grace);
+      dura = mnd.dura();
       if (errorStr != "")
             _logger->logError(errorStr, &_e);
 

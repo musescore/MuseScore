@@ -65,6 +65,7 @@
 
 #include "importmxmllogger.h"
 #include "importmxmlnoteduration.h"
+#include "importmxmlnotepitch.h"
 #include "importmxmlpass2.h"
 #include "musicxmlfonthandler.h"
 #include "musicxmlsupport.h"
@@ -210,32 +211,6 @@ static Fraction noteTypeToFraction(const QString& type)
             return Fraction(8, 1);
       else
             return Fraction(0, 0);
-      }
-
-//---------------------------------------------------------
-//   calculateFraction
-//---------------------------------------------------------
-
-/**
- Convert note type, number of dots and actual and normal notes into a duration
- */
-
-static Fraction calculateFraction(const QString& type, const int dots, const Fraction timeMod)
-      {
-      // type
-      Fraction f = noteTypeToFraction(type);
-      if (f.isValid()) {
-            // dot(s)
-            Fraction f_no_dots = f;
-            for (int i = 0; i < dots; ++i)
-                  f += (f_no_dots / (2 << i));
-            // tuplet
-            if (timeMod.isValid())
-                  f *= timeMod;
-            // clean up (just in case)
-            f.reduce();
-            }
-      return f;
       }
 
 //---------------------------------------------------------
@@ -3429,57 +3404,6 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure,
       }
 
 //---------------------------------------------------------
-//   isAppr
-//---------------------------------------------------------
-
-/**
- Check if v approximately equals ref.
- Used to prevent floating point comparison for equality from failing
- */
-
-static bool isAppr(const double v, const double ref, const double epsilon)
-      {
-      return v > ref - epsilon && v < ref + epsilon;
-      }
-
-//---------------------------------------------------------
-//   microtonalGuess
-//---------------------------------------------------------
-
-/**
- Convert a MusicXML alter tag into a microtonal accidental in MuseScore enum AccidentalType.
- Works only for quarter tone, half tone, three-quarters tone and whole tone accidentals.
- */
-
-static AccidentalType microtonalGuess(double val)
-      {
-      const double eps = 0.001;
-      if (isAppr(val, -2, eps))
-            return AccidentalType::FLAT2;
-      else if (isAppr(val, -1.5, eps))
-            return AccidentalType::MIRRORED_FLAT2;
-      else if (isAppr(val, -1, eps))
-            return AccidentalType::FLAT;
-      else if (isAppr(val, -0.5, eps))
-            return AccidentalType::MIRRORED_FLAT;
-      else if (isAppr(val, 0, eps))
-            return AccidentalType::NATURAL;
-      else if (isAppr(val, 0.5, eps))
-            return AccidentalType::SHARP_SLASH;
-      else if (isAppr(val, 1, eps))
-            return AccidentalType::SHARP;
-      else if (isAppr(val, 1.5, eps))
-            return AccidentalType::SHARP_SLASH4;
-      else if (isAppr(val, 2, eps))
-            return AccidentalType::SHARP2;
-      else
-            qDebug("Guess for microtonal accidental corresponding to value %f failed.", val);  // TODO
-
-      // default
-      return AccidentalType::NONE;
-      }
-
-//---------------------------------------------------------
 //   addSymToSig
 //---------------------------------------------------------
 
@@ -4196,46 +4120,6 @@ static void handleDisplayStep(ChordRest* cr, int step, int octave, int tick, qre
       }
 
 //---------------------------------------------------------
-//   displayStepOctave
-//---------------------------------------------------------
-
-/**
- Handle <display-step> and <display-octave> for <rest> and <unpitched>
- */
-
-static void displayStepOctave(QXmlStreamReader& e,
-                              int& step,
-                              int& oct)
-      {
-      Q_ASSERT(e.isStartElement()
-               && (e.name() == "rest" || e.name() == "unpitched"));
-
-      while (e.readNextStartElement()) {
-            if (e.name() == "display-step") {
-                  QString strStep = e.readElementText();
-                  int pos = QString("CDEFGAB").indexOf(strStep);
-                  if (strStep.size() == 1 && pos >=0 && pos < 7)
-                        step = pos;
-                  else
-                        //logError(QString("invalid step '%1'").arg(strStep));
-                        qDebug("invalid step '%s'", qPrintable(strStep));  // TODO
-                  }
-            else if (e.name() == "display-octave") {
-                  QString strOct = e.readElementText();
-                  bool ok;
-                  oct = strOct.toInt(&ok);
-                  if (!ok || oct < 0 || oct > 9) {
-                        //logError(QString("invalid octave '%1'").arg(strOct));
-                        qDebug("invalid octave '%s'", qPrintable(strOct)); // TODO
-                        oct = -1;
-                        }
-                  }
-            else
-                  e.skipCurrentElement();             // TODO log
-            }
-      }
-
-//---------------------------------------------------------
 //   setNoteHead
 //---------------------------------------------------------
 
@@ -4321,19 +4205,14 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             return 0;
             }
 
-      int alter = 0;
       bool chord = false;
       bool cue = false;
       bool small = false;
       bool grace = false;
-      int octave = -1;
-      bool bRest = false;
+      bool rest = false;
       int staff = 1;
-      int step = 0;
       QString type;
       QString voice;
-      AccidentalType accType = AccidentalType::NONE; // set based on alter value (can be microtonal)
-      Accidental* acc = 0;                               // created based on accidental element
       Direction stemDir = Direction::AUTO;
       bool noStem = false;
       NoteHead::Group headGroup = NoteHead::Group::HEAD_NORMAL;
@@ -4346,19 +4225,18 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       bool graceSlash = false;
       bool printObject = _e.attributes().value("print-object") != "no";
       Beam::Mode bm  = Beam::Mode::AUTO;
-      int displayStep = -1;       // invalid
-      int displayOctave = -1; // invalid
-      bool unpitched = false;
       QString instrId;
 
-      mxmlNoteTime mnt(_divs, _logger);
+      mxmlNoteDuration mnd(_divs, _logger);
+      mxmlNotePitch mnp(_logger);
 
       while (_e.readNextStartElement() && !elementMustBePostponed(_e)) {
-            if (mnt.readProperties(_e)) {
+            if (mnp.readProperties(_e, _score)) {
                   // element handled
                   }
-            else if (_e.name() == "accidental")
-                  acc = accidental();
+            else if (mnd.readProperties(_e)) {
+                  // element handled
+                  }
             else if (_e.name() == "beam")
                   beam(bm);
             else if (_e.name() == "chord") {
@@ -4384,11 +4262,9 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   noteheadFilled = _e.attributes().value("filled").toString();
                   headGroup = convertNotehead(_e.readElementText());
                   }
-            else if (_e.name() == "pitch")
-                  pitch(step, alter, octave, accType);
             else if (_e.name() == "rest") {
-                  bRest = true;
-                  rest(displayStep, displayOctave);
+                  rest = true;
+                  mnp.displayStepOctave(_e);
                   }
             else if (_e.name() == "staff") {
                   QString strStaff = _e.readElementText();
@@ -4407,10 +4283,6 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             else if (_e.name() == "type") {
                   small = _e.attributes().value("size") == "cue";
                   type = _e.readElementText();
-                  }
-            else if (_e.name() == "unpitched") {
-                  unpitched = true;
-                  displayStepOctave(_e, displayStep, displayOctave);
                   }
             else if (_e.name() == "voice")
                   voice = _e.readElementText();
@@ -4433,18 +4305,10 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       if (voice == "")
             voice = "1";
 
-      // accidental handling
-      //qDebug("note acc %p type %hhd acctype %hhd",
-      //       acc, acc ? acc->accidentalType() : static_cast<Ms::AccidentalType>(0), accType);
-      if (!acc && accType != AccidentalType::NONE) {
-            acc = new Accidental(_score);
-            acc->setAccidentalType(accType);
-            }
-
       // check for timing error(s) and set dura
       // keep in this order as checkTiming() might change dura
-      auto errorStr = mnt.checkTiming(type, bRest, grace);
-      dura = mnt.dura();
+      auto errorStr = mnd.checkTiming(type, rest, grace);
+      dura = mnd.dura();
       if (errorStr != "")
             _logger->logError(errorStr, &_e);
 
@@ -4486,7 +4350,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       else {
             }
 
-      TDuration duration = determineDuration(bRest, type, mnt.dots(), dura, Fraction::fromTicks(measure->ticks()));
+      TDuration duration = determineDuration(rest, type, mnd.dots(), dura, Fraction::fromTicks(measure->ticks()));
 
       ChordRest* cr = 0;
       Note* note = 0;
@@ -4496,7 +4360,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       // - prevTime for others
       const Fraction noteStartTime = chord ? prevSTime : sTime;
 
-      if (bRest) {
+      if (rest) {
             int track = msTrack + msVoice;
             cr = addRest(_score, measure, noteStartTime.ticks(), track, msMove,
                          duration, dura);
@@ -4515,7 +4379,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   if (noteColor != QColor::Invalid)
                         cr->setColor(noteColor);
                   cr->setVisible(printObject);
-                  handleDisplayStep(cr, displayStep, displayOctave, noteStartTime.ticks(), _score->spatium());
+                  handleDisplayStep(cr, mnp.displayStep(), mnp.displayOctave(), noteStartTime.ticks(), _score->spatium());
                   }
             }
       else {
@@ -4576,7 +4440,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   }
 
             const MusicXMLDrumset& mxmlDrumset = _pass1.getDrumset(partId);
-            if (unpitched) {
+            if (mnp.unpitched()) {
                   //&& drumsets.contains(partId)
                   if (_hasDrumset
                       && mxmlDrumset.contains(instrId)) {
@@ -4589,13 +4453,13 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                         }
                   else {
                         //qDebug("disp step %d oct %d", displayStep, displayOctave);
-                        xmlSetPitch(note, displayStep, 0, displayOctave, 0, _pass1.getPart(partId)->instrument());
+                        xmlSetPitch(note, mnp.displayStep(), 0, mnp.displayOctave(), 0, _pass1.getPart(partId)->instrument());
                         }
                   }
             else {
                   int ottavaStaff = (msTrack - _pass1.trackForPart(partId)) / VOICES;
                   int octaveShift = _pass1.octaveShift(partId, ottavaStaff, noteStartTime);
-                  xmlSetPitch(note, step, alter, octave, octaveShift, _pass1.getPart(partId)->instrument());
+                  xmlSetPitch(note, mnp.step(), mnp.alter(), mnp.octave(), octaveShift, _pass1.getPart(partId)->instrument());
                   }
 
             // set drumset information
@@ -4603,11 +4467,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             // line and stem direction, while a MusicXML file contains actuals.
             // the MusicXML values for each note are simply copied to the defaults
 
-            if (unpitched) {
+            if (mnp.unpitched()) {
                   // determine staff line based on display-step / -octave and clef type
                   ClefType clef = c->staff()->clef(noteStartTime.ticks());
                   int po = ClefInfo::pitchOffset(clef);
-                  int pitch = MusicXMLStepAltOct2Pitch(displayStep, 0, displayOctave);
+                  int pitch = MusicXMLStepAltOct2Pitch(mnp.displayStep(), 0, mnp.displayOctave());
                   int line = po - absStep(pitch);
 
                   // correct for number of staff lines
@@ -4638,12 +4502,22 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   _pass1.setDrumsetDefault(partId, instrId, headGroup, line, stemDir);
                   }
 
+            // accidental handling
+            //qDebug("note acc %p type %hhd acctype %hhd",
+            //       acc, acc ? acc->accidentalType() : static_cast<Ms::AccidentalType>(0), accType);
+            Accidental* acc = mnp.acc();
+            if (!acc && mnp.accType() != AccidentalType::NONE) {
+                  acc = new Accidental(_score);
+                  acc->setAccidentalType(mnp.accType());
+                  }
+
             if (acc) {
                   note->add(acc);
                   // save alter value for user accidental
                   if (acc->accidentalType() != AccidentalType::NONE)
-                        alt = alter;
+                        alt = mnp.alter();
                   }
+
             c->add(note);
             //c->setStemDirection(stemDir); // already done in handleBeamAndStemDir()
             c->setNoStem(noStem);
@@ -4704,14 +4578,14 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       if (!chord && !grace) {
             // do tuplet if valid time-modification is not 1/1 and is not 1/2 (tremolo)
-            auto timeMod = mnt.timeMod();
+            auto timeMod = mnd.timeMod();
             if (timeMod.isValid() && timeMod != Fraction(1, 1) && timeMod != Fraction(1, 2)) {
                   // find part-relative track
                   Part* part = _pass1.getPart(partId);
                   Q_ASSERT(part);
                   int scoreRelStaff = _score->staffIdx(part); // zero-based number of parts first staff in the score
                   int partRelTrack = msTrack + msVoice - scoreRelStaff * VOICES;
-                  addTupletToChord(cr, _tuplets[partRelTrack], _tuplImpls[partRelTrack], timeMod, tupletDesc, mnt.normalType());
+                  addTupletToChord(cr, _tuplets[partRelTrack], _tuplImpls[partRelTrack], timeMod, tupletDesc, mnd.normalType());
                   }
             }
 
@@ -4719,7 +4593,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       if (cr) {
             // add lyrics and stop corresponding extends
             addLyrics(_logger, &_e, cr, numberedLyrics, defaultyLyrics, unNumberedLyrics, extendedLyrics, _extendedLyrics);
-            if (bRest) {
+            if (rest) {
                   // stop all extends
                   _extendedLyrics.setExtend(-1, cr->track(), cr->tick());
                   }
@@ -4734,6 +4608,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       if (chord || grace)
             dura.set(0, 1);
 
+      if (!(_e.isEndElement() && _e.name() == "note"))
+            qDebug("name %s line %lld", qPrintable(_e.name().toString()), _e.lineNumber());
       Q_ASSERT(_e.isEndElement() && _e.name() == "note");
 
       return note;
@@ -5204,39 +5080,6 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       }
 
 //---------------------------------------------------------
-//   accidental
-//---------------------------------------------------------
-
-/**
- Parse the /score-partwise/part/measure/note/accidental node.
- Return the result as an Accidental.
- */
-
-Accidental* MusicXMLParserPass2::accidental()
-      {
-      Q_ASSERT(_e.isStartElement() && _e.name() == "accidental");
-
-      bool cautionary = _e.attributes().value("cautionary") == "yes";
-      bool editorial = _e.attributes().value("editorial") == "yes";
-      bool parentheses = _e.attributes().value("parentheses") == "yes";
-
-      QString s = _e.readElementText();
-      AccidentalType type = mxmlString2accidentalType(s);
-
-      if (type != AccidentalType::NONE) {
-            Accidental* a = new Accidental(_score);
-            a->setAccidentalType(type);
-            if (editorial || cautionary || parentheses) {
-                  a->setBracket(AccidentalBracket(cautionary || parentheses));
-                  a->setRole(AccidentalRole::USER);
-                  }
-            return a;
-            }
-
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   beam
 //---------------------------------------------------------
 
@@ -5312,121 +5155,6 @@ void MusicXMLParserPass2::backup(Fraction& dura)
             else
                   skipLogCurrElem();
             }
-      }
-
-//---------------------------------------------------------
-//   timeModification
-//---------------------------------------------------------
-
-/**
- Parse the /score-partwise/part/measure/note/time-modification node.
- */
-
-void MusicXMLParserPass2::timeModification(Fraction& timeMod, TDuration& normalType)
-      {
-      Q_ASSERT(_e.isStartElement() && _e.name() == "time-modification");
-
-      int intActual = 0;
-      int intNormal = 0;
-      QString strActual;
-      QString strNormal;
-
-      while (_e.readNextStartElement()) {
-            if (_e.name() == "actual-notes")
-                  strActual = _e.readElementText();
-            else if (_e.name() == "normal-notes")
-                  strNormal = _e.readElementText();
-            else if (_e.name() == "normal-type") {
-                  // "measure" is not a valid normal-type,
-                  // but would be accepted by setType()
-                  QString strNormalType = _e.readElementText();
-                  if (strNormalType != "measure")
-                        normalType.setType(strNormalType);
-                  }
-            else
-                  skipLogCurrElem();
-            }
-
-      intActual = strActual.toInt();
-      intNormal = strNormal.toInt();
-      if (intActual > 0 && intNormal > 0)
-            timeMod.set(intNormal, intActual);
-      else {
-            timeMod.set(0, 0); // invalid
-            _logger->logError(QString("illegal time-modification: actual-notes %1 normal-notes %2")
-                              .arg(strActual).arg(strNormal), &_e);
-            }
-      }
-
-//---------------------------------------------------------
-//   pitch
-//---------------------------------------------------------
-
-/**
- Parse the /score-partwise/part/measure/note/pitch node.
- */
-
-void MusicXMLParserPass2::pitch(int& step, int& alter, int& oct, AccidentalType& accid)
-      {
-      Q_ASSERT(_e.isStartElement() && _e.name() == "pitch");
-
-      // defaults
-      step = -1;
-      alter = 0;
-      oct = -1;
-
-      while (_e.readNextStartElement()) {
-            if (_e.name() == "alter") {
-                  QString strAlter = _e.readElementText();
-                  bool ok;
-                  alter = MxmlSupport::stringToInt(strAlter, &ok); // fractions not supported by mscore
-                  if (!ok || alter < -2 || alter > 2) {
-                        _logger->logError(QString("invalid alter '%1'").arg(strAlter), &_e);
-                        bool ok2;
-                        double altervalue = strAlter.toDouble(&ok2);
-                        if (ok2 && (qAbs(altervalue) < 2.0) && (accid == AccidentalType::NONE)) {
-                              // try to see if a microtonal accidental is needed
-                              accid = microtonalGuess(altervalue);
-                              }
-                        alter = 0;
-                        }
-                  }
-            else if (_e.name() == "octave") {
-                  QString strOct = _e.readElementText();
-                  bool ok;
-                  oct = strOct.toInt(&ok);
-                  if (!ok || oct < 0 || oct > 9) {
-                        _logger->logError(QString("invalid octave '%1'").arg(strOct), &_e);
-                        oct = -1;
-                        }
-                  }
-            else if (_e.name() == "step") {
-                  QString strStep = _e.readElementText();
-                  int pos = QString("CDEFGAB").indexOf(strStep);
-                  if (strStep.size() == 1 && pos >=0 && pos < 7)
-                        step = pos;
-                  else
-                        _logger->logError(QString("invalid step '%1'").arg(strStep), &_e);
-                  }
-            else
-                  skipLogCurrElem();
-            }
-      //qDebug("pitch step %d alter %d oct %d accid %hhd", step, alter, oct, accid);
-      }
-
-//---------------------------------------------------------
-//   rest
-//---------------------------------------------------------
-
-/**
- Parse the /score-partwise/part/measure/note/rest node.
- */
-
-void MusicXMLParserPass2::rest(int& step, int& octave)
-      {
-      Q_ASSERT(_e.isStartElement() && _e.name() == "rest");
-
-      displayStepOctave(_e, step, octave);
       }
 
 //---------------------------------------------------------

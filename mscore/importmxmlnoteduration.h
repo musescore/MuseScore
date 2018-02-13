@@ -10,8 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __IMPORTMXMLNOTETIME_H__
-#define __IMPORTMXMLNOTETIME_H__
+#ifndef __IMPORTMXMLNOTEDURATION_H__
+#define __IMPORTMXMLNOTEDURATION_H__
 
 #include "libmscore/durationtype.h"
 #include "libmscore/fraction.h"
@@ -21,18 +21,17 @@ namespace Ms {
 class MxmlLogger;
 
 //---------------------------------------------------------
-//   mxmlNoteTime
+//   mxmlNoteDuration
 //---------------------------------------------------------
 
 /**
  Parse the note time related part of the /score-partwise/part/measure/note node.
  */
 
-class mxmlNoteTime
+class mxmlNoteDuration
       {
 public:
-      mxmlNoteTime(int divs, MxmlLogger* logger) : _divs(divs), _logger(logger) { /* nothing so far */ }
-      //void read(QXmlStreamReader& e);
+      mxmlNoteDuration(int divs, MxmlLogger* logger) : _divs(divs), _logger(logger) { /* nothing so far */ }
       QString checkTiming(const QString& type, const bool rest, const bool grace);
       Fraction dura() const { return _dura; }
       int dots() const { return _dots; }

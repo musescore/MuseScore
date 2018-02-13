@@ -94,7 +94,7 @@ static Fraction calculateFraction(const QString& type, const int dots, const Fra
  Return empty string if OK, message in case of error.
  */
 
-QString mxmlNoteTime::checkTiming(const QString& type, const bool rest, const bool grace)
+QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, const bool grace)
       {
       //qDebug("type %s rest %d grace %d", qPrintable(type), rest, grace);
       QString errorStr;
@@ -166,7 +166,7 @@ QString mxmlNoteTime::checkTiming(const QString& type, const bool rest, const bo
  Parse the /score-partwise/part/measure/note/duration node.
  */
 
-void mxmlNoteTime::duration(QXmlStreamReader& e)
+void mxmlNoteDuration::duration(QXmlStreamReader& e)
       {
       Q_ASSERT(e.isStartElement() && e.name() == "duration");
       _logger->logDebugTrace("MusicXMLParserPass1::duration", &e);
@@ -195,7 +195,7 @@ void mxmlNoteTime::duration(QXmlStreamReader& e)
  Return true if handled.
  */
 
-bool mxmlNoteTime::readProperties(QXmlStreamReader& e)
+bool mxmlNoteDuration::readProperties(QXmlStreamReader& e)
       {
       const QStringRef& tag(e.name());
       //qDebug("tag %s", qPrintable(tag.toString()));
@@ -223,7 +223,7 @@ bool mxmlNoteTime::readProperties(QXmlStreamReader& e)
  Parse the /score-partwise/part/measure/note/time-modification node.
  */
 
-void mxmlNoteTime::timeModification(QXmlStreamReader& e)
+void mxmlNoteDuration::timeModification(QXmlStreamReader& e)
       {
       Q_ASSERT(e.isStartElement() && e.name() == "time-modification");
       _logger->logDebugTrace("MusicXMLParserPass1::timeModification", &e);

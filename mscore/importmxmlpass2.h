@@ -144,8 +144,7 @@ public:
       void forward(Fraction& dura);
       void backup(Fraction& dura);
       void timeModification(Fraction& timeMod, TDuration& normalType);
-      void pitch(int& step, int& alter, int& oct, AccidentalType& accid);
-      void rest(int& step, int& octave);
+      //void pitch(int& step, int& alter, int& oct, AccidentalType& accid);
       void lyric(QMap<int, Lyrics*>& numbrdLyrics, QMap<int, Lyrics*>& defyLyrics,
                  QList<Lyrics*>& unNumbrdLyrics, QSet<Lyrics*>& extLyrics);
       void slur(ChordRest* cr, const int tick, const int track, bool& lastGraceAFter);
