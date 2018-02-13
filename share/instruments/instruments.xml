@@ -8980,6 +8980,28 @@
 <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
             </Instrument>
+            <Instrument id="baritone-guitar">
+                  <longName>Baritone Guitar</longName>
+                  <shortName>Bar. Guit.</shortName>
+                  <description>Baritone Guitar</description>
+                  <musicXMLid>pluck.guitar</musicXMLid>
+                  <StringData>
+                        <frets>19</frets>
+                        <string>35</string>
+                        <string>40</string>
+                        <string>45</string>
+                        <string>50</string>
+                        <string>54</string>
+                        <string>59</string>
+                  </StringData>
+                  <clef>G8vb</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>35-78</aPitchRange>
+                  <pPitchRange>35-78</pPitchRange>
+                  <Channel>
+                        <program value="24"/>
+                  </Channel>
+            </Instrument>
             <Instrument id="contra-guitar">
                   <longName>Contra Guitar</longName>
                   <shortName>C. Guit.</shortName>
@@ -9966,6 +9988,86 @@
                   <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
 <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
+            </Instrument>
+            <Instrument id="5-string-electric-bass-high-c">
+                  <longName>5-str. Electric Bass</longName>
+                  <shortName>El. B.</shortName>
+                  <trackName>5-str. Electric Bass (High C/Tenor)</trackName>
+                  <description>5-string Electric Bass (High C/Tenor)</description>
+                  <musicXMLid>pluck.bass.electric</musicXMLid>
+                  <StringData>
+                        <frets>24</frets>
+                        <string>40</string>
+                        <string>45</string>
+                        <string>50</string>
+                        <string>55</string>
+                        <string>60</string>
+                  </StringData>
+                  <transposingClef>F</transposingClef>
+                  <concertClef>F8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>23-65</aPitchRange>
+                  <pPitchRange>23-67</pPitchRange>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
+                  <Channel>
+                        <program value="33"/>
+                  </Channel>
+                  <Channel name="slap">
+                        <program value="36"/>
+                  </Channel>
+                  <Channel name="pop">
+                        <program value="37"/>
+                  </Channel>
+                  <genre>jazz</genre>
+            </Instrument>
+            <Instrument id="5-string-electric-bass-tab-high-c">
+                  <trackName>5-str. Electric Bass (High C/Tenor) [Tablature]</trackName>
+                  <init>5-string-electric-bass-high-c</init>
+                  <description>5-string Electric Bass (High C/Tenor) (Tablature)</description>
+                  <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
+<!--                  <clef>TAB</clef> -->
+                  <genre>jazz</genre>
+            </Instrument>
+            <Instrument id="6-string-electric-bass">
+                  <longName>6-str. Electric Bass</longName>
+                  <shortName>El. B.</shortName>
+                  <description>6-string Electric Bass</description>
+                  <musicXMLid>pluck.bass.electric</musicXMLid>
+                  <StringData>
+                        <frets>24</frets>
+                        <string>35</string>
+                        <string>40</string>
+                        <string>45</string>
+                        <string>50</string>
+                        <string>55</string>
+                        <string>60</string>
+                  </StringData>
+                  <transposingClef>F</transposingClef>
+                  <concertClef>F8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>23-70</aPitchRange>
+                  <pPitchRange>23-72</pPitchRange>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
+                  <Channel>
+                        <program value="33"/>
+                  </Channel>
+                  <Channel name="slap">
+                        <program value="36"/>
+                  </Channel>
+                  <Channel name="pop">
+                        <program value="37"/>
+                  </Channel>
+                  <genre>jazz</genre>
+            </Instrument>
+            <Instrument id="6-string-electric-bass-tab">
+                  <trackName>6-str. Electric Bass [Tablature]</trackName>
+                  <init>6-string-electric-bass</init>
+                  <description>6-string Electric Bass (Tablature)</description>
+                  <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
+<!--                  <clef>TAB</clef> -->
+                  <genre>jazz</genre>
             </Instrument>
             <Instrument id="prim">
                   <longName>Prim</longName>
