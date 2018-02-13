@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Do not upload artefacts generated as part of a pull request
+# Do not upload artifacts generated as part of a pull request
 if [ $(env | grep TRAVIS_PULL_REQUEST) == "TRAVIS_PULL_REQUEST" ] ; then
   if [ "$TRAVIS_PULL_REQUEST" != "false" ] ; then
     echo "Not uploading AppImage since this is a pull request."
@@ -11,7 +11,7 @@ fi
 FILE="$1"
 [ -f "$FILE" ] || { echo "$0: Please provide a valid path to a file" >&2 ; exit 1 ;}
 
-# instal ssh key
+# install ssh key
 openssl aes-256-cbc -K $encrypted_99b076488ab1_key -iv $encrypted_99b076488ab1_iv -in build/travis/resources/osuosl_nighlies_rsa.enc -out build/travis/resources/osuosl_nighlies_rsa -d
 
 # Copy over private key, and set permissions

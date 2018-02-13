@@ -84,7 +84,7 @@ Timewise insert/delete notes/rests
       Functions which may be removed:
             - split measure: replaced by dropping a barline
             - join measure:  replaced by deleting a barline
-            - adjusting the actual measure lenght in measure properties; this
+            - adjusting the actual measure length in measure properties; this
               can be achieved by inserting/deleting notes/rests in the measure.
             - delete measure timewise: replaced by Ctrl+Del of selection ranges
 
@@ -180,7 +180,7 @@ Score File
         style value if they are styled.
 
 paint() method in Element
-      paint() should never paint something or not conditionally. If you watn something not to be
+      paint() should never paint something or not conditionally. If you want something not to be
       painted, then set the bounding box of the element to zero in layout() and paint will not
       be called. This works better with smart layout and collision detection.
 

@@ -769,7 +769,7 @@ void TestText::testDropUnicodeAfterSMUFLwhenCursorSetToSymbol()
 
 //---------------------------------------------------------
 ///   testDropBasicUnicodeWhenNotInEditMode
-///     Simple test dropping basic unicode, but excercising the path when edit mode not already engaged
+///     Simple test dropping basic unicode, but exercising the path when edit mode not already engaged
 //---------------------------------------------------------
 
 void TestText::testDropBasicUnicodeWhenNotInEditMode()
@@ -790,7 +790,7 @@ void TestText::testDropBasicUnicodeWhenNotInEditMode()
 
 //---------------------------------------------------------
 ///   testDropSupplementaryUnicodeWhenNotInEditMode
-///     Simple test dropping supplementary unicode, but excercising the path when edit mode not already engaged
+///     Simple test dropping supplementary unicode, but exercising the path when edit mode not already engaged
 //---------------------------------------------------------
 
 void TestText::testDropSupplementaryUnicodeWhenNotInEditMode()
