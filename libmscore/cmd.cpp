@@ -596,7 +596,7 @@ void Score::createCRSequence(Fraction f, ChordRest* cr, int tick)
 //    return segment of last created note/rest
 //---------------------------------------------------------
 
-Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, Direction stemDirection)
+Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, Direction stemDirection, bool rhythmic)
       {
       Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
 
@@ -621,7 +621,11 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   }
 
             measure = segment->measure();
-            std::vector<TDuration> dl = toRhythmicDurationList(dd, isRest, segment->rtick(), sigmap()->timesig(tick).nominal(), measure, 1);
+            std::vector<TDuration> dl;
+            if (rhythmic)
+                  dl = toRhythmicDurationList(dd, isRest, segment->rtick(), sigmap()->timesig(tick).nominal(), measure, 1);
+            else
+                  dl = toDurationList(dd, true);
             int n = dl.size();
             for (int i = 0; i < n; ++i) {
                   const TDuration& d = dl[i];
