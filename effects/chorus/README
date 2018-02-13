@@ -167,7 +167,7 @@ flowing in the resistive part.
 Mvclpf-3 is based on the previous one, with two differences. It uses the
 the technique described by Stilson and Smith to extend the constant-Q
 range, and the internal sample frequency is doubled, giving a better
-approximation to the non-linear behaviour at high freqencies.
+approximation to the non-linear behaviour at high frequencies.
 This version has high Q over the entire frequency range and will
 oscillate up to above 10 kHz, while the two others show a decreasing
 Q at high frequencies. Moogvcf3 is reasonably well tuned, and can be

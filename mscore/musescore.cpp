@@ -3668,7 +3668,7 @@ void AboutBoxDialog::copyRevisionToClipboard()
       sysinfo += QSysInfo::prettyProductName();
       sysinfo += ", Arch.: ";
       sysinfo += QSysInfo::currentCpuArchitecture();
-      // endianess?
+      // endianness?
       sysinfo += ", MuseScore version (";
       sysinfo += QSysInfo::WordSize==32?"32":"64";
       sysinfo += "-bit): " VERSION ", revision: ";
@@ -4009,7 +4009,7 @@ void MuseScore::autoSaveTimerTimeout()
                   QString tmp = s->tmpName();
                   if (!tmp.isEmpty()) {
                         QFileInfo fi(tmp);
-                        // TODO: cannot catch exeption here:
+                        // TODO: cannot catch exception here:
                         s->saveCompressedFile(fi, false);
                         }
                   else {

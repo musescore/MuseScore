@@ -10,7 +10,7 @@ WARNING
 This is not a final or prerelease version of MuseScore. The nightly builds use
 the cymbal logo to emphasis that the software is likely to crash, contain 
 significant bugs, and not intended for production work. If this is not what 
-you want then I recomend the stable releases at
+you want then I recommend the stable releases at
 http://www.musescore.org/
 
 

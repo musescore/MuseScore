@@ -174,7 +174,7 @@ void TestBarline::barline02()
 //---------------------------------------------------------
 ///   barline03
 ///   Sets a staff bar line span involving spanFrom and spanTo and
-///   check tht it is properly applied to start-repeat
+///   check that it is properly applied to start-repeat
 //
 //    NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------
@@ -214,7 +214,7 @@ void TestBarline::barline03()
 //---------------------------------------------------------
 ///   barline04
 ///   Sets custom span parameters to a system-initial start-repeat bar line and
-///   check tht it is properly applied to it and to the start-reapeat bar lines of staves below.
+///   check that it is properly applied to it and to the start-reapeat bar lines of staves below.
 //
 //    NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------

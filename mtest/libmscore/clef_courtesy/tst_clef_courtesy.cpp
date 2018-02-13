@@ -68,7 +68,7 @@ static void dropClef(Measure* m, ClefType t)
 
 //---------------------------------------------------------
 //   clef_courtesy01
-//    add two clefs mid-score at the begining of systems and look for courtesy clefs
+//    add two clefs mid-score at the beginning of systems and look for courtesy clefs
 //    the first should be there, the second should not, as it is after a section break
 //---------------------------------------------------------
 
@@ -109,7 +109,7 @@ void TestClefCourtesy::clef_courtesy01()
 
 //---------------------------------------------------------
 //   clef_courtesy02
-//    add two clefs mid-score at the begining of systems and look for courtesy clefs
+//    add two clefs mid-score at the beginning of systems and look for courtesy clefs
 //    neither should be there, as courtesy clefs are turned off
 //---------------------------------------------------------
 

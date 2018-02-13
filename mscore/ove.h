@@ -2257,7 +2257,7 @@ public:
             }
 
 public:
-      // ingore data more than 4 bytes
+      // ignore data more than 4 bytes
       bool isEqual(const QString& name) const;
       };
 

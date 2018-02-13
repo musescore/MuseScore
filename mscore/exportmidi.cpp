@@ -240,10 +240,10 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportR
             cs->renderStaff(&events, staff);
             cs->renderSpanners(&events, staffIdx);
 
-            // Pass throught the all instruments in the part
+            // Pass through the all instruments in the part
             const InstrumentList* il = part->instruments();
             for(auto j = il->begin(); j!= il->end(); j++) {
-                  // Pass throught the all channels of the instrument
+                  // Pass through the all channels of the instrument
                   // "normal", "pizzicato", "tremolo" for Strings,
                   // "normal", "mute" for Trumpet
                   foreach(const Channel* ch, j->second->channel()) {

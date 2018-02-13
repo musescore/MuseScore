@@ -56,7 +56,7 @@ private:
     int32_t    _l0;    // attack length
     int32_t    _l1;    // loop length
     int16_t    _k_s;   // sample step
-    int16_t    _k_r;   // release lenght
+    int16_t    _k_r;   // release length
     float      _m_r;   // release multiplier
     float      _d_r;   // release detune
     float      _d_p;   // instability

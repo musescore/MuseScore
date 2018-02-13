@@ -82,7 +82,7 @@ void TestAlbum::album_78521()
 //    appends two scores that do not have manually-inserted initial clefs
 //          album_76101-01.mscx is two measures of treble clef
 //          album_76101-02.mscx is two measures of bass clef
-//    desired behavior is for initial clef of second score to be copied even if initial clef element is "generated" (which occurs if intial clef was not manually inserted)
+//    desired behavior is for initial clef of second score to be copied even if initial clef element is "generated" (which occurs if initial clef was not manually inserted)
 //    this test verifies that there is a non-generated clef added to final tick of final measure of first section
 //--------------------------------------------------------
 

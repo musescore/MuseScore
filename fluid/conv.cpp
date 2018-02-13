@@ -46,7 +46,7 @@ void fluid_conversion_config()
 
       /* NOTE: EMU8k and EMU10k devices don't conform to the SoundFont
        * specification in regards to volume attenuation.  The below calculation
-       * is an approx. equation for generating a table equivelant to the
+       * is an approx. equation for generating a table equivalent to the
        * cb_to_amp_table[] in tables.c of the TiMidity++ source, which I'm told
        * was generated from device testing.  By the spec this should be centibels.
        */
@@ -108,7 +108,7 @@ float fluid_cb2amp(float cb)
  * out: a value between 1 and 0
  *
  * Note: Volume attenuation is supposed to be centibels but EMU8k/10k don't
- * follow this.  Thats the reason for separate fluid_cb2amp and fluid_atten2amp.
+ * follow this.  That's the reason for separate fluid_cb2amp and fluid_atten2amp.
  */
 float fluid_atten2amp(float atten)
       {

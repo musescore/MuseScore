@@ -2,7 +2,7 @@
 ### Dependencies
 
 The compilation relies on the availability of a zip archive containing Qt.
-In order to reduce the size of the download, debug symbols and librairies are
+In order to reduce the size of the download, debug symbols and libraries are
 not zipped.
 
 

@@ -205,7 +205,7 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
             scaledFont.setPixelSize(font.pixelSize() * fretNumMag);
             p.setFont(scaledFont);
             p.setPen(pen);
-            // Todo: make dependant from StyleIdx::fretNumPos
+            // Todo: make dependent from StyleIdx::fretNumPos
             p.drawText(QRectF(-stringDist * .4, 0.0, 0.0, fretDist),
                Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
                QString("%1").arg(fretOffset+1));

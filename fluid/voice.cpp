@@ -402,7 +402,7 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
             if (curPos == 0) {
                   curPos = 1;
 
-                  // if we should calulate for position 1 already make sure we don't do it twice
+                  // if we should calculate for position 1 already make sure we don't do it twice
                   // could lead to curPos==lastPos which causes devision by zero
                   if (volumeChanges.find(1) != volumeChanges.end())
                         volumeChanges.erase(volumeChanges.find(1));
@@ -1342,7 +1342,7 @@ void Voice::modulate_all()
         the set of modulators. We risk to call 'fluid_voice_update_param'
         several times for the same generator if several modulators have
         that generator as destination. It's not an error, just a wast of
-        energy (think polution, global warming, unhappy musicians, ...)
+        energy (think pollution, global warming, unhappy musicians, ...)
        */
 
       for (int i = 0; i < mod_count; i++) {

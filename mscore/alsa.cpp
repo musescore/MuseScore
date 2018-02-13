@@ -190,7 +190,7 @@ snd_pcm_sframes_t AlsaDriver::pcmWait()
                   snd_pcm_poll_descriptors(_play_handle, _pfd, _play_npfd);
 
             errno = 0;
-            // timout in ms or infinite
+            // timeout in ms or infinite
             if (poll(_pfd, _play_npfd, -1) < 0) {
                   if (errno == EINTR) {
                         _stat = 1;
@@ -660,7 +660,7 @@ static void* alsaLoop(void* alsa)
 void AlsaAudio::alsaLoop()
       {
       //
-      // try to get realtime priviledges
+      // try to get realtime privileges
       //
       struct sched_param rt_param;
       memset(&rt_param, 0, sizeof(rt_param));

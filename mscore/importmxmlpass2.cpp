@@ -448,7 +448,7 @@ static bool hasDrumset(const MusicXMLDrumset& mxmlDrumset)
 // determine if the part contains a drumset
 // this is the case if any instrument has a midi-unpitched element,
 // (which stored in the MusicXMLDrumInstrument pitch field)
-// if the part contains a drumset, Drumset drumset is intialized
+// if the part contains a drumset, Drumset drumset is initialized
 
 static void initDrumset(Drumset* drumset, const MusicXMLDrumset& mxmlDrumset)
       {
@@ -1046,7 +1046,7 @@ static void determineTupletTypeAndCount(Tuplet* t, int& tupletType, int& tupletC
  and type and number of smallest notes in the tuplet.
 
  Example: baselen of a 3:2 tuplet with 1/16, 1/8, 1/8 and 1/16
- is 1/8. For this tuplet smalles note is 1/16, count is 6.
+ is 1/8. For this tuplet smallest note is 1/16, count is 6.
  */
 
 // TODO: this is defined twice, remove one
@@ -1824,7 +1824,7 @@ void MusicXMLParserPass2::part()
       // determine if the part contains a drumset
       // this is the case if any instrument has a midi-unpitched element,
       // (which stored in the MusicXMLDrumInstrument pitch field)
-      // if the part contains a drumset, Drumset drumset is intialized
+      // if the part contains a drumset, Drumset drumset is initialized
 
       Drumset* drumset = new Drumset;
       const MusicXMLDrumset& mxmlDrumsetAfterPass2 = _pass1.getDrumset(id);

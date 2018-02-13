@@ -1134,7 +1134,7 @@ void PreferenceDialog::exclusiveAudioDriver(bool on)
             bool pulseaudioChecked = pulseaudioDriver->isVisible() && ((QObject::sender() != pulseaudioDriver && pulseaudioDriver->isChecked()) || QObject::sender() == pulseaudioDriver);
             bool alsaChecked =       alsaDriver->isVisible()       && ((QObject::sender() != alsaDriver       && alsaDriver->isChecked())       || QObject::sender() == alsaDriver);
             bool jackChecked =       jackDriver->isVisible()       && ((QObject::sender() != jackDriver       && jackDriver->isChecked())       || QObject::sender() == jackDriver);
-            // If nothing is checked, prevent looping (runned with -s, sequencer disabled)
+            // If nothing is checked, prevent looping (run with -s, sequencer disabled)
             if (!(portAudioChecked || pulseaudioChecked || alsaChecked || jackChecked))
                   return;
             // Don't allow to uncheck all drivers

@@ -57,7 +57,7 @@ class TestMidi : public QObject, public MTest
       void midiPortExport()   { midiExportTestRef("testMidiPort"); }
       void midi184376ExportMidiInitialKeySig()
             {
-            midiExportTestRef("testInitialKeySigThenRepeatToMeas2");    // tick 0 has Bb keysig.  Meas 2 has no key sig. Meas 2 repeats back to start of Meas 2.  Result should have intial Bb keysig
+            midiExportTestRef("testInitialKeySigThenRepeatToMeas2");    // tick 0 has Bb keysig.  Meas 2 has no key sig. Meas 2 repeats back to start of Meas 2.  Result should have initial Bb keysig
             midiExportTestRef("testRepeatsWithKeySigs");                // 5 measures, with a key sig on every measure. Meas 3-4 are repeated.
             midiExportTestRef("testRepeatsWithKeySigsExceptFirstMeas"); // 5 measures, with a key sig on every measure except meas 0.  Meas 3-4 are repeated.
             }

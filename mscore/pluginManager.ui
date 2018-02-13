@@ -126,7 +126,7 @@
          <widget class="QPushButton" name="reloadPlugins">
           <property name="toolTip">
            <string>Reload all plugins.
-This will re-evaluate all plugins, picking up any changes that may have occured.</string>
+This will re-evaluate all plugins, picking up any changes that may have occurred.</string>
           </property>
           <property name="text">
            <string>Reload Plugins</string>

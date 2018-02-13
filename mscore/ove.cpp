@@ -3286,7 +3286,7 @@ MeasureData::~MeasureData(){
             }
       musicDatas_.clear();
 
-      // noteContainers_ also in musicDatas_, no need to destory
+      // noteContainers_ also in musicDatas_, no need to destroy
       noteContainers_.clear();
 
       // only delete at element start

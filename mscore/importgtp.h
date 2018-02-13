@@ -76,7 +76,7 @@ struct GPVolta {
  * first is an index value and the second is the time division that
  * index value refers to, and they are givin with respect to a
  * measure. Time division 0 means a minim, 1 is a crotchet, 2 is a
- * quaver and so on, with the index (counting from 0) refering to how
+ * quaver and so on, with the index (counting from 0) referring to how
  * many time divisions occur before the fermata. These numbers are
  * separated in GP6 with a '/' character. For example, a note
  * occurring on the third beat of a measure in a 4/4 bar would be

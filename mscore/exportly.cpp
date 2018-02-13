@@ -2009,7 +2009,7 @@ void ExportLy::buildGlissandoList(int strack, int etrack)
   //seems to be overkill to go thru entire score first to find
   //glissandos. Alternative would be to back up to the previous chord
   //in writeChordMeasure(). But I don't know how to do that. So I steal the
-  //buildinstructionlist-functions to make a parallell
+  //buildinstructionlist-functions to make a parallel
   //buildglissandolist-function. (og)
   for (MeasureBase* mb = score->measures()->first(); mb; mb = mb->next())
     {

@@ -441,7 +441,7 @@ QString TestImportMidi::midiFilePath(const char* fileName) const
       }
 
 //---------------------------------------------------------
-//  tuplet recognition fuctions
+//  tuplet recognition functions
 //---------------------------------------------------------
 
 void TestImportMidi::findChordInBar()
