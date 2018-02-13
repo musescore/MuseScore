@@ -389,7 +389,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                         break;
                   }
 
-            // _score->update();
             return;
             }
 
@@ -454,6 +453,20 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 
 void ScoreView::dropEvent(QDropEvent* event)
       {
+      switch (state) {
+            case ViewState::PLAY:
+                  event->ignore();
+                  return;
+            case ViewState::EDIT:
+                  changeState(ViewState::NORMAL);
+                  break;
+
+            // TODO: check/handle more states
+
+            case ViewState::NORMAL:
+            default:
+                  break;
+            }
       QPointF pos(imatrix.map(QPointF(event->pos())));
 
       EditData dropData(this);
@@ -752,8 +765,8 @@ void ScoreView::dragLeaveEvent(QDragLeaveEvent*)
 
 bool ScoreView::dropCanvas(Element* e)
       {
-      if (e->type() == ElementType::ICON) {
-            switch(static_cast<Icon*>(e)->iconType()) {
+      if (e->isIcon()) {
+            switch (toIcon(e)->iconType()) {
                   case IconType::VFRAME:
                         score()->insertMeasure(ElementType::VBOX, 0);
                         break;
