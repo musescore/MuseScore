@@ -978,7 +978,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                               lastRest = cr;
                               }
                         int restTicks = lastRest->tick() + lastRest->duration().ticks() - curr->tick();
-                        seg = setNoteRest(seg, curr->track(), NoteVal(), Fraction::fromTicks(restTicks), Direction::AUTO);
+                        seg = setNoteRest(seg, curr->track(), NoteVal(), Fraction::fromTicks(restTicks), Direction::AUTO, true);
                         }
                   else {
                         // combine tied chords
@@ -1003,7 +1003,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                               nn->setTieFor(0);
                               }
                         int noteTicks = lastTiedChord->tick() + lastTiedChord->duration().ticks() - chord->tick();
-                        seg = setNoteRest(seg, curr->track(), NoteVal(pitches[0]), Fraction::fromTicks(noteTicks), Direction::AUTO);
+                        seg = setNoteRest(seg, curr->track(), NoteVal(pitches[0]), Fraction::fromTicks(noteTicks), Direction::AUTO, true);
                         Chord* newChord = toChord(seg->cr(track));
                         Note* n = newChord->notes().front();
                         undoRemoveElement(n);
