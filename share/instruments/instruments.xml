@@ -9611,7 +9611,7 @@
             </Instrument>
             <Instrument id="alto-mandola">
                   <longName>Alto Mandola</longName>
-                  <shortName>Mda.</shortName>
+                  <shortName>A. Mda.</shortName>
                   <description>Mandola Viola tuning</description>
                   <musicXMLid>pluck.mandola</musicXMLid>
                   <StringData>
@@ -9631,7 +9631,7 @@
             </Instrument>
             <Instrument id="tenor-mandola">
                   <longName>Tenor Mandola</longName>
-                  <shortName>Mda.</shortName>
+                  <shortName>T. Mda.</shortName>
                   <description>Mandola 8va mandolin tuning</description>
                   <musicXMLid>pluck.mandola</musicXMLid>
                   <StringData>
