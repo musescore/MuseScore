@@ -638,7 +638,7 @@ bool ZInstrument::loadSfz(const QString& s)
                         globMode = false;
                         }
                   else {
-                        r = glob; // initalize group with global values
+                        r = glob; // initialize group with global values
                         }
                   groupMode = true;
                   curLine = curLine.mid(7);

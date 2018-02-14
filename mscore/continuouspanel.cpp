@@ -54,7 +54,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       qreal _oldWidth = 0;        // The last final panel width
       qreal _newWidth = 0;        // New panel width
       qreal _height = 0;
-      qreal _leftMarginTotal = 0; // Sum of all elments left margin
+      qreal _leftMarginTotal = 0; // Sum of all elements left margin
       qreal _panelRightPadding = 5;  // Extra space for the panel after last element
 
       Measure* measure = _score->firstMeasure();

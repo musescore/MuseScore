@@ -32,7 +32,7 @@ which bsdtar || exit 1 # https://github.com/libarchive/libarchive/wiki/ManPageBs
 which grep || exit 1
 which zsyncmake || exit 1
 
-# Do not upload artefacts generated as part of a pull request
+# Do not upload artifacts generated as part of a pull request
 if [ $(env | grep TRAVIS_PULL_REQUEST ) ] ; then
   if [ "$TRAVIS_PULL_REQUEST" != "false" ] ; then
     echo "Not uploading AppImage since this is a pull request."
