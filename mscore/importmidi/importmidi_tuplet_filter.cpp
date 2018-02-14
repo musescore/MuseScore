@@ -693,7 +693,7 @@ void removeExtraTuplets(std::vector<TupletInfo> &tuplets)
 
 // first chord in tuplet may belong to other tuplet at the same time
 // in the case if there are enough notes in this first chord
-// to be splitted into different voices
+// to be split into different voices
 
 void filterTuplets(std::vector<TupletInfo> &tuplets,
                    const ReducedFraction &basicQuant)

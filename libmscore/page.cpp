@@ -89,7 +89,7 @@ void Page::appendSystem(System* s)
 
 //---------------------------------------------------------
 //   draw
-//    bounding rectange fr is relative to page QPointF
+//    bounding rectangle fr is relative to page QPointF
 //---------------------------------------------------------
 
 void Page::draw(QPainter* painter) const

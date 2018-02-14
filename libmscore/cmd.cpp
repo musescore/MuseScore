@@ -515,7 +515,7 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
       Note* note = new Note(this);
       Chord* chord = new Chord(this);
 
-      // alow grace notes to be added to other grace notes
+      // allow grace notes to be added to other grace notes
       // by really adding to parent chord
       if (ch->noteType() != NoteType::NORMAL)
             ch = toChord(ch->parent());
