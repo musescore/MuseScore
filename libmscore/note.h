@@ -205,13 +205,13 @@ class Note final : public Element {
 
    private:
       bool _ghost         { false };      ///< ghost note (guitar: death note)
-      bool _hidden        { false };      ///< markes this note as the hidden one if there are
+      bool _hidden        { false };      ///< marks this note as the hidden one if there are
                                           ///< overlapping notes; hidden notes are not played
                                           ///< and heads + accidentals are not shown
       bool _dotsHidden    { false };      ///< dots of hidden notes are hidden too
                                           ///< except if only one note is dotted
       bool _fretConflict  { false };      ///< used by TAB staves to mark a fretting conflict:
-                                          ///< two or mor enotes on the same string
+                                          ///< two or more notes on the same string
       bool dragMode       { false };
       bool _mirror        { false };      ///< True if note is mirrored at stem.
       bool _small         { false };

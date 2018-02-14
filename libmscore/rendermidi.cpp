@@ -247,7 +247,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
       NoteEventList nel = note->playEvents();
       int nels = nel.size();
       for (int i = 0; i < nels; ++i) {
-            const NoteEvent& e = nel[i]; // we make an explict const ref, not a const copy.  no need to copy as we won't change the original object.
+            const NoteEvent& e = nel[i]; // we make an explicit const ref, not a const copy.  no need to copy as we won't change the original object.
 
             // skip if note has a tie into it and only one NoteEvent
             // its length was already added to previous note
@@ -1120,7 +1120,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
       else if (ticksPerNote <= maxTicksPerNote) // in a good range, so we don't need to adjust ticksPerNote
             ;
       else {
-            // for slow tempos, such as adagio, we may need to speed up the tremblement freqency, i.e., decrease the ticks per note, to make it sound reasonable.
+            // for slow tempos, such as adagio, we may need to speed up the tremblement frequency, i.e., decrease the ticks per note, to make it sound reasonable.
             ticksPerNote = requestedTicksPerNote ;
             while (ticksPerNote > maxTicksPerNote) {
                   ticksPerNote /= 2;
@@ -1206,12 +1206,12 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
             ontime = makeEvent(prefix[j], ontime, tieForward(j,prefix));
 
       if (b > 0) {
-            // render the body, but not the final repetion
+            // render the body, but not the final repetition
             for (int r = 0; r < numrepeat-1; r++) {
                   for (int j=0; j < b; j++)
                         ontime = makeEvent(body[j], ontime, millespernote);
                   }
-            // render the final repetion of body, but not the final note of the repition
+            // render the final repetition of body, but not the final note of the repition
             for (int j = 0; j < b - 1; j++)
                   ontime = makeEvent(body[j], ontime, millespernote);
             // render the final note of the final repeat of body
@@ -1236,7 +1236,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
 //   prefix - vector of integers. indicating which notes to play at the beginning of rendering the
 //            articulation.  0 represents the principle note, 1==> the note diatonically 1 above
 //            -1 ==> the note diatonically 1 below.  E.g., in the key of G, if a turn articulation
-//            occures above the note F#, then 0==>F#, 1==>G, -1==>E.
+//            occurs above the note F#, then 0==>F#, 1==>G, -1==>E.
 //            These integers indicate which notes actual notes to play when rendering the ornamented
 //            note.   However, if the same integer appears several times adjacently such as {0,0,0,1}
 //            That means play the notes tied.  e.g., F# followed by G, but the duration of F# is 3x the
@@ -1374,7 +1374,7 @@ void renderGlissando(NoteEventList* events, Note *notestart)
                   Glissando *glissando = toGlissando(spanner);
                   GlissandoStyle glissandoStyle = glissando->glissandoStyle();
                   Element* ee = spanner->endElement();
-                  // only consider glissando connnected to NOTE.
+                  // only consider glissando connected to NOTE.
                   if (glissando->playGlissando() && ElementType::NOTE == ee->type()) {
                         vector<int> body;
                         Note *noteend  = toNote(ee);

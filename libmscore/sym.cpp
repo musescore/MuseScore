@@ -5377,7 +5377,7 @@ QVector<oldName> oldNames = {
       {"right parenthesis",                     SymId::noteheadParenthesisRight },  // accidentals.rightparen SMULF parenth. for noteheads used instead
       {"left parenthesis",                      SymId::noteheadParenthesisLeft },   // accidentals.leftparen
 
-      {"arrowheads.open.01",                    SymId::arrowheadWhiteRight }, // arrowheads.open.01 imilar, not identical in SMuFL
+      {"arrowheads.open.01",                    SymId::arrowheadWhiteRight }, // arrowheads.open.01 similar, not identical in SMuFL
       {"arrowheads.open.0M1",                   SymId::arrowheadWhiteLeft },  // arrowheads.open.0M1
       {"arrowheads.open.11",                    SymId::arrowheadWhiteUp },    // arrowheads.open.11
       {"arrowheads.open.1M1",                   SymId::arrowheadWhiteDown },  // arrowheads.open.1M1

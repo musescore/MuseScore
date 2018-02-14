@@ -27,7 +27,7 @@ class Chord;
 class Stem final : public Element {
       QLineF line;                  // p1 is attached to notehead
       qreal _userLen   { 0.0 };
-      qreal _len       { 0.0 };     // allways positive
+      qreal _len       { 0.0 };     // always positive
       qreal _lineWidth;
 
    public:

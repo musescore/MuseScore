@@ -1010,7 +1010,7 @@ void TabDurationSymbol::draw(QPainter* painter) const
             if (_beamGrid == TabBeamGrid::MEDIALFINAL) {
                   pen.setWidthF(font.gridBeamWidth * _spatium);
                   painter->setPen(pen);
-                  // lower heigth available to beams by half a beam width,
+                  // lower height available to beams by half a beam width,
                   // so that top beam upper border aligns with stem top
                   h += (font.gridBeamWidth * _spatium) * 0.5;
                   // draw beams equally spaced within the stem height (this is
@@ -1173,7 +1173,7 @@ bool TablatureDurationFont::read(XmlReader& e)
 //   Read Configuration File
 //
 //    reads a configuration and appends read data to g_TABFonts
-//    resets everythings and reads the built-in config file if fileName is null or empty
+//    resets everything and reads the built-in config file if fileName is null or empty
 //---------------------------------------------------------
 
 bool StaffType::readConfigFile(const QString& fileName)

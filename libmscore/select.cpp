@@ -1057,7 +1057,7 @@ static bool checkEnd(Element* e, int endTick)
 //---------------------------------------------------------
 //   canCopy
 //    return false if range selection intersects a tuplet
-//    or a tremolo, or a local timne signature
+//    or a tremolo, or a local time signature
 //---------------------------------------------------------
 
 bool Selection::canCopy() const

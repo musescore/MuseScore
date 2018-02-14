@@ -343,7 +343,7 @@ class Element : public ScoreElement {
 /**
  Handle a dropped element at canvas relative \a pos of given element
  \a type and \a subtype. Returns dropped element if any.
- The ownership of element in DropData is transfered to the called
+ The ownership of element in DropData is transferred to the called
  element (if not used, element has to be deleted).
  The returned element will be selected if not in note edit mode.
 
@@ -445,7 +445,7 @@ class Element : public ScoreElement {
       virtual Element* prevSegmentElement();  //< next-element and prev-element command
 
       virtual QString accessibleInfo() const;         //< used to populate the status bar
-      virtual QString screenReaderInfo() const  {     //< by default returns accessibleInfo, but can be overriden
+      virtual QString screenReaderInfo() const  {     //< by default returns accessibleInfo, but can be overridden
             return accessibleInfo();
             }
                                                        //  if the screen-reader needs a special string (see note for example)

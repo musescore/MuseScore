@@ -349,7 +349,7 @@ void LineSegment::editDrag(EditData& ed)
                   _userOff2 -= deltaResize;
                   undoChangeProperty(P_ID::AUTOPLACE, false);
                   break;
-            case Grip::END: // Resize the end of element (rigth grip)
+            case Grip::END: // Resize the end of element (right grip)
                   _userOff2 += deltaResize;
                   undoChangeProperty(P_ID::AUTOPLACE, false);
                   break;

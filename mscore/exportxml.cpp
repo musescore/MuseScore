@@ -3948,7 +3948,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m)
 //  findTrackForAnnotations
 //---------------------------------------------------------
 
-// An annotation is attched to the staff, with track set
+// An annotation is attached to the staff, with track set
 // to the lowest track in the staff. Find a track for it
 // (the lowest track in this staff that has a chord or rest)
 
@@ -4590,10 +4590,10 @@ static void initReverseInstrMap(MxmlReverseInstrumentMap& rim, const MxmlInstrum
 
 /**
  Handle the <print> element.
- When exporting layout and all breaks, a <print> with layout informations
+ When exporting layout and all breaks, a <print> with layout information
  is generated for the measure types TopSystem, NewSystem and newPage.
  When exporting layout but only manual or no breaks, a <print> with
- layout informations is generated only for the measure type TopSystem,
+ layout information is generated only for the measure type TopSystem,
  as it is assumed the system layout is broken by the importing application
  anyway and is thus useless.
  */

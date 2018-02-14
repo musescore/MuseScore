@@ -41,7 +41,7 @@
         </font>
        </property>
        <property name="text">
-        <string notr="true" extracomment="Placeholder, gets set programatically">USERNAME</string>
+        <string notr="true" extracomment="Placeholder, gets set programmatically">USERNAME</string>
        </property>
       </widget>
      </item>
@@ -141,7 +141,7 @@
        <item row="1" column="0" colspan="3">
         <widget class="QLabel" name="privateHelp">
          <property name="text">
-          <string notr="true" extracomment="Placeholder, gets set and translated programatically">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+          <string notr="true" extracomment="Placeholder, gets set and translated programmatically">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -183,7 +183,7 @@ p, li { white-space: pre-wrap; }
        <item row="5" column="2" rowspan="2">
         <widget class="QLabel" name="licenseHelp">
          <property name="text">
-          <string notr="true" extracomment="Placeholder, gets set and translated programatically">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+          <string notr="true" extracomment="Placeholder, gets set and translated programmatically">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -237,7 +237,7 @@ p, li { white-space: pre-wrap; }
           </font>
          </property>
          <property name="text">
-          <string notr="true" extracomment="Placeholder, gets set and translated programatically">Use a comma to separate the tags</string>
+          <string notr="true" extracomment="Placeholder, gets set and translated programmatically">Use a comma to separate the tags</string>
          </property>
         </widget>
        </item>
@@ -271,7 +271,7 @@ p, li { white-space: pre-wrap; }
           <bool>true</bool>
          </property>
          <property name="text">
-          <string notr="true" extracomment="Placeholder, gets set and translated programatically">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+          <string notr="true" extracomment="Placeholder, gets set and translated programmatically">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -299,7 +299,7 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="1">
         <widget class="QLabel" name="linkToScore">
          <property name="text">
-          <string notr="true" extracomment="Hyperlink, gets set/unset programatically">[Link]</string>
+          <string notr="true" extracomment="Hyperlink, gets set/unset programmatically">[Link]</string>
          </property>
          <property name="openExternalLinks">
           <bool>true</bool>

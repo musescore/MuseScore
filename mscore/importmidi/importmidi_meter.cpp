@@ -303,7 +303,7 @@ bool isQuarterDuration(const ReducedFraction &ticks)
       }
 
 // If last 2/3 of beat in compound meter is rest,
-// it should be splitted into 2 rests
+// it should be split into 2 rests
 
 bool is23EndOfBeatInCompoundMeter(const ReducedFraction &startTickInBar,
                                   const ReducedFraction &endTickInBar,

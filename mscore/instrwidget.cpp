@@ -54,7 +54,7 @@ void filterInstruments(QTreeWidget* instrumentList, const QString &searchPhrase)
             QTreeWidgetItem* ci = 0;
 
             for (int cidx = 0; (ci = item->child(cidx)); ++cidx) {
-                  // replace the unicode b (accidential) so a search phrase of "bb" would give Bb Trumpet...
+                  // replace the unicode b (accidental) so a search phrase of "bb" would give Bb Trumpet...
                   QString text = ci->text(0).replace(QChar(0x266d), QChar('b'));
                   bool isMatch = text.contains(searchPhrase, Qt::CaseInsensitive);
                   ci->setHidden(!isMatch);

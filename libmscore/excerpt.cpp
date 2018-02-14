@@ -1171,7 +1171,7 @@ QList<Excerpt*> Excerpt::createAllExcerpt(MasterScore *score)
 QString Excerpt::createName(const QString& partName, QList<Excerpt*>& excerptList)
       {
       QString name = partName.simplified();
-      int count = 0;    // no of occurences of partName
+      int count = 0;    // no of occurrences of partName
 
       for (Excerpt* e : excerptList) {
             // if <partName> already exists, change <partName> to <partName 1>

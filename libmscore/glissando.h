@@ -71,7 +71,7 @@ class Glissando final : public SLine {
       static Note* guessInitialNote(Chord* chord);
       static Note* guessFinalNote(Chord* chord);
 
-      // overriden inherited methods
+      // overridden inherited methods
       virtual Glissando* clone() const override     { return new Glissando(*this);   }
       virtual ElementType type() const override     { return ElementType::GLISSANDO; }
       virtual LineSegment* createLineSegment() override;

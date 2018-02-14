@@ -430,7 +430,7 @@ void Chord::add(Element* e)
 
                   // _notes should be sorted by line position,
                   // but it's often not yet possible since line is unknown
-                  // use pitch instead, and line as a second sort critera.
+                  // use pitch instead, and line as a second sort criteria.
 
                   for (unsigned idx = 0; idx < _notes.size(); ++idx) {
                         if (note->pitch() <= _notes[idx]->pitch()) {
@@ -821,7 +821,7 @@ void Chord::computeUp()
                   if (measure()->hasVoices(staffIdx()))
                         _up = !(track() % 2);
                   else                          // if only voice 1,
-                        // uncondtionally set to down if not stems or according to TAB stem direction otherwise
+                        // unconditionally set to down if not stems or according to TAB stem direction otherwise
                         // (even with no stems, stem direction controls position of slurs and ties)
                         _up = tab->slashStyle() ? false : !tab->stemsDown();
                   return;

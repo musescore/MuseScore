@@ -96,7 +96,7 @@ class Staff final : public ScoreElement {
       bool _invisible          { false };
       bool _cutaway            { false };
       bool _showIfEmpty        { false };       ///< show this staff if system is empty and hideEmptyStaves is true
-      bool _hideSystemBarLine  { false };       // no system barline if not preceeded by staff with barline
+      bool _hideSystemBarLine  { false };       // no system barline if not preceded by staff with barline
       HideMode _hideWhenEmpty  { HideMode::AUTO };    // hide empty staves
 
       QColor _color            { MScore::defaultColor };

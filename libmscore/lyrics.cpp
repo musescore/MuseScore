@@ -501,7 +501,7 @@ Element* Lyrics::drop(EditData& data)
 void Lyrics::setNo(int n)
       {
       _no = n;
-      // adjust beween LYRICS1 and LYRICS2 only; keep other styles as they are
+      // adjust between LYRICS1 and LYRICS2 only; keep other styles as they are
       // (_no is 0-based, so odd _no means even line and viceversa)
       if (type() == ElementType::LYRICS) {
             if ((_no & 1) && subStyle() == SubStyle::LYRIC1)
@@ -806,7 +806,7 @@ void LyricsLineSegment::layout()
             lyr         = nextLyr = lyricsLine()->nextLyrics();
             sys         = lyr->segment()->system();
             endOfSystem = (sys != system());
-            // if next lyrics is on a different sytem, this line segment is at the end of its system:
+            // if next lyrics is on a different system, this line segment is at the end of its system:
             // do not adjust for next lyrics position
             if (!endOfSystem) {
                   qreal lyrX        = lyr->bbox().x();

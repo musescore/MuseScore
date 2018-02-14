@@ -128,7 +128,7 @@ void Rest::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   setUserOff, overriden from Element
+//   setUserOff, overridden from Element
 //    (- raster vertical position in spatium units) -> no
 //    - half rests and whole rests outside the staff are
 //      replaced by special symbols with ledger lines
@@ -378,7 +378,7 @@ void Rest::layout()
                   return;
                   }
             // if no rests or no duration symbols, delete any dur. symbol and chain into standard staff mngmt
-            // this is to ensure horiz space is reserved for rest, even if they are not diplayed
+            // this is to ensure horiz space is reserved for rest, even if they are not displayed
             // Rest::draw() will skip their drawing, if not needed
             if(_tabDur) {
                   delete _tabDur;

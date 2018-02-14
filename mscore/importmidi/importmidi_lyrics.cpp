@@ -310,7 +310,7 @@ QList<std::string> makeLyricsListForUI()
                   if (isMetaText(text))
                         continue;
                   if (!lyricText.empty())
-                        lyricText += " ";       // visual text delimeter
+                        lyricText += " ";       // visual text delimiter
                   if (lyricText.size() + text.size() > symbolLimit)
                         lyricText += text.substr(0, symbolLimit - lyricText.size());
                   else
