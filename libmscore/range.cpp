@@ -378,7 +378,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                               measure = measure->nextMeasure();
                               rest    = measure->len();
                               if (e != tuplet->elements().back()) {
-                                    // create second part of splitted tuplet
+                                    // create second part of split tuplet
                                     dt = dt->clone();
                                     dt->setGenerated(true);
                                     dt->setParent(measure);

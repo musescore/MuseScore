@@ -265,8 +265,8 @@ void RepeatList::unwind()
       MeasureBase* sectionStartMeasureBase = NULL; // NULL indicates haven't discovered starting Measure of section
       MeasureBase* sectionEndMeasureBase = NULL;
 
-      // partition score by section breaks and unwind individual sections seperately
-      // note: section breaks may occur on non-Measure frames, so must seach list of all MeasureBases
+      // partition score by section breaks and unwind individual sections separately
+      // note: section breaks may occur on non-Measure frames, so must search list of all MeasureBases
       for (MeasureBase* mb = _score->first(); mb; mb = mb->next()) {
 
             // unwindSection only deals with real Measures, so sectionEndMeasureBase and sectionStartMeasureBase will only point to real Measures
@@ -313,7 +313,7 @@ void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEnd
             return;
             }
 
-      // both of these trackers possibly should be private members to allow tracking accross all sections?
+      // both of these trackers possibly should be private members to allow tracking across all sections?
       // Especially when jumping to a different section and having playRepeats enabled could suffer from this
       std::map<Volta*, Measure*> voltaRangeEnds; // open volta possibly ends past the end of its spanner
       std::set<Jump*> jumpsTaken; // take the jumps only once, so store them

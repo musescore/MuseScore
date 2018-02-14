@@ -37,7 +37,7 @@ extern bool ignoreWarnings;
 
 //---------------------------------------------------------
 // MsWidget
-// used to assign actions (shortcuts) to the apropriate
+// used to assign actions (shortcuts) to the appropriate
 // widget (actions.cpp, shortcuts.cpp)
 //---------------------------------------------------------
 

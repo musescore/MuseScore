@@ -266,7 +266,7 @@ void InspectorBarLine::manageSpanData()
       b.spanTo->setMinimum(min);
       b.spanTo->setMaximum(max);
 
-      // determin MAX for SPAN
+      // determine MAX for SPAN
       max = bl->score()->nstaves() - bl->staffIdx();
       b.span->setMaximum(max);
 #endif
