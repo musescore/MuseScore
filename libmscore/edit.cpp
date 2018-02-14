@@ -1214,35 +1214,53 @@ void Score::cmdFlip()
             MScore::setError(NO_NOTE_SLUR_SELECTED);
             return;
             }
+
+      std::set<const Element*> alreadyFlippedElements;
+      auto flipOnce = [&alreadyFlippedElements](const Element* element, std::function<void()> flipFunction) -> void {
+            if (alreadyFlippedElements.count(element) == 0) {
+                  alreadyFlippedElements.insert(element);
+                  flipFunction();
+                  }
+            };
       for (Element* e : el) {
             if (e->isNote() || e->isStem() || e->isHook()) {
-                  Chord* chord;
-                  if (e->isNote())
-                        chord = toNote(e)->chord();
+                  Chord* chord = nullptr;
+                  if (e->isNote()) {
+                        auto note = toNote(e);
+                        chord = note->chord();
+                        }
                   else if (e->isStem())
                         chord = toStem(e)->chord();
                   else
                         chord = toHook(e)->chord();
-                  if (chord->beam())
+
+                  if (chord->beam()) {
                         if (!selection().isRange())
-                              e = chord->beam();  // fall through
+                              e = chord->beam();
                         else
                               continue;
-                  else {
-                        Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
-                        chord->undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
                         }
+                  else {
+                        flipOnce(chord, [chord](){
+                              Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
+                              chord->undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
+                              });
+                        }                  
                   }
 
-            else if (e->isBeam()) {
-                  Beam* beam = toBeam(e);
-                  Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
-                  beam->undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
+            if (e->isBeam()) {
+                  auto beam = toBeam(e);
+                  flipOnce(beam, [beam](){
+                        Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
+                        beam->undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
+                        });
                   }
             else if (e->isSlurTieSegment()) {
-                  SlurTie* slur = toSlurTieSegment(e)->slurTie();
-                  Direction dir = slur->up() ? Direction::DOWN : Direction::UP;
-                  slur->undoChangeProperty(P_ID::SLUR_DIRECTION, QVariant::fromValue<Direction>(dir));
+                  auto slurTieSegment = toSlurTieSegment(e)->slurTie();
+                  flipOnce(slurTieSegment, [slurTieSegment](){
+                        Direction dir = slurTieSegment->up() ? Direction::DOWN : Direction::UP;
+                        slurTieSegment->undoChangeProperty(P_ID::SLUR_DIRECTION, QVariant::fromValue<Direction>(dir));
+                        });
                   }
             else if (e->isHairpinSegment()) {
                   Hairpin* h = toHairpinSegment(e)->hairpin();
@@ -1256,32 +1274,35 @@ void Score::cmdFlip()
                   h->undoChangeProperty(P_ID::HAIRPIN_TYPE, int(st));
                   }
             else if (e->isArticulation()) {
-                  Articulation* a = toArticulation(e);
-                  ArticulationAnchor aa = a->anchor();
-                  switch (aa) {
-                        case ArticulationAnchor::TOP_CHORD:
-                              aa = ArticulationAnchor::BOTTOM_CHORD;
-                              break;
-                        case ArticulationAnchor::BOTTOM_CHORD:
-                              aa = ArticulationAnchor::TOP_CHORD;
-                              break;
-                        case ArticulationAnchor::CHORD:
-                              aa = a->up() ? ArticulationAnchor::BOTTOM_CHORD : ArticulationAnchor::TOP_CHORD;
-                              break;
-                        case ArticulationAnchor::TOP_STAFF:
-                              aa = ArticulationAnchor::BOTTOM_STAFF;
-                              break;
-                        case ArticulationAnchor::BOTTOM_STAFF:
-                              aa = ArticulationAnchor::TOP_STAFF;
-                              break;
-                        }
-                  // a->undoChangeProperty(P_ID::DIRECTION, a->up() ? Direction::DOWN : Direction::UP);
-                  a->undoChangeProperty(P_ID::ARTICULATION_ANCHOR, int(aa));
+                  auto articulation = toArticulation(e);
+                  flipOnce(articulation, [articulation](){
+                        ArticulationAnchor articAnchor = articulation->anchor();
+                        switch (articAnchor) {
+                              case ArticulationAnchor::TOP_CHORD:
+                                    articAnchor = ArticulationAnchor::BOTTOM_CHORD;
+                                    break;
+                              case ArticulationAnchor::BOTTOM_CHORD:
+                                    articAnchor = ArticulationAnchor::TOP_CHORD;
+                                    break;
+                              case ArticulationAnchor::CHORD:
+                                    articAnchor = articulation->up() ? ArticulationAnchor::BOTTOM_CHORD : ArticulationAnchor::TOP_CHORD;
+                                    break;
+                              case ArticulationAnchor::TOP_STAFF:
+                                    articAnchor = ArticulationAnchor::BOTTOM_STAFF;
+                                    break;
+                              case ArticulationAnchor::BOTTOM_STAFF:
+                                    articAnchor = ArticulationAnchor::TOP_STAFF;
+                                    break;
+                              }
+                        articulation->undoChangeProperty(P_ID::ARTICULATION_ANCHOR, int(articAnchor));
+                        });
                   }
             else if (e->isTuplet()) {
-                  Tuplet* tuplet = toTuplet(e);
-                  Direction d = tuplet->isUp() ? Direction::DOWN : Direction::UP;
-                  tuplet->undoChangeProperty(P_ID::DIRECTION, QVariant::fromValue<Direction>(d));
+                  auto tuplet = toTuplet(e);
+                  flipOnce(tuplet, [tuplet](){
+                        Direction dir = tuplet->isUp() ? Direction::DOWN : Direction::UP;
+                        tuplet->undoChangeProperty(P_ID::DIRECTION, QVariant::fromValue<Direction>(dir));
+                        });
                   }
             else if (e->isNoteDot()) {
                   Note* note = toNote(e->parent());
