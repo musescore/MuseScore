@@ -240,7 +240,7 @@ WebPageDockWidget::WebPageDockWidget(MuseScore* /*mscore*/, QWidget* parent)
       
       setWidget(web);
 
-      //removing every widget from the tabbing order until suport for
+      //removing every widget from the tabbing order until support for
       //accessibility is provided
       QList<QWidget*> widgets = this->findChildren<QWidget*>();
       for(int i = 0; i < widgets.size(); i++){
