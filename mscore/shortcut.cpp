@@ -3877,6 +3877,16 @@ void Shortcut::retranslate()
             }
       }
 
+void Shortcut::refreshIcons()
+      {
+      foreach (Shortcut* s, _shortcuts) {
+            QAction* a = s->action();
+            if (a && s->icon() != Icons::Invalid_ICON) {
+                  a->setIcon(*icons[int(s->icon())]);
+                  }
+            }
+      }
+
 //---------------------------------------------------------
 //   save
 //---------------------------------------------------------
