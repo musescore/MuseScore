@@ -479,6 +479,15 @@ void MuseScore::preferencesChanged()
       {
       updateExternalValuesFromPreferences();
 
+      setPlayRepeats(MScore::playRepeats);
+      getAction("pan")->setChecked(MScore::panPlayback);
+      getAction("follow")->setChecked(preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG));
+      getAction("midi-on")->setEnabled(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
+      getAction("toggle-statusbar")->setChecked(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
+      _statusBar->setVisible(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
+
+      MuseScore::updateUiStyleAndTheme();
+
       QString fgWallpaper = preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER);
       for (int i = 0; i < tab1->count(); ++i) {
             ScoreView* canvas = tab1->view(i);
@@ -524,8 +533,21 @@ void MuseScore::preferencesChanged()
       transportTools->setEnabled(!noSeq && seq && seq->isRunning());
       playId->setEnabled(!noSeq && seq && seq->isRunning());
 
-      getAction("midi-on")->setEnabled(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
-      _statusBar->setVisible(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
+      // change workspace
+      if (preferences.getString(PREF_APP_WORKSPACE) != Workspace::currentWorkspace->name()) {
+            Workspace* workspace = 0;
+            for (Workspace* w: Workspace::workspaces()) {
+                  if (w->name() == preferences.getString(PREF_APP_WORKSPACE)) {
+                        workspace = w;
+                        break;
+                        }
+                  }
+
+            if (workspace != 0) {
+                  mscore->changeWorkspace(workspace);
+                  mscore->getPaletteBox()->updateWorkspaces();
+                  }
+            }
 
       delete newWizard;
       newWizard = 0;
@@ -4860,6 +4882,18 @@ void MuseScore::updateUndoRedo()
       a->setEnabled(cs ? cs->undoStack()->canRedo() : false);
       }
 
+
+void MuseScore::setPlayRepeats(bool repeat)
+      {
+      getAction("repeat")->setChecked(repeat);
+      preferences.setPreference(PREF_APP_PLAYBACK_PLAYREPEATS, repeat);
+      MScore::playRepeats = repeat;
+      if (cs) {
+            cs->updateRepeatList(repeat);
+            emit cs->playlistChanged();
+            }
+      }
+
 //---------------------------------------------------------
 //   cmd
 //---------------------------------------------------------
@@ -5077,13 +5111,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             }
       else if (cmd == "print")
             printFile();
-      else if (cmd == "repeat") {
-            preferences.setPreference(PREF_APP_PLAYBACK_PLAYREPEATS, a->isChecked());
-            if (cs) {
-                  cs->updateRepeatList(preferences.getBool(PREF_APP_PLAYBACK_PLAYREPEATS));
-                  emit cs->playlistChanged();
-                  }
-            }
+      else if (cmd == "repeat")
+            setPlayRepeats(a->isChecked());
       else if (cmd == "pan")
             MScore::panPlayback = !MScore::panPlayback;
       else if (cmd == "show-invisible")
@@ -5865,6 +5894,53 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       return true;
 #endif
       }
+
+void MuseScore::updateUiStyleAndTheme()
+      {
+      // set UI Theme
+      QApplication::setStyle(QStyleFactory::create("Fusion"));
+
+      QString wd      = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
+      // set UI Color Palette
+      QPalette p(QApplication::palette());
+      QString jsonPaletteFilename = preferences.isThemeDark() ? "palette_dark_fusion.json" : "palette_light_fusion.json";;
+      QFile jsonPalette(QString(":/themes/%1").arg(jsonPaletteFilename));
+      // read from Documents TODO: remove this
+      if (QFile::exists(QString("%1/%2").arg(wd, "ms_palette.json")))
+            jsonPalette.setFileName(QString("%1/%2").arg(wd, "ms_palette.json"));
+      if (jsonPalette.open(QFile::ReadOnly | QFile::Text)) {
+            QJsonDocument d = QJsonDocument::fromJson(jsonPalette.readAll());
+            QJsonObject o = d.object();
+            QMetaEnum metaEnum = QMetaEnum::fromType<QPalette::ColorRole>();
+            for (int i = 0; i < metaEnum.keyCount(); ++i) {
+                  QJsonValue v = o.value(metaEnum.valueToKey(i));
+                  if (!v.isUndefined())
+                        p.setColor(static_cast<QPalette::ColorRole>(metaEnum.value(i)), QColor(v.toString()));
+                  }
+            }
+      QApplication::setPalette(p);
+
+      // set UI Style
+      QString css;
+      QString styleFilename = preferences.isThemeDark() ? "style_dark_fusion.css" : "style_light_fusion.css";
+      QFile fstyle(QString(":/themes/%1").arg(styleFilename));
+      // read from Documents TODO: remove this
+      if (QFile::exists(QString("%1/%2").arg(wd, "ms_style.css")))
+            fstyle.setFileName(QString("%1/%2").arg(wd, "ms_style.css"));
+      if (fstyle.open(QFile::ReadOnly | QFile::Text)) {
+            QTextStream in(&fstyle);
+            css = in.readAll();
+            }
+
+      css.replace("$voice1-bgcolor", MScore::selectColor[0].name(QColor::HexRgb));
+      css.replace("$voice2-bgcolor", MScore::selectColor[1].name(QColor::HexRgb));
+      css.replace("$voice3-bgcolor", MScore::selectColor[2].name(QColor::HexRgb));
+      css.replace("$voice4-bgcolor", MScore::selectColor[3].name(QColor::HexRgb));
+      qApp->setStyleSheet(css);
+
+      genIcons();
+      Shortcut::refreshIcons();
+      }
 }
 
 using namespace Ms;
@@ -6218,46 +6294,7 @@ int main(int argc, char* av[])
             }
 
       if (!converterMode && !pluginMode) {
-
-            // set UI Theme
-            QApplication::setStyle(QStyleFactory::create("Fusion"));
-
-            QString wd      = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
-            // set UI Color Palette
-            QPalette p(QApplication::palette());
-            QString jsonPaletteFilename = preferences.isThemeDark() ? "palette_dark_fusion.json" : "palette_light_fusion.json";;
-            QFile jsonPalette(QString(":/themes/%1").arg(jsonPaletteFilename));
-            // read from Documents TODO: remove this
-            if (QFile::exists(QString("%1/%2").arg(wd, "ms_palette.json")))
-                  jsonPalette.setFileName(QString("%1/%2").arg(wd, "ms_palette.json"));
-            if (jsonPalette.open(QFile::ReadOnly | QFile::Text)) {
-                  QJsonDocument d = QJsonDocument::fromJson(jsonPalette.readAll());
-                  QJsonObject o = d.object();
-                  QMetaEnum metaEnum = QMetaEnum::fromType<QPalette::ColorRole>();
-                  for (int i = 0; i < metaEnum.keyCount(); ++i) {
-                        QJsonValue v = o.value(metaEnum.valueToKey(i));
-                        if (!v.isUndefined())
-                              p.setColor(static_cast<QPalette::ColorRole>(metaEnum.value(i)), QColor(v.toString()));
-                        }
-                  }
-            QApplication::setPalette(p);
-
-            // set UI Style
-            QString css;
-            QString styleFilename = preferences.isThemeDark() ? "style_dark_fusion.css" : "style_light_fusion.css";
-            QFile fstyle(QString(":/themes/%1").arg(styleFilename));
-            // read from Documents TODO: remove this
-            if (QFile::exists(QString("%1/%2").arg(wd, "ms_style.css")))
-                  fstyle.setFileName(QString("%1/%2").arg(wd, "ms_style.css"));
-            if (fstyle.open(QFile::ReadOnly | QFile::Text)) {
-                  QTextStream in(&fstyle);
-                  css = in.readAll();
-                  }
-            css.replace("$voice1-bgcolor", MScore::selectColor[0].name(QColor::HexRgb));
-            css.replace("$voice2-bgcolor", MScore::selectColor[1].name(QColor::HexRgb));
-            css.replace("$voice3-bgcolor", MScore::selectColor[2].name(QColor::HexRgb));
-            css.replace("$voice4-bgcolor", MScore::selectColor[3].name(QColor::HexRgb));
-            qApp->setStyleSheet(css);
+            MuseScore::updateUiStyleAndTheme();
             }
       else
             noSeq = true;
