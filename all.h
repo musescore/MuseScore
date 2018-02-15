@@ -31,6 +31,7 @@
 
 #include <stdio.h>
 #include <limits.h>
+#include <float.h>
 #include <map>
 #include <unordered_map>
 #include <set>
