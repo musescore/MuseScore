@@ -2728,8 +2728,7 @@ static void applyLyricsMin(ChordRest* cr, int staffIdx, qreal yMin)
       for (Lyrics* l : cr->lyrics()) {
             if (l->autoplace() && l->placeAbove()) {
                   l->rUserYoffset() = yMin;
-                  sh.add(l->bbox().translated(l->pos())
-                     .adjusted(0.0, -lyricsMinBottomDistance, 0.0, 0.0));
+                  sh.add(l->bbox().translated(l->pos()).adjusted(0.0, -lyricsMinBottomDistance, 0.0, 0.0));
                   }
             }
       cr->segment()->staffShape(staffIdx).add(sh);
@@ -2824,7 +2823,18 @@ void Score::layoutLyrics(System* system)
                         }
                   break;
             }
+
+      // align lyrics line segments
+
+      std::vector<LyricsLineSegment*> ll;
+      for (SpannerSegment* ss : system->spannerSegments()) {
+            if (ss->isLyricsLineSegment()) {
+                  LyricsLineSegment* lls = toLyricsLineSegment(ss);
+                  lls->rUserYoffset() = lls->lyricsLine()->lyrics()->rUserYoffset();
+                  }
+            }
       }
+
 //---------------------------------------------------------
 //   layoutTies
 //---------------------------------------------------------

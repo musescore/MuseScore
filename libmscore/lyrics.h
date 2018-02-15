@@ -34,8 +34,7 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   @@ Lyrics
-//   @P syllabic  enum (Lyrics.SINGLE, Lyrics.BEGIN, Lyrics.END, Lyrics.MIDDLE)
+//   Lyrics
 //---------------------------------------------------------
 
 class LyricsLine;
@@ -90,9 +89,9 @@ class Lyrics final : public TextBase {
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
 
-      Segment* segment() const                        { return (Segment*)parent()->parent(); }
-      Measure* measure() const                        { return (Measure*)parent()->parent()->parent(); }
-      ChordRest* chordRest() const                    { return (ChordRest*)parent(); }
+      Segment* segment() const                        { return toSegment(parent()->parent()); }
+      Measure* measure() const                        { return toMeasure(parent()->parent()->parent()); }
+      ChordRest* chordRest() const                    { return toChordRest(parent()); }
 
       virtual void layout() override;
       virtual void layout1() override;
@@ -155,7 +154,7 @@ class LyricsLine final : public SLine {
       virtual LineSegment* createLineSegment() override;
       virtual void removeUnmanaged() override;
 
-      Lyrics* lyrics() const                          { return (Lyrics*)parent();   }
+      Lyrics* lyrics() const                          { return toLyrics(parent());   }
       Lyrics* nextLyrics() const                      { return _nextLyrics;         }
       virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       };
@@ -176,7 +175,7 @@ class LyricsLineSegment final : public LineSegment {
       virtual ElementType type() const override             { return ElementType::LYRICSLINE_SEGMENT; }
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
-      LyricsLine* lyricsLine() const                        { return (LyricsLine*)spanner(); }
+      LyricsLine* lyricsLine() const                        { return toLyricsLine(spanner()); }
       };
 
 }     // namespace Ms
