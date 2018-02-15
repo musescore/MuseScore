@@ -144,6 +144,7 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_SCORE_NOTE_DEFAULTPLAYDURATION                 "score/note/defaultPlayDuration"
 #define PREF_SCORE_NOTE_WARNPITCHRANGE                      "score/note/warnPitchRange"
 #define PREF_SCORE_STYLE_DEFAULTSTYLEFILE                   "score/style/defaultStyleFile"
+#define PREF_SCORE_STYLE_PARTSTYLEFILE                      "score/style/partStyleFile"
 #define PREF_UI_CANVAS_BG_USECOLOR                          "ui/canvas/background/useColor"
 #define PREF_UI_CANVAS_FG_USECOLOR                          "ui/canvas/foreground/useColor"
 #define PREF_UI_CANVAS_BG_COLOR                             "ui/canvas/background/color"

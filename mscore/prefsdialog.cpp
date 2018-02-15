@@ -513,10 +513,8 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       oscPort->setValue(preferences.getInt(PREF_IO_OSC_PORTNUMBER));
 
       styleName->setCurrentIndex(int(preferences.globalStyle()));
-
       defaultStyle->setText(preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE));
-      QSettings s;
-      partStyle->setText(s.value("partStyle").toString());
+      partStyle->setText(preferences.getString(PREF_SCORE_STYLE_PARTSTYLEFILE));
 
       myScores->setText(preferences.getString(PREF_APP_PATHS_MYSCORES));
       myStyles->setText(preferences.getString(PREF_APP_PATHS_MYSTYLES));
@@ -838,12 +836,6 @@ void PreferenceDialog::buttonBoxClicked(QAbstractButton* button)
 
 void PreferenceDialog::apply()
       {
-      QSettings s;
-      if (partStyle->text() != s.value("partStyle").toString()) {
-            s.setValue("partStyle", partStyle->text());
-            MScore::defaultStyleForPartsHasChanged();
-            }
-
       if (lastSession->isChecked())
             preferences.setCustomPreference<SessionStart>(PREF_APP_STARTUP_SESSIONSTART, SessionStart::LAST);
       else if (newSession->isChecked())
@@ -852,7 +844,6 @@ void PreferenceDialog::apply()
             preferences.setCustomPreference<SessionStart>(PREF_APP_STARTUP_SESSIONSTART, SessionStart::SCORE);
       else if (emptySession->isChecked())
             preferences.setCustomPreference<SessionStart>(PREF_APP_STARTUP_SESSIONSTART, SessionStart::EMPTY);
-
 
       preferences.setPreference(PREF_APP_AUTOSAVE_AUTOSAVETIME, autoSaveTime->value());
       preferences.setPreference(PREF_APP_AUTOSAVE_USEAUTOSAVE, autoSave->isChecked());
@@ -1055,6 +1046,11 @@ void PreferenceDialog::apply()
       if (defaultStyle->text() != preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE)) {
             preferences.setPreference(PREF_SCORE_STYLE_DEFAULTSTYLEFILE, defaultStyle->text());
             MScore::readDefaultStyle(preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE));
+            }
+
+      if (partStyle->text() != preferences.getString(PREF_SCORE_STYLE_PARTSTYLEFILE)) {
+            preferences.setPreference(PREF_SCORE_STYLE_PARTSTYLEFILE, partStyle->text());
+            MScore::defaultStyleForPartsHasChanged();
             }
 
       genIcons();

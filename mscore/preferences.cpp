@@ -135,6 +135,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_SCORE_NOTE_DEFAULTPLAYDURATION,                  Preference(300 /* ms */)},
             {PREF_SCORE_NOTE_WARNPITCHRANGE,                       Preference(true)},
             {PREF_SCORE_STYLE_DEFAULTSTYLEFILE,                    Preference("")},
+            {PREF_SCORE_STYLE_PARTSTYLEFILE,                       Preference("")},
             {PREF_UI_CANVAS_BG_USECOLOR,                           Preference(true)},
             {PREF_UI_CANVAS_FG_USECOLOR,                           Preference(true)},
             {PREF_UI_CANVAS_BG_COLOR,                              Preference(QColor("#dddddd"))},
