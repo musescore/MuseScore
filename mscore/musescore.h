@@ -459,6 +459,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void updateViewModeCombo();
       void switchLayoutMode(LayoutMode);
+      void setPlayRepeats(bool repeat);
 
    private slots:
       void cmd(QAction* a, const QString& cmd);
@@ -768,6 +769,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void setNoteInputMenuEntries(std::list<const char*> l)         { _noteInputMenuEntries = l; }
       void populateNoteInputMenu();
+      static void updateUiStyleAndTheme();
 
       void showError();
 

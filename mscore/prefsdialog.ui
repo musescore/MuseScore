@@ -4148,6 +4148,69 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tabAdvanced">
+      <property name="accessibleName">
+       <string>Advanced Tab</string>
+      </property>
+      <attribute name="title">
+       <string>Advanced</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <layout class="QVBoxLayout" name="advancedTabLayout">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QPushButton" name="resetPreference">
+             <property name="toolTip">
+              <string>Select a preference to reset to default value</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleDescription">
+              <string>Select a preference to reset to default value</string>
+             </property>
+             <property name="text">
+              <string>Reset to default</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="advancedSearch">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="placeholderText">
+              <string>Search</string>
+             </property>
+             <property name="clearButtonEnabled">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
