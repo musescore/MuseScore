@@ -94,6 +94,8 @@ class TestRepeat : public QObject, public MTest
 
       void repeat45() { repeat("repeat45.mscx", "1;2;3;4;3;5;6;2;3;4;3;5;6;7"); } // repeat12 but with 'play repeats' enabled
       void repeat46() { repeat("repeat46.mscx", "1;2;3;4;5;3;4;2;3;4;5;3;4;5;6"); } // repeat24 but with 'play repeats' enabled
+
+      void repeat47() { repeat("repeat47.mscx", "1;2;3;2;4;5;6;7;6;8;9;10;11; 2;4;13;14;15; 9;10;16;17;18"); } // #269378 Double Coda messed up repeat rewind logic
       };
 
 //---------------------------------------------------------
