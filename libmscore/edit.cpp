@@ -1813,6 +1813,11 @@ void Score::cmdFlip()
             selectNoteSlurMessage();
             return;
             }
+
+      std::set<const Element*> alreadyFlippedElements;
+      auto isNotFlippedElement = [&alreadyFlippedElements](const Element* element) {
+          return alreadyFlippedElements.insert(element).second;
+            };
       foreach (Element* e, el) {
             if (e->type() == Element::Type::NOTE || e->type() == Element::Type::STEM || e->type() == Element::Type::HOOK) {
                   Chord* chord;
@@ -1828,20 +1833,26 @@ void Score::cmdFlip()
                         else
                               continue;
                   else {
-                        MScore::Direction dir = chord->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
-                        undoChangeProperty(chord, P_ID::STEM_DIRECTION, int(dir));
+                      if (isNotFlippedElement(chord)) {
+                            MScore::Direction dir = chord->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
+                            undoChangeProperty(chord, P_ID::STEM_DIRECTION, int(dir));
+                            }
                         }
                   }
 
             if (e->type() == Element::Type::BEAM) {
-                  Beam* beam = static_cast<Beam*>(e);
-                  MScore::Direction dir = beam->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
-                  undoChangeProperty(beam, P_ID::STEM_DIRECTION, int(dir));
+                  if (isNotFlippedElement(e)) {
+                        Beam* beam = static_cast<Beam*>(e);
+                        MScore::Direction dir = beam->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
+                        undoChangeProperty(beam, P_ID::STEM_DIRECTION, int(dir));
+                        }
                   }
             else if (e->type() == Element::Type::SLUR_SEGMENT) {
-                  SlurTie* slur = static_cast<SlurSegment*>(e)->slurTie();
-                  MScore::Direction dir = slur->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
-                  undoChangeProperty(slur, P_ID::SLUR_DIRECTION, int(dir));
+                  if (isNotFlippedElement(e)) {
+                        SlurTie* slur = static_cast<SlurSegment*>(e)->slurTie();
+                        MScore::Direction dir = slur->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
+                        undoChangeProperty(slur, P_ID::SLUR_DIRECTION, int(dir));
+                        }
                   }
             else if (e->type() == Element::Type::HAIRPIN_SEGMENT) {
                   Hairpin* h = static_cast<HairpinSegment*>(e)->hairpin();
@@ -1849,37 +1860,40 @@ void Score::cmdFlip()
                   undoChangeProperty(h, P_ID::HAIRPIN_TYPE, int(st));
                   }
             else if (e->type() == Element::Type::ARTICULATION) {
-                  Articulation* a = static_cast<Articulation*>(e);
-                  if (a->articulationType() == ArticulationType::Staccato
-                     || a->articulationType() == ArticulationType::Tenuto
-                     || a->articulationType() == ArticulationType::Sforzatoaccent
-                     || a->articulationType() == ArticulationType::FadeIn
-                     || a->articulationType() == ArticulationType::FadeOut
-                     || a->articulationType() == ArticulationType::VolumeSwell
-                     || a->articulationType() == ArticulationType::WiggleSawtooth
-                     || a->articulationType() == ArticulationType::WiggleSawtoothWide
-                     || a->articulationType() == ArticulationType::WiggleVibratoLargeFaster
-                     || a->articulationType() == ArticulationType::WiggleVibratoLargeSlowest) {
-                        ArticulationAnchor aa = a->anchor();
-                        if (aa == ArticulationAnchor::TOP_CHORD)
-                              aa = ArticulationAnchor::BOTTOM_CHORD;
-                        else if (aa == ArticulationAnchor::BOTTOM_CHORD)
-                              aa = ArticulationAnchor::TOP_CHORD;
-                        else if (aa == ArticulationAnchor::CHORD)
-                              aa = a->up() ? ArticulationAnchor::BOTTOM_CHORD : ArticulationAnchor::TOP_CHORD;
-                        if (aa != a->anchor())
-                              undoChangeProperty(a, P_ID::ARTICULATION_ANCHOR, int(aa));
+                  if (isNotFlippedElement(e)) {
+                        Articulation* a = static_cast<Articulation*>(e);
+                        if (a->articulationType() == ArticulationType::Staccato
+                           || a->articulationType() == ArticulationType::Tenuto
+                           || a->articulationType() == ArticulationType::Sforzatoaccent
+                           || a->articulationType() == ArticulationType::FadeIn
+                           || a->articulationType() == ArticulationType::FadeOut
+                           || a->articulationType() == ArticulationType::VolumeSwell
+                           || a->articulationType() == ArticulationType::WiggleSawtooth
+                           || a->articulationType() == ArticulationType::WiggleSawtoothWide
+                           || a->articulationType() == ArticulationType::WiggleVibratoLargeFaster
+                           || a->articulationType() == ArticulationType::WiggleVibratoLargeSlowest) {
+                              ArticulationAnchor aa = a->anchor();
+                              if (aa == ArticulationAnchor::TOP_CHORD)
+                                    aa = ArticulationAnchor::BOTTOM_CHORD;
+                              else if (aa == ArticulationAnchor::BOTTOM_CHORD)
+                                    aa = ArticulationAnchor::TOP_CHORD;
+                              else if (aa == ArticulationAnchor::CHORD)
+                                    aa = a->up() ? ArticulationAnchor::BOTTOM_CHORD : ArticulationAnchor::TOP_CHORD;
+                              if (aa != a->anchor())
+                                    undoChangeProperty(a, P_ID::ARTICULATION_ANCHOR, int(aa));
+                              }
+                        else {
+                              MScore::Direction d = a->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
+                              undoChangeProperty(a, P_ID::DIRECTION, int(d));
+                              }
                         }
-                  else {
-                        MScore::Direction d = a->up() ? MScore::Direction::DOWN : MScore::Direction::UP;
-                        undoChangeProperty(a, P_ID::DIRECTION, int(d));
-                        }
-                  //return;   // no layoutAll
                   }
             else if (e->type() == Element::Type::TUPLET) {
-                  Tuplet* tuplet = static_cast<Tuplet*>(e);
-                  MScore::Direction d = tuplet->isUp() ? MScore::Direction::DOWN : MScore::Direction::UP;
-                  undoChangeProperty(tuplet, P_ID::DIRECTION, int(d));
+                  if (isNotFlippedElement(e)) {
+                        Tuplet* tuplet = static_cast<Tuplet*>(e);
+                        MScore::Direction d = tuplet->isUp() ? MScore::Direction::DOWN : MScore::Direction::UP;
+                        undoChangeProperty(tuplet, P_ID::DIRECTION, int(d));
+                        }
                   }
             else if (e->type() == Element::Type::NOTEDOT) {
                   Note* note = static_cast<Note*>(e->parent());
