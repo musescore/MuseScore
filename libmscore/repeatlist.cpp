@@ -441,8 +441,10 @@ void RepeatList::unwindSection(Measure* sectionStartMeasure, Measure* sectionEnd
                                           for (Measure* m = _score->firstMeasure(); m; m = m->nextMeasure())
                                                 m->setPlaybackCount(0);
                                           }
-                                    else { // set each measure to have it play it's final time, but only from our jumptarget on until the current measure
-                                          for (Measure* m = jumpToMeasure; (m && (m != currentMeasure->nextMeasure())); m = m->nextMeasure()) {
+                                    else { // set each measure to have it play its final time
+                                          // but only from our jumptarget on until the playUntil/current measure (whichever comes first)
+                                          Measure* const rewindUntil = (playUntilMeasure->no() < currentMeasure->no()) ? playUntilMeasure->nextMeasure() : currentMeasure->nextMeasure();
+                                          for (Measure* m = jumpToMeasure; (m && (m != rewindUntil)); m = m->nextMeasure()) {
                                                 if (m->playbackCount() != 0)
                                                       m->setPlaybackCount(m->playbackCount() - 1);
                                                 }
