@@ -727,7 +727,7 @@ void Note::draw(QPainter* painter) const
                   else
                         painter->fillRect(bb, Qt::white);
 
-                  if (fretConflict() && !score()->printing()) {          //on fret conflict, draw on red background
+                  if (fretConflict() && !score()->printing() && score()->showUnprintable()) {          //on fret conflict, draw on red background
                         painter->save();
                         painter->setPen(Qt::red);
                         painter->setBrush(QBrush(QColor(Qt::red)));
