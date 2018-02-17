@@ -943,10 +943,12 @@ void ChangeElement::flip(EditData*)
             }
 
       Score* score = oldElement->score();
-      if (oldElement->selected())
-            score->deselect(oldElement);
-      if (newElement->selected())
-            score->select(newElement);
+      if (!score->selection().isRange()) {
+            if (oldElement->selected())
+                  score->deselect(oldElement);
+            if (newElement->selected())
+                  score->select(newElement, SelectType::ADD);
+            }
       if (oldElement->parent() == 0) {
             score->removeElement(oldElement);
             score->addElement(newElement);
