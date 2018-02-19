@@ -139,8 +139,9 @@ void mxmlNotePitch::pitch(QXmlStreamReader& e)
                   else
                         _logger->logError(QString("invalid step '%1'").arg(step), &e);
                   }
-            else
+            else {
                   ;       // TODO skipLogCurrElem();
+                  }
             }
       //qDebug("pitch step %d alter %d oct %d accid %hhd", step, alter, oct, accid);
       }
