@@ -9,21 +9,22 @@
       </Synthesizer>
     <Division>480</Division>
     <Style>
+      <pageWidth>3.93701</pageWidth>
+      <pageHeight>3.54331</pageHeight>
+      <pagePrintableWidth>3.77953</pagePrintableWidth>
+      <pageEvenLeftMargin>0.0787403</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.0787403</pageOddLeftMargin>
+      <pageEvenTopMargin>0</pageEvenTopMargin>
+      <pageEvenBottomMargin>0</pageEvenBottomMargin>
+      <pageOddTopMargin>0</pageOddTopMargin>
+      <pageOddBottomMargin>0</pageOddBottomMargin>
+      <pageTwosided>0</pageTwosided>
       <staffDistance>1</staffDistance>
       <showMeasureNumber>0</showMeasureNumber>
       <musicalSymbolFont>Gonville</musicalSymbolFont>
       <musicalTextFont>Gootville Text</musicalTextFont>
       <showFooter>0</showFooter>
-      <page-layout>
-        <page-height>510.236</page-height>
-        <page-width>566.929</page-width>
-        <page-margins type="both">
-          <left-margin>11.3386</left-margin>
-          <right-margin>11.3386</right-margin>
-          <top-margin>0</top-margin>
-          <bottom-margin>0</bottom-margin>
-          </page-margins>
-        </page-layout>
+      <staffTextPosAbove>-1</staffTextPosAbove>
       <Spatium>1.5</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -43,18 +44,11 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <PageList>
-      <Page>
-        <System>
-          </System>
-        </Page>
-      </PageList>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <Staff id="2">
         <StaffType group="pitched">
@@ -134,14 +128,13 @@ p, li { white-space: pre-wrap; }
         <TimeSig>
           <sigN>8</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>0</showCourtesySig>
+          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <StaffText>
-          <pos x="-5" y="-5.5"/>
+          <pos x="-5" y="-4.5"/>
           <text>Gonville note-heads</text>
           </StaffText>
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Normal</text>
           </StaffText>
         <Chord>
@@ -184,7 +177,6 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="3">
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Cross</text>
           </StaffText>
         <Chord>
@@ -225,7 +217,6 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
@@ -239,10 +230,9 @@ p, li { white-space: pre-wrap; }
         <TimeSig>
           <sigN>8</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>0</showCourtesySig>
+          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Diamond</text>
           </StaffText>
         <Chord>
@@ -289,7 +279,6 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="3">
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Triangel</text>
           </StaffText>
         <Chord>
@@ -297,7 +286,6 @@ p, li { white-space: pre-wrap; }
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
-            <head>triangle</head>
             </Note>
           </Chord>
         </Measure>
@@ -307,7 +295,6 @@ p, li { white-space: pre-wrap; }
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
-            <head>triangle</head>
             </Note>
           </Chord>
         <Chord>
@@ -315,7 +302,6 @@ p, li { white-space: pre-wrap; }
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
-            <head>triangle</head>
             </Note>
           </Chord>
         <Chord>
@@ -323,14 +309,12 @@ p, li { white-space: pre-wrap; }
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
-            <head>triangle</head>
             </Note>
           </Chord>
         <Rest>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
@@ -344,10 +328,9 @@ p, li { white-space: pre-wrap; }
         <TimeSig>
           <sigN>8</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>0</showCourtesySig>
+          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Slash</text>
           </StaffText>
         <Chord>
@@ -394,7 +377,6 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="3">
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>XCircle</text>
           </StaffText>
         <Chord>
@@ -435,7 +417,6 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
@@ -449,10 +430,9 @@ p, li { white-space: pre-wrap; }
         <TimeSig>
           <sigN>8</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>0</showCourtesySig>
+          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Do</text>
           </StaffText>
         <Chord>
@@ -499,7 +479,6 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="3">
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Re</text>
           </StaffText>
         <Chord>
@@ -540,7 +519,6 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
@@ -554,10 +532,9 @@ p, li { white-space: pre-wrap; }
         <TimeSig>
           <sigN>8</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>0</showCourtesySig>
+          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Mi</text>
           </StaffText>
         <Chord>
@@ -604,7 +581,6 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="3">
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Fa</text>
           </StaffText>
         <Chord>
@@ -645,7 +621,6 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
@@ -659,10 +634,9 @@ p, li { white-space: pre-wrap; }
         <TimeSig>
           <sigN>8</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>0</showCourtesySig>
+          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Sol</text>
           </StaffText>
         <Chord>
@@ -709,7 +683,6 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="3">
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>La</text>
           </StaffText>
         <Chord>
@@ -750,7 +723,6 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
@@ -764,10 +736,9 @@ p, li { white-space: pre-wrap; }
         <TimeSig>
           <sigN>8</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>0</showCourtesySig>
+          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Ti</text>
           </StaffText>
         <Chord>
@@ -814,7 +785,6 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="3">
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Alt. Brevis</text>
           </StaffText>
         <Chord>
@@ -873,7 +843,6 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
-          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>
