@@ -6745,14 +6745,14 @@
                         <name>Closed Hi-Hat</name>
                   </Drum>
                   <Articulation>
-                        <gateTime>100%</gateTime>
-                        <velocity>100%</velocity>
+                        <gateTime>100</gateTime>
+                        <velocity>100</velocity>
                   </Articulation>
                   <Articulation name="sforzato">
-                        <velocity>130%</velocity>
+                        <velocity>130</velocity>
                   </Articulation>
-                  <Articulation name="umarcato">
-                        <velocity>500%</velocity>
+                  <Articulation name="marcato">
+                        <velocity>500</velocity>
                   </Articulation>
                   <channel>
                         <program>56</program>
@@ -6950,14 +6950,14 @@
                       <stem>1</stem>
                       </Drum>
                   <Articulation>
-                        <gateTime>100%</gateTime>
-                        <velocity>100%</velocity>
+                        <gateTime>100</gateTime>
+                        <velocity>100</velocity>
                   </Articulation>
                   <Articulation name="sforzato">
-                        <velocity>130%</velocity>
+                        <velocity>130</velocity>
                   </Articulation>
-                  <Articulation name="umarcato">
-                        <velocity>500%</velocity>
+                  <Articulation name="marcato">
+                        <velocity>500</velocity>
                   </Articulation>
                   <channel>
                         <program>96</program>
@@ -7057,14 +7057,14 @@
                       <stem>1</stem>
                       </Drum>
                   <Articulation>
-                        <gateTime>100%</gateTime>
-                        <velocity>100%</velocity>
+                        <gateTime>100</gateTime>
+                        <velocity>100</velocity>
                   </Articulation>
                   <Articulation name="sforzato">
-                        <velocity>130%</velocity>
+                        <velocity>130</velocity>
                   </Articulation>
-                  <Articulation name="umarcato">
-                        <velocity>500%</velocity>
+                  <Articulation name="marcato">
+                        <velocity>500</velocity>
                   </Articulation>
                   <channel>
                         <program>59</program>
@@ -7165,14 +7165,14 @@
                         <name>Roll</name>
                   </Drum>
                   <Articulation>
-                        <gateTime>100%</gateTime>
-                        <velocity>100%</velocity>
+                        <gateTime>100</gateTime>
+                        <velocity>100</velocity>
                   </Articulation>
                   <Articulation name="sforzato">
-                        <velocity>130%</velocity>
+                        <velocity>130</velocity>
                   </Articulation>
-                  <Articulation name="umarcato">
-                        <velocity>500%</velocity>
+                  <Articulation name="marcato">
+                        <velocity>500</velocity>
                   </Articulation>
                   <channel>
                         <program>58</program>
