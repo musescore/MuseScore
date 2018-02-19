@@ -1524,7 +1524,6 @@ void Score::changeAccidental(AccidentalType idx)
       {
       foreach(Note* note, selection().noteList())
             changeAccidental(note, idx);
-      setPlayNote(true);
       }
 
 //---------------------------------------------------------
@@ -1654,6 +1653,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
                   }
             changeAccidental2(ln, pitch, tpc);
             }
+      setPlayNote(true);
       }
 
 //---------------------------------------------------------
