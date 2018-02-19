@@ -1010,7 +1010,7 @@ static void readChord(Chord* chord, XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   read
+//   readText
 //---------------------------------------------------------
 
 static void readText(XmlReader& e, TextBase* t, Element* be)
@@ -1896,6 +1896,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         }
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
+                  // vertical alignment changed from top to baseline
+                  el->setReadPos(el->readPos() + QPointF(0.0, el->baseLine() * MScore::pixelRatio));
                   }
             else if (tag == "Harmony"
                || tag == "FretDiagram"
