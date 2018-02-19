@@ -46,31 +46,6 @@ namespace FluidS {
  * - dsp_buf: Output buffer of floating point values (FLUID_BUFSIZE in length)
  */
 
-inline bool Voice::updateAmpInc(unsigned int &nextNewAmpInc, std::map<int, qreal>::iterator &curSample2AmpInc, qreal &dsp_amp_incr, unsigned int &dsp_i)
-      {
-      if (positionToTurnOff > 0 && dsp_i >= (unsigned int) positionToTurnOff)
-            return false;
-
-      // if volume is zero skip all phases that do not change that!
-      if (amp == 0.0f) {
-            while (dsp_amp_incr == 0.0f && curSample2AmpInc != Sample2AmpInc.end()) {
-                  dsp_i = curSample2AmpInc->first;
-                  curSample2AmpInc++;
-                  nextNewAmpInc = curSample2AmpInc->first;
-                  dsp_amp_incr = curSample2AmpInc->second;
-                  }
-            if (curSample2AmpInc == Sample2AmpInc.end())
-                  return false;
-            }
-
-      if (dsp_i >= nextNewAmpInc) {
-            curSample2AmpInc++;
-            nextNewAmpInc = curSample2AmpInc->first;
-            dsp_amp_incr = curSample2AmpInc->second;
-            }
-      return true;
-      }
-
 
 /* Interpolation (find a value between two samples of the original waveform) */
 
@@ -83,7 +58,7 @@ float Voice::interp_coeff[FLUID_INTERP_MAX][4];
 /* 7th order interpolation (7 coefficients centered on 3rd) */
 float Voice::sinc_table7[FLUID_INTERP_MAX][7];
 
-#define SINC_INTERP_ORDER 7	/* 7th order constant */
+#define SINC_INTERP_ORDER 7      /* 7th order constant */
 
 //---------------------------------------------------------
 //   dsp_float_config
@@ -147,9 +122,8 @@ int Voice::dsp_float_interpolate_none(unsigned n)
       Phase dsp_phase_incr; //  end_phase;
       short int *dsp_data = voice->sample->data;
       float *dsp_buf = voice->dsp_buf;
-      auto curSample2AmpInc = Sample2AmpInc.begin();
-      qreal dsp_amp_incr = curSample2AmpInc->second;
-      unsigned int nextNewAmpInc = curSample2AmpInc->first;
+      float dsp_amp = voice->amp;
+      float dsp_amp_incr = voice->amp_incr;
       unsigned int dsp_i = 0;
       unsigned int dsp_phase_index;
       unsigned int end_index;
@@ -170,14 +144,12 @@ int Voice::dsp_float_interpolate_none(unsigned n)
 
             /* interpolate sequence of sample points */
             for ( ; dsp_i < n && dsp_phase_index <= end_index; dsp_i++) {
-                  dsp_buf[dsp_i] = amp * dsp_data[dsp_phase_index];
+                  dsp_buf[dsp_i] = dsp_amp * dsp_data[dsp_phase_index];
 
                   /* increment phase and amplitude */
                   dsp_phase += dsp_phase_incr;
-                  dsp_phase_index = dsp_phase.index_round();	/* round to nearest point */
-                  if (!updateAmpInc(nextNewAmpInc, curSample2AmpInc, dsp_amp_incr, dsp_i))
-                        return dsp_i;
-                  amp += dsp_amp_incr;
+                  dsp_phase_index = dsp_phase.index_round();      /* round to nearest point */
+                  dsp_amp += dsp_amp_incr;
                   }
 
             /* break out if not looping (buffer may not be full) */
@@ -196,6 +168,7 @@ int Voice::dsp_float_interpolate_none(unsigned n)
             }
 
       voice->phase = dsp_phase;
+      voice->amp = dsp_amp;
       return dsp_i;
       }
 
@@ -213,9 +186,8 @@ int Voice::dsp_float_interpolate_linear(unsigned n)
       Phase dsp_phase_incr; // end_phase;
       short int *dsp_data = voice->sample->data;
       float *dsp_buf = voice->dsp_buf;
-      auto curSample2AmpInc = Sample2AmpInc.begin();
-      qreal dsp_amp_incr = curSample2AmpInc->second;
-      unsigned int nextNewAmpInc = curSample2AmpInc->first;
+      float dsp_amp = voice->amp;
+      float dsp_amp_incr = voice->amp_incr;
       unsigned int dsp_i = 0;
       unsigned int dsp_phase_index;
       unsigned int end_index;
@@ -246,35 +218,31 @@ int Voice::dsp_float_interpolate_linear(unsigned n)
             /* interpolate the sequence of sample points */
             for ( ; dsp_i < n && dsp_phase_index <= end_index; dsp_i++) {
                   coeffs = interp_coeff_linear[fluid_phase_fract_to_tablerow (dsp_phase)];
-                  dsp_buf[dsp_i] = amp * (coeffs[0] * dsp_data[dsp_phase_index]
-				  + coeffs[1] * dsp_data[dsp_phase_index+1]);
+                  dsp_buf[dsp_i] = dsp_amp * (coeffs[0] * dsp_data[dsp_phase_index]
+                          + coeffs[1] * dsp_data[dsp_phase_index+1]);
 
                   /* increment phase and amplitude */
                   dsp_phase += dsp_phase_incr;
                   dsp_phase_index = dsp_phase.index();
-                  if (!updateAmpInc(nextNewAmpInc, curSample2AmpInc, dsp_amp_incr, dsp_i))
-                        return dsp_i;
-                  amp += dsp_amp_incr;
+                  dsp_amp += dsp_amp_incr;
                   }
 
             /* break out if buffer filled */
             if (dsp_i >= n)
                   break;
 
-            end_index++;	/* we're now interpolating the last point */
+            end_index++;      /* we're now interpolating the last point */
 
             /* interpolate within last point */
             for (; dsp_phase_index <= end_index && dsp_i < n; dsp_i++) {
                   coeffs = interp_coeff_linear[fluid_phase_fract_to_tablerow (dsp_phase)];
-                  dsp_buf[dsp_i] = amp * (coeffs[0] * dsp_data[dsp_phase_index]
+                  dsp_buf[dsp_i] = dsp_amp * (coeffs[0] * dsp_data[dsp_phase_index]
                      + coeffs[1] * point);
 
                   /* increment phase and amplitude */
                   dsp_phase += dsp_phase_incr;
                   dsp_phase_index = dsp_phase.index();
-                  if (!updateAmpInc(nextNewAmpInc, curSample2AmpInc, dsp_amp_incr, dsp_i))
-                        return dsp_i;
-                  amp += dsp_amp_incr;	/* increment amplitude */
+                  dsp_amp += dsp_amp_incr;      /* increment amplitude */
                   }
 
             if (!looping)
@@ -289,10 +257,11 @@ int Voice::dsp_float_interpolate_linear(unsigned n)
             /* break out if filled buffer */
             if (dsp_i >= n)
                   break;
-            end_index--;	/* set end back to second to last sample point */
+            end_index--;      /* set end back to second to last sample point */
             }
 
       voice->phase = dsp_phase;
+      voice->amp = dsp_amp;
       return dsp_i;
       }
 
@@ -307,9 +276,7 @@ int Voice::dsp_float_interpolate_4th_order(unsigned n)
       {
       Phase dsp_phase_incr; // end_phase;
       short int* dsp_data = sample->data;
-      auto curSample2AmpInc = Sample2AmpInc.begin();
-      qreal dsp_amp_incr = curSample2AmpInc->second;
-      unsigned int nextNewAmpInc = curSample2AmpInc->first;
+      float dsp_amp_incr  = amp_incr;
       unsigned int dsp_i  = 0;
       unsigned int dsp_phase_index;
       unsigned int start_index;
@@ -327,13 +294,13 @@ int Voice::dsp_float_interpolate_4th_order(unsigned n)
       /* last index before 4th interpolation point must be specially handled */
       unsigned int end_index = (looping ? loopend - 1 : end) - 2;
 
-      if (has_looped) {	/* set start_index and start point if looped or not */
+      if (has_looped) {      /* set start_index and start point if looped or not */
             start_index = loopstart;
-            start_point = dsp_data[loopend - 1];	/* last point in loop (wrap around) */
+            start_point = dsp_data[loopend - 1];      /* last point in loop (wrap around) */
             }
       else {
             start_index = start;
-            start_point = dsp_data[start];	/* just duplicate the point */
+            start_point = dsp_data[start];      /* just duplicate the point */
             }
 
       /* get points off the end (loop start if looping, duplicate point if end) */
@@ -353,15 +320,13 @@ int Voice::dsp_float_interpolate_4th_order(unsigned n)
             for ( ; dsp_phase_index == start_index && dsp_i < n; dsp_i++) {
                   coeffs = interp_coeff[fluid_phase_fract_to_tablerow (phase)];
                   dsp_buf[dsp_i] = amp * (coeffs[0] * start_point
-				  + coeffs[1] * dsp_data[dsp_phase_index]
-				  + coeffs[2] * dsp_data[dsp_phase_index+1]
-				  + coeffs[3] * dsp_data[dsp_phase_index+2]);
+                          + coeffs[1] * dsp_data[dsp_phase_index]
+                          + coeffs[2] * dsp_data[dsp_phase_index+1]
+                          + coeffs[3] * dsp_data[dsp_phase_index+2]);
 
                   /* increment phase and amplitude */
                   phase += dsp_phase_incr;
                   dsp_phase_index = phase.index();
-                  if (!updateAmpInc(nextNewAmpInc, curSample2AmpInc, dsp_amp_incr, dsp_i))
-                        return dsp_i;
                   amp += dsp_amp_incr;
                   }
 
@@ -369,15 +334,13 @@ int Voice::dsp_float_interpolate_4th_order(unsigned n)
             for ( ; dsp_i < n && dsp_phase_index <= end_index; dsp_i++) {
                   coeffs = interp_coeff[fluid_phase_fract_to_tablerow (phase)];
                   dsp_buf[dsp_i] = amp * (coeffs[0] * dsp_data[dsp_phase_index-1]
-				  + coeffs[1] * dsp_data[dsp_phase_index]
-				  + coeffs[2] * dsp_data[dsp_phase_index+1]
-				  + coeffs[3] * dsp_data[dsp_phase_index+2]);
+                          + coeffs[1] * dsp_data[dsp_phase_index]
+                          + coeffs[2] * dsp_data[dsp_phase_index+1]
+                          + coeffs[3] * dsp_data[dsp_phase_index+2]);
 
                   /* increment phase and amplitude */
                   phase += dsp_phase_incr;
                   dsp_phase_index = phase.index();
-                  if (!updateAmpInc(nextNewAmpInc, curSample2AmpInc, dsp_amp_incr, dsp_i))
-                        return dsp_i;
                   amp += dsp_amp_incr;
                   }
 
@@ -385,39 +348,35 @@ int Voice::dsp_float_interpolate_4th_order(unsigned n)
             if (dsp_i >= n)
                   break;
 
-            end_index++;	/* we're now interpolating the 2nd to last point */
+            end_index++;      /* we're now interpolating the 2nd to last point */
 
             /* interpolate within 2nd to last point */
             for (; dsp_phase_index <= end_index && dsp_i < n; dsp_i++) {
                   coeffs = interp_coeff[fluid_phase_fract_to_tablerow (phase)];
                   dsp_buf[dsp_i] = amp * (coeffs[0] * dsp_data[dsp_phase_index-1]
-				  + coeffs[1] * dsp_data[dsp_phase_index]
-				  + coeffs[2] * dsp_data[dsp_phase_index+1]
-				  + coeffs[3] * end_point1);
+                          + coeffs[1] * dsp_data[dsp_phase_index]
+                          + coeffs[2] * dsp_data[dsp_phase_index+1]
+                          + coeffs[3] * end_point1);
 
                   /* increment phase and amplitude */
                   phase += dsp_phase_incr;
                   dsp_phase_index = phase.index();
-                  if (!updateAmpInc(nextNewAmpInc, curSample2AmpInc, dsp_amp_incr, dsp_i))
-                        return dsp_i;
                   amp += dsp_amp_incr;
                   }
 
-            end_index++;	/* we're now interpolating the last point */
+            end_index++;      /* we're now interpolating the last point */
 
             /* interpolate within the last point */
             for (; dsp_phase_index <= end_index && dsp_i < n; dsp_i++) {
                   coeffs = interp_coeff[fluid_phase_fract_to_tablerow (phase)];
                   dsp_buf[dsp_i] = amp * (coeffs[0] * dsp_data[dsp_phase_index-1]
-				  + coeffs[1] * dsp_data[dsp_phase_index]
-				  + coeffs[2] * end_point1
-				  + coeffs[3] * end_point2);
+                          + coeffs[1] * dsp_data[dsp_phase_index]
+                          + coeffs[2] * end_point1
+                          + coeffs[3] * end_point2);
 
                   /* increment phase and amplitude */
                   phase += dsp_phase_incr;
                   dsp_phase_index = phase.index();
-                  if (!updateAmpInc(nextNewAmpInc, curSample2AmpInc, dsp_amp_incr, dsp_i))
-                        return dsp_i;
                   amp += dsp_amp_incr;
                   }
 
@@ -436,7 +395,7 @@ int Voice::dsp_float_interpolate_4th_order(unsigned n)
             /* break out if filled buffer */
             if (dsp_i >= n)
                   break;
-            end_index -= 2;	/* set end back to third to last sample point */
+            end_index -= 2;      /* set end back to third to last sample point */
             }
       return dsp_i;
       }
@@ -456,9 +415,8 @@ int Voice::dsp_float_interpolate_7th_order(unsigned n)
       Phase dsp_phase_incr; // end_phase;
       short int *dsp_data = voice->sample->data;
       float *dsp_buf = voice->dsp_buf;
-      auto curSample2AmpInc = Sample2AmpInc.begin();
-      qreal dsp_amp_incr = curSample2AmpInc->second;
-      unsigned int nextNewAmpInc = curSample2AmpInc->first;
+      float dsp_amp = voice->amp;
+      float dsp_amp_incr = voice->amp_incr;
       unsigned int dsp_i = 0;
       unsigned int dsp_phase_index;
       unsigned int start_index, end_index;
@@ -490,7 +448,7 @@ int Voice::dsp_float_interpolate_7th_order(unsigned n)
             }
       else {
             start_index = voice->start;
-            start_points[0] = dsp_data[voice->start];	/* just duplicate the start point */
+            start_points[0] = dsp_data[voice->start];      /* just duplicate the start point */
             start_points[1] = start_points[0];
             start_points[2] = start_points[0];
             }
@@ -514,9 +472,9 @@ int Voice::dsp_float_interpolate_7th_order(unsigned n)
             for ( ; dsp_phase_index == start_index && dsp_i < n; dsp_i++) {
                   coeffs = sinc_table7[fluid_phase_fract_to_tablerow (dsp_phase)];
 
-                  dsp_buf[dsp_i] = amp * (coeffs[0] * (float)start_points[2]
+                  dsp_buf[dsp_i] = dsp_amp * (coeffs[0] * (float)start_points[2]
                         + coeffs[1] * (float)start_points[1]
-	                  + coeffs[2] * (float)start_points[0]
+                        + coeffs[2] * (float)start_points[0]
                         + coeffs[3] * (float)dsp_data[dsp_phase_index]
                         + coeffs[4] * (float)dsp_data[dsp_phase_index+1]
                         + coeffs[5] * (float)dsp_data[dsp_phase_index+2]
@@ -525,9 +483,7 @@ int Voice::dsp_float_interpolate_7th_order(unsigned n)
                   /* increment phase and amplitude */
                   dsp_phase += dsp_phase_incr;
                   dsp_phase_index = dsp_phase.index();
-                  if (!updateAmpInc(nextNewAmpInc, curSample2AmpInc, dsp_amp_incr, dsp_i))
-                        return dsp_i;
-                  amp += dsp_amp_incr;
+                  dsp_amp += dsp_amp_incr;
                   }
 
             start_index++;
@@ -536,20 +492,18 @@ int Voice::dsp_float_interpolate_7th_order(unsigned n)
             for ( ; dsp_phase_index == start_index && dsp_i < n; dsp_i++) {
                   coeffs = sinc_table7[fluid_phase_fract_to_tablerow (dsp_phase)];
 
-                  dsp_buf[dsp_i] = amp * (coeffs[0] * (float)start_points[1]
-        	            + coeffs[1] * (float)start_points[0]
-        	            + coeffs[2] * (float)dsp_data[dsp_phase_index-1]
-        	            + coeffs[3] * (float)dsp_data[dsp_phase_index]
-        	            + coeffs[4] * (float)dsp_data[dsp_phase_index+1]
-        	            + coeffs[5] * (float)dsp_data[dsp_phase_index+2]
-        	            + coeffs[6] * (float)dsp_data[dsp_phase_index+3]);
+                  dsp_buf[dsp_i] = dsp_amp * (coeffs[0] * (float)start_points[1]
+                          + coeffs[1] * (float)start_points[0]
+                          + coeffs[2] * (float)dsp_data[dsp_phase_index-1]
+                          + coeffs[3] * (float)dsp_data[dsp_phase_index]
+                          + coeffs[4] * (float)dsp_data[dsp_phase_index+1]
+                          + coeffs[5] * (float)dsp_data[dsp_phase_index+2]
+                          + coeffs[6] * (float)dsp_data[dsp_phase_index+3]);
 
                   /* increment phase and amplitude */
                   dsp_phase += dsp_phase_incr;
                   dsp_phase_index = dsp_phase.index();
-                  if (!updateAmpInc(nextNewAmpInc, curSample2AmpInc, dsp_amp_incr, dsp_i))
-                        return dsp_i;
-                  amp += dsp_amp_incr;
+                  dsp_amp += dsp_amp_incr;
                   }
 
             start_index++;
@@ -558,7 +512,7 @@ int Voice::dsp_float_interpolate_7th_order(unsigned n)
             for ( ; dsp_phase_index == start_index && dsp_i < n; dsp_i++) {
                   coeffs = sinc_table7[fluid_phase_fract_to_tablerow (dsp_phase)];
 
-                  dsp_buf[dsp_i] = amp * (coeffs[0] * (float)start_points[0]
+                  dsp_buf[dsp_i] = dsp_amp * (coeffs[0] * (float)start_points[0]
                      + coeffs[1] * (float)dsp_data[dsp_phase_index-2]
                      + coeffs[2] * (float)dsp_data[dsp_phase_index-1]
                      + coeffs[3] * (float)dsp_data[dsp_phase_index]
@@ -569,18 +523,16 @@ int Voice::dsp_float_interpolate_7th_order(unsigned n)
                   /* increment phase and amplitude */
                   dsp_phase += dsp_phase_incr;
                   dsp_phase_index = dsp_phase.index();
-                  if (!updateAmpInc(nextNewAmpInc, curSample2AmpInc, dsp_amp_incr, dsp_i))
-                        return dsp_i;
-                  amp += dsp_amp_incr;
+                  dsp_amp += dsp_amp_incr;
                   }
 
-            start_index -= 2;	/* set back to original start index */
+            start_index -= 2;      /* set back to original start index */
 
             /* interpolate the sequence of sample points */
             for ( ; dsp_i < n && dsp_phase_index <= end_index; dsp_i++) {
                   coeffs = sinc_table7[fluid_phase_fract_to_tablerow (dsp_phase)];
 
-                  dsp_buf[dsp_i] = amp * (coeffs[0] * (float)dsp_data[dsp_phase_index-3]
+                  dsp_buf[dsp_i] = dsp_amp * (coeffs[0] * (float)dsp_data[dsp_phase_index-3]
                      + coeffs[1] * (float)dsp_data[dsp_phase_index-2]
                      + coeffs[2] * (float)dsp_data[dsp_phase_index-1]
                      + coeffs[3] * (float)dsp_data[dsp_phase_index]
@@ -591,22 +543,20 @@ int Voice::dsp_float_interpolate_7th_order(unsigned n)
                   /* increment phase and amplitude */
                   dsp_phase += dsp_phase_incr;
                   dsp_phase_index = dsp_phase.index();
-                  if (!updateAmpInc(nextNewAmpInc, curSample2AmpInc, dsp_amp_incr, dsp_i))
-                        return dsp_i;
-                  amp += dsp_amp_incr;
+                  dsp_amp += dsp_amp_incr;
                   }
 
             /* break out if buffer filled */
             if (dsp_i >= n)
                   break;
 
-            end_index++;	/* we're now interpolating the 3rd to last point */
+            end_index++;      /* we're now interpolating the 3rd to last point */
 
             /* interpolate within 3rd to last point */
             for (; dsp_phase_index <= end_index && dsp_i < n; dsp_i++) {
                   coeffs = sinc_table7[fluid_phase_fract_to_tablerow (dsp_phase)];
 
-                  dsp_buf[dsp_i] = amp * (coeffs[0] * (float)dsp_data[dsp_phase_index-3]
+                  dsp_buf[dsp_i] = dsp_amp * (coeffs[0] * (float)dsp_data[dsp_phase_index-3]
                         + coeffs[1] * (float)dsp_data[dsp_phase_index-2]
                         + coeffs[2] * (float)dsp_data[dsp_phase_index-1]
                         + coeffs[3] * (float)dsp_data[dsp_phase_index]
@@ -617,18 +567,16 @@ int Voice::dsp_float_interpolate_7th_order(unsigned n)
                   /* increment phase and amplitude */
                   dsp_phase += dsp_phase_incr;
                   dsp_phase_index = dsp_phase.index();
-                  if (!updateAmpInc(nextNewAmpInc, curSample2AmpInc, dsp_amp_incr, dsp_i))
-                        return dsp_i;
-                  amp += dsp_amp_incr;
+                  dsp_amp += dsp_amp_incr;
                   }
 
-            end_index++;	/* we're now interpolating the 2nd to last point */
+            end_index++;      /* we're now interpolating the 2nd to last point */
 
             /* interpolate within 2nd to last point */
             for (; dsp_phase_index <= end_index && dsp_i < n; dsp_i++) {
                   coeffs = sinc_table7[fluid_phase_fract_to_tablerow (dsp_phase)];
 
-                  dsp_buf[dsp_i] = amp * (coeffs[0] * (float)dsp_data[dsp_phase_index-3]
+                  dsp_buf[dsp_i] = dsp_amp * (coeffs[0] * (float)dsp_data[dsp_phase_index-3]
                         + coeffs[1] * (float)dsp_data[dsp_phase_index-2]
                         + coeffs[2] * (float)dsp_data[dsp_phase_index-1]
                         + coeffs[3] * (float)dsp_data[dsp_phase_index]
@@ -639,18 +587,16 @@ int Voice::dsp_float_interpolate_7th_order(unsigned n)
                   /* increment phase and amplitude */
                   dsp_phase += dsp_phase_incr;
                   dsp_phase_index = dsp_phase.index();
-                  if (!updateAmpInc(nextNewAmpInc, curSample2AmpInc, dsp_amp_incr, dsp_i))
-                        return dsp_i;
-                  amp += dsp_amp_incr;
+                  dsp_amp += dsp_amp_incr;
                   }
 
-            end_index++;	/* we're now interpolating the last point */
+            end_index++;      /* we're now interpolating the last point */
 
             /* interpolate within last point */
             for (; dsp_phase_index <= end_index && dsp_i < n; dsp_i++) {
                   coeffs = sinc_table7[fluid_phase_fract_to_tablerow (dsp_phase)];
 
-                  dsp_buf[dsp_i] = amp * (coeffs[0] * (float)dsp_data[dsp_phase_index-3]
+                  dsp_buf[dsp_i] = dsp_amp * (coeffs[0] * (float)dsp_data[dsp_phase_index-3]
                         + coeffs[1] * (float)dsp_data[dsp_phase_index-2]
                         + coeffs[2] * (float)dsp_data[dsp_phase_index-1]
                         + coeffs[3] * (float)dsp_data[dsp_phase_index]
@@ -661,9 +607,7 @@ int Voice::dsp_float_interpolate_7th_order(unsigned n)
                   /* increment phase and amplitude */
                   dsp_phase += dsp_phase_incr;
                   dsp_phase_index = dsp_phase.index();
-                  if (!updateAmpInc(nextNewAmpInc, curSample2AmpInc, dsp_amp_incr, dsp_i))
-                        return dsp_i;
-                  amp += dsp_amp_incr;
+                  dsp_amp += dsp_amp_incr;
                   }
 
             if (!looping)
@@ -685,7 +629,7 @@ int Voice::dsp_float_interpolate_7th_order(unsigned n)
             /* break out if filled buffer */
             if (dsp_i >= n)
                   break;
-            end_index -= 3;	/* set end back to 4th to last sample point */
+            end_index -= 3;      /* set end back to 4th to last sample point */
             }
 
       /* sub 1/2 sample from dsp_phase since 7th order interpolation is centered on
@@ -693,6 +637,7 @@ int Voice::dsp_float_interpolate_7th_order(unsigned n)
       dsp_phase -= (Phase)0x80000000;
 
       voice->phase = dsp_phase;
+      voice->amp   = dsp_amp;
 
       return dsp_i;
       }
