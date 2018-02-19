@@ -1739,7 +1739,6 @@ void ScoreView::cmd(const char* s)
                   }
             }
       else if (cmd == "figured-bass") {
-            changeState(ViewState::NOTE_ENTRY);
             FiguredBass* fb = _score->addFiguredBass();
             if (fb) {
                   startEditMode(fb);
