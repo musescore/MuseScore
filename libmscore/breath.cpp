@@ -65,7 +65,7 @@ void Breath::layout()
       if (isCaesura())
             setPos(x(), spatium());
       else
-            setPos(x(), -0.5 * spatium());
+            setPos(x(), 0.5 * spatium());
       setbbox(symBbox(_symId));
       }
 
