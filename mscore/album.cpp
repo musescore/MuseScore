@@ -161,9 +161,12 @@ bool Album::createScore(const QString& fn, bool addPageBreak, bool addSectionBre
 
       Score* score = firstScore->clone();
 
+      LayoutMode layoutMode = score->layoutMode();
+      score->switchToPageMode();
+
       int excerptCount = firstScore->excerpts().count();
       bool joinExcerpt = true;
-	for (AlbumItem* item : _scores) {
+      for (AlbumItem* item : _scores) {
             if (item->score == 0 || item->score == firstScore)
                   continue;
             if (item->score->excerpts().count() != excerptCount) {
@@ -183,6 +186,7 @@ bool Album::createScore(const QString& fn, bool addPageBreak, bool addSectionBre
                   continue;
 
             // try to append root score
+            item->score->ScoreElement::undoChangeProperty(P_ID::LAYOUT_MODE, int(LayoutMode::PAGE));
             item->score->doLayout();
             if (!score->appendScore(item->score, addPageBreak, addSectionBreak)) {
                   qDebug("Cannot append root score of album item \"%s\".", qPrintable(item->name));
@@ -212,6 +216,8 @@ bool Album::createScore(const QString& fn, bool addPageBreak, bool addSectionBre
                   }
             }
 
+      if (layoutMode != score->layoutMode())
+            score->endCmd(true);       // rollback
       score->fileInfo()->setFile(fn);
       qDebug("Album::createScore: save file");
       try {
