@@ -2538,11 +2538,9 @@ static void writeTypeAndDots(XmlWriter& xml, const Note* const note)
       Tuplet* t = note->chord()->tuplet();
       int actNotes = 1;
       int nrmNotes = 1;
-      int nrmTicks = 0;
       if (t) {
             actNotes = t->ratio().numerator();
             nrmNotes = t->ratio().denominator();
-            nrmTicks = determineTupletNormalTicks(note->chord());
             }
 
       const auto strActTicks = stretchCorrActTicks(note);
