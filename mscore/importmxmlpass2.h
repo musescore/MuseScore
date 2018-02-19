@@ -190,12 +190,12 @@ private:
 
       QVector<Tuplet*> _tuplets;          ///< Current tuplet for each track in the current part
       QVector<bool> _tuplImpls;           ///< Current tuplet implicit flag for each track in the current part
-      SlurStack _slurs {};
-      TrillStack _trills {};              ///< Current trills
-      BracketsStack _brackets {};
-      DashesStack _dashes {};
-      OttavasStack _ottavas {};           ///< Current ottavas
-      HairpinsStack _hairpins {};         ///< Current hairpins
+      SlurStack _slurs {{}};
+      TrillStack _trills {{}};            ///< Current trills
+      BracketsStack _brackets {{}};
+      DashesStack _dashes {{}};
+      OttavasStack _ottavas {{}};         ///< Current ottavas
+      HairpinsStack _hairpins {{}};       ///< Current hairpins
 
       Glissando* _glissandi[MAX_NUMBER_LEVEL][2];   ///< Current slides ([0]) / glissandi ([1])
 
