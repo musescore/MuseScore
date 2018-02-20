@@ -1245,7 +1245,7 @@ void Score::cmdFlip()
                               Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
                               chord->undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
                               });
-                        }                  
+                        }
                   }
 
             if (e->isBeam()) {
@@ -3115,29 +3115,38 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link
 
 //---------------------------------------------------------
 //   undoPropertyChanged
+//    return true if an property was actually changed
 //---------------------------------------------------------
 
-void Score::undoPropertyChanged(Element* e, P_ID t, const QVariant& st)
+bool Score::undoPropertyChanged(Element* e, P_ID t, const QVariant& st)
       {
+      bool changed = false;
+
       if (propertyLink(t) && e->links()) {
-            foreach (ScoreElement* ee, *e->links()) {
+            for (ScoreElement* ee : *e->links()) {
                   if (ee == e) {
-                        if (ee->getProperty(t) != st)
+                        if (ee->getProperty(t) != st) {
                               undoStack()->push1(new ChangeProperty(ee, t, st));
+                              changed = true;
+                              }
                         }
                   else {
                         // property in linked element has not changed yet
                         // push() calls redo() to change it
-                        if (ee->getProperty(t) != e->getProperty(t))
+                        if (ee->getProperty(t) != e->getProperty(t)) {
                               undoStack()->push(new ChangeProperty(ee, t, e->getProperty(t)), 0);
+                              changed = true;
+                              }
                         }
                   }
             }
       else {
             if (e->getProperty(t) != st) {
                   undoStack()->push1(new ChangeProperty(e, t, st));
+                  changed = true;
                   }
             }
+      return changed;
       }
 
 void Score::undoPropertyChanged(ScoreElement* e, P_ID t, const QVariant& st)

@@ -947,7 +947,7 @@ void ChordRest::processSiblings(std::function<void(Element*)> func)
 //   nextArticulationOrLyric
 //---------------------------------------------------------
 
-Element* ChordRest::nextArticulationOrLyric(Element* e)
+Element* ChordRest::nextArticulationOrLyric(Element* /*e*/)
       {
 #if 0 // TODO:fermata
       auto i = std::find(_articulations.begin(), _articulations.end(), e);
@@ -977,7 +977,7 @@ Element* ChordRest::nextArticulationOrLyric(Element* e)
 //   prevArticulationOrLyric
 //---------------------------------------------------------
 
-Element* ChordRest::prevArticulationOrLyric(Element* e)
+Element* ChordRest::prevArticulationOrLyric(Element* /*e*/)
       {
 #if 0 // TODO:fermata
       auto i = std::find(_lyrics.begin(), _lyrics.end(), e);
