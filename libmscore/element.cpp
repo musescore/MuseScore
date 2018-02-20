@@ -1834,12 +1834,16 @@ void Element::editDrag(EditData& ed)
 void Element::endEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
+      bool changed = false;
       if (eed) {
-            for (PropertyData pd : eed->propertyData)
-                  score()->undoPropertyChanged(this, pd.id, pd.data);
+            for (PropertyData pd : eed->propertyData) {
+                  if (score()->undoPropertyChanged(this, pd.id, pd.data))
+                        changed = true;
+                  }
             eed->propertyData.clear();
             }
-      undoChangeProperty(P_ID::AUTOPLACE, false);
+      if (changed)
+            undoChangeProperty(P_ID::AUTOPLACE, false);
       }
 
 //---------------------------------------------------------
