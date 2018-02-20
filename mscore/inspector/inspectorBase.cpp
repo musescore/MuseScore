@@ -360,12 +360,13 @@ void InspectorBase::valueChanged(int idx, bool reset)
             if (reset) {
                   val2 = e->propertyDefault(id);
                   }
-            if (val2.isValid() && val1 != val2)
+            if (val2.isValid() && val1 != val2) {
                   if (reset) {
-                        val2 = e->propertyDefault(id);
+//ws:??                        val2 = e->propertyDefault(id);
                         setValue(ii, val2);
                         }
                   e->undoChangeProperty(id, val2, ps);
+                  }
             }
       inspector->setInspectorEdit(true);
       checkDifferentValues(ii);

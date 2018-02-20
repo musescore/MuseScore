@@ -3158,7 +3158,7 @@ void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2)
       ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
       if (cr1 == cr2)
             ss->setSlurOffset(Grip::END, QPointF(3.0 * cr1->score()->spatium(), 0.0));
-      ss->setAutoplace(false);
+//      ss->setAutoplace(false);
       slur->add(ss);
 
       _score->endCmd();
