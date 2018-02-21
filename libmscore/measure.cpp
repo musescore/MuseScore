@@ -2040,7 +2040,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   TimeSig* ts = new TimeSig(score());
                   ts->setTrack(e.track());
                   ts->read(e);
-                  // if time sig not at begining of measure => courtesy time sig
+                  // if time sig not at beginning of measure => courtesy time sig
                   int currTick = e.tick();
                   bool courtesySig = (currTick > tick());
                   if (courtesySig) {

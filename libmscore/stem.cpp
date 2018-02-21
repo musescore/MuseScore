@@ -84,7 +84,7 @@ void Stem::layout()
                         // if fret marks above lines, raise stem beginning by 1/2 line distance
                         if (!st->onLines())
                               y1 -= lineDist * 0.5;
-                        // shorten stem by 1/2 lineDist to clear the note and a little more to keep 'air' betwen stem and note
+                        // shorten stem by 1/2 lineDist to clear the note and a little more to keep 'air' between stem and note
                         lineDist *= 0.7 * mag();
                         y1       += _up * lineDist;
                         }

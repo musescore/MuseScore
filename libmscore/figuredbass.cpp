@@ -447,7 +447,7 @@ void FiguredBassItem::layout()
       {
       qreal             h, w, x, x1, x2, y;
 
-      // contruct font metrics
+      // construct font metrics
       int   fontIdx = 0;
       QFont f(g_FBFonts.at(fontIdx).family);
 
@@ -1089,7 +1089,7 @@ void FiguredBass::layout()
       yOff *= _sp;                                    // convert spatium value to raster units
       setPos(QPointF(0.0, yOff));
 
-      // BOUNDING BOX and individual item layout (if requried)
+      // BOUNDING BOX and individual item layout (if required)
       createLayout();                                 // prepare structs and data expected by Text methods
       // if element could be parsed into items, layout each element
       if (items.size() > 0) {
@@ -1566,7 +1566,7 @@ bool FiguredBassFont::read(XmlReader& e)
 //   Read Configuration File
 //
 //    reads a configuration and appends read data to g_FBFonts
-//    resets everythings and reads the built-in config file if fileName is null or empty
+//    resets everything and reads the built-in config file if fileName is null or empty
 //---------------------------------------------------------
 
 bool FiguredBass::readConfigFile(const QString& fileName)
@@ -1749,7 +1749,7 @@ void FiguredBass::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEnd
 //
 // METHODS BELONGING TO OTHER CLASSES
 //
-//    Work In Progress: kept here until the FiguredBass framwork is reasonably set up;
+//    Work In Progress: kept here until the FiguredBass framework is reasonably set up;
 //    To be finally moved to their respective class implementation files.
 //
 //---------------------------------------------------------

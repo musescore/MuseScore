@@ -681,7 +681,7 @@ void Tie::layoutFor(System* system)
 
 //---------------------------------------------------------
 //   layoutBack
-//    layout the second SpannerSegment of a splitted slur
+//    layout the second SpannerSegment of a split slur
 //---------------------------------------------------------
 
 void Tie::layoutBack(System* system)
