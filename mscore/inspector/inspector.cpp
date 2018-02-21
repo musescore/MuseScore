@@ -848,7 +848,7 @@ void InspectorClef::setElement()
 
       // try to locate the 'other clef' of a courtesy / main pair
       Clef* clef = toClef(inspector->element());
-      // if not in a clef-segment-measure hierachy, do nothing
+      // if not in a clef-segment-measure hierarchy, do nothing
       if (!clef->parent() || clef->parent()->type() != ElementType::SEGMENT)
             return;
       Segment*    segm = toSegment(clef->parent());

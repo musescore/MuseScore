@@ -45,7 +45,7 @@ static void transposeChord(Chord* c, Interval srcTranspose, int tick)
       {
       // set note track
       // check if staffMove moves a note to a
-      // nonexistant staff
+      // nonexistent staff
       //
       int track  = c->track();
       int nn     = (track / VOICES) + c->staffMove();

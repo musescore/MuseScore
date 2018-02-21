@@ -357,7 +357,7 @@ void GuitarPro::initGuitarProDrumset()
 	gpDrumset->drum(91) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Snare (Rim shot)"), NoteHead::Group::HEAD_DIAMOND, 3, Direction::UP);
 	gpDrumset->drum(93) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride (edge)"), NoteHead::Group::HEAD_CROSS, 0, Direction::UP);
 
-	//Additional clutch presets (midi by default cant play this)
+	//Additional clutch presets (midi by default can't play this)
 	gpDrumset->drum(99) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Cowbell Low"), NoteHead::Group::HEAD_TRIANGLE_UP, 1, Direction::UP);
 	gpDrumset->drum(102) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Cowbell High"), NoteHead::Group::HEAD_TRIANGLE_UP, -1, Direction::UP);
       }
@@ -1786,7 +1786,7 @@ bool GuitarPro1::readNote(int string, Note* note)
       if (noteBits & 0x1) {               // note != beat
             int a = readUChar();          // length
             int b = readUChar();          // t
-            qDebug("Time independend note len, len %d t %d", a, b);
+            qDebug("Time independent note len, len %d t %d", a, b);
             }
       if (noteBits & 0x2) {               // note is dotted
             //readUChar();
@@ -1967,7 +1967,7 @@ bool GuitarPro1::readNote(int string, Note* note)
             fretNumber = 0;
       int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr, 0);
 
-      /* it's possible to specifiy extraordinarily high pitches by
+      /* it's possible to specify extraordinarily high pitches by
       specifying fret numbers that don't exist. This is an issue that
       comes from tuxguitar. Just set to maximum pitch. GP6 actually
       sets the fret number to 0 also, so that's what I've opted to do

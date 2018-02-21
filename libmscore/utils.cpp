@@ -388,7 +388,7 @@ Note* prevChordNote(Note* note)
 
 //---------------------------------------------------------
 //   pitchKeyAdjust
-//    change entered note to sounding pitch dependend
+//    change entered note to sounding pitch dependent
 //    on key.
 //    Example: if F is entered in G-major, a Fis is played
 //    key -7 ... +7

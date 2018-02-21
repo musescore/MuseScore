@@ -35,7 +35,7 @@ enum class ArticulationAnchor : char {
       TOP_STAFF,      // anchor is always placed at top of staff
       BOTTOM_STAFF,   // anchor is always placed at bottom of staff
       CHORD,          // anchor depends on chord direction, away from stem
-      TOP_CHORD,      // attribute is alway placed at top of chord
+      TOP_CHORD,      // attribute is always placed at top of chord
       BOTTOM_CHORD,   // attribute is placed at bottom of chord
       };
 
