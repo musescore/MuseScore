@@ -300,11 +300,13 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
 
       /******************* mod env **********************/
 
-      // if we wouldn't calculate sample accurate volume
-      // we wouldn't advance beyond FLUID_VOICE_ENVDELAY
-      // and effectively always skip the first buffer rendering thus adding n to modenv_count
-      if (volenv_section > FLUID_VOICE_ENVDELAY)
-            modenv_count += n;
+      /* Skip to decay phase if delay and attack envelope sections each are
+       * less than 100 samples long. This avoids popping noises due to the
+       * mod envelope being out-of-sync with the sample-based volume envelope. */
+      if (modenv_section < 2 && modenv_data[FLUID_VOICE_ENVDELAY].count < 100 && modenv_data[FLUID_VOICE_ENVATTACK].count < 100) {
+            modenv_section = 2;
+            modenv_val     = 1.0f;
+            }
 
       env_data = &modenv_data[modenv_section];
 
