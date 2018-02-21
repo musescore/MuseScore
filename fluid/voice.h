@@ -91,7 +91,7 @@ class Voice
 					           have to be checked. */
 	unsigned int ticks;
 
-	qreal amp;                       /* the linear amplitude */
+	float amp;                       /* the linear amplitude */
 	Phase phase;                     // the phase of the sample wave
 
 	// Temporary variables used in write()
@@ -104,7 +104,7 @@ class Voice
 	float attenuation;        /* the attenuation in centibels */
 	float min_attenuation_cB; /* Estimate on the smallest possible attenuation
 					          * during the lifetime of the voice */
-	float root_pitch;
+	float root_pitch, root_pitch_hz;
 
 	/* sample and loop start and end points (offset in sample memory).  */
 	int start;
@@ -219,6 +219,7 @@ class Voice
       void noteoff();
       void kill_excl();
       int calculate_hold_decay_frames(int gen_base, int gen_key2base, int is_decay);
+      void calculate_gen_pitch();
 
       /* A voice is 'ON', if it has not yet received a noteoff
        * event. Sending a noteoff event will advance the envelopes to
