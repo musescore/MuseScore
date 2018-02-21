@@ -1442,8 +1442,8 @@ void InsertRemoveMeasures::insertMeasures()
       Score* score = fm->score();
       QList<Clef*> clefs;
       QList<KeySig*> keys;
-      Segment* fs;
-      Segment* ls;
+      Segment* fs = nullptr;
+      Segment* ls = nullptr;
       if (fm->isMeasure()) {
             score->setPlaylistDirty();
             fs = toMeasure(fm)->first();

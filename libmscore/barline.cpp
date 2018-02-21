@@ -930,7 +930,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type)
       {
       qreal dotwidth = score->scoreFont()->width(SymId::repeatDot, 1.0);
 
-      qreal w;
+      qreal w {0.0};
       switch (type) {
             case BarLineType::DOUBLE:
                   w = score->styleP(StyleIdx::doubleBarWidth) + score->styleP(StyleIdx::doubleBarDistance);

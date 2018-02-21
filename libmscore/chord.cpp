@@ -3079,7 +3079,7 @@ Element* Chord::prevElement()
             case ElementType::NOTE: {
                   if (e == _notes.back())
                         break;
-                  Note* prevNote;
+                  Note* prevNote = nullptr;
                   for (auto &i : _notes) {
                         if (i == e) {
                               prevNote = *(&i+1);
