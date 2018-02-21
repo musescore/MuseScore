@@ -698,7 +698,7 @@ void ScoreView::escapeCmd()
 
 static const char* stateName(ViewState s)
       {
-      const char* p;
+      std::string p;
       switch (s) {
             case ViewState::NORMAL:             p = "NORMAL";           break;
             case ViewState::DRAG:               p = "DRAG";             break;
@@ -715,7 +715,7 @@ static const char* stateName(ViewState s)
             case ViewState::FOTO_DRAG_OBJECT:   p = "FOTO_DRAG_OBJECT"; break;
             case ViewState::FOTO_LASSO:         p = "FOTO_LASSO";       break;
             }
-      return p;
+      return p.c_str();
       }
 
 //---------------------------------------------------------

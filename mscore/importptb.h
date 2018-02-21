@@ -73,8 +73,8 @@ class PowerTab {
                   };
 
             struct stRhytmSlash : public ptComponent {
-                  int position;
-                  int duration;
+                  int position {0};
+                  int duration {0};
                   bool triplet{ false };
                   bool tripletend{ false };
                   bool dotted{ false };

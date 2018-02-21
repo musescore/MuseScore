@@ -151,10 +151,9 @@ void GuitarPro::read(void* p, qint64 len)
       if (len == 0)
             return;
       qint64 rv = f->read((char*)p, len);
-#ifndef NDEBUG
-      Q_UNUSED(rv); // avoid warning about unused variable in RELEASE mode
-      Q_ASSERT(rv == len);
-#endif
+      if (rv != len) {
+            Q_ASSERT(rv == len); //to have assert in debug and no warnings from AppVeyor in release
+            }
       curPos += len;
       }
 
