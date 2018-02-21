@@ -375,7 +375,7 @@ void Workspace::read()
             }
 
       QByteArray ba = f.fileData(rootfile);
-      XmlReader e(gscore, ba);
+      XmlReader e(ba);
 
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {

@@ -213,7 +213,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
             if (MScore::debugMode)
                   qDebug("ScoreView::dragEnterEvent Symbol: <%s>", a.data());
 
-            XmlReader e(_score, a);
+            XmlReader e(a);
             editData.dragOffset = QPoint();
             Fraction duration;  // dummy
             ElementType type = Element::readType(e, &editData.dragOffset, &duration);
@@ -728,7 +728,7 @@ void ScoreView::dropEvent(QDropEvent* event)
             }
       else if (etype == ElementType::MEASURE_LIST || etype == ElementType::STAFF_LIST) {
             _score->startCmd();
-            XmlReader xml(_score, data);
+            XmlReader xml(data);
             System* s = measure->system();
             int idx   = s->y2staff(pos.y());
             if (idx != -1) {

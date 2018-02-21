@@ -2443,7 +2443,7 @@ void Score::cmdExplode()
                   int track = (srcStaff + i) * VOICES;
                   ChordRest* cr = toChordRest(firstCRSegment->element(track));
                   if (cr) {
-                        XmlReader e(this, srcSelection.mimeData());
+                        XmlReader e(srcSelection.mimeData());
                         e.setPasteMode(true);
                         pasteStaff(e, cr->segment(), cr->staffIdx());
                         }

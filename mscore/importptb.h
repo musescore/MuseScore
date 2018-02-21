@@ -339,10 +339,8 @@ class PowerTab {
 
             int               staves{ 0 };
 
-            int               _tick{ 0 };
             ptTrack*          curTrack;
             int               staffInc{ 0 };
-            Measure*          incMeasure{ nullptr };
             char              lastPart{ 0 };
 
             ptSection*        cur_section;

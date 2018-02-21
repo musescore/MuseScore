@@ -1570,7 +1570,7 @@ bool MStyle::readProperties(XmlReader& e)
 
 bool MStyle::load(QFile* qf)
       {
-      XmlReader e(0, qf);
+      XmlReader e(qf);
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   QString version = e.attribute("version");

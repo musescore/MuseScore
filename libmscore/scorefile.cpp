@@ -721,7 +721,7 @@ QString readRootFile(MQZipReader* uz, QList<QString>& images)
             return rootfile;
             }
 
-      XmlReader e(0, cbuf);
+      XmlReader e(cbuf);
 
       while (e.readNextStartElement()) {
             if (e.name() != "container") {
@@ -786,7 +786,7 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
                         }
                   }
             }
-      XmlReader e(this, dbuf);
+      XmlReader e(dbuf);
       e.setDocName(masterScore()->fileInfo()->completeBaseName());
 
       FileError retval = read1(e, ignoreVersionError);
@@ -842,7 +842,7 @@ Score::FileError MasterScore::loadMsc(QString name, QIODevice* io, bool ignoreVe
       if (name.endsWith(".mscz"))
             return loadCompressedMsc(io, ignoreVersionError);
       else {
-            XmlReader r(this, io);
+            XmlReader r(io);
             return read1(r, ignoreVersionError);
             }
       }

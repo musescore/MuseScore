@@ -1594,7 +1594,7 @@ bool FiguredBass::readConfigFile(const QString& fileName)
             qDebug("FiguredBass::read failed: <%s>", qPrintable(path));
             return false;
             }
-      XmlReader e(0, &f);
+      XmlReader e(&f);
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   // QString version = e.attribute(QString("version"));

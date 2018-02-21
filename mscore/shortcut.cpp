@@ -3972,7 +3972,7 @@ void Shortcut::load()
       if (MScore::debugMode)
             qDebug("read shortcuts from <%s>", qPrintable(f.fileName()));
 
-      XmlReader e(0, &f);
+      XmlReader e(&f);
 
       while (e.readNextStartElement()) {
             if (e.name() == "Shortcuts") {
@@ -4037,7 +4037,7 @@ static QList<Shortcut1> loadShortcuts(QString fileLocation)
             QMessageBox::critical(0, QObject::tr("Load Shortcuts"), QObject::tr("Can't load shortcuts file: %1").arg(strerror(errno)));
             return list;
             }
-      XmlReader e(0, &f);
+      XmlReader e(&f);
       while (e.readNextStartElement()) {
             if (e.name() == "Shortcuts") {
                   while (e.readNextStartElement()) {

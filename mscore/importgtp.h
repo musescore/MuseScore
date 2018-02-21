@@ -86,7 +86,7 @@ struct GPVolta {
 struct GPFermata {
       int index;
       int timeDivision;
-	QString type;
+      QString type;
       };
 
 struct GPLyrics {
@@ -109,9 +109,9 @@ struct GpBar {
       QString direction;
       QString directionStyle;
 
-	QString section[2];
+      QString section[2];
 
-	std::vector<QString> directions;
+      std::vector<QString> directions;
 
       GpBar();
       };
@@ -191,9 +191,9 @@ class GuitarPro {
       int version;
       int key { 0 };
 
-	Segment* last_segment   { nullptr };
-	Measure* last_measure   { nullptr };
-	int last_tempo          { -1 };
+      Segment* last_segment   { nullptr };
+      Measure* last_measure   { nullptr };
+      int last_tempo          { -1 };
 
       QMap<int, QList<GPFermata>*> fermatas;
       std::vector<Ottava*> ottava;
@@ -205,7 +205,7 @@ class GuitarPro {
       int previousDynamic;
       std::vector<int> ottavaFound;
       std::vector<QString> ottavaValue;
-	std::map<int, std::pair<int, bool>> tempoMap;
+      std::map<int, std::pair<int, bool>> tempoMap;
       int tempo;
       QMap<int,int> slides;
 
@@ -213,7 +213,7 @@ class GuitarPro {
       int slide;
       int voltaSequence;
       QTextCodec* _codec { 0 };
-	Slur** slurs       { nullptr };
+      Slur** slurs       { nullptr };
 
       void skip(qint64 len);
       void read(void* p, qint64 len);
@@ -252,14 +252,14 @@ class GuitarPro {
       void addPop(Note*);
       void createTuningString(int strings, int tuning[]);
 
-	std::vector<PalmMute*> _palmMutes;
-	std::vector<LetRing*> _letRings;
-	std::vector<Vibrato*> _vibratos;
- 
-   public:
-	std::vector<std::string> tunings;
+      std::vector<PalmMute*> _palmMutes;
+      std::vector<LetRing*> _letRings;
+      std::vector<Vibrato*> _vibratos;
 
-	void setTempo(int n, Measure* measure);
+   public:
+      std::vector<std::string> tunings;
+
+      void setTempo(int n, Measure* measure);
       void initGuitarProDrumset();
       QString title, subtitle, artist, album, composer;
       QString transcriber, instructions;
@@ -322,10 +322,8 @@ class GuitarPro3 : public GuitarPro1 {
 //---------------------------------------------------------
 
 class GuitarPro4 : public GuitarPro {
-	std::vector<int> curDynam;
-	//int curDynam{ -1 };
-	int curTuple{ 0 };
-	std::vector<int> tupleKind;
+      std::vector<int> curDynam;
+      std::vector<int> tupleKind;
       void readInfo();
       bool readNote(int string, int staffIdx, Note* note);
       virtual int readBeatEffects(int track, Segment* segment);
@@ -342,8 +340,8 @@ class GuitarPro4 : public GuitarPro {
 //---------------------------------------------------------
 
 class GuitarPro5 : public GuitarPro {
-	std::map<std::pair<int, int>, bool> dead_end;
-	  int _beat_counter{ 0 };
+      std::map<std::pair<int, int>, bool> dead_end;
+      int _beat_counter{ 0 };
       void readInfo();
       void readPageSetup();
       virtual int readBeatEffects(int track, Segment* segment);
@@ -368,7 +366,7 @@ class GuitarPro5 : public GuitarPro {
 class GuitarPro6 : public GuitarPro {
 
       int _lastTick;
-	Volta* _lastVolta{ nullptr };
+      Volta* _lastVolta{ nullptr };
       // an integer stored in the header indicating that the file is not compressed (BCFS).
       const int GPX_HEADER_UNCOMPRESSED = 1397113666;
       // an integer stored in the header indicating that the file is not compressed (BCFZ).

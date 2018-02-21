@@ -45,7 +45,7 @@ void MasterSynthesizer::init()
             setState(defaultState);
             return;
             }
-      XmlReader e(0, &f);
+      XmlReader e(&f);
       while (e.readNextStartElement()) {
             if (e.name() == "Synthesizer")
                   state.read(e);

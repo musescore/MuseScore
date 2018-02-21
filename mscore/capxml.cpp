@@ -1192,7 +1192,7 @@ Score::FileError importCapXml(MasterScore* score, const QString& name)
             }
 
       QByteArray dbuf = uz.fileData("score.xml");
-      XmlReader e(score, dbuf);
+      XmlReader e(dbuf);
       e.setDocName(name);
       Capella cf;
 

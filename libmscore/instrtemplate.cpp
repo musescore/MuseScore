@@ -598,7 +598,7 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
             return false;
             }
 
-      XmlReader e(0, &qf);
+      XmlReader e(&qf);
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   while (e.readNextStartElement()) {
