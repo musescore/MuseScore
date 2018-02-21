@@ -323,8 +323,6 @@ class GuitarPro3 : public GuitarPro1 {
 
 class GuitarPro4 : public GuitarPro {
 	std::vector<int> curDynam;
-	//int curDynam{ -1 };
-	int curTuple{ 0 };
 	std::vector<int> tupleKind;
       void readInfo();
       bool readNote(int string, int staffIdx, Note* note);

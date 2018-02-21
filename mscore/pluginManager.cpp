@@ -71,7 +71,7 @@ bool PluginManager::readPluginList()
             qDebug("Cannot open plugins file <%s>", qPrintable(f.fileName()));
             return false;
             }
-      XmlReader e(0, &f);
+      XmlReader e(&f);
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   while (e.readNextStartElement()) {
