@@ -2550,7 +2550,7 @@ bool TextBase::validateText(QString& s)
                   d.append(c);
             }
       QString ss = "<data>" + d + "</data>\n";
-      XmlReader xml(0, ss);
+      XmlReader xml(ss);
       while (xml.readNextStartElement())
             ; // qDebug("  token %d <%s>", int(xml.tokenType()), qPrintable(xml.name().toString()));
       if (xml.error() == QXmlStreamReader::NoError) {

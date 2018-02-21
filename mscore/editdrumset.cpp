@@ -365,7 +365,7 @@ void EditDrumset::load()
       if (!fp.open(QIODevice::ReadOnly))
             return;
 
-      XmlReader e(0, &fp);
+      XmlReader e(&fp);
       nDrumset.clear();
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {

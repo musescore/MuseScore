@@ -4055,7 +4055,7 @@ bool MuseScore::restoreSession(bool always)
             qDebug("Cannot open session file <%s>", qPrintable(f.fileName()));
             return false;
             }
-      XmlReader e(0, &f);
+      XmlReader e(&f);
       int tab = 0;
       int idx = -1;
       bool cleanExit = false;
