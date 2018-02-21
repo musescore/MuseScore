@@ -1132,7 +1132,6 @@ static void readVolta(XmlReader& e, Volta* volta)
 static void readPedal(XmlReader& e, Pedal* pedal)
       {
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
             if (!readTextLineProperties(e, pedal))
                   e.unknown();
             }
@@ -1251,7 +1250,6 @@ static void readTrill(XmlReader& e, Trill* t)
 static void readTextLine(XmlReader& e, TextLineBase* tlb)
       {
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
             if (!readTextLineProperties(e, tlb))
                   e.unknown();
             }

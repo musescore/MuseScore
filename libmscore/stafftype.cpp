@@ -1205,7 +1205,7 @@ bool StaffType::readConfigFile(const QString& fileName)
             return false;
             }
 
-      XmlReader e(0, &f);
+      XmlReader e(&f);
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   while (e.readNextStartElement()) {

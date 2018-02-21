@@ -1054,7 +1054,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "subtype") {
-                              BarLineType t;
+                              BarLineType t = BarLineType::NORMAL;
                               switch (e.readInt()) {
                                     default:
                                     case 0:

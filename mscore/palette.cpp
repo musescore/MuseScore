@@ -407,7 +407,7 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
             // use same code path as drag&drop
 
             QByteArray a = e->mimeData(QPointF());
-            XmlReader e(gscore, a);
+            XmlReader e(a);
             Fraction duration;  // dummy
             QPointF dragOffset;
             ElementType type = Element::readType(e, &dragOffset, &duration);
@@ -492,7 +492,7 @@ void Palette::applyPaletteElement(PaletteCell* cell)
                   int idx = cr1->staffIdx();
 
                   QByteArray a = element->mimeData(QPointF());
-                  XmlReader e(gscore, a);
+                  XmlReader e(a);
                   Fraction duration;  // dummy
                   QPointF dragOffset;
                   ElementType type = Element::readType(e, &dragOffset, &duration);
@@ -1253,7 +1253,7 @@ void Palette::write(XmlWriter& xml) const
 
 bool Palette::read(QFile* qf)
       {
-      XmlReader e(gscore, qf);
+      XmlReader e(qf);
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   QString version = e.attribute("version");
@@ -1295,7 +1295,7 @@ bool Palette::read(const QString& p)
 
       QByteArray ba = f.fileData("META-INF/container.xml");
 
-      XmlReader e(gscore, ba);
+      XmlReader e(ba);
       // extract first rootfile
       QString rootfile = "";
       QList<QString> images;
@@ -1810,7 +1810,7 @@ void Palette::dropEvent(QDropEvent* event)
             }
       else if (data->hasFormat(mimeSymbolFormat)) {
             QByteArray data(event->mimeData()->data(mimeSymbolFormat));
-            XmlReader xml(gscore, data);
+            XmlReader xml(data);
             QPointF dragOffset;
             Fraction duration;
             ElementType type = Element::readType(xml, &dragOffset, &duration);
