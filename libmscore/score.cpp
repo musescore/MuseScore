@@ -1842,7 +1842,7 @@ MasterScore* MasterScore::clone()
 
       buffer.close();
 
-      XmlReader r(this, buffer.buffer());
+      XmlReader r(buffer.buffer());
       MasterScore* score = new MasterScore(style());
       score->read1(r, true);
 

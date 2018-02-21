@@ -1604,7 +1604,7 @@ void ScoreView::normalSwap()
       if (mimeType == mimeStaffListFormat) { // determine size of clipboard selection
             int tickLen = 0, staves = 0;
             QByteArray data(ms->data(mimeStaffListFormat));
-            XmlReader e(_score, data);
+            XmlReader e(data);
             e.readNextStartElement();
             if (e.name() == "StaffList") {
                   tickLen         = e.intAttribute("len", 0);
@@ -3964,7 +3964,7 @@ void ScoreView::cmdRepeatSelection()
       QApplication::clipboard()->setMimeData(mimeData);
 
       QByteArray data(mimeData->data(mimeType));
-      XmlReader xml(_score, data);
+      XmlReader xml(data);
       xml.setPasteMode(true);
 
       int dStaff = selection.staffStart();

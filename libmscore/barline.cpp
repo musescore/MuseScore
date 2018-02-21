@@ -61,12 +61,13 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType)
                                     e->score()->undo(new ChangeProperty(e, P_ID::GENERATED, false, PropertyFlags::NOSTYLE));
                                     }
                               else {
-                                    BarLine* bl = new BarLine(bl->score());
-                                    bl->setBarLineType(barType);
-                                    bl->setParent(segment);
-                                    bl->setTrack(0);
-                                    bl->setSpanStaff(bl->score()->nstaves());
-                                    bl->score()->undo(new AddElement(bl));
+                                    auto score = bl->score();
+                                    BarLine* newBl = new BarLine(score);
+                                    newBl->setBarLineType(barType);
+                                    newBl->setParent(segment);
+                                    newBl->setTrack(0);
+                                    newBl->setSpanStaff(score->nstaves());
+                                    newBl->score()->undo(new AddElement(newBl));
                                     }
                               }
                         }
