@@ -388,13 +388,19 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                         continue;
                   qreal x1 = s->x() + s->measure()->x();
                   qreal x2 = x1 + s->width();
+
                   if (pp1.x() > x2)
                         continue;
-                  if (pp2.x() >= x1 && pp2.x() < x2)
+//                  if (pp2.x() >= x1 && pp2.x() < x2)
+//                        break;
+                  if (pp2.x() < x1)
                         break;
+
+                  Shape s2 = s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos());
+
                   if (up) {
                         QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).top() + s->y() + s->measure()->y());
-                        qreal dist = _shape.minVerticalDistance(s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos()));
+                        qreal dist = _shape.minVerticalDistance(s2);
                         if (dist > 0.0) {
                               if (pt.x() - x1 < nearDistance) {
                                     // collision near beginning of slur
@@ -411,7 +417,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                         }
                   else {
                         QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).bottom() + s->y() + s->measure()->y());
-                        qreal dist = s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos()).minVerticalDistance(_shape);
+                        qreal dist = s2.minVerticalDistance(_shape);
                         if (dist > 0.0) {
                               if (pt.x() - x1 < nearDistance) {
                                     // collision near beginning of slur
@@ -441,12 +447,13 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                   qreal x2 = x1 + s->width();
                   if (pp1.x() > x2)
                         continue;
-                  if (pp2.x() >= x1 && pp2.x() < x2)
+//                  if (pp2.x() >= x1 && pp2.x() < x2)
+//                        break;
+                  if (pp2.x() < x1)
                         break;
                   if (up) {
                         QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).top() + s->y() + s->measure()->y());
                         qreal dist = _shape.minVerticalDistance(s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos()));
-//                        dist += sdist;
                         if (dist > 0.0) {
                               pl.append(Collision(dist, pt));
 //                            printf("collision at %d %s %f %f\n", s->tick(), s->subTypeName(), pt.x(), pt.y());
@@ -455,9 +462,10 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                   else {
                         QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).bottom() + s->y() + s->measure()->y());
                         qreal dist = s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos()).minVerticalDistance(_shape);
-//                        dist += sdist;
-                        if (dist > 0.0)
+                        if (dist > 0.0) {
+//                              printf("collision at %d %s %f %f\n", s->tick(), s->subTypeName(), pt.x(), pt.y());
                               pl.append(Collision(-dist, pt));
+                              }
                         }
                   }
             //
