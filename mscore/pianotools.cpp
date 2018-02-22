@@ -20,6 +20,7 @@
 
 #include "pianotools.h"
 #include "preferences.h"
+#include "libmscore/chord.h"
 
 namespace Ms {
 
@@ -175,6 +176,7 @@ void HPiano::updateAllKeys()
       {
       for (PianoKeyItem* key : keys) {
             key->setPressed(_pressedPitches.contains(key->pitch()));
+            key->setInnactive(_pressedPitches.contains(key->pitch() << 8));
             key->update();
             }
       }
@@ -189,6 +191,7 @@ PianoKeyItem::PianoKeyItem(HPiano* _piano, int p)
       piano = _piano;
       _pitch = p;
       _pressed = false;
+      _innactive = false;
       type = -1;
       }
 
@@ -329,6 +332,8 @@ void PianoKeyItem::paint(QPainter* p, const QStyleOptionGraphicsItem* /*o*/, QWi
             c.setAlpha(180);
             p->setBrush(c);
             }
+      else if (_innactive)
+            p->setBrush(type >= 7 ? QColor(125, 125, 125): QColor(200, 200, 200));
       else
             p->setBrush(type >= 7 ? Qt::black : Qt::white);
       p->drawPath(path());
@@ -436,6 +441,29 @@ bool HPiano::gestureEvent(QGestureEvent *event)
                   }
             }
       return true;
+      }
+
+//---------------------------------------------------------
+//   changeSelection
+//---------------------------------------------------------
+
+void PianoTools::changeSelection(const QList<Element *> &elements)
+      {
+
+      if (elements.empty() || elements.front()->type() != Element::Type::NOTE)
+            return _piano->setPressedPitches({});
+      QSet<Element*> selected;
+      Chord* chord = static_cast<Note*>(elements.front())->chord();
+      for (auto e : elements)
+            {
+            if (e->type() != Element::Type::NOTE || static_cast<Note*>(e)->chord() != chord)
+                  return _piano->setPressedPitches({});
+            selected.insert(e);
+            }
+      QSet<int> pitches;
+      for (auto n : chord->notes())
+            pitches.insert(selected.contains(n) ? n->pitch() : n->pitch() << 8);
+      _piano->setPressedPitches(pitches);
       }
 }
 
