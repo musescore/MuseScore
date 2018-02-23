@@ -87,7 +87,7 @@ void PositionCursor::paint(QPainter* p)
                   p->fillRect(_rect, color());
                   int         track       = _sv->score()->inputTrack();
                   Staff*      staff       = _sv->score()->staff(track2staff(track));
-                  if (staff) {
+                  if (staff && _sv->score()->noteEntryMode()) {
                         StaffType*  staffType   = staff->staffType();
                         if (staffType && staffType->group() == StaffGroup::TAB)
                               staffType->drawInputStringMarks(p, _sv->score()->inputState().string(),
