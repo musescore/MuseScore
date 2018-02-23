@@ -664,9 +664,9 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "stretch+",
-         QT_TRANSLATE_NOOP("action","Increase Measure Width"),
-         QT_TRANSLATE_NOOP("action","Increase measure width"),
-         QT_TRANSLATE_NOOP("action","Increase width of selected measures"),
+         QT_TRANSLATE_NOOP("action","Increase Layout Stretch"),
+         QT_TRANSLATE_NOOP("action","Increase layout stretch"),
+         QT_TRANSLATE_NOOP("action","Increase layout stretch factor of selected measures"),
          Icons::Invalid_ICON,
          Qt::WindowShortcut
          },
@@ -674,9 +674,9 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "stretch-",
-         QT_TRANSLATE_NOOP("action","Decrease Measure Width"),
-         QT_TRANSLATE_NOOP("action","Decrease measure width"),
-         QT_TRANSLATE_NOOP("action","Decrease width of selected measures"),
+         QT_TRANSLATE_NOOP("action","Decrease Layout Stretch"),
+         QT_TRANSLATE_NOOP("action","Decrease layout stretch"),
+         QT_TRANSLATE_NOOP("action","Decrease layout stretch factor of selected measures"),
          Icons::Invalid_ICON,
          Qt::WindowShortcut
          },
@@ -2312,8 +2312,9 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_EDIT,
          "reset",
-         QT_TRANSLATE_NOOP("action","Reset Shape and Position"),
-         QT_TRANSLATE_NOOP("action","Reset shape and position")
+         QT_TRANSLATE_NOOP("action","Reset Shapes and Positions"),
+         QT_TRANSLATE_NOOP("action","Reset shapes and positions"),
+         QT_TRANSLATE_NOOP("action","Reset shapes and positions of selected elements to their defaults")
          },
       {
          MsWidget::MAIN_WINDOW,
@@ -2325,9 +2326,9 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "reset-stretch",
-         QT_TRANSLATE_NOOP("action","Reset Measure Width"),
-         QT_TRANSLATE_NOOP("action","Reset measure width"),
-         0,
+         QT_TRANSLATE_NOOP("action","Reset Layout Stretch"),
+         QT_TRANSLATE_NOOP("action","Reset layout stretch"),
+         QT_TRANSLATE_NOOP("action","Reset layout stretch factor of selected measures or entire score"),
          Icons::Invalid_ICON,
          Qt::WindowShortcut
          },
