@@ -438,25 +438,27 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                   foreach (Element* e, segment->annotations()) {
                         if ((e->type() != Element::Type::HARMONY) || (!tracks.contains(e->track())))
                               continue;
-                        Harmony* h  = static_cast<Harmony*>(e);
+                        Harmony* hh  = static_cast<Harmony*>(e);
                         int rootTpc, baseTpc;
-                        if (mode == TransposeMode::DIATONICALLY) {
-                              int tick = segment->tick();
-                              Key key = !h->staff() ? Key::C : h->staff()->key(tick);
-                              rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
-                                          transposeInterval, key, trKeys, useDoubleSharpsFlats);
-                              baseTpc = transposeTpcDiatonicByKey(h->baseTpc(),
-                                          transposeInterval, key, trKeys, useDoubleSharpsFlats);
-                              }
-                        else {
-                              rootTpc = transposeTpc(h->rootTpc(), interval, useDoubleSharpsFlats);
-                              baseTpc = transposeTpc(h->baseTpc(), interval, useDoubleSharpsFlats);
-                              }
                         // undoTransposeHarmony does not do links
                         // because it is also used to handle transposing instruments
                         // and score / parts could be in different concert pitch states
-                        for (ScoreElement* e : h->linkList())
-                              undoTransposeHarmony(static_cast<Harmony*>(e), rootTpc, baseTpc);
+                        for (ScoreElement* e : hh->linkList()) {
+                              Harmony* h = static_cast<Harmony*>(e);
+                              if (mode == TransposeMode::DIATONICALLY) {
+                                    int tick = segment->tick();
+                                    Key key = !h->staff() ? Key::C : h->staff()->key(tick);
+                                    rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
+                                                transposeInterval, key, trKeys, useDoubleSharpsFlats);
+                                    baseTpc = transposeTpcDiatonicByKey(h->baseTpc(),
+                                                transposeInterval, key, trKeys, useDoubleSharpsFlats);
+                                    }
+                              else {
+                                    rootTpc = transposeTpc(h->rootTpc(), interval, useDoubleSharpsFlats);
+                                    baseTpc = transposeTpc(h->baseTpc(), interval, useDoubleSharpsFlats);
+                                    }
+                              undoTransposeHarmony(h, rootTpc, baseTpc);
+                              }
                         }
                   }
             }
