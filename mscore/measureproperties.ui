@@ -348,6 +348,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>Layout stretch factor</string>
+            </property>
             <property name="text">
              <string>Layout stretch:</string>
             </property>
