@@ -104,7 +104,8 @@ bool Portaudio::init(bool)
 
       const PaDeviceInfo* di = Pa_GetDeviceInfo(idx);
 
-      if (di == nullptr)
+      //select default output device if no device or device without output channels have been selected
+      if (di == nullptr || di->maxOutputChannels < 1)
             di = Pa_GetDeviceInfo(Pa_GetDefaultOutputDevice());
 
       if (!di)
@@ -118,11 +119,7 @@ bool Portaudio::init(bool)
       out.device           = idx;
       out.channelCount     = 2;
       out.sampleFormat     = paFloat32;
-#ifdef Q_OS_MAC
-      out.suggestedLatency = 0.020;
-#else // on windows, this small latency causes some problem
-      out.suggestedLatency = 0.100;
-#endif
+      out.suggestedLatency = di->defaultLowOutputLatency;
       out.hostApiSpecificStreamInfo = 0;
 
       err = Pa_OpenStream(&stream, 0, &out, double(_sampleRate), 0, 0, paCallback, (void*)this);
