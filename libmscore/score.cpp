@@ -1025,7 +1025,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       qreal y           = p.y() - system->pagePos().y();
       for (; pos->staffIdx < nstaves(); ++pos->staffIdx) {
             Staff* st = staff(pos->staffIdx);
-            if (st->invisible() || !st->part()->show())
+            if (!st->part()->show())
                   continue;
             qreal sy2;
             SysStaff* ss = system->staff(pos->staffIdx);
@@ -1034,7 +1034,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
             // find next visible staff
             for (int i = pos->staffIdx + 1; i < nstaves(); ++i) {
                   Staff* st = staff(i);
-                  if (st->invisible() || !st->part()->show())
+                  if (!st->part()->show())
                         continue;
                   nstaff = system->staff(i);
                   break;
