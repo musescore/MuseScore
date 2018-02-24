@@ -81,6 +81,8 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/exportmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmxml.cpp               # Required by importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmxmllogger.cpp         # Required by importxml.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmxmlnoteduration.cpp   # Required by importxml.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/importmxmlnotepitch.cpp      # Required by importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmxmlpass1.cpp          # Required by importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importmxmlpass2.cpp          # Required by importxml.cpp
       ${PROJECT_SOURCE_DIR}/mscore/importxml.cpp
@@ -88,6 +90,7 @@ add_library(
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlfonthandler.cpp
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlsupport.cpp
       ${PROJECT_SOURCE_DIR}/mscore/qmlplugin.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/preferences.cpp
       ${PROJECT_SOURCE_DIR}/mscore/shortcut.cpp
       ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/fmt_opts.cpp    # Required by capella.cpp and capxml.cpp
       ${PROJECT_SOURCE_DIR}/thirdparty/rtf2html/rtf2html.cpp    # Required by capella.cpp and capxml.cpp

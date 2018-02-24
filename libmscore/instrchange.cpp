@@ -28,10 +28,9 @@ namespace Ms {
 //---------------------------------------------------------
 
 InstrumentChange::InstrumentChange(Score* s)
-   : TextBase(s)
+   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
       {
       init(SubStyle::INSTRUMENT_CHANGE);
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _instrument = new Instrument();
       }
 

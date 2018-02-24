@@ -2728,8 +2728,7 @@ static void applyLyricsMin(ChordRest* cr, int staffIdx, qreal yMin)
       for (Lyrics* l : cr->lyrics()) {
             if (l->autoplace() && l->placeAbove()) {
                   l->rUserYoffset() = yMin;
-                  sh.add(l->bbox().translated(l->pos())
-                     .adjusted(0.0, -lyricsMinBottomDistance, 0.0, 0.0));
+                  sh.add(l->bbox().translated(l->pos()).adjusted(0.0, -lyricsMinBottomDistance, 0.0, 0.0));
                   }
             }
       cr->segment()->staffShape(staffIdx).add(sh);
@@ -2824,7 +2823,18 @@ void Score::layoutLyrics(System* system)
                         }
                   break;
             }
+
+      // align lyrics line segments
+
+      std::vector<LyricsLineSegment*> ll;
+      for (SpannerSegment* ss : system->spannerSegments()) {
+            if (ss->isLyricsLineSegment()) {
+                  LyricsLineSegment* lls = toLyricsLineSegment(ss);
+                  lls->rUserYoffset() = lls->lyricsLine()->lyrics()->rUserYoffset();
+                  }
+            }
       }
+
 //---------------------------------------------------------
 //   layoutTies
 //---------------------------------------------------------
@@ -2846,13 +2856,21 @@ static void layoutTies(Chord* ch, System* system, int stick)
 //   processLines
 //---------------------------------------------------------
 
-static void processLines(System* system, std::vector<Spanner*> lines)
+static void processLines(System* system, std::vector<Spanner*> lines, bool align)
       {
       std::vector<SpannerSegment*> segments;
       for (Spanner* sp : lines) {
             SpannerSegment* ss = sp->layoutSystem(system);     // create/layout spanner segment for this system
             if (ss->autoplace())
                   segments.push_back(ss);
+            }
+
+      if (align && segments.size() > 1) {
+            qreal y = segments[0]->userOff().y();
+            for (unsigned i = 1; i < segments.size(); ++i)
+                  y = qMax(y, segments[i]->userOff().y());
+            for (auto ss : segments)
+                  ss->rUserYoffset() = y;
             }
 
       //
@@ -3163,7 +3181,7 @@ System* Score::collectSystem(LayoutContext& lc)
                               spanner.push_back(sp);
                         }
                   }
-            processLines(system, spanner);
+            processLines(system, spanner, false);
             }
 
       std::vector<Dynamic*> dynamics;
@@ -3246,19 +3264,23 @@ System* Score::collectSystem(LayoutContext& lc)
 
             std::vector<Spanner*> ottavas;
             std::vector<Spanner*> spanner;
+            std::vector<Spanner*> pedal;
 
             for (auto interval : spanners) {
                   Spanner* sp = interval.value;
                   if (sp->tick() < etick && sp->tick2() > stick) {
                         if (sp->isOttava())
                               ottavas.push_back(sp);
+                        else if (sp->isPedal())
+                              pedal.push_back(sp);
                         else if (!sp->isSlur())             // slurs are already handled
                               spanner.push_back(sp);
                         }
                   }
 
-            processLines(system, ottavas);
-            processLines(system, spanner);
+            processLines(system, ottavas, false);
+            processLines(system, pedal, true);
+            processLines(system, spanner, false);
 
             //
             // vertical align volta segments
@@ -3304,7 +3326,9 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
             }
 
-      // tempo text
+      //
+      // TempoText, Fermata
+      //
 
       for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure())
@@ -3317,11 +3341,6 @@ System* Score::collectSystem(LayoutContext& lc)
                               TempoText* tt = toTempoText(e);
                               setTempo(tt->segment(), tt->tempo());
                               tt->layout();
-                              if (tt->visible()) {
-                                    int si = tt->staffIdx();
-                                    s->staffShape(si).add(tt->shape().translated(e->pos()));
-                                    m->staffShape(si).add(tt->shape().translated(s->pos() + e->pos()));
-                                    }
                               }
                         else if (e->isFermata()) {
                               e->layout();
@@ -3333,6 +3352,24 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
             }
 
+      //
+      // Jump, Marker
+      //
+
+      for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure())
+                  continue;
+            Measure* m = toMeasure(mb);
+            for (Element* e : m->el()) {
+                  if (e->visible() && (e->isJump() || e->isMarker()))
+                        e->layout();
+                  }
+            }
+
+      //
+      // RehearsalMark, StaffText, FretDiagram
+      //
+
       for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure())
                   continue;
@@ -3340,12 +3377,8 @@ System* Score::collectSystem(LayoutContext& lc)
             Measure* m = toMeasure(mb);
             for (Segment* s = m->first(st); s; s = s->next(st)) {
                   for (Element* e : s->annotations()) {
-                        if (e->visible() && (e->isRehearsalMark() || e->isStaffText() || e->isFretDiagram())) {
+                        if (e->visible() && (e->isRehearsalMark() || e->isStaffText() || e->isFretDiagram()))
                               e->layout();
-                              int si = e->staffIdx();
-                              s->staffShape(si).add(e->shape().translated(e->pos()));
-                              m->staffShape(si).add(e->shape().translated(s->pos() + e->pos()));
-                              }
                         }
                   }
             }
@@ -3572,6 +3605,8 @@ void Score::doLayout()
 
 void Score::doLayoutRange(int stick, int etick)
       {
+      if (stick == -1 && etick == -1)
+            abort();
       if (!last()) {
             qDeleteAll(_systems);
             _systems.clear();
@@ -3698,7 +3733,7 @@ void Score::doLayoutRange(int stick, int etick)
       else {
             QList<System*>& systems = lc.page->systems();
             int i = systems.indexOf(lc.curSystem);
-            qDebug("clear page systems from %d", i);
+//            qDebug("clear page systems from %d", i);
             if (i <= -1)
                   systems.clear();
             else {

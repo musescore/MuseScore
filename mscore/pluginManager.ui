@@ -125,7 +125,8 @@
         <item>
          <widget class="QPushButton" name="reloadPlugins">
           <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reload all plugins.&lt;/p&gt;&lt;p&gt;This will re-evaluate all plugins, picking up any changes that may have occured.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>Reload all plugins.
+This will re-evaluate all plugins, picking up any changes that may have occurred.</string>
           </property>
           <property name="text">
            <string>Reload Plugins</string>
@@ -161,7 +162,7 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QListWidget" name="pluginList">
+    <widget class="QListWidget" name="pluginListWidget">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -195,7 +196,7 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>pluginList</tabstop>
+  <tabstop>pluginListWidget</tabstop>
   <tabstop>pluginName</tabstop>
   <tabstop>pluginPath</tabstop>
   <tabstop>pluginVersion</tabstop>

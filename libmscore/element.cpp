@@ -148,15 +148,15 @@ QString Element::subtypeName() const
 //   Element
 //---------------------------------------------------------
 
-Element::Element(Score* s) :
-   ScoreElement(s)
+Element::Element(Score* s, ElementFlags f)
+   : ScoreElement(s)
       {
+      _flags         = f | ElementFlag::ENABLED | ElementFlag::EMPTY | ElementFlag::AUTOPLACE | ElementFlag::SELECTABLE | ElementFlag::VISIBLE;
       _placement     = Placement::BELOW;
       _track         = -1;
       _color         = MScore::defaultColor;
       _mag           = 1.0;
       _tag           = 1;
-      itemDiscovered = false;
       _z             = -1;
       }
 
@@ -1099,8 +1099,7 @@ QVariant Element::propertyDefault(P_ID id) const
 
 void Element::initSubStyle(SubStyle st)
       {
-      auto l = subStyle(st);
-      for (const StyledProperty& p : l) {
+      for (const StyledProperty& p : subStyle(st)) {
             setProperty(p.propertyIdx, score()->styleV(p.styleIdx));
             setPropertyFlags(p.propertyIdx, PropertyFlags::STYLED);
             }
@@ -1813,8 +1812,7 @@ bool Element::edit(EditData& ed)
 void Element::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
-      if (eed)
-            eed->pushProperty(P_ID::USER_OFF);
+      eed->pushProperty(P_ID::USER_OFF);
       }
 
 //---------------------------------------------------------
@@ -1836,12 +1834,16 @@ void Element::editDrag(EditData& ed)
 void Element::endEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
+      bool changed = false;
       if (eed) {
-            for (PropertyData pd : eed->propertyData)
-                  score()->undoPropertyChanged(this, pd.id, pd.data);
+            for (PropertyData pd : eed->propertyData) {
+                  if (score()->undoPropertyChanged(this, pd.id, pd.data))
+                        changed = true;
+                  }
             eed->propertyData.clear();
             }
-      undoChangeProperty(P_ID::AUTOPLACE, false);
+      if (changed)
+            undoChangeProperty(P_ID::AUTOPLACE, false);
       }
 
 //---------------------------------------------------------
@@ -1850,6 +1852,56 @@ void Element::endEditDrag(EditData& ed)
 
 void Element::endEdit(EditData&)
       {
+      }
+
+//---------------------------------------------------------
+//   styleP
+//---------------------------------------------------------
+
+qreal Element::styleP(StyleIdx idx) const
+      {
+      return score()->styleP(idx);
+      }
+
+//---------------------------------------------------------
+//   autoplaceSegmentElement
+//---------------------------------------------------------
+
+void Element::autoplaceSegmentElement(qreal minDistance)
+      {
+      if (autoplace() && parent()) {
+            setUserOff(QPointF());
+            Segment* s        = toSegment(parent());
+            Measure* m        = s->measure();
+            int si            = staffIdx();
+            Shape s1          = m->staffShape(si);
+            Shape s2          = shape().translated(s->pos() + pos());
+
+            // look for collisions in the next measure
+            // if necessary
+
+            bool cnm = (s2.right() > m->width()) && m->nextMeasure() && m->nextMeasure()->system() == m->system();
+            if (cnm) {
+                  Measure* nm = m->nextMeasure();
+                  s1.add(nm->staffShape(si).translated(QPointF(m->width(), 0.0)));
+                  }
+            qreal d = placeAbove() ? s2.minVerticalDistance(s1) : s1.minVerticalDistance(s2);
+            if (d > -minDistance) {
+                  qreal yd = d + minDistance;
+                  if (placeAbove())
+                        yd *= -1.0;
+                  rUserYoffset() = yd;
+                  s2.translateY(yd);
+                  }
+            m->staffShape(si).add(s2);
+            if (cnm) {
+                  Measure* nm = m->nextMeasure();
+                  s2.translateX(-m->width());
+                  nm->staffShape(staffIdx()).add(s2);
+                  }
+            }
+      else
+            adjustReadPos();
       }
 
 }

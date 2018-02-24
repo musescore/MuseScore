@@ -5,7 +5,7 @@
 # Note: There is no official quota for open source projects on Bintray, but
 # they will suspend the account if they think you are taking advantage.
 
-set -e # exit on error - don't want to accidently delete the wrong version!
+set -e # exit on error - don't want to accidentally delete the wrong version!
 #set -x
 
 function showHelp() {

@@ -35,6 +35,7 @@
 #include "preferences.h"
 #include "seq.h"
 #include "synthesizer/msynthesizer.h"
+#include "shortcut.h"
 
 #ifdef OSC
 #include "ofqf/qoscserver.h"
@@ -61,9 +62,9 @@ void MuseScore::initOsc()
 
 void MuseScore::initOsc()
       {
-      if (!preferences.useOsc)
+      if (!preferences.getBool(PREF_IO_OSC_USEREMOTECONTROL))
             return;
-      int port = preferences.oscPort;
+      int port = preferences.getInt(PREF_IO_OSC_PORTNUMBER);
       QOscServer* osc = new QOscServer(port, qApp);
 
       PathObject* oo = new PathObject( "/addpitch", QVariant::Int, osc);

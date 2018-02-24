@@ -1721,7 +1721,7 @@ bool ChordList::read(const QString& name)
             qDebug("ChordList::read failed: <%s>", qPrintable(path));
             return false;
             }
-      XmlReader e(0, &f);
+      XmlReader e(&f);
       docName = f.fileName();
 
       while (e.readNextStartElement()) {

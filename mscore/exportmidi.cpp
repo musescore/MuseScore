@@ -208,7 +208,7 @@ void ExportMidi::writeHeader()
 //    return false on error
 //---------------------------------------------------------
 
-bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
+bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportRPNs)
       {
       f.setFileName(name);
       if (!f.open(QIODevice::WriteOnly))
@@ -240,10 +240,10 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
             cs->renderStaff(&events, staff);
             cs->renderSpanners(&events, staffIdx);
 
-            // Pass throught the all instruments in the part
+            // Pass through the all instruments in the part
             const InstrumentList* il = part->instruments();
             for(auto j = il->begin(); j!= il->end(); j++) {
-                  // Pass throught the all channels of the instrument
+                  // Pass through the all channels of the instrument
                   // "normal", "pizzicato", "tremolo" for Strings,
                   // "normal", "mute" for Trumpet
                   foreach(const Channel* ch, j->second->channel()) {
@@ -255,7 +255,7 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
                               // We need this to get the correct pitch of bends
                               // Hidden under preferences because some software
                               // crashes when receiving RPNs: https://musescore.org/en/node/37431
-                              if (channel != 9 && preferences.midiExportRPNs) {
+                              if (channel != 9 && exportRPNs) {
                                     // set pitch bend sensitivity to 12 semitones:
                                     track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 0));
                                     track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));

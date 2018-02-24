@@ -213,7 +213,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
             if (MScore::debugMode)
                   qDebug("ScoreView::dragEnterEvent Symbol: <%s>", a.data());
 
-            XmlReader e(_score, a);
+            XmlReader e(a);
             editData.dragOffset = QPoint();
             Fraction duration;  // dummy
             ElementType type = Element::readType(e, &editData.dragOffset, &duration);
@@ -389,7 +389,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                         break;
                   }
 
-            // _score->update();
             return;
             }
 
@@ -454,6 +453,20 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 
 void ScoreView::dropEvent(QDropEvent* event)
       {
+      switch (state) {
+            case ViewState::PLAY:
+                  event->ignore();
+                  return;
+            case ViewState::EDIT:
+                  changeState(ViewState::NORMAL);
+                  break;
+
+            // TODO: check/handle more states
+
+            case ViewState::NORMAL:
+            default:
+                  break;
+            }
       QPointF pos(imatrix.map(QPointF(event->pos())));
 
       EditData dropData(this);
@@ -715,7 +728,7 @@ void ScoreView::dropEvent(QDropEvent* event)
             }
       else if (etype == ElementType::MEASURE_LIST || etype == ElementType::STAFF_LIST) {
             _score->startCmd();
-            XmlReader xml(_score, data);
+            XmlReader xml(data);
             System* s = measure->system();
             int idx   = s->y2staff(pos.y());
             if (idx != -1) {
@@ -752,8 +765,8 @@ void ScoreView::dragLeaveEvent(QDragLeaveEvent*)
 
 bool ScoreView::dropCanvas(Element* e)
       {
-      if (e->type() == ElementType::ICON) {
-            switch(static_cast<Icon*>(e)->iconType()) {
+      if (e->isIcon()) {
+            switch (toIcon(e)->iconType()) {
                   case IconType::VFRAME:
                         score()->insertMeasure(ElementType::VBOX, 0);
                         break;

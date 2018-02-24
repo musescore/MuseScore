@@ -31,6 +31,7 @@ namespace Ms {
 
 void FotoLasso::startEdit(EditData& ed)
       {
+      Element::startEdit(ed);
       ed.grips   = 8;
       ed.curGrip = Grip(0);
       QRectF view = ((ScoreView*)ed.view)->toLogical(QRect(0.0, 0.0, ed.view->geometry().width(), ed.view->geometry().height()));
@@ -86,6 +87,15 @@ void ScoreView::startFotomode()
             _foto = new FotoLasso(_score);
       else
             _foto->setScore(_score);
+      QRectF view = toLogical(QRect(0.0, 0.0, width(), height()));
+      if (_foto->bbox().isEmpty() || !view.intersects(_foto->bbox())) {
+            // rect not found - construct new rect with default size & relative position
+            qreal w = view.width();
+            qreal h = view.height();
+            QRectF r(w * .3, h * .3, w * .4, h * .4);
+            // convert to absolute position
+            _foto->setbbox(toPhysical(r));
+            }
       _foto->setVisible(true);
       _score->select(_foto);
       editData.element = _foto;
@@ -312,11 +322,11 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       popup->addAction(a);
 
       popup->addSeparator();
-      a = popup->addAction(tr("Resolution (%1 DPI)...").arg(preferences.pngResolution));
+      a = popup->addAction(tr("Resolution (%1 DPI)...").arg(preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION)));
       a->setData("set-res");
       QAction* bgAction = popup->addAction(tr("Transparent background"));
       bgAction->setCheckable(true);
-      bgAction->setChecked(preferences.pngTransparent);
+      bgAction->setChecked(preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY));
       bgAction->setData("set-bg");
 
       popup->addSeparator();
@@ -359,13 +369,12 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
             double resolution = QInputDialog::getDouble(this,
                tr("Set Output Resolution"),
                tr("Set output resolution for PNG"),
-               preferences.pngResolution,
+               preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION),
                16.0, 2400.0, 1,
                &ok
                );
             if (ok) {
-                  preferences.pngResolution = resolution;
-                  preferences.dirty = true;
+                  preferences.setPreference(PREF_EXPORT_PNG_RESOLUTION, resolution);
                   }
             }
       else if (cmd == "resizePage") {
@@ -390,9 +399,8 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
             QString val(QString("%1x%2").arg(w).arg(h));
             QSettings().setValue(QString("fotoSize%1").arg(cmd[3]), val);
             }
-      if (bgAction->isChecked() != preferences.pngTransparent) {
-            preferences.pngTransparent = bgAction->isChecked();
-            preferences.dirty = true;
+      if (bgAction->isChecked() != preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY)) {
+            preferences.setPreference(PREF_EXPORT_PNG_USETRANSPARENCY, bgAction->isChecked());
             }
       }
 
@@ -402,8 +410,8 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
 
 void ScoreView::fotoModeCopy()
       {
-      bool transparent = preferences.pngTransparent;
-      double convDpi   = preferences.pngResolution;
+      bool transparent = preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY);
+      double convDpi   = preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION);
       double mag       = convDpi / DPI;
 
       QRectF r(_foto->canvasBoundingRect());
@@ -491,8 +499,8 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
       if (fi.suffix().toLower() != ext)
             fn += "." + ext;
 
-      bool transparent = preferences.pngTransparent;
-      double convDpi   = preferences.pngResolution;
+      bool transparent = preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY);
+      double convDpi   = preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION);
       double mag       = convDpi / DPI;
 
       if (ext == "svg")
@@ -504,7 +512,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
       double pr = MScore::pixelRatio;
       if (ext == "pdf") {
             QPdfWriter pdfWriter(fn);
-            pdfWriter.setResolution(preferences.exportPdfDpi);
+            pdfWriter.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
             mag = pdfWriter.logicalDpiX() / DPI;
             QSizeF size(r.width() / DPI, r.height() / DPI);
             QPageSize ps(size, QPageSize::Inch, "", QPageSize::ExactMatch);

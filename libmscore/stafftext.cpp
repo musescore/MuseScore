@@ -24,19 +24,16 @@ namespace Ms {
 //---------------------------------------------------------
 
 StaffText::StaffText(Score* s)
-   : TextBase(s)
+   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
       {
       init(SubStyle::STAFF);
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      setPlacement(Placement::ABOVE);     // default
       setSwingParameters(MScore::division / 2, 60);
       }
 
 StaffText::StaffText(SubStyle ss, Score* s)
-   : TextBase(s)
+   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
       {
       init(ss);
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setPlacement(Placement::ABOVE);     // default
       setSwingParameters(MScore::division / 2, 60);
       }
@@ -207,35 +204,11 @@ bool StaffText::getAeolusStop(int group, int idx) const
 
 void StaffText::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
-
-      // TODO: add above/below offset properties
-      QPointF p(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
-      if (placement() == Placement::BELOW)
-            p.ry() =  - p.ry() + lineHeight();
-      setPos(p);
+      Staff* s = staff();
+      qreal y = placeAbove() ? styleP(StyleIdx::staffTextPosAbove) : styleP(StyleIdx::staffTextPosBelow) + (s ? s->height() : 0.0);
+      setPos(QPointF(0.0, y));
       TextBase::layout1();
-      if (!parent()) // palette & clone trick
-          return;
-
-      if (autoplace() && segment()) {
-            qreal minDistance = score()->styleP(StyleIdx::dynamicsMinDistance);  // TODO
-            const Shape& s1 = segment()->measure()->staffShape(staffIdx());
-            Shape s2        = shape().translated(segment()->pos() + pos());
-
-            if (placeAbove()) {
-                  qreal d = s2.minVerticalDistance(s1);
-                  if (d > -minDistance)
-                        rUserYoffset() = -d - minDistance;
-                  }
-            else {
-                  qreal d = s1.minVerticalDistance(s2);
-                  if (d > -minDistance)
-                        rUserYoffset() = d + minDistance;
-                  }
-            }
-      adjustReadPos();
+      autoplaceSegmentElement(styleP(StyleIdx::staffTextMinDistance));
       }
 
 //---------------------------------------------------------

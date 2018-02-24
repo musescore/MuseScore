@@ -294,6 +294,8 @@ void MeasureBase::layout()
                         }
                   element->setPos(x, y);
                   }
+            else if (element->isMarker() || element->isJump())
+                  ;
             else
                   element->layout();
             }

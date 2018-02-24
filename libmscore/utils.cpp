@@ -388,7 +388,7 @@ Note* prevChordNote(Note* note)
 
 //---------------------------------------------------------
 //   pitchKeyAdjust
-//    change entered note to sounding pitch dependend
+//    change entered note to sounding pitch dependent
 //    on key.
 //    Example: if F is entered in G-major, a Fis is played
 //    key -7 ... +7
@@ -508,7 +508,7 @@ QString pitch2string(int v)
       {
       if (v < 0 || v > 127)
             return QString("----");
-      int octave = (v / 12) - 2;
+      int octave = (v / 12) - 1;
       QString o;
       o.sprintf("%d", octave);
       int i = v % 12;

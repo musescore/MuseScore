@@ -73,8 +73,8 @@ class PowerTab {
                   };
 
             struct stRhytmSlash : public ptComponent {
-                  int position;
-                  int duration;
+                  int position {0};
+                  int duration {0};
                   bool triplet{ false };
                   bool tripletend{ false };
                   bool dotted{ false };
@@ -339,10 +339,8 @@ class PowerTab {
 
             int               staves{ 0 };
 
-            int               _tick{ 0 };
             ptTrack*          curTrack;
             int               staffInc{ 0 };
-            Measure*          incMeasure{ nullptr };
             char              lastPart{ 0 };
 
             ptSection*        cur_section;

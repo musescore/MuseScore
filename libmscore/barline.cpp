@@ -61,12 +61,13 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType)
                                     e->score()->undo(new ChangeProperty(e, P_ID::GENERATED, false, PropertyFlags::NOSTYLE));
                                     }
                               else {
-                                    BarLine* bl = new BarLine(bl->score());
-                                    bl->setBarLineType(barType);
-                                    bl->setParent(segment);
-                                    bl->setTrack(0);
-                                    bl->setSpanStaff(bl->score()->nstaves());
-                                    bl->score()->undo(new AddElement(bl));
+                                    auto score = bl->score();
+                                    BarLine* newBl = new BarLine(score);
+                                    newBl->setBarLineType(barType);
+                                    newBl->setParent(segment);
+                                    newBl->setTrack(0);
+                                    newBl->setSpanStaff(score->nstaves());
+                                    newBl->score()->undo(new AddElement(newBl));
                                     }
                               }
                         }
@@ -929,7 +930,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type)
       {
       qreal dotwidth = score->scoreFont()->width(SymId::repeatDot, 1.0);
 
-      qreal w;
+      qreal w {0.0};
       switch (type) {
             case BarLineType::DOUBLE:
                   w = score->styleP(StyleIdx::doubleBarWidth) + score->styleP(StyleIdx::doubleBarDistance);

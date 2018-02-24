@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.00">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Repeat Test</metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <bottomGap>1</bottomGap>
+        <Text>
+          <style>Title</style>
+          <text>Repeat Test</text>
+          </Text>
+        <Text>
+          <style>Subtitle</style>
+          <text>Slightly more complex alternative endings</text>
+          </Text>
+        </VBox>
+      <TBox>
+        <height>1</height>
+        <topGap>0</topGap>
+        <leftMargin>1</leftMargin>
+        <rightMargin>1</rightMargin>
+        <topMargin>1</topMargin>
+        <bottomMargin>1</bottomMargin>
+        <Text>
+          <style>Frame</style>
+          <text>1,2,1,2,1,3,1,2,1,4,1,5
+</text>
+          </Text>
+        </TBox>
+      <Measure number="1">
+        <startRepeat/>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          </TimeSig>
+        <Tempo>
+          <tempo>5</tempo>
+          <followText>1</followText>
+          <text><sym>metNoteQuarterUp</sym> = 300</text>
+          </Tempo>
+        <Chord>
+          <durationType>whole</durationType>
+          <Note>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <endRepeat>4</endRepeat>
+        <Volta id="2">
+          <endHookType>1</endHookType>
+          <beginText>1.2.4.</beginText>
+          <endings>1, 2, 4</endings>
+          </Volta>
+        <Chord>
+          <durationType>whole</durationType>
+          <Note>
+            <pitch>62</pitch>
+            <tpc>16</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="3">
+        <endRepeat>2</endRepeat>
+        <endSpanner id="2"/>
+        <Volta id="3">
+          <endHookType>1</endHookType>
+          <beginText>3.</beginText>
+          <endings>3</endings>
+          </Volta>
+        <Chord>
+          <durationType>whole</durationType>
+          <Note>
+            <pitch>64</pitch>
+            <tpc>18</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="4">
+        <endRepeat>2</endRepeat>
+        <endSpanner id="3"/>
+        <Volta id="4">
+          <endHookType>1</endHookType>
+          <beginText>5.</beginText>
+          <endings>5</endings>
+          </Volta>
+        <Chord>
+          <durationType>whole</durationType>
+          <Note>
+            <pitch>65</pitch>
+            <tpc>13</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="5">
+        <endSpanner id="4"/>
+        <Chord>
+          <durationType>whole</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <BarLine>
+          </BarLine>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

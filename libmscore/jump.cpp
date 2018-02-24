@@ -105,17 +105,17 @@ void Jump::layout()
             if (placeAbove()) {
                   qreal d = s2.minVerticalDistance(s1);
                   if (d > -minDistance) {
-                        qreal xd       = -d - minDistance;
-                        rUserYoffset() = xd;
-                        s2.translate(QPointF(xd, 0.0));
+                        qreal yd       = -d - minDistance;
+                        rUserYoffset() = yd;
+                        s2.translate(QPointF(0.0, yd));
                         }
                   }
             else {
                   qreal d = s1.minVerticalDistance(s2);
                   if (d > -minDistance) {
-                        qreal xd       = d + minDistance;
-                        rUserYoffset() = xd;
-                        s2.translate(QPointF(xd, 0.0));
+                        qreal yd       = d + minDistance;
+                        rUserYoffset() = yd;
+                        s2.translate(QPointF(0.0, yd));
                         }
                   }
             s1.add(s2);

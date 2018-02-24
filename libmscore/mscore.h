@@ -331,6 +331,7 @@ class MScore : public QObject {
       static MStyle& defaultStyle()                { return _defaultStyle;         }
       static const MStyle* defaultStyleForParts()  { return _defaultStyleForParts; }
 
+      static bool readDefaultStyle(QString file);
       static void setDefaultStyle(const MStyle& s) { _defaultStyle = s; }
       static void defaultStyleForPartsHasChanged();
 

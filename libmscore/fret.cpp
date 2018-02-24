@@ -348,9 +348,6 @@ void FretDiagram::draw(QPainter* painter) const
 
 void FretDiagram::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
-
       qreal _spatium  = spatium() * _userMag * score()->styleD(StyleIdx::fretMag);
       lw1             = _spatium * 0.08;
       lw2             = _fretOffset ? lw1 : _spatium * 0.2;
@@ -373,7 +370,7 @@ void FretDiagram::layout()
 
       bbox().setRect(x, y, w, h);
 
-      setPos(-_spatium, -h - score()->styleP(StyleIdx::fretY) + _spatium );
+      setPos(-_spatium, -h - styleP(StyleIdx::fretY) + _spatium );
       if (!autoplace())
             adjustReadPos();
 
@@ -384,17 +381,7 @@ void FretDiagram::layout()
             setPos(QPointF());
             return;
             }
-      if (autoplace()) {
-            int staffIdx      = track() / VOICES;
-            qreal minDistance = score()->styleP(StyleIdx::fretMinDistance);
-            Segment* s        = segment();
-            Shape s1          = s->measure()->staffShape(staffIdx);
-            Shape s2          = shape().translated(s->pos() + pos());
-            qreal d           = s2.minVerticalDistance(s1);
-            if (d > -minDistance)
-                  rUserYoffset() = -d - minDistance;
-            }
-
+      autoplaceSegmentElement(styleP(StyleIdx::fretMinDistance));
       if (_harmony)
             _harmony->layout();
       }

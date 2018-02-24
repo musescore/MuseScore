@@ -33,8 +33,8 @@ int toIntVoiceCount(MidiOperations::VoiceCount value)
 
 int voiceLimit()
       {
-      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
-      const int currentTrack = preferences.midiImportOperations.currentTrack();
+      const auto &opers = midiImportOperations.data()->trackOpers;
+      const int currentTrack = midiImportOperations.currentTrack();
       const int allowedVoiceCount = toIntVoiceCount(opers.maxVoiceCount.value(currentTrack));
 
       Q_ASSERT_X(allowedVoiceCount <= VOICES,
@@ -122,8 +122,8 @@ int findDurationCountInGroup(
                  "MidiVoice::findDurationCountInGroup",
                  "Notes are not sorted by off time in ascending order");
 
-      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
-      const int currentTrack = preferences.midiImportOperations.currentTrack();
+      const auto &opers = midiImportOperations.data()->trackOpers;
+      const int currentTrack = midiImportOperations.currentTrack();
       const bool useDots = opers.useDots.value(currentTrack);
 
       int count = 0;
@@ -997,7 +997,7 @@ void sortVoices(
 
 bool separateVoices(std::multimap<int, MTrack> &tracks, const TimeSigMap *sigmap)
       {
-      auto &opers = preferences.midiImportOperations;
+      auto &opers = midiImportOperations;
       bool changed = false;
 
       for (auto &track: tracks) {

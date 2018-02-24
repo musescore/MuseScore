@@ -19,6 +19,7 @@
 #include "xml.h"
 #include "staff.h"
 #include "segment.h"
+#include "undo.h"
 
 namespace Ms {
 
@@ -403,14 +404,16 @@ void Lyrics::paste(EditData& ed)
       QStringList hyph = sl[0].split("-");
       bool minus = false;
       bool underscore = false;
+      score()->startCmd();
+
       if(hyph.length() > 1) {
-            insertText(ed, hyph[0]);
+            score()->undo(new InsertText(cursor(ed), hyph[0]), &ed);
             hyph.removeFirst();
             sl[0] =  hyph.join("-");
             minus = true;
             }
       else if (sl.length() > 1 && sl[1] == "-") {
-            insertText(ed, sl[0]);
+            score()->undo(new InsertText(cursor(ed), sl[0]), &ed);
             sl.removeFirst();
             sl.removeFirst();
             minus = true;
@@ -423,26 +426,24 @@ void Lyrics::paste(EditData& ed)
             }
       else if (sl[0].contains("_")) {
             int p = sl[0].indexOf("_");
-            insertText(ed, sl[0].left(p));
+            score()->undo(new InsertText(cursor(ed), sl[0]), &ed);
             sl[0] = sl[0].mid(p + 1);
             if (sl[0].isEmpty())
                   sl.removeFirst();
             underscore = true;
             }
       else if (sl.length() > 1 && sl[1] == "_") {
-            insertText(ed, sl[0]);
+            score()->undo(new InsertText(cursor(ed), sl[0]), &ed);
             sl.removeFirst();
             sl.removeFirst();
             underscore = true;
             }
       else {
-            insertText(ed, sl[0]);
+            score()->undo(new InsertText(cursor(ed), sl[0]), &ed);
             sl.removeFirst();
             }
 
-      layout();
-      score()->setLayoutAll();
-      score()->update();
+      score()->endCmd();
       txt = sl.join(" ");
 
       QApplication::clipboard()->setText(txt, mode);
@@ -500,7 +501,7 @@ Element* Lyrics::drop(EditData& data)
 void Lyrics::setNo(int n)
       {
       _no = n;
-      // adjust beween LYRICS1 and LYRICS2 only; keep other styles as they are
+      // adjust between LYRICS1 and LYRICS2 only; keep other styles as they are
       // (_no is 0-based, so odd _no means even line and viceversa)
       if (type() == ElementType::LYRICS) {
             if ((_no & 1) && subStyle() == SubStyle::LYRIC1)
@@ -805,7 +806,7 @@ void LyricsLineSegment::layout()
             lyr         = nextLyr = lyricsLine()->nextLyrics();
             sys         = lyr->segment()->system();
             endOfSystem = (sys != system());
-            // if next lyrics is on a different sytem, this line segment is at the end of its system:
+            // if next lyrics is on a different system, this line segment is at the end of its system:
             // do not adjust for next lyrics position
             if (!endOfSystem) {
                   qreal lyrX        = lyr->bbox().x();

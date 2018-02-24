@@ -1079,8 +1079,8 @@ QString TextBlock::text(int col1, int len) const
 //   Text
 //---------------------------------------------------------
 
-TextBase::TextBase(Score* s)
-   : Element(s)
+TextBase::TextBase(Score* s, ElementFlags f)
+   : Element(s, f | ElementFlag::MOVABLE)
       {
       _family                 = "FreeSerif";
       _size                   = 10.0;
@@ -1099,7 +1099,6 @@ TextBase::TextBase(Score* s)
       _frameRound             = 0;
       _offset                 = QPointF();
       _offsetType             = OffsetType::SPATIUM;
-      setFlag(ElementFlag::MOVABLE, true);
       }
 
 TextBase::TextBase(const TextBase& st)
@@ -2551,7 +2550,7 @@ bool TextBase::validateText(QString& s)
                   d.append(c);
             }
       QString ss = "<data>" + d + "</data>\n";
-      XmlReader xml(0, ss);
+      XmlReader xml(ss);
       while (xml.readNextStartElement())
             ; // qDebug("  token %d <%s>", int(xml.tokenType()), qPrintable(xml.name().toString()));
       if (xml.error() == QXmlStreamReader::NoError) {
@@ -2570,7 +2569,7 @@ bool TextBase::validateText(QString& s)
 //   inputTransition
 //---------------------------------------------------------
 
-void TextBase::inputTransition(QInputMethodEvent* ie)
+void TextBase::inputTransition(QInputMethodEvent* /* ie */)
       {
 #if 0
       // remove preedit string
@@ -3179,12 +3178,22 @@ bool TextBase::edit(EditData& ed)
                         break;
 
                   case Qt::Key_Up:
+#if defined(Q_OS_MAC)
+                        if (!_cursor->movePosition(QTextCursor::Up, mm))
+                              _cursor->movePosition(QTextCursor::StartOfLine, mm);
+#else
                         _cursor->movePosition(QTextCursor::Up, mm);
+#endif
                         s.clear();
                         break;
 
                   case Qt::Key_Down:
+#if defined(Q_OS_MAC)
+                        if (!_cursor->movePosition(QTextCursor::Down, mm))
+                              _cursor->movePosition(QTextCursor::EndOfLine, mm);
+#else
                         _cursor->movePosition(QTextCursor::Down, mm);
+#endif
                         s.clear();
                         break;
 

@@ -300,11 +300,13 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
 
       /******************* mod env **********************/
 
-      // if we wouldn't calculate sample accurate volume
-      // we wouldn't advance beyond FLUID_VOICE_ENVDELAY
-      // and effectively always skip the first buffer rendering thus adding n to modenv_count
-      if (volenv_section > FLUID_VOICE_ENVDELAY)
-            modenv_count += n;
+      /* Skip to decay phase if delay and attack envelope sections each are
+       * less than 100 samples long. This avoids popping noises due to the
+       * mod envelope being out-of-sync with the sample-based volume envelope. */
+      if (modenv_section < 2 && modenv_data[FLUID_VOICE_ENVDELAY].count < 100 && modenv_data[FLUID_VOICE_ENVATTACK].count < 100) {
+            modenv_section = 2;
+            modenv_val     = 1.0f;
+            }
 
       env_data = &modenv_data[modenv_section];
 
@@ -402,7 +404,7 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
             if (curPos == 0) {
                   curPos = 1;
 
-                  // if we should calulate for position 1 already make sure we don't do it twice
+                  // if we should calculate for position 1 already make sure we don't do it twice
                   // could lead to curPos==lastPos which causes devision by zero
                   if (volumeChanges.find(1) != volumeChanges.end())
                         volumeChanges.erase(volumeChanges.find(1));
@@ -502,7 +504,7 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
       float cent = pitch + modlfo_val * modlfo_to_pitch
                    + viblfo_val * viblfo_to_pitch
                    + modenv_val * modenv_to_pitch;
-      phase_incr = _fluid->ct2hz_real(cent) / root_pitch;
+      phase_incr = _fluid->ct2hz_real(cent) / root_pitch_hz;
       }
 
       /* if phase_incr is not advancing, set it to the minimum fraction value (prevent stuckage) */
@@ -747,17 +749,6 @@ void Voice::voice_start()
             dest_gen->mod      += modval;
             }
 
-     /* The GEN_PITCH is a hack to fit the pitch bend controller into the
-      * modulator paradigm.  Now the nominal pitch of the key is set.
-      * Note about SCALETUNE: SF2.01 8.1.3 says, that this generator is a
-      * non-realtime parameter. So we don't allow modulation (as opposed
-      * to _GEN(voice, GEN_SCALETUNE) When the scale tuning is varied,
-      * one key remains fixed. Here C3 (MIDI number 60) is used.
-      */
-
-      gen[GEN_PITCH].val = _noteTuning + _fluid->getPitch(60) + (gen[GEN_SCALETUNE].val * .01 *
-               (_fluid->getPitch(key) - _fluid->getPitch(60)));
-
      /* Now the generators are initialized, nominal and modulation value.
       * The voice parameters (which depend on generators) are calculated
       * with update_param. Processing the list of generator
@@ -792,6 +783,30 @@ void Voice::voice_start()
       positionToTurnOff = -1;
 
       status = FLUID_VOICE_ON;
+      }
+
+//---------------------------------------------------------
+//   fluid_voice_calculate_gen_pitch
+//---------------------------------------------------------
+
+void Voice::calculate_gen_pitch()
+      {
+      float x;
+     /* The GEN_PITCH is a hack to fit the pitch bend controller into the
+      * modulator paradigm.  Now the nominal pitch of the key is set.
+      * Note about SCALETUNE: SF2.01 8.1.3 says, that this generator is a
+      * non-realtime parameter. So we don't allow modulation (as opposed
+      * to _GEN(voice, GEN_SCALETUNE) When the scale tuning is varied,
+      * one key remains fixed. Here C3 (MIDI number 60) is used.
+      */
+      //if (channel->tuning != 0) {
+            /* pitch(scalekey) + scale * (pitch(key) - pitch(scalekey)) */
+      x = _fluid->getPitch((int)(root_pitch / 100.0f));
+      gen[GEN_PITCH].val = _noteTuning + (x + (gen[GEN_SCALETUNE].val / 100.0f * (_fluid->getPitch(key) - x)));
+      //      }
+      //else {
+      //      gen[GEN_PITCH].val = _noteTuning + (gen[GEN_SCALETUNE].val * (key - root_pitch / 100.0f) + root_pitch);
+      //      }
       }
 
 /*
@@ -925,10 +940,11 @@ void Voice::update_param(int _gen)
                               }
                         else {
                               root_pitch = sample->origpitch * 100.0f - sample->pitchadj;
-                        }
-                        root_pitch = _fluid->ct2hz(root_pitch);
-                        if (sample->samplerate != 0)
-                              root_pitch *= (float) _fluid->sample_rate / sample->samplerate;
+                              }
+                        root_pitch_hz = _fluid->ct2hz(root_pitch);
+                        root_pitch_hz *= (float) _fluid->sample_rate / sample->samplerate;
+                        /* voice pitch depends on voice root_pitch, so calculate voice pitch now */
+                        calculate_gen_pitch();
                         }
                   break;
 
@@ -1342,7 +1358,7 @@ void Voice::modulate_all()
         the set of modulators. We risk to call 'fluid_voice_update_param'
         several times for the same generator if several modulators have
         that generator as destination. It's not an error, just a wast of
-        energy (think polution, global warming, unhappy musicians, ...)
+        energy (think pollution, global warming, unhappy musicians, ...)
        */
 
       for (int i = 0; i < mod_count; i++) {

@@ -54,7 +54,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       qreal _oldWidth = 0;        // The last final panel width
       qreal _newWidth = 0;        // New panel width
       qreal _height = 0;
-      qreal _leftMarginTotal = 0; // Sum of all elments left margin
+      qreal _leftMarginTotal = 0; // Sum of all elements left margin
       qreal _panelRightPadding = 5;  // Extra space for the panel after last element
 
       Measure* measure = _score->firstMeasure();
@@ -272,13 +272,13 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       pen.setWidthF(0.0);
       pen.setStyle(Qt::NoPen);
       painter.setPen(pen);
-      painter.setBrush(preferences.fgColor);
+      painter.setBrush(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
       QRectF bg(_rect);
 
       bg.setWidth(_widthClef + _widthKeySig + _widthTimeSig + _leftMarginTotal + _panelRightPadding);
       QPixmap* fgPixmap = _sv->fgPixmap();
       if (fgPixmap == 0 || fgPixmap->isNull())
-            painter.fillRect(bg, preferences.fgColor);
+            painter.fillRect(bg, preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
       else {
             painter.setMatrixEnabled(false);
             painter.drawTiledPixmap(bg, *fgPixmap, bg.topLeft()

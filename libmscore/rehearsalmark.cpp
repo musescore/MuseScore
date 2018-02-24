@@ -34,15 +34,7 @@ RehearsalMark::RehearsalMark(Score* s)
 
 void RehearsalMark::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
-      qreal y;
-      if (placeAbove())
-            y = score()->styleP(StyleIdx::rehearsalMarkPosAbove);
-      else {
-            qreal sh = staff() ? staff()->height() : 0;
-            y = score()->styleP(StyleIdx::rehearsalMarkPosBelow) + sh + lineSpacing();
-            }
+      qreal y = placeAbove() ? styleP(StyleIdx::rehearsalMarkPosAbove) : styleP(StyleIdx::rehearsalMarkPosBelow) + staff()->height();
       setPos(QPointF(0.0, y));
       TextBase::layout1();
       Segment* s = segment();
@@ -61,22 +53,7 @@ void RehearsalMark::layout()
                         rxpos() += qMin(leftX, barlineX) + width();
                         }
                   }
-            if (autoplace()) {
-                  int firstStaffIdx = s->measure()->system()->firstVisibleStaff();
-                  qreal minDistance = score()->styleP(StyleIdx::rehearsalMarkMinDistance);
-                  Shape s1 = s->measure()->staffShape(firstStaffIdx);
-                  Shape s2 = shape().translated(s->pos() + pos());
-                  if (placeAbove()) {
-                        qreal d = s2.minVerticalDistance(s1);
-                        if (d > -minDistance)
-                              rUserYoffset() = -d - minDistance;
-                        }
-                  else {
-                        qreal d = s1.minVerticalDistance(s2);
-                        if (d > -minDistance)
-                              rUserYoffset() = d + minDistance;
-                        }
-                  }
+            autoplaceSegmentElement(styleP(StyleIdx::rehearsalMarkMinDistance));
             }
       }
 

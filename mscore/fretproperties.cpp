@@ -125,7 +125,7 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
       font.setPixelSize(size);
 
       QPainter p(this);
-      p.setRenderHint(QPainter::Antialiasing, preferences.antialiasedDrawing);
+      p.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
       p.setRenderHint(QPainter::TextAntialiasing, true);
       p.translate(xo, yo);
 
@@ -205,7 +205,7 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
             scaledFont.setPixelSize(font.pixelSize() * fretNumMag);
             p.setFont(scaledFont);
             p.setPen(pen);
-            // Todo: make dependant from StyleIdx::fretNumPos
+            // Todo: make dependent from StyleIdx::fretNumPos
             p.drawText(QRectF(-stringDist * .4, 0.0, 0.0, fretDist),
                Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
                QString("%1").arg(fretOffset+1));

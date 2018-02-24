@@ -84,8 +84,8 @@ const static std::map<QString, QString> instrumentMapping = {
             {"bnj6",            "banjo"},
             {"bongo",           "bongos"},
             {"brthns",          "baritone-horn"}, 
-            {"brtn-c",          "bariton"},
-            {"brtn-s",          "bariton"},
+            {"brtn-c",          "baritone"},
+            {"brtn-s",          "baritone"},
             {"cbs",             "cabasa"},
             {"cello",           "violoncello"},
             {"china",           "chinese-tom-toms"},
@@ -149,7 +149,7 @@ const static std::map<QString, QString> instrumentMapping = {
             {"ride",            "ride-cymbal"},
             {"rvs-cymb",        "cymbal"},
             {"sax-alt-eb",      "alto-saxophone"},
-            {"sax-bar-eb",      "bariton-saxophone"},
+            {"sax-bar-eb",      "baritone-saxophone"},
             {"sax-bass-eb",     "bass-saxophone"},
             {"sax-ms-f",        "mezzo-soprano-saxophone"},
             {"sax-sop-bb",      "soprano-saxophone"},
@@ -186,7 +186,7 @@ const static std::map<QString, QString> instrumentMapping = {
             {"tmblKit",         "timbales"},
             {"tmbl",            "timbales"},
             {"tmpn",            "timpani"},
-            {"tnklbll",         "tubular-bells"}, //The short form does not match but this is very likely due to the discription
+            {"tnklbll",         "tubular-bells"}, //The short form does not match but this is very likely due to the description
             {"tnr-c",           "tenor"},
             {"tnr-s",           "tenor"},
             {"Triangle-Percu",  "triangle"},
@@ -2002,7 +2002,7 @@ void GuitarPro6::addTremoloBar(Segment* segment, int track, int whammyOrigin, in
       if (whammyOrigin == 0 && whammyMiddle == 0 && whammyEnd == 0)
             return;
       if ((whammyOrigin == whammyEnd) && (whammyOrigin != whammyMiddle) && whammyMiddle != -1) {
-            /* we are dealing with a dip. We need the chek for whammy middle
+            /* we are dealing with a dip. We need the check for whammy middle
              * to be set as a predive has the same characteristics. */
             QList<PitchValue> points;
             points.append(PitchValue(0, whammyOrigin, false));

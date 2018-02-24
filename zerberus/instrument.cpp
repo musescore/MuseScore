@@ -181,7 +181,7 @@ bool ZInstrument::loadFromFile(const QString& path)
 
 bool ZInstrument::read(const QByteArray& buf, MQZipReader* /*uz*/, const QString& /*path*/)
       {
-      Ms::XmlReader e(0, buf);
+      Ms::XmlReader e(buf);
       while (e.readNextStartElement()) {
             if (e.name() == "MuseSynth") {
                   while (e.readNextStartElement()) {
