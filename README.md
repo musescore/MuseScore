@@ -1,11 +1,10 @@
-![MuseScore](mscore/data/musescore_logo_full.png)  
- Music notation and composition software
+![MuseScore](mscore/data/musescore_logo_full.png)
 
 [![Travis CI](https://secure.travis-ci.org/musescore/MuseScore.svg)](https://travis-ci.org/musescore/MuseScore)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/bp3ww6v985i64ece/branch/master?svg=true)](https://ci.appveyor.com/project/MuseScore/musescore/branch/master)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 
-MuseScore is an open source and free music notation software. For support, contribution, and bug reports visit MuseScore.org. Fork and make pull requests!
+[MuseScore](https://musescore.org) is an open-source and professional music composition application. MuseScore is free to use and allows users to create sheet music for instruments, including piano, guitar, and drums, efficiently. Users can learn more about MuseScore's features by visiting MuseScore's ["Support"](https://musescore.org/en/support) page. Developers are encouraged to contribute to MuseScore and can learn how to contribute by visiting MuseScore's ["Contribution"](https://musescore.org/en/contribute) page. 
 
 ## Features
 
