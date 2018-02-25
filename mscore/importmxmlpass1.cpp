@@ -732,6 +732,30 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
       }
 
 //---------------------------------------------------------
+//   fixupSigmap
+//---------------------------------------------------------
+
+/**
+ To enable error handling in pass2, ensure sigmap contains a valid entry at tick = 0.
+ Required by TimeSigMap::tickValues(), called (indirectly) by Segment::add().
+ */
+
+static void fixupSigmap(MxmlLogger* logger, Score* score, const QVector<Fraction>& measureLength)
+      {
+      auto it = score->sigmap()->find(0);
+
+      if (it == score->sigmap()->end()) {
+            // no valid timesig at tick = 0
+            logger->logError("no valid time signature at tick = 0");
+            // use length of first measure instead time signature.
+            // if there is no first measure, we probably don't care,
+            // but set a default anyway.
+            Fraction tsig = measureLength.isEmpty() ? Fraction(4, 4) : measureLength.at(0);
+            score->sigmap()->add(0, tsig);
+            }
+      }
+
+//---------------------------------------------------------
 //   parse
 //---------------------------------------------------------
 
@@ -744,14 +768,18 @@ Score::FileError MusicXMLParserPass1::parse(QIODevice* device)
       _logger->logDebugTrace("MusicXMLParserPass1::parse device");
       _parts.clear();
       _e.setDevice(device);
-      Score::FileError res = parse();
+      auto res = parse();
       if (res != Score::FileError::FILE_NO_ERROR)
             return res;
 
       // Determine the start tick of each measure in the part
       determineMeasureLength(_measureLength);
       determineMeasureStart(_measureLength, _measureStart);
+      // Fixup timesig at tick = 0 if necessary
+      fixupSigmap(_logger, _score, _measureLength);
+      // Create the measures
       createMeasures(_score, _measureLength, _measureStart);
+
       return res;
       }
 
@@ -1921,7 +1949,7 @@ static Fraction measureDurationAsFraction(const Fraction length, const int tsigt
  */
 
 void MusicXMLParserPass1::measure(const QString& partId,
-                                  const Fraction time,
+                                  const Fraction cTime,
                                   Fraction& mdur,
                                   VoiceOverlapDetector& vod)
       {
@@ -1935,11 +1963,11 @@ void MusicXMLParserPass1::measure(const QString& partId,
 
       while (_e.readNextStartElement()) {
             if (_e.name() == "attributes")
-                  attributes(partId);
+                  attributes(partId, cTime + mTime);
             else if (_e.name() == "note") {
                   Fraction dura;
                   // note: chord and grace note handling done in note()
-                  note(partId, time + mTime, dura, vod);
+                  note(partId, cTime + mTime, dura, vod);
                   if (dura.isValid()) {
                         mTime += dura;
                         if (mTime > mDura)
@@ -1968,7 +1996,7 @@ void MusicXMLParserPass1::measure(const QString& partId,
                         }
                   }
             else if (_e.name() == "direction")
-                  direction(partId, time + mTime);
+                  direction(partId, cTime + mTime);
             else
                   skipLogCurrElem();
 
@@ -2031,7 +2059,7 @@ void MusicXMLParserPass1::measure(const QString& partId,
  Parse the /score-partwise/part/measure/attributes node.
  */
 
-void MusicXMLParserPass1::attributes(const QString& partId)
+void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "attributes");
       _logger->logDebugTrace("MusicXMLParserPass1::attributes", &_e);
@@ -2046,7 +2074,7 @@ void MusicXMLParserPass1::attributes(const QString& partId)
             else if (_e.name() == "staves")
                   staves(partId);
             else if (_e.name() == "time")
-                  time();
+                  time(cTime);
             else
                   skipLogCurrElem();
             }
@@ -2168,7 +2196,7 @@ static bool determineTimeSig(MxmlLogger* logger, const QXmlStreamReader* const x
  Parse the /score-partwise/part/measure/attributes/time node.
  */
 
-void MusicXMLParserPass1::time()
+void MusicXMLParserPass1::time(const Fraction cTime)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "time");
 
@@ -2192,6 +2220,7 @@ void MusicXMLParserPass1::time()
             int btp = 0;       // beat-type as integer
             if (determineTimeSig(_logger, &_e, beats, beatType, timeSymbol, st, bts, btp)) {
                   _timeSigDura = Fraction(bts, btp);
+                  _score->sigmap()->add(cTime.ticks(), _timeSigDura);
                   }
             }
       }
