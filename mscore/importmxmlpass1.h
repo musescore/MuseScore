@@ -83,10 +83,10 @@ public:
       void scoreInstrument(const QString& partId);
       void midiInstrument(const QString& partId);
       void part();
-      void measure(const QString& partId, const Fraction time, Fraction& mdur, VoiceOverlapDetector& vod);
-      void attributes(const QString& partId);
+      void measure(const QString& partId, const Fraction cTime, Fraction& mdur, VoiceOverlapDetector& vod);
+      void attributes(const QString& partId, const Fraction cTime);
       void clef(const QString& partId);
-      void time();
+      void time(const Fraction cTime);
       void divisions();
       void staves(const QString& partId);
       void direction(const QString& partId, const Fraction cTime);

@@ -3758,11 +3758,7 @@ void MusicXMLParserPass2::time(const QString& partId, Measure* measure, const in
             int btp = 0; // beat-type as integer
             if (determineTimeSig(beats, beatType, timeSymbol, st, bts, btp)) {
                   _timeSigDura = Fraction(bts, btp);
-                  // TODO: verify if fractionTSig handling must be copied from DOM parser
                   Fraction fractionTSig = Fraction(bts, btp);
-                  _score->sigmap()->add(tick, fractionTSig);
-                  //Part* part = score->staff(staff)->part();
-                  //int staves = part->nstaves();
                   for (int i = 0; i < _pass1.getPart(partId)->nstaves(); ++i) {
                         TimeSig* timesig = new TimeSig(_score);
                         timesig->setVisible(printObject);
