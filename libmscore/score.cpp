@@ -1148,6 +1148,8 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
                   continue;
             qreal sy2;
             SysStaff* ss = system->staff(pos->staffIdx);
+            if (!ss->show())
+                  continue;
             SysStaff* nstaff = 0;
 
             // find next visible staff
@@ -1156,6 +1158,10 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
                   if (!st->part()->show())
                         continue;
                   nstaff = system->staff(i);
+                  if (!nstaff->show()) {
+                        nstaff = 0;
+                        continue;
+                        }
                   break;
                   }
 
