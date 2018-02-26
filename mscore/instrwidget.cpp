@@ -21,6 +21,7 @@
 #include "config.h"
 #include "icons.h"
 #include "instrwidget.h"
+#include "stringutils.h"
 
 #include "libmscore/clef.h"
 #include "libmscore/instrtemplate.h"
@@ -56,7 +57,12 @@ void filterInstruments(QTreeWidget* instrumentList, const QString &searchPhrase)
             for (int cidx = 0; (ci = item->child(cidx)); ++cidx) {
                   // replace the unicode b (accidental) so a search phrase of "bb" would give Bb Trumpet...
                   QString text = ci->text(0).replace(QChar(0x266d), QChar('b'));
-                  bool isMatch = text.contains(searchPhrase, Qt::CaseInsensitive);
+
+                  // remove ligatures and diacritics
+                  QString removedSpecialChar = stringutils::removeLigatures(text);
+                  removedSpecialChar = stringutils::removeDiacritics(removedSpecialChar);
+
+                  bool isMatch = text.contains(searchPhrase, Qt::CaseInsensitive) || removedSpecialChar.contains(searchPhrase, Qt::CaseInsensitive);
                   ci->setHidden(!isMatch);
 
                   if (isMatch)
