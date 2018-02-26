@@ -238,6 +238,7 @@ add_executable ( ${ExecutableName}
       ${INCS}
 
       recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
+      stringutils.h stringutils.cpp
       scoreview.cpp editharmony.cpp editfiguredbass.cpp events.cpp
       editinstrument.cpp editstyle.cpp
       icons.cpp importbww.cpp
