@@ -315,7 +315,7 @@ void findBeatLocations(
                   }
             }
 
-      auto *data = preferences.midiImportOperations.data();
+      auto *data = midiImportOperations.data();
       if (!beatResults.empty()) {
             const MidiOperations::HumanBeatData &beatData = beatResults.begin()->second;
             setTimeSig(sigmap, beatData.timeSig);
@@ -375,7 +375,7 @@ void scaleOffTimes(
 
 void adjustChordsToBeats(std::multimap<int, MTrack> &tracks)
       {
-      const auto &opers = preferences.midiImportOperations;
+      const auto &opers = midiImportOperations;
       std::set<ReducedFraction> beats = opers.data()->humanBeatData.beatSet;  // copy
       if (beats.empty())
             return;
@@ -464,7 +464,7 @@ void updateFirstLastBeats(MidiOperations::HumanBeatData &beatData, const Reduced
 
 void setTimeSignature(TimeSigMap *sigmap)
       {
-      auto *data = preferences.midiImportOperations.data();
+      auto *data = midiImportOperations.data();
       const std::set<ReducedFraction> &beats = data->humanBeatData.beatSet;
       if (beats.empty())
             return;           // don't set time sig for non-human performed MIDI files

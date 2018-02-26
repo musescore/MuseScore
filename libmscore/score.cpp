@@ -1842,7 +1842,7 @@ MasterScore* MasterScore::clone()
 
       buffer.close();
 
-      XmlReader r(this, buffer.buffer());
+      XmlReader r(buffer.buffer());
       MasterScore* score = new MasterScore(style());
       score->read1(r, true);
 
@@ -4425,7 +4425,8 @@ void MasterScore::setLayoutAll()
 
 void MasterScore::setLayout(int t)
       {
-      _cmdState.setTick(t);
+      if (t >= 0)
+            _cmdState.setTick(t);
       }
 
 //---------------------------------------------------------

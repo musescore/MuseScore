@@ -255,7 +255,7 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
 #ifndef QT_NO_DEBUG
       if (!strcmp(cmd->name(), "ChangeProperty")) {
             ChangeProperty* cp = static_cast<ChangeProperty*>(cmd);
-            qCDebug(undoRedo, "<%s> id %s", cmd->name(), propertyName(cp->getId()));
+            qCDebug(undoRedo, "<%s> id %d %s", cmd->name(), int(cp->getId()), propertyName(cp->getId()));
             }
       else {
             qCDebug(undoRedo, "<%s>", cmd->name());
@@ -1442,8 +1442,8 @@ void InsertRemoveMeasures::insertMeasures()
       Score* score = fm->score();
       QList<Clef*> clefs;
       QList<KeySig*> keys;
-      Segment* fs;
-      Segment* ls;
+      Segment* fs = nullptr;
+      Segment* ls = nullptr;
       if (fm->isMeasure()) {
             score->setPlaylistDirty();
             fs = toMeasure(fm)->first();
@@ -1815,7 +1815,7 @@ void ChangeStaffUserDist::flip(EditData*)
 
 void ChangeProperty::flip(EditData*)
       {
-      qCDebug(undoRedo) << element->name() << propertyName(id) << element->getProperty(id) << "->" << property;
+      qCDebug(undoRedo) << element->name() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id) << "->" << property;
 
 //      if (id == P_ID::SPANNER_TICK)
 //            static_cast<Element*>(element)->score()->removeSpanner(static_cast<Spanner*>(element));

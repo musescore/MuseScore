@@ -202,6 +202,7 @@ extern QString accSymId2MxmlString(const SymId id);
 extern QString accidentalType2MxmlString(const AccidentalType type);
 extern AccidentalType mxmlString2accidentalType(const QString mxmlName);
 extern SymId mxmlString2accSymId(const QString mxmlName);
+extern AccidentalType microtonalGuess(double val);
 
 } // namespace Ms
 #endif

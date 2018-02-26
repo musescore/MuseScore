@@ -278,7 +278,7 @@ void Image::read(XmlReader& e)
                   loaded = load(_storePath);
             path = _storePath;
             }
-      // if no succes from store path, attempt loading from link path (for .mscx files)
+      // if no success from store path, attempt loading from link path (for .mscx files)
       if (!loaded) {
             _linkIsValid = load(_linkPath);
             path = _linkPath;
@@ -570,6 +570,7 @@ QVariant Image::propertyDefault(P_ID id) const
 
 void Image::startEdit(EditData& ed)
       {
+      Element::startEdit(ed);
       ed.grips   = 2;
       ed.curGrip = Grip(1);
       }

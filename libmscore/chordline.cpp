@@ -365,7 +365,7 @@ void ChordLine::updateGrips(EditData& ed) const
             else if (_chordLineType == ChordLineType::PLOP)
                    ed.grip[0].translate(QPointF(-offset, -offset));
 
-            // translate on the length and height - stops the grips from goint past boundries of slide
+            // translate on the length and height - stops the grips from going past boundaries of slide
             ed.grip[0].translate(cp + QPointF(path.elementAt(1).x * sp, path.elementAt(1).y * sp));
             }
       else  {
@@ -380,6 +380,7 @@ void ChordLine::updateGrips(EditData& ed) const
 
 void ChordLine::startEdit(EditData& ed)
       {
+      Element::startEdit(ed);
       if (_straight) {
             ed.curGrip = Grip(0);
             ed.grips   = 1;

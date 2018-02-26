@@ -287,7 +287,7 @@ function checkDependencies() {
   rm -r "${tmp}"
 }
 
-# PROBLEM: We want to check dependecies provided by the system, but `ldd` looks
+# PROBLEM: We want to check dependencies provided by the system, but `ldd` looks
 # in the current directory first so will find the other package libraries first.
 # SOLUTION: Copy lib to tmp and test it there, delete and repeat with next, etc.
 function checkFile() {

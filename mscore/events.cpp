@@ -361,15 +361,23 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   break;
 
             case ViewState::EDIT: {
-                  if (e == editData.element && editData.grips) {
+                  if (editData.grips) {
                         qreal a = editData.grip[0].width() * 1.0;
+                        bool gripFound = false;
                         for (int i = 0; i < editData.grips; ++i) {
                               if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
                                     editData.curGrip = Grip(i);
                                     updateGrips();
                                     score()->update();
+                                    gripFound = true;
                                     break;
                                     }
+                              }
+                        if (!gripFound) {
+                              editData.element = e;
+                              changeState(ViewState::NORMAL);
+                              mousePressEventNormal(ev);
+                              break;
                               }
                         }
                   else {
@@ -690,7 +698,7 @@ void ScoreView::escapeCmd()
 
 static const char* stateName(ViewState s)
       {
-      const char* p;
+      std::string p;
       switch (s) {
             case ViewState::NORMAL:             p = "NORMAL";           break;
             case ViewState::DRAG:               p = "DRAG";             break;
@@ -707,7 +715,7 @@ static const char* stateName(ViewState s)
             case ViewState::FOTO_DRAG_OBJECT:   p = "FOTO_DRAG_OBJECT"; break;
             case ViewState::FOTO_LASSO:         p = "FOTO_LASSO";       break;
             }
-      return p;
+      return p.c_str();
       }
 
 //---------------------------------------------------------
@@ -744,8 +752,15 @@ void ScoreView::changeState(ViewState s)
                   break;
             case ViewState::DRAG:
                   break;
-            case ViewState::DRAG_OBJECT:
             case ViewState::FOTO_DRAG_OBJECT:
+                  for (Element* e : _score->selection().elements()) {
+                        e->endDrag(editData);
+                        e->triggerLayout();
+                        }
+                  setDropTarget(0); // this also resets dropAnchor
+                  _score->endCmd();
+                  break;
+            case ViewState::DRAG_OBJECT:
                   endDrag();
                   break;
             case ViewState::FOTO_DRAG_EDIT:

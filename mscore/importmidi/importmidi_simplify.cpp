@@ -60,8 +60,8 @@ void lengthenNote(
       if (endTime <= note.offTime)
             return;
 
-      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
-      const int currentTrack = preferences.midiImportOperations.currentTrack();
+      const auto &opers = midiImportOperations.data()->trackOpers;
+      const int currentTrack = midiImportOperations.currentTrack();
 
       const bool useDots = opers.useDots.value(currentTrack);
       const auto tupletsForDuration = MidiTuplet::findTupletsInBarForDuration(
@@ -278,7 +278,7 @@ void simplifyDurations(
             const TimeSigMap *sigmap,
             bool simplifyDrumTracks)
       {
-      auto &opers = preferences.midiImportOperations;
+      auto &opers = midiImportOperations;
 
       for (auto &track: tracks) {
             MTrack &mtrack = track.second;

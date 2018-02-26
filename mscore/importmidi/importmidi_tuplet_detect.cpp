@@ -35,7 +35,7 @@ bool isTupletAllowed(const TupletInfo &tupletInfo)
             }
       }
                   // for all tuplets
-      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
+      const auto &opers = midiImportOperations.data()->trackOpers;
       const int minAllowedNoteCount = (opers.isHumanPerformance.value())
                   ? tupletLimits(tupletInfo.tupletNumber).minNoteCountHuman
                   : tupletLimits(tupletInfo.tupletNumber).minNoteCount;
@@ -65,8 +65,8 @@ bool isTupletAllowed(const TupletInfo &tupletInfo)
 std::vector<int> findTupletNumbers(const ReducedFraction &divLen,
                                    const ReducedFraction &barFraction)
       {
-      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
-      const int currentTrack = preferences.midiImportOperations.currentTrack();
+      const auto &opers = midiImportOperations.data()->trackOpers;
+      const int currentTrack = midiImportOperations.currentTrack();
       std::vector<int> tupletNumbers;
 
       if (Meter::isCompound(barFraction) && divLen == Meter::beatLength(barFraction)) {
@@ -101,8 +101,8 @@ ReducedFraction findSumLengthOfRests(
       const auto tupletNoteLen = tupletInfo.len / tupletInfo.tupletNumber;
       ReducedFraction sumLen = {0, 1};
 
-      const auto &opers = preferences.midiImportOperations.data()->trackOpers;
-      const int currentTrack = preferences.midiImportOperations.currentTrack();
+      const auto &opers = midiImportOperations.data()->trackOpers;
+      const int currentTrack = midiImportOperations.currentTrack();
 
       for (const auto &chord: tupletInfo.chords) {
             const auto staccatoIt = (opers.simplifyDurations.value(currentTrack))
@@ -353,8 +353,8 @@ std::vector<TupletInfo> detectTuplets(
                         auto tupletInfo = findTupletApproximation(divLen, tupletNumber,
                                              basicQuant, startDivTime, startDivChordIt, endDivChordIt);
 
-                        const auto &opers = preferences.midiImportOperations.data()->trackOpers;
-                        const int currentTrack = preferences.midiImportOperations.currentTrack();
+                        const auto &opers = midiImportOperations.data()->trackOpers;
+                        const int currentTrack = midiImportOperations.currentTrack();
 
                         if (opers.simplifyDurations.value(currentTrack)) {
                               if (!haveChordsInTheMiddleBetweenTupletChords(

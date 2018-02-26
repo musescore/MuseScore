@@ -295,7 +295,7 @@ void MScore::init()
       //
       _baseStyle.precomputeValues();
       QSettings s;
-      QString defStyle = s.value("defaultStyle").toString();
+      QString defStyle = s.value("score/style/defaultStyleFile").toString();
       if (!(MScore::testMode || defStyle.isEmpty())) {
             QFile f(defStyle);
             if (f.open(QIODevice::ReadOnly)) {
@@ -305,7 +305,7 @@ void MScore::init()
                   }
             }
       _defaultStyle.precomputeValues();
-      QString partStyle = s.value("partStyle").toString();
+      QString partStyle = s.value("score/style/partStyleFile").toString();
       if (!(MScore::testMode || partStyle.isEmpty())) {
             QFile f(partStyle);
             if (f.open(QIODevice::ReadOnly)) {
@@ -356,6 +356,25 @@ void MScore::init()
 #ifdef DEBUG_SHAPES
       testShapes();
 #endif
+}
+
+//---------------------------------------------------------
+//   readDefaultStyle
+//---------------------------------------------------------
+
+bool MScore::readDefaultStyle(QString file)
+      {
+      if (file.isEmpty())
+            return false;
+      MStyle style = defaultStyle();
+      QFile f(file);
+      if (!f.open(QIODevice::ReadOnly))
+            return false;
+      bool rv = style.load(&f);
+      if (rv)
+            setDefaultStyle(style);
+      f.close();
+      return rv;
       }
 
 //---------------------------------------------------------
@@ -364,7 +383,7 @@ void MScore::init()
 
 void MScore::defaultStyleForPartsHasChanged()
       {
-// TODO ??
+// TODO what is needed here?
 //      delete _defaultStyleForParts;
 //      _defaultStyleForParts = 0;
       }

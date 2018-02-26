@@ -77,7 +77,7 @@ void InstrumentsDialog::on_saveButton_clicked()
          ".",
          tr("MuseScore Instruments") + " (*.xml)",
          0,
-         preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
+         preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS) ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
       if (name.isEmpty())
             return;
@@ -120,7 +120,7 @@ void InstrumentsDialog::on_loadButton_clicked()
           mscoreGlobalShare + "/templates",
          tr("MuseScore Instruments") + " (*.xml)",
          0,
-         preferences.nativeDialogs ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
+         preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS) ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
       if (fn.isEmpty())
             return;

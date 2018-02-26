@@ -20,6 +20,12 @@
 
 namespace Ms {
 
+#ifdef Q_OS_MAC
+#define CONTROL_MODIFIER Qt::AltModifier
+#else
+#define CONTROL_MODIFIER Qt::ControlModifier
+#endif
+
 #ifndef VOICES
 #define VOICES 4
 #endif
@@ -48,6 +54,7 @@ enum class Grip {
 //---------------------------------------------------------
 
 enum class ElementFlag {
+      NOTHING         = 0x00000000,
       DROP_TARGET     = 0x00000001,
       SELECTABLE      = 0x00000002,
       MOVABLE         = 0x00000004,
@@ -123,7 +130,7 @@ class EditData {
 
       ElementEditData* getData(const Element*) const;
       void addData(ElementEditData*);
-      bool control() const  { return modifiers & Qt::ControlModifier; }
+      bool control() const  { return modifiers & CONTROL_MODIFIER; }
       bool shift() const    { return modifiers & Qt::ShiftModifier; }
       bool isStartEndGrip() { return curGrip == Grip::START || curGrip == Grip::END; }
       };
@@ -158,7 +165,7 @@ class Element : public ScoreElement {
       QColor _color;              ///< element color attribute
 
    public:
-      Element(Score* s = 0);
+      Element(Score* = 0, ElementFlags = ElementFlag::NOTHING);
       Element(const Element&);
       virtual ~Element();
 
@@ -336,7 +343,7 @@ class Element : public ScoreElement {
 /**
  Handle a dropped element at canvas relative \a pos of given element
  \a type and \a subtype. Returns dropped element if any.
- The ownership of element in DropData is transfered to the called
+ The ownership of element in DropData is transferred to the called
  element (if not used, element has to be deleted).
  The returned element will be selected if not in note edit mode.
 
@@ -350,7 +357,7 @@ class Element : public ScoreElement {
  */
       virtual bool mousePress(EditData&) { return false; }
 
-      mutable bool itemDiscovered;     ///< helper flag for bsp
+      mutable bool itemDiscovered      { false };     ///< helper flag for bsp
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
@@ -438,7 +445,7 @@ class Element : public ScoreElement {
       virtual Element* prevSegmentElement();  //< next-element and prev-element command
 
       virtual QString accessibleInfo() const;         //< used to populate the status bar
-      virtual QString screenReaderInfo() const  {     //< by default returns accessibleInfo, but can be overriden
+      virtual QString screenReaderInfo() const  {     //< by default returns accessibleInfo, but can be overridden
             return accessibleInfo();
             }
                                                        //  if the screen-reader needs a special string (see note for example)
@@ -448,6 +455,9 @@ class Element : public ScoreElement {
 
       virtual void triggerLayout() const;
       virtual void drawEditMode(QPainter*, EditData&);
+
+      void autoplaceSegmentElement(qreal minDistance);      // helper function
+      qreal styleP(StyleIdx idx) const;
       };
 
 //-----------------------------------------------------------------------------

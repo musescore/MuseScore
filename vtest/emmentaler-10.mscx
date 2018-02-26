@@ -29,6 +29,8 @@
       <showMeasureNumber>0</showMeasureNumber>
       <showFooter>0</showFooter>
       <dynamicsFontItalic>0</dynamicsFontItalic>
+      <staffTextPosAbove>-1</staffTextPosAbove>
+      <staffTextMinDistance>0.2</staffTextMinDistance>
       <Spatium>1.5</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -128,14 +130,12 @@ p, li { white-space: pre-wrap; }
         <TimeSig>
           <sigN>8</sigN>
           <sigD>4</sigD>
-          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <StaffText>
-          <pos x="-5" y="-5.5"/>
+          <pos x="-5" y="-4.5"/>
           <text>Emmentaler note-heads</text>
           </StaffText>
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Normal</text>
           </StaffText>
         <Chord>
@@ -177,7 +177,6 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="3">
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Cross</text>
           </StaffText>
         <Chord>
@@ -218,6 +217,7 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
+          <subtype>normal</subtype>
           </BarLine>
         </Measure>
       </Staff>
@@ -226,10 +226,8 @@ p, li { white-space: pre-wrap; }
         <TimeSig>
           <sigN>8</sigN>
           <sigD>4</sigD>
-          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Diamond</text>
           </StaffText>
         <Chord>
@@ -275,7 +273,6 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="3">
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Triangel</text>
           </StaffText>
         <Chord>
@@ -316,6 +313,7 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
+          <subtype>normal</subtype>
           </BarLine>
         </Measure>
       </Staff>
@@ -324,10 +322,8 @@ p, li { white-space: pre-wrap; }
         <TimeSig>
           <sigN>8</sigN>
           <sigD>4</sigD>
-          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Slash</text>
           </StaffText>
         <Chord>
@@ -373,7 +369,6 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="3">
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>XCircle</text>
           </StaffText>
         <Chord>
@@ -414,6 +409,7 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
+          <subtype>normal</subtype>
           </BarLine>
         </Measure>
       </Staff>
@@ -422,10 +418,8 @@ p, li { white-space: pre-wrap; }
         <TimeSig>
           <sigN>8</sigN>
           <sigD>4</sigD>
-          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Do</text>
           </StaffText>
         <Chord>
@@ -471,7 +465,6 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="3">
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Re</text>
           </StaffText>
         <Chord>
@@ -512,6 +505,7 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
+          <subtype>normal</subtype>
           </BarLine>
         </Measure>
       </Staff>
@@ -520,10 +514,8 @@ p, li { white-space: pre-wrap; }
         <TimeSig>
           <sigN>8</sigN>
           <sigD>4</sigD>
-          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Mi</text>
           </StaffText>
         <Chord>
@@ -569,7 +561,6 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="3">
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Fa</text>
           </StaffText>
         <Chord>
@@ -610,6 +601,7 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
+          <subtype>normal</subtype>
           </BarLine>
         </Measure>
       </Staff>
@@ -618,10 +610,8 @@ p, li { white-space: pre-wrap; }
         <TimeSig>
           <sigN>8</sigN>
           <sigD>4</sigD>
-          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Sol</text>
           </StaffText>
         <Chord>
@@ -667,7 +657,6 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="3">
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>La</text>
           </StaffText>
         <Chord>
@@ -708,6 +697,7 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
+          <subtype>normal</subtype>
           </BarLine>
         </Measure>
       </Staff>
@@ -716,10 +706,8 @@ p, li { white-space: pre-wrap; }
         <TimeSig>
           <sigN>8</sigN>
           <sigD>4</sigD>
-          <showCourtesy>0</showCourtesy>
           </TimeSig>
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Ti</text>
           </StaffText>
         <Chord>
@@ -765,7 +753,6 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="3">
         <StaffText>
-          <pos x="0" y="-2.5"/>
           <text>Alt. Brevis</text>
           </StaffText>
         <Chord>
@@ -824,6 +811,7 @@ p, li { white-space: pre-wrap; }
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
+          <subtype>normal</subtype>
           </BarLine>
         </Measure>
       </Staff>

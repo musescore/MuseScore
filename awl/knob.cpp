@@ -24,7 +24,7 @@ namespace Awl {
 
 //---------------------------------------------------------
 //   Knob
-///   this is the AwlKnob contructor
+///   this is the AwlKnob constructor
 //---------------------------------------------------------
 
 Knob::Knob(QWidget* parent)

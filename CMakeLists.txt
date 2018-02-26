@@ -145,7 +145,8 @@ if (APPLE)
       find_library(CoreMidiFW            NAMES CoreMIDI)
       find_library(SystemConfigurationFW NAMES SystemConfiguration)
       find_library(CoreServicesFW        NAMES CoreServices)
-      set(OsxFrameworks ${AudioToolboxFW} ${AudioUnitFW} ${CoreAudioFW} ${CoreMidiFW} ${SystemConfigurationFW} ${CoreServicesFW})
+      find_library(AppKit                NAMES AppKit)
+      set(OsxFrameworks ${AudioToolboxFW} ${AudioUnitFW} ${CoreAudioFW} ${CoreMidiFW} ${SystemConfigurationFW} ${CoreServicesFW} ${AppKit})
 endif (APPLE)
 
 #
@@ -480,7 +481,7 @@ if (NOT MINGW AND NOT APPLE)
                        build/rm-empty-dirs              DESTINATION bin COMPONENT portable ${SCRIPT_PERMS})
       install(FILES    build/Linux+BSD/portable/qt.conf DESTINATION bin COMPONENT portable)
     else (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
-      set(MAN_PORTABLE '.\"') # Comment out lines in man page that are only relevent to the portable version
+      set(MAN_PORTABLE '.\"') # Comment out lines in man page that are only relevant to the portable version
     endif (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
     # Install desktop file (perform variable substitution first)
     configure_file(build/Linux+BSD/mscore.desktop.in mscore${MSCORE_INSTALL_SUFFIX}.desktop)

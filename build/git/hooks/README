@@ -7,7 +7,7 @@ the string "Unknown" instead of a build number.
 
 It is always possible to update mscore/revision.h with the build number
 of the current checked-out branch by doing "make revision". However, the
-updated mscore/revision.h should never be commited back to git. This can
+updated mscore/revision.h should never be committed back to git. This can
 be prevented manually by restoring the original value before committing,
 with "git checkout -- mscore/revision.h"
 

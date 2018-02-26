@@ -956,7 +956,7 @@ void PowerTab::ptSection::copyTracks(ptTrack* track)
                   beat->isRest = rt.is_rest;
                   beat->tuplet = rt.triplet;
                   if (!rt.is_rest) {
-                        auto diagram = track->diagramMap.find({ signature->second.key, signature->second.formula, signature->second.formula_mod });
+                        auto diagram = track->diagramMap.find({ {signature->second.key, signature->second.formula, signature->second.formula_mod} });
                         for (unsigned int string = 0; string < diagram->second.frets.size(); ++string) {
                               int fret = diagram->second.frets[string];
                               if (fret >= 0xFE) {

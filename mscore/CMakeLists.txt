@@ -223,8 +223,10 @@ endif (OMR)
 
 if (APPLE)
       file(GLOB_RECURSE INCS "*.h")
+      set(COCOABRIDGE "macos/cocoabridge.mm")
 else (APPLE)
       set(INCS "")
+      set(COCOABRIDGE "")
 endif (APPLE)
 
 add_executable ( ${ExecutableName}
@@ -235,11 +237,13 @@ add_executable ( ${ExecutableName}
       ${resource_file}
       ${INCS}
 
-      recordbutton.h greendotbutton prefsdialog.h
+      recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
+      stringutils.h stringutils.cpp
       scoreview.cpp editharmony.cpp editfiguredbass.cpp events.cpp
       editinstrument.cpp editstyle.cpp
       icons.cpp importbww.cpp
-      importmxml.cpp importmxmllogger.cpp importmxmlpass1.cpp importmxmlpass2.cpp
+      importmxmllogger.cpp importmxmlnoteduration.cpp importmxmlnotepitch.cpp
+      importmxml.cpp importmxmlpass1.cpp importmxmlpass2.cpp
       instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
@@ -345,6 +349,7 @@ add_executable ( ${ExecutableName}
       abstractdialog.cpp abstractdialog.h
       toolbuttonmenu.cpp
 
+      ${COCOABRIDGE}
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}

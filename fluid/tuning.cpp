@@ -334,7 +334,7 @@ bool Tuning::loadkbm(const QString& filename)
             return false;
       lastkey = qBound(1, x, 127);
 
-      //loads last the middle note where scale fro scale degree=0
+      //loads last the middle note where scale for scale degree=0
       tmp = loadLine(&file);
       if (tmp.isEmpty())
             return false;

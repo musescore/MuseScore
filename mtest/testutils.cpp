@@ -67,15 +67,6 @@ QIcon* icons[0];
 QString mscoreGlobalShare;
 
 //---------------------------------------------------------
-//   Preferences
-//---------------------------------------------------------
-
-Preferences preferences;
-Preferences::Preferences()
-      {
-      }
-
-//---------------------------------------------------------
 //   writeReadElement
 //    writes and element and reads it back
 //---------------------------------------------------------
@@ -99,7 +90,7 @@ Element* MTest::writeReadElement(Element* element)
 // printf("===read <%s>===\n", element->name());
 // printf("%s\n", buffer.buffer().data());
 
-      XmlReader e(element->score(), buffer.buffer());
+      XmlReader e(buffer.buffer());
       e.readNextStartElement();
       QString tag(e.name().toString());
 // printf("read tag %s\n", qPrintable(tag));
@@ -339,7 +330,7 @@ void MTest::initMTest()
       mscore->init();
       ed.init();
 
-      preferences.shortestNote = MScore::division / 4; // midi quantization: 1/16
+      preferences.init(true);
 
       root = TESTROOT "/mtest";
       loadInstrumentTemplates(":/instruments.xml");

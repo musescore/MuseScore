@@ -515,7 +515,7 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
       Note* note = new Note(this);
       Chord* chord = new Chord(this);
 
-      // alow grace notes to be added to other grace notes
+      // allow grace notes to be added to other grace notes
       // by really adding to parent chord
       if (ch->noteType() != NoteType::NORMAL)
             ch = toChord(ch->parent());
@@ -596,7 +596,7 @@ void Score::createCRSequence(Fraction f, ChordRest* cr, int tick)
 //    return segment of last created note/rest
 //---------------------------------------------------------
 
-Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, Direction stemDirection)
+Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, Direction stemDirection, bool rhythmic)
       {
       Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
 
@@ -621,7 +621,11 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   }
 
             measure = segment->measure();
-            std::vector<TDuration> dl = toRhythmicDurationList(dd, isRest, segment->rtick(), sigmap()->timesig(tick).nominal(), measure, 1);
+            std::vector<TDuration> dl;
+            if (rhythmic)
+                  dl = toRhythmicDurationList(dd, isRest, segment->rtick(), sigmap()->timesig(tick).nominal(), measure, 1);
+            else
+                  dl = toDurationList(dd, true);
             int n = dl.size();
             for (int i = 0; i < n; ++i) {
                   const TDuration& d = dl[i];
@@ -1649,6 +1653,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
                   }
             changeAccidental2(ln, pitch, tpc);
             }
+      setPlayNote(true);
       }
 
 //---------------------------------------------------------
@@ -2438,7 +2443,7 @@ void Score::cmdExplode()
                   int track = (srcStaff + i) * VOICES;
                   ChordRest* cr = toChordRest(firstCRSegment->element(track));
                   if (cr) {
-                        XmlReader e(this, srcSelection.mimeData());
+                        XmlReader e(srcSelection.mimeData());
                         e.setPasteMode(true);
                         pasteStaff(e, cr->segment(), cr->staffIdx());
                         }

@@ -33,7 +33,7 @@ PaletteBox::PaletteBox(QWidget* parent)
 
       singlePaletteAction = new QAction(this);
       singlePaletteAction->setCheckable(true);
-      singlePaletteAction->setChecked(preferences.singlePalette);
+      singlePaletteAction->setChecked(preferences.getBool(PREF_APP_USESINGLEPALETTE));
       addAction(singlePaletteAction);
       connect(singlePaletteAction, SIGNAL(toggled(bool)), SLOT(setSinglePalette(bool)));
 
@@ -136,8 +136,7 @@ void PaletteBox::filterPalettes(const QString& text)
 void PaletteBox::workspaceSelected(int idx)
       {
       Workspace* w = Workspace::workspaces().at(idx);
-      preferences.workspace = w->name();
-      preferences.dirty = true;
+      preferences.setPreference(PREF_APP_WORKSPACE, w->name());
       mscore->changeWorkspace(w);
       }
 
@@ -163,7 +162,7 @@ void PaletteBox::updateWorkspaces()
       int curIdx = -1;
       for (Workspace* p : pl) {
             workspaceList->addItem(qApp->translate("Ms::Workspace", p->name().toUtf8()), p->path());
-            if (p->name() == preferences.workspace)
+            if (p->name() == preferences.getString(PREF_APP_WORKSPACE))
                   curIdx = idx;
             ++idx;
             }
@@ -410,8 +409,7 @@ QSize PaletteBoxScrollArea::sizeHint() const
 
 void PaletteBox::setSinglePalette(bool val)
       {
-      preferences.singlePalette = val;
-      preferences.dirty = true;
+      preferences.setPreference(PREF_APP_USESINGLEPALETTE, val);
       }
 
 //---------------------------------------------------------

@@ -50,7 +50,7 @@ void TestSfzGlobal::initTestCase()
 void TestSfzGlobal::testglobal()
       {
       Zerberus* synth = new Zerberus();
-      Ms::preferences.mySoundfontsPath += ";" + root;
+      preferences.setPreference(PREF_APP_PATHS_MYSOUNDFONTS, root);
       synth->loadInstrument("globalTest.sfz");
       QCOMPARE(synth->instrument(0)->zones().size(), (size_t) 2);
       QCOMPARE(synth->instrument(0)->zones().front()->keyLo, (char) 40);

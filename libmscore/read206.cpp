@@ -1010,7 +1010,7 @@ static void readChord(Chord* chord, XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   read
+//   readText
 //---------------------------------------------------------
 
 static void readText(XmlReader& e, TextBase* t, Element* be)
@@ -1132,7 +1132,6 @@ static void readVolta(XmlReader& e, Volta* volta)
 static void readPedal(XmlReader& e, Pedal* pedal)
       {
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
             if (!readTextLineProperties(e, pedal))
                   e.unknown();
             }
@@ -1251,7 +1250,6 @@ static void readTrill(XmlReader& e, Trill* t)
 static void readTextLine(XmlReader& e, TextLineBase* tlb)
       {
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
             if (!readTextLineProperties(e, tlb))
                   e.unknown();
             }
@@ -1804,7 +1802,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   TimeSig* ts = new TimeSig(score);
                   ts->setTrack(e.track());
                   ts->read(e);
-                  // if time sig not at begining of measure => courtesy time sig
+                  // if time sig not at beginning of measure => courtesy time sig
                   int currTick = e.tick();
                   bool courtesySig = (currTick > m->tick());
                   if (courtesySig) {
@@ -1896,6 +1894,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         }
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
+                  // vertical alignment changed from top to baseline
+                  el->setReadPos(el->readPos() + QPointF(0.0, el->baseLine() * MScore::pixelRatio));
                   }
             else if (tag == "Harmony"
                || tag == "FretDiagram"

@@ -28,7 +28,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 TempoText::TempoText(Score* s)
-   : TextBase(s)
+   : TextBase(s, ElementFlag::SYSTEM)
       {
       init(SubStyle::TEMPO);
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
@@ -346,23 +346,17 @@ QVariant TempoText::propertyDefault(P_ID id) const
 
 void TempoText::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
-
-      qreal y;
-      if (placeAbove())
-            y = score()->styleP(StyleIdx::tempoPosAbove);
-      else {
-            qreal sh = staff() ? staff()->height() : 0;
-            y = score()->styleP(StyleIdx::tempoPosBelow) + sh + lineSpacing();
-            }
+      qreal y = placeAbove() ? styleP(StyleIdx::tempoPosAbove) : styleP(StyleIdx::tempoPosBelow) + staff()->height();
       setPos(QPointF(0.0, y));
       TextBase::layout1();
 
+      Segment* s = segment();
+      if (!s)                       // for use in palette
+            return;
+
       // tempo text on first chordrest of measure should align over time sig if present
       //
-      Segment* s = segment();
-      if (s && !s->rtick()) {
+      if (!s->rtick()) {
             Segment* p = segment()->prev(SegmentType::TimeSig);
             if (p) {
                   rxpos() -= s->x() - p->x();
@@ -371,25 +365,7 @@ void TempoText::layout()
                         rxpos() += e->x();
                   }
             }
-
-      if (s && autoplace()) {
-            int firstStaffIdx = s->measure()->system()->firstVisibleStaff();
-            qreal minDistance = score()->styleP(StyleIdx::tempoMinDistance);
-            Shape s1          = s->measure()->staffShape(firstStaffIdx);
-            Shape s2          = shape().translated(s->pos() + pos());
-            if (placeAbove()) {
-                  qreal d = s2.minVerticalDistance(s1);
-                  if (d > -minDistance)
-                        rUserYoffset() = -d - minDistance;
-                  }
-            else {
-                  qreal d = s1.minVerticalDistance(s2);
-                  if (d > -minDistance)
-                        rUserYoffset() = d + minDistance;
-                  }
-            }
-      if (!autoplace())
-            adjustReadPos();
+      autoplaceSegmentElement(styleP(StyleIdx::tempoMinDistance));
       }
 
 //---------------------------------------------------------

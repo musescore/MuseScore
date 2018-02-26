@@ -347,7 +347,7 @@ void PianoKeyItem::paint(QPainter* p, const QStyleOptionGraphicsItem* /*o*/, QWi
       p->setRenderHint(QPainter::Antialiasing, true);
       p->setPen(QPen(Qt::black, .8));
       if (_pressed) {
-            QColor c(preferences.pianoHlColor);
+            QColor c(preferences.getColor(PREF_UI_PIANO_HIGHLIGHTCOLOR));
             c.setAlpha(180);
             p->setBrush(c);
             }

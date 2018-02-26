@@ -113,7 +113,6 @@
         </Measure>
       <Measure number="5">
         <Jump>
-          <pos x="21.8667" y="-4.53333"/>
           <style>Repeat Text Right</style>
           <text>D.C. al Coda</text>
           <jumpTo>start</jumpTo>
