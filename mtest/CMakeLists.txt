@@ -99,6 +99,7 @@ add_library(
       ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/AgentList.cpp       # required by importmidi.cpp
       ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/BeatTracker.cpp     # required by importmidi.cpp
       ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Induction.cpp       # required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/stringutils.cpp
       ${OMR_SRC}
       omr
       )
@@ -159,7 +160,7 @@ add_custom_target(reporthtml
       WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/mtest"
       )
 
-subdirs (libmscore importmidi capella biab musicxml guitarpro scripting testoves zerberus)
+subdirs (libmscore importmidi capella biab musicxml guitarpro scripting testoves zerberus stringutils)
 
 install(FILES
       ../share/styles/chords_std.xml

@@ -223,6 +223,7 @@ add_executable ( ${ExecutableName}
       ${INCS}
 
       recordbutton.h greendotbutton prefsdialog.h
+      stringutils.h stringutils.cpp
       scoreview.cpp editinstrument.cpp editstyle.cpp
       icons.cpp importbww.cpp
       importmxmllogger.cpp importmxmlnoteduration.cpp importmxmlnotepitch.cpp
