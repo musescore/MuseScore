@@ -20,6 +20,7 @@
 
 #include "pianotools.h"
 #include "preferences.h"
+#include "libmscore/chord.h"
 
 namespace Ms {
 
@@ -168,6 +169,25 @@ void HPiano::releasePitch(int pitch)
       }
 
 //---------------------------------------------------------
+//   changeSelection
+//---------------------------------------------------------
+
+void HPiano::changeSelection(Selection selection)
+      {
+      for (PianoKeyItem* key : keys) {
+            key->setHighlighted(false);
+            key->setSelected(false);
+            }
+      for (Note* n : selection.uniqueNotes()) {
+            keys[n->pitch() - _firstKey]->setSelected(true);
+            for (Note* other : n->chord()->notes())
+                  keys[other->pitch() - _firstKey]->setHighlighted(true);
+            }
+      for (PianoKeyItem* key : keys)
+            key->update();
+      }
+
+//---------------------------------------------------------
 //   updateAllKeys
 //---------------------------------------------------------
 
@@ -189,6 +209,8 @@ PianoKeyItem::PianoKeyItem(HPiano* _piano, int p)
       piano = _piano;
       _pitch = p;
       _pressed = false;
+      _selected = false;
+      _highlighted = false;
       type = -1;
       }
 
@@ -329,6 +351,13 @@ void PianoKeyItem::paint(QPainter* p, const QStyleOptionGraphicsItem* /*o*/, QWi
             c.setAlpha(180);
             p->setBrush(c);
             }
+      else if (_selected) {
+            QColor c(preferences.pianoHlColor);
+            c.setAlpha(100);
+            p->setBrush(c);
+            }
+      else if (_highlighted)
+            p->setBrush(type >= 7 ? QColor(125, 125, 125) : QColor(200, 200, 200));
       else
             p->setBrush(type >= 7 ? Qt::black : Qt::white);
       p->drawPath(path());
@@ -436,6 +465,15 @@ bool HPiano::gestureEvent(QGestureEvent *event)
                   }
             }
       return true;
+      }
+
+//---------------------------------------------------------
+//   changeSelection
+//---------------------------------------------------------
+
+void PianoTools::changeSelection(Selection selection)
+      {
+      _piano->changeSelection(selection);
       }
 }
 
