@@ -35,6 +35,7 @@ class PianoKeyItem : public QGraphicsPathItem {
       int type;
       int _pitch;
       bool _pressed;
+      bool _innactive;
       HPiano* piano;
 
       virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
@@ -46,6 +47,7 @@ class PianoKeyItem : public QGraphicsPathItem {
       void setType(int val);
       int pitch() { return _pitch; }
       void setPressed(bool p) { _pressed = p; }
+      void setInnactive(bool p) { _innactive = p; }
       };
 
 //---------------------------------------------------------
@@ -96,6 +98,7 @@ class PianoTools : public QDockWidget {
       void pressPitch(int pitch)    { _piano->pressPitch(pitch);   }
       void releasePitch(int pitch)  { _piano->releasePitch(pitch); }
       void heartBeat(QList<const Note*> notes);
+      void changeSelection(const QList<Element*>& elements);
       };
 
 
