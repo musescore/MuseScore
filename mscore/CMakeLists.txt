@@ -501,6 +501,11 @@ if (MINGW)
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
 
+   install (FILES
+      ${MINGW_ROOT}/lib/lame_enc.dll
+      DESTINATION bin
+      OPTIONAL)
+
     install(FILES
       ${QT_INSTALL_PREFIX}/plugins/iconengines/qsvgicon.dll
       DESTINATION bin/iconengines)
