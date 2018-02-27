@@ -379,14 +379,8 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
       a->setData("edit-drumset");
       a->setEnabled(staff->part()->instrument()->drumset() != 0);
 
-      if (staff->part()->instrument()->drumset()) {
-            a = popup->addAction(tr("Drumroll Editor..."));
-            a->setData("drumroll");
-            }
-      else {
-            a = popup->addAction(tr("Pianoroll Editor..."));
-            a->setData("pianoroll");
-            }
+      a = popup->addAction(tr("Piano Roll Editor..."));
+      a->setData("pianoroll");
 
       a = popup->addAction(tr("Staff Properties..."));
       a->setData("staff-properties");
