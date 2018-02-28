@@ -698,24 +698,23 @@ void ScoreView::escapeCmd()
 
 static const char* stateName(ViewState s)
       {
-      std::string p;
       switch (s) {
-            case ViewState::NORMAL:             p = "NORMAL";           break;
-            case ViewState::DRAG:               p = "DRAG";             break;
-            case ViewState::DRAG_OBJECT:        p = "DRAG_OBJECT";      break;
-            case ViewState::EDIT:               p = "EDIT";             break;
-            case ViewState::DRAG_EDIT:          p = "DRAG_EDIT";        break;
-            case ViewState::LASSO:              p = "LASSO";            break;
-            case ViewState::NOTE_ENTRY:         p = "NOTE_ENTRY";       break;
-            case ViewState::PLAY:               p = "PLAY";             break;
-            case ViewState::ENTRY_PLAY:         p = "ENTRY_PLAY";       break;
-            case ViewState::FOTO:               p = "FOTO";             break;
-            case ViewState::FOTO_DRAG:          p = "FOTO_DRAG";        break;
-            case ViewState::FOTO_DRAG_EDIT:     p = "FOTO_DRAG_EDIT";   break;
-            case ViewState::FOTO_DRAG_OBJECT:   p = "FOTO_DRAG_OBJECT"; break;
-            case ViewState::FOTO_LASSO:         p = "FOTO_LASSO";       break;
+            case ViewState::NORMAL:             return "NORMAL";
+            case ViewState::DRAG:               return "DRAG";
+            case ViewState::DRAG_OBJECT:        return "DRAG_OBJECT";
+            case ViewState::EDIT:               return "EDIT";
+            case ViewState::DRAG_EDIT:          return "DRAG_EDIT";
+            case ViewState::LASSO:              return "LASSO";
+            case ViewState::NOTE_ENTRY:         return "NOTE_ENTRY";
+            case ViewState::PLAY:               return "PLAY";
+            case ViewState::ENTRY_PLAY:         return "ENTRY_PLAY";
+            case ViewState::FOTO:               return "FOTO";
+            case ViewState::FOTO_DRAG:          return "FOTO_DRAG";
+            case ViewState::FOTO_DRAG_EDIT:     return "FOTO_DRAG_EDIT";
+            case ViewState::FOTO_DRAG_OBJECT:   return "FOTO_DRAG_OBJECT";
+            case ViewState::FOTO_LASSO:         return "FOTO_LASSO";
             }
-      return p.c_str();
+      return "";
       }
 
 //---------------------------------------------------------
