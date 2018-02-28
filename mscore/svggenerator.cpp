@@ -40,7 +40,6 @@
 ****************************************************************************/
 
 #include "svggenerator.h"
-#include "paintengine_p.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // FOR GRADIENT FUNCTIONALITY THAT IS NOT IMPLEMENTED (YET):
@@ -152,7 +151,7 @@ static QString getClass(const Ms::Element *e)
     return eName;
 }
 
-class SvgPaintEnginePrivate : public QPaintEnginePrivate
+class SvgPaintEnginePrivate
 {
 public:
     SvgPaintEnginePrivate()
@@ -231,6 +230,7 @@ class SvgPaintEngine : public QPaintEngine
 private:
     QString     stateString;
     QTextStream stateStream;
+    SvgPaintEnginePrivate *d_ptr;
 
 // Qt translates everything. These help avoid SVG transform="translate()".
     qreal _dx;
@@ -311,10 +311,10 @@ protected:
 
 public:
     SvgPaintEngine()
-        : QPaintEngine(*new SvgPaintEnginePrivate,
-                       svgEngineFeatures()),
+        : QPaintEngine(svgEngineFeatures()),
           stateStream(&stateString)
     {
+        d_ptr = new SvgPaintEnginePrivate;
     }
 
     bool begin(QPaintDevice *device);
