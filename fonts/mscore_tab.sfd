@@ -3,7 +3,7 @@ FontName: MScoreTabulature
 FullName: MScoreTabulature
 FamilyName: MScoreTabulature
 Weight: Medium
-Copyright: Created by Maurizio M. Gavioli, with FontForge 2.0 (http://fontforge.sf.net)
+Copyright: Copyright (c) 2012-15, Maurizio M. Gavioli. Licensed under the SIL Open Font Licence, Version 1.1
 UComments: "To be used with MuseScore for Renaissance-style tabulatures."
 FontLog: "2010-12-3: Created."
 Version: 001.000
@@ -23,7 +23,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1291378652
-ModificationTime: 1448443236
+ModificationTime: 1519998836
 PfmFamily: 17
 TTFWeight: 500
 TTFWidth: 5
@@ -47,7 +47,7 @@ Lookup: 4 0 1 "'liga' Standard Ligatures in Latin lookup 0" { "'liga' Standard L
 Lookup: 258 0 0 "'kern' Horizontal Kerning lookup 0" { "'kern' Horizontal Kerning lookup 0-1" [153,15,2] } ['kern' ('DFLT' <'dflt' > ) ]
 MarkAttachClasses: 1
 DEI: 91125
-LangName: 1033
+LangName: 1033 "" "" "" "" "" "" "" "" "" "" "" "" "" "Copyright (c) 2012-15, Maurizio M. Gavioli (mmg@vistamaresoft.com),+AAoA-with Reserved Font Name MScoreTabulature.+AAoACgAA-This Font Software is licensed under the SIL Open Font License, Version 1.1.+AAoA-The full text of this license is available with a FAQ at: http://scripts.sil.org/OFL" "http://scripts.sil.org/OFL"
 GaspTable: 1 65535 2 0
 Encoding: UnicodeBmp
 UnicodeInterp: none
@@ -55,7 +55,7 @@ NameList: Adobe Glyph List
 DisplaySize: -72
 AntiAlias: 1
 FitToEm: 1
-WinInfo: 320 8 10
+WinInfo: 0 8 10
 BeginPrivate: 0
 EndPrivate
 Grid
@@ -3670,7 +3670,6 @@ LayerCount: 2
 Fore
 Refer: 87 278 N 1 0 0 1 150 0 2
 Refer: 87 278 N 1 0 0 1 0 50 2
-Validated: 1
 EndChar
 
 StartChar: Eogonek
@@ -3685,7 +3684,6 @@ Fore
 Refer: 87 278 N 1 0 0 1 120 50 2
 Refer: 87 278 N 1 0 0 1 240 0 2
 Refer: 87 278 N 1 0 0 1 0 100 2
-Validated: 1
 EndChar
 
 StartChar: eogonek
@@ -3701,7 +3699,6 @@ Refer: 87 278 N 1 0 0 1 120 100 2
 Refer: 87 278 N 1 0 0 1 240 50 2
 Refer: 87 278 N 1 0 0 1 360 0 2
 Refer: 87 278 N 1 0 0 1 0 150 2
-Validated: 1
 EndChar
 
 StartChar: Ecaron
@@ -3718,7 +3715,6 @@ Refer: 87 278 N 1 0 0 1 240 100 2
 Refer: 87 278 N 1 0 0 1 360 50 2
 Refer: 87 278 N 1 0 0 1 480 0 2
 Refer: 87 278 N 1 0 0 1 0 200 2
-Validated: 1
 EndChar
 
 StartChar: uni0221
@@ -4258,7 +4254,6 @@ Refer: 106 86 N 1 0 0 1 180 180 2
 Refer: 106 86 N 1 0 0 1 360 120 2
 Refer: 106 86 N 1 0 0 1 540 60 2
 Refer: 106 86 N 1 0 0 1 720 0 2
-Validated: 1
 EndChar
 
 StartChar: V
@@ -4306,7 +4301,6 @@ LayerCount: 2
 Fore
 Refer: 106 86 S 1 0 0 1 0 60 2
 Refer: 106 86 N 1 0 0 1 180 0 2
-Validated: 1
 EndChar
 
 StartChar: X
@@ -4321,7 +4315,6 @@ Fore
 Refer: 106 86 N 1 0 0 1 0 120 2
 Refer: 106 86 N 1 0 0 1 180 60 2
 Refer: 106 86 N 1 0 0 1 360 0 2
-Validated: 1
 EndChar
 
 StartChar: Y
@@ -4337,7 +4330,6 @@ Refer: 106 86 N 1 0 0 1 0 180 2
 Refer: 106 86 N 1 0 0 1 180 120 2
 Refer: 106 86 N 1 0 0 1 360 60 2
 Refer: 106 86 S 1 0 0 1 540 0 2
-Validated: 1
 EndChar
 
 StartChar: colon
@@ -7085,7 +7077,6 @@ LayerCount: 2
 Fore
 Refer: 180 310 N 1 0 0 1 200 0 2
 Refer: 180 310 N 1 0 0 1 0 66 2
-Validated: 1
 EndChar
 
 StartChar: kgreenlandic
@@ -7100,7 +7091,6 @@ Fore
 Refer: 180 310 N 1 0 0 1 200 66 2
 Refer: 180 310 N 1 0 0 1 399 0 2
 Refer: 180 310 N 1 0 0 1 0 133 2
-Validated: 1
 EndChar
 
 StartChar: Lacute
@@ -7116,7 +7106,6 @@ Refer: 180 310 N 1 0 0 1 200 133 2
 Refer: 180 310 N 1 0 0 1 399 66 2
 Refer: 180 310 N 1 0 0 1 598 0 2
 Refer: 180 310 N 1 0 0 1 0 200 2
-Validated: 1
 EndChar
 
 StartChar: lacute
@@ -7133,7 +7122,6 @@ Refer: 180 310 N 1 0 0 1 399 133 2
 Refer: 180 310 N 1 0 0 1 598 66 2
 Refer: 180 310 N 1 0 0 1 798 0 2
 Refer: 180 310 N 1 0 0 1 0 266 2
-Validated: 1
 EndChar
 
 StartChar: acutecomb
