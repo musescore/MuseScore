@@ -24,11 +24,6 @@
 #include <QtDebug>
 #include "kqoauthutils.h"
 
-#include <openssl/pem.h>
-#include <openssl/err.h>
-#include <openssl/ssl.h>
-#include <openssl/evp.h>
-
 
 QString KQOAuthUtils::hmac_sha1(const QString &message, const QString &key)
 {
