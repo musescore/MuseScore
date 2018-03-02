@@ -3,8 +3,8 @@ FontName: MScore
 FullName: MScore for scores
 FamilyName: MScore
 Weight: Regular
-Copyright: 
-Version: 
+Copyright: This font is distributed under the GNU General Public License. As a special exception, if you create a document which uses this font, and embed this font or unaltered portions of this font into the document, this font does not by itself cause the resulting document to be covered by the GNU General Public License.
+Version:
 DefaultBaseFilename: mscore
 ItalicAngle: 0
 UnderlinePosition: -51
@@ -56,7 +56,7 @@ OS2UnicodeRanges: 00000001.10000000.00000000.00000000
 Lookup: 258 0 0 "'kern' Horizontal Kerning in Latin lookup 0"  {"'kern' Horizontal Kerning in Latin lookup 0 subtable"  } ['kern' ('latn' <'dflt' > ) ]
 MarkAttachClasses: 1
 DEI: 91125
-LangName: 1033 
+LangName: 1033
 Encoding: UnicodeBmp
 UnicodeInterp: none
 NameList: Adobe Glyph List
@@ -788,7 +788,7 @@ SplineSet
  254 251 l 1
 EndSplineSet
 Validated: 1
-Kerns2: 21 -130 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  18 -150 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  16 -110 "'kern' Horizontal Kerning in Latin lookup 0 subtable" 
+Kerns2: 21 -130 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  18 -150 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  16 -110 "'kern' Horizontal Kerning in Latin lookup 0 subtable"
 EndChar
 
 StartChar: m
@@ -853,7 +853,7 @@ SplineSet
  -12 133 -14 134 -14 138 c 0
 EndSplineSet
 Validated: 1
-Kerns2: 18 -54 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  16 -50 "'kern' Horizontal Kerning in Latin lookup 0 subtable" 
+Kerns2: 18 -54 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  16 -50 "'kern' Horizontal Kerning in Latin lookup 0 subtable"
 EndChar
 
 StartChar: p
@@ -913,7 +913,7 @@ SplineSet
  105 278 120 283 134 283 c 0
 EndSplineSet
 Validated: 1
-Kerns2: 19 30 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  18 -30 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  16 -50 "'kern' Horizontal Kerning in Latin lookup 0 subtable" 
+Kerns2: 19 30 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  18 -30 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  16 -50 "'kern' Horizontal Kerning in Latin lookup 0 subtable"
 EndChar
 
 StartChar: r
@@ -955,7 +955,7 @@ SplineSet
  263 210 253 205 243 205 c 0x60
 EndSplineSet
 Validated: 1
-Kerns2: 21 0 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  18 -10 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  16 -50 "'kern' Horizontal Kerning in Latin lookup 0 subtable" 
+Kerns2: 21 0 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  18 -10 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  16 -50 "'kern' Horizontal Kerning in Latin lookup 0 subtable"
 EndChar
 
 StartChar: s
@@ -1007,7 +1007,7 @@ SplineSet
  106 242 101 229 101 214 c 0xf4
 EndSplineSet
 Validated: 1
-Kerns2: 19 40 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  16 -30 "'kern' Horizontal Kerning in Latin lookup 0 subtable" 
+Kerns2: 19 40 "'kern' Horizontal Kerning in Latin lookup 0 subtable"  16 -30 "'kern' Horizontal Kerning in Latin lookup 0 subtable"
 EndChar
 
 StartChar: z
@@ -1054,7 +1054,7 @@ SplineSet
  91 5 55 10 34 10 c 0x30
 EndSplineSet
 Validated: 1
-Kerns2: 18 -30 "'kern' Horizontal Kerning in Latin lookup 0 subtable" 
+Kerns2: 18 -30 "'kern' Horizontal Kerning in Latin lookup 0 subtable"
 EndChar
 
 StartChar: uniE043
