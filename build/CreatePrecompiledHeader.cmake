@@ -3,7 +3,7 @@ macro( precompiled_header includes header_name build_pch)
         message(STATUS "Precompiled header generation")
         # Get the compiler flags for this build type
         string( TOUPPER "CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}" flags_for_build_name )
-        set( compile_flags ${${flags_for_build_name}} )
+        set( compile_flags "${CMAKE_CXX_FLAGS} ${${flags_for_build_name}}" )
 
         # Add all the Qt include directories
         foreach( item ${${includes}} )
