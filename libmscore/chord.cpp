@@ -269,12 +269,12 @@ Chord::Chord(const Chord& c, bool link)
             }
       if (c._tremolo) {
             Tremolo* t = new Tremolo(*(c._tremolo));
-            add(t);
             if (link) {
                   score()->undo(new Link(const_cast<Tremolo*>(c._tremolo), t));
                   if (c._tremolo->twoNotes())
                         t->setChords(0, 0);
                   }
+            add(t);
             }
 
       for (Element* e : c.el()) {
