@@ -4327,8 +4327,8 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                               exp->harmony(toHarmony(e), fd);
                               fd = nullptr; // make sure to write only once ...
                               }
-                        else if (e->isFiguredBass() || e->isFretDiagram() || e->isJump())
-                              ;  // handled separately by figuredBass(), findFretDiagram() or ignored
+                        else if (e->isFermata() ||  e->isFiguredBass() || e->isFretDiagram() || e->isJump())
+                              ;  // handled separately by chordAttributes(), figuredBass(), findFretDiagram() or ignored
                         else
                               qDebug("annotations: direction type %s at tick %d not implemented",
                                      Element::name(e->type()), seg->tick().ticks());
