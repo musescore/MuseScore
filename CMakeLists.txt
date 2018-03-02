@@ -481,7 +481,7 @@ if (NOT MINGW AND NOT APPLE)
                        build/rm-empty-dirs              DESTINATION bin COMPONENT portable ${SCRIPT_PERMS})
       install(FILES    build/Linux+BSD/portable/qt.conf DESTINATION bin COMPONENT portable)
     else (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
-      set(MAN_PORTABLE '.\"') # Comment out lines in man page that are only relevant to the portable version
+      set(MAN_PORTABLE .\\\") # comment out lines in man page that are only relevent to the portable version
     endif (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
     # Install desktop file (perform variable substitution first)
     configure_file(build/Linux+BSD/mscore.desktop.in mscore${MSCORE_INSTALL_SUFFIX}.desktop)
