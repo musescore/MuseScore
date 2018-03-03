@@ -121,6 +121,20 @@ void StaffLines::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
+//   drawMultipleMeasures
+//   - used to optimize SVG and PDF files by reducing number of elements.
+//   - additionalLength after this measure to the last measure of a contiguous connected series of measures.
+//   - draws a horizontal line from x1 to x2 + additionalLength at y1.
+//---------------------------------------------------------
+
+void StaffLines::drawMultipleMeasures(QPainter* painter, qreal additionalLength) const
+      {
+      painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
+      for (int i = 0; i < lines.size(); ++i)
+            painter->drawLine(lines[i].x1(), lines[i].y1(), lines[i].x2() + additionalLength, lines[i].y1());
+      }
+
+//---------------------------------------------------------
 //   y1
 //---------------------------------------------------------
 
