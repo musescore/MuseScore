@@ -221,9 +221,9 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
       for (int i = 0; i < cs->nstaves(); ++i)
             tracks.append(MidiTrack());
 
-      cs->updateSwing();
-      cs->createPlayEvents();
-      cs->updateRepeatList(midiExpandRepeats);
+      EventMap events;
+      cs->renderMidi(&events, false, midiExpandRepeats);
+
       pauseMap.calculate(cs);
       writeHeader();
 
@@ -234,16 +234,6 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
 
             track.setOutPort(part->midiPort());
             track.setOutChannel(part->midiChannel());
-
-            // Render each staff only once
-            EventMap events;
-            cs->renderStaff(&events, staff);
-            //XXX this is not optimal:
-            // it does not take cross-staff collisions into account;
-            // better use Score::renderMidi() instead and take its
-            // result apart for MIDI file export
-            events.fixupMIDI();
-            cs->renderSpanners(&events, staffIdx);
 
             // Pass throught the all instruments in the part
             const InstrumentList* il = part->instruments();
@@ -298,6 +288,9 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
 
                         for (auto i = events.begin(); i != events.end(); ++i) {
                               const NPlayEvent& event = i->second;
+                              if (event.getOriginatingStaff() != staffIdx)
+                                    continue;
+
                               char eventPort    = cs->midiPort(event.channel());
                               char eventChannel = cs->midiChannel(event.channel());
                               if (port != eventPort || channel != eventChannel)
