@@ -553,11 +553,8 @@ endif (NOT MINGW AND NOT APPLE)
 #
 
 # all.h is expected in PROJECT_BINARY_DIR by subdirs
-add_custom_command(
-    OUTPUT ${PROJECT_BINARY_DIR}/all.h
-    COMMAND ${CMAKE_COMMAND}
-    ARGS -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
-    DEPENDS ${PROJECT_SOURCE_DIR}/all.h
+execute_process(
+    COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
     )
 
