@@ -1570,7 +1570,7 @@ void Score::renderMetronome(EventMap* events, Measure* m, int tickOffset)
 //    export score to event list
 //---------------------------------------------------------
 
-void Score::renderMidi(EventMap* events)
+void Score::renderMidi(EventMap* events, bool metronome)
       {
       updateSwing();
       createPlayEvents();
@@ -1588,6 +1588,8 @@ void Score::renderMidi(EventMap* events)
       // create sustain pedal events
       renderSpanners(events, -1);
 
+      if (!metronome)
+            return;
       // add metronome ticks
       foreach (const RepeatSegment* rs, *repeatList()) {
             int startTick  = rs->tick;
