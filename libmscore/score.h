@@ -398,10 +398,6 @@ class Score : public QObject, public ScoreElement {
 
       int _pos[3];            ///< 0 - current, 1 - left loop, 2 - right loop
 
-      bool _foundPlayPosAfterRepeats; ///< Temporary used during playback rendering
-                                      ///< indicating if playPos after expanded repeats
-                                      ///< has been calculated.
-
       int _fileDivision; ///< division of current loading *.mscx file
       int _mscVersion; ///< version of .mscx file during file read, then changed to MSCVERSION for drag and drop
       int _mscRealVersion;  ///< keep the actual and initial version of current loaded *.mscx file
@@ -493,6 +489,10 @@ class Score : public QObject, public ScoreElement {
       FileError loadCompressedMsc(QIODevice*, bool ignoreVersionError);
       FileError read114(XmlReader&);
       FileError read1(XmlReader&, bool ignoreVersionError);
+
+      void renderStaff(EventMap* events, Staff*);
+      void renderSpanners(EventMap* events);
+      void renderMetronome(EventMap* events, Measure* m, int tickOffset);
 
    protected:
       void createPlayEvents(Chord*);
@@ -807,9 +807,7 @@ class Score : public QObject, public ScoreElement {
       PasteStatus pasteStaff(XmlReader&, Segment* dst, int staffIdx);
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
-      void renderStaff(EventMap* events, Staff*);
-      void renderSpanners(EventMap* events, int staffIdx);
-      void renderMetronome(EventMap* events, Measure* m, int tickOffset);
+      void renderMidi(EventMap* events, bool metronome, bool expandRepeats);
 
       BeatType tick2beatType(int tick);
 
