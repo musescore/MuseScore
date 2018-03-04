@@ -650,7 +650,7 @@ void Score::renderStaff(EventMap* events, Staff* staff)
 //   renderSpanners
 //---------------------------------------------------------
 
-void Score::renderSpanners(EventMap* events, int staffIdx)
+void Score::renderSpanners(EventMap* events)
       {
       foreach (const RepeatSegment* rs, *repeatList()) {
             int tickOffset = rs->utick - rs->tick;
@@ -660,7 +660,7 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
             std::map<int, std::vector<std::pair<int, std::pair<bool, int>>>> channelPedalEvents = std::map<int, std::vector<std::pair<int, std::pair<bool, int>>>>();
             for (const auto& sp : _spanner.map()) {
                   Spanner* s = sp.second;
-                  if (s->type() != Element::Type::PEDAL || (staffIdx != -1 && s->staffIdx() != staffIdx))
+                  if (s->type() != Element::Type::PEDAL)
                         continue;
 
                   int staff = s->staffIdx();
@@ -1590,7 +1590,7 @@ void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats)
       events->fixupMIDI();
 
       // create sustain pedal events
-      renderSpanners(events, -1);
+      renderSpanners(events);
 
       if (!metronome)
             return;

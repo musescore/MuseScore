@@ -490,6 +490,10 @@ class Score : public QObject, public ScoreElement {
       FileError read114(XmlReader&);
       FileError read1(XmlReader&, bool ignoreVersionError);
 
+      void renderStaff(EventMap* events, Staff*);
+      void renderSpanners(EventMap* events);
+      void renderMetronome(EventMap* events, Measure* m, int tickOffset);
+
    protected:
       void createPlayEvents(Chord*);
       void createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord, int& ontime);
@@ -804,9 +808,6 @@ class Score : public QObject, public ScoreElement {
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
       void renderMidi(EventMap* events, bool metronome, bool expandRepeats);
-      void renderStaff(EventMap* events, Staff*);
-      void renderSpanners(EventMap* events, int staffIdx);
-      void renderMetronome(EventMap* events, Measure* m, int tickOffset);
 
       BeatType tick2beatType(int tick);
 
