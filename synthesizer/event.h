@@ -311,7 +311,12 @@ class EventList : public QList<Event> {
       void insertNote(int channel, Note*);
       };
 
-class EventMap : public std::multimap<int, NPlayEvent> {};
+class EventMap : public std::multimap<int, NPlayEvent> {
+      int _highestChannel = 15;
+   public:
+      void fixupMIDI();
+      void registerChannel(int c) { if (c > _highestChannel) _highestChannel = c; }
+      };
 
 typedef EventList::iterator iEvent;
 typedef EventList::const_iterator ciEvent;
