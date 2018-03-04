@@ -297,7 +297,7 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
                               }
 
                         for (auto i = events.begin(); i != events.end(); ++i) {
-                              NPlayEvent event(i->second);
+                              const NPlayEvent& event = i->second;
                               char eventPort    = cs->midiPort(event.channel());
                               char eventChannel = cs->midiChannel(event.channel());
                               if (port != eventPort || channel != eventChannel)
