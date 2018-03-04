@@ -238,6 +238,11 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
             // Render each staff only once
             EventMap events;
             cs->renderStaff(&events, staff);
+            //XXX this is not optimal:
+            // it does not take cross-staff collisions into account;
+            // better use Score::renderMidi() instead and take its
+            // result apart for MIDI file export
+            events.fixupMIDI();
             cs->renderSpanners(&events, staffIdx);
 
             // Pass throught the all instruments in the part
