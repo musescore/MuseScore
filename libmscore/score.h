@@ -398,10 +398,6 @@ class Score : public QObject, public ScoreElement {
 
       int _pos[3];            ///< 0 - current, 1 - left loop, 2 - right loop
 
-      bool _foundPlayPosAfterRepeats; ///< Temporary used during playback rendering
-                                      ///< indicating if playPos after expanded repeats
-                                      ///< has been calculated.
-
       int _fileDivision; ///< division of current loading *.mscx file
       int _mscVersion; ///< version of .mscx file during file read, then changed to MSCVERSION for drag and drop
       int _mscRealVersion;  ///< keep the actual and initial version of current loaded *.mscx file
@@ -806,7 +802,8 @@ class Score : public QObject, public ScoreElement {
       PasteStatus cmdPaste(const QMimeData* ms, MuseScoreView* view);
       PasteStatus pasteStaff(XmlReader&, Segment* dst, int staffIdx);
       void pasteSymbols(XmlReader& e, ChordRest* dst);
-      void renderMidi(EventMap* events, bool metronome = true);
+      void renderMidi(EventMap* events);
+      void renderMidi(EventMap* events, bool metronome, bool expandRepeats);
       void renderStaff(EventMap* events, Staff*);
       void renderSpanners(EventMap* events, int staffIdx);
       void renderMetronome(EventMap* events, Measure* m, int tickOffset);

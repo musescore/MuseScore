@@ -1570,13 +1570,17 @@ void Score::renderMetronome(EventMap* events, Measure* m, int tickOffset)
 //    export score to event list
 //---------------------------------------------------------
 
-void Score::renderMidi(EventMap* events, bool metronome)
+void Score::renderMidi(EventMap* events)
+      {
+      renderMidi(events, true, MScore::playRepeats);
+      }
+
+void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats)
       {
       updateSwing();
       createPlayEvents();
 
-      updateRepeatList(MScore::playRepeats);
-      _foundPlayPosAfterRepeats = false;
+      updateRepeatList(expandRepeats);
       updateChannel();
       updateVelo();
 
