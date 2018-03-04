@@ -378,6 +378,7 @@ void EventList::insert(const Event& e)
 void EventMap::fixupMIDI()
       {
       unsigned short nowPlaying[_highestChannel + 1][128 /* notes */];
+      int originatingTrack[_highestChannel + 1][128 /* notes */];
       auto it = begin();
 
       memset(nowPlaying, 0, (_highestChannel + 1) * 128 * sizeof(unsigned short));
@@ -392,9 +393,14 @@ void EventMap::fixupMIDI()
                         /* already off or still playing? */
                         if (np == 0 || --np > 0)
                               discard = true;
+                        else
+                              /* hoist NOTEOFF to same track as NOTEON */
+                              it->second.setOriginatingStaff(originatingTrack[it->second.channel()][it->second.pitch()]);
                         }
                   else if (++np > 1)
                         discard = true; /* already playing */
+                  else
+                        originatingTrack[it->second.channel()][it->second.pitch()] = it->second.getOriginatingStaff();
                   nowPlaying[it->second.channel()][it->second.pitch()] = np;
                   }
 
