@@ -121,7 +121,7 @@ bool savePositions(Score* score, const QString& name, bool segments)
       score->updateRepeatList(true);
       foreach(const RepeatSegment* rs, *score->repeatList()) {
             int startTick  = rs->tick;
-            int endTick    = startTick + rs->len;
+            int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;
             for (Measure* m = score->tick2measureMM(startTick); m; m = m->nextMeasureMM()) {
                         if (segments)
