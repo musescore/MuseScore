@@ -657,7 +657,7 @@ void Score::renderSpanners(EventMap* events)
             int utick1 = rs->utick;
             int tick1 = repeatList()->utick2tick(utick1);
             int tick2 = tick1 + rs->len();
-            std::map<int, std::vector<std::pair<int, std::pair<bool, int>>>> channelPedalEvents = std::map<int, std::vector<std::pair<int, std::pair<bool, int>>>>();
+            std::map<int, std::vector<std::pair<int, std::pair<bool, int>>>> channelPedalEvents;
             for (const auto& sp : _spanner.map()) {
                   Spanner* s = sp.second;
                   if (s->type() != Element::Type::PEDAL)
