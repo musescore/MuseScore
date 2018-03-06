@@ -129,6 +129,7 @@ class XmlReader : public XmlStreamReader {
       void setTransposeDiatonic(int v) { _transpose.diatonic = v; }
 
       QList<std::pair<int, ClefType>>& clefs(int idx);
+      void checkTuplets();
       };
 
 //---------------------------------------------------------
