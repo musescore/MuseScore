@@ -17,20 +17,30 @@ namespace Ms {
 
 class Score;
 class Measure;
+class Volta;
+class Jump;
 
 //---------------------------------------------------------
 //   RepeatSegment
 //---------------------------------------------------------
 
 class RepeatSegment {
+   private:
+      QList<std::pair<Measure*, int>> measureList; //measure, playbackCount
    public:
       int tick;         // start tick
-      int len;
       int utick;
       qreal utime;
       qreal timeOffset;
 
       RepeatSegment();
+      RepeatSegment(RepeatSegment * const, Measure * const fromMeasure, Measure * const untilMeasure);
+      void addMeasure(Measure * const);
+      bool containsMeasure(Measure const * const) const;
+      int len() const;
+      int playbackCount(Measure * const) const;
+
+      friend class RepeatList;
       };
 
 //---------------------------------------------------------
@@ -43,10 +53,15 @@ class RepeatList: public QList<RepeatSegment*>
       mutable unsigned idx1, idx2;   // cached values
 
       RepeatSegment* rs;            // tmp value during unwind()
+      std::map<Volta*, Measure*> _voltaRanges; // open volta possibly ends past the end of its spanner, used during unwind
+      std::set<Jump*> _jumpsTaken;   // take the jumps only once, so track them during unwind
 
-      void unwindSection(Measure* fm, Measure* em);
-      Measure* findStartRepeat(Measure*);
-      int findStartFromRepeatCount(Measure * const startFrom, Measure * const sectionEndMeasure);
+      void preProcessVoltas();
+      std::map<Volta*, Measure*>::const_iterator searchVolta(Measure * const) const;
+      void unwindSection(Measure * const fm, Measure * const em);
+      Measure* findStartRepeat(Measure * const) const;
+      int findStartFromRepeatCount(Measure * const startFrom) const;
+      bool isFinalPlaythrough(Measure * const measure, QList<RepeatSegment*>::const_iterator repeatSegmentIt) const;
 
    public:
       RepeatList(Score* s);

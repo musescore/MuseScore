@@ -453,15 +453,19 @@ void Score::updateRepeatList(bool expandRepeats)
             for (RepeatSegment* s : *repeatList())
                   delete s;
             repeatList()->clear();
-            Measure* m = lastMeasure();
+            Measure* m = firstMeasure();
             if (m == 0)
                   return;
             RepeatSegment* s = new RepeatSegment;
             s->tick  = 0;
-            s->len   = m->tick() + m->ticks();
             s->utick = 0;
             s->utime = 0.0;
             s->timeOffset = 0.0;
+            do {
+                  s->addMeasure(m);
+                  m = m->nextMeasure();
+                  }
+            while (m);
             repeatList()->append(s);
             }
       else
@@ -632,7 +636,7 @@ void Score::renderStaff(EventMap* events, Staff* staff)
       Measure* lastMeasure = 0;
       for (const RepeatSegment* rs : *repeatList()) {
             int startTick  = rs->tick;
-            int endTick    = startTick + rs->len;
+            int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
                   if (lastMeasure && m->isRepeatMeasure(staff)) {
@@ -659,7 +663,7 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
             int tickOffset = rs->utick - rs->tick;
             int utick1 = rs->utick;
             int tick1 = repeatList()->utick2tick(utick1);
-            int tick2 = tick1 + rs->len;
+            int tick2 = tick1 + rs->len();
             std::map<int, std::vector<std::pair<int, bool>>> channelPedalEvents = std::map<int, std::vector<std::pair<int, bool>>>();
             for (const auto& sp : _spanner.map()) {
                   Spanner* s = sp.second;
@@ -689,8 +693,8 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                               }
                         if (s->tick2() >= tick1 && s->tick2() <= tick2) {
                               int t = s->tick2() + tickOffset + 1;
-                              if (t > repeatList()->last()->utick + repeatList()->last()->len)
-                                    t = repeatList()->last()->utick + repeatList()->last()->len;
+                              if (t > repeatList()->last()->utick + repeatList()->last()->len())
+                                    t = repeatList()->last()->utick + repeatList()->last()->len();
                               channelPedalEvents.at(channel).push_back(std::pair<int, bool>(t, false));
                               }
                         }
@@ -1767,7 +1771,7 @@ void Score::renderMidi(EventMap* events)
       // add metronome ticks
       for (const RepeatSegment* rs : *repeatList()) {
             int startTick  = rs->tick;
-            int endTick    = startTick + rs->len;
+            int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;
 
             //

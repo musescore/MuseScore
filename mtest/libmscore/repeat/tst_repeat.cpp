@@ -96,6 +96,10 @@ class TestRepeat : public QObject, public MTest
       void repeat46() { repeat("repeat46.mscx", "1;2;3;4;5;3;4;2;3;4;5;3;4;5;6"); } // repeat24 but with 'play repeats' enabled
 
       void repeat47() { repeat("repeat47.mscx", "1;2;3;2;4;5;6;7;6;8;9;10;11; 2;4;13;14;15; 9;10;16;17;18"); } // #269378 Double Coda messed up repeat rewind logic
+
+      void repeat48() { repeat("repeat48.mscx", "1;2;3;4;1;5;6;7;3;4;1;5;8"); } // jump into first volta, without playRepeats
+      void repeat49() { repeat("repeat49.mscx", "1;2;3;1;2;3;4;5;6;3;1;2;3;4;7"); } // D.S. with playRepeats
+      void repeat50() { repeat("repeat50.mscx", "1;2;3;4;1;2;3;4;5;6;1;2;3;4;1;2;3;7"); } // D.S. with playRepeats with ToCoda inside the repeat
       };
 
 //---------------------------------------------------------
@@ -119,7 +123,7 @@ void TestRepeat::repeat(const char* f1, const QString & ref)
       QStringList sl;
       for (const RepeatSegment* rs : *score->repeatList()) {
             int startTick  = rs->tick;
-            int endTick    = startTick + rs->len;
+            int endTick    = startTick + rs->len();
             for (Measure* m = score->tick2measure(startTick); m; m = m->nextMeasure()) {
                   sl.append(QString::number(m->no()+1));
                   if (m->tick() + m->ticks() >= endTick)

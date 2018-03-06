@@ -3833,7 +3833,7 @@ QString Score::extractLyrics()
             // follow the repeat segments
             for (const RepeatSegment* rs : *repeatList()) {
                   int startTick  = rs->tick;
-                  int endTick    = startTick + rs->len;
+                  int endTick    = startTick + rs->len();
                   for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
                         int playCount = m->playbackCount();
                         for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
@@ -3922,7 +3922,7 @@ int Score::duration()
       {
       updateRepeatList(true);
       RepeatSegment* rs = repeatList()->last();
-      return lrint(utick2utime(rs->utick + rs->len));
+      return lrint(utick2utime(rs->utick + rs->len()));
       }
 
 //---------------------------------------------------------
