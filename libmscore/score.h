@@ -958,13 +958,13 @@ class Score : public QObject, public ScoreElement {
       void addLayoutFlags(LayoutFlags val)               { layoutFlags |= val; }
       void updateHairpin(Hairpin*);       // add/modify hairpin to pitchOffset list
       void removeHairpin(Hairpin*);       // remove hairpin from pitchOffset list
-      Volta* searchVolta(int tick) const;
       Score* parentScore() const    { return _parentScore; }
       void setParentScore(Score* s) { _parentScore = s;    }
       const Score* rootScore() const;
       Score* rootScore();
       void addExcerpt(Score*);
       void removeExcerpt(Score*);
+
       void createRevision();
       QByteArray readCompressedToBuffer();
       QByteArray readToBuffer();
