@@ -104,7 +104,8 @@ bool Portaudio::init(bool)
 
       const PaDeviceInfo* di = Pa_GetDeviceInfo(idx);
 
-      if (di == nullptr)
+      //select default output device if no device or device without output channels have been selected
+      if (di == nullptr || di->maxOutputChannels < 1)
             di = Pa_GetDeviceInfo(Pa_GetDefaultOutputDevice());
 
       if (!di)
@@ -125,11 +126,11 @@ bool Portaudio::init(bool)
 #endif
       out.hostApiSpecificStreamInfo = 0;
 
-      err = Pa_OpenStream(&stream, 0, &out, double(_sampleRate), 0, 0, paCallback, (void*)this);
+      err = Pa_OpenStream(&stream, 0, &out, double(_sampleRate), 500, 0, paCallback, (void*)this);
       if (err != paNoError) {
             // fall back to default device:
             out.device = Pa_GetDefaultOutputDevice();
-            err = Pa_OpenStream(&stream, 0, &out, double(_sampleRate), 0, 0, paCallback, (void*)this);
+            err = Pa_OpenStream(&stream, 0, &out, double(_sampleRate), 500, 0, paCallback, (void*)this);
             if (err != paNoError) {
                   qDebug("Portaudio open stream %d failed: %s", idx, Pa_GetErrorText(err));
                   return false;
