@@ -70,9 +70,36 @@ class Voice
       Fluid* _fluid;
       double _noteTuning;             // +/- in midicent
 
-      void effects(int count, float* out, float* effect1, float* effect2);
+      //keeps number of frames that are now in cache
+      //Cached frames are the frames that are calculated in terms of DSP (digital sound processing) and interpolated.
+      unsigned _cachedFrames = 0;
+      //Keeps number of the initially cached frames. It's used to calculate actual shift in cache arrays for setting cache to output stream.
+      unsigned _initialCacheFrames = 0;
+      //Cache arrays keep actual calculated data after applying effects. Its size is twice bigger than framesBuffer (2 channels).
+      std::vector<float> _cacheOut;
+      std::vector<float> _cacheReverb;
+      std::vector<float> _cacheChorus;
+            
+      /*
+       / Applies effects to the calculated interpolation and put frames to output containers.
+       / @startBufIdx is used to specify start index of interpolation data array that is used to put data to frames array.
+       / @count specifies how many frames should be calculated. Note, size of output arrays must be twice bigger, than @count.
+      */
+      void effects(int startBufIdx, int count, float* out, float* effect1, float* effect2);
+            
+      /*
+       / Generates DSP data required for sound interpolation. @frames defines number of available frames to generate sound envelope.
+       / Note, the minimal viable number of frames is NUM_FRAMES_DELAY. That is why we need all that stuff with caching. Using bluetooth or some specific hardware leads to less number of frames and silence.
+      */
+      bool generateDataForDSPChain(unsigned frames);
+            
+      /*
+       / Generates sound data from calculated DSP data. Resulting data is stored in @dsp_buf.
+       / The data is generated for @n frames. Note, number of generated frames can be less than @n.
+       */
+      std::tuple<unsigned, bool> interpolateGeneratedDSPData(unsigned n);
 
-   public:
+public:
 	unsigned int id;                // the id is incremented for every new noteon.
 					        // it's used for noteoff's
 	unsigned char status;
@@ -96,8 +123,8 @@ class Voice
 
 	// Temporary variables used in write()
 	float phase_incr;	      /* the phase increment for the next 64 samples */
-    qreal amp_incr;		/* amplitude increment value */
-	float* dsp_buf;	      /* buffer to store interpolated sample data to */
+      qreal amp_incr;		/* amplitude increment value */
+      std::vector<float> dsp_buf;	      /* buffer to store interpolated sample data to */
 
 	/* basic parameters */
 	float pitch;              /* the pitch in midicents */
