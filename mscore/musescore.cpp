@@ -3238,7 +3238,7 @@ void MuseScore::changeState(ScoreState val)
 
       if (_sstate == STATE_FOTO)
             updateInspector();
-      if (_sstate == STATE_NOTE_ENTRY_STAFF_DRUM)
+      if (_sstate != STATE_NOTE_ENTRY_STAFF_DRUM)
             showDrumTools(0, 0);
 
       switch (val) {
