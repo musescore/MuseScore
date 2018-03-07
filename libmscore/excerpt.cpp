@@ -209,7 +209,7 @@ void createExcerpt(Excerpt* excerpt)
                         endTick = score->lastSegment()->tick();
                   score->transposeKeys(staffIdx, staffIdx+1, 0, endTick, interval, true, flip);
 
-                  for (auto segment = score->firstSegment(Segment::Type::ChordRest); segment; segment = segment->next1(Segment::Type::ChordRest)) {
+                  for (auto segment = score->firstSegmentMM(Segment::Type::ChordRest); segment; segment = segment->next1MM(Segment::Type::ChordRest)) {
                         Interval interval = staff->part()->instrument(segment->tick())->transpose();
                         if (interval.isZero())
                               continue;
@@ -222,7 +222,16 @@ void createExcerpt(Excerpt* excerpt)
                               Harmony* h  = static_cast<Harmony*>(e);
                               int rootTpc = Ms::transposeTpc(h->rootTpc(), interval, true);
                               int baseTpc = Ms::transposeTpc(h->baseTpc(), interval, true);
-                              score->undoTransposeHarmony(h, rootTpc, baseTpc);
+                              // mmrests are on by default in part
+                              // if this harmony is attached to an mmrest,
+                              // be sure to transpose harmony in underlying measure as well
+                              for (ScoreElement* se : h->linkList()) {
+                                    Harmony* hh = static_cast<Harmony*>(se);
+                                    // skip links to other staves (including in other scores)
+                                    if (hh->staff() != h->staff())
+                                          continue;
+                                    score->undoTransposeHarmony(hh, rootTpc, baseTpc);
+                                    }
                               }
                         }
                   }
