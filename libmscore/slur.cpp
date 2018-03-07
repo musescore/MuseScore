@@ -348,6 +348,7 @@ inline static qreal slurDistance(const Shape& shape, const QPointF& pt, qreal sd
 //    p1, p2  are in System coordinates
 //---------------------------------------------------------
 
+#if 0
 void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       {
       if (autoplace()) {
@@ -511,6 +512,70 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             }
       setbbox(path.boundingRect());
       }
+
+#else
+
+void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
+      {
+      if (autoplace()) {
+            for (UP& up : _ups)
+                  up.off = QPointF();
+            rUserYoffset() = 0;
+            }
+      ups(Grip::START).p = p1;
+      ups(Grip::END).p   = p2;
+      computeBezier();
+
+      if (MScore::autoplaceSlurs && autoplace() && system()) {
+            bool up = slur()->up();
+
+            qreal gdist = 0.0;
+            Segment* ls = system()->lastMeasure()->last();
+            Segment* fs = system()->firstMeasure()->first();
+            QPointF pp1 = ups(Grip::START).p;
+            QPointF pp2 = ups(Grip::END).p;
+            for (Segment* s = fs; s && s != ls; s = s->next1()) {
+                  if (!s->enabled())
+                        continue;
+                  qreal x1 = s->x() + s->measure()->x();
+                  qreal x2 = x1 + s->width();
+                  if (pp1.x() > x2)
+                        continue;
+                  if (pp2.x() < x1)
+                        break;
+                  if (up) {
+                        //QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).top() + s->y() + s->measure()->y());
+                        qreal dist = _shape.minVerticalDistance(s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos()));
+                        if (dist > 0.0)
+                              gdist = qMax(gdist, dist);
+                        }
+                  else {
+                        //QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).bottom() + s->y() + s->measure()->y());
+                        qreal dist = s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos()).minVerticalDistance(_shape);
+                        if (dist > 0.0)
+                              gdist = qMax(gdist, dist);
+                        }
+                  }
+            if (gdist > 0.0) {
+                  if (up) {
+                        rUserYoffset() -= (gdist + spatium() * .5);
+                        }
+                  else
+                        rUserYoffset() += (gdist + spatium() * .5);
+                  }
+            }
+      else {
+            if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
+                  QPointF staffOffset;
+                  if (system() && track() >= 0)
+                        staffOffset = QPointF(0.0, system()->staff(staffIdx())->y());
+                  setReadPos(readPos() + staffOffset);
+                  }
+            adjustReadPos();
+            }
+      setbbox(path.boundingRect());
+      }
+#endif
 
 //---------------------------------------------------------
 //   isEdited

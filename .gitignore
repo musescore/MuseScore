@@ -31,4 +31,6 @@ CMakeLists.txt.user.*
 vtest/html
 thirdparty/mupdf-qt
 vtest/LOG
-
+vtest/META-INF
+vtest/Thumbnails
+vtest/Pictures
