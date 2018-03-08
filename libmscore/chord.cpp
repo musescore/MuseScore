@@ -2925,19 +2925,17 @@ void Chord::sortNotes()
 
 Chord* Chord::nextTiedChord(bool backwards, bool sameSize)
       {
-      Segment* nextSeg = segment();
-      ChordRest* nextCR = 0;
-      do    {
-            nextSeg = backwards ? nextSeg->prev1(SegmentType::ChordRest) : nextSeg->next1(SegmentType::ChordRest);
-            if (!nextSeg)
-                  return 0; // nothing to tie to
-            nextCR = nextSeg->cr(track());
-            } while (nextCR == 0); // nextCR = 0 when CR in another voice overlaps
-      if (!nextCR->isChord())
-            return 0; // can't tie to a rest
+      Segment* nextSeg = backwards ? segment()->prev1(SegmentType::ChordRest) : segment()->next1(SegmentType::ChordRest);
+      if (!nextSeg)
+            return 0;
+      ChordRest* nextCR = nextSeg->nextChordRest(track(), backwards);
+      if (!nextCR || !nextCR->isChord())
+            return 0;
       Chord* next = toChord(nextCR);
       if (sameSize && notes().size() != next->notes().size())
             return 0; // sizes don't match so some notes can't be tied
+      if (tuplet() != next->tuplet())
+            return 0; // next chord belongs to a different tuplet
       for (Note* n : _notes) {
             Tie* tie = backwards ? n->tieBack() : n->tieFor();
             if (!tie)

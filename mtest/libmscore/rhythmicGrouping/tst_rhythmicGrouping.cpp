@@ -32,12 +32,13 @@ class TestRhythmicGrouping : public QObject, public MTest
 
    private slots:
       void initTestCase();
-      void group8ths44()            { group("group8ths4-4.mscx",        "group8ths4-4-ref.mscx");      }
-      void group8thsSimple()        { group("group8thsSimple.mscx",     "group8thsSimple-ref.mscx");   }
-      void group8thsCompound()      { group("group8thsCompound.mscx",   "group8thsCompound-ref.mscx"); }
-      void groupSubbeats()          { group("groupSubbeats.mscx",       "groupSubbeats-ref.mscx");     }
-      void groupVoices()            { group("groupVoices.mscx",         "groupVoices-ref.mscx");       }
-      void groupConflicts()         { group("groupConflicts.mscx",      "groupConflicts-ref.mscx", 1); } // only group 1st staff
+      void group8ths44()             { group("group8ths4-4.mscx",           "group8ths4-4-ref.mscx");      }
+      void group8thsSimple()         { group("group8thsSimple.mscx",        "group8thsSimple-ref.mscx");   }
+      void group8thsCompound()       { group("group8thsCompound.mscx",      "group8thsCompound-ref.mscx"); }
+      void groupSubbeats()           { group("groupSubbeats.mscx",          "groupSubbeats-ref.mscx");     }
+      void groupVoices()             { group("groupVoices.mscx",            "groupVoices-ref.mscx");       }
+      void groupConflicts()          { group("groupConflicts.mscx",         "groupConflicts-ref.mscx", 1); } // only group 1st staff
+      void groupArticulationsTies()  { group("groupArticulationsTies.mscx", "groupArticulationsTies-ref.mscx"); } // test for articulations and forward/backward ties
 
       };
 
