@@ -385,7 +385,6 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                 || element->type() == Element::Type::MARKER
                 || element->type() == Element::Type::JUMP
                 || element->type() == Element::Type::SPACER
-                || element->type() == Element::Type::LAYOUT_BREAK
                 || element->type() == Element::Type::VBOX
                 || element->type() == Element::Type::HBOX
                 || element->type() == Element::Type::TBOX
@@ -406,6 +405,10 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                         if (m == last)
                               break;
                         }
+                  }
+            else if (element->type() == Element::Type::LAYOUT_BREAK) {
+                  LayoutBreak* breakElement = static_cast<LayoutBreak*>(element);
+                  score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
                   }
             else if (element->type() == Element::Type::CLEF
                      || element->type() == Element::Type::KEYSIG
