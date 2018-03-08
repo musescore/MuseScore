@@ -1175,11 +1175,11 @@ void Tuplet::styleChanged()
 
 void Tuplet::sanitizeTuplet()
       {
-      Fraction tupletDuration = duration().reduced();
-      Fraction baseLenDuration = (Fraction(ratio().denominator(),1) * baseLen().fraction()).reduced();
-      if ((tupletDuration - baseLenDuration).reduced().numerator() == 0)
+      if (ratio().numerator() == ratio().reduced().numerator()) // return if the ratio is an irreducible fraction
             return;
-      // Mismatch between the duration and the duration computed from the base length.
+      Fraction baseLenDuration = (Fraction(ratio().denominator(),1) * baseLen().fraction()).reduced();
+      // Due to a bug present in 2.1 (and before), a tuplet with non-reduced ratio could be 
+      // in a corrupted state (mismatch between duration and base length).
       // A tentative will now be made to retrieve the correct duration by summing up all the
       // durations of the elements constituting the tuplet. This does not work for
       // not-completely filled tuplets, such as tuplets in voices > 0 with
@@ -1201,7 +1201,7 @@ void Tuplet::sanitizeTuplet()
             }
       testDuration = testDuration / ratio();
       testDuration.reduce();
-      if (((testDuration - tupletDuration).reduced().numerator() != 0) || ((testDuration - baseLenDuration).reduced().numerator() != 0)) {
+      if ((testDuration - baseLenDuration).reduced().numerator() != 0) {
             Fraction f = testDuration * Fraction(1, ratio().denominator());
             f.reduce();
             Fraction fbl(1, f.denominator());
