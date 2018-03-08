@@ -162,8 +162,6 @@ class XmlWriter : public QTextStream {
       int _tupletId       = { 1 };
       int _beamId         = { 1 };
 
-      void putLevel();
-
    public:
       XmlWriter(Score*);
       XmlWriter(Score* s, QIODevice* dev);
@@ -227,6 +225,8 @@ class XmlWriter : public QTextStream {
 
       static QString xmlString(const QString&);
       static QString xmlString(ushort c);
+    
+      void putLevel();
       };
 
 extern PlaceText readPlacement(XmlReader&);

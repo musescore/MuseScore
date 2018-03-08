@@ -98,6 +98,7 @@ Clef::Clef(Score* s)
       _small                      = false;
       _clefTypes._concertClef     = ClefType::INVALID;
       _clefTypes._transposingClef = ClefType::INVALID;
+      symbol                      = 0;
       }
 
 Clef::Clef(const Clef& c)
@@ -106,6 +107,19 @@ Clef::Clef(const Clef& c)
       _showCourtesy = c._showCourtesy;
       _small        = c._small;
       _clefTypes    = c._clefTypes;
+      }
+
+//---------------------------------------------------------
+//   sym
+//---------------------------------------------------------
+    
+SymId Clef::sym() const
+      {
+      return symbol ? symbol->sym() : SymId::noSym;
+      }
+qreal Clef::symMag() const
+      {
+      return symbol ? symbol->mag() : 1.0;
       }
 
 //---------------------------------------------------------
