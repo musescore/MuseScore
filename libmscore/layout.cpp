@@ -1870,8 +1870,9 @@ void Score::createMMRests()
       //  create mm rest measures
       //
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+            MeasureBase* nmb = m;
             Measure* nm = m;
-            Measure* lm = nm;
+            Measure* lm = m;
             int n = 0;
             Fraction len;
             while (validMMRestMeasure(nm)) {
@@ -1882,11 +1883,10 @@ void Score::createMMRests()
                   ++n;
                   len += nm->len();
                   lm = nm;
-                  if (!mb || (mb->type() != Element::Type::MEASURE)) {
-                        nm = nullptr;
+                  nmb = mb;
+                  if (!mb || (mb->type() != Element::Type::MEASURE))
                         break;
-                        }
-                  nm = static_cast<Measure*>(mb);
+                  nm = static_cast<Measure*>(nmb);
                   }
 
             if (n >= styleI(StyleIdx::minEmptyMeasures)) {
@@ -2091,7 +2091,7 @@ void Score::createMMRests()
                               undo(new RemoveElement(e));
                         }
 
-                  mmr->setNext(nm);
+                  mmr->setNext(nmb);
                   mmr->setPrev(m->prev());
                   m = lm;
                   }
