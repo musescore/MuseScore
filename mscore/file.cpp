@@ -480,8 +480,11 @@ MasterScore* MuseScore::getNewFile()
       {
       if (!newWizard)
             newWizard = new NewWizard(this);
-      else
+      else {
+            newWizard->updateTemplate();
             newWizard->restart();
+            }
+
       if (newWizard->exec() != QDialog::Accepted)
             return 0;
       int measures            = newWizard->measures();
