@@ -91,6 +91,7 @@
 
 namespace Ms {
 
+extern bool edata;
 extern void importSoundfont(QString name);
 
 extern MasterSynthesizer* synti;
@@ -2538,16 +2539,95 @@ bool MuseScore::savePng(Score* score, const QString& name)
       {
       const QList<Page*>& pl = score->pages();
       int pages = pl.size();
+      return savePng(score, name, false, preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY), preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION), trimMargin, QImage::Format_ARGB32_Premultiplied);
+      }
+
+//---------------------------------------------------------
+//   savePng with options
+//    return true on success
+//---------------------------------------------------------
+
+bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool transparent, double convDpi, int trimMargin, QImage::Format format)
+      {
+      bool rv = true;
+      score->setPrinting(!screenshot);    // dont print page break symbols etc.
+      double pr = MScore::pixelRatio;
+
+      QImage::Format f;
+      if (format != QImage::Format_Indexed8)
+            f = format;
+      else
+            f = QImage::Format_ARGB32_Premultiplied;
+
+      const QList<Page*>& pl = score->pages();
+      int pages = pl.size();
+
+      if (edata) {
+            convDpi = DPI * 20.0 / score->spatium();    // spatium is always 20 pixel in image output
+            transparent = false;
+            f = QImage::Format_Grayscale8;
+      }
+
       int padding = QString("%1").arg(pages).size();
       bool overwrite = false;
       bool noToAll = false;
       for (int pageNumber = 0; pageNumber < pages; ++pageNumber) {
-            QString fileName(name);
-            if (fileName.endsWith(".png"))
-                  fileName = fileName.left(fileName.size() - 4);
-            fileName += QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+            Page* page = pl.at(pageNumber);
+
+            QRectF r;
+            if (trimMargin >= 0) {
+                  QMarginsF margins(trimMargin, trimMargin, trimMargin, trimMargin);
+                  r = page->tbbox() + margins;
+                  }
+            else
+                  r = page->abbox();
+            int w = lrint(r.width()  * convDpi / DPI);
+            int h = lrint(r.height() * convDpi / DPI);
+
+            QImage printer(w, h, f);
+            printer.setDotsPerMeterX(lrint((convDpi * 1000) / INCH));
+            printer.setDotsPerMeterY(lrint((convDpi * 1000) / INCH));
+
+            printer.fill(transparent ? 0 : 0xffffffff);
+
+            double mag = convDpi / DPI;
+            MScore::pixelRatio = 1.0 / mag;
+
+            QPainter p(&printer);
+            p.setRenderHint(QPainter::Antialiasing, true);
+            p.setRenderHint(QPainter::TextAntialiasing, true);
+            p.scale(mag, mag);
+            if (trimMargin >= 0)
+                  p.translate(-r.topLeft());
+
+            QList<Element*> pel = page->elements();
+            qStableSort(pel.begin(), pel.end(), elementLessThan);
+            paintElements(p, pel);
+
+            if (format == QImage::Format_Indexed8) {
+                  //convert to grayscale & respect alpha
+                  QVector<QRgb> colorTable;
+                  colorTable.push_back(QColor(0, 0, 0, 0).rgba());
+                  if (!transparent) {
+                        for (int i = 1; i < 256; i++)
+                            colorTable.push_back(QColor(i, i, i).rgb());
+                        }
+                  else {
+                        for (int i = 1; i < 256; i++)
+                            colorTable.push_back(QColor(0, 0, 0, i).rgba());
+                        }
+                  printer = printer.convertToFormat(QImage::Format_Indexed8, colorTable);
+                  }
+                  else if (format == QImage::Format_Grayscale8) {
+                  printer = printer.convertToFormat(QImage::Format_Grayscale8);
+                  }
+
+            QString fName(name);
+            if (fName.endsWith(".png"))
+                  fName = fName.left(fName.size() - 4);
+            QString fileName = fName + QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
             if (!converterMode) {
-                  QFileInfo fip(fileName);
+                  QFileInfo fip(fName);
                   if(fip.exists() && !overwrite) {
                         if(noToAll)
                               continue;
@@ -2574,6 +2654,11 @@ bool MuseScore::savePng(Score* score, const QString& name)
             if (!f.open(QIODevice::WriteOnly))
                   return false;
             bool rv = savePng(score, &f, pageNumber);
+            rv = printer.save(fileName, "png");
+            if (edata) {
+                  QString edataName = fName + QString("-%1.xml").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+                  writeEdata(edataName, fileName, score, mag, pel);
+                  }
             if (!rv)
                   return false;
             }

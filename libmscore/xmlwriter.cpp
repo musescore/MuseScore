@@ -404,6 +404,12 @@ void XmlWriter::tag(const QString& name, QVariant data)
                   *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(p.width()).arg(p.height());
                   }
                   break;
+            case QVariant::Size:
+                  {
+                  const QSize& p(data.value<QSize>());
+                  *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(p.width()).arg(p.height());
+                  }
+                  break;
             default: {
                   const char* type = data.typeName();
                   if (strcmp(type, "Ms::Spatium") == 0) {

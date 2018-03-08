@@ -230,8 +230,6 @@ class XmlWriter : public QTextStream {
       std::vector<std::pair<const ScoreElement*, QString>> _elements;
       bool _recordElements = false;
 
-      void putLevel();
-
    public:
       XmlWriter(Score*);
       XmlWriter(Score* s, QIODevice* dev);
@@ -312,6 +310,8 @@ class XmlWriter : public QTextStream {
 
       static QString xmlString(const QString&);
       static QString xmlString(ushort c);
+    
+      void putLevel();
       };
 
 extern PlaceText readPlacement(XmlReader&);

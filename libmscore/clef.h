@@ -26,6 +26,7 @@ namespace Ms {
 class XmlWriter;
 class MuseScoreView;
 class Segment;
+class Symbol;
 
 static const int NO_CLEF = -1000;
 
@@ -129,6 +130,7 @@ class ClefInfo {
 
 class Clef final : public Element {
       SymId symId;
+      Symbol* symbol;
       bool _showCourtesy;
       bool _small;
 
@@ -154,6 +156,9 @@ class Clef final : public Element {
 
       virtual bool isEditable() const                    { return false; }
 
+      SymId sym() const;
+      qreal symMag() const;
+    
       bool small() const               { return _small; }
       void setSmall(bool val);
 

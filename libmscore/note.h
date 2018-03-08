@@ -268,7 +268,6 @@ class Note final : public Element {
       int concertPitchIdx() const;
       void updateRelLine(int relLine, bool undoable);
       bool isNoteName() const;
-      SymId noteHead() const;
 
    public:
       Note(Score* s = 0);
@@ -477,6 +476,7 @@ class Note final : public Element {
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type, int tpc, Key key, NoteHeadScheme scheme);
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);
       NoteVal noteVal() const;
+      SymId noteHead() const;
 
       Element* nextInEl(Element* e);
       Element* prevInEl(Element* e);

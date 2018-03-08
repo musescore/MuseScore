@@ -709,6 +709,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveSvg(Score*, QIODevice*, int pageNum = 0);
       bool savePng(Score*, QIODevice*, int pageNum = 0);
       bool savePng(Score*, const QString& name);
+
       bool saveMidi(Score*, const QString& name);
       bool saveMidi(Score*, QIODevice*);
       bool savePositions(Score*, const QString& name, bool segments);
@@ -717,6 +718,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QJsonObject saveMetadataJSON(Score*);
 
       bool exportAllMediaFiles(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
+      void writeEdata(const QString&, const QString&, Score*, qreal, const QList<Element*>&);
 
       virtual void closeScore(Score* score);
 

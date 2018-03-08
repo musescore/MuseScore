@@ -127,3 +127,6 @@ To run the debug version, type:
 
 ### Testing
 See [mtest/README.md](/mtest/README.md) or https://musescore.org/en/developers-handbook/testing for instructions on how to run the test suite.
+
+### Export data for OMR
+mscore file.mscz -o file.png -E

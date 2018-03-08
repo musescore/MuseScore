@@ -162,6 +162,7 @@ bool converterMode = false;
 static bool rawDiffMode = false;
 static bool diffMode = false;
 static bool scriptTestMode = false;
+bool edata = false;
 bool processJob = false;
 bool externalIcons = false;
 bool pluginMode = false;
@@ -6845,6 +6846,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption("score-media", "Export all media for a given score in a single JSON file and print it to std out"));
       parser.addOption(QCommandLineOption("raw-diff", "Print a raw diff for the given scores"));
       parser.addOption(QCommandLineOption("diff", "Print a diff for the given scores"));
+      parser.addOption(QCommandLineOption({"A", "emeta"}, "create metatdata xml file for every exported image file"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -6945,6 +6947,10 @@ int main(int argc, char* av[])
             if (styleFile.isEmpty())
                   parser.showHelp(EXIT_FAILURE);
             }
+      if (parser.isSet("A")) {
+            edata = true;
+            }
+          
       useFactorySettings = parser.isSet("F");
       deletePreferences = (useFactorySettings || parser.isSet("R"));
       enableExperimental = parser.isSet("e");
