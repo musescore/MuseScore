@@ -361,6 +361,10 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
                   else
                         qDebug("nowhere to place drum note");
                   }
+            else if (element->type() == Element::Type::LAYOUT_BREAK) {
+                  LayoutBreak* breakElement = static_cast<LayoutBreak*>(element);
+                  score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
+                  }
             else if (element->type() == Element::Type::SLUR && addSingle) {
                   viewer->cmdAddSlur();
                   }
