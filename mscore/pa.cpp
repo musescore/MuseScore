@@ -122,11 +122,11 @@ bool Portaudio::init(bool)
       out.suggestedLatency = di->defaultLowOutputLatency;
       out.hostApiSpecificStreamInfo = 0;
 
-      err = Pa_OpenStream(&stream, 0, &out, double(_sampleRate), 0, 0, paCallback, (void*)this);
+      err = Pa_OpenStream(&stream, 0, &out, double(_sampleRate), 500, 0, paCallback, (void*)this);
       if (err != paNoError) {
             // fall back to default device:
             out.device = Pa_GetDefaultOutputDevice();
-            err = Pa_OpenStream(&stream, 0, &out, double(_sampleRate), 0, 0, paCallback, (void*)this);
+            err = Pa_OpenStream(&stream, 0, &out, double(_sampleRate), 500, 0, paCallback, (void*)this);
             if (err != paNoError) {
                   qDebug("Portaudio open stream %d failed: %s", idx, Pa_GetErrorText(err));
                   return false;
