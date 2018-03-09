@@ -480,6 +480,10 @@ void Palette::applyPaletteElement(PaletteCell* cell)
                   else
                         qDebug("nowhere to place drum note");
                   }
+            else if (element->isLayoutBreak()) {
+                  LayoutBreak* breakElement = toLayoutBreak(element);
+                  score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
+                  }
             else if (element->isSlur() && addSingle) {
                   viewer->addSlur();
                   }
