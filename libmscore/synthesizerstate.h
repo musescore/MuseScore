@@ -80,7 +80,7 @@ static SynthesizerState defaultState = {
             },
             },
       { "Fluid", {
-            { 0, "FluidR3Mono_GM.sf3" },
+            { 0, "MS_General.sf3" },
             },
             },
 //      { "Zerberus", {

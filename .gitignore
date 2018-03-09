@@ -34,3 +34,9 @@ vtest/LOG
 vtest/META-INF
 vtest/Thumbnails
 vtest/Pictures
+
+# Downloaded files during build process
+MS_General.sf3
+MS_General-License.md
+MS_General-changelog.txt
+VERSION
