@@ -1899,9 +1899,13 @@ void MusicXMLParserPass1::part()
       // set first instrument for multi-instrument part starting with rest
       if (_firstInstrId != "" && _firstInstrSTime > Fraction(0, 1))
             _parts[id]._instrList.setInstrument(_firstInstrId, Fraction(0, 1));
+      // determine the lyric numbers for this part
+      _parts[id].lyricNumberHandler().determineLyricNos();
 
       // debug: print results
       //qDebug("%s", qPrintable(_parts[id].toString()));
+
+      //qDebug("lyric numbers: %s", qPrintable(_parts[id].lyricNumberHandler().toString()));
 
       /*
       qDebug("instrument map:");
@@ -2528,8 +2532,11 @@ void MusicXMLParserPass1::note(const QString& partId,
                   instrId = _e.attributes().value("id").toString();
                   _e.readNext();
                   }
-            else if (_e.name() == "lyric")
-                  _e.skipCurrentElement();  // skip but don't log
+            else if (_e.name() == "lyric") {
+                  const auto number = _e.attributes().value("number").toString();
+                  _parts[partId].lyricNumberHandler().addNumber(number);
+                  _e.skipCurrentElement();
+                  }
             else if (_e.name() == "notations")
                   _e.skipCurrentElement();  // skip but don't log
             else if (_e.name() == "notehead")
@@ -2612,6 +2619,8 @@ void MusicXMLParserPass1::note(const QString& partId,
             // TODO
             vod.addNote(sTime.ticks(), (sTime + dura).ticks(), voice, staff);
             }
+
+      Q_ASSERT(_e.isEndElement() && _e.name() == "note");
       }
 
 //---------------------------------------------------------
