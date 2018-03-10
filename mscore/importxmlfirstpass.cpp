@@ -163,4 +163,70 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
 
       }
 
+
+//---------------------------------------------------------
+//   LyricNumberHandler
+//   collect lyric numbering information and determine order
+//
+//   MusicXML lyrics may contain name and number attributes,
+//   plus position information (typically default-y).
+//   Name and number are simply tokens with no specified usage.
+//   Default-y cannot easily be used to determine the lyrics
+//   line, as it tends to differ per system depending on the
+//   actual notes present.
+//
+//   Simply collecting all possible lyric number attributes
+//   within a MusicXML part and assigning lyrics position
+//   based on alphabetically sorting works well for all
+//   common MusicXML files.
+//---------------------------------------------------------
+
+//---------------------------------------------------------
+//   addNumber
+//---------------------------------------------------------
+
+void LyricNumberHandler::addNumber(const QString number)
+      {
+      if (_numberToNo.find(number) == _numberToNo.end())
+            _numberToNo[number] = -1;       // unassiged
+      }
+
+//---------------------------------------------------------
+//   toString
+//---------------------------------------------------------
+
+QString LyricNumberHandler::toString() const
+      {
+      QString res;
+      for (const auto& p : _numberToNo) {
+            if (!res.isEmpty())
+                  res += " ";
+            res += QString("%1:%2").arg(p.first).arg(p.second);
+            }
+      return res;
+      }
+
+//---------------------------------------------------------
+//   getLyricNo
+//---------------------------------------------------------
+
+int LyricNumberHandler::getLyricNo(const QString& number) const
+      {
+      const auto it = _numberToNo.find(number);
+      return it == _numberToNo.end() ? 0 : it->second;
+      }
+
+//---------------------------------------------------------
+//   determineLyricNos
+//---------------------------------------------------------
+
+void LyricNumberHandler::determineLyricNos()
+      {
+      int i = 0;
+      for (auto& p : _numberToNo) {
+            p.second = i;
+            ++i;
+            }
+      }
+
 }
