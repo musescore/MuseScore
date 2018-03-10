@@ -339,7 +339,9 @@ void Fluid::program_change(int chan, int prognum)
       if (!preset) {
             //Suppressing qDebug because might not have soundfont if using MIDI out only.
             //qDebug("Fluid::program_change: preset %d %d not found", banknum, prognum);
-            preset = find_preset(0, 0);
+            preset = find_preset(0, prognum);
+            if (!preset)
+                  preset = find_preset(0, 0);
             }
 
       unsigned sfont_id = preset? preset->sfont->id() : 0;
