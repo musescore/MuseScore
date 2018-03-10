@@ -2507,14 +2507,7 @@ void Score::cmd(const QAction* a)
                   type = LayoutBreak::Type::PAGE;
             else
                   type = LayoutBreak::Type::SECTION;
-
-            if (el && el->type() == Element::Type::BAR_LINE && el->parent()->type() == Element::Type::SEGMENT) {
-                  Measure* measure = static_cast<Measure*>(el->parent()->parent());
-                  // if measure is mm rest, then propagate to last original measure
-                  measure = measure->isMMRest() ? measure->mmRestLast() : measure;
-                  if (measure)
-                        measure->undoSetBreak(!measure->lineBreak(), type);
-                  }
+            cmdToggleLayoutBreak(type);
             }
       else if (cmd == "reset-stretch")
             resetUserStretch();
@@ -3116,4 +3109,53 @@ void Score::addRemoveBreaks(int interval, bool lock)
             }
 
       }
+
+//---------------------------------------------------------
+//   cmdToggleLayoutBreak
+//---------------------------------------------------------
+
+void Score::cmdToggleLayoutBreak(LayoutBreak::Type type)
+      {
+      // find measure(s)
+      QList<Measure*> ml;
+      if (selection().isRange()) {
+            Measure* startMeasure = nullptr;
+            Measure* endMeasure = nullptr;
+            if (!selection().measureRange(&startMeasure, &endMeasure))
+                  return;
+            if (!startMeasure || !endMeasure)
+                  return;
+#if 1
+            // toggle break on the last measure of the range
+            ml.append(endMeasure);
+            // if more than one measure selected,
+            // also toggle break *before* the range (to try to fit selection on a single line)
+            if (startMeasure != endMeasure && startMeasure->prevMeasure())
+                  ml.append(startMeasure->prevMeasure());
+#else
+            // toggle breaks throughout the selection
+            for (Measure* m = startMeasure; m; m = m->nextMeasure()) {
+                  ml.append(m);
+                  if (m == endMeasure)
+                        break;
+                  }
+#endif
+            }
+      else {
+            for (Element* el : selection().elements()) {
+                  Measure* measure = static_cast<Measure*>(el->findMeasure());
+                  if (measure)
+                        ml.append(measure);
+                  }
+            }
+      // toggle the breaks
+      for (Measure* measure : ml) {
+            // if measure is mm rest, then propagate to last original measure
+            measure = measure->isMMRest() ? measure->mmRestLast() : measure;
+            if (measure)
+                  measure->undoSetBreak(!measure->lineBreak(), type);
+            }
+      }
+
+
 }

@@ -26,6 +26,7 @@
 #include "segment.h"
 #include "ottava.h"
 #include "spannermap.h"
+#include "layoutbreak.h"
 #include "rehearsalmark.h"
 #include <set>
 
@@ -533,6 +534,7 @@ class Score : public QObject, public ScoreElement {
       void cmdHalfDuration()        { cmdIncDecDuration( 1, 0); }
       void cmdIncDurationDotted()   { cmdIncDecDuration(-1, 1); }
       void cmdDecDurationDotted()   { cmdIncDecDuration( 1, 1); }
+      void cmdToggleLayoutBreak(LayoutBreak::Type);
 
       void addRemoveBreaks(int interval, bool lock);
 
