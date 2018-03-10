@@ -777,34 +777,13 @@ static void addLyric(MxmlLogger* logger, const QXmlStreamReader* const xmlreader
 static void addLyrics(MxmlLogger* logger, const QXmlStreamReader* const xmlreader,
                       ChordRest* cr,
                       QMap<int, Lyrics*>& numbrdLyrics,
-                      QMap<int, Lyrics*>& defyLyrics,
-                      QList<Lyrics*>& unNumbrdLyrics,
                       QSet<Lyrics*>& extLyrics,
                       MusicXmlLyricsExtend& extendedLyrics)
       {
-      // first the lyrics with valid number
       int lyricNo = -1;
       for (QMap<int, Lyrics*>::const_iterator i = numbrdLyrics.constBegin(); i != numbrdLyrics.constEnd(); ++i) {
-            lyricNo = i.key(); // use number obtained from MusicXML file
+            lyricNo = i.key();
             Lyrics* l = i.value();
-            addLyric(logger, xmlreader, cr, l, lyricNo, extendedLyrics);
-            if (extLyrics.contains(l))
-                  extendedLyrics.addLyric(l);
-            }
-
-      // then the lyrics without valid number but with valid default-y
-      for (QMap<int, Lyrics*>::const_iterator i = defyLyrics.constBegin(); i != defyLyrics.constEnd(); ++i) {
-            lyricNo++; // use sequence number
-            Lyrics* l = i.value();
-            addLyric(logger, xmlreader, cr, l, lyricNo, extendedLyrics);
-            if (extLyrics.contains(l))
-                  extendedLyrics.addLyric(l);
-            }
-
-      // finally the remaining lyrics, which are simply added in order they appear in the MusicXML file
-      for (QList<Lyrics*>::const_iterator i = unNumbrdLyrics.constBegin(); i != unNumbrdLyrics.constEnd(); ++i) {
-            lyricNo++; // use sequence number
-            Lyrics* l = *i;
             addLyric(logger, xmlreader, cr, l, lyricNo, extendedLyrics);
             if (extLyrics.contains(l))
                   extendedLyrics.addLyric(l);
@@ -4490,8 +4469,6 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       // at a StartElement instead of the usual EndElement
 
       QMap<int, Lyrics*> numberedLyrics; // lyrics with valid number
-      QMap<int, Lyrics*> defaultyLyrics; // lyrics with valid default-y
-      QList<Lyrics*> unNumberedLyrics;   // lyrics with neither
       QSet<Lyrics*> extendedLyrics;      // lyrics with the extend flag set
       MusicXmlTupletDesc tupletDesc;
       bool lastGraceAFter = false;       // set by notations() if end of grace after sequence found
@@ -4502,7 +4479,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             if (_e.name() == "lyric") {
                   // lyrics on grace notes not (yet) supported by MuseScore
                   if (!grace)
-                        lyric(numberedLyrics, defaultyLyrics, unNumberedLyrics, extendedLyrics);  // TODO: move track handling to addlyric
+                        lyric(partId, numberedLyrics, extendedLyrics);  // TODO: move track handling to addlyric
                   else {
                         _logger->logDebugInfo("ignoring lyrics on grace notes", &_e);
                         skipLogCurrElem();
@@ -4546,7 +4523,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       // add lyrics found by lyric
       if (cr) {
             // add lyrics and stop corresponding extends
-            addLyrics(_logger, &_e, cr, numberedLyrics, defaultyLyrics, unNumberedLyrics, extendedLyrics, _extendedLyrics);
+            addLyrics(_logger, &_e, cr, numberedLyrics, extendedLyrics, _extendedLyrics);
             if (rest) {
                   // stop all extends
                   _extendedLyrics.setExtend(-1, cr->track(), cr->tick());
@@ -5119,9 +5096,8 @@ void MusicXMLParserPass2::backup(Fraction& dura)
  Parse the /score-partwise/part/measure/note/lyric node.
  */
 
-void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
-                                QMap<int, Lyrics*>& defyLyrics,
-                                QList<Lyrics*>& unNumbrdLyrics,
+void MusicXMLParserPass2::lyric(const QString& partId,
+                                QMap<int, Lyrics*>& numbrdLyrics,
                                 QSet<Lyrics*>& extLyrics)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "lyric");
@@ -5130,10 +5106,9 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
       // TODO in addlyrics: l->setTrack(trk);
 
       bool hasExtend = false;
-      QString strLyricNo = _e.attributes().value("number").toString();
+      QString lyricNumber = _e.attributes().value("number").toString();
       QColor lyricColor = QColor::Invalid;
       lyricColor.setNamedColor(_e.attributes().value("color").toString());
-      QString strDefaultY = _e.attributes().value("default-y").toString();
       QString extendType;
       QString formattedText;
 
@@ -5178,32 +5153,25 @@ void MusicXMLParserPass2::lyric(QMap<int, Lyrics*>& numbrdLyrics,
             return;
             }
 
-      // put lyric on correct list to be able determine line number later
-      bool ok = true;
-      int lyricNo = strLyricNo.toInt(&ok) - 1;
-      if (ok) {
-            if (lyricNo < 0) {
-                  qDebug("invalid lyrics number (<0)");       // TODO
-                  delete l;
-                  return;
-                  }
-            else if (lyricNo > MAX_LYRICS) {
-                  qDebug("too much lyrics (>%d)", MAX_LYRICS);       // TODO
-                  delete l;
-                  return;
-                  }
-            else {
-                  numbrdLyrics[lyricNo] = l;
-                  }
+      auto mxmlPart = _pass1.getMusicXmlPart(partId);
+      auto lyricNo = mxmlPart.lyricNumberHandler().getLyricNo(lyricNumber);
+      if (lyricNo < 0) {
+            _logger->logError("invalid lyrics number (<0)", &_e);
+            delete l;
+            return;
             }
-      else {
-            int defaultY = strDefaultY.toInt(&ok);
-            if (ok)
-                  // invert default-y as it decreases with increasing lyric number
-                  defyLyrics[-defaultY] = l;
-            else
-                  unNumbrdLyrics.append(l);
+      else if (lyricNo > MAX_LYRICS) {
+            _logger->logError(QString("too much lyrics (>%1)").arg(MAX_LYRICS), &_e);
+            delete l;
+            return;
             }
+      else if (numbrdLyrics.contains(lyricNo)) {
+            _logger->logError(QString("duplicate lyrics number (%1)").arg(lyricNumber), &_e);
+            delete l;
+            return;
+            }
+
+      numbrdLyrics[lyricNo] = l;
 
       if (hasExtend && (extendType == "" || extendType == "start"))
             extLyrics.insert(l);
@@ -5840,13 +5808,13 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                   tuplet(tupletDesc);
                   }
             else if (_e.name() == "dynamics") {
-                placement = _e.attributes().value("placement").toString();
-                if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
-                      // ry        = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
-                      // rx        = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
-                      // yoffset   = _e.attributes().value("default-y").toDouble(&hasYoffset) * -0.1;
-                      // xoffset   = ee.attribute("default-x", "0.0").toDouble() * 0.1;
-                      }
+                  placement = _e.attributes().value("placement").toString();
+                  if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
+                        // ry        = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
+                        // rx        = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
+                        // yoffset   = _e.attributes().value("default-y").toDouble(&hasYoffset) * -0.1;
+                        // xoffset   = ee.attribute("default-x", "0.0").toDouble() * 0.1;
+                        }
                   dynamics(placement, dynamicslist);
                   }
             else if (_e.name() == "articulations") {
