@@ -189,19 +189,19 @@ bool MTest::compareFiles(const QString& saveName, const QString& compareWith) co
       QStringList args;
       args.append("-u");
       args.append("--strip-trailing-cr");
-      args.append(saveName);
       args.append(root + "/" + compareWith);
+      args.append(saveName);
       QProcess p;
-qDebug() << "Running " << cmd << " with arg1:" << saveName << " and arg2: " << compareWith;
+qDebug() << "Running " << cmd << " with arg1: " << compareWith << " and arg2: " << saveName;
       p.start(cmd, args);
       if (!p.waitForFinished() || p.exitCode()) {
             QByteArray ba = p.readAll();
             //qDebug("%s", qPrintable(ba));
-            //qDebug("   <diff -u %s %s failed", qPrintable(saveName),
-            //   qPrintable(QString(root + "/" + compareWith)));
+            //qDebug("   <diff -u %s %s failed", qPrintable(compareWith),
+            //   qPrintable(QString(root + "/" + saveName)));
             QTextStream outputText(stdout);
             outputText << QString(ba);
-            outputText << QString("   <diff -u %1 %2 failed").arg(QString(saveName)).arg(QString(root + "/" + compareWith));
+            outputText << QString("   <diff -u %1 %2 failed").arg(QString(compareWith)).arg(QString(root + "/" + saveName));
             return false;
             }
       return true;
