@@ -1855,6 +1855,22 @@ void MusicXMLParserPass1::midiInstrument(const QString& partId)
       }
 
 //---------------------------------------------------------
+//   setNumberOfStavesForPart
+//---------------------------------------------------------
+
+/**
+ Set number of staves for part \a partId to the max value
+ of the current value \a staves.
+ */
+
+static void setNumberOfStavesForPart(Part* const part, const int staves)
+      {
+      Q_ASSERT(part);
+      if (staves > part->nstaves())
+            part->setStaves(staves);
+      }
+
+//---------------------------------------------------------
 //   part
 //---------------------------------------------------------
 
@@ -1890,6 +1906,8 @@ void MusicXMLParserPass1::part()
                   skipLogCurrElem();
             }
 
+      // Bug fix for Cubase 6.5.5..9.5.10 which generate <staff>2</staff> in a single staff part
+      setNumberOfStavesForPart(_partMap.value(id), _parts[id].maxStaff());
       // allocate MuseScore staff to MusicXML voices
       allocateStaves(_parts[id].voicelist);
       // allocate MuseScore voice to MusicXML voices
@@ -2273,8 +2291,7 @@ void MusicXMLParserPass1::divisions()
 //---------------------------------------------------------
 
 /**
- Set number of staves for part \a partId to the max value of the current value
- and the value in the <staves> element.
+ Parse the /score-partwise/part/measure/attributes/staves node.
  */
 
 void MusicXMLParserPass1::staves(const QString& partId)
@@ -2288,10 +2305,7 @@ void MusicXMLParserPass1::staves(const QString& partId)
             return;
             }
 
-      Part* part = _partMap.value(partId);
-      Q_ASSERT(part);
-      if (staves > part->nstaves())
-            part->setStaves(staves);
+      setNumberOfStavesForPart(_partMap.value(partId), staves);
       }
 
 //---------------------------------------------------------
@@ -2548,16 +2562,14 @@ void MusicXMLParserPass1::note(const QString& partId,
                   rest();
                   }
             else if (_e.name() == "staff") {
-                  QString strStaff = _e.readElementText();
-                  staff = strStaff.toInt();
-                  // Bug fix for Cubase 6.5.5 which generates <staff>2</staff> in a single staff part
-                  // Same fix is required in pass 1 and pass 2
+                  auto ok = false;
+                  auto strStaff = _e.readElementText();
+                  staff = strStaff.toInt(&ok);
+                  _parts[partId].setMaxStaff(staff);
                   Part* part = _partMap.value(partId);
                   Q_ASSERT(part);
-                  if (staff <= 0 || staff > part->nstaves()) {
+                  if (!ok || staff <= 0 || staff > part->nstaves())
                         _logger->logError(QString("illegal staff '%1'").arg(strStaff), &_e);
-                        staff = 1;
-                        }
                   }
             else if (_e.name() == "stem")
                   _e.skipCurrentElement();  // skip but don't log

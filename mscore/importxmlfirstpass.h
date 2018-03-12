@@ -68,6 +68,8 @@ public:
       void setPrintAbbr(bool b) { printAbbr = b; }
       bool getPrintAbbr() const { return printAbbr; }
       LyricNumberHandler& lyricNumberHandler() { return _lyricNumberHandler; }
+      void setMaxStaff(const int staff);
+      int maxStaff() const { return _maxStaff; }
 private:
       QString id;
       QString name;
@@ -78,6 +80,7 @@ private:
       QList<Fraction> measureDurations;       // duration in fraction for every measure
       QVector<MusicXmlOctaveShiftList> octaveShifts; // octave shift list for every staff
       LyricNumberHandler _lyricNumberHandler;
+      int _maxStaff = 0;                      // maximum staff value found (1 based), 0 = none
       };
 
 } // namespace Ms

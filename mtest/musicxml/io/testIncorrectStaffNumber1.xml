@@ -19,7 +19,7 @@
         Cubase 6.5.5 exports multi-staff parts as two separate parts, but leaves
         number=... in the clef and still refers to staff 2 in the second part.
         This results in incorrect staff numbers for in the second part.
-        MuseScore will overrule the staff and assume staff 1 was meant.
+        MuseScore will interpret the second part as a two staff part.
         </miscellaneous-field>
       </miscellaneous>
     </identification>

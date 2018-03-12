@@ -4200,14 +4200,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   mnp.displayStepOctave(_e);
                   }
             else if (_e.name() == "staff") {
-                  QString strStaff = _e.readElementText();
-                  staff = strStaff.toInt();
-                  // Bug fix for Cubase 6.5.5 which generates <staff>2</staff> in a single staff part
-                  // Same fix is required in pass 1 and pass 2
-                  Part* part = _pass1.getPart(partId);
-                  Q_ASSERT(part);
-                  if (staff <= 0 || staff > part->nstaves()) {
-                        _logger->logError(QString("illegal staff '%1'").arg(strStaff), &_e);
+                  auto ok = false;
+                  auto strStaff = _e.readElementText();
+                  staff = strStaff.toInt(&ok);
+                  if (!ok) {
+                        // error already reported in pass 1
                         staff = 1;
                         }
                   }
@@ -5775,6 +5772,10 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                                     MusicXmlTupletDesc& tupletDesc, bool& lastGraceAFter)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "notations");
+      Q_ASSERT_X(cr,
+                 qPrintable(QString("notations() at line %1 col %2")
+                            .arg(_e.lineNumber()).arg(_e.columnNumber())),
+                 "cr is null");
 
       lastGraceAFter = false;       // ensure default
 
