@@ -358,6 +358,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   int velocity = staff->velocities().velo(seg->tick());
                   Instrument* instr = chord->part()->instrument(tick);
                   int channel = instr->channel(chord->upNote()->subchannel())->channel;
+                  events->registerChannel(channel);
 
                   foreach (Articulation* a, chord->articulations()) {
                         instr->updateVelocity(&velocity,channel, a->subtypeName());
@@ -1574,6 +1575,7 @@ void Score::renderMidi(EventMap* events)
       // create note & other events
       foreach (Staff* part, _staves)
             renderStaff(events, part);
+      events->fixupMIDI();
 
       // create sustain pedal events
       renderSpanners(events, -1);

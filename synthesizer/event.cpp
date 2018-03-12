@@ -370,5 +370,37 @@ void EventList::insert(const Event& e)
             }
       append(e);
       }
-}
 
+//---------------------------------------------------------
+//   class EventMap::fixupMIDI
+//---------------------------------------------------------
+
+void EventMap::fixupMIDI()
+      {
+      unsigned short nowPlaying[_highestChannel + 1][128 /* notes */] = { { 0 } };
+      auto it = begin();
+
+      while (it != end()) {
+            bool discard = false;
+
+            /* ME_NOTEOFF is never emitted, no need to check for it */
+            if (it->second.type() == ME_NOTEON) {
+                  unsigned short np = nowPlaying[it->second.channel()][it->second.pitch()];
+                  if (it->second.velo() == 0) {
+                        /* already off or still playing? */
+                        if (np == 0 || --np > 0)
+                              discard = true;
+                        }
+                  else if (++np > 1)
+                        discard = true; /* already playing */
+                  nowPlaying[it->second.channel()][it->second.pitch()] = np;
+                  }
+
+            if (discard)
+                  it = erase(it);
+            else
+                  ++it;
+            }
+      }
+
+}
