@@ -825,8 +825,8 @@
           </Text>
         <Text>
           <style>Subtitle</style>
-          <text>Playback 123-24-256
-(Repeat No of 2. Volta set to 1)</text>
+          <text>Playback 123-256
+(Repeat No of 2. Volta set to 1, so it will be skipped)</text>
           </Text>
         </VBox>
       <Measure number="1">
@@ -936,7 +936,7 @@
           <pos x="-3.61513" y="1.48455"/>
           <style></style>
           <text>Volta test 1
-playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</text>
+playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2, end</text>
           </Text>
         </VBox>
       <Measure number="1">
@@ -1086,7 +1086,7 @@ playback: Measure 1,2,[volta 1],1,2,[volta 2],,1,2,[volta 3],1,2,[volta 4] end</
           <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
           <beginText>2.</beginText>
-          <endings>1</endings>
+          <endings>2</endings>
           </Volta>
         <Chord>
           <durationType>quarter</durationType>
@@ -2154,7 +2154,7 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
           <endHookType>1</endHookType>
           <lineWidth>0.1</lineWidth>
           <beginText>2.</beginText>
-          <endings>1</endings>
+          <endings>2</endings>
           </Volta>
         <Chord>
           <durationType>whole</durationType>
@@ -2200,7 +2200,7 @@ A switch for 1234 356 234 3567 (play volta on repeat) would be nice) </text>
         <Volta id="16">
           <lineWidth>0.1</lineWidth>
           <beginText>3.</beginText>
-          <endings>1</endings>
+          <endings>3</endings>
           </Volta>
         <Chord>
           <durationType>whole</durationType>

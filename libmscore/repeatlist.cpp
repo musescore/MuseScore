@@ -401,8 +401,8 @@ std::map<Volta*, Measure*>::const_iterator RepeatList::searchVolta(Measure * con
       {
       std::map<Volta*, Measure*>::const_iterator voltaRange;
       for (voltaRange = _voltaRanges.cbegin(); voltaRange != _voltaRanges.cend(); ++voltaRange) {
-            if (   (voltaRange->first->startMeasure()->no() <= measure->no())
-                && (measure->no() <= voltaRange->second->no())
+            if (   (voltaRange->first->startMeasure()->tick() <= measure->tick())
+                && (measure->tick() <= voltaRange->second->tick())
                 ) {
                   break;
                   }
@@ -568,84 +568,85 @@ void RepeatList::unwindSection(Measure* const sectionStartMeasure, Measure* cons
                                           }
 
                                     // step 3 : duplicate the part we would otherwise have to rewind
-                                    if (jump->playRepeats()) {
-                                          // all should be replayed, simply copy over
-                                          for (int idx = copyFromIdx; idx <= copyUntilIdx; ++idx) {
-                                                this->push_back(new RepeatSegment(
-                                                                      this->at(idx),
-                                                                      (idx == copyFromIdx) ? copyFromMeasure : nullptr,
-                                                                      (idx == copyUntilIdx) ? copyUntilMeasure : nullptr
-                                                                      )
-                                                                );
+                                    if (copyFromIdx != -1) {
+                                          if (jump->playRepeats()) {
+                                                // all should be replayed, simply copy over
+                                                for (int idx = copyFromIdx; idx <= copyUntilIdx; ++idx) {
+                                                      this->push_back(new RepeatSegment(
+                                                                            this->at(idx),
+                                                                            (idx == copyFromIdx) ? copyFromMeasure : nullptr,
+                                                                            (idx == copyUntilIdx) ? copyUntilMeasure : nullptr
+                                                                            )
+                                                                      );
+                                                      }
                                                 }
-                                          }
-                                    else { // only most recent passes should be played
-                                          // so we have to inspect each measure to be it's most recent playthrough
-                                          int idx = copyFromIdx;
-                                          while (idx <= copyUntilIdx) {
-                                                RepeatSegment* referenceSegment = this->at(idx);
-                                                auto referenceIt = referenceSegment->measureList.cbegin();
-                                                bool forwardToMoreRecentPlaythrough = false;
-                                                if (idx == copyFromIdx) {
-                                                      // skip start of segment
-                                                      while ((referenceIt->first != copyFromMeasure) && ((++referenceIt) != referenceSegment->measureList.cend()));
-                                                      }
-                                                // start copy
-                                                while (   ((referenceIt != referenceSegment->measureList.cend()) && !forwardToMoreRecentPlaythrough)
-                                                       && ((idx != copyUntilIdx) || (referenceIt->first->no() <= copyUntilMeasure->no()))
-                                                       ) {
-                                                      // find most recent occurence of this measure
-                                                      auto mostRecentRepeatSegmentIdx = copyUntilIdx; // look backwards to find to most recent first
-                                                      while ((mostRecentRepeatSegmentIdx > idx) && !forwardToMoreRecentPlaythrough) {
-                                                            RepeatSegment * mostRecentSegment = this->at(mostRecentRepeatSegmentIdx);
-                                                            if (   (mostRecentSegment->playbackCount(referenceIt->first) >= referenceIt->second)
-                                                                && (referenceIt->first->no() <= copyUntilMeasure->no())
-                                                                ) {
-                                                                  // found a more recent playthrough => continue our copy from there
-                                                                  forwardToMoreRecentPlaythrough = true;
-                                                                  // save continueCopyPosition
-                                                                  copyFromMeasure = referenceIt->first;
-                                                                  idx = mostRecentRepeatSegmentIdx;
-                                                                  continue;
-                                                                  }
-                                                            --mostRecentRepeatSegmentIdx;
+                                          else { // only most recent passes should be played
+                                                // so we have to inspect each measure to be it's most recent playthrough
+                                                int idx = copyFromIdx;
+                                                while (idx <= copyUntilIdx) {
+                                                      RepeatSegment* referenceSegment = this->at(idx);
+                                                      auto referenceIt = referenceSegment->measureList.cbegin();
+                                                      bool forwardToMoreRecentPlaythrough = false;
+                                                      if (idx == copyFromIdx) {
+                                                            // skip start of segment
+                                                            while ((referenceIt->first != copyFromMeasure) && ((++referenceIt) != referenceSegment->measureList.cend()));
                                                             }
+                                                      // start copy
+                                                      while (   ((referenceIt != referenceSegment->measureList.cend()) && !forwardToMoreRecentPlaythrough)
+                                                             && ((idx != copyUntilIdx) || (referenceIt->first->no() <= copyUntilMeasure->no()))
+                                                             ) {
+                                                            // find most recent occurence of this measure
+                                                            auto mostRecentRepeatSegmentIdx = copyUntilIdx; // look backwards to find to most recent first
+                                                            while ((mostRecentRepeatSegmentIdx > idx) && !forwardToMoreRecentPlaythrough) {
+                                                                  RepeatSegment * mostRecentSegment = this->at(mostRecentRepeatSegmentIdx);
+                                                                  if (   (mostRecentSegment->playbackCount(referenceIt->first) >= referenceIt->second)
+                                                                      && (referenceIt->first->no() <= copyUntilMeasure->no())
+                                                                      ) {
+                                                                        // found a more recent playthrough => continue our copy from there
+                                                                        forwardToMoreRecentPlaythrough = true;
+                                                                        // save continueCopyPosition
+                                                                        copyFromMeasure = referenceIt->first;
+                                                                        idx = mostRecentRepeatSegmentIdx;
+                                                                        continue;
+                                                                        }
+                                                                  --mostRecentRepeatSegmentIdx;
+                                                                  }
+                                                            if (!forwardToMoreRecentPlaythrough) {
+                                                                  // this is the most recent playthrough of this measure -> copy it
+                                                                  if (nullptr == rs) {
+                                                                        rs = new RepeatSegment();
+                                                                        rs->tick = referenceIt->first->tick();
+                                                                        }
+                                                                  rs->measureList.push_back(std::make_pair(referenceIt->first, referenceIt->second));
+                                                                  }
+                                                            // test & copy next measure
+                                                            ++referenceIt;
+                                                            }
+                                                      // store what we've copied from this repeatSegment
+                                                      if (rs) {
+                                                            push_back(rs);
+                                                            rs = nullptr;
+                                                            }
+                                                      // move to the next repeatSegment
                                                       if (!forwardToMoreRecentPlaythrough) {
-                                                            // this is the most recent playthrough of this measure -> copy it
-                                                            if (nullptr == rs) {
-                                                                  rs = new RepeatSegment();
-                                                                  rs->tick = referenceIt->first->tick();
-                                                                  }
-                                                            rs->measureList.push_back(std::make_pair(referenceIt->first, referenceIt->second));
+                                                            ++idx;
                                                             }
-                                                      // test & copy next measure
-                                                      ++referenceIt;
-                                                      }
-                                                // store what we've copied from this repeatSegment
-                                                if (rs) {
-                                                      push_back(rs);
-                                                      rs = nullptr;
-                                                      }
-                                                // move to the next repeatSegment
-                                                if (!forwardToMoreRecentPlaythrough) {
-                                                      ++idx;
                                                       }
                                                 }
                                           }
 
                                     // step 4 : determine the next measure to evaluate
-                                    if (copyUntilMeasure == playUntilMeasure) {
-                                          // fully processed this jump, we know where to continue, so jump there
-                                          currentMeasure = continueAtMeasure;
-                                          // end of processing this jump
-                                          playUntilMeasure = nullptr;
-                                          continueAtMeasure = nullptr;
+                                    if (copyFromIdx == -1) {
+                                          // still everything to process, because we couldn't copy from the jumpToMeasure yet
+                                          currentMeasure = jumpToMeasure; // so start there now
                                           }
                                     else {
-                                          // still more to process
-                                          if (copyFromIdx == -1) {
-                                                // still everything to process, because we couldn't copy from the jumpToMeasure yet
-                                                currentMeasure = jumpToMeasure; // so start there now
+                                          if (copyUntilMeasure == playUntilMeasure) {
+                                                // fully processed this jump, we know where to continue, so jump there
+                                                currentMeasure = continueAtMeasure;
+                                                // end of processing this jump
+                                                playUntilMeasure = nullptr;
+                                                continueAtMeasure = nullptr;
                                                 }
                                           else {
                                                 // we have copied stuff, but not yet all of it
