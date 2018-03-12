@@ -5772,93 +5772,95 @@ void MusicXMLParserPass2::notations(Note* note, ChordRest* cr, const int tick,
                                     MusicXmlTupletDesc& tupletDesc, bool& lastGraceAFter)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "notations");
-      Q_ASSERT_X(cr,
-                 qPrintable(QString("notations() at line %1 col %2")
-                            .arg(_e.lineNumber()).arg(_e.columnNumber())),
-                 "cr is null");
 
-      lastGraceAFter = false;       // ensure default
+      if (cr) {
+            lastGraceAFter = false; // ensure default
 
-      Measure* measure = cr->measure();
-      int ticks = cr->duration().ticks();
-      int track = cr->track();
+            Measure* measure = cr->measure();
+            int ticks = cr->duration().ticks();
+            int track = cr->track();
 
-      QString wavyLineType;
-      int wavyLineNo = 0;
-      QString arpeggioType;
-      SymId breath = SymId::noSym;
-      int tremoloNr = 0;
-      QString tremoloType;
-      QString placement;
-      QStringList dynamicslist;
-      // qreal rx = 0.0;
-      // qreal ry = 0.0;
-      // qreal yoffset = 0.0; // actually this is default-y
-      // qreal xoffset = 0.0; // not used
-      // bool hasYoffset = false;
-      QString chordLineType;
+            QString wavyLineType;
+            int wavyLineNo = 0;
+            QString arpeggioType;
+            SymId breath = SymId::noSym;
+            int tremoloNr = 0;
+            QString tremoloType;
+            QString placement;
+            QStringList dynamicslist;
+            // qreal rx = 0.0;
+            // qreal ry = 0.0;
+            // qreal yoffset = 0.0; // actually this is default-y
+            // qreal xoffset = 0.0; // not used
+            // bool hasYoffset = false;
+            QString chordLineType;
 
-      while (_e.readNextStartElement()) {
-            if (_e.name() == "slur") {
-                  slur(cr, tick, track, lastGraceAFter);
-                  }
-            else if (_e.name() == "tied") {
-                  tied(note, track);
-                  }
-            else if (_e.name() == "tuplet") {
-                  tuplet(tupletDesc);
-                  }
-            else if (_e.name() == "dynamics") {
-                  placement = _e.attributes().value("placement").toString();
-                  if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
-                        // ry        = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
-                        // rx        = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
-                        // yoffset   = _e.attributes().value("default-y").toDouble(&hasYoffset) * -0.1;
-                        // xoffset   = ee.attribute("default-x", "0.0").toDouble() * 0.1;
+            while (_e.readNextStartElement()) {
+                  if (_e.name() == "slur") {
+                        slur(cr, tick, track, lastGraceAFter);
                         }
-                  dynamics(placement, dynamicslist);
+                  else if (_e.name() == "tied") {
+                        tied(note, track);
+                        }
+                  else if (_e.name() == "tuplet") {
+                        tuplet(tupletDesc);
+                        }
+                  else if (_e.name() == "dynamics") {
+                        placement = _e.attributes().value("placement").toString();
+                        if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
+                              // ry        = ee.attribute(QString("relative-y"), "0").toDouble() * -.1;
+                              // rx        = ee.attribute(QString("relative-x"), "0").toDouble() * .1;
+                              // yoffset   = _e.attributes().value("default-y").toDouble(&hasYoffset) * -0.1;
+                              // xoffset   = ee.attribute("default-x", "0.0").toDouble() * 0.1;
+                              }
+                        dynamics(placement, dynamicslist);
+                        }
+                  else if (_e.name() == "articulations") {
+                        articulations(cr, breath, chordLineType);
+                        }
+                  else if (_e.name() == "fermata")
+                        fermata(cr);
+                  else if (_e.name() == "ornaments") {
+                        ornaments(cr, wavyLineType, wavyLineNo, tremoloType, tremoloNr, lastGraceAFter);
+                        }
+                  else if (_e.name() == "technical") {
+                        technical(note, cr);
+                        }
+                  else if (_e.name() == "arpeggiate") {
+                        arpeggioType = _e.attributes().value("direction").toString();
+                        if (arpeggioType == "") arpeggioType = "none";
+                        _e.readNext();
+                        }
+                  else if (_e.name() == "non-arpeggiate") {
+                        arpeggioType = "non-arpeggiate";
+                        _e.readNext();
+                        }
+                  else if (_e.name() == "glissando" || _e.name() == "slide") {
+                        glissando(note, tick, ticks, track);
+                        }
+                  else
+                        skipLogCurrElem();
                   }
-            else if (_e.name() == "articulations") {
-                  articulations(cr, breath, chordLineType);
-                  }
-            else if (_e.name() == "fermata")
-                  fermata(cr);
-            else if (_e.name() == "ornaments") {
-                  ornaments(cr, wavyLineType, wavyLineNo, tremoloType, tremoloNr, lastGraceAFter);
-                  }
-            else if (_e.name() == "technical") {
-                  technical(note, cr);
-                  }
-            else if (_e.name() == "arpeggiate") {
-                  arpeggioType = _e.attributes().value("direction").toString();
-                  if (arpeggioType == "") arpeggioType = "none";
-                  _e.readNext();
-                  }
-            else if (_e.name() == "non-arpeggiate") {
-                  arpeggioType = "non-arpeggiate";
-                  _e.readNext();
-                  }
-            else if (_e.name() == "glissando" || _e.name() == "slide") {
-                  glissando(note, tick, ticks, track);
-                  }
-            else
-                  skipLogCurrElem();
-            }
 
-      addArpeggio(cr, arpeggioType, _logger, &_e);
-      addWavyLine(cr, tick, wavyLineNo, wavyLineType, _spanners, _trills, _logger, &_e);
-      addBreath(cr, tick, breath);
-      addTremolo(cr, tremoloNr, tremoloType, ticks, _tremStart, _logger, &_e);
-      addChordLine(note, chordLineType, _logger, &_e);
+            addArpeggio(cr, arpeggioType, _logger, &_e);
+            addWavyLine(cr, tick, wavyLineNo, wavyLineType, _spanners, _trills, _logger, &_e);
+            addBreath(cr, tick, breath);
+            addTremolo(cr, tremoloNr, tremoloType, ticks, _tremStart, _logger, &_e);
+            addChordLine(note, chordLineType, _logger, &_e);
 
-      // more than one dynamic ???
-      // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
-      // TODO remove duplicate code (see MusicXml::direction)
-      for (QStringList::Iterator it = dynamicslist.begin(); it != dynamicslist.end(); ++it ) {
-            Dynamic* dyn = new Dynamic(_score);
-            dyn->setDynamicType(*it);
+            // more than one dynamic ???
+            // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
+            // TODO remove duplicate code (see MusicXml::direction)
+            for (QStringList::Iterator it = dynamicslist.begin(); it != dynamicslist.end(); ++it ) {
+                  Dynamic* dyn = new Dynamic(_score);
+                  dyn->setDynamicType(*it);
 //TODO:ws            if (hasYoffset) dyn->textStyle().setYoff(yoffset);
-            addElemOffset(dyn, track, placement, measure, tick);
+                  addElemOffset(dyn, track, placement, measure, tick);
+                  }
+            }
+      else {
+            _logger->logDebugInfo("no note to attach to, skipping notations", &_e);
+            _e.skipCurrentElement();
             }
 
       Q_ASSERT(_e.isEndElement() && _e.name() == "notations");
