@@ -131,7 +131,6 @@
                   <Channel>
                         <program value="72"/>
                   </Channel>
-                  <genre>common</genre>
             </Instrument>
             <Instrument id="soprano-flute">
                   <longName>Soprano Flute</longName>
@@ -181,6 +180,7 @@
                   </Channel>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>common</genre>
             </Instrument>
             <Instrument id="bass-flute">
                   <longName>Bass Flute</longName>
