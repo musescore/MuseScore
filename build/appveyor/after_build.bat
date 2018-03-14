@@ -1,8 +1,9 @@
 :: Print ccache statistics
 ccache.exe -s
-
+echo on
 :: Test MuseScore stability
 IF "%UNSTABLE%" == "" (
+  echo "Stable: Build MSI package"
   :: sign dlls and exe files
   SET dSource=C:\MuseScore\win32install
   for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') do (
@@ -27,7 +28,7 @@ IF "%UNSTABLE%" == "" (
   XCOPY %FILEPATH% C:\MuseScore /Y /Q
   SET ARTIFACT_NAME=%FILENAME%
 ) ELSE (
-  echo "UNSTABLE"
+  echo "Unstable: build 7z package"
   CD C:\MuseScore
   RENAME C:\MuseScore\win32install\bin\musescore.exe nightly.exe
   RENAME C:\MuseScore\win32install MuseScoreNightly
