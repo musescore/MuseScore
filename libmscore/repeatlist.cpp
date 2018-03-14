@@ -546,16 +546,17 @@ void RepeatList::unwindSection(Measure* const sectionStartMeasure, Measure* cons
                                     auto copyFromIdx = -1;
                                     Measure * copyFromMeasure = jumpToMeasure;
                                     if (jump->playRepeats()) {
-                                          // we want to replay as much from the score as possible => find first occurence of jumpToMeasure
-                                          for (auto it = this->cbegin(); it != this->cend(); ++it) {
-                                                if ((*it)->containsMeasure(jumpToMeasure)) {
-                                                      copyFromIdx = it - this->cbegin();
+                                          // we want to replay as much from the score as possible
+                                          // => find most recent occurence of first playBack of jumpToMeasure #270332
+                                          for (int jumpToIdx = playUntilIdx; jumpToIdx >= 0; --jumpToIdx) {
+                                                if (this->at(jumpToIdx)->playbackCount(jumpToMeasure) == 1) {
+                                                      copyFromIdx = jumpToIdx;
                                                       break;
                                                       }
                                                 }
                                           }
                                     else { // no repeats upon jumping => find final occurence of jumpToMeasure
-                                          auto jumpToIdx = this->size();
+                                          int jumpToIdx = this->size();
                                           do {
                                                 --jumpToIdx;
                                                 }
