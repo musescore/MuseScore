@@ -540,6 +540,7 @@ void AlsaDriver::write(int n, float* l, float* r)
                   }
             else if (avail >= n)
                   break;
+            usleep(1000); // sleep 1 ms when avail = 0 to avoid infinite loop hogging a CPU.
             }
       if (mmappedInterface) {
             playInit(n);
