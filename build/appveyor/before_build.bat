@@ -17,6 +17,10 @@ CD C:\MuseScore
 for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:\MuseScore\CMakeLists.txt') do set UNSTABLE=%%i
 echo on
 echo %UNSTABLE%
+IF ["%UNSTABLE%"] == [] (echo "UNStable1")
+IF "%~UNSTABLE%" == "" (echo "UNStable2")
+IF "%~UNSTABLE" == "" (echo "UNStable3")
+
 
 :: get revision number
 SET PATH=C:\Qt\5.4\mingw491_32\bin;C:\Qt\Tools\mingw491_32\bin;%PATH%

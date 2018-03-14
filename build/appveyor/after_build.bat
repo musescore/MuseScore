@@ -1,7 +1,7 @@
 :: Print ccache statistics
 ccache.exe -s
 
-:: Test MueScore stability
+:: Test MuseScore stability
 IF ["%UNSTABLE%"] == [] (
   :: sign dlls and exe files
   SET dSource=C:\MuseScore\win32install
