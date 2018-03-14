@@ -30,3 +30,9 @@ CMakeLists.txt.user.*
 vtest/html
 thirdparty/mupdf-qt
 
+# Downloaded files during build process
+MS_General.sf3
+MS_General-License.md
+MS_General-changelog.txt
+VERSION
+
