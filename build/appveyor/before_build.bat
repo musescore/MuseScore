@@ -15,6 +15,7 @@ CD C:\MuseScore
 
 :: is MuseScore stable? Check here, no grep in PATH later on
 for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:\MuseScore\CMakeLists.txt') do set UNSTABLE=%%i
+echo %UNSTABLE%
 
 :: get revision number
 SET PATH=C:\Qt\5.4\mingw491_32\bin;C:\Qt\Tools\mingw491_32\bin;%PATH%
