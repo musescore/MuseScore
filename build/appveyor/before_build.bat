@@ -3,7 +3,6 @@ IF NOT EXIST dependencies.7z ( START " " /wait "C:\MinGW\msys\1.0\bin\wget" --no
 
 :: keep full PATH for later
 SET OLD_PATH=%PATH%
-where SignTool
 
 :: copy dependencies
 START " " /wait "7z" x -y dependencies.7z > nul
