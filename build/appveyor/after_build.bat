@@ -26,15 +26,14 @@ for /r %%i in (build.release\*.msi) do ( SET FILEPATH=%%i )
 echo on
 echo %FILEPATH%
 echo off
-for /F %%f in ("%FILEPATH%") do (
-    SET FILENAME=%%~nxf
-    echo on
-    echo %FILENAME%
-    echo off
-    "C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe" sign /debug /f "C:\MuseScore\build\build\appveyor\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p "%CERTIFICATE_PASSWORD%" /d %FILENAME% %FILEPATH%
-    :: verify signature
-    "C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe" verify %FILEPATH%
-    )
+for /F %%f in ("%FILEPATH%") do (SET FILENAME=%%~nxf)
+echo on
+echo %FILENAME%
+echo off
+"C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe" sign /debug /f "C:\MuseScore\build\build\appveyor\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p "%CERTIFICATE_PASSWORD%" /d %FILENAME% %FILEPATH%
+:: verify signature
+"C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe" verify %FILEPATH%
+
 :: prepare upload
 XCOPY %FILEPATH% C:\MuseScore /Y /Q
 SET ARTIFACT_NAME=%FILENAME%
