@@ -62,6 +62,9 @@ class Tie final : public SlurTie {
       static Note* editStartNote;
       static Note* editEndNote;
 
+      std::vector<QLineF> _bendLines;
+      QString _bendText;
+
    public:
       Tie(Score* = 0);
       virtual Tie* clone() const override         { return new Tie(*this);  }
@@ -76,6 +79,8 @@ class Tie final : public SlurTie {
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
 //      virtual void layout() override;
+      std::vector<QLineF>& getBendLines() { return _bendLines; }
+      QString& getBendText() { return _bendText; }
       virtual void slurPos(SlurPos*) override;
 
       void layoutFor(System*);

@@ -87,6 +87,7 @@
 #include "libmscore/xml.h"
 #include "libmscore/textline.h"
 #include "libmscore/shape.h"
+#include "libmscore/tie.h"
 
 namespace Ms {
 
@@ -4157,6 +4158,12 @@ Element* ScoreView::elementNear(QPointF p)
       QList<Element*> el = page->items(r);
       QList<Element*> ll;
       for (Element* e : el) {
+            if (e->isTieSegment() && toTieSegment(e)->tie()->getBendLines().size())
+                  {
+                  for (auto el : toTieSegment(e)->tie()->startNote()->firstTiedNote()->el())
+                        if (el->isBend())
+                              return el;
+                  }
             e->itemDiscovered = 0;
             if (!e->selectable() || e->isPage())
                   continue;

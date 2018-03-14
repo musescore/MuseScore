@@ -16,6 +16,8 @@
 #include "element.h"
 #include "pitchvalue.h"
 #include "property.h"
+#include "slurtie.h"
+#include "shape.h"
 
 namespace Ms {
 
@@ -30,6 +32,9 @@ class Bend final : public Element {
       bool fontItalic    { false       };
       bool fontUnderline { false       };
 
+      const float bendHeight { 5.0f };
+      const float bendYOffset { 29.0f };
+
       PropertyFlags propertyFlagsList[5] = {
             PropertyFlags::STYLED,
             PropertyFlags::STYLED,
@@ -38,14 +43,29 @@ class Bend final : public Element {
             PropertyFlags::STYLED,
             };
 
+      struct BendSegment
+            {
+            QPointF p1;
+            QPointF p2;
+            QString label;
+            Note* note;
+            };
+      std::vector<BendSegment> _segments;
+      void makeSegments();
+
+      void collectPoints();
+
       bool _playBend     { true };
       QList<PitchValue> _points;
+      QList<PitchValue> _originPoints;
       qreal _lw;
       QPointF notePos;
       qreal noteWidth;
 
-      QFont font(qreal) const;
+      void panelDraw(QPainter*) const;
 
+      bool tiedBend;
+      Shape _shape;
    public:
       Bend(Score* s);
       virtual Bend* clone() const override        { return new Bend(*this); }
@@ -56,6 +76,7 @@ class Bend final : public Element {
       virtual void read(XmlReader& e) override;
       QList<PitchValue>& points()                { return _points; }
       const QList<PitchValue>& points() const    { return _points; }
+      QList<PitchValue> gridPoints() const;
       void setPoints(const QList<PitchValue>& p) { _points = p;    }
       bool playBend() const                      { return _playBend; }
       void setPlayBend(bool v)                   { _playBend = v;    }
@@ -70,8 +91,10 @@ class Bend final : public Element {
       virtual void resetProperty(P_ID id) override;
       virtual StyleIdx getPropertyStyle(P_ID) const override;
       virtual void reset() override;
-      };
 
+      virtual Shape shape() const override;
+      QFont font(qreal) const;
+      };
 
 }     // namespace Ms
 #endif

@@ -16,6 +16,8 @@
 #include "undo.h"
 #include "chord.h"
 #include "tie.h"
+#include "bend.h"
+#include "sym.h"
 
 namespace Ms {
 
@@ -44,6 +46,126 @@ void TieSegment::draw(QPainter* painter) const
       // hide tie toward the second chord of a cross-measure value
       if (tie()->endNote() && tie()->endNote()->chord()->crossMeasure() == CrossMeasure::SECOND)
             return;
+
+      if (tie()->getBendLines().size())
+                  {
+                  Bend* origin = nullptr;
+                  for (auto e : tie()->startNote()->tiedNotes().front()->el())
+                        if (e->isBend())
+                              {
+                              origin = toBend(e);
+                              break;
+                              }
+                  QPen pen(origin->curColor(), 2.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+                  painter->setPen(pen);
+                  auto& bl = tie()->getBendLines();
+                  bool tabStaff = tie()->startNote()->staff()->isTabStaff(tie()->startNote()->tick());
+                  auto startPt = path.pointAtPercent(0);
+                  auto endPt = path.pointAtPercent(.5);
+                  if (tabStaff)
+                        {
+                        startPt.ry() += tie()->endNote()->height() * .5;
+                        qreal aw = spatium() * .5;
+                        QPolygonF arrowUp;
+                        arrowUp << QPointF(0, 0) << QPointF(aw*.5, aw) << QPointF(-aw*.5, aw);
+                        QPolygonF arrowDown;
+                        arrowDown << QPointF(0, 0) << QPointF(aw*.5, -aw) << QPointF(-aw*.5, -aw);
+                        QFont f = origin->font(spatium() * MScore::pixelRatio);
+                        painter->setFont(f);
+                        QFontMetrics fm(f);
+
+                        int index = 0;
+                        auto l1 = bl[index++];
+                        if (l1.x1() == l1.x2())
+                              {
+                              painter->drawLine(QLineF(l1.translated(startPt)));
+                              painter->drawPolygon(arrowUp.translated(startPt + l1.p2()));
+                              if (index == bl.size())
+                                    return;
+                              l1 = bl[index++];
+                              }
+                        while(true)
+                              {
+                              if (l1.y1() == l1.y2())
+                                    {
+                                    auto oldpen = painter->pen();
+                                    painter->setPen(QPen(origin->curColor(), oldpen.width(), Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
+                                    l1.setP2(QPointF(endPt.x() - startPt.x(), l1.y2()));
+                                    painter->drawLine(l1.translated(startPt));
+                                    painter->setPen(oldpen);
+                                    }
+                              else
+                                    {
+                                    painter->setBrush(Qt::NoBrush);
+                                    QPainterPath path;
+                                    path.moveTo(l1.p1());
+                                    if (index != bl.size() || tie()->endNote()->tieFor() != nullptr)
+                                          l1.setP2(QPointF(endPt.x() - startPt.x(), l1.y2()));
+                                    qreal dx = l1.x2() - l1.x1();
+                                    qreal dy = l1.y1() - l1.y2();
+                                    // path.cubicTo(seg.p1.x() + dx / 4, seg.p1.y(), seg.p2.x(), seg.p1.y() + dy / 5, seg.p2.x(), seg.p2.y());
+                                    path.cubicTo(l1.x1() + dx / 4, l1.y1(), l1.x2(), l1.y1() + dy / 5, l1.x2(), l1.y2());
+                                    painter->drawPath(path.translated(startPt));
+                                    painter->setBrush(origin->curColor());
+                                    auto arrow = (l1.y1() < l1.y2() ? arrowDown : arrowUp);
+                                    if (l1.y1() > l1.y2() && tie()->getBendText().length())
+                                          {
+                                          qreal textWidth = fm.width(tie()->getBendText());
+                                          qreal textHeight = fm.height();
+                                          QRectF txtRect = QRectF(l1.x2() - textWidth / 2, l1.y2() - textHeight / 2, .0, .0).translated(startPt);
+                                          painter->drawText(txtRect, Qt::AlignVCenter|Qt::TextDontClip, tie()->getBendText());
+                                          }
+                                    painter->drawPolygon(arrow.translated(startPt + QPointF(l1.x2(), l1.y2())));
+                                    }
+                              if (index == bl.size()) break;
+                              l1 = bl[index++].translated(QPointF(l1.x2(), 0));
+
+                              }
+
+
+                        }
+                  else
+                        {
+                        bool up = tie()->startNote()->line() > 5;
+                        int index = 0;
+                        auto l1 = bl[index++];
+                        auto l2 = bl[index++];
+                        if (l1.x1() < 0)
+                              {
+                              painter->drawLine(l1.translated(startPt));
+                              painter->drawLine(l2.translated(startPt));
+                              auto pt = l1.p1();
+                              pt.rx() -= 10.0f;
+                              pt.ry() += (up ? -11.0f : 12.0f);
+                              drawSymbol(SymId::noteheadBlack, painter, pt + startPt, .7);
+                              pt.rx() -= 10.0f;
+                              drawSymbol(SymId::noteheadParenthesisLeft, painter, pt + startPt, .5);
+                              pt.rx() += 34.0f;
+                              drawSymbol(SymId::noteheadParenthesisRight, painter, pt + startPt, .5);
+
+                              if (bl.size() == index)
+                                    return;
+                              l1 = bl[index++];
+                              l2 = bl[index++];
+                              }
+
+                        qreal midPoint = (endPt.x() - startPt.x()) * .5 + startPt.x();
+                        painter->drawLine(QLineF(startPt.x(), startPt.y() + l1.y1(), midPoint, endPt.y() + l1.y2()));
+                        painter->drawLine(QLineF(midPoint, endPt.y() + l1.y2(), endPt.x(), endPt.y() + l2.y2()));
+
+                        if (index < bl.size())
+                              {
+                              l1 = bl[index++];
+                              l2 = bl[index++];
+                              endPt += QPointF(10.0, .0);
+                              painter->drawLine(l1.translated(endPt));
+                              painter->drawLine(l2.translated(endPt));
+                              auto pt = l2.p2() + endPt + QPointF(-10.0, 10.0);
+                              drawSymbol(SymId::noteheadBlack, painter, pt, .7);
+                              }
+                        }
+                  return;
+                  }
 
       QPen pen(curColor());
       switch (slurTie()->lineType()) {
@@ -316,16 +438,78 @@ void TieSegment::computeBezier(QPointF p6o)
 
       qreal minH = qAbs(3.0 * w);
       int nbShapes = 15;
-      for (int i = 1; i <= nbShapes; i++) {
-            QPointF point = t.map(p.pointAtPercent(i/float(nbShapes)));
-            QRectF re = QRectF(start, point).normalized();
-            if (re.height() < minH) {
-                  qreal d = (minH - re.height()) * .5;
-                  re.adjust(0.0, -d, 0.0, d);
+      if (tie()->getBendLines().empty())
+            {
+            for (int i = 1; i <= nbShapes; i++) {
+                  QPointF point = t.map(p.pointAtPercent(i/float(nbShapes)));
+                  QRectF re = QRectF(start, point).normalized();
+                  if (re.height() < minH) {
+                        qreal d = (minH - re.height()) * .5;
+                        re.adjust(0.0, -d, 0.0, d);
+                        }
+                  _shape.add(re);
+                  start = point;
                   }
-//            re.translate(staffOffset);
-            _shape.add(re);
-            start = point;
+            }
+      else
+            {
+            bool tab = tie()->startNote()->staff()->isTabStaff(tie()->startNote()->tick());
+            bool endTie = tie()->endNote()->tieFor() == nullptr;
+            int n = tie()->getBendLines().size();
+            float cx = t.map(p.pointAtPercent(.5)).x() - start.x();
+            for (int i = 0; i < n; ++i)
+                  {
+                  auto& l = tie()->getBendLines()[i];
+                  QPointF p1 = l.p1(), p2 = l.p2();
+                  if (p1.y() == p2.y())
+                        {
+                        p1.ry() -= 10;
+                        p2.ry() += 10;
+                        }
+                  else if (p1.x() == p2.x())
+                        {
+                        p1.rx() -= 10;
+                        p2.rx() += 10;
+                        }
+                  if (!tab)
+                        {
+                        p1.rx() = 0;
+                        if (!endTie || i < 2)
+                              p2.rx() = cx;
+                        _shape.add(QRectF(p1, p2).translated(start));
+                        if (!endTie || i < 2)
+                              start.rx() += cx;
+                        }
+                  else
+                        {
+                        p1.ry() += 16.0; p2.ry() +=16.0;
+                        if (i == 0)
+                              p2.rx() = cx * 2;
+                        else if (i == 1)
+                              {
+                              qreal dif = p2.x() - p1.x();
+                              p1.rx() = cx * 2;
+                              p2.rx() = p1.x() + dif;
+                              }
+                        if (p1.y() > p2.y() && tie()->getBendText().length())
+                              {
+                              Bend* origin = nullptr;
+                              for (auto e : tie()->startNote()->firstTiedNote()->el())
+                                    if (e->isBend())
+                                          {
+                                          origin = toBend(e);
+                                          break;
+                                          }
+                              QFont f = origin->font(spatium() * MScore::pixelRatio);
+                              QFontMetrics fm(f);
+                              qreal textWidth = fm.width(tie()->getBendText());
+                              qreal textHeight = fm.height();
+                              QRectF txtRect = QRectF(p2.x() - textWidth / 2, p2.y() - textHeight / 2, .0, .0).translated(start);
+                              _shape.add(txtRect);
+                              }
+                        _shape.add(QRectF(p1, p2).translated(start));
+                        }
+                  }
             }
       }
 

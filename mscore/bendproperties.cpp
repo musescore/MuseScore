@@ -27,6 +27,8 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "musescore.h"
+#include "libmscore/bend.h"
+#include "libmscore/note.h"
 
 namespace Ms {
 
@@ -38,11 +40,11 @@ BendProperties::BendProperties(Bend* b, QWidget* parent)
    : QDialog(parent)
       {
       setObjectName("BendProperties");
+      bend = b;
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      bend = b;
-      bendCanvas->setPoints(bend->points());
+      bendCanvas->setPoints(bend->gridPoints());
       bendTypes = new QButtonGroup(this);
       bendTypes->addButton(bend1, 0);
       bendTypes->addButton(bend2, 1);
@@ -63,7 +65,14 @@ const QList<PitchValue>& BendProperties::points() const
       {
       return bendCanvas->points();
       }
-
+//---------------------------------------------------------
+//   bendTypeChanged
+//---------------------------------------------------------
+int BendProperties::tieSize() const
+      {
+      auto note = static_cast<Note*>(bend->parent());
+      return note->tiedNotes().size();
+      }
 //---------------------------------------------------------
 //   bendTypeChanged
 //---------------------------------------------------------
@@ -124,6 +133,7 @@ BendCanvas::BendCanvas(QWidget* parent)
 
 void BendCanvas::paintEvent(QPaintEvent* ev)
       {
+      int tiesize = static_cast<BendProperties*>(parent())->tieSize();
       int w = width();
       int h = height();
 
@@ -131,11 +141,12 @@ void BendCanvas::paintEvent(QPaintEvent* ev)
       p.fillRect(rect(), Qt::white);
 
       static const int ROWS    = 13;
-      static const int COLUMNS = 13;
+      //static const int COLUMNS = 13;
+      const int COLUMNS = tiesize + 2;
 
-      int xs = w / (COLUMNS);
+      int xs = (w - 40 ) / (COLUMNS - 1);
       int ys = h / (ROWS);
-      int lm = xs / 2;
+      int lm = 20;
       int tm = ys / 2;
       int tw = (COLUMNS - 1) * xs;
       int th = (ROWS - 1)    * ys;
@@ -166,6 +177,7 @@ void BendCanvas::paintEvent(QPaintEvent* ev)
       pen.setWidth(5);
       pen.setColor(Qt::gray);
       p.setPen(pen);
+
       foreach(const PitchValue& v, _points) {
             int x = ((tw * v.time) / 60) + lm;
             int y = th - ((th * v.pitch) / 300) + tm;
@@ -192,18 +204,20 @@ void BendCanvas::paintEvent(QPaintEvent* ev)
 void BendCanvas::mousePressEvent(QMouseEvent* ev)
       {
       static const int ROWS = 13;
-      static const int COLUMNS = 13;
+      //static const int COLUMNS = 13;
+      int tiesize = static_cast<BendProperties*>(parent())->tieSize();
+      const int COLUMNS = tiesize + 2;
 
-      int xs = width() / (COLUMNS);
+      int xs = (width() - 40) / (COLUMNS - 1);
       int ys = height() / (ROWS);
-      int lm = xs / 2;
+      int lm = 20;//xs / 2;
       int tm = ys / 2;
 //      int tw = (COLUMNS - 1) * xs;
 //      int th = (ROWS - 1)    * ys;
 
-      int x = ev->x() - lm;
+      int x = ((ev->x() + xs / 2) - 20) / xs;//ev->x() - lm;
       int y = ev->y() - tm;
-      x = (x + xs/2) / xs;
+      //x = (x + xs/2) / xs;
       y = (y + ys/2) / ys;
       if (x >= COLUMNS)
             x = COLUMNS - 1;
@@ -211,7 +225,7 @@ void BendCanvas::mousePressEvent(QMouseEvent* ev)
             y = ROWS - 1;
       y = ROWS - y - 1;
 
-      int time = x * 5;
+      int time = x * (60.0 / (COLUMNS - 1));
       int pitch = y * 25;
 
       int n = _points.size();
@@ -224,6 +238,11 @@ void BendCanvas::mousePressEvent(QMouseEvent* ev)
                   }
             if (_points[i].time == time) {
                   if (_points[i].pitch == pitch && i > 0 && i < (n-1)) {
+                        if (n < tiesize || i != n - 2)
+                              {
+                              found = true;
+                              break;
+                              }
                         _points.removeAt(i);
                         }
                   else {
