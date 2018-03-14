@@ -5,7 +5,8 @@ echo on
 IF "%UNSTABLE%" == "" (
   echo "Stable: Build MSI package"
   :: sign dlls and exe files
-  SET dSource=C:\MuseScore\win32install
+  CD C:\MuseScore
+  SET dSource=win32install
   for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') do (
       echo "Signing %%f"
       "SignTool" sign /f "C:\MuseScore\build\build\appveyor\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p "%CERTIFICATE_PASSWORD%" "%%f"
