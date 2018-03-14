@@ -426,20 +426,22 @@ void LoginManager::uploadMedia()
             emit displaySuccess();
             return;
             }
-      if (_mp3File->open(QIODevice::ReadOnly)) { // probably cancelled, no error handling
-            QNetworkRequest request;
-            request.setUrl(QUrl(_mediaUrl));
-            request.setHeader(QNetworkRequest::KnownHeaders::ContentLengthHeader, _mp3File->size());
-            _progressDialog->reset();
-            _progressDialog->setLabelText(tr("Uploading..."));
-            _progressDialog->setCancelButtonText(tr("Cancel"));
-            _progressDialog->show();
-            _uploadTryCount++;
-            QNetworkReply *reply = mscore->networkManager()->put(request, _mp3File);
-            connect(_progressDialog, SIGNAL(canceled()), reply, SLOT(abort()));
-            connect(reply, SIGNAL(finished()), this, SLOT(mediaUploadFinished()));
-            connect(reply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(mediaUploadProgress(qint64, qint64)));
+      if (!_mp3File->isOpen() && !_mp3File->open(QIODevice::ReadOnly)) {
+            return; // probably cancelled, no error handling
             }
+
+      QNetworkRequest request;
+      request.setUrl(QUrl(_mediaUrl));
+      request.setHeader(QNetworkRequest::KnownHeaders::ContentLengthHeader, _mp3File->size());
+      _progressDialog->reset();
+      _progressDialog->setLabelText(tr("Uploading..."));
+      _progressDialog->setCancelButtonText(tr("Cancel"));
+      _progressDialog->show();
+      _uploadTryCount++;
+      QNetworkReply *reply = mscore->networkManager()->put(request, _mp3File);
+      connect(_progressDialog, SIGNAL(canceled()), reply, SLOT(abort()));
+      connect(reply, SIGNAL(finished()), this, SLOT(mediaUploadFinished()));
+      connect(reply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(mediaUploadProgress(qint64, qint64)));
       }
 
 //---------------------------------------------------------
