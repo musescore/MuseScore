@@ -2,7 +2,7 @@
 ccache.exe -s
 
 :: Test MuseScore stability
-IF ["%UNSTABLE%"] == [] (
+IF "%UNSTABLE%" == "" (
   :: sign dlls and exe files
   SET dSource=C:\MuseScore\win32install
   for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') do (

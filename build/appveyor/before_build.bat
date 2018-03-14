@@ -17,8 +17,7 @@ CD C:\MuseScore
 for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:\MuseScore\CMakeLists.txt') do set UNSTABLE=%%i
 echo on
 echo %UNSTABLE%
-IF ["%UNSTABLE%"] == [] (echo "UNStable1")
-IF "%~UNSTABLE" == "" (echo "UNStable3")
+IF "%UNSTABLE%" == "" (echo "UNStable3")
 
 
 :: get revision number
