@@ -18,7 +18,6 @@ for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:
 echo on
 echo %UNSTABLE%
 IF ["%UNSTABLE%"] == [] (echo "UNStable1")
-IF "%~UNSTABLE%" == "" (echo "UNStable2")
 IF "%~UNSTABLE" == "" (echo "UNStable3")
 
 
