@@ -22,7 +22,7 @@ for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') d
 mingw32-make -f Makefile.mingw package
 
 :: find the MSI file without the hardcoded version
-for /r %%i in (build.release\*.msi) do ( SET FILEPATH=%i )
+for /r %%i in (build.release\*.msi) do ( SET FILEPATH=%%i )
 echo on
 echo %FILEPATH%
 echo off
