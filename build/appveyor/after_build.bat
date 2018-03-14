@@ -12,6 +12,8 @@ IF "%UNSTABLE%" == "" (
 echo "Stable: Build MSI package"
 :: sign dlls and exe files
 CD C:\MuseScore
+IF EXIST ".\build\build\appveyor\resources\musescore.p12" (echo "cert found relative path") ELSE (echo "cert not found relative path")
+IF EXIST "C:\MuseScore\build\build\appveyor\resources\musescore.p12" (echo "cert found abs path") ELSE (echo "cert not found abs path")
 SET dSource=win32install
 for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') do (
     echo "Signing %%f"
