@@ -100,6 +100,7 @@ class TestRepeat : public QObject, public MTest
       void repeat48() { repeat("repeat48.mscx", "1;2;3;4;1;5;6;7;3;4;1;5;8"); } // jump into first volta, without playRepeats
       void repeat49() { repeat("repeat49.mscx", "1;2;3;1;2;3;4;5;6;3;1;2;3;4;7"); } // D.S. with playRepeats
       void repeat50() { repeat("repeat50.mscx", "1;2;3;4;1;2;3;4;5;6;1;2;3;4;1;2;3;7"); } // D.S. with playRepeats with ToCoda inside the repeat
+      void repeat51() { repeat("repeat51.mscx", "1;2;3;4;5;6;3;4;7;8;9;3;4;10;11"); } //#270332 twice D.S. with playRepeats to same target with different Coda
       };
 
 //---------------------------------------------------------
