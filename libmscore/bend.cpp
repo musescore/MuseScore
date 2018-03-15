@@ -20,17 +20,7 @@
 
 namespace Ms {
 
-//---------------------------------------------------------
-//   styledProperties
-//---------------------------------------------------------
-
-static constexpr std::array<StyledProperty,5> styledProperties {{
-      { StyleIdx::bendFontFace,      P_ID::FONT_FACE },
-      { StyleIdx::bendFontSize,      P_ID::FONT_SIZE },
-      { StyleIdx::bendFontBold,      P_ID::FONT_BOLD },
-      { StyleIdx::bendFontItalic,    P_ID::FONT_ITALIC },
-      { StyleIdx::bendFontUnderline, P_ID::FONT_UNDERLINE }
-      }};
+constexpr std::array<StyledProperty,6> Bend::_styledProperties;
 
 //---------------------------------------------------------
 //   label
@@ -49,6 +39,17 @@ static const char* label[] = {
 Bend::Bend(Score* s)
    : Element(s)
       {
+      static constexpr std::array<P_ID,5> properties {
+            P_ID::FONT_FACE,
+            P_ID::FONT_SIZE,
+            P_ID::FONT_BOLD,
+            P_ID::FONT_ITALIC,
+            P_ID::FONT_UNDERLINE,
+            };
+
+      for (P_ID id : properties)
+            resetProperty(id);
+
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
@@ -58,11 +59,11 @@ Bend::Bend(Score* s)
 
 QFont Bend::font(qreal sp) const
       {
-      QFont f(fontFace);
-      f.setBold(fontBold);
-      f.setItalic(fontItalic);
-      f.setUnderline(fontUnderline);
-      qreal m = fontSize;
+      QFont f(_fontFace);
+      f.setBold(_fontBold);
+      f.setItalic(_fontItalic);
+      f.setUnderline(_fontUnderline);
+      qreal m = _fontSize;
       m *= sp / SPATIUM20;
 
       f.setPointSizeF(m);
@@ -288,11 +289,26 @@ void Bend::write(XmlWriter& xml) const
             xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
                .arg(v.time).arg(v.pitch).arg(v.vibrato));
             }
-      for (auto k : styledProperties)
+      for (auto k : _styledProperties)
             writeProperty(xml, k.propertyIdx);
       writeProperty(xml, P_ID::PLAY);
       Element::writeProperties(xml);
       xml.etag();
+      }
+
+//---------------------------------------------------------
+//   readStyledProperty
+//---------------------------------------------------------
+
+bool Bend::readStyledProperty(XmlReader& e, const QStringRef& tag)
+      {
+      for (auto k : _styledProperties) {
+            if (readProperty(tag, e, k.propertyIdx)) {
+                  setPropertyFlags(k.propertyIdx, PropertyFlags::UNSTYLED);
+                  return true;
+                  }
+             }
+      return false;
       }
 
 //---------------------------------------------------------
@@ -304,17 +320,9 @@ void Bend::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-            bool found = false;
-            for (auto k : styledProperties) {
-                  if (readProperty(tag, e, k.propertyIdx)) {
-                        setPropertyFlags(k.propertyIdx, PropertyFlags::UNSTYLED);
-                        found = true;
-                        break;
-                        }
-                  }
-            if (found)
-                  continue;
-            if (tag == "point") {
+            if (readStyledProperty(e, tag))
+                  ;
+            else if (tag == "point") {
                   PitchValue pv;
                   pv.time    = e.intAttribute("time");
                   pv.pitch   = e.intAttribute("pitch");
@@ -322,25 +330,11 @@ void Bend::read(XmlReader& e)
                   _points.append(pv);
                   e.readNext();
                   }
-            else if (tag == "play") {
+            else if (tag == "play")
                   setPlayBend(e.readBool());
-                  }
             else if (!Element::readProperties(e))
                   e.unknown();
             }
-      }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-StyleIdx Bend::getPropertyStyle(P_ID id) const
-      {
-      for (auto k : styledProperties) {
-            if (k.propertyIdx == id)
-                  return k.styleIdx;
-            }
-      return Element::getPropertyStyle(id);
       }
 
 //---------------------------------------------------------
@@ -351,15 +345,15 @@ QVariant Bend::getProperty(P_ID id) const
       {
       switch (id) {
             case P_ID::FONT_FACE:
-                  return fontFace;
+                  return _fontFace;
             case P_ID::FONT_SIZE:
-                  return fontSize;
+                  return _fontSize;
             case P_ID::FONT_BOLD:
-                  return fontBold;
+                  return _fontBold;
             case P_ID::FONT_ITALIC:
-                  return fontItalic;
+                  return _fontItalic;
             case P_ID::FONT_UNDERLINE:
-                  return fontUnderline;
+                  return _fontUnderline;
             case P_ID::PLAY:
                   return bool(playBend());
             default:
@@ -375,19 +369,19 @@ bool Bend::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
             case P_ID::FONT_FACE:
-                  fontFace = v.toString();
+                  _fontFace = v.toString();
                   break;
             case P_ID::FONT_SIZE:
-                  fontSize = v.toReal();
+                  _fontSize = v.toReal();
                   break;
             case P_ID::FONT_BOLD:
-                  fontBold = v.toBool();
+                  _fontBold = v.toBool();
                   break;
             case P_ID::FONT_ITALIC:
-                  fontItalic = v.toBool();
+                  _fontItalic = v.toBool();
                   break;
             case P_ID::FONT_UNDERLINE:
-                  fontUnderline = v.toBool();
+                  _fontUnderline = v.toBool();
                   break;
             case P_ID::PLAY:
                  setPlayBend(v.toBool());
@@ -405,7 +399,7 @@ bool Bend::setProperty(P_ID id, const QVariant& v)
 
 QVariant Bend::propertyDefault(P_ID id) const
       {
-      for (auto k : styledProperties) {
+      for (auto k : _styledProperties) {
             if (k.propertyIdx == id)
                   return score()->styleV(k.styleIdx);
             }
@@ -418,55 +412,14 @@ QVariant Bend::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
-//   resetProperty
-//---------------------------------------------------------
-
-void Bend::resetProperty(P_ID id)
-      {
-      setPropertyFlags(id, PropertyFlags::STYLED);
-      }
-
-//---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
 
 void Bend::reset()
       {
-      for (auto k : styledProperties)
+      for (auto k : _styledProperties)
             undoResetProperty(k.propertyIdx);
       Element::reset();
-      }
-
-//---------------------------------------------------------
-//   propertyFlags
-//---------------------------------------------------------
-
-PropertyFlags& Bend::propertyFlags(P_ID id)
-      {
-      int i = 0;
-      for (auto k : styledProperties) {
-            if (k.propertyIdx == id)
-                  return propertyFlagsList[i];
-            ++i;
-            }
-      return Element::propertyFlags(id);
-      }
-
-//---------------------------------------------------------
-//   setPropertyFlags
-//---------------------------------------------------------
-
-void Bend::setPropertyFlags(P_ID id, PropertyFlags f)
-      {
-      int i = 0;
-      for (auto k : styledProperties) {
-            if (k.propertyIdx == id) {
-                  propertyFlagsList[i] = f;
-                  return;
-                  }
-            ++i;
-            }
-      Element::setPropertyFlags(id, f);
       }
 
 }

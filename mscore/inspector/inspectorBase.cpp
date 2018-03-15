@@ -295,7 +295,6 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
 
       if (inspector->el()->size() > 1) {
             P_ID id      = ii.t;
-//            P_TYPE pt    = propertyType(id);
             QVariant val = getValue(ii);
 
             for (Element* e : *inspector->el()) {
@@ -338,10 +337,15 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
 
 void InspectorBase::valueChanged(int idx, bool reset)
       {
+      static bool recursion = false;
+
+      if (recursion)
+            return;
+      recursion = true;
+
       const InspectorItem& ii = iList[idx];
       P_ID id       = ii.t;
-      QVariant val2 = getValue(ii);
-
+      QVariant val2 = getValue(ii);                   // get new value from UI
       Score* score  = inspector->element()->score();
 
       score->startCmd();
@@ -359,14 +363,11 @@ void InspectorBase::valueChanged(int idx, bool reset)
             QVariant val1 = e->getProperty(id);
             if (reset) {
                   val2 = e->propertyDefault(id);
+                  if (!val2.isValid())
+                        continue;
+                  setValue(ii, val2);           // set UI, this may call valueChanged()
                   }
-            if (val2.isValid() && val1 != val2) {
-                  if (reset) {
-//ws:??                        val2 = e->propertyDefault(id);
-                        setValue(ii, val2);
-                        }
-                  e->undoChangeProperty(id, val2, ps);
-                  }
+            e->undoChangeProperty(id, val2, ps);
             }
       inspector->setInspectorEdit(true);
       checkDifferentValues(ii);
@@ -377,6 +378,7 @@ void InspectorBase::valueChanged(int idx, bool reset)
       // a subStyle change may change several other values:
       if (id == P_ID::SUB_STYLE)
             setElement();
+      recursion = false;
       }
 
 //---------------------------------------------------------

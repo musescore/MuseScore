@@ -163,6 +163,12 @@ Palette handling
       some rules
 ====================================================================
 
+Element type system
+      Every class derived from ScoreElement which implements
+            virtual ElementType type() const = 0;
+      should have set the class attribute "final" to make sure no other class will be derived
+      from this one. This avoids ambiguities in the internal type system.
+
 Layout
 
       - After loading a score, the score data can only be modified in a "undo" function during editing.
@@ -234,28 +240,92 @@ Dynamics
       staff line + text line height.
 
 
-Styles & Properties
-      There is a connection between style values and property values as some properties
-      can be styled. The StyleIdx of a property style can be found by calling
-            StyleIdx Element::getPropertyStyle(P_ID)
-      If the property has no style, then StyleIDx::NOSTYLE is returned.
+==============================================================
+Properties & Styles
+==============================================================
 
-      A property can have different style values depending on the element type.
+Properties are identified by the enumeration P_ID.
+Style values are identified by the enumeration StyleIdx.
+
+Some properties are associated with a Style. This styled properties have
+a state (enumeration PropertyFlags). The property can by STYLED in which case it has
+the value of the associated Style. If the style changes, the value of all styled properties
+also change. If the property is UNSTYLED, then the local value of the property is valid.
+Style changes have no effect on unstyled properties. If an property has no associated style, then its
+state is NOSTYLE.
+
+If the user changes a styled property in the inspector it is set to UNSTYLED.
+
+Element Interface
+
+Setter/Getter
+
+      virtual QVariant getProperty(P_ID) const;
+      virtual bool setProperty(P_ID, const QVariant&);
+
+Default
+
+      A property can have a default value.
+
+      virtual QVariant propertyDefault(P_ID) const;
+      virtual void resetProperty(P_ID id);
+            Reset property to default value. Also if the property has an associated style value,
+            sets the property state to STYLED.
+
+Undo/Redo:
+
+      virtual void undoChangeProperty(P_ID id, const QVariant&, PropertyFlags ps);
+      void undoChangeProperty(P_ID id, const QVariant&);
+      void undoResetProperty(P_ID id);
+
+      void undoPushProperty(P_ID);
+
+Serialization:
+
+      void ScoreElement::writeProperty(XmlWriter& xml, P_ID id) const;
+      bool Element::readProperty(const QStringRef&, XmlReader&, P_ID);
+
+Styled properties:
+
+      virtual StyleIdx getPropertyStyle(P_ID) const;
+      virtual void styleChanged();
+
+      Helper functions:
+      virtual PropertyFlags& propertyFlags(P_ID);
+      virtual void setPropertyFlags(P_ID, PropertyFlags);
+
+Helper functions:
+
+      void Element::initSubStyle(SubStyle st)
+      bool Element::custom(P_ID id) const
+            return true if property is != default value
+
+      virtual const StyledProperty* ScoreElement::styledProperties() const;
+      virtual PropertyFlags* ScoreElement::propertyFlagsList();
 
 
+Macros:
 
-====================================================================
-      Known Issues
-====================================================================
+    M_PROPERTY (type, getter_name, setter_name)
+       helper macro to define a styled ScoreElement property
 
-      * tablature not tested, has likely regressions
+    usage example:
+    class Text : public Element {
+          M_PROPERTY(bool, bold, setBold)
+          ...
+          };
+    this defines:
+          bool _bold;
+          PropertyFlags _boldStyle { PropertyFlags::STYLED };
+          const bool& bold() const { return _bold; }
+          void setBold(const a& val) { _bold = val; }
 
-      * some scripting interface functions are commented out
 
-      * horizontal layout mode is incomplete and does not work right
+Functions which must be implemented by ScoreElement:
 
-      * only simple text editing will work, the current implementation is
-        incomplete
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
-
-
+      virtual const StyledProperty* styledProperties() const override;
+      virtual PropertyFlags* propertyFlagsList()       override;

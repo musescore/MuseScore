@@ -16,6 +16,7 @@
 #include "element.h"
 #include "pitchvalue.h"
 #include "property.h"
+#include "style.h"
 
 namespace Ms {
 
@@ -24,13 +25,22 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Bend final : public Element {
-      QString fontFace   { "FreeSerif" };
-      qreal fontSize     { 8.0         };
-      bool fontBold      { false       };
-      bool fontItalic    { false       };
-      bool fontUnderline { false       };
+      QString _fontFace;
+      qreal _fontSize;
+      bool _fontBold;
+      bool _fontItalic;
+      bool _fontUnderline;
 
-      PropertyFlags propertyFlagsList[5] = {
+      static constexpr std::array<StyledProperty,6> _styledProperties {{
+            { StyleIdx::bendFontFace,      P_ID::FONT_FACE },
+            { StyleIdx::bendFontSize,      P_ID::FONT_SIZE },
+            { StyleIdx::bendFontBold,      P_ID::FONT_BOLD },
+            { StyleIdx::bendFontItalic,    P_ID::FONT_ITALIC },
+            { StyleIdx::bendFontUnderline, P_ID::FONT_UNDERLINE },
+            { StyleIdx::NOSTYLE,           P_ID::END }      // end of list marker
+            }};
+
+      PropertyFlags _propertyFlagsList[5] = {
             PropertyFlags::STYLED,
             PropertyFlags::STYLED,
             PropertyFlags::STYLED,
@@ -41,10 +51,16 @@ class Bend final : public Element {
       bool _playBend     { true };
       QList<PitchValue> _points;
       qreal _lw;
+
       QPointF notePos;
       qreal noteWidth;
 
       QFont font(qreal) const;
+      bool readStyledProperty(XmlReader& e, const QStringRef& tag);     // helper function
+
+   protected:
+      virtual const StyledProperty* styledProperties() const override { return _styledProperties.data(); }
+      virtual PropertyFlags* propertyFlagsList()       override       { return _propertyFlagsList; }
 
    public:
       Bend(Score* s);
@@ -65,10 +81,6 @@ class Bend final : public Element {
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
 
-      virtual void setPropertyFlags(P_ID, PropertyFlags) override;
-      virtual PropertyFlags& propertyFlags(P_ID) override;
-      virtual void resetProperty(P_ID id) override;
-      virtual StyleIdx getPropertyStyle(P_ID) const override;
       virtual void reset() override;
       };
 
