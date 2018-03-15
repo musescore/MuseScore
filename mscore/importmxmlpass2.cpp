@@ -5594,6 +5594,8 @@ static void addTremolo(ChordRest* cr,
                        Chord*& tremStart,
                        MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
       {
+      if (cr->type() != Element::Type::CHORD)
+            return;
       if (tremoloNr) {
             //qDebug("tremolo %d type '%s' ticks %d tremStart %p", tremoloNr, qPrintable(tremoloType), ticks, _tremStart);
             if (tremoloNr == 1 || tremoloNr == 2 || tremoloNr == 3 || tremoloNr == 4) {
