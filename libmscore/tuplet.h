@@ -125,6 +125,10 @@ class Tuplet : public DurationElement {
       bool setProperty(P_ID propertyId, const QVariant& v);
       QVariant propertyDefault(P_ID id) const;
       void sanitizeTuplet();
+      void addMissingElements();
+
+   private:
+      Fraction addMissingElement(int startTick, int endTick);
       };
 
 
