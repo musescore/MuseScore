@@ -14,6 +14,7 @@
 #define __SCORE_ELEMENT_H__
 
 #include "types.h"
+#include "style.h"
 
 namespace Ms {
 
@@ -187,6 +188,8 @@ class ScoreElement {
       virtual QVariant propertyDefault(P_ID) const { return QVariant(); }
       virtual void resetProperty(P_ID id);
 
+      virtual const StyledProperty* styledProperties() const;
+      virtual PropertyFlags* propertyFlagsList();
       virtual PropertyFlags& propertyFlags(P_ID);
 
       virtual void setPropertyFlags(P_ID, PropertyFlags);

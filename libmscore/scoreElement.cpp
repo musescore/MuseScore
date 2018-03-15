@@ -264,8 +264,8 @@ void ScoreElement::writeProperty(XmlWriter& xml, P_ID id) const
                QVariant(propertyDefault(id).toReal()/_spatium));
             }
       else {
-            Q_ASSERT(getProperty(id).isValid());
-            xml.tag(id, getProperty(id), propertyDefault(id));
+            if (getProperty(id).isValid())
+                  xml.tag(id, getProperty(id), propertyDefault(id));
             }
       }
 
@@ -374,12 +374,41 @@ MasterScore* ScoreElement::masterScore() const
       }
 
 //---------------------------------------------------------
+//   styledProperties
+//---------------------------------------------------------
+
+const StyledProperty* ScoreElement::styledProperties() const
+      {
+      static constexpr std::array<StyledProperty,1> _styledProperties {{
+            { StyleIdx::NOSTYLE,           P_ID::END }      // end of list marker
+            }};
+      return _styledProperties.data();
+      }
+
+//---------------------------------------------------------
+//   propertyFlagsList
+//---------------------------------------------------------
+
+PropertyFlags* ScoreElement::propertyFlagsList()
+      {
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags& ScoreElement::propertyFlags(P_ID)
+PropertyFlags& ScoreElement::propertyFlags(P_ID id)
       {
       static PropertyFlags f = PropertyFlags::NOSTYLE;
+      const StyledProperty* spl = styledProperties();
+      for (int i = 0;;++i) {
+            const StyledProperty& k = spl[i];
+            if (k.styleIdx == StyleIdx::NOSTYLE)
+                  break;
+            if (k.propertyIdx == id)
+                  return propertyFlagsList()[i];
+            }
       return f;
       }
 
@@ -398,8 +427,16 @@ void ScoreElement::setPropertyFlags(P_ID id, PropertyFlags f)
 //   getPropertyStyle
 //---------------------------------------------------------
 
-StyleIdx ScoreElement::getPropertyStyle(P_ID) const
+StyleIdx ScoreElement::getPropertyStyle(P_ID id) const
       {
+      const StyledProperty* spl = styledProperties();
+      for (int i = 0;;++i) {
+            const StyledProperty& k = spl[i];
+            if (k.styleIdx == StyleIdx::NOSTYLE)
+                  break;
+            if (k.propertyIdx == id)
+                  return k.styleIdx;
+            }
       return StyleIdx::NOSTYLE;
       }
 

@@ -2808,23 +2808,6 @@ QVariant TextBase::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
-//   resetProperty
-//---------------------------------------------------------
-
-#if 0
-void TextBase::resetProperty(P_ID id)
-      {
-      PropertyFlags* p = propertyFlagsP(id);
-      if (p) {
-            setProperty(id, propertyDefault(id));
-            *p = PropertyFlags::STYLED;
-            }
-      else
-            Element::resetProperty(id);
-      }
-#endif
-
-//---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
 
@@ -2860,21 +2843,6 @@ void TextBase::styleChanged()
             }
       Element::styleChanged();
       }
-
-#if 0
-//---------------------------------------------------------
-//   setPropertyFlags
-//---------------------------------------------------------
-
-void TextBase::setPropertyFlags(P_ID id, PropertyFlags f)
-      {
-      PropertyFlags* p = propertyFlagsP(id);
-      if (p)
-            *p = f;
-      else
-            Element::setPropertyFlags(id, f);
-      }
-#endif
 
 //---------------------------------------------------------
 //   propertyFlags

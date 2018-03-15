@@ -738,7 +738,7 @@ struct StyledProperty {
       P_ID propertyIdx;
       };
 
-extern const std::vector<StyledProperty> fingeringStyle;
+// extern const std::vector<StyledProperty> fingeringStyle;
 extern const std::vector<StyledProperty> titleStyle;
 
 //-------------------------------------------------------------------
