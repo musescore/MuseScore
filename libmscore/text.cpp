@@ -1050,13 +1050,7 @@ QRectF Text::cursorRect() const
 
 QColor Text::textColor() const
       {
-      if (score() && !score()->printing()) {
-            if (selected())
-                  return (track() > -1) ? MScore::selectColor[voice()] : MScore::selectColor[0];
-            if (!visible())
-                  return Qt::gray;
-            }
-      return textStyle().foregroundColor();
+      return curColor();
       }
 
 //---------------------------------------------------------
