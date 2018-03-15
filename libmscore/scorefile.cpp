@@ -390,6 +390,7 @@ bool Score::saveFile()
       temp.close();
 
       QString name(info.filePath());
+      QString basename(info.fileName());
       QDir dir(info.path());
       if (!saved()) {
             // if file was already saved in this session
@@ -412,8 +413,8 @@ bool Score::saveFile()
             // step 3
             // rename old file into backup
             //
-            if (dir.exists(name)) {
-                  if (!dir.rename(name, backupName)) {
+            if (dir.exists(basename)) {
+                  if (!dir.rename(basename, backupName)) {
 //                      if (!MScore::noGui)
 //                            QMessageBox::critical(0, tr("Save File"),
 //                               tr("Renaming old file <")
@@ -428,8 +429,8 @@ bool Score::saveFile()
             }
       else {
             // file has previously been saved - remove the old file
-            if (dir.exists(name)) {
-                  if (!dir.remove(name)) {
+            if (dir.exists(basename)) {
+                  if (!dir.remove(basename)) {
 //                      if (!MScore::noGui)
 //                            QMessageBox::critical(0, tr("Save File"),
 //                               tr("Removing old file") + name + tr(" failed"));
