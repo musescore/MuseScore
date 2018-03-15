@@ -18,9 +18,26 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-install(FILES
+if (NOT EXISTS MS_General.sf3)
+  install (FILES FluidR3Mono_GM.sf3
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
+      RENAME MS_General.sf3
+      )
+else ()
+  install(FILES
       MS_General.sf3
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
+      )
+endif ()
+
+if (NOT EXISTS MS_General-License.md)
+  install (FILES FluidR3Mono_License.md
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
+      RENAME MS_General-License.md)
+else ()
+  install(FILES
       MS_General-License.md
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
       )
+endif ()
 
