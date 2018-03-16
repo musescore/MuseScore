@@ -33,7 +33,7 @@ mv applebuild/$PACKAGE_NAME-$BRANCH-$REVISION.dmg $DMGFILE
 else
 build/package_mac
 PACKAGE_NAME=MuseScore
-DMGFILE=applebuild/$PACKAGE_NAME-$BRANCH.dmg
+DMGFILE=applebuild/$PACKAGE_NAME-*.dmg
 fi
 
 SSH_INDENTITY=$HOME/.ssh/osuosl_nighlies_rsa
