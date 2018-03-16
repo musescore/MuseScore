@@ -288,6 +288,8 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
 
                         for (auto i = events.begin(); i != events.end(); ++i) {
                               const NPlayEvent& event = i->second;
+                              if (event.discard())
+                                    continue;
                               if (event.getOriginatingStaff() != staffIdx)
                                     continue;
 

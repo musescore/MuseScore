@@ -509,9 +509,10 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
       {
       int type = event.type();
       if (type == ME_NOTEON) {
+            if (event.discard())
+                  return;
             bool mute;
             const Note* note = event.note();
-
             if (note) {
                   Instrument* instr = note->staff()->part()->instrument(note->chord()->tick());
                   const Channel* a = instr->channel(note->subchannel());

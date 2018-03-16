@@ -236,6 +236,7 @@ class PlayEvent : public MidiCoreEvent {
 class NPlayEvent : public PlayEvent {
       const Note* _note = 0;
       int _origin = -1;
+      bool _discard = false;
 
    public:
       NPlayEvent() : PlayEvent() {}
@@ -243,10 +244,14 @@ class NPlayEvent : public PlayEvent {
          : PlayEvent(t, c, a, b) {}
       NPlayEvent(const MidiCoreEvent& e) : PlayEvent(e) {}
       NPlayEvent(BeatType beatType);
+
       const Note* note() const       { return _note; }
       void setNote(const Note* v)    { _note = v; }
+
       int getOriginatingStaff() const { return _origin; }
       void setOriginatingStaff(int i) { _origin = i; }
+      void setDiscard(bool d) {_discard = d; }
+      bool discard() const { return _discard; }
       };
 
 //---------------------------------------------------------
