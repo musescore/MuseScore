@@ -71,7 +71,7 @@
     <message>
         <location filename="../../aeolus/aeolus_gui.ui" line="340"/>
         <source>I</source>
-        <translation>K</translation>
+        <translation>I</translation>
     </message>
     <message>
         <location filename="../../aeolus/aeolus_gui.ui" line="347"/>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="17"/>
         <source>Album Manager</source>
-        <translation>Album Manager</translation>
+        <translation>Rediger album</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="28"/>
@@ -154,12 +154,12 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="187"/>
         <source>Save Joined Score</source>
-        <translation>Gem det flettede nodeark</translation>
+        <translation>Gem det samlede nodeark</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="199"/>
         <source>Join Scores</source>
-        <translation>Flet nodeark</translation>
+        <translation>Saml nodeark</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="212"/>
@@ -250,7 +250,7 @@
     <message>
         <location filename="../../awl/colorlabel.cpp" line="98"/>
         <source>Select Color</source>
-        <translation>Vælgt farve</translation>
+        <translation>Vælg farve</translation>
     </message>
 </context>
 <context>
@@ -378,7 +378,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="103"/>
         <source>Knee</source>
-        <translation>Knee</translation>
+        <translation>Knæk</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="118"/>
@@ -449,7 +449,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="438"/>
         <source>Controls the final gain after compression, in dB.</source>
-        <translation type="unfinished"/>
+        <translation>Kontrollerer den endelige gain efter compression, i dB.</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="473"/>
@@ -1409,12 +1409,12 @@
     <message>
         <location filename="../../mscore/editpitch.ui" line="1213"/>
         <source>B♭ 0</source>
-        <translation>H♭ 0</translation>
+        <translation>B♭ 0</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1221"/>
         <source>B 0</source>
-        <translation>B 0</translation>
+        <translation>H 0</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1237"/>
@@ -1469,12 +1469,12 @@
     <message>
         <location filename="../../mscore/editpitch.ui" line="1323"/>
         <source>B♭ -1</source>
-        <translation>H♭ -1</translation>
+        <translation>B♭ -1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1331"/>
         <source>B -1</source>
-        <translation>B -1</translation>
+        <translation>H -1</translation>
     </message>
 </context>
 <context>
@@ -1564,10 +1564,6 @@
         <location filename="../../mscore/editstaff.ui" line="325"/>
         <source>Transpose written pitches to sound:</source>
         <translation>Transponér den skrevne tonehøjde</translation>
-    </message>
-    <message>
-        <source>octaves +</source>
-        <translation type="vanished">oktav(er)+</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="345"/>
@@ -3176,7 +3172,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4837"/>
         <source>Line height:</source>
-        <translation>Linjelængde:</translation>
+        <translation>Linjehøjde:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4853"/>
@@ -3227,7 +3223,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="4989"/>
         <location filename="../../mscore/editstyle.ui" line="5582"/>
         <source>Articulations, Ornaments</source>
-        <translation>Artikulationer &amp; Ornamenter</translation>
+        <translation>Artikulationer, Ornamenter</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4997"/>
@@ -3286,7 +3282,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5182"/>
         <source>Naturals in Key Signatures</source>
-        <translation>♮ i Tonearter</translation>
+        <translation>Opløsningstegn i tonearter</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5188"/>
@@ -3296,12 +3292,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5195"/>
         <source>Before key signature if changing to fewer sharps or flats</source>
-        <translation>Foran toneart ved skift til færre ♯ eller ♭</translation>
+        <translation>Før toneart ved ændring til færre #/b</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5202"/>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
-        <translation>Efter n toneart ved skift til færre ♯ eller ♭. Foran ved skift mellem ♯ og ♭</translation>
+        <translation>Efter toneart ved ændring til færre #/b. Før ved ændring mellem # og b</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5232"/>
@@ -3357,7 +3353,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5512"/>
         <source>Header, Footer, Numbers</source>
-        <translation>Hoved, bund, numre</translation>
+        <translation>Sidehoved, sidefod og numre</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5562"/>
@@ -3380,7 +3376,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="14"/>
         <source>Parts</source>
-        <translation>Dele</translation>
+        <translation>Stemmer</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="20"/>
@@ -4356,7 +4352,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="257"/>
         <source>Span Type</source>
-        <translation type="unfinished"/>
+        <translation>Type af spænd</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="267"/>
@@ -4890,7 +4886,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_empty.ui" line="17"/>
         <source>«Empty» Inspector</source>
-        <translation type="unfinished"/>
+        <translation>«Tom» inspektør</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_empty.ui" line="44"/>
@@ -5465,7 +5461,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_jump.ui" line="184"/>
         <source>Reset &apos;Play repeats&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Nulstil &quot;Afspil gentagelser&quot; værdien</translation>
     </message>
 </context>
 <context>
@@ -7151,7 +7147,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="303"/>
         <source>Part list</source>
-        <translation type="unfinished"/>
+        <translation>Stemmeliste</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="319"/>
@@ -7758,7 +7754,7 @@ Du skal kun gøre dette én gang.
     <message>
         <location filename="../../mscore/masterpalette.ui" line="105"/>
         <source>Repeats &amp; Jumps</source>
-        <translation>Gentagelser og spring</translation>
+        <translation>Gentagelser &amp; spring</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="110"/>
@@ -7942,12 +7938,12 @@ tuplet ville overskride taktstreg</translation>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="352"/>
         <source>Layout stretch factor</source>
-        <translation type="unfinished"/>
+        <translation>Layout forlængelsesfaktor</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="355"/>
         <source>Layout stretch:</source>
-        <translation>Layoutstræk:</translation>
+        <translation>Layout forlængelse:</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="387"/>
@@ -8206,7 +8202,7 @@ Et resume i læsbar tekst er tilgængeligt:
     <message>
         <location filename="../../mscore/albummanager.cpp" line="76"/>
         <source>Add Score</source>
-        <translation>Tilføj nodeark...</translation>
+        <translation>Tilføj nodeark</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="101"/>
@@ -8611,17 +8607,17 @@ fejlede:</translation>
 <context>
     <name>Ms::Hairpin</name>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="640"/>
+        <location filename="../../libmscore/hairpin.cpp" line="638"/>
         <source>Crescendo</source>
         <translation>Crescendo (tiltagende styrke, voksende)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="643"/>
+        <location filename="../../libmscore/hairpin.cpp" line="641"/>
         <source>Decrescendo</source>
         <translation>Diminuendo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="646"/>
+        <location filename="../../libmscore/hairpin.cpp" line="644"/>
         <source>Custom</source>
         <translation>Brugerdefineret</translation>
     </message>
@@ -8631,12 +8627,12 @@ fejlede:</translation>
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1613"/>
         <source>sharp</source>
-        <translation>♯</translation>
+        <translation>kryds</translation>
     </message>
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1618"/>
         <source>flat</source>
-        <translation>♭</translation>
+        <translation>b</translation>
     </message>
 </context>
 <context>
@@ -9175,7 +9171,7 @@ før lukning?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="302"/>
         <source>Load Score</source>
-        <translation>Indlæs nodeark...</translation>
+        <translation>Indlæs nodeark</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="400"/>
@@ -9286,7 +9282,7 @@ før lukning?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1268"/>
         <source>Load Palette</source>
-        <translation>Indlæs palette...</translation>
+        <translation>Hent palette</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1269"/>
@@ -9297,7 +9293,7 @@ før lukning?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1272"/>
         <source>Save Palette</source>
-        <translation>Gem palette...</translation>
+        <translation>Gem palette</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1350"/>
@@ -9482,7 +9478,7 @@ Vil du erstatte den?</translation>
         <location filename="../../mscore/file.cpp" line="2210"/>
         <location filename="../../mscore/file.cpp" line="2250"/>
         <source>Save As</source>
-        <translation>Gem som...</translation>
+        <translation>Gem som</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1917"/>
@@ -9917,7 +9913,7 @@ Vælg en takt og prøv igen</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1049"/>
         <source>&amp;About...</source>
-        <translation>&amp;Om MuseScore... </translation>
+        <translation>&amp;Om... </translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1055"/>
@@ -10098,12 +10094,12 @@ Genskab denne session?</translation>
         <translation>Gå til: </translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="131"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="135"/>
         <source>Tuplet Error</source>
         <translation>Tuplet fejl</translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="132"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="136"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
         <translation>Kan ikke oprette tuplet med forholdet %1 for en varighed af %2</translation>
     </message>
@@ -10581,12 +10577,12 @@ Gem før lukning?</translation>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="316"/>
         <source>Plugin Details:</source>
-        <translation type="unfinished"/>
+        <translation>Plugin detaljer:</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="317"/>
         <source>Menu Path:</source>
-        <translation type="unfinished"/>
+        <translation>Menu sti:</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="318"/>
@@ -10835,12 +10831,12 @@ Gem før lukning?</translation>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1469"/>
         <source>Possible MIDI Loopback</source>
-        <translation type="unfinished"/>
+        <translation>Muligt MIDI tilbageløb</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1471"/>
         <source>Warning: You used the same CoreMIDI IAC bus for input and output.  This will cause problematic loopback, whereby MuseScore&apos;s outputted MIDI messages will be sent back to MuseScore as input, causing confusion.  To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore&apos;s MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore&apos;s MIDI output.  Other programs may then use that dedicated virtual port to receive MuseScore&apos;s MIDI output.</source>
-        <translation type="unfinished"/>
+        <translation>Advarsel: Der er brugt samme CoreMIDI IAC bus til både input og output. Dette medføre et problemstisk tilbageløb, hvorved MuseScores MIDI output vil blive sendt tilbage til MuseScore som input, hvad der skaber forvirring. For at undgå dette problem må man gå til Audio MIDI opsætningen via Spotlight, og oprette en dedikeret virtuel port til MuseScore&apos;s MIDI output. Herefter genstartes MuseScore, og i Indstillinger vælges den nye virtuelle port til MuseScore&apos;s MIDI output. Andre programmer kan bruge den dedikerede virtuelle port til at modtage MuseScore&apos;s MIDI output.</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1650"/>
@@ -10984,14 +10980,14 @@ fejlede: %2</translation>
         <translation>Gem fil fejlede: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="445"/>
+        <location filename="../../libmscore/scorefile.cpp" line="446"/>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
         <translation>Omdøbning af midlertidig fil: &lt;%1&gt; til &lt;%2&gt; fejlede:
 %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="470"/>
+        <location filename="../../libmscore/scorefile.cpp" line="471"/>
         <source>Open File
 %1
 failed: </source>
@@ -11000,7 +10996,7 @@ failed: </source>
 fejlede:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="603"/>
+        <location filename="../../libmscore/scorefile.cpp" line="604"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -11009,12 +11005,12 @@ failed: %2</source>
 fejlede: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="625"/>
+        <location filename="../../libmscore/scorefile.cpp" line="626"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>Layoutfilen kan ikke bruges af denne version af MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="646"/>
+        <location filename="../../libmscore/scorefile.cpp" line="647"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -11023,12 +11019,12 @@ failed: %2</source>
 fejlede: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="656"/>
+        <location filename="../../libmscore/scorefile.cpp" line="657"/>
         <source>Write Style failed: %1</source>
         <translation>Skriv layoutfil fejlede: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1199"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>XML læsefejl ved linje %1 kolonne %2: %3</translation>
     </message>
@@ -11168,7 +11164,7 @@ fejlede: %2</translation>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
         <source>Save As</source>
-        <translation>Gem som...</translation>
+        <translation>Gem som</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
@@ -11385,7 +11381,7 @@ fejlede: %2</translation>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="1139"/>
         <source>Piano Roll Editor...</source>
-        <translation type="unfinished"/>
+        <translation>Piano Roll Redigering</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="1144"/>
@@ -11598,8 +11594,8 @@ Vælg en takt og prøv igen</translation>
 <context>
     <name>Ms::Text</name>
     <message>
-        <location filename="../../libmscore/text.cpp" line="3082"/>
-        <location filename="../../libmscore/text.cpp" line="3114"/>
+        <location filename="../../libmscore/text.cpp" line="3076"/>
+        <location filename="../../libmscore/text.cpp" line="3108"/>
         <source>System Text</source>
         <translation>Systemtekst</translation>
     </message>
@@ -11883,7 +11879,7 @@ vælg et andet navn: </translation>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="27"/>
         <source>Cb major, Ab minor</source>
-        <translation>C♭ dur / A♭ mol</translation>
+        <translation>Cb dur, Ab mol</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="28"/>
@@ -11893,52 +11889,52 @@ vælg et andet navn: </translation>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="29"/>
         <source>Gb major, Eb minor</source>
-        <translation>G♭dur, E♭mol</translation>
+        <translation>Gb dur, Eb mol</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="30"/>
         <source>A major, F# minor</source>
-        <translation>A dur, F♯ mol</translation>
+        <translation>A dur, F# mol</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="31"/>
         <source>Db major, Bb minor</source>
-        <translation>D♭ dur, B♭ mol</translation>
+        <translation>Db dur, Bb mol</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="32"/>
         <source>E major, C# minor</source>
-        <translation>E dur, C♯ mol</translation>
+        <translation>E dur, C# mol</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="33"/>
         <source>Ab major, F minor</source>
-        <translation>A♭ dur, F mol</translation>
+        <translation>Ab dur, F mol</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="34"/>
         <source>B major, G# minor</source>
-        <translation>B dur, G♯ mol</translation>
+        <translation>H dur, G# mol</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="35"/>
         <source>Eb major, C minor</source>
-        <translation>E♭ dur, C mol</translation>
+        <translation>Eb dur, C mol</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="36"/>
         <source>F# major, D# minor</source>
-        <translation>F♯ dur, D♯ mol</translation>
+        <translation>F# dur, D# mol</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="37"/>
         <source>Bb major, G minor</source>
-        <translation>B♭ dur, G mol</translation>
+        <translation>Bb dur. G mol</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="38"/>
         <source>C# major, A# minor</source>
-        <translation>C♯ dur, A♯ mol</translation>
+        <translation>C# dur, A# mol</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="39"/>
@@ -12347,7 +12343,7 @@ vælg et andet navn: </translation>
     <message>
         <location filename="../../mscore/menus.cpp" line="550"/>
         <source>Articulations &amp;&amp; Ornaments</source>
-        <translation>Artikulationer &amp; ornamenter</translation>
+        <translation>Artikulationer &amp;&amp; ornamenter</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="599"/>
@@ -12495,7 +12491,7 @@ vælg et andet navn: </translation>
         <translation>Becifringsdiagrammer</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1278"/>
+        <location filename="../../mscore/palette.cpp" line="1285"/>
         <source>Writing Palette File
 %1
 failed: </source>
@@ -12504,7 +12500,7 @@ failed: </source>
 mislykkedes:</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1279"/>
+        <location filename="../../mscore/palette.cpp" line="1286"/>
         <source>Writing Palette File</source>
         <translation>Skriver palettefil</translation>
     </message>
@@ -12935,7 +12931,8 @@ mislykkedes:</translation>
         <location filename="../../mscore/pluginManager.ui" line="126"/>
         <source>Reload all plugins.
 This will re-evaluate all plugins, picking up any changes that may have occurred.</source>
-        <translation type="unfinished"/>
+        <translation>Genindlæs alle program tilføjelser.
+Dette vil gen-evaluere alle tilføjelser, og opsamle eventuelle ændringer, som er foretaget.</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginManager.ui" line="130"/>
@@ -14087,7 +14084,12 @@ If latency is zero, MIDI messages are delivered as fast as possible, but may con
 Setting latency greater than zero may help the driver alleviate any jitter.
 
 Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s internal audio synthesizer, so that they both sound notes at the same time.</source>
-        <translation type="unfinished"/>
+        <translation>
+Forsinkelsen angiver den tidsforskydning, i millisekunder, som føjes til tidsstemplet, for at angive til driveren, hvornår udgangssignalet faktisk skal falde.
+Hvis forsinkelsen er nul, vil MIDI meddelelser blive leveret så hurtigt som muligt, men de kan indeholde jitter.
+Sættes forsinkelsen større end nul, kan driveren have lettere ved at håndtere eventuel jitter.
+Justering af forsinkelsen kan gøre det lettere at synkronisere MIDI udstyr med MuseScore&apos;s interne syntheziser, sådan at begge gengiver tonerne på samme tid.
+ </translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2822"/>
@@ -14548,7 +14550,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2740"/>
+        <location filename="../../libmscore/edit.cpp" line="2751"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14558,7 +14560,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2741"/>
+        <location filename="../../libmscore/edit.cpp" line="2752"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14719,22 +14721,22 @@ fejlede: %2</translation>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="249"/>
         <source>double flat</source>
-        <translation>♭♭</translation>
+        <translation>dobbelt b</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="264"/>
         <source>flat</source>
-        <translation>♭</translation>
+        <translation>b</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="273"/>
         <source>sharp</source>
-        <translation>♯</translation>
+        <translation>kryds</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="279"/>
         <source>double sharp</source>
-        <translation>♯♯</translation>
+        <translation>dobbeltkryds</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1200"/>
@@ -14867,12 +14869,12 @@ Besøg %1MuseScore website%2 for at hente seneste version.</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="198"/>
         <source>File &quot;%1&quot; not found.</source>
-        <translation type="unfinished"/>
+        <translation>Filen &quot;%1&quot; blev ikke fundet.</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="201"/>
         <source>File &quot;%1&quot; corrupted.</source>
-        <translation type="unfinished"/>
+        <translation>Fil &quot;%1&quot; er defekt</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="220"/>
@@ -15343,7 +15345,7 @@ Vil du overskrive?</translation>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="138"/>
         <source>Same string:</source>
-        <translation type="unfinished"/>
+        <translation>Samme streng:</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="155"/>
@@ -15389,7 +15391,7 @@ Vil du overskrive?</translation>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="30"/>
         <source>Load</source>
-        <translation>Indlæs...</translation>
+        <translation>Indlæs</translation>
     </message>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="31"/>
@@ -16839,12 +16841,12 @@ Vil du overskrive?</translation>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="467"/>
         <source>Single Sharps and Flats Only</source>
-        <translation>Kun enkelt ♯ og ♭</translation>
+        <translation>Kun enkelt #/b</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="472"/>
         <source>Use Double Sharps and Flats</source>
-        <translation>Brug dobbelt ♯og ♭</translation>
+        <translation>Brug dobbelt #/b</translation>
     </message>
 </context>
 <context>
@@ -16953,7 +16955,7 @@ Vil du overskrive?</translation>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="45"/>
         <source>Ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Forhold:</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="71"/>
@@ -17029,12 +17031,12 @@ Vil du overskrive?</translation>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="137"/>
         <source>Keep this score private</source>
-        <translation type="unfinished"/>
+        <translation>Nodearket skal forblive privat</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="295"/>
         <source>Update existing score</source>
-        <translation type="unfinished"/>
+        <translation>Opdatér eksisterende node</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="179"/>
@@ -17256,122 +17258,122 @@ fejlede:</translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="41"/>
         <source>Sharp</source>
-        <translation>♯</translation>
+        <translation>Kryds</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="42"/>
         <source>Flat</source>
-        <translation>♭</translation>
+        <translation>b</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="43"/>
         <source>Double sharp</source>
-        <translation>Dobbelt♯</translation>
+        <translation>Dobbelkryds</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="44"/>
         <source>Double flat</source>
-        <translation>Dobbelt ♭</translation>
+        <translation>Dobbelt-b</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="45"/>
         <source>Natural</source>
-        <translation type="unfinished"/>
+        <translation>Opløsningstegn</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="47"/>
         <source>Flat-slash</source>
-        <translation>♭-skråstreg</translation>
+        <translation>b-streg</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="48"/>
         <source>Flat-slash2</source>
-        <translation>♭-skråstreg2</translation>
+        <translation>b-streg2</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="49"/>
         <source>Mirrored-flat2</source>
-        <translation>Spejlet-♭2</translation>
+        <translation>Spejlvendt b2</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="50"/>
         <source>Mirrored-flat</source>
-        <translation>Spejlet-♭</translation>
+        <translation>Spejlvendt b</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="51"/>
         <source>Mirrored-flat-slash</source>
-        <translation>Spejlet-♭-skråstreg</translation>
+        <translation>Spejlvendt b-streg</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="52"/>
         <source>Flat-flat-slash</source>
-        <translation>♭-♭-skråstreg</translation>
+        <translation>Dobbelt b-streg</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="54"/>
         <source>Sharp-slash</source>
-        <translation>♯-skråstreg</translation>
+        <translation>Halvt kryds</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="55"/>
         <source>Sharp-slash2</source>
-        <translation>♯-skråstreg2</translation>
+        <translation>Sharp-slash2</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="56"/>
         <source>Sharp-slash3</source>
-        <translation>♯-skråstreg3</translation>
+        <translation>Sharp-slash3</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="57"/>
         <source>Sharp-slash4</source>
-        <translation>♯-skråstreg4</translation>
+        <translation>3/4 kryds</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="59"/>
         <source>Sharp arrow up</source>
-        <translation>♯ pii op</translation>
+        <translation>Mikrotonalt kryds op</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="60"/>
         <source>Sharp arrow down</source>
-        <translation>♯ pil ned</translation>
+        <translation>Mikrotonalt kryds ned</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="61"/>
         <source>Sharp arrow both</source>
-        <translation>pil op og ned</translation>
+        <translation>Mikrotonalt kryds</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="62"/>
         <source>Flat arrow up</source>
-        <translation>♭pil op</translation>
+        <translation>Mikrotonalt b op</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="63"/>
         <source>Flat arrow down</source>
-        <translation>♭pil ned</translation>
+        <translation>Mikrotonalt b ned</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="64"/>
         <source>Flat arrow both</source>
-        <translation> ♭pil op/ned</translation>
+        <translation>Mikrotonalt b</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="65"/>
         <source>Natural arrow up</source>
-        <translation>pil op</translation>
+        <translation>Mikrotonalt opløsningstegn op</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="66"/>
         <source>Natural arrow down</source>
-        <translation>pil ned</translation>
+        <translation>Mikrotonalt opløsningstegn ned</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="67"/>
         <source>Natural arrow both</source>
-        <translation>pil op/ned</translation>
+        <translation>Mikrotonalt opløsningstegn</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="69"/>
@@ -18179,32 +18181,32 @@ fejlede:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="676"/>
         <source>Increase Layout Stretch</source>
-        <translation type="unfinished"/>
+        <translation>Forøg layout forlængelse</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="677"/>
         <source>Increase layout stretch</source>
-        <translation type="unfinished"/>
+        <translation>Forøg layout forlængelse</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="678"/>
         <source>Increase layout stretch factor of selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Forøg layout forlængelse for markerede takter</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="687"/>
         <source>Decrease Layout Stretch</source>
-        <translation type="unfinished"/>
+        <translation>Reducer layout forlængelse</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="688"/>
         <source>Decrease layout stretch</source>
-        <translation type="unfinished"/>
+        <translation>Reducer layout forlængelse</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="689"/>
         <source>Decrease layout stretch factor of selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Reducer layout forlængelse for markerede takter</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="698"/>
@@ -19131,65 +19133,65 @@ fejlede:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1484"/>
         <source>Double Sharp</source>
-        <translation>Dobbelt ♯</translation>
+        <translation>Dobbeltkryds</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1485"/>
         <source>Note input: Double sharp</source>
-        <translation>Nodeindtastning: Dobbelt ♯</translation>
+        <translation>Nodeindtastning: dobbeltkryds</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1486"/>
         <source>Double sharp</source>
-        <translation>Dobbelt ♯</translation>
+        <translation>Dobbelkryds</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1495"/>
         <location filename="../../mscore/shortcut.cpp" line="1497"/>
         <source>Sharp</source>
-        <translation>♯</translation>
+        <translation>Kryds</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1496"/>
         <source>Note input: Sharp</source>
-        <translation>Nodeindtastning: ♯</translation>
+        <translation>Nodeindtastning: Kryds</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1506"/>
         <location filename="../../mscore/shortcut.cpp" line="1508"/>
         <source>Natural</source>
-        <translation type="unfinished"/>
+        <translation>Opløsningstegn</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1507"/>
         <source>Note input: Natural</source>
-        <translation>Nodeindtastning:</translation>
+        <translation>Nodeindtastning: Naturlig</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1517"/>
         <location filename="../../mscore/shortcut.cpp" line="1519"/>
         <source>Flat</source>
-        <translation>♭</translation>
+        <translation>b</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1518"/>
         <source>Note input: Flat</source>
-        <translation>Nodeindtastning: ♭</translation>
+        <translation>Nodeindtastning: b</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1528"/>
         <source>Double Flat</source>
-        <translation>Dobbelt ♭</translation>
+        <translation>Dobbelt b</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1529"/>
         <source>Note input: Double flat</source>
-        <translation>Nodeindtastning: Dobbelt ♭</translation>
+        <translation>Nodeindtastning: Dobbelt b</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1530"/>
         <source>Double flat</source>
-        <translation>Dobbelt ♭</translation>
+        <translation>Dobbelt-b</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1539"/>
@@ -19349,7 +19351,7 @@ fejlede:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1781"/>
         <source>Toogle &apos;Selection Filter&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Slå &quot;Afgrænsningsfilter&quot; til/fra</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1801"/>
@@ -19359,7 +19361,7 @@ fejlede:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1826"/>
         <source>Toogle &apos;File Operations&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Slå værktøjslinjen &quot;Fil håndtering&quot; til/fra</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1833"/>
@@ -19374,7 +19376,7 @@ fejlede:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1854"/>
         <source>Toogle &apos;Note Input&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Slå værktøjslinjen &quot;Nodeindtastning&quot; til/fra</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1861"/>
@@ -19384,32 +19386,32 @@ fejlede:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1994"/>
         <source>Player: play</source>
-        <translation type="unfinished"/>
+        <translation>Afspiller: Afspil</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2044"/>
         <source>Seek to Begin</source>
-        <translation type="unfinished"/>
+        <translation>Søg til Begynd</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2045"/>
         <source>Player: seek to begin</source>
-        <translation type="unfinished"/>
+        <translation>Afspiller: søg til begynd</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2055"/>
         <source>Player: rewind</source>
-        <translation type="unfinished"/>
+        <translation>Afspiller: Spol tilbage</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2063"/>
         <source>Seek to End</source>
-        <translation type="unfinished"/>
+        <translation>Søg til Slut</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2064"/>
         <source>Player: seek to end</source>
-        <translation type="unfinished"/>
+        <translation>Afspiller: søg til slut</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2071"/>
@@ -19419,7 +19421,7 @@ fejlede:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2081"/>
         <source>Pan Score</source>
-        <translation type="unfinished"/>
+        <translation>Panorer nodeark</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2082"/>
@@ -19444,47 +19446,47 @@ fejlede:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2308"/>
         <source>Reset Layout Stretch</source>
-        <translation type="unfinished"/>
+        <translation>Nulstil layout forlængelse</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2309"/>
         <source>Reset layout stretch</source>
-        <translation type="unfinished"/>
+        <translation>Nulstil layout forlængelse</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2310"/>
         <source>Reset layout stretch factor of selected measures or entire score</source>
-        <translation type="unfinished"/>
+        <translation>Nulstil layout forlængelse for markerede takter eller hele nodearket</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2602"/>
         <source>Change Enharmonic Spelling (Both Modes)</source>
-        <translation type="unfinished"/>
+        <translation>Skift enharmoniske navne (Begge typer)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2603"/>
         <source>Change enharmonic spelling (both modes)</source>
-        <translation type="unfinished"/>
+        <translation>Skift enharmoniske navne (Begge typer)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2604"/>
         <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
-        <translation type="unfinished"/>
+        <translation>Skift enharmonisk navn (ændrer navnet for C-notation og transponerende notation)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2610"/>
         <source>Change Enharmonic Spelling (Current Mode)</source>
-        <translation type="unfinished"/>
+        <translation>Skift enharmonisk navn (nuværende notation)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2611"/>
         <source>Change enharmonic spelling (current mode)</source>
-        <translation type="unfinished"/>
+        <translation>Skift enharmonisk navn (nuværende notation)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2612"/>
         <source>Change enharmonic note (alters the spelling in the current mode only)</source>
-        <translation type="unfinished"/>
+        <translation>Skift enharmonisk navn (ændre kun navnet i nuværende notation)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2626"/>
@@ -19494,7 +19496,7 @@ fejlede:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2803"/>
         <source>Loop Playback</source>
-        <translation type="unfinished"/>
+        <translation>Afspil i løkke</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2804"/>
@@ -20321,12 +20323,12 @@ fejlede:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2500"/>
         <source>All Similar Elements with more options</source>
-        <translation type="unfinished"/>
+        <translation>Alle lignende elementer med flere muligheder</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2501"/>
         <source>Select all similar elements with more options</source>
-        <translation type="unfinished"/>
+        <translation>Marker alle lignende elementer med flere muligheder</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2507"/>
@@ -21273,11 +21275,7 @@ fejlede:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3360"/>
         <source>Toggle Hide Empty Staves</source>
-        <translation>Slå &apos;Skjul tomme nodelinjer&apos; til/fra</translation>
-    </message>
-    <message>
-        <source>Toggle hide empty staves</source>
-        <translation type="vanished">Slå &apos;Skjul tomme nodelinjer&apos; til/fra</translation>
+        <translation>Skjul/Vis tomme nodelinjer</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3371"/>
@@ -21390,20 +21388,20 @@ fejlede:</translation>
 <context>
     <name>addRemoveTimeSig</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="534"/>
-        <location filename="../../libmscore/edit.cpp" line="550"/>
+        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="551"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="536"/>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
         <translation>Kan ikke skrive takt.
 Tuplet vil overskride taktstreg</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="551"/>
+        <location filename="../../libmscore/edit.cpp" line="552"/>
         <source>Cannot change local time signature:
 Measure is not empty</source>
         <translation>Kan ikke ændre lokal taktart:
@@ -21678,7 +21676,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="25"/>
         <source>c#</source>
-        <translation>c♯</translation>
+        <translation>c#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="26"/>
@@ -21688,7 +21686,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="27"/>
         <source>d#</source>
-        <translation>d♯</translation>
+        <translation>d#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="28"/>
@@ -21703,7 +21701,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="30"/>
         <source>f#</source>
-        <translation>f♯</translation>
+        <translation>f# </translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="31"/>
@@ -21713,7 +21711,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="32"/>
         <source>g#</source>
-        <translation>g♯</translation>
+        <translation>g# </translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="33"/>
@@ -21723,7 +21721,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="34"/>
         <source>a#</source>
-        <translation>a♯</translation>
+        <translation>a# </translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="35"/>
@@ -21738,7 +21736,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="39"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="40"/>
@@ -21748,7 +21746,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="41"/>
         <source>D#</source>
-        <translation>D♯</translation>
+        <translation>D# </translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="42"/>
@@ -21763,7 +21761,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="44"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="45"/>
@@ -21773,7 +21771,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="46"/>
         <source>G#</source>
-        <translation>G♯</translation>
+        <translation>G# </translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="47"/>
@@ -21783,7 +21781,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="48"/>
         <source>A#</source>
-        <translation>A♯</translation>
+        <translation>A# </translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="49"/>
@@ -22172,7 +22170,7 @@ Takten er ikke tom</translation>
         <location filename="../../libmscore/bagpembell.cpp" line="162"/>
         <location filename="../../libmscore/bagpembell.cpp" line="219"/>
         <source>Bubbly</source>
-        <translation type="unfinished"/>
+        <translation>Boblende</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="163"/>
@@ -23100,7 +23098,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="533"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="534"/>
@@ -23110,7 +23108,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="535"/>
         <source>Eb</source>
-        <translation>E♭</translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="536"/>
@@ -23125,7 +23123,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="538"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="539"/>
@@ -23135,7 +23133,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="540"/>
         <source>Ab</source>
-        <translation>A♭</translation>
+        <translation>Ab</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="541"/>
@@ -23163,7 +23161,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="215"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="216"/>
@@ -23173,7 +23171,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="217"/>
         <source>Eb</source>
-        <translation>E♭</translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="218"/>
@@ -23188,7 +23186,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="220"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="221"/>
@@ -23198,7 +23196,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="222"/>
         <source>Ab</source>
-        <translation>A♭</translation>
+        <translation>Ab</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="223"/>
@@ -25345,7 +25343,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="494"/>
         <source>c#</source>
-        <translation>c♯</translation>
+        <translation>c#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="495"/>
@@ -25355,7 +25353,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="496"/>
         <source>d#</source>
-        <translation>d♯</translation>
+        <translation>d#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="497"/>
@@ -25370,7 +25368,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="499"/>
         <source>f#</source>
-        <translation>f♯</translation>
+        <translation>f# </translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="500"/>
@@ -25380,7 +25378,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="501"/>
         <source>g#</source>
-        <translation>g♯</translation>
+        <translation>g# </translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="502"/>
@@ -25390,7 +25388,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="503"/>
         <source>a#</source>
-        <translation>a♯</translation>
+        <translation>a# </translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="504"/>
@@ -25405,7 +25403,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="508"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="509"/>
@@ -25415,7 +25413,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="510"/>
         <source>D#</source>
-        <translation>D♯</translation>
+        <translation>D# </translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="511"/>
@@ -25430,7 +25428,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="513"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="514"/>
@@ -25440,7 +25438,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="515"/>
         <source>G#</source>
-        <translation>G♯</translation>
+        <translation>G# </translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="516"/>
@@ -25450,7 +25448,7 @@ Takten er ikke tom</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="517"/>
         <source>A#</source>
-        <translation>A♯</translation>
+        <translation>A# </translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="518"/>

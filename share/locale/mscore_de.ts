@@ -1566,10 +1566,6 @@
         <translation>Transposition:</translation>
     </message>
     <message>
-        <source>octaves +</source>
-        <translation type="vanished">Oktave(n) +</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editstaff.ui" line="345"/>
         <source>Octave(s) +</source>
         <translation>Oktave(n) +</translation>
@@ -8206,7 +8202,7 @@ Eine lesbare Zusammenfassung ist verfügbar:
     <message>
         <location filename="../../mscore/albummanager.cpp" line="76"/>
         <source>Add Score</source>
-        <translation>Partitur hinzufügen...</translation>
+        <translation>Partitur hinzufügen</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="101"/>
@@ -8612,17 +8608,17 @@ fehlgeschlagen:</translation>
 <context>
     <name>Ms::Hairpin</name>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="640"/>
+        <location filename="../../libmscore/hairpin.cpp" line="638"/>
         <source>Crescendo</source>
         <translation>Crescendo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="643"/>
+        <location filename="../../libmscore/hairpin.cpp" line="641"/>
         <source>Decrescendo</source>
         <translation>Diminuendo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="646"/>
+        <location filename="../../libmscore/hairpin.cpp" line="644"/>
         <source>Custom</source>
         <translation>Benutzerdefiniert</translation>
     </message>
@@ -9176,7 +9172,7 @@ vor dem Schließen speichern?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="302"/>
         <source>Load Score</source>
-        <translation>Partitur laden...</translation>
+        <translation>Partitur laden</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="400"/>
@@ -9287,7 +9283,7 @@ vor dem Schließen speichern?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1268"/>
         <source>Load Palette</source>
-        <translation>Palette laden...</translation>
+        <translation>Palette laden</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1269"/>
@@ -9298,7 +9294,7 @@ vor dem Schließen speichern?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1272"/>
         <source>Save Palette</source>
-        <translation>Palette speichern...</translation>
+        <translation>Palette speichern</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1350"/>
@@ -9484,7 +9480,7 @@ Wollen Sie es ersetzen?
         <location filename="../../mscore/file.cpp" line="2210"/>
         <location filename="../../mscore/file.cpp" line="2250"/>
         <source>Save As</source>
-        <translation>Speichern als…</translation>
+        <translation>Speichern unter</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1917"/>
@@ -10100,12 +10096,12 @@ Sitzung wiederherstellen?</translation>
         <translation>Gehe zu: </translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="131"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="135"/>
         <source>Tuplet Error</source>
         <translation>N-Tolen-Fehler</translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="132"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="136"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
         <translation>Kann N-Tole mit Verhältnis %1 für Länge %2 nicht erstellen</translation>
     </message>
@@ -10986,7 +10982,7 @@ fehlgeschlagen: %2</translation>
         <translation>Fehler beim Speichern der Datei: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="445"/>
+        <location filename="../../libmscore/scorefile.cpp" line="446"/>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
         <translation>Umbenennen temporärer Datei &lt;%1&gt; zu &lt;%2&gt; fehlgeschlagen:
@@ -10994,7 +10990,7 @@ fehlgeschlagen: %2</translation>
 </translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="470"/>
+        <location filename="../../libmscore/scorefile.cpp" line="471"/>
         <source>Open File
 %1
 failed: </source>
@@ -11003,7 +10999,7 @@ failed: </source>
 fehlgeschlagen:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="603"/>
+        <location filename="../../libmscore/scorefile.cpp" line="604"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -11012,12 +11008,12 @@ failed: %2</source>
 fehlgeschlagen: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="625"/>
+        <location filename="../../libmscore/scorefile.cpp" line="626"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>Die Stil-Datei ist inkompatibel mit dieser Version von MuseScore.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="646"/>
+        <location filename="../../libmscore/scorefile.cpp" line="647"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -11026,12 +11022,12 @@ failed: %2</source>
 fehlgeschlagen: %</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="656"/>
+        <location filename="../../libmscore/scorefile.cpp" line="657"/>
         <source>Write Style failed: %1</source>
         <translation>Datei schreiben schlug fehl: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1199"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>XML Lesefehler in Zeile %1 Spalte %2: %3</translation>
     </message>
@@ -11171,7 +11167,7 @@ fehlgeschlagen: %</translation>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
         <source>Save As</source>
-        <translation>Speichern als…</translation>
+        <translation>Speichern unter</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
@@ -11602,8 +11598,8 @@ Bitte zuerst Takt auswählen und dann nochmal probieren</translation>
 <context>
     <name>Ms::Text</name>
     <message>
-        <location filename="../../libmscore/text.cpp" line="3082"/>
-        <location filename="../../libmscore/text.cpp" line="3114"/>
+        <location filename="../../libmscore/text.cpp" line="3076"/>
+        <location filename="../../libmscore/text.cpp" line="3108"/>
         <source>System Text</source>
         <translation>Systemtext</translation>
     </message>
@@ -11887,7 +11883,7 @@ bitte wählen Sie einen anderen Namen:</translation>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="27"/>
         <source>Cb major, Ab minor</source>
-        <translation>Ces-Dur / as-Moll</translation>
+        <translation>Ces-Dur, as-Moll</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="28"/>
@@ -12499,7 +12495,7 @@ bitte wählen Sie einen anderen Namen:</translation>
         <translation>Griffbrettdiagramme</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1278"/>
+        <location filename="../../mscore/palette.cpp" line="1285"/>
         <source>Writing Palette File
 %1
 failed: </source>
@@ -12508,7 +12504,7 @@ failed: </source>
 fehlgeschlagen: </translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1279"/>
+        <location filename="../../mscore/palette.cpp" line="1286"/>
         <source>Writing Palette File</source>
         <translation>Palette speichern</translation>
     </message>
@@ -14559,7 +14555,7 @@ Die Latenz azupassen kann helfen die MIDI Hardware mit MuseScores internem Audio
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2740"/>
+        <location filename="../../libmscore/edit.cpp" line="2751"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14569,7 +14565,7 @@ Die Latenz azupassen kann helfen die MIDI Hardware mit MuseScores internem Audio
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2741"/>
+        <location filename="../../libmscore/edit.cpp" line="2752"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14732,7 +14728,7 @@ ist fehlgeschlagen: %2</translation>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="249"/>
         <source>double flat</source>
-        <translation>♭♭</translation>
+        <translation>Doppel-♭ </translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="264"/>
@@ -14747,7 +14743,7 @@ ist fehlgeschlagen: %2</translation>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="279"/>
         <source>double sharp</source>
-        <translation>♯♯</translation>
+        <translation>Doppel-♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1200"/>
@@ -15402,7 +15398,7 @@ Soll sie überschrieben werden?</translation>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="30"/>
         <source>Load</source>
-        <translation>Laden...</translation>
+        <translation>Laden</translation>
     </message>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="31"/>
@@ -17299,12 +17295,12 @@ fehlgeschlagen: </translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="48"/>
         <source>Flat-slash2</source>
-        <translation>b-Strich2</translation>
+        <translation>♭-Doppelstrich</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="49"/>
         <source>Mirrored-flat2</source>
-        <translation>Spiegel-♭2</translation>
+        <translation>Doppeltes Spiegel-♭</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="50"/>
@@ -17314,12 +17310,12 @@ fehlgeschlagen: </translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="51"/>
         <source>Mirrored-flat-slash</source>
-        <translation>Spiegel-♭-Strich</translation>
+        <translation>Durchgestrichenes Spiegel-♭</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="52"/>
         <source>Flat-flat-slash</source>
-        <translation>♭-♭-Strich</translation>
+        <translation>Doppel-♭-Strich</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="54"/>
@@ -17344,12 +17340,12 @@ fehlgeschlagen: </translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="59"/>
         <source>Sharp arrow up</source>
-        <translation>♯ Pfeil hoch</translation>
+        <translation>♯ Pfeil oben</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="60"/>
         <source>Sharp arrow down</source>
-        <translation>♯ Pfeil runter</translation>
+        <translation>♯ Pfeil unten</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="61"/>
@@ -17359,12 +17355,12 @@ fehlgeschlagen: </translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="62"/>
         <source>Flat arrow up</source>
-        <translation>♭ Pfeil hoch</translation>
+        <translation>♭ Pfeil oben</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="63"/>
         <source>Flat arrow down</source>
-        <translation>♭ Pfeil runter</translation>
+        <translation>♭ Pfeil unten</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="64"/>
@@ -17374,12 +17370,12 @@ fehlgeschlagen: </translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="65"/>
         <source>Natural arrow up</source>
-        <translation>♮ Pfeil hoch</translation>
+        <translation>♮ Pfeil oben</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="66"/>
         <source>Natural arrow down</source>
-        <translation>♮ Pfeil runter</translation>
+        <translation>♮ Pfeil unten</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="67"/>
@@ -19144,7 +19140,7 @@ fehlgeschlagen: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1484"/>
         <source>Double Sharp</source>
-        <translation>Doppel-♯</translation>
+        <translation>Doppel-♯ </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1485"/>
@@ -21288,10 +21284,6 @@ fehlgeschlagen: </translation>
         <translation>&apos;Leere Notenzeilen verstecken&apos; umschalten</translation>
     </message>
     <message>
-        <source>Toggle hide empty staves</source>
-        <translation type="vanished">&apos;Leere Notenzeilen verstecken&apos; umschalten</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="3371"/>
         <source>Bold Face</source>
         <translation>Fett</translation>
@@ -21402,20 +21394,20 @@ fehlgeschlagen: </translation>
 <context>
     <name>addRemoveTimeSig</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="534"/>
-        <location filename="../../libmscore/edit.cpp" line="550"/>
+        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="551"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="536"/>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
         <translation>Kann Takt nicht neu schreiben:
 N-Tole würde Taktgrenze überschreiten</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="551"/>
+        <location filename="../../libmscore/edit.cpp" line="552"/>
         <source>Cannot change local time signature:
 Measure is not empty</source>
         <translation>Kann lokale Taktart nicht ändern:

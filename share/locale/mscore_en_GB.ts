@@ -1566,10 +1566,6 @@
         <translation>Transpose written pitches to sound:</translation>
     </message>
     <message>
-        <source>octaves +</source>
-        <translation type="vanished">octave(s) +</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editstaff.ui" line="345"/>
         <source>Octave(s) +</source>
         <translation>Octave(s) +</translation>
@@ -3296,12 +3292,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5195"/>
         <source>Before key signature if changing to fewer sharps or flats</source>
-        <translation>Before key signature if changing to fewer ♯ or ♭</translation>
+        <translation>Before key signature if changing to fewer # or ♭</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5202"/>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
-        <translation>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</translation>
+        <translation>After key signature if changing to fewer # or ♭. Before if changing between # and ♭</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5232"/>
@@ -8206,7 +8202,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/albummanager.cpp" line="76"/>
         <source>Add Score</source>
-        <translation>Add Score...</translation>
+        <translation>Add Score</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="101"/>
@@ -8611,17 +8607,17 @@ failed: </translation>
 <context>
     <name>Ms::Hairpin</name>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="640"/>
+        <location filename="../../libmscore/hairpin.cpp" line="638"/>
         <source>Crescendo</source>
         <translation>Crescendo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="643"/>
+        <location filename="../../libmscore/hairpin.cpp" line="641"/>
         <source>Decrescendo</source>
         <translation>Diminuendo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="646"/>
+        <location filename="../../libmscore/hairpin.cpp" line="644"/>
         <source>Custom</source>
         <translation>Custom</translation>
     </message>
@@ -8631,7 +8627,7 @@ failed: </translation>
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1613"/>
         <source>sharp</source>
-        <translation>♯</translation>
+        <translation>#</translation>
     </message>
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1618"/>
@@ -9175,7 +9171,7 @@ before closing?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="302"/>
         <source>Load Score</source>
-        <translation>Load Score...</translation>
+        <translation>Load Score</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="400"/>
@@ -9286,7 +9282,7 @@ before closing?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1268"/>
         <source>Load Palette</source>
-        <translation>Load Palette...</translation>
+        <translation>Load Palette</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1269"/>
@@ -9297,7 +9293,7 @@ before closing?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1272"/>
         <source>Save Palette</source>
-        <translation>Save Palette...</translation>
+        <translation>Save Palette</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1350"/>
@@ -9483,7 +9479,7 @@ Do you want to replace it?
         <location filename="../../mscore/file.cpp" line="2210"/>
         <location filename="../../mscore/file.cpp" line="2250"/>
         <source>Save As</source>
-        <translation>Save As...</translation>
+        <translation>Save As</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1917"/>
@@ -10099,12 +10095,12 @@ Restore session?</translation>
         <translation>Go To: </translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="131"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="135"/>
         <source>Tuplet Error</source>
         <translation>Tuplet Error</translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="132"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="136"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
         <translation>Cannot create tuplet with ratio %1 for duration %2</translation>
     </message>
@@ -10984,14 +10980,14 @@ failed: %2</translation>
         <translation>Save File failed: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="445"/>
+        <location filename="../../libmscore/scorefile.cpp" line="446"/>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
         <translation>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="470"/>
+        <location filename="../../libmscore/scorefile.cpp" line="471"/>
         <source>Open File
 %1
 failed: </source>
@@ -11000,7 +10996,7 @@ failed: </source>
 failed: </translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="603"/>
+        <location filename="../../libmscore/scorefile.cpp" line="604"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -11009,12 +11005,12 @@ failed: %2</source>
 failed: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="625"/>
+        <location filename="../../libmscore/scorefile.cpp" line="626"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>The style file is not compatible with this version of MuseScore.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="646"/>
+        <location filename="../../libmscore/scorefile.cpp" line="647"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -11023,12 +11019,12 @@ failed: %2</source>
 failed: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="656"/>
+        <location filename="../../libmscore/scorefile.cpp" line="657"/>
         <source>Write Style failed: %1</source>
         <translation>Write Style failed: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1199"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>XML read error at line %1 column %2: %3</translation>
     </message>
@@ -11168,7 +11164,7 @@ failed: %2</translation>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
         <source>Save As</source>
-        <translation>Save As...</translation>
+        <translation>Save As</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
@@ -11599,8 +11595,8 @@ Please select a bar and try again</translation>
 <context>
     <name>Ms::Text</name>
     <message>
-        <location filename="../../libmscore/text.cpp" line="3082"/>
-        <location filename="../../libmscore/text.cpp" line="3114"/>
+        <location filename="../../libmscore/text.cpp" line="3076"/>
+        <location filename="../../libmscore/text.cpp" line="3108"/>
         <source>System Text</source>
         <translation>System Text</translation>
     </message>
@@ -11884,7 +11880,7 @@ please choose a different name:</translation>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="27"/>
         <source>Cb major, Ab minor</source>
-        <translation>C♭ major / A♭ minor</translation>
+        <translation>C♭ major, A♭ minor</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="28"/>
@@ -12496,7 +12492,7 @@ please choose a different name:</translation>
         <translation>Fretboard Diagrams</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1278"/>
+        <location filename="../../mscore/palette.cpp" line="1285"/>
         <source>Writing Palette File
 %1
 failed: </source>
@@ -12505,7 +12501,7 @@ failed: </source>
 failed: </translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1279"/>
+        <location filename="../../mscore/palette.cpp" line="1286"/>
         <source>Writing Palette File</source>
         <translation>Writing Palette File</translation>
     </message>
@@ -14556,7 +14552,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2740"/>
+        <location filename="../../libmscore/edit.cpp" line="2751"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14566,7 +14562,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2741"/>
+        <location filename="../../libmscore/edit.cpp" line="2752"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14729,7 +14725,7 @@ failed: %2</translation>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="249"/>
         <source>double flat</source>
-        <translation>♭♭</translation>
+        <translation>double ♭</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="264"/>
@@ -14739,12 +14735,12 @@ failed: %2</translation>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="273"/>
         <source>sharp</source>
-        <translation>♯</translation>
+        <translation>#</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="279"/>
         <source>double sharp</source>
-        <translation>♯♯</translation>
+        <translation>double #</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1200"/>
@@ -16850,12 +16846,12 @@ Do you want to overwrite it?</translation>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="467"/>
         <source>Single Sharps and Flats Only</source>
-        <translation>Single ♯ and ♭ Only</translation>
+        <translation>Single # and ♭ Only</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="472"/>
         <source>Use Double Sharps and Flats</source>
-        <translation>Use Double ♯ and ♭</translation>
+        <translation>Use Double # and ♭</translation>
     </message>
 </context>
 <context>
@@ -17267,7 +17263,7 @@ failed: </translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="41"/>
         <source>Sharp</source>
-        <translation>♯</translation>
+        <translation># </translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="42"/>
@@ -17277,7 +17273,7 @@ failed: </translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="43"/>
         <source>Double sharp</source>
-        <translation>Double ♯</translation>
+        <translation>Double #</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="44"/>
@@ -17307,7 +17303,7 @@ failed: </translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="50"/>
         <source>Mirrored-flat</source>
-        <translation>Mirrored-♭ </translation>
+        <translation>Mirrored-♭</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="51"/>
@@ -17322,37 +17318,37 @@ failed: </translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="54"/>
         <source>Sharp-slash</source>
-        <translation>♯-slash</translation>
+        <translation>#-slash</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="55"/>
         <source>Sharp-slash2</source>
-        <translation>♯-slash2</translation>
+        <translation>#-slash2</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="56"/>
         <source>Sharp-slash3</source>
-        <translation>♯-slash3</translation>
+        <translation>#-slash3</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="57"/>
         <source>Sharp-slash4</source>
-        <translation>♯-slash4</translation>
+        <translation>#-slash4</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="59"/>
         <source>Sharp arrow up</source>
-        <translation>♯ arrow up</translation>
+        <translation># arrow up</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="60"/>
         <source>Sharp arrow down</source>
-        <translation>♯ arrow down</translation>
+        <translation># arrow down</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="61"/>
         <source>Sharp arrow both</source>
-        <translation>♯ arrow both</translation>
+        <translation># arrow both</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="62"/>
@@ -19143,28 +19139,28 @@ Demisemiquaver (32nd note)</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1484"/>
         <source>Double Sharp</source>
-        <translation>Double ♯</translation>
+        <translation>Double #</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1485"/>
         <source>Note input: Double sharp</source>
-        <translation>Note input: Double ♯</translation>
+        <translation>Note input: Double #</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1486"/>
         <source>Double sharp</source>
-        <translation>Double ♯</translation>
+        <translation>Double #</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1495"/>
         <location filename="../../mscore/shortcut.cpp" line="1497"/>
         <source>Sharp</source>
-        <translation>♯</translation>
+        <translation># </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1496"/>
         <source>Note input: Sharp</source>
-        <translation>Note input: ♯</translation>
+        <translation>Note input: # </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1506"/>
@@ -19361,7 +19357,7 @@ Demisemiquaver (32nd note)</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1781"/>
         <source>Toogle &apos;Selection Filter&apos;</source>
-        <translation>Toogle &apos;Selection Filter&apos;</translation>
+        <translation>Toggle &apos;Selection Filter&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1801"/>
@@ -19371,7 +19367,7 @@ Demisemiquaver (32nd note)</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1826"/>
         <source>Toogle &apos;File Operations&apos; toolbar</source>
-        <translation>Toogle &apos;File Operations&apos; toolbar</translation>
+        <translation>Toggle &apos;File Operations&apos; toolbar</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1833"/>
@@ -19386,7 +19382,7 @@ Demisemiquaver (32nd note)</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1854"/>
         <source>Toogle &apos;Note Input&apos; toolbar</source>
-        <translation>Toogle &apos;Note Input&apos; toolbar</translation>
+        <translation>Toggle &apos;Note Input&apos; toolbar</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1861"/>
@@ -21287,10 +21283,6 @@ Demisemiquaver (32nd note)</translation>
         <translation>Toggle &apos;Hide Empty Staves&apos;</translation>
     </message>
     <message>
-        <source>Toggle hide empty staves</source>
-        <translation type="vanished">Toggle &apos;Hide empty staves&apos;</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="3371"/>
         <source>Bold Face</source>
         <translation>Bold Face</translation>
@@ -21401,20 +21393,20 @@ Demisemiquaver (32nd note)</translation>
 <context>
     <name>addRemoveTimeSig</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="534"/>
-        <location filename="../../libmscore/edit.cpp" line="550"/>
+        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="551"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="536"/>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
         <translation>Cannot rewrite bars:
 Tuplet would cross bar</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="551"/>
+        <location filename="../../libmscore/edit.cpp" line="552"/>
         <source>Cannot change local time signature:
 Measure is not empty</source>
         <translation>Cannot change local time signature:

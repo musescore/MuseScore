@@ -1566,10 +1566,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>octaves +</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/editstaff.ui" line="345"/>
         <source>Octave(s) +</source>
         <translation type="unfinished"/>
@@ -8582,17 +8578,17 @@ failed: </source>
 <context>
     <name>Ms::Hairpin</name>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="640"/>
+        <location filename="../../libmscore/hairpin.cpp" line="638"/>
         <source>Crescendo</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="643"/>
+        <location filename="../../libmscore/hairpin.cpp" line="641"/>
         <source>Decrescendo</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="646"/>
+        <location filename="../../libmscore/hairpin.cpp" line="644"/>
         <source>Custom</source>
         <translation type="unfinished"/>
     </message>
@@ -9448,7 +9444,7 @@ Do you want to replace it?
         <location filename="../../mscore/file.cpp" line="2210"/>
         <location filename="../../mscore/file.cpp" line="2250"/>
         <source>Save As</source>
-        <translation>Saglabāt ķā...</translation>
+        <translation>Saglabāt kā</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1917"/>
@@ -10057,12 +10053,12 @@ Restore session?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="131"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="135"/>
         <source>Tuplet Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="132"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="136"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
         <translation type="unfinished"/>
     </message>
@@ -10930,44 +10926,44 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="445"/>
+        <location filename="../../libmscore/scorefile.cpp" line="446"/>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="470"/>
+        <location filename="../../libmscore/scorefile.cpp" line="471"/>
         <source>Open File
 %1
 failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="603"/>
+        <location filename="../../libmscore/scorefile.cpp" line="604"/>
         <source>Open File
 %1
 failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="625"/>
+        <location filename="../../libmscore/scorefile.cpp" line="626"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="646"/>
+        <location filename="../../libmscore/scorefile.cpp" line="647"/>
         <source>Open Style File
 %1
 failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="656"/>
+        <location filename="../../libmscore/scorefile.cpp" line="657"/>
         <source>Write Style failed: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1199"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation type="unfinished"/>
     </message>
@@ -11107,7 +11103,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
         <source>Save As</source>
-        <translation>Saglabāt ķā...</translation>
+        <translation>Saglabāt kā</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
@@ -11531,8 +11527,8 @@ Please select a measure and try again</source>
 <context>
     <name>Ms::Text</name>
     <message>
-        <location filename="../../libmscore/text.cpp" line="3082"/>
-        <location filename="../../libmscore/text.cpp" line="3114"/>
+        <location filename="../../libmscore/text.cpp" line="3076"/>
+        <location filename="../../libmscore/text.cpp" line="3108"/>
         <source>System Text</source>
         <translation type="unfinished"/>
     </message>
@@ -12427,14 +12423,14 @@ please choose a different name:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1278"/>
+        <location filename="../../mscore/palette.cpp" line="1285"/>
         <source>Writing Palette File
 %1
 failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1279"/>
+        <location filename="../../mscore/palette.cpp" line="1286"/>
         <source>Writing Palette File</source>
         <translation type="unfinished"/>
     </message>
@@ -14478,7 +14474,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2740"/>
+        <location filename="../../libmscore/edit.cpp" line="2751"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14488,7 +14484,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2741"/>
+        <location filename="../../libmscore/edit.cpp" line="2752"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -15296,7 +15292,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="30"/>
         <source>Load</source>
-        <translation type="unfinished"/>
+        <translation>Ielādēšana</translation>
     </message>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="31"/>
@@ -21180,10 +21176,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Toggle hide empty staves</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="3371"/>
         <source>Bold Face</source>
         <translation type="unfinished"/>
@@ -21294,19 +21286,19 @@ failed: </source>
 <context>
     <name>addRemoveTimeSig</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="534"/>
-        <location filename="../../libmscore/edit.cpp" line="550"/>
+        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="551"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="536"/>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="551"/>
+        <location filename="../../libmscore/edit.cpp" line="552"/>
         <source>Cannot change local time signature:
 Measure is not empty</source>
         <translation type="unfinished"/>
@@ -21640,7 +21632,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="39"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="40"/>
@@ -21650,7 +21642,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="41"/>
         <source>D#</source>
-        <translation type="unfinished"/>
+        <translation>D#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="42"/>
@@ -21665,7 +21657,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="44"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="45"/>
@@ -21675,7 +21667,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="46"/>
         <source>G#</source>
-        <translation type="unfinished"/>
+        <translation>G#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="47"/>
@@ -21685,7 +21677,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="48"/>
         <source>A#</source>
-        <translation type="unfinished"/>
+        <translation>A#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="49"/>
@@ -23002,7 +22994,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="533"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="534"/>
@@ -23012,7 +23004,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="535"/>
         <source>Eb</source>
-        <translation>E♭</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="536"/>
@@ -23027,7 +23019,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="538"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="539"/>
@@ -23037,7 +23029,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="540"/>
         <source>Ab</source>
-        <translation>A♭</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="541"/>
@@ -23047,7 +23039,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="542"/>
         <source>Bb</source>
-        <translation>B♭</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="543"/>
@@ -23065,7 +23057,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="215"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="216"/>
@@ -23075,7 +23067,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="217"/>
         <source>Eb</source>
-        <translation>E♭</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="218"/>
@@ -23090,7 +23082,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="220"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="221"/>
@@ -23100,7 +23092,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="222"/>
         <source>Ab</source>
-        <translation>A♭</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="223"/>
@@ -23110,7 +23102,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="224"/>
         <source>Bb</source>
-        <translation>B♭</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="225"/>
@@ -25307,7 +25299,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="508"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="509"/>
@@ -25317,7 +25309,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="510"/>
         <source>D#</source>
-        <translation type="unfinished"/>
+        <translation>D#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="511"/>
@@ -25332,7 +25324,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="513"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="514"/>
@@ -25342,7 +25334,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="515"/>
         <source>G#</source>
-        <translation type="unfinished"/>
+        <translation>G#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="516"/>
@@ -25352,7 +25344,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="517"/>
         <source>A#</source>
-        <translation type="unfinished"/>
+        <translation>A#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="518"/>

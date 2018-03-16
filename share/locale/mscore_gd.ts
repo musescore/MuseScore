@@ -301,17 +301,17 @@
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="14"/>
         <source>Add/Remove System Breaks</source>
-        <translation type="unfinished"/>
+        <translation>Cuir ris/Thoir air falbh brisidhean-siostaim</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="24"/>
         <source>Break systems every X measures</source>
-        <translation type="unfinished"/>
+        <translation>Briseadh-siostaim gach X siostam</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="27"/>
         <source>Break systems every</source>
-        <translation type="unfinished"/>
+        <translation>Briseadh-siostaim gach</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="34"/>
@@ -326,18 +326,18 @@
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="69"/>
         <source>Add system breaks at end of each system</source>
-        <translation type="unfinished"/>
+        <translation>Cuir brisidhean-siostaim ri deireadh gach siostaim</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="72"/>
         <source>Add system break at end of each system</source>
-        <translation type="unfinished"/>
+        <translation>Cuir briseadh-siostaim ri deireadh gach siostaim</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="79"/>
         <location filename="../../mscore/breaksdialog.ui" line="82"/>
         <source>Remove current system breaks</source>
-        <translation type="unfinished"/>
+        <translation>Thoir air falbh na brisidhean-siostaim làithreach</translation>
     </message>
 </context>
 <context>
@@ -449,7 +449,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="438"/>
         <source>Controls the final gain after compression, in dB.</source>
-        <translation type="unfinished"/>
+        <translation>Stiùirichidh seo am meudachadh fuaime deireannach às dèid an dùmhlachaidh ann an dB.</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="473"/>
@@ -638,7 +638,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="290"/>
         <source>Notehead:</source>
-        <translation type="unfinished"/>
+        <translation>Ceann puing:</translation>
     </message>
 </context>
 <context>
@@ -709,7 +709,7 @@
     <message>
         <location filename="../../mscore/editpitch.ui" line="54"/>
         <source>Octave 9</source>
-        <translation type="unfinished"/>
+        <translation>Ochdadh 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="59"/>
@@ -830,42 +830,42 @@
         <location filename="../../mscore/editpitch.ui" line="174"/>
         <location filename="../../mscore/editpitch.ui" line="341"/>
         <source>C 9</source>
-        <translation type="unfinished"/>
+        <translation>C 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="179"/>
         <source>C♯ 9</source>
-        <translation type="unfinished"/>
+        <translation>C♯ 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="184"/>
         <source>D 9</source>
-        <translation type="unfinished"/>
+        <translation>D 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="189"/>
         <source>E♭ 9</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="194"/>
         <source>E 9</source>
-        <translation type="unfinished"/>
+        <translation>E 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="199"/>
         <source>F 9</source>
-        <translation type="unfinished"/>
+        <translation>F 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="204"/>
         <source>F♯ 9</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="209"/>
         <source>G 9</source>
-        <translation type="unfinished"/>
+        <translation>G 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="239"/>
@@ -1566,13 +1566,9 @@
         <translation>Gleus-atharraich na gleusan sgrìobhte gu fuaim:</translation>
     </message>
     <message>
-        <source>octaves +</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/editstaff.ui" line="345"/>
         <source>Octave(s) +</source>
-        <translation type="unfinished"/>
+        <translation>Ochdadh +</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="365"/>
@@ -2643,12 +2639,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="211"/>
         <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation type="unfinished"/>
+        <translation>Seall luachan phongan thar crìochan leagaidh (DEUCHAINNEIL, ceòl tràth a-mhàin!)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2211"/>
         <source>Show repeat barline tips (&quot;winged&quot; repeats)</source>
-        <translation type="unfinished"/>
+        <translation>Seall oidheaman air loidhnichean-leagaidh ath-ghabhalach: (ath-ghabhail “sgiathach”)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2218"/>
@@ -3250,12 +3246,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5037"/>
         <source>Notehead distance:</source>
-        <translation type="unfinished"/>
+        <translation>Astar nan ceann phongan:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5264"/>
         <source>Vertical distance from notehead:</source>
-        <translation type="unfinished"/>
+        <translation>Astar inghearach o cheann a’ puing:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5073"/>
@@ -3286,7 +3282,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5182"/>
         <source>Naturals in Key Signatures</source>
-        <translation type="unfinished"/>
+        <translation>Comharran nàdarra ann an gleus-chomharran</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5188"/>
@@ -3296,12 +3292,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5195"/>
         <source>Before key signature if changing to fewer sharps or flats</source>
-        <translation type="unfinished"/>
+        <translation>Ron ghleus-chomharra ma dh’atharraicheas e gu nas lugha dhe chomharran geura no maola</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5202"/>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
-        <translation type="unfinished"/>
+        <translation>As dèid a’ ghleus-chomharra ma dh’atharraicheas e gu nas lugha dhe chomharran geura no maola. Roimhe-san ma thèid atharrachadh eadar comharran geura ’s maola.</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5232"/>
@@ -3440,17 +3436,17 @@ space unit</extracomment>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="26"/>
         <source>SoundFonts</source>
-        <translation type="unfinished"/>
+        <translation>SoundFonts</translation>
     </message>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="47"/>
         <source>Move SoundFont up</source>
-        <translation type="unfinished"/>
+        <translation>Gluais an SoundFont suas</translation>
     </message>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="69"/>
         <source>Move SoundFont down</source>
-        <translation type="unfinished"/>
+        <translation>Gluais an SoundFont sìos</translation>
     </message>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="101"/>
@@ -3558,7 +3554,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/importmidi/importmidi_panel.ui" line="281"/>
         <source>Cancel non-applied MIDI import operations</source>
-        <translation type="unfinished"/>
+        <translation>Sguir dhe dh’obrachaidhean ion-phortadh MIDI nach deach a chur an sàs</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi_panel.ui" line="284"/>
@@ -3610,7 +3606,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="84"/>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="136"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="87"/>
@@ -3744,7 +3740,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="829"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="895"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="211"/>
@@ -4121,7 +4117,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="94"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="97"/>
@@ -4209,7 +4205,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="289"/>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="306"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="176"/>
@@ -4296,7 +4292,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="227"/>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="264"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="110"/>
@@ -4356,7 +4352,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="257"/>
         <source>Span Type</source>
-        <translation type="unfinished"/>
+        <translation>Seòrsa an t-sìnidh</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="267"/>
@@ -4441,7 +4437,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="366"/>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="415"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="198"/>
@@ -4532,7 +4528,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="106"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="109"/>
@@ -4589,7 +4585,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="119"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="122"/>
@@ -4616,7 +4612,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="249"/>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="266"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="84"/>
@@ -4729,7 +4725,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_clef.ui" line="103"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_clef.ui" line="106"/>
@@ -4758,7 +4754,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="88"/>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="144"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="91"/>
@@ -4841,7 +4837,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_element.ui" line="246"/>
         <location filename="../../mscore/inspector/inspector_element.ui" line="344"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="159"/>
@@ -4890,7 +4886,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_empty.ui" line="17"/>
         <source>«Empty» Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Sgrùdair «falamh»</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_empty.ui" line="44"/>
@@ -4918,7 +4914,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="113"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="116"/>
@@ -4960,7 +4956,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="207"/>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="237"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="101"/>
@@ -5139,7 +5135,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="174"/>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="191"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="177"/>
@@ -5173,7 +5169,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="244"/>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="296"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="87"/>
@@ -5320,7 +5316,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_image.ui" line="221"/>
         <location filename="../../mscore/inspector/inspector_image.ui" line="238"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="84"/>
@@ -5440,7 +5436,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_jump.ui" line="157"/>
         <location filename="../../mscore/inspector/inspector_jump.ui" line="181"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_jump.ui" line="126"/>
@@ -5465,7 +5461,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_jump.ui" line="184"/>
         <source>Reset &apos;Play repeats&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich an luach air “Cluich na h-ath-ghabhalaichean”</translation>
     </message>
 </context>
 <context>
@@ -5489,7 +5485,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="94"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="97"/>
@@ -5572,7 +5568,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_line.ui" line="238"/>
         <location filename="../../mscore/inspector/inspector_line.ui" line="261"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="97"/>
@@ -5688,7 +5684,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="81"/>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="112"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="84"/>
@@ -5786,7 +5782,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_note.ui" line="632"/>
         <location filename="../../mscore/inspector/inspector_note.ui" line="649"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="93"/>
@@ -6021,7 +6017,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="166"/>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="196"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="91"/>
@@ -6115,7 +6111,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_rest.ui" line="81"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_rest.ui" line="84"/>
@@ -6172,7 +6168,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="157"/>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="174"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="160"/>
@@ -6201,7 +6197,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="87"/>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="151"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="90"/>
@@ -6323,7 +6319,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="253"/>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="270"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="101"/>
@@ -6437,7 +6433,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="84"/>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="108"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="87"/>
@@ -6496,7 +6492,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="101"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="104"/>
@@ -6537,7 +6533,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="90"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="93"/>
@@ -6571,7 +6567,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="113"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="116"/>
@@ -6631,7 +6627,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="187"/>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="204"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="127"/>
@@ -6711,7 +6707,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="101"/>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="127"/>
@@ -6805,7 +6801,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="364"/>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="381"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="94"/>
@@ -6954,7 +6950,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="108"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="111"/>
@@ -7151,7 +7147,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="303"/>
         <source>Part list</source>
-        <translation type="unfinished"/>
+        <translation>Liosta nam pàirt</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="319"/>
@@ -7942,7 +7938,7 @@ rachadh ioma-rinn thar an leagaidh</translation>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="352"/>
         <source>Layout stretch factor</source>
-        <translation type="unfinished"/>
+        <translation>Factar sìneadh na co-dhealbhachd</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="355"/>
@@ -8134,7 +8130,11 @@ Support MuseScore with your %3donation%4.
 
 Copyright &amp;copy; 1999-2018 Werner Schweer and Others.
 Published under the GNU General Public License.</source>
-        <translation type="unfinished"/>
+        <translation>Tadhail air %1www.musescore.org%2 airson tionndaidhean ùra ’s barrachd fiosrachaidh.
+Cuir taic ri MuseScore le %3tìodhlac%4.
+
+Còir-lethbhreac &amp;copy; 1999-2018 Werner Schweer agus eile.
+Air fhoillseachadh fo cheadachas GNU General Public License.</translation>
     </message>
 </context>
 <context>
@@ -8150,7 +8150,15 @@ Group under the W3C Community Contributor License Agreement
 %1
 A human-readable summary is available:
 %2</source>
-        <translation type="unfinished"/>
+        <translation>’S e fòrmat faidhle fosgailte a th’ ann am MusicXML airson ceòl sgrìobhte digiteach a cho-roinneadh
+agus a chuireas iomadh aplacaid taic ris.
+Còir-lethbhreac © 2004-2017 còm-pàirtichean sònrachadh MusicXML,
+air fhoillseachadh le W3C Music Notation Community
+Group fo cheadachas W3C Community Contributor License Agreement
+(CLA):
+%1
+Tha gearr-chunntas so-leughaidh ri fhaighinn:
+%2</translation>
     </message>
 </context>
 <context>
@@ -8181,7 +8189,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/searchComboBox.cpp" line="107"/>
         <source>Not found</source>
-        <translation type="unfinished"/>
+        <translation>Cha deach seo a lorg </translation>
     </message>
 </context>
 <context>
@@ -8194,7 +8202,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/albummanager.cpp" line="76"/>
         <source>Add Score</source>
-        <translation>Cuir sgòr ris…</translation>
+        <translation>Cuir sgòr ris</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="101"/>
@@ -8599,17 +8607,17 @@ fosgladh an fhaidhle
 <context>
     <name>Ms::Hairpin</name>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="640"/>
+        <location filename="../../libmscore/hairpin.cpp" line="638"/>
         <source>Crescendo</source>
         <translation>Crescendo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="643"/>
+        <location filename="../../libmscore/hairpin.cpp" line="641"/>
         <source>Decrescendo</source>
         <translation>Decrescendo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="646"/>
+        <location filename="../../libmscore/hairpin.cpp" line="644"/>
         <source>Custom</source>
         <translation>Gnàthaichte</translation>
     </message>
@@ -8619,12 +8627,12 @@ fosgladh an fhaidhle
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1613"/>
         <source>sharp</source>
-        <translation type="unfinished"/>
+        <translation>geur</translation>
     </message>
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1618"/>
         <source>flat</source>
-        <translation type="unfinished"/>
+        <translation>maol</translation>
     </message>
 </context>
 <context>
@@ -8765,12 +8773,12 @@ faidhle nan innealan-ciùil
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="107"/>
         <source>Write Instruments File failed: </source>
-        <translation type="unfinished"/>
+        <translation>Dh’fhàillig le sgrìobhadh faidhle nan innealan-ciùil:</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="108"/>
         <source>Write Instruments File</source>
-        <translation type="unfinished"/>
+        <translation>Sgrìobh faidhle innealan-ciùil</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="119"/>
@@ -8955,7 +8963,7 @@ faidhle nan innealan-ciùil
     <message>
         <location filename="../../mscore/loginmanager.cpp" line="469"/>
         <source>Sorry, MuseScore couldn&apos;t upload the audio file. Error %1</source>
-        <translation type="unfinished"/>
+        <translation>Tha sinn duilich ach cha b’ urrainn dha MuseScore am faidhle fuaime a luchdadh suas. Mearachd %1</translation>
     </message>
     <message>
         <location filename="../../mscore/loginmanager.cpp" line="572"/>
@@ -9128,7 +9136,7 @@ a shàbhaladh mus dùin thu e?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="293"/>
         <source>MuseData Files</source>
-        <translation type="unfinished"/>
+        <translation>Faidhlichean MuseData</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="294"/>
@@ -9163,7 +9171,7 @@ a shàbhaladh mus dùin thu e?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="302"/>
         <source>Load Score</source>
-        <translation type="unfinished"/>
+        <translation>Luchdaich sgòr</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="400"/>
@@ -9274,7 +9282,7 @@ a shàbhaladh mus dùin thu e?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1268"/>
         <source>Load Palette</source>
-        <translation>Luchdaich pailead…</translation>
+        <translation>Luchdaich pailead</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1269"/>
@@ -9285,7 +9293,7 @@ a shàbhaladh mus dùin thu e?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1272"/>
         <source>Save Palette</source>
-        <translation>Sàbhail am pailead…</translation>
+        <translation>Sàbhail am pailead</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1350"/>
@@ -9387,7 +9395,7 @@ a shàbhaladh mus dùin thu e?</translation>
         <location filename="../../mscore/file.cpp" line="1595"/>
         <location filename="../../mscore/file.cpp" line="1671"/>
         <source>Uncompressed MusicXML File</source>
-        <translation type="unfinished"/>
+        <translation>Faidhle MusicXML gun dùmhlachadh</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1598"/>
@@ -9470,7 +9478,7 @@ A bheil thu airson faidhle ùr a chur ’na àite?</translation>
         <location filename="../../mscore/file.cpp" line="2210"/>
         <location filename="../../mscore/file.cpp" line="2250"/>
         <source>Save As</source>
-        <translation>Sàbhail mar…</translation>
+        <translation>Sàbhail mar</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1917"/>
@@ -9547,7 +9555,7 @@ A bheil thu airson faidhle ùr a chur ’na àite?</translation>
     <message>
         <location filename="../../mscore/menus.cpp" line="418"/>
         <source>System break</source>
-        <translation type="unfinished"/>
+        <translation>Briseadh-siostaim</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="423"/>
@@ -10086,12 +10094,12 @@ A bheil thu airson an seisean aiseag?</translation>
         <translation>Rach gu: </translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="131"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="135"/>
         <source>Tuplet Error</source>
         <translation>Mearachd ioma-rinne</translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="132"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="136"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
         <translation>Cha b’ urrainn dhuinn ioma-rinn le co-mheas %1 is fad %2 a chruthachadh</translation>
     </message>
@@ -10556,23 +10564,25 @@ A bheil thu airson a shàbhaladh mus dùin thu e?</translation>
         <location filename="../../mscore/pluginCreator.cpp" line="295"/>
         <source>Running...
 </source>
-        <translation type="unfinished"/>
+        <translation>’Ga ruith…
+</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="305"/>
         <source>creating component failed
 </source>
-        <translation type="unfinished"/>
+        <translation>dh’fhàillig le cruthachadh na co-phàirt
+</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="316"/>
         <source>Plugin Details:</source>
-        <translation type="unfinished"/>
+        <translation>Fiosrachadh a’ phlugain:</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="317"/>
         <source>Menu Path:</source>
-        <translation type="unfinished"/>
+        <translation>Slighe a’ chlàir-thaice:</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="318"/>
@@ -10587,7 +10597,7 @@ A bheil thu airson a shàbhaladh mus dùin thu e?</translation>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="453"/>
         <source>Saving to:</source>
-        <translation type="unfinished"/>
+        <translation>’Ga shàbhaladh gu:</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="455"/>
@@ -10620,7 +10630,7 @@ A bheil thu airson a shàbhaladh mus dùin thu e?</translation>
     <message>
         <location filename="../../mscore/pluginManager.cpp" line="204"/>
         <source>Plugins reloaded.</source>
-        <translation type="unfinished"/>
+        <translation>Chaidh na plugain ath-luchdadh.</translation>
     </message>
 </context>
 <context>
@@ -10821,12 +10831,12 @@ A bheil thu airson a shàbhaladh mus dùin thu e?</translation>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1469"/>
         <source>Possible MIDI Loopback</source>
-        <translation type="unfinished"/>
+        <translation>Lùb cearcallach MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1471"/>
         <source>Warning: You used the same CoreMIDI IAC bus for input and output.  This will cause problematic loopback, whereby MuseScore&apos;s outputted MIDI messages will be sent back to MuseScore as input, causing confusion.  To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore&apos;s MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore&apos;s MIDI output.  Other programs may then use that dedicated virtual port to receive MuseScore&apos;s MIDI output.</source>
-        <translation type="unfinished"/>
+        <translation>Rabhadh: chleachd thu an t-aon bhus CoreMIDI IAC airson an ion-chuir ’s a chleachd thu airson an às-chuir.  Adhbharaichidh seo lùb cearcallach ’s breisleach on a thèid na teachdaireachdan MIDI a-mach aig MuseScore a chur air ais gu MuseScore mar ion-chur. Gus an duilgheadas seo a sheachnadh, inntrig rèiteachadh fuaim MIDI slighe Spotlight a chruthachadh port biortail sònraichte do dh’às-chur MuseScore, ath-thòisich MuseScore, till dha na roghainnean agus tagh am port biortail ùr agad mar às-chur MuseScore.  ’S urrainn do phrògraman eile am port biortail sònraichte seo a chleachdadh gus an às-chur aig MuseScore fhaighinn an uairsin.</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1650"/>
@@ -10969,14 +10979,14 @@ fhosgladh: %2</translation>
         <translation>Cha deach leinn am faidhle sàbhalaidh fhosgladh: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="445"/>
+        <location filename="../../libmscore/scorefile.cpp" line="446"/>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
         <translation>Cha deach leinn an t-ainm ùr &lt;%2&gt; a thoirt air an fhaile sealadach &lt;%1&gt;:
 %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="470"/>
+        <location filename="../../libmscore/scorefile.cpp" line="471"/>
         <source>Open File
 %1
 failed: </source>
@@ -10985,7 +10995,7 @@ failed: </source>
 fhosgladh: </translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="603"/>
+        <location filename="../../libmscore/scorefile.cpp" line="604"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -10994,12 +11004,12 @@ failed: %2</source>
 fhosgladh: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="625"/>
+        <location filename="../../libmscore/scorefile.cpp" line="626"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>Chan eil am faidhle stoidhle seo co-chòrdail ris an tionndadh seo dhe MuseScore.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="646"/>
+        <location filename="../../libmscore/scorefile.cpp" line="647"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -11008,12 +11018,12 @@ failed: %2</source>
 fhosgladh: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="656"/>
+        <location filename="../../libmscore/scorefile.cpp" line="657"/>
         <source>Write Style failed: %1</source>
         <translation>Cha deach leinn an stoidhle a sgrìobhadh: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1199"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>Mearachd le leughadh an XML air loidhne %1 colbh %2: %3</translation>
     </message>
@@ -11070,7 +11080,7 @@ fhosgladh: %2</translation>
     <message>
         <location filename="../../mscore/scoreBrowser.cpp" line="65"/>
         <source>There are no templates matching the current search.</source>
-        <translation type="unfinished"/>
+        <translation>Chan eil teamplaid ann a fhreagras ris na lorg thu.</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreBrowser.cpp" line="149"/>
@@ -11133,7 +11143,7 @@ fhosgladh: %2</translation>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="642"/>
         <source>Set output resolution for PNG</source>
-        <translation type="unfinished"/>
+        <translation>Suidhich dùmhlachd-bhreacaidh an às-chùir airson PNG</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="736"/>
@@ -11153,7 +11163,7 @@ fhosgladh: %2</translation>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
         <source>Save As</source>
-        <translation>Sàbhail mar…</translation>
+        <translation>Sàbhail mar</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
@@ -11370,7 +11380,7 @@ fhosgladh: %2</translation>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="1139"/>
         <source>Piano Roll Editor...</source>
-        <translation type="unfinished"/>
+        <translation>Deasaiche rola piàna…</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="1144"/>
@@ -11498,7 +11508,7 @@ Tagh leagadh ’s feuch ris a-rithist</translation>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="40"/>
         <source>Use Tab and Backtab (Shift+Tab) to move through the check boxes</source>
-        <translation type="unfinished"/>
+        <translation>Cleachd Tab ’s Backtab (Shift+Tab) gus gluasad on dàrna bhogsa-cromaige dhan fhear eile</translation>
     </message>
 </context>
 <context>
@@ -11515,7 +11525,7 @@ Tagh leagadh ’s feuch ris a-rithist</translation>
         <location filename="../../mscore/shortcutcapturedialog.cpp" line="149"/>
         <location filename="../../mscore/shortcutcapturedialog.cpp" line="157"/>
         <source>Shortcut conflicts with %1</source>
-        <translation type="unfinished"/>
+        <translation>Tha an ath-ghoirid an còmhstri le %1</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcutcapturedialog.cpp" line="169"/>
@@ -11584,8 +11594,8 @@ Tagh leagadh ’s feuch ris a-rithist</translation>
 <context>
     <name>Ms::Text</name>
     <message>
-        <location filename="../../libmscore/text.cpp" line="3082"/>
-        <location filename="../../libmscore/text.cpp" line="3114"/>
+        <location filename="../../libmscore/text.cpp" line="3076"/>
+        <location filename="../../libmscore/text.cpp" line="3108"/>
         <source>System Text</source>
         <translation>Teacsa an t-siostaim</translation>
     </message>
@@ -11869,7 +11879,7 @@ feuch an tagh thu ainm eile:</translation>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="27"/>
         <source>Cb major, Ab minor</source>
-        <translation>Mòr-C♭ / mion-A♭</translation>
+        <translation>Mòr-C♭, mion-A♭</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="28"/>
@@ -11879,52 +11889,52 @@ feuch an tagh thu ainm eile:</translation>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="29"/>
         <source>Gb major, Eb minor</source>
-        <translation type="unfinished"/>
+        <translation>Mòr-G♭, mion-E♭</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="30"/>
         <source>A major, F# minor</source>
-        <translation type="unfinished"/>
+        <translation>Mòr-A, mion-F♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="31"/>
         <source>Db major, Bb minor</source>
-        <translation type="unfinished"/>
+        <translation>Mòr-D♭, mion-B♭</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="32"/>
         <source>E major, C# minor</source>
-        <translation type="unfinished"/>
+        <translation>Mòr-E, mion-C♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="33"/>
         <source>Ab major, F minor</source>
-        <translation type="unfinished"/>
+        <translation>Mòr-A♭, mion-F</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="34"/>
         <source>B major, G# minor</source>
-        <translation type="unfinished"/>
+        <translation>Mòr-B, mion-G♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="35"/>
         <source>Eb major, C minor</source>
-        <translation type="unfinished"/>
+        <translation>Mòr-E♭, mion-C</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="36"/>
         <source>F# major, D# minor</source>
-        <translation type="unfinished"/>
+        <translation>Mòr-F♯, mion-D♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="37"/>
         <source>Bb major, G minor</source>
-        <translation type="unfinished"/>
+        <translation>Mòr-B♭, mion-G</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="38"/>
         <source>C# major, A# minor</source>
-        <translation type="unfinished"/>
+        <translation>Mòr-C♯, mion-A♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="39"/>
@@ -12481,7 +12491,7 @@ feuch an tagh thu ainm eile:</translation>
         <translation>Diagraman bùird-cheapan</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1278"/>
+        <location filename="../../mscore/palette.cpp" line="1285"/>
         <source>Writing Palette File
 %1
 failed: </source>
@@ -12490,7 +12500,7 @@ failed: </source>
 a sgrìobhadh: </translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1279"/>
+        <location filename="../../mscore/palette.cpp" line="1286"/>
         <source>Writing Palette File</source>
         <translation>A’ sgrìobhadh faidhle paileid</translation>
     </message>
@@ -12921,12 +12931,13 @@ a sgrìobhadh: </translation>
         <location filename="../../mscore/pluginManager.ui" line="126"/>
         <source>Reload all plugins.
 This will re-evaluate all plugins, picking up any changes that may have occurred.</source>
-        <translation type="unfinished"/>
+        <translation>Ath-luchdaich na h-uile plugan.
+Nì seo ath-sgrùdadh air na plugain uile, a’ mothachadh do dh’atharrachadh sam bith a thàinig orra.</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginManager.ui" line="130"/>
         <source>Reload Plugins</source>
-        <translation type="unfinished"/>
+        <translation>Ath-luchdaich na plugain</translation>
     </message>
 </context>
 <context>
@@ -13861,13 +13872,13 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="2462"/>
         <location filename="../../mscore/prefsdialog.ui" line="2592"/>
         <source>Opens a file dialog for selecting an instrument list file</source>
-        <translation type="unfinished"/>
+        <translation>Fosglaidh seo còmhradh gus faidhle le liosta innealan-ciùil a thaghadh</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2489"/>
         <location filename="../../mscore/prefsdialog.ui" line="2579"/>
         <source>Insert path to an instrument list file</source>
-        <translation type="unfinished"/>
+        <translation>Cuir a-steach slighe gu faidhle le liosta innealan-cliùil</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3521"/>
@@ -14047,22 +14058,22 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2775"/>
         <source>MIDI Output:</source>
-        <translation type="unfinished"/>
+        <translation>Às-chur MIDI:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2794"/>
         <source>MIDI Output</source>
-        <translation type="unfinished"/>
+        <translation>Às-chur MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2797"/>
         <source>Choose MIDI Output</source>
-        <translation type="unfinished"/>
+        <translation>Tagh às-chur MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2806"/>
         <source>MIDI Output Latency:</source>
-        <translation type="unfinished"/>
+        <translation>Foillidheachd an às-chuir MIDI:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2813"/>
@@ -14073,17 +14084,23 @@ If latency is zero, MIDI messages are delivered as fast as possible, but may con
 Setting latency greater than zero may help the driver alleviate any jitter.
 
 Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s internal audio synthesizer, so that they both sound notes at the same time.</source>
-        <translation type="unfinished"/>
+        <translation>’S e na mille-dhiogan de dhàil ’nan stampaichean-tìde a tha san fhoillidheachd agus innsidh i dhan draibhear mu cuin a thèid an t-às-chur a dhèanamh ann an da-rìribh.
+
+Nuair a bhios an fhoillidheachd ’na neoni, thèid na teachdaireachdan MIDI a lìbhrigeadh cho luath ’s a ghabhas ach dh’fhaoidte gum bi e beagan cugallach.
+
+Ma shuidhicheas tu an fhoillidheachd air luach nas motha na neoni, cuidichidh seo an draibhear ach am bi an siognail nas seasmhaiche.
+
+Ma chuireas tu gleus air an fhoillidheachd, dh’fhaoidte gun cuidich seo le sioncronachadh a’ bhathair-chruaidh MIDI agad leis an t-sinteisear aig MuseScore fèin ach an cluich an dà chuid dhiubh na pongan aig an aon àm.</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2822"/>
         <source>MIDI Output Latency</source>
-        <translation type="unfinished"/>
+        <translation>Foillidheachd an às-chuir MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2825"/>
         <source>Choose MIDI Output Latency</source>
-        <translation type="unfinished"/>
+        <translation>Tagh foillidheachd an às-chuir MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2852"/>
@@ -14185,7 +14202,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3228"/>
         <source>Attention: Any changes on this page require a restart of MuseScore.  Precise MIDI output timing is only possible via JACK.</source>
-        <translation type="unfinished"/>
+        <translation>Thoir an aire: Adhbharaichidh atharrachadh sam bith air an duilleag seo gum bi MuseScore feumach air ath-thòiseachadh. Cha ghabh an t-às-chur a thìmeachadh gu pongail ach le JACK.</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3249"/>
@@ -14534,7 +14551,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2740"/>
+        <location filename="../../libmscore/edit.cpp" line="2751"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14544,7 +14561,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2741"/>
+        <location filename="../../libmscore/edit.cpp" line="2752"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14707,22 +14724,22 @@ fhosgladh: %2</translation>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="249"/>
         <source>double flat</source>
-        <translation type="unfinished"/>
+        <translation>maol dùbailte</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="264"/>
         <source>flat</source>
-        <translation type="unfinished"/>
+        <translation>maol</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="273"/>
         <source>sharp</source>
-        <translation type="unfinished"/>
+        <translation>geur</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="279"/>
         <source>double sharp</source>
-        <translation type="unfinished"/>
+        <translation>geur dùbailte</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1200"/>
@@ -14856,12 +14873,12 @@ Tadhail air %1làrach-lìn MuseScore%2 gus an tionndadh as ùire fhaighinn.</tra
     <message>
         <location filename="../../mscore/file.cpp" line="198"/>
         <source>File &quot;%1&quot; not found.</source>
-        <translation type="unfinished"/>
+        <translation>Cha deach am faidhle “%1” a lorg.</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="201"/>
         <source>File &quot;%1&quot; corrupted.</source>
-        <translation type="unfinished"/>
+        <translation>Tha am faidhle “%1” coirbte.</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="220"/>
@@ -15332,7 +15349,7 @@ A bheil thu airson sgrìobhadh thairis air?</translation>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="138"/>
         <source>Same string:</source>
-        <translation type="unfinished"/>
+        <translation>An aon sreang:</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="155"/>
@@ -15378,7 +15395,7 @@ A bheil thu airson sgrìobhadh thairis air?</translation>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="30"/>
         <source>Load</source>
-        <translation>Luchdaich…</translation>
+        <translation>Luchdaich</translation>
     </message>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="31"/>
@@ -16828,12 +16845,12 @@ A bheil thu airson sgrìobhadh thairis air?</translation>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="467"/>
         <source>Single Sharps and Flats Only</source>
-        <translation type="unfinished"/>
+        <translation>Samhlaidhean geura ’s maola singilte a-mhàin</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="472"/>
         <source>Use Double Sharps and Flats</source>
-        <translation type="unfinished"/>
+        <translation>Cleachd samhlaidhean geura ’s maola dùbailte</translation>
     </message>
 </context>
 <context>
@@ -16942,7 +16959,7 @@ A bheil thu airson sgrìobhadh thairis air?</translation>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="45"/>
         <source>Ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Co-mheas:</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="71"/>
@@ -17018,12 +17035,12 @@ A bheil thu airson sgrìobhadh thairis air?</translation>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="137"/>
         <source>Keep this score private</source>
-        <translation type="unfinished"/>
+        <translation>Cum an sgòr seo prìobhaideach</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="295"/>
         <source>Update existing score</source>
-        <translation type="unfinished"/>
+        <translation>Ùraich sgòr a tha ann</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="179"/>
@@ -17245,122 +17262,122 @@ a sgrìobhadh: </translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="41"/>
         <source>Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Geur</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="42"/>
         <source>Flat</source>
-        <translation type="unfinished"/>
+        <translation>Maol</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="43"/>
         <source>Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Geur dùbailte</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="44"/>
         <source>Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Maol dùbailte</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="45"/>
         <source>Natural</source>
-        <translation type="unfinished"/>
+        <translation>Nàdarra</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="47"/>
         <source>Flat-slash</source>
-        <translation type="unfinished"/>
+        <translation>Maol-le-slais</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="48"/>
         <source>Flat-slash2</source>
-        <translation type="unfinished"/>
+        <translation>Maol-le-slais2</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="49"/>
         <source>Mirrored-flat2</source>
-        <translation type="unfinished"/>
+        <translation>Maol-sgàthanaichte2</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="50"/>
         <source>Mirrored-flat</source>
-        <translation type="unfinished"/>
+        <translation>Maol-sgàthanaichte</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="51"/>
         <source>Mirrored-flat-slash</source>
-        <translation type="unfinished"/>
+        <translation>Maol-sgàthanaichte-le-slais</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="52"/>
         <source>Flat-flat-slash</source>
-        <translation type="unfinished"/>
+        <translation>Dà-mhaol-le-slais</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="54"/>
         <source>Sharp-slash</source>
-        <translation type="unfinished"/>
+        <translation>Geur-le-slais</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="55"/>
         <source>Sharp-slash2</source>
-        <translation type="unfinished"/>
+        <translation>Geur-le-slais2</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="56"/>
         <source>Sharp-slash3</source>
-        <translation type="unfinished"/>
+        <translation>Geur-le-slais3</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="57"/>
         <source>Sharp-slash4</source>
-        <translation type="unfinished"/>
+        <translation>Geur-le-slais4</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="59"/>
         <source>Sharp arrow up</source>
-        <translation type="unfinished"/>
+        <translation>Geur le saighead suas</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="60"/>
         <source>Sharp arrow down</source>
-        <translation type="unfinished"/>
+        <translation>Geur le saighead sìos</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="61"/>
         <source>Sharp arrow both</source>
-        <translation type="unfinished"/>
+        <translation>Geur le dà shaighead</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="62"/>
         <source>Flat arrow up</source>
-        <translation type="unfinished"/>
+        <translation>Maol le saighead suas</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="63"/>
         <source>Flat arrow down</source>
-        <translation type="unfinished"/>
+        <translation>Maol le saighead sìos</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="64"/>
         <source>Flat arrow both</source>
-        <translation type="unfinished"/>
+        <translation>Maol le dà shaighead</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="65"/>
         <source>Natural arrow up</source>
-        <translation type="unfinished"/>
+        <translation>Nàdarra le saighead suas</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="66"/>
         <source>Natural arrow down</source>
-        <translation type="unfinished"/>
+        <translation>Nàdarra le saighead sìos</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="67"/>
         <source>Natural arrow both</source>
-        <translation type="unfinished"/>
+        <translation>Nàdarra le dà shaighead</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="69"/>
@@ -18168,32 +18185,32 @@ a sgrìobhadh: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="676"/>
         <source>Increase Layout Stretch</source>
-        <translation type="unfinished"/>
+        <translation>Meudaich sìneadh na co-dhealbhachd</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="677"/>
         <source>Increase layout stretch</source>
-        <translation type="unfinished"/>
+        <translation>Meudaich sìneadh na co-dhealbhachd</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="678"/>
         <source>Increase layout stretch factor of selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Meudaich factar sìneadh na co-dhealbhachd airson nan leagaidhean a thagh thu</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="687"/>
         <source>Decrease Layout Stretch</source>
-        <translation type="unfinished"/>
+        <translation>Lùghdaich sìneadh na co-dhealbhachd</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="688"/>
         <source>Decrease layout stretch</source>
-        <translation type="unfinished"/>
+        <translation>Lùghdaich sìneadh na co-dhealbhachd</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="689"/>
         <source>Decrease layout stretch factor of selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Lùghdaich factar sìneadh na co-dhealbhachd airson nan leagaidhean a thagh thu</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="698"/>
@@ -19120,65 +19137,65 @@ a sgrìobhadh: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1484"/>
         <source>Double Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Geur dùbailte</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1485"/>
         <source>Note input: Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Ion-chur puing: Geur dùbailte</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1486"/>
         <source>Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Geur dùbailte</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1495"/>
         <location filename="../../mscore/shortcut.cpp" line="1497"/>
         <source>Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Geur</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1496"/>
         <source>Note input: Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Ion-chur puing: Geur</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1506"/>
         <location filename="../../mscore/shortcut.cpp" line="1508"/>
         <source>Natural</source>
-        <translation type="unfinished"/>
+        <translation>Nàdarra</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1507"/>
         <source>Note input: Natural</source>
-        <translation type="unfinished"/>
+        <translation>Ion-chur puing: Nàdarra</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1517"/>
         <location filename="../../mscore/shortcut.cpp" line="1519"/>
         <source>Flat</source>
-        <translation type="unfinished"/>
+        <translation>Maol</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1518"/>
         <source>Note input: Flat</source>
-        <translation type="unfinished"/>
+        <translation>Ion-chur puing: Maol</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1528"/>
         <source>Double Flat</source>
-        <translation type="unfinished"/>
+        <translation>Maol dùbailte</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1529"/>
         <source>Note input: Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Ion-chur puing: Maol dùbailte</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1530"/>
         <source>Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Maol dùbailte</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1539"/>
@@ -19328,207 +19345,207 @@ a sgrìobhadh: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1666"/>
         <source>Toggle &apos;MIDI Input&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Ion-chur MIDI”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1771"/>
         <source>Toggle &apos;Play Panel&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Panail cluiche”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1781"/>
         <source>Toogle &apos;Selection Filter&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Criathrag taghaidh”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1801"/>
         <source>Toggle &apos;MIDI Import Panel&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Panail ion-phortadh MIDI”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1826"/>
         <source>Toogle &apos;File Operations&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich bàr-inneal nan “Obrachaidhean fhaidhlichean”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1833"/>
         <source>Toggle &apos;Playback Controls&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich bàr-inneal “Stiùireadh na cluiche”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1847"/>
         <source>Toggle &apos;Image Capture&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich bàr-inneal “Glacadh deilbh”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1854"/>
         <source>Toogle &apos;Note Input&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich bàr-inneal “Ion-chur phongan”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1861"/>
         <source>Toggle &apos;Status Bar&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Bàr-staide”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1994"/>
         <source>Player: play</source>
-        <translation type="unfinished"/>
+        <translation>Inneal-cluiche: cluich</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2044"/>
         <source>Seek to Begin</source>
-        <translation type="unfinished"/>
+        <translation>Sir gun toiseach</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2045"/>
         <source>Player: seek to begin</source>
-        <translation type="unfinished"/>
+        <translation>Inneal-cluiche: sir gun toiseach</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2055"/>
         <source>Player: rewind</source>
-        <translation type="unfinished"/>
+        <translation>Inneal-cluiche: toinn air ais an</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2063"/>
         <source>Seek to End</source>
-        <translation type="unfinished"/>
+        <translation>Sir gun deireadh</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2064"/>
         <source>Player: seek to end</source>
-        <translation type="unfinished"/>
+        <translation>Inneal-cluiche: sir gun deireadh</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2071"/>
         <source>Toggle &apos;Play Repeats&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Cluich na h-ath-ghabhalaichean”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2081"/>
         <source>Pan Score</source>
-        <translation type="unfinished"/>
+        <translation>Panaich an sgòr</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2082"/>
         <source>Toggle &apos;Pan Score&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Panaich an sgòr”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2256"/>
         <source>Toggle &apos;System Break&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Briseadh-siostaim”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2267"/>
         <source>Toggle &apos;Page Break&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Briseadh-duilleige”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2278"/>
         <source>Toggle &apos;Section Break&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Briseadh-roinne”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2308"/>
         <source>Reset Layout Stretch</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich sìneadh na co-dhealbhachd</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2309"/>
         <source>Reset layout stretch</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich sìneadh na co-dhealbhachd</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2310"/>
         <source>Reset layout stretch factor of selected measures or entire score</source>
-        <translation type="unfinished"/>
+        <translation>Ath-shuidhich factar sìneadh na co-dhealbhachd airson nan leagaidhean a thagh thu no an sgòr air fad</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2602"/>
         <source>Change Enharmonic Spelling (Both Modes)</source>
-        <translation type="unfinished"/>
+        <translation>Atharraich an litreachadh aon-seirmeach (an dà mhodh)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2603"/>
         <source>Change enharmonic spelling (both modes)</source>
-        <translation type="unfinished"/>
+        <translation>Atharraich an litreachadh aon-seirmeach (an dà mhodh)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2604"/>
         <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
-        <translation type="unfinished"/>
+        <translation>Atharraich an litreachadh aon-seirmeach (atharraichidh seo an litreachadh an dà chuid ann an gleus consairt agus sa mhodh ghleus-atharraichte)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2610"/>
         <source>Change Enharmonic Spelling (Current Mode)</source>
-        <translation type="unfinished"/>
+        <translation>Atharraich an litreachadh aon-seirmeach (am modh làithreach)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2611"/>
         <source>Change enharmonic spelling (current mode)</source>
-        <translation type="unfinished"/>
+        <translation>Atharraich an litreachadh aon-seirmeach (am modh làithreach)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2612"/>
         <source>Change enharmonic note (alters the spelling in the current mode only)</source>
-        <translation type="unfinished"/>
+        <translation>Atharraich an litreachadh aon-seirmeach (atharraichidh seo an litreachadh sa mhodh làithreach a-mhàin)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2626"/>
         <source>Toggle &apos;Image Capture&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Glacadh deilbh”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2803"/>
         <source>Loop Playback</source>
-        <translation type="unfinished"/>
+        <translation>Lùb a’ chluiche</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2804"/>
         <source>Toggle &apos;Loop Playback&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Lùb a’ chluiche”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2848"/>
         <source>Toggle &apos;Count-In&apos; playback</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich cluich a’ chunntaidh a-steach</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2924"/>
         <source>Toggle &apos;View Mode&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Modh an t-seallaidh”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2949"/>
         <source>Toggle &apos;Visibility&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich an “Fhaicsinneachd”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3350"/>
         <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Cruthaich clois thar iomadh leagaidh”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3361"/>
         <source>Toggle &apos;Hide Empty Staves&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Falaich na cliathan falamh”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3446"/>
         <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Nòtachadh slais ruitheim”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3456"/>
         <source>Add/Remove System Breaks...</source>
-        <translation type="unfinished"/>
+        <translation>Cuir ris/Thoir air falbh brisidhean-siostaim…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3457"/>
         <source>Add/remove system breaks</source>
-        <translation type="unfinished"/>
+        <translation>Cuir ris/Thoir air falbh brisidhean-siostaim</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1676"/>
@@ -19618,7 +19635,7 @@ a sgrìobhadh: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1761"/>
         <source>Toggle &apos;Palettes&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich “Paileadan”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1770"/>
@@ -19638,7 +19655,7 @@ a sgrìobhadh: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1791"/>
         <source>Toggle &apos;Navigator&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich an “Seòladair”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1800"/>
@@ -19653,7 +19670,7 @@ a sgrìobhadh: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1816"/>
         <source>Toggle &apos;Mixer&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich am “Measgadair”</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1825"/>
@@ -20310,12 +20327,12 @@ a sgrìobhadh: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2500"/>
         <source>All Similar Elements with more options</source>
-        <translation type="unfinished"/>
+        <translation>A h-uile eileamaid coltach rithe le barrachd roghainnean</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2501"/>
         <source>Select all similar elements with more options</source>
-        <translation type="unfinished"/>
+        <translation>Tagh a h-uile eileamaid coltach rithe le barrachd roghainnean</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2507"/>
@@ -20660,7 +20677,7 @@ a sgrìobhadh: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2847"/>
         <source>Count-In</source>
-        <translation>Cunntadh a-steach</translation>
+        <translation>Cunnt a-steach</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2849"/>
@@ -21261,11 +21278,7 @@ a sgrìobhadh: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3360"/>
         <source>Toggle Hide Empty Staves</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Toggle hide empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Toglaich falach nan cliathan falamh</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3371"/>
@@ -21378,20 +21391,20 @@ a sgrìobhadh: </translation>
 <context>
     <name>addRemoveTimeSig</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="534"/>
-        <location filename="../../libmscore/edit.cpp" line="550"/>
+        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="551"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="536"/>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
         <translation>Chan urrainn dhuinn na leagaidhean ath-sgrìobhadh:
 Rachadh ioma-rinn thar leagaidh</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="551"/>
+        <location filename="../../libmscore/edit.cpp" line="552"/>
         <source>Cannot change local time signature:
 Measure is not empty</source>
         <translation>Chan urrainn dhuinn an tìm-chomharra ionadail atharrachadh:
@@ -21666,7 +21679,7 @@ Chan eil an leagadh falamh</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="25"/>
         <source>c#</source>
-        <translation type="unfinished"/>
+        <translation>c♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="26"/>
@@ -21676,7 +21689,7 @@ Chan eil an leagadh falamh</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="27"/>
         <source>d#</source>
-        <translation type="unfinished"/>
+        <translation>d♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="28"/>
@@ -21691,7 +21704,7 @@ Chan eil an leagadh falamh</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="30"/>
         <source>f#</source>
-        <translation type="unfinished"/>
+        <translation>f♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="31"/>
@@ -21701,7 +21714,7 @@ Chan eil an leagadh falamh</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="32"/>
         <source>g#</source>
-        <translation type="unfinished"/>
+        <translation>g♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="33"/>
@@ -21711,7 +21724,7 @@ Chan eil an leagadh falamh</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="34"/>
         <source>a#</source>
-        <translation type="unfinished"/>
+        <translation>a♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="35"/>
@@ -25333,7 +25346,7 @@ Chan eil an leagadh falamh</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="494"/>
         <source>c#</source>
-        <translation type="unfinished"/>
+        <translation>c♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="495"/>
@@ -25343,7 +25356,7 @@ Chan eil an leagadh falamh</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="496"/>
         <source>d#</source>
-        <translation type="unfinished"/>
+        <translation>d♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="497"/>
@@ -25358,7 +25371,7 @@ Chan eil an leagadh falamh</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="499"/>
         <source>f#</source>
-        <translation type="unfinished"/>
+        <translation>f♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="500"/>
@@ -25368,7 +25381,7 @@ Chan eil an leagadh falamh</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="501"/>
         <source>g#</source>
-        <translation type="unfinished"/>
+        <translation>g♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="502"/>
@@ -25378,7 +25391,7 @@ Chan eil an leagadh falamh</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="503"/>
         <source>a#</source>
-        <translation type="unfinished"/>
+        <translation>a♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="504"/>

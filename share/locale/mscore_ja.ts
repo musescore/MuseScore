@@ -1566,10 +1566,6 @@
         <translation>記譜されているピッチから移調する:</translation>
     </message>
     <message>
-        <source>octaves +</source>
-        <translation type="vanished">オクターブ(s) +</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editstaff.ui" line="345"/>
         <source>Octave(s) +</source>
         <translation>オクターブ(s) +</translation>
@@ -8205,7 +8201,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/albummanager.cpp" line="76"/>
         <source>Add Score</source>
-        <translation>スコアの追加...</translation>
+        <translation>スコアの追加</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="101"/>
@@ -8610,17 +8606,17 @@ failed: </source>
 <context>
     <name>Ms::Hairpin</name>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="640"/>
+        <location filename="../../libmscore/hairpin.cpp" line="638"/>
         <source>Crescendo</source>
         <translation>クレシェンド</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="643"/>
+        <location filename="../../libmscore/hairpin.cpp" line="641"/>
         <source>Decrescendo</source>
         <translation>デクレシェンド</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="646"/>
+        <location filename="../../libmscore/hairpin.cpp" line="644"/>
         <source>Custom</source>
         <translation>ユーザ定義</translation>
     </message>
@@ -8630,12 +8626,12 @@ failed: </source>
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1613"/>
         <source>sharp</source>
-        <translation>♯</translation>
+        <translation>シャープ</translation>
     </message>
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1618"/>
         <source>flat</source>
-        <translation>♭</translation>
+        <translation>フラット</translation>
     </message>
 </context>
 <context>
@@ -9174,7 +9170,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="302"/>
         <source>Load Score</source>
-        <translation>スコアの読み込み...</translation>
+        <translation>スコアの読み込み</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="400"/>
@@ -9285,7 +9281,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1268"/>
         <source>Load Palette</source>
-        <translation>パレットの読み込み...</translation>
+        <translation>パレットの読み込み</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1269"/>
@@ -9296,7 +9292,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1272"/>
         <source>Save Palette</source>
-        <translation>パレットの保存...</translation>
+        <translation>パレットの保存</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1350"/>
@@ -9482,7 +9478,7 @@ Do you want to replace it?
         <location filename="../../mscore/file.cpp" line="2210"/>
         <location filename="../../mscore/file.cpp" line="2250"/>
         <source>Save As</source>
-        <translation>名前を付けて保存...</translation>
+        <translation>名前を付けて保存</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1917"/>
@@ -9927,7 +9923,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1060"/>
         <source>About &amp;MusicXML...</source>
-        <translation>MusicXMLについて...(&amp;M)</translation>
+        <translation>MusicXML について...(&amp;M)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1067"/>
@@ -10098,12 +10094,12 @@ Restore session?</source>
         <translation>移動先の小節番号:</translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="131"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="135"/>
         <source>Tuplet Error</source>
         <translation>連符のエラー</translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="132"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="136"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
         <translation>音価 %2 には比率 %1 の連符を作成できません</translation>
     </message>
@@ -10981,14 +10977,14 @@ failed: %2</source>
         <translation>ファイルの保存に失敗しました: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="445"/>
+        <location filename="../../libmscore/scorefile.cpp" line="446"/>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
         <translation>Tempファイルの名前を変更。ファイル &lt;%1&gt; から &lt;%2&gt; へ 失敗:
 %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="470"/>
+        <location filename="../../libmscore/scorefile.cpp" line="471"/>
         <source>Open File
 %1
 failed: </source>
@@ -10997,7 +10993,7 @@ failed: </source>
 失敗:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="603"/>
+        <location filename="../../libmscore/scorefile.cpp" line="604"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -11006,12 +11002,12 @@ failed: %2</source>
 失敗: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="625"/>
+        <location filename="../../libmscore/scorefile.cpp" line="626"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>このスタイルファイルは現在のMuseScoreのバージョンと互換性がありません。</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="646"/>
+        <location filename="../../libmscore/scorefile.cpp" line="647"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -11020,12 +11016,12 @@ failed: %2</source>
 失敗: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="656"/>
+        <location filename="../../libmscore/scorefile.cpp" line="657"/>
         <source>Write Style failed: %1</source>
         <translation>スタイルの書き込みに失敗: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1199"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>XML 読み込みエラー箇所 %1 行目 カラム %2: %3</translation>
     </message>
@@ -11165,7 +11161,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
         <source>Save As</source>
-        <translation>名前を付けて保存...</translation>
+        <translation>名前を付けて保存</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
@@ -11595,8 +11591,8 @@ Please select a measure and try again</source>
 <context>
     <name>Ms::Text</name>
     <message>
-        <location filename="../../libmscore/text.cpp" line="3082"/>
-        <location filename="../../libmscore/text.cpp" line="3114"/>
+        <location filename="../../libmscore/text.cpp" line="3076"/>
+        <location filename="../../libmscore/text.cpp" line="3108"/>
         <source>System Text</source>
         <translation>段テキスト</translation>
     </message>
@@ -11880,7 +11876,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="27"/>
         <source>Cb major, Ab minor</source>
-        <translation>変ハ長調(C♭ major)/変イ短調(A♭ minor)</translation>
+        <translation>変ハ長調(Cb major)/変イ短調(Ab minor)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="28"/>
@@ -11890,7 +11886,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="29"/>
         <source>Gb major, Eb minor</source>
-        <translation>変ト長調(G♭ major)/変ホ短調(E♭ minor)</translation>
+        <translation>変ト長調(Gb major)/変ホ短調(Eb minor)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="30"/>
@@ -11900,7 +11896,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="31"/>
         <source>Db major, Bb minor</source>
-        <translation>変ニ長調(D♭ major)/変ロ短調(B♭ minor)</translation>
+        <translation>変ニ長調(Db major)/変ロ短調(Bb minor)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="32"/>
@@ -11910,7 +11906,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="33"/>
         <source>Ab major, F minor</source>
-        <translation>変イ長調(A♭ major)/ヘ短調(F minor)</translation>
+        <translation>変イ長調(Ab major)/ヘ短調(F minor)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="34"/>
@@ -11930,7 +11926,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="37"/>
         <source>Bb major, G minor</source>
-        <translation>変ロ長調(B♭ major)/ト短調(G minor)</translation>
+        <translation>変ロ長調(Bb major)/ト短調(G minor)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="38"/>
@@ -12492,7 +12488,7 @@ please choose a different name:</source>
         <translation>フレットボードダイアグラム</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1278"/>
+        <location filename="../../mscore/palette.cpp" line="1285"/>
         <source>Writing Palette File
 %1
 failed: </source>
@@ -12501,7 +12497,7 @@ failed: </source>
 失敗:</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1279"/>
+        <location filename="../../mscore/palette.cpp" line="1286"/>
         <source>Writing Palette File</source>
         <translation>パレットファイルを書き込み中</translation>
     </message>
@@ -14552,7 +14548,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2740"/>
+        <location filename="../../libmscore/edit.cpp" line="2751"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14562,7 +14558,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2741"/>
+        <location filename="../../libmscore/edit.cpp" line="2752"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14731,12 +14727,12 @@ failed: %2</source>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="264"/>
         <source>flat</source>
-        <translation>♭</translation>
+        <translation>フラット</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="273"/>
         <source>sharp</source>
-        <translation>♯</translation>
+        <translation>シャープ</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="279"/>
@@ -15397,7 +15393,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="30"/>
         <source>Load</source>
-        <translation>読み込み...</translation>
+        <translation>読み込み</translation>
     </message>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="31"/>
@@ -16847,7 +16843,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="467"/>
         <source>Single Sharps and Flats Only</source>
-        <translation>ダブルシャープ、ダブルフラットを使わない（＃,♭のみ使用）</translation>
+        <translation>ダブルシャープ、ダブルフラットを使用しない（＃,♭のみ使用）</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="472"/>
@@ -17264,12 +17260,12 @@ failed: </source>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="41"/>
         <source>Sharp</source>
-        <translation>♯</translation>
+        <translation>シャープ</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="42"/>
         <source>Flat</source>
-        <translation>♭</translation>
+        <translation>フラット</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="43"/>
@@ -17324,17 +17320,17 @@ failed: </source>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="55"/>
         <source>Sharp-slash2</source>
-        <translation>シャープ　スラッシュ2</translation>
+        <translation>シャープ - スラッシュ2</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="56"/>
         <source>Sharp-slash3</source>
-        <translation>シャープ　スラッシュ3</translation>
+        <translation>シャープ - スラッシュ3</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="57"/>
         <source>Sharp-slash4</source>
-        <translation>シャープ　スラッシュ4</translation>
+        <translation>シャープ - スラッシュ4</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="59"/>
@@ -19155,7 +19151,7 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="1495"/>
         <location filename="../../mscore/shortcut.cpp" line="1497"/>
         <source>Sharp</source>
-        <translation>♯</translation>
+        <translation>シャープ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1496"/>
@@ -19177,7 +19173,7 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="1517"/>
         <location filename="../../mscore/shortcut.cpp" line="1519"/>
         <source>Flat</source>
-        <translation>♭</translation>
+        <translation>フラット</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1518"/>
@@ -21030,7 +21026,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3168"/>
         <source>Add fret 4 on current string (TAB only)</source>
-        <translation>現在の弦に4フレットを付け加える(TAB only)</translation>
+        <translation>現在の弦に4フレットを付け加える(TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3174"/>
@@ -21040,7 +21036,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3175"/>
         <source>Add fret 5 on current string (TAB only)</source>
-        <translation>現在の弦に5フレットを付け加える(TAB only)</translation>
+        <translation>現在の弦に5フレットを付け加える(TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3181"/>
@@ -21050,7 +21046,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3182"/>
         <source>Add fret 6 on current string (TAB only)</source>
-        <translation>現在の弦に6フレットを付け加える(TAB only)</translation>
+        <translation>現在の弦に6フレットを付け加える(TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3188"/>
@@ -21060,7 +21056,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3189"/>
         <source>Add fret 7 on current string (TAB only)</source>
-        <translation>現在の弦に7フレットを付け加える(TAB only)</translation>
+        <translation>現在の弦に7フレットを付け加える(TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3195"/>
@@ -21070,7 +21066,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3196"/>
         <source>Add fret 8 on current string (TAB only)</source>
-        <translation>現在の弦に8フレットを付け加える(TAB only)</translation>
+        <translation>現在の弦に8フレットを付け加える(TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3202"/>
@@ -21080,7 +21076,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3203"/>
         <source>Add fret 9 on current string (TAB only)</source>
-        <translation>現在の弦に9フレットを付け加える(TAB only)</translation>
+        <translation>現在の弦に9フレットを付け加える(TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3209"/>
@@ -21090,7 +21086,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3210"/>
         <source>Add fret 10 on current string (TAB only)</source>
-        <translation>現在の弦に10フレットを付け加える(TAB only)</translation>
+        <translation>現在の弦に10フレットを付け加える(TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3216"/>
@@ -21100,7 +21096,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3217"/>
         <source>Add fret 11 on current string (TAB only)</source>
-        <translation>現在の弦に11フレットを付け加える(TAB only)</translation>
+        <translation>現在の弦に11フレットを付け加える(TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3223"/>
@@ -21110,7 +21106,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3224"/>
         <source>Add fret 12 on current string (TAB only)</source>
-        <translation>現在の弦に12フレットを付け加える(TAB only)</translation>
+        <translation>現在の弦に12フレットを付け加える(TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3230"/>
@@ -21120,7 +21116,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3231"/>
         <source>Add fret 13 on current string (TAB only)</source>
-        <translation>現在の弦に13フレットを付け加える(TAB only)</translation>
+        <translation>現在の弦に13フレットを付け加える(TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3237"/>
@@ -21130,7 +21126,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3238"/>
         <source>Add fret 14 on current string (TAB only)</source>
-        <translation>現在の弦に14フレットを付け加える(TAB only)</translation>
+        <translation>現在の弦に14フレットを付け加える(TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3247"/>
@@ -21280,11 +21276,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3360"/>
         <source>Toggle Hide Empty Staves</source>
-        <translation>空の譜表をまとめる 切替</translation>
-    </message>
-    <message>
-        <source>Toggle hide empty staves</source>
-        <translation type="vanished">空の譜表をまとめる 切替</translation>
+        <translation>空の譜表を隠すトグル</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3371"/>
@@ -21397,20 +21389,20 @@ failed: </source>
 <context>
     <name>addRemoveTimeSig</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="534"/>
-        <location filename="../../libmscore/edit.cpp" line="550"/>
+        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="551"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="536"/>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
         <translation>小節の書き換えができません:
 連符が小節をまたいでしまいます</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="551"/>
+        <location filename="../../libmscore/edit.cpp" line="552"/>
         <source>Cannot change local time signature:
 Measure is not empty</source>
         <translation>拍子を変更できません:
@@ -21745,7 +21737,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="39"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="40"/>
@@ -21755,7 +21747,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="41"/>
         <source>D#</source>
-        <translation>D♯</translation>
+        <translation>D#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="42"/>
@@ -21770,7 +21762,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="44"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="45"/>
@@ -21780,7 +21772,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="46"/>
         <source>G#</source>
-        <translation>G♯</translation>
+        <translation>G#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="47"/>
@@ -21790,7 +21782,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="48"/>
         <source>A#</source>
-        <translation>A♯</translation>
+        <translation>A#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="49"/>
@@ -23107,7 +23099,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="533"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="534"/>
@@ -23132,7 +23124,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="538"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="539"/>
@@ -23142,7 +23134,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="540"/>
         <source>Ab</source>
-        <translation>A♭</translation>
+        <translation>Ab</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="541"/>
@@ -23170,7 +23162,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="215"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="216"/>
@@ -23195,7 +23187,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="220"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="221"/>
@@ -23205,7 +23197,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="222"/>
         <source>Ab</source>
-        <translation>A♭</translation>
+        <translation>Ab</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="223"/>
@@ -25412,7 +25404,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="508"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="509"/>
@@ -25422,7 +25414,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="510"/>
         <source>D#</source>
-        <translation>D♯</translation>
+        <translation>D#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="511"/>
@@ -25437,7 +25429,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="513"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="514"/>
@@ -25447,7 +25439,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="515"/>
         <source>G#</source>
-        <translation>G♯</translation>
+        <translation>G#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="516"/>
@@ -25457,7 +25449,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="517"/>
         <source>A#</source>
-        <translation>A♯</translation>
+        <translation>A#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="518"/>

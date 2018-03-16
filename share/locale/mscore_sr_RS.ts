@@ -638,7 +638,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="290"/>
         <source>Notehead:</source>
-        <translation type="unfinished"/>
+        <translation>Нотна глава:</translation>
     </message>
 </context>
 <context>
@@ -1563,10 +1563,6 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="325"/>
         <source>Transpose written pitches to sound:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>octaves +</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3281,7 +3277,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5171"/>
         <source>Cents offset</source>
-        <translation type="unfinished"/>
+        <translation>Водоравни помак до референтне тачке</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5182"/>
@@ -3327,7 +3323,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5274"/>
         <source>Avoid the staves</source>
-        <translation type="unfinished"/>
+        <translation>Избегните нотне системе</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5338"/>
@@ -3650,7 +3646,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="93"/>
         <source>Head group:</source>
-        <translation type="unfinished"/>
+        <translation>Група главе:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="106"/>
@@ -4048,12 +4044,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="796"/>
         <source>Reset &apos;Head group&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност за „Групу главе“</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="816"/>
         <source>Head type:</source>
-        <translation type="unfinished"/>
+        <translation>Врста главе:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="832"/>
@@ -4073,7 +4069,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="898"/>
         <source>Reset &apos;Head type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност за „Врсту главе“</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="918"/>
@@ -4306,62 +4302,62 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="124"/>
         <source>Span from:</source>
-        <translation type="unfinished"/>
+        <translation>Обухвати од:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="137"/>
         <source>Spanned staves:</source>
-        <translation type="unfinished"/>
+        <translation>Обухваћени нотни системи:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="150"/>
         <source>Span from</source>
-        <translation type="unfinished"/>
+        <translation>Обухвати од</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="163"/>
         <source>Span</source>
-        <translation type="unfinished"/>
+        <translation>Обухвати</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="173"/>
         <source>Span to:</source>
-        <translation type="unfinished"/>
+        <translation>Обухвати до:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="186"/>
         <source>Span to</source>
-        <translation type="unfinished"/>
+        <translation>Обухвати до</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="196"/>
         <source>Reset &apos;Spanned staves&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност &apos;Обухваћених нотних система&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="213"/>
         <source>Reset &apos;Span from&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност &apos;Обухвати од&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="230"/>
         <source>Reset &apos;Span to&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност &apos;Обухвати до&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="244"/>
         <source>Span preset:</source>
-        <translation type="unfinished"/>
+        <translation>Предефинисано обухватање:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="257"/>
         <source>Span Type</source>
-        <translation type="unfinished"/>
+        <translation>Врста обухватања</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="267"/>
         <source>Reset &apos;Span preset&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност &apos;Предефинисаног обухватања&apos;</translation>
     </message>
 </context>
 <context>
@@ -4420,7 +4416,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="154"/>
         <source>Vertical position offset left</source>
-        <translation type="unfinished"/>
+        <translation>Помак вертикалне позиције улево</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="157"/>
@@ -4456,7 +4452,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="221"/>
         <source>Vertical position offset right</source>
-        <translation type="unfinished"/>
+        <translation>Помак вертикалне позиције удесно</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="246"/>
@@ -4621,7 +4617,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="84"/>
         <source>Reset &apos;Vertical offset&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност &apos;Усправног помака&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="104"/>
@@ -4651,12 +4647,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="142"/>
         <source>Reset &apos;Horizontal offset&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност &apos;Водоравног помака&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="162"/>
         <source>Vertical offset:</source>
-        <translation>Усправни померај:</translation>
+        <translation>Усправни помак:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="175"/>
@@ -4678,7 +4674,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="217"/>
         <source>Horizontal offset:</source>
-        <translation type="unfinished"/>
+        <translation>Водоравни помак:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="230"/>
@@ -4763,12 +4759,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="91"/>
         <source>Reset &apos;Velocity&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност &apos;гласноће&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="105"/>
         <source>Velocity:</source>
-        <translation>Јачина:</translation>
+        <translation>Гласноћа:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="112"/>
@@ -4846,7 +4842,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="159"/>
         <source>Reset &apos;Horizontal offset&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност &apos;Водоравног помака&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="179"/>
@@ -4856,12 +4852,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="207"/>
         <source>Reset &apos;Vertical offset&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност &apos;Усправног помака&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="233"/>
         <source>Horizontal offset:</source>
-        <translation type="unfinished"/>
+        <translation>Водоравни помак:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="249"/>
@@ -5213,17 +5209,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="149"/>
         <source>Velocity change:</source>
-        <translation type="unfinished"/>
+        <translation>Промена гласноће:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="156"/>
         <source>Velocity change</source>
-        <translation>Промена јачине</translation>
+        <translation>Промена гласноће</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="169"/>
         <source>Reset &apos;Velocity change&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност &apos;Промене гласноће&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="183"/>
@@ -5791,7 +5787,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="93"/>
         <source>Reset &apos;Tuning&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност &apos;штимовања&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="113"/>
@@ -5806,7 +5802,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="142"/>
         <source>Reset &apos;Velocity&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност &apos;гласноће&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="162"/>
@@ -5869,7 +5865,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="258"/>
         <source>Mirror head:</source>
-        <translation type="unfinished"/>
+        <translation>Обрнута нотна глава:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="274"/>
@@ -5899,7 +5895,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="343"/>
         <source>Head type:</source>
-        <translation type="unfinished"/>
+        <translation>Врста главе:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="359"/>
@@ -5919,12 +5915,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="396"/>
         <source>Reset &apos;Velocity type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност за &apos;врсту гласноће&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="416"/>
         <source>Head group:</source>
-        <translation type="unfinished"/>
+        <translation>Група главе:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="435"/>
@@ -5949,12 +5945,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="508"/>
         <source>Velocity:</source>
-        <translation>Јачина:</translation>
+        <translation>Гласноћа:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="524"/>
         <source>Tuning:</source>
-        <translation type="unfinished"/>
+        <translation>Штимовање:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="537"/>
@@ -5965,22 +5961,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="556"/>
         <source>Reset &apos;Mirror head&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност за &apos;обрнуту нотну главу&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="576"/>
         <source>Velocity type:</source>
-        <translation type="unfinished"/>
+        <translation>Врста гласноће:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="595"/>
         <source>Reset &apos;Head group&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност за „Групу главе“</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="618"/>
         <source>Reset &apos;Head type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност за &apos;Врсту главе&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="635"/>
@@ -6144,7 +6140,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="87"/>
         <source>Trailing space:</source>
-        <translation type="unfinished"/>
+        <translation>Пратећи простор:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="100"/>
@@ -6166,7 +6162,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="150"/>
         <source>Leading space:</source>
-        <translation type="unfinished"/>
+        <translation>Водећи простор:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="157"/>
@@ -6177,12 +6173,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="160"/>
         <source>Reset &apos;Leading space&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност &apos;водећег простора&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="177"/>
         <source>Reset &apos;Trailing space&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Поново постави вредност &apos;пратећег простора&apos;</translation>
     </message>
 </context>
 <context>
@@ -8187,7 +8183,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/albummanager.cpp" line="76"/>
         <source>Add Score</source>
-        <translation>Додај партитуру...</translation>
+        <translation>Додај партитуру</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="101"/>
@@ -8368,12 +8364,12 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/drumroll.cpp" line="105"/>
         <source>Velocity:</source>
-        <translation>Јачина:</translation>
+        <translation>Гласноћа:</translation>
     </message>
     <message>
         <location filename="../../mscore/drumroll.cpp" line="107"/>
         <source>offset</source>
-        <translation>оффсет</translation>
+        <translation>помак</translation>
     </message>
     <message>
         <location filename="../../mscore/drumroll.cpp" line="108"/>
@@ -8491,7 +8487,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="224"/>
         <source>Special symbols in header/footer</source>
-        <translation type="unfinished"/>
+        <translation>Специјални симболи за заглавље/подножје</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="227"/>
@@ -8592,17 +8588,17 @@ failed: </source>
 <context>
     <name>Ms::Hairpin</name>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="640"/>
+        <location filename="../../libmscore/hairpin.cpp" line="638"/>
         <source>Crescendo</source>
         <translation>Крешендо</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="643"/>
+        <location filename="../../libmscore/hairpin.cpp" line="641"/>
         <source>Decrescendo</source>
         <translation>Диминуендо</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="646"/>
+        <location filename="../../libmscore/hairpin.cpp" line="644"/>
         <source>Custom</source>
         <translation>Прилагођено</translation>
     </message>
@@ -8612,12 +8608,12 @@ failed: </source>
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1613"/>
         <source>sharp</source>
-        <translation type="unfinished"/>
+        <translation>повисилица</translation>
     </message>
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1618"/>
         <source>flat</source>
-        <translation type="unfinished"/>
+        <translation>снизилица</translation>
     </message>
 </context>
 <context>
@@ -9155,7 +9151,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="302"/>
         <source>Load Score</source>
-        <translation type="unfinished"/>
+        <translation>Учитај партитуру</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="400"/>
@@ -9266,7 +9262,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1268"/>
         <source>Load Palette</source>
-        <translation type="unfinished"/>
+        <translation>Учитај палету</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1269"/>
@@ -9277,7 +9273,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1272"/>
         <source>Save Palette</source>
-        <translation type="unfinished"/>
+        <translation>Сачувај палету</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1350"/>
@@ -9463,7 +9459,7 @@ Do you want to replace it?
         <location filename="../../mscore/file.cpp" line="2210"/>
         <location filename="../../mscore/file.cpp" line="2250"/>
         <source>Save As</source>
-        <translation>Сачувај као…</translation>
+        <translation>Сачувај као</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1917"/>
@@ -10078,12 +10074,12 @@ Restore session?</source>
         <translation>Иди на: </translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="131"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="135"/>
         <source>Tuplet Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="132"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="136"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
         <translation type="unfinished"/>
     </message>
@@ -10475,7 +10471,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="110"/>
         <source>Velocity:</source>
-        <translation>Јачина:</translation>
+        <translation>Гласноћа:</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="112"/>
@@ -10958,14 +10954,14 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="445"/>
+        <location filename="../../libmscore/scorefile.cpp" line="446"/>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
         <translation>Није успело преименовање датотеке из „&lt;%1&gt;“ у „&lt;%2&gt;“:
 %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="470"/>
+        <location filename="../../libmscore/scorefile.cpp" line="471"/>
         <source>Open File
 %1
 failed: </source>
@@ -10974,7 +10970,7 @@ failed: </source>
 није успело: </translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="603"/>
+        <location filename="../../libmscore/scorefile.cpp" line="604"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -10983,12 +10979,12 @@ failed: %2</source>
 није успело: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="625"/>
+        <location filename="../../libmscore/scorefile.cpp" line="626"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>Датотека са стилом није у сагласности са овим издањем програма.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="646"/>
+        <location filename="../../libmscore/scorefile.cpp" line="647"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -10997,12 +10993,12 @@ failed: %2</source>
 није успело: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="656"/>
+        <location filename="../../libmscore/scorefile.cpp" line="657"/>
         <source>Write Style failed: %1</source>
         <translation>Упис стила није успео: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1199"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>Грешка при читању ИксМЛ датотеке у линији %1, колона %2: %3</translation>
     </message>
@@ -11069,7 +11065,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/scoreBrowser.cpp" line="153"/>
         <source>Create New Score...</source>
-        <translation type="unfinished"/>
+        <translation>Створи нову партитуру...</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreBrowser.cpp" line="228"/>
@@ -11142,7 +11138,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
         <source>Save As</source>
-        <translation>Сачувај као…</translation>
+        <translation>Сачувај као</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
@@ -11433,7 +11429,9 @@ Please select a range of measures to join and try again</source>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
-        <translation type="unfinished"/>
+        <translation>Нотни системи нису пронађени
+молимо употребите дијалог инструмената да
+створите прво нотне системе</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="5759"/>
@@ -11570,8 +11568,8 @@ Please select a measure and try again</source>
 <context>
     <name>Ms::Text</name>
     <message>
-        <location filename="../../libmscore/text.cpp" line="3082"/>
-        <location filename="../../libmscore/text.cpp" line="3114"/>
+        <location filename="../../libmscore/text.cpp" line="3076"/>
+        <location filename="../../libmscore/text.cpp" line="3108"/>
         <source>System Text</source>
         <translation>Системски текст</translation>
     </message>
@@ -11855,7 +11853,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="27"/>
         <source>Cb major, Ab minor</source>
-        <translation type="unfinished"/>
+        <translation>Цес дур, Ас мол</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="28"/>
@@ -11865,52 +11863,52 @@ please choose a different name:</source>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="29"/>
         <source>Gb major, Eb minor</source>
-        <translation type="unfinished"/>
+        <translation>Гес дур, ес мол</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="30"/>
         <source>A major, F# minor</source>
-        <translation type="unfinished"/>
+        <translation>А дур, фис мол</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="31"/>
         <source>Db major, Bb minor</source>
-        <translation type="unfinished"/>
+        <translation>Дес дур, б мол,</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="32"/>
         <source>E major, C# minor</source>
-        <translation type="unfinished"/>
+        <translation>Е дур, цис мол</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="33"/>
         <source>Ab major, F minor</source>
-        <translation type="unfinished"/>
+        <translation>АС дур, ф мол</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="34"/>
         <source>B major, G# minor</source>
-        <translation type="unfinished"/>
+        <translation>Х дур, гис мол</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="35"/>
         <source>Eb major, C minor</source>
-        <translation type="unfinished"/>
+        <translation>Ес дур, ц мол</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="36"/>
         <source>F# major, D# minor</source>
-        <translation type="unfinished"/>
+        <translation>Фис дур, дис мол</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="37"/>
         <source>Bb major, G minor</source>
-        <translation type="unfinished"/>
+        <translation>Б дур, г мол</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="38"/>
         <source>C# major, A# minor</source>
-        <translation type="unfinished"/>
+        <translation>Цис дур, аис мол</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="39"/>
@@ -12071,7 +12069,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/omrpanel.ui" line="66"/>
         <source>Mark staves</source>
-        <translation type="unfinished"/>
+        <translation>Означи нотне системе</translation>
     </message>
     <message>
         <location filename="../../mscore/omrpanel.ui" line="73"/>
@@ -12467,14 +12465,14 @@ please choose a different name:</source>
         <translation>Графикони врата</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1278"/>
+        <location filename="../../mscore/palette.cpp" line="1285"/>
         <source>Writing Palette File
 %1
 failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1279"/>
+        <location filename="../../mscore/palette.cpp" line="1286"/>
         <source>Writing Palette File</source>
         <translation type="unfinished"/>
     </message>
@@ -12499,7 +12497,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="36"/>
         <source>Content offset</source>
-        <translation type="unfinished"/>
+        <translation>Помак садржаја</translation>
     </message>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="56"/>
@@ -14518,7 +14516,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2740"/>
+        <location filename="../../libmscore/edit.cpp" line="2751"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14528,7 +14526,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>Мјуз-скор</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2741"/>
+        <location filename="../../libmscore/edit.cpp" line="2752"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14574,7 +14572,8 @@ Please select a single note or rest and retry operation
         <location filename="../../libmscore/utils.cpp" line="488"/>
         <source>Please select one or more staves and retry operation
 </source>
-        <translation type="unfinished"/>
+        <translation>Одаберите један или више система те поновите радњу
+</translation>
     </message>
 </context>
 <context>
@@ -14686,22 +14685,22 @@ failed: %2</source>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="249"/>
         <source>double flat</source>
-        <translation type="unfinished"/>
+        <translation>двострука снизилица</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="264"/>
         <source>flat</source>
-        <translation type="unfinished"/>
+        <translation>снизилица</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="273"/>
         <source>sharp</source>
-        <translation type="unfinished"/>
+        <translation>повисилица</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="279"/>
         <source>double sharp</source>
-        <translation type="unfinished"/>
+        <translation>двострука повисилица</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1200"/>
@@ -15057,7 +15056,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/workspace.cpp" line="167"/>
         <source>Do you really want to delete the &apos;%1&apos; workspace?</source>
-        <translation type="unfinished"/>
+        <translation>Да ли заиста желиш да избришеш &apos;%1&apos; радни простор?</translation>
     </message>
 </context>
 <context>
@@ -15259,7 +15258,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="47"/>
         <source>Same notehead:</source>
-        <translation type="unfinished"/>
+        <translation>Иста нотна глава:</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="54"/>
@@ -15350,7 +15349,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="30"/>
         <source>Load</source>
-        <translation>Учитај...</translation>
+        <translation>Учитај</translation>
     </message>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="31"/>
@@ -15858,7 +15857,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="434"/>
         <source>Horizontal offset to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Водоравни помак до референтне тачке</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="466"/>
@@ -15870,7 +15869,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="485"/>
         <source>Vertical offset to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Усправни помак до референтне тачке</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="509"/>
@@ -16800,12 +16799,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="467"/>
         <source>Single Sharps and Flats Only</source>
-        <translation type="unfinished"/>
+        <translation>Само једноструке повисилице и снизилице</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="472"/>
         <source>Use Double Sharps and Flats</source>
-        <translation type="unfinished"/>
+        <translation>Употреби двоструке повисилице и снизилице</translation>
     </message>
 </context>
 <context>
@@ -16904,7 +16903,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="14"/>
         <source>Create Tuplet</source>
-        <translation type="unfinished"/>
+        <translation>Створи неправилну тонску групу</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="34"/>
@@ -17051,7 +17050,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/workspace.cpp" line="240"/>
         <source>Writing Workspace File</source>
-        <translation type="unfinished"/>
+        <translation>Уписивање датотеке радног простора</translation>
     </message>
 </context>
 <context>
@@ -17217,52 +17216,52 @@ failed: </source>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="41"/>
         <source>Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Повисилица</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="42"/>
         <source>Flat</source>
-        <translation type="unfinished"/>
+        <translation>Снизилица</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="43"/>
         <source>Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Двострука повисилица</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="44"/>
         <source>Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Двострука снизилица</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="45"/>
         <source>Natural</source>
-        <translation type="unfinished"/>
+        <translation>Разрешилица</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="47"/>
         <source>Flat-slash</source>
-        <translation type="unfinished"/>
+        <translation>Прецртана снизилица</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="48"/>
         <source>Flat-slash2</source>
-        <translation type="unfinished"/>
+        <translation>Прецртана снизилица 2</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="49"/>
         <source>Mirrored-flat2</source>
-        <translation type="unfinished"/>
+        <translation>Снизилица у огледалу 2</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="50"/>
         <source>Mirrored-flat</source>
-        <translation type="unfinished"/>
+        <translation>Снизилица у огледалу</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="51"/>
         <source>Mirrored-flat-slash</source>
-        <translation type="unfinished"/>
+        <translation>Прецртана снизилица у огледалу</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="52"/>
@@ -19097,60 +19096,60 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1485"/>
         <source>Note input: Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Унос нота: Двострука повисилица</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1486"/>
         <source>Double sharp</source>
-        <translation type="unfinished"/>
+        <translation>Двострука повисилица</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1495"/>
         <location filename="../../mscore/shortcut.cpp" line="1497"/>
         <source>Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Повисилица</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1496"/>
         <source>Note input: Sharp</source>
-        <translation type="unfinished"/>
+        <translation>Унос нота: Повисилица</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1506"/>
         <location filename="../../mscore/shortcut.cpp" line="1508"/>
         <source>Natural</source>
-        <translation type="unfinished"/>
+        <translation>Разрешилица</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1507"/>
         <source>Note input: Natural</source>
-        <translation type="unfinished"/>
+        <translation>Унос нота: Разрешилица</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1517"/>
         <location filename="../../mscore/shortcut.cpp" line="1519"/>
         <source>Flat</source>
-        <translation type="unfinished"/>
+        <translation>Снизилица</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1518"/>
         <source>Note input: Flat</source>
-        <translation type="unfinished"/>
+        <translation>Унос нота: Снизилица</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1528"/>
         <source>Double Flat</source>
-        <translation type="unfinished"/>
+        <translation>Двострука снизилица</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1529"/>
         <source>Note input: Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Унос нота: Двострука снизилица</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1530"/>
         <source>Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Двострука снизилица</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1539"/>
@@ -19485,7 +19484,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3361"/>
         <source>Toggle &apos;Hide Empty Staves&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Укљ./Искљ. &apos;скривање празних система&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3446"/>
@@ -20212,12 +20211,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2439"/>
         <source>Mirror Notehead</source>
-        <translation type="unfinished"/>
+        <translation>Обрнута нотна глава</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2440"/>
         <source>Mirror notehead</source>
-        <translation type="unfinished"/>
+        <translation>Обрнута нотна глава</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2450"/>
@@ -21233,11 +21232,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3360"/>
         <source>Toggle Hide Empty Staves</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Toggle hide empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Укљ./Искљ. скривање празних система</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3371"/>
@@ -21350,19 +21345,19 @@ failed: </source>
 <context>
     <name>addRemoveTimeSig</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="534"/>
-        <location filename="../../libmscore/edit.cpp" line="550"/>
+        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="551"/>
         <source>MuseScore</source>
         <translation>Мјуз-скор</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="536"/>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="551"/>
+        <location filename="../../libmscore/edit.cpp" line="552"/>
         <source>Cannot change local time signature:
 Measure is not empty</source>
         <translation type="unfinished"/>
@@ -21636,7 +21631,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="25"/>
         <source>c#</source>
-        <translation type="unfinished"/>
+        <translation>до♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="26"/>
@@ -21646,7 +21641,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="27"/>
         <source>d#</source>
-        <translation type="unfinished"/>
+        <translation>ре♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="28"/>
@@ -21661,7 +21656,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="30"/>
         <source>f#</source>
-        <translation type="unfinished"/>
+        <translation>фа♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="31"/>
@@ -21671,7 +21666,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="32"/>
         <source>g#</source>
-        <translation type="unfinished"/>
+        <translation>сол♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="33"/>
@@ -21681,7 +21676,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="34"/>
         <source>a#</source>
-        <translation type="unfinished"/>
+        <translation>ла♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="35"/>
@@ -21696,7 +21691,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="39"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>До♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="40"/>
@@ -21706,7 +21701,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="41"/>
         <source>D#</source>
-        <translation>D♯</translation>
+        <translation>Ре♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="42"/>
@@ -21721,7 +21716,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="44"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>Фа♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="45"/>
@@ -21731,7 +21726,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="46"/>
         <source>G#</source>
-        <translation>G♯</translation>
+        <translation>Сол♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="47"/>
@@ -21741,7 +21736,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../awl/utils.cpp" line="48"/>
         <source>A#</source>
-        <translation>A♯</translation>
+        <translation>Ла♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="49"/>
@@ -23058,7 +23053,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="533"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>До♯</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="534"/>
@@ -23068,7 +23063,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="535"/>
         <source>Eb</source>
-        <translation>E♭</translation>
+        <translation>Ес</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="536"/>
@@ -23083,7 +23078,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="538"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>Фа♯</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="539"/>
@@ -23093,7 +23088,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="540"/>
         <source>Ab</source>
-        <translation>A♭</translation>
+        <translation>Ас</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="541"/>
@@ -23103,7 +23098,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="542"/>
         <source>Bb</source>
-        <translation>B♭</translation>
+        <translation>Х</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="543"/>
@@ -23121,7 +23116,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="215"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>До♯</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="216"/>
@@ -23131,7 +23126,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="217"/>
         <source>Eb</source>
-        <translation>E♭</translation>
+        <translation>Ес</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="218"/>
@@ -23146,7 +23141,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="220"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>Фа♯</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="221"/>
@@ -23156,7 +23151,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="222"/>
         <source>Ab</source>
-        <translation>A♭</translation>
+        <translation>Ас</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="223"/>
@@ -23166,7 +23161,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="224"/>
         <source>Bb</source>
-        <translation>B♭</translation>
+        <translation>Х</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="225"/>
@@ -23449,7 +23444,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/element.cpp" line="151"/>
         <source>Notehead</source>
-        <translation type="unfinished"/>
+        <translation>Нотна глава</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="152"/>
@@ -25303,7 +25298,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="494"/>
         <source>c#</source>
-        <translation type="unfinished"/>
+        <translation>до♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="495"/>
@@ -25313,7 +25308,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="496"/>
         <source>d#</source>
-        <translation type="unfinished"/>
+        <translation>ре♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="497"/>
@@ -25328,7 +25323,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="499"/>
         <source>f#</source>
-        <translation type="unfinished"/>
+        <translation>фа♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="500"/>
@@ -25338,7 +25333,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="501"/>
         <source>g#</source>
-        <translation type="unfinished"/>
+        <translation>сол♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="502"/>
@@ -25348,7 +25343,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="503"/>
         <source>a#</source>
-        <translation type="unfinished"/>
+        <translation>ла♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="504"/>
@@ -25363,7 +25358,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="508"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>До♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="509"/>
@@ -25373,7 +25368,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="510"/>
         <source>D#</source>
-        <translation>D♯</translation>
+        <translation>Ре♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="511"/>
@@ -25388,7 +25383,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="513"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>Фа♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="514"/>
@@ -25398,7 +25393,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="515"/>
         <source>G#</source>
-        <translation>G♯</translation>
+        <translation>Сол♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="516"/>
@@ -25408,7 +25403,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="517"/>
         <source>A#</source>
-        <translation>A♯</translation>
+        <translation>Ла♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="518"/>

@@ -1566,10 +1566,6 @@
         <translation>Transponovat notový zápis oproti zvuku o:</translation>
     </message>
     <message>
-        <source>octaves +</source>
-        <translation type="vanished">oktáv(y) +</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editstaff.ui" line="345"/>
         <source>Octave(s) +</source>
         <translation>oktáv(y) +</translation>
@@ -3286,7 +3282,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5182"/>
         <source>Naturals in Key Signatures</source>
-        <translation>♮ v předznamenání</translation>
+        <translation>Odrážky v předznamenáních</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5188"/>
@@ -3296,12 +3292,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5195"/>
         <source>Before key signature if changing to fewer sharps or flats</source>
-        <translation>Před předznamenáním při změně na méně ♯ nebo ♭</translation>
+        <translation>Před předznamenáním při změně na méně křížků nebo bé</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5202"/>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
-        <translation>Za předznamenáním při změně na méně ♯ nebo ♭. Před předznamenáním při změně mezi ♯ a ♭</translation>
+        <translation>Po předznamenání při změně na méně křížků nebo bé, před předznamenáním při změně z křížků na bé nebo naopak</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5232"/>
@@ -8206,7 +8202,7 @@ Zjednodušené shrnutí je dostupné:
     <message>
         <location filename="../../mscore/albummanager.cpp" line="76"/>
         <source>Add Score</source>
-        <translation>Přidat notový zápis...</translation>
+        <translation>Přidat notový zápis</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="101"/>
@@ -8611,17 +8607,17 @@ se nezdařilo:</translation>
 <context>
     <name>Ms::Hairpin</name>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="640"/>
+        <location filename="../../libmscore/hairpin.cpp" line="638"/>
         <source>Crescendo</source>
         <translation>Crescendo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="643"/>
+        <location filename="../../libmscore/hairpin.cpp" line="641"/>
         <source>Decrescendo</source>
         <translation>Decrescendo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="646"/>
+        <location filename="../../libmscore/hairpin.cpp" line="644"/>
         <source>Custom</source>
         <translation>Vlastní</translation>
     </message>
@@ -8631,12 +8627,12 @@ se nezdařilo:</translation>
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1613"/>
         <source>sharp</source>
-        <translation>♯</translation>
+        <translation>křížek</translation>
     </message>
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1618"/>
         <source>flat</source>
-        <translation>♭</translation>
+        <translation>bé</translation>
     </message>
 </context>
 <context>
@@ -9176,7 +9172,7 @@ do notového zápisu &quot;%1&quot;?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="302"/>
         <source>Load Score</source>
-        <translation>Nahrát notový zápis...</translation>
+        <translation>Nahrát notový zápis</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="400"/>
@@ -9287,7 +9283,7 @@ do notového zápisu &quot;%1&quot;?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1268"/>
         <source>Load Palette</source>
-        <translation>Nahrát paletu...</translation>
+        <translation>Nahrát paletu</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1269"/>
@@ -9298,7 +9294,7 @@ do notového zápisu &quot;%1&quot;?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1272"/>
         <source>Save Palette</source>
-        <translation>Uložit paletu...</translation>
+        <translation>Uložit paletu</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1350"/>
@@ -9483,7 +9479,7 @@ Chcete jej nahradit?</translation>
         <location filename="../../mscore/file.cpp" line="2210"/>
         <location filename="../../mscore/file.cpp" line="2250"/>
         <source>Save As</source>
-        <translation>Uložit jako...</translation>
+        <translation>Uložit jako</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1917"/>
@@ -10101,12 +10097,12 @@ Obnovit sezení?</translation>
         <translation>Jít na: </translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="131"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="135"/>
         <source>Tuplet Error</source>
         <translation>Chyba nepravidelné rytmické skupiny</translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="132"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="136"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
         <translation>Nelze vytvořit nepravidelnou rytmickou skupinu s poměrem %1 pro délku %2</translation>
     </message>
@@ -10985,14 +10981,14 @@ se nezdařilo: %2</translation>
         <translation>Uložení souboru se nezdařilo: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="445"/>
+        <location filename="../../libmscore/scorefile.cpp" line="446"/>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
         <translation>Přejmenování dočasného souboru &lt;%1&gt; na &lt;%2&gt; se nezdařilo:
 %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="470"/>
+        <location filename="../../libmscore/scorefile.cpp" line="471"/>
         <source>Open File
 %1
 failed: </source>
@@ -11001,7 +10997,7 @@ failed: </source>
 se nezdařilo:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="603"/>
+        <location filename="../../libmscore/scorefile.cpp" line="604"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -11010,12 +11006,12 @@ failed: %2</source>
 se nezdařilo: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="625"/>
+        <location filename="../../libmscore/scorefile.cpp" line="626"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>Soubor se stylem je neslučitelný s touto verzí MuseScore.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="646"/>
+        <location filename="../../libmscore/scorefile.cpp" line="647"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -11024,12 +11020,12 @@ failed: %2</source>
 se nezdařilo: %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="656"/>
+        <location filename="../../libmscore/scorefile.cpp" line="657"/>
         <source>Write Style failed: %1</source>
         <translation>Zápis stylu se nezdařil: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1199"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>Chyba při čtení XML na řádku %1, sloupec %2: %3
 </translation>
@@ -11170,7 +11166,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
         <source>Save As</source>
-        <translation>Uložit jako...</translation>
+        <translation>Uložit jako</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="765"/>
@@ -11601,8 +11597,8 @@ Vyberte, prosím, takt a zkuste to znovu</translation>
 <context>
     <name>Ms::Text</name>
     <message>
-        <location filename="../../libmscore/text.cpp" line="3082"/>
-        <location filename="../../libmscore/text.cpp" line="3114"/>
+        <location filename="../../libmscore/text.cpp" line="3076"/>
+        <location filename="../../libmscore/text.cpp" line="3108"/>
         <source>System Text</source>
         <translation>Text u notového systému</translation>
     </message>
@@ -11886,7 +11882,7 @@ Vyberte, prosím, jiný název:</translation>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="27"/>
         <source>Cb major, Ab minor</source>
-        <translation>Ces dur / as moll</translation>
+        <translation>Ces dur, as moll</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="28"/>
@@ -12498,7 +12494,7 @@ Vyberte, prosím, jiný název:</translation>
         <translation>Nákresy hmat&amp;ů</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1278"/>
+        <location filename="../../mscore/palette.cpp" line="1285"/>
         <source>Writing Palette File
 %1
 failed: </source>
@@ -12507,7 +12503,7 @@ failed: </source>
 se nezdařil:</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1279"/>
+        <location filename="../../mscore/palette.cpp" line="1286"/>
         <source>Writing Palette File</source>
         <translation>Uložení souboru palety</translation>
     </message>
@@ -14558,7 +14554,7 @@ Nastavení latence na hodnotu větší než nula může ovladači pomoci nepřes
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2740"/>
+        <location filename="../../libmscore/edit.cpp" line="2751"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14568,7 +14564,7 @@ Nastavení latence na hodnotu větší než nula může ovladači pomoci nepřes
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2741"/>
+        <location filename="../../libmscore/edit.cpp" line="2752"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14731,22 +14727,22 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="249"/>
         <source>double flat</source>
-        <translation>♭♭</translation>
+        <translation>dvojité bé</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="264"/>
         <source>flat</source>
-        <translation>♭</translation>
+        <translation>bé</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="273"/>
         <source>sharp</source>
-        <translation>♯</translation>
+        <translation>křížek</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="279"/>
         <source>double sharp</source>
-        <translation>♯♯</translation>
+        <translation>dvojitý křížek</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1200"/>
@@ -15401,7 +15397,7 @@ Chcete ji nahradit?</translation>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="30"/>
         <source>Load</source>
-        <translation>Nahrát...</translation>
+        <translation>Nahrát</translation>
     </message>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="31"/>
@@ -16851,12 +16847,12 @@ Chcete ji nahradit?</translation>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="467"/>
         <source>Single Sharps and Flats Only</source>
-        <translation>Pouze jednoduché ♯ a ♭</translation>
+        <translation>Pouze jednoduché křížky a bé</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="472"/>
         <source>Use Double Sharps and Flats</source>
-        <translation>Použít také dvojité ♯ a ♭</translation>
+        <translation>Použít také dvojité křížky a dvojitá bé</translation>
     </message>
 </context>
 <context>
@@ -17268,32 +17264,32 @@ se nezdařil:</translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="41"/>
         <source>Sharp</source>
-        <translation>♯</translation>
+        <translation>Křížek</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="42"/>
         <source>Flat</source>
-        <translation>♭</translation>
+        <translation>Bé</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="43"/>
         <source>Double sharp</source>
-        <translation>Dvojitý ♯</translation>
+        <translation>Dvojitý křížek</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="44"/>
         <source>Double flat</source>
-        <translation>Dvojité ♭</translation>
+        <translation>Dvojité bé</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="45"/>
         <source>Natural</source>
-        <translation>♮</translation>
+        <translation>Odrážka</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="47"/>
         <source>Flat-slash</source>
-        <translation>Bé škrtnuté</translation>
+        <translation>Bé – škrtnuté 1</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="48"/>
@@ -17303,12 +17299,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="49"/>
         <source>Mirrored-flat2</source>
-        <translation>Převrácené bé 2</translation>
+        <translation>Bé – snížení o tři čtvrttóny</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="50"/>
         <source>Mirrored-flat</source>
-        <translation>Převrácené bé</translation>
+        <translation>Bé – snížení o čtvrttón</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="51"/>
@@ -17318,37 +17314,37 @@ se nezdařil:</translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="52"/>
         <source>Flat-flat-slash</source>
-        <translation>Dvojité bé – škrtnuté</translation>
+        <translation>Bé – bé – šikmá čára</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="54"/>
         <source>Sharp-slash</source>
-        <translation>Křížek – škrtnutý</translation>
+        <translation>Křížek – zvýšení o čtvrttón</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="55"/>
         <source>Sharp-slash2</source>
-        <translation>Křížek – škrtnutý 2</translation>
+        <translation>Křížek – škrtnutý 1</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="56"/>
         <source>Sharp-slash3</source>
-        <translation>Křížek – škrtnutý 3</translation>
+        <translation>Křížek – škrtnutý 2</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="57"/>
         <source>Sharp-slash4</source>
-        <translation>Křížek – škrtnutý 4</translation>
+        <translation>Křížek – zvýšení o tři čtvrttóny</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="59"/>
         <source>Sharp arrow up</source>
-        <translation>Křížek – šipka nahoru</translation>
+        <translation>Křížek – zvýšení o tři čtvrttóny</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="60"/>
         <source>Sharp arrow down</source>
-        <translation>Křížek – šipka dolů</translation>
+        <translation>Křížek – zvýšení o čtvrttón</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="61"/>
@@ -17358,12 +17354,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="62"/>
         <source>Flat arrow up</source>
-        <translation>Bé – šipka nahoru</translation>
+        <translation>Bé – snížení o čtvrttón</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="63"/>
         <source>Flat arrow down</source>
-        <translation>Bé – šipka dolů</translation>
+        <translation>Bé – snížení o tři čtrvrttóny</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="64"/>
@@ -17373,12 +17369,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="65"/>
         <source>Natural arrow up</source>
-        <translation>Odrážka – šipka nahoru</translation>
+        <translation>Odrážka – zvýšení o čtvrttón</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="66"/>
         <source>Natural arrow down</source>
-        <translation>Odrážka – šipka dolů</translation>
+        <translation>Odrážka – snížení o čtvrttón</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="67"/>
@@ -19148,7 +19144,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1485"/>
         <source>Note input: Double sharp</source>
-        <translation>Vkládání not: dvojitý křížek</translation>
+        <translation>Vkládání not: Dvojitý křížek</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1486"/>
@@ -19159,49 +19155,49 @@ se nezdařil:</translation>
         <location filename="../../mscore/shortcut.cpp" line="1495"/>
         <location filename="../../mscore/shortcut.cpp" line="1497"/>
         <source>Sharp</source>
-        <translation>♯</translation>
+        <translation>Křížek</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1496"/>
         <source>Note input: Sharp</source>
-        <translation>Vkládání not: křížek</translation>
+        <translation>Vkládání not: Křížek</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1506"/>
         <location filename="../../mscore/shortcut.cpp" line="1508"/>
         <source>Natural</source>
-        <translation>♮</translation>
+        <translation>Odrážka</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1507"/>
         <source>Note input: Natural</source>
-        <translation>Vkládání not: odrážka</translation>
+        <translation>Vkládání not: Odrážka</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1517"/>
         <location filename="../../mscore/shortcut.cpp" line="1519"/>
         <source>Flat</source>
-        <translation>♭</translation>
+        <translation>Bé</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1518"/>
         <source>Note input: Flat</source>
-        <translation>Vkládání not: bé</translation>
+        <translation>Vkládání not: Bé</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1528"/>
         <source>Double Flat</source>
-        <translation>Dvojité ♭</translation>
+        <translation>Dvojité bé</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1529"/>
         <source>Note input: Double flat</source>
-        <translation>Vkládání not: dvojité bé</translation>
+        <translation>Vkládání not: Dvojité bé</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1530"/>
         <source>Double flat</source>
-        <translation>Dvojité ♭</translation>
+        <translation>Dvojité bé</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1539"/>
@@ -21284,11 +21280,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3360"/>
         <source>Toggle Hide Empty Staves</source>
-        <translation>Zapnout/Vypnout „Skrýt prázdné osnovy”</translation>
-    </message>
-    <message>
-        <source>Toggle hide empty staves</source>
-        <translation type="vanished">Zapnout/Vypnout „Skrýt prázdné osnovy”</translation>
+        <translation>Přepnout skrytí prázdné notové osnovy</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3371"/>
@@ -21401,20 +21393,20 @@ se nezdařil:</translation>
 <context>
     <name>addRemoveTimeSig</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="534"/>
-        <location filename="../../libmscore/edit.cpp" line="550"/>
+        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="551"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="536"/>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
         <translation>Nelze znovu zapsat takty:
 nepravidelná rytmická skupina by překročila takt</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="551"/>
+        <location filename="../../libmscore/edit.cpp" line="552"/>
         <source>Cannot change local time signature:
 Measure is not empty</source>
         <translation>Nelze změnit místní taktové označení:
@@ -21689,7 +21681,7 @@ takt není prázdný</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="25"/>
         <source>c#</source>
-        <translation>c♯</translation>
+        <translation>cis</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="26"/>
@@ -21699,7 +21691,7 @@ takt není prázdný</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="27"/>
         <source>d#</source>
-        <translation>d♯</translation>
+        <translation>dis</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="28"/>
@@ -21724,7 +21716,7 @@ takt není prázdný</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="32"/>
         <source>g#</source>
-        <translation>g♯</translation>
+        <translation>gis</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="33"/>
@@ -21734,7 +21726,7 @@ takt není prázdný</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="34"/>
         <source>a#</source>
-        <translation>a♯</translation>
+        <translation>ais</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="35"/>
@@ -25356,7 +25348,7 @@ takt není prázdný</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="494"/>
         <source>c#</source>
-        <translation>c♯</translation>
+        <translation>cis</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="495"/>
@@ -25366,7 +25358,7 @@ takt není prázdný</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="496"/>
         <source>d#</source>
-        <translation>d♯</translation>
+        <translation>dis</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="497"/>
@@ -25391,7 +25383,7 @@ takt není prázdný</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="501"/>
         <source>g#</source>
-        <translation>g♯</translation>
+        <translation>gis</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="502"/>
@@ -25401,7 +25393,7 @@ takt není prázdný</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="503"/>
         <source>a#</source>
-        <translation>a♯</translation>
+        <translation>ais</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="504"/>

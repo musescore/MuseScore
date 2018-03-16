@@ -187,7 +187,7 @@
     <message>
         <location filename="../../mscore/articulation.ui" line="30"/>
         <source>Direction:</source>
-        <translation>Direction:</translation>
+        <translation>Direction :</translation>
     </message>
     <message>
         <location filename="../../mscore/articulation.ui" line="44"/>
@@ -263,7 +263,7 @@
     <message>
         <location filename="../../mscore/bend.ui" line="23"/>
         <source>Bend type:</source>
-        <translation>Type de Bend:</translation>
+        <translation>Type de Bend :</translation>
     </message>
     <message>
         <location filename="../../mscore/bend.ui" line="30"/>
@@ -278,7 +278,7 @@
     <message>
         <location filename="../../mscore/bend.ui" line="88"/>
         <source>Bend/Release</source>
-        <translation>Bend/Release</translation>
+        <translation>Bend / Release</translation>
     </message>
     <message>
         <location filename="../../mscore/bend.ui" line="107"/>
@@ -588,7 +588,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="173"/>
         <source>Stem direction:</source>
-        <translation>Direction de la hampe:</translation>
+        <translation>Direction de la hampe :</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="184"/>
@@ -608,7 +608,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="202"/>
         <source>Default voice:</source>
-        <translation>Voix par défaut:</translation>
+        <translation>Voix par défaut :</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="213"/>
@@ -633,7 +633,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="236"/>
         <source>Shortcut:</source>
-        <translation>Raccourci:</translation>
+        <translation>Raccourci :</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="290"/>
@@ -656,22 +656,22 @@
     <message>
         <location filename="../../mscore/editinstrument.ui" line="26"/>
         <source>Name:</source>
-        <translation>No :</translation>
+        <translation>Nom :</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="46"/>
         <source>Short name:</source>
-        <translation>Nom court:</translation>
+        <translation>Nom court :</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="66"/>
         <source>Pitch:</source>
-        <translation>Tessiture:</translation>
+        <translation>Tessiture :</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="89"/>
         <source>Transpose:</source>
-        <translation>Transposer:</translation>
+        <translation>Transposer :</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="112"/>
@@ -1513,7 +1513,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="26"/>
         <source>Edit Staff/Part Properties</source>
-        <translation>Éditer les propriétés de la portée/partie</translation>
+        <translation>Éditer les propriétés de la portée / partie</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="38"/>
@@ -1564,10 +1564,6 @@
         <location filename="../../mscore/editstaff.ui" line="325"/>
         <source>Transpose written pitches to sound:</source>
         <translation>Transposition à la lecture : </translation>
-    </message>
-    <message>
-        <source>octaves +</source>
-        <translation type="vanished">octave(s) +</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="345"/>
@@ -2000,7 +1996,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="885"/>
         <source>Repeat:</source>
-        <translation>Répétées:</translation>
+        <translation>Répétées :</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="904"/>
@@ -2456,7 +2452,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="995"/>
         <source>Use odd/even page header</source>
-        <translation>Utiliser les en-têtes en fonction des pages paires/impaires</translation>
+        <translation>Utiliser les en-têtes en fonction des pages paires / impaires</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="998"/>
@@ -2509,7 +2505,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1225"/>
         <source>Use odd/even page footer</source>
-        <translation>Utiliser les pieds de page en fonction des pages impaires/paires</translation>
+        <translation>Utiliser les pieds de page en fonction des pages impaires / paires</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1374"/>
@@ -2524,7 +2520,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1406"/>
         <source>Every system</source>
-        <translation>A chaque système</translation>
+        <translation>À chaque système</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1415"/>
@@ -3286,7 +3282,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5182"/>
         <source>Naturals in Key Signatures</source>
-        <translation>♮ dans les Armures</translation>
+        <translation>Bécarres dans les armures</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5188"/>
@@ -3301,7 +3297,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5202"/>
         <source>After key signature if changing to fewer sharps or flats. Before if changing between sharps and flats</source>
-        <translation>Après l&apos;armure si le changement utilise moins de ♯ ou de ♭. Avant s&apos;il passe de ♯ à ♭</translation>
+        <translation>Après l&apos;armure si le changement utilise moins de ♯ ou de ♭. Avant s&apos;il passe de ♯ à ♭ ou inversement.</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5232"/>
@@ -5698,7 +5694,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="98"/>
         <source>Label:</source>
-        <translation>Étiquette:</translation>
+        <translation>Étiquette :</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="105"/>
@@ -8610,17 +8606,17 @@ a échoué :</translation>
 <context>
     <name>Ms::Hairpin</name>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="640"/>
+        <location filename="../../libmscore/hairpin.cpp" line="638"/>
         <source>Crescendo</source>
         <translation>Crescendo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="643"/>
+        <location filename="../../libmscore/hairpin.cpp" line="641"/>
         <source>Decrescendo</source>
         <translation>Decrescendo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="646"/>
+        <location filename="../../libmscore/hairpin.cpp" line="644"/>
         <source>Custom</source>
         <translation>Personnalisé</translation>
     </message>
@@ -8630,12 +8626,12 @@ a échoué :</translation>
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1613"/>
         <source>sharp</source>
-        <translation>♯</translation>
+        <translation>dièse</translation>
     </message>
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1618"/>
         <source>flat</source>
-        <translation>♭</translation>
+        <translation>bémol</translation>
     </message>
 </context>
 <context>
@@ -8776,7 +8772,7 @@ a échoué :</translation>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="107"/>
         <source>Write Instruments File failed: </source>
-        <translation>Échec lors de l&apos;écriture du fichier d&apos;instrumrnts : </translation>
+        <translation>Échec lors de l&apos;écriture du fichier d&apos;instruments : </translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="108"/>
@@ -8971,7 +8967,7 @@ a échoué :</translation>
     <message>
         <location filename="../../mscore/loginmanager.cpp" line="572"/>
         <source>An error occurred during the file transfer. Please try again</source>
-        <translation>Une erreur s&apos;est déclarée lors du transfert de fichier. Veuillez réessayer.</translation>
+        <translation>Une erreur s&apos;est produite lors du transfert de fichier. Veuillez réessayer.</translation>
     </message>
     <message>
         <location filename="../../mscore/loginmanager.cpp" line="576"/>
@@ -9077,7 +9073,7 @@ a échoué :</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="5124"/>
         <source>Not a valid or supported MP3 encoding library!</source>
-        <translation>Impossible de trouver une bibliothèque d&apos;encodage MP3 valide et/ou prise en charge !</translation>
+        <translation>Impossible de trouver une bibliothèque d&apos;encodage MP3 valide et / ou prise en charge !</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="5148"/>
@@ -9296,7 +9292,7 @@ avant de fermer ?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1272"/>
         <source>Save Palette</source>
-        <translation>Enregistrer une palette</translation>
+        <translation>Enregistrer la palette</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1350"/>
@@ -9720,7 +9716,7 @@ Voulez-vous le remplacer ?
     <message>
         <location filename="../../mscore/menus.cpp" line="1289"/>
         <source>&amp;Add</source>
-        <translation>A&amp;jouter</translation>
+        <translation>&amp;Ajouter</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1292"/>
@@ -9952,7 +9948,7 @@ Veuillez sélectionner une mesure et réessayer</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1212"/>
         <source>Are you sure?</source>
-        <translation>Êtes-vous sûr?</translation>
+        <translation>Êtes-vous sûr ?</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1213"/>
@@ -10100,12 +10096,12 @@ Restaurer la session ?</translation>
         <translation>Aller à : </translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="131"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="135"/>
         <source>Tuplet Error</source>
         <translation>Erreur dans les divisions irrégulières</translation>
     </message>
     <message>
-        <location filename="../../mscore/tupletdialog.cpp" line="132"/>
+        <location filename="../../mscore/tupletdialog.cpp" line="136"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
         <translation>Impossible de créer une division irrégulière avec le ratio %1 pour la durée %2</translation>
     </message>
@@ -10982,14 +10978,14 @@ a échoué :  %2</translation>
         <translation>Échec lors de la sauvegarde du fichier : %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="445"/>
+        <location filename="../../libmscore/scorefile.cpp" line="446"/>
         <source>Renaming temp. file &lt;%1&gt; to &lt;%2&gt; failed:
 %3</source>
         <translation>Le renommage du fichier temporaire de &lt;%1&gt; vers &lt;%2&gt; a échoué :
 %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="470"/>
+        <location filename="../../libmscore/scorefile.cpp" line="471"/>
         <source>Open File
 %1
 failed: </source>
@@ -10998,7 +10994,7 @@ failed: </source>
 a échoué :</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="603"/>
+        <location filename="../../libmscore/scorefile.cpp" line="604"/>
         <source>Open File
 %1
 failed: %2</source>
@@ -11007,12 +11003,12 @@ failed: %2</source>
 a échoué : %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="625"/>
+        <location filename="../../libmscore/scorefile.cpp" line="626"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
         <translation>Le fichier de style n&apos;est pas compatible avec cette version de MuseScore.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="646"/>
+        <location filename="../../libmscore/scorefile.cpp" line="647"/>
         <source>Open Style File
 %1
 failed: %2</source>
@@ -11021,12 +11017,12 @@ failed: %2</source>
 a échoué : %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="656"/>
+        <location filename="../../libmscore/scorefile.cpp" line="657"/>
         <source>Write Style failed: %1</source>
         <translation>Échec lors de l&apos;écriture du style : %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/scorefile.cpp" line="1198"/>
+        <location filename="../../libmscore/scorefile.cpp" line="1199"/>
         <source>XML read error at line %1 column %2: %3</source>
         <translation>Erreur de lecture XML à la ligne %1 colonne %2: %3</translation>
     </message>
@@ -11597,8 +11593,8 @@ Veuillez sélectionner une mesure et réessayer</translation>
 <context>
     <name>Ms::Text</name>
     <message>
-        <location filename="../../libmscore/text.cpp" line="3082"/>
-        <location filename="../../libmscore/text.cpp" line="3114"/>
+        <location filename="../../libmscore/text.cpp" line="3076"/>
+        <location filename="../../libmscore/text.cpp" line="3108"/>
         <source>System Text</source>
         <translation>Texte de système</translation>
     </message>
@@ -11882,7 +11878,7 @@ veuillez choisir un nom différent :</translation>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="27"/>
         <source>Cb major, Ab minor</source>
-        <translation>Do♭ majeur / La♭ mineur</translation>
+        <translation>Do♭ majeur, La♭ mineur</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="28"/>
@@ -12494,7 +12490,7 @@ veuillez choisir un nom différent :</translation>
         <translation>Diagrammes d&apos;accord </translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1278"/>
+        <location filename="../../mscore/palette.cpp" line="1285"/>
         <source>Writing Palette File
 %1
 failed: </source>
@@ -12503,7 +12499,7 @@ failed: </source>
 a échoué :</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1279"/>
+        <location filename="../../mscore/palette.cpp" line="1286"/>
         <source>Writing Palette File</source>
         <translation>Fichier de la palette d&apos;écriture</translation>
     </message>
@@ -14553,7 +14549,7 @@ Ajuster correctement la latence permet aussi de synchroniser les périphériques
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2740"/>
+        <location filename="../../libmscore/edit.cpp" line="2751"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14563,7 +14559,7 @@ Ajuster correctement la latence permet aussi de synchroniser les périphériques
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2741"/>
+        <location filename="../../libmscore/edit.cpp" line="2752"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14726,22 +14722,22 @@ a échoué : %2</translation>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="249"/>
         <source>double flat</source>
-        <translation>♭♭</translation>
+        <translation>double bémol</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="264"/>
         <source>flat</source>
-        <translation>♭</translation>
+        <translation>bémol</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="273"/>
         <source>sharp</source>
-        <translation>♯</translation>
+        <translation>dièse</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="279"/>
         <source>double sharp</source>
-        <translation>♯♯</translation>
+        <translation>double dièse</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1200"/>
@@ -16846,12 +16842,12 @@ Voulez-vous le remplacer ?</translation>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="467"/>
         <source>Single Sharps and Flats Only</source>
-        <translation>♯ et ♭ simples seulement</translation>
+        <translation>Dièses et bémols simples seulement</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="472"/>
         <source>Use Double Sharps and Flats</source>
-        <translation>Utiliser des doubles ♯ et ♭</translation>
+        <translation>Utiliser des doubles dièses et bémols</translation>
     </message>
 </context>
 <context>
@@ -17263,122 +17259,122 @@ a échoué :</translation>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="41"/>
         <source>Sharp</source>
-        <translation>♯</translation>
+        <translation>Dièse</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="42"/>
         <source>Flat</source>
-        <translation>♭</translation>
+        <translation>Bémol</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="43"/>
         <source>Double sharp</source>
-        <translation>Double ♯</translation>
+        <translation>Double dièse</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="44"/>
         <source>Double flat</source>
-        <translation>Double ♭</translation>
+        <translation>Double bémol</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="45"/>
         <source>Natural</source>
-        <translation>♮</translation>
+        <translation>Bécarre</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="47"/>
         <source>Flat-slash</source>
-        <translation>♭barré</translation>
+        <translation>Bémol barré</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="48"/>
         <source>Flat-slash2</source>
-        <translation>♭barré 2</translation>
+        <translation>Bémol double barré</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="49"/>
         <source>Mirrored-flat2</source>
-        <translation>♭ en miroir 2</translation>
+        <translation>Bémol retourné double</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="50"/>
         <source>Mirrored-flat</source>
-        <translation>♭ en miroir</translation>
+        <translation>Bémol retourné</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="51"/>
         <source>Mirrored-flat-slash</source>
-        <translation>♭ en miroir barré</translation>
+        <translation>Bémol retourné barré</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="52"/>
         <source>Flat-flat-slash</source>
-        <translation>♭-♭barré</translation>
+        <translation>Double bémol barré</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="54"/>
         <source>Sharp-slash</source>
-        <translation>♯ barré</translation>
+        <translation>Dièse barré</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="55"/>
         <source>Sharp-slash2</source>
-        <translation>♯ barré 2</translation>
+        <translation>Dièse barré 2</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="56"/>
         <source>Sharp-slash3</source>
-        <translation>♯ barré 3</translation>
+        <translation>Dièse barré 3</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="57"/>
         <source>Sharp-slash4</source>
-        <translation>♯ barré 4</translation>
+        <translation>Dièse barré 4</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="59"/>
         <source>Sharp arrow up</source>
-        <translation>♯ flèche haut</translation>
+        <translation>Dièse flèche haut</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="60"/>
         <source>Sharp arrow down</source>
-        <translation>♯ flèche bas</translation>
+        <translation>Dièse flèche bas</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="61"/>
         <source>Sharp arrow both</source>
-        <translation>♯ flèches haut et bas</translation>
+        <translation>Dièse deux flèches</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="62"/>
         <source>Flat arrow up</source>
-        <translation>♭ flèche haut</translation>
+        <translation>Bémol flèche haut</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="63"/>
         <source>Flat arrow down</source>
-        <translation>♭ flèche bas</translation>
+        <translation>Bémol flèche bas</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="64"/>
         <source>Flat arrow both</source>
-        <translation>♭ flèches haut et bas</translation>
+        <translation>Bémol deux flèches</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="65"/>
         <source>Natural arrow up</source>
-        <translation>♮ flèche haut</translation>
+        <translation>Bécarre flèche haut</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="66"/>
         <source>Natural arrow down</source>
-        <translation>♮ flèche bas</translation>
+        <translation>Bécarre flèche bas</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="67"/>
         <source>Natural arrow both</source>
-        <translation>♮ flèches haut et bas</translation>
+        <translation>Bécarre deux flèches</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="69"/>
@@ -19138,65 +19134,65 @@ a échoué :</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1484"/>
         <source>Double Sharp</source>
-        <translation>Double ♯</translation>
+        <translation>Double dièse</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1485"/>
         <source>Note input: Double sharp</source>
-        <translation>Saisie de note : Double ♯</translation>
+        <translation>Saisie de la note : double dièse</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1486"/>
         <source>Double sharp</source>
-        <translation>Double ♯</translation>
+        <translation>Double dièse</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1495"/>
         <location filename="../../mscore/shortcut.cpp" line="1497"/>
         <source>Sharp</source>
-        <translation>♯</translation>
+        <translation>Dièse</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1496"/>
         <source>Note input: Sharp</source>
-        <translation>Saisie de note : ♯</translation>
+        <translation>Saisie de la note : dièse</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1506"/>
         <location filename="../../mscore/shortcut.cpp" line="1508"/>
         <source>Natural</source>
-        <translation>♮</translation>
+        <translation>Bécarre</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1507"/>
         <source>Note input: Natural</source>
-        <translation>Saisie de note : ♮</translation>
+        <translation>Saisie de la note : bécarre</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1517"/>
         <location filename="../../mscore/shortcut.cpp" line="1519"/>
         <source>Flat</source>
-        <translation>♭</translation>
+        <translation>Bémol</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1518"/>
         <source>Note input: Flat</source>
-        <translation>Saisie de note : ♭</translation>
+        <translation>Saisie de note : bémol</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1528"/>
         <source>Double Flat</source>
-        <translation>Double ♭</translation>
+        <translation>Double bémol</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1529"/>
         <source>Note input: Double flat</source>
-        <translation>Saisie de note : Double ♭</translation>
+        <translation>Saisie de note : double bémol</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1530"/>
         <source>Double flat</source>
-        <translation>Double ♭</translation>
+        <translation>Double bémol</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1539"/>
@@ -21279,11 +21275,7 @@ a échoué :</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3360"/>
         <source>Toggle Hide Empty Staves</source>
-        <translation>Activer / Désactiver &quot;Masquer les portées vides&quot;</translation>
-    </message>
-    <message>
-        <source>Toggle hide empty staves</source>
-        <translation type="vanished">Activer / Désactiver &quot;Masquer les portées vides&quot;</translation>
+        <translation>Réinitialiser la valeur &apos;Masquer les portées vides&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3371"/>
@@ -21396,20 +21388,20 @@ a échoué :</translation>
 <context>
     <name>addRemoveTimeSig</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="534"/>
-        <location filename="../../libmscore/edit.cpp" line="550"/>
+        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="551"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="535"/>
+        <location filename="../../libmscore/edit.cpp" line="536"/>
         <source>Cannot rewrite measures:
 Tuplet would cross measure</source>
         <translation>Impossible de réécrire les mesures :
 La division irrégulière traverserait la barre de mesure</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="551"/>
+        <location filename="../../libmscore/edit.cpp" line="552"/>
         <source>Cannot change local time signature:
 Measure is not empty</source>
         <translation>Impossible de modifier l&apos;indication de mesure :
@@ -21684,7 +21676,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="25"/>
         <source>c#</source>
-        <translation>do♯</translation>
+        <translation>do#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="26"/>
@@ -21694,7 +21686,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="27"/>
         <source>d#</source>
-        <translation>ré♯</translation>
+        <translation>ré#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="28"/>
@@ -21709,7 +21701,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="30"/>
         <source>f#</source>
-        <translation>fa♯</translation>
+        <translation>fa#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="31"/>
@@ -21719,7 +21711,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="32"/>
         <source>g#</source>
-        <translation>sol♯</translation>
+        <translation>sol#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="33"/>
@@ -21729,7 +21721,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="34"/>
         <source>a#</source>
-        <translation>la♯</translation>
+        <translation>la#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="35"/>
@@ -21744,7 +21736,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="39"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="40"/>
@@ -21754,7 +21746,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="41"/>
         <source>D#</source>
-        <translation>D♯</translation>
+        <translation>D#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="42"/>
@@ -21769,7 +21761,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../awl/utils.cpp" line="44"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="45"/>
@@ -23106,7 +23098,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="533"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="534"/>
@@ -23116,7 +23108,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="535"/>
         <source>Eb</source>
-        <translation>E♭</translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="536"/>
@@ -23131,7 +23123,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="538"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="539"/>
@@ -23141,7 +23133,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="540"/>
         <source>Ab</source>
-        <translation>A♭</translation>
+        <translation>Ab</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="541"/>
@@ -23151,7 +23143,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="542"/>
         <source>Bb</source>
-        <translation>B♭</translation>
+        <translation>Bb</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="543"/>
@@ -23169,7 +23161,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="215"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="216"/>
@@ -23179,7 +23171,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="217"/>
         <source>Eb</source>
-        <translation>E♭</translation>
+        <translation>Eb</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="218"/>
@@ -23194,7 +23186,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="220"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="221"/>
@@ -23204,7 +23196,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="222"/>
         <source>Ab</source>
-        <translation>A♭</translation>
+        <translation>Ab</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="223"/>
@@ -23214,7 +23206,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="224"/>
         <source>Bb</source>
-        <translation>B♭</translation>
+        <translation>Bb</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="225"/>
@@ -24850,7 +24842,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="437"/>
         <source>Arabic Presentation Forms-A</source>
-        <translation>Formes de Présentation Arabes - A</translation>
+        <translation>Formes de présentation arabes - A</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="438"/>
@@ -25285,7 +25277,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="524"/>
         <source>Miscellaneous Symbols and Pictographs</source>
-        <translation>Symboles et Pictogrammes Divers</translation>
+        <translation>Symboles et pictogrammes divers</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="525"/>
@@ -25351,7 +25343,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="494"/>
         <source>c#</source>
-        <translation>do♯</translation>
+        <translation>do#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="495"/>
@@ -25361,7 +25353,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="496"/>
         <source>d#</source>
-        <translation>ré♯</translation>
+        <translation>ré#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="497"/>
@@ -25376,7 +25368,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="499"/>
         <source>f#</source>
-        <translation>fa♯</translation>
+        <translation>fa#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="500"/>
@@ -25386,7 +25378,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="501"/>
         <source>g#</source>
-        <translation>sol♯</translation>
+        <translation>sol#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="502"/>
@@ -25396,7 +25388,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="503"/>
         <source>a#</source>
-        <translation>la♯</translation>
+        <translation>la#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="504"/>
@@ -25411,7 +25403,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="508"/>
         <source>C#</source>
-        <translation>C♯</translation>
+        <translation>C#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="509"/>
@@ -25421,7 +25413,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="510"/>
         <source>D#</source>
-        <translation>Ré♯</translation>
+        <translation>D#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="511"/>
@@ -25436,7 +25428,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="513"/>
         <source>F#</source>
-        <translation>F♯</translation>
+        <translation>F#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="514"/>
@@ -25446,7 +25438,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="515"/>
         <source>G#</source>
-        <translation>Sol#</translation>
+        <translation>G#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="516"/>
@@ -25456,7 +25448,7 @@ La mesure n&apos;est pas vide</translation>
     <message>
         <location filename="../../libmscore/utils.cpp" line="517"/>
         <source>A#</source>
-        <translation>La#</translation>
+        <translation>A#</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="518"/>
