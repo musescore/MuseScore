@@ -370,14 +370,14 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       autoplaceVerticalAlignRange->addItem(tr("System"),  int(VerticalAlignRange::SYSTEM));
 
       tupletNumberType->clear();
-      tupletNumberType->addItem(tr("Number"), int(Tuplet::NumberType::SHOW_NUMBER));
-      tupletNumberType->addItem(tr("Ratio"), int(Tuplet::NumberType::SHOW_RELATION));
-      tupletNumberType->addItem(tr("Nothing"), int(Tuplet::NumberType::NO_TEXT));
+      tupletNumberType->addItem(tr("Number"), int(TupletNumberType::SHOW_NUMBER));
+      tupletNumberType->addItem(tr("Ratio"), int(TupletNumberType::SHOW_RELATION));
+      tupletNumberType->addItem(tr("Nothing"), int(TupletNumberType::NO_TEXT));
 
       tupletBracketType->clear();
-      tupletBracketType->addItem(tr("Automatic"), int(Tuplet::BracketType::AUTO_BRACKET));
-      tupletBracketType->addItem(tr("Bracket"), int(Tuplet::BracketType::SHOW_BRACKET));
-      tupletBracketType->addItem(tr("Nothing"), int(Tuplet::BracketType::SHOW_NO_BRACKET));
+      tupletBracketType->addItem(tr("Automatic"), int(TupletBracketType::AUTO_BRACKET));
+      tupletBracketType->addItem(tr("Bracket"), int(TupletBracketType::SHOW_BRACKET));
+      tupletBracketType->addItem(tr("Nothing"), int(TupletBracketType::SHOW_NO_BRACKET));
 
       pageList->setCurrentRow(0);
       accidentalsGroup->setVisible(false); // disable, not yet implemented

@@ -1786,9 +1786,9 @@ static void tupletStartStop(ChordRest* cr, Notations& notations, XmlWriter& xml)
             QString tupletTag = "tuplet type=\"start\"";
             tupletTag += " bracket=";
             tupletTag += t->hasBracket() ? "\"yes\"" : "\"no\"";
-            if (t->numberType() == Tuplet::NumberType::SHOW_RELATION)
+            if (t->numberType() == TupletNumberType::SHOW_RELATION)
                   tupletTag += " show-number=\"both\"";
-            if (t->numberType() == Tuplet::NumberType::NO_TEXT)
+            if (t->numberType() == TupletNumberType::NO_TEXT)
                   tupletTag += " show-number=\"none\"";
             xml.tagE(tupletTag);
             }

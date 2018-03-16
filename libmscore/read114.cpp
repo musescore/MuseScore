@@ -889,10 +889,10 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
             if (tag == "subtype")    // obsolete
                   e.skipCurrentElement();
             else if (tag == "hasNumber")  // obsolete even in 1.3
-                  tuplet->setNumberType(e.readInt() ? Tuplet::NumberType::SHOW_NUMBER : Tuplet::NumberType::NO_TEXT);
+                  tuplet->setNumberType(e.readInt() ? TupletNumberType::SHOW_NUMBER : TupletNumberType::NO_TEXT);
             else if (tag == "hasLine") {  // obsolete even in 1.3
                   tuplet->setHasBracket(e.readInt());
-                  tuplet->setBracketType(Tuplet::BracketType::AUTO_BRACKET);
+                  tuplet->setBracketType(TupletBracketType::AUTO_BRACKET);
                   }
             else if (tag == "baseLen")    // obsolete even in 1.3
                   bl = e.readInt();
