@@ -297,21 +297,6 @@ void Bend::write(XmlWriter& xml) const
       }
 
 //---------------------------------------------------------
-//   readStyledProperty
-//---------------------------------------------------------
-
-bool Bend::readStyledProperty(XmlReader& e, const QStringRef& tag)
-      {
-      for (auto k : _styledProperties) {
-            if (readProperty(tag, e, k.propertyIdx)) {
-                  setPropertyFlags(k.propertyIdx, PropertyFlags::UNSTYLED);
-                  return true;
-                  }
-             }
-      return false;
-      }
-
-//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 

@@ -432,26 +432,6 @@ const char* Articulation::articulationName() const
             }
       }
 
-
-//---------------------------------------------------------
-//   propertyStyle
-//---------------------------------------------------------
-
-PropertyFlags& Articulation::propertyFlags(P_ID id)
-      {
-#if 0
-      switch (id) {
-            case P_ID::DIRECTION:
-            case P_ID::ARTICULATION_ANCHOR:
-                  return PropertyFlags::NOSTYLE;
-
-            default:
-                  break;
-            }
-#endif
-      return Element::propertyFlags(id);
-      }
-
 //---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------

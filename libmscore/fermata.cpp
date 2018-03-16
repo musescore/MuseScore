@@ -310,24 +310,6 @@ QVariant Fermata::propertyDefault(P_ID propertyId) const
       }
 
 //---------------------------------------------------------
-//   propertyStyle
-//---------------------------------------------------------
-
-PropertyFlags& Fermata::propertyFlags(P_ID id)
-      {
-#if 0
-      switch (id) {
-            case P_ID::TIME_STRETCH:
-                  return PropertyFlags::NOSTYLE;
-
-            default:
-                  break;
-            }
-#endif
-      return Element::propertyFlags(id);
-      }
-
-//---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
 

@@ -441,6 +441,55 @@ StyleIdx ScoreElement::getPropertyStyle(P_ID id) const
       }
 
 //---------------------------------------------------------
+//   readProperty
+//---------------------------------------------------------
+
+bool ScoreElement::readProperty(const QStringRef& s, XmlReader& e, P_ID id)
+      {
+      if (s == propertyName(id)) {
+            setProperty(id, Ms::getProperty(id, e));
+            return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   readStyledProperty
+//---------------------------------------------------------
+
+bool ScoreElement::readStyledProperty(XmlReader& e, const QStringRef& tag)
+      {
+      const StyledProperty* spl = styledProperties();
+      for (int i = 0;;++i) {
+            const StyledProperty& k = spl[i];
+            if (k.styleIdx == StyleIdx::NOSTYLE)
+                  break;
+            if (readProperty(tag, e, k.propertyIdx)) {
+                  setPropertyFlags(k.propertyIdx, PropertyFlags::UNSTYLED);
+                  return true;
+                  }
+             }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//---------------------------------------------------------
+
+void ScoreElement::styleChanged()
+      {
+      const StyledProperty* spl = styledProperties();
+      for (int i = 0;;++i) {
+            const StyledProperty& k = spl[i];
+            if (k.styleIdx == StyleIdx::NOSTYLE)
+                  break;
+            PropertyFlags& f = propertyFlags(k.propertyIdx);
+            if (f == PropertyFlags::STYLED)
+                  setProperty(k.propertyIdx, score()->styleV(k.styleIdx));
+            }
+      }
+
+//---------------------------------------------------------
 //   name
 //---------------------------------------------------------
 

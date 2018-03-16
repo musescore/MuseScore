@@ -1116,19 +1116,6 @@ bool Element::custom(P_ID id) const
       }
 
 //---------------------------------------------------------
-//   readProperty
-//---------------------------------------------------------
-
-bool Element::readProperty(const QStringRef& s, XmlReader& e, P_ID id)
-      {
-      if (s == propertyName(id)) {
-            setProperty(id, Ms::getProperty(id, e));
-            return true;
-            }
-      return false;
-      }
-
-//---------------------------------------------------------
 //   isPrintable
 //---------------------------------------------------------
 

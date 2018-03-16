@@ -89,7 +89,7 @@ namespace Ms {
 
 MusicXmlTupletDesc::MusicXmlTupletDesc()
       : type(MxmlStartStop::NONE), placement(Placement::BELOW),
-      bracket(Tuplet::BracketType::AUTO_BRACKET), shownumber(Tuplet::NumberType::SHOW_NUMBER)
+      bracket(TupletBracketType::AUTO_BRACKET), shownumber(TupletNumberType::SHOW_NUMBER)
       {
       // nothing
       }
@@ -5954,17 +5954,17 @@ void MusicXMLParserPass2::tuplet(MusicXmlTupletDesc& tupletDesc)
 
       // set bracket, leave at default if unspecified
       if (tupletBracket == "yes")
-            tupletDesc.bracket = Tuplet::BracketType::SHOW_BRACKET;
+            tupletDesc.bracket = TupletBracketType::SHOW_BRACKET;
       else if (tupletBracket == "no")
-            tupletDesc.bracket = Tuplet::BracketType::SHOW_NO_BRACKET;
+            tupletDesc.bracket = TupletBracketType::SHOW_NO_BRACKET;
 
       // set number, default is "actual" (=NumberType::SHOW_NUMBER)
       if (tupletShowNumber == "both")
-            tupletDesc.shownumber = Tuplet::NumberType::SHOW_RELATION;
+            tupletDesc.shownumber = TupletNumberType::SHOW_RELATION;
       else if (tupletShowNumber == "none")
-            tupletDesc.shownumber = Tuplet::NumberType::NO_TEXT;
+            tupletDesc.shownumber = TupletNumberType::NO_TEXT;
       else
-            tupletDesc.shownumber = Tuplet::NumberType::SHOW_NUMBER;
+            tupletDesc.shownumber = TupletNumberType::SHOW_NUMBER;
       }
 
 //---------------------------------------------------------

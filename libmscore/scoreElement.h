@@ -195,10 +195,15 @@ class ScoreElement {
       virtual void setPropertyFlags(P_ID, PropertyFlags);
 
       virtual StyleIdx getPropertyStyle(P_ID) const;
+      bool readProperty(const QStringRef&, XmlReader&, P_ID);
+      bool readStyledProperty(XmlReader& e, const QStringRef& tag);
+
+      virtual void styleChanged();
 
       virtual void undoChangeProperty(P_ID id, const QVariant&, PropertyFlags ps);
       void undoChangeProperty(P_ID id, const QVariant&);
       void undoResetProperty(P_ID id);
+
 
       void undoPushProperty(P_ID);
       void writeProperty(XmlWriter& xml, P_ID id) const;

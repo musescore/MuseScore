@@ -415,10 +415,7 @@ class Element : public ScoreElement {
       virtual void initSubStyle(SubStyle);
 
       bool custom(P_ID) const;
-      bool readProperty(const QStringRef&, XmlReader&, P_ID);
       virtual bool isUserModified() const;
-
-      virtual void styleChanged() {}
 
       void drawSymbol(SymId id, QPainter* p, const QPointF& o = QPointF(), qreal scale = 1.0) const;
       void drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const;

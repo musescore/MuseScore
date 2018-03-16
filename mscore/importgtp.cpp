@@ -560,7 +560,7 @@ void GuitarPro::setupTupletStyle(Tuplet* tuplet)
             default: real = false;
             }
       if (!real)
-            tuplet->setNumberType(Tuplet::NumberType::SHOW_RELATION);
+            tuplet->setNumberType(TupletNumberType::SHOW_RELATION);
       }
 
 //---------------------------------------------------------
