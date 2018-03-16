@@ -570,7 +570,7 @@ void Measure::layout2()
             }
 
       //---------------------------------------------------
-      //    layout ties, spanners and tuples
+      //    layout ties
       //---------------------------------------------------
 
       int tracks = score()->ntracks();
@@ -594,11 +594,6 @@ void Measure::layout2()
                               for (Spanner* sp : note->spannerFor())
                                     sp->layout();
                               }
-                        }
-                  DurationElement* de = cr;
-                  while (de->tuplet() && de->tuplet()->elements().front() == de) {
-                        de->tuplet()->layout();
-                        de = de->tuplet();
                         }
                   }
             }

@@ -31,6 +31,15 @@ class Bend final : public Element {
       bool _fontItalic;
       bool _fontUnderline;
 
+      bool _playBend     { true };
+      QList<PitchValue> _points;
+      qreal _lw;
+
+      QPointF notePos;
+      qreal noteWidth;
+
+      QFont font(qreal) const;
+
       static constexpr std::array<StyledProperty,6> _styledProperties {{
             { StyleIdx::bendFontFace,      P_ID::FONT_FACE },
             { StyleIdx::bendFontSize,      P_ID::FONT_SIZE },
@@ -47,16 +56,6 @@ class Bend final : public Element {
             PropertyFlags::STYLED,
             PropertyFlags::STYLED,
             };
-
-      bool _playBend     { true };
-      QList<PitchValue> _points;
-      qreal _lw;
-
-      QPointF notePos;
-      qreal noteWidth;
-
-      QFont font(qreal) const;
-      bool readStyledProperty(XmlReader& e, const QStringRef& tag);     // helper function
 
    protected:
       virtual const StyledProperty* styledProperties() const override { return _styledProperties.data(); }

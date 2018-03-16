@@ -1,28 +1,65 @@
-Version 2.305  Fix Orchestral Drumset Decay/Release Envelopes
-Version 2.304  Fix Orchestral Drumset keymapping issues
-Version 2.303  Apply pitch shift fix to Marching Cymbals
-Version 2.302  Apply pitch shift fix to Marching Snare
-Version 2.301  Fix pitch shift problems with Drumline Bass Drum
-Version 2.300  Add Mike Shorsch Drumline instruments
-Version 2.203  Fix Decay and Release envelopes for Timpani
-Version 2.202  Add Dry Strings preset for short articulations
-Version 2.201  Extend Strings instrument range to E7 (MIDI #100)
-Version 2.200  Add temple blocks preset at Bank #1 Patch #115
-Version 2.112  Extend Baritone Sax range (now goes up to note #127)
-Version 2.111  Map out sample Aah Choir F#4 containing an audio glitch
-Version 2.110  Fix panning position of Drawbar Organ
-Version 2.109  Increase Contrabass range to A5 (MIDI #81)
-Version 2.108  Withdrawn
-Version 2.107  Add Mellow Yamaha Grand at Bank #8 Patch #0
-Version 2.106  Fix Alto Sax range issue
-Version 2.105  Fix Recorder range issue
-Version 2.104  Tweak tuning for Violin preset
-Version 2.103  Remove Burst Noise preset which was overloading 
-                      FluidSynth
-Version 2.102  Fix name problem for Bass & Lead
-Version 2.101  Fix typo in Accordion def
-Version 2.10   Raise level of drumkits
-Version 2.9    Panning fix to Clarinet
-Version 2.8    Fix Goblin Synth patch crashing FluidSynth in Windows
-Version 2.7    Fix missing drum in some drum kits
-Version 2.6    Beta release of mono soundfont
+0.1 (pre-release alpha)
+  - This is the first version that branches off from FluidR3_Mono.
+  - Renamed presets to remove brand names ("Yamaha", "Rhodes").
+  - Altered the velocity scale for all instruments to be less extreme between FF and PP.
+  - Added velocity-to-filter for a mellower sound at low velocities for several instruments.
+  - Reprogrammed strange velocity response behaviors on several instruments.
+  - Replaced the following instruments. Most of the synth sounds are newly programmed based on custom analog waveforms, leading to low RAM consumption yet very high-quality sound:
+    . 000-005: FM Electric Piano
+	. 008-005: Detuned FM EP
+    . 000-010: Music Box
+    . 000-038: Synth Bass 1
+    . 000-039: Synth Bass 2
+    . 008-038: Synth Bass 3
+    . 008-039: Synth Bass 4
+    . 000-042: Cello
+  	. 000-050: Synth Strings 1
+	. 000-051: Synth Strings 2
+	. 008-050: Synth Strings 3
+	. 000-062: Synth Brass 1
+	. 000-063: Synth Brass 2
+	. 008-062: Synth Brass 3
+	. 008-063: Synth Brass 4
+    . 000-080: Square Lead
+	. 008-080: Sine Wave
+	. 000-081: Saw Lead
+	. 000-086: 5th Saw Wave
+	. 000-087: Bass & Lead
+	. 000-088: Fantasia
+	. 000-090: Polysynth
+	. 000-092: Bowed Glass
+	. 000-093: Metal Pad
+	. 000-094: Halo Pad
+	. 000-095: Sweep Pad
+	. 000-095: Ice Rain
+	. 000-097: Soundtrack
+	. 000-098: Crystal
+	. 000-099: Atmosphere
+	. 000-100: Brightness
+	. 000-103: Star Theme
+	
+  - Performed the following noteworthy per-instrument improvements and fixes:
+    . 000-000: Grand Piano -- Reprogrammed the instrument to get mellower at lower velocities, and to have no dampers on the high strings.
+	. 001-000: Mellow Grand Piano -- Reprogrammed to avoid the need for separate samples.
+	. 000-001: Bright Grand Piano -- Used sample shifting to create a truly bright sound. The original version used a brighter filter that barely made any difference.
+	. 000-003: Honky-Tonk Piano -- used sample shifting to improve realism. Now it no longer has a "flanged" sound to it.
+	. 000-004: Tine Electric Piano -- Added velocity-to-filter for a mellower sound at low velocities.
+    . 000-008: Celesta -- The conversion to mono used the left samples, but "000-098: Crystal" used the right samples, so both left and right samples were still in the SoundFont. This problem was solved when I replaced the "Crystal" preset using new programming.
+	. 000-024: Nylon Guitar and 000-025: Steel String Guitar -- Removed the weird velocity-triggered release, which would cause notes to ring out for a long time if they were played at a high velocity. I also added better velocity-to-filter cutoff mapping.
+	. 008-025: 12-String Guitar -- Manipulated the sample mapping to better simulate the sound of a real 12-string guitar.
+	. 000-032: Acoustic Bass -- Added velocity-to-filter for a mellower sound at low velocities.
+	. 000-040: Violin -- Improved tuning and used modulation envelope to counter some of the pitch bending on note attack.
+	. 000-043: Contrabass -- Fixed abrupt release at high velocities.
+	. 000-044: Tremolo Strings -- Improved realism of tremolo effect.
+	. 000-045: Countered the overly long reverb tail. Incorporated the use of the filter to create a more realistic sound across the dynamic range.
+	. 000-048: Strings (& variants) -- Eliminated the unnaturally long release, so staccato notes will now sound correct. Note tone and attack now follow velocity. I also extended the strings to the full MIDI range (previously they stopped at E7).
+	. 000-057: Trombone -- Fixed short release.
+	. 000-058: Tuba -- Release was too short for notes at low velocities.
+	. 000-061: Brass Section -- There was some strange programming in this one that caused two voices to be used up per note for no real benefit. Both voices were playing the same sample, one panned hard right and the other hard left with the only difference being slightly different filter settings. This resulted in notes that seemed to pan toward the left at lighter velocities. I fixed this to only use one voice per note and also removed the useless "Key on velocity -> initialFilterQ" modulator that had been added (it was attempting to subtract up to 47 dB from the filter Q, but nowhere was the filter Q greater than 0).
+	. 000-069: English Horn -- Tamed the crazy volume swell that occured on most notes. Unfortunately, this instrument ends up being a bit quieter than the other woodwinds. It would be necessary to edit the samples to remedy this.
+	. 000-071: Clarinet -- EQ'd the samples and added a bit of release for better realism. The original samples were incredibly nasally and cut off too abruptly on note release.
+	. 000-074: Recorder -- Duplicate samples were panned hard left and right for no discernable reason, which was causing twice the polyphony to be used. I fixed this to use single, center-panned samples instead. I also improved the tuning and countered the pitch bend at the beginning of some notes.
+	. 000-089: Warm Pad -- Reprogrammed using the strings samples to avoid needing dedicated samples for this preset.
+	. 000-112: Tinker Bell -- Fixed notes from middle C downward all playing the same pitch.
+	. 128-025: TR-808 -- Fixed kit volume to match the other kits. It was being boosted way too loud.
+	. 128-048: Orchestra Kit -- Fixed snare cutting off abruptly on release.

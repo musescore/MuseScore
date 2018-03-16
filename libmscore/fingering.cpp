@@ -187,10 +187,7 @@ QVariant Fingering::propertyDefault(P_ID id) const
 
 PropertyFlags& Fingering::propertyFlags(P_ID id)
       {
-      switch (id) {
-            default:
-                  return TextBase::propertyFlags(id);
-            }
+      return TextBase::propertyFlags(id);
       }
 
 //---------------------------------------------------------
