@@ -2029,12 +2029,22 @@ void Score::deleteItem(Element* el)
                   //
                   {
                   Rest* rest = static_cast<Rest*>(el);
+                  // delete empty tuplets
                   if (rest->tuplet() && rest->tuplet()->elements().empty())
                         undoRemoveElement(rest->tuplet());
+                  // Voice > 1, do not delete rests in tuplet, turn them invisible instead
                   if (el->voice() != 0) {
-                        undoRemoveElement(el);
-                        if (noteEntryMode())
-                              _is.moveToNextInputPos();
+                        if (rest->tuplet())
+                              undoChangeProperty(el, P_ID::VISIBLE, false);
+                        else {
+                              undoRemoveElement(el);
+                              if (noteEntryMode())
+                                    _is.moveToNextInputPos();
+                              }
+                        }
+                  else {
+                        // voice = 1, do not delete rests, turn them invisible instead
+                        undoChangeProperty(el, P_ID::VISIBLE, false);
                         }
                   }
                   break;
