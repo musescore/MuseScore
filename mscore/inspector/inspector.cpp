@@ -712,7 +712,8 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
             { P_ID::FONT_UNDERLINE, 0, t.tupletUnderline, t.resetTupletUnderline   },
             { P_ID::DIRECTION,      0, t.direction,       t.resetDirection         },
             { P_ID::NUMBER_TYPE,    0, t.numberType,      t.resetNumberType        },
-            { P_ID::BRACKET_TYPE,   0, t.bracketType,     t.resetBracketType       }
+            { P_ID::BRACKET_TYPE,   0, t.bracketType,     t.resetBracketType       },
+            { P_ID::LINE_WIDTH,     0, t.lineWidth,       t.resetLineWidth         }
             };
       const std::vector<InspectorPanel> ppList = { {t.title, t.panel} };
       t.tupletBold->setIcon(*icons[int(Icons::textBold_ICON)]);
