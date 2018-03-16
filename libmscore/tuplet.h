@@ -39,13 +39,11 @@ class Tuplet final : public DurationElement {
       // the tick position of a tuplet is the tick position of its
       // first element:
       int _tick;
-
-   private:
       std::vector<DurationElement*> _elements;
-
       Direction _direction;
       TupletNumberType _numberType;
       TupletBracketType _bracketType;
+      Spatium _bracketWidth;
 
       bool _hasBracket;
       Fraction _ratio;
@@ -61,7 +59,7 @@ class Tuplet final : public DurationElement {
       QPointF bracketL[4];
       QPointF bracketR[3];
 
-      static constexpr std::array<StyledProperty, 10> _styledProperties {{
+      static constexpr std::array<StyledProperty, 11> _styledProperties {{
             { StyleIdx::tupletDirection,     P_ID::DIRECTION },
             { StyleIdx::tupletNumberType,    P_ID::NUMBER_TYPE },
             { StyleIdx::tupletBracketType,   P_ID::BRACKET_TYPE },
@@ -71,10 +69,12 @@ class Tuplet final : public DurationElement {
             { StyleIdx::tupletFontItalic,    P_ID::FONT_ITALIC },
             { StyleIdx::tupletFontUnderline, P_ID::FONT_UNDERLINE },
             { StyleIdx::tupletAlign,         P_ID::ALIGN },
+            { StyleIdx::tupletBracketWidth,  P_ID::LINE_WIDTH },
             { StyleIdx::NOSTYLE,             P_ID::END }      // end of list marker
             }};
 
-      PropertyFlags _propertyFlagsList[9] = {
+      PropertyFlags _propertyFlagsList[10] = {
+            PropertyFlags::STYLED,
             PropertyFlags::STYLED,
             PropertyFlags::STYLED,
             PropertyFlags::STYLED,
@@ -94,7 +94,7 @@ class Tuplet final : public DurationElement {
       Tuplet(Score*);
       Tuplet(const Tuplet&);
       ~Tuplet();
-      virtual Tuplet* clone() const override      { return new Tuplet(*this); }
+      virtual Tuplet* clone() const override    { return new Tuplet(*this);   }
       virtual ElementType type() const override { return ElementType::TUPLET; }
       virtual void setTrack(int val) override;
 
@@ -116,6 +116,8 @@ class Tuplet final : public DurationElement {
       void setBracketType(TupletBracketType val) { _bracketType = val;       }
       bool hasBracket() const              { return _hasBracket;       }
       void setHasBracket(bool b)           { _hasBracket = b;          }
+      Spatium bracketWidth() const         { return _bracketWidth;     }
+      void setBracketWidth(Spatium s)      { _bracketWidth = s;        }
 
       Fraction ratio() const               { return _ratio;         }
       void setRatio(const Fraction& r)     { _ratio = r;            }

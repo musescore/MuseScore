@@ -26,7 +26,7 @@
 
 namespace Ms {
 
-constexpr std::array<StyledProperty,10> Tuplet::_styledProperties;
+constexpr std::array<StyledProperty,11> Tuplet::_styledProperties;
 
 //---------------------------------------------------------
 //   Tuplet
@@ -40,6 +40,7 @@ Tuplet::Tuplet(Score* s)
       resetProperty(P_ID::DIRECTION);
       resetProperty(P_ID::NUMBER_TYPE);
       resetProperty(P_ID::BRACKET_TYPE);
+      resetProperty(P_ID::LINE_WIDTH);
       _ratio        = Fraction(1, 1);
       _number       = 0;
       _hasBracket   = false;
@@ -57,6 +58,7 @@ Tuplet::Tuplet(const Tuplet& t)
       _direction    = t._direction;
       _numberType   = t._numberType;
       _bracketType  = t._bracketType;
+      _bracketWidth = t._bracketWidth;
 
       *_propertyFlagsList = *t._propertyFlagsList;
 
@@ -592,7 +594,7 @@ void Tuplet::draw(QPainter* painter) const
             painter->translate(-pos);
             }
       if (_hasBracket) {
-            painter->setPen(QPen(color, mag() * score()->styleP(StyleIdx::tupletBracketWidth)));
+            painter->setPen(QPen(color, spatium() * _bracketWidth.val()));
             if (!_number)
                   painter->drawPolyline(bracketL, 4);
             else {
@@ -631,7 +633,7 @@ Shape Tuplet::shape() const
       {
       Shape s;
       if (_hasBracket) {
-            qreal w = mag() * score()->styleP(StyleIdx::tupletBracketWidth);
+            qreal w = spatium() * _bracketWidth.val();
             if (_number) {
                   s.add(Rect(bracketL[0], bracketL[1], w));
                   s.add(Rect(bracketL[1], bracketL[2], w));
@@ -674,6 +676,7 @@ void Tuplet::write(XmlWriter& xml) const
       writeProperty(xml, P_ID::DIRECTION);
       writeProperty(xml, P_ID::NUMBER_TYPE);
       writeProperty(xml, P_ID::BRACKET_TYPE);
+      writeProperty(xml, P_ID::LINE_WIDTH);
       writeProperty(xml, P_ID::NORMAL_NOTES);
       writeProperty(xml, P_ID::ACTUAL_NOTES);
       writeProperty(xml, P_ID::P1);
@@ -947,6 +950,8 @@ QVariant Tuplet::getProperty(P_ID propertyId) const
                   return int(_numberType);
             case P_ID::BRACKET_TYPE:
                   return int(_bracketType);
+            case P_ID::LINE_WIDTH:
+                  return _bracketWidth;
             case P_ID::NORMAL_NOTES:
                   return _ratio.denominator();
             case P_ID::ACTUAL_NOTES:
@@ -983,6 +988,9 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::BRACKET_TYPE:
                   setBracketType(TupletBracketType(v.toInt()));
+                  break;
+            case P_ID::LINE_WIDTH:
+                  setBracketWidth(v.value<Spatium>());
                   break;
             case P_ID::NORMAL_NOTES:
                   _ratio.setDenominator(v.toInt());
