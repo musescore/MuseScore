@@ -358,6 +358,7 @@ void Score::putNote(const Position& p, bool replace)
                                     int tpc1 = note->tpc1default(nval.pitch);
                                     int tpc2 = note->tpc2default(nval.pitch);
                                     undoChangeFretting(note, nval.pitch, nval.string, nval.fret, tpc1, tpc2);
+                                    setPlayNote(true);
                                     return;
                                     }
                         }
