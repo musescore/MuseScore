@@ -441,6 +441,61 @@
       <mark value="slash" number="4">Ĺ</mark>
       <mark value="slash" number="5">ĺ</mark>
    </fretFont>
+   <fretFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore Tab Shamisen</displayName>
+      <defaultPitch>9</defaultPitch>
+      <defaultYOffset>0.0</defaultYOffset>
+      <fret value="0"  letter="0">ƀ</fret>
+      <fret value="1"  letter="0">Ɓ</fret>
+      <fret value="2"  letter="0">Ƃ</fret>
+      <fret value="3"  letter="0">ƃ</fret>
+      <fret value="4"  letter="0">Ƅ</fret>
+      <fret value="5"  letter="0">ƅ</fret>
+      <fret value="6"  letter="0">Ɔ</fret>
+      <fret value="7"  letter="0">Ƈ</fret>
+      <fret value="8"  letter="0">ƈ</fret>
+      <fret value="9"  letter="0">Ɖ</fret>
+      <fret value="10" letter="0">Ɗ</fret>
+      <fret value="11" letter="0">Ƌ</fret>
+      <fret value="12" letter="0">ƌ</fret>
+      <fret value="13" letter="0">ƍ</fret>
+      <fret value="14" letter="0">Ǝ</fret>
+      <fret value="15" letter="0">Ə</fret>
+      <fret value="16" letter="0">Ɛ</fret>
+      <fret value="17" letter="0">Ƒ</fret>
+      <fret value="18" letter="0">ƒ</fret>
+      <fret value="19" letter="0">Ɠ</fret>
+      <fret value="20" letter="0">Ɣ</fret>
+      <fret value="21" letter="0">ƕ</fret>
+      <fret value="22" letter="0">Ɩ</fret>
+      <fret value="23" letter="0">Ɨ</fret>
+      <fret value="24" letter="0">Ƙ</fret>
+      <fret value="0"  letter="1">a</fret>
+      <fret value="1"  letter="1">b</fret>
+      <fret value="2"  letter="1">c</fret>
+      <fret value="3"  letter="1">d</fret>
+      <fret value="4"  letter="1">e</fret>
+      <fret value="5"  letter="1">f</fret>
+      <fret value="6"  letter="1">g</fret>
+      <fret value="7"  letter="1">h</fret>
+      <fret value="8"  letter="1">i</fret>
+      <fret value="9"  letter="1">k</fret>
+      <fret value="10" letter="1">l</fret>
+      <fret value="11" letter="1">m</fret>
+      <fret value="12" letter="1">n</fret>
+      <fret value="13" letter="1">o</fret>
+      <fret value="14" letter="1">p</fret>
+      <fret value="15" letter="1">q</fret>
+      <fret value="16" letter="1">r</fret>
+      <mark value="x">X</mark>
+      <mark value="ghost">×</mark>
+      <mark value="slash" number="1">/</mark>
+      <mark value="slash" number="2">//</mark>
+      <mark value="slash" number="3">///</mark>
+      <mark value="slash" number="4">////</mark>
+      <mark value="slash" number="5">/////</mark>
+   </fretFont>
 
    <durationFont>
       <family>MScoreTabulature</family>
@@ -543,6 +598,28 @@
       <duration value="128">ɉ</duration>
       <duration value="256">Ɋ</duration>
       <duration value="dot">Ɍ</duration>
+   </durationFont>
+   <durationFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore Tab Shamisen Rhythm</displayName>
+      <defaultPitch>15</defaultPitch>
+      <defaultYOffset>0</defaultYOffset>
+      <beamWidth>0.5</beamWidth>
+      <stemHeight>3</stemHeight>
+      <stemWidth>0.1</stemWidth>
+      <zeroBeamValue>semiminima</zeroBeamValue>
+      <duration value="longa">ɐ</duration>
+      <duration value="brevis">ɑ</duration>
+      <duration value="semibrevis">ɒ</duration>
+      <duration value="minima">ɓ</duration>
+      <duration value="semiminima">ɔ</duration>
+      <duration value="fusa">ɕ</duration>
+      <duration value="semifusa">ɖ</duration>
+      <duration value="32">ɗ</duration>
+      <duration value="64">ɘ</duration>
+      <duration value="128">ə</duration>
+      <duration value="256">ɚ</duration>
+      <duration value="dot">ɜ</duration>
    </durationFont>
 
 </museScore>
