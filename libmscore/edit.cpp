@@ -285,11 +285,12 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
             //
             Fraction f;
             if (tuplet) {
-                  int ticks = (tuplet->tick() + tuplet->actualTicks()) - tick;
-
-                  f = Fraction::fromTicks(ticks);
-                  for (Tuplet* t = tuplet; t; t = t->tuplet())
-                        f *= t->ratio();
+                  f = tuplet->baseLen().fraction() * tuplet->ratio().numerator();
+                  for (DurationElement* de : tuplet->elements()) {
+                        if (de->tick() >= tick)
+                              break;
+                        f -= de->duration();
+                        }
                   //
                   // restrict to tuplet len
                   //
