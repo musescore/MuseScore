@@ -348,6 +348,7 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
             nt = static_cast<Tuplet*>(ot->linkedClone());
             nt->setTrack(track);
             nt->setParent(m);
+            nt->setScore(ncr->score());
             tupletMap.add(ot, nt);
 
             Tuplet* nt1 = nt;
@@ -357,6 +358,7 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
                         nt = static_cast<Tuplet*>(ot->tuplet()->linkedClone());
                         nt->setTrack(track);
                         nt->setParent(m);
+                        nt->setScore(ncr->score());
                         tupletMap.add(ot->tuplet(), nt);
                         }
                   nt->add(nt1);
@@ -529,7 +531,7 @@ void cloneStaves(Score* oscore, Score* score, const QList<int>& map)
                                     Tuplet* ot = ocr->tuplet();
 
                                     if (ot)
-                                          cloneTuplets(ocr, ncr, ot, tupletMap, m, track);
+                                          cloneTuplets(ocr, ncr, ot, tupletMap, nm, track);
 
                                     if (oe->type() == Element::Type::CHORD) {
                                           Chord* och = static_cast<Chord*>(ocr);
