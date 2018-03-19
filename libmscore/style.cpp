@@ -673,6 +673,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::bendFontBold,                  "bendFontBold",                 false },
       { StyleIdx::bendFontItalic,                "bendFontItalic",               false },
       { StyleIdx::bendFontUnderline,             "bendFontUnderline",            false },
+      { StyleIdx::bendLineWidth,                 "bendLineWidth",                Spatium(0.15) },
 
       { StyleIdx::headerFontFace,                "headerFontFace",               "FreeSerif" },
       { StyleIdx::headerFontSize,                "headerFontSize",               8.0 },
