@@ -47,6 +47,7 @@ matrix:
             - libgtk2.0-bin
             - libgstreamer0.10-0
             - libgstreamer-plugins-base0.10-0
+            - expect
       cache:
         directories:
           - $HOME/.ccache
