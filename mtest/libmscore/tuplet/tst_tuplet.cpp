@@ -143,6 +143,7 @@ void TestTuplet::split(const char* p1, const char* p2)
       dd.dragOffset = QPointF();
       dd.pos = m->pagePos();
       m->drop(dd);
+      score->doLayout();
 
       QVERIFY(saveCompareScore(score, p1, DIR + p2));
       delete score;
