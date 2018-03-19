@@ -151,11 +151,12 @@ static const StyleType styleTypes[] {
       { StyleIdx::ledgerLineLength,        "ledgerLineLength",        Spatium(.6)   },     // notehead width + this value
       { StyleIdx::accidentalDistance,      "accidentalDistance",      Spatium(0.22) },
       { StyleIdx::accidentalNoteDistance,  "accidentalNoteDistance",  Spatium(0.22) },
-      { StyleIdx::beamWidth,               "beamWidth",               Spatium(0.5)  },     // was 0.48
 
+      { StyleIdx::beamWidth,               "beamWidth",               Spatium(0.5)  },     // was 0.48
       { StyleIdx::beamDistance,            "beamDistance",            QVariant(0.5) },     // 0.25sp units
       { StyleIdx::beamMinLen,              "beamMinLen",              Spatium(1.32) },     // 1.316178 exactly notehead widthen beams
       { StyleIdx::beamNoSlope,             "beamNoSlope",             QVariant(false) },
+
       { StyleIdx::dotMag,                  "dotMag",                  QVariant(1.0) },
       { StyleIdx::dotNoteDistance,         "dotNoteDistance",         Spatium(0.35) },
       { StyleIdx::dotRestDistance,         "dotRestDistance",         Spatium(0.25) },
