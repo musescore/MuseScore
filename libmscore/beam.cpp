@@ -35,6 +35,8 @@
 
 namespace Ms {
 
+constexpr std::array<StyledProperty, BEAM_STYLED_PROPERTIES+1> Beam::_styledProperties;
+
 //---------------------------------------------------------
 //   BeamFragment
 //    position of primary beam
@@ -2395,51 +2397,8 @@ QVariant Beam::propertyDefault(P_ID id) const
             case P_ID::USER_MODIFIED:  return false;
             case P_ID::BEAM_POS:       return beamPos();
             case P_ID::BEAM_NO_SLOPE:  return score()->styleB(StyleIdx::beamNoSlope);
-            default:               return Element::propertyDefault(id);
+            default:                   return Element::propertyDefault(id);
             }
-      }
-
-//---------------------------------------------------------
-//   propertyFlags
-//---------------------------------------------------------
-
-PropertyFlags& Beam::propertyFlags(P_ID id)
-      {
-      switch (id) {
-            case P_ID::BEAM_NO_SLOPE:
-                  return noSlopeStyle;
-
-            default:
-                  return Element::propertyFlags(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   resetProperty
-//---------------------------------------------------------
-
-void Beam::resetProperty(P_ID id)
-      {
-      switch (id) {
-            case P_ID::BEAM_NO_SLOPE:
-                  setNoSlope(score()->styleB(StyleIdx::beamNoSlope));
-                  noSlopeStyle = PropertyFlags::STYLED;
-                  break;
-
-            default:
-                  return Element::resetProperty(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   styleChanged
-//    reset all styled values to actual style
-//---------------------------------------------------------
-
-void Beam::styleChanged()
-      {
-      if (noSlopeStyle == PropertyFlags::STYLED)
-            setNoSlope(score()->styleB(StyleIdx::beamNoSlope));
       }
 
 //---------------------------------------------------------
@@ -2480,21 +2439,6 @@ Shape Beam::shape() const
                   shape.add(QRectF(x, y-ww, w, bs->y2() - y + ww*2));
             }
       return shape;
-      }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-StyleIdx Beam::getPropertyStyle(P_ID id) const
-      {
-      switch (id) {
-            case P_ID::BEAM_NO_SLOPE:
-                  return StyleIdx::beamNoSlope;
-            default:
-                  break;
-            }
-      return StyleIdx::NOSTYLE;
       }
 
 //---------------------------------------------------------

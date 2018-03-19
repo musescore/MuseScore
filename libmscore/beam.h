@@ -15,6 +15,7 @@
 
 #include "element.h"
 #include "durationtype.h"
+#include "property.h"
 
 namespace Ms {
 
@@ -57,7 +58,6 @@ class Beam final : public Element {
       TDuration maxDuration;
       qreal slope { 0.0 };
 
-
       void layout2(std::vector<ChordRest*>, SpannerSegmentType, int frag);
       bool twoBeamedNotes();
       void computeStemLen(const std::vector<ChordRest*>& crl, qreal& py1, int beamLevels);
@@ -65,6 +65,21 @@ class Beam final : public Element {
       bool hasNoSlope();
       void addChordRest(ChordRest* a);
       void removeChordRest(ChordRest* a);
+
+
+#define BEAM_STYLED_PROPERTIES 1
+      static constexpr std::array<StyledProperty, BEAM_STYLED_PROPERTIES + 1> _styledProperties {{
+            { StyleIdx::beamNoSlope,       P_ID::BEAM_NO_SLOPE },
+            { StyleIdx::NOSTYLE,           P_ID::END }      // end of list marker
+            }};
+
+      PropertyFlags _propertyFlagsList[BEAM_STYLED_PROPERTIES] = {
+            PropertyFlags::STYLED,
+            };
+
+   protected:
+      virtual const StyledProperty* styledProperties() const override { return _styledProperties.data(); }
+      virtual PropertyFlags* propertyFlagsList()       override       { return _propertyFlagsList; }
 
    public:
       enum class Mode : signed char {
@@ -143,11 +158,7 @@ class Beam final : public Element {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID id) const override;
-      virtual PropertyFlags& propertyFlags(P_ID) override;
-      virtual void resetProperty(P_ID id) override;
-      virtual StyleIdx getPropertyStyle(P_ID) const override;
 
-      virtual void styleChanged() override;
       bool isGrace() const { return _isGrace; }  // for debugger
       bool cross() const   { return _cross; }
       virtual Shape shape() const override;
