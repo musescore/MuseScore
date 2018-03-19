@@ -66,8 +66,7 @@ Beam::Beam(Score* s)
       _grow2           = 1.0;
       _isGrace         = false;
       _cross           = false;
-      _noSlope         = score()->styleB(StyleIdx::beamNoSlope);
-      noSlopeStyle     = PropertyFlags::STYLED;
+      resetProperty(P_ID::BEAM_NO_SLOPE);
       }
 
 //---------------------------------------------------------
@@ -97,7 +96,7 @@ Beam::Beam(const Beam& b)
       maxDuration      = b.maxDuration;
       slope            = b.slope;
       _noSlope         = b._noSlope;
-      noSlopeStyle     = b.noSlopeStyle;
+      *_propertyFlagsList = *b._propertyFlagsList;
       }
 
 //---------------------------------------------------------
@@ -2033,10 +2032,8 @@ void Beam::read(XmlReader& e)
                   }
             else if (tag == "distribute")
                   setDistribute(e.readInt());
-            else if (tag == "noSlope") {
-                  setNoSlope(e.readInt());
-                  noSlopeStyle = PropertyFlags::UNSTYLED;
-                  }
+            else if (readStyledProperty(e, tag))
+                  ;
             else if (tag == "growLeft")
                   setGrowLeft(e.readDouble());
             else if (tag == "growRight")
@@ -2173,11 +2170,8 @@ void Beam::reset()
             undoChangeProperty(P_ID::BEAM_POS, QVariant(beamPos()));
             undoChangeProperty(P_ID::USER_MODIFIED, false);
             }
-      if (beamDirection() != Direction::AUTO)
-            undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
-      if (noSlopeStyle == PropertyFlags::UNSTYLED)
-            resetProperty(P_ID::BEAM_NO_SLOPE);       // TODO: make undoable
-
+      undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
+      resetProperty(P_ID::BEAM_NO_SLOPE);
       setGenerated(true);
       }
 
@@ -2368,7 +2362,6 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::BEAM_NO_SLOPE:
                   setNoSlope(v.toBool());
-                  noSlopeStyle = PropertyFlags::UNSTYLED;
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
