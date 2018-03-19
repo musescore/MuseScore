@@ -46,6 +46,7 @@ matrix:
             - ccache
             - libpulse-dev
             - libgtk2.0-bin
+            - expect
       cache:
         directories:
           - $HOME/.ccache

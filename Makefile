@@ -207,4 +207,7 @@ unix:
             echo "build directory linux does alread exist, please remove first";  \
          fi
 
+zip:
+	zip -q -r MuseScore-${VERSION}.zip * -x .git\* -x vtest/html\*
+
 
