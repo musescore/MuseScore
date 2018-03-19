@@ -754,6 +754,7 @@ InspectorBend::InspectorBend(QWidget* parent)
       g.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
+            { P_ID::LINE_WIDTH,     0, g.lineWidth,   g.resetLineWidth   },
             { P_ID::PLAY,           0, g.playBend,    g.resetPlayBend    },
             { P_ID::FONT_FACE,      0, g.fontFace,    g.resetFontFace    },
             { P_ID::FONT_SIZE,      0, g.fontSize,    g.resetFontSize    },

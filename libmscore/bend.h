@@ -30,26 +30,29 @@ class Bend final : public Element {
       bool _fontBold;
       bool _fontItalic;
       bool _fontUnderline;
+      Spatium _lineWidth;
 
       bool _playBend     { true };
       QList<PitchValue> _points;
-      qreal _lw;
 
       QPointF notePos;
       qreal noteWidth;
 
       QFont font(qreal) const;
 
-      static constexpr std::array<StyledProperty,6> _styledProperties {{
+#define BEND_STYLED_PROPERTIES 6
+      static constexpr std::array<StyledProperty, BEND_STYLED_PROPERTIES + 1> _styledProperties {{
             { StyleIdx::bendFontFace,      P_ID::FONT_FACE },
             { StyleIdx::bendFontSize,      P_ID::FONT_SIZE },
             { StyleIdx::bendFontBold,      P_ID::FONT_BOLD },
             { StyleIdx::bendFontItalic,    P_ID::FONT_ITALIC },
             { StyleIdx::bendFontUnderline, P_ID::FONT_UNDERLINE },
+            { StyleIdx::bendLineWidth,     P_ID::LINE_WIDTH },
             { StyleIdx::NOSTYLE,           P_ID::END }      // end of list marker
             }};
 
-      PropertyFlags _propertyFlagsList[5] = {
+      PropertyFlags _propertyFlagsList[BEND_STYLED_PROPERTIES] = {
+            PropertyFlags::STYLED,
             PropertyFlags::STYLED,
             PropertyFlags::STYLED,
             PropertyFlags::STYLED,

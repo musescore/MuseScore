@@ -20,7 +20,7 @@
 
 namespace Ms {
 
-constexpr std::array<StyledProperty,6> Bend::_styledProperties;
+constexpr std::array<StyledProperty, BEND_STYLED_PROPERTIES+1> Bend::_styledProperties;
 
 //---------------------------------------------------------
 //   label
@@ -39,12 +39,13 @@ static const char* label[] = {
 Bend::Bend(Score* s)
    : Element(s)
       {
-      static constexpr std::array<P_ID,5> properties {
+      static constexpr std::array<P_ID,6> properties {
             P_ID::FONT_FACE,
             P_ID::FONT_SIZE,
             P_ID::FONT_BOLD,
             P_ID::FONT_ITALIC,
             P_ID::FONT_UNDERLINE,
+            P_ID::LINE_WIDTH,
             };
 
       for (P_ID id : properties)
@@ -90,7 +91,7 @@ void Bend::layout()
                   }
             }
 
-      _lw        = _spatium * 0.15;
+      qreal _lw = _lineWidth.val() * _spatium;
       Note* note = toNote(parent());
       if (note == 0) {
             noteWidth = 0.0;
@@ -188,11 +189,13 @@ void Bend::layout()
 
 void Bend::draw(QPainter* painter) const
       {
+      qreal _spatium = spatium();
+      qreal _lw = _lineWidth.val() * _spatium;
+
       QPen pen(curColor(), _lw, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
       painter->setPen(pen);
       painter->setBrush(QBrush(curColor()));
 
-      qreal _spatium = spatium();
       QFont f = font(_spatium * MScore::pixelRatio);
       painter->setFont(f);
 
@@ -341,6 +344,8 @@ QVariant Bend::getProperty(P_ID id) const
                   return _fontUnderline;
             case P_ID::PLAY:
                   return bool(playBend());
+            case P_ID::LINE_WIDTH:
+                  return _lineWidth;
             default:
                   return Element::getProperty(id);
             }
@@ -371,6 +376,9 @@ bool Bend::setProperty(P_ID id, const QVariant& v)
             case P_ID::PLAY:
                  setPlayBend(v.toBool());
                  break;
+            case P_ID::LINE_WIDTH:
+                  _lineWidth = v.value<Spatium>();
+                  break;
             default:
                   return Element::setProperty(id, v);
             }

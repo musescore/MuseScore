@@ -353,6 +353,13 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::staffTextPosAbove,       false, staffTextPosAbove,     resetStaffTextPosAbove    },
       { StyleIdx::staffTextPosBelow,       false, staffTextPosBelow,     resetStaffTextPosBelow    },
       { StyleIdx::staffTextMinDistance,    false, staffTextMinDistance,  resetStaffTextMinDistance },
+
+      { StyleIdx::bendFontFace,      false, bendFontFace,      resetBendFontFace      },
+      { StyleIdx::bendFontSize,      false, bendFontSize,      resetBendFontSize      },
+      { StyleIdx::bendFontBold,      false, bendFontBold,      resetBendFontBold      },
+      { StyleIdx::bendFontItalic,    false, bendFontItalic,    resetBendFontItalic    },
+      { StyleIdx::bendFontUnderline, false, bendFontUnderline, resetBendFontUnderline },
+      { StyleIdx::bendLineWidth,     false, bendLineWidth,     resetBendLineWidth     },
       };
 
       for (QComboBox* cb : std::vector<QComboBox*> {
