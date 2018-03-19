@@ -360,6 +360,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { StyleIdx::bendFontItalic,    false, bendFontItalic,    resetBendFontItalic    },
       { StyleIdx::bendFontUnderline, false, bendFontUnderline, resetBendFontUnderline },
       { StyleIdx::bendLineWidth,     false, bendLineWidth,     resetBendLineWidth     },
+      { StyleIdx::bendArrowWidth,    false, bendArrowWidth,    resetBendArrowWidth     },
       };
 
       for (QComboBox* cb : std::vector<QComboBox*> {

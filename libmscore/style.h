@@ -654,6 +654,7 @@ enum class StyleIdx {
       bendFontItalic,
       bendFontUnderline,
       bendLineWidth,
+      bendArrowWidth,
 
       headerFontFace,
       headerFontSize,

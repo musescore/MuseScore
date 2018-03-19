@@ -198,21 +198,20 @@ void Bend::draw(QPainter* painter) const
 
       QFont f = font(_spatium * MScore::pixelRatio);
       painter->setFont(f);
+      QFontMetrics fm(f);
 
-      int n    = _points.size();
-      qreal x  = noteWidth;
+      qreal x  = noteWidth + _spatium * .2;
       qreal y  = -_spatium * .8;
       qreal x2, y2;
 
-      qreal aw = _spatium * .5;
+      qreal aw = score()->styleP(StyleIdx::bendArrowWidth);
       QPolygonF arrowUp;
-      arrowUp << QPointF(0, 0) << QPointF(aw*.5, aw) << QPointF(-aw*.5, aw);
+      arrowUp << QPointF(0, 0) << QPointF(aw * .5, aw) << QPointF(-aw *.5, aw);
       QPolygonF arrowDown;
-      arrowDown << QPointF(0, 0) << QPointF(aw*.5, -aw) << QPointF(-aw*.5, -aw);
-      QFontMetrics fm(f);
-      for (int pt = 0; pt < n; ++pt) {
-            if (pt == (n-1))
-                  break;
+      arrowDown << QPointF(0, 0) << QPointF(aw * .5, -aw) << QPointF(-aw *.5, -aw);
+
+      int n = _points.size();
+      for (int pt = 0; pt < n-1; ++pt) {
             int pitch = _points[pt].pitch;
             if (pt == 0 && pitch) {
                   y2 = -notePos.y() -_spatium * 2;
