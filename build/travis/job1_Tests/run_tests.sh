@@ -45,4 +45,21 @@ cd -
 #curl -F zip_file=@$REVISION.zip  http://prereleases.musescore.org/test/index.php
 #echo "Test results: http://prereleases.musescore.org/test/$REVISION/"
 
+cd ..
+cd ..
+if [ "$(grep '^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)' CMakeLists.txt)" ]
+then # Build is marked UNSTABLE inside CMakeLists.txt
+  echo "Unstable version: do not upload source zip file"
+else
+  make clean
+  rm -rf qt5
+  rm -rf qt5.zip
+  rm -rf share/sound/FluidR3Mono*
+  rm -rf share/sound/README*
+  rm -rf share/locale/*.qm
+  make zip
+  ./build/travis/job1_Tests/osuosl.sh MuseScore*.zip
+fi
+
+
 exit $PROC_RET
