@@ -39,7 +39,6 @@ class Beam final : public Element {
       bool _up;
       bool _distribute;                   // equal spacing of elements
       bool _noSlope;
-      PropertyFlags noSlopeStyle;
 
       bool _userModified[2];              // 0: auto/down  1: up
       bool _isGrace;
