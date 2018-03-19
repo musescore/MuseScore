@@ -69,10 +69,8 @@ Tuplet::Tuplet(const Tuplet& t)
       _p1            = t._p1;
       _p2            = t._p2;
 
-      if (t._number)
-            _number = new Text(*t._number);
-      else
-            _number = 0;
+     // recreated on layout
+     _number = 0;
       }
 
 //---------------------------------------------------------
