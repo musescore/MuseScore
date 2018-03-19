@@ -378,6 +378,7 @@ void System::layout2()
 
       if (visibleStaves.empty()) {
             qDebug("====no visible staves, staves %d, score staves %d", _staves.size(), score()->nstaves());
+            return;
             }
 
       for (auto i = visibleStaves.begin();; ++i) {
