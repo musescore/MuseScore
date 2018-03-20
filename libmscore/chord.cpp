@@ -444,10 +444,7 @@ void Chord::add(Element* e)
                         }
                   if (!found)
                         _notes.push_back(note);
-                  if (note->tieFor()) {
-                        if (note->tieFor()->endNote())
-                              note->tieFor()->endNote()->setTieBack(note->tieFor());
-                        }
+                  note->connectTiedNotes();
                   if (voice() && measure() && note->visible())
                         measure()->setHasVoices(staffIdx(), true);
                   }
@@ -529,10 +526,7 @@ void Chord::remove(Element* e)
                   auto i = std::find(_notes.begin(), _notes.end(), note);
                   if (i != _notes.end()) {
                         _notes.erase(i);
-                        if (note->tieFor()) {
-                              if (note->tieFor()->endNote())
-                                    note->tieFor()->endNote()->setTieBack(0);
-                              }
+                        note->disconnectTiedNotes();
                         for (Spanner* s : note->spannerBack())
                               note->removeSpannerBack(s);
                         for (Spanner* s : note->spannerFor())

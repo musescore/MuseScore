@@ -3182,6 +3182,36 @@ std::vector<Note*> Note::tiedNotes() const
       }
 
 //---------------------------------------------------------
+//   disconnectTiedNotes
+//---------------------------------------------------------
+
+void Note::disconnectTiedNotes()
+      {
+      if (tieBack() && tieBack()->startNote()) {
+            tieBack()->startNote()->remove(tieBack());
+            }
+      if (tieFor() && tieFor()->endNote()) {
+            tieFor()->endNote()->setTieBack(0);
+            }
+      }
+
+//---------------------------------------------------------
+//   connectTiedNotes
+//---------------------------------------------------------
+
+void Note::connectTiedNotes()
+      {
+      if (tieBack()) {
+            tieBack()->setEndNote(this);
+            if (tieBack()->startNote())
+                  tieBack()->startNote()->add(tieBack());
+            }
+      if (tieFor() && tieFor()->endNote()) {
+            tieFor()->endNote()->setTieBack(tieFor());
+            }
+      }
+
+//---------------------------------------------------------
 //   accidentalType
 //---------------------------------------------------------
 
