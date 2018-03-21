@@ -20,8 +20,6 @@
 
 namespace Ms {
 
-constexpr std::array<StyledProperty, BEND_STYLED_PROPERTIES+1> Bend::_styledProperties;
-
 //---------------------------------------------------------
 //   label
 //---------------------------------------------------------
@@ -37,25 +35,9 @@ static const char* label[] = {
 //---------------------------------------------------------
 
 Bend::Bend(Score* s)
-   : Element(s)
+   : Element(s, ElementFlag::MOVABLE)
       {
-      _propertyFlagsList = new PropertyFlags[BEND_STYLED_PROPERTIES];
-      for (int i = 0; i < BEND_STYLED_PROPERTIES; ++i)
-            _propertyFlagsList[i] = PropertyFlags::STYLED;
-
-      static constexpr std::array<P_ID,6> properties {
-            P_ID::FONT_FACE,
-            P_ID::FONT_SIZE,
-            P_ID::FONT_BOLD,
-            P_ID::FONT_ITALIC,
-            P_ID::FONT_UNDERLINE,
-            P_ID::LINE_WIDTH,
-            };
-
-      for (P_ID id : properties)
-            resetProperty(id);
-
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
+      initSubStyle(SubStyleId::BEND);
       }
 
 //---------------------------------------------------------
@@ -295,8 +277,7 @@ void Bend::write(XmlWriter& xml) const
             xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
                .arg(v.time).arg(v.pitch).arg(v.vibrato));
             }
-      for (auto k : _styledProperties)
-            writeProperty(xml, k.propertyIdx);
+      writeStyledProperties(xml);
       writeProperty(xml, P_ID::PLAY);
       Element::writeProperties(xml);
       xml.etag();
@@ -395,9 +376,9 @@ bool Bend::setProperty(P_ID id, const QVariant& v)
 
 QVariant Bend::propertyDefault(P_ID id) const
       {
-      for (auto k : _styledProperties) {
-            if (k.propertyIdx == id)
-                  return score()->styleV(k.styleIdx);
+      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp) {
+            if (spp->propertyIdx == id)
+                  return score()->styleV(spp->styleIdx);
             }
       switch (id) {
             case P_ID::PLAY:
@@ -413,8 +394,7 @@ QVariant Bend::propertyDefault(P_ID id) const
 
 void Bend::reset()
       {
-      for (auto k : _styledProperties)
-            undoResetProperty(k.propertyIdx);
+      resetStyledProperties();
       Element::reset();
       }
 

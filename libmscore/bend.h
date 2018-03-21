@@ -25,12 +25,12 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Bend final : public Element {
-      QString _fontFace;
-      qreal _fontSize;
-      bool _fontBold;
-      bool _fontItalic;
-      bool _fontUnderline;
-      Spatium _lineWidth;
+      M_PROPERTY(QString, fontFace,      setFontFace)
+      M_PROPERTY(qreal,   fontSize,      setFontSize)
+      M_PROPERTY(bool,    fontBold,      setFontBold)
+      M_PROPERTY(bool,    fontItalic,    setFontItalic)
+      M_PROPERTY(bool,    fontUnderline, setFontUnderline)
+      M_PROPERTY(Spatium, lineWidth,     setLineWidth)
 
       bool _playBend     { true };
       QList<PitchValue> _points;
@@ -39,20 +39,6 @@ class Bend final : public Element {
       qreal noteWidth;
 
       QFont font(qreal) const;
-
-#define BEND_STYLED_PROPERTIES 6
-      static constexpr std::array<StyledProperty, BEND_STYLED_PROPERTIES + 1> _styledProperties {{
-            { StyleIdx::bendFontFace,      P_ID::FONT_FACE },
-            { StyleIdx::bendFontSize,      P_ID::FONT_SIZE },
-            { StyleIdx::bendFontBold,      P_ID::FONT_BOLD },
-            { StyleIdx::bendFontItalic,    P_ID::FONT_ITALIC },
-            { StyleIdx::bendFontUnderline, P_ID::FONT_UNDERLINE },
-            { StyleIdx::bendLineWidth,     P_ID::LINE_WIDTH },
-            { StyleIdx::NOSTYLE,           P_ID::END }      // end of list marker
-            }};
-
-   protected:
-      virtual const StyledProperty* styledProperties() const override { return _styledProperties.data(); }
 
    public:
       Bend(Score* s);

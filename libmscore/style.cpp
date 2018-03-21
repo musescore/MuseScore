@@ -1246,6 +1246,7 @@ const std::vector<StyledProperty> bendStyle {
       { StyleIdx::bendFontBold,                       P_ID::FONT_BOLD              },
       { StyleIdx::bendFontItalic,                     P_ID::FONT_ITALIC            },
       { StyleIdx::bendFontUnderline,                  P_ID::FONT_UNDERLINE         },
+      { StyleIdx::bendLineWidth,                      P_ID::LINE_WIDTH             },
       { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 

@@ -323,6 +323,26 @@ void ScoreElement::writeProperty(XmlWriter& xml, P_ID id) const
       }
 
 //---------------------------------------------------------
+//   writeStyledProperties
+//---------------------------------------------------------
+
+void ScoreElement::writeStyledProperties(XmlWriter& xml) const
+      {
+      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp)
+            writeProperty(xml, spp->propertyIdx);
+      }
+
+//---------------------------------------------------------
+//   resetStyledProperties
+//---------------------------------------------------------
+
+void ScoreElement::resetStyledProperties()
+      {
+      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp)
+            resetProperty(spp->propertyIdx);
+      }
+
+//---------------------------------------------------------
 //   linkTo
 //---------------------------------------------------------
 

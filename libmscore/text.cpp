@@ -1862,7 +1862,6 @@ static const std::array<P_ID, 18> pids { {
 
 void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
       {
-      printf("===writeProperties style %d %s\n", int(subStyleId()), subStyleName(subStyleId()));
       Element::writeProperties(xml);
       for (P_ID i :pids)
             writeProperty(xml, i);
