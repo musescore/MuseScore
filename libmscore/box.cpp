@@ -559,8 +559,7 @@ Element* Box::drop(EditData& data)
 
             case ElementType::STAFF_TEXT:
                   {
-                  Text* text = new Text(score());
-                  text->init(SubStyle::FRAME);
+                  Text* text = new Text(SubStyleId::FRAME, score());
                   text->setParent(this);
                   text->setXmlText(toStaffText(e)->xmlText());
                   score()->undoAddElement(text);

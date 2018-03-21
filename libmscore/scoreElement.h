@@ -166,7 +166,9 @@ class ScoreElement {
       Score* _score;
 
    protected:
-      LinkedElements* _links { 0 };
+      LinkedElements* _links            { 0 };
+      PropertyFlags* _propertyFlagsList { 0 };
+      SubStyleId _subStyleId            { SubStyleId::EMPTY };
 
    public:
       ScoreElement(Score* s) : _score(s)   {}
@@ -188,8 +190,11 @@ class ScoreElement {
       virtual QVariant propertyDefault(P_ID) const { return QVariant(); }
       virtual void resetProperty(P_ID id);
 
-      virtual const StyledProperty* styledProperties() const;
-      virtual PropertyFlags* propertyFlagsList();
+      SubStyleId subStyleId() const                          { return _subStyleId; }
+      void setSubStyleId(SubStyleId);
+      void initSubStyle(SubStyleId);
+      virtual const StyledProperty* styledProperties() const { return subStyle(_subStyleId).data(); }
+      virtual PropertyFlags* propertyFlagsList()             { return _propertyFlagsList; }
       virtual PropertyFlags& propertyFlags(P_ID);
 
       virtual void setPropertyFlags(P_ID, PropertyFlags);

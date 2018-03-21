@@ -121,7 +121,7 @@ void Tuplet::layout()
       qreal _spatium = spatium();
       if (_numberType != TupletNumberType::NO_TEXT) {
             if (_number == 0) {
-                  _number = new Text(SubStyle::TUPLET, score());
+                  _number = new Text(SubStyleId::TUPLET, score());
                   _number->setTrack(track());
                   _number->setParent(this);
                   _number->setVisible(visible());
@@ -729,7 +729,7 @@ bool Tuplet::readProperties(XmlReader& e)
       else if (tag == "baseNote")
             _baseLen = TDuration(e.readElementText());
       else if (tag == "Number") {
-            _number = new Text(SubStyle::TUPLET, score());
+            _number = new Text(SubStyleId::TUPLET, score());
             _number->setParent(this);
             _number->read(e);
             _number->setVisible(visible());     //?? override saved property

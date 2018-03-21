@@ -958,7 +958,7 @@ bool FiguredBassItem::startsWithParenthesis() const
 FiguredBass::FiguredBass(Score* s)
    : TextBase(s)
       {
-      init(SubStyle::FIGURED_BASS);
+      initSubStyle(SubStyleId::FIGURED_BASS);
       setFlag(ElementFlag::ON_STAFF, true);
       setOnNote(true);
 #if 0  // TODO
@@ -1080,7 +1080,7 @@ void FiguredBass::layout()
       // if in edit mode or if style has been changed,
       // do nothing else, keeping default laying out and formatting
 //      if (editMode() || items.size() < 1 || subStyle() != SubStyle::FIGURED_BASS) {
-      if (items.size() < 1 || subStyle() != SubStyle::FIGURED_BASS) {
+      if (items.size() < 1 || subStyleId() != SubStyleId::FIGURED_BASS) {
             TextBase::layout();
             return;
             }
@@ -1207,9 +1207,10 @@ void FiguredBass::draw(QPainter* painter) const
             }
       // if in edit mode or with custom style, use standard text drawing
 //      if (editMode() || subStyle() != SubStyle::FIGURED_BASS)
-      if (subStyle() != SubStyle::FIGURED_BASS)
+      if (subStyleId() != SubStyleId::FIGURED_BASS)
             TextBase::draw(painter);
-      else {                                                // not edit mode:
+      else
+            {                                                // not edit mode:
             if (items.size() < 1)                           // if not parseable into f.b. items
                   TextBase::draw(painter);                      // draw as standard text
             else

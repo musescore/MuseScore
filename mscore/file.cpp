@@ -387,7 +387,7 @@ bool MuseScore::saveFile(MasterScore* score)
             return false;
       if (score->created()) {
             QString fn = score->masterScore()->fileInfo()->fileName();
-            Text* t = score->getText(SubStyle::TITLE);
+            Text* t = score->getText(SubStyleId::TITLE);
             if (t)
                   fn = t->plainText();
             QString name = createDefaultFileName(fn);
@@ -697,24 +697,24 @@ MasterScore* MuseScore::getNewFile()
                   delete nvb;
                   }
             if (!title.isEmpty()) {
-                  Text* s = new Text(SubStyle::TITLE, score);
+                  Text* s = new Text(SubStyleId::TITLE, score);
                   s->setPlainText(title);
                   measure->add(s);
                   score->setMetaTag("workTitle", title);
                   }
             if (!subtitle.isEmpty()) {
-                  Text* s = new Text(SubStyle::SUBTITLE, score);
+                  Text* s = new Text(SubStyleId::SUBTITLE, score);
                   s->setPlainText(subtitle);
                   measure->add(s);
                   }
             if (!composer.isEmpty()) {
-                  Text* s = new Text(SubStyle::COMPOSER, score);
+                  Text* s = new Text(SubStyleId::COMPOSER, score);
                   s->setPlainText(composer);
                   measure->add(s);
                   score->setMetaTag("composer", composer);
                   }
             if (!poet.isEmpty()) {
-                  Text* s = new Text(SubStyle::POET, score);
+                  Text* s = new Text(SubStyleId::POET, score);
                   s->setPlainText(poet);
                   measure->add(s);
                   // the poet() functions returns data called lyricist in the dialog

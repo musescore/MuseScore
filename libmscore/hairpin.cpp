@@ -538,7 +538,7 @@ Hairpin::Hairpin(Score* s)
       hairpinHeightStyle     = PropertyFlags::STYLED;
       _hairpinContHeight     = score()->styleS(StyleIdx::hairpinContHeight);
       hairpinContHeightStyle = PropertyFlags::STYLED;
-      initSubStyle(SubStyle::HAIRPIN);
+//TODO-ws      initSubStyle(SubStyleId::HAIRPIN);
       }
 
 //---------------------------------------------------------

@@ -88,7 +88,7 @@ struct Interval;
 struct TEvent;
 struct LayoutContext;
 
-enum class SubStyle;
+enum class SubStyleId;
 enum class ClefType : signed char;
 enum class BeatType : char;
 enum class SymId;
@@ -882,7 +882,7 @@ class Score : public QObject, ScoreElement {
 
       bool defaultsRead() const                      { return _defaultsRead;    }
       void setDefaultsRead(bool b)                   { _defaultsRead = b;       }
-      Text* getText(SubStyle subtype);
+      Text* getText(SubStyleId subtype);
 
       void lassoSelect(const QRectF&);
       void lassoSelectEnd();

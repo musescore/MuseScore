@@ -30,14 +30,14 @@ namespace Ms {
 InstrumentChange::InstrumentChange(Score* s)
    : TextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
       {
-      init(SubStyle::INSTRUMENT_CHANGE);
+      initSubStyle(SubStyleId::INSTRUMENT_CHANGE);
       _instrument = new Instrument();
       }
 
 InstrumentChange::InstrumentChange(const Instrument& i, Score* s)
    : TextBase(s)
       {
-      init(SubStyle::INSTRUMENT_CHANGE);
+      initSubStyle(SubStyleId::INSTRUMENT_CHANGE);
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _instrument = new Instrument(i);
       }
@@ -118,7 +118,7 @@ QVariant InstrumentChange::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
             case P_ID::SUB_STYLE:
-                  return int(SubStyle::INSTRUMENT_CHANGE);
+                  return int(SubStyleId::INSTRUMENT_CHANGE);
             default:
                   return TextBase::propertyDefault(propertyId);
             }

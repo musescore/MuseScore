@@ -60,12 +60,11 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Placement p
 Lyrics::Lyrics(Score* s)
    : TextBase(s)
       {
-      init(SubStyle::LYRIC1);
+      initSubStyle(SubStyleId::LYRIC_ODD);
       _no         = 0;
       _ticks      = 0;
       _syllabic   = Syllabic::SINGLE;
       _separator  = 0;
-      placementStyle = PropertyFlags::STYLED;
       setPlacement(Placement(s->styleI(StyleIdx::lyricsPlacement)));
       }
 
@@ -156,10 +155,6 @@ void Lyrics::read(XmlReader& e)
                   _verseNumber = new Text(score());
                   _verseNumber->read(e);
                   _verseNumber->setParent(this);
-                  }
-            else if (tag == "placement") {
-                  placementStyle = PropertyFlags::UNSTYLED;
-                  TextBase::readProperties(e);
                   }
             else if (!TextBase::readProperties(e))
                   e.unknown();
@@ -501,13 +496,13 @@ Element* Lyrics::drop(EditData& data)
 void Lyrics::setNo(int n)
       {
       _no = n;
-      // adjust between LYRICS1 and LYRICS2 only; keep other styles as they are
+      // adjust between LYRICS_EVEN and LYRICS_ODD only; keep other styles as they are
       // (_no is 0-based, so odd _no means even line and viceversa)
       if (type() == ElementType::LYRICS) {
-            if ((_no & 1) && subStyle() == SubStyle::LYRIC1)
-                  initSubStyle(SubStyle::LYRIC2);
-            if (!(_no & 1) && subStyle() == SubStyle::LYRIC2)
-                  initSubStyle(SubStyle::LYRIC1);
+            if ((_no & 1) && subStyleId() == SubStyleId::LYRIC_ODD)
+                  initSubStyle(SubStyleId::LYRIC_EVEN);
+            if (!(_no & 1) && subStyleId() == SubStyleId::LYRIC_EVEN)
+                  initSubStyle(SubStyleId::LYRIC_ODD);
             }
       }
 
@@ -560,7 +555,6 @@ bool Lyrics::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
             case P_ID::PLACEMENT:
-                  placementStyle = PropertyFlags::UNSTYLED;
                   setPlacement(Placement(v.toInt()));
                   break;
             case P_ID::SYLLABIC:
@@ -589,7 +583,7 @@ QVariant Lyrics::propertyDefault(P_ID id) const
       {
       switch (id) {
             case P_ID::SUB_STYLE:
-                  return int(SubStyle::LYRIC1);
+                  return int(SubStyleId::LYRIC_ODD);
             case P_ID::PLACEMENT:
                   return score()->styleI(StyleIdx::lyricsPlacement);
             case P_ID::SYLLABIC:
@@ -924,21 +918,7 @@ void LyricsLineSegment::draw(QPainter* painter) const
             }
       }
 
-//---------------------------------------------------------
-//   propertyStyle
-//---------------------------------------------------------
-
-PropertyFlags& Lyrics::propertyFlags(P_ID id)
-      {
-      switch (id) {
-            case P_ID::PLACEMENT:
-                  return ScoreElement::propertyFlags(id);   // return PropertyFlags::NOSTYLE;
-
-            default:
-                  return TextBase::propertyFlags(id);
-            }
-      }
-
+#if 0
 //---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
@@ -965,45 +945,6 @@ StyleIdx Lyrics::getPropertyStyle(P_ID id) const
             }
       return StyleIdx::NOSTYLE;
       }
-
-//---------------------------------------------------------
-//   styleChanged
-//    reset all styled values to actual style
-//---------------------------------------------------------
-
-void Lyrics::styleChanged()
-      {
-      if (placementStyle == PropertyFlags::STYLED)
-            setPlacement(Placement(score()->styleI(StyleIdx::lyricsPlacement)));
-      TextBase::styleChanged();
-      }
-
-//---------------------------------------------------------
-//   reset
-//---------------------------------------------------------
-
-void Lyrics::reset()
-      {
-      undoResetProperty(P_ID::PLACEMENT);
-      TextBase::reset();
-      }
-
-//---------------------------------------------------------
-//   resetProperty
-//---------------------------------------------------------
-
-void Lyrics::resetProperty(P_ID id)
-      {
-      switch (id) {
-            case P_ID::PLACEMENT:
-                  setProperty(id, propertyDefault(id));
-                  placementStyle = PropertyFlags::STYLED;
-                  break;
-
-            default:
-                  return TextBase::resetProperty(id);
-            }
-      }
-
+#endif
 }
 
