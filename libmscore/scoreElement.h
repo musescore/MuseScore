@@ -189,6 +189,7 @@ class ScoreElement {
       virtual bool setProperty(P_ID, const QVariant&) = 0;
       virtual QVariant propertyDefault(P_ID) const { return QVariant(); }
       virtual void resetProperty(P_ID id);
+      void resetStyledProperties();
 
       SubStyleId subStyleId() const                          { return _subStyleId; }
       void setSubStyleId(SubStyleId);
@@ -212,6 +213,7 @@ class ScoreElement {
 
       void undoPushProperty(P_ID);
       void writeProperty(XmlWriter& xml, P_ID id) const;
+      void writeStyledProperties(XmlWriter&) const;
 
       QList<ScoreElement*> linkList() const;
 
