@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2010-2011 Werner Schweer
+//  Copyright (C) 2010-2018 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -25,65 +25,18 @@ namespace Ms {
 
 //---------------------------------------------------------
 //   Fingering
+//      Element(Score* = 0, ElementFlags = ElementFlag::NOTHING);
 //---------------------------------------------------------
+
+Fingering::Fingering(SubStyleId ssid, Score* s, ElementFlag ef)
+   : TextBase(s, ef)
+      {
+      initSubStyle(ssid);
+      }
 
 Fingering::Fingering(Score* s)
-  : TextBase(s)
+  : Fingering(SubStyleId::FINGERING, s, ElementFlag::HAS_TAG)
       {
-      // init subStyle Fingering
-      _subStyleId = SubStyleId::FINGERING;
-      _propertyFlagsList = new PropertyFlags[subStyle(_subStyleId).size()];
-      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp)
-            resetProperty(spp->propertyIdx);
-
-      setFlag(ElementFlag::HAS_TAG, true);      // this is a layered element
-      }
-
-Fingering::Fingering(SubStyleId ssid, Score* s)
-   : TextBase(s)
-      {
-      setSubStyleId(ssid);
-      for (const StyledProperty* spp = styledProperties();spp->styleIdx != StyleIdx::NOSTYLE; ++spp)
-            resetProperty(spp->propertyIdx);
-      setFlag(ElementFlag::HAS_TAG, true);      // this is a layered element
-      }
-
-Fingering::~Fingering()
-      {
-      }
-
-//---------------------------------------------------------
-//   styledProperties
-//---------------------------------------------------------
-
-const StyledProperty* Fingering::styledProperties() const
-      {
-      return subStyle(_subStyleId).data();
-      }
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Fingering::write(XmlWriter& xml) const
-      {
-      if (!xml.canWrite(this))
-            return;
-      xml.stag(name());
-      TextBase::writeProperties(xml);
-      xml.etag();
-      }
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Fingering::read(XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            if (!TextBase::readProperties(e))
-                  e.unknown();
-            }
       }
 
 //---------------------------------------------------------
@@ -163,28 +116,9 @@ void Fingering::draw(QPainter* painter) const
 QString Fingering::accessibleInfo() const
       {
       QString rez = Element::accessibleInfo();
-      if (_subStyleId == SubStyleId::STRING_NUMBER) {
+      if (_subStyleId == SubStyleId::STRING_NUMBER)
             rez += " " + QObject::tr("String number");
-            }
       return QString("%1: %2").arg(rez).arg(plainText());
-      }
-
-//---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
-QVariant Fingering::getProperty(P_ID propertyId) const
-      {
-      return TextBase::getProperty(propertyId);
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool Fingering::setProperty(P_ID propertyId, const QVariant& v)
-      {
-      return TextBase::setProperty(propertyId, v);
       }
 
 //---------------------------------------------------------
@@ -199,15 +133,6 @@ QVariant Fingering::propertyDefault(P_ID id) const
             default:
                   return TextBase::propertyDefault(id);
             }
-      }
-
-//---------------------------------------------------------
-//   subtypeName
-//---------------------------------------------------------
-
-QString Fingering::subtypeName() const
-      {
-      return subStyleName(_subStyleId);
       }
 
 }
