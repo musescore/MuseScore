@@ -325,10 +325,9 @@ OVE::Staff* getStaff(const OVE::OveSong* ove, int track) {
       return 0;
       }
 
-void addText(VBox* & vbox, Score* s, QString strTxt, SubStyle stl) {
+void addText(VBox* & vbox, Score* s, QString strTxt, SubStyleId stl) {
       if (!strTxt.isEmpty()) {
-            Text* text = new Text(s);
-            text->initSubStyle(stl);
+            Text* text = new Text(stl, s);
             text->setPlainText(strTxt);
             if(vbox == 0) {
                   vbox = new VBox(s);
@@ -343,7 +342,7 @@ void OveToMScore::convertHeader() {
       if( !titles.empty() && !titles[0].isEmpty() ) {
             QString title = titles[0];
             score_->setMetaTag("movementTitle", title);
-            addText(vbox, score_, title, SubStyle::TITLE);
+            addText(vbox, score_, title, SubStyleId::TITLE);
             }
 
       QList<QString> copyrights = ove_->getCopyrights();
@@ -355,19 +354,19 @@ void OveToMScore::convertHeader() {
       QList<QString> annotates = ove_->getAnnotates();
       if( !annotates.empty() && !annotates[0].isEmpty() ) {
             QString annotate = annotates[0];
-            addText(vbox, score_, annotate, SubStyle::POET);
+            addText(vbox, score_, annotate, SubStyleId::POET);
             }
 
       QList<QString> writers = ove_->getWriters();
       if(!writers.empty()) {
             QString composer = writers[0];
             score_->setMetaTag("composer", composer);
-            addText(vbox, score_, composer, SubStyle::COMPOSER);
+            addText(vbox, score_, composer, SubStyleId::COMPOSER);
             }
 
       if(writers.size() > 1) {
             QString lyricist = writers[1];
-            addText(vbox, score_, lyricist, SubStyle::POET);
+            addText(vbox, score_, lyricist, SubStyleId::POET);
             }
 
       if (vbox) {
@@ -2294,7 +2293,7 @@ void OveToMScore::convertExpressions(Measure* measure, int part, int staff, int 
       for(int i=0; i<expressions.size(); ++i){
             OVE::Expressions* expressionPtr = static_cast<OVE::Expressions*>(expressions[i]);
             int absTick = mtt_->getTick(measure->no(), expressionPtr->getTick());
-            Text* t = new Text(SubStyle::EXPRESSION, score_);
+            Text* t = new Text(SubStyleId::EXPRESSION, score_);
 
             t->setPlainText(expressionPtr->getText());
             t->setTrack(track);

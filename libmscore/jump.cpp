@@ -22,12 +22,12 @@ namespace Ms {
 //---------------------------------------------------------
 
 const JumpTypeTable jumpTypeTable[] = {
-      { Jump::Type::DC,         SubStyle::REPEAT_RIGHT, "D.C.",         "start", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo")        },
-      { Jump::Type::DC_AL_FINE, SubStyle::REPEAT_RIGHT, "D.C. al Fine", "start", "fine", "" ,     QT_TRANSLATE_NOOP("jumpType", "Da Capo al Fine")},
-      { Jump::Type::DC_AL_CODA, SubStyle::REPEAT_RIGHT, "D.C. al Coda", "start", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "Da Capo al Coda")},
-      { Jump::Type::DS_AL_CODA, SubStyle::REPEAT_RIGHT, "D.S. al Coda", "segno", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda")   },
-      { Jump::Type::DS_AL_FINE, SubStyle::REPEAT_RIGHT, "D.S. al Fine", "segno", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "D.S. al Fine")   },
-      { Jump::Type::DS,         SubStyle::REPEAT_RIGHT, "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.")           }
+      { Jump::Type::DC,         SubStyleId::REPEAT_RIGHT, "D.C.",         "start", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo")        },
+      { Jump::Type::DC_AL_FINE, SubStyleId::REPEAT_RIGHT, "D.C. al Fine", "start", "fine", "" ,     QT_TRANSLATE_NOOP("jumpType", "Da Capo al Fine")},
+      { Jump::Type::DC_AL_CODA, SubStyleId::REPEAT_RIGHT, "D.C. al Coda", "start", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "Da Capo al Coda")},
+      { Jump::Type::DS_AL_CODA, SubStyleId::REPEAT_RIGHT, "D.S. al Coda", "segno", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda")   },
+      { Jump::Type::DS_AL_FINE, SubStyleId::REPEAT_RIGHT, "D.S. al Fine", "segno", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "D.S. al Fine")   },
+      { Jump::Type::DS,         SubStyleId::REPEAT_RIGHT, "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.")           }
       };
 
 int jumpTypeTableSize()
@@ -42,7 +42,7 @@ int jumpTypeTableSize()
 Jump::Jump(Score* s)
    : TextBase(s)
       {
-      init(SubStyle::REPEAT_RIGHT);
+      initSubStyle(SubStyleId::REPEAT_RIGHT);
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       setLayoutToParentWidth(true);
       _playRepeats = false;
@@ -251,8 +251,6 @@ QVariant Jump::propertyDefault(P_ID propertyId) const
                   return QString("");
             case P_ID::PLAY_REPEATS:
                   return false;
-            case P_ID::PLACEMENT:
-                  return int(Placement::ABOVE);
             default:
                   break;
             }

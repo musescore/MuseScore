@@ -188,25 +188,23 @@ class TextBlock {
 //---------------------------------------------------------
 
 class TextBase : public Element {
-      M_PROPERTY(QString, family,                 setFamily)
-      M_PROPERTY(qreal,   size,                   setSize)
-      M_PROPERTY(bool,    bold,                   setBold)
-      M_PROPERTY(bool,    italic,                 setItalic)
-      M_PROPERTY(bool,    underline,              setUnderline)
-      M_PROPERTY(QColor,  bgColor,                setBgColor)
-      M_PROPERTY(QColor,  frameColor,             setFrameColor)
-      M_PROPERTY(Align,   align,                  setAlign)
-      M_PROPERTY(bool,    hasFrame,               setHasFrame)
-      M_PROPERTY(bool,    circle,                 setCircle)
-      M_PROPERTY(bool,    square,                 setSquare)
-      M_PROPERTY(bool,    sizeIsSpatiumDependent, setSizeIsSpatiumDependent)
-      M_PROPERTY(Spatium, frameWidth,             setFrameWidth)
-      M_PROPERTY(Spatium, paddingWidth,           setPaddingWidth)
-      M_PROPERTY(int,     frameRound,             setFrameRound)
-      M_PROPERTY(QPointF, offset,                 setOffset)            // inch or spatium
-      M_PROPERTY(OffsetType, offsetType,          setOffsetType)
-
-      SubStyle _subStyle;
+      M_PROPERTY(QString,    family,                 setFamily)
+      M_PROPERTY(qreal,      size,                   setSize)
+      M_PROPERTY(bool,       bold,                   setBold)
+      M_PROPERTY(bool,       italic,                 setItalic)
+      M_PROPERTY(bool,       underline,              setUnderline)
+      M_PROPERTY(QColor,     bgColor,                setBgColor)
+      M_PROPERTY(QColor,     frameColor,             setFrameColor)
+      M_PROPERTY(Align,      align,                  setAlign)
+      M_PROPERTY(bool,       hasFrame,               setHasFrame)
+      M_PROPERTY(bool,       circle,                 setCircle)
+      M_PROPERTY(bool,       square,                 setSquare)
+      M_PROPERTY(bool,       sizeIsSpatiumDependent, setSizeIsSpatiumDependent)
+      M_PROPERTY(Spatium,    frameWidth,             setFrameWidth)
+      M_PROPERTY(Spatium,    paddingWidth,           setPaddingWidth)
+      M_PROPERTY(int,        frameRound,             setFrameRound)
+      M_PROPERTY(QPointF,    offset,                 setOffset)            // inch or spatium
+      M_PROPERTY(OffsetType, offsetType,             setOffsetType)
 
       // there are two representations of text; only one
       // might be valid and the other can be constructed from it
@@ -237,11 +235,6 @@ class TextBase : public Element {
    public:
       TextBase(Score* = 0, ElementFlags = ElementFlag::NOTHING);
       TextBase(const TextBase&);
-      void init(SubStyle st = SubStyle::DEFAULT);
-
-      SubStyle subStyle() const                    { return _subStyle; }
-      void setSubStyle(SubStyle ss)                { _subStyle = ss;   }
-      virtual void initSubStyle(SubStyle) override;
 
       virtual bool mousePress(EditData&) override;
 
@@ -287,7 +280,6 @@ class TextBase : public Element {
       bool readProperties(XmlReader&);
 
       void spellCheckUnderline(bool) {}
-      virtual void styleChanged() override;
 
       virtual void paste(EditData&);
 
@@ -329,9 +321,9 @@ class TextBase : public Element {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(P_ID id) const override;
-      virtual PropertyFlags& propertyFlags(P_ID) override;
-      virtual StyleIdx getPropertyStyle(P_ID) const override;
+
       virtual void reset() override;
+      virtual void styleChanged() override;
 
       void editInsertText(TextCursor*, const QString&);
 
@@ -356,10 +348,11 @@ class Text final : public TextBase {
 
    public:
       Text(Score* s = 0);
-      Text(SubStyle ss, Score* s = 0);
+      Text(SubStyleId ss, Score* s = 0);
 
       virtual ElementType type() const override    { return ElementType::TEXT; }
       virtual Text* clone() const override         { return new Text(*this); }
+      virtual void read(XmlReader&) override;
       };
 
 }     // namespace Ms

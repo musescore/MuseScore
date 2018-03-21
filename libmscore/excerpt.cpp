@@ -202,8 +202,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
       titleFramePart->copyValues(titleFrameScore);
       QString partLabel = excerpt->title();     // parts.front()->longName();
       if (!partLabel.isEmpty()) {
-            Text* txt = new Text(score);
-            txt->init(SubStyle::INSTRUMENT_EXCERPT);
+            Text* txt = new Text(SubStyleId::INSTRUMENT_EXCERPT, score);
             txt->setPlainText(partLabel);
             txt->setTrack(0);
             measure->add(txt);

@@ -990,9 +990,9 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       s.placement->addItem(tr("Below"), 1);
 
       s.subStyle->clear();
-      for (auto ss : { SubStyle::SYSTEM, SubStyle::STAFF, SubStyle::TEMPO, SubStyle::METRONOME,
-         SubStyle::REHEARSAL_MARK, SubStyle::EXPRESSION,
-         SubStyle::REPEAT_LEFT, SubStyle::REPEAT_RIGHT, SubStyle::USER1, SubStyle::USER2 } )
+      for (auto ss : { SubStyleId::SYSTEM, SubStyleId::STAFF, SubStyleId::TEMPO, SubStyleId::METRONOME,
+         SubStyleId::REHEARSAL_MARK, SubStyleId::EXPRESSION,
+         SubStyleId::REPEAT_LEFT, SubStyleId::REPEAT_RIGHT, SubStyleId::USER1, SubStyleId::USER2 } )
             {
             s.subStyle->addItem(subStyleUserName(ss), int(ss));
             }

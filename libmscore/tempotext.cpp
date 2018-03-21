@@ -30,11 +30,12 @@ namespace Ms {
 TempoText::TempoText(Score* s)
    : TextBase(s, ElementFlag::SYSTEM)
       {
-      init(SubStyle::TEMPO);
+      initSubStyle(SubStyleId::TEMPO);
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
       _relative   = 1.0;
       _isRelative = false;
+      setPlacement(Placement::ABOVE);
       }
 
 //---------------------------------------------------------
@@ -285,7 +286,7 @@ void TempoText::undoSetFollowText(bool v)
 
 QVariant TempoText::getProperty(P_ID propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case P_ID::TEMPO:
                   return _tempo;
             case P_ID::TEMPO_FOLLOW_TEXT:
@@ -327,7 +328,7 @@ QVariant TempoText::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_ID::SUB_STYLE:
-                  return int(SubStyle::TEMPO);
+                  return int(SubStyleId::TEMPO);
             case P_ID::TEMPO:
                   return 2.0;
             case P_ID::TEMPO_FOLLOW_TEXT:

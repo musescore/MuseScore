@@ -140,7 +140,7 @@ qDebug("ResolveDegreeList: not found in table");
 Harmony::Harmony(Score* s)
    : TextBase(s)
       {
-      init(SubStyle::HARMONY);
+      initSubStyle(SubStyleId::HARMONY);
       _rootTpc    = Tpc::TPC_INVALID;
       _baseTpc    = Tpc::TPC_INVALID;
       _rootCase   = NoteCaseType::CAPITAL;
@@ -1623,7 +1623,7 @@ QVariant Harmony::propertyDefault(P_ID id) const
       {
       switch (id) {
             case P_ID::SUB_STYLE:
-                  return int(SubStyle::HARMONY);
+                  return int(SubStyleId::HARMONY);
             default:
                   return TextBase::propertyDefault(id);
             }

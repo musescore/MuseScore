@@ -140,11 +140,13 @@ bool isTitlePrefix(const QString &text)
 
 void addTitleToScore(Score *score, const QString &string, int textCounter)
       {
-      Text* text = new Text(score);
+      SubStyleId ssid = SubStyleId::DEFAULT;
       if (textCounter == 1)
-            text->setSubStyle(SubStyle::TITLE);
+            ssid = SubStyleId::TITLE;
       else if (textCounter == 2)
-            text->setSubStyle(SubStyle::COMPOSER);
+            ssid = SubStyleId::COMPOSER;
+
+      Text* text = new Text(ssid, score);
       text->setPlainText(string.right(string.size() - TEXT_PREFIX.size()));
 
       MeasureBase* measure = score->first();
