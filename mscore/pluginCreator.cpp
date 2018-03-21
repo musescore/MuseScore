@@ -249,16 +249,13 @@ void PluginCreator::closeEvent(QCloseEvent* ev)
                QMessageBox::Save);
             if (n == QMessageBox::Save){
                   savePlugin();
-                  PluginCreator.writeSettings();
-                  }
-            else if (n == QMessageBox::Discard){
-                  PluginCreator.writeSettings();
                   }
             else if (n == QMessageBox::Cancel) {
                   ev->ignore();
                   return;
                   }
             }
+      PluginCreator.writeSettings();
       emit closed(false);
       QWidget::closeEvent(ev);
       }
