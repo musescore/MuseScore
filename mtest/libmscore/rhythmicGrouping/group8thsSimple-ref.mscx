@@ -420,6 +420,7 @@ N = 1 eighth note</text>
           <dots>1</dots>
           <durationType>quarter</durationType>
           <Note>
+            <endSpanner id="2"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -445,6 +446,7 @@ N = 1 eighth note</text>
         <Chord>
           <durationType>eighth</durationType>
           <Note>
+            <endSpanner id="3"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -469,6 +471,7 @@ N = 1 eighth note</text>
         <Chord>
           <durationType>half</durationType>
           <Note>
+            <endSpanner id="4"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -528,6 +531,7 @@ N = 1 eighth note</text>
         <Chord>
           <durationType>eighth</durationType>
           <Note>
+            <endSpanner id="5"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -579,6 +583,7 @@ N = 1 eighth note</text>
         <Chord>
           <durationType>half</durationType>
           <Note>
+            <endSpanner id="6"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -603,6 +608,7 @@ N = 1 eighth note</text>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
+            <endSpanner id="7"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -629,6 +635,7 @@ N = 1 eighth note</text>
         <Chord>
           <durationType>eighth</durationType>
           <Note>
+            <endSpanner id="8"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -660,6 +667,7 @@ N = 1 eighth note</text>
         <Chord>
           <durationType>half</durationType>
           <Note>
+            <endSpanner id="9"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -683,6 +691,7 @@ N = 1 eighth note</text>
         <Chord>
           <durationType>quarter</durationType>
           <Note>
+            <endSpanner id="10"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -710,6 +719,7 @@ N = 1 eighth note</text>
         <Chord>
           <durationType>half</durationType>
           <Note>
+            <endSpanner id="11"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -742,6 +752,7 @@ N = 1 eighth note</text>
           <dots>1</dots>
           <durationType>quarter</durationType>
           <Note>
+            <endSpanner id="13"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -769,6 +780,7 @@ N = 1 eighth note</text>
           <dots>1</dots>
           <durationType>quarter</durationType>
           <Note>
+            <endSpanner id="14"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -803,6 +815,7 @@ N = 1 eighth note</text>
         <Chord>
           <durationType>half</durationType>
           <Note>
+            <endSpanner id="16"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -826,6 +839,7 @@ N = 1 eighth note</text>
         <Chord>
           <durationType>half</durationType>
           <Note>
+            <endSpanner id="17"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
