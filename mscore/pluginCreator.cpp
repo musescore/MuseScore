@@ -247,8 +247,13 @@ void PluginCreator::closeEvent(QCloseEvent* ev)
                "Save before closing?").arg(path),
                QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                QMessageBox::Save);
-            if (n == QMessageBox::Save)
+            if (n == QMessageBox::Save){
                   savePlugin();
+                  PluginCreator.writeSettings();
+                  }
+            else if (n == QMessageBox::Discard){
+                  PluginCreator.writeSettings();
+                  }
             else if (n == QMessageBox::Cancel) {
                   ev->ignore();
                   return;
@@ -452,7 +457,7 @@ void PluginCreator::load()
 //   savePlugin
 //---------------------------------------------------------
 
-void PluginCreator::doSavePlugin(bool saveas) 
+void PluginCreator::doSavePlugin(bool saveas)
       {
       if (saveas) {
             path = mscore->getPluginFilename(false);
