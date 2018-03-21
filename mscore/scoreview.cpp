@@ -3613,7 +3613,8 @@ void ScoreView::cmdRealtimeAdvance()
       if (!is.noteEntryMode())
             return;
       _score->startCmd();
-      if (!is.cr() || is.cr()->duration() != is.duration().fraction())
+      int ticks2measureEnd = is.segment()->measure()->ticks() - is.segment()->rtick();
+      if (!is.cr() || (is.cr()->duration() != is.duration().fraction() && is.duration().ticks() < ticks2measureEnd))
             _score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), Direction::AUTO);
       ChordRest* prevCR = toChordRest(is.cr());
       is.moveToNextInputPos();
