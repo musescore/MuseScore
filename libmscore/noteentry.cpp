@@ -156,6 +156,14 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag)
       if (_is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
             duration = _is.cr()->duration();
             }
+      else if (_is.usingNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO) || _is.usingNoteEntryMethod(NoteEntryMethod::REALTIME_MANUAL)) {
+            // FIXME: truncate duration at barline in real-time modes.
+            //   The user might try to enter a duration that is too long to fit in the remaining space in the measure.
+            //   We could split the duration at the barline and continue into the next bar, but this would create extra
+            //   notes, extra ties, and extra pain. Instead, we simply truncate the duration at the barline.
+            int ticks2measureEnd = _is.segment()->measure()->ticks() - _is.segment()->rtick();
+            duration = _is.duration().ticks() > ticks2measureEnd ? Fraction::fromTicks(ticks2measureEnd) : _is.duration().fraction();
+            }
       else {
             duration = _is.duration().fraction();
             }

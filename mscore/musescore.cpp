@@ -558,7 +558,7 @@ void MuseScore::populateNoteInputMenu()
                         noteEntryMethods->addAction(getAction("note-input-realtime-auto"));
                         noteEntryMethods->addAction(getAction("note-input-realtime-manual"));
 
-                        connect(noteEntryMethods, SIGNAL(triggered(QAction*)), this, SLOT(setNoteEntryState()));
+                        connect(noteEntryMethods, SIGNAL(triggered(QAction*)), this, SLOT(cmd(QAction*)));
 
                         w = new ToolButtonMenu(tr("Note Entry Methods"),
                            ToolButtonMenu::TYPES::ICON_CHANGED,

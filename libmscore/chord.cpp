@@ -2925,12 +2925,16 @@ void Chord::sortNotes()
 
 Chord* Chord::nextTiedChord(bool backwards, bool sameSize)
       {
-      Segment* nextSeg = backwards ? segment()->prev1(SegmentType::ChordRest) : segment()->next1(SegmentType::ChordRest);
-      if (!nextSeg)
-            return 0;
-      ChordRest* nextCR = nextSeg->cr(track());
-      if (!nextCR || !nextCR->isChord())
-            return 0;
+      Segment* nextSeg = segment();
+      ChordRest* nextCR = 0;
+      do    {
+            nextSeg = backwards ? nextSeg->prev1(SegmentType::ChordRest) : nextSeg->next1(SegmentType::ChordRest);
+            if (!nextSeg)
+                  return 0; // nothing to tie to
+            nextCR = nextSeg->cr(track());
+            } while (nextCR == 0); // nextCR = 0 when CR in another voice overlaps
+      if (!nextCR->isChord())
+            return 0; // can't tie to a rest
       Chord* next = toChord(nextCR);
       if (sameSize && notes().size() != next->notes().size())
             return 0; // sizes don't match so some notes can't be tied
