@@ -2821,6 +2821,9 @@ void Chord::removeMarkings(bool keepTremolo)
       if (arpeggio())
             remove(arpeggio());
       qDeleteAll(graceNotes());
+	  for(Articulation* a : articulations() ){
+            remove(a);
+      }
       for (Note* n : notes()) {
             for (Element* e : n->el())
                   n->remove(e);
