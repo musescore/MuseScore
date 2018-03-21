@@ -965,16 +965,20 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
             int maxTick = endTick > msr->endTick() ? msr->endTick() : endTick;
             if (!seg || seg->measure() != msr)
                   seg = msr->first(SegmentType::ChordRest);
-            for (; seg && seg->tick() + seg->ticks() < maxTick; seg = seg->next(SegmentType::ChordRest)) {
+            for (; seg; seg = seg->next(SegmentType::ChordRest)) {
                   ChordRest* curr = seg->cr(track);
                   if (!curr)
-                        continue; // voice is empty here
+                        continue; // this voice is empty here (CR overlaps with CR in other track)
+                  if (seg->tick() + curr->actualTicks() > maxTick)
+                        break; // outside range
                   if (curr->isRest()) {
                         // combine consecutive rests
                         ChordRest* lastRest = curr;
-                        for (Segment* s = seg->next(SegmentType::ChordRest); s && s->tick() + s->ticks() <= maxTick; s = s->next(SegmentType::ChordRest)) {
+                        for (Segment* s = seg->next(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                               ChordRest* cr = s->cr(track);
-                              if (!cr || !cr->isRest())
+                              if (!cr)
+                                    continue; // this voice is empty here
+                              if (!cr->isRest() || s->tick() + cr->actualTicks() > maxTick)
                                     break;
                               lastRest = cr;
                               }
@@ -1004,21 +1008,37 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                               nn->setTieFor(0);
                               }
                         int noteTicks = lastTiedChord->tick() + lastTiedChord->duration().ticks() - chord->tick();
-                        seg = setNoteRest(seg, curr->track(), NoteVal(pitches[0]), Fraction::fromTicks(noteTicks), Direction::AUTO, true);
-                        Chord* newChord = toChord(seg->cr(track));
-                        Note* n = newChord->notes().front();
-                        undoRemoveElement(n);
-                        for (int i = 0; i < numNotes; i++) {
-                              NoteVal nval = NoteVal(pitches[i]);
-                              n = addNote(newChord, nval);
-                              if (tieBack[i]) {
-                                    n->setTieBack(tieBack[i]);
-                                    tieBack[i]->setEndNote(n);
+                        Segment* newSeg = setNoteRest(seg, curr->track(), NoteVal(pitches[0]), Fraction::fromTicks(noteTicks), Direction::AUTO, true);
+                        for (seg = seg->prev1()->next1(SegmentType::ChordRest);;seg = seg->next1(SegmentType::ChordRest)) {
+                              ChordRest* cr = seg->cr(track);
+                              if (!cr)
+                                    continue; // voice is empty here
+                              Chord* newChord = toChord(cr);
+                              Note* n = newChord->notes().front();
+                              undoRemoveElement(n);
+                              for (int i = 0; i < numNotes; i++) {
+                                    NoteVal nval = NoteVal(pitches[i]);
+                                    n = addNote(newChord, nval);
+                                    if (tieBack[i]) {
+                                          n->setTieBack(tieBack[i]);
+                                          tieBack[i]->setEndNote(n);
+                                          tieBack[i] = 0;
+                                          }
+                                    if (seg != newSeg) {
+                                          Tie* tie = new Tie(this);
+                                          n->setTieFor(tie);
+                                          tie->setStartNote(n);
+                                          tie->setEndNote(n);
+                                          tie->setTrack(n->track());
+                                          tieBack[i] = tie;
+                                          }
+                                    else if (tieFor[i]) {
+                                          n->setTieFor(tieFor[i]);
+                                          tieFor[i]->setStartNote(n);
+                                          }
                                     }
-                              if (tieFor[i]) {
-                                    n->setTieFor(tieFor[i]);
-                                    tieFor[i]->setStartNote(n);
-                                    }
+                              if (seg == newSeg)
+                                    break;
                               }
                         }
                   }

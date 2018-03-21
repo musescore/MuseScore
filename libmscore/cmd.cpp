@@ -1917,13 +1917,8 @@ bool Score::processMidiInput()
                                                 startCmd();
                                                 cmdActive = true;
                                                 }
-                                          if (n && n->tieBack()) {
-                                                Note* fn =  n->tieBack()->startNote();
-                                                deleteItem(n->tieBack());
-                                                deleteItem(n);
-                                                select(fn);
-                                                _is.moveToNextInputPos();
-                                                }
+                                          deleteItem(n->tieBack());
+                                          deleteItem(n);
                                           }
                                     }
                               }
@@ -1933,13 +1928,10 @@ bool Score::processMidiInput()
                         startCmd();
                         cmdActive = true;
                         }
-                  if (usingNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO) || usingNoteEntryMethod(NoteEntryMethod::REALTIME_MANUAL)) {
-                        // It's only a chord if multiple notes are held. (i.e. ignore shift key)
-                        if (activeMidiPitches()->empty())
-                              ev.chord = false;
-                        else
-                              ev.chord = true;
-                        }
+                  if (activeMidiPitches()->empty())
+                        ev.chord = false;
+                  else
+                        ev.chord = true;
                   // TODO: add shadow note instead of real note in realtime modes
                   // (note becomes real when realtime-advance triggered).
                   addMidiPitch(ev.pitch, ev.chord);

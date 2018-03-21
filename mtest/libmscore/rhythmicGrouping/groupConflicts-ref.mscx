@@ -337,6 +337,7 @@
           <durationType>16th</durationType>
           <Beam>3</Beam>
           <Note>
+            <endSpanner id="2"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
@@ -468,6 +469,7 @@
         <Chord>
           <durationType>16th</durationType>
           <Note>
+            <endSpanner id="3"/>
             <pitch>71</pitch>
             <tpc>19</tpc>
             </Note>
