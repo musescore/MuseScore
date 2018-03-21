@@ -4448,6 +4448,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             c->add(note);
             //c->setStemDirection(stemDir); // already done in handleBeamAndStemDir()
             c->setNoStem(noStem);
+            c->setParent(new Segment(measure, SegmentType::ChordRest, c->tick()));
             cr = c;
             }
 
