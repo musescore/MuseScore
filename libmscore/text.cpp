@@ -1816,6 +1816,8 @@ bool TextBase::deleteSelectedText(EditData& ed)
 
 void TextBase::write(XmlWriter& xml) const
       {
+      if (!xml.canWrite(this))
+            return;
       xml.stag(name());
       writeProperties(xml, true, true);
       xml.etag();
@@ -2408,18 +2410,16 @@ QString TextBase::screenReaderInfo() const
 
 int TextBase::subtype() const
       {
-#if 0
-      switch (subStyle()) {
-            case SubStyle::TITLE:
-            case SubStyle::SUBTITLE:
-            case SubStyle::COMPOSER:
-            case SubStyle::POET:
-            case SubStyle::FRAME:
-            case SubStyle::INSTRUMENT_EXCERPT:
-                  return int(subStyle());
+      switch (subStyleId()) {
+            case SubStyleId::TITLE:
+            case SubStyleId::SUBTITLE:
+            case SubStyleId::COMPOSER:
+            case SubStyleId::POET:
+            case SubStyleId::FRAME:
+            case SubStyleId::INSTRUMENT_EXCERPT:
+                  return int(subStyleId());
             default: return -1;
             }
-#endif
       return -1;
       }
 
@@ -2429,21 +2429,7 @@ int TextBase::subtype() const
 
 QString TextBase::subtypeName() const
       {
-      QString rez;
-#if 0
-      switch (subStyle()) {
-            case SubStyle::TITLE:
-            case SubStyle::SUBTITLE:
-            case SubStyle::COMPOSER:
-            case SubStyle::POET:
-            case SubStyle::FRAME:
-            case SubStyle::INSTRUMENT_EXCERPT:
-                  rez = subStyleUserName(subStyle());
-                  break;
-            default: rez = "";
-            }
-#endif
-      return rez;
+      return (subtype() != -1) ? subStyleUserName(subStyleId()) : "";
       }
 
 //---------------------------------------------------------
