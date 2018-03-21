@@ -34,7 +34,7 @@ InspectorFingering::InspectorFingering(QWidget* parent)
             };
 
       f.subStyle->clear();
-      for (auto ss : { SubStyle::FINGERING, SubStyle::LH_GUITAR_FINGERING, SubStyle::RH_GUITAR_FINGERING, SubStyle::STRING_NUMBER } )
+      for (auto ss : { SubStyleId::FINGERING, SubStyleId::LH_GUITAR_FINGERING, SubStyleId::RH_GUITAR_FINGERING, SubStyleId::STRING_NUMBER } )
             {
             f.subStyle->addItem(subStyleUserName(ss), int(ss));
             }

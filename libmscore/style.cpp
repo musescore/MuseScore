@@ -612,6 +612,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::repeatLeftFontItalic,          "repeatLeftFontItalic",         false },
       { StyleIdx::repeatLeftFontUnderline,       "repeatLeftFontUnderline",      false },
       { StyleIdx::repeatLeftAlign,               "repeatLeftAlign",              QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+      { StyleIdx::repeatLeftPlacement,           "repeatLeftPlacement",          int(Placement::ABOVE) },
 
       { StyleIdx::repeatRightFontFace,           "repeatRightFontFace",          "FreeSerif" },
       { StyleIdx::repeatRightFontSize,           "repeatRightFontSize",          12.0 },
@@ -619,6 +620,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::repeatRightFontItalic,         "repeatRightFontItalic",        false },
       { StyleIdx::repeatRightFontUnderline,      "repeatRightFontUnderline",     false },
       { StyleIdx::repeatRightAlign,              "repeatRightAlign",             QVariant::fromValue(Align::RIGHT | Align::BASELINE) },
+      { StyleIdx::repeatRightPlacement,          "repeatLeftPlacement",          int(Placement::ABOVE) },
 
       { StyleIdx::voltaFontFace,                 "voltaFontFace",                "FreeSerif" },
       { StyleIdx::voltaFontSize,                 "voltaFontSize",                11.0 },
@@ -758,6 +760,10 @@ MStyle  MScore::_defaultStyle;
 //   sets of styled properties
 //---------------------------------------------------------
 
+const std::vector<StyledProperty> emptyStyle {
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
+      };
+
 const std::vector<StyledProperty> defaultStyle {
       { StyleIdx::defaultFontFace,                    P_ID::FONT_FACE              },
       { StyleIdx::defaultFontSize,                    P_ID::FONT_SIZE              },
@@ -777,6 +783,7 @@ const std::vector<StyledProperty> defaultStyle {
       { StyleIdx::defaultOffset,                      P_ID::OFFSET                 },
       { StyleIdx::defaultOffsetType,                  P_ID::OFFSET_TYPE            },
       { StyleIdx::defaultSystemFlag,                  P_ID::SYSTEM_FLAG            },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> titleStyle {
@@ -789,6 +796,7 @@ const std::vector<StyledProperty> titleStyle {
       { StyleIdx::titleAlign,                         P_ID::ALIGN                  },
       { StyleIdx::titleOffset,                        P_ID::OFFSET                 },
       { StyleIdx::titleOffsetType,                    P_ID::OFFSET_TYPE            },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> subTitleStyle {
@@ -803,6 +811,7 @@ const std::vector<StyledProperty> subTitleStyle {
       { StyleIdx::subTitleOffsetType,                 P_ID::OFFSET_TYPE            },
       { StyleIdx::subTitleOffset,                     P_ID::OFFSET                 },
       { StyleIdx::subTitleOffsetType,                 P_ID::OFFSET_TYPE            },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> composerStyle {
@@ -815,6 +824,7 @@ const std::vector<StyledProperty> composerStyle {
       { StyleIdx::composerAlign,                      P_ID::ALIGN                  },
       { StyleIdx::composerOffset,                     P_ID::OFFSET                 },
       { StyleIdx::composerOffsetType,                 P_ID::OFFSET_TYPE            },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> lyricistStyle {
@@ -826,6 +836,8 @@ const std::vector<StyledProperty> lyricistStyle {
       { StyleIdx::lyricistAlign,                      P_ID::ALIGN                  },
       { StyleIdx::lyricistOffset,                     P_ID::OFFSET                 },
       { StyleIdx::lyricistOffsetType,                 P_ID::OFFSET_TYPE            },
+      { StyleIdx::lyricsPlacement,                    P_ID::PLACEMENT              },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> lyricsOddStyle {
@@ -835,6 +847,7 @@ const std::vector<StyledProperty> lyricsOddStyle {
       { StyleIdx::lyricsOddFontItalic,                P_ID::FONT_ITALIC            },
       { StyleIdx::lyricsOddFontUnderline,             P_ID::FONT_UNDERLINE         },
       { StyleIdx::lyricsOddAlign,                     P_ID::ALIGN                  },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> lyricsEvenStyle {
@@ -844,6 +857,7 @@ const std::vector<StyledProperty> lyricsEvenStyle {
       { StyleIdx::lyricsEvenFontItalic,               P_ID::FONT_ITALIC            },
       { StyleIdx::lyricsEvenFontUnderline,            P_ID::FONT_UNDERLINE         },
       { StyleIdx::lyricsEvenAlign,                    P_ID::ALIGN                  },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> fingeringStyle {
@@ -862,6 +876,7 @@ const std::vector<StyledProperty> fingeringStyle {
       { StyleIdx::fingeringFrameFgColor,              P_ID::FRAME_FG_COLOR         },
       { StyleIdx::fingeringFrameBgColor,              P_ID::FRAME_BG_COLOR         },
       { StyleIdx::fingeringOffset,                    P_ID::OFFSET                 },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> lhGuitarFingeringStyle {
@@ -880,6 +895,7 @@ const std::vector<StyledProperty> lhGuitarFingeringStyle {
       { StyleIdx::lhGuitarFingeringFrameFgColor,      P_ID::FRAME_FG_COLOR         },
       { StyleIdx::lhGuitarFingeringFrameBgColor,      P_ID::FRAME_BG_COLOR         },
       { StyleIdx::lhGuitarFingeringOffset,            P_ID::OFFSET                 },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> rhGuitarFingeringStyle {
@@ -898,6 +914,7 @@ const std::vector<StyledProperty> rhGuitarFingeringStyle {
       { StyleIdx::rhGuitarFingeringFrameFgColor,      P_ID::FRAME_FG_COLOR         },
       { StyleIdx::rhGuitarFingeringFrameBgColor,      P_ID::FRAME_BG_COLOR         },
       { StyleIdx::rhGuitarFingeringOffset,            P_ID::OFFSET                 },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> stringNumberStyle {
@@ -916,6 +933,7 @@ const std::vector<StyledProperty> stringNumberStyle {
       { StyleIdx::stringNumberFrameFgColor,           P_ID::FRAME_FG_COLOR         },
       { StyleIdx::stringNumberFrameBgColor,           P_ID::FRAME_BG_COLOR         },
       { StyleIdx::stringNumberOffset,                 P_ID::OFFSET                 },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> longInstrumentStyle {
@@ -925,6 +943,7 @@ const std::vector<StyledProperty> longInstrumentStyle {
       { StyleIdx::longInstrumentFontItalic,           P_ID::FONT_ITALIC            },
       { StyleIdx::longInstrumentFontUnderline,        P_ID::FONT_UNDERLINE         },
       { StyleIdx::longInstrumentAlign,                P_ID::ALIGN                  },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> shortInstrumentStyle {
@@ -934,6 +953,7 @@ const std::vector<StyledProperty> shortInstrumentStyle {
       { StyleIdx::shortInstrumentFontItalic,          P_ID::FONT_ITALIC            },
       { StyleIdx::shortInstrumentFontUnderline,       P_ID::FONT_UNDERLINE         },
       { StyleIdx::shortInstrumentAlign,               P_ID::ALIGN                  },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> partInstrumentStyle {
@@ -942,6 +962,7 @@ const std::vector<StyledProperty> partInstrumentStyle {
       { StyleIdx::partInstrumentFontBold,             P_ID::FONT_BOLD              },
       { StyleIdx::partInstrumentFontItalic,           P_ID::FONT_ITALIC            },
       { StyleIdx::partInstrumentFontUnderline,        P_ID::FONT_UNDERLINE         },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> dynamicsStyle {
@@ -951,6 +972,7 @@ const std::vector<StyledProperty> dynamicsStyle {
       { StyleIdx::dynamicsFontItalic,                 P_ID::FONT_ITALIC            },
       { StyleIdx::dynamicsFontUnderline,              P_ID::FONT_UNDERLINE         },
       { StyleIdx::dynamicsAlign,                      P_ID::ALIGN                  },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> expressionStyle {
@@ -959,6 +981,7 @@ const std::vector<StyledProperty> expressionStyle {
       { StyleIdx::expressionFontBold,                 P_ID::FONT_BOLD              },
       { StyleIdx::expressionFontItalic,               P_ID::FONT_ITALIC            },
       { StyleIdx::expressionFontUnderline,            P_ID::FONT_UNDERLINE         },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> tempoStyle {
@@ -970,6 +993,7 @@ const std::vector<StyledProperty> tempoStyle {
       { StyleIdx::tempoOffset,                        P_ID::OFFSET                 },
       { StyleIdx::tempoSystemFlag,                    P_ID::SYSTEM_FLAG            },
       { StyleIdx::tempoAlign,                         P_ID::ALIGN                  },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> metronomeStyle {
@@ -978,6 +1002,7 @@ const std::vector<StyledProperty> metronomeStyle {
       { StyleIdx::metronomeFontBold,                  P_ID::FONT_BOLD              },
       { StyleIdx::metronomeFontItalic,                P_ID::FONT_ITALIC            },
       { StyleIdx::metronomeFontUnderline,             P_ID::FONT_UNDERLINE         },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> measureNumberStyle {
@@ -988,6 +1013,7 @@ const std::vector<StyledProperty> measureNumberStyle {
       { StyleIdx::measureNumberFontUnderline,         P_ID::FONT_UNDERLINE         },
       { StyleIdx::measureNumberOffset,                P_ID::OFFSET                 },
       { StyleIdx::measureNumberOffsetType,            P_ID::OFFSET_TYPE            },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> translatorStyle {
@@ -996,6 +1022,7 @@ const std::vector<StyledProperty> translatorStyle {
       { StyleIdx::translatorFontBold,                 P_ID::FONT_BOLD              },
       { StyleIdx::translatorFontItalic,               P_ID::FONT_ITALIC            },
       { StyleIdx::translatorFontUnderline,            P_ID::FONT_UNDERLINE         },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> tupletStyle {
@@ -1005,6 +1032,7 @@ const std::vector<StyledProperty> tupletStyle {
       { StyleIdx::tupletFontItalic,                   P_ID::FONT_ITALIC            },
       { StyleIdx::tupletFontUnderline,                P_ID::FONT_UNDERLINE         },
       { StyleIdx::tupletAlign,                        P_ID::ALIGN                  },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> systemStyle {
@@ -1016,6 +1044,7 @@ const std::vector<StyledProperty> systemStyle {
       { StyleIdx::systemOffset,                       P_ID::OFFSET                 },
       { StyleIdx::systemOffsetType,                   P_ID::OFFSET_TYPE            },
       { StyleIdx::systemAlign,                        P_ID::ALIGN                  },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> staffStyle {
@@ -1028,6 +1057,7 @@ const std::vector<StyledProperty> staffStyle {
       { StyleIdx::staffTextOffset,                    P_ID::OFFSET                 },
       { StyleIdx::staffTextOffsetType,                P_ID::OFFSET_TYPE            },
       { StyleIdx::staffTextPlacement,                 P_ID::PLACEMENT              },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> chordSymbolStyle {
@@ -1037,6 +1067,7 @@ const std::vector<StyledProperty> chordSymbolStyle {
       { StyleIdx::chordSymbolFontItalic,              P_ID::FONT_ITALIC            },
       { StyleIdx::chordSymbolFontUnderline,           P_ID::FONT_UNDERLINE         },
       { StyleIdx::chordSymbolAlign,                   P_ID::ALIGN                  },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> rehearsalMarkStyle {
@@ -1055,6 +1086,7 @@ const std::vector<StyledProperty> rehearsalMarkStyle {
       { StyleIdx::rehearsalMarkFrameFgColor,          P_ID::FRAME_FG_COLOR         },
       { StyleIdx::rehearsalMarkFrameBgColor,          P_ID::FRAME_BG_COLOR         },
       { StyleIdx::rehearsalMarkPlacement,             P_ID::PLACEMENT              },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> repeatLeftStyle {
@@ -1064,6 +1096,8 @@ const std::vector<StyledProperty> repeatLeftStyle {
       { StyleIdx::repeatLeftFontItalic,               P_ID::FONT_ITALIC            },
       { StyleIdx::repeatLeftFontUnderline,            P_ID::FONT_UNDERLINE         },
       { StyleIdx::repeatLeftAlign,                    P_ID::ALIGN                  },
+      { StyleIdx::repeatLeftPlacement,                P_ID::PLACEMENT              },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> repeatRightStyle {
@@ -1073,6 +1107,8 @@ const std::vector<StyledProperty> repeatRightStyle {
       { StyleIdx::repeatRightFontItalic,              P_ID::FONT_ITALIC            },
       { StyleIdx::repeatRightFontUnderline,           P_ID::FONT_UNDERLINE         },
       { StyleIdx::repeatRightAlign,                   P_ID::ALIGN                  },
+      { StyleIdx::repeatRightPlacement,               P_ID::PLACEMENT              },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> frameStyle {
@@ -1082,6 +1118,7 @@ const std::vector<StyledProperty> frameStyle {
       { StyleIdx::frameFontItalic,                    P_ID::FONT_ITALIC            },
       { StyleIdx::frameFontUnderline,                 P_ID::FONT_UNDERLINE         },
       { StyleIdx::frameAlign,                         P_ID::ALIGN                  },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> textLineStyle {
@@ -1090,6 +1127,7 @@ const std::vector<StyledProperty> textLineStyle {
       { StyleIdx::textLineFontBold,                   P_ID::FONT_BOLD              },
       { StyleIdx::textLineFontItalic,                 P_ID::FONT_ITALIC            },
       { StyleIdx::textLineFontUnderline,              P_ID::FONT_UNDERLINE         },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> glissandoStyle {
@@ -1098,6 +1136,7 @@ const std::vector<StyledProperty> glissandoStyle {
       { StyleIdx::glissandoFontBold,                  P_ID::FONT_BOLD              },
       { StyleIdx::glissandoFontItalic,                P_ID::FONT_ITALIC            },
       { StyleIdx::glissandoFontUnderline,             P_ID::FONT_UNDERLINE         },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> ottavaStyle {
@@ -1107,6 +1146,7 @@ const std::vector<StyledProperty> ottavaStyle {
       { StyleIdx::ottavaFontItalic,                   P_ID::FONT_ITALIC            },
       { StyleIdx::ottavaFontUnderline,                P_ID::FONT_UNDERLINE         },
       { StyleIdx::ottavaTextAlign,                    P_ID::BEGIN_TEXT_ALIGN       },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> pedalStyle {
@@ -1129,6 +1169,7 @@ const std::vector<StyledProperty> pedalStyle {
       { StyleIdx::pedalTextAlign,                     P_ID::CONTINUE_TEXT_ALIGN    },
       { StyleIdx::pedalHookHeight,                    P_ID::BEGIN_HOOK_HEIGHT      },
       { StyleIdx::pedalHookHeight,                    P_ID::END_HOOK_HEIGHT        },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> letRingStyle {
@@ -1151,6 +1192,7 @@ const std::vector<StyledProperty> letRingStyle {
       { StyleIdx::letRingTextAlign,                     P_ID::CONTINUE_TEXT_ALIGN    },
       { StyleIdx::letRingHookHeight,                    P_ID::BEGIN_HOOK_HEIGHT      },
       { StyleIdx::letRingHookHeight,                    P_ID::END_HOOK_HEIGHT        },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> palmMuteStyle {
@@ -1173,6 +1215,7 @@ const std::vector<StyledProperty> palmMuteStyle {
       { StyleIdx::palmMuteTextAlign,                     P_ID::CONTINUE_TEXT_ALIGN    },
       { StyleIdx::palmMuteHookHeight,                    P_ID::BEGIN_HOOK_HEIGHT      },
       { StyleIdx::palmMuteHookHeight,                    P_ID::END_HOOK_HEIGHT        },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> hairpinStyle {
@@ -1194,6 +1237,7 @@ const std::vector<StyledProperty> hairpinStyle {
       { StyleIdx::hairpinFontItalic,                  P_ID::END_FONT_ITALIC            },
       { StyleIdx::hairpinFontUnderline,               P_ID::END_FONT_UNDERLINE         },
       { StyleIdx::hairpinTextAlign,                   P_ID::END_TEXT_ALIGN             },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> bendStyle {
@@ -1202,6 +1246,7 @@ const std::vector<StyledProperty> bendStyle {
       { StyleIdx::bendFontBold,                       P_ID::FONT_BOLD              },
       { StyleIdx::bendFontItalic,                     P_ID::FONT_ITALIC            },
       { StyleIdx::bendFontUnderline,                  P_ID::FONT_UNDERLINE         },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> headerStyle {
@@ -1210,6 +1255,7 @@ const std::vector<StyledProperty> headerStyle {
       { StyleIdx::headerFontBold,                     P_ID::FONT_BOLD              },
       { StyleIdx::headerFontItalic,                   P_ID::FONT_ITALIC            },
       { StyleIdx::headerFontUnderline,                P_ID::FONT_UNDERLINE         },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> footerStyle {
@@ -1218,6 +1264,7 @@ const std::vector<StyledProperty> footerStyle {
       { StyleIdx::footerFontBold,                     P_ID::FONT_BOLD              },
       { StyleIdx::footerFontItalic,                   P_ID::FONT_ITALIC            },
       { StyleIdx::footerFontUnderline,                P_ID::FONT_UNDERLINE         },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> instrumentChangeStyle {
@@ -1228,6 +1275,7 @@ const std::vector<StyledProperty> instrumentChangeStyle {
       { StyleIdx::instrumentChangeFontUnderline,      P_ID::FONT_UNDERLINE         },
       { StyleIdx::instrumentChangeAlign,              P_ID::ALIGN                  },
       { StyleIdx::instrumentChangeOffset,             P_ID::OFFSET                 },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> figuredBassStyle {
@@ -1236,6 +1284,7 @@ const std::vector<StyledProperty> figuredBassStyle {
       { StyleIdx::figuredBassFontBold,                P_ID::FONT_BOLD              },
       { StyleIdx::figuredBassFontItalic,              P_ID::FONT_ITALIC            },
       { StyleIdx::figuredBassFontUnderline,           P_ID::FONT_UNDERLINE         },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> user1Style {
@@ -1244,6 +1293,7 @@ const std::vector<StyledProperty> user1Style {
       { StyleIdx::user1FontBold,                      P_ID::FONT_BOLD              },
       { StyleIdx::user1FontItalic,                    P_ID::FONT_ITALIC            },
       { StyleIdx::user1FontUnderline,                 P_ID::FONT_UNDERLINE         },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> user2Style {
@@ -1252,6 +1302,7 @@ const std::vector<StyledProperty> user2Style {
       { StyleIdx::user2FontBold,                      P_ID::FONT_BOLD              },
       { StyleIdx::user2FontItalic,                    P_ID::FONT_ITALIC            },
       { StyleIdx::user2FontUnderline,                 P_ID::FONT_UNDERLINE         },
+      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
 //---------------------------------------------------------
@@ -1260,8 +1311,8 @@ const std::vector<StyledProperty> user2Style {
 
 struct StyledPropertyListName {
       const char* name;
-      const std::vector<StyledProperty>* spl;
-      SubStyle ss;
+      const SubStyle* spl;
+      SubStyleId ss;
       };
 
 //---------------------------------------------------------
@@ -1269,56 +1320,57 @@ struct StyledPropertyListName {
 //    must be in sync with SubStyle enumeration
 //---------------------------------------------------------
 
-static const std::array<StyledPropertyListName, int(SubStyle::SUBSTYLES)> namedStyles { {
-      { QT_TRANSLATE_NOOP("TextStyle", "default"),                 &defaultStyle,                   SubStyle::DEFAULT },
-      { QT_TRANSLATE_NOOP("TextStyle", "Title"),                   &titleStyle,                     SubStyle::TITLE },
-      { QT_TRANSLATE_NOOP("TextStyle", "Subtitle"),                &subTitleStyle,                  SubStyle::SUBTITLE },
-      { QT_TRANSLATE_NOOP("TextStyle", "Composer"),                &composerStyle,                  SubStyle::COMPOSER },
-      { QT_TRANSLATE_NOOP("TextStyle", "Lyricist"),                &lyricistStyle,                  SubStyle::POET },
-      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Odd Lines"),        &lyricsOddStyle,                 SubStyle::LYRIC1 },
-      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Even Lines"),       &lyricsEvenStyle,                SubStyle::LYRIC2 },
-      { QT_TRANSLATE_NOOP("TextStyle", "Fingering"),               &fingeringStyle,                 SubStyle::FINGERING },
-      { QT_TRANSLATE_NOOP("TextStyle", "LH Guitar Fingering"),     &lhGuitarFingeringStyle,         SubStyle::LH_GUITAR_FINGERING },
-      { QT_TRANSLATE_NOOP("TextStyle", "RH Guitar Fingering"),     &rhGuitarFingeringStyle,         SubStyle::RH_GUITAR_FINGERING },
-      { QT_TRANSLATE_NOOP("TextStyle", "String Number"),           &stringNumberStyle,              SubStyle::STRING_NUMBER },
-      { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Long)"),  &longInstrumentStyle,            SubStyle::INSTRUMENT_LONG },
-      { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Short)"), &shortInstrumentStyle,           SubStyle::INSTRUMENT_SHORT },
-      { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Part)"),  &partInstrumentStyle,            SubStyle::INSTRUMENT_EXCERPT },
-      { QT_TRANSLATE_NOOP("TextStyle", "Dynamics"),                &dynamicsStyle,                  SubStyle::DYNAMICS },
-      { QT_TRANSLATE_NOOP("TextStyle", "Expression"),              &expressionStyle,                SubStyle::EXPRESSION },
-      { QT_TRANSLATE_NOOP("TextStyle", "Tempo"),                   &tempoStyle,                     SubStyle::TEMPO },
-      { QT_TRANSLATE_NOOP("TextStyle", "Metronome"),               &metronomeStyle,                 SubStyle::METRONOME },
-      { QT_TRANSLATE_NOOP("TextStyle", "Measure Number"),          &measureNumberStyle,             SubStyle::MEASURE_NUMBER },
-      { QT_TRANSLATE_NOOP("TextStyle", "Translator"),              &translatorStyle,                SubStyle::TRANSLATOR },
-      { QT_TRANSLATE_NOOP("TextStyle", "Tuplet"),                  &tupletStyle,                    SubStyle::TUPLET },
-      { QT_TRANSLATE_NOOP("TextStyle", "System"),                  &systemStyle,                    SubStyle::SYSTEM },
-      { QT_TRANSLATE_NOOP("TextStyle", "Staff"),                   &staffStyle,                     SubStyle::STAFF },
-      { QT_TRANSLATE_NOOP("TextStyle", "Chord Symbol"),            &chordSymbolStyle,               SubStyle::HARMONY },
-      { QT_TRANSLATE_NOOP("TextStyle", "Rehearsal Mark"),          &rehearsalMarkStyle,             SubStyle::REHEARSAL_MARK },
-      { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Left"),        &repeatLeftStyle,                SubStyle::REPEAT_LEFT },
-      { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Right"),       &repeatRightStyle,               SubStyle::REPEAT_RIGHT },
-      { QT_TRANSLATE_NOOP("TextStyle", "Frame"),                   &frameStyle,                     SubStyle::FRAME },
-      { QT_TRANSLATE_NOOP("TextStyle", "Text Line"),               &textLineStyle,                  SubStyle::TEXTLINE },
-      { QT_TRANSLATE_NOOP("TextStyle", "Glissando"),               &glissandoStyle,                 SubStyle::GLISSANDO },
-      { QT_TRANSLATE_NOOP("TextStyle", "Ottava"),                  &ottavaStyle,                    SubStyle::OTTAVA },
-      { QT_TRANSLATE_NOOP("TextStyle", "Pedal"),                   &pedalStyle,                     SubStyle::PEDAL },
-      { QT_TRANSLATE_NOOP("TextStyle", "LetRing"),                 &letRingStyle,                   SubStyle::LET_RING },
-      { QT_TRANSLATE_NOOP("TextStyle", "PalmMute"),                &palmMuteStyle,                  SubStyle::PALM_MUTE },
-      { QT_TRANSLATE_NOOP("TextStyle", "Hairpin"),                 &hairpinStyle,                   SubStyle::HAIRPIN },
-      { QT_TRANSLATE_NOOP("TextStyle", "Bend"),                    &bendStyle,                      SubStyle::BEND },
-      { QT_TRANSLATE_NOOP("TextStyle", "Header"),                  &headerStyle,                    SubStyle::HEADER },
-      { QT_TRANSLATE_NOOP("TextStyle", "Footer"),                  &footerStyle,                    SubStyle::FOOTER },
-      { QT_TRANSLATE_NOOP("TextStyle", "Instrument Change"),       &instrumentChangeStyle,          SubStyle::INSTRUMENT_CHANGE },
-      { QT_TRANSLATE_NOOP("TextStyle", "Figured Bass"),            &figuredBassStyle,               SubStyle::FIGURED_BASS },
-      { QT_TRANSLATE_NOOP("TextStyle", "User-1"),                  &user1Style,                     SubStyle::USER1 },
-      { QT_TRANSLATE_NOOP("TextStyle", "User-2"),                  &user2Style,                     SubStyle::USER2 },
+static constexpr std::array<StyledPropertyListName, int(SubStyleId::SUBSTYLES)> namedStyles { {
+      { QT_TRANSLATE_NOOP("TextStyle", "empty"),                   &emptyStyle,                     SubStyleId::EMPTY   },
+      { QT_TRANSLATE_NOOP("TextStyle", "default"),                 &defaultStyle,                   SubStyleId::DEFAULT },
+      { QT_TRANSLATE_NOOP("TextStyle", "Title"),                   &titleStyle,                     SubStyleId::TITLE },
+      { QT_TRANSLATE_NOOP("TextStyle", "Subtitle"),                &subTitleStyle,                  SubStyleId::SUBTITLE },
+      { QT_TRANSLATE_NOOP("TextStyle", "Composer"),                &composerStyle,                  SubStyleId::COMPOSER },
+      { QT_TRANSLATE_NOOP("TextStyle", "Lyricist"),                &lyricistStyle,                  SubStyleId::POET },
+      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Odd Lines"),        &lyricsOddStyle,                 SubStyleId::LYRIC_ODD },
+      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Even Lines"),       &lyricsEvenStyle,                SubStyleId::LYRIC_EVEN },
+      { QT_TRANSLATE_NOOP("TextStyle", "Fingering"),               &fingeringStyle,                 SubStyleId::FINGERING },
+      { QT_TRANSLATE_NOOP("TextStyle", "LH Guitar Fingering"),     &lhGuitarFingeringStyle,         SubStyleId::LH_GUITAR_FINGERING },
+      { QT_TRANSLATE_NOOP("TextStyle", "RH Guitar Fingering"),     &rhGuitarFingeringStyle,         SubStyleId::RH_GUITAR_FINGERING },
+      { QT_TRANSLATE_NOOP("TextStyle", "String Number"),           &stringNumberStyle,              SubStyleId::STRING_NUMBER },
+      { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Long)"),  &longInstrumentStyle,            SubStyleId::INSTRUMENT_LONG },
+      { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Short)"), &shortInstrumentStyle,           SubStyleId::INSTRUMENT_SHORT },
+      { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Part)"),  &partInstrumentStyle,            SubStyleId::INSTRUMENT_EXCERPT },
+      { QT_TRANSLATE_NOOP("TextStyle", "Dynamics"),                &dynamicsStyle,                  SubStyleId::DYNAMICS },
+      { QT_TRANSLATE_NOOP("TextStyle", "Expression"),              &expressionStyle,                SubStyleId::EXPRESSION },
+      { QT_TRANSLATE_NOOP("TextStyle", "Tempo"),                   &tempoStyle,                     SubStyleId::TEMPO },
+      { QT_TRANSLATE_NOOP("TextStyle", "Metronome"),               &metronomeStyle,                 SubStyleId::METRONOME },
+      { QT_TRANSLATE_NOOP("TextStyle", "Measure Number"),          &measureNumberStyle,             SubStyleId::MEASURE_NUMBER },
+      { QT_TRANSLATE_NOOP("TextStyle", "Translator"),              &translatorStyle,                SubStyleId::TRANSLATOR },
+      { QT_TRANSLATE_NOOP("TextStyle", "Tuplet"),                  &tupletStyle,                    SubStyleId::TUPLET },
+      { QT_TRANSLATE_NOOP("TextStyle", "System"),                  &systemStyle,                    SubStyleId::SYSTEM },
+      { QT_TRANSLATE_NOOP("TextStyle", "Staff"),                   &staffStyle,                     SubStyleId::STAFF },
+      { QT_TRANSLATE_NOOP("TextStyle", "Chord Symbol"),            &chordSymbolStyle,               SubStyleId::HARMONY },
+      { QT_TRANSLATE_NOOP("TextStyle", "Rehearsal Mark"),          &rehearsalMarkStyle,             SubStyleId::REHEARSAL_MARK },
+      { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Left"),        &repeatLeftStyle,                SubStyleId::REPEAT_LEFT },
+      { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Right"),       &repeatRightStyle,               SubStyleId::REPEAT_RIGHT },
+      { QT_TRANSLATE_NOOP("TextStyle", "Frame"),                   &frameStyle,                     SubStyleId::FRAME },
+      { QT_TRANSLATE_NOOP("TextStyle", "Text Line"),               &textLineStyle,                  SubStyleId::TEXTLINE },
+      { QT_TRANSLATE_NOOP("TextStyle", "Glissando"),               &glissandoStyle,                 SubStyleId::GLISSANDO },
+      { QT_TRANSLATE_NOOP("TextStyle", "Ottava"),                  &ottavaStyle,                    SubStyleId::OTTAVA },
+      { QT_TRANSLATE_NOOP("TextStyle", "Pedal"),                   &pedalStyle,                     SubStyleId::PEDAL },
+      { QT_TRANSLATE_NOOP("TextStyle", "LetRing"),                 &letRingStyle,                   SubStyleId::LET_RING },
+      { QT_TRANSLATE_NOOP("TextStyle", "PalmMute"),                &palmMuteStyle,                  SubStyleId::PALM_MUTE },
+      { QT_TRANSLATE_NOOP("TextStyle", "Hairpin"),                 &hairpinStyle,                   SubStyleId::HAIRPIN },
+      { QT_TRANSLATE_NOOP("TextStyle", "Bend"),                    &bendStyle,                      SubStyleId::BEND },
+      { QT_TRANSLATE_NOOP("TextStyle", "Header"),                  &headerStyle,                    SubStyleId::HEADER },
+      { QT_TRANSLATE_NOOP("TextStyle", "Footer"),                  &footerStyle,                    SubStyleId::FOOTER },
+      { QT_TRANSLATE_NOOP("TextStyle", "Instrument Change"),       &instrumentChangeStyle,          SubStyleId::INSTRUMENT_CHANGE },
+      { QT_TRANSLATE_NOOP("TextStyle", "Figured Bass"),            &figuredBassStyle,               SubStyleId::FIGURED_BASS },
+      { QT_TRANSLATE_NOOP("TextStyle", "User-1"),                  &user1Style,                     SubStyleId::USER1 },
+      { QT_TRANSLATE_NOOP("TextStyle", "User-2"),                  &user2Style,                     SubStyleId::USER2 },
       } };
 
 //---------------------------------------------------------
 //   subStyle
 //---------------------------------------------------------
 
-const std::vector<StyledProperty>& subStyle(const char* name)
+const SubStyle& subStyle(const char* name)
       {
       for (const StyledPropertyListName& s : namedStyles) {
             if (strcmp(s.name, name) == 0)
@@ -1328,7 +1380,7 @@ const std::vector<StyledProperty>& subStyle(const char* name)
       return *namedStyles[0].spl;
       }
 
-const std::vector<StyledProperty>& subStyle(SubStyle idx)
+const SubStyle& subStyle(SubStyleId idx)
       {
       return *namedStyles[int(idx)].spl;
       }
@@ -1337,24 +1389,24 @@ const std::vector<StyledProperty>& subStyle(SubStyle idx)
 //   subStyleFromName
 //---------------------------------------------------------
 
-SubStyle subStyleFromName(const QString& name)
+SubStyleId subStyleFromName(const QString& name)
       {
       for (const StyledPropertyListName& s : namedStyles) {
             if (s.name == name)
-                  return SubStyle(s.ss);
+                  return SubStyleId(s.ss);
             }
       if (name == "Technique")                  // compatibility
-            return SubStyle::EXPRESSION;
+            return SubStyleId::EXPRESSION;
 
       qDebug("substyle <%s> not known", qPrintable(name));
-      return SubStyle::DEFAULT;
+      return SubStyleId::DEFAULT;
       }
 
 //---------------------------------------------------------
 //   subStyleName
 //---------------------------------------------------------
 
-const char* subStyleName(SubStyle idx)
+const char* subStyleName(SubStyleId idx)
       {
       return namedStyles[int(idx)].name;
       }
@@ -1363,7 +1415,7 @@ const char* subStyleName(SubStyle idx)
 //   subStyleUserName
 //---------------------------------------------------------
 
-QString subStyleUserName(SubStyle idx)
+QString subStyleUserName(SubStyleId idx)
       {
       return qApp->translate("TextStyle", subStyleName(idx));
       }

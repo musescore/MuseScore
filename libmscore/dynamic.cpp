@@ -82,7 +82,7 @@ static Dyn dynList[] = {
 Dynamic::Dynamic(Score* s)
    : TextBase(s)
       {
-      init(SubStyle::DYNAMICS);
+      initSubStyle(SubStyleId::DYNAMICS);
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _velocity = -1;
       _dynRange = Range::PART;
@@ -139,8 +139,8 @@ void Dynamic::read(XmlReader& e)
             else if (!TextBase::readProperties(e))
                   e.unknown();
             }
-      if (subStyle() == SubStyle::DEFAULT)
-            initSubStyle(SubStyle::DYNAMICS);
+      if (subStyleId() == SubStyleId::DEFAULT)
+            initSubStyle(SubStyleId::DYNAMICS);
       }
 
 //---------------------------------------------------------
@@ -366,7 +366,7 @@ QVariant Dynamic::propertyDefault(P_ID id) const
       {
       switch(id) {
             case P_ID::SUB_STYLE:
-                  return int(SubStyle::DYNAMICS);
+                  return int(SubStyleId::DYNAMICS);
             case P_ID::DYNAMIC_RANGE:
                   return int(Range::PART);
             case P_ID::VELOCITY:

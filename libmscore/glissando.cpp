@@ -39,6 +39,8 @@ namespace Ms {
 static const qreal      GLISS_PALETTE_WIDTH           = 4.0;
 static const qreal      GLISS_PALETTE_HEIGHT          = 4.0;
 
+constexpr std::array<StyledProperty, GLISSANDO_STYLED_PROPERTIES+1> Glissando::_styledProperties;
+
 //---------------------------------------------------------
 //   GlisandoSegment
 //---------------------------------------------------------
@@ -266,17 +268,16 @@ Glissando::Glissando(Score* s)
       setAnchor(Spanner::Anchor::NOTE);
       setDiagonal(true);
 
+      _propertyFlagsList = new PropertyFlags[GLISSANDO_STYLED_PROPERTIES];
+      for (int i = 0; i < GLISSANDO_STYLED_PROPERTIES; ++i) {
+            _propertyFlagsList[i] = PropertyFlags::STYLED;
+            resetProperty(_styledProperties[i].propertyIdx);
+            }
       resetProperty(P_ID::GLISS_SHOW_TEXT);
-      resetProperty(P_ID::LINE_WIDTH);
       resetProperty(P_ID::PLAY);
       resetProperty(P_ID::GLISSANDO_STYLE);
       resetProperty(P_ID::GLISS_TYPE);
       resetProperty(P_ID::GLISS_TEXT);
-      resetProperty(P_ID::FONT_FACE);
-      resetProperty(P_ID::FONT_SIZE);
-      resetProperty(P_ID::FONT_BOLD);
-      resetProperty(P_ID::FONT_ITALIC);
-      resetProperty(P_ID::FONT_UNDERLINE);
       }
 
 Glissando::Glissando(const Glissando& g)
@@ -515,26 +516,8 @@ void Glissando::read(XmlReader& e)
                   setProperty(P_ID::GLISSANDO_STYLE, Ms::getProperty(P_ID::GLISSANDO_STYLE, e));
             else if (tag == "play")
                   setPlayGlissando(e.readBool());
-            else if (tag == "family") {
-                  setFontFace(e.readElementText());
-                  _fontFaceStyle = PropertyFlags::UNSTYLED;
-                  }
-            else if (tag == "size") {
-                  setFontSize(e.readDouble());
-                  _fontSizeStyle = PropertyFlags::UNSTYLED;
-                  }
-            else if (tag == "bold") {
-                  setFontBold(e.readBool());
-                  _fontBoldStyle = PropertyFlags::UNSTYLED;
-                  }
-            else if (tag == "italic") {
-                  setFontItalic(e.readBool());
-                  _fontItalicStyle = PropertyFlags::UNSTYLED;
-                  }
-            else if (tag == "underline") {
-                  setFontUnderline(e.readBool());
-                  _fontUnderlineStyle = PropertyFlags::UNSTYLED;
-                  }
+            else if (readStyledProperty(e, tag))
+                  ;
             else if (!SLine::readProperties(e))
                   e.unknown();
             }
@@ -832,6 +815,7 @@ QVariant Glissando::propertyDefault(P_ID propertyId) const
       return SLine::propertyDefault(propertyId);
       }
 
+#if 0
 //---------------------------------------------------------
 //   propertyFlags
 //---------------------------------------------------------
@@ -879,6 +863,7 @@ StyleIdx Glissando::getPropertyStyle(P_ID id) const
             }
       return SLine::getPropertyStyle(id);
       }
+#endif
 
 //---------------------------------------------------------
 //   styleChanged

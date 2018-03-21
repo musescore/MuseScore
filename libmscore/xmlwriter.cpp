@@ -270,7 +270,7 @@ void XmlWriter::tag(P_ID id, QVariant data, QVariant defaultData)
                   tag(name, NoteHead::type2name(NoteHead::Type(data.toInt())));
                   break;
             case P_TYPE::SUB_STYLE:
-                  tag(name, subStyleName(SubStyle(data.toInt())));
+                  tag(name, subStyleName(SubStyleId(data.toInt())));
                   break;
             default:
                   Q_ASSERT(false);

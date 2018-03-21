@@ -69,6 +69,5 @@ class TempoText final : public TextBase  {
       };
 
 
-
 }     // namespace Ms
 #endif

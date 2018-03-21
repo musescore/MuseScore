@@ -22,6 +22,7 @@
 
 namespace Ms {
 
+
 //---------------------------------------------------------
 //   Fingering
 //---------------------------------------------------------
@@ -29,8 +30,35 @@ namespace Ms {
 Fingering::Fingering(Score* s)
   : TextBase(s)
       {
-      init(SubStyle::FINGERING);
+      // init subStyle Fingering
+      _subStyleId = SubStyleId::FINGERING;
+      _propertyFlagsList = new PropertyFlags[subStyle(_subStyleId).size()];
+      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp)
+            resetProperty(spp->propertyIdx);
+
       setFlag(ElementFlag::HAS_TAG, true);      // this is a layered element
+      }
+
+Fingering::Fingering(SubStyleId ssid, Score* s)
+   : TextBase(s)
+      {
+      setSubStyleId(ssid);
+      for (const StyledProperty* spp = styledProperties();spp->styleIdx != StyleIdx::NOSTYLE; ++spp)
+            resetProperty(spp->propertyIdx);
+      setFlag(ElementFlag::HAS_TAG, true);      // this is a layered element
+      }
+
+Fingering::~Fingering()
+      {
+      }
+
+//---------------------------------------------------------
+//   styledProperties
+//---------------------------------------------------------
+
+const StyledProperty* Fingering::styledProperties() const
+      {
+      return subStyle(_subStyleId).data();
       }
 
 //---------------------------------------------------------
@@ -135,7 +163,7 @@ void Fingering::draw(QPainter* painter) const
 QString Fingering::accessibleInfo() const
       {
       QString rez = Element::accessibleInfo();
-      if (subStyle() == SubStyle::STRING_NUMBER) {
+      if (_subStyleId == SubStyleId::STRING_NUMBER) {
             rez += " " + QObject::tr("String number");
             }
       return QString("%1: %2").arg(rez).arg(plainText());
@@ -147,10 +175,7 @@ QString Fingering::accessibleInfo() const
 
 QVariant Fingering::getProperty(P_ID propertyId) const
       {
-      switch (propertyId) {
-            default:
-                  return TextBase::getProperty(propertyId);
-            }
+      return TextBase::getProperty(propertyId);
       }
 
 //---------------------------------------------------------
@@ -159,12 +184,7 @@ QVariant Fingering::getProperty(P_ID propertyId) const
 
 bool Fingering::setProperty(P_ID propertyId, const QVariant& v)
       {
-      switch (propertyId) {
-            default:
-                  return TextBase::setProperty(propertyId, v);
-            }
-      triggerLayout();
-      return true;
+      return TextBase::setProperty(propertyId, v);
       }
 
 //---------------------------------------------------------
@@ -175,63 +195,10 @@ QVariant Fingering::propertyDefault(P_ID id) const
       {
       switch (id) {
             case P_ID::SUB_STYLE:
-                  return int(SubStyle::FINGERING);
+                  return int(SubStyleId::FINGERING);
             default:
                   return TextBase::propertyDefault(id);
             }
-      }
-
-//---------------------------------------------------------
-//   propertyStyle
-//---------------------------------------------------------
-
-PropertyFlags& Fingering::propertyFlags(P_ID id)
-      {
-      return TextBase::propertyFlags(id);
-      }
-
-//---------------------------------------------------------
-//   resetProperty
-//---------------------------------------------------------
-
-void Fingering::resetProperty(P_ID id)
-      {
-      switch (id) {
-            default:
-                  return TextBase::resetProperty(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-StyleIdx Fingering::getPropertyStyle(P_ID id) const
-      {
-      switch (id) {
-            default:
-                  return TextBase::getPropertyStyle(id);
-            }
-      return StyleIdx::NOSTYLE;
-      }
-
-//---------------------------------------------------------
-//   styleChanged
-//    reset all styled values to actual style
-//---------------------------------------------------------
-
-void Fingering::styleChanged()
-      {
-      TextBase::styleChanged();
-      }
-
-//---------------------------------------------------------
-//   reset
-//---------------------------------------------------------
-
-void Fingering::reset()
-      {
-      TextBase::reset();
       }
 
 //---------------------------------------------------------
@@ -240,7 +207,7 @@ void Fingering::reset()
 
 QString Fingering::subtypeName() const
       {
-      return subStyleName(subStyle());
+      return subStyleName(_subStyleId);
       }
 
 }

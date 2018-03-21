@@ -308,7 +308,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { P_ID::END_FONT_UNDERLINE,      "end_font_underline",      false, "endFontUnderline",      P_TYPE::BOOL            },
       { P_ID::END_TEXT_OFFSET,         "end_text_offset",         false, "endTextOffset",         P_TYPE::POINT           },
 
-      { P_ID::END, "", false, "", P_TYPE::INT }
+      { P_ID::END, "++end++", false, "++end++", P_TYPE::INT }
       };
 
 //---------------------------------------------------------

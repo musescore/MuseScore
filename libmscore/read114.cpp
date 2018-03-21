@@ -303,49 +303,49 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element* be)
       const QStringRef& tag(e.name());
       if (tag == "style") {
             int i = e.readInt();
-            SubStyle ss = SubStyle::DEFAULT;
+            SubStyleId ss = SubStyleId::DEFAULT;
             switch (i) {
-                  case 2:  ss = SubStyle::TITLE;     break;
-                  case 3:  ss = SubStyle::SUBTITLE;  break;
-                  case 4:  ss = SubStyle::COMPOSER;  break;
-                  case 5:  ss = SubStyle::POET;      break;
-                  case 6:  ss = SubStyle::LYRIC1;    break;
-                  case 7:  ss = SubStyle::LYRIC2;    break;
-                  case 8:  ss = SubStyle::FINGERING; break;
-                  case 9:  ss = SubStyle::INSTRUMENT_LONG;    break;
-                  case 10: ss = SubStyle::INSTRUMENT_SHORT;   break;
-                  case 11: ss = SubStyle::INSTRUMENT_EXCERPT; break;
+                  case 2:  ss = SubStyleId::TITLE;     break;
+                  case 3:  ss = SubStyleId::SUBTITLE;  break;
+                  case 4:  ss = SubStyleId::COMPOSER;  break;
+                  case 5:  ss = SubStyleId::POET;      break;
+                  case 6:  ss = SubStyleId::LYRIC_ODD;    break;
+                  case 7:  ss = SubStyleId::LYRIC_EVEN;    break;
+                  case 8:  ss = SubStyleId::FINGERING; break;
+                  case 9:  ss = SubStyleId::INSTRUMENT_LONG;    break;
+                  case 10: ss = SubStyleId::INSTRUMENT_SHORT;   break;
+                  case 11: ss = SubStyleId::INSTRUMENT_EXCERPT; break;
 
-                  case 12: ss = SubStyle::DYNAMICS;  break;
-                  case 13: ss = SubStyle::EXPRESSION;   break;
-                  case 14: ss = SubStyle::TEMPO;     break;
-                  case 15: ss = SubStyle::METRONOME; break;
-                  case 16: ss = SubStyle::FOOTER;    break;  // TextStyleType::COPYRIGHT
-                  case 17: ss = SubStyle::MEASURE_NUMBER; break;
-                  case 18: ss = SubStyle::FOOTER; break;    // TextStyleType::PAGE_NUMBER_ODD
-                  case 19: ss = SubStyle::FOOTER; break;    // TextStyleType::PAGE_NUMBER_EVEN
-                  case 20: ss = SubStyle::TRANSLATOR; break;
-                  case 21: ss = SubStyle::TUPLET;     break;
+                  case 12: ss = SubStyleId::DYNAMICS;  break;
+                  case 13: ss = SubStyleId::EXPRESSION;   break;
+                  case 14: ss = SubStyleId::TEMPO;     break;
+                  case 15: ss = SubStyleId::METRONOME; break;
+                  case 16: ss = SubStyleId::FOOTER;    break;  // TextStyleType::COPYRIGHT
+                  case 17: ss = SubStyleId::MEASURE_NUMBER; break;
+                  case 18: ss = SubStyleId::FOOTER; break;    // TextStyleType::PAGE_NUMBER_ODD
+                  case 19: ss = SubStyleId::FOOTER; break;    // TextStyleType::PAGE_NUMBER_EVEN
+                  case 20: ss = SubStyleId::TRANSLATOR; break;
+                  case 21: ss = SubStyleId::TUPLET;     break;
 
-                  case 22: ss = SubStyle::SYSTEM;         break;
-                  case 23: ss = SubStyle::STAFF;          break;
-                  case 24: ss = SubStyle::HARMONY;        break;
-                  case 25: ss = SubStyle::REHEARSAL_MARK; break;
-                  case 26: ss = SubStyle::REPEAT_LEFT;         break;
-//??                  case 27: ss = SubStyle::VOLTA;          break;
-                  case 28: ss = SubStyle::FRAME;          break;
-                  case 29: ss = SubStyle::TEXTLINE;       break;
-                  case 30: ss = SubStyle::GLISSANDO;      break;
-                  case 31: ss = SubStyle::STRING_NUMBER;  break;
+                  case 22: ss = SubStyleId::SYSTEM;         break;
+                  case 23: ss = SubStyleId::STAFF;          break;
+                  case 24: ss = SubStyleId::HARMONY;        break;
+                  case 25: ss = SubStyleId::REHEARSAL_MARK; break;
+                  case 26: ss = SubStyleId::REPEAT_LEFT;         break;
+//??                  case 27: ss = SubStyleId::VOLTA;          break;
+                  case 28: ss = SubStyleId::FRAME;          break;
+                  case 29: ss = SubStyleId::TEXTLINE;       break;
+                  case 30: ss = SubStyleId::GLISSANDO;      break;
+                  case 31: ss = SubStyleId::STRING_NUMBER;  break;
 
-                  case 32: ss = SubStyle::OTTAVA;  break;
-//??                  case 33: ss = SubStyle::BENCH;   break;
-                  case 34: ss = SubStyle::HEADER;  break;
-                  case 35: ss = SubStyle::FOOTER;  break;
+                  case 32: ss = SubStyleId::OTTAVA;  break;
+//??                  case 33: ss = SubStyleId::BENCH;   break;
+                  case 34: ss = SubStyleId::HEADER;  break;
+                  case 35: ss = SubStyleId::FOOTER;  break;
                   case 0:
                   default:
                         qDebug("style %d invalid", i);
-                        ss = SubStyle::DEFAULT;
+                        ss = SubStyleId::DEFAULT;
                         break;
                   }
             be->initSubStyle(ss);
@@ -1462,7 +1462,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               // force the marker type for correct display
                               m->setXmlText("");
                               m->setMarkerType(m->markerType());
-                              m->setSubStyle(SubStyle::REPEAT_LEFT);
+                              m->initSubStyle(SubStyleId::REPEAT_LEFT);
                               }
                         }
                   m->add(el);
@@ -1560,7 +1560,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
 #endif
                   }
             else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(SubStyle::MEASURE_NUMBER, m->score());
+                  Text* noText = new Text(SubStyleId::MEASURE_NUMBER, m->score());
                   noText->read(e);
                   noText->setFlag(ElementFlag::ON_STAFF, true);
                   // noText->setFlag(ElementFlag::MOVABLE, false); ??

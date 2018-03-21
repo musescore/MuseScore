@@ -39,6 +39,10 @@ static const char* label[] = {
 Bend::Bend(Score* s)
    : Element(s)
       {
+      _propertyFlagsList = new PropertyFlags[BEND_STYLED_PROPERTIES];
+      for (int i = 0; i < BEND_STYLED_PROPERTIES; ++i)
+            _propertyFlagsList[i] = PropertyFlags::STYLED;
+
       static constexpr std::array<P_ID,6> properties {
             P_ID::FONT_FACE,
             P_ID::FONT_SIZE,

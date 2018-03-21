@@ -323,42 +323,42 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             mscore->addImage(score(), static_cast<HBox*>(e));
             }
       else if (cmd == "frame-text") {
-            Text* t = new Text(SubStyle::FRAME, score());
+            Text* t = new Text(SubStyleId::FRAME, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "title-text") {
-            Text* t = new Text(SubStyle::TITLE, score());
+            Text* t = new Text(SubStyleId::TITLE, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "subtitle-text") {
-            Text* t = new Text(SubStyle::SUBTITLE, score());
+            Text* t = new Text(SubStyleId::SUBTITLE, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "composer-text") {
-            Text* t = new Text(SubStyle::COMPOSER, score());
+            Text* t = new Text(SubStyleId::COMPOSER, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "poet-text") {
-            Text* t = new Text(SubStyle::POET, score());
+            Text* t = new Text(SubStyleId::POET, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "part-text") {
-            Text* t = new Text(SubStyle::INSTRUMENT_EXCERPT, score());
+            Text* t = new Text(SubStyleId::INSTRUMENT_EXCERPT, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);

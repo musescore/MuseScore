@@ -17,7 +17,7 @@
 
 namespace Ms {
 
-enum class SubStyle;
+enum class SubStyleId;
 
 //---------------------------------------------------------
 //   @@ Jump
@@ -92,7 +92,7 @@ class Jump final : public TextBase {
 
 struct JumpTypeTable {
       Jump::Type type;
-      SubStyle subStyle;
+      SubStyleId subStyle;
       const char* text;
       const char* jumpTo;
       const char* playUntil;

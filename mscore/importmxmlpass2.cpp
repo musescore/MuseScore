@@ -1296,12 +1296,11 @@ static NoteHead::Group convertNotehead(QString mxmlName)
  Add Text to Note.
  */
 
-static void addTextToNote(int l, int c, QString txt, SubStyle style, Score* score, Note* note)
+static void addTextToNote(int l, int c, QString txt, SubStyleId style, Score* score, Note* note)
       {
       if (note) {
             if (!txt.isEmpty()) {
-                  TextBase* t = new Fingering(score);
-                  t->initSubStyle(style);
+                  TextBase* t = new Fingering(style, score);
                   t->setPlainText(txt);
                   note->add(t);
                   }
@@ -2732,13 +2731,11 @@ static Marker* findMarker(const QString& repeat, Score* score)
             m->setMarkerType(Marker::Type::CODA);
             }
       else if (repeat == "fine") {
-            m = new Marker(score);
-            m->initSubStyle(SubStyle::REPEAT_RIGHT);
+            m = new Marker(SubStyleId::REPEAT_RIGHT, score);
             m->setMarkerType(Marker::Type::FINE);
             }
       else if (repeat == "toCoda") {
-            m = new Marker(score);
-            m->initSubStyle(SubStyle::REPEAT_RIGHT);
+            m = new Marker(SubStyleId::REPEAT_RIGHT, score);
             m->setMarkerType(Marker::Type::TOCODA);
             }
       return m;
@@ -4833,8 +4830,8 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       double rx = 0.0;        // 0.1 * e.attribute("relative-x", "0").toDouble();
       double ry = 0.0;        // -0.1 * e.attribute("relative-y", "0").toDouble();
 
-      double styleYOff = _score->textStyle(SubStyle::HARMONY).offset().y();
-      OffsetType offsetType = _score->textStyle(SubStyle::HARMONY).offsetType();
+      double styleYOff = _score->textStyle(SubStyleId::HARMONY).offset().y();
+      OffsetType offsetType = _score->textStyle(SubStyleId::HARMONY).offsetType();
       if (offsetType == OffsetType::ABS) {
             styleYOff = styleYOff * DPMM / _score->spatium();
             }
@@ -5488,10 +5485,10 @@ void MusicXMLParserPass2::technical(Note* note, ChordRest* cr)
                   continue;
                   }
             else if (_e.name() == "fingering")
-                  // TODO: distinguish between keyboards (style SubStyle::FINGERING)
-                  // and (plucked) strings (style SubStyle::LH_GUITAR_FINGERING)
+                  // TODO: distinguish between keyboards (style SubStyleId::FINGERING)
+                  // and (plucked) strings (style SubStyleId::LH_GUITAR_FINGERING)
                   addTextToNote(_e.lineNumber(), _e.columnNumber(), _e.readElementText(),
-                                SubStyle::FINGERING, _score, note);
+                                SubStyleId::FINGERING, _score, note);
             else if (_e.name() == "fret") {
                   int fret = _e.readElementText().toInt();
                   if (note) {
@@ -5503,7 +5500,7 @@ void MusicXMLParserPass2::technical(Note* note, ChordRest* cr)
                   }
             else if (_e.name() == "pluck")
                   addTextToNote(_e.lineNumber(), _e.columnNumber(), _e.readElementText(),
-                                SubStyle::RH_GUITAR_FINGERING, _score, note);
+                                SubStyleId::RH_GUITAR_FINGERING, _score, note);
             else if (_e.name() == "string") {
                   QString txt = _e.readElementText();
                   if (note) {
@@ -5511,7 +5508,7 @@ void MusicXMLParserPass2::technical(Note* note, ChordRest* cr)
                               note->setString(txt.toInt() - 1);
                         else
                               addTextToNote(_e.lineNumber(), _e.columnNumber(), txt,
-                                            SubStyle::STRING_NUMBER, _score, note);
+                                            SubStyleId::STRING_NUMBER, _score, note);
                         }
                   else
                         _logger->logError("no note for string", &_e);

@@ -1109,7 +1109,6 @@ TextBase::TextBase(const TextBase& st)
       textInvalid                  = st.textInvalid;
       layoutInvalid                = st.layoutInvalid;
       frame                        = st.frame;
-      _subStyle                    = st._subStyle;
       _layoutToParentWidth         = st._layoutToParentWidth;
       hexState                     = -1;
       _family                      = st._family;
@@ -1129,33 +1128,6 @@ TextBase::TextBase(const TextBase& st)
       _frameRound                  = st._frameRound;
       _offset                      = st._offset;
       _offsetType                  = st._offsetType;
-      _familyStyle                 = st._familyStyle;
-      _sizeStyle                   = st._sizeStyle;
-      _boldStyle                   = st._boldStyle;
-      _italicStyle                 = st._italicStyle;
-      _underlineStyle              = st._underlineStyle;
-      _bgColorStyle                = st._bgColorStyle;
-      _frameColorStyle             = st._frameColorStyle;
-      _alignStyle                  = st._alignStyle;
-      _hasFrameStyle               = st._hasFrameStyle;
-      _circleStyle                 = st._circleStyle;
-      _squareStyle                 = st._squareStyle;
-      _sizeIsSpatiumDependentStyle = st._sizeIsSpatiumDependentStyle;
-      _frameWidthStyle             = st._frameWidthStyle;
-      _paddingWidthStyle           = st._paddingWidthStyle;
-      _frameRoundStyle             = st._frameRoundStyle;
-      _offsetStyle                 = st._offsetStyle;
-      _offsetTypeStyle             = st._offsetTypeStyle;
-      }
-
-//---------------------------------------------------------
-//   init
-//---------------------------------------------------------
-
-void TextBase::init(SubStyle st)
-      {
-      initSubStyle(st);
-      resetProperty(P_ID::PLACEMENT);
       }
 
 //---------------------------------------------------------
@@ -1888,6 +1860,7 @@ static const std::array<P_ID, 18> pids { {
 
 void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
       {
+      printf("===writeProperties style %d %s\n", int(subStyleId()), subStyleName(subStyleId()));
       Element::writeProperties(xml);
       for (P_ID i :pids)
             writeProperty(xml, i);
@@ -1902,18 +1875,9 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
 bool TextBase::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
-
-      if (tag == "style") {
-            SubStyle s = subStyleFromName(e.readElementText());
-            initSubStyle(s);
-            return true;
-            }
-
       for (P_ID i :pids) {
-            if (readProperty(tag, e, i)) {
-                  setPropertyFlags(i, PropertyFlags::UNSTYLED);
+            if (readProperty(tag, e, i))
                   return true;
-                  }
             }
       if (tag == "text")
             setXmlText(e.readXml());
@@ -2389,19 +2353,21 @@ QString TextBase::escape(QString s)
 QString TextBase::accessibleInfo() const
       {
       QString rez;
+#if 0
       switch (subStyle()) {
-            case SubStyle::TITLE:
-            case SubStyle::SUBTITLE:
-            case SubStyle::COMPOSER:
-            case SubStyle::POET:
-            case SubStyle::TRANSLATOR:
-            case SubStyle::MEASURE_NUMBER:
+            case SubStyleId::TITLE:
+            case SubStyleId::SUBTITLE:
+            case SubStyleId::COMPOSER:
+            case SubStyleId::POET:
+            case SubStyleId::TRANSLATOR:
+            case SubStyleId::MEASURE_NUMBER:
                   rez = subStyleUserName(subStyle());
                   break;
             default:
                   rez = Element::accessibleInfo();
                   break;
             }
+#endif
       QString s = plainText().simplified();
       if (s.length() > 20) {
             s.truncate(20);
@@ -2417,6 +2383,7 @@ QString TextBase::accessibleInfo() const
 QString TextBase::screenReaderInfo() const
       {
       QString rez;
+#if 0
       switch (subStyle()) {
             case SubStyle::TITLE:
             case SubStyle::SUBTITLE:
@@ -2430,6 +2397,7 @@ QString TextBase::screenReaderInfo() const
                   rez = Element::accessibleInfo();
                   break;
             }
+#endif
       QString s = plainText().simplified();
       return  QString("%1: %2").arg(rez).arg(s);
       }
@@ -2440,6 +2408,7 @@ QString TextBase::screenReaderInfo() const
 
 int TextBase::subtype() const
       {
+#if 0
       switch (subStyle()) {
             case SubStyle::TITLE:
             case SubStyle::SUBTITLE:
@@ -2450,6 +2419,8 @@ int TextBase::subtype() const
                   return int(subStyle());
             default: return -1;
             }
+#endif
+      return -1;
       }
 
 //---------------------------------------------------------
@@ -2459,6 +2430,7 @@ int TextBase::subtype() const
 QString TextBase::subtypeName() const
       {
       QString rez;
+#if 0
       switch (subStyle()) {
             case SubStyle::TITLE:
             case SubStyle::SUBTITLE:
@@ -2470,6 +2442,7 @@ QString TextBase::subtypeName() const
                   break;
             default: rez = "";
             }
+#endif
       return rez;
       }
 
@@ -2643,22 +2616,14 @@ QFontMetricsF TextBase::fontMetrics() const
       }
 
 //---------------------------------------------------------
-//   initSubStyle
-//---------------------------------------------------------
-
-void TextBase::initSubStyle(SubStyle s)
-      {
-      _subStyle = s;
-      Element::initSubStyle(s);
-      }
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
 QVariant TextBase::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
+            case P_ID::SUB_STYLE:
+                  return int(subStyleId());
             case P_ID::FONT_FACE:
                   return family();
             case P_ID::FONT_SIZE:
@@ -2691,8 +2656,6 @@ QVariant TextBase::getProperty(P_ID propertyId) const
                   return QVariant::fromValue(align());
             case P_ID::TEXT:
                   return xmlText();
-            case P_ID::SUB_STYLE:
-                  return int(subStyle());
             case P_ID::OFFSET:
                   return offset();
             case P_ID::OFFSET_TYPE:
@@ -2711,6 +2674,9 @@ bool TextBase::setProperty(P_ID propertyId, const QVariant& v)
       score()->addRefresh(canvasBoundingRect());
       bool rv = true;
       switch (propertyId) {
+            case P_ID::SUB_STYLE:
+                  setSubStyleId(SubStyleId(v.toInt()));
+                  break;
             case P_ID::FONT_FACE:
                   setFamily(v.toString());
                   break;
@@ -2759,9 +2725,6 @@ bool TextBase::setProperty(P_ID propertyId, const QVariant& v)
             case P_ID::ALIGN:
                   setAlign(v.value<Align>());
                   break;
-            case P_ID::SUB_STYLE:
-                  setSubStyle(SubStyle(v.toInt()));
-                  break;
             case P_ID::OFFSET:
                   setOffset(v.toPointF());
                   break;
@@ -2785,13 +2748,13 @@ bool TextBase::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant TextBase::propertyDefault(P_ID id) const
       {
-      for (const StyledProperty& p : Ms::subStyle(_subStyle)) {
+      if (id == P_ID::SUB_STYLE)
+            return int(SubStyleId::DEFAULT);
+      for (const StyledProperty& p : subStyle(subStyleId())) {
             if (p.propertyIdx == id)
                   return score()->styleV(p.styleIdx);
             }
       switch (id) {
-            case P_ID::SUB_STYLE:
-                  return int(SubStyle::DEFAULT);
             case P_ID::TEXT:
                   return QString();
             case P_ID::OFFSET:
@@ -2799,7 +2762,7 @@ QVariant TextBase::propertyDefault(P_ID id) const
             case P_ID::OFFSET_TYPE:
                   return int (OffsetType::SPATIUM);
             default:
-                  for (const StyledProperty& p : Ms::subStyle(SubStyle::DEFAULT)) {
+                  for (const StyledProperty& p : subStyle(SubStyleId::DEFAULT)) {
                         if (p.propertyIdx == id)
                               return score()->styleV(p.styleIdx);
                         }
@@ -2813,22 +2776,9 @@ QVariant TextBase::propertyDefault(P_ID id) const
 
 void TextBase::reset()
       {
-      for (const StyledProperty& p : Ms::subStyle(_subStyle))
-            undoResetProperty(p.propertyIdx);
+//      for (const StyledProperty& p : Ms::subStyle(_subStyle))
+//            undoResetProperty(p.propertyIdx);
       Element::reset();
-      }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-StyleIdx TextBase::getPropertyStyle(P_ID id) const
-      {
-      for (auto sp : Ms::subStyle(_subStyle)) {
-            if (sp.propertyIdx == id)
-                  return sp.styleIdx;
-            }
-      return Element::getPropertyStyle(id);
       }
 
 //---------------------------------------------------------
@@ -2837,55 +2787,11 @@ StyleIdx TextBase::getPropertyStyle(P_ID id) const
 
 void TextBase::styleChanged()
       {
-      for (const StyledProperty& p : Ms::subStyle(_subStyle)) {
-            if (propertyFlags(p.propertyIdx) == PropertyFlags::STYLED)
-                  setProperty(p.propertyIdx, propertyDefault(p.propertyIdx));
-            }
+//      for (const StyledProperty& p : Ms::subStyle(_subStyle)) {
+//            if (propertyFlags(p.propertyIdx) == PropertyFlags::STYLED)
+//                  setProperty(p.propertyIdx, propertyDefault(p.propertyIdx));
+//            }
       Element::styleChanged();
-      }
-
-//---------------------------------------------------------
-//   propertyFlags
-//---------------------------------------------------------
-
-PropertyFlags& TextBase::propertyFlags(P_ID id)
-      {
-      switch (id) {
-            case P_ID::FONT_FACE:
-                  return _familyStyle;
-            case P_ID::FONT_SIZE:
-                  return _sizeStyle;
-            case P_ID::FONT_BOLD:
-                  return _boldStyle;
-            case P_ID::FONT_ITALIC:
-                  return _italicStyle;
-            case P_ID::FONT_UNDERLINE:
-                  return _underlineStyle;
-            case P_ID::FRAME:
-                  return _hasFrameStyle;
-            case P_ID::FRAME_SQUARE:
-                  return _squareStyle;
-            case P_ID::FRAME_CIRCLE:
-                  return _circleStyle;
-            case P_ID::FRAME_WIDTH:
-                  return _frameWidthStyle;
-            case P_ID::FRAME_PADDING:
-                  return _paddingWidthStyle;
-            case P_ID::FRAME_ROUND:
-                  return _frameRoundStyle;
-            case P_ID::FRAME_FG_COLOR:
-                  return _frameColorStyle;
-            case P_ID::FRAME_BG_COLOR:
-                  return _bgColorStyle;
-            case P_ID::FONT_SPATIUM_DEPENDENT:
-                  return _sizeIsSpatiumDependentStyle;
-            case P_ID::ALIGN:
-                  return _alignStyle;
-            default:
-                  // qDebug("unknown id: %d %s", int(id), propertyName(id));
-                  break;
-            }
-      return ScoreElement::propertyFlags(id);
       }
 
 //---------------------------------------------------------
@@ -3275,12 +3181,32 @@ bool TextBase::edit(EditData& ed)
 
 Text::Text(Score* s) : TextBase(s)
       {
-      init(SubStyle::DEFAULT);
+      initSubStyle(SubStyleId::DEFAULT);
       }
 
-Text::Text(SubStyle ss, Score* s) : TextBase(s)
+Text::Text(SubStyleId ssid, Score* s) : TextBase(s)
       {
-      init(ss);
+      initSubStyle(ssid);
       }
+
+//---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
+void Text::read(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+
+            if (tag == "style") {
+                  QString sn = e.readElementText();
+                  SubStyleId s = subStyleFromName(sn);
+                  initSubStyle(s);
+                  }
+            else if (!readProperties(e))
+                  e.unknown();
+            }
+      }
+
 }
 

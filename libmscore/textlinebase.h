@@ -19,7 +19,6 @@
 
 namespace Ms {
 
-enum class SubStyle;
 enum class Align : char;
 class TextLineBase;
 class Element;

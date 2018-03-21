@@ -45,6 +45,7 @@ class Marker final : public TextBase {
 
    public:
       Marker(Score*);
+      Marker(SubStyleId, Score*);
 
       void setMarkerType(Type t);
       Type markerType() const          { return _markerType; }

@@ -51,18 +51,8 @@ class Bend final : public Element {
             { StyleIdx::NOSTYLE,           P_ID::END }      // end of list marker
             }};
 
-      PropertyFlags _propertyFlagsList[BEND_STYLED_PROPERTIES] = {
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            };
-
    protected:
       virtual const StyledProperty* styledProperties() const override { return _styledProperties.data(); }
-      virtual PropertyFlags* propertyFlagsList()       override       { return _propertyFlagsList; }
 
    public:
       Bend(Score* s);

@@ -1053,8 +1053,8 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   setSystemFlag(v.toBool());
                   break;
             default:
-                  qFatal("unknown %s <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
-//                  qDebug("unknown %s <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
+                  qFatal("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
+//                  qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
                   return false;
             }
       triggerLayout();
@@ -1091,18 +1091,6 @@ QVariant Element::propertyDefault(P_ID id) const
                   break;
             }
       return QVariant();
-      }
-
-//---------------------------------------------------------
-//   setStyle
-//---------------------------------------------------------
-
-void Element::initSubStyle(SubStyle st)
-      {
-      for (const StyledProperty& p : subStyle(st)) {
-            setProperty(p.propertyIdx, score()->styleV(p.styleIdx));
-            setPropertyFlags(p.propertyIdx, PropertyFlags::STYLED);
-            }
       }
 
 //---------------------------------------------------------

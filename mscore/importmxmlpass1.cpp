@@ -492,10 +492,10 @@ static void determineMeasureStart(const QVector<Fraction>& ml, QVector<Fraction>
 //---------------------------------------------------------
 
 /**
- Add text \a strTxt to VBox \a vbx using SubStyle \a stl.
+ Add text \a strTxt to VBox \a vbx using SubStyleId \a stl.
  */
 
-static void addText(VBox* vbx, Score* s, QString strTxt, SubStyle stl)
+static void addText(VBox* vbx, Score* s, QString strTxt, SubStyleId stl)
       {
       if (!strTxt.isEmpty()) {
             Text* text = new Text(stl, s);
@@ -509,11 +509,11 @@ static void addText(VBox* vbx, Score* s, QString strTxt, SubStyle stl)
 //---------------------------------------------------------
 
 /**
- Add text \a strTxt to VBox \a vbx using SubStyle \a stl.
+ Add text \a strTxt to VBox \a vbx using SubStyleId \a stl.
  Also sets Align and Yoff.
  */
 
-static void addText2(VBox* vbx, Score* s, QString strTxt, SubStyle stl, Align v, double yoffs)
+static void addText2(VBox* vbx, Score* s, QString strTxt, SubStyleId stl, Align v, double yoffs)
       {
       if (!strTxt.isEmpty()) {
             Text* text = new Text(stl, s);
@@ -628,14 +628,14 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                   if (pw2 < defx) {
                         // found composer
                         addText2(vbox, score, w->words,
-                                 SubStyle::COMPOSER, Align::RIGHT | Align::BOTTOM,
+                                 SubStyleId::COMPOSER, Align::RIGHT | Align::BOTTOM,
                                  (miny - w->defaultY) * score->spatium() / (10 * DPI));
                         }
                   // poet is in the left column
                   else if (defx < pw1) {
                         // found poet/lyricist
                         addText2(vbox, score, w->words,
-                                 SubStyle::POET, Align::LEFT | Align::BOTTOM,
+                                 SubStyleId::POET, Align::LEFT | Align::BOTTOM,
                                  (miny - w->defaultY) * score->spatium() / (10 * DPI));
                         }
                   // save others (in the middle column) to be handled later
@@ -678,7 +678,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             CreditWords* w = creditMap.value(keys.at(keys.size() - 1));
             //qDebug("title='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
-                     SubStyle::TITLE, Align::HCENTER | Align::TOP,
+                     SubStyleId::TITLE, Align::HCENTER | Align::TOP,
                      (maxy - w->defaultY) * score->spatium() / (10 * DPI));
             }
 
@@ -687,7 +687,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             CreditWords* w = creditMap.value(keys.at(i));
             //qDebug("subtitle='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
-                     SubStyle::SUBTITLE, Align::HCENTER | Align::TOP,
+                     SubStyleId::SUBTITLE, Align::HCENTER | Align::TOP,
                      (maxy - w->defaultY) * score->spatium() / (10 * DPI));
             }
 
@@ -718,11 +718,11 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             if (!metaPoet.isEmpty()) strPoet = metaPoet;
             if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
 
-            addText(vbox, score, strTitle.toHtmlEscaped(),      SubStyle::TITLE);
-            addText(vbox, score, strSubTitle.toHtmlEscaped(),   SubStyle::SUBTITLE);
-            addText(vbox, score, strComposer.toHtmlEscaped(),   SubStyle::COMPOSER);
-            addText(vbox, score, strPoet.toHtmlEscaped(),       SubStyle::POET);
-            addText(vbox, score, strTranslator.toHtmlEscaped(), SubStyle::TRANSLATOR);
+            addText(vbox, score, strTitle.toHtmlEscaped(),      SubStyleId::TITLE);
+            addText(vbox, score, strSubTitle.toHtmlEscaped(),   SubStyleId::SUBTITLE);
+            addText(vbox, score, strComposer.toHtmlEscaped(),   SubStyleId::COMPOSER);
+            addText(vbox, score, strPoet.toHtmlEscaped(),       SubStyleId::POET);
+            addText(vbox, score, strTranslator.toHtmlEscaped(), SubStyleId::TRANSLATOR);
             }
 
       if (vbox) {
@@ -1209,23 +1209,23 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
 static bool mustSetSize(const int i)
       {
       return
-            i == int(SubStyle::TITLE)
-            || i == int(SubStyle::SUBTITLE)
-            || i == int(SubStyle::COMPOSER)
-            || i == int(SubStyle::POET)
-            || i == int(SubStyle::INSTRUMENT_LONG)
-            || i == int(SubStyle::INSTRUMENT_SHORT)
-            || i == int(SubStyle::INSTRUMENT_EXCERPT)
-            || i == int(SubStyle::TEMPO)
-            || i == int(SubStyle::METRONOME)
-            || i == int(SubStyle::TRANSLATOR)
-            || i == int(SubStyle::SYSTEM)
-            || i == int(SubStyle::STAFF)
-            || i == int(SubStyle::REPEAT_LEFT)
-            || i == int(SubStyle::REPEAT_RIGHT)
-            || i == int(SubStyle::TEXTLINE)
-            || i == int(SubStyle::GLISSANDO)
-            || i == int(SubStyle::INSTRUMENT_CHANGE);
+            i == int(SubStyleId::TITLE)
+            || i == int(SubStyleId::SUBTITLE)
+            || i == int(SubStyleId::COMPOSER)
+            || i == int(SubStyleId::POET)
+            || i == int(SubStyleId::INSTRUMENT_LONG)
+            || i == int(SubStyleId::INSTRUMENT_SHORT)
+            || i == int(SubStyleId::INSTRUMENT_EXCERPT)
+            || i == int(SubStyleId::TEMPO)
+            || i == int(SubStyleId::METRONOME)
+            || i == int(SubStyleId::TRANSLATOR)
+            || i == int(SubStyleId::SYSTEM)
+            || i == int(SubStyleId::STAFF)
+            || i == int(SubStyleId::REPEAT_LEFT)
+            || i == int(SubStyleId::REPEAT_RIGHT)
+            || i == int(SubStyleId::TEXTLINE)
+            || i == int(SubStyleId::GLISSANDO)
+            || i == int(SubStyleId::INSTRUMENT_CHANGE);
       }
 #endif
 
@@ -1247,9 +1247,9 @@ static void updateStyles(Score* score,
       // loop over all text styles (except the empty, always hidden, first one)
       // set all text styles to the MusicXML defaults
 #if 0 // TODO:ws
-      for (int i = int(SubStyle::DEFAULT) + 1; i < int(SubStyle::TEXT_STYLES); ++i) {
+      for (int i = int(SubStyleId::DEFAULT) + 1; i < int(SubStyleId::TEXT_STYLES); ++i) {
             TextStyle ts = score->style().textStyle(TextStyleType(i));
-            if (i == int(SubStyle::LYRIC1) || i == int(SubStyle::LYRIC2)) {
+            if (i == int(SubStyleId::LYRIC1) || i == int(SubStyleId::LYRIC2)) {
                   if (lyricFamily != "")
                         ts.setFamily(lyricFamily);
                   if (fLyricSize > 0.001)

@@ -3761,8 +3761,10 @@ void Score::undoAddElement(Element* element)
             // don't link part name
             if (et == ElementType::TEXT) {
                   Text* t = toText(element);
+#if 0 // TODO-ws
                   if (t->subStyle() == SubStyle::INSTRUMENT_EXCERPT)
                         links = 0;
+#endif
                   }
             if (links == 0) {
                   undo(new AddElement(element));

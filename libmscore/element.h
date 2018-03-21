@@ -34,7 +34,7 @@ class XmlReader;
 class XmlWriter;
 enum class SymId;
 enum class P_ID;
-enum class SubStyle;
+enum class SubStyleId;
 
 //---------------------------------------------------------
 //   Grip
@@ -412,7 +412,6 @@ class Element : public ScoreElement {
       virtual QVariant getProperty(P_ID) const override;
       virtual bool setProperty(P_ID, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
-      virtual void initSubStyle(SubStyle);
 
       bool custom(P_ID) const;
       virtual bool isUserModified() const;

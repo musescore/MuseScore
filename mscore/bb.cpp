@@ -459,7 +459,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
       //    create title
       //---------------------------------------------------
 
-      Text* text = new Text(SubStyle::TITLE, score);
+      Text* text = new Text(SubStyleId::TITLE, score);
       text->setPlainText(bb.title());
 
       MeasureBase* measure = score->first();

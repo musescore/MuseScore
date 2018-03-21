@@ -1746,12 +1746,12 @@ void Score::setSelection(const Selection& s)
 //   getText
 //---------------------------------------------------------
 
-Text* Score::getText(SubStyle subStyle)
+Text* Score::getText(SubStyleId subStyle)
       {
       MeasureBase* m = first();
       if (m && m->type() == ElementType::VBOX) {
             for (Element* e : m->el()) {
-                  if (e->type() == ElementType::TEXT && toText(e)->subStyle() == subStyle)
+                  if (e->type() == ElementType::TEXT && toText(e)->subStyleId() == subStyle)
                         return toText(e);
                   }
             }
@@ -3426,11 +3426,12 @@ void Score::addText(const QString& type, const QString& txt)
             insertMeasure(ElementType::VBOX, measure);
             measure = first();
             }
-      Text* text = new Text(this);
+      SubStyleId stid = SubStyleId::DEFAULT;
       if (type == "title")
-            text->initSubStyle(SubStyle::TITLE);
+            stid = SubStyleId::TITLE;
       else if (type == "subtitle")
-            text->initSubStyle(SubStyle::SUBTITLE);
+            stid = SubStyleId::SUBTITLE;
+      Text* text = new Text(stid, this);
       text->setParent(measure);
       text->setXmlText(txt);
       undoAddElement(text);
@@ -3657,82 +3658,6 @@ void Score::setImportedFilePath(const QString& filePath)
       {
       _importedFilePath = filePath;
       }
-
-#if 0
-//---------------------------------------------------------
-//   title
-//---------------------------------------------------------
-
-QString Score::title()
-      {
-      QString fn;
-      Text* t = getText(SubStyle::TITLE);
-      if (t)
-            fn = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
-
-      if (fn.isEmpty())
-            fn = metaTag("workTitle");
-
-      if (fn.isEmpty())
-            fn = masterScore()->fileInfo()->completeBaseName();
-
-      if (fn.isEmpty())
-            fn = "Untitled";
-
-      return fn.simplified();
-      }
-
-//---------------------------------------------------------
-//   subtitle
-//---------------------------------------------------------
-
-QString Score::subtitle()
-      {
-      QString fn;
-      Text* t = getText(SubStyle::SUBTITLE);
-      if (t)
-            fn = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
-
-      return fn.simplified();
-      }
-
-//---------------------------------------------------------
-//   composer
-//---------------------------------------------------------
-
-QString Score::composer()
-      {
-      QString fn;
-      Text* t = getText(SubStyle::COMPOSER);
-      if (t)
-            fn = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
-
-      if (fn.isEmpty())
-            fn = metaTag("composer");
-
-      return fn.simplified();
-      }
-
-//---------------------------------------------------------
-//   poet
-//---------------------------------------------------------
-
-QString Score::poet()
-      {
-      QString fn;
-      Text* t = getText(SubStyle::POET);
-      if (t)
-            fn = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
-
-      if (fn.isEmpty())
-            fn = metaTag("lyricist");
-
-      if (fn.isEmpty())
-            fn = "";
-
-      return fn.simplified();
-      }
-#endif
 
 //---------------------------------------------------------
 //   nmeasure

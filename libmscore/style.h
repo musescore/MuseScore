@@ -591,6 +591,7 @@ enum class StyleIdx {
       repeatLeftFontItalic,
       repeatLeftFontUnderline,
       repeatLeftAlign,
+      repeatLeftPlacement,
 
       repeatRightFontFace,
       repeatRightFontSize,
@@ -598,6 +599,7 @@ enum class StyleIdx {
       repeatRightFontItalic,
       repeatRightFontUnderline,
       repeatRightAlign,
+      repeatRightPlacement,
 
       voltaFontFace,
       voltaFontSize,
@@ -740,23 +742,21 @@ struct StyledProperty {
       P_ID propertyIdx;
       };
 
-// extern const std::vector<StyledProperty> fingeringStyle;
-extern const std::vector<StyledProperty> titleStyle;
-
 //-------------------------------------------------------------------
-//   SubStyle
+//   SubStyleId
 //    Enumerate the list of built-in substyles
 //    must be in sync with namedStyles array
 //-------------------------------------------------------------------
 
-enum class SubStyle {
+enum class SubStyleId {
+      EMPTY,
       DEFAULT,
       TITLE,
       SUBTITLE,
       COMPOSER,
       POET,
-      LYRIC1,
-      LYRIC2,
+      LYRIC_ODD,
+      LYRIC_EVEN,
       FINGERING,
       LH_GUITAR_FINGERING,
       RH_GUITAR_FINGERING,
@@ -795,6 +795,7 @@ enum class SubStyle {
       SUBSTYLES
       };
 
+
 //---------------------------------------------------------
 //   MStyle
 //---------------------------------------------------------
@@ -831,11 +832,17 @@ class MStyle {
       static StyleIdx styleIdx(const QString& name);
       };
 
-const std::vector<StyledProperty>& subStyle(const char*);
-const std::vector<StyledProperty>& subStyle(SubStyle);
-const char* subStyleName(SubStyle);
-QString subStyleUserName(SubStyle);
-SubStyle subStyleFromName(const QString&);
+typedef std::vector<StyledProperty> SubStyle;
+
+extern const SubStyle emptyStyle;
+extern const SubStyle fingeringStyle;
+
+const SubStyle& subStyle(SubStyleId);
+const SubStyle& subStyle(const char*);
+
+const char* subStyleName(SubStyleId);
+QString subStyleUserName(SubStyleId);
+SubStyleId subStyleFromName(const QString&);
 
 #ifndef NDEBUG
 extern void checkStyles();

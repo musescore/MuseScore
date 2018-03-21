@@ -24,7 +24,7 @@ namespace Ms {
 RehearsalMark::RehearsalMark(Score* s)
    : TextBase(s)
       {
-      init(SubStyle::REHEARSAL_MARK);
+      initSubStyle(SubStyleId::REHEARSAL_MARK);
       setSystemFlag(true);
       }
 
@@ -65,7 +65,7 @@ QVariant RehearsalMark::propertyDefault(P_ID id) const
       {
       switch (id) {
             case P_ID::SUB_STYLE:
-                  return int(SubStyle::REHEARSAL_MARK);
+                  return int(SubStyleId::REHEARSAL_MARK);
             case P_ID::PLACEMENT:
                   return score()->styleV(StyleIdx::rehearsalMarkPlacement);
             default:

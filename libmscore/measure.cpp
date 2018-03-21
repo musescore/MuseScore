@@ -548,8 +548,7 @@ void Measure::layout2()
                   t->setTrack(staffIdx * VOICES);
             if (smn && ((staffIdx == nn) || nas)) {
                   if (t == 0) {
-                        t = new Text(score());
-                        t->init(SubStyle::MEASURE_NUMBER);
+                        t = new Text(SubStyleId::MEASURE_NUMBER, score());
                         t->setFlag(ElementFlag::ON_STAFF, true);
                         t->setTrack(staffIdx * VOICES);
                         t->setGenerated(true);
@@ -2227,8 +2226,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             else if (tag == "Segment")
                   segment->read(e);
             else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(score());
-                  noText->init(SubStyle::MEASURE_NUMBER);
+                  Text* noText = new Text(SubStyleId::MEASURE_NUMBER, score());
                   noText->read(e);
                   noText->setFlag(ElementFlag::ON_STAFF, true);
                   noText->setTrack(e.track());

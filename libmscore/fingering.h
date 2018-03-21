@@ -19,14 +19,22 @@
 namespace Ms {
 
 class Note;
+extern const std::vector<StyledProperty> fingeringStyle;
 
 //---------------------------------------------------------
 //   @@ Fingering
 //---------------------------------------------------------
 
 class Fingering final : public TextBase {
+
+   protected:
+      virtual const StyledProperty* styledProperties() const override;
+      virtual PropertyFlags* propertyFlagsList()       override       { return _propertyFlagsList; }
+
    public:
       Fingering(Score* s);
+      Fingering(SubStyleId ssid, Score* s);
+      ~Fingering();
       virtual Fingering* clone() const override { return new Fingering(*this); }
       virtual ElementType type() const override { return ElementType::FINGERING; }
 
@@ -36,7 +44,8 @@ class Fingering final : public TextBase {
       virtual void layout() override;
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
-      virtual int subtype() const override         { return (int) subStyle(); }
+
+      virtual int subtype() const override         { return (int) _subStyleId; }
       virtual QString subtypeName() const override;
 
       virtual QString accessibleInfo() const override;
@@ -44,11 +53,7 @@ class Fingering final : public TextBase {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(P_ID id) const override;
-      virtual PropertyFlags& propertyFlags(P_ID) override;
-      virtual void resetProperty(P_ID id) override;
-      virtual StyleIdx getPropertyStyle(P_ID) const override;
-      virtual void styleChanged() override;
-      virtual void reset() override;
+
       };
 
 

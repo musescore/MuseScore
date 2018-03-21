@@ -3701,15 +3701,16 @@ void ScoreView::cmdAddText(TEXT type)
                         _score->insertMeasure(ElementType::VBOX, measure);
                         measure = measure->prev();
                         }
-                  s = new Text(_score);
+                  SubStyleId ssid;
                   switch(type) {
-                        case TEXT::TITLE:    s->initSubStyle(SubStyle::TITLE);    break;
-                        case TEXT::SUBTITLE: s->initSubStyle(SubStyle::SUBTITLE); break;
-                        case TEXT::COMPOSER: s->initSubStyle(SubStyle::COMPOSER); break;
-                        case TEXT::POET:     s->initSubStyle(SubStyle::POET);     break;
-                        case TEXT::PART:     s->initSubStyle(SubStyle::INSTRUMENT_EXCERPT); break;
-                        default: /* can't happen, but need to keep compiler happy */ break;
+                        case TEXT::TITLE:    ssid = SubStyleId::TITLE;    break;
+                        case TEXT::SUBTITLE: ssid = SubStyleId::SUBTITLE; break;
+                        case TEXT::COMPOSER: ssid = SubStyleId::COMPOSER; break;
+                        case TEXT::POET:     ssid = SubStyleId::POET;     break;
+                        case TEXT::PART:     ssid = SubStyleId::INSTRUMENT_EXCERPT; break;
+                        default: ssid = SubStyleId::DEFAULT; /* can't happen, but need to keep compiler happy */ break;
                         }
+                  s = new Text(ssid, _score);
                   s->setParent(measure);
                   adjustCanvasPosition(measure, false);
                   }
@@ -3730,10 +3731,8 @@ void ScoreView::cmdAddText(TEXT type)
                   ChordRest* cr = _score->getSelectedChordRest();
                   if (!cr)
                         break;
-                  s = new StaffText(_score);
+                  s = new StaffText(SubStyleId::STAFF, _score);
                   s->setTrack(cr->track());
-                  s->initSubStyle(SubStyle::STAFF);
-
                   s->setParent(cr->segment());
                   }
                   break;
@@ -3742,9 +3741,8 @@ void ScoreView::cmdAddText(TEXT type)
                   ChordRest* cr = _score->getSelectedChordRest();
                   if (!cr)
                         break;
-                  s = new SystemText(_score);
+                  s = new SystemText(SubStyleId::SYSTEM, _score);
                   s->setTrack(0);
-                  s->initSubStyle(SubStyle::SYSTEM);
                   s->setParent(cr->segment());
                   }
                   break;
@@ -3753,9 +3751,8 @@ void ScoreView::cmdAddText(TEXT type)
                   ChordRest* cr = _score->getSelectedChordRest();
                   if (!cr)
                         break;
-                  s = new StaffText(_score);
+                  s = new StaffText(SubStyleId::EXPRESSION, _score);
                   s->setTrack(cr->track());
-                  s->initSubStyle(SubStyle::EXPRESSION);
                   s->setPlacement(Placement::BELOW);
                   s->setParent(cr->segment());
                   }
