@@ -2416,6 +2416,7 @@ int TextBase::subtype() const
             case SubStyle::POET:
             case SubStyle::FRAME:
             case SubStyle::INSTRUMENT_EXCERPT:
+            case SubStyle::MEASURE_NUMBER:
                   return int(subStyle());
             default: return -1;
             }
@@ -2438,6 +2439,7 @@ QString TextBase::subtypeName() const
             case SubStyle::POET:
             case SubStyle::FRAME:
             case SubStyle::INSTRUMENT_EXCERPT:
+            case SubStyle::MEASURE_NUMBER:
                   rez = subStyleUserName(subStyle());
                   break;
             default: rez = "";

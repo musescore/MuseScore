@@ -3027,6 +3027,11 @@ void Score::selectSimilar(Element* e, bool sameStaff)
                   pattern.subtype = -1; // hack
             else
                   pattern.subtype = e->subtype();
+            pattern.subtypeValid = true;
+            }
+      else if (type == ElementType::TEXT) {
+            pattern.subtype = e->subtype();
+            pattern.subtypeValid = true;
             }
       pattern.staffStart = sameStaff ? e->staffIdx() : -1;
       pattern.staffEnd = sameStaff ? e->staffIdx() + 1 : -1;
@@ -3058,6 +3063,10 @@ void Score::selectSimilarInRange(Element* e)
                   pattern.subtype = -1; //hack
             else
                   pattern.subtype = e->subtype();
+            pattern.subtypeValid = true;
+            }
+      else if (type == ElementType::TEXT) {
+            pattern.subtype = e->subtype();
             pattern.subtypeValid = true;
             }
       pattern.staffStart = selection().staffStart();
