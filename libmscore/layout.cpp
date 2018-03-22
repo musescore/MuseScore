@@ -2362,7 +2362,7 @@ void Score::getNextMeasure(LayoutContext& lc)
       //  implement section break rest
       //
       if (measure->sectionBreak() && measure->pause() != 0.0)
-            setPause(measure->endTick()-1, measure->pause());
+            setPause(measure->endTick(), measure->pause());
 
       //
       // calculate accidentals and note lines,
