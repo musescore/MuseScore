@@ -65,21 +65,6 @@ class Beam final : public Element {
       void addChordRest(ChordRest* a);
       void removeChordRest(ChordRest* a);
 
-
-#define BEAM_STYLED_PROPERTIES 1
-      static constexpr std::array<StyledProperty, BEAM_STYLED_PROPERTIES + 1> _styledProperties {{
-            { StyleIdx::beamNoSlope,       P_ID::BEAM_NO_SLOPE },
-            { StyleIdx::NOSTYLE,           P_ID::END }      // end of list marker
-            }};
-
-      PropertyFlags _propertyFlagsList[BEAM_STYLED_PROPERTIES] = {
-            PropertyFlags::STYLED,
-            };
-
-   protected:
-      virtual const StyledProperty* styledProperties() const override { return _styledProperties.data(); }
-      virtual PropertyFlags* propertyFlagsList()       override       { return _propertyFlagsList; }
-
    public:
       enum class Mode : signed char {
             AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1

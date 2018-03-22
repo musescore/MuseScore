@@ -376,10 +376,6 @@ bool Bend::setProperty(P_ID id, const QVariant& v)
 
 QVariant Bend::propertyDefault(P_ID id) const
       {
-      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp) {
-            if (spp->propertyIdx == id)
-                  return score()->styleV(spp->styleIdx);
-            }
       switch (id) {
             case P_ID::PLAY:
                   return true;

@@ -2733,12 +2733,6 @@ bool TextBase::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant TextBase::propertyDefault(P_ID id) const
       {
-      if (id == P_ID::SUB_STYLE)
-            return int(SubStyleId::DEFAULT);
-      for (const StyledProperty& p : subStyle(subStyleId())) {
-            if (p.propertyIdx == id)
-                  return score()->styleV(p.styleIdx);
-            }
       switch (id) {
             case P_ID::TEXT:
                   return QString();
@@ -2747,10 +2741,6 @@ QVariant TextBase::propertyDefault(P_ID id) const
             case P_ID::OFFSET_TYPE:
                   return int (OffsetType::SPATIUM);
             default:
-                  for (const StyledProperty& p : subStyle(SubStyleId::DEFAULT)) {
-                        if (p.propertyIdx == id)
-                              return score()->styleV(p.styleIdx);
-                        }
                   return Element::propertyDefault(id);
             }
       }

@@ -165,14 +165,16 @@ struct ElementName {
 class ScoreElement {
       Score* _score;
 
-   protected:
-      LinkedElements* _links            { 0 };
       PropertyFlags* _propertyFlagsList { 0 };
       SubStyleId _subStyleId            { SubStyleId::EMPTY };
+
+   protected:
+      LinkedElements* _links            { 0 };
 
    public:
       ScoreElement(Score* s) : _score(s)   {}
       ScoreElement(const ScoreElement& se);
+
       virtual ~ScoreElement();
 
       Score* score() const                 { return _score;      }
@@ -187,7 +189,7 @@ class ScoreElement {
 
       virtual QVariant getProperty(P_ID) const = 0;
       virtual bool setProperty(P_ID, const QVariant&) = 0;
-      virtual QVariant propertyDefault(P_ID) const { return QVariant(); }
+      virtual QVariant propertyDefault(P_ID) const;
       virtual void resetProperty(P_ID id);
       void resetStyledProperties();
 
