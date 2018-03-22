@@ -255,7 +255,7 @@ void PluginCreator::closeEvent(QCloseEvent* ev)
                   return;
                   }
             }
-      PluginCreator.writeSettings();
+      writeSettings();
       emit closed(false);
       QWidget::closeEvent(ev);
       }
