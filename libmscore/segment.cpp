@@ -448,11 +448,11 @@ void Segment::add(Element* el)
                   setEmpty(false);
                   break;
 
+            case ElementType::TEMPO_TEXT:
             case ElementType::DYNAMIC:
             case ElementType::HARMONY:
             case ElementType::SYMBOL:
             case ElementType::FRET_DIAGRAM:
-            case ElementType::TEMPO_TEXT:
             case ElementType::STAFF_TEXT:
             case ElementType::SYSTEM_TEXT:
             case ElementType::REHEARSAL_MARK:

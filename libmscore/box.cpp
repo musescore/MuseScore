@@ -677,6 +677,8 @@ bool HBox::setProperty(P_ID propertyId, const QVariant& v)
 QVariant HBox::propertyDefault(P_ID id) const
       {
       switch(id) {
+            case P_ID::SUB_STYLE:
+                  return int(SubStyleId::BOX);
             case P_ID::CREATE_SYSTEM_HEADER:
                   return true;
             default:
