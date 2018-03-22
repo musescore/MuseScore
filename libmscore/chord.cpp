@@ -2820,7 +2820,7 @@ void Chord::removeMarkings(bool keepTremolo)
             remove(tremolo());
       if (arpeggio())
             remove(arpeggio());
-      qDeleteAll(graceNotes());
+      graceNotes().clear();
       for (Note* n : notes()) {
             for (Element* e : n->el())
                   n->remove(e);

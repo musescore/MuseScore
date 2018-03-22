@@ -1235,10 +1235,10 @@ void ChordRest::flipLyrics(Lyrics* l)
 
 void ChordRest::removeMarkings(bool /* keepTremolo */)
       {
-      qDeleteAll(el());
+      el().clear();
       if (isChord())
-            qDeleteAll(toChord(this)->articulations());
-      qDeleteAll(lyrics());
+            toChord(this)->articulations().clear();
+      lyrics().clear();
       }
 
 //---------------------------------------------------------
