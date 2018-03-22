@@ -178,7 +178,7 @@ void MeasureBase::remove(Element* el)
                         break;
                   case LayoutBreak::SECTION:
                         setSectionBreak(false);
-                        score()->setPause(endTick()-1, 0);
+                        score()->setPause(endTick(), 0);
                         score()->setLayoutAll();
                         break;
                   case LayoutBreak::NOBREAK:
