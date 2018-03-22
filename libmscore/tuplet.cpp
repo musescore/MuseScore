@@ -1093,7 +1093,7 @@ void Tuplet::sanitizeTuplet()
             }
       testDuration = testDuration / ratio();
       testDuration.reduce();
-      if ((testDuration - baseLenDuration).reduced().numerator() != 0) {
+      if (!(testDuration == baseLenDuration && baseLenDuration == duration())) {
             Fraction f = testDuration * Fraction(1, ratio().denominator());
             f.reduce();
             Fraction fbl(1, f.denominator());
