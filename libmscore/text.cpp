@@ -2409,17 +2409,7 @@ QString TextBase::screenReaderInfo() const
 
 int TextBase::subtype() const
       {
-      switch (subStyleId()) {
-            case SubStyleId::TITLE:
-            case SubStyleId::SUBTITLE:
-            case SubStyleId::COMPOSER:
-            case SubStyleId::POET:
-            case SubStyleId::FRAME:
-            case SubStyleId::INSTRUMENT_EXCERPT:
-                  return int(subStyleId());
-            default: return -1;
-            }
-      return -1;
+      return int(subStyleId());
       }
 
 //---------------------------------------------------------
@@ -2428,7 +2418,7 @@ int TextBase::subtype() const
 
 QString TextBase::subtypeName() const
       {
-      return (subtype() != -1) ? subStyleUserName(subStyleId()) : "";
+      return subStyleUserName(subStyleId());
       }
 
 //---------------------------------------------------------
