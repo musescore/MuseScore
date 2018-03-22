@@ -164,17 +164,17 @@ Element::Element(const Element& e)
    : ScoreElement(e)
       {
       _parent     = e._parent;
-      _z          = e._z;
-      _placement  = e._placement;
       _flags      = e._flags;
+      _placement  = e._placement;
       _track      = e._track;
-      _color      = e._color;
       _mag        = e._mag;
       _pos        = e._pos;
       _userOff    = e._userOff;
       _readPos    = e._readPos;
       _bbox       = e._bbox;
       _tag        = e._tag;
+      _z          = e._z;
+      _color      = e._color;
       itemDiscovered = false;
       }
 
@@ -1085,12 +1085,9 @@ QVariant Element::propertyDefault(P_ID id) const
                   return true;
             case P_ID::Z:
                   return int(type()) * 100;
-            case P_ID::SYSTEM_FLAG:
-                  return false;
-            default:    // not all properties have a default
+            default:
                   return ScoreElement::propertyDefault(id);
             }
-//      return QVariant();
       }
 
 //---------------------------------------------------------
