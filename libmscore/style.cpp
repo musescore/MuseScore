@@ -1136,6 +1136,7 @@ const std::vector<StyledProperty> glissandoStyle {
       { StyleIdx::glissandoFontBold,                  P_ID::FONT_BOLD              },
       { StyleIdx::glissandoFontItalic,                P_ID::FONT_ITALIC            },
       { StyleIdx::glissandoFontUnderline,             P_ID::FONT_UNDERLINE         },
+      { StyleIdx::glissandoLineWidth,                 P_ID::LINE_WIDTH             },
       { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
@@ -1288,6 +1289,17 @@ const std::vector<StyledProperty> figuredBassStyle {
       { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
+const std::vector<StyledProperty> beamStyle {
+      { StyleIdx::beamNoSlope,                        P_ID::BEAM_NO_SLOPE           },
+      { StyleIdx::NOSTYLE,                            P_ID::END                     }      // end of list marker
+      };
+
+const std::vector<StyledProperty> boxStyle {
+      { StyleIdx::systemFrameDistance,                P_ID::TOP_GAP                 },
+      { StyleIdx::frameSystemDistance,                P_ID::BOTTOM_GAP              },
+      { StyleIdx::NOSTYLE,                            P_ID::END                     }      // end of list marker
+      };
+
 const std::vector<StyledProperty> user1Style {
       { StyleIdx::user1FontFace,                      P_ID::FONT_FACE              },
       { StyleIdx::user1FontSize,                      P_ID::FONT_SIZE              },
@@ -1363,6 +1375,8 @@ static constexpr std::array<StyledPropertyListName, int(SubStyleId::SUBSTYLES)> 
       { QT_TRANSLATE_NOOP("TextStyle", "Footer"),                  &footerStyle,                    SubStyleId::FOOTER },
       { QT_TRANSLATE_NOOP("TextStyle", "Instrument Change"),       &instrumentChangeStyle,          SubStyleId::INSTRUMENT_CHANGE },
       { QT_TRANSLATE_NOOP("TextStyle", "Figured Bass"),            &figuredBassStyle,               SubStyleId::FIGURED_BASS },
+      { QT_TRANSLATE_NOOP("TextStyle", "Beam"),                    &beamStyle,                      SubStyleId::BEAM  },
+      { QT_TRANSLATE_NOOP("TextStyle", "Box"),                     &boxStyle,                       SubStyleId::BOX   },
       { QT_TRANSLATE_NOOP("TextStyle", "User-1"),                  &user1Style,                     SubStyleId::USER1 },
       { QT_TRANSLATE_NOOP("TextStyle", "User-2"),                  &user2Style,                     SubStyleId::USER2 },
       } };

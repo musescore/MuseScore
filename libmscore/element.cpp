@@ -1088,9 +1088,9 @@ QVariant Element::propertyDefault(P_ID id) const
             case P_ID::SYSTEM_FLAG:
                   return false;
             default:    // not all properties have a default
-                  break;
+                  return ScoreElement::propertyDefault(id);
             }
-      return QVariant();
+//      return QVariant();
       }
 
 //---------------------------------------------------------

@@ -39,8 +39,6 @@ namespace Ms {
 static const qreal      GLISS_PALETTE_WIDTH           = 4.0;
 static const qreal      GLISS_PALETTE_HEIGHT          = 4.0;
 
-constexpr std::array<StyledProperty, GLISSANDO_STYLED_PROPERTIES+1> Glissando::_styledProperties;
-
 //---------------------------------------------------------
 //   GlisandoSegment
 //---------------------------------------------------------
@@ -261,18 +259,13 @@ StyleIdx GlissandoSegment::getPropertyStyle(P_ID id) const
 //=========================================================
 
 Glissando::Glissando(Score* s)
-  : SLine(s)
+  : SLine(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
-
       setAnchor(Spanner::Anchor::NOTE);
       setDiagonal(true);
 
-      _propertyFlagsList = new PropertyFlags[GLISSANDO_STYLED_PROPERTIES];
-      for (int i = 0; i < GLISSANDO_STYLED_PROPERTIES; ++i) {
-            _propertyFlagsList[i] = PropertyFlags::STYLED;
-            resetProperty(_styledProperties[i].propertyIdx);
-            }
+      initSubStyle(SubStyleId::GLISSANDO);
+
       resetProperty(P_ID::GLISS_SHOW_TEXT);
       resetProperty(P_ID::PLAY);
       resetProperty(P_ID::GLISSANDO_STYLE);
@@ -813,67 +806,6 @@ QVariant Glissando::propertyDefault(P_ID propertyId) const
                   break;
             }
       return SLine::propertyDefault(propertyId);
-      }
-
-#if 0
-//---------------------------------------------------------
-//   propertyFlags
-//---------------------------------------------------------
-
-PropertyFlags& Glissando::propertyFlags(P_ID id)
-      {
-      switch (id) {
-            case P_ID::FONT_FACE:
-                  return _fontFaceStyle;
-            case P_ID::FONT_SIZE:
-                  return _fontSizeStyle;
-            case P_ID::FONT_BOLD:
-                  return _fontBoldStyle;
-            case P_ID::FONT_ITALIC:
-                  return _fontItalicStyle;
-            case P_ID::FONT_UNDERLINE:
-                  return _fontUnderlineStyle;
-            default:
-                  return SLine::propertyFlags(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//    map between property and style
-//---------------------------------------------------------
-
-StyleIdx Glissando::getPropertyStyle(P_ID id) const
-      {
-      switch (id) {
-            case P_ID::FONT_FACE:
-                  return StyleIdx::glissandoFontFace;
-            case P_ID::FONT_SIZE:
-                  return StyleIdx::glissandoFontSize;
-            case P_ID::FONT_BOLD:
-                  return StyleIdx::glissandoFontBold;
-            case P_ID::FONT_ITALIC:
-                  return StyleIdx::glissandoFontItalic;
-            case P_ID::FONT_UNDERLINE:
-                  return StyleIdx::glissandoFontUnderline;
-            case P_ID::LINE_WIDTH:
-                  return StyleIdx::glissandoLineWidth;
-            default:
-                  break;
-            }
-      return SLine::getPropertyStyle(id);
-      }
-#endif
-
-//---------------------------------------------------------
-//   styleChanged
-//    reset all styled values to actual style
-//---------------------------------------------------------
-
-void Glissando::styleChanged()
-      {
-      qDebug("todo");
-      SLine::styleChanged();
       }
 
 }

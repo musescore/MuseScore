@@ -44,22 +44,6 @@ class Box : public MeasureBase {
       bool editMode                 { false };
       qreal dragX;                        // used during drag of hbox
 
-#define BOX_STYLED_PROPERTIES 2
-      static constexpr std::array<StyledProperty, BOX_STYLED_PROPERTIES + 1> _styledProperties {{
-            { StyleIdx::systemFrameDistance, P_ID::TOP_GAP },
-            { StyleIdx::frameSystemDistance, P_ID::BOTTOM_GAP },
-            { StyleIdx::NOSTYLE,             P_ID::END }      // end of list marker
-            }};
-
-      PropertyFlags _propertyFlagsList[BOX_STYLED_PROPERTIES] = {
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            };
-
-   protected:
-      virtual const StyledProperty* styledProperties() const override { return _styledProperties.data(); }
-      virtual PropertyFlags* propertyFlagsList()       override       { return _propertyFlagsList; }
-
    public:
       Box(Score*);
       virtual void draw(QPainter*) const override;
@@ -110,7 +94,7 @@ class Box : public MeasureBase {
 ///    horizontal frame
 //---------------------------------------------------------
 
-class HBox : public Box {
+class HBox final : public Box {
       bool _createSystemHeader { true };
 
    public:

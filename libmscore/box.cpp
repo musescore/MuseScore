@@ -30,8 +30,6 @@
 
 namespace Ms {
 
-constexpr std::array<StyledProperty, BOX_STYLED_PROPERTIES+1> Box::_styledProperties;
-
 //---------------------------------------------------------
 //   Box
 //---------------------------------------------------------
@@ -274,9 +272,8 @@ bool Box::readProperties(XmlReader& e)
             else {
                   t = new Text(score());
                   t->read(e);
-                  if (t->empty()) {
+                  if (t->empty())
                         qDebug("read empty text");
-                        }
                   else
                         add(t);
                   }
@@ -404,6 +401,8 @@ bool Box::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Box::propertyDefault(P_ID id) const
       {
       switch(id) {
+            case P_ID::SUB_STYLE:
+                  return int(SubStyleId::BOX);
             case P_ID::BOX_HEIGHT:
             case P_ID::BOX_WIDTH:
                   return Spatium(0.0);
@@ -448,6 +447,7 @@ void Box::copyValues(Box* origin)
 HBox::HBox(Score* score)
    : Box(score)
       {
+      initSubStyle(SubStyleId::BOX);
       setBoxWidth(Spatium(5.0));
       }
 
@@ -691,9 +691,8 @@ QVariant HBox::propertyDefault(P_ID id) const
 VBox::VBox(Score* score)
    : Box(score)
       {
+      initSubStyle(SubStyleId::BOX);
       setBoxHeight(Spatium(10.0));
-      resetProperty(P_ID::TOP_GAP);
-      resetProperty(P_ID::BOTTOM_GAP);
       setLineBreak(true);
       }
 

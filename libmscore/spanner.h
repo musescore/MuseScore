@@ -137,7 +137,7 @@ class Spanner : public Element {
       QList<SpannerSegment*> segments;
 
    public:
-      Spanner(Score* = 0);
+      Spanner(Score* s, ElementFlags = ElementFlag::NOTHING);
       Spanner(const Spanner&);
       ~Spanner();
 

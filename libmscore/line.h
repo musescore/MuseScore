@@ -79,7 +79,7 @@ class SLine : public Spanner {
       virtual QPointF linePos(Grip, System** system) const;
 
    public:
-      SLine(Score* s);
+      SLine(Score* s, ElementFlags = ElementFlag::NOTHING);
       SLine(const SLine&);
 
       virtual void layout() override;

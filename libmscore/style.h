@@ -790,6 +790,8 @@ enum class SubStyleId {
       FOOTER,
       INSTRUMENT_CHANGE,
       FIGURED_BASS,
+      BEAM,
+      BOX,
       USER1,
       USER2,
       SUBSTYLES

@@ -487,8 +487,8 @@ QLineF LineSegment::dragAnchor() const
 //   SLine
 //---------------------------------------------------------
 
-SLine::SLine(Score* s)
-   : Spanner(s)
+SLine::SLine(Score* s, ElementFlags f)
+   : Spanner(s, f)
       {
       setTrack(0);
       }

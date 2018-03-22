@@ -221,8 +221,8 @@ void SpannerSegment::triggerLayout() const
 //   Spanner
 //---------------------------------------------------------
 
-Spanner::Spanner(Score* s)
-   : Element(s)
+Spanner::Spanner(Score* s, ElementFlags f)
+   : Element(s, f)
       {
       }
 

@@ -35,8 +35,6 @@
 
 namespace Ms {
 
-constexpr std::array<StyledProperty, BEAM_STYLED_PROPERTIES+1> Beam::_styledProperties;
-
 //---------------------------------------------------------
 //   BeamFragment
 //    position of primary beam
@@ -54,9 +52,9 @@ struct BeamFragment {
 //---------------------------------------------------------
 
 Beam::Beam(Score* s)
-   : Element(s)
+   : Element(s, ElementFlag::SELECTABLE)
       {
-      setFlags(ElementFlag::SELECTABLE);
+      initSubStyle(SubStyleId::BEAM);
       _direction       = Direction::AUTO;
       _up              = true;
       _distribute      = false;
@@ -66,7 +64,6 @@ Beam::Beam(Score* s)
       _grow2           = 1.0;
       _isGrace         = false;
       _cross           = false;
-      resetProperty(P_ID::BEAM_NO_SLOPE);
       }
 
 //---------------------------------------------------------
@@ -96,7 +93,6 @@ Beam::Beam(const Beam& b)
       maxDuration      = b.maxDuration;
       slope            = b.slope;
       _noSlope         = b._noSlope;
-      *_propertyFlagsList = *b._propertyFlagsList;
       }
 
 //---------------------------------------------------------
@@ -2383,13 +2379,13 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Beam::propertyDefault(P_ID id) const
       {
       switch (id) {
+            case P_ID::SUB_STYLE:      return int(SubStyleId::BEAM);
             case P_ID::STEM_DIRECTION: return QVariant::fromValue<Direction>(Direction::AUTO);
             case P_ID::DISTRIBUTE:     return false;
             case P_ID::GROW_LEFT:      return 1.0;
             case P_ID::GROW_RIGHT:     return 1.0;
             case P_ID::USER_MODIFIED:  return false;
             case P_ID::BEAM_POS:       return beamPos();
-            case P_ID::BEAM_NO_SLOPE:  return score()->styleB(StyleIdx::beamNoSlope);
             default:                   return Element::propertyDefault(id);
             }
       }
