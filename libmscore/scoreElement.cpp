@@ -192,7 +192,6 @@ void ScoreElement::initSubStyle(SubStyleId ssid)
                   }
             ++i;
             }
-
       }
 
 //---------------------------------------------------------
@@ -308,15 +307,8 @@ void ScoreElement::writeProperty(XmlWriter& xml, P_ID id) const
                QVariant(propertyDefault(id).toReal()/_spatium));
             }
       else {
-            if (getProperty(id).isValid()) {
+            if (getProperty(id).isValid())
                   xml.tag(id, getProperty(id), propertyDefault(id));
-                  if (id == P_ID::SUB_STYLE) {
-                        printf("write substyle %d %s default %d %s\n",
-                           getProperty(id).toInt(),  subStyleName( SubStyleId(getProperty(id).toInt()) ),
-                           propertyDefault(id).toInt(), subStyleName(SubStyleId(propertyDefault(id).toInt()))
-                           );
-                        }
-                  }
             else
                   qDebug("invalid property");
             }
@@ -517,12 +509,18 @@ bool ScoreElement::readProperty(const QStringRef& s, XmlReader& e, P_ID id)
 
 QVariant ScoreElement::propertyDefault(P_ID id) const
       {
-      if (id == P_ID::SUB_STYLE)
+      if (id == P_ID::SUB_STYLE) {
             return int(SubStyleId::DEFAULT);
+            }
       for (const StyledProperty& p : subStyle(subStyleId())) {
             if (p.propertyIdx == id)
                   return score()->styleV(p.styleIdx);
             }
+      for (const StyledProperty& p : subStyle(SubStyleId::DEFAULT)) {
+            if (p.propertyIdx == id)
+                  return score()->styleV(p.styleIdx);
+            }
+      qDebug("not found <%s> in <%s> style <%s>", propertyName(id), name(), subStyleName(subStyleId()));
       return QVariant();
       }
 

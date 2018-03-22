@@ -2724,12 +2724,10 @@ bool TextBase::setProperty(P_ID propertyId, const QVariant& v)
 QVariant TextBase::propertyDefault(P_ID id) const
       {
       switch (id) {
+            case P_ID::SUB_STYLE:
+                  return int(SubStyleId::DEFAULT);
             case P_ID::TEXT:
                   return QString();
-            case P_ID::OFFSET:
-                  return QPointF();
-            case P_ID::OFFSET_TYPE:
-                  return int (OffsetType::SPATIUM);
             default:
                   return Element::propertyDefault(id);
             }

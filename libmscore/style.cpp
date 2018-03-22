@@ -993,6 +993,7 @@ const std::vector<StyledProperty> tempoStyle {
       { StyleIdx::tempoOffset,                        P_ID::OFFSET                 },
       { StyleIdx::tempoSystemFlag,                    P_ID::SYSTEM_FLAG            },
       { StyleIdx::tempoAlign,                         P_ID::ALIGN                  },
+      { StyleIdx::tempoPlacement,                     P_ID::PLACEMENT              },
       { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 

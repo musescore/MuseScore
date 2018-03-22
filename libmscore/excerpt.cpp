@@ -420,18 +420,18 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
       MeasureBaseList* nmbl = score->measures();
       for (MeasureBase* mb = oscore->measures()->first(); mb; mb = mb->next()) {
             MeasureBase* nmb = 0;
-            if (mb->type() == ElementType::HBOX)
+            if (mb->isHBox())
                   nmb = new HBox(score);
-            else if (mb->type() == ElementType::VBOX)
+            else if (mb->isVBox())
                   nmb = new VBox(score);
-            else if (mb->type() == ElementType::TBOX) {
+            else if (mb->isTBox()) {
                   nmb = new TBox(score);
                   Text* text = toTBox(mb)->text();
                   Element* ne = text->linkedClone();
                   ne->setScore(score);
                   nmb->add(ne);
                   }
-            else if (mb->type() == ElementType::MEASURE) {
+            else if (mb->isMeasure()) {
                   Measure* m  = toMeasure(mb);
                   Measure* nm = new Measure(score);
                   nmb = nm;
@@ -464,12 +464,10 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                         Tremolo* tremolo = 0;
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                               Segment* ns = nullptr; //create segment later, on demand
-                              foreach (Element* e, oseg->annotations()) {
+                              for (Element* e : oseg->annotations()) {
                                     if (e->generated())
                                           continue;
-                                    if ((e->track() == srcTrack && track != -1)
-                                       || (e->systemFlag() && srcTrack == 0)
-                                       ) {
+                                    if ((e->track() == srcTrack && track != -1) || (e->systemFlag() && srcTrack == 0)) {
                                           Element* ne = e->linkedClone();
                                           // reset user offset as most likely it will not fit
                                           ne->setUserOff(QPointF());

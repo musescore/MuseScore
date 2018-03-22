@@ -1268,8 +1268,10 @@ void GuitarPro::setTempo(int tempo, Measure* measure)
 
 		Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
 		for (Element* e : segment->annotations()) {
-			if (e->isTempoText())
+			if (e->isTempoText()) {
+                        qDebug("already there");
 				return;
+                        }
       		}
 
 		TempoText* tt = new TempoText(score);
@@ -1277,6 +1279,7 @@ void GuitarPro::setTempo(int tempo, Measure* measure)
 		tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempo));
 		tt->setTrack(0);
 
+qDebug("%p setTempo %d annotations %d", tt, measure->tick(), segment->annotations().size());
 		segment->add(tt);
 		score->setTempo(measure->tick(), tt->tempo());
 		previousTempo = tempo;
