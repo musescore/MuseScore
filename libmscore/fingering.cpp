@@ -116,7 +116,7 @@ void Fingering::draw(QPainter* painter) const
 QString Fingering::accessibleInfo() const
       {
       QString rez = Element::accessibleInfo();
-      if (_subStyleId == SubStyleId::STRING_NUMBER)
+      if (subStyleId() == SubStyleId::STRING_NUMBER)
             rez += " " + QObject::tr("String number");
       return QString("%1: %2").arg(rez).arg(plainText());
       }
