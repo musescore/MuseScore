@@ -288,10 +288,17 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats)
 
                         for (auto i = events.begin(); i != events.end(); ++i) {
                               const NPlayEvent& event = i->second;
-                              if (event.discard())
-                                    continue;
+
                               if (event.getOriginatingStaff() != staffIdx)
                                     continue;
+
+                              if (event.discard()) { // ignore noteoff but restrike noteon
+                                    if (event.velo() > 0)
+                                          track.insert(pauseMap.addPauseTicks(i->first), MidiEvent(ME_NOTEON, channel,
+                                                                     event.pitch(), 0));
+                                    else
+                                          continue;
+                                    }
 
                               char eventPort    = cs->midiPort(event.channel());
                               char eventChannel = cs->midiChannel(event.channel());
