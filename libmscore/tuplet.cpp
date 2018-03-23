@@ -1093,6 +1093,8 @@ void Tuplet::sanitizeTuplet()
             }
       testDuration = testDuration / ratio();
       testDuration.reduce();
+      if (elements().back()->tick() + elements().back()->actualTicks() - elements().front()->tick() > testDuration.ticks())
+            return;     // this tuplet has missing elements; do not sanitize
       if (!(testDuration == baseLenDuration && baseLenDuration == duration())) {
             Fraction f = testDuration * Fraction(1, ratio().denominator());
             f.reduce();
