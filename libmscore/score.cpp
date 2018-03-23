@@ -395,7 +395,7 @@ void Score::fixTicks()
             //  implement section break rest
             //
             if (isMaster() && m->sectionBreak() && m->pause() != 0.0)
-                  setPause(m->tick() + m->ticks() - 1, m->pause());
+                  setPause(m->tick() + m->ticks(), m->pause());
 
             //
             // implement fermata as a tempo change
