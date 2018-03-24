@@ -511,7 +511,6 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
       if (type == ME_NOTEON) {
             bool mute;
             const Note* note = event.note();
-
             if (note) {
                   Instrument* instr = note->staff()->part()->instrument(note->chord()->tick());
                   const Channel* a = instr->channel(note->subchannel());
@@ -520,8 +519,15 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
             else
                   mute = false;
 
-            if (!mute)
+            if (!mute) {
+                  if (event.discard()) { // ignore noteoff but restrike noteon
+                        if (event.velo() > 0)
+                              putEvent(NPlayEvent(ME_NOTEON, event.channel(), event.pitch(), 0) ,framePos);
+                        else
+                              return;
+                        }
                   putEvent(event, framePos);
+                  }
             }
       else if (type == ME_CONTROLLER || type == ME_PITCHBEND)
             putEvent(event, framePos);
