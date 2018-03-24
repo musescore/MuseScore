@@ -247,13 +247,15 @@ void PluginCreator::closeEvent(QCloseEvent* ev)
                "Save before closing?").arg(path),
                QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                QMessageBox::Save);
-            if (n == QMessageBox::Save)
+            if (n == QMessageBox::Save){
                   savePlugin();
+                  }
             else if (n == QMessageBox::Cancel) {
                   ev->ignore();
                   return;
                   }
             }
+      writeSettings();
       emit closed(false);
       writeSettings();
       QWidget::closeEvent(ev);
