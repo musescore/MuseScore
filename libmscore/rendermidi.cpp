@@ -166,7 +166,7 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
       NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
       ev.setOriginatingStaff(staffIdx);
       ev.setTuning(note->tuning());
-      ev.setNote(note);
+      ev.notes.push_back(note);
       events->insert(std::pair<int, NPlayEvent>(onTime, ev));
       ev.setVelo(0);
       events->insert(std::pair<int, NPlayEvent>(offTime, ev));
