@@ -27,11 +27,14 @@ enum class StyleIdx : int;
 //          M_PROPERTY(bool, bold, setBold)
 //          ...
 //          };
+//    this defines:
+//          bool _bold;
+//          const bool& bold() const { return _bold; }
+//          void setBold(const a& val) { _bold = val; }
 //---------------------------------------------------------
 
 #define M_PROPERTY(a,b,c)                                      \
       a _ ## b;                                                \
-      PropertyFlags _ ## b ## Style { PropertyFlags::STYLED }; \
    public:                                                     \
       const a& b() const   { return _ ## b; }                  \
       void c(const a& val) { _ ## b = val;  }                  \

@@ -445,55 +445,55 @@ void readTextStyle206(MStyle* style, XmlReader& e)
 
       struct StyleTable {
             const char* name;
-            SubStyle ss;
+            SubStyleId ss;
             } styleTable[] = {
-            { "",                        SubStyle::DEFAULT },
-            { "Title",                   SubStyle::TITLE },
-            { "Subtitle",                SubStyle::SUBTITLE },
-            { "Composer",                SubStyle::COMPOSER },
-            { "Lyricist",                SubStyle::POET },
-            { "Lyrics Odd Lines",        SubStyle::LYRIC1 },
-            { "Lyrics Even Lines",       SubStyle::LYRIC2 },
-            { "Fingering",               SubStyle::FINGERING },
-            { "LH Guitar Fingering",     SubStyle::LH_GUITAR_FINGERING },
-            { "RH Guitar Fingering",     SubStyle::RH_GUITAR_FINGERING },
-            { "String Number",           SubStyle::STRING_NUMBER },
-            { "Instrument Name (Long)",  SubStyle::INSTRUMENT_LONG },
-            { "Instrument Name (Short)", SubStyle::INSTRUMENT_SHORT },
-            { "Instrument Name (Part)",  SubStyle::INSTRUMENT_EXCERPT },
-            { "Dynamics",                SubStyle::DYNAMICS },
-            { "Technique",               SubStyle::EXPRESSION },
-            { "Tempo",                   SubStyle::TEMPO },
-            { "Metronome",               SubStyle::METRONOME },
-            { "Measure Number",          SubStyle::MEASURE_NUMBER },
-            { "Translator",              SubStyle::TRANSLATOR },
-            { "Tuplet",                  SubStyle::TUPLET },
-            { "System",                  SubStyle::SYSTEM },
-            { "Staff",                   SubStyle::STAFF },
-            { "Chord Symbol",            SubStyle::HARMONY },
-            { "Rehearsal Mark",          SubStyle::REHEARSAL_MARK },
-            { "Repeat Text Left",        SubStyle::REPEAT_LEFT },
-            { "Repeat Text Right",       SubStyle::REPEAT_RIGHT },
-            { "Frame",                   SubStyle::FRAME },
-            { "Text Line",               SubStyle::TEXTLINE },
-            { "Glissando",               SubStyle::GLISSANDO },
-            { "Ottava",                  SubStyle::OTTAVA },
-            { "Pedal",                   SubStyle::PEDAL },
-            { "Hairpin",                 SubStyle::HAIRPIN },
-            { "Bend",                    SubStyle::BEND },
-            { "Header",                  SubStyle::HEADER },
-            { "Footer",                  SubStyle::FOOTER },
-            { "Instrument Change",       SubStyle::INSTRUMENT_CHANGE },
-            { "Figured Bass",            SubStyle::FIGURED_BASS },
+            { "",                        SubStyleId::DEFAULT },
+            { "Title",                   SubStyleId::TITLE },
+            { "Subtitle",                SubStyleId::SUBTITLE },
+            { "Composer",                SubStyleId::COMPOSER },
+            { "Lyricist",                SubStyleId::POET },
+            { "Lyrics Odd Lines",        SubStyleId::LYRIC_ODD },
+            { "Lyrics Even Lines",       SubStyleId::LYRIC_EVEN },
+            { "Fingering",               SubStyleId::FINGERING },
+            { "LH Guitar Fingering",     SubStyleId::LH_GUITAR_FINGERING },
+            { "RH Guitar Fingering",     SubStyleId::RH_GUITAR_FINGERING },
+            { "String Number",           SubStyleId::STRING_NUMBER },
+            { "Instrument Name (Long)",  SubStyleId::INSTRUMENT_LONG },
+            { "Instrument Name (Short)", SubStyleId::INSTRUMENT_SHORT },
+            { "Instrument Name (Part)",  SubStyleId::INSTRUMENT_EXCERPT },
+            { "Dynamics",                SubStyleId::DYNAMICS },
+            { "Technique",               SubStyleId::EXPRESSION },
+            { "Tempo",                   SubStyleId::TEMPO },
+            { "Metronome",               SubStyleId::METRONOME },
+            { "Measure Number",          SubStyleId::MEASURE_NUMBER },
+            { "Translator",              SubStyleId::TRANSLATOR },
+            { "Tuplet",                  SubStyleId::TUPLET },
+            { "System",                  SubStyleId::SYSTEM },
+            { "Staff",                   SubStyleId::STAFF },
+            { "Chord Symbol",            SubStyleId::HARMONY },
+            { "Rehearsal Mark",          SubStyleId::REHEARSAL_MARK },
+            { "Repeat Text Left",        SubStyleId::REPEAT_LEFT },
+            { "Repeat Text Right",       SubStyleId::REPEAT_RIGHT },
+            { "Frame",                   SubStyleId::FRAME },
+            { "Text Line",               SubStyleId::TEXTLINE },
+            { "Glissando",               SubStyleId::GLISSANDO },
+            { "Ottava",                  SubStyleId::OTTAVA },
+            { "Pedal",                   SubStyleId::PEDAL },
+            { "Hairpin",                 SubStyleId::HAIRPIN },
+            { "Bend",                    SubStyleId::BEND },
+            { "Header",                  SubStyleId::HEADER },
+            { "Footer",                  SubStyleId::FOOTER },
+            { "Instrument Change",       SubStyleId::INSTRUMENT_CHANGE },
+            { "Figured Bass",            SubStyleId::FIGURED_BASS },
             };
-      SubStyle ss = SubStyle::SUBSTYLES;
+      SubStyleId ss = SubStyleId::SUBSTYLES;
       for (const auto& i : styleTable) {
             if (name == i.name) {
                   ss = i.ss;
                   break;
                   }
             }
-      if (ss != SubStyle::SUBSTYLES) {
+      if (ss != SubStyleId::SUBSTYLES) {
             const std::vector<StyledProperty>& spl = subStyle(ss);
             for (const auto& i : spl) {
                   QVariant value;
@@ -1019,7 +1019,7 @@ static void readText(XmlReader& e, TextBase* t, Element* be)
             const QStringRef& tag(e.name());
             if (tag == "style") {
                   QString s = e.readElementText();
-                  SubStyle ss = subStyleFromName(s);
+                  SubStyleId ss = subStyleFromName(s);
                   be->initSubStyle(ss);
                   }
             else if (tag == "foregroundColor")  // same as "color" ?
@@ -2004,7 +2004,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Segment")
                   segment->read(e);
             else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(SubStyle::MEASURE_NUMBER, score);
+                  Text* noText = new Text(SubStyleId::MEASURE_NUMBER, score);
                   noText->read(e);
                   noText->setFlag(ElementFlag::ON_STAFF, true);
                   // noText->setFlag(ElementFlag::MOVABLE, false); ??

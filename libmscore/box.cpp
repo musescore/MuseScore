@@ -30,7 +30,6 @@
 
 namespace Ms {
 
-
 //---------------------------------------------------------
 //   Box
 //---------------------------------------------------------
@@ -193,15 +192,11 @@ void Box::write(XmlWriter& xml) const
 
 void Box::writeProperties(XmlWriter& xml) const
       {
-      writeProperty(xml, P_ID::BOX_HEIGHT);
-      writeProperty(xml, P_ID::BOX_WIDTH);
-      writeProperty(xml, P_ID::TOP_GAP);
-      writeProperty(xml, P_ID::BOTTOM_GAP);
-      writeProperty(xml, P_ID::LEFT_MARGIN);
-      writeProperty(xml, P_ID::RIGHT_MARGIN);
-      writeProperty(xml, P_ID::TOP_MARGIN);
-      writeProperty(xml, P_ID::BOTTOM_MARGIN);
-
+      for (P_ID id : {
+         P_ID::BOX_HEIGHT, P_ID::BOX_WIDTH, P_ID::TOP_GAP, P_ID::BOTTOM_GAP,
+         P_ID::LEFT_MARGIN, P_ID::RIGHT_MARGIN, P_ID::TOP_MARGIN, P_ID::BOTTOM_MARGIN }) {
+            writeProperty(xml, id);
+            }
       Element::writeProperties(xml);
       for (const Element* e : el())
             e->write(xml);
@@ -252,13 +247,13 @@ bool Box::readProperties(XmlReader& e)
             _topGap = e.readDouble();
             if (score()->mscVersion() >= 206)
                   _topGap *= score()->spatium();
-            topGapStyle = PropertyFlags::UNSTYLED;
+            setPropertyFlags(P_ID::TOP_GAP, PropertyFlags::UNSTYLED);
             }
       else if (tag == "bottomGap") {
             _bottomGap = e.readDouble();
              if (score()->mscVersion() >= 206)
                   _bottomGap *= score()->spatium();
-            bottomGapStyle = PropertyFlags::UNSTYLED;
+            setPropertyFlags(P_ID::BOTTOM_GAP, PropertyFlags::UNSTYLED);
             }
       else if (tag == "leftMargin")
             _leftMargin = e.readDouble();
@@ -277,9 +272,8 @@ bool Box::readProperties(XmlReader& e)
             else {
                   t = new Text(score());
                   t->read(e);
-                  if (t->empty()) {
+                  if (t->empty())
                         qDebug("read empty text");
-                        }
                   else
                         add(t);
                   }
@@ -377,11 +371,9 @@ bool Box::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::TOP_GAP:
                   _topGap = v.toDouble();
-                  topGapStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::BOTTOM_GAP:
                   _bottomGap = v.toDouble();
-                  bottomGapStyle = PropertyFlags::UNSTYLED;
                   break;
             case P_ID::LEFT_MARGIN:
                   _leftMargin = v.toDouble();
@@ -409,6 +401,8 @@ bool Box::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Box::propertyDefault(P_ID id) const
       {
       switch(id) {
+            case P_ID::SUB_STYLE:
+                  return int(SubStyleId::BOX);
             case P_ID::BOX_HEIGHT:
             case P_ID::BOX_WIDTH:
                   return Spatium(0.0);
@@ -426,74 +420,6 @@ QVariant Box::propertyDefault(P_ID id) const
             default:
                   return MeasureBase::propertyDefault(id);
             }
-      }
-
-//---------------------------------------------------------
-//   propertyFlags
-//---------------------------------------------------------
-
-PropertyFlags& Box::propertyFlags(P_ID id)
-      {
-      switch (id) {
-            case P_ID::TOP_GAP:
-                  return topGapStyle;
-            case P_ID::BOTTOM_GAP:
-                  return bottomGapStyle;
-            default:
-                  return MeasureBase::propertyFlags(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   resetProperty
-//---------------------------------------------------------
-
-void Box::resetProperty(P_ID id)
-      {
-      switch (id) {
-            case P_ID::TOP_GAP:
-                  setTopGap(isHBox() ? 0.0 : score()->styleP(StyleIdx::systemFrameDistance));
-                  topGapStyle = PropertyFlags::STYLED;
-                  break;
-            case P_ID::BOTTOM_GAP:
-                  setBottomGap(isHBox() ? 0.0 : score()->styleP(StyleIdx::frameSystemDistance));
-                  bottomGapStyle = PropertyFlags::STYLED;
-                  break;
-            default:
-                  return MeasureBase::resetProperty(id);
-            }
-      score()->setLayout(tick());
-      }
-
-//---------------------------------------------------------
-//   styleChanged
-//    reset all styled values to actual style
-//---------------------------------------------------------
-
-void Box::styleChanged()
-      {
-      if (topGapStyle == PropertyFlags::STYLED)
-            setTopGap(isHBox() ? 0.0 : score()->styleP(StyleIdx::systemFrameDistance));
-      if (bottomGapStyle == PropertyFlags::STYLED)
-            setBottomGap(isHBox() ? 0.0 : score()->styleP(StyleIdx::frameSystemDistance));
-      score()->setLayout(tick());
-      }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-StyleIdx Box::getPropertyStyle(P_ID id) const
-      {
-      switch (id) {
-            case P_ID::TOP_GAP:
-                  return isHBox() ? StyleIdx::NOSTYLE : StyleIdx::systemFrameDistance;
-            case P_ID::BOTTOM_GAP:
-                  return isHBox() ? StyleIdx::NOSTYLE : StyleIdx::frameSystemDistance;
-            default:
-                  break;
-            }
-      return StyleIdx::NOSTYLE;
       }
 
 //---------------------------------------------------------
@@ -521,6 +447,7 @@ void Box::copyValues(Box* origin)
 HBox::HBox(Score* score)
    : Box(score)
       {
+      initSubStyle(SubStyleId::BOX);
       setBoxWidth(Spatium(5.0));
       }
 
@@ -632,8 +559,7 @@ Element* Box::drop(EditData& data)
 
             case ElementType::STAFF_TEXT:
                   {
-                  Text* text = new Text(score());
-                  text->init(SubStyle::FRAME);
+                  Text* text = new Text(SubStyleId::FRAME, score());
                   text->setParent(this);
                   text->setXmlText(toStaffText(e)->xmlText());
                   score()->undoAddElement(text);
@@ -751,6 +677,8 @@ bool HBox::setProperty(P_ID propertyId, const QVariant& v)
 QVariant HBox::propertyDefault(P_ID id) const
       {
       switch(id) {
+            case P_ID::SUB_STYLE:
+                  return int(SubStyleId::BOX);
             case P_ID::CREATE_SYSTEM_HEADER:
                   return true;
             default:
@@ -765,9 +693,8 @@ QVariant HBox::propertyDefault(P_ID id) const
 VBox::VBox(Score* score)
    : Box(score)
       {
+      initSubStyle(SubStyleId::BOX);
       setBoxHeight(Spatium(10.0));
-      setTopGap(score->styleP(StyleIdx::systemFrameDistance));
-      setBottomGap(score->styleP(StyleIdx::frameSystemDistance));
       setLineBreak(true);
       }
 
@@ -814,6 +741,5 @@ void FBox::add(Element* e)
             }
       el().push_back(e);
       }
-
 }
 

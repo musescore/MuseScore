@@ -29,6 +29,12 @@ void MusicXmlPart::addMeasureNumberAndDuration(QString measureNumber, Fraction m
       measureDurations.append(measureDuration);
       }
 
+void MusicXmlPart::setMaxStaff(const int staff)
+      {
+      if (staff > _maxStaff)
+            _maxStaff = staff;
+      }
+
 Fraction MusicXmlPart::measureDuration(int i) const
       {
       if (i >= 0 && i < measureDurations.size())
@@ -38,9 +44,8 @@ Fraction MusicXmlPart::measureDuration(int i) const
 
 QString MusicXmlPart::toString() const
       {
-      QString res;
-      res = QString("part id '%1' name '%2' print %3 abbr '%4' print %5\n")
-            .arg(id).arg(name).arg(printName).arg(abbr).arg(printAbbr);
+      auto res = QString("part id '%1' name '%2' print %3 abbr '%4' print %5 maxStaff %6\n")
+            .arg(id).arg(name).arg(printName).arg(abbr).arg(printAbbr).arg(_maxStaff);
 
       for (VoiceList::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
             res += QString("voice %1 map staff data %2\n")
@@ -161,6 +166,72 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
             qDebug(" [%s : %d]", qPrintable((*i).first.print()), (*i).second);
        */
 
+      }
+
+
+//---------------------------------------------------------
+//   LyricNumberHandler
+//   collect lyric numbering information and determine order
+//
+//   MusicXML lyrics may contain name and number attributes,
+//   plus position information (typically default-y).
+//   Name and number are simply tokens with no specified usage.
+//   Default-y cannot easily be used to determine the lyrics
+//   line, as it tends to differ per system depending on the
+//   actual notes present.
+//
+//   Simply collecting all possible lyric number attributes
+//   within a MusicXML part and assigning lyrics position
+//   based on alphabetically sorting works well for all
+//   common MusicXML files.
+//---------------------------------------------------------
+
+//---------------------------------------------------------
+//   addNumber
+//---------------------------------------------------------
+
+void LyricNumberHandler::addNumber(const QString number)
+      {
+      if (_numberToNo.find(number) == _numberToNo.end())
+            _numberToNo[number] = -1;       // unassiged
+      }
+
+//---------------------------------------------------------
+//   toString
+//---------------------------------------------------------
+
+QString LyricNumberHandler::toString() const
+      {
+      QString res;
+      for (const auto& p : _numberToNo) {
+            if (!res.isEmpty())
+                  res += " ";
+            res += QString("%1:%2").arg(p.first).arg(p.second);
+            }
+      return res;
+      }
+
+//---------------------------------------------------------
+//   getLyricNo
+//---------------------------------------------------------
+
+int LyricNumberHandler::getLyricNo(const QString& number) const
+      {
+      const auto it = _numberToNo.find(number);
+      return it == _numberToNo.end() ? 0 : it->second;
+      }
+
+//---------------------------------------------------------
+//   determineLyricNos
+//---------------------------------------------------------
+
+void LyricNumberHandler::determineLyricNos()
+      {
+      int i = 0;
+      for (auto& p : _numberToNo) {
+            p.second = i;
+            ++i;
+            }
       }
 
 }

@@ -52,9 +52,9 @@ struct BeamFragment {
 //---------------------------------------------------------
 
 Beam::Beam(Score* s)
-   : Element(s)
+   : Element(s, ElementFlag::SELECTABLE)
       {
-      setFlags(ElementFlag::SELECTABLE);
+      initSubStyle(SubStyleId::BEAM);
       _direction       = Direction::AUTO;
       _up              = true;
       _distribute      = false;
@@ -64,8 +64,6 @@ Beam::Beam(Score* s)
       _grow2           = 1.0;
       _isGrace         = false;
       _cross           = false;
-      _noSlope         = score()->styleB(StyleIdx::beamNoSlope);
-      noSlopeStyle     = PropertyFlags::STYLED;
       }
 
 //---------------------------------------------------------
@@ -95,7 +93,6 @@ Beam::Beam(const Beam& b)
       maxDuration      = b.maxDuration;
       slope            = b.slope;
       _noSlope         = b._noSlope;
-      noSlopeStyle     = b.noSlopeStyle;
       }
 
 //---------------------------------------------------------
@@ -2031,10 +2028,8 @@ void Beam::read(XmlReader& e)
                   }
             else if (tag == "distribute")
                   setDistribute(e.readInt());
-            else if (tag == "noSlope") {
-                  setNoSlope(e.readInt());
-                  noSlopeStyle = PropertyFlags::UNSTYLED;
-                  }
+            else if (readStyledProperty(e, tag))
+                  ;
             else if (tag == "growLeft")
                   setGrowLeft(e.readDouble());
             else if (tag == "growRight")
@@ -2171,11 +2166,8 @@ void Beam::reset()
             undoChangeProperty(P_ID::BEAM_POS, QVariant(beamPos()));
             undoChangeProperty(P_ID::USER_MODIFIED, false);
             }
-      if (beamDirection() != Direction::AUTO)
-            undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
-      if (noSlopeStyle == PropertyFlags::UNSTYLED)
-            resetProperty(P_ID::BEAM_NO_SLOPE);       // TODO: make undoable
-
+      undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
+      resetProperty(P_ID::BEAM_NO_SLOPE);
       setGenerated(true);
       }
 
@@ -2366,7 +2358,6 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
                   break;
             case P_ID::BEAM_NO_SLOPE:
                   setNoSlope(v.toBool());
-                  noSlopeStyle = PropertyFlags::UNSTYLED;
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
@@ -2388,58 +2379,15 @@ bool Beam::setProperty(P_ID propertyId, const QVariant& v)
 QVariant Beam::propertyDefault(P_ID id) const
       {
       switch (id) {
+            case P_ID::SUB_STYLE:      return int(SubStyleId::BEAM);
             case P_ID::STEM_DIRECTION: return QVariant::fromValue<Direction>(Direction::AUTO);
             case P_ID::DISTRIBUTE:     return false;
             case P_ID::GROW_LEFT:      return 1.0;
             case P_ID::GROW_RIGHT:     return 1.0;
             case P_ID::USER_MODIFIED:  return false;
             case P_ID::BEAM_POS:       return beamPos();
-            case P_ID::BEAM_NO_SLOPE:  return score()->styleB(StyleIdx::beamNoSlope);
-            default:               return Element::propertyDefault(id);
+            default:                   return Element::propertyDefault(id);
             }
-      }
-
-//---------------------------------------------------------
-//   propertyFlags
-//---------------------------------------------------------
-
-PropertyFlags& Beam::propertyFlags(P_ID id)
-      {
-      switch (id) {
-            case P_ID::BEAM_NO_SLOPE:
-                  return noSlopeStyle;
-
-            default:
-                  return Element::propertyFlags(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   resetProperty
-//---------------------------------------------------------
-
-void Beam::resetProperty(P_ID id)
-      {
-      switch (id) {
-            case P_ID::BEAM_NO_SLOPE:
-                  setNoSlope(score()->styleB(StyleIdx::beamNoSlope));
-                  noSlopeStyle = PropertyFlags::STYLED;
-                  break;
-
-            default:
-                  return Element::resetProperty(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   styleChanged
-//    reset all styled values to actual style
-//---------------------------------------------------------
-
-void Beam::styleChanged()
-      {
-      if (noSlopeStyle == PropertyFlags::STYLED)
-            setNoSlope(score()->styleB(StyleIdx::beamNoSlope));
       }
 
 //---------------------------------------------------------
@@ -2480,21 +2428,6 @@ Shape Beam::shape() const
                   shape.add(QRectF(x, y-ww, w, bs->y2() - y + ww*2));
             }
       return shape;
-      }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-StyleIdx Beam::getPropertyStyle(P_ID id) const
-      {
-      switch (id) {
-            case P_ID::BEAM_NO_SLOPE:
-                  return StyleIdx::beamNoSlope;
-            default:
-                  break;
-            }
-      return StyleIdx::NOSTYLE;
       }
 
 //---------------------------------------------------------

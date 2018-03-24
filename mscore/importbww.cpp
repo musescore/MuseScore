@@ -53,11 +53,10 @@
 //   TODO: remove duplicate code
 //---------------------------------------------------------
 
-static void addText(Ms::VBox*& vbx, Ms::Score* s, QString strTxt, Ms::SubStyle stl)
+static void addText(Ms::VBox*& vbx, Ms::Score* s, QString strTxt, Ms::SubStyleId stl)
       {
       if (!strTxt.isEmpty()) {
-            Ms::Text* text = new Ms::Text(s);
-            text->initSubStyle(stl);
+            Ms::Text* text = new Ms::Text(stl, s);
             text->setPlainText(strTxt);
             if (vbx == 0)
                   vbx = new Ms::VBox(s);
@@ -431,11 +430,11 @@ void MsScWriter::header(const QString title, const QString type,
 
       //  score->setWorkTitle(title);
       Ms::VBox* vbox  = 0;
-      addText(vbox, score, title, Ms::SubStyle::TITLE);
-      addText(vbox, score, type, Ms::SubStyle::SUBTITLE);
-      addText(vbox, score, composer, Ms::SubStyle::COMPOSER);
-      // addText(vbox, score, strPoet, Ms::SubStyle::POET);
-      // addText(vbox, score, strTranslator, Ms::SubStyle::TRANSLATOR);
+      addText(vbox, score, title, Ms::SubStyleId::TITLE);
+      addText(vbox, score, type, Ms::SubStyleId::SUBTITLE);
+      addText(vbox, score, composer, Ms::SubStyleId::COMPOSER);
+      // addText(vbox, score, strPoet, Ms::SubStyleId::POET);
+      // addText(vbox, score, strTranslator, Ms::SubStyleId::TRANSLATOR);
       if (vbox) {
             vbox->setTick(0);
             score->measures()->add(vbox);

@@ -712,7 +712,8 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
             { P_ID::FONT_UNDERLINE, 0, t.tupletUnderline, t.resetTupletUnderline   },
             { P_ID::DIRECTION,      0, t.direction,       t.resetDirection         },
             { P_ID::NUMBER_TYPE,    0, t.numberType,      t.resetNumberType        },
-            { P_ID::BRACKET_TYPE,   0, t.bracketType,     t.resetBracketType       }
+            { P_ID::BRACKET_TYPE,   0, t.bracketType,     t.resetBracketType       },
+            { P_ID::LINE_WIDTH,     0, t.lineWidth,       t.resetLineWidth         }
             };
       const std::vector<InspectorPanel> ppList = { {t.title, t.panel} };
       t.tupletBold->setIcon(*icons[int(Icons::textBold_ICON)]);
@@ -753,6 +754,7 @@ InspectorBend::InspectorBend(QWidget* parent)
       g.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
+            { P_ID::LINE_WIDTH,     0, g.lineWidth,   g.resetLineWidth   },
             { P_ID::PLAY,           0, g.playBend,    g.resetPlayBend    },
             { P_ID::FONT_FACE,      0, g.fontFace,    g.resetFontFace    },
             { P_ID::FONT_SIZE,      0, g.fontSize,    g.resetFontSize    },
@@ -988,9 +990,9 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       s.placement->addItem(tr("Below"), 1);
 
       s.subStyle->clear();
-      for (auto ss : { SubStyle::SYSTEM, SubStyle::STAFF, SubStyle::TEMPO, SubStyle::METRONOME,
-         SubStyle::REHEARSAL_MARK, SubStyle::EXPRESSION,
-         SubStyle::REPEAT_LEFT, SubStyle::REPEAT_RIGHT, SubStyle::USER1, SubStyle::USER2 } )
+      for (auto ss : { SubStyleId::SYSTEM, SubStyleId::STAFF, SubStyleId::TEMPO, SubStyleId::METRONOME,
+         SubStyleId::REHEARSAL_MARK, SubStyleId::EXPRESSION,
+         SubStyleId::REPEAT_LEFT, SubStyleId::REPEAT_RIGHT, SubStyleId::USER1, SubStyleId::USER2 } )
             {
             s.subStyle->addItem(subStyleUserName(ss), int(ss));
             }

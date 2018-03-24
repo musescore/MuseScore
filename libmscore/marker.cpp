@@ -42,7 +42,16 @@ int markerTypeTableSize()
 Marker::Marker(Score* s)
    : TextBase(s)
       {
-      init(SubStyle::REPEAT_LEFT);
+      initSubStyle(SubStyleId::REPEAT_LEFT);
+      _markerType = Type::FINE;
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
+      setLayoutToParentWidth(true);
+      }
+
+Marker::Marker(SubStyleId ssid, Score* s)
+   : TextBase(s)
+      {
+      initSubStyle(ssid);
       _markerType = Type::FINE;
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setLayoutToParentWidth(true);
@@ -84,13 +93,13 @@ void Marker::setMarkerType(Type t)
 
             case Type::FINE:
                   txt = "Fine";
-                  initSubStyle(SubStyle::REPEAT_RIGHT);
+//TODO-ws                  initSubStyle(SubStyleId::REPEAT_RIGHT);
                   setLabel("fine");
                   break;
 
             case Type::TOCODA:
                   txt = "To Coda";
-                  initSubStyle(SubStyle::REPEAT_RIGHT);
+//TODO-ws                  initSubStyle(SubStyle::REPEAT_RIGHT);
                   setLabel("coda");
                   break;
 

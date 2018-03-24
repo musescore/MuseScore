@@ -88,7 +88,7 @@ struct Interval;
 struct TEvent;
 struct LayoutContext;
 
-enum class SubStyle;
+enum class SubStyleId;
 enum class ClefType : signed char;
 enum class BeatType : char;
 enum class SymId;
@@ -619,7 +619,6 @@ class Score : public QObject, ScoreElement {
       void undoChangeUserMirror(Note*, MScore::DirectionH);
       void undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent);
       void undoChangeClef(Staff* ostaff, Segment*, ClefType st);
-//      void undoChangeProperty(ScoreElement*, P_ID, const QVariant&, PropertyFlags ps = PropertyFlags::NOSTYLE);
       bool undoPropertyChanged(Element*, P_ID, const QVariant& v);
       void undoPropertyChanged(ScoreElement*, P_ID, const QVariant& v);
       inline virtual UndoStack* undoStack() const;
@@ -628,7 +627,6 @@ class Score : public QObject, ScoreElement {
       void undoAddBracket(Staff* staff, int level, BracketType type, int span);
       void undoRemoveBracket(Bracket*);
       void undoInsertTime(int tick, int len);
-//      void undoChangeBarLine(Measure*, BarLineType, SegmentType type);
       void undoChangeStyleVal(StyleIdx idx, const QVariant& v);
 
       Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
@@ -884,7 +882,7 @@ class Score : public QObject, ScoreElement {
 
       bool defaultsRead() const                      { return _defaultsRead;    }
       void setDefaultsRead(bool b)                   { _defaultsRead = b;       }
-      Text* getText(SubStyle subtype);
+      Text* getText(SubStyleId subtype);
 
       void lassoSelect(const QRectF&);
       void lassoSelectEnd();

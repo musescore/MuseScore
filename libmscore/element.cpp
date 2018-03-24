@@ -164,17 +164,17 @@ Element::Element(const Element& e)
    : ScoreElement(e)
       {
       _parent     = e._parent;
-      _z          = e._z;
-      _placement  = e._placement;
       _flags      = e._flags;
+      _placement  = e._placement;
       _track      = e._track;
-      _color      = e._color;
       _mag        = e._mag;
       _pos        = e._pos;
       _userOff    = e._userOff;
       _readPos    = e._readPos;
       _bbox       = e._bbox;
       _tag        = e._tag;
+      _z          = e._z;
+      _color      = e._color;
       itemDiscovered = false;
       }
 
@@ -1053,8 +1053,8 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
                   setSystemFlag(v.toBool());
                   break;
             default:
-                  qFatal("unknown %s <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
-//                  qDebug("unknown %s <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
+                  qFatal("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
+//                  qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
                   return false;
             }
       triggerLayout();
@@ -1085,23 +1085,8 @@ QVariant Element::propertyDefault(P_ID id) const
                   return true;
             case P_ID::Z:
                   return int(type()) * 100;
-            case P_ID::SYSTEM_FLAG:
-                  return false;
-            default:    // not all properties have a default
-                  break;
-            }
-      return QVariant();
-      }
-
-//---------------------------------------------------------
-//   setStyle
-//---------------------------------------------------------
-
-void Element::initSubStyle(SubStyle st)
-      {
-      for (const StyledProperty& p : subStyle(st)) {
-            setProperty(p.propertyIdx, score()->styleV(p.styleIdx));
-            setPropertyFlags(p.propertyIdx, PropertyFlags::STYLED);
+            default:
+                  return ScoreElement::propertyDefault(id);
             }
       }
 
@@ -1113,19 +1098,6 @@ void Element::initSubStyle(SubStyle st)
 bool Element::custom(P_ID id) const
       {
       return propertyDefault(id) != getProperty(id);
-      }
-
-//---------------------------------------------------------
-//   readProperty
-//---------------------------------------------------------
-
-bool Element::readProperty(const QStringRef& s, XmlReader& e, P_ID id)
-      {
-      if (s == propertyName(id)) {
-            setProperty(id, Ms::getProperty(id, e));
-            return true;
-            }
-      return false;
       }
 
 //---------------------------------------------------------

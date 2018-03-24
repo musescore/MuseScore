@@ -30,65 +30,21 @@ install:
     nuget install secure-file -ExcludeVersion &&
     secure-file\tools\secure-file -decrypt C:\MuseScore\build\appveyor\resources\osuosl_nighlies_rsa_nopp.enc -secret %ENCRYPT_SECRET_SSH%
     )
+  - IF DEFINED ENCRYPT_SECRET_CERTIFICATE (
+    nuget install secure-file -ExcludeVersion &&
+    secure-file\tools\secure-file -decrypt C:\MuseScore\build\appveyor\resources\musescore.p12.enc -secret %ENCRYPT_SECRET_CERTIFICATE%
+    )
 
 # scripts to run before build
 before_build:
-  - IF NOT EXIST dependencies.7z (
-    START " " /wait "C:\MinGW\msys\1.0\bin\wget" --no-check-certificate "http://utils.musescore.org.s3.amazonaws.com/musescore_dependencies_win32.7z" -O dependencies.7z
-    )
-  - START " " /wait "7z" x -y dependencies.7z > nul &&
-    CD dependencies &&
-    XCOPY i686-w64-mingw32 "C:\Qt\Tools\mingw530_32\i686-w64-mingw32" /E /Y &&
-    XCOPY lib "C:\Qt\Tools\mingw530_32\lib" /E /Y &&
-    XCOPY Jack "C:\Program Files (x86)\Jack" /E /I /Y &&
-    XCOPY ccache "C:\ccache" /E /I /Y
-  - SET OLD_PATH=%PATH%
-  - SET PATH=C:\Qt\5.9\mingw53_32\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%
-  - CD C:\MuseScore
-  # get revision number
-  - mingw32-make -f Makefile.mingw revision
-  - SET /p MSversion=<mscore\revision.h
-  # CMake refuses to generate MinGW Makefiles if sh.exe is in the PATH (C:\Program Files\Git\usr\bin)
-  - SET PATH=C:\Qt\5.9\mingw53_32\bin;C:\Qt\Tools\mingw530_32\bin;C:\Program Files (x86)\CMake\bin;C:\Program Files\7-Zip;C:\ccache\bin;C:\Tools\curl\bin;C:\Windows\system32;C:\Windows
-  - SET CCACHE_DIR=C:\ccache\cache
+  - cmd: C:\MuseScore\build\appveyor\before_build.bat
 
+build_script:
+  - cmd: C:\MuseScore\build\appveyor\build_script.bat
 
 after_build:
-  - ccache.exe -s
-  - CD C:\MuseScore
-  - RENAME C:\MuseScore\win32install\bin\musescore.exe nightly.exe
-  - RENAME C:\MuseScore\win32install MuseScoreNightly
-  - XCOPY C:\MuseScore\build\appveyor\special C:\MuseScore\MuseScoreNightly\special /I /E /Y /Q
-  - COPY C:\MuseScore\build\appveyor\support\README.txt C:\MuseScore\MuseScoreNightly\README.txt /Y
-  - COPY C:\MuseScore\build\appveyor\support\nightly.bat C:\MuseScore\MuseScoreNightly\nightly.bat /Y
-  - COPY C:\MuseScore\mscore\revision.h C:\MuseScore\MuseScoreNightly\revision.h
-# get hour with a trailing 0 if necessary (add 100)
-  - set hh0=%time:~0,2%
-  - set /a hh1=%hh0%+100
-  - set hh=%hh1:~1,2%
-  - SET BUILD_DATE=%Date:~10,4%-%Date:~4,2%-%Date:~7,2%-%hh%%time:~3,2%
-  - SET ARTIFACT_NAME=MuseScoreNightly-%BUILD_DATE%-%APPVEYOR_REPO_BRANCH%-%MSversion%.7z
-  - 7z a C:\MuseScore\%ARTIFACT_NAME% C:\MuseScore\MuseScoreNightly
+  - cmd: C:\MuseScore\build\appveyor\after_build.bat
 
-  - SET SSH_IDENTITY=C:\MuseScore\build\appveyor\resources\osuosl_nighlies_rsa_nopp
-  - SET PATH=%OLD_PATH%
-  - IF DEFINED ENCRYPT_SECRET_SSH scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% %ARTIFACT_NAME% musescore-nightlies@ftp-osl.osuosl.org:~/ftp/windows/
-  - IF DEFINED ENCRYPT_SECRET_SSH ssh -oStrictHostKeyChecking=no -i %SSH_IDENTITY% musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/windows; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
-# create and upload index.html and RSS
-  - IF DEFINED ENCRYPT_SECRET_SSH python build/appveyor/updateHTML.py %SSH_IDENTITY%
-  - IF DEFINED ENCRYPT_SECRET_SSH scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% build/appveyor/web/index.html musescore-nightlies@ftp-osl.osuosl.org:ftp/windows
-  - IF DEFINED ENCRYPT_SECRET_SSH scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% build/appveyor/web/nightly.xml musescore-nightlies@ftp-osl.osuosl.org:ftp/windows
-# trigger distribution
-  - IF DEFINED ENCRYPT_SECRET_SSH ssh -oStrictHostKeyChecking=no -i %SSH_IDENTITY% musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
-# notify IRC channel
-  - IF DEFINED ENCRYPT_SECRET_SSH pip install irc
-  - IF DEFINED ENCRYPT_SECRET_SSH python build/appveyor/irccat.py "%APPVEYOR_REPO_BRANCH%-%MSversion% (Win) compiled successfully https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%"
-
-  - CD C:\MuseScore
 artifacts:
   - path: $(ARTIFACT_NAME)
 
-
-
-build_script:
-  - mingw32-make -f Makefile.mingw release && mingw32-make -f Makefile.mingw install

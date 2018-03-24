@@ -34,8 +34,9 @@ InspectorText::InspectorText(QWidget* parent)
             };
 
       f.subStyle->clear();
-      for (auto ss : { SubStyle::FRAME, SubStyle::TITLE, SubStyle::SUBTITLE,SubStyle::COMPOSER, SubStyle::POET, SubStyle::INSTRUMENT_EXCERPT,
-                       SubStyle::TRANSLATOR, SubStyle::HEADER, SubStyle::FOOTER, SubStyle::USER1, SubStyle::USER2 } )
+      for (auto ss : { SubStyleId::FRAME, SubStyleId::TITLE, SubStyleId::SUBTITLE,SubStyleId::COMPOSER,
+         SubStyleId::POET, SubStyleId::INSTRUMENT_EXCERPT,
+         SubStyleId::TRANSLATOR, SubStyleId::HEADER, SubStyleId::FOOTER, SubStyleId::USER1, SubStyleId::USER2 } )
             {
             f.subStyle->addItem(subStyleUserName(ss), int(ss));
             }

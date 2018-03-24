@@ -52,10 +52,9 @@ class GlissandoSegment final : public LineSegment {
 //---------------------------------------------------------
 
 class Glissando final : public SLine {
-      QString _text;
-      GlissandoType _glissandoType;
-      GlissandoStyle _glissandoStyle;
-
+      M_PROPERTY(QString, text, setText)
+      M_PROPERTY(GlissandoType, glissandoType, setGlissandoType)
+      M_PROPERTY(GlissandoStyle, glissandoStyle, setGlissandoStyle)
       M_PROPERTY(QString, fontFace, setFontFace)
       M_PROPERTY(qreal, fontSize, setFontSize)
       M_PROPERTY(bool, showText, setShowText)
@@ -80,22 +79,10 @@ class Glissando final : public SLine {
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
 
-      // Glissando specific methods
-      GlissandoType glissandoType() const      { return _glissandoType;  }
-      void setGlissandoType(GlissandoType v)   { _glissandoType = v;     }
-      GlissandoStyle glissandoStyle() const    { return _glissandoStyle; }
-      void setGlissandoStyle(GlissandoStyle s) { _glissandoStyle = s;    }
-      QString text() const                     { return _text;           }
-      void setText(const QString& t)           { _text = t;              }
-
       // property/style methods
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool     setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
-      virtual PropertyFlags& propertyFlags(P_ID) override;
-      virtual StyleIdx getPropertyStyle(P_ID) const override;
-
-      virtual void styleChanged() override;
       };
 
 

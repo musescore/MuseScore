@@ -14,6 +14,7 @@
 #define __SCORE_ELEMENT_H__
 
 #include "types.h"
+#include "style.h"
 
 namespace Ms {
 
@@ -164,12 +165,16 @@ struct ElementName {
 class ScoreElement {
       Score* _score;
 
+      PropertyFlags* _propertyFlagsList { 0 };
+      SubStyleId _subStyleId            { SubStyleId::EMPTY };
+
    protected:
-      LinkedElements* _links { 0 };
+      LinkedElements* _links            { 0 };
 
    public:
       ScoreElement(Score* s) : _score(s)   {}
       ScoreElement(const ScoreElement& se);
+
       virtual ~ScoreElement();
 
       Score* score() const                 { return _score;      }
@@ -184,21 +189,33 @@ class ScoreElement {
 
       virtual QVariant getProperty(P_ID) const = 0;
       virtual bool setProperty(P_ID, const QVariant&) = 0;
-      virtual QVariant propertyDefault(P_ID) const { return QVariant(); }
+      virtual QVariant propertyDefault(P_ID) const;
       virtual void resetProperty(P_ID id);
+      void resetStyledProperties();
 
+      SubStyleId subStyleId() const                          { return _subStyleId; }
+      void setSubStyleId(SubStyleId);
+      void initSubStyle(SubStyleId);
+      virtual const StyledProperty* styledProperties() const { return subStyle(_subStyleId).data(); }
+      virtual PropertyFlags* propertyFlagsList()             { return _propertyFlagsList; }
       virtual PropertyFlags& propertyFlags(P_ID);
 
       virtual void setPropertyFlags(P_ID, PropertyFlags);
 
       virtual StyleIdx getPropertyStyle(P_ID) const;
+      bool readProperty(const QStringRef&, XmlReader&, P_ID);
+      bool readStyledProperty(XmlReader& e, const QStringRef& tag);
+
+      virtual void styleChanged();
 
       virtual void undoChangeProperty(P_ID id, const QVariant&, PropertyFlags ps);
       void undoChangeProperty(P_ID id, const QVariant&);
       void undoResetProperty(P_ID id);
 
+
       void undoPushProperty(P_ID);
       void writeProperty(XmlWriter& xml, P_ID id) const;
+      void writeStyledProperties(XmlWriter&) const;
 
       QList<ScoreElement*> linkList() const;
 
