@@ -255,6 +255,7 @@ void PluginCreator::closeEvent(QCloseEvent* ev)
                   }
             }
       emit closed(false);
+      writeSettings();
       QWidget::closeEvent(ev);
       }
 
@@ -303,7 +304,7 @@ void PluginCreator::runClicked()
       QObject* obj = component.create();
       if (obj == 0) {
             msg(tr("creating component failed\n"));
-            foreach(QQmlError e, component.errors())
+            for(QQmlError e: component.errors())
                   msg(QString("   line %1: %2\n").arg(e.line()).arg(e.description()));
             stop->setEnabled(false);
             return;
@@ -547,7 +548,7 @@ void PluginCreator::textChanged()
 
 void PluginCreator::qmlWarnings(const QList<QQmlError>& el)
       {
-      foreach(const QQmlError& e, el)
+      for(const QQmlError& e: el)
             msg(QString("%1:%2: %3\n").arg(e.line()).arg(e.column()).arg(e.description()));
       }
 
