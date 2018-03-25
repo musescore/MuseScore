@@ -18,7 +18,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-if (NOT EXISTS MuseScore_General.sf3)
+if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/MuseScore_General.sf3)
   install (FILES FluidR3Mono_GM.sf3
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
       RENAME MuseScore_General.sf3
@@ -30,7 +30,7 @@ else ()
       )
 endif ()
 
-if (NOT EXISTS MuseScore_General-License.md)
+if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/MuseScore_General-License.md)
   install (FILES FluidR3Mono_License.md
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound
       RENAME MuseScore_General-License.md)
