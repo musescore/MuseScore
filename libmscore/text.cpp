@@ -1816,6 +1816,8 @@ bool TextBase::deleteSelectedText(EditData& ed)
 
 void TextBase::write(XmlWriter& xml) const
       {
+      if (!xml.canWrite(this))
+            return;
       xml.stag(name());
       writeProperties(xml, true, true);
       xml.etag();
@@ -1860,7 +1862,6 @@ static const std::array<P_ID, 18> pids { {
 
 void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
       {
-      printf("===writeProperties style %d %s\n", int(subStyleId()), subStyleName(subStyleId()));
       Element::writeProperties(xml);
       for (P_ID i :pids)
             writeProperty(xml, i);
@@ -2408,19 +2409,7 @@ QString TextBase::screenReaderInfo() const
 
 int TextBase::subtype() const
       {
-#if 0
-      switch (subStyle()) {
-            case SubStyle::TITLE:
-            case SubStyle::SUBTITLE:
-            case SubStyle::COMPOSER:
-            case SubStyle::POET:
-            case SubStyle::FRAME:
-            case SubStyle::INSTRUMENT_EXCERPT:
-                  return int(subStyle());
-            default: return -1;
-            }
-#endif
-      return -1;
+      return int(subStyleId());
       }
 
 //---------------------------------------------------------
@@ -2429,21 +2418,7 @@ int TextBase::subtype() const
 
 QString TextBase::subtypeName() const
       {
-      QString rez;
-#if 0
-      switch (subStyle()) {
-            case SubStyle::TITLE:
-            case SubStyle::SUBTITLE:
-            case SubStyle::COMPOSER:
-            case SubStyle::POET:
-            case SubStyle::FRAME:
-            case SubStyle::INSTRUMENT_EXCERPT:
-                  rez = subStyleUserName(subStyle());
-                  break;
-            default: rez = "";
-            }
-#endif
-      return rez;
+      return subStyleUserName(subStyleId());
       }
 
 //---------------------------------------------------------
@@ -2748,24 +2723,12 @@ bool TextBase::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant TextBase::propertyDefault(P_ID id) const
       {
-      if (id == P_ID::SUB_STYLE)
-            return int(SubStyleId::DEFAULT);
-      for (const StyledProperty& p : subStyle(subStyleId())) {
-            if (p.propertyIdx == id)
-                  return score()->styleV(p.styleIdx);
-            }
       switch (id) {
+            case P_ID::SUB_STYLE:
+                  return int(SubStyleId::DEFAULT);
             case P_ID::TEXT:
                   return QString();
-            case P_ID::OFFSET:
-                  return QPointF();
-            case P_ID::OFFSET_TYPE:
-                  return int (OffsetType::SPATIUM);
             default:
-                  for (const StyledProperty& p : subStyle(SubStyleId::DEFAULT)) {
-                        if (p.propertyIdx == id)
-                              return score()->styleV(p.styleIdx);
-                        }
                   return Element::propertyDefault(id);
             }
       }

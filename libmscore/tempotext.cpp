@@ -28,14 +28,13 @@ namespace Ms {
 //---------------------------------------------------------
 
 TempoText::TempoText(Score* s)
-   : TextBase(s, ElementFlag::SYSTEM)
+   : TextBase(s, ElementFlags(ElementFlag::SYSTEM))
       {
       initSubStyle(SubStyleId::TEMPO);
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
       _relative   = 1.0;
       _isRelative = false;
-      setPlacement(Placement::ABOVE);
       }
 
 //---------------------------------------------------------
@@ -44,7 +43,7 @@ TempoText::TempoText(Score* s)
 
 void TempoText::write(XmlWriter& xml) const
       {
-      xml.stag("Tempo");
+      xml.stag(name());
       xml.tag("tempo", _tempo);
       if (_followText)
             xml.tag("followText", _followText);
@@ -333,8 +332,6 @@ QVariant TempoText::propertyDefault(P_ID id) const
                   return 2.0;
             case P_ID::TEMPO_FOLLOW_TEXT:
                   return false;
-            case P_ID::PLACEMENT:
-                  return int(Placement::ABOVE);
             default:
                   return TextBase::propertyDefault(id);
             }
