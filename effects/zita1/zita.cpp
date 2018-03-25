@@ -340,10 +340,10 @@ void ZitaReverb::init(float fsamp)
 
       _ipdel = 0.04f;
       _xover = 200.0f;
-      _rtlow = 3.0f;
+      _rtlow = 1.4f;
       _rtmid = 2.0f;
       _fdamp = 3e3f;
-      _opmix = 0.5f;
+      _opmix = 0.33f;
 
       _g0 = _d0 = 0;
       _g1 = _d1 = 0;
