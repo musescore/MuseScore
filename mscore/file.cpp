@@ -581,8 +581,6 @@ MasterScore* MuseScore::getNewFile()
                   score->style().chordList()->read("chords.xml");
             score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
             }
-      if (!newWizard->title().isEmpty())
-            score->fileInfo()->setFile(newWizard->title());
 
       score->sigmap()->add(0, timesig);
 
@@ -646,7 +644,7 @@ MasterScore* MuseScore::getNewFile()
                               if (!dList.empty()) {
                                     int ltick = tick;
                                     int k = 0;
-                                    foreach (TDuration d, dList) {
+                                    for (TDuration d : dList) {
                                           if (k < puRests.count())
                                                 rest = static_cast<Rest*>(puRests[k]->linkedClone());
                                           else {
@@ -692,11 +690,20 @@ MasterScore* MuseScore::getNewFile()
                   }
             }
 
-      QString title     = newWizard->title();
-      QString subtitle  = newWizard->subtitle();
-      QString composer  = newWizard->composer();
-      QString poet      = newWizard->poet();
-      QString copyright = newWizard->copyright();
+      NewWizardPage1* metaTagsPage = newWizard->metaTagsPage();
+      metaTagsPage->addCompletions();
+      score->setMetaTag("movementTitle", metaTagsPage->movementTitle());
+      score->setMetaTag("movementNumber", metaTagsPage->movementNumber());
+      score->setMetaTag("arranger", metaTagsPage->arranger());
+      score->setMetaTag("lyricist", metaTagsPage->lyricist());
+      score->setMetaTag("workNumber", metaTagsPage->workNumber());
+      score->setMetaTag("source", metaTagsPage->source());
+      QString title = metaTagsPage->title();
+      QString subtitle = metaTagsPage->subtitle();
+      QString composer = metaTagsPage->composer();
+      QString poet = metaTagsPage->poet();
+      QString copyright = metaTagsPage->copyright();
+      QString translator = metaTagsPage->translator();
 
       if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !poet.isEmpty()) {
             MeasureBase* measure = score->measures()->first();
@@ -712,6 +719,7 @@ MasterScore* MuseScore::getNewFile()
                   }
             if (!title.isEmpty()) {
                   Text* s = new Text(score, Tid::TITLE);
+                  score->fileInfo()->setFile(title);
                   s->setPlainText(title);
                   measure->add(s);
                   score->setMetaTag("workTitle", title);
@@ -731,13 +739,22 @@ MasterScore* MuseScore::getNewFile()
                   Text* s = new Text(score, Tid::POET);
                   s->setPlainText(poet);
                   measure->add(s);
-                  // the poet() functions returns data called lyricist in the dialog
-                  score->setMetaTag("lyricist", poet);
+                  score->setMetaTag("poet", poet);
+                  }
+            if (!translator.isEmpty()) {
+                  Text* s = new Text(score, Tid::TRANSLATOR);
+                  s->setPlainText(translator);
+                  measure->add(s);
+                  score->setMetaTag("translator", translator);
                   }
             }
       else if (nvb) {
             delete nvb;
             }
+      // increment work number.
+      if (preferences.getBool(PREF_SCORE_WORKNUMBER_TRACKWORKNUMBER))
+            preferences.setPreference(PREF_SCORE_WORKNUMBER_NEXTWORKNUMBER,
+                                      preferences.getInt(PREF_SCORE_WORKNUMBER_NEXTWORKNUMBER) + 1);
 
       if (newWizard->createTempo()) {
             double tempo = newWizard->tempo();
@@ -1813,7 +1830,7 @@ bool MuseScore::exportParts()
       QString confirmReplaceMessage = tr("\"%1\" already exists.\nDo you want to replace it?\n");
       QString replaceMessage = tr("Replace");
       QString skipMessage = tr("Skip");
-      foreach (Excerpt* e, thisScore->excerpts())  {
+      for (Excerpt* e : thisScore->excerpts())  {
             Score* pScore = e->partScore();
             QString partfn = fi.absolutePath() + "/" + fi.completeBaseName() + "-" + createDefaultFileName(pScore->title()) + "." + ext;
             QFileInfo fip(partfn);
@@ -1846,7 +1863,7 @@ bool MuseScore::exportParts()
       if (ext.toLower() == "pdf") {
             QList<Score*> scores;
             scores.append(thisScore);
-            foreach(Excerpt* e, thisScore->excerpts())  {
+            for (Excerpt* e : thisScore->excerpts())  {
                   scores.append(e->partScore());
                   }
             QString partfn(fi.absolutePath() + "/" + fi.completeBaseName() + "-" + createDefaultFileName(tr("Score_and_Parts")) + ".pdf");
@@ -2103,7 +2120,7 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
             qDebug("unable to clear printer margins");
 
       QString title = firstScore->metaTag("workTitle");
-      if (title.isEmpty()) // workTitle unset?
+      if (title.isEmpty()) // workTitle unset or tag deleted
             title = firstScore->title(); // fall back to (master)score's tab title
       title += " - " + tr("Score and Parts");
       pdfWriter.setTitle(title); // set PDF's meta data for Title

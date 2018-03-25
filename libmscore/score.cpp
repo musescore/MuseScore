@@ -1841,7 +1841,22 @@ QString Score::metaTag(const QString& s) const
       {
       if (_metaTags.contains(s))
             return _metaTags.value(s);
-      return _masterScore->_metaTags.value(s);
+
+      if      (s ==  "platform")       return tr("Platform");
+      else if (s ==  "movementNumber") return tr("Movement number");
+      else if (s ==  "movementTitle")  return tr("Movement title");
+      else if (s ==  "workNumber")     return tr("Work number");
+      else if (s ==  "workTitle")      return tr("Work title");
+      else if (s ==  "arranger")       return tr("Arranger");
+      else if (s ==  "composer")       return tr("Composer");
+      else if (s ==  "lyricist")       return tr("Lyricist");
+      else if (s ==  "poet")           return tr("Poet");
+      else if (s ==  "translator")     return tr("Translator");
+      else if (s ==  "source")         return tr("Source");
+      else if (s ==  "copyright")      return tr("Copyright");
+      else if (s ==  "creationDate")   return tr("Creation date");
+      else
+            return _masterScore->_metaTags.value(s);
       }
 
 //---------------------------------------------------------

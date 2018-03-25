@@ -96,7 +96,7 @@
       <string>Preferences Tab Manager</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -2450,74 +2450,20 @@
        <string>Score</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout61">
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_19">
-         <property name="title">
-          <string>View</string>
+       <item row="4" column="0">
+        <spacer name="verticalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-         <layout class="QGridLayout" name="gridLayout_7">
-          <item row="0" column="1">
-           <widget class="QDoubleSpinBox" name="scale">
-            <property name="toolTip">
-             <string>Default scale for new score views</string>
-            </property>
-            <property name="accessibleName">
-             <string>Default zoom</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Default scale for new score views</string>
-            </property>
-            <property name="suffix">
-             <string notr="true">%</string>
-            </property>
-            <property name="decimals">
-             <number>0</number>
-            </property>
-            <property name="minimum">
-             <double>5.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1600.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>20.000000000000000</double>
-            </property>
-            <property name="value">
-             <double>100.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_48">
-            <property name="text">
-             <string>Default zoom:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <spacer name="horizontalSpacer_17">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="showMidiControls">
-            <property name="text">
-             <string>Show MIDI controls in Mixer</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
-       <item row="0" column="0">
+       <item row="1" column="0">
         <widget class="QGroupBox" name="groupBox_39">
          <property name="title">
           <string>Default Files</string>
@@ -2704,18 +2650,72 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="0">
-        <spacer name="verticalSpacer_7">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_19">
+         <property name="title">
+          <string>View</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="0" column="1">
+           <widget class="QDoubleSpinBox" name="scale">
+            <property name="toolTip">
+             <string>Default scale for new score views</string>
+            </property>
+            <property name="accessibleName">
+             <string>Default zoom</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Default scale for new score views</string>
+            </property>
+            <property name="suffix">
+             <string notr="true">%</string>
+            </property>
+            <property name="decimals">
+             <number>0</number>
+            </property>
+            <property name="minimum">
+             <double>5.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1600.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>20.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>100.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_48">
+            <property name="text">
+             <string>Default zoom:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer_17">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="showMidiControls">
+            <property name="text">
+             <string>Show MIDI controls in Mixer</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -4474,7 +4474,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>realtimeDelay</tabstop>
   <tabstop>playNotes</tabstop>
   <tabstop>showMidiControls</tabstop>
-  <tabstop>expandRepeats</tabstop>
   <tabstop>exportRPNs</tabstop>
   <tabstop>exportPdfDpi</tabstop>
   <tabstop>exportMp3BitRate</tabstop>
@@ -4482,6 +4481,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>checkUpdateStartup</tabstop>
   <tabstop>resetPreference</tabstop>
   <tabstop>advancedSearch</tabstop>
+  <tabstop>expandRepeats</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>

@@ -90,7 +90,7 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       void mixerPreferencesChanged(bool showMidiControls);
 
    protected:
-      virtual void retranslate() { retranslateUi(this); updateValues(); }
+      virtual void retranslate() override { retranslateUi(this); updateValues(); }
 
    public:
       PreferenceDialog(QWidget* parent);

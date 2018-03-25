@@ -24,8 +24,6 @@
 #include "ui_timesigwizard.h"
 #include "ui_newwizard.h"
 
-#include <QWizard>
-
 #include "libmscore/timesig.h"
 #include "libmscore/key.h"
 #include "libmscore/fraction.h"
@@ -53,6 +51,7 @@ class TimesigWizard : public QWidget, private Ui::TimesigWizard {
    public:
       TimesigWizard(QWidget* parent = 0);
       int measures() const;
+      void setMeasures(int m) { measureCount->setValue(m); }
       Fraction timesig() const;
       bool pickup(int* z, int* n) const;
       TimeSigType type() const;
@@ -65,8 +64,21 @@ class TimesigWizard : public QWidget, private Ui::TimesigWizard {
 class TitleWizard : public QWidget, public Ui::NewWizard {
       Q_OBJECT
 
+   private:
+      bool _moreOptionsVisible;
+
+      void readSettings();
+      void writeSettings();
+
+   private slots:
+      void setMoreOptionsVisible(bool visible = true);
+
    public:
-      TitleWizard(QWidget* parent = 0);
+      TitleWizard(QWidget* parent = nullptr);
+      ~TitleWizard();
+
+   public /*slots*/ : // for now not used as a slot
+      void addCompletions();
       };
 
 //---------------------------------------------------------
@@ -79,13 +91,28 @@ class NewWizardPage1 : public QWizardPage {
       TitleWizard* w;
 
    public:
-      NewWizardPage1(QWidget* parent = 0);
-      QString title() const              { return w->title->text();      }
-      QString subtitle() const           { return w->subtitle->text();   }
-      QString composer() const           { return w->composer->text();   }
-      QString poet() const               { return w->poet->text();       }
-      QString copyright() const          { return w->copyright->text();  }
+      NewWizardPage1(QWidget* parent = nullptr);
+      inline QString title() const          { return w->lineEditTitle->text();          }
+      inline QString movementTitle() const  { return w->lineEditMovementTitle->text();  }
+      inline QString movementNumber() const { return w->lineEditMovementNumber->text(); }
+      inline QString subtitle() const       { return w->lineEditSubtitle->text();       }
+      inline QString composer() const       { return w->lineEditComposer->text();       }
+      inline void setComposer(QString c)    { w->lineEditComposer->setText(c);          }
+      inline QString arranger() const       { return w->lineEditArranger->text();       }
+      inline QString lyricist() const       { return w->lineEditLyricist->text();       }
+      inline void setLyricist(QString l)    { w->lineEditLyricist->setText(l);          }
+      inline QString poet() const           { return w->lineEditPoet->text();           }
+      inline QString workNumber() const     { return w->lineEditWorkNumber->text();     }
+      inline void setWorkNumber(QString wn) { w->lineEditWorkNumber->setText(wn);       }
+      inline QString translator() const     { return w->lineEditTranslator->text();     }
+      inline QString source() const         { return w->lineEditSource->text();         }
+      inline QString copyright() const      { return w->lineEditCopyright->text();      }
+      inline void setCopyright(QString c)   { w->lineEditCopyright->setText(c);         }
+
       virtual void initializePage() override;
+
+   public /*slots*/ : // for now not used as a slot
+      inline void addCompletions() { w->addCompletions(); }
       };
 
 //---------------------------------------------------------
@@ -120,6 +147,7 @@ class NewWizardPage3 : public QWizardPage {
    public:
       NewWizardPage3(QWidget* parent = 0);
       int measures() const                     { return w->measures();   }
+      void setMeasures(int m)                  { w->setMeasures(m);      }
       Fraction timesig() const                 { return w->timesig();    }
       bool pickupMeasure(int* z, int* n) const { return w->pickup(z, n); }
       TimeSigType timesigType() const          { return w->type();       }
@@ -163,8 +191,10 @@ class NewWizardPage5 : public QWizardPage {
       NewWizardPage5(QWidget* parent = 0);
       virtual bool isComplete() const override { return true; }
       KeySigEvent keysig() const;
-      double tempo() const            { return _tempo->value(); }
-      bool createTempo() const        { return tempoGroup->isChecked(); }
+      double tempo() const              { return _tempo->value(); }
+      void setTempo(double t) const     { _tempo->setValue(t); }
+      bool createTempo() const          { return tempoGroup->isChecked(); }
+      void setCreateTempo(bool c) const { tempoGroup->setChecked(c); }
       void init();
       };
 
@@ -181,9 +211,11 @@ class NewWizard : public QWizard {
       NewWizardPage4* p4;
       NewWizardPage5* p5;
 
-      virtual void hideEvent(QHideEvent*);
+      void readSettings();
+      virtual void hideEvent(QHideEvent*) override;
 
-   private slots:
+private slots:
+      void writeSettings();
       void idChanged(int);
 
    public:
@@ -197,20 +229,15 @@ class NewWizard : public QWizard {
       int measures() const               { return p3->measures();    }
       Fraction timesig() const           { return p3->timesig();     }
       void createInstruments(Score* s)   { p2->createInstruments(s); }
-      QString title() const              { return p1->title();       }
-      QString subtitle() const           { return p1->subtitle();    }
-      QString composer() const           { return p1->composer();    }
-      QString poet() const               { return p1->poet();        }
-      QString copyright() const          { return p1->copyright();   }
-      KeySigEvent keysig() const         { return p5->keysig();      }
+      inline NewWizardPage1* metaTagsPage() { return p1; }
+      KeySigEvent keysig() const         { return p5->keysig(); }
       bool pickupMeasure(int* z, int* n) const { return p3->pickupMeasure(z, n); }
-      TimeSigType timesigType() const     { return p3->timesigType();       }
+      TimeSigType timesigType() const     { return p3->timesigType(); }
       double tempo() const                { return p5->tempo();       }
       bool createTempo() const            { return p5->createTempo(); }
       bool emptyScore() const;
       void updateValues() const;
       };
-
 
 } // namespace Ms
 #endif

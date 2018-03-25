@@ -39,7 +39,13 @@
 #include "libmscore/timesig.h"
 #include "libmscore/sym.h"
 
+#include <QCompleter>
+
+#define METATAGS_SAVED_COMPLETIONS 12
+
 namespace Ms {
+
+extern bool useFactorySettings;
 
 extern Palette* newKeySigPalette();
 extern void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString(""));
@@ -149,9 +155,212 @@ void TimesigWizard::fractionToggled(bool val)
 //---------------------------------------------------------
 
 TitleWizard::TitleWizard(QWidget* parent)
-   : QWidget(parent)
+   : QWidget(parent),
+     _moreOptionsVisible(true) // because they are visible in the .ui files.
       {
+      setObjectName("TitleWizard");
       setupUi(this);
+
+      readSettings();
+
+      QCompleter* composerCompl = lineEditComposer->completer();
+      composerCompl->setCaseSensitivity(Qt::CaseInsensitive);
+      composerCompl->setCompletionMode(QCompleter::PopupCompletion);
+      composerCompl->setFilterMode(Qt::MatchContains);
+      QCompleter* arrangerCompl = lineEditArranger->completer();
+      arrangerCompl->setCaseSensitivity(Qt::CaseInsensitive);
+      arrangerCompl->setCompletionMode(QCompleter::PopupCompletion);
+      arrangerCompl->setFilterMode(Qt::MatchContains);
+      QCompleter* lyricistCompl = lineEditLyricist->completer();
+      lyricistCompl->setCaseSensitivity(Qt::CaseInsensitive);
+      lyricistCompl->setCompletionMode(QCompleter::PopupCompletion);
+      lyricistCompl->setFilterMode(Qt::MatchContains);
+      QCompleter* copyrightCompl = lineEditCopyright->completer();
+      copyrightCompl->setCaseSensitivity(Qt::CaseInsensitive);
+      copyrightCompl->setCompletionMode(QCompleter::PopupCompletion);
+      copyrightCompl->setFilterMode(Qt::MatchContains);
+
+      connect(buttonMore, SIGNAL(toggled(bool)), SLOT(setMoreOptionsVisible(bool)));
+      }
+
+TitleWizard::~TitleWizard()
+      {
+      writeSettings();
+      }
+
+void TitleWizard::addCompletions()
+      {
+      auto addCompletionToModel = [] (QStringListModel* model, QString completion)
+            {
+            if (completion.isEmpty())
+                  return;
+            QStringList sl = model->stringList();
+
+            // to stack the existing string on top,
+            // so it's the last on the discard pile,
+            // remove it, then append it later.
+            if (sl.contains(completion, Qt::CaseSensitive))
+                  sl.removeAll(completion); // sl.removeOne(completion) would be faster, but less secure.
+
+            // Limit the number max number of completions
+            if (sl.size() > METATAGS_SAVED_COMPLETIONS)
+                  sl.takeFirst();
+
+            sl.append(completion);
+            model->setStringList(sl);
+            };
+
+      // completions are added to composer, lyricist, arranger and copyright.
+      addCompletionToModel(static_cast<QStringListModel*> (lineEditComposer->completer()->model()),  lineEditComposer->text());
+      addCompletionToModel(static_cast<QStringListModel*> (lineEditLyricist->completer()->model()),  lineEditLyricist->text());
+      addCompletionToModel(static_cast<QStringListModel*> (lineEditArranger->completer()->model()),  lineEditArranger->text());
+      addCompletionToModel(static_cast<QStringListModel*> (lineEditCopyright->completer()->model()), lineEditCopyright->text());
+      }
+
+//   metatags which are saved in a QCompleter: composer, lyricist, arranger and copyright.
+void TitleWizard::readSettings()
+      {
+      QSettings settings;
+      settings.beginGroup(objectName());
+      setMoreOptionsVisible(settings.value("moreOptionsVisible", false).toBool());
+
+      /// Load the QCompleters
+      {
+      // composers
+      int size = settings.beginReadArray("composers");
+      QStringList sl;
+      for (int i = 0; i < size; ++i) {
+            settings.setArrayIndex(i);
+            sl << settings.value("composer", "").toString();
+            }
+      lineEditComposer->setCompleter(new QCompleter(new QStringListModel(sl)));
+      settings.endArray();
+      } // to free the ressources and change the scope so that no long name is required.
+
+      {
+      // lyricists
+      int size = settings.beginReadArray("lyricists");
+      QStringList sl;
+      for (int i = 0; i < size; ++i) {
+            settings.setArrayIndex(i);
+            sl << settings.value("lyricist", "").toString();
+            }
+      lineEditLyricist->setCompleter(new QCompleter(new QStringListModel(sl)));
+      settings.endArray();
+      } // to free the ressources and change the scope so that no long name is required.
+
+      {
+      // arrangers
+      int size = settings.beginReadArray("arrangers");
+      QStringList sl;
+      for (int i = 0; i < size; ++i) {
+            settings.setArrayIndex(i);
+            sl << settings.value("arranger", "").toString();
+            }
+      lineEditArranger->setCompleter(new QCompleter(new QStringListModel(sl)));
+      settings.endArray();
+      } // to free the ressources and change the scope so that no long name is required.
+
+      {
+      // copyrights
+      int size = settings.beginReadArray("copyrights");
+      QStringList sl;
+      for (int i = 0; i < size; ++i) {
+            settings.setArrayIndex(i);
+            sl << settings.value("copyright", "").toString();
+            }
+      lineEditCopyright->setCompleter(new QCompleter(new QStringListModel(sl)));
+      settings.endArray();
+      } // to free the ressources and change the scope so that no long name is required.
+
+      settings.endGroup();
+      }
+
+//   metatags which are saved in a QCompleter: composer, lyricist, arranger and copyright.
+void TitleWizard::writeSettings()
+      {
+      QSettings settings;
+      settings.beginGroup(objectName());
+      settings.setValue("moreOptionsVisible", _moreOptionsVisible);
+
+      /// Save the QCompleters
+      {
+      // composers
+      QStringList sl = static_cast<QStringListModel*> (lineEditComposer->completer()->model())->stringList();
+      settings.beginWriteArray("composers");
+      for (int i = 0; i < sl.length(); ++i) {
+            settings.setArrayIndex(i);
+            settings.setValue("composer", sl.at(i));
+            }
+      settings.endArray();
+      } // to keep short names
+
+      {
+      // lyricists
+      QStringList sl = static_cast<QStringListModel*> (lineEditLyricist->completer()->model())->stringList();
+      settings.beginWriteArray("lyricists");
+      for (int i = 0; i < sl.length(); ++i) {
+            settings.setArrayIndex(i);
+            settings.setValue("lyricist", sl.at(i));
+            }
+      settings.endArray();
+      } // to keep short names
+
+      {
+      // arrangers
+      QStringList sl = static_cast<QStringListModel*> (lineEditArranger->completer()->model())->stringList();
+      settings.beginWriteArray("arrangers");
+      for (int i = 0; i < sl.length(); ++i) {
+            settings.setArrayIndex(i);
+            settings.setValue("arrangers", sl.at(i));
+            }
+      settings.endArray();
+      }
+
+      {
+      // copyrights
+      QStringList sl = static_cast<QStringListModel*> (lineEditCopyright->completer()->model())->stringList();
+      settings.beginWriteArray("copyrights");
+      for (int i = 0; i < sl.length(); ++i) {
+            settings.setArrayIndex(i);
+            settings.setValue("copyright", sl.at(i));
+            }
+      settings.endArray();
+      } // to keep short names
+
+      settings.endGroup();
+      }
+
+//---------------------------------------------------------
+//   setMoreOptionsVisible
+//---------------------------------------------------------
+
+void TitleWizard::setMoreOptionsVisible(bool visible)
+      {
+      if (visible == _moreOptionsVisible)
+            return;
+
+      lineEditArranger->setVisible(visible);
+      labelArranger->setVisible(visible);
+      lineEditMovementNumber->setVisible(visible);
+      labelMovementNumber->setVisible(visible);
+      lineEditMovementTitle->setVisible(visible);
+      labelMovementTitle->setVisible(visible);
+      lineEditSource->setVisible(visible);
+      labelSource->setVisible(visible);
+      lineEditPoet->setVisible(visible);
+      labelPoet->setVisible(visible);
+      lineEditTranslator->setVisible(visible);
+      labelTranslator->setVisible(visible);
+      lineEditWorkNumber->setVisible(visible);
+      labelWorkNumber->setVisible(visible);
+
+      if (visible)
+            buttonMore->setText(tr("Less"));
+      else
+            buttonMore->setText(tr("More"));
+
+      _moreOptionsVisible = visible;
       }
 
 //---------------------------------------------------------
@@ -175,12 +384,31 @@ NewWizardPage1::NewWizardPage1(QWidget* parent)
 
 //---------------------------------------------------------
 //   initializePage
+//   This needs to be done because since the newWizard is
+//   only deleted when musescore is closed, the editLines
+//   are not reset if you use 2 times the newwizard on the
+//   same session. But since (quite often) you don't want
+//   to create two scores with the same title, it needs to
+//   be reset.
 //---------------------------------------------------------
 
 void NewWizardPage1::initializePage()
       {
-      w->title->setText("");
-      w->subtitle->setText("");
+      w->lineEditTitle->setText("");
+      w->lineEditSubtitle->setText("");
+      w->lineEditComposer->setText("");
+      w->lineEditLyricist->setText("");
+      w->lineEditArranger->setText("");
+      w->lineEditCopyright->setText("");
+      if (preferences.getBool(PREF_SCORE_WORKNUMBER_TRACKWORKNUMBER)) {
+            w->lineEditWorkNumber->setText(QString("%1%2%3").arg(preferences.getBool(PREF_SCORE_WORKNUMBER_USEPREFIX)
+                                                                 ? (preferences.getString(PREF_SCORE_WORKNUMBER_PREFIX) + " ")
+                                                                 : "")
+                                                             .arg(preferences.getInt(PREF_SCORE_WORKNUMBER_NEXTWORKNUMBER))
+                                                             .arg(preferences.getBool(PREF_SCORE_WORKNUMBER_USESUFFIX)
+                                                                  ? (" " + preferences.getString(PREF_SCORE_WORKNUMBER_SUFFIX))
+                                                                  : ""));
+            }
       }
 
 //---------------------------------------------------------
@@ -220,6 +448,8 @@ void NewWizardPage2::initializePage()
 
 void NewWizardPage2::setComplete(bool val)
       {
+      if (complete == val)
+            return;
       complete = val;
       emit completeChanged();
       }
@@ -474,8 +704,8 @@ NewWizard::NewWizard(QWidget* parent)
       setPage(Page::Timesig,     p3);
 
       resize(QSize(840, 560)); //ensure default size if no geometry in settings
-      MuseScore::restoreGeometry(this);
-      connect(this, SIGNAL(currentIdChanged(int)), SLOT(idChanged(int)));
+      //connect(this, SIGNAL(currentIdChanged(int)), SLOT(idChanged(int)));
+      readSettings();
       }
 
 //---------------------------------------------------------
@@ -526,6 +756,39 @@ bool NewWizard::emptyScore() const
       bool val = fi.completeBaseName() == "00-Blank";
       return val;
       }
+//---------------------------------------------------------
+//   writeSettings
+//---------------------------------------------------------
+
+void NewWizard::writeSettings()
+      {
+      QSettings settings;
+      settings.beginGroup(objectName());
+      settings.setValue("numberOfMeasures", p3->measures());
+      settings.setValue("tempo", p5->tempo());
+      settings.setValue("createTempo", p5->createTempo());
+      settings.endGroup();
+
+      MuseScore::saveGeometry(this);
+      }
+
+//---------------------------------------------------------
+//   readSettings
+//---------------------------------------------------------
+
+void NewWizard::readSettings()
+      {
+      if (!useFactorySettings) {
+            QSettings settings;
+            settings.beginGroup(objectName());
+            p3->setMeasures(settings.value("numberOfMeasures").toInt());
+            p5->setTempo(settings.value("tempo").toDouble());
+            p5->setCreateTempo(settings.value("createTempo").toBool());
+            settings.endGroup();
+            }
+
+      MuseScore::restoreGeometry(this);
+      }
 
 //---------------------------------------------------------
 //   hideEvent
@@ -533,9 +796,9 @@ bool NewWizard::emptyScore() const
 
 void NewWizard::hideEvent(QHideEvent* event)
       {
-      MuseScore::saveGeometry(this);
+      writeSettings();
       QWidget::hideEvent(event);
       }
 
-}
+} // namesace Ms
 
