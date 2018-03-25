@@ -293,6 +293,11 @@ void Page::doRebuildBspTree()
 //       source
 //       workNumber
 //       workTitle
+//       arranger
+//       composer
+//       lyricist
+//       poet
+//       translator
 //---------------------------------------------------------
 
 QString Page::replaceTextMacros(const QString& s) const
