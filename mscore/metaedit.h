@@ -34,21 +34,27 @@ class Score;
 class MetaEditDialog : public QDialog, public Ui::MetaEditDialog {
       Q_OBJECT
 
-      Score* score;
+      Score* m_score;
 
-      bool dirty;
+      bool m_dirty;
 
-      virtual void hideEvent(QHideEvent*);
+      virtual void hideEvent(QHideEvent*) override;
 
-   private slots:
+      bool isSystemTag(QString tag) const;
+//      bool isTransformedSystemTag(QString tag) const;
+
+      bool save();
+
+private slots:
       void newClicked();
-      void setDirty() { dirty = true; }
+      void setDirty(bool dirty = true);
+      void saveClicked() { save(); } // slot for save function(which has a return value).
 
    public slots:
       virtual void accept();
 
    public:
-      MetaEditDialog(Score*, QWidget* parent = 0);
+      MetaEditDialog(Score*, QWidget *parent = nullptr);
       };
 
 

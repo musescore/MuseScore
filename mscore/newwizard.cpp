@@ -39,6 +39,8 @@
 
 namespace Ms {
 
+extern bool useFactorySettings;
+
 extern Palette* newKeySigPalette();
 extern void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString(""));
 
@@ -147,9 +149,45 @@ void TimesigWizard::fractionToggled(bool val)
 //---------------------------------------------------------
 
 TitleWizard::TitleWizard(QWidget* parent)
-   : QWidget(parent)
+   : QWidget(parent),
+     moreOptionsVisible(true) // because they are visible in the .ui files.
       {
       setupUi(this);
+
+      setMoreOptionsVisible(false);
+      connect(buttonMore, SIGNAL(toggled(bool)), SLOT(setMoreOptionsVisible(bool)));
+      }
+
+//---------------------------------------------------------
+//   setMoreOptionsVisible
+//---------------------------------------------------------
+
+void TitleWizard::setMoreOptionsVisible(bool visible)
+      {
+      if (visible == moreOptionsVisible)
+            return;
+
+      lineEditArranger->setVisible(visible);
+      labelArranger->setVisible(visible);
+      lineEditMovementNumber->setVisible(visible);
+      labelMovementNumber->setVisible(visible);
+      lineEditMovementTitle->setVisible(visible);
+      labelMovementTitle->setVisible(visible);
+      lineEditSource->setVisible(visible);
+      labelSource->setVisible(visible);
+      lineEditPoet->setVisible(visible);
+      labelPoet->setVisible(visible);
+      lineEditTranslator->setVisible(visible);
+      labelTranslator->setVisible(visible);
+      lineEditWorkNumber->setVisible(visible);
+      labelWorkNumber->setVisible(visible);
+
+      if (visible)
+            buttonMore->setText(tr("Less"));
+      else
+            buttonMore->setText(tr("More"));
+
+      moreOptionsVisible = visible;
       }
 
 //---------------------------------------------------------
@@ -173,12 +211,27 @@ NewWizardPage1::NewWizardPage1(QWidget* parent)
 
 //---------------------------------------------------------
 //   initializePage
+//   This needs to be done because since the newWizard is
+//   only deleted when musescore is closed, the editLines
+//   are not reset if you use 2 times the newwizard on the
+//   same session. But since (quite often) you don't want
+//   to create two scores with the same title, it needs to
+//   be reset.
 //---------------------------------------------------------
 
 void NewWizardPage1::initializePage()
       {
-      w->title->setText("");
-      w->subtitle->setText("");
+      w->lineEditTitle->setText("");
+      w->lineEditSubtitle->setText("");
+      if (preferences.getBool(PREF_SCORE_WORKNUMBER_TRACK)) {
+            w->lineEditWorkNumber->setText((preferences.getBool(PREF_SCORE_WORKNUMBER_USEPREFIX)
+                                             ? preferences.getString(PREF_SCORE_WORKNUMBER_PREFIX)
+                                             : "")
+                                           + (preferences.getString(PREF_SCORE_WORKNUMBER_CURRENTNUMBER))
+                                           + (preferences.getBool(PREF_SCORE_WORKNUMBER_USESUFFIX)
+                                             ? preferences.getString(PREF_SCORE_WORKNUMBER_SUFFIX)
+                                             : ""));
+            }
       }
 
 //---------------------------------------------------------
@@ -218,6 +271,8 @@ void NewWizardPage2::initializePage()
 
 void NewWizardPage2::setComplete(bool val)
       {
+      if (complete == val)
+            return;
       complete = val;
       emit completeChanged();
       }
@@ -454,8 +509,8 @@ NewWizard::NewWizard(QWidget* parent)
       setPage(Page::Timesig,     p3);
 
       resize(QSize(840, 560)); //ensure default size if no geometry in settings
-      MuseScore::restoreGeometry(this);
-      connect(this, SIGNAL(currentIdChanged(int)), SLOT(idChanged(int)));
+      //connect(this, SIGNAL(currentIdChanged(int)), SLOT(idChanged(int)));
+      readSettings();
       }
 
 //---------------------------------------------------------
@@ -506,6 +561,45 @@ bool NewWizard::emptyScore() const
       bool val = fi.completeBaseName() == "00-Blank";
       return val;
       }
+//---------------------------------------------------------
+//   writeSettings
+//---------------------------------------------------------
+
+void NewWizard::writeSettings()
+      {
+      QSettings settings;
+      settings.beginGroup(objectName());
+      settings.setValue("composer", p1->composer());
+      settings.setValue("lyricist", p1->lyricist());
+      settings.setValue("copyright", p1->copyright());
+      settings.setValue("numberOfMeasures", p3->measures());
+      settings.setValue("tempo", p5->tempo());
+      settings.setValue("createTempo", p5->createTempo());
+      settings.endGroup();
+
+      MuseScore::saveGeometry(this);
+      }
+
+//---------------------------------------------------------
+//   readSettings
+//---------------------------------------------------------
+
+void NewWizard::readSettings()
+      {
+      if (!useFactorySettings) {
+            QSettings settings;
+            settings.beginGroup(objectName());
+            p1->setComposer(settings.value("composer").toString());
+            p1->setLyricist(settings.value("lyricist").toString());
+            p1->setCopyright(settings.value("copyright").toString());
+            p3->setMeasures(settings.value("numberOfMeasures").toInt());
+            p5->setTempo(settings.value("tempo").toDouble());
+            p5->setCreateTempo(settings.value("createTempo").toBool());
+            settings.endGroup();
+            }
+
+      MuseScore::restoreGeometry(this);
+      }
 
 //---------------------------------------------------------
 //   hideEvent
@@ -513,9 +607,9 @@ bool NewWizard::emptyScore() const
 
 void NewWizard::hideEvent(QHideEvent* event)
       {
-      MuseScore::saveGeometry(this);
+      writeSettings();
       QWidget::hideEvent(event);
       }
 
-}
+} // namesace Ms
 

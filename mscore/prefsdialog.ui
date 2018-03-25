@@ -96,7 +96,7 @@
       <string>Preferences Tab Manager</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -1047,6 +1047,7 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
+              <width>0</width>
               <height>20</height>
              </size>
             </property>
@@ -2377,73 +2378,6 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout61">
        <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_19">
-         <property name="title">
-          <string>View</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_7">
-          <item row="0" column="1">
-           <widget class="QDoubleSpinBox" name="scale">
-            <property name="toolTip">
-             <string>Default scale for new score views</string>
-            </property>
-            <property name="accessibleName">
-             <string>Default zoom</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Default scale for new score views</string>
-            </property>
-            <property name="suffix">
-             <string notr="true">%</string>
-            </property>
-            <property name="decimals">
-             <number>0</number>
-            </property>
-            <property name="minimum">
-             <double>5.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1600.000000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>20.000000000000000</double>
-            </property>
-            <property name="value">
-             <double>100.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_48">
-            <property name="text">
-             <string>Default zoom:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <spacer name="horizontalSpacer_17">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="showMidiControls">
-            <property name="text">
-             <string>Show MIDI controls in Mixer</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_39">
          <property name="title">
           <string>Default Files</string>
@@ -2630,7 +2564,74 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_19">
+         <property name="title">
+          <string>View</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="0" column="1">
+           <widget class="QDoubleSpinBox" name="scale">
+            <property name="toolTip">
+             <string>Default scale for new score views</string>
+            </property>
+            <property name="accessibleName">
+             <string>Default zoom</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Default scale for new score views</string>
+            </property>
+            <property name="suffix">
+             <string notr="true">%</string>
+            </property>
+            <property name="decimals">
+             <number>0</number>
+            </property>
+            <property name="minimum">
+             <double>5.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1600.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>20.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>100.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_48">
+            <property name="text">
+             <string>Default zoom:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer_17">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="showMidiControls">
+            <property name="text">
+             <string>Show MIDI controls in Mixer</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="5" column="0">
         <spacer name="verticalSpacer_7">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -2642,6 +2643,149 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="4" column="0">
+        <widget class="QGroupBox" name="defaultNewScoreConfigGroupBox">
+         <property name="title">
+          <string>Default new score configuration</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_11">
+          <item row="4" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <spacer name="horizontalSpacer_22">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="workNumberPrefixCheckBox">
+              <property name="text">
+               <string>Prefix:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="workNumberPrefixLineEdit">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="3" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <spacer name="horizontalSpacer_21">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="currentWorkNumberLabel">
+              <property name="text">
+               <string>Current work number</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="currentWorkNumberSpinBox">
+              <property name="accelerated">
+               <bool>true</bool>
+              </property>
+              <property name="minimum">
+               <number>-100000</number>
+              </property>
+              <property name="maximum">
+               <number>100000</number>
+              </property>
+              <property name="value">
+               <number>1</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_20">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item row="5" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_13">
+            <item>
+             <spacer name="horizontalSpacer_23">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="workNumberSuffixCheckBox">
+              <property name="text">
+               <string>Suffix:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="workNumberSuffixLineEdit">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="trackWorkNumberCheckBox">
+            <property name="text">
+             <string>Track work number</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -4375,9 +4519,157 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>limitScrollArea</tabstop>
   <tabstop>drawAntialiased</tabstop>
   <tabstop>proximity</tabstop>
+  <tabstop>pageHorizontal</tabstop>
+  <tabstop>pageVertical</tabstop>
+  <tabstop>realtimeDelay</tabstop>
+  <tabstop>playNotes</tabstop>
+  <tabstop>showMidiControls</tabstop>
+  <tabstop>trackWorkNumberCheckBox</tabstop>
+  <tabstop>currentWorkNumberSpinBox</tabstop>
+  <tabstop>workNumberPrefixCheckBox</tabstop>
+  <tabstop>workNumberPrefixLineEdit</tabstop>
+  <tabstop>workNumberSuffixCheckBox</tabstop>
+  <tabstop>workNumberSuffixLineEdit</tabstop>
+  <tabstop>exportRPNs</tabstop>
+  <tabstop>exportPdfDpi</tabstop>
+  <tabstop>exportMp3BitRate</tabstop>
+  <tabstop>filterShortcuts</tabstop>
+  <tabstop>checkUpdateStartup</tabstop>
+  <tabstop>resetPreference</tabstop>
+  <tabstop>advancedSearch</tabstop>
+  <tabstop>expandRepeats</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>trackWorkNumberCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>currentWorkNumberLabel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>282</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>179</x>
+     <y>309</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>trackWorkNumberCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>workNumberPrefixLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>96</x>
+     <y>282</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>337</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>trackWorkNumberCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>workNumberSuffixCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>57</x>
+     <y>282</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>133</x>
+     <y>364</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>trackWorkNumberCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>workNumberPrefixCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>71</x>
+     <y>282</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>133</x>
+     <y>336</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>trackWorkNumberCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>workNumberSuffixLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>67</x>
+     <y>282</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>305</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>workNumberPrefixCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>workNumberPrefixLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>133</x>
+     <y>336</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>337</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>workNumberSuffixCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>workNumberSuffixLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>133</x>
+     <y>364</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>334</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>trackWorkNumberCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>currentWorkNumberSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>177</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>215</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

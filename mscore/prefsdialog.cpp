@@ -469,6 +469,13 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       //
       // score settings
       //
+      trackWorkNumberCheckBox->setChecked(preferences.getBool(PREF_SCORE_WORKNUMBER_TRACK));
+      currentWorkNumberSpinBox->setValue(preferences.getInt(PREF_SCORE_WORKNUMBER_CURRENTNUMBER));
+      workNumberPrefixCheckBox->setChecked(preferences.getBool(PREF_SCORE_WORKNUMBER_USEPREFIX));
+      workNumberPrefixLineEdit->setText(preferences.getString(PREF_SCORE_WORKNUMBER_PREFIX));
+      workNumberSuffixCheckBox->setChecked(preferences.getBool(PREF_SCORE_WORKNUMBER_USESUFFIX));
+      workNumberSuffixLineEdit->setText(preferences.getString(PREF_SCORE_WORKNUMBER_SUFFIX));
+
       scale->setValue(preferences.getDouble(PREF_SCORE_MAGNIFICATION) * 100.0);
       showMidiControls->setChecked(preferences.getBool(PREF_IO_MIDI_SHOWCONTROLSINMIXER));
 
@@ -673,7 +680,7 @@ void  PreferenceDialog::filterShortcutsTextChanged(const QString &query )
           if(item->text(0).toLower().contains(query.toLower()))
               item->setHidden(false);
           else
-              item->setHidden(true);  
+              item->setHidden(true);
           }
       }
 
@@ -915,6 +922,12 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_IO_MIDI_USEREMOTECONTROL, rcGroup->isChecked());
       preferences.setPreference(PREF_IO_OSC_PORTNUMBER, oscPort->value());
       preferences.setPreference(PREF_IO_OSC_USEREMOTECONTROL, oscServer->isChecked());
+      preferences.setPreference(PREF_SCORE_WORKNUMBER_TRACK, trackWorkNumberCheckBox->isChecked());
+      preferences.setPreference(PREF_SCORE_WORKNUMBER_CURRENTNUMBER, currentWorkNumberSpinBox->value());
+      preferences.setPreference(PREF_SCORE_WORKNUMBER_USEPREFIX, workNumberPrefixCheckBox->isChecked());
+      preferences.setPreference(PREF_SCORE_WORKNUMBER_PREFIX, workNumberPrefixLineEdit->text());
+      preferences.setPreference(PREF_SCORE_WORKNUMBER_USESUFFIX, workNumberSuffixCheckBox->isChecked());
+      preferences.setPreference(PREF_SCORE_WORKNUMBER_SUFFIX, workNumberSuffixLineEdit->text());
       preferences.setPreference(PREF_SCORE_CHORD_PLAYONADDNOTE, playChordOnAddNote->isChecked());
       preferences.setPreference(PREF_SCORE_NOTE_DEFAULTPLAYDURATION, defaultPlayDuration->value());
       preferences.setPreference(PREF_SCORE_NOTE_PLAYONCLICK, playNotes->isChecked());

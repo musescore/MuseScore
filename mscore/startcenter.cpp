@@ -81,7 +81,7 @@ Startcenter::~Startcenter() {
 
 void Startcenter::loadScore(QString s)
       {
-      if (s.endsWith("Create_New_Score.mscz")) {
+      if (s.endsWith("Create_New_Score.mscx")) {
             newScore();
             }
       else {
@@ -116,7 +116,7 @@ void Startcenter::closeEvent(QCloseEvent*)
 void Startcenter::updateRecentScores()
       {
       QFileInfoList fil = mscore->recentScores();
-      QFileInfo newScore(":/data/Create_New_Score.mscz");
+      QFileInfo newScore(":/data/Create_New_Score.mscx");
       fil.prepend(newScore);
       recentPage->setScores(fil);
       recentPage->selectFirst();
