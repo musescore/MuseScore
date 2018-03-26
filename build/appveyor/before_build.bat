@@ -18,7 +18,7 @@ for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:
 
 :: add stable keys for musescore.com
 IF "%UNSTABLE%" == "" (
-python build/add-mc-keys.py $MC_CONSUMER_KEY $MC_CONSUMER_SECRET
+python build/add-mc-keys.py %MC_CONSUMER_KEY% %MC_CONSUMER_SECRET%
 )
 
 :: get revision number
