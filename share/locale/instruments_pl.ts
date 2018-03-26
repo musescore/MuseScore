@@ -35,7 +35,7 @@
         <location filename="../instruments/instrumentsxml.h" line="8"/>
         <source>W.</source>
         <comment>Winds</comment>
-        <translation>F.</translation>
+        <translation>D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="9"/>
@@ -301,12 +301,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="121"/>
         <source>Tin Whistle</source>
-        <translation>Tin whistle</translation>
+        <translation>Pemperino</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="123"/>
         <source>B♭ Tin Whistle</source>
-        <translation>Tin whistle in B♭</translation>
+        <translation>Pemperino in B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="127"/>
@@ -341,7 +341,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="139"/>
         <source>Baritone Oboe</source>
-        <translation>Oboe basso</translation>
+        <translation>Oboe baritono</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="141"/>
@@ -2495,7 +2495,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1149"/>
         <source>Bu.</source>
         <comment>Bugarija</comment>
-        <translation>Bug.</translation>
+        <translation>B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1150"/>
@@ -2638,19 +2638,19 @@
         <location filename="../instruments/instrumentsxml.h" line="1204"/>
         <source>Tr. Vl.</source>
         <comment>Treble Viol</comment>
-        <translation>V. s.</translation>
+        <translation>V-la s.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1208"/>
         <source>A. Vl.</source>
         <comment>Alto Viol</comment>
-        <translation>V. c-a.</translation>
+        <translation>V-la c-a.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1212"/>
         <source>T. Vl.</source>
         <comment>Tenor Viol</comment>
-        <translation>V. t.</translation>
+        <translation>V-la t.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1216"/>
@@ -3029,24 +3029,24 @@
         <location filename="../instruments/instrumentsxml.h" line="122"/>
         <source>Tin Wh.</source>
         <comment>Tin Whistle</comment>
-        <translation>Tin wh.</translation>
+        <translation>Pemp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="124"/>
         <source>B♭ Tin Wh.</source>
         <comment>B♭ Tin Whistle</comment>
-        <translation>Tin wh. in B♭</translation>
+        <translation>Pemp. in B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="125"/>
         <source>D Tin Whistle</source>
-        <translation>Tin whistle in D</translation>
+        <translation>Pemperino in D</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="126"/>
         <source>D Tin Wh.</source>
         <comment>D Tin Whistle</comment>
-        <translation>Tin wh. in D</translation>
+        <translation>Pemp. in D</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="128"/>
@@ -3088,7 +3088,7 @@
         <location filename="../instruments/instrumentsxml.h" line="140"/>
         <source>Bar. Ob.</source>
         <comment>Baritone Oboe</comment>
-        <translation>Ob. b.</translation>
+        <translation>Ob. bar.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="142"/>
@@ -3105,19 +3105,19 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="145"/>
         <source>Lupophone</source>
-        <translation>Lupofono</translation>
+        <translation>Oboe basso</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="146"/>
         <source>Lph.</source>
         <comment>Lupophone</comment>
-        <translation>Lup.</translation>
+        <translation>Ob. b.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="148"/>
         <source>Hph.</source>
         <comment>Heckelphone-clarinet</comment>
-        <translation>Heck.</translation>
+        <translation>Heck.-cl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="150"/>
@@ -3201,38 +3201,38 @@
         <location filename="../instruments/instrumentsxml.h" line="176"/>
         <source>Cm.</source>
         <comment>Cornamuse</comment>
-        <translation>C.</translation>
+        <translation>C-musa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="178"/>
         <source>S. Cm.</source>
         <comment>Soprano Cornamuse</comment>
-        <translation>C. s.</translation>
+        <translation>C-musa s.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="180"/>
         <source>A. Cm.</source>
         <comment>Alto Cornamuse</comment>
-        <translation>C. c-a.</translation>
+        <translation>C-musa c-a.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="182"/>
         <source>T. Cm.</source>
         <comment>Tenor Cornamuse</comment>
-        <translation>C. t.</translation>
+        <translation>C-musa t.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="184"/>
         <source>B. Cm.</source>
         <comment>Bass Cornamuse</comment>
-        <translation>C. b.</translation>
+        <translation>C-musa b.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="186"/>
         <location filename="../instruments/instrumentsxml.h" line="192"/>
         <source>Du.</source>
         <comment>Duduk</comment>
-        <translation>Dud.</translation>
+        <translation>D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="188"/>
@@ -3485,7 +3485,7 @@
         <location filename="../instruments/instrumentsxml.h" line="264"/>
         <source>S. Cha.</source>
         <comment>Soprano Chalumeau</comment>
-        <translation>Salm. b.</translation>
+        <translation>Salm. s.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="266"/>
@@ -3539,7 +3539,7 @@
         <location filename="../instruments/instrumentsxml.h" line="282"/>
         <source>Du.</source>
         <comment>Dulcian</comment>
-        <translation>Dulc.</translation>
+        <translation>D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="284"/>
@@ -3689,79 +3689,79 @@
         <location filename="../instruments/instrumentsxml.h" line="333"/>
         <source>Harm.</source>
         <comment>12 Hole C Chromatic Harmonica</comment>
-        <translation>Arm. crom. in C</translation>
+        <translation>Arm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="335"/>
         <source>Harm.</source>
         <comment>14 Hole C Chromatic Harmonica</comment>
-        <translation>Arm. crom. in C</translation>
+        <translation>Arm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="337"/>
         <source>Harm.</source>
         <comment>12 Hole G Chromatic Harmonica</comment>
-        <translation>Arm. crom. in G</translation>
+        <translation>Arm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="339"/>
         <source>Harm.</source>
         <comment>16 Hole C Chromatic Harmonica</comment>
-        <translation>Arm. crom. in C</translation>
+        <translation>Arm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="341"/>
         <source>Harm.</source>
         <comment>12 Hole Tenor C Chromatic Harmonica</comment>
-        <translation>Arm. t. crom. in C</translation>
+        <translation>Arm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="343"/>
         <source>Harm.</source>
         <comment>10 Hole High G Diatonic Harmonica</comment>
-        <translation>Arm. diat. in G</translation>
+        <translation>Arm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="345"/>
         <source>Harm.</source>
         <comment>10 Hole F Diatonic Harmonica</comment>
-        <translation>Arm. diat. in F</translation>
+        <translation>Arm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="347"/>
         <source>Harm.</source>
         <comment>10 Hole D Diatonic Harmonica</comment>
-        <translation>Arm. diat. in D</translation>
+        <translation>Arm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="349"/>
         <source>Harm.</source>
         <comment>10 Hole C Diatonic Harmonica</comment>
-        <translation>Arm. diat. in C</translation>
+        <translation>Arm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="351"/>
         <source>Harm.</source>
         <comment>10 Hole A Diatonic Harmonica</comment>
-        <translation>Arm. diat. in A</translation>
+        <translation>Arm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="353"/>
         <source>Harm.</source>
         <comment>10 Hole G Diatonic Harmonica</comment>
-        <translation>Arm. diat. in G</translation>
+        <translation>Arm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="355"/>
         <source>Harm.</source>
         <comment>10 Hole Low D Diatonic Harmonica</comment>
-        <translation>Arm. diat. in D</translation>
+        <translation>Arm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="357"/>
         <source>Harm.</source>
         <comment>20 Hole Chordet Harmonica</comment>
-        <translation>Arm. Ch.</translation>
+        <translation>Arm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="359"/>
@@ -3773,13 +3773,13 @@
         <location filename="../instruments/instrumentsxml.h" line="361"/>
         <source>Bs. Harm.</source>
         <comment>Bass Hohner Harmonica</comment>
-        <translation>Arm. b. Hohner</translation>
+        <translation>Arm. b.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="363"/>
         <source>Bs. Harm.</source>
         <comment>Bass Huang Harmonica</comment>
-        <translation>Arm. b. Huang</translation>
+        <translation>Arm. b.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="365"/>
@@ -3839,7 +3839,7 @@
         <location filename="../instruments/instrumentsxml.h" line="384"/>
         <source>Br.</source>
         <comment>Brass</comment>
-        <translation>Ott.</translation>
+        <translation>Br.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="386"/>
@@ -4280,7 +4280,7 @@
         <location filename="../instruments/instrumentsxml.h" line="538"/>
         <source>Co.</source>
         <comment>Cornettino</comment>
-        <translation>C-no</translation>
+        <translation>C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="540"/>
@@ -4556,7 +4556,7 @@
         <location filename="../instruments/instrumentsxml.h" line="635"/>
         <source>Tph.</source>
         <comment>Tubaphone</comment>
-        <translation>Tub.</translation>
+        <translation>T.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="637"/>
@@ -4598,7 +4598,7 @@
         <location filename="../instruments/instrumentsxml.h" line="649"/>
         <source>Tu. Be.</source>
         <comment>Tubular Bells</comment>
-        <translation>Camp. tub.</translation>
+        <translation>Camp. t.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="651"/>
@@ -5732,7 +5732,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1019"/>
         <source>Guit.</source>
         <comment>Classical Guitar</comment>
-        <translation>Chit. cl.</translation>
+        <translation>Chit.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1020"/>
@@ -5778,7 +5778,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1029"/>
         <source>Guit.</source>
         <comment>Acoustic Guitar</comment>
-        <translation>Chit. ac.</translation>
+        <translation>Chit.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1032"/>
@@ -5829,7 +5829,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1049"/>
         <source>flageoletti</source>
-        <translation>Flażolet</translation>
+        <translation>Flagioletti</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1051"/>
@@ -6179,17 +6179,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1203"/>
         <source>Treble Viol</source>
-        <translation>Viol soprano</translation>
+        <translation>Viola soprano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1207"/>
         <source>Alto Viol</source>
-        <translation>Viol contralto</translation>
+        <translation>Viola contralto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1211"/>
         <source>Tenor Viol</source>
-        <translation>Viol tenore</translation>
+        <translation>Viola tenore</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1215"/>

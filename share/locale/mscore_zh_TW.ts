@@ -2290,6 +2290,11 @@ space unit</extracomment>
         <translation>不要於第一個譜表組中隱藏空白譜表</translation>
     </message>
     <message>
+        <location filename="../../mscore/editstyle.ui" line="211"/>
+        <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
+        <translation>顯示橫跨小節線的音符時值（【試驗中】只限早期音樂！）</translation>
+    </message>
+    <message>
         <location filename="../../mscore/editstyle.ui" line="218"/>
         <source>Hide instrument name if there is only 1 instrument</source>
         <translation>如果只有一種樂器，隱藏樂器名稱</translation>
@@ -2635,11 +2640,6 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="5527"/>
         <source>Barlines</source>
         <translation>小節線</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="211"/>
-        <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation>顯示橫跨小節線的音符時值（【試驗中】只限早期音樂！）</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2211"/>
@@ -3249,11 +3249,6 @@ space unit</extracomment>
         <translation>符頭距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5264"/>
-        <source>Vertical distance from notehead:</source>
-        <translation>與符頭的垂直距離：</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editstyle.ui" line="5073"/>
         <source>Articulation size:</source>
         <translation>演奏法記號大小：</translation>
@@ -3319,6 +3314,11 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="5254"/>
         <source>Vertical distance from stem:</source>
         <translation>與符桿的垂直距離：</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="5264"/>
+        <source>Vertical distance from notehead:</source>
+        <translation>與符頭的垂直距離：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5274"/>
@@ -6683,6 +6683,13 @@ space unit</extracomment>
         <translation>連音符</translation>
     </message>
     <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="84"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="101"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
+        <source>Reset to default</source>
+        <translation>重設為預設值</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="87"/>
         <source>Reset &apos;Number type&apos; value</source>
         <translation>重設「數字類型」設定值</translation>
@@ -6701,13 +6708,6 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="122"/>
         <source>Number</source>
         <translation>號碼</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="84"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="101"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
-        <source>Reset to default</source>
-        <translation>重設為預設值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="127"/>
@@ -9060,44 +9060,6 @@ failed: </source>
         <translation>匯出中…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5111"/>
-        <location filename="../../mscore/musescore.cpp" line="5123"/>
-        <source>Error Opening LAME library</source>
-        <translation>開啟 LAME 資料庫時出現問題。</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5112"/>
-        <source>Could not open MP3 encoding library!</source>
-        <translation>未能開啟 MP3 編碼資料庫！</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5124"/>
-        <source>Not a valid or supported MP3 encoding library!</source>
-        <translation>此並非有效或已支援的 MP3 編碼資料庫！</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5148"/>
-        <location filename="../../mscore/musescore.cpp" line="5161"/>
-        <location filename="../../mscore/musescore.cpp" line="5303"/>
-        <source>Encoding Error</source>
-        <translation>編碼錯誤</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5149"/>
-        <source>Unable to initialize MP3 stream</source>
-        <translation>無法初始化 MP3 串流</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5162"/>
-        <source>Unable to open target file for writing</source>
-        <translation>無法開啟目標檔案作寫入用途</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5304"/>
-        <source>Error %1 returned from MP3 encoder</source>
-        <translation>從 MP3 編碼器回報錯誤 %1 </translation>
-    </message>
-    <message>
         <location filename="../../mscore/file.cpp" line="250"/>
         <location filename="../../mscore/musescore.cpp" line="3675"/>
         <source>MuseScore</source>
@@ -10093,6 +10055,44 @@ Restore session?</source>
         <translation>跳到： </translation>
     </message>
     <message>
+        <location filename="../../mscore/musescore.cpp" line="5111"/>
+        <location filename="../../mscore/musescore.cpp" line="5123"/>
+        <source>Error Opening LAME library</source>
+        <translation>開啟 LAME 資料庫時出現問題。</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5112"/>
+        <source>Could not open MP3 encoding library!</source>
+        <translation>未能開啟 MP3 編碼資料庫！</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5124"/>
+        <source>Not a valid or supported MP3 encoding library!</source>
+        <translation>此並非有效或已支援的 MP3 編碼資料庫！</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5148"/>
+        <location filename="../../mscore/musescore.cpp" line="5161"/>
+        <location filename="../../mscore/musescore.cpp" line="5303"/>
+        <source>Encoding Error</source>
+        <translation>編碼錯誤</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5149"/>
+        <source>Unable to initialize MP3 stream</source>
+        <translation>無法初始化 MP3 串流</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5162"/>
+        <source>Unable to open target file for writing</source>
+        <translation>無法開啟目標檔案作寫入用途</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5304"/>
+        <source>Error %1 returned from MP3 encoder</source>
+        <translation>從 MP3 編碼器回報錯誤 %1 </translation>
+    </message>
+    <message>
         <location filename="../../mscore/tupletdialog.cpp" line="135"/>
         <source>Tuplet Error</source>
         <translation>連音錯誤</translation>
@@ -10833,7 +10833,7 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1471"/>
         <source>Warning: You used the same CoreMIDI IAC bus for input and output.  This will cause problematic loopback, whereby MuseScore&apos;s outputted MIDI messages will be sent back to MuseScore as input, causing confusion.  To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore&apos;s MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore&apos;s MIDI output.  Other programs may then use that dedicated virtual port to receive MuseScore&apos;s MIDI output.</source>
-        <translation>警告：您在輸入口和輸出口使用了同一條 CoreMIDI IAC 總線。這會對信號回送產生問題，因為這樣 MuseScore 的輸出信息會被傳送回 MuseScore 的輸入口，從而產生混淆。為了避免這個問題，請通過 Spotlight 存取 Audio MIDI Setup 以創造一個 MuseScore MIDI 輸出專用的虛擬接口，然後重新啟動 MuseScore，並返回偏好設定，最後選取您新的虛擬接口。這樣其他的應用程式就可以使用這個專用接口獲取 MuseScore MIDI 的輸出。</translation>
+        <translation>警告：您在輸入口和輸出口使用了同一條 CoreMIDI IAC 總線。這會對信號回送產生問題，因為這樣 MuseScore 所輸出的信息會被傳送回 MuseScore 的輸入口，從而產生混淆。為了避免這個問題，請通過 Spotlight 存取 Audio MIDI Setup 以創造一個 MuseScore MIDI 輸出專用的虛擬接口，然後重新啟動 MuseScore，並返回偏好設定，最後選取您新的虛擬接口。這樣其他的應用程式就可以使用這個專用接口獲取 MuseScore MIDI 的輸出。</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1650"/>
@@ -12794,7 +12794,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/playpanel.ui" line="892"/>
         <source>Actual tempo in quarter notes per minute</source>
-        <translation type="unfinished"/>
+        <translation>以每分鐘有多少個四分音符為基準的實際速度</translation>
     </message>
     <message>
         <location filename="../../mscore/playpanel.ui" line="929"/>
@@ -12852,11 +12852,6 @@ failed: </source>
         <translation>儲存</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="187"/>
-        <source>Save As...</source>
-        <translation>儲存為...</translation>
-    </message>
-    <message>
         <location filename="../../mscore/pluginCreator.ui" line="147"/>
         <source>Manual</source>
         <translation>手動／用戶手冊</translation>
@@ -12885,6 +12880,11 @@ failed: </source>
         <location filename="../../mscore/pluginCreator.ui" line="182"/>
         <source>Reload current plugin source</source>
         <translation>重新載入當前外掛模組</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pluginCreator.ui" line="187"/>
+        <source>Save As...</source>
+        <translation>儲存為…</translation>
     </message>
 </context>
 <context>
@@ -12928,7 +12928,8 @@ failed: </source>
         <location filename="../../mscore/pluginManager.ui" line="126"/>
         <source>Reload all plugins.
 This will re-evaluate all plugins, picking up any changes that may have occurred.</source>
-        <translation type="unfinished"/>
+        <translation>重新載入所有外掛模組。
+這會重新檢查所有外掛模組，以發現任何已經發生的改變。</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginManager.ui" line="130"/>
@@ -13245,12 +13246,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="675"/>
         <source>Port number:</source>
         <extracomment>The UDP port number on which the MuseScore OSC server will listen on</extracomment>
-        <translation>埠號：</translation>
+        <translation>連接埠號碼：</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="685"/>
         <source>Port number</source>
-        <translation>埠號:</translation>
+        <translation>連接埠號碼</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="717"/>
@@ -13865,23 +13866,6 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <translation>預設縮放大小</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2462"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2592"/>
-        <source>Opens a file dialog for selecting an instrument list file</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2579"/>
-        <source>Insert path to an instrument list file</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3521"/>
-        <source>PNG</source>
-        <translation>PNG</translation>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="2396"/>
         <source>Default zoom:</source>
         <translation>預設縮放大小：</translation>
@@ -13902,6 +13886,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <translation>選取樂器列表 1</translation>
     </message>
     <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2462"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2592"/>
+        <source>Opens a file dialog for selecting an instrument list file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/prefsdialog.ui" line="2476"/>
         <source>Instrument list 1:</source>
         <translation>樂器列表 1：</translation>
@@ -13910,6 +13900,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="2486"/>
         <source>Instrument list 1</source>
         <translation>樂器列表 1</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2579"/>
+        <source>Insert path to an instrument list file</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2496"/>
@@ -14340,6 +14336,11 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>匯出</translation>
     </message>
     <message>
+        <location filename="../../mscore/prefsdialog.ui" line="3521"/>
+        <source>PNG</source>
+        <translation>PNG</translation>
+    </message>
+    <message>
         <location filename="../../mscore/prefsdialog.ui" line="3530"/>
         <location filename="../../mscore/prefsdialog.ui" line="3698"/>
         <source>Resolution:</source>
@@ -14541,7 +14542,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2751"/>
+        <location filename="../../libmscore/edit.cpp" line="2829"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14551,7 +14552,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2752"/>
+        <location filename="../../libmscore/edit.cpp" line="2830"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -17023,11 +17024,6 @@ Do you want to overwrite it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.ui" line="295"/>
-        <source>Update existing score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="179"/>
         <source>License:</source>
         <translation>許可證</translation>
@@ -17041,6 +17037,11 @@ Do you want to overwrite it?</source>
         <location filename="../../mscore/uploadscoredialog.ui" line="264"/>
         <source>Upload score audio</source>
         <translation>上載樂譜音訊</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/uploadscoredialog.ui" line="295"/>
+        <source>Update existing score</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="316"/>
@@ -17515,12 +17516,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="133"/>
         <source>Import PDF...</source>
-        <translation>匯入PDF檔...</translation>
+        <translation>匯入 PDF 檔案…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="134"/>
         <source>Import PDF</source>
-        <translation>匯入PDF檔</translation>
+        <translation>匯入 PDF 檔案</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="135"/>
@@ -19333,206 +19334,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1771"/>
-        <source>Toggle &apos;Play Panel&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1781"/>
-        <source>Toogle &apos;Selection Filter&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1801"/>
-        <source>Toggle &apos;MIDI Import Panel&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1826"/>
-        <source>Toogle &apos;File Operations&apos; toolbar</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1833"/>
-        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1847"/>
-        <source>Toggle &apos;Image Capture&apos; toolbar</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1854"/>
-        <source>Toogle &apos;Note Input&apos; toolbar</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1861"/>
-        <source>Toggle &apos;Status Bar&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1994"/>
-        <source>Player: play</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2044"/>
-        <source>Seek to Begin</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2045"/>
-        <source>Player: seek to begin</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2055"/>
-        <source>Player: rewind</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2063"/>
-        <source>Seek to End</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2064"/>
-        <source>Player: seek to end</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2071"/>
-        <source>Toggle &apos;Play Repeats&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2081"/>
-        <source>Pan Score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2082"/>
-        <source>Toggle &apos;Pan Score&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2256"/>
-        <source>Toggle &apos;System Break&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2267"/>
-        <source>Toggle &apos;Page Break&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2278"/>
-        <source>Toggle &apos;Section Break&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2308"/>
-        <source>Reset Layout Stretch</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2309"/>
-        <source>Reset layout stretch</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2310"/>
-        <source>Reset layout stretch factor of selected measures or entire score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2602"/>
-        <source>Change Enharmonic Spelling (Both Modes)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2603"/>
-        <source>Change enharmonic spelling (both modes)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2604"/>
-        <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2610"/>
-        <source>Change Enharmonic Spelling (Current Mode)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2611"/>
-        <source>Change enharmonic spelling (current mode)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2612"/>
-        <source>Change enharmonic note (alters the spelling in the current mode only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2626"/>
-        <source>Toggle &apos;Image Capture&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2803"/>
-        <source>Loop Playback</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2804"/>
-        <source>Toggle &apos;Loop Playback&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2848"/>
-        <source>Toggle &apos;Count-In&apos; playback</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2924"/>
-        <source>Toggle &apos;View Mode&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2949"/>
-        <source>Toggle &apos;Visibility&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3350"/>
-        <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3361"/>
-        <source>Toggle &apos;Hide Empty Staves&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3446"/>
-        <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3456"/>
-        <source>Add/Remove System Breaks...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3457"/>
-        <source>Add/remove system breaks</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="1676"/>
         <source>Beam Start</source>
         <translation>符槓開頭</translation>
@@ -19628,9 +19429,19 @@ failed: </source>
         <translation>播放面板</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1771"/>
+        <source>Toggle &apos;Play Panel&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1780"/>
         <source>Selection Filter</source>
         <translation>篩選選取區</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1781"/>
+        <source>Toogle &apos;Selection Filter&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1790"/>
@@ -19648,6 +19459,11 @@ failed: </source>
         <translation>MIDI 匯入面板</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1801"/>
+        <source>Toggle &apos;MIDI Import Panel&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1815"/>
         <source>Mixer</source>
         <translation>混音器</translation>
@@ -19663,9 +19479,19 @@ failed: </source>
         <translation>檔案操作工具列</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1826"/>
+        <source>Toogle &apos;File Operations&apos; toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1832"/>
         <source>Playback Controls</source>
         <translation>回放控制</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1833"/>
+        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1839"/>
@@ -19684,9 +19510,24 @@ failed: </source>
         <translation>螢幕擷取</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1847"/>
+        <source>Toggle &apos;Image Capture&apos; toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1854"/>
+        <source>Toogle &apos;Note Input&apos; toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1860"/>
         <source>Status Bar</source>
         <translation>狀態列</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1861"/>
+        <source>Toggle &apos;Status Bar&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1867"/>
@@ -19859,6 +19700,11 @@ failed: </source>
         <translation>播放</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1994"/>
+        <source>Player: play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1995"/>
         <source>Start or stop playback</source>
         <translation>開始或停止播放</translation>
@@ -19904,9 +19750,24 @@ failed: </source>
         <translation>播放下個小節</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2044"/>
+        <source>Seek to Begin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2045"/>
+        <source>Player: seek to begin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2054"/>
         <source>Rewind</source>
         <translation>倒回</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2055"/>
+        <source>Player: rewind</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2056"/>
@@ -19914,14 +19775,39 @@ failed: </source>
         <translation>回到起始位置</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2063"/>
+        <source>Seek to End</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2064"/>
+        <source>Player: seek to end</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2070"/>
         <source>Play Repeats</source>
         <translation>反覆播放</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2071"/>
+        <source>Toggle &apos;Play Repeats&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2072"/>
         <source>Play repeats</source>
         <translation>反覆播放</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2081"/>
+        <source>Pan Score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2082"/>
+        <source>Toggle &apos;Pan Score&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2083"/>
@@ -20079,14 +19965,29 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2256"/>
+        <source>Toggle &apos;System Break&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2266"/>
         <source>Toggle Page Break</source>
         <translation>開啟或關閉分頁符號</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2267"/>
+        <source>Toggle &apos;Page Break&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2277"/>
         <source>Toggle Section Break</source>
         <translation>開啟或關閉分頁</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2278"/>
+        <source>Toggle &apos;Section Break&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2288"/>
@@ -20112,6 +20013,21 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="2302"/>
         <source>Debugger</source>
         <translation>偵錯</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2308"/>
+        <source>Reset Layout Stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2309"/>
+        <source>Reset layout stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2310"/>
+        <source>Reset layout stretch factor of selected measures or entire score</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2319"/>
@@ -20420,6 +20336,36 @@ failed: </source>
         <translation>管理分譜</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2602"/>
+        <source>Change Enharmonic Spelling (Both Modes)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2603"/>
+        <source>Change enharmonic spelling (both modes)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2604"/>
+        <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2610"/>
+        <source>Change Enharmonic Spelling (Current Mode)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2611"/>
+        <source>Change enharmonic spelling (current mode)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2612"/>
+        <source>Change enharmonic note (alters the spelling in the current mode only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2618"/>
         <source>Create New Revision</source>
         <translation>建立新的校訂本</translation>
@@ -20433,6 +20379,11 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="2625"/>
         <source>Toggle Image Capture</source>
         <translation>開啟或關閉螢幕擷取</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2626"/>
+        <source>Toggle &apos;Image Capture&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2637"/>
@@ -20625,6 +20576,16 @@ failed: </source>
         <translation>顯示光學劃記符號辨識面板</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2803"/>
+        <source>Loop Playback</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2804"/>
+        <source>Toggle &apos;Loop Playback&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2814"/>
         <source>Loop In</source>
         <translation>回路</translation>
@@ -20662,6 +20623,11 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2847"/>
         <source>Count-In</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2848"/>
+        <source>Toggle &apos;Count-In&apos; playback</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -20745,6 +20711,11 @@ failed: </source>
         <translation>更換檢視模式</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2924"/>
+        <source>Toggle &apos;View Mode&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2934"/>
         <source>Next Syllable</source>
         <translation>下一音節</translation>
@@ -20768,6 +20739,11 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="2948"/>
         <source>Toggle Visibility</source>
         <translation>可見性設定</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2949"/>
+        <source>Toggle &apos;Visibility&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2955"/>
@@ -21261,8 +21237,18 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="3350"/>
+        <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="3360"/>
         <source>Toggle Hide Empty Staves</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3361"/>
+        <source>Toggle &apos;Hide Empty Staves&apos;</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -21340,6 +21326,21 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3445"/>
         <source>Toggle Rhythmic Slash Notation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3446"/>
+        <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3456"/>
+        <source>Add/Remove System Breaks...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3457"/>
+        <source>Add/remove system breaks</source>
         <translation type="unfinished"/>
     </message>
     <message>

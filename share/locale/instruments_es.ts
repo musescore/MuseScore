@@ -35,7 +35,7 @@
         <location filename="../instruments/instrumentsxml.h" line="8"/>
         <source>W.</source>
         <comment>Winds</comment>
-        <translation type="unfinished"/>
+        <translation>V.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="9"/>
@@ -2430,12 +2430,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1133"/>
         <source>5-str. Electric Bass (High C/Tenor)</source>
-        <translation type="unfinished"/>
+        <translation>Bajo Eléctrico de 5 cuerdas (D alto/Tenor)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1136"/>
         <source>5-str. Electric Bass (High C/Tenor) [Tablature]</source>
-        <translation type="unfinished"/>
+        <translation>Bajo Eléctrico de 5 cuerdas (D alto/Tenor) [Tablatura]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1137"/>
@@ -2694,7 +2694,7 @@
         <location filename="../instruments/instrumentsxml.h" line="12"/>
         <source>D♭ Picc.</source>
         <comment>D♭ Piccolo</comment>
-        <translation type="unfinished"/>
+        <translation>Picc. Fa ♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="14"/>
@@ -2759,7 +2759,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="33"/>
         <source>Traverso</source>
-        <translation type="unfinished"/>
+        <translation>Traverso</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="34"/>
@@ -3386,7 +3386,7 @@
         <location filename="../instruments/instrumentsxml.h" line="236"/>
         <source>G Cl.</source>
         <comment>G Clarinet</comment>
-        <translation type="unfinished"/>
+        <translation>Cl. Sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="238"/>
@@ -3404,7 +3404,7 @@
         <location filename="../instruments/instrumentsxml.h" line="242"/>
         <source>A. Cl.</source>
         <comment>Alto Clarinet</comment>
-        <translation>Cl. A</translation>
+        <translation>Cl. La</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="244"/>
@@ -3427,35 +3427,35 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="249"/>
         <source>B♭ Bass Clarinet (Bass Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Clarinete Bajo en Si♭ (Clave Bajo)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="250"/>
         <source>B♭ B. Cl.</source>
         <comment>B♭ Bass Clarinet (Bass Clef)</comment>
-        <translation type="unfinished"/>
+        <translation>Cl. B. Re ♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="251"/>
         <source>A Bass Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Clarinete Bajo en La</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="252"/>
         <source>A B. Cl.</source>
         <comment>A Bass Clarinet</comment>
-        <translation type="unfinished"/>
+        <translation>Cl. B. Do</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="253"/>
         <source>A Bass Clarinet (Bass Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Clarinete Bajo en La (Clave Bajo)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="254"/>
         <source>A B. Cl.</source>
         <comment>A Bass Clarinet (Bass Clef)</comment>
-        <translation type="unfinished"/>
+        <translation>Cl. B. Do</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="256"/>
@@ -5151,7 +5151,7 @@
         <location filename="../instruments/instrumentsxml.h" line="829"/>
         <source>T.D.</source>
         <comment>Tenor Drums</comment>
-        <translation type="unfinished"/>
+        <translation>T.T.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="831"/>
@@ -5234,7 +5234,7 @@
         <location filename="../instruments/instrumentsxml.h" line="856"/>
         <source>W.</source>
         <comment>Women</comment>
-        <translation type="unfinished"/>
+        <translation>M.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="857"/>
@@ -5245,7 +5245,7 @@
         <location filename="../instruments/instrumentsxml.h" line="858"/>
         <source>M.</source>
         <comment>Men</comment>
-        <translation type="unfinished"/>
+        <translation>H.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="860"/>
@@ -5960,7 +5960,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1231"/>
         <source>D Vne.</source>
         <comment>D Violone</comment>
-        <translation type="unfinished"/>
+        <translation>Violón en Fa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1082"/>
@@ -6108,7 +6108,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1134"/>
         <location filename="../instruments/instrumentsxml.h" line="1139"/>
         <source>slap</source>
-        <translation type="unfinished"/>
+        <translation>slap</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1116"/>
@@ -6204,13 +6204,13 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1222"/>
         <source>Baryton</source>
-        <translation type="unfinished"/>
+        <translation>Barítono</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1223"/>
         <source>Bary.</source>
         <comment>Baryton</comment>
-        <translation type="unfinished"/>
+        <translation>Barít.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1226"/>

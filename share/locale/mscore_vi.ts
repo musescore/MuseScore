@@ -2290,6 +2290,11 @@ space unit</extracomment>
         <translation>Không ẩn các khuông nhạc rỗng tại dòng nhạc đầu tiên</translation>
     </message>
     <message>
+        <location filename="../../mscore/editstyle.ui" line="211"/>
+        <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/editstyle.ui" line="218"/>
         <source>Hide instrument name if there is only 1 instrument</source>
         <translation>Ẩn tên nhạc cụ nếu chỉ có 1 nhạc cụ</translation>
@@ -2637,11 +2642,6 @@ cho trang chẵn &amp;&amp; trang lẻ</translation>
         <location filename="../../mscore/editstyle.ui" line="5527"/>
         <source>Barlines</source>
         <translation>Vạch nhịp</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="211"/>
-        <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2211"/>
@@ -3251,11 +3251,6 @@ cho trang chẵn &amp;&amp; trang lẻ</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5264"/>
-        <source>Vertical distance from notehead:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/editstyle.ui" line="5073"/>
         <source>Articulation size:</source>
         <translation>Độ lớn dấu chỉ dẫn:</translation>
@@ -3323,6 +3318,11 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
         <location filename="../../mscore/editstyle.ui" line="5254"/>
         <source>Vertical distance from stem:</source>
         <translation>Kh/cách dọc so với thân nốt:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="5264"/>
+        <source>Vertical distance from notehead:</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5274"/>
@@ -6687,6 +6687,13 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
         <translation>Dấu liên</translation>
     </message>
     <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="84"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="101"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
+        <source>Reset to default</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="87"/>
         <source>Reset &apos;Number type&apos; value</source>
         <translation>Trả &quot;Kiểu chữ số&quot; về m/định</translation>
@@ -6705,13 +6712,6 @@ Nằm trước nếu chuyển qua lại giữa hóa biểu thăng và hóa biể
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="122"/>
         <source>Number</source>
         <translation>Số</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="84"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="101"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
-        <source>Reset to default</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="127"/>
@@ -9052,44 +9052,6 @@ bị lỗi:</translation>
         <translation>Xuất dữ liệu...</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5111"/>
-        <location filename="../../mscore/musescore.cpp" line="5123"/>
-        <source>Error Opening LAME library</source>
-        <translation>Lỗi thư viện LAME</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5112"/>
-        <source>Could not open MP3 encoding library!</source>
-        <translation>Không thể mở thư viện mã hóa MP3!</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5124"/>
-        <source>Not a valid or supported MP3 encoding library!</source>
-        <translation>Thư viện mã hóa MP3 này không hợp lệ hoặc không tương thích!</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5148"/>
-        <location filename="../../mscore/musescore.cpp" line="5161"/>
-        <location filename="../../mscore/musescore.cpp" line="5303"/>
-        <source>Encoding Error</source>
-        <translation>Việc mã hóa bị lỗi</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5149"/>
-        <source>Unable to initialize MP3 stream</source>
-        <translation>Không thể khởi tạo chuỗi MP3</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5162"/>
-        <source>Unable to open target file for writing</source>
-        <translation>Không thể mở tập tin mong muốn để ghi</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5304"/>
-        <source>Error %1 returned from MP3 encoder</source>
-        <translation>Lỗi %1 được trả về từ bộ mã hóa MP3</translation>
-    </message>
-    <message>
         <location filename="../../mscore/file.cpp" line="250"/>
         <location filename="../../mscore/musescore.cpp" line="3675"/>
         <source>MuseScore</source>
@@ -10084,6 +10046,44 @@ Phục hồi lại?</translation>
         <location filename="../../mscore/musescore.cpp" line="4964"/>
         <source>Go To: </source>
         <translation>Đi đến: </translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5111"/>
+        <location filename="../../mscore/musescore.cpp" line="5123"/>
+        <source>Error Opening LAME library</source>
+        <translation>Lỗi thư viện LAME</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5112"/>
+        <source>Could not open MP3 encoding library!</source>
+        <translation>Không thể mở thư viện mã hóa MP3!</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5124"/>
+        <source>Not a valid or supported MP3 encoding library!</source>
+        <translation>Thư viện mã hóa MP3 này không hợp lệ hoặc không tương thích!</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5148"/>
+        <location filename="../../mscore/musescore.cpp" line="5161"/>
+        <location filename="../../mscore/musescore.cpp" line="5303"/>
+        <source>Encoding Error</source>
+        <translation>Việc mã hóa bị lỗi</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5149"/>
+        <source>Unable to initialize MP3 stream</source>
+        <translation>Không thể khởi tạo chuỗi MP3</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5162"/>
+        <source>Unable to open target file for writing</source>
+        <translation>Không thể mở tập tin mong muốn để ghi</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5304"/>
+        <source>Error %1 returned from MP3 encoder</source>
+        <translation>Lỗi %1 được trả về từ bộ mã hóa MP3</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.cpp" line="135"/>
@@ -12850,11 +12850,6 @@ trong khoảng rộng - panorama</translation>
         <translation>Lưu trữ</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="187"/>
-        <source>Save As...</source>
-        <translation>Lưu trữ với...</translation>
-    </message>
-    <message>
         <location filename="../../mscore/pluginCreator.ui" line="147"/>
         <source>Manual</source>
         <translation>Sổ tay lập trình</translation>
@@ -12883,6 +12878,11 @@ trong khoảng rộng - panorama</translation>
         <location filename="../../mscore/pluginCreator.ui" line="182"/>
         <source>Reload current plugin source</source>
         <translation>Nạp lại mã Trình phụ trợ hiện tại</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pluginCreator.ui" line="187"/>
+        <source>Save As...</source>
+        <translation>Lưu trữ với...</translation>
     </message>
 </context>
 <context>
@@ -13864,23 +13864,6 @@ một kỹ thuật trong xử lý đồ họa</translation>
         <translation>Mặc định</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2462"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2592"/>
-        <source>Opens a file dialog for selecting an instrument list file</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2579"/>
-        <source>Insert path to an instrument list file</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3521"/>
-        <source>PNG</source>
-        <translation>PNG</translation>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="2396"/>
         <source>Default zoom:</source>
         <translation>Mặc định:</translation>
@@ -13901,6 +13884,12 @@ một kỹ thuật trong xử lý đồ họa</translation>
         <translation>Chọn d/sách nhạc cụ 1</translation>
     </message>
     <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2462"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2592"/>
+        <source>Opens a file dialog for selecting an instrument list file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/prefsdialog.ui" line="2476"/>
         <source>Instrument list 1:</source>
         <translation>D/sách nhạc cụ 1:</translation>
@@ -13909,6 +13898,12 @@ một kỹ thuật trong xử lý đồ họa</translation>
         <location filename="../../mscore/prefsdialog.ui" line="2486"/>
         <source>Instrument list 1</source>
         <translation>D/sách nhạc cụ 1</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2579"/>
+        <source>Insert path to an instrument list file</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2496"/>
@@ -14339,6 +14334,11 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>Xuất dữ liệu</translation>
     </message>
     <message>
+        <location filename="../../mscore/prefsdialog.ui" line="3521"/>
+        <source>PNG</source>
+        <translation>PNG</translation>
+    </message>
+    <message>
         <location filename="../../mscore/prefsdialog.ui" line="3530"/>
         <location filename="../../mscore/prefsdialog.ui" line="3698"/>
         <source>Resolution:</source>
@@ -14540,7 +14540,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2751"/>
+        <location filename="../../libmscore/edit.cpp" line="2829"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14550,7 +14550,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2752"/>
+        <location filename="../../libmscore/edit.cpp" line="2830"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -17027,11 +17027,6 @@ Bạn muốn ghi đè không?</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.ui" line="295"/>
-        <source>Update existing score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="179"/>
         <source>License:</source>
         <translation>Giấy phép:</translation>
@@ -17045,6 +17040,11 @@ Bạn muốn ghi đè không?</translation>
         <location filename="../../mscore/uploadscoredialog.ui" line="264"/>
         <source>Upload score audio</source>
         <translation>Tải file âm thanh bản nhạc lên</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/uploadscoredialog.ui" line="295"/>
+        <source>Update existing score</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="316"/>
@@ -19342,206 +19342,6 @@ trong chuỗi thao tác đã làm
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1771"/>
-        <source>Toggle &apos;Play Panel&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1781"/>
-        <source>Toogle &apos;Selection Filter&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1801"/>
-        <source>Toggle &apos;MIDI Import Panel&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1826"/>
-        <source>Toogle &apos;File Operations&apos; toolbar</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1833"/>
-        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1847"/>
-        <source>Toggle &apos;Image Capture&apos; toolbar</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1854"/>
-        <source>Toogle &apos;Note Input&apos; toolbar</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1861"/>
-        <source>Toggle &apos;Status Bar&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1994"/>
-        <source>Player: play</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2044"/>
-        <source>Seek to Begin</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2045"/>
-        <source>Player: seek to begin</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2055"/>
-        <source>Player: rewind</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2063"/>
-        <source>Seek to End</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2064"/>
-        <source>Player: seek to end</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2071"/>
-        <source>Toggle &apos;Play Repeats&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2081"/>
-        <source>Pan Score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2082"/>
-        <source>Toggle &apos;Pan Score&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2256"/>
-        <source>Toggle &apos;System Break&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2267"/>
-        <source>Toggle &apos;Page Break&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2278"/>
-        <source>Toggle &apos;Section Break&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2308"/>
-        <source>Reset Layout Stretch</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2309"/>
-        <source>Reset layout stretch</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2310"/>
-        <source>Reset layout stretch factor of selected measures or entire score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2602"/>
-        <source>Change Enharmonic Spelling (Both Modes)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2603"/>
-        <source>Change enharmonic spelling (both modes)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2604"/>
-        <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2610"/>
-        <source>Change Enharmonic Spelling (Current Mode)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2611"/>
-        <source>Change enharmonic spelling (current mode)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2612"/>
-        <source>Change enharmonic note (alters the spelling in the current mode only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2626"/>
-        <source>Toggle &apos;Image Capture&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2803"/>
-        <source>Loop Playback</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2804"/>
-        <source>Toggle &apos;Loop Playback&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2848"/>
-        <source>Toggle &apos;Count-In&apos; playback</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2924"/>
-        <source>Toggle &apos;View Mode&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2949"/>
-        <source>Toggle &apos;Visibility&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3350"/>
-        <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3361"/>
-        <source>Toggle &apos;Hide Empty Staves&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3446"/>
-        <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3456"/>
-        <source>Add/Remove System Breaks...</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3457"/>
-        <source>Add/remove system breaks</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="1676"/>
         <source>Beam Start</source>
         <translation>Beam Start</translation>
@@ -19637,9 +19437,19 @@ trong chuỗi thao tác đã làm
         <translation>Máy phát nhạc</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1771"/>
+        <source>Toggle &apos;Play Panel&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1780"/>
         <source>Selection Filter</source>
         <translation>Bộ lọc cho vùng được chọn</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1781"/>
+        <source>Toogle &apos;Selection Filter&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1790"/>
@@ -19657,6 +19467,11 @@ trong chuỗi thao tác đã làm
         <translation>Bảng nhập liệu MIDI</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1801"/>
+        <source>Toggle &apos;MIDI Import Panel&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1815"/>
         <source>Mixer</source>
         <translation>Bộ phối âm</translation>
@@ -19672,9 +19487,19 @@ trong chuỗi thao tác đã làm
         <translation>Các tác vụ trên tập tin</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1826"/>
+        <source>Toogle &apos;File Operations&apos; toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1832"/>
         <source>Playback Controls</source>
         <translation>Khung phát nhạc</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1833"/>
+        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1839"/>
@@ -19693,9 +19518,24 @@ trong chuỗi thao tác đã làm
         <translation>Hình chụp</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1847"/>
+        <source>Toggle &apos;Image Capture&apos; toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1854"/>
+        <source>Toogle &apos;Note Input&apos; toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1860"/>
         <source>Status Bar</source>
         <translation>Thanh trạng thái</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1861"/>
+        <source>Toggle &apos;Status Bar&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1867"/>
@@ -19868,6 +19708,11 @@ trong chuỗi thao tác đã làm
         <translation>Phát nhạc</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1994"/>
+        <source>Player: play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1995"/>
         <source>Start or stop playback</source>
         <translation>Bắt đầu hoặc dừng phát
@@ -19914,9 +19759,24 @@ trong chuỗi thao tác đã làm
         <translation>Chơi ô nhịp kế tiếp</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2044"/>
+        <source>Seek to Begin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2045"/>
+        <source>Player: seek to begin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2054"/>
         <source>Rewind</source>
         <translation>Quay lại</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2055"/>
+        <source>Player: rewind</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2056"/>
@@ -19924,14 +19784,39 @@ trong chuỗi thao tác đã làm
         <translation>Tua lại vị trí ban đầu</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2063"/>
+        <source>Seek to End</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2064"/>
+        <source>Player: seek to end</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2070"/>
         <source>Play Repeats</source>
         <translation>Xử lý mọi dấu lặp khi Phát bản nhạc</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2071"/>
+        <source>Toggle &apos;Play Repeats&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2072"/>
         <source>Play repeats</source>
         <translation>Xử lý mọi dấu lặp khi phát bản nhạc</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2081"/>
+        <source>Pan Score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2082"/>
+        <source>Toggle &apos;Pan Score&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2083"/>
@@ -20089,14 +19974,29 @@ trong chuỗi thao tác đã làm
         <translation>Bật/Tắt Ngắt dòng</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2256"/>
+        <source>Toggle &apos;System Break&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2266"/>
         <source>Toggle Page Break</source>
         <translation>Bật/Tắt Ngắt trang</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2267"/>
+        <source>Toggle &apos;Page Break&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2277"/>
         <source>Toggle Section Break</source>
         <translation>Bật/Tắt Dấu phân đoạn</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2278"/>
+        <source>Toggle &apos;Section Break&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2288"/>
@@ -20122,6 +20022,21 @@ trong chuỗi thao tác đã làm
         <location filename="../../mscore/shortcut.cpp" line="2302"/>
         <source>Debugger</source>
         <translation>Trình gỡ rối</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2308"/>
+        <source>Reset Layout Stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2309"/>
+        <source>Reset layout stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2310"/>
+        <source>Reset layout stretch factor of selected measures or entire score</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2319"/>
@@ -20430,6 +20345,36 @@ trong chuỗi thao tác đã làm
         <translation>Quản lý các bè</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2602"/>
+        <source>Change Enharmonic Spelling (Both Modes)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2603"/>
+        <source>Change enharmonic spelling (both modes)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2604"/>
+        <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2610"/>
+        <source>Change Enharmonic Spelling (Current Mode)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2611"/>
+        <source>Change enharmonic spelling (current mode)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2612"/>
+        <source>Change enharmonic note (alters the spelling in the current mode only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2618"/>
         <source>Create New Revision</source>
         <translation>Tạo Bản hiệu chỉnh Mới</translation>
@@ -20443,6 +20388,11 @@ trong chuỗi thao tác đã làm
         <location filename="../../mscore/shortcut.cpp" line="2625"/>
         <source>Toggle Image Capture</source>
         <translation>Bật/Tắt Chế độ Chụp ảnh</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2626"/>
+        <source>Toggle &apos;Image Capture&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2637"/>
@@ -20635,6 +20585,16 @@ trong chuỗi thao tác đã làm
         <translation>Hiển thị bảng OMR</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2803"/>
+        <source>Loop Playback</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2804"/>
+        <source>Toggle &apos;Loop Playback&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2814"/>
         <source>Loop In</source>
         <translation>Chọn điểm đầu</translation>
@@ -20673,6 +20633,11 @@ trong chuỗi thao tác đã làm
         <location filename="../../mscore/shortcut.cpp" line="2847"/>
         <source>Count-In</source>
         <translation>Gõ nhịp lấy đà</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2848"/>
+        <source>Toggle &apos;Count-In&apos; playback</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2849"/>
@@ -20755,6 +20720,11 @@ trong chuỗi thao tác đã làm
         <translation>Chuyển chế độ xem</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2924"/>
+        <source>Toggle &apos;View Mode&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2934"/>
         <source>Next Syllable</source>
         <translation>Âm tiết Kế tiếp</translation>
@@ -20778,6 +20748,11 @@ trong chuỗi thao tác đã làm
         <location filename="../../mscore/shortcut.cpp" line="2948"/>
         <source>Toggle Visibility</source>
         <translation>Bật/Tắt Hiển thị</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2949"/>
+        <source>Toggle &apos;Visibility&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2955"/>
@@ -21271,9 +21246,19 @@ trong chuỗi thao tác đã làm
         <translation>Bật/Tắt: Tạo Dấu-lặng-đa-ô-nhịp</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="3350"/>
+        <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="3360"/>
         <source>Toggle Hide Empty Staves</source>
         <translation>Bật/Tắt: Ẩn khuông rỗng</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3361"/>
+        <source>Toggle &apos;Hide Empty Staves&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3371"/>
@@ -21351,6 +21336,21 @@ trong chuỗi thao tác đã làm
         <location filename="../../mscore/shortcut.cpp" line="3445"/>
         <source>Toggle Rhythmic Slash Notation</source>
         <translation>Bật/Tắt: Ký âm Dạng tiết tấu</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3446"/>
+        <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3456"/>
+        <source>Add/Remove System Breaks...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3457"/>
+        <source>Add/remove system breaks</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3467"/>

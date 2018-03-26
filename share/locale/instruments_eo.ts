@@ -3839,7 +3839,7 @@
         <location filename="../instruments/instrumentsxml.h" line="384"/>
         <source>Br.</source>
         <comment>Brass</comment>
-        <translation>Lat-o</translation>
+        <translation>B-pr t-rico</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="386"/>
@@ -4178,7 +4178,7 @@
         <location filename="../instruments/instrumentsxml.h" line="504"/>
         <source>Bu.</source>
         <comment>Bugle</comment>
-        <translation>Bu</translation>
+        <translation>K t-rico</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="506"/>
@@ -4872,7 +4872,7 @@
         <location filename="../instruments/instrumentsxml.h" line="740"/>
         <source>Be.</source>
         <comment>Bells</comment>
-        <translation>Son-j</translation>
+        <translation>B t-rico</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="742"/>

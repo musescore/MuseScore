@@ -177,7 +177,7 @@
     <message>
         <location filename="../../mscore/articulation.ui" line="14"/>
         <source>Articulation Properties</source>
-        <translation type="unfinished"/>
+        <translation>Artikaĵecoj</translation>
     </message>
     <message>
         <location filename="../../mscore/articulation.ui" line="24"/>
@@ -258,7 +258,7 @@
     <message>
         <location filename="../../mscore/bend.ui" line="14"/>
         <source>Bend Properties</source>
-        <translation type="unfinished"/>
+        <translation>Fleksecoj</translation>
     </message>
     <message>
         <location filename="../../mscore/bend.ui" line="23"/>
@@ -638,7 +638,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="290"/>
         <source>Notehead:</source>
-        <translation type="unfinished"/>
+        <translation>Notokapo:</translation>
     </message>
 </context>
 <context>
@@ -840,32 +840,32 @@
     <message>
         <location filename="../../mscore/editpitch.ui" line="184"/>
         <source>D 9</source>
-        <translation type="unfinished"/>
+        <translation>D 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="189"/>
         <source>E♭ 9</source>
-        <translation type="unfinished"/>
+        <translation>E♭ 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="194"/>
         <source>E 9</source>
-        <translation type="unfinished"/>
+        <translation>E 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="199"/>
         <source>F 9</source>
-        <translation type="unfinished"/>
+        <translation>F 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="204"/>
         <source>F♯ 9</source>
-        <translation type="unfinished"/>
+        <translation>F♯ 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="209"/>
         <source>G 9</source>
-        <translation type="unfinished"/>
+        <translation>G 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="239"/>
@@ -2290,6 +2290,11 @@ space unit</extracomment>
         <translation>Ne kaŝi vakajn notliniarojn de l’ unua liniargrupo</translation>
     </message>
     <message>
+        <location filename="../../mscore/editstyle.ui" line="211"/>
+        <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/editstyle.ui" line="218"/>
         <source>Hide instrument name if there is only 1 instrument</source>
         <translation>Kaŝi la muzikilnomon se estas nur 1 muzikilo</translation>
@@ -2307,7 +2312,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="262"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>FIn’</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="272"/>
@@ -2637,11 +2642,6 @@ space unit</extracomment>
         <translation>Taktostrekoj</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="211"/>
-        <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/editstyle.ui" line="2211"/>
         <source>Show repeat barline tips (&quot;winged&quot; repeats)</source>
         <translation type="unfinished"/>
@@ -2854,12 +2854,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3152"/>
         <source>Small staff size:</source>
-        <translation type="unfinished"/>
+        <translation>Grando de malgranda notliniaro:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3193"/>
         <source>Small note size:</source>
-        <translation type="unfinished"/>
+        <translation>Grando de malgranda noto:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3231"/>
@@ -3249,11 +3249,6 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5264"/>
-        <source>Vertical distance from notehead:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/editstyle.ui" line="5073"/>
         <source>Articulation size:</source>
         <translation>Artikaĵogrando:</translation>
@@ -3272,7 +3267,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5166"/>
         <source>Semitones offset</source>
-        <translation type="unfinished"/>
+        <translation>Deŝovo de duontonoj</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5171"/>
@@ -3318,6 +3313,11 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5254"/>
         <source>Vertical distance from stem:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="5264"/>
+        <source>Vertical distance from notehead:</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3606,7 +3606,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="84"/>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="136"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="87"/>
@@ -3740,7 +3740,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="829"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="895"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="211"/>
@@ -3977,7 +3977,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="439"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="721"/>
         <source>Oct.:</source>
-        <translation type="unfinished"/>
+        <translation>Okt-o:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="449"/>
@@ -4117,7 +4117,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="94"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="97"/>
@@ -4205,7 +4205,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="289"/>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="306"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="176"/>
@@ -4235,7 +4235,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="259"/>
         <source>Ornament Style:</source>
-        <translation type="unfinished"/>
+        <translation>Ornamaĵostilo:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="276"/>
@@ -4250,7 +4250,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="292"/>
         <source>Reset &apos;Ornament style&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki valoron de &apos;ornamaĵostilo&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="309"/>
@@ -4292,7 +4292,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="227"/>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="264"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="110"/>
@@ -4416,7 +4416,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="154"/>
         <source>Vertical position offset left</source>
-        <translation type="unfinished"/>
+        <translation>Maldekstra deŝovo de vertikalpozicio</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="157"/>
@@ -4437,7 +4437,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="366"/>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="415"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="198"/>
@@ -4452,7 +4452,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="221"/>
         <source>Vertical position offset right</source>
-        <translation type="unfinished"/>
+        <translation>Dekstra deŝovo de vertikalpozicio</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="246"/>
@@ -4477,7 +4477,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="333"/>
         <source>Reset &apos;User position&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki valoron de &apos;Uzantpozicio&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="350"/>
@@ -4528,7 +4528,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="106"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="109"/>
@@ -4575,17 +4575,17 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="90"/>
         <source>sec</source>
         <extracomment>seconds</extracomment>
-        <translation type="unfinished"/>
+        <translation>sek-o</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="112"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>Paŭzo</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="119"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="122"/>
@@ -4612,12 +4612,12 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="249"/>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="266"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="84"/>
         <source>Reset &apos;Vertical offset&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki valoron de &apos;Vertikala deŝovo&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="104"/>
@@ -4647,7 +4647,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="142"/>
         <source>Reset &apos;Horizontal offset&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki valoron de &apos;Horizontala deŝovo&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="162"/>
@@ -4725,7 +4725,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_clef.ui" line="103"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_clef.ui" line="106"/>
@@ -4754,7 +4754,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="88"/>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="144"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="91"/>
@@ -4837,12 +4837,12 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_element.ui" line="246"/>
         <location filename="../../mscore/inspector/inspector_element.ui" line="344"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="159"/>
         <source>Reset &apos;Horizontal offset&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki valoron de &apos;Horizontala deŝovo&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="179"/>
@@ -4852,7 +4852,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="207"/>
         <source>Reset &apos;Vertical offset&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki valoron de &apos;Vertikala deŝovo&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="233"/>
@@ -4914,7 +4914,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="113"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="116"/>
@@ -4956,7 +4956,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="207"/>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="237"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="101"/>
@@ -4981,7 +4981,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="156"/>
         <source>Play Style</source>
-        <translation type="unfinished"/>
+        <translation>Ludostilo</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="160"/>
@@ -5135,7 +5135,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="174"/>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="191"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="177"/>
@@ -5169,7 +5169,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="244"/>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="296"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="87"/>
@@ -5316,12 +5316,12 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_image.ui" line="221"/>
         <location filename="../../mscore/inspector/inspector_image.ui" line="238"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="84"/>
         <source>Reset &apos;Scale to frame size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki valoron de &apos;Skaligi al kadrogrando&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="104"/>
@@ -5361,7 +5361,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="241"/>
         <source>Reset &apos;Size in staff space units&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki valoron de &apos;Grando en notliniaraj spacetunuoj&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="258"/>
@@ -5379,13 +5379,13 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_image.ui" line="277"/>
         <location filename="../../mscore/inspector/inspector_image.ui" line="280"/>
         <source>Size in staff space units</source>
-        <translation type="unfinished"/>
+        <translation>Grando en notliniaraj spacetunuoj</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="290"/>
         <location filename="../../mscore/inspector/inspector_image.ui" line="293"/>
         <source>Scale to frame size</source>
-        <translation type="unfinished"/>
+        <translation>Skaligi al kadrogrando</translation>
     </message>
 </context>
 <context>
@@ -5436,7 +5436,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_jump.ui" line="157"/>
         <location filename="../../mscore/inspector/inspector_jump.ui" line="181"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_jump.ui" line="126"/>
@@ -5485,7 +5485,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="94"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="97"/>
@@ -5568,7 +5568,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_line.ui" line="238"/>
         <location filename="../../mscore/inspector/inspector_line.ui" line="261"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="97"/>
@@ -5655,7 +5655,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="241"/>
         <source>Reset &apos;Line style&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki valoron de &apos;liniostilo&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="264"/>
@@ -5684,7 +5684,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="81"/>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="112"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="84"/>
@@ -5782,7 +5782,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_note.ui" line="632"/>
         <location filename="../../mscore/inspector/inspector_note.ui" line="649"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="93"/>
@@ -6017,7 +6017,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="166"/>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="196"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="91"/>
@@ -6111,7 +6111,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_rest.ui" line="81"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_rest.ui" line="84"/>
@@ -6140,7 +6140,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="87"/>
         <source>Trailing space:</source>
-        <translation>Postsekva spaceto:</translation>
+        <translation>Postsekva spaco:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="100"/>
@@ -6157,7 +6157,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="125"/>
         <source>Trailing space</source>
-        <translation>Postsekva spaceto</translation>
+        <translation>Postsekva spaco</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="150"/>
@@ -6168,17 +6168,17 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="157"/>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="174"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="160"/>
         <source>Reset &apos;Leading space&apos; value</source>
-        <translation>Reegi la linipaŝo-valoron</translation>
+        <translation>Reeki valoron de &apos;Linipaŝo&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="177"/>
         <source>Reset &apos;Trailing space&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki valoron de &apos;Postsekva spaco&apos;</translation>
     </message>
 </context>
 <context>
@@ -6197,7 +6197,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="87"/>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="151"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="90"/>
@@ -6319,7 +6319,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="253"/>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="270"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="101"/>
@@ -6433,7 +6433,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="84"/>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="108"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="87"/>
@@ -6448,7 +6448,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="111"/>
         <source>Reset &apos;Tempo&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki la valoron de ‘Tempo’</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="128"/>
@@ -6492,7 +6492,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="101"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="104"/>
@@ -6533,7 +6533,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="90"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="93"/>
@@ -6567,7 +6567,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="113"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="116"/>
@@ -6627,7 +6627,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="187"/>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="204"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="127"/>
@@ -6637,7 +6637,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="147"/>
         <source>Ornament Style:</source>
-        <translation type="unfinished"/>
+        <translation>Ornamaĵostilo:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="160"/>
@@ -6662,7 +6662,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="190"/>
         <source>Reset &apos;Ornament style&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki valoron de &apos;ornamaĵostilo&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="207"/>
@@ -6683,14 +6683,21 @@ space unit</extracomment>
         <translation>Duolo</translation>
     </message>
     <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="84"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="101"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
+        <source>Reset to default</source>
+        <translation>Defaŭlte reeki</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="87"/>
         <source>Reset &apos;Number type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki valoron de &apos;nombrospeco&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="104"/>
         <source>Reset &apos;Bracket type&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Reeki valoron de &apos;krampospeco&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="118"/>
@@ -6701,13 +6708,6 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="122"/>
         <source>Number</source>
         <translation>Numero</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="84"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="101"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
-        <source>Reset to default</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="127"/>
@@ -6801,7 +6801,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="364"/>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="381"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="94"/>
@@ -6950,7 +6950,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="108"/>
         <source>Reset to default</source>
-        <translation type="unfinished"/>
+        <translation>Defaŭlte reeki</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="111"/>
@@ -9039,44 +9039,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5111"/>
-        <location filename="../../mscore/musescore.cpp" line="5123"/>
-        <source>Error Opening LAME library</source>
-        <translation>Eraro dum la malfermado de LAME-biblioteko</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5112"/>
-        <source>Could not open MP3 encoding library!</source>
-        <translation>Malfermi MP3-kodoprezentaro ne eblis!</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5124"/>
-        <source>Not a valid or supported MP3 encoding library!</source>
-        <translation>Nevalida aŭ nesubtenata MP3-kodoprezentaro!</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5148"/>
-        <location filename="../../mscore/musescore.cpp" line="5161"/>
-        <location filename="../../mscore/musescore.cpp" line="5303"/>
-        <source>Encoding Error</source>
-        <translation>Kodoprezenta eraro</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5149"/>
-        <source>Unable to initialize MP3 stream</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5162"/>
-        <source>Unable to open target file for writing</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5304"/>
-        <source>Error %1 returned from MP3 encoder</source>
-        <translation>La MP3-kodilo liveris eraron $1</translation>
-    </message>
-    <message>
         <location filename="../../mscore/file.cpp" line="250"/>
         <location filename="../../mscore/musescore.cpp" line="3675"/>
         <source>MuseScore</source>
@@ -9193,7 +9155,7 @@ antaŭ ol la fermado?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="939"/>
         <source>MuseScore Styles</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore-stiloj</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="944"/>
@@ -9208,7 +9170,7 @@ antaŭ ol la fermado?</translation>
         <location filename="../../mscore/file.cpp" line="965"/>
         <location filename="../../mscore/file.cpp" line="982"/>
         <source>MuseScore Style File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore-stildosiero</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1006"/>
@@ -9549,12 +9511,12 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/menus.cpp" line="434"/>
         <source>Staff spacer down</source>
-        <translation type="unfinished"/>
+        <translation>Notliniarspaceto malsupren</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="440"/>
         <source>Staff spacer up</source>
-        <translation type="unfinished"/>
+        <translation>Notliniarspaceto supren</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="461"/>
@@ -9832,7 +9794,7 @@ Bonvole selektu mezuron kaj reprovu.</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="796"/>
         <source>W&amp;orkspaces</source>
-        <translation type="unfinished"/>
+        <translation>Laborspacoj</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="800"/>
@@ -10073,6 +10035,44 @@ Restore session?</source>
         <translation>Iri al: </translation>
     </message>
     <message>
+        <location filename="../../mscore/musescore.cpp" line="5111"/>
+        <location filename="../../mscore/musescore.cpp" line="5123"/>
+        <source>Error Opening LAME library</source>
+        <translation>Eraro dum la malfermado de LAME-biblioteko</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5112"/>
+        <source>Could not open MP3 encoding library!</source>
+        <translation>Malfermi MP3-kodoprezentaro ne eblis!</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5124"/>
+        <source>Not a valid or supported MP3 encoding library!</source>
+        <translation>Nevalida aŭ nesubtenata MP3-kodoprezentaro!</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5148"/>
+        <location filename="../../mscore/musescore.cpp" line="5161"/>
+        <location filename="../../mscore/musescore.cpp" line="5303"/>
+        <source>Encoding Error</source>
+        <translation>Kodoprezenta eraro</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5149"/>
+        <source>Unable to initialize MP3 stream</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5162"/>
+        <source>Unable to open target file for writing</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5304"/>
+        <source>Error %1 returned from MP3 encoder</source>
+        <translation>La MP3-kodilo liveris eraron $1</translation>
+    </message>
+    <message>
         <location filename="../../mscore/tupletdialog.cpp" line="135"/>
         <source>Tuplet Error</source>
         <translation type="unfinished"/>
@@ -10106,12 +10106,12 @@ Restore session?</source>
         <location filename="../../mscore/workspace.cpp" line="107"/>
         <location filename="../../mscore/workspace.cpp" line="123"/>
         <source>Read Workspace Name</source>
-        <translation type="unfinished"/>
+        <translation>Legi la laborspacan nomon</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="108"/>
         <source>Workspace name:</source>
-        <translation type="unfinished"/>
+        <translation>Laborspaca nomo:</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="124"/>
@@ -10363,7 +10363,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/palettebox.cpp" line="49"/>
         <source>Select workspace</source>
-        <translation type="unfinished"/>
+        <translation>Elekti laborspacon</translation>
     </message>
     <message>
         <location filename="../../mscore/palettebox.cpp" line="55"/>
@@ -10373,7 +10373,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/palettebox.cpp" line="56"/>
         <source>Add new workspace</source>
-        <translation type="unfinished"/>
+        <translation>Aldoni novan laborspacon</translation>
     </message>
     <message>
         <location filename="../../mscore/palettebox.cpp" line="237"/>
@@ -10972,19 +10972,21 @@ failed: %2</source>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="626"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
-        <translation>La </translation>
+        <translation>La stildosiero ne kongruas kun ĉi tiu versio de MuseScore.</translation>
     </message>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="647"/>
         <source>Open Style File
 %1
 failed: %2</source>
-        <translation type="unfinished"/>
+        <translation>Malfermi stildosieron
+%1
+malsukcesis: %2</translation>
     </message>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="657"/>
         <source>Write Style failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Malsukcesis skribi stilon: %1</translation>
     </message>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="1199"/>
@@ -11274,7 +11276,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="303"/>
         <source>Style...</source>
-        <translation type="unfinished"/>
+        <translation>Stilo...</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="305"/>
@@ -11572,7 +11574,7 @@ Bonvole selektu mezuron kaj reprovu.</translation>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="601"/>
         <source>Musical Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Muziksimboloj</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="620"/>
@@ -11614,7 +11616,7 @@ Bonvole selektu mezuron kaj reprovu.</translation>
         <location filename="../../mscore/textstyle.cpp" line="201"/>
         <location filename="../../mscore/textstyle.cpp" line="216"/>
         <source>Read Style Name</source>
-        <translation type="unfinished"/>
+        <translation>Legi stilnomon</translation>
     </message>
     <message>
         <location filename="../../mscore/textstyle.cpp" line="202"/>
@@ -12485,7 +12487,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="36"/>
         <source>Content offset</source>
-        <translation type="unfinished"/>
+        <translation>Enhava deŝovo</translation>
     </message>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="56"/>
@@ -12511,7 +12513,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="103"/>
         <source>Draw staff</source>
-        <translation type="unfinished"/>
+        <translation>Desegni notliniaron</translation>
     </message>
 </context>
 <context>
@@ -12544,7 +12546,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/palette.ui" line="90"/>
         <source>Element offset:</source>
-        <translation>Element Offset</translation>
+        <translation>Elementa deŝovo:</translation>
     </message>
     <message>
         <location filename="../../mscore/palette.ui" line="97"/>
@@ -12815,11 +12817,6 @@ failed: </source>
         <translation>Konservi</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="187"/>
-        <source>Save As...</source>
-        <translation>Konservi kiel...</translation>
-    </message>
-    <message>
         <location filename="../../mscore/pluginCreator.ui" line="147"/>
         <source>Manual</source>
         <translation type="unfinished"/>
@@ -12848,6 +12845,11 @@ failed: </source>
         <location filename="../../mscore/pluginCreator.ui" line="182"/>
         <source>Reload current plugin source</source>
         <translation>Reŝargi la nunan kromprogramfonton</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pluginCreator.ui" line="187"/>
+        <source>Save As...</source>
+        <translation>Konservi kiel...</translation>
     </message>
 </context>
 <context>
@@ -13053,7 +13055,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="363"/>
         <source>Styles:</source>
-        <translation type="unfinished"/>
+        <translation>Stiloj:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="376"/>
@@ -13828,23 +13830,6 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2462"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2592"/>
-        <source>Opens a file dialog for selecting an instrument list file</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2579"/>
-        <source>Insert path to an instrument list file</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3521"/>
-        <source>PNG</source>
-        <translation>PNG</translation>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="2396"/>
         <source>Default zoom:</source>
         <translation type="unfinished"/>
@@ -13865,6 +13850,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <translation>Elekti 1-an liston de muzikiloj</translation>
     </message>
     <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2462"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2592"/>
+        <source>Opens a file dialog for selecting an instrument list file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/prefsdialog.ui" line="2476"/>
         <source>Instrument list 1:</source>
         <translation>1-a listo de muzikiloj:</translation>
@@ -13875,6 +13866,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <translation>1-a listo de muzikiloj</translation>
     </message>
     <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2579"/>
+        <source>Insert path to an instrument list file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/prefsdialog.ui" line="2496"/>
         <source>Style:</source>
         <translation>Stilo</translation>
@@ -13882,7 +13879,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2506"/>
         <source>Style</source>
-        <translation>Style</translation>
+        <translation>Stilo</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2509"/>
@@ -13894,7 +13891,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="2519"/>
         <location filename="../../mscore/prefsdialog.ui" line="3299"/>
         <source>Choose style</source>
-        <translation type="unfinished"/>
+        <translation>Elekti stilon</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2522"/>
@@ -13920,7 +13917,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2559"/>
         <source>Choose style for part</source>
-        <translation>Elektoi stilon por parto:</translation>
+        <translation>Elekti stilon por parto:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2562"/>
@@ -14182,12 +14179,12 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <location filename="../../mscore/prefsdialog.ui" line="3279"/>
         <location filename="../../mscore/prefsdialog.ui" line="3289"/>
         <source>Use style file</source>
-        <translation type="unfinished"/>
+        <translation>Uzi stildosiero</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3282"/>
         <source>Use style file:</source>
-        <translation>Use style file:</translation>
+        <translation>Uzi stildosiero:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3318"/>
@@ -14301,6 +14298,11 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <location filename="../../mscore/prefsdialog.ui" line="3502"/>
         <source>Export</source>
         <translation>Elporti</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="3521"/>
+        <source>PNG</source>
+        <translation>PNG</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3530"/>
@@ -14504,7 +14506,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2751"/>
+        <location filename="../../libmscore/edit.cpp" line="2829"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14514,7 +14516,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2752"/>
+        <location filename="../../libmscore/edit.cpp" line="2830"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -15049,7 +15051,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/workspace.cpp" line="167"/>
         <source>Do you really want to delete the &apos;%1&apos; workspace?</source>
-        <translation type="unfinished"/>
+        <translation>Ĉu vi vere volas forigi la &apos;%1&apos; laborspacon?</translation>
     </message>
 </context>
 <context>
@@ -15085,7 +15087,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="90"/>
         <source>File Size</source>
-        <translation type="unfinished"/>
+        <translation>Dosiergrando</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="95"/>
@@ -15141,7 +15143,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="45"/>
         <source>sec</source>
-        <translation type="unfinished"/>
+        <translation>sek-o</translation>
     </message>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="70"/>
@@ -15550,7 +15552,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/stafftext.ui" line="4040"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>FIn’</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftext.ui" line="4053"/>
@@ -15762,7 +15764,7 @@ Do you want to overwrite it?</source>
         <location filename="../../mscore/textproperties.ui" line="34"/>
         <location filename="../../mscore/textproperties.ui" line="159"/>
         <source>Style:</source>
-        <translation>Stilo</translation>
+        <translation>Stilo:</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="50"/>
@@ -15792,7 +15794,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="124"/>
         <source>Font point size</source>
-        <translation type="unfinished"/>
+        <translation>Tipara punktogrando</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="192"/>
@@ -15818,7 +15820,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="302"/>
         <source>Size follows &apos;Staff space&apos; setting</source>
-        <translation type="unfinished"/>
+        <translation>La grando sekvas la agordon de &apos;Notliniarspaceto&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="319"/>
@@ -15850,7 +15852,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="434"/>
         <source>Horizontal offset to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Horizontala deŝovo al referencpunkto</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="466"/>
@@ -15862,7 +15864,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="485"/>
         <source>Vertical offset to reference point</source>
-        <translation type="unfinished"/>
+        <translation>Vertikala deŝovo al referencpunkto</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="509"/>
@@ -15872,7 +15874,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="522"/>
         <source>Offset is absolute</source>
-        <translation type="unfinished"/>
+        <translation>La deŝovo estas absoluta</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="525"/>
@@ -15882,7 +15884,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="538"/>
         <source>Offset in staff space units</source>
-        <translation type="unfinished"/>
+        <translation>Deŝovo en notliniaraj spacetunuoj</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="541"/>
@@ -15943,7 +15945,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="799"/>
         <source>Draw circled frame</source>
-        <translation type="unfinished"/>
+        <translation>Desegni cirklan kadron</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="802"/>
@@ -15953,7 +15955,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="809"/>
         <source>Draw boxed frame</source>
-        <translation type="unfinished"/>
+        <translation>Desegni ortangulan kadron</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="812"/>
@@ -16985,11 +16987,6 @@ Do you want to overwrite it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.ui" line="295"/>
-        <source>Update existing score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="179"/>
         <source>License:</source>
         <translation type="unfinished"/>
@@ -17002,6 +16999,11 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="264"/>
         <source>Upload score audio</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/uploadscoredialog.ui" line="295"/>
+        <source>Update existing score</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -17036,12 +17038,14 @@ Do you want to overwrite it?</source>
         <source>Writing Workspace File
 %1
 failed: </source>
-        <translation type="unfinished"/>
+        <translation>Skribi laborspacan dosieron
+%1
+malsukcesis: </translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="240"/>
         <source>Writing Workspace File</source>
-        <translation type="unfinished"/>
+        <translation>Skribas laborspacan dosieron</translation>
     </message>
 </context>
 <context>
@@ -17074,7 +17078,7 @@ failed: </source>
     <message>
         <location filename="../../thirdparty/xmlstream/xmlstream.cpp" line="1554"/>
         <source>Namespace prefix &apos;%1&apos; not declared</source>
-        <translation type="unfinished"/>
+        <translation>Oni ne deklaris la &apos;%1&apos; nomspacan prefikson</translation>
     </message>
     <message>
         <location filename="../../thirdparty/xmlstream/xmlstream.cpp" line="1587"/>
@@ -19293,206 +19297,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1771"/>
-        <source>Toggle &apos;Play Panel&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1781"/>
-        <source>Toogle &apos;Selection Filter&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1801"/>
-        <source>Toggle &apos;MIDI Import Panel&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1826"/>
-        <source>Toogle &apos;File Operations&apos; toolbar</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1833"/>
-        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1847"/>
-        <source>Toggle &apos;Image Capture&apos; toolbar</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1854"/>
-        <source>Toogle &apos;Note Input&apos; toolbar</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1861"/>
-        <source>Toggle &apos;Status Bar&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1994"/>
-        <source>Player: play</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2044"/>
-        <source>Seek to Begin</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2045"/>
-        <source>Player: seek to begin</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2055"/>
-        <source>Player: rewind</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2063"/>
-        <source>Seek to End</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2064"/>
-        <source>Player: seek to end</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2071"/>
-        <source>Toggle &apos;Play Repeats&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2081"/>
-        <source>Pan Score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2082"/>
-        <source>Toggle &apos;Pan Score&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2256"/>
-        <source>Toggle &apos;System Break&apos;</source>
-        <translation>Baskuligi ‘Liniargrupan salton’</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2267"/>
-        <source>Toggle &apos;Page Break&apos;</source>
-        <translation>Baskuligi ‘Paĝosalton’</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2278"/>
-        <source>Toggle &apos;Section Break&apos;</source>
-        <translation>Baskuligi ‘Sekciosalton’</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2308"/>
-        <source>Reset Layout Stretch</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2309"/>
-        <source>Reset layout stretch</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2310"/>
-        <source>Reset layout stretch factor of selected measures or entire score</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2602"/>
-        <source>Change Enharmonic Spelling (Both Modes)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2603"/>
-        <source>Change enharmonic spelling (both modes)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2604"/>
-        <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2610"/>
-        <source>Change Enharmonic Spelling (Current Mode)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2611"/>
-        <source>Change enharmonic spelling (current mode)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2612"/>
-        <source>Change enharmonic note (alters the spelling in the current mode only)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2626"/>
-        <source>Toggle &apos;Image Capture&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2803"/>
-        <source>Loop Playback</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2804"/>
-        <source>Toggle &apos;Loop Playback&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2848"/>
-        <source>Toggle &apos;Count-In&apos; playback</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2924"/>
-        <source>Toggle &apos;View Mode&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2949"/>
-        <source>Toggle &apos;Visibility&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3350"/>
-        <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3361"/>
-        <source>Toggle &apos;Hide Empty Staves&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3446"/>
-        <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3456"/>
-        <source>Add/Remove System Breaks...</source>
-        <translation>Aldoni/Forigi liniargrupajn saltojn...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3457"/>
-        <source>Add/remove system breaks</source>
-        <translation>Aldoni/Forigi liniargrupajn saltojn</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="1676"/>
         <source>Beam Start</source>
         <translation>Trabeko</translation>
@@ -19588,8 +19392,18 @@ failed: </source>
         <translation>Ludpanelo</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1771"/>
+        <source>Toggle &apos;Play Panel&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1780"/>
         <source>Selection Filter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1781"/>
+        <source>Toogle &apos;Selection Filter&apos;</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -19608,6 +19422,11 @@ failed: </source>
         <translation>MIDI-enportopanelo</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1801"/>
+        <source>Toggle &apos;MIDI Import Panel&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1815"/>
         <source>Mixer</source>
         <translation>Miksilo</translation>
@@ -19623,8 +19442,18 @@ failed: </source>
         <translation>Dosieraj manipuioj</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1826"/>
+        <source>Toogle &apos;File Operations&apos; toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1832"/>
         <source>Playback Controls</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1833"/>
+        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -19644,9 +19473,24 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1847"/>
+        <source>Toggle &apos;Image Capture&apos; toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1854"/>
+        <source>Toogle &apos;Note Input&apos; toolbar</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1860"/>
         <source>Status Bar</source>
         <translation>Stata breto</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1861"/>
+        <source>Toggle &apos;Status Bar&apos;</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1867"/>
@@ -19819,6 +19663,11 @@ failed: </source>
         <translation>Ludi</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1994"/>
+        <source>Player: play</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1995"/>
         <source>Start or stop playback</source>
         <translation>Ekigi aŭ haltigi ludadon</translation>
@@ -19864,9 +19713,24 @@ failed: </source>
         <translation>Ludi postan mezuron</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2044"/>
+        <source>Seek to Begin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2045"/>
+        <source>Player: seek to begin</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2054"/>
         <source>Rewind</source>
         <translation>Komencen</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2055"/>
+        <source>Player: rewind</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2056"/>
@@ -19874,13 +19738,38 @@ failed: </source>
         <translation>Rewind to start position</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2063"/>
+        <source>Seek to End</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2064"/>
+        <source>Player: seek to end</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2070"/>
         <source>Play Repeats</source>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2071"/>
+        <source>Toggle &apos;Play Repeats&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2072"/>
         <source>Play repeats</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2081"/>
+        <source>Pan Score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2082"/>
+        <source>Toggle &apos;Pan Score&apos;</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -19891,12 +19780,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2092"/>
         <source>Load Style...</source>
-        <translation>Stilon enigi...</translation>
+        <translation>Ŝarĝi stilon...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2093"/>
         <source>Load style</source>
-        <translation>Load style</translation>
+        <translation>Ŝarĝi stilon</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2103"/>
@@ -20039,14 +19928,29 @@ failed: </source>
         <translation>Baskuligi liniargrupan salton</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2256"/>
+        <source>Toggle &apos;System Break&apos;</source>
+        <translation>Baskuligi ‘Liniargrupan salton’</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2266"/>
         <source>Toggle Page Break</source>
         <translation>Baskuligi paĝsalton</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2267"/>
+        <source>Toggle &apos;Page Break&apos;</source>
+        <translation>Baskuligi ‘Paĝosalton’</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2277"/>
         <source>Toggle Section Break</source>
         <translation>Baskuligi sekciosalton</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2278"/>
+        <source>Toggle &apos;Section Break&apos;</source>
+        <translation>Baskuligi ‘Sekciosalton’</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2288"/>
@@ -20071,6 +19975,21 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2302"/>
         <source>Debugger</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2308"/>
+        <source>Reset Layout Stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2309"/>
+        <source>Reset layout stretch</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2310"/>
+        <source>Reset layout stretch factor of selected measures or entire score</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -20166,7 +20085,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2400"/>
         <source>Backspace</source>
-        <translation type="unfinished"/>
+        <translation>Retropaŝo</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2411"/>
@@ -20380,6 +20299,36 @@ failed: </source>
         <translation>Administri partojn</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2602"/>
+        <source>Change Enharmonic Spelling (Both Modes)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2603"/>
+        <source>Change enharmonic spelling (both modes)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2604"/>
+        <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2610"/>
+        <source>Change Enharmonic Spelling (Current Mode)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2611"/>
+        <source>Change enharmonic spelling (current mode)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2612"/>
+        <source>Change enharmonic note (alters the spelling in the current mode only)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2618"/>
         <source>Create New Revision</source>
         <translation type="unfinished"/>
@@ -20392,6 +20341,11 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2625"/>
         <source>Toggle Image Capture</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2626"/>
+        <source>Toggle &apos;Image Capture&apos;</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -20585,6 +20539,16 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2803"/>
+        <source>Loop Playback</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2804"/>
+        <source>Toggle &apos;Loop Playback&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2814"/>
         <source>Loop In</source>
         <translation type="unfinished"/>
@@ -20622,6 +20586,11 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2847"/>
         <source>Count-In</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2848"/>
+        <source>Toggle &apos;Count-In&apos; playback</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -20705,6 +20674,11 @@ failed: </source>
         <translation>Baskuligi vidreĝimon</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2924"/>
+        <source>Toggle &apos;View Mode&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2934"/>
         <source>Next Syllable</source>
         <translation>Sekva silabo</translation>
@@ -20727,6 +20701,11 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2948"/>
         <source>Toggle Visibility</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2949"/>
+        <source>Toggle &apos;Visibility&apos;</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -21221,8 +21200,18 @@ failed: </source>
         <translation>Baskuligi la kreon de plurmezura silento</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="3350"/>
+        <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="3360"/>
         <source>Toggle Hide Empty Staves</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3361"/>
+        <source>Toggle &apos;Hide Empty Staves&apos;</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -21301,6 +21290,21 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="3445"/>
         <source>Toggle Rhythmic Slash Notation</source>
         <translation>Baskuligi ritmostrekan notacion</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3446"/>
+        <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3456"/>
+        <source>Add/Remove System Breaks...</source>
+        <translation>Aldoni/Forigi liniargrupajn saltojn...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3457"/>
+        <source>Add/remove system breaks</source>
+        <translation>Aldoni/Forigi liniargrupajn saltojn</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3467"/>
@@ -23615,22 +23619,22 @@ Mezuro ne estas vaka</translation>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="567"/>
         <source>Resize to A</source>
-        <translation type="unfinished"/>
+        <translation>Reskaligi grandon al A</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="568"/>
         <source>Resize to B</source>
-        <translation type="unfinished"/>
+        <translation>Reskaligi grandon al B</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="569"/>
         <source>Resize to C</source>
-        <translation type="unfinished"/>
+        <translation>Reskaligi grandon al C</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="570"/>
         <source>Resize to D</source>
-        <translation type="unfinished"/>
+        <translation>Reskaligi grandon al D</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="574"/>
@@ -25145,7 +25149,7 @@ Mezuro ne estas vaka</translation>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="508"/>
         <source>Kana Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Suplemento de strekaj kanaoj </translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="509"/>
@@ -25165,7 +25169,7 @@ Mezuro ne estas vaka</translation>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="512"/>
         <source>Musical Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Muziksimboloj</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="513"/>
@@ -25190,7 +25194,7 @@ Mezuro ne estas vaka</translation>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="517"/>
         <source>Mende Kikakui</source>
-        <translation type="unfinished"/>
+        <translation>Menda kikaku-skribo</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="518"/>
@@ -25230,7 +25234,7 @@ Mezuro ne estas vaka</translation>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="525"/>
         <source>Emoticons (Emoji)</source>
-        <translation type="unfinished"/>
+        <translation>Emociikonoj (Mienaĵoj)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="526"/>

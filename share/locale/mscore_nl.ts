@@ -2290,6 +2290,11 @@ space unit</extracomment>
         <translation>Lege notenbalken in eerste systeem niet verbergen</translation>
     </message>
     <message>
+        <location filename="../../mscore/editstyle.ui" line="211"/>
+        <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
+        <translation>Geef nootwaardes over de maatstreep heen weer (EXPERIMENTEEL, alleen voor oude muziek!)</translation>
+    </message>
+    <message>
         <location filename="../../mscore/editstyle.ui" line="218"/>
         <source>Hide instrument name if there is only 1 instrument</source>
         <translation>Verberg de instrumentnaam als er maar 1 instrument is</translation>
@@ -2635,11 +2640,6 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="5527"/>
         <source>Barlines</source>
         <translation>Maatstrepen</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="211"/>
-        <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation>Geef nootwaardes over de maatstreep heen weer (EXPERIMENTEEL, alleen voor oude muziek!)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2211"/>
@@ -3249,11 +3249,6 @@ space unit</extracomment>
         <translation>Afstand tussen de notenkoppen: </translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5264"/>
-        <source>Vertical distance from notehead:</source>
-        <translation>Verticale afstand vanaf de notenkop:</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editstyle.ui" line="5073"/>
         <source>Articulation size:</source>
         <translation>Articulatiegrootte:</translation>
@@ -3319,6 +3314,11 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="5254"/>
         <source>Vertical distance from stem:</source>
         <translation>Verticale afstand vanaf stok:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="5264"/>
+        <source>Vertical distance from notehead:</source>
+        <translation>Verticale afstand vanaf de notenkop:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5274"/>
@@ -6683,6 +6683,13 @@ space unit</extracomment>
         <translation>Antimetrisch figuur</translation>
     </message>
     <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="84"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="101"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
+        <source>Reset to default</source>
+        <translation>Herstel de standaardwaarde</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="87"/>
         <source>Reset &apos;Number type&apos; value</source>
         <translation>Herstel de standaardwaarde voor &apos;Nummertype&apos;</translation>
@@ -6701,13 +6708,6 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="122"/>
         <source>Number</source>
         <translation>Getal</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="84"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="101"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
-        <source>Reset to default</source>
-        <translation>Herstel de standaardwaarde</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="127"/>
@@ -9061,44 +9061,6 @@ mislukt:</translation>
         <translation>Bezig met exporteren...</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5111"/>
-        <location filename="../../mscore/musescore.cpp" line="5123"/>
-        <source>Error Opening LAME library</source>
-        <translation>Fout bij openen LAME-bibliotheek</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5112"/>
-        <source>Could not open MP3 encoding library!</source>
-        <translation>Kan de MP3-encodingbibliotheek niet openen!</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5124"/>
-        <source>Not a valid or supported MP3 encoding library!</source>
-        <translation>Incorrecte of niet ondersteunde MP3-encodingbibliotheek!</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5148"/>
-        <location filename="../../mscore/musescore.cpp" line="5161"/>
-        <location filename="../../mscore/musescore.cpp" line="5303"/>
-        <source>Encoding Error</source>
-        <translation>Encoding-fout</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5149"/>
-        <source>Unable to initialize MP3 stream</source>
-        <translation>Kan de MP3-stroom niet initialiseren</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5162"/>
-        <source>Unable to open target file for writing</source>
-        <translation>Kan doelbestand niet openen om in te schrijven</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5304"/>
-        <source>Error %1 returned from MP3 encoder</source>
-        <translation>Fout %1 ontvangen van MP3-encoder</translation>
-    </message>
-    <message>
         <location filename="../../mscore/file.cpp" line="250"/>
         <location filename="../../mscore/musescore.cpp" line="3675"/>
         <source>MuseScore</source>
@@ -10093,6 +10055,44 @@ Sessie herstellen?</translation>
         <location filename="../../mscore/musescore.cpp" line="4964"/>
         <source>Go To: </source>
         <translation>Ga naar: </translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5111"/>
+        <location filename="../../mscore/musescore.cpp" line="5123"/>
+        <source>Error Opening LAME library</source>
+        <translation>Fout bij openen LAME-bibliotheek</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5112"/>
+        <source>Could not open MP3 encoding library!</source>
+        <translation>Kan de MP3-encodingbibliotheek niet openen!</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5124"/>
+        <source>Not a valid or supported MP3 encoding library!</source>
+        <translation>Incorrecte of niet ondersteunde MP3-encodingbibliotheek!</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5148"/>
+        <location filename="../../mscore/musescore.cpp" line="5161"/>
+        <location filename="../../mscore/musescore.cpp" line="5303"/>
+        <source>Encoding Error</source>
+        <translation>Encoding-fout</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5149"/>
+        <source>Unable to initialize MP3 stream</source>
+        <translation>Kan de MP3-stroom niet initialiseren</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5162"/>
+        <source>Unable to open target file for writing</source>
+        <translation>Kan doelbestand niet openen om in te schrijven</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5304"/>
+        <source>Error %1 returned from MP3 encoder</source>
+        <translation>Fout %1 ontvangen van MP3-encoder</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.cpp" line="135"/>
@@ -12855,11 +12855,6 @@ mislukt:</translation>
         <translation>Sla op</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="187"/>
-        <source>Save As...</source>
-        <translation>Sla op als...</translation>
-    </message>
-    <message>
         <location filename="../../mscore/pluginCreator.ui" line="147"/>
         <source>Manual</source>
         <translation>Handleiding</translation>
@@ -12888,6 +12883,11 @@ mislukt:</translation>
         <location filename="../../mscore/pluginCreator.ui" line="182"/>
         <source>Reload current plugin source</source>
         <translation>Laad huidige plugin-bron opnieuw</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pluginCreator.ui" line="187"/>
+        <source>Save As...</source>
+        <translation>Sla op als...</translation>
     </message>
 </context>
 <context>
@@ -13869,23 +13869,6 @@ Hierdoor zullen alle plug-ins opnieuw geëvalueerd  worden en alle wijzigingen w
         <translation>Standaard schaalverhouding</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2462"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2592"/>
-        <source>Opens a file dialog for selecting an instrument list file</source>
-        <translation>Opent een bestandsdialoogvenster om een instrumentenlijstbestand te selecteren</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2579"/>
-        <source>Insert path to an instrument list file</source>
-        <translation>Voer een locatie van een instrumentenlijst bestand in</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3521"/>
-        <source>PNG</source>
-        <translation>PNG</translation>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="2396"/>
         <source>Default zoom:</source>
         <translation>Standaard schaalverhouding:</translation>
@@ -13906,6 +13889,12 @@ Hierdoor zullen alle plug-ins opnieuw geëvalueerd  worden en alle wijzigingen w
         <translation>Kies instrumentenlijst 1</translation>
     </message>
     <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2462"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2592"/>
+        <source>Opens a file dialog for selecting an instrument list file</source>
+        <translation>Opent een bestandsdialoogvenster om een instrumentenlijstbestand te selecteren</translation>
+    </message>
+    <message>
         <location filename="../../mscore/prefsdialog.ui" line="2476"/>
         <source>Instrument list 1:</source>
         <translation>Instrumentenlijst 1:</translation>
@@ -13914,6 +13903,12 @@ Hierdoor zullen alle plug-ins opnieuw geëvalueerd  worden en alle wijzigingen w
         <location filename="../../mscore/prefsdialog.ui" line="2486"/>
         <source>Instrument list 1</source>
         <translation>Instrumentenlijst 1</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2579"/>
+        <source>Insert path to an instrument list file</source>
+        <translation>Voer een locatie van een instrumentenlijst bestand in</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2496"/>
@@ -14350,6 +14345,11 @@ Het aanpassen van de latency kan helpen om MIDI-hardware te synchroniseren met M
         <translation>Exporteren</translation>
     </message>
     <message>
+        <location filename="../../mscore/prefsdialog.ui" line="3521"/>
+        <source>PNG</source>
+        <translation>PNG</translation>
+    </message>
+    <message>
         <location filename="../../mscore/prefsdialog.ui" line="3530"/>
         <location filename="../../mscore/prefsdialog.ui" line="3698"/>
         <source>Resolution:</source>
@@ -14551,7 +14551,7 @@ Het aanpassen van de latency kan helpen om MIDI-hardware te synchroniseren met M
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2751"/>
+        <location filename="../../libmscore/edit.cpp" line="2829"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14561,7 +14561,7 @@ Het aanpassen van de latency kan helpen om MIDI-hardware te synchroniseren met M
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2752"/>
+        <location filename="../../libmscore/edit.cpp" line="2830"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -17036,11 +17036,6 @@ Wil je dit overschrijven?</translation>
         <translation>Houd deze partituur privé</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.ui" line="295"/>
-        <source>Update existing score</source>
-        <translation>Werk de bestaande partituur bij</translation>
-    </message>
-    <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="179"/>
         <source>License:</source>
         <translation>Licentie:</translation>
@@ -17054,6 +17049,11 @@ Wil je dit overschrijven?</translation>
         <location filename="../../mscore/uploadscoredialog.ui" line="264"/>
         <source>Upload score audio</source>
         <translation>Upload audio van de partituur</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/uploadscoredialog.ui" line="295"/>
+        <source>Update existing score</source>
+        <translation>Werk de bestaande partituur bij</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="316"/>
@@ -19346,206 +19346,6 @@ mislukt:</translation>
         <translation>Schakel &apos;Midi input&apos; in/uit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1771"/>
-        <source>Toggle &apos;Play Panel&apos;</source>
-        <translation>Schakel &apos;Afspeelpaneel&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1781"/>
-        <source>Toogle &apos;Selection Filter&apos;</source>
-        <translation>Schakel &apos;Selectiefilter&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1801"/>
-        <source>Toggle &apos;MIDI Import Panel&apos;</source>
-        <translation>Schakel &apos;MIDI-importeerpaneel&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1826"/>
-        <source>Toogle &apos;File Operations&apos; toolbar</source>
-        <translation>Schakel &apos;Bestandsbewerkingen&apos; werkbalk in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1833"/>
-        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
-        <translation>Schakel &apos;Afspeelknoppen&apos; werkbalk in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1847"/>
-        <source>Toggle &apos;Image Capture&apos; toolbar</source>
-        <translation>Schakel &apos;Afbeeldingsopname&apos; werkbalk in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1854"/>
-        <source>Toogle &apos;Note Input&apos; toolbar</source>
-        <translation>Schakel &apos;Noteninvoer&apos; werkbalk in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1861"/>
-        <source>Toggle &apos;Status Bar&apos;</source>
-        <translation>Schakel &apos;Statusbalk&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1994"/>
-        <source>Player: play</source>
-        <translation>Audiospeler: speel af</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2044"/>
-        <source>Seek to Begin</source>
-        <translation>Zoek tot begin</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2045"/>
-        <source>Player: seek to begin</source>
-        <translation>Audiospeler: naar het begin</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2055"/>
-        <source>Player: rewind</source>
-        <translation>Audiospeler: terugspoelen</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2063"/>
-        <source>Seek to End</source>
-        <translation>ga naar het einde</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2064"/>
-        <source>Player: seek to end</source>
-        <translation>Audiospeler: ga naar het einde</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2071"/>
-        <source>Toggle &apos;Play Repeats&apos;</source>
-        <translation>Schakel &apos;Herhalingen afspelen&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2081"/>
-        <source>Pan Score</source>
-        <translation>Laat het beeld van de partituur meelopen</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2082"/>
-        <source>Toggle &apos;Pan Score&apos;</source>
-        <translation>Schakel &apos;Laat het beeld van de partituur meelopen&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2256"/>
-        <source>Toggle &apos;System Break&apos;</source>
-        <translation>Schakel &apos;Systeemomslag&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2267"/>
-        <source>Toggle &apos;Page Break&apos;</source>
-        <translation>Schakel &apos;Paginaomslag&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2278"/>
-        <source>Toggle &apos;Section Break&apos;</source>
-        <translation>Schakel &apos;Sectieomslag&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2308"/>
-        <source>Reset Layout Stretch</source>
-        <translation>Herstel de standaardwaarde voor de uitrekking van de opmaak</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2309"/>
-        <source>Reset layout stretch</source>
-        <translation>Herstel de standaardwaarde voor de uitrekking van de opmaak</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2310"/>
-        <source>Reset layout stretch factor of selected measures or entire score</source>
-        <translation>Herstel de standaardwaarde van de uitrekkingsfactor van de layout voor de geselecteerde maten of de gehele partituur</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2602"/>
-        <source>Change Enharmonic Spelling (Both Modes)</source>
-        <translation>Wijzig enharmonische notatie (beide modussen)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2603"/>
-        <source>Change enharmonic spelling (both modes)</source>
-        <translation>Wijzig enharmonische notatie (beide modussen)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2604"/>
-        <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
-        <translation>Wijzig enharmonische noot (wijzigt de notatie in werkelijke toonhoogte en getransponeerde modus)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2610"/>
-        <source>Change Enharmonic Spelling (Current Mode)</source>
-        <translation>Wijzig enharmonische notatie (huidige modus)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2611"/>
-        <source>Change enharmonic spelling (current mode)</source>
-        <translation>Wijzig enharmonische notatie (huidige modus)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2612"/>
-        <source>Change enharmonic note (alters the spelling in the current mode only)</source>
-        <translation>Wijzig enharmonische noot (wijzigt de notatie alleen in de huidige mode)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2626"/>
-        <source>Toggle &apos;Image Capture&apos;</source>
-        <translation>Schakel &apos;Afbeeldingsopname&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2803"/>
-        <source>Loop Playback</source>
-        <translation>Schakel &apos;Speel in een lus af&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2804"/>
-        <source>Toggle &apos;Loop Playback&apos;</source>
-        <translation>Schakel &apos;Speel in een lus af&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2848"/>
-        <source>Toggle &apos;Count-In&apos; playback</source>
-        <translation>Schakel &apos;Aftellen laten horen&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2924"/>
-        <source>Toggle &apos;View Mode&apos;</source>
-        <translation>Schakel &apos;Weergavemodus&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2949"/>
-        <source>Toggle &apos;Visibility&apos;</source>
-        <translation>Schakel &apos;Zichtbaarheid&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3350"/>
-        <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
-        <translation>Schakel &apos;Meermaatsrusten aanmaken&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3361"/>
-        <source>Toggle &apos;Hide Empty Staves&apos;</source>
-        <translation>Schakel &apos;Verberg lege notenbalken&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3446"/>
-        <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
-        <translation>Schakel &apos;Ritmische schuine streep-notatie&apos; in/uit</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3456"/>
-        <source>Add/Remove System Breaks...</source>
-        <translation>Voeg systeemomslagen toe / verwijder systeemomslagen</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3457"/>
-        <source>Add/remove system breaks</source>
-        <translation>Voeg systeemomslagen toe / verwijder systeemomslagen</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="1676"/>
         <source>Beam Start</source>
         <translation>Waardestreep aan beginnoot</translation>
@@ -19641,9 +19441,19 @@ mislukt:</translation>
         <translation>Afspeelpaneel</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1771"/>
+        <source>Toggle &apos;Play Panel&apos;</source>
+        <translation>Schakel &apos;Afspeelpaneel&apos; in/uit</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1780"/>
         <source>Selection Filter</source>
         <translation>Selectiefilter</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1781"/>
+        <source>Toogle &apos;Selection Filter&apos;</source>
+        <translation>Schakel &apos;Selectiefilter&apos; in/uit</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1790"/>
@@ -19661,6 +19471,11 @@ mislukt:</translation>
         <translation>MIDI-importeerpaneel</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1801"/>
+        <source>Toggle &apos;MIDI Import Panel&apos;</source>
+        <translation>Schakel &apos;MIDI-importeerpaneel&apos; in/uit</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1815"/>
         <source>Mixer</source>
         <translation>Mixer</translation>
@@ -19676,9 +19491,19 @@ mislukt:</translation>
         <translation>Bestandsbewerkingen</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1826"/>
+        <source>Toogle &apos;File Operations&apos; toolbar</source>
+        <translation>Schakel &apos;Bestandsbewerkingen&apos; werkbalk in/uit</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1832"/>
         <source>Playback Controls</source>
         <translation>Afspeelknoppen</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1833"/>
+        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
+        <translation>Schakel &apos;Afspeelknoppen&apos; werkbalk in/uit</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1839"/>
@@ -19697,9 +19522,24 @@ mislukt:</translation>
         <translation>Afbeeldingsopname</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1847"/>
+        <source>Toggle &apos;Image Capture&apos; toolbar</source>
+        <translation>Schakel &apos;Afbeeldingsopname&apos; werkbalk in/uit</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1854"/>
+        <source>Toogle &apos;Note Input&apos; toolbar</source>
+        <translation>Schakel &apos;Noteninvoer&apos; werkbalk in/uit</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1860"/>
         <source>Status Bar</source>
         <translation>Statusbalk</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1861"/>
+        <source>Toggle &apos;Status Bar&apos;</source>
+        <translation>Schakel &apos;Statusbalk&apos; in/uit</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1867"/>
@@ -19872,6 +19712,11 @@ mislukt:</translation>
         <translation>Speel af</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1994"/>
+        <source>Player: play</source>
+        <translation>Audiospeler: speel af</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1995"/>
         <source>Start or stop playback</source>
         <translation>Start of stop afspelen</translation>
@@ -19917,9 +19762,24 @@ mislukt:</translation>
         <translation>Speel volgende maat</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2044"/>
+        <source>Seek to Begin</source>
+        <translation>Zoek tot begin</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2045"/>
+        <source>Player: seek to begin</source>
+        <translation>Audiospeler: naar het begin</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2054"/>
         <source>Rewind</source>
         <translation>Spoel terug</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2055"/>
+        <source>Player: rewind</source>
+        <translation>Audiospeler: terugspoelen</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2056"/>
@@ -19927,14 +19787,39 @@ mislukt:</translation>
         <translation>Spoel terug naar startpositie</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2063"/>
+        <source>Seek to End</source>
+        <translation>ga naar het einde</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2064"/>
+        <source>Player: seek to end</source>
+        <translation>Audiospeler: ga naar het einde</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2070"/>
         <source>Play Repeats</source>
         <translation>Speel de herhalingen</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2071"/>
+        <source>Toggle &apos;Play Repeats&apos;</source>
+        <translation>Schakel &apos;Herhalingen afspelen&apos; in/uit</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2072"/>
         <source>Play repeats</source>
         <translation>Laat herhalingen horen</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2081"/>
+        <source>Pan Score</source>
+        <translation>Laat het beeld van de partituur meelopen</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2082"/>
+        <source>Toggle &apos;Pan Score&apos;</source>
+        <translation>Schakel &apos;Laat het beeld van de partituur meelopen&apos; in/uit</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2083"/>
@@ -20092,14 +19977,29 @@ mislukt:</translation>
         <translation>Schakel &apos;Systeemomslag&apos; in/uit</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2256"/>
+        <source>Toggle &apos;System Break&apos;</source>
+        <translation>Schakel &apos;Systeemomslag&apos; in/uit</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2266"/>
         <source>Toggle Page Break</source>
         <translation>Schakel &apos;Pagina afbreking&apos; in/uit</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2267"/>
+        <source>Toggle &apos;Page Break&apos;</source>
+        <translation>Schakel &apos;Paginaomslag&apos; in/uit</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2277"/>
         <source>Toggle Section Break</source>
         <translation>Schakel &apos;Sectie afbreking&apos; in/uit</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2278"/>
+        <source>Toggle &apos;Section Break&apos;</source>
+        <translation>Schakel &apos;Sectieomslag&apos; in/uit</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2288"/>
@@ -20125,6 +20025,21 @@ mislukt:</translation>
         <location filename="../../mscore/shortcut.cpp" line="2302"/>
         <source>Debugger</source>
         <translation>Debugger</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2308"/>
+        <source>Reset Layout Stretch</source>
+        <translation>Herstel de standaardwaarde voor de uitrekking van de opmaak</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2309"/>
+        <source>Reset layout stretch</source>
+        <translation>Herstel de standaardwaarde voor de uitrekking van de opmaak</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2310"/>
+        <source>Reset layout stretch factor of selected measures or entire score</source>
+        <translation>Herstel de standaardwaarde van de uitrekkingsfactor van de layout voor de geselecteerde maten of de gehele partituur</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2319"/>
@@ -20433,6 +20348,36 @@ mislukt:</translation>
         <translation>Beheer partijen</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2602"/>
+        <source>Change Enharmonic Spelling (Both Modes)</source>
+        <translation>Wijzig enharmonische notatie (beide modussen)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2603"/>
+        <source>Change enharmonic spelling (both modes)</source>
+        <translation>Wijzig enharmonische notatie (beide modussen)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2604"/>
+        <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
+        <translation>Wijzig enharmonische noot (wijzigt de notatie in werkelijke toonhoogte en getransponeerde modus)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2610"/>
+        <source>Change Enharmonic Spelling (Current Mode)</source>
+        <translation>Wijzig enharmonische notatie (huidige modus)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2611"/>
+        <source>Change enharmonic spelling (current mode)</source>
+        <translation>Wijzig enharmonische notatie (huidige modus)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2612"/>
+        <source>Change enharmonic note (alters the spelling in the current mode only)</source>
+        <translation>Wijzig enharmonische noot (wijzigt de notatie alleen in de huidige mode)</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2618"/>
         <source>Create New Revision</source>
         <translation>Maak een nieuwe bewerking</translation>
@@ -20445,6 +20390,11 @@ mislukt:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2625"/>
         <source>Toggle Image Capture</source>
+        <translation>Schakel &apos;Afbeeldingsopname&apos; in/uit</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2626"/>
+        <source>Toggle &apos;Image Capture&apos;</source>
         <translation>Schakel &apos;Afbeeldingsopname&apos; in/uit</translation>
     </message>
     <message>
@@ -20638,6 +20588,16 @@ mislukt:</translation>
         <translation>Laat OMR-paneel zien</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2803"/>
+        <source>Loop Playback</source>
+        <translation>Schakel &apos;Speel in een lus af&apos; in/uit</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2804"/>
+        <source>Toggle &apos;Loop Playback&apos;</source>
+        <translation>Schakel &apos;Speel in een lus af&apos; in/uit</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2814"/>
         <source>Loop In</source>
         <translation>Beginpositie van de lus</translation>
@@ -20676,6 +20636,11 @@ mislukt:</translation>
         <location filename="../../mscore/shortcut.cpp" line="2847"/>
         <source>Count-In</source>
         <translation>Tel af</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2848"/>
+        <source>Toggle &apos;Count-In&apos; playback</source>
+        <translation>Schakel &apos;Aftellen laten horen&apos; in/uit</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2849"/>
@@ -20758,6 +20723,11 @@ mislukt:</translation>
         <translation>Wissel &apos;Weergavemodus&apos;</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2924"/>
+        <source>Toggle &apos;View Mode&apos;</source>
+        <translation>Schakel &apos;Weergavemodus&apos; in/uit</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2934"/>
         <source>Next Syllable</source>
         <translation>Volgende lettergreep</translation>
@@ -20780,6 +20750,11 @@ mislukt:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2948"/>
         <source>Toggle Visibility</source>
+        <translation>Schakel &apos;Zichtbaarheid&apos; in/uit</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2949"/>
+        <source>Toggle &apos;Visibility&apos;</source>
         <translation>Schakel &apos;Zichtbaarheid&apos; in/uit</translation>
     </message>
     <message>
@@ -21274,8 +21249,18 @@ mislukt:</translation>
         <translation>Schakel &apos;Meermaatsrusten aanmaken&apos; in/uit</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="3350"/>
+        <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
+        <translation>Schakel &apos;Meermaatsrusten aanmaken&apos; in/uit</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="3360"/>
         <source>Toggle Hide Empty Staves</source>
+        <translation>Schakel &apos;Verberg lege notenbalken&apos; in/uit</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3361"/>
+        <source>Toggle &apos;Hide Empty Staves&apos;</source>
         <translation>Schakel &apos;Verberg lege notenbalken&apos; in/uit</translation>
     </message>
     <message>
@@ -21354,6 +21339,21 @@ mislukt:</translation>
         <location filename="../../mscore/shortcut.cpp" line="3445"/>
         <source>Toggle Rhythmic Slash Notation</source>
         <translation>Schakel &apos;Ritmische schuine streep-notatie&apos; om</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3446"/>
+        <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
+        <translation>Schakel &apos;Ritmische schuine streep-notatie&apos; in/uit</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3456"/>
+        <source>Add/Remove System Breaks...</source>
+        <translation>Voeg systeemomslagen toe / verwijder systeemomslagen</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3457"/>
+        <source>Add/remove system breaks</source>
+        <translation>Voeg systeemomslagen toe / verwijder systeemomslagen</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3467"/>

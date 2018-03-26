@@ -35,7 +35,7 @@
         <location filename="../instruments/instrumentsxml.h" line="8"/>
         <source>W.</source>
         <comment>Winds</comment>
-        <translation>V.</translation>
+        <translation>Dones</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="9"/>
@@ -2495,7 +2495,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1149"/>
         <source>Bu.</source>
         <comment>Bugarija</comment>
-        <translation>Bu.</translation>
+        <translation>Cla.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1150"/>
@@ -2656,7 +2656,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1216"/>
         <source>Vla. d. g.</source>
         <comment>Viola da gamba</comment>
-        <translation>Vla. d. g.</translation>
+        <translation>Vla. d. g. (tab)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1220"/>
@@ -3809,7 +3809,7 @@
         <location filename="../instruments/instrumentsxml.h" line="373"/>
         <source>She.</source>
         <comment>Sheng</comment>
-        <translation>She.</translation>
+        <translation>Xe.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="375"/>
@@ -3839,7 +3839,7 @@
         <location filename="../instruments/instrumentsxml.h" line="384"/>
         <source>Br.</source>
         <comment>Brass</comment>
-        <translation>V-Met.</translation>
+        <translation>Br.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="386"/>
@@ -4280,13 +4280,13 @@
         <location filename="../instruments/instrumentsxml.h" line="538"/>
         <source>Co.</source>
         <comment>Cornettino</comment>
-        <translation>Ctino.</translation>
+        <translation>Cong.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="540"/>
         <source>Co.</source>
         <comment>Cornett</comment>
-        <translation>Co.</translation>
+        <translation>Cong.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="542"/>
@@ -4872,7 +4872,7 @@
         <location filename="../instruments/instrumentsxml.h" line="740"/>
         <source>Be.</source>
         <comment>Bells</comment>
-        <translation>Camp.</translation>
+        <translation>Be.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="742"/>
@@ -4950,7 +4950,7 @@
         <location filename="../instruments/instrumentsxml.h" line="766"/>
         <source>Cym.</source>
         <comment>Cymbal</comment>
-        <translation>Plat</translation>
+        <translation>Plt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="768"/>
@@ -5888,7 +5888,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1086"/>
         <source>Mda.</source>
         <comment>Mandola</comment>
-        <translation>Mda.</translation>
+        <translation>Mda. T.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1092"/>

@@ -5257,13 +5257,13 @@
         <location filename="../instruments/instrumentsxml.h" line="863"/>
         <source>Pno.</source>
         <comment>Piano</comment>
-        <translation>Klv.</translation>
+        <translation>Pno.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="865"/>
         <source>Pno.</source>
         <comment>Grand Piano</comment>
-        <translation>Klv.</translation>
+        <translation>Pno.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="867"/>
@@ -5888,7 +5888,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1086"/>
         <source>Mda.</source>
         <comment>Mandola</comment>
-        <translation>Mda.</translation>
+        <translation>A. Mda.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1092"/>
@@ -5954,7 +5954,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1227"/>
         <source>Vne.</source>
         <comment>Violone</comment>
-        <translation>Vne.</translation>
+        <translation>D Vne.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1231"/>

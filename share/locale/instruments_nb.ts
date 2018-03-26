@@ -5228,7 +5228,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="855"/>
         <source>Women</source>
-        <translation type="unfinished"/>
+        <translation>Kvinner</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="856"/>
@@ -5239,7 +5239,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="857"/>
         <source>Men</source>
-        <translation type="unfinished"/>
+        <translation>Menn</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="858"/>

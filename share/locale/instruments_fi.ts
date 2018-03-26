@@ -5228,7 +5228,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="855"/>
         <source>Women</source>
-        <translation type="unfinished"/>
+        <translation>Naiset</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="856"/>
@@ -5783,7 +5783,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1032"/>
         <source>Acoustic Guitar (Treble Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Akustinen kitara (Diskanttiavain)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1035"/>
@@ -5813,7 +5813,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1044"/>
         <source>Electric Guitar (Treble Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Sähkökitara (Diskanttiavain)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1047"/>

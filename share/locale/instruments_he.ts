@@ -4449,7 +4449,7 @@
         <location filename="../instruments/instrumentsxml.h" line="600"/>
         <source>Helicon</source>
         <comment>Helicon</comment>
-        <translation>הליקון (בומברדון)</translation>
+        <translation>הליקון</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="602"/>
@@ -5942,7 +5942,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1118"/>
         <source>El. B.</source>
         <comment>Electric Bass</comment>
-        <translation>בס חשמלית</translation>
+        <translation>בס ח.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1123"/>

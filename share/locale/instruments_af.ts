@@ -3064,7 +3064,7 @@
         <location filename="../instruments/instrumentsxml.h" line="132"/>
         <source>Bq. Ob.</source>
         <comment>Baroque Oboe</comment>
-        <translation type="unfinished"/>
+        <translation>Bk. Hob.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="134"/>
@@ -4013,7 +4013,7 @@
         <location filename="../instruments/instrumentsxml.h" line="437"/>
         <source>Tpt.</source>
         <comment>Trumpet</comment>
-        <translation type="unfinished"/>
+        <translation>Tr.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="440"/>

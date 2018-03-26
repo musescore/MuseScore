@@ -2478,13 +2478,13 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1146"/>
         <source>Čelo</source>
-        <translation type="unfinished"/>
+        <translation>Čelo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1147"/>
         <source>Č.</source>
         <comment>Čelo</comment>
-        <translation type="unfinished"/>
+        <translation>Čelo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1148"/>

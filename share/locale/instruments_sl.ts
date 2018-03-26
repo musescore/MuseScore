@@ -3743,7 +3743,7 @@
         <location filename="../instruments/instrumentsxml.h" line="351"/>
         <source>Harm.</source>
         <comment>10 Hole A Diatonic Harmonica</comment>
-        <translation>UHa</translation>
+        <translation>UHa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="353"/>
@@ -3839,7 +3839,7 @@
         <location filename="../instruments/instrumentsxml.h" line="384"/>
         <source>Br.</source>
         <comment>Brass</comment>
-        <translation>Br.</translation>
+        <translation>Bra.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="386"/>
@@ -4178,7 +4178,7 @@
         <location filename="../instruments/instrumentsxml.h" line="504"/>
         <source>Bu.</source>
         <comment>Bugle</comment>
-        <translation>Bu.</translation>
+        <translation>Bug.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="506"/>
@@ -4950,7 +4950,7 @@
         <location filename="../instruments/instrumentsxml.h" line="766"/>
         <source>Cym.</source>
         <comment>Cymbal</comment>
-        <translation>Cym.</translation>
+        <translation>Cim.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="768"/>
@@ -5128,7 +5128,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="823"/>
         <source>Percussion</source>
-        <translation>Tolkalski ključ</translation>
+        <translation>Ritmični ključ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="824"/>
@@ -5353,7 +5353,7 @@
         <location filename="../instruments/instrumentsxml.h" line="896"/>
         <source>Harm.</source>
         <comment>Harmonium</comment>
-        <translation>Harm.</translation>
+        <translation>UHa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="898"/>
@@ -5365,7 +5365,7 @@
         <location filename="../instruments/instrumentsxml.h" line="901"/>
         <source>Synth.</source>
         <comment>Effect Synthesizer</comment>
-        <translation>Synth</translation>
+        <translation>Sint.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="902"/>
@@ -5942,7 +5942,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1118"/>
         <source>El. B.</source>
         <comment>Electric Bass</comment>
-        <translation>El. B.</translation>
+        <translation>El. Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1123"/>

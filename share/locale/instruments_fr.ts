@@ -5234,7 +5234,7 @@
         <location filename="../instruments/instrumentsxml.h" line="856"/>
         <source>W.</source>
         <comment>Women</comment>
-        <translation>F.</translation>
+        <translation>W.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="857"/>
@@ -6069,7 +6069,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1112"/>
         <source>Bass</source>
         <comment>Acoustic Bass</comment>
-        <translation>Bass</translation>
+        <translation>Basse</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1113"/>

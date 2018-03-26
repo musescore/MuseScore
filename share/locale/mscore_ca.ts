@@ -2183,7 +2183,7 @@
     <message>
         <location filename="../../mscore/editstyle.ui" line="126"/>
         <source>Create multimeasure rests</source>
-        <translation>Afegeix compassos d&apos;espera</translation>
+        <translation>Crear un silenci multicompàs</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="143"/>
@@ -2288,6 +2288,11 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="204"/>
         <source>Don&apos;t hide empty staves in first system</source>
         <translation>No amagar els pentagrames buits en el primer sistema</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="211"/>
+        <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
+        <translation>Permetre notes que sobreïxen del compàs (EXPERIMENTAL, només música antiga!)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="218"/>
@@ -2623,7 +2628,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2092"/>
         <source>Multimeasure rest margin:</source>
-        <translation>Marge de silencis multicompàs</translation>
+        <translation>Marge del silenci multicompàs:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2143"/>
@@ -2635,11 +2640,6 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="5527"/>
         <source>Barlines</source>
         <translation>Barres de compàs</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="211"/>
-        <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation>Permetre notes que sobreïxen del compàs (EXPERIMENTAL, només música antiga!)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2211"/>
@@ -3249,11 +3249,6 @@ space unit</extracomment>
         <translation>Distància cap de nota:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5264"/>
-        <source>Vertical distance from notehead:</source>
-        <translation>Distància vertical des del cap de la nota:</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editstyle.ui" line="5073"/>
         <source>Articulation size:</source>
         <translation>Mida de l&apos;articulació:</translation>
@@ -3319,6 +3314,11 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="5254"/>
         <source>Vertical distance from stem:</source>
         <translation>Distància vertical des de la plica:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="5264"/>
+        <source>Vertical distance from notehead:</source>
+        <translation>Distància vertical des del cap de la nota:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5274"/>
@@ -6683,6 +6683,13 @@ space unit</extracomment>
         <translation>Grup irregular</translation>
     </message>
     <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="84"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="101"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
+        <source>Reset to default</source>
+        <translation>Restablir per defecte</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="87"/>
         <source>Reset &apos;Number type&apos; value</source>
         <translation>Restablir valors &apos;Tipus de número&apos;</translation>
@@ -6701,13 +6708,6 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="122"/>
         <source>Number</source>
         <translation>Número</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="84"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="101"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
-        <source>Reset to default</source>
-        <translation>Restablir per defecte</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="127"/>
@@ -7928,7 +7928,7 @@ el grupetto sobrepassa el compàs</translation>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="297"/>
         <source>Break multimeasure rest</source>
-        <translation>Divideix compassos d&apos;espera</translation>
+        <translation>Dividir el silenci multicompàs</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="310"/>
@@ -7938,22 +7938,22 @@ el grupetto sobrepassa el compàs</translation>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="352"/>
         <source>Layout stretch factor</source>
-        <translation>Factor disseny d&apos;estirament</translation>
+        <translation>Factor d&apos;estirament del disseny</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="355"/>
         <source>Layout stretch:</source>
-        <translation>Disseny d&apos;estirament</translation>
+        <translation>Estirament del disseny</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="387"/>
         <source>Add to measure number:</source>
-        <translation>Afegir a nombre de compàs:</translation>
+        <translation>Afegir al número del compàs:</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="410"/>
         <source>Measure number mode:</source>
-        <translation>Mode de compassos numèric:</translation>
+        <translation>Mode de numeració del compàs:</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="418"/>
@@ -9061,44 +9061,6 @@ error:</translation>
         <translation>S&apos;està exportant...</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5111"/>
-        <location filename="../../mscore/musescore.cpp" line="5123"/>
-        <source>Error Opening LAME library</source>
-        <translation>Hi ha un error d&apos;obertura de la biblioteca LAME</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5112"/>
-        <source>Could not open MP3 encoding library!</source>
-        <translation>No s&apos;ha pogut obrir la biblioteca de codificació de MP3!</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5124"/>
-        <source>Not a valid or supported MP3 encoding library!</source>
-        <translation>No és una biblioteca de codificació MP3 vàlida o compatible!</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5148"/>
-        <location filename="../../mscore/musescore.cpp" line="5161"/>
-        <location filename="../../mscore/musescore.cpp" line="5303"/>
-        <source>Encoding Error</source>
-        <translation>Hi ha un error de codificació</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5149"/>
-        <source>Unable to initialize MP3 stream</source>
-        <translation>No es pot inicialitzar flux MP3</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5162"/>
-        <source>Unable to open target file for writing</source>
-        <translation>No es pot obrir el fitxer de destinació per a l&apos;escriptura</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5304"/>
-        <source>Error %1 returned from MP3 encoder</source>
-        <translation>Hi ha un error %1 tornar des del codificador MP3</translation>
-    </message>
-    <message>
         <location filename="../../mscore/file.cpp" line="250"/>
         <location filename="../../mscore/musescore.cpp" line="3675"/>
         <source>MuseScore</source>
@@ -10093,6 +10055,44 @@ Restaurar sessió?</translation>
         <location filename="../../mscore/musescore.cpp" line="4964"/>
         <source>Go To: </source>
         <translation>Anar a: </translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5111"/>
+        <location filename="../../mscore/musescore.cpp" line="5123"/>
+        <source>Error Opening LAME library</source>
+        <translation>Hi ha un error d&apos;obertura de la biblioteca LAME</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5112"/>
+        <source>Could not open MP3 encoding library!</source>
+        <translation>No s&apos;ha pogut obrir la biblioteca de codificació de MP3!</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5124"/>
+        <source>Not a valid or supported MP3 encoding library!</source>
+        <translation>No és una biblioteca de codificació MP3 vàlida o compatible!</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5148"/>
+        <location filename="../../mscore/musescore.cpp" line="5161"/>
+        <location filename="../../mscore/musescore.cpp" line="5303"/>
+        <source>Encoding Error</source>
+        <translation>Hi ha un error de codificació</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5149"/>
+        <source>Unable to initialize MP3 stream</source>
+        <translation>No es pot inicialitzar flux MP3</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5162"/>
+        <source>Unable to open target file for writing</source>
+        <translation>No es pot obrir el fitxer de destinació per a l&apos;escriptura</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5304"/>
+        <source>Error %1 returned from MP3 encoder</source>
+        <translation>Hi ha un error %1 tornar des del codificador MP3</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.cpp" line="135"/>
@@ -12856,11 +12856,6 @@ error:</translation>
         <translation>Desa</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="187"/>
-        <source>Save As...</source>
-        <translation>Anomena i desa...</translation>
-    </message>
-    <message>
         <location filename="../../mscore/pluginCreator.ui" line="147"/>
         <source>Manual</source>
         <translation>Manual</translation>
@@ -12889,6 +12884,11 @@ error:</translation>
         <location filename="../../mscore/pluginCreator.ui" line="182"/>
         <source>Reload current plugin source</source>
         <translation>Recarregar l&apos;actual connector original</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pluginCreator.ui" line="187"/>
+        <source>Save As...</source>
+        <translation>Anomena i desa...</translation>
     </message>
 </context>
 <context>
@@ -13870,23 +13870,6 @@ Això revaluarà tots els connectors, recollint els canvis que s&apos;hagin prod
         <translation>Zoom per defecte</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2462"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2592"/>
-        <source>Opens a file dialog for selecting an instrument list file</source>
-        <translation>Obre una caixa de diàleg per seleccionar un llistat d&apos;instruments</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2579"/>
-        <source>Insert path to an instrument list file</source>
-        <translation>Inserir la ruta d&apos;un fitxer de llistat d&apos;instruments</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3521"/>
-        <source>PNG</source>
-        <translation>PNG</translation>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="2396"/>
         <source>Default zoom:</source>
         <translation>Zoom per defecte:</translation>
@@ -13907,6 +13890,12 @@ Això revaluarà tots els connectors, recollint els canvis que s&apos;hagin prod
         <translation>Trieu llistat d&apos;instruments 1</translation>
     </message>
     <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2462"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2592"/>
+        <source>Opens a file dialog for selecting an instrument list file</source>
+        <translation>Obre una caixa de diàleg per seleccionar un llistat d&apos;instruments</translation>
+    </message>
+    <message>
         <location filename="../../mscore/prefsdialog.ui" line="2476"/>
         <source>Instrument list 1:</source>
         <translation>Llistat d&apos;instruments 1:</translation>
@@ -13915,6 +13904,12 @@ Això revaluarà tots els connectors, recollint els canvis que s&apos;hagin prod
         <location filename="../../mscore/prefsdialog.ui" line="2486"/>
         <source>Instrument list 1</source>
         <translation>Llistat d&apos;instruments 1</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2579"/>
+        <source>Insert path to an instrument list file</source>
+        <translation>Inserir la ruta d&apos;un fitxer de llistat d&apos;instruments</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2496"/>
@@ -14351,6 +14346,11 @@ L&apos;ajustament de la latència pot ajudar a sincronitzar el maquinari MIDI am
         <translation>Exporta</translation>
     </message>
     <message>
+        <location filename="../../mscore/prefsdialog.ui" line="3521"/>
+        <source>PNG</source>
+        <translation>PNG</translation>
+    </message>
+    <message>
         <location filename="../../mscore/prefsdialog.ui" line="3530"/>
         <location filename="../../mscore/prefsdialog.ui" line="3698"/>
         <source>Resolution:</source>
@@ -14552,7 +14552,7 @@ L&apos;ajustament de la latència pot ajudar a sincronitzar el maquinari MIDI am
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2751"/>
+        <location filename="../../libmscore/edit.cpp" line="2829"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14562,7 +14562,7 @@ L&apos;ajustament de la latència pot ajudar a sincronitzar el maquinari MIDI am
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2752"/>
+        <location filename="../../libmscore/edit.cpp" line="2830"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -17036,11 +17036,6 @@ Do you want to overwrite it?</source>
         <translation>Mantenir aquesta partitura privada</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.ui" line="295"/>
-        <source>Update existing score</source>
-        <translation>Actualitzar la partitura existent</translation>
-    </message>
-    <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="179"/>
         <source>License:</source>
         <translation>Llicència:</translation>
@@ -17054,6 +17049,11 @@ Do you want to overwrite it?</source>
         <location filename="../../mscore/uploadscoredialog.ui" line="264"/>
         <source>Upload score audio</source>
         <translation>Puja fitxer àudio de la partitura</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/uploadscoredialog.ui" line="295"/>
+        <source>Update existing score</source>
+        <translation>Actualitzar la partitura existent</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="316"/>
@@ -18183,32 +18183,32 @@ error:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="676"/>
         <source>Increase Layout Stretch</source>
-        <translation>Augmentar el disseny d&apos;estirament</translation>
+        <translation>Augmentar l&apos;estirament del disseny</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="677"/>
         <source>Increase layout stretch</source>
-        <translation>Augmentar el disseny d&apos;estirament</translation>
+        <translation>Augmentar l&apos;estirament del disseny</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="678"/>
         <source>Increase layout stretch factor of selected measures</source>
-        <translation>Augmentar el factor del disseny d&apos;estirament als compassos seleccionats</translation>
+        <translation>Augmentar el factor d&apos;estirament del disseny als compassos seleccionats</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="687"/>
         <source>Decrease Layout Stretch</source>
-        <translation>Disminuir el disseny d&apos;estirament</translation>
+        <translation>Disminuir l&apos;estirament del disseny</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="688"/>
         <source>Decrease layout stretch</source>
-        <translation>Disminuir el disseny d&apos;estirament</translation>
+        <translation>Disminuir l&apos;estirament del disseny</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="689"/>
         <source>Decrease layout stretch factor of selected measures</source>
-        <translation>Disminuir el factor del disseny d&apos;estirament als compassos seleccionats</translation>
+        <translation>Disminuir el factor d&apos;estirament del disseny als compassos seleccionats</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="698"/>
@@ -19346,206 +19346,6 @@ error:</translation>
         <translation>Activa/desactiva &apos;entrada MIDI&apos;</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1771"/>
-        <source>Toggle &apos;Play Panel&apos;</source>
-        <translation>Activa/desactiva &apos;Panell de reproducció&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1781"/>
-        <source>Toogle &apos;Selection Filter&apos;</source>
-        <translation>Activa/desactiva &apos;Filtre de selecció&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1801"/>
-        <source>Toggle &apos;MIDI Import Panel&apos;</source>
-        <translation>Activa/desactiva &apos;Panell d&apos;importació MIDI&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1826"/>
-        <source>Toogle &apos;File Operations&apos; toolbar</source>
-        <translation>Activa/desactiva la barra d&apos;eines &apos;Operacions de fitxer&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1833"/>
-        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
-        <translation>Activa/desactiva barra d&apos;eines &apos;Controls de reproducció&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1847"/>
-        <source>Toggle &apos;Image Capture&apos; toolbar</source>
-        <translation>Activa/desactiva barra d&apos;eines &apos;Captura d&apos;imatge&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1854"/>
-        <source>Toogle &apos;Note Input&apos; toolbar</source>
-        <translation>Activa/desactiva la barra d&apos;eines &apos;Entrada de notes&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1861"/>
-        <source>Toggle &apos;Status Bar&apos;</source>
-        <translation>Activa/desactiva &apos;Barra d&apos;estat&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1994"/>
-        <source>Player: play</source>
-        <translation>Reproductor: reproducció</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2044"/>
-        <source>Seek to Begin</source>
-        <translation>Anar a l&apos;inici</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2045"/>
-        <source>Player: seek to begin</source>
-        <translation>Reproductor: anar a l&apos;inici</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2055"/>
-        <source>Player: rewind</source>
-        <translation>Reproductor: rebobinar</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2063"/>
-        <source>Seek to End</source>
-        <translation>Anar al final</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2064"/>
-        <source>Player: seek to end</source>
-        <translation>Reproductor: anar al final</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2071"/>
-        <source>Toggle &apos;Play Repeats&apos;</source>
-        <translation>Activa/desactiva &apos;Reproduir repeticions&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2081"/>
-        <source>Pan Score</source>
-        <translation>Partitura panoràmica</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2082"/>
-        <source>Toggle &apos;Pan Score&apos;</source>
-        <translation>Activa/desactiva &apos;Moure la partitura&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2256"/>
-        <source>Toggle &apos;System Break&apos;</source>
-        <translation>Activa/desactiva &apos;Salts de sistema&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2267"/>
-        <source>Toggle &apos;Page Break&apos;</source>
-        <translation>Activa/desactiva &apos;Salts de pàgina&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2278"/>
-        <source>Toggle &apos;Section Break&apos;</source>
-        <translation>Activa/desactiva &apos;Salts de secció&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2308"/>
-        <source>Reset Layout Stretch</source>
-        <translation>Restablir disseny d&apos;estirament</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2309"/>
-        <source>Reset layout stretch</source>
-        <translation>Restablir disseny d&apos;estirament</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2310"/>
-        <source>Reset layout stretch factor of selected measures or entire score</source>
-        <translation>Restablir el factor del disseny d&apos;estirament al compassos seleccionats o a tota la partitura</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2602"/>
-        <source>Change Enharmonic Spelling (Both Modes)</source>
-        <translation>Canviar l&apos;ortografia enharmònica (ambdós modes)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2603"/>
-        <source>Change enharmonic spelling (both modes)</source>
-        <translation>Canviar l&apos;ortografia enharmònica (ambdós modes)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2604"/>
-        <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
-        <translation>Canviar la nota enharmònica (modifica l&apos;ortografia en la tonalitat de concert i el mode transposat)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2610"/>
-        <source>Change Enharmonic Spelling (Current Mode)</source>
-        <translation>Canvia l&apos;ortografia enharmònica (Mode actual)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2611"/>
-        <source>Change enharmonic spelling (current mode)</source>
-        <translation>Canvia l&apos;ortografia enharmònica (Mode actual)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2612"/>
-        <source>Change enharmonic note (alters the spelling in the current mode only)</source>
-        <translation>Canviar la nota enharmònica (modifica l&apos;ortografia només en el mode actual)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2626"/>
-        <source>Toggle &apos;Image Capture&apos;</source>
-        <translation>Activa/desactiva &apos;Captura d&apos;imatge&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2803"/>
-        <source>Loop Playback</source>
-        <translation>Reproducció en bucle</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2804"/>
-        <source>Toggle &apos;Loop Playback&apos;</source>
-        <translation>Activa/desactiva &apos;Reproducció en bucle&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2848"/>
-        <source>Toggle &apos;Count-In&apos; playback</source>
-        <translation>Activa/desactiva &apos;La claqueta&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2924"/>
-        <source>Toggle &apos;View Mode&apos;</source>
-        <translation>Activa/desactiva &apos;Mode de visualització&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2949"/>
-        <source>Toggle &apos;Visibility&apos;</source>
-        <translation>Activa/desactiva &apos;Visibilitat&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3350"/>
-        <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
-        <translation>Activa/desactiva &apos;Crear compassos d&apos;espera&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3361"/>
-        <source>Toggle &apos;Hide Empty Staves&apos;</source>
-        <translation>Activa/desactiva &apos;Amagar els pentagrames buits&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3446"/>
-        <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
-        <translation>Activa/desactiva &apos;Notació rítmica amb slash&apos;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3456"/>
-        <source>Add/Remove System Breaks...</source>
-        <translation>Afegir/Treure salts de sistema...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3457"/>
-        <source>Add/remove system breaks</source>
-        <translation>Afegir/Treure salts de sistema</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="1676"/>
         <source>Beam Start</source>
         <translation>Inici del grup</translation>
@@ -19641,9 +19441,19 @@ error:</translation>
         <translation>Panell de reproducció</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1771"/>
+        <source>Toggle &apos;Play Panel&apos;</source>
+        <translation>Activa/desactiva &apos;Panell de reproducció&apos;</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1780"/>
         <source>Selection Filter</source>
         <translation>Filtre de selecció</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1781"/>
+        <source>Toogle &apos;Selection Filter&apos;</source>
+        <translation>Activa/desactiva &apos;Filtre de selecció&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1790"/>
@@ -19661,6 +19471,11 @@ error:</translation>
         <translation>Panell d&apos;importació MIDI</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1801"/>
+        <source>Toggle &apos;MIDI Import Panel&apos;</source>
+        <translation>Activa/desactiva &apos;Panell d&apos;importació MIDI&apos;</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1815"/>
         <source>Mixer</source>
         <translation>Mesclador</translation>
@@ -19676,9 +19491,19 @@ error:</translation>
         <translation>Operacions de fitxer</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1826"/>
+        <source>Toogle &apos;File Operations&apos; toolbar</source>
+        <translation>Activa/desactiva la barra d&apos;eines &apos;Operacions de fitxer&apos;</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1832"/>
         <source>Playback Controls</source>
         <translation>Controls de reproducció</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1833"/>
+        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
+        <translation>Activa/desactiva barra d&apos;eines &apos;Controls de reproducció&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1839"/>
@@ -19697,9 +19522,24 @@ error:</translation>
         <translation>Captura d&apos;imatge</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1847"/>
+        <source>Toggle &apos;Image Capture&apos; toolbar</source>
+        <translation>Activa/desactiva barra d&apos;eines &apos;Captura d&apos;imatge&apos;</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1854"/>
+        <source>Toogle &apos;Note Input&apos; toolbar</source>
+        <translation>Activa/desactiva la barra d&apos;eines &apos;Entrada de notes&apos;</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1860"/>
         <source>Status Bar</source>
         <translation>Barra d&apos;estat</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1861"/>
+        <source>Toggle &apos;Status Bar&apos;</source>
+        <translation>Activa/desactiva &apos;Barra d&apos;estat&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1867"/>
@@ -19872,6 +19712,11 @@ error:</translation>
         <translation>Reprodueix</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1994"/>
+        <source>Player: play</source>
+        <translation>Reproductor: reproducció</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1995"/>
         <source>Start or stop playback</source>
         <translation>Inicia o atura la reproducció</translation>
@@ -19917,9 +19762,24 @@ error:</translation>
         <translation>Reprodueix compàs següent</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2044"/>
+        <source>Seek to Begin</source>
+        <translation>Anar a l&apos;inici</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2045"/>
+        <source>Player: seek to begin</source>
+        <translation>Reproductor: anar a l&apos;inici</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2054"/>
         <source>Rewind</source>
         <translation>Rebobinar</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2055"/>
+        <source>Player: rewind</source>
+        <translation>Reproductor: rebobinar</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2056"/>
@@ -19927,14 +19787,39 @@ error:</translation>
         <translation>Rebobinar a la posició d&apos;inici</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2063"/>
+        <source>Seek to End</source>
+        <translation>Anar al final</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2064"/>
+        <source>Player: seek to end</source>
+        <translation>Reproductor: anar al final</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2070"/>
         <source>Play Repeats</source>
         <translation>Reproduir repeticions</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2071"/>
+        <source>Toggle &apos;Play Repeats&apos;</source>
+        <translation>Activa/desactiva &apos;Reproduir repeticions&apos;</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2072"/>
         <source>Play repeats</source>
         <translation>Reproduir repeticions</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2081"/>
+        <source>Pan Score</source>
+        <translation>Partitura panoràmica</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2082"/>
+        <source>Toggle &apos;Pan Score&apos;</source>
+        <translation>Activa/desactiva &apos;Moure la partitura&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2083"/>
@@ -20092,14 +19977,29 @@ error:</translation>
         <translation>Activa/desactiva salts de sistema</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2256"/>
+        <source>Toggle &apos;System Break&apos;</source>
+        <translation>Activa/desactiva &apos;Salts de sistema&apos;</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2266"/>
         <source>Toggle Page Break</source>
         <translation>Activa/desactiva salts de pàgina</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2267"/>
+        <source>Toggle &apos;Page Break&apos;</source>
+        <translation>Activa/desactiva &apos;Salts de pàgina&apos;</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2277"/>
         <source>Toggle Section Break</source>
         <translation>Activa/desactiva Salt de secció</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2278"/>
+        <source>Toggle &apos;Section Break&apos;</source>
+        <translation>Activa/desactiva &apos;Salts de secció&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2288"/>
@@ -20125,6 +20025,21 @@ error:</translation>
         <location filename="../../mscore/shortcut.cpp" line="2302"/>
         <source>Debugger</source>
         <translation>Depurador</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2308"/>
+        <source>Reset Layout Stretch</source>
+        <translation>Restablir l&apos;estirament del disseny</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2309"/>
+        <source>Reset layout stretch</source>
+        <translation>Restablir l&apos;estirament del disseny</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2310"/>
+        <source>Reset layout stretch factor of selected measures or entire score</source>
+        <translation>Restablir el factor d&apos;estirament del disseny al compassos seleccionats o a tota la partitura</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2319"/>
@@ -20433,6 +20348,36 @@ error:</translation>
         <translation>Administrador de les particel·les</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2602"/>
+        <source>Change Enharmonic Spelling (Both Modes)</source>
+        <translation>Canviar l&apos;ortografia enharmònica (ambdós modes)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2603"/>
+        <source>Change enharmonic spelling (both modes)</source>
+        <translation>Canviar l&apos;ortografia enharmònica (ambdós modes)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2604"/>
+        <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
+        <translation>Canviar la nota enharmònica (modifica l&apos;ortografia en la tonalitat de concert i el mode transposat)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2610"/>
+        <source>Change Enharmonic Spelling (Current Mode)</source>
+        <translation>Canvia l&apos;ortografia enharmònica (Mode actual)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2611"/>
+        <source>Change enharmonic spelling (current mode)</source>
+        <translation>Canvia l&apos;ortografia enharmònica (Mode actual)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2612"/>
+        <source>Change enharmonic note (alters the spelling in the current mode only)</source>
+        <translation>Canviar la nota enharmònica (modifica l&apos;ortografia només en el mode actual)</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2618"/>
         <source>Create New Revision</source>
         <translation>Crea nova revisió</translation>
@@ -20446,6 +20391,11 @@ error:</translation>
         <location filename="../../mscore/shortcut.cpp" line="2625"/>
         <source>Toggle Image Capture</source>
         <translation>Activa/desactiva la captura d&apos;imatge</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2626"/>
+        <source>Toggle &apos;Image Capture&apos;</source>
+        <translation>Activa/desactiva &apos;Captura d&apos;imatge&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2637"/>
@@ -20638,6 +20588,16 @@ error:</translation>
         <translation>Mostrar panell OMR</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2803"/>
+        <source>Loop Playback</source>
+        <translation>Reproducció en bucle</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2804"/>
+        <source>Toggle &apos;Loop Playback&apos;</source>
+        <translation>Activa/desactiva &apos;Reproducció en bucle&apos;</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2814"/>
         <source>Loop In</source>
         <translation>Inici bucle</translation>
@@ -20676,6 +20636,11 @@ error:</translation>
         <location filename="../../mscore/shortcut.cpp" line="2847"/>
         <source>Count-In</source>
         <translation>Claqueta</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2848"/>
+        <source>Toggle &apos;Count-In&apos; playback</source>
+        <translation>Activa/desactiva &apos;La claqueta&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2849"/>
@@ -20758,6 +20723,11 @@ error:</translation>
         <translation>Activar/desactivar mode de visualització</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2924"/>
+        <source>Toggle &apos;View Mode&apos;</source>
+        <translation>Activa/desactiva &apos;Mode de visualització&apos;</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2934"/>
         <source>Next Syllable</source>
         <translation>Síl·laba següent</translation>
@@ -20781,6 +20751,11 @@ error:</translation>
         <location filename="../../mscore/shortcut.cpp" line="2948"/>
         <source>Toggle Visibility</source>
         <translation>Activa/desactiva Visibilitat</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2949"/>
+        <source>Toggle &apos;Visibility&apos;</source>
+        <translation>Activa/desactiva &apos;Visibilitat&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2955"/>
@@ -21271,12 +21246,22 @@ error:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3349"/>
         <source>Toggle Create Multimeasure Rest</source>
-        <translation>Activa/Desactiva crear compassos d&apos;espera</translation>
+        <translation>Activa/Desactiva crear un silenci multicompàs</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3350"/>
+        <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
+        <translation>Activa/desactiva &apos;Crear un silenci multicompàs&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3360"/>
         <source>Toggle Hide Empty Staves</source>
         <translation>Activa/desactiva amagar pentagrames buits</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3361"/>
+        <source>Toggle &apos;Hide Empty Staves&apos;</source>
+        <translation>Activa/desactiva &apos;Amagar els pentagrames buits&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3371"/>
@@ -21354,6 +21339,21 @@ error:</translation>
         <location filename="../../mscore/shortcut.cpp" line="3445"/>
         <source>Toggle Rhythmic Slash Notation</source>
         <translation>Activa/desactiva notació rítmica amb slash </translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3446"/>
+        <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
+        <translation>Activa/desactiva &apos;Notació rítmica amb slash&apos;</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3456"/>
+        <source>Add/Remove System Breaks...</source>
+        <translation>Afegir/Treure salts de sistema...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3457"/>
+        <source>Add/remove system breaks</source>
+        <translation>Afegir/Treure salts de sistema</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3467"/>

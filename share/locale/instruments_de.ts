@@ -3839,7 +3839,7 @@
         <location filename="../instruments/instrumentsxml.h" line="384"/>
         <source>Br.</source>
         <comment>Brass</comment>
-        <translation>Bl.</translation>
+        <translation>Br.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="386"/>
@@ -4178,7 +4178,7 @@
         <location filename="../instruments/instrumentsxml.h" line="504"/>
         <source>Bu.</source>
         <comment>Bugle</comment>
-        <translation>Hn.</translation>
+        <translation>Bu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="506"/>
@@ -4872,7 +4872,7 @@
         <location filename="../instruments/instrumentsxml.h" line="740"/>
         <source>Be.</source>
         <comment>Bells</comment>
-        <translation>Gl.</translation>
+        <translation>Be.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="742"/>
@@ -5234,7 +5234,7 @@
         <location filename="../instruments/instrumentsxml.h" line="856"/>
         <source>W.</source>
         <comment>Women</comment>
-        <translation>F.</translation>
+        <translation>H.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="857"/>
@@ -5888,7 +5888,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1086"/>
         <source>Mda.</source>
         <comment>Mandola</comment>
-        <translation>Mda.</translation>
+        <translation>T. Mda.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1092"/>
@@ -5954,7 +5954,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1227"/>
         <source>Vne.</source>
         <comment>Violone</comment>
-        <translation>Vne.</translation>
+        <translation>D Vne.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1231"/>

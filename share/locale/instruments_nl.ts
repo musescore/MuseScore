@@ -5234,7 +5234,7 @@
         <location filename="../instruments/instrumentsxml.h" line="856"/>
         <source>W.</source>
         <comment>Women</comment>
-        <translation>V.</translation>
+        <translation>Bl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="857"/>
@@ -5732,7 +5732,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1019"/>
         <source>Guit.</source>
         <comment>Classical Guitar</comment>
-        <translation>Klass. Git.</translation>
+        <translation>Akoe. Git.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1020"/>
@@ -5745,7 +5745,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1031"/>
         <source>Guit.</source>
         <comment>Guitar</comment>
-        <translation>Git.</translation>
+        <translation>Akoe. Git.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1022"/>
@@ -5888,7 +5888,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1086"/>
         <source>Mda.</source>
         <comment>Mandola</comment>
-        <translation>Mda.</translation>
+        <translation>A. Mda.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1092"/>
@@ -5954,7 +5954,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1227"/>
         <source>Vne.</source>
         <comment>Violone</comment>
-        <translation>Vne.</translation>
+        <translation>D Vne.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1231"/>

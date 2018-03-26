@@ -5128,7 +5128,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="823"/>
         <source>Percussion</source>
-        <translation>Պերկուսիոն</translation>
+        <translation>Պերկուսիա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="824"/>

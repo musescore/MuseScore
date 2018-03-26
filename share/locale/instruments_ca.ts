@@ -35,7 +35,7 @@
         <location filename="../instruments/instrumentsxml.h" line="8"/>
         <source>W.</source>
         <comment>Winds</comment>
-        <translation>V.</translation>
+        <translation>D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="9"/>
@@ -3839,7 +3839,7 @@
         <location filename="../instruments/instrumentsxml.h" line="384"/>
         <source>Br.</source>
         <comment>Brass</comment>
-        <translation>V-Met.</translation>
+        <translation>Br.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="386"/>
@@ -4872,7 +4872,7 @@
         <location filename="../instruments/instrumentsxml.h" line="740"/>
         <source>Be.</source>
         <comment>Bells</comment>
-        <translation>Camp.</translation>
+        <translation>Be.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="742"/>
@@ -5783,7 +5783,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1032"/>
         <source>Acoustic Guitar (Treble Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Guitarra acústica (Clau de Sol)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1035"/>
@@ -5813,7 +5813,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1044"/>
         <source>Electric Guitar (Treble Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Guitarra elèctrica (Clau de Sol)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1047"/>
@@ -6108,7 +6108,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1134"/>
         <location filename="../instruments/instrumentsxml.h" line="1139"/>
         <source>slap</source>
-        <translation type="unfinished"/>
+        <translation>slap</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1116"/>
@@ -6118,7 +6118,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1135"/>
         <location filename="../instruments/instrumentsxml.h" line="1140"/>
         <source>pop</source>
-        <translation type="unfinished"/>
+        <translation>pop</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1117"/>

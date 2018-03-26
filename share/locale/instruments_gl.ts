@@ -35,7 +35,7 @@
         <location filename="../instruments/instrumentsxml.h" line="8"/>
         <source>W.</source>
         <comment>Winds</comment>
-        <translation>V.</translation>
+        <translation>M.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="9"/>

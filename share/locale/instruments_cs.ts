@@ -29,7 +29,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="7"/>
         <source>Winds</source>
-        <translation type="unfinished"/>
+        <translation>Dechové nástroje</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="8"/>
@@ -3105,13 +3105,13 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="145"/>
         <source>Lupophone</source>
-        <translation type="unfinished"/>
+        <translation>Lupofon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="146"/>
         <source>Lph.</source>
         <comment>Lupophone</comment>
-        <translation type="unfinished"/>
+        <translation>Lup.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="148"/>

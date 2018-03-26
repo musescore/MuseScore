@@ -429,7 +429,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="356"/>
         <source>Knee radius (dB)</source>
-        <translation>ニーの範囲 (デシベル)</translation>
+        <translation>ニーの範囲 (dB)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="359"/>
@@ -444,17 +444,17 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="435"/>
         <source>Makeup gain (dB)</source>
-        <translation>メイクアップ ゲイン (デシベル)</translation>
+        <translation>メイクアップ ゲイン (dB)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="438"/>
         <source>Controls the final gain after compression, in dB.</source>
-        <translation>圧縮後にゲインをコントロールする (デシベル)</translation>
+        <translation>圧縮後にゲインをコントロールする (dB)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="473"/>
         <source>Threshold level (dB)</source>
-        <translation>しきい値レベル (デシベル)</translation>
+        <translation>しきい値レベル (dB)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="476"/>
@@ -2290,6 +2290,11 @@ space unit</extracomment>
         <translation>最初の段では空の譜表を非表示にしない</translation>
     </message>
     <message>
+        <location filename="../../mscore/editstyle.ui" line="211"/>
+        <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
+        <translation>小節線を越えて音の長さを表示する (実験的で初期音楽のみ)</translation>
+    </message>
+    <message>
         <location filename="../../mscore/editstyle.ui" line="218"/>
         <source>Hide instrument name if there is only 1 instrument</source>
         <translation>楽器が1つの場合、楽器名を非表示に</translation>
@@ -2635,11 +2640,6 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="5527"/>
         <source>Barlines</source>
         <translation>縦線</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="211"/>
-        <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation>小節線を越えて音の長さを表示する (実験的で初期音楽のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2211"/>
@@ -3249,11 +3249,6 @@ space unit</extracomment>
         <translation>符頭の距離:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5264"/>
-        <source>Vertical distance from notehead:</source>
-        <translation>符頭からの垂直距離:</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editstyle.ui" line="5073"/>
         <source>Articulation size:</source>
         <translation>アーティキュレーションのサイズ:</translation>
@@ -3287,7 +3282,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5188"/>
         <source>Only for a change to C Maj / A min</source>
-        <translation>ハ長調 (C メジャー)・イ短調 (Aマイナー) に変更された場合のみ</translation>
+        <translation>ハ長調 (Cメジャー)・イ短調 (Aマイナー) に変更された場合のみ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5195"/>
@@ -3319,6 +3314,11 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="5254"/>
         <source>Vertical distance from stem:</source>
         <translation>符幹からの垂直距離:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="5264"/>
+        <source>Vertical distance from notehead:</source>
+        <translation>符頭からの垂直距離:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5274"/>
@@ -3358,7 +3358,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5562"/>
         <source>Hairpins, Volta, Ottava</source>
-        <translation>＜＞,反復記号,8va</translation>
+        <translation>クレッシェンド,反復記号,8va</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5567"/>
@@ -6683,6 +6683,13 @@ space unit</extracomment>
         <translation>連符</translation>
     </message>
     <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="84"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="101"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
+        <source>Reset to default</source>
+        <translation>元に戻す</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="87"/>
         <source>Reset &apos;Number type&apos; value</source>
         <translation>数字のタイプをリセット</translation>
@@ -6701,13 +6708,6 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="122"/>
         <source>Number</source>
         <translation>数</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="84"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="101"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
-        <source>Reset to default</source>
-        <translation>元に戻す</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="127"/>
@@ -7663,7 +7663,7 @@ You only need to do this once.
 
 Would you like to locate %2 now?</source>
         <translation>MuseScoreはMP3を書き出すために無料のLAMEエンコーダを使用します。
-別途 %1 を取得しエンコーダーの場所を手動で指定（詳細はハンドブックを確認して下さい）しなければなりません。
+別途 %1 を取得しエンコーダーの場所を手動で指定 (詳細はハンドブックを確認して下さい)しなければなりません。
 この操作は初回のみで次回以降は不要です。
 
 今すぐ %2 を検索しますか？</translation>
@@ -8130,7 +8130,7 @@ Support MuseScore with your %3donation%4.
 
 Copyright &amp;copy; 1999-2018 Werner Schweer and Others.
 Published under the GNU General Public License.</source>
-        <translation>%1www.musescore.org%2 を訪れ、新バージョンや他の情報を得てください。
+        <translation>%1www.musescore.org%2 を訪れて、新バージョンや他の情報を得てください。
 あなたの %3寄付%4 で、MuseScoreをサポートしてください。
 
 Copyright &amp;copy; 1999-2018 Werner Schweer and Others.
@@ -8196,7 +8196,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/albummanager.cpp" line="75"/>
         <source>MuseScore Files</source>
-        <translation>MuseScoreファイル</translation>
+        <translation>MuseScore ファイル</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="76"/>
@@ -8206,7 +8206,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/albummanager.cpp" line="101"/>
         <source>MuseScore Album Files</source>
-        <translation>MuseScoreアルバムファイル</translation>
+        <translation>MuseScore アルバムファイル</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="102"/>
@@ -8510,7 +8510,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="227"/>
         <source>page number, except on first page</source>
-        <translation>ページ番号（最初のページを除く）</translation>
+        <translation>ページ番号 (最初のページを除く)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="229"/>
@@ -8520,7 +8520,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="231"/>
         <source>page number, on all pages</source>
-        <translation>ページ番号（すべてのページ）</translation>
+        <translation>ページ番号 (すべてのページ)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="233"/>
@@ -8560,12 +8560,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="247"/>
         <source>copyright, on first page only</source>
-        <translation>コピーライト（最初のページのみ）</translation>
+        <translation>コピーライト (最初のページのみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="249"/>
         <source>copyright, on all pages</source>
-        <translation>コピーライト（すべてのページ）</translation>
+        <translation>コピーライト (すべてのページ)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="251"/>
@@ -9060,44 +9060,6 @@ failed: </source>
         <translation>エクスポート中...</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5111"/>
-        <location filename="../../mscore/musescore.cpp" line="5123"/>
-        <source>Error Opening LAME library</source>
-        <translation>LAMEライブラリの開始中にエラーが発生しました</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5112"/>
-        <source>Could not open MP3 encoding library!</source>
-        <translation>MP3エンコードライブラリを開くことができませんでした！</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5124"/>
-        <source>Not a valid or supported MP3 encoding library!</source>
-        <translation>MP3エンコードライブラリはサポートされていないか無効です</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5148"/>
-        <location filename="../../mscore/musescore.cpp" line="5161"/>
-        <location filename="../../mscore/musescore.cpp" line="5303"/>
-        <source>Encoding Error</source>
-        <translation>エンコード　エラー</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5149"/>
-        <source>Unable to initialize MP3 stream</source>
-        <translation>MP3ストリームを初期化できません</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5162"/>
-        <source>Unable to open target file for writing</source>
-        <translation>書き込みを行うファイルが開けません</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="5304"/>
-        <source>Error %1 returned from MP3 encoder</source>
-        <translation>MP3エンコーダーからエラー %1 が返されました</translation>
-    </message>
-    <message>
         <location filename="../../mscore/file.cpp" line="250"/>
         <location filename="../../mscore/musescore.cpp" line="3675"/>
         <source>MuseScore</source>
@@ -9120,7 +9082,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="290"/>
         <source>MuseScore Files</source>
-        <translation>MuseScoreファイル</translation>
+        <translation>MuseScore ファイル</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="291"/>
@@ -9135,7 +9097,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="293"/>
         <source>MuseData Files</source>
-        <translation>MuseDataファイル</translation>
+        <translation>MuseData ファイル</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="294"/>
@@ -9145,22 +9107,22 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="295"/>
         <source>BB Files &lt;experimental&gt;</source>
-        <translation>BB Files &lt;experimental&gt;</translation>
+        <translation>BB Files &lt;実験的&gt;</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="297"/>
         <source>PDF Files &lt;experimental OMR&gt;</source>
-        <translation>PDF ファイル &lt;experimental OMR&gt;</translation>
+        <translation>PDF ファイル &lt;実験的 OMR&gt;</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="299"/>
         <source>Overture / Score Writer Files &lt;experimental&gt;</source>
-        <translation>Overture / Score Writer ファイル &lt;※実験的&gt;</translation>
+        <translation>Overture / Score Writer ファイル &lt;実験的&gt;</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="300"/>
         <source>Bagpipe Music Writer Files &lt;experimental&gt;</source>
-        <translation>Bagpipe Music Writer Files &lt;experimental&gt;</translation>
+        <translation>Bagpipe Music Writer ファイル &lt;実験的&gt;</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="301"/>
@@ -9178,7 +9140,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="2207"/>
         <location filename="../../mscore/file.cpp" line="2268"/>
         <source>MuseScore File</source>
-        <translation>MuseScoreファイル</translation>
+        <translation>MuseScore ファイル</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="401"/>
@@ -9186,7 +9148,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="1673"/>
         <location filename="../../mscore/file.cpp" line="2208"/>
         <source>Uncompressed MuseScore File</source>
-        <translation>非圧縮MuseScoreファイル</translation>
+        <translation>非圧縮MuseScore ファイル</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="416"/>
@@ -9214,7 +9176,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="939"/>
         <source>MuseScore Styles</source>
-        <translation>MuseScoreスタイル</translation>
+        <translation>MuseScore スタイル</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="944"/>
@@ -9229,7 +9191,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="965"/>
         <location filename="../../mscore/file.cpp" line="982"/>
         <source>MuseScore Style File</source>
-        <translation>MuseScoreスタイルファイル</translation>
+        <translation>MuseScore スタイルファイル</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1006"/>
@@ -9287,7 +9249,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="1269"/>
         <location filename="../../mscore/file.cpp" line="1273"/>
         <source>MuseScore Palette</source>
-        <translation>MuseScoreパレット</translation>
+        <translation>MuseScore パレット</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1272"/>
@@ -9302,7 +9264,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1351"/>
         <source>MuseScore Plugin</source>
-        <translation>MuseScoreプラグイン</translation>
+        <translation>MuseScore プラグイン</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1354"/>
@@ -9313,7 +9275,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1355"/>
         <source>MuseScore Plugin File</source>
-        <translation>MuseScoreプラグインファイル</translation>
+        <translation>MuseScore プラグインファイル</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1433"/>
@@ -9323,7 +9285,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1434"/>
         <source>MuseScore Drumset</source>
-        <translation>MuseScoreドラムセット</translation>
+        <translation>MuseScore ドラムセット</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1437"/>
@@ -9333,7 +9295,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1438"/>
         <source>MuseScore Drumset File</source>
-        <translation>MuseScoreドラムセットファイル</translation>
+        <translation>MuseScore ドラムセットファイル</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1582"/>
@@ -9358,7 +9320,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="1586"/>
         <location filename="../../mscore/file.cpp" line="1662"/>
         <source>Wave Audio</source>
-        <translation>Wave 形式オーディオ</translation>
+        <translation>Wave形式 オーディオ</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1587"/>
@@ -9570,12 +9532,12 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/menus.cpp" line="434"/>
         <source>Staff spacer down</source>
-        <translation>譜表スペーサー（下）</translation>
+        <translation>譜表スペーサー (下)</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="440"/>
         <source>Staff spacer up</source>
-        <translation>譜表スペーサー（上）</translation>
+        <translation>譜表スペーサー (上)</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="461"/>
@@ -9605,7 +9567,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/menus.cpp" line="614"/>
         <source>Brace</source>
-        <translation>括弧（ブレイス）</translation>
+        <translation>括弧 (ブレイス)</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="615"/>
@@ -9803,7 +9765,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="630"/>
         <source>Concert Pitch</source>
-        <translation>合奏調（実音）</translation>
+        <translation>合奏調 (実音)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="634"/>
@@ -9918,7 +9880,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1055"/>
         <source>About &amp;Qt...</source>
-        <translation>Qt について...(&amp;Q)</translation>
+        <translation>Qt について...</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1060"/>
@@ -9956,15 +9918,14 @@ Please select a measure and try again</source>
 Custom palettes, custom shortcuts, and the list of recent scores will be deleted. MuseScore will restart with its default settings.
 Reverting will not remove any scores from your computer.
 Are you sure you want to proceed?</source>
-        <translation>この操作では、 Musescore のすべての設定がリセットされます。
-カスタムパレット、カスタムショートカット、および最近使用したスコアのリストが削除され、デフォルト設定が適用されます。
-この操作を行っても、スコアは削除されません。
+        <translation>この操作では、Musescoreの全ての設定がリセットされ、初期設定が適用されます。
+作成したスコア以外のカスタムパレットやカスタムショートカット、また最近使用したスコアの履歴も削除されます。
 続行しますか？</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1424"/>
         <source>Clear Recent Files</source>
-        <translation>最近使ったファイルのクリア</translation>
+        <translation>最近開いたファイルの履歴をクリア</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2648"/>
@@ -9976,7 +9937,7 @@ Are you sure you want to proceed?</source>
         <location filename="../../mscore/musescore.cpp" line="2656"/>
         <source>Error reading language file %s at line %d column %d: %s
 </source>
-        <translation>言語ファイル %s の読込みエラー 行%d 列%d : %s
+        <translation>言語ファイル %s の読み込みエラー箇所 %d行目 %d列目: %s
 </translation>
     </message>
     <message>
@@ -9987,27 +9948,27 @@ Are you sure you want to proceed?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2845"/>
         <source>Repitch input mode</source>
-        <translation>リピッチインプットモード</translation>
+        <translation>リピッチ 入力モード</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2850"/>
         <source>Rhythm input mode</source>
-        <translation>リズムインプットモード</translation>
+        <translation>リズム 入力モード</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2855"/>
         <source>Realtime (automatic) note input mode</source>
-        <translation>リアルタイム(自動)ノートインプットモード</translation>
+        <translation>リアルタイム(自動) 音符入力モード</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2860"/>
         <source>Realtime (manual) note input mode</source>
-        <translation>リアルタイム(手動)ノートインプットモード</translation>
+        <translation>リアルタイム(手動) 音符入力モード</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2865"/>
         <source>Steptime note input mode</source>
-        <translation>ステップタイムノートインプットモード</translation>
+        <translation>ステップタイム 音符入力モード</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2872"/>
@@ -10017,7 +9978,7 @@ Are you sure you want to proceed?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2880"/>
         <source>TAB input mode</source>
-        <translation>TAB入力モード</translation>
+        <translation>タブ譜 入力モード</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2883"/>
@@ -10092,6 +10053,44 @@ Restore session?</source>
         <location filename="../../mscore/musescore.cpp" line="4964"/>
         <source>Go To: </source>
         <translation>移動先の小節番号:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5111"/>
+        <location filename="../../mscore/musescore.cpp" line="5123"/>
+        <source>Error Opening LAME library</source>
+        <translation>LAMEライブラリの開始中にエラーが発生しました</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5112"/>
+        <source>Could not open MP3 encoding library!</source>
+        <translation>MP3エンコードライブラリを開くことができませんでした！</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5124"/>
+        <source>Not a valid or supported MP3 encoding library!</source>
+        <translation>MP3エンコードライブラリはサポートされていないか無効です</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5148"/>
+        <location filename="../../mscore/musescore.cpp" line="5161"/>
+        <location filename="../../mscore/musescore.cpp" line="5303"/>
+        <source>Encoding Error</source>
+        <translation>エンコードエラー</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5149"/>
+        <source>Unable to initialize MP3 stream</source>
+        <translation>MP3ストリームを初期化できません</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5162"/>
+        <source>Unable to open target file for writing</source>
+        <translation>書き込みを行うファイルが開けません</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="5304"/>
+        <source>Error %1 returned from MP3 encoder</source>
+        <translation>MP3エンコーダーからエラー %1 が返されました</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.cpp" line="135"/>
@@ -10540,7 +10539,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="199"/>
         <source>MuseScore Plugin Creator</source>
-        <translation>MuseScore プラグイン クリエイター</translation>
+        <translation>MuseScore プラグインクリエイター</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="245"/>
@@ -10767,7 +10766,7 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="785"/>
         <source>The language will be changed once you restart MuseScore.</source>
-        <translation>MuseScoreを再起動すると、言語が変更されます。</translation>
+        <translation>言語を変更するにはMuseScoreを再起動する必要があります。</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1135"/>
@@ -10819,7 +10818,7 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1296"/>
         <source>MuseScore Files</source>
-        <translation>MuseScoreファイル</translation>
+        <translation>MuseScore ファイル</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1296"/>
@@ -10834,7 +10833,7 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1471"/>
         <source>Warning: You used the same CoreMIDI IAC bus for input and output.  This will cause problematic loopback, whereby MuseScore&apos;s outputted MIDI messages will be sent back to MuseScore as input, causing confusion.  To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore&apos;s MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore&apos;s MIDI output.  Other programs may then use that dedicated virtual port to receive MuseScore&apos;s MIDI output.</source>
-        <translation>警告：入力時と出力時で同じCoreMIDI IACバスを使用しました。 これによりループバックが起こり、MuseScoreから出力されたMIDIメッセージが、またMuseScoreに入力されて問題を起こす可能性があります。 この問題を回避するには、スポットライト経由でAudio MIDI 設定にアクセスし、MuseScoreのMIDI出力用の仮想ポートを作成します。MuseScoreを再起動し、環境設定からMuseScoreのMIDI出力用の新しい仮想ポートを選択します。 他のプログラムでもMuseScoreのMIDI出力用の仮想ポートを使用することができます。</translation>
+        <translation>警告：入力時と出力時で同じ CoreMIDI IACバス を使用しました。 これによりループバックが起こり、MuseScoreから出力されたMIDIメッセージが、またMuseScoreに再入力されて問題を起こす可能性があります。 この問題を回避するには、スポットライト経由で Audio MIDI 設定 にアクセスし、MuseScoreのMIDI出力用の仮想ポートを作成します。MuseScoreを再起動し、 環境設定 からMuseScoreのMIDI出力用の新しい仮想ポートを選択します。 そうすることで他のプログラムでもMuseScoreのMIDI出力用の仮想ポートを使用することができます。</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1650"/>
@@ -11004,7 +11003,7 @@ failed: %2</source>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="626"/>
         <source>The style file is not compatible with this version of MuseScore.</source>
-        <translation>このスタイルファイルは現在のMuseScoreのバージョンと互換性がありません。</translation>
+        <translation>このスタイルファイルは現在のMuseScoreのバージョンとの互換性がありません。</translation>
     </message>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="647"/>
@@ -11023,7 +11022,7 @@ failed: %2</source>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="1199"/>
         <source>XML read error at line %1 column %2: %3</source>
-        <translation>XML 読み込みエラー箇所 %1 行目 カラム %2: %3</translation>
+        <translation>XML 読み込みエラー箇所 %1行目 %2列目: %3</translation>
     </message>
 </context>
 <context>
@@ -11432,7 +11431,7 @@ Please select a chord/rest and try again</source>
         <source>Cannot split measure here:
 First beat of measure</source>
         <translation>ここでは小節を分割できません:
-小節の１拍目</translation>
+小節の1拍目</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="3122"/>
@@ -11505,7 +11504,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="40"/>
         <source>Use Tab and Backtab (Shift+Tab) to move through the check boxes</source>
-        <translation>チェックボックスの移動にタブとバックタブ(Shift+Tab)を使用する</translation>
+        <translation>チェックボックスの移動にTabキーとバックTab (Shift+Tab) を使用する</translation>
     </message>
 </context>
 <context>
@@ -11871,77 +11870,77 @@ please choose a different name:</source>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="26"/>
         <source>G major, E minor</source>
-        <translation>ト長調(G major)ホ短調(E minor)</translation>
+        <translation>ト長調 (Gメジャー)/ホ短調 (Eマイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="27"/>
         <source>Cb major, Ab minor</source>
-        <translation>変ハ長調(Cb major)/変イ短調(Ab minor)</translation>
+        <translation>変ハ長調 (Cbメジャー)/変イ短調 (Abマイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="28"/>
         <source>D major, B minor</source>
-        <translation>ニ長調(D major)/ロ短調(B minor)</translation>
+        <translation>ニ長調 (Dメジャー)/ロ短調 (Bマイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="29"/>
         <source>Gb major, Eb minor</source>
-        <translation>変ト長調(Gb major)/変ホ短調(Eb minor)</translation>
+        <translation>変ト長調 (Gbメジャー)/変ホ短調 (Ebマイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="30"/>
         <source>A major, F# minor</source>
-        <translation>イ長調(A major)/嬰ヘ短調(F# minor)</translation>
+        <translation>イ長調 (Aメジャー)/嬰ヘ短調 (F♯マイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="31"/>
         <source>Db major, Bb minor</source>
-        <translation>変ニ長調(Db major)/変ロ短調(Bb minor)</translation>
+        <translation>変ニ長調 (Dbメジャー)/変ロ短調 (Bbマイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="32"/>
         <source>E major, C# minor</source>
-        <translation>ホ長調(E major)/嬰ハ短調(C# minor)</translation>
+        <translation>ホ長調 (Eメジャー)/嬰ハ短調 (C♯マイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="33"/>
         <source>Ab major, F minor</source>
-        <translation>変イ長調(Ab major)/ヘ短調(F minor)</translation>
+        <translation>変イ長調 (Abメジャー)/ヘ短調 (Fマイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="34"/>
         <source>B major, G# minor</source>
-        <translation>ロ長調(B major)/嬰ト短調(G# minor)</translation>
+        <translation>ロ長調 (Bメジャー)/嬰ト短調 (G♯マイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="35"/>
         <source>Eb major, C minor</source>
-        <translation>変ホ長調(Eb major)/ハ短調(C minor)</translation>
+        <translation>変ホ長調 (Ebメジャー)/ハ短調 (Cマイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="36"/>
         <source>F# major, D# minor</source>
-        <translation>嬰ヘ長調(F# major)/嬰ニ短調(D# minor)</translation>
+        <translation>嬰ヘ長調 (F♯メジャー)/嬰ニ短調 (D♯マイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="37"/>
         <source>Bb major, G minor</source>
-        <translation>変ロ長調(Bb major)/ト短調(G minor)</translation>
+        <translation>変ロ長調 (Bbメジャー)/ト短調 (Gマイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="38"/>
         <source>C# major, A# minor</source>
-        <translation>嬰ハ長調(C# major)/嬰イ短調(A# minor)</translation>
+        <translation>嬰ハ長調 (C♯メジャー)/嬰イ短調 (A♯マイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="39"/>
         <source>F major, D minor</source>
-        <translation>ヘ長調(F major)/ニ短調(D minor)</translation>
+        <translation>ヘ長調 (Fメジャー)/ニ短調 (Dマイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="40"/>
         <source>C major, A minor</source>
-        <translation>ハ長調(C major)/イ短調(A minor)</translation>
+        <translation>ハ長調 (Cメジャー)/イ短調 (Aマイナー)</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="41"/>
@@ -12166,7 +12165,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="182"/>
         <source>Staff space (sp):</source>
-        <translation>譜表のスペース(sp):</translation>
+        <translation>譜表のスペース (sp):</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="223"/>
@@ -12852,11 +12851,6 @@ failed: </source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="187"/>
-        <source>Save As...</source>
-        <translation>名前を付けて保存...</translation>
-    </message>
-    <message>
         <location filename="../../mscore/pluginCreator.ui" line="147"/>
         <source>Manual</source>
         <translation>マニュアル</translation>
@@ -12885,6 +12879,11 @@ failed: </source>
         <location filename="../../mscore/pluginCreator.ui" line="182"/>
         <source>Reload current plugin source</source>
         <translation>現在のプラグインフォルダを再読み込み</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/pluginCreator.ui" line="187"/>
+        <source>Save As...</source>
+        <translation>名前を付けて保存...</translation>
     </message>
 </context>
 <context>
@@ -12984,7 +12983,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="127"/>
         <source>The language will be changed once you restart MuseScore.</source>
-        <translation>MuseScoreを再起動すると、言語が変更されます。</translation>
+        <translation>言語を変更するにはMuseScoreを再起動する必要があります。</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="158"/>
@@ -13224,7 +13223,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="625"/>
         <source>Select delay (in minutes) between auto saves</source>
-        <translation>自動保存間隔の選択(分単位)</translation>
+        <translation>自動保存間隔の選択 (分単位)</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="628"/>
@@ -13235,12 +13234,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="657"/>
         <source>OSC remote control</source>
-        <translation>OSCリモートコントロール</translation>
+        <translation>OSC リモートコントロール</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="660"/>
         <source>OSC Remote Control</source>
-        <translation>OSCリモートコントロール</translation>
+        <translation>OSC リモートコントロール</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="675"/>
@@ -13474,12 +13473,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1231"/>
         <source>Enable MIDI Input</source>
-        <translation>MIDI Inputを有効にする</translation>
+        <translation>MIDI Input を有効にする</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1234"/>
         <source>Enable MIDI input</source>
-        <translation>MIDI Inputを有効にする</translation>
+        <translation>MIDI Input を有効にする</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1241"/>
@@ -13490,12 +13489,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1251"/>
         <source>Delay between notes in automatic Real-time mode:</source>
-        <translation>リアルタイムモード（自動）の時の、音と音の間隔:</translation>
+        <translation>リアルタイム(自動)モード のときの、音と音の間隔:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1258"/>
         <source>Delay between notes in automatic Real-time mode</source>
-        <translation>リアルタイムモード（自動）の時の、音と音の間隔</translation>
+        <translation>リアルタイム(自動)モード のときの、音と音の間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1261"/>
@@ -13530,7 +13529,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1369"/>
         <source>Enable MIDI remote control</source>
-        <translation>MIDIリモートコントロールを有効にする</translation>
+        <translation>MIDI リモートコントロール を有効にする</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1372"/>
@@ -13673,7 +13672,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1752"/>
         <source>Real-time Advance</source>
-        <translation>リアルタイム（手動）</translation>
+        <translation>リアルタイム(手動)</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1765"/>
@@ -13866,23 +13865,6 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <translation>既定の倍率</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2462"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2592"/>
-        <source>Opens a file dialog for selecting an instrument list file</source>
-        <translation>楽器リストを選択するためのダイアログを開く</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
-        <location filename="../../mscore/prefsdialog.ui" line="2579"/>
-        <source>Insert path to an instrument list file</source>
-        <translation>楽器リストファイルのパスを挿入</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3521"/>
-        <source>PNG</source>
-        <translation>PNG</translation>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="2396"/>
         <source>Default zoom:</source>
         <translation>既定の倍率:</translation>
@@ -13903,6 +13885,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <translation>楽器リスト1の選択</translation>
     </message>
     <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2462"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2592"/>
+        <source>Opens a file dialog for selecting an instrument list file</source>
+        <translation>楽器リストを選択するためのダイアログを開く</translation>
+    </message>
+    <message>
         <location filename="../../mscore/prefsdialog.ui" line="2476"/>
         <source>Instrument list 1:</source>
         <translation>楽器リスト1:</translation>
@@ -13911,6 +13899,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="2486"/>
         <source>Instrument list 1</source>
         <translation>楽器リスト1</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="2489"/>
+        <location filename="../../mscore/prefsdialog.ui" line="2579"/>
+        <source>Insert path to an instrument list file</source>
+        <translation>楽器リストファイルのパスを挿入</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2496"/>
@@ -14033,7 +14027,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2742"/>
         <source>Choose MIDI Input</source>
-        <translation>MIDI Inputの選択</translation>
+        <translation>MIDI Input の選択</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2749"/>
@@ -14065,12 +14059,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2797"/>
         <source>Choose MIDI Output</source>
-        <translation>MIDI Outputの選択</translation>
+        <translation>MIDI Output の選択</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2806"/>
         <source>MIDI Output Latency:</source>
-        <translation>MIDI Outputの遅延:</translation>
+        <translation>MIDI Output の遅延:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2813"/>
@@ -14081,23 +14075,23 @@ If latency is zero, MIDI messages are delivered as fast as possible, but may con
 Setting latency greater than zero may help the driver alleviate any jitter.
 
 Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s internal audio synthesizer, so that they both sound notes at the same time.</source>
-        <translation>遅延は、タイムスタンプに適用されるミリ秒単位の遅延で、出力の発生をドライバーに通知します。
+        <translation>タイムスタンプを適用するミリ秒単位の遅延により、出力の発生をドライバーに通知します。
 
 遅延が0の場合、MIDIはできるだけ速く動作しますが、ジッターが生じる可能性があります。
 
-0より大きい遅延を設定することで、ジッターを緩和します.
+0よりも大きい遅延を設定することで、ジッターを緩和します.
 
-遅延を調整することで、MIDIハードウェアをMuseScoreの内蔵オーディオシンセサイザーと同時に音声を鳴らすことができます。</translation>
+遅延をうまく調整することで、MIDIハードウェアをMuseScoreの内蔵オーディオシンセサイザーと同時に音声を鳴らすことができます。</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2822"/>
         <source>MIDI Output Latency</source>
-        <translation>MIDI Outputの遅延:</translation>
+        <translation>MIDI Output の遅延:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2825"/>
         <source>Choose MIDI Output Latency</source>
-        <translation>MIDI Outputの遅延設定</translation>
+        <translation>MIDI Output の遅延設定</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2852"/>
@@ -14164,13 +14158,13 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <location filename="../../mscore/prefsdialog.ui" line="3074"/>
         <location filename="../../mscore/prefsdialog.ui" line="3077"/>
         <source>JACK audio server</source>
-        <translation>JACK オーディオ サーバー</translation>
+        <translation>JACK オーディオサーバー</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3095"/>
         <location filename="../../mscore/prefsdialog.ui" line="3098"/>
         <source>Timebase Master</source>
-        <translation>Timebase Master</translation>
+        <translation>タイムベース マスター</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3111"/>
@@ -14345,6 +14339,11 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <location filename="../../mscore/prefsdialog.ui" line="3502"/>
         <source>Export</source>
         <translation>エクスポート</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/prefsdialog.ui" line="3521"/>
+        <source>PNG</source>
+        <translation>PNG</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3530"/>
@@ -14548,7 +14547,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2751"/>
+        <location filename="../../libmscore/edit.cpp" line="2829"/>
         <location filename="../../libmscore/figuredbass.cpp" line="1768"/>
         <location filename="../../libmscore/utils.cpp" line="458"/>
         <location filename="../../libmscore/utils.cpp" line="468"/>
@@ -14558,7 +14557,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2752"/>
+        <location filename="../../libmscore/edit.cpp" line="2830"/>
         <source>No note or lyrics selected:
 Please select a single note or lyrics and retry operation
 </source>
@@ -14859,7 +14858,7 @@ Visit the %1MuseScore download page%2 to obtain such a 1.x version.</source>
         <translation>それはバージョン0.9.5以前で保存されたものです。
 MuseScore version 1.x で開いてから保存すれば
 変更することが可能です。
-1.x versionは%1MuseScoreダウンロードページ%2で得られます。</translation>
+1.x versionは %1MuseScoreダウンロードページ%2 で得られます。</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="191"/>
@@ -14906,7 +14905,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <location filename="../../mscore/importxml.cpp" line="136"/>
         <source>Error reading container.xml at line %1 column %2: %3
 </source>
-        <translation>container.xmlの読み取りエラー %1 行目  カラム %2:%3
+        <translation>container.xml 読み取りエラー箇所 %1行目 %2列目: %3
 </translation>
     </message>
     <message>
@@ -14932,7 +14931,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <location filename="../../mscore/importxml.cpp" line="286"/>
         <source>Could not open compressed MusicXML file
 %1</source>
-        <translation>圧縮されたMusicXMLファイルを開けません
+        <translation>MusicXML圧縮ファイルを開けません
 %1</translation>
     </message>
     <message>
@@ -15020,7 +15019,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/capella.cpp" line="2686"/>
         <source>Import Capella</source>
-        <translation>Capella のインポート</translation>
+        <translation>Capellaのインポート</translation>
     </message>
     <message>
         <location filename="../../mscore/capella.cpp" line="2687"/>
@@ -15059,7 +15058,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="2084"/>
         <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
-        <translation>サウンドフォントがインストールされました。[表示]＞[シンセサイザーの追加]を確認し、[表示]＞[ミキサー]で楽器を選択してください。</translation>
+        <translation>サウンドフォントがインストールされました。[表示] &gt; [シンセサイザーの追加]を確認し、[表示] &gt; [ミキサー]で楽器を選択してください。</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="2389"/>
@@ -16123,17 +16122,17 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../libmscore/style.cpp" line="296"/>
         <source>Instrument Name (Long)</source>
-        <translation>楽器の名前(長)</translation>
+        <translation>楽器の名前 (長)</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="298"/>
         <source>Instrument Name (Short)</source>
-        <translation>楽器の名前(短)</translation>
+        <translation>楽器の名前 (短)</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="300"/>
         <source>Instrument Name (Part)</source>
-        <translation>楽器の名前(パート)</translation>
+        <translation>楽器の名前 (パート)</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="304"/>
@@ -16505,7 +16504,7 @@ Do you want to overwrite it?</source>
         <location filename="../../mscore/timesigwizard.ui" line="182"/>
         <location filename="../../mscore/timesigwizard.ui" line="185"/>
         <source>Pickup Measure</source>
-        <translation>弱起（アウフタクト）</translation>
+        <translation>弱起 (アウフタクト)</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="200"/>
@@ -16559,77 +16558,77 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="57"/>
         <source>C♭ major / A♭ minor</source>
-        <translation>変ハ長調(C♭ major)/変イ短調(A♭ minor)</translation>
+        <translation>変ハ長調 (C♭メジャー)/変イ短調 (A♭マイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="62"/>
         <source>G♭ major / E♭ minor</source>
-        <translation>変ト長調(G♭ major)/変ホ短調(E♭ minor)</translation>
+        <translation>変ト長調 (G♭メジャー)/変ホ短調 (E♭マイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="67"/>
         <source>D♭ major / B♭ minor</source>
-        <translation>変ニ長調(D♭ major)/変ロ短調(B♭ minor)</translation>
+        <translation>変ニ長調 (D♭メジャー)/変ロ短調 (B♭マイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="72"/>
         <source>A♭ major / F minor</source>
-        <translation>変イ長調(A♭ major)/ヘ短調(F minor)</translation>
+        <translation>変イ長調 (A♭メジャー)/ヘ短調 (Fマイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="77"/>
         <source>E♭ major / C minor</source>
-        <translation>変ホ長調(E♭ major)/ハ短調(C minor)</translation>
+        <translation>変ホ長調 (E♭メジャー)/ハ短調 (Cマイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="82"/>
         <source>B♭ major / G minor</source>
-        <translation>変ロ長調(B♭ major)/ト短調(G minor)</translation>
+        <translation>変ロ長調 (B♭メジャー)/ト短調 (Gマイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="87"/>
         <source>F major / D minor</source>
-        <translation>ヘ長調(F major)/ニ短調(D minor)</translation>
+        <translation>ヘ長調 (Fメジャー)/ニ短調 (Dマイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="92"/>
         <source>C major / A minor</source>
-        <translation>ハ長調(C major)/イ短調(A minor)</translation>
+        <translation>ハ長調 (Cメジャー)/イ短調 (Aマイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="97"/>
         <source>G major / E minor</source>
-        <translation>ト長調(G major)/ホ短調(E minor)</translation>
+        <translation>ト長調 (Gメジャー)/ホ短調 (Eマイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="102"/>
         <source>D major / B minor</source>
-        <translation>ニ長調(D major)/ロ短調(B minor)</translation>
+        <translation>ニ長調 (Dメジャー)/ロ短調 (Bマイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="107"/>
         <source>A major / F♯ minor</source>
-        <translation>イ長調(A major)/嬰ヘ短調(F# minor)</translation>
+        <translation>イ長調 (Aメジャー)/嬰ヘ短調 (F♯マイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="112"/>
         <source>E major / C♯ minor</source>
-        <translation>ホ長調(E major)/嬰ハ短調(C# minor)</translation>
+        <translation>ホ長調 (Eメジャー)/嬰ハ短調 (C♯マイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="117"/>
         <source>B major / G♯ minor</source>
-        <translation>ロ長調(B major)/嬰ト短調(G# minor)</translation>
+        <translation>ロ長調 (Bメジャー)/嬰ト短調 (G♯マイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="122"/>
         <source>F♯ major / D♯ minor</source>
-        <translation>嬰ヘ長調(F# major)/嬰ニ短調(D# minor)</translation>
+        <translation>嬰ヘ長調 (F♯メジャー)/嬰ニ短調 (D♯マイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="127"/>
         <source>C♯ major / A♯ minor</source>
-        <translation>嬰ハ長調(C# major)/嬰イ短調(A# minor)</translation>
+        <translation>嬰ハ長調 (C♯メジャー)/嬰イ短調 (A♯マイナー)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="135"/>
@@ -16843,7 +16842,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="467"/>
         <source>Single Sharps and Flats Only</source>
-        <translation>ダブルシャープ、ダブルフラットを使用しない（＃,♭のみ使用）</translation>
+        <translation>ダブルシャープ、ダブルフラットを使用しない (＃,♭のみ使用)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="472"/>
@@ -17036,11 +17035,6 @@ Do you want to overwrite it?</source>
         <translation>このスコアを個人用にする</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.ui" line="295"/>
-        <source>Update existing score</source>
-        <translation>既存のスコアを更新する</translation>
-    </message>
-    <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="179"/>
         <source>License:</source>
         <translation>ライセンス:</translation>
@@ -17054,6 +17048,11 @@ Do you want to overwrite it?</source>
         <location filename="../../mscore/uploadscoredialog.ui" line="264"/>
         <source>Upload score audio</source>
         <translation>スコアのオーディオをアップロード</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/uploadscoredialog.ui" line="295"/>
+        <source>Update existing score</source>
+        <translation>既存のスコアを更新する</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="316"/>
@@ -17380,12 +17379,12 @@ failed: </source>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="69"/>
         <source>Sori</source>
-        <translation>1/2半音＃(sori)</translation>
+        <translation>1/2半音＃(Sori)</translation>
     </message>
     <message>
         <location filename="../../libmscore/accidental.cpp" line="70"/>
         <source>Koron</source>
-        <translation>1/2半音♭(koron)</translation>
+        <translation>1/2半音♭(Koron)</translation>
     </message>
 </context>
 <context>
@@ -17573,7 +17572,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="159"/>
         <source>Print...</source>
-        <translation>印刷... (&amp;P)</translation>
+        <translation>印刷...(&amp;P)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="160"/>
@@ -17651,7 +17650,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="250"/>
         <source>Step-time (default)</source>
-        <translation>ステップタイム(デフォルト)</translation>
+        <translation>ステップタイム (デフォルト)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="251"/>
@@ -17681,7 +17680,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="283"/>
         <source>Real-time (automatic)</source>
-        <translation>リアルタイム(自動)</translation>
+        <translation>リアルタイム (自動)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="284"/>
@@ -17691,7 +17690,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="294"/>
         <source>Real-time (manual)</source>
-        <translation>リアルタイム(手動)</translation>
+        <translation>リアルタイム (手動)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="295"/>
@@ -19346,206 +19345,6 @@ failed: </source>
         <translation>MIDI Input 切替</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1771"/>
-        <source>Toggle &apos;Play Panel&apos;</source>
-        <translation>再生パネル 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1781"/>
-        <source>Toogle &apos;Selection Filter&apos;</source>
-        <translation>選択フィルタ 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1801"/>
-        <source>Toggle &apos;MIDI Import Panel&apos;</source>
-        <translation>MIDIインポート パネル 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1826"/>
-        <source>Toogle &apos;File Operations&apos; toolbar</source>
-        <translation>ファイル操作 ツールバー 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1833"/>
-        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
-        <translation>再生コントロール ツールバー 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1847"/>
-        <source>Toggle &apos;Image Capture&apos; toolbar</source>
-        <translation>イメージキャプチャ ツールバー 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1854"/>
-        <source>Toogle &apos;Note Input&apos; toolbar</source>
-        <translation>音符入力ツールバー 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1861"/>
-        <source>Toggle &apos;Status Bar&apos;</source>
-        <translation>ステータスバー 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1994"/>
-        <source>Player: play</source>
-        <translation>プレイヤー: 再生</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2044"/>
-        <source>Seek to Begin</source>
-        <translation>先頭まで検索</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2045"/>
-        <source>Player: seek to begin</source>
-        <translation>プレイヤー: 先頭まで検索</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2055"/>
-        <source>Player: rewind</source>
-        <translation>プレイヤー: 巻き戻し</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2063"/>
-        <source>Seek to End</source>
-        <translation>最後まで検索</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2064"/>
-        <source>Player: seek to end</source>
-        <translation>プレイヤー: 最後まで検索</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2071"/>
-        <source>Toggle &apos;Play Repeats&apos;</source>
-        <translation>再生リピート 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2081"/>
-        <source>Pan Score</source>
-        <translation>スコアのパン</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2082"/>
-        <source>Toggle &apos;Pan Score&apos;</source>
-        <translation>スコアのパン 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2256"/>
-        <source>Toggle &apos;System Break&apos;</source>
-        <translation>譜表の折り返し 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2267"/>
-        <source>Toggle &apos;Page Break&apos;</source>
-        <translation>ページ区切り 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2278"/>
-        <source>Toggle &apos;Section Break&apos;</source>
-        <translation>セクション区切り 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2308"/>
-        <source>Reset Layout Stretch</source>
-        <translation>全ての間隔をリセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2309"/>
-        <source>Reset layout stretch</source>
-        <translation>全ての間隔をリセット</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2310"/>
-        <source>Reset layout stretch factor of selected measures or entire score</source>
-        <translation>選択した複数小節の間隔をリセットする</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2602"/>
-        <source>Change Enharmonic Spelling (Both Modes)</source>
-        <translation>異名同音の変更(両方の調)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2603"/>
-        <source>Change enharmonic spelling (both modes)</source>
-        <translation>異名同音の変更(両方の調)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2604"/>
-        <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
-        <translation>異名同音の変更(合奏調と実音で変更)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2610"/>
-        <source>Change Enharmonic Spelling (Current Mode)</source>
-        <translation>異名同音の変更(現在の調)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2611"/>
-        <source>Change enharmonic spelling (current mode)</source>
-        <translation>異名同音の変更(両方の調)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2612"/>
-        <source>Change enharmonic note (alters the spelling in the current mode only)</source>
-        <translation>異名同音の変更(実音で変更)</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2626"/>
-        <source>Toggle &apos;Image Capture&apos;</source>
-        <translation>イメージキャプチャ 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2803"/>
-        <source>Loop Playback</source>
-        <translation>ループ再生</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2804"/>
-        <source>Toggle &apos;Loop Playback&apos;</source>
-        <translation>ループ再生 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2848"/>
-        <source>Toggle &apos;Count-In&apos; playback</source>
-        <translation>カウントイン 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2924"/>
-        <source>Toggle &apos;View Mode&apos;</source>
-        <translation>表示モード 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="2949"/>
-        <source>Toggle &apos;Visibility&apos;</source>
-        <translation>可視・不可視 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3350"/>
-        <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
-        <translation>長休符の作成と消去</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3361"/>
-        <source>Toggle &apos;Hide Empty Staves&apos;</source>
-        <translation>空の譜表をまとめる 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3446"/>
-        <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
-        <translation>リズミックスラッシュ表記 切替</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3456"/>
-        <source>Add/Remove System Breaks...</source>
-        <translation>譜表の折り返しの追加・削除...</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3457"/>
-        <source>Add/remove system breaks</source>
-        <translation>譜表の折り返しの追加・削除</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="1676"/>
         <source>Beam Start</source>
         <translation>連桁開始</translation>
@@ -19553,17 +19352,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1677"/>
         <source>Beam start</source>
-        <translation>連桁（開始）</translation>
+        <translation>連桁 (開始)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1687"/>
         <source>Beam Middle</source>
-        <translation>連桁（中間）</translation>
+        <translation>連桁 (中間)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1688"/>
         <source>Beam middle</source>
-        <translation>連桁（中間）</translation>
+        <translation>連桁 (中間)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1698"/>
@@ -19641,9 +19440,19 @@ failed: </source>
         <translation>再生パネル</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1771"/>
+        <source>Toggle &apos;Play Panel&apos;</source>
+        <translation>再生パネル 切替</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1780"/>
         <source>Selection Filter</source>
         <translation>選択フィルタ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1781"/>
+        <source>Toogle &apos;Selection Filter&apos;</source>
+        <translation>選択フィルタ 切替</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1790"/>
@@ -19658,7 +19467,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1800"/>
         <source>MIDI Import Panel</source>
-        <translation>MIDIインポートパネル</translation>
+        <translation>MIDI インポートパネル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1801"/>
+        <source>Toggle &apos;MIDI Import Panel&apos;</source>
+        <translation>MIDI インポート パネル 切替</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1815"/>
@@ -19676,15 +19490,25 @@ failed: </source>
         <translation>ファイル操作</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1826"/>
+        <source>Toogle &apos;File Operations&apos; toolbar</source>
+        <translation>ファイル操作 ツールバー 切替</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1832"/>
         <source>Playback Controls</source>
         <translation>再生コントロール</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1833"/>
+        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
+        <translation>再生コントロール ツールバー 切替</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1839"/>
         <location filename="../../mscore/shortcut.cpp" line="2224"/>
         <source>Concert Pitch</source>
-        <translation>合奏調 （実音）</translation>
+        <translation>合奏調 (実音)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1840"/>
@@ -19697,9 +19521,24 @@ failed: </source>
         <translation>イメージ キャプチャ</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1847"/>
+        <source>Toggle &apos;Image Capture&apos; toolbar</source>
+        <translation>イメージキャプチャ ツールバー 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1854"/>
+        <source>Toogle &apos;Note Input&apos; toolbar</source>
+        <translation>音符入力ツールバー 切替</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1860"/>
         <source>Status Bar</source>
         <translation>ステータスバー</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1861"/>
+        <source>Toggle &apos;Status Bar&apos;</source>
+        <translation>ステータスバー 切替</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1867"/>
@@ -19872,6 +19711,11 @@ failed: </source>
         <translation>再生</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="1994"/>
+        <source>Player: play</source>
+        <translation>プレイヤー: 再生</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="1995"/>
         <source>Start or stop playback</source>
         <translation>再生・停止</translation>
@@ -19917,9 +19761,24 @@ failed: </source>
         <translation>次の小節を再生</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2044"/>
+        <source>Seek to Begin</source>
+        <translation>先頭まで検索</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2045"/>
+        <source>Player: seek to begin</source>
+        <translation>プレイヤー: 先頭まで検索</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2054"/>
         <source>Rewind</source>
         <translation>巻き戻し</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2055"/>
+        <source>Player: rewind</source>
+        <translation>プレイヤー: 巻き戻し</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2056"/>
@@ -19927,14 +19786,39 @@ failed: </source>
         <translation>開始位置に戻る</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2063"/>
+        <source>Seek to End</source>
+        <translation>最後まで検索</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2064"/>
+        <source>Player: seek to end</source>
+        <translation>プレイヤー: 最後まで検索</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2070"/>
         <source>Play Repeats</source>
         <translation>反復再生</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2071"/>
+        <source>Toggle &apos;Play Repeats&apos;</source>
+        <translation>再生リピート 切替</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2072"/>
         <source>Play repeats</source>
         <translation>反復再生</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2081"/>
+        <source>Pan Score</source>
+        <translation>スコアのパン</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2082"/>
+        <source>Toggle &apos;Pan Score&apos;</source>
+        <translation>スコアのパン 切替</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2083"/>
@@ -19974,7 +19858,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2125"/>
         <source>&amp;Transpose...</source>
-        <translation>移調... (&amp;T)</translation>
+        <translation>移調...(&amp;T)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2126"/>
@@ -20064,7 +19948,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2225"/>
         <source>Display in concert pitch</source>
-        <translation>合奏調（実音）で表示</translation>
+        <translation>合奏調 (実音) で表示</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2235"/>
@@ -20092,13 +19976,28 @@ failed: </source>
         <translation>譜表の折り返し 切替</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2256"/>
+        <source>Toggle &apos;System Break&apos;</source>
+        <translation>譜表の折り返し 切替</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2266"/>
         <source>Toggle Page Break</source>
         <translation>ページ区切り 切替</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2267"/>
+        <source>Toggle &apos;Page Break&apos;</source>
+        <translation>ページ区切り 切替</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2277"/>
         <source>Toggle Section Break</source>
+        <translation>セクション区切り 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2278"/>
+        <source>Toggle &apos;Section Break&apos;</source>
         <translation>セクション区切り 切替</translation>
     </message>
     <message>
@@ -20125,6 +20024,21 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="2302"/>
         <source>Debugger</source>
         <translation>デバッガ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2308"/>
+        <source>Reset Layout Stretch</source>
+        <translation>全ての間隔をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2309"/>
+        <source>Reset layout stretch</source>
+        <translation>全ての間隔をリセット</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2310"/>
+        <source>Reset layout stretch factor of selected measures or entire score</source>
+        <translation>選択した複数小節の間隔をリセットする</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2319"/>
@@ -20433,6 +20347,36 @@ failed: </source>
         <translation>パートの管理</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2602"/>
+        <source>Change Enharmonic Spelling (Both Modes)</source>
+        <translation>異名同音の変更 (両方の調)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2603"/>
+        <source>Change enharmonic spelling (both modes)</source>
+        <translation>異名同音の変更 (両方の調)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2604"/>
+        <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
+        <translation>異名同音の変更 (合奏調と実音で変更)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2610"/>
+        <source>Change Enharmonic Spelling (Current Mode)</source>
+        <translation>異名同音の変更 (現在の調)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2611"/>
+        <source>Change enharmonic spelling (current mode)</source>
+        <translation>異名同音の変更 (両方の調)</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2612"/>
+        <source>Change enharmonic note (alters the spelling in the current mode only)</source>
+        <translation>異名同音の変更 (実音で変更)</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2618"/>
         <source>Create New Revision</source>
         <translation>新しいリビジョンの作成</translation>
@@ -20446,6 +20390,11 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="2625"/>
         <source>Toggle Image Capture</source>
         <translation>イメージ キャプチャ 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2626"/>
+        <source>Toggle &apos;Image Capture&apos;</source>
+        <translation>イメージキャプチャ 切替</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2637"/>
@@ -20638,6 +20587,16 @@ failed: </source>
         <translation>OMRパネルを表示する</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2803"/>
+        <source>Loop Playback</source>
+        <translation>ループ再生</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2804"/>
+        <source>Toggle &apos;Loop Playback&apos;</source>
+        <translation>ループ再生 切替</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2814"/>
         <source>Loop In</source>
         <translation>ループイン</translation>
@@ -20676,6 +20635,11 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="2847"/>
         <source>Count-In</source>
         <translation>カウントイン</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2848"/>
+        <source>Toggle &apos;Count-In&apos; playback</source>
+        <translation>カウントイン 切替</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2849"/>
@@ -20758,6 +20722,11 @@ failed: </source>
         <translation>表示モード 切替</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="2924"/>
+        <source>Toggle &apos;View Mode&apos;</source>
+        <translation>表示モード 切替</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="2934"/>
         <source>Next Syllable</source>
         <translation>次の音節</translation>
@@ -20780,6 +20749,11 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2948"/>
         <source>Toggle Visibility</source>
+        <translation>可視・不可視 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="2949"/>
+        <source>Toggle &apos;Visibility&apos;</source>
         <translation>可視・不可視 切替</translation>
     </message>
     <message>
@@ -20825,12 +20799,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2985"/>
         <source>Longa (TAB)</source>
-        <translation>四倍全音符(TAB)</translation>
+        <translation>四倍全音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2986"/>
         <source>Note duration: Longa (TAB)</source>
-        <translation>音価: 四倍全音符 (TAB)</translation>
+        <translation>音価: 四倍全音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2996"/>
@@ -20840,67 +20814,67 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2997"/>
         <source>Note duration: Double whole (TAB)</source>
-        <translation>音価: 倍全音符 (TAB)</translation>
+        <translation>音価: 倍全音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3007"/>
         <source>Whole Note (TAB)</source>
-        <translation>全音符(TAB)</translation>
+        <translation>全音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3008"/>
         <source>Note duration: Whole (TAB)</source>
-        <translation>音価: 全音符 (TAB)</translation>
+        <translation>音価: 全音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3018"/>
         <source>Half Note (TAB)</source>
-        <translation>2分音符(TAB譜)</translation>
+        <translation>2分音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3019"/>
         <source>Note duration: Half (TAB)</source>
-        <translation>音価: 2分音符 (TAB)</translation>
+        <translation>音価: 2分音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3029"/>
         <source>Quarter Note (TAB)</source>
-        <translation>4分音符(TAB)</translation>
+        <translation>4分音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3030"/>
         <source>Note duration: Quarter (TAB)</source>
-        <translation>音価: 4分音符 (TAB)</translation>
+        <translation>音価: 4分音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3040"/>
         <source>Eighth Note (TAB)</source>
-        <translation>8分音符(TAB譜)</translation>
+        <translation>8分音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3041"/>
         <source>Note duration: Eighth (TAB)</source>
-        <translation>音価: 8分音符 (TAB)</translation>
+        <translation>音価: 8分音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3051"/>
         <source>16th Note (TAB)</source>
-        <translation>16分音符(TAB譜)</translation>
+        <translation>16分音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3052"/>
         <source>Note duration: 16th (TAB)</source>
-        <translation>音価: 16分音符 (TAB)</translation>
+        <translation>音価: 16分音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3062"/>
         <source>32nd Note (TAB)</source>
-        <translation>32分音符(TAB譜)</translation>
+        <translation>32分音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3063"/>
         <source>Note duration: 32nd (TAB)</source>
-        <translation>音価: 32分音符 (TAB)</translation>
+        <translation>音価: 32分音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3073"/>
@@ -20910,48 +20884,48 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3074"/>
         <source>Note duration: 64th (TAB)</source>
-        <translation>音価: 64分音符 (TAB)</translation>
+        <translation>音価: 64分音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3084"/>
         <source>128th Note (TAB)</source>
-        <translation>128分音符(TAB譜)</translation>
+        <translation>128分音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3085"/>
         <source>Note duration: 128th (TAB)</source>
-        <translation>音価: 128分音符 (TAB)</translation>
+        <translation>音価: 128分音符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3095"/>
         <source>Increase Active Duration (TAB)</source>
-        <translation>長さを増やす(TAB)</translation>
+        <translation>長さを増やす (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3096"/>
         <source>Increase active duration (TAB)</source>
-        <translation>長さを増やす(TAB)</translation>
+        <translation>長さを増やす (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3102"/>
         <source>Decrease Active Duration (TAB)</source>
-        <translation>長さを減らす(TAB)</translation>
+        <translation>長さを減らす (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3103"/>
         <source>Decrease active duration (TAB)</source>
-        <translation>長さを減らす(TAB)</translation>
+        <translation>長さを減らす (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3109"/>
         <location filename="../../mscore/shortcut.cpp" line="3118"/>
         <source>Rest (TAB)</source>
-        <translation>休符(TAB譜)</translation>
+        <translation>休符 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3110"/>
         <source>Enter rest (TAB)</source>
-        <translation>休符の入力(TAB譜)</translation>
+        <translation>休符の入力 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3119"/>
@@ -20961,172 +20935,172 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3125"/>
         <source>String Above (TAB)</source>
-        <translation>弦を上に(TAB譜)</translation>
+        <translation>弦を上に (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3126"/>
         <source>Select string above (TAB only)</source>
-        <translation>選択中の弦を上に(TAB譜)</translation>
+        <translation>選択中の弦を上に (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3132"/>
         <source>String Below (TAB)</source>
-        <translation>弦を下に(TAB譜)</translation>
+        <translation>弦を下に (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3133"/>
         <source>Select string below (TAB only)</source>
-        <translation>選択中の弦を下に(TAB譜)</translation>
+        <translation>選択中の弦を下に (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3139"/>
         <source>Fret 0 (TAB)</source>
-        <translation>フレット0(TAB譜)</translation>
+        <translation>フレット0 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3140"/>
         <source>Add fret 0 on current string (TAB only)</source>
-        <translation>現在の弦にフレット0を追加(TAB譜)</translation>
+        <translation>現在の弦にフレット0を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3146"/>
         <source>Fret 1 (TAB)</source>
-        <translation>フレット1(TAB譜)</translation>
+        <translation>フレット1 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3147"/>
         <source>Add fret 1 on current string (TAB only)</source>
-        <translation>現在の弦にフレット1を追加(TAB譜)</translation>
+        <translation>現在の弦にフレット1を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3153"/>
         <source>Fret 2 (TAB)</source>
-        <translation>フレット2(TAB譜)</translation>
+        <translation>フレット2 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3154"/>
         <source>Add fret 2 on current string (TAB only)</source>
-        <translation>現在の弦にフレット2を追加(TAB譜)</translation>
+        <translation>現在の弦にフレット2を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3160"/>
         <source>Fret 3 (TAB)</source>
-        <translation>フレット3(TAB譜)</translation>
+        <translation>フレット3 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3161"/>
         <source>Add fret 3 on current string (TAB only)</source>
-        <translation>現在の弦にフレット3を追加(TAB譜)</translation>
+        <translation>現在の弦にフレット3を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3167"/>
         <source>Fret 4 (TAB)</source>
-        <translation>フレット4(TAB譜)</translation>
+        <translation>フレット4 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3168"/>
         <source>Add fret 4 on current string (TAB only)</source>
-        <translation>現在の弦に4フレットを付け加える(TAB譜のみ)</translation>
+        <translation>現在の弦にフレット4を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3174"/>
         <source>Fret 5 (TAB)</source>
-        <translation>フレット5(TAB譜)</translation>
+        <translation>フレット5 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3175"/>
         <source>Add fret 5 on current string (TAB only)</source>
-        <translation>現在の弦に5フレットを付け加える(TAB譜のみ)</translation>
+        <translation>現在の弦にフレット5を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3181"/>
         <source>Fret 6 (TAB)</source>
-        <translation>フレット6(TAB譜)</translation>
+        <translation>フレット6 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3182"/>
         <source>Add fret 6 on current string (TAB only)</source>
-        <translation>現在の弦に6フレットを付け加える(TAB譜のみ)</translation>
+        <translation>現在の弦にフレット6を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3188"/>
         <source>Fret 7 (TAB)</source>
-        <translation>フレット7(TAB譜)</translation>
+        <translation>フレット7 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3189"/>
         <source>Add fret 7 on current string (TAB only)</source>
-        <translation>現在の弦に7フレットを付け加える(TAB譜のみ)</translation>
+        <translation>現在の弦にフレット7を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3195"/>
         <source>Fret 8 (TAB)</source>
-        <translation>フレット8(TAB譜)</translation>
+        <translation>フレット8 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3196"/>
         <source>Add fret 8 on current string (TAB only)</source>
-        <translation>現在の弦に8フレットを付け加える(TAB譜のみ)</translation>
+        <translation>現在の弦にフレット8を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3202"/>
         <source>Fret 9 (TAB)</source>
-        <translation>フレット9(TAB譜)</translation>
+        <translation>フレット9 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3203"/>
         <source>Add fret 9 on current string (TAB only)</source>
-        <translation>現在の弦に9フレットを付け加える(TAB譜のみ)</translation>
+        <translation>現在の弦にフレット9を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3209"/>
         <source>Fret 10 (TAB)</source>
-        <translation>フレット10(TAB譜)</translation>
+        <translation>フレット10 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3210"/>
         <source>Add fret 10 on current string (TAB only)</source>
-        <translation>現在の弦に10フレットを付け加える(TAB譜のみ)</translation>
+        <translation>現在の弦にフレット10を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3216"/>
         <source>Fret 11 (TAB)</source>
-        <translation>フレット11(TAB譜)</translation>
+        <translation>フレット11 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3217"/>
         <source>Add fret 11 on current string (TAB only)</source>
-        <translation>現在の弦に11フレットを付け加える(TAB譜のみ)</translation>
+        <translation>現在の弦にフレット11を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3223"/>
         <source>Fret 12 (TAB)</source>
-        <translation>フレット12(TAB譜)</translation>
+        <translation>フレット12 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3224"/>
         <source>Add fret 12 on current string (TAB only)</source>
-        <translation>現在の弦に12フレットを付け加える(TAB譜のみ)</translation>
+        <translation>現在の弦にフレット12を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3230"/>
         <source>Fret 13 (TAB)</source>
-        <translation>フレット13(TAB譜)</translation>
+        <translation>フレット13 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3231"/>
         <source>Add fret 13 on current string (TAB only)</source>
-        <translation>現在の弦に13フレットを付け加える(TAB譜のみ)</translation>
+        <translation>現在の弦にフレット13を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3237"/>
         <source>Fret 14 (TAB)</source>
-        <translation>フレット14(TAB譜)</translation>
+        <translation>フレット14 (TAB譜)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3238"/>
         <source>Add fret 14 on current string (TAB only)</source>
-        <translation>現在の弦に14フレットを付け加える(TAB譜のみ)</translation>
+        <translation>現在の弦にフレット14を付け加える (TAB譜のみ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3247"/>
@@ -21274,9 +21248,19 @@ failed: </source>
         <translation>長休符の作成と消去</translation>
     </message>
     <message>
+        <location filename="../../mscore/shortcut.cpp" line="3350"/>
+        <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
+        <translation>長休符の作成と消去</translation>
+    </message>
+    <message>
         <location filename="../../mscore/shortcut.cpp" line="3360"/>
         <source>Toggle Hide Empty Staves</source>
         <translation>空の譜表を隠すトグル</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3361"/>
+        <source>Toggle &apos;Hide Empty Staves&apos;</source>
+        <translation>空の譜表をまとめる 切替</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3371"/>
@@ -21354,6 +21338,21 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="3445"/>
         <source>Toggle Rhythmic Slash Notation</source>
         <translation>リズミックスラッシュ表記 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3446"/>
+        <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
+        <translation>リズミックスラッシュ表記 切替</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3456"/>
+        <source>Add/Remove System Breaks...</source>
+        <translation>譜表の折り返しの追加・削除...</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3457"/>
+        <source>Add/remove system breaks</source>
+        <translation>譜表の折り返しの追加・削除</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3467"/>
@@ -23525,7 +23524,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/element.cpp" line="158"/>
         <source>Tab Duration Symbol</source>
-        <translation>TAB譜音価記号</translation>
+        <translation>TAB譜 音価記号</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="159"/>
@@ -24223,7 +24222,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="310"/>
         <source>Gujarati</source>
-        <translation>グジャラーティー文字（グジャラート文字）</translation>
+        <translation>グジャラーティー文字 (グジャラート文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="311"/>
@@ -24243,7 +24242,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="314"/>
         <source>Kannada</source>
-        <translation>カンナダ文字（カナラ文字）</translation>
+        <translation>カンナダ文字 (カナラ文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="315"/>
@@ -24288,7 +24287,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="323"/>
         <source>Ethiopic</source>
-        <translation>エチオピア文字（ゲーズ文字）</translation>
+        <translation>エチオピア文字 (ゲーズ文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="324"/>
@@ -24318,7 +24317,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="329"/>
         <source>Tagalog</source>
-        <translation>タガログ文字（バイバイン文字）</translation>
+        <translation>タガログ文字 (バイバイン文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="330"/>
@@ -24353,12 +24352,12 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="336"/>
         <source>Limbu</source>
-        <translation>リンブ文字（キランティ文字）</translation>
+        <translation>リンブ文字 (キランティ文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="337"/>
         <source>Tai Le</source>
-        <translation>タイ・ロ文字（タイ・ヌア文字）</translation>
+        <translation>タイ・ロ文字 (タイ・ヌア文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="338"/>
@@ -24373,12 +24372,12 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="340"/>
         <source>Buginese</source>
-        <translation>ブギス文字（ブギ文字）</translation>
+        <translation>ブギス文字 (ブギ文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="341"/>
         <source>Tai Tham</source>
-        <translation>タイ・タム文字（ラーンナー文字）</translation>
+        <translation>タイ・タム文字 (ラーンナー文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="342"/>
@@ -24398,17 +24397,17 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="345"/>
         <source>Batak</source>
-        <translation>バタク文字（バタック文字）</translation>
+        <translation>バタク文字 (バタック文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="346"/>
         <source>Lepcha</source>
-        <translation>レプチャ文字（ロン文字）</translation>
+        <translation>レプチャ文字 (ロン文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="347"/>
         <source>Ol Chiki</source>
-        <translation>オル・チキ文字（サンタル文字）</translation>
+        <translation>オル・チキ文字 (サンタル文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="348"/>
@@ -24638,7 +24637,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="393"/>
         <source>Bopomofo</source>
-        <translation>注音字母（ボポモフォ）</translation>
+        <translation>注音字母 (ボポモフォ)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="394"/>
@@ -24663,7 +24662,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="398"/>
         <source>Katakana Phonetic Extensions</source>
-        <translation>小書きカタカナ拡張（アイヌ語表音）</translation>
+        <translation>小書きカタカナ拡張 (アイヌ語表音)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="399"/>
@@ -24693,7 +24692,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="404"/>
         <source>Yi Syllables</source>
-        <translation>イ文字（ロロ文字）</translation>
+        <translation>イ文字 (ロロ文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="405"/>
@@ -24718,7 +24717,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="409"/>
         <source>Bamum</source>
-        <translation>バムン文字（バヌム文字）</translation>
+        <translation>バムン文字 (バヌム文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="410"/>
@@ -24763,7 +24762,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="418"/>
         <source>Rejang</source>
-        <translation>レジャン文字（ルジャン文字）</translation>
+        <translation>レジャン文字 (ルジャン文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="419"/>
@@ -24793,12 +24792,12 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="424"/>
         <source>Tai Viet</source>
-        <translation>タイ・ヴェト文字（黒タイ語）</translation>
+        <translation>タイ・ヴェト文字 (黒タイ語)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="425"/>
         <source>Meetei Mayek Extensions</source>
-        <translation>マニプール文字（メイテイ文字）拡張</translation>
+        <translation>マニプール文字 (メイテイ文字) 拡張</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="426"/>
@@ -24813,7 +24812,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="428"/>
         <source>Meetei Mayek</source>
-        <translation>マニプール文字（メイテイ文字）</translation>
+        <translation>マニプール文字 (メイテイ文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="429"/>
@@ -24833,7 +24832,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="435"/>
         <source>CJK Compatibility Ideographs</source>
-        <translation>CJK互換漢字</translation>
+        <translation>CJK 互換漢字</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="436"/>
@@ -24863,7 +24862,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="441"/>
         <source>CJK Compatibility Forms</source>
-        <translation>CJK互換形</translation>
+        <translation>CJK 互換形</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="442"/>
@@ -25283,7 +25282,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="525"/>
         <source>Emoticons (Emoji)</source>
-        <translation>顔文字 （絵文字）</translation>
+        <translation>顔文字 (絵文字)</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="526"/>
