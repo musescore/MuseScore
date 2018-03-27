@@ -157,7 +157,7 @@ ScoreElement::~ScoreElement()
                   _links = 0;
                   }
             }
-      delete _propertyFlagsList;
+      delete[] _propertyFlagsList;
       }
 
 //---------------------------------------------------------
@@ -167,11 +167,37 @@ ScoreElement::~ScoreElement()
 void ScoreElement::setSubStyleId(SubStyleId ssid)
       {
       _subStyleId = ssid;
-      delete _propertyFlagsList;
+      delete[] _propertyFlagsList;
       int n = subStyle(_subStyleId).size() - 1;       // don't count end of list marker
       _propertyFlagsList = new PropertyFlags[n];
       for (int i = 0; i < n; ++i)
             _propertyFlagsList[i] = PropertyFlags::STYLED;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant ScoreElement::propertyDefault(P_ID id) const
+      {
+//      if (isTuplet())
+//            qDebug("lookup <%s> in <%s> style <%s>", propertyName(id), name(), subStyleName(subStyleId()));
+      if (id == P_ID::SUB_STYLE) {
+            return int(SubStyleId::DEFAULT);
+            }
+      for (const StyledProperty& p : subStyle(subStyleId())) {
+            if (p.propertyIdx == id)
+                  return score()->styleV(p.styleIdx);
+            }
+      for (const StyledProperty& p : subStyle(SubStyleId::DEFAULT)) {
+            if (p.propertyIdx == id)
+                  return score()->styleV(p.styleIdx);
+            }
+      if (isTuplet())
+            qDebug("<%s> not found in <%s> style <%s>", propertyName(id), name(), subStyleName(subStyleId()));
+
+//      qDebug("<%s> not found in <%s> style <%s>", propertyName(id), name(), subStyleName(subStyleId()));
+      return QVariant();
       }
 
 //---------------------------------------------------------
@@ -501,27 +527,6 @@ bool ScoreElement::readProperty(const QStringRef& s, XmlReader& e, P_ID id)
             return true;
             }
       return false;
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant ScoreElement::propertyDefault(P_ID id) const
-      {
-      if (id == P_ID::SUB_STYLE) {
-            return int(SubStyleId::DEFAULT);
-            }
-      for (const StyledProperty& p : subStyle(subStyleId())) {
-            if (p.propertyIdx == id)
-                  return score()->styleV(p.styleIdx);
-            }
-      for (const StyledProperty& p : subStyle(SubStyleId::DEFAULT)) {
-            if (p.propertyIdx == id)
-                  return score()->styleV(p.styleIdx);
-            }
-      qDebug("not found <%s> in <%s> style <%s>", propertyName(id), name(), subStyleName(subStyleId()));
-      return QVariant();
       }
 
 //---------------------------------------------------------

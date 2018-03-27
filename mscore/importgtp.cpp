@@ -1279,7 +1279,6 @@ void GuitarPro::setTempo(int tempo, Measure* measure)
 		tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempo));
 		tt->setTrack(0);
 
-qDebug("%p setTempo %d annotations %d", tt, measure->tick(), segment->annotations().size());
 		segment->add(tt);
 		score->setTempo(measure->tick(), tt->tempo());
 		previousTempo = tempo;

@@ -184,7 +184,6 @@
           <actualNotes>3</actualNotes>
           <baseNote>quarter</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>3</text>
             </Number>
           </Tuplet>
@@ -232,7 +231,6 @@
           <baseNote>quarter</baseNote>
           <Number>
             <track>1</track>
-            <style>Tuplet</style>
             <text>3</text>
             </Number>
           </Tuplet>
@@ -287,7 +285,6 @@
           <baseNote>quarter</baseNote>
           <Number>
             <track>2</track>
-            <style>Tuplet</style>
             <text>3</text>
             </Number>
           </Tuplet>
@@ -534,7 +531,6 @@
           <actualNotes>3</actualNotes>
           <baseNote>quarter</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>3</text>
             </Number>
           </Tuplet>
@@ -639,7 +635,6 @@
           <actualNotes>3</actualNotes>
           <baseNote>quarter</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>3</text>
             </Number>
           </Tuplet>

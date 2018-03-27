@@ -18,7 +18,7 @@ namespace Ms {
 class XmlReader;
 enum class StyleIdx : int;
 
-//---------------------------------------------------------
+//------------------------------------------------------------------------
 //    M_PROPERTY (type, getter_name, setter_name)
 //       helper macro to define a styled ScoreElement property
 //
@@ -35,6 +35,13 @@ enum class StyleIdx : int;
 
 #define M_PROPERTY(a,b,c)                                      \
       a _ ## b;                                                \
+   public:                                                     \
+      const a& b() const   { return _ ## b; }                  \
+      void c(const a& val) { _ ## b = val;  }                  \
+   private:
+
+#define M_PROPERTY2(a,b,c,d)                                   \
+      a _ ## b { d };                                          \
    public:                                                     \
       const a& b() const   { return _ ## b; }                  \
       void c(const a& val) { _ ## b = val;  }                  \

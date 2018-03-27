@@ -92,16 +92,19 @@ class SpannerSegment : public Element {
       virtual QVariant getProperty(P_ID id) const override;
       virtual bool setProperty(P_ID id, const QVariant& v) override;
       virtual QVariant propertyDefault(P_ID id) const override;
+      virtual StyleIdx getPropertyStyle(P_ID id) const override;
+      virtual PropertyFlags& propertyFlags(P_ID id) override;
+      virtual void resetProperty(P_ID id) override;
+      virtual void styleChanged() override;
       void reset() override;
+
       virtual void setSelected(bool f) override;
       virtual void setVisible(bool f) override;
       virtual void setColor(const QColor& col) override;
 
       virtual Element* nextSegmentElement() override;
       virtual Element* prevSegmentElement() override;
-//      virtual bool isSpannerSegment() const override { return true; }
       virtual QString accessibleInfo() const override;
-      virtual void styleChanged() override;
       virtual void triggerLayout() const override;
       };
 

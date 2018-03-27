@@ -121,6 +121,46 @@ QVariant SpannerSegment::propertyDefault(P_ID id) const
       }
 
 //---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx SpannerSegment::getPropertyStyle(P_ID id) const
+      {
+      return spanner()->getPropertyStyle(id);
+      }
+
+//---------------------------------------------------------
+//   propertyFlags
+//---------------------------------------------------------
+
+PropertyFlags& SpannerSegment::propertyFlags(P_ID id)
+      {
+      return spanner()->propertyFlags(id);
+      }
+
+//---------------------------------------------------------
+//   resetProperty
+//---------------------------------------------------------
+
+void SpannerSegment::resetProperty(P_ID id)
+      {
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp) {
+            if (spp->propertyIdx == id)
+                  return spanner()->resetProperty(id);
+            }
+      return Element::resetProperty(id);
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//---------------------------------------------------------
+
+void SpannerSegment::styleChanged()
+      {
+      spanner()->styleChanged();
+      }
+
+//---------------------------------------------------------
 //   reset
 //---------------------------------------------------------
 
@@ -197,15 +237,6 @@ Element* SpannerSegment::prevSegmentElement()
 QString SpannerSegment::accessibleInfo() const
       {
       return spanner()->accessibleInfo();
-      }
-
-//---------------------------------------------------------
-//   styleChanged
-//---------------------------------------------------------
-
-void SpannerSegment::styleChanged()
-      {
-      _spanner->styleChanged();
       }
 
 //---------------------------------------------------------
