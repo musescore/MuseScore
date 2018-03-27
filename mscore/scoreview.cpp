@@ -604,7 +604,7 @@ void ScoreView::moveCursor()
       {
       const InputState& is = _score->inputState();
       Segment* segment = is.segment();
-      if (segment && score()->styleB(StyleIdx::createMultiMeasureRests) && segment->measure()->hasMMRest()) {
+      if (segment && score()->styleB(Sid::createMultiMeasureRests) && segment->measure()->hasMMRest()) {
             Measure* m = segment->measure()->mmRest();
             segment = m->findSegment(SegmentType::ChordRest, m->tick());
             }
@@ -629,7 +629,7 @@ void ScoreView::moveCursor()
       double x        = segment->canvasPos().x();
       double y        = system->staffYpage(staffIdx) + system->page()->pos().y();
       double _spatium = score()->spatium();
-      x              -= qMin(segment->pos().x() - score()->styleP(StyleIdx::barNoteDistance), 0.0);
+      x              -= qMin(segment->pos().x() - score()->styleP(Sid::barNoteDistance), 0.0);
 
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
 
@@ -820,7 +820,7 @@ void ScoreView::setShadowNote(const QPointF& p)
       // so pad this by barNoteDistance
       qreal mag     = score()->staff(pos.staffIdx)->mag(0);
       qreal relX    = pos.pos.x() - pos.segment->measure()->canvasPos().x();
-      pos.pos.rx() -= qMin(relX - score()->styleP(StyleIdx::barNoteDistance) * mag, 0.0);
+      pos.pos.rx() -= qMin(relX - score()->styleP(Sid::barNoteDistance) * mag, 0.0);
 
       shadowNote->setVisible(true);
       Staff* staff = score()->staff(pos.staffIdx);
@@ -1852,13 +1852,13 @@ void ScoreView::cmd(const char* s)
             if (el && (el->isText())) {
                   score()->startCmd();
                   if (cmd == "prev-chord")
-                        el->undoChangeProperty(P_ID::USER_OFF, el->userOff() - QPointF (MScore::nudgeStep * el->spatium(), 0.0));
+                        el->undoChangeProperty(Pid::USER_OFF, el->userOff() - QPointF (MScore::nudgeStep * el->spatium(), 0.0));
                   else if (cmd == "next-chord")
-                        el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF (MScore::nudgeStep * el->spatium(), 0.0));
+                        el->undoChangeProperty(Pid::USER_OFF, el->userOff() + QPointF (MScore::nudgeStep * el->spatium(), 0.0));
                   else if (cmd == "prev-measure")
-                        el->undoChangeProperty(P_ID::USER_OFF, el->userOff() - QPointF (MScore::nudgeStep10 * el->spatium(), 0.0));
+                        el->undoChangeProperty(Pid::USER_OFF, el->userOff() - QPointF (MScore::nudgeStep10 * el->spatium(), 0.0));
                   else if (cmd == "next-measure")
-                        el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF (MScore::nudgeStep10 * el->spatium(), 0.0));
+                        el->undoChangeProperty(Pid::USER_OFF, el->userOff() + QPointF (MScore::nudgeStep10 * el->spatium(), 0.0));
                   score()->endCmd();
                   }
             else {
@@ -2218,7 +2218,7 @@ void ScoreView::cmd(const char* s)
 #endif
       else if (cmd == "concert-pitch") {
             QAction* a = getAction(cmd);
-            if (_score->styleB(StyleIdx::concertPitch) != a->isChecked()) {
+            if (_score->styleB(Sid::concertPitch) != a->isChecked()) {
                   _score->startCmd();
                   _score->cmdConcertPitchChanged(a->isChecked(), true);
                   _score->endCmd();
@@ -3293,8 +3293,8 @@ void ScoreView::cmdChangeEnharmonic(bool both)
                   int string = n->line() + (both ? 1 : -1);
                   int fret   = staff->part()->instrument()->stringData()->fret(n->pitch(), string, staff, n->chord()->tick());
                   if (fret != -1) {
-                        n->undoChangeProperty(P_ID::FRET, fret);
-                        n->undoChangeProperty(P_ID::STRING, string);
+                        n->undoChangeProperty(Pid::FRET, fret);
+                        n->undoChangeProperty(Pid::STRING, string);
                         }
                   }
             else {
@@ -3337,9 +3337,9 @@ void ScoreView::cmdChangeEnharmonic(bool both)
                               // change both spellings
                               int t = n->transposeTpc(tpc);
                               if (n->concertPitch())
-                                    n->undoChangeProperty(P_ID::TPC2, t);
+                                    n->undoChangeProperty(Pid::TPC2, t);
                               else
-                                    n->undoChangeProperty(P_ID::TPC1, t);
+                                    n->undoChangeProperty(Pid::TPC1, t);
                               }
                         }
                   }
@@ -4019,7 +4019,7 @@ bool ScoreView::searchMeasure(int n)
       int i = 0;
       Measure* measure;
       for (measure = _score->firstMeasureMM(); measure; measure = measure->nextMeasureMM()) {
-            int nn = _score->styleB(StyleIdx::createMultiMeasureRests) && measure->isMMRest()
+            int nn = _score->styleB(Sid::createMultiMeasureRests) && measure->isMMRest()
                ? measure->mmRestCount() : 1;
             if (n >= i && n < (i+nn))
                   break;

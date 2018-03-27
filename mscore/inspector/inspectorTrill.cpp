@@ -30,16 +30,16 @@ InspectorTrill::InspectorTrill(QWidget* parent)
       t.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::DIAGONAL,       0, l.diagonal,         l.resetDiagonal         },
-            { P_ID::LINE_COLOR,     0, l.lineColor,        l.resetLineColor        },
-            { P_ID::LINE_WIDTH,     0, l.lineWidth,        l.resetLineWidth        },
-            { P_ID::LINE_STYLE,     0, l.lineStyle,        l.resetLineStyle        },
-            { P_ID::DASH_LINE_LEN,  0, l.dashLineLength,   l.resetDashLineLength   },
-            { P_ID::DASH_GAP_LEN,   0, l.dashGapLength,    l.resetDashGapLength    },
-            { P_ID::TRILL_TYPE,     0, t.trillType,        t.resetTrillType        },
-            { P_ID::PLACEMENT,      0, t.placement,        t.resetPlacement        },
-            { P_ID::ORNAMENT_STYLE, 0, t.ornamentStyle,    t.resetOrnamentStyle    },
-            { P_ID::PLAY,           0, t.playArticulation, t.resetPlayArticulation }
+            { Pid::DIAGONAL,       0, l.diagonal,         l.resetDiagonal         },
+            { Pid::LINE_COLOR,     0, l.lineColor,        l.resetLineColor        },
+            { Pid::LINE_WIDTH,     0, l.lineWidth,        l.resetLineWidth        },
+            { Pid::LINE_STYLE,     0, l.lineStyle,        l.resetLineStyle        },
+            { Pid::DASH_LINE_LEN,  0, l.dashLineLength,   l.resetDashLineLength   },
+            { Pid::DASH_GAP_LEN,   0, l.dashGapLength,    l.resetDashGapLength    },
+            { Pid::TRILL_TYPE,     0, t.trillType,        t.resetTrillType        },
+            { Pid::PLACEMENT,      0, t.placement,        t.resetPlacement        },
+            { Pid::ORNAMENT_STYLE, 0, t.ornamentStyle,    t.resetOrnamentStyle    },
+            { Pid::PLAY,           0, t.playArticulation, t.resetPlayArticulation }
             };
       const std::vector<InspectorPanel> ppList = {
             { l.title, l.panel },

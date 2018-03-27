@@ -214,7 +214,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
       score->doLayout();
 
       // handle transposing instruments
-      if (oscore->styleB(StyleIdx::concertPitch) != score->styleB(StyleIdx::concertPitch)) {
+      if (oscore->styleB(Sid::concertPitch) != score->styleB(Sid::concertPitch)) {
             for (Staff* staff : score->staves()) {
                   if (staff->staffType(0)->group() == StaffGroup::PERCUSSION)
                         continue;
@@ -224,7 +224,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                   if (interval.isZero() && staff->part()->instruments()->size() == 1)
                         continue;
                   bool flip = false;
-                  if (oscore->styleB(StyleIdx::concertPitch)) {
+                  if (oscore->styleB(Sid::concertPitch)) {
                         interval.flip();  // flip the transposition for the original instrument
                         flip = true;      // transposeKeys() will flip transposition for each instrument change
                         }
@@ -242,7 +242,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                         Interval interval = staff->part()->instrument(segment->tick())->transpose();
                         if (interval.isZero())
                               continue;
-                        if (oscore->styleB(StyleIdx::concertPitch))
+                        if (oscore->styleB(Sid::concertPitch))
                               interval.flip();
 
                         for (auto e : segment->annotations()) {

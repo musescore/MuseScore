@@ -62,9 +62,9 @@ class TempoText final : public TextBase  {
       static QString duration2tempoTextString(const TDuration dur);
       static QString duration2userName(const TDuration t);
 
-      QVariant getProperty(P_ID propertyId) const override;
-      bool setProperty(P_ID propertyId, const QVariant&) override;
-      QVariant propertyDefault(P_ID id) const override;
+      QVariant getProperty(Pid propertyId) const override;
+      bool setProperty(Pid propertyId, const QVariant&) override;
+      QVariant propertyDefault(Pid id) const override;
       virtual QString accessibleInfo() const override;
       };
 

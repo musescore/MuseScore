@@ -69,9 +69,9 @@ class Marker final : public TextBase {
       virtual bool systemFlag() const override  { return true;        }
       virtual void adjustReadPos() override;
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid) const override;
 
       virtual Element* nextSegmentElement() override;
       virtual Element* prevSegmentElement() override;

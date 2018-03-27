@@ -1923,7 +1923,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->title());
 
       QAction* a = getAction("concert-pitch");
-      a->setChecked(cs->styleB(StyleIdx::concertPitch));
+      a->setChecked(cs->styleB(Sid::concertPitch));
 
       setPos(cs->inputPos());
       //showMessage(cs->filePath(), 2000);
@@ -2686,7 +2686,7 @@ static bool doConvert(Score* cs, QString fn, QString plugin = "")
                         for (Excerpt* e : excerpts) {
                               Score* nscore = new Score(e->oscore());
                               e->setPartScore(nscore);
-                              nscore->style().set(StyleIdx::createMultiMeasureRests, true);
+                              nscore->style().set(Sid::createMultiMeasureRests, true);
                               Excerpt::createExcerpt(e);
                               cs->startCmd();
                               cs->undo(new AddExcerpt(e));
@@ -2712,7 +2712,7 @@ static bool doConvert(Score* cs, QString fn, QString plugin = "")
                               e->setPartScore(nscore);
                               nscore->setExcerpt(e);
                               // nscore->setName(e->title()); // needed before AddExcerpt
-                              nscore->style().set(StyleIdx::createMultiMeasureRests, true);
+                              nscore->style().set(Sid::createMultiMeasureRests, true);
                               Excerpt::createExcerpt(e);
                               cs->startCmd();
                               cs->undo(new AddExcerpt(e));
@@ -4649,7 +4649,7 @@ void MuseScore::transpose()
             Staff* staff = cs->staff(i);
             if (staff->isPitchedStaff(startTick)) {
                   key = staff->key(startTick);
-                  if (!cs->styleB(StyleIdx::concertPitch)) {
+                  if (!cs->styleB(Sid::concertPitch)) {
                         int diff = staff->part()->instrument(startTick)->transpose().chromatic;
                         if (diff)
                               key = transposeKey(key, diff);
@@ -4827,7 +4827,7 @@ void MuseScore::endCmd()
                   SelState ss = cs->selection().state();
                   selectionChanged(ss);
                   }
-            getAction("concert-pitch")->setChecked(cs->styleB(StyleIdx::concertPitch));
+            getAction("concert-pitch")->setChecked(cs->styleB(Sid::concertPitch));
 
             if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();
@@ -6122,9 +6122,9 @@ int main(int argc, char* av[])
             if (p.isValid()) {
                   qDebug("set paper size from default printer");
                   QRectF psf = p.paperRect(QPrinter::Inch);
-                  MScore::defaultStyle().set(StyleIdx::pageWidth,  psf.width());
-                  MScore::defaultStyle().set(StyleIdx::pageHeight, psf.height());
-                  MScore::defaultStyle().set(StyleIdx::pagePrintableWidth, psf.width()-20.0/INCH);
+                  MScore::defaultStyle().set(Sid::pageWidth,  psf.width());
+                  MScore::defaultStyle().set(Sid::pageHeight, psf.height());
+                  MScore::defaultStyle().set(Sid::pagePrintableWidth, psf.width()-20.0/INCH);
                   }
             }
 #endif
@@ -6284,7 +6284,7 @@ int main(int argc, char* av[])
       gscore->setMovements(new Movements());
       gscore->setStyle(MScore::baseStyle());
 
-      gscore->style().set(StyleIdx::MusicalTextFont, QString("Bravura Text"));
+      gscore->style().set(Sid::MusicalTextFont, QString("Bravura Text"));
       ScoreFont* scoreFont = ScoreFont::fontFactory("Bravura");
       gscore->setScoreFont(scoreFont);
       gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / SPATIUM20);

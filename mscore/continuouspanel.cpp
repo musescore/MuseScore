@@ -224,14 +224,14 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                  }
             }
 
-      _leftMarginTotal = _score->styleP(StyleIdx::clefLeftMargin);
-      _leftMarginTotal += _score->styleP(StyleIdx::keysigLeftMargin);
-      _leftMarginTotal += _score->styleP(StyleIdx::timesigLeftMargin);
+      _leftMarginTotal = _score->styleP(Sid::clefLeftMargin);
+      _leftMarginTotal += _score->styleP(Sid::keysigLeftMargin);
+      _leftMarginTotal += _score->styleP(Sid::timesigLeftMargin);
 
       _newWidth = _widthClef + _widthKeySig + _widthTimeSig + _leftMarginTotal + _panelRightPadding;
       _xPosMeasure -= _offsetPanel;
 
-      lineWidthName += _score->spatium() + _score->styleP(StyleIdx::clefLeftMargin) + _widthClef;
+      lineWidthName += _score->spatium() + _score->styleP(Sid::clefLeftMargin) + _widthClef;
       if (_newWidth < lineWidthName) {
             _newWidth = lineWidthName;
             _oldWidth = 0;
@@ -301,7 +301,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       newElement->setSizeIsSpatiumDependent(true);
       newElement->setColor(color);
       newElement->layout1();
-      pos = QPointF(_score->styleP(StyleIdx::clefLeftMargin) + _widthClef, _y + newElement->height());
+      pos = QPointF(_score->styleP(Sid::clefLeftMargin) + _widthClef, _y + newElement->height());
       painter.translate(pos);
       newElement->draw(&painter);
       pos += QPointF(_offsetPanel, 0);
@@ -365,7 +365,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   newName->layout();
                   if (currentStaff->part()->staff(0) == currentStaff) {
                         double _spatium = _score->spatium();
-                        pos = QPointF (_score->styleP(StyleIdx::clefLeftMargin) + _widthClef, -_spatium * 2);
+                        pos = QPointF (_score->styleP(Sid::clefLeftMargin) + _widthClef, -_spatium * 2);
                         painter.translate(pos);
                         newName->draw(&painter);
                         painter.translate(-pos);
@@ -381,7 +381,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   clef.setTrack(e->track());
                   clef.setColor(color);
                   clef.layout();
-                  posX += _score->styleP(StyleIdx::clefLeftMargin);
+                  posX += _score->styleP(Sid::clefLeftMargin);
                   clef.drawAt(&painter, QPointF(posX, clef.pos().y()));
                   posX += _widthClef;
 
@@ -396,7 +396,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   newKs.setColor(color);
                   newKs.setHideNaturals(true);
                   newKs.layout();
-                  posX += _score->styleP(StyleIdx::keysigLeftMargin);
+                  posX += _score->styleP(Sid::keysigLeftMargin);
                   newKs.drawAt(&painter, QPointF(posX, 0.0));
 
                   posX += _widthKeySig + _xPosTimeSig;
@@ -412,7 +412,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                         newTs.setTrack(e->track());
                         newTs.setColor(color);
                         newTs.layout();
-                        posX += _score->styleP(StyleIdx::timesigLeftMargin);
+                        posX += _score->styleP(Sid::timesigLeftMargin);
                         newTs.drawAt(&painter, QPointF(posX, 0.0));
                         }
                   painter.restore();

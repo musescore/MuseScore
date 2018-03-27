@@ -31,7 +31,7 @@ void LetRingSegment::layout()
             setUserOff(QPointF());
       TextLineBaseSegment::layout();
       if (parent()) {     // for palette
-            rypos() += score()->styleP(letRing()->placeBelow() ? StyleIdx::letRingPosBelow : StyleIdx::letRingPosAbove);
+            rypos() += score()->styleP(letRing()->placeBelow() ? Sid::letRingPosBelow : Sid::letRingPosAbove);
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
                   Shape s1 = shape().translated(pos());
@@ -86,7 +86,7 @@ void LetRing::write(XmlWriter& xml) const
             return;
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
 
-      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp)
+      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp)
             writeProperty(xml, spp->propertyIdx);
 
       Element::writeProperties(xml);
@@ -108,44 +108,44 @@ LineSegment* LetRing::createLineSegment()
 
 void LetRing::setYoff(qreal val)
       {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? StyleIdx::letRingPosAbove : StyleIdx::letRingPosBelow);
+      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::letRingPosAbove : Sid::letRingPosBelow);
       }
 
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant LetRing::propertyDefault(P_ID propertyId) const
+QVariant LetRing::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::LINE_WIDTH:
-                  return score()->styleV(StyleIdx::letRingLineWidth);
+            case Pid::LINE_WIDTH:
+                  return score()->styleV(Sid::letRingLineWidth);
 
-            case P_ID::ALIGN:
+            case Pid::ALIGN:
                   return QVariant::fromValue(Align::LEFT | Align::BASELINE);
 
-            case P_ID::LINE_STYLE:
-                  return score()->styleV(StyleIdx::letRingLineStyle);
+            case Pid::LINE_STYLE:
+                  return score()->styleV(Sid::letRingLineStyle);
 
-            case P_ID::BEGIN_TEXT_OFFSET:
-                  return score()->styleV(StyleIdx::letRingBeginTextOffset).toPointF();
+            case Pid::BEGIN_TEXT_OFFSET:
+                  return score()->styleV(Sid::letRingBeginTextOffset).toPointF();
 
-            case P_ID::BEGIN_TEXT_ALIGN:
-            case P_ID::CONTINUE_TEXT_ALIGN:
-            case P_ID::END_TEXT_ALIGN:
-                  return score()->styleV(StyleIdx::letRingTextAlign);
+            case Pid::BEGIN_TEXT_ALIGN:
+            case Pid::CONTINUE_TEXT_ALIGN:
+            case Pid::END_TEXT_ALIGN:
+                  return score()->styleV(Sid::letRingTextAlign);
 
-            case P_ID::BEGIN_HOOK_HEIGHT:
-            case P_ID::END_HOOK_HEIGHT:
-                  return score()->styleV(StyleIdx::letRingHookHeight);
+            case Pid::BEGIN_HOOK_HEIGHT:
+            case Pid::END_HOOK_HEIGHT:
+                  return score()->styleV(Sid::letRingHookHeight);
 
-            case P_ID::BEGIN_FONT_ITALIC:
-                  return score()->styleV(StyleIdx::letRingFontItalic);
+            case Pid::BEGIN_FONT_ITALIC:
+                  return score()->styleV(Sid::letRingFontItalic);
 
-            case P_ID::BEGIN_TEXT:
-                  return score()->styleV(StyleIdx::letRingText);
+            case Pid::BEGIN_TEXT:
+                  return score()->styleV(Sid::letRingText);
 
-            case P_ID::END_HOOK_TYPE:
+            case Pid::END_HOOK_TYPE:
                   return int(HookType::HOOK_90T);
 
             default:
@@ -157,34 +157,34 @@ QVariant LetRing::propertyDefault(P_ID propertyId) const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-StyleIdx LetRing::getPropertyStyle(P_ID id) const
+Sid LetRing::getPropertyStyle(Pid id) const
       {
       switch (id) {
-            case P_ID::PLACEMENT:
-                  return StyleIdx::letRingPlacement;
-            case P_ID::BEGIN_FONT_FACE:
-                  return StyleIdx::letRingFontFace;
-            case P_ID::BEGIN_FONT_SIZE:
-                  return StyleIdx::letRingFontSize;
-            case P_ID::BEGIN_FONT_BOLD:
-                  return StyleIdx::letRingFontBold;
-            case P_ID::BEGIN_FONT_ITALIC:
-                  return StyleIdx::letRingFontItalic;
-            case P_ID::BEGIN_FONT_UNDERLINE:
-                  return StyleIdx::letRingFontUnderline;
-            case P_ID::BEGIN_TEXT_ALIGN:
-            case P_ID::CONTINUE_TEXT_ALIGN:
-            case P_ID::END_TEXT_ALIGN:
-                  return StyleIdx::letRingTextAlign;
-            case P_ID::BEGIN_HOOK_HEIGHT:
-            case P_ID::END_HOOK_HEIGHT:
-                  return StyleIdx::letRingHookHeight;
-            case P_ID::BEGIN_TEXT:
-                  return StyleIdx::letRingText;
+            case Pid::PLACEMENT:
+                  return Sid::letRingPlacement;
+            case Pid::BEGIN_FONT_FACE:
+                  return Sid::letRingFontFace;
+            case Pid::BEGIN_FONT_SIZE:
+                  return Sid::letRingFontSize;
+            case Pid::BEGIN_FONT_BOLD:
+                  return Sid::letRingFontBold;
+            case Pid::BEGIN_FONT_ITALIC:
+                  return Sid::letRingFontItalic;
+            case Pid::BEGIN_FONT_UNDERLINE:
+                  return Sid::letRingFontUnderline;
+            case Pid::BEGIN_TEXT_ALIGN:
+            case Pid::CONTINUE_TEXT_ALIGN:
+            case Pid::END_TEXT_ALIGN:
+                  return Sid::letRingTextAlign;
+            case Pid::BEGIN_HOOK_HEIGHT:
+            case Pid::END_HOOK_HEIGHT:
+                  return Sid::letRingHookHeight;
+            case Pid::BEGIN_TEXT:
+                  return Sid::letRingText;
             default:
                   break;
             }
-      return StyleIdx::NOSTYLE;
+      return Sid::NOSTYLE;
       }
 
 

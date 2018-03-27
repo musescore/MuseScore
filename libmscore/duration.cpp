@@ -150,10 +150,10 @@ void DurationElement::writeTuplet(XmlWriter& xml)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant DurationElement::getProperty(P_ID propertyId) const
+QVariant DurationElement::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::DURATION:
+            case Pid::DURATION:
                   return QVariant::fromValue(_duration);
             default:
                   return Element::getProperty(propertyId);
@@ -164,10 +164,10 @@ QVariant DurationElement::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool DurationElement::setProperty(P_ID propertyId, const QVariant& v)
+bool DurationElement::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::DURATION: {
+            case Pid::DURATION: {
                   Fraction f(v.value<Fraction>());
                   setDuration(f);
                   score()->setLayoutAll();

@@ -118,7 +118,7 @@ void SlurTieSegment::endEdit(EditData&)
 void SlurTieSegment::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
-      for (auto i : { P_ID::SLUR_UOFF1, P_ID::SLUR_UOFF2, P_ID::SLUR_UOFF3, P_ID::SLUR_UOFF4, P_ID::USER_OFF })
+      for (auto i : { Pid::SLUR_UOFF1, Pid::SLUR_UOFF2, Pid::SLUR_UOFF3, Pid::SLUR_UOFF4, Pid::USER_OFF })
             eed->pushProperty(i);
       }
 
@@ -191,19 +191,19 @@ void SlurTieSegment::editDrag(EditData& ed)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant SlurTieSegment::getProperty(P_ID propertyId) const
+QVariant SlurTieSegment::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::LINE_TYPE:
-            case P_ID::SLUR_DIRECTION:
+            case Pid::LINE_TYPE:
+            case Pid::SLUR_DIRECTION:
                   return slurTie()->getProperty(propertyId);
-            case P_ID::SLUR_UOFF1:
+            case Pid::SLUR_UOFF1:
                   return ups(Grip::START).off;
-            case P_ID::SLUR_UOFF2:
+            case Pid::SLUR_UOFF2:
                   return ups(Grip::BEZIER1).off;
-            case P_ID::SLUR_UOFF3:
+            case Pid::SLUR_UOFF3:
                   return ups(Grip::BEZIER2).off;
-            case P_ID::SLUR_UOFF4:
+            case Pid::SLUR_UOFF4:
                   return ups(Grip::END).off;
             default:
                   return SpannerSegment::getProperty(propertyId);
@@ -214,22 +214,22 @@ QVariant SlurTieSegment::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool SlurTieSegment::setProperty(P_ID propertyId, const QVariant& v)
+bool SlurTieSegment::setProperty(Pid propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case P_ID::LINE_TYPE:
-            case P_ID::SLUR_DIRECTION:
+            case Pid::LINE_TYPE:
+            case Pid::SLUR_DIRECTION:
                   return slurTie()->setProperty(propertyId, v);
-            case P_ID::SLUR_UOFF1:
+            case Pid::SLUR_UOFF1:
                   ups(Grip::START).off = v.toPointF();
                   break;
-            case P_ID::SLUR_UOFF2:
+            case Pid::SLUR_UOFF2:
                   ups(Grip::BEZIER1).off = v.toPointF();
                   break;
-            case P_ID::SLUR_UOFF3:
+            case Pid::SLUR_UOFF3:
                   ups(Grip::BEZIER2).off = v.toPointF();
                   break;
-            case P_ID::SLUR_UOFF4:
+            case Pid::SLUR_UOFF4:
                   ups(Grip::END).off = v.toPointF();
                   break;
             default:
@@ -243,16 +243,16 @@ bool SlurTieSegment::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SlurTieSegment::propertyDefault(P_ID id) const
+QVariant SlurTieSegment::propertyDefault(Pid id) const
       {
       switch (id) {
-            case P_ID::LINE_TYPE:
-            case P_ID::SLUR_DIRECTION:
+            case Pid::LINE_TYPE:
+            case Pid::SLUR_DIRECTION:
                   return slurTie()->propertyDefault(id);
-            case P_ID::SLUR_UOFF1:
-            case P_ID::SLUR_UOFF2:
-            case P_ID::SLUR_UOFF3:
-            case P_ID::SLUR_UOFF4:
+            case Pid::SLUR_UOFF1:
+            case Pid::SLUR_UOFF2:
+            case Pid::SLUR_UOFF3:
+            case Pid::SLUR_UOFF4:
                   return QPointF();
             default:
                   return SpannerSegment::propertyDefault(id);
@@ -266,11 +266,11 @@ QVariant SlurTieSegment::propertyDefault(P_ID id) const
 void SlurTieSegment::reset()
       {
       Element::reset();
-      undoResetProperty(P_ID::SLUR_UOFF1);
-      undoResetProperty(P_ID::SLUR_UOFF2);
-      undoResetProperty(P_ID::SLUR_UOFF3);
-      undoResetProperty(P_ID::SLUR_UOFF4);
-      undoResetProperty(P_ID::AUTOPLACE);
+      undoResetProperty(Pid::SLUR_UOFF1);
+      undoResetProperty(Pid::SLUR_UOFF2);
+      undoResetProperty(Pid::SLUR_UOFF3);
+      undoResetProperty(Pid::SLUR_UOFF4);
+      undoResetProperty(Pid::AUTOPLACE);
       slurTie()->reset();
       }
 
@@ -382,8 +382,8 @@ void SlurTie::writeProperties(XmlWriter& xml) const
       int idx = 0;
       for (const SpannerSegment* ss : spannerSegments())
             ((SlurTieSegment*)ss)->writeSlur(xml, idx++);
-      writeProperty(xml, P_ID::SLUR_DIRECTION);
-      writeProperty(xml, P_ID::LINE_TYPE);
+      writeProperty(xml, Pid::SLUR_DIRECTION);
+      writeProperty(xml, Pid::LINE_TYPE);
       }
 
 //---------------------------------------------------------
@@ -394,7 +394,7 @@ bool SlurTie::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      if (readProperty(tag, e, P_ID::SLUR_DIRECTION))
+      if (readProperty(tag, e, Pid::SLUR_DIRECTION))
             ;
       else if (tag == "lineType")
             _lineType = e.readInt();
@@ -414,7 +414,7 @@ bool SlurTie::readProperties(XmlReader& e)
 
 void SlurTie::undoSetLineType(int t)
       {
-      undoChangeProperty(P_ID::LINE_TYPE, t);
+      undoChangeProperty(Pid::LINE_TYPE, t);
       }
 
 //---------------------------------------------------------
@@ -423,19 +423,19 @@ void SlurTie::undoSetLineType(int t)
 
 void SlurTie::undoSetSlurDirection(Direction d)
       {
-      undoChangeProperty(P_ID::SLUR_DIRECTION, QVariant::fromValue<Direction>(d));
+      undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(d));
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant SlurTie::getProperty(P_ID propertyId) const
+QVariant SlurTie::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::LINE_TYPE:
+            case Pid::LINE_TYPE:
                   return lineType();
-            case P_ID::SLUR_DIRECTION:
+            case Pid::SLUR_DIRECTION:
                   return QVariant::fromValue<Direction>(slurDirection());
             default:
                   return Spanner::getProperty(propertyId);
@@ -446,13 +446,13 @@ QVariant SlurTie::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
+bool SlurTie::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::LINE_TYPE:
+            case Pid::LINE_TYPE:
                   setLineType(v.toInt());
                   break;
-            case P_ID::SLUR_DIRECTION:
+            case Pid::SLUR_DIRECTION:
                   setSlurDirection(v.value<Direction>());
                   break;
             default:
@@ -466,12 +466,12 @@ bool SlurTie::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SlurTie::propertyDefault(P_ID id) const
+QVariant SlurTie::propertyDefault(Pid id) const
       {
       switch (id) {
-            case P_ID::LINE_TYPE:
+            case Pid::LINE_TYPE:
                   return 0;
-            case P_ID::SLUR_DIRECTION:
+            case Pid::SLUR_DIRECTION:
                   return QVariant::fromValue<Direction>(Direction::AUTO);
             default:
                   return Spanner::propertyDefault(id);
@@ -552,8 +552,8 @@ void SlurTie::fixupSegments(unsigned nsegs)
 void SlurTie::reset()
       {
       Element::reset();
-      undoResetProperty(P_ID::SLUR_DIRECTION);
-      undoResetProperty(P_ID::LINE_TYPE);
+      undoResetProperty(Pid::SLUR_DIRECTION);
+      undoResetProperty(Pid::LINE_TYPE);
       }
 
 }

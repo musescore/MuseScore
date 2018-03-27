@@ -202,9 +202,9 @@ void StringData::fretChords(Chord * chord) const
                         note->setFretConflict(true);
                         // store fretting change without affecting chord context
                         if (nFret != nNewFret)
-                              note->undoChangeProperty(P_ID::FRET, nNewFret);
+                              note->undoChangeProperty(Pid::FRET, nNewFret);
                         if (nString != nNewString)
-                              note->undoChangeProperty(P_ID::STRING, nNewString);
+                              note->undoChangeProperty(Pid::STRING, nNewString);
                         continue;
                         }
                   // note can be fretted: use string
@@ -232,9 +232,9 @@ void StringData::fretChords(Chord * chord) const
 
             // if fretting did change, store as a fret change
             if (nFret != nNewFret)
-                  note->undoChangeProperty(P_ID::FRET, nNewFret);
+                  note->undoChangeProperty(Pid::FRET, nNewFret);
             if (nString != nNewString)
-                  note->undoChangeProperty(P_ID::STRING, nNewString);
+                  note->undoChangeProperty(Pid::STRING, nNewString);
             }
 
       // check for any remaining fret conflict

@@ -33,7 +33,7 @@ namespace Ms {
 class XmlReader;
 class XmlWriter;
 enum class SymId;
-enum class P_ID;
+enum class Pid;
 enum class SubStyleId;
 
 //---------------------------------------------------------
@@ -409,11 +409,11 @@ class Element : public ScoreElement {
       bool autoplace() const           { return flag(ElementFlag::AUTOPLACE); }
       void setAutoplace(bool v)        { setFlag(ElementFlag::AUTOPLACE, v); }
 
-      virtual QVariant getProperty(P_ID) const override;
-      virtual bool setProperty(P_ID, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID) const override;
+      virtual QVariant getProperty(Pid) const override;
+      virtual bool setProperty(Pid, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid) const override;
 
-      bool custom(P_ID) const;
+      bool custom(Pid) const;
       virtual bool isUserModified() const;
 
       void drawSymbol(SymId id, QPainter* p, const QPointF& o = QPointF(), qreal scale = 1.0) const;
@@ -453,7 +453,7 @@ class Element : public ScoreElement {
       virtual void drawEditMode(QPainter*, EditData&);
 
       void autoplaceSegmentElement(qreal minDistance);      // helper function
-      qreal styleP(StyleIdx idx) const;
+      qreal styleP(Sid idx) const;
       };
 
 //-----------------------------------------------------------------------------
@@ -466,7 +466,7 @@ class Element : public ScoreElement {
 //-----------------------------------------------------------------------------
 
 struct PropertyData {
-      P_ID id;
+      Pid id;
       QVariant data;
       };
 
@@ -475,7 +475,7 @@ class ElementEditData {
       Element* e;
       QList<PropertyData> propertyData;
 
-      void pushProperty(P_ID pid) { propertyData.push_back(PropertyData({pid, e->getProperty(pid) })); }
+      void pushProperty(Pid pid) { propertyData.push_back(PropertyData({pid, e->getProperty(pid) })); }
       };
 
 //---------------------------------------------------------

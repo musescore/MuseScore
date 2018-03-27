@@ -33,9 +33,9 @@ void PedalSegment::layout()
       TextLineBaseSegment::layout();
       if (parent()) {     // for palette
             if (pedal()->placeBelow())
-                  rypos() += score()->styleP(StyleIdx::pedalPosBelow) + (staff() ? staff()->height() : 0.0);
+                  rypos() += score()->styleP(Sid::pedalPosBelow) + (staff() ? staff()->height() : 0.0);
             else
-                  rypos() += score()->styleP(StyleIdx::pedalPosAbove);
+                  rypos() += score()->styleP(Sid::pedalPosAbove);
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
                   Shape s1 = shape().translated(pos());
@@ -65,16 +65,16 @@ Pedal::Pedal(Score* s)
    : TextLineBase(s)
       {
       setLineVisible(true);
-      resetProperty(P_ID::BEGIN_TEXT);
-      resetProperty(P_ID::END_TEXT);
+      resetProperty(Pid::BEGIN_TEXT);
+      resetProperty(Pid::END_TEXT);
 
-      resetProperty(P_ID::LINE_WIDTH);
-      resetProperty(P_ID::LINE_STYLE);
+      resetProperty(Pid::LINE_WIDTH);
+      resetProperty(Pid::LINE_STYLE);
 
-      resetProperty(P_ID::BEGIN_HOOK_TYPE);
-      resetProperty(P_ID::END_HOOK_TYPE);
+      resetProperty(Pid::BEGIN_HOOK_TYPE);
+      resetProperty(Pid::END_HOOK_TYPE);
 
-      resetProperty(P_ID::BEGIN_TEXT_PLACE);
+      resetProperty(Pid::BEGIN_TEXT_PLACE);
 
       initSubStyle(SubStyleId::PEDAL);
       }
@@ -105,16 +105,16 @@ void Pedal::write(XmlWriter& xml) const
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
 
       for (auto i : {
-         P_ID::END_HOOK_TYPE,
-         P_ID::BEGIN_TEXT,
-         P_ID::END_TEXT,
-         P_ID::LINE_WIDTH,
-         P_ID::LINE_STYLE,
-         P_ID::BEGIN_HOOK_TYPE
+         Pid::END_HOOK_TYPE,
+         Pid::BEGIN_TEXT,
+         Pid::END_TEXT,
+         Pid::LINE_WIDTH,
+         Pid::LINE_STYLE,
+         Pid::BEGIN_HOOK_TYPE
          }) {
             writeProperty(xml, i);
             }
-      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp)
+      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp)
             writeProperty(xml, spp->propertyIdx);
 
       Element::writeProperties(xml);
@@ -137,31 +137,31 @@ LineSegment* Pedal::createLineSegment()
 
 void Pedal::setYoff(qreal val)
       {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? StyleIdx::pedalPosAbove : StyleIdx::pedalPosBelow);
+      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::pedalPosAbove : Sid::pedalPosBelow);
       }
 
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Pedal::propertyDefault(P_ID propertyId) const
+QVariant Pedal::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::LINE_WIDTH:
-                  return score()->styleV(StyleIdx::pedalLineWidth);
+            case Pid::LINE_WIDTH:
+                  return score()->styleV(Sid::pedalLineWidth);
 
-            case P_ID::LINE_STYLE:
-                  return score()->styleV(StyleIdx::pedalLineStyle);
+            case Pid::LINE_STYLE:
+                  return score()->styleV(Sid::pedalLineStyle);
 
-            case P_ID::BEGIN_TEXT:
-            case P_ID::END_TEXT:
+            case Pid::BEGIN_TEXT:
+            case Pid::END_TEXT:
                   return "";
 
-            case P_ID::BEGIN_TEXT_PLACE:
+            case Pid::BEGIN_TEXT_PLACE:
                   return int(PlaceText::LEFT);
 
-            case P_ID::BEGIN_HOOK_TYPE:
-            case P_ID::END_HOOK_TYPE:
+            case Pid::BEGIN_HOOK_TYPE:
+            case Pid::END_HOOK_TYPE:
                   return int(HookType::NONE);
 
             default:

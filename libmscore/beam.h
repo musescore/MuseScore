@@ -139,9 +139,9 @@ class Beam final : public Element {
 
       qreal beamDist() const              { return _beamDist; }
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid id) const override;
 
       bool isGrace() const { return _isGrace; }  // for debugger
       bool cross() const   { return _cross; }

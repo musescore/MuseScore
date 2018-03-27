@@ -110,7 +110,7 @@ void ShadowNote::draw(QPainter* painter) const
 
       QPointF ap(pagePos());
       painter->translate(ap);
-      qreal lw = score()->styleP(StyleIdx::stemWidth);
+      qreal lw = score()->styleP(Sid::stemWidth);
       QPen pen(MScore::selectColor[_voice].lighter(SHADOW_NOTE_LIGHT), lw, Qt::SolidLine, Qt::RoundCap);
       painter->setPen(pen);
 
@@ -120,8 +120,8 @@ void ShadowNote::draw(QPainter* painter) const
       qreal noteheadWidth = symWidth(_notehead);
       QPointF posDot;
       if (_duration.dots() > 0) {
-            qreal d  = score()->styleP(StyleIdx::dotNoteDistance) * mag();
-            qreal dd = score()->styleP(StyleIdx::dotDotDistance) * mag();
+            qreal d  = score()->styleP(Sid::dotNoteDistance) * mag();
+            qreal dd = score()->styleP(Sid::dotDotDistance) * mag();
             posDot.rx() += (noteheadWidth + d);
             if (!_rest)
                   posDot.ry() -= (_line % 2 == 0 ? 0.5 * spatium() : 0);
@@ -157,7 +157,7 @@ void ShadowNote::draw(QPainter* painter) const
       qreal x2 = x1 + 2 * ms * mag();
       ms *= .5;
 
-      lw = score()->styleP(StyleIdx::ledgerLineWidth);
+      lw = score()->styleP(Sid::ledgerLineWidth);
       QPen penL(MScore::selectColor[_voice].lighter(SHADOW_NOTE_LIGHT), lw);
       painter->setPen(penL);
 
@@ -192,8 +192,8 @@ void ShadowNote::layout()
       qreal dotWidth = 0;
       if (_duration.dots() > 0) {
             qreal noteheadWidth = symWidth(_notehead);
-            qreal d  = score()->styleP(StyleIdx::dotNoteDistance) * mag();
-            qreal dd = score()->styleP(StyleIdx::dotDotDistance) * mag();
+            qreal d  = score()->styleP(Sid::dotNoteDistance) * mag();
+            qreal dd = score()->styleP(Sid::dotDotDistance) * mag();
             dotWidth += (noteheadWidth + d);
             for (int i = 0; i < _duration.dots(); i++)
                   dotWidth += dd * i;
@@ -210,7 +210,7 @@ void ShadowNote::layout()
             qreal y = up ? 0 : -height;
             if (flag != SymId::lastSym) {
                   QRectF flagBbox = symBbox(flag);
-                  qreal lw = score()->styleP(StyleIdx::stemWidth) * mag();
+                  qreal lw = score()->styleP(Sid::stemWidth) * mag();
                   qreal h =  flagBbox.height() + lw / 2 + spatium() * mag();
                   y -= h * up;
                   height += h;
@@ -226,7 +226,7 @@ void ShadowNote::layout()
             b.setRect(x, y, width, height);
             }
 
-      qreal lw = score()->styleP(StyleIdx::ledgerLineWidth);
+      qreal lw = score()->styleP(Sid::ledgerLineWidth);
 
       qreal x1 = (noteheadBbox.width()) * .5 - (_spatium * mag()) - lw * .5;
 

@@ -208,9 +208,9 @@ class Accidental final : public Element {
       virtual void read(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID propertyId) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid propertyId) const override;
 
       static AccidentalVal subtype2value(AccidentalType);             // return effective pitch offset
       static const char* subtype2name(AccidentalType);

@@ -33,8 +33,8 @@ class Lasso : public Element {
       virtual void endDrag(EditData&)              {}
 
       virtual void startEdit(EditData&) override;
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
       };
 
 

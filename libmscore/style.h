@@ -17,18 +17,18 @@
 
 namespace Ms {
 
-enum class P_ID : int;
+enum class Pid : int;
 class XmlWriter;
 struct ChordDescription;
 class Element;
 
 //---------------------------------------------------------
-//   StyleIdx
+//   Sid
 //
 //    Keep in sync with styleTypes[] in style.cpp
 //---------------------------------------------------------
 
-enum class StyleIdx {
+enum class Sid {
       NOSTYLE = -1,
 
       pageWidth,
@@ -735,8 +735,8 @@ enum class StyleIdx {
 //---------------------------------------------------------
 
 struct StyledProperty {
-      StyleIdx styleIdx;
-      P_ID propertyIdx;
+      Sid styleIdx;
+      Pid propertyIdx;
       };
 
 //-------------------------------------------------------------------
@@ -801,8 +801,8 @@ enum class SubStyleId {
 //---------------------------------------------------------
 
 class MStyle {
-      std::array<QVariant, int(StyleIdx::STYLES)> _values;
-      std::array<qreal, int(StyleIdx::STYLES)> _precomputedValues;
+      std::array<QVariant, int(Sid::STYLES)> _values;
+      std::array<qreal, int(Sid::STYLES)> _precomputedValues;
 
       ChordList _chordList;
       bool _customChordList;        // if true, chordlist will be saved as part of score
@@ -811,11 +811,11 @@ class MStyle {
       MStyle();
 
       void precomputeValues();
-      QVariant value(StyleIdx idx) const;
-      qreal pvalue(StyleIdx idx) const    { return _precomputedValues[int(idx)]; }
-      void set(StyleIdx idx, const QVariant& v);
+      QVariant value(Sid idx) const;
+      qreal pvalue(Sid idx) const    { return _precomputedValues[int(idx)]; }
+      void set(Sid idx, const QVariant& v);
 
-      bool isDefault(StyleIdx idx) const;
+      bool isDefault(Sid idx) const;
 
       const ChordDescription* chordDescription(int id) const;
       ChordList* chordList()  { return &_chordList; }
@@ -827,9 +827,9 @@ class MStyle {
       void save(XmlWriter& xml, bool optimize);
       bool readProperties(XmlReader&);
 
-      static const char* valueType(const StyleIdx);
-      static const char* valueName(const StyleIdx);
-      static StyleIdx styleIdx(const QString& name);
+      static const char* valueType(const Sid);
+      static const char* valueName(const Sid);
+      static Sid styleIdx(const QString& name);
       };
 
 typedef std::vector<StyledProperty> SubStyle;

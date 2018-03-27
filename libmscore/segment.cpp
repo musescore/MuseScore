@@ -822,12 +822,12 @@ void Segment::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Segment::getProperty(P_ID propertyId) const
+QVariant Segment::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::TICK:
+            case Pid::TICK:
                   return _tick;
-            case P_ID::LEADING_SPACE:
+            case Pid::LEADING_SPACE:
                   return extraLeadingSpace();
             default:
                   return Element::getProperty(propertyId);
@@ -838,10 +838,10 @@ QVariant Segment::getProperty(P_ID propertyId) const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Segment::propertyDefault(P_ID propertyId) const
+QVariant Segment::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::LEADING_SPACE:
+            case Pid::LEADING_SPACE:
                   return Spatium(0.0);
             default:
                   return Element::getProperty(propertyId);
@@ -852,13 +852,13 @@ QVariant Segment::propertyDefault(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Segment::setProperty(P_ID propertyId, const QVariant& v)
+bool Segment::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::TICK:
+            case Pid::TICK:
                   _tick = v.toInt();
                   break;
-            case P_ID::LEADING_SPACE:
+            case Pid::LEADING_SPACE:
                   setExtraLeadingSpace(v.value<Spatium>());
                   break;
             default:
@@ -1850,7 +1850,7 @@ qreal Segment::minRight() const
       for (const Shape& sh : shapes())
             distance = qMax(distance, sh.right());
       if (isClefType())
-            distance += score()->styleP(StyleIdx::clefBarlineDistance);
+            distance += score()->styleP(Sid::clefBarlineDistance);
       return distance;
       }
 
@@ -1900,10 +1900,10 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
       if (isChordRestType()) {
             if (nst == SegmentType::EndBarLine) {
                   w = qMax(w, score()->noteHeadWidth());
-                  w += score()->styleP(StyleIdx::noteBarDistance);
+                  w += score()->styleP(Sid::noteBarDistance);
                   }
             else if (nst == SegmentType::Clef) {
-                  w = qMax(w, score()->styleP(StyleIdx::clefLeftMargin));
+                  w = qMax(w, score()->styleP(Sid::clefLeftMargin));
                   }
             else {
                   bool isGap = false;
@@ -1921,19 +1921,19 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                   if (isGap)
                         return 0.0;
                   // minimum distance between notes is one note head width
-                  w = qMax(w, score()->noteHeadWidth()) + score()->styleP(StyleIdx::minNoteDistance);
+                  w = qMax(w, score()->noteHeadWidth()) + score()->styleP(Sid::minNoteDistance);
                   }
             }
       else if (nst == SegmentType::ChordRest) {
             qreal d;
             if (systemHeaderGap) {
                   if (st == SegmentType::TimeSig)
-                        d = score()->styleP(StyleIdx::systemHeaderTimeSigDistance);
+                        d = score()->styleP(Sid::systemHeaderTimeSigDistance);
                   else
-                        d = score()->styleP(StyleIdx::systemHeaderDistance);
+                        d = score()->styleP(Sid::systemHeaderDistance);
                   }
             else
-                  d = score()->styleP(StyleIdx::barNoteDistance);
+                  d = score()->styleP(Sid::barNoteDistance);
             qreal dd = minRight() + ns->minLeft() + spatium();
             w = qMax(d, dd);
             // d -= ns->minLeft() * .7;      // hack
@@ -1943,36 +1943,36 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
             }
       else if (st & (SegmentType::Clef | SegmentType::HeaderClef)) {
             if (nst == SegmentType::KeySig)
-                  w += score()->styleP(StyleIdx::clefKeyDistance);
+                  w += score()->styleP(Sid::clefKeyDistance);
             else if (nst == SegmentType::TimeSig)
-                  w += score()->styleP(StyleIdx::clefTimesigDistance);
+                  w += score()->styleP(Sid::clefTimesigDistance);
             else if (nst & (SegmentType::EndBarLine | SegmentType::StartRepeatBarLine))
-                  w += score()->styleP(StyleIdx::clefBarlineDistance);
+                  w += score()->styleP(Sid::clefBarlineDistance);
             else if (nst == SegmentType::Ambitus)
-                  w += score()->styleP(StyleIdx::ambitusMargin);
+                  w += score()->styleP(Sid::ambitusMargin);
             }
       else if ((st & (SegmentType::KeySig | SegmentType::KeySigAnnounce))
          && (nst & (SegmentType::TimeSig | SegmentType::TimeSigAnnounce))) {
-            w += score()->styleP(StyleIdx::keyTimesigDistance);
+            w += score()->styleP(Sid::keyTimesigDistance);
             }
       else if (st == SegmentType::KeySig && nst == SegmentType::StartRepeatBarLine)
-            w += score()->styleP(StyleIdx::keyBarlineDistance);
+            w += score()->styleP(Sid::keyBarlineDistance);
       else if (st == SegmentType::StartRepeatBarLine)
-            w += score()->styleP(StyleIdx::noteBarDistance);
+            w += score()->styleP(Sid::noteBarDistance);
       else if (st == SegmentType::BeginBarLine && (nst & (SegmentType::HeaderClef | SegmentType::Clef)))
-            w += score()->styleP(StyleIdx::clefLeftMargin);
+            w += score()->styleP(Sid::clefLeftMargin);
       else if (st == SegmentType::EndBarLine) {
             if (nst == SegmentType::KeySigAnnounce)
-                  w += score()->styleP(StyleIdx::keysigLeftMargin);
+                  w += score()->styleP(Sid::keysigLeftMargin);
             else if (nst == SegmentType::TimeSigAnnounce)
-                  w += score()->styleP(StyleIdx::timesigLeftMargin);
+                  w += score()->styleP(Sid::timesigLeftMargin);
             }
       else if (st == SegmentType::TimeSig && nst == SegmentType::StartRepeatBarLine)
-            w += score()->styleP(StyleIdx::timesigBarlineDistance);
+            w += score()->styleP(Sid::timesigBarlineDistance);
       else if (st == SegmentType::Breath)
             w += spatium() * 1.5;
       else if (st == SegmentType::Ambitus)
-            w += score()->styleP(StyleIdx::ambitusMargin);
+            w += score()->styleP(Sid::ambitusMargin);
 
       if (w < 0.0)
             w = 0.0;

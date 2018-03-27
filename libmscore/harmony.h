@@ -178,7 +178,7 @@ class Harmony final : public TextBase {
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
 
-      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual QVariant propertyDefault(Pid id) const override;
       };
 
 }     // namespace Ms

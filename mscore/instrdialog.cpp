@@ -216,7 +216,7 @@ void MuseScore::editInstrList()
             }
       Key normalizedC = Key::C;
       // normalize the keyevents to concert pitch if necessary
-      if (firstStaff && !masterScore->styleB(StyleIdx::concertPitch) && firstStaff->part()->instrument()->transpose().chromatic ) {
+      if (firstStaff && !masterScore->styleB(Sid::concertPitch) && firstStaff->part()->instrument()->transpose().chromatic ) {
             int interval = firstStaff->part()->instrument()->transpose().chromatic;
             normalizedC = transposeKey(normalizedC, interval);
             for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
@@ -295,7 +295,7 @@ void MuseScore::editInstrList()
             else {
                   part = pli->part;
                   if (part->show() != pli->visible())
-                        part->undoChangeProperty(P_ID::VISIBLE, pli->visible());
+                        part->undoChangeProperty(Pid::VISIBLE, pli->visible());
                   for (int cidx = 0; pli->child(cidx); ++cidx) {
                         StaffListItem* sli = static_cast<StaffListItem*>(pli->child(cidx));
                         if (sli->op() == ListItemOp::I_DELETE) {
@@ -467,7 +467,7 @@ void MuseScore::editInstrList()
                   // update brackets
                   for (BracketItem* bi : staff->brackets()) {
                         if ((bi->bracketSpan() > (n - i)))
-                              bi->undoChangeProperty(P_ID::BRACKET_SPAN, n - i);
+                              bi->undoChangeProperty(Pid::BRACKET_SPAN, n - i);
                         }
                   }
             }

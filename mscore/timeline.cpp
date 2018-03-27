@@ -2265,7 +2265,7 @@ void Timeline::updateView()
             for (Measure* curr_measure = _score->firstMeasure(); curr_measure; curr_measure = curr_measure->nextMeasure()) {
                   System* system = curr_measure->system();
 
-                  if (curr_measure->mmRest() && _score->styleB(StyleIdx::createMultiMeasureRests)) {
+                  if (curr_measure->mmRest() && _score->styleB(Sid::createMultiMeasureRests)) {
                         //Handle mmRests
                         Measure* mmrest_measure = curr_measure->mmRest();
                         system = mmrest_measure->system();
@@ -2637,7 +2637,7 @@ void Timeline::toggleShow(int staff)
       QList<Part*> parts = _score->parts();
       if (parts.size() > staff && staff >= 0) {
             parts.at(staff)->setShow(!parts.at(staff)->show());
-            parts.at(staff)->undoChangeProperty(P_ID::VISIBLE, parts.at(staff)->show());
+            parts.at(staff)->undoChangeProperty(Pid::VISIBLE, parts.at(staff)->show());
             _score->masterScore()->setLayoutAll();
             _score->masterScore()->update();
             mscore->endCmd();

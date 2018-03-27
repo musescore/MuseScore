@@ -411,19 +411,19 @@ InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
       sl.setupUi(addWidget());
 
       iList = {
-            { P_ID::STAFF_YOFFSET,          0, sl.yoffset,         sl.resetYoffset         },
-            { P_ID::SMALL,                  0, sl.small,           sl.resetSmall           },
-            { P_ID::MAG,                    0, sl.scale,           sl.resetScale           },
-            { P_ID::STAFF_LINES,            0, sl.lines,           sl.resetLines           },
-            { P_ID::STEP_OFFSET,            0, sl.stepOffset,      sl.resetStepOffset      },
-            { P_ID::LINE_DISTANCE,          0, sl.lineDistance,    sl.resetLineDistance    },
-            { P_ID::STAFF_SHOW_BARLINES,    0, sl.showBarlines,    sl.resetShowBarlines    },
-            { P_ID::STAFF_SHOW_LEDGERLINES, 0, sl.showLedgerlines, sl.resetShowLedgerlines },
-            { P_ID::STAFF_SLASH_STYLE,      0, sl.slashStyle,      sl.resetSlashStyle      },
-            { P_ID::STAFF_NOTEHEAD_SCHEME,  0, sl.noteheadScheme,  sl.resetNoteheadScheme  },
-            { P_ID::STAFF_GEN_CLEF,         0, sl.genClefs,        sl.resetGenClefs        },
-            { P_ID::STAFF_GEN_TIMESIG,      0, sl.genTimesig,      sl.resetGenTimesig      },
-            { P_ID::STAFF_GEN_KEYSIG,       0, sl.genKeysig,       sl.resetGenKeysig       },
+            { Pid::STAFF_YOFFSET,          0, sl.yoffset,         sl.resetYoffset         },
+            { Pid::SMALL,                  0, sl.small,           sl.resetSmall           },
+            { Pid::MAG,                    0, sl.scale,           sl.resetScale           },
+            { Pid::STAFF_LINES,            0, sl.lines,           sl.resetLines           },
+            { Pid::STEP_OFFSET,            0, sl.stepOffset,      sl.resetStepOffset      },
+            { Pid::LINE_DISTANCE,          0, sl.lineDistance,    sl.resetLineDistance    },
+            { Pid::STAFF_SHOW_BARLINES,    0, sl.showBarlines,    sl.resetShowBarlines    },
+            { Pid::STAFF_SHOW_LEDGERLINES, 0, sl.showLedgerlines, sl.resetShowLedgerlines },
+            { Pid::STAFF_SLASH_STYLE,      0, sl.slashStyle,      sl.resetSlashStyle      },
+            { Pid::STAFF_NOTEHEAD_SCHEME,  0, sl.noteheadScheme,  sl.resetNoteheadScheme  },
+            { Pid::STAFF_GEN_CLEF,         0, sl.genClefs,        sl.resetGenClefs        },
+            { Pid::STAFF_GEN_TIMESIG,      0, sl.genTimesig,      sl.resetGenTimesig      },
+            { Pid::STAFF_GEN_KEYSIG,       0, sl.genKeysig,       sl.resetGenKeysig       },
             };
 
       sl.noteheadScheme->clear();
@@ -451,13 +451,13 @@ InspectorVBox::InspectorVBox(QWidget* parent)
       vb.setupUi(addWidget());
 
       iList = {
-            { P_ID::TOP_GAP,       0, vb.topGap,       vb.resetTopGap       },
-            { P_ID::BOTTOM_GAP,    0, vb.bottomGap,    vb.resetBottomGap    },
-            { P_ID::LEFT_MARGIN,   0, vb.leftMargin,   vb.resetLeftMargin   },
-            { P_ID::RIGHT_MARGIN,  0, vb.rightMargin,  vb.resetRightMargin  },
-            { P_ID::TOP_MARGIN,    0, vb.topMargin,    vb.resetTopMargin    },
-            { P_ID::BOTTOM_MARGIN, 0, vb.bottomMargin, vb.resetBottomMargin },
-            { P_ID::BOX_HEIGHT,    0, vb.height,       0                    }
+            { Pid::TOP_GAP,       0, vb.topGap,       vb.resetTopGap       },
+            { Pid::BOTTOM_GAP,    0, vb.bottomGap,    vb.resetBottomGap    },
+            { Pid::LEFT_MARGIN,   0, vb.leftMargin,   vb.resetLeftMargin   },
+            { Pid::RIGHT_MARGIN,  0, vb.rightMargin,  vb.resetRightMargin  },
+            { Pid::TOP_MARGIN,    0, vb.topMargin,    vb.resetTopMargin    },
+            { Pid::BOTTOM_MARGIN, 0, vb.bottomMargin, vb.resetBottomMargin },
+            { Pid::BOX_HEIGHT,    0, vb.height,       0                    }
             };
       mapSignals();
       }
@@ -472,12 +472,12 @@ InspectorTBox::InspectorTBox(QWidget* parent)
       tb.setupUi(addWidget());
 
       iList = {
-            { P_ID::TOP_GAP,       0, tb.topGap,       tb.resetTopGap       },
-            { P_ID::BOTTOM_GAP,    0, tb.bottomGap,    tb.resetBottomGap    },
-            { P_ID::LEFT_MARGIN,   0, tb.leftMargin,   tb.resetLeftMargin   },
-            { P_ID::RIGHT_MARGIN,  0, tb.rightMargin,  tb.resetRightMargin  },
-            { P_ID::TOP_MARGIN,    0, tb.topMargin,    tb.resetTopMargin    },
-            { P_ID::BOTTOM_MARGIN, 0, tb.bottomMargin, tb.resetBottomMargin },
+            { Pid::TOP_GAP,       0, tb.topGap,       tb.resetTopGap       },
+            { Pid::BOTTOM_GAP,    0, tb.bottomGap,    tb.resetBottomGap    },
+            { Pid::LEFT_MARGIN,   0, tb.leftMargin,   tb.resetLeftMargin   },
+            { Pid::RIGHT_MARGIN,  0, tb.rightMargin,  tb.resetRightMargin  },
+            { Pid::TOP_MARGIN,    0, tb.topMargin,    tb.resetTopMargin    },
+            { Pid::BOTTOM_MARGIN, 0, tb.bottomMargin, tb.resetBottomMargin },
             };
       mapSignals();
       }
@@ -492,10 +492,10 @@ InspectorHBox::InspectorHBox(QWidget* parent)
       hb.setupUi(addWidget());
 
       iList = {
-            { P_ID::TOP_GAP,               0, hb.leftGap,  hb.resetLeftGap  },
-            { P_ID::BOTTOM_GAP,            0, hb.rightGap, hb.resetRightGap },
-            { P_ID::BOX_WIDTH,             0, hb.width,    0                },
-            { P_ID::CREATE_SYSTEM_HEADER,  0, hb.createSystemHeader, hb.resetCreateSystemHeader }
+            { Pid::TOP_GAP,               0, hb.leftGap,  hb.resetLeftGap  },
+            { Pid::BOTTOM_GAP,            0, hb.rightGap, hb.resetRightGap },
+            { Pid::BOX_WIDTH,             0, hb.width,    0                },
+            { Pid::CREATE_SYSTEM_HEADER,  0, hb.createSystemHeader, hb.resetCreateSystemHeader }
             };
 
       mapSignals();
@@ -511,11 +511,11 @@ InspectorArticulation::InspectorArticulation(QWidget* parent)
       ar.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::ARTICULATION_ANCHOR, 0, ar.anchor,           ar.resetAnchor           },
-            { P_ID::DIRECTION,           0, ar.direction,        ar.resetDirection        },
-            { P_ID::TIME_STRETCH,        0, ar.timeStretch,      ar.resetTimeStretch      },
-            { P_ID::ORNAMENT_STYLE,      0, ar.ornamentStyle,    ar.resetOrnamentStyle    },
-            { P_ID::PLAY,                0, ar.playArticulation, ar.resetPlayArticulation }
+            { Pid::ARTICULATION_ANCHOR, 0, ar.anchor,           ar.resetAnchor           },
+            { Pid::DIRECTION,           0, ar.direction,        ar.resetDirection        },
+            { Pid::TIME_STRETCH,        0, ar.timeStretch,      ar.resetTimeStretch      },
+            { Pid::ORNAMENT_STYLE,      0, ar.ornamentStyle,    ar.resetOrnamentStyle    },
+            { Pid::PLAY,                0, ar.playArticulation, ar.resetPlayArticulation }
             };
       const std::vector<InspectorPanel> ppList = { { ar.title, ar.panel } };
       mapSignals(iiList, ppList);
@@ -531,9 +531,9 @@ InspectorFermata::InspectorFermata(QWidget* parent)
       f.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::PLACEMENT,           0, f.placement,        f.resetPlacement        },
-            { P_ID::TIME_STRETCH,        0, f.timeStretch,      f.resetTimeStretch      },
-            { P_ID::PLAY,                0, f.playArticulation, f.resetPlayArticulation }
+            { Pid::PLACEMENT,           0, f.placement,        f.resetPlacement        },
+            { Pid::TIME_STRETCH,        0, f.timeStretch,      f.resetTimeStretch      },
+            { Pid::PLAY,                0, f.playArticulation, f.resetPlayArticulation }
             };
       const std::vector<InspectorPanel> ppList = { { f.title, f.panel } };
       mapSignals(iiList, ppList);
@@ -549,7 +549,7 @@ InspectorSpacer::InspectorSpacer(QWidget* parent)
       sp.setupUi(addWidget());
 
       iList = {
-            { P_ID::SPACE, 0, sp.height, 0 }
+            { Pid::SPACE, 0, sp.height, 0 }
             };
       mapSignals();
       }
@@ -565,8 +565,8 @@ InspectorRest::InspectorRest(QWidget* parent)
       r.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::LEADING_SPACE,  1, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_ID::SMALL,          0, r.small,         r.resetSmall         },
+            { Pid::LEADING_SPACE,  1, s.leadingSpace,  s.resetLeadingSpace  },
+            { Pid::SMALL,          0, r.small,         r.resetSmall         },
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel },
@@ -640,13 +640,13 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
       t.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::LEADING_SPACE,  1, s.leadingSpace,   s.resetLeadingSpace  },
-            { P_ID::SHOW_COURTESY,  0, t.showCourtesy,   t.resetShowCourtesy  },
-            { P_ID::SCALE,          0, t.scale,          t.resetScale         },
-//          { P_ID::TIMESIG,        0, t.timesigZ,       t.resetTimesig       },
-//          { P_ID::TIMESIG,        0, t.timesigN,       t.resetTimesig       },
-//          { P_ID::TIMESIG_GLOBAL, 0, t.globalTimesigZ, t.resetGlobalTimesig },
-//          { P_ID::TIMESIG_GLOBAL, 0, t.globalTimesigN, t.resetGlobalTimesig }
+            { Pid::LEADING_SPACE,  1, s.leadingSpace,   s.resetLeadingSpace  },
+            { Pid::SHOW_COURTESY,  0, t.showCourtesy,   t.resetShowCourtesy  },
+            { Pid::SCALE,          0, t.scale,          t.resetScale         },
+//          { Pid::TIMESIG,        0, t.timesigZ,       t.resetTimesig       },
+//          { Pid::TIMESIG,        0, t.timesigN,       t.resetTimesig       },
+//          { Pid::TIMESIG_GLOBAL, 0, t.globalTimesigZ, t.resetGlobalTimesig },
+//          { Pid::TIMESIG_GLOBAL, 0, t.globalTimesigN, t.resetGlobalTimesig }
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel },
@@ -676,9 +676,9 @@ InspectorKeySig::InspectorKeySig(QWidget* parent)
       k.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::LEADING_SPACE,  1, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_ID::SHOW_COURTESY,  0, k.showCourtesy,  k.resetShowCourtesy  },
-//          { P_ID::SHOW_NATURALS,  0, k.showNaturals,  k.resetShowNaturals  }
+            { Pid::LEADING_SPACE,  1, s.leadingSpace,  s.resetLeadingSpace  },
+            { Pid::SHOW_COURTESY,  0, k.showCourtesy,  k.resetShowCourtesy  },
+//          { Pid::SHOW_NATURALS,  0, k.showNaturals,  k.resetShowNaturals  }
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel },
@@ -705,15 +705,15 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
       t.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::FONT_FACE,      0, t.tupletFontFace,  t.resetTupletFontFace    },
-            { P_ID::FONT_SIZE,      0, t.tupletFontSize,  t.resetTupletFontSize    },
-            { P_ID::FONT_BOLD,      0, t.tupletBold,      t.resetTupletBold        },
-            { P_ID::FONT_ITALIC,    0, t.tupletItalic,    t.resetTupletItalic      },
-            { P_ID::FONT_UNDERLINE, 0, t.tupletUnderline, t.resetTupletUnderline   },
-            { P_ID::DIRECTION,      0, t.direction,       t.resetDirection         },
-            { P_ID::NUMBER_TYPE,    0, t.numberType,      t.resetNumberType        },
-            { P_ID::BRACKET_TYPE,   0, t.bracketType,     t.resetBracketType       },
-            { P_ID::LINE_WIDTH,     0, t.lineWidth,       t.resetLineWidth         }
+            { Pid::FONT_FACE,      0, t.tupletFontFace,  t.resetTupletFontFace    },
+            { Pid::FONT_SIZE,      0, t.tupletFontSize,  t.resetTupletFontSize    },
+            { Pid::FONT_BOLD,      0, t.tupletBold,      t.resetTupletBold        },
+            { Pid::FONT_ITALIC,    0, t.tupletItalic,    t.resetTupletItalic      },
+            { Pid::FONT_UNDERLINE, 0, t.tupletUnderline, t.resetTupletUnderline   },
+            { Pid::DIRECTION,      0, t.direction,       t.resetDirection         },
+            { Pid::NUMBER_TYPE,    0, t.numberType,      t.resetNumberType        },
+            { Pid::BRACKET_TYPE,   0, t.bracketType,     t.resetBracketType       },
+            { Pid::LINE_WIDTH,     0, t.lineWidth,       t.resetLineWidth         }
             };
       const std::vector<InspectorPanel> ppList = { {t.title, t.panel} };
       t.tupletBold->setIcon(*icons[int(Icons::textBold_ICON)]);
@@ -732,8 +732,8 @@ InspectorAccidental::InspectorAccidental(QWidget* parent)
       a.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::SMALL,               0, a.small,    a.resetSmall    },
-            { P_ID::ACCIDENTAL_BRACKET,  0, a.bracket,  a.resetBracket  }
+            { Pid::SMALL,               0, a.small,    a.resetSmall    },
+            { Pid::ACCIDENTAL_BRACKET,  0, a.bracket,  a.resetBracket  }
             };
       a.bracket->clear();
       a.bracket->addItem(tr("None"), int(AccidentalBracket::NONE));
@@ -754,13 +754,13 @@ InspectorBend::InspectorBend(QWidget* parent)
       g.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::LINE_WIDTH,     0, g.lineWidth,   g.resetLineWidth   },
-            { P_ID::PLAY,           0, g.playBend,    g.resetPlayBend    },
-            { P_ID::FONT_FACE,      0, g.fontFace,    g.resetFontFace    },
-            { P_ID::FONT_SIZE,      0, g.fontSize,    g.resetFontSize    },
-            { P_ID::FONT_BOLD,      0, g.bold,        g.resetBold        },
-            { P_ID::FONT_ITALIC,    0, g.italic,      g.resetItalic      },
-            { P_ID::FONT_UNDERLINE, 0, g.underline,   g.resetUnderline   },
+            { Pid::LINE_WIDTH,     0, g.lineWidth,   g.resetLineWidth   },
+            { Pid::PLAY,           0, g.playBend,    g.resetPlayBend    },
+            { Pid::FONT_FACE,      0, g.fontFace,    g.resetFontFace    },
+            { Pid::FONT_SIZE,      0, g.fontSize,    g.resetFontSize    },
+            { Pid::FONT_BOLD,      0, g.bold,        g.resetBold        },
+            { Pid::FONT_ITALIC,    0, g.italic,      g.resetItalic      },
+            { Pid::FONT_UNDERLINE, 0, g.underline,   g.resetUnderline   },
             };
       const std::vector<InspectorPanel> ppList = { {g.title, g.panel} };
       g.bold->setIcon(*icons[int(Icons::textBold_ICON)]);
@@ -794,9 +794,9 @@ InspectorTremoloBar::InspectorTremoloBar(QWidget* parent)
       g.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::PLAY,       0, g.play,        g.resetPlay        },
-            { P_ID::LINE_WIDTH, 0, g.lineWidth,   g.resetLineWidth   },
-            { P_ID::MAG,        0, g.mag,         g.resetMag         }
+            { Pid::PLAY,       0, g.play,        g.resetPlay        },
+            { Pid::LINE_WIDTH, 0, g.lineWidth,   g.resetLineWidth   },
+            { Pid::MAG,        0, g.mag,         g.resetMag         }
             };
       const std::vector<InspectorPanel> ppList = { { g.title, g.panel } };
 
@@ -829,8 +829,8 @@ InspectorClef::InspectorClef(QWidget* parent)
       c.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::LEADING_SPACE, 1, s.leadingSpace,  s.resetLeadingSpace  },
-            { P_ID::SHOW_COURTESY, 0, c.showCourtesy,  c.resetShowCourtesy  }
+            { Pid::LEADING_SPACE, 1, s.leadingSpace,  s.resetLeadingSpace  },
+            { Pid::SHOW_COURTESY, 0, c.showCourtesy,  c.resetShowCourtesy  }
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel },
@@ -891,9 +891,9 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
       tt.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
-            { P_ID::TEMPO,             0, tt.tempo,       tt.resetTempo       },
-            { P_ID::TEMPO_FOLLOW_TEXT, 0, tt.followText,  tt.resetFollowText  },
-            { P_ID::PLACEMENT,         0, tt.placement,   tt.resetPlacement   }
+            { Pid::TEMPO,             0, tt.tempo,       tt.resetTempo       },
+            { Pid::TEMPO_FOLLOW_TEXT, 0, tt.followText,  tt.resetFollowText  },
+            { Pid::PLACEMENT,         0, tt.placement,   tt.resetPlacement   }
             };
       const std::vector<InspectorPanel> ppList = {
             { tt.title, tt.panel }
@@ -927,8 +927,8 @@ InspectorLyric::InspectorLyric(QWidget* parent)
       l.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
-            { P_ID::PLACEMENT,          0, l.placement, l.resetPlacement },
-            { P_ID::VERSE,              0, l.verse,     l.resetVerse     }
+            { Pid::PLACEMENT,          0, l.placement, l.resetPlacement },
+            { Pid::VERSE,              0, l.verse,     l.resetVerse     }
             };
       const std::vector<InspectorPanel> ppList = {
             { l.title, l.panel }
@@ -946,12 +946,12 @@ InspectorLyric::InspectorLyric(QWidget* parent)
 
 void InspectorLyric::valueChanged(int idx)
       {
-      if (iList[idx].t == P_ID::VERSE) {
+      if (iList[idx].t == Pid::VERSE) {
             int val    = getValue(iList[idx]).toInt();
             Lyrics* l  = toLyrics(inspector->element());
             Lyrics* nl = l->chordRest()->lyrics(val, l->placement());
             if (nl) {
-                  nl->undoChangeProperty(P_ID::VERSE, l->no());
+                  nl->undoChangeProperty(Pid::VERSE, l->no());
                   }
             }
       InspectorBase::valueChanged(idx);
@@ -979,8 +979,8 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
             s.title->setText(e->isSystemText() ? tr("System Text") : tr("Staff Text"));
 
       const std::vector<InspectorItem> il = {
-            { P_ID::PLACEMENT,  0, s.placement,    s.resetPlacement    },
-            { P_ID::SUB_STYLE,  0, s.subStyle,     s.resetSubStyle     }
+            { Pid::PLACEMENT,  0, s.placement,    s.resetPlacement    },
+            { Pid::SUB_STYLE,  0, s.subStyle,     s.resetSubStyle     }
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel }
@@ -1022,8 +1022,8 @@ InspectorSlurTie::InspectorSlurTie(QWidget* parent)
             s.title->setText(e->accessibleInfo());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::LINE_TYPE,       0, s.lineType,      s.resetLineType      },
-            { P_ID::SLUR_DIRECTION,  0, s.slurDirection, s.resetSlurDirection }
+            { Pid::LINE_TYPE,       0, s.lineType,      s.resetLineType      },
+            { Pid::SLUR_DIRECTION,  0, s.slurDirection, s.resetSlurDirection }
             };
       const std::vector<InspectorPanel> ppList = { { s.title, s.panel } };
       mapSignals(iiList, ppList);
@@ -1068,7 +1068,7 @@ InspectorCaesura::InspectorCaesura(QWidget* parent) : InspectorElementBase(paren
             c.title->setText(b->accessibleInfo());
 
       const std::vector<InspectorItem> il = {
-            { P_ID::PAUSE,  0, c.pause,         c.resetPause         }
+            { Pid::PAUSE,  0, c.pause,         c.resetPause         }
             };
       const std::vector<InspectorPanel> ppList = { {c.title, c.panel} };
       mapSignals(il, ppList);
@@ -1083,7 +1083,7 @@ InspectorBracket::InspectorBracket(QWidget* parent) : InspectorBase(parent)
       b.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
-            { P_ID::BRACKET_COLUMN, 0, b.column, b.resetColumn }
+            { Pid::BRACKET_COLUMN, 0, b.column, b.resetColumn }
             };
       mapSignals(il);
       }
@@ -1097,7 +1097,7 @@ InspectorIname::InspectorIname(QWidget* parent) : InspectorTextBase(parent)
       i.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
-            { P_ID::INAME_LAYOUT_POSITION, 0, i.layoutPosition, i.resetLayoutPosition }
+            { Pid::INAME_LAYOUT_POSITION, 0, i.layoutPosition, i.resetLayoutPosition }
             };
       mapSignals(il);
       }

@@ -98,7 +98,7 @@ NoteVal Score::noteValForPosition(Position pos, bool &error)
                   int step           = absStep(line, clef);
                   int octave         = step/7;
                   nval.pitch         = step2pitch(step) + octave * 12 + int(acci);
-                  if (styleB(StyleIdx::concertPitch))
+                  if (styleB(Sid::concertPitch))
                         nval.tpc1 = step2tpc(step % 7, acci);
                   else {
                         nval.pitch += instr->transpose().chromatic;
@@ -419,7 +419,7 @@ void Score::repitchNote(const Position& p, bool replace)
       int octave = step / 7;
       nval.pitch = step2pitch(step) + octave * 12 + int(acci);
 
-      if (styleB(StyleIdx::concertPitch))
+      if (styleB(Sid::concertPitch))
             nval.tpc1 = step2tpc(step % 7, acci);
       else {
             nval.pitch += st->part()->instrument(s->tick())->transpose().chromatic;
@@ -554,7 +554,7 @@ void Score::localInsertChord(const Position& pos)
       undo(new InsertTime(this, tick, len));
 
       for (Segment* s = pos.segment; s; s = s-> next())
-            s->undoChangeProperty(P_ID::TICK, s->rtick() + len);
+            s->undoChangeProperty(Pid::TICK, s->rtick() + len);
       undo(new ChangeMeasureLen(m, m->len() + fraction));
 
       Segment* s = m->undoGetSegment(SegmentType::ChordRest, tick);
@@ -637,9 +637,9 @@ void Score::globalInsertChord(const Position& pos)
             Spanner* s = i.second;
             if (s->track() >= strack && s->track() < etrack) {
                   if (s->tick() >= stick && s->tick() < etick)
-                        s->undoChangeProperty(P_ID::SPANNER_TICK, s->tick() + ticks);
+                        s->undoChangeProperty(Pid::SPANNER_TICK, s->tick() + ticks);
                   else if (s->tick2() >= stick && s->tick2() < etick)
-                        s->undoChangeProperty(P_ID::SPANNER_TICKS, s->ticks() + ticks);
+                        s->undoChangeProperty(Pid::SPANNER_TICKS, s->ticks() + ticks);
                   }
             }
 

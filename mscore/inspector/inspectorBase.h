@@ -36,7 +36,7 @@ struct InspectorPanel {
 //---------------------------------------------------------
 
 struct InspectorItem {
-      P_ID t;           // property id
+      Pid t;           // property id
       int parent;       // apply to parent() element level
       QWidget* w;
       QToolButton* r;   // reset to default button (if any)

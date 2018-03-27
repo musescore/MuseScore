@@ -102,7 +102,7 @@ void InstrumentChange::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant InstrumentChange::getProperty(P_ID propertyId) const
+QVariant InstrumentChange::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
             default:
@@ -114,10 +114,10 @@ QVariant InstrumentChange::getProperty(P_ID propertyId) const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant InstrumentChange::propertyDefault(P_ID propertyId) const
+QVariant InstrumentChange::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::SUB_STYLE:
+            case Pid::SUB_STYLE:
                   return int(SubStyleId::INSTRUMENT_CHANGE);
             default:
                   return TextBase::propertyDefault(propertyId);
@@ -128,7 +128,7 @@ QVariant InstrumentChange::propertyDefault(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool InstrumentChange::setProperty(P_ID propertyId, const QVariant& v)
+bool InstrumentChange::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
             default:

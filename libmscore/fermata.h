@@ -61,11 +61,11 @@ class Fermata final : public Element {
       virtual void reset() override;
       virtual QLineF dragAnchor() const override;
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID) const override;
-      virtual void resetProperty(P_ID id) override;
-      StyleIdx getPropertyStyle(P_ID id) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid) const override;
+      virtual void resetProperty(Pid id) override;
+      Sid getPropertyStyle(Pid id) const override;
 
       ChordRest* chordRest() const;
       Segment* segment() const              { return toSegment(parent()); }

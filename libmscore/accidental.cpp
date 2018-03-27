@@ -189,9 +189,9 @@ void Accidental::read(XmlReader& e)
 void Accidental::write(XmlWriter& xml) const
       {
       xml.stag(name());
-      writeProperty(xml, P_ID::ACCIDENTAL_BRACKET);
-      writeProperty(xml, P_ID::ROLE);
-      writeProperty(xml, P_ID::SMALL);
+      writeProperty(xml, Pid::ACCIDENTAL_BRACKET);
+      writeProperty(xml, Pid::ROLE);
+      writeProperty(xml, Pid::SMALL);
       xml.tag("subtype", subtype2name(accidentalType()));
       Element::writeProperties(xml);
       xml.etag();
@@ -281,7 +281,7 @@ void Accidental::layout()
 
       qreal m = parent() ? parent()->mag() : 1.0;
       if (_small)
-            m *= score()->styleD(StyleIdx::smallNoteMag);
+            m *= score()->styleD(Sid::smallNoteMag);
       setMag(m);
 
       m = magS();
@@ -362,10 +362,10 @@ Element* Accidental::drop(EditData& data)
             case ElementType::ICON :
                   switch(toIcon(e)->iconType()) {
                         case IconType::BRACKETS:
-                              undoChangeProperty(P_ID::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACKET), PropertyFlags::NOSTYLE);
+                              undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACKET), PropertyFlags::NOSTYLE);
                               break;
                         case IconType::PARENTHESES:
-                              undoChangeProperty(P_ID::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS), PropertyFlags::NOSTYLE);
+                              undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS), PropertyFlags::NOSTYLE);
                               break;
                         default:
                               qDebug("unknown icon type");
@@ -385,19 +385,19 @@ Element* Accidental::drop(EditData& data)
 
 void Accidental::undoSetSmall(bool val)
       {
-      undoChangeProperty(P_ID::SMALL, val);
+      undoChangeProperty(Pid::SMALL, val);
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Accidental::getProperty(P_ID propertyId) const
+QVariant Accidental::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::SMALL:              return _small;
-            case P_ID::ACCIDENTAL_BRACKET: return int(bracket());
-            case P_ID::ROLE:               return int(role());
+            case Pid::SMALL:              return _small;
+            case Pid::ACCIDENTAL_BRACKET: return int(bracket());
+            case Pid::ROLE:               return int(role());
             default:
                   return Element::getProperty(propertyId);
             }
@@ -407,12 +407,12 @@ QVariant Accidental::getProperty(P_ID propertyId) const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Accidental::propertyDefault(P_ID propertyId) const
+QVariant Accidental::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::SMALL:              return false;
-            case P_ID::ACCIDENTAL_BRACKET: return int(AccidentalBracket::NONE);
-            case P_ID::ROLE:               return int(AccidentalRole::AUTO);
+            case Pid::SMALL:              return false;
+            case Pid::ACCIDENTAL_BRACKET: return int(AccidentalBracket::NONE);
+            case Pid::ROLE:               return int(AccidentalRole::AUTO);
             default:
                   return Element::propertyDefault(propertyId);
             }
@@ -422,16 +422,16 @@ QVariant Accidental::propertyDefault(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Accidental::setProperty(P_ID propertyId, const QVariant& v)
+bool Accidental::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::SMALL:
+            case Pid::SMALL:
                   _small = v.toBool();
                   break;
-            case P_ID::ACCIDENTAL_BRACKET:
+            case Pid::ACCIDENTAL_BRACKET:
                   _bracket = AccidentalBracket(v.toInt());
                   break;
-            case P_ID::ROLE:
+            case Pid::ROLE:
                   _role = v.value<AccidentalRole>();
                   break;
             default:

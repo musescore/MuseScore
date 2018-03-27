@@ -40,21 +40,21 @@ void SlurSegment::draw(QPainter* painter) const
                   painter->setBrush(QBrush(pen.color()));
                   pen.setCapStyle(Qt::RoundCap);
                   pen.setJoinStyle(Qt::RoundJoin);
-                  pen.setWidthF(score()->styleP(StyleIdx::SlurEndWidth));
+                  pen.setWidthF(score()->styleP(Sid::SlurEndWidth));
                   break;
             case 1:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(StyleIdx::SlurDottedWidth));
+                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth));
                   pen.setStyle(Qt::DotLine);
                   break;
             case 2:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(StyleIdx::SlurDottedWidth));
+                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth));
                   pen.setStyle(Qt::DashLine);
                   break;
             case 3:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(StyleIdx::SlurDottedWidth));
+                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth));
                   pen.setStyle(Qt::CustomDashLine);
                   QVector<qreal> dashes { 5.0, 5.0 };
                   pen.setDashPattern(dashes);
@@ -110,7 +110,7 @@ bool SlurSegment::edit(EditData& ed)
       Slur* sl = slur();
 
       if (ed.key == Qt::Key_X) {
-            sl->undoChangeProperty(P_ID::SLUR_DIRECTION, QVariant::fromValue<Direction>(sl->up() ? Direction::DOWN : Direction::UP));
+            sl->undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(sl->up() ? Direction::DOWN : Direction::UP));
             sl->layout();
             return true;
             }
@@ -164,15 +164,15 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
       {
       if (ed.curGrip == Grip::START) {
             int ticks = spanner()->endElement()->tick() - element->tick();
-            spanner()->undoChangeProperty(P_ID::SPANNER_TICK, element->tick());
-            spanner()->undoChangeProperty(P_ID::SPANNER_TICKS, ticks);
-            spanner()->undoChangeProperty(P_ID::TRACK, element->track());
+            spanner()->undoChangeProperty(Pid::SPANNER_TICK, element->tick());
+            spanner()->undoChangeProperty(Pid::SPANNER_TICKS, ticks);
+            spanner()->undoChangeProperty(Pid::TRACK, element->track());
             if (score()->spannerMap().removeSpanner(spanner()))
                   score()->addSpanner(spanner());
             }
       else {
-            spanner()->undoChangeProperty(P_ID::SPANNER_TICKS,  element->tick() - spanner()->startElement()->tick());
-            spanner()->undoChangeProperty(P_ID::SPANNER_TRACK2, element->track());
+            spanner()->undoChangeProperty(Pid::SPANNER_TICKS,  element->tick() - spanner()->startElement()->tick());
+            spanner()->undoChangeProperty(Pid::SPANNER_TRACK2, element->track());
             }
       int segments  = spanner()->spannerSegments().size();
       ups(ed.curGrip).off = QPointF();
@@ -250,7 +250,7 @@ void SlurSegment::computeBezier(QPointF p6o)
       QPointF p3(c1, -shoulderH);
       QPointF p4(c2, -shoulderH);
 
-      qreal w = score()->styleP(StyleIdx::SlurMidWidth) - score()->styleP(StyleIdx::SlurEndWidth);
+      qreal w = score()->styleP(Sid::SlurMidWidth) - score()->styleP(Sid::SlurEndWidth);
       if ((c2 - c1) <= _spatium)
             w *= .5;
       QPointF th(0.0, w);    // thickness of slur
@@ -371,7 +371,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                   Collision(qreal a, const QPointF b) : dist(a), p(b) {}
                   };
             QList<Collision> pl;                // skyline
-            qreal sdist = score()->styleP(StyleIdx::SlurMinDistance);
+            qreal sdist = score()->styleP(Sid::SlurMinDistance);
 
             QPointF pp1 = ups(Grip::START).p;
             QPointF pp2 = ups(Grip::END).p;

@@ -27,7 +27,7 @@ InspectorFingering::InspectorFingering(QWidget* parent)
       f.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::SUB_STYLE, 0, f.subStyle,     f.resetSubStyle     },
+            { Pid::SUB_STYLE, 0, f.subStyle,     f.resetSubStyle     },
             };
       const std::vector<InspectorPanel> ppList = {
             { f.title, f.panel }

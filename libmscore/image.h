@@ -78,9 +78,9 @@ class Image final : public BSymbol {
       bool sizeIsSpatium() const         { return _sizeIsSpatium; }
       void setSizeIsSpatium(bool val)    { _sizeIsSpatium = val;  }
 
-      QVariant getProperty(P_ID ) const;
-      bool setProperty(P_ID propertyId, const QVariant&);
-      QVariant propertyDefault(P_ID id) const;
+      QVariant getProperty(Pid ) const;
+      bool setProperty(Pid propertyId, const QVariant&);
+      QVariant propertyDefault(Pid id) const;
 
       QSizeF imageSize() const;
 

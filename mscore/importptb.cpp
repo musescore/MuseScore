@@ -1238,7 +1238,7 @@ Score::FileError PowerTab::read()
                   parts[i] = sec.beats[i];
             }
 
-      score->style().set(StyleIdx::ArpeggioHiddenInStdIfTab, true);
+      score->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
 
       MeasureBase* m;
       if (!score->measures()->first()) {
@@ -1278,8 +1278,8 @@ Score::FileError PowerTab::read()
 
 
 //TODO-ws          pscore->showLyrics = score->showLyrics;
-            pscore->style().set(StyleIdx::createMultiMeasureRests, false);
-            pscore->style().set(StyleIdx::ArpeggioHiddenInStdIfTab, true);
+            pscore->style().set(Sid::createMultiMeasureRests, false);
+            pscore->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
 
             QList<int> stavesMap;
             Part* p = new Part(pscore);

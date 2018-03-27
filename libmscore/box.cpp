@@ -118,9 +118,9 @@ void Box::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
       if (isHBox())
-            eed->pushProperty(P_ID::BOX_WIDTH);
+            eed->pushProperty(Pid::BOX_WIDTH);
       else
-            eed->pushProperty(P_ID::BOX_HEIGHT);
+            eed->pushProperty(Pid::BOX_HEIGHT);
       }
 
 //---------------------------------------------------------
@@ -192,9 +192,9 @@ void Box::write(XmlWriter& xml) const
 
 void Box::writeProperties(XmlWriter& xml) const
       {
-      for (P_ID id : {
-         P_ID::BOX_HEIGHT, P_ID::BOX_WIDTH, P_ID::TOP_GAP, P_ID::BOTTOM_GAP,
-         P_ID::LEFT_MARGIN, P_ID::RIGHT_MARGIN, P_ID::TOP_MARGIN, P_ID::BOTTOM_MARGIN }) {
+      for (Pid id : {
+         Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
+         Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN }) {
             writeProperty(xml, id);
             }
       Element::writeProperties(xml);
@@ -247,13 +247,13 @@ bool Box::readProperties(XmlReader& e)
             _topGap = e.readDouble();
             if (score()->mscVersion() >= 206)
                   _topGap *= score()->spatium();
-            setPropertyFlags(P_ID::TOP_GAP, PropertyFlags::UNSTYLED);
+            setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
             }
       else if (tag == "bottomGap") {
             _bottomGap = e.readDouble();
              if (score()->mscVersion() >= 206)
                   _bottomGap *= score()->spatium();
-            setPropertyFlags(P_ID::BOTTOM_GAP, PropertyFlags::UNSTYLED);
+            setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
             }
       else if (tag == "leftMargin")
             _leftMargin = e.readDouble();
@@ -331,24 +331,24 @@ void Box::add(Element* e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Box::getProperty(P_ID propertyId) const
+QVariant Box::getProperty(Pid propertyId) const
       {
       switch(propertyId) {
-            case P_ID::BOX_HEIGHT:
+            case Pid::BOX_HEIGHT:
                   return _boxHeight;
-            case P_ID::BOX_WIDTH:
+            case Pid::BOX_WIDTH:
                   return _boxWidth;
-            case P_ID::TOP_GAP:
+            case Pid::TOP_GAP:
                   return _topGap;
-            case P_ID::BOTTOM_GAP:
+            case Pid::BOTTOM_GAP:
                   return _bottomGap;
-            case P_ID::LEFT_MARGIN:
+            case Pid::LEFT_MARGIN:
                   return _leftMargin;
-            case P_ID::RIGHT_MARGIN:
+            case Pid::RIGHT_MARGIN:
                   return _rightMargin;
-            case P_ID::TOP_MARGIN:
+            case Pid::TOP_MARGIN:
                   return _topMargin;
-            case P_ID::BOTTOM_MARGIN:
+            case Pid::BOTTOM_MARGIN:
                   return _bottomMargin;
             default:
                   return MeasureBase::getProperty(propertyId);
@@ -359,32 +359,32 @@ QVariant Box::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Box::setProperty(P_ID propertyId, const QVariant& v)
+bool Box::setProperty(Pid propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
-            case P_ID::BOX_HEIGHT:
+            case Pid::BOX_HEIGHT:
                   _boxHeight = v.value<Spatium>();
                   break;
-            case P_ID::BOX_WIDTH:
+            case Pid::BOX_WIDTH:
                   _boxWidth = v.value<Spatium>();
                   break;
-            case P_ID::TOP_GAP:
+            case Pid::TOP_GAP:
                   _topGap = v.toDouble();
                   break;
-            case P_ID::BOTTOM_GAP:
+            case Pid::BOTTOM_GAP:
                   _bottomGap = v.toDouble();
                   break;
-            case P_ID::LEFT_MARGIN:
+            case Pid::LEFT_MARGIN:
                   _leftMargin = v.toDouble();
                   break;
-            case P_ID::RIGHT_MARGIN:
+            case Pid::RIGHT_MARGIN:
                   _rightMargin = v.toDouble();
                   break;
-            case P_ID::TOP_MARGIN:
+            case Pid::TOP_MARGIN:
                   _topMargin = v.toDouble();
                   break;
-            case P_ID::BOTTOM_MARGIN:
+            case Pid::BOTTOM_MARGIN:
                   _bottomMargin = v.toDouble();
                   break;
             default:
@@ -398,24 +398,24 @@ bool Box::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Box::propertyDefault(P_ID id) const
+QVariant Box::propertyDefault(Pid id) const
       {
       switch(id) {
-            case P_ID::SUB_STYLE:
+            case Pid::SUB_STYLE:
                   return int(SubStyleId::BOX);
-            case P_ID::BOX_HEIGHT:
-            case P_ID::BOX_WIDTH:
+            case Pid::BOX_HEIGHT:
+            case Pid::BOX_WIDTH:
                   return Spatium(0.0);
 
-            case P_ID::TOP_GAP:
-                  return isHBox() ? 0.0 : score()->styleP(StyleIdx::systemFrameDistance);
-            case P_ID::BOTTOM_GAP:
-                  return isHBox() ? 0.0 : score()->styleP(StyleIdx::frameSystemDistance);
+            case Pid::TOP_GAP:
+                  return isHBox() ? 0.0 : score()->styleP(Sid::systemFrameDistance);
+            case Pid::BOTTOM_GAP:
+                  return isHBox() ? 0.0 : score()->styleP(Sid::frameSystemDistance);
 
-            case P_ID::LEFT_MARGIN:
-            case P_ID::RIGHT_MARGIN:
-            case P_ID::TOP_MARGIN:
-            case P_ID::BOTTOM_MARGIN:
+            case Pid::LEFT_MARGIN:
+            case Pid::RIGHT_MARGIN:
+            case Pid::TOP_MARGIN:
+            case Pid::BOTTOM_MARGIN:
                   return 0.0;
             default:
                   return MeasureBase::propertyDefault(id);
@@ -643,10 +643,10 @@ bool HBox::isMovable() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant HBox::getProperty(P_ID propertyId) const
+QVariant HBox::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::CREATE_SYSTEM_HEADER:
+            case Pid::CREATE_SYSTEM_HEADER:
                   return createSystemHeader();
             default:
                   return Box::getProperty(propertyId);
@@ -657,10 +657,10 @@ QVariant HBox::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool HBox::setProperty(P_ID propertyId, const QVariant& v)
+bool HBox::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::CREATE_SYSTEM_HEADER:
+            case Pid::CREATE_SYSTEM_HEADER:
                   setCreateSystemHeader(v.toBool());
                   score()->setLayout(tick());
                   break;
@@ -674,12 +674,12 @@ bool HBox::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant HBox::propertyDefault(P_ID id) const
+QVariant HBox::propertyDefault(Pid id) const
       {
       switch(id) {
-            case P_ID::SUB_STYLE:
+            case Pid::SUB_STYLE:
                   return int(SubStyleId::BOX);
-            case P_ID::CREATE_SYSTEM_HEADER:
+            case Pid::CREATE_SYSTEM_HEADER:
                   return true;
             default:
                   return Box::propertyDefault(id);

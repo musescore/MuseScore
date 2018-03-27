@@ -484,7 +484,7 @@ void Debugger::updateList(Score* s)
                         if (mb->type() != ElementType::MEASURE)
                               continue;
                         Measure* measure = (Measure*) mb;
-                        if (cs->styleB(StyleIdx::concertPitch)) {
+                        if (cs->styleB(Sid::concertPitch)) {
                               if (measure->mmRest()) {
                                     ElementItem* mmi = new ElementItem(mi, measure->mmRest());
                                     addMeasure(mmi, measure->mmRest());

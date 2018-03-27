@@ -1861,7 +1861,7 @@ bool GuitarPro1::readNote(int string, Note* note)
 					  gc->setDurationType(d);
 					  gc->setDuration(d.fraction());
 					  gc->setNoteType(NoteType::ACCIACCATURA);
-					  gc->setMag(note->chord()->staff()->mag(0) * score->styleD(StyleIdx::graceNoteMag));
+					  gc->setMag(note->chord()->staff()->mag(0) * score->styleD(Sid::graceNoteMag));
 					  note->chord()->add(gc); // sets parent + track
 					  addDynamic(gn, dynamic);
 				  }
@@ -2776,7 +2776,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             return Score::FileError::FILE_NO_ERROR;
             }
 
-      score->style().set(StyleIdx::ArpeggioHiddenInStdIfTab, true);
+      score->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
 
       MeasureBase* m;
       if (!score->measures()->first()) {
@@ -2845,8 +2845,8 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             QMultiMap<int, int> tracks;
 	      Score* pscore = new Score(score);
 //TODO-ws		pscore->showLyrics = score->showLyrics;
-            pscore->style().set(StyleIdx::createMultiMeasureRests, false);
-            pscore->style().set(StyleIdx::ArpeggioHiddenInStdIfTab, true);
+            pscore->style().set(Sid::createMultiMeasureRests, false);
+            pscore->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
 
             QList<int> stavesMap;
             Part*   p = new Part(pscore);
