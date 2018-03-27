@@ -28,7 +28,7 @@ InspectorArpeggio::InspectorArpeggio(QWidget* parent)
       g.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::PLAY, 0,     g.playArpeggio, g.resetPlayArpeggio}
+            { Pid::PLAY, 0,     g.playArpeggio, g.resetPlayArpeggio}
             };
       const std::vector<InspectorPanel> ppList = {
             { g.title, g.panel }

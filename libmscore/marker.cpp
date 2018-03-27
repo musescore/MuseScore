@@ -184,7 +184,7 @@ Marker::Type Marker::markerType(const QString& s) const
 
 void Marker::layout()
       {
-      setPos(QPointF(0.0, score()->styleP(StyleIdx::markerPosAbove)));
+      setPos(QPointF(0.0, score()->styleP(Sid::markerPosAbove)));
       TextBase::layout1();
 
       // although normally laid out to parent (measure) width,
@@ -195,7 +195,7 @@ void Marker::layout()
       if (parent() && autoplace()) {
             setUserOff(QPointF());
             int si            = staffIdx();
-            qreal minDistance = 0.5 * spatium(); // score()->styleP(StyleIdx::tempoMinDistance);
+            qreal minDistance = 0.5 * spatium(); // score()->styleP(Sid::tempoMinDistance);
             Shape& s1         = measure()->staffShape(si);
             Shape s2          = shape().translated(pos());
             if (placeAbove()) {
@@ -260,7 +260,7 @@ void Marker::write(XmlWriter& xml) const
 
 void Marker::undoSetLabel(const QString& s)
       {
-      undoChangeProperty(P_ID::LABEL, s);
+      undoChangeProperty(Pid::LABEL, s);
       }
 
 //---------------------------------------------------------
@@ -269,19 +269,19 @@ void Marker::undoSetLabel(const QString& s)
 
 void Marker::undoSetMarkerType(Type t)
       {
-      undoChangeProperty(P_ID::MARKER_TYPE, int(t));
+      undoChangeProperty(Pid::MARKER_TYPE, int(t));
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Marker::getProperty(P_ID propertyId) const
+QVariant Marker::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::LABEL:
+            case Pid::LABEL:
                   return label();
-            case P_ID::MARKER_TYPE:
+            case Pid::MARKER_TYPE:
                   return int(markerType());
             default:
                   break;
@@ -293,13 +293,13 @@ QVariant Marker::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Marker::setProperty(P_ID propertyId, const QVariant& v)
+bool Marker::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::LABEL:
+            case Pid::LABEL:
                   setLabel(v.toString());
                   break;
-            case P_ID::MARKER_TYPE:
+            case Pid::MARKER_TYPE:
                   setMarkerType(Type(v.toInt()));
                   break;
             default:
@@ -315,14 +315,14 @@ bool Marker::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Marker::propertyDefault(P_ID propertyId) const
+QVariant Marker::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::LABEL:
+            case Pid::LABEL:
                   return QString();
-            case P_ID::MARKER_TYPE:
+            case Pid::MARKER_TYPE:
                   return int(Type::FINE);
-            case P_ID::PLACEMENT:
+            case Pid::PLACEMENT:
                   return int(Placement::ABOVE);
             default:
                   break;

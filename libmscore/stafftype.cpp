@@ -750,7 +750,7 @@ void StaffType::drawInputStringMarks(QPainter *p, int string, int voice, QRectF 
       qreal       lineDist    = _lineDistance.val() * spatium;
       bool        hasFret;
       QString     text        = tabBassStringPrefix(string, &hasFret);
-//    qreal       lw          = point(score()->styleS(StyleIdx::ledgerLineWidth));  // no access to score form here
+//    qreal       lw          = point(score()->styleS(Sid::ledgerLineWidth));  // no access to score form here
       qreal       lw          = LEDGER_LINE_THICKNESS * spatium;                    // use a fixed width
       QPen        pen(MScore::selectColor[voice].lighter(SHADOW_NOTE_LIGHT), lw);
       p->setPen(pen);
@@ -1419,7 +1419,7 @@ void StaffType::initStaffTypes()
 
 qreal StaffType::spatium(Score* score) const
       {
-      return score->spatium() * (small() ? score->styleD(StyleIdx::smallStaffMag) : 1.0) * userMag();
+      return score->spatium() * (small() ? score->styleD(Sid::smallStaffMag) : 1.0) * userMag();
       }
 
 } // namespace Ms

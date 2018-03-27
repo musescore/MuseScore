@@ -72,7 +72,7 @@ void TestEarlymusic::earlymusic01()
 
       // set crossMeasureValue flag ON: score should not change
       MStyle newStyle = score->style();
-      newStyle.set(StyleIdx::crossMeasureValues, true);
+      newStyle.set(Sid::crossMeasureValues, true);
       score->startCmd();
       score->deselectAll();
       score->undo(new ChangeStyle(score, newStyle));

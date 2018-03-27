@@ -50,8 +50,8 @@ class LetRing final : public TextLineBase {
       virtual void write(XmlWriter& xml) const override;
       LineSegment* createLineSegment();
       virtual void setYoff(qreal) override;
-      virtual QVariant propertyDefault(P_ID propertyId) const override;
-      virtual StyleIdx getPropertyStyle(P_ID) const override;
+      virtual QVariant propertyDefault(Pid propertyId) const override;
+      virtual Sid getPropertyStyle(Pid) const override;
       };
 
 }     // namespace Ms

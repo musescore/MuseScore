@@ -49,7 +49,7 @@ QVariant ElementW::get(const QString& s) const
       {
       QVariant val;
       if (e) {
-            P_ID pid = propertyId(s);
+            Pid pid = propertyId(s);
             val = e->getProperty(pid);
             if (propertyType(pid) == P_TYPE::FRACTION) {
                   Fraction f(val.value<Fraction>());

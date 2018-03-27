@@ -1126,12 +1126,12 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       if (cap->systems.isEmpty())
             return;
 
-      score->style().set(StyleIdx::measureSpacing, 1.0);
+      score->style().set(Sid::measureSpacing, 1.0);
       score->setSpatium(cap->normalLineDist * DPMM);
-      score->style().set(StyleIdx::smallStaffMag, cap->smallLineDist / cap->normalLineDist);
-      score->style().set(StyleIdx::minSystemDistance, Spatium(8));
-      score->style().set(StyleIdx::maxSystemDistance, Spatium(12));
-      // score->style().set(StyleIdx::hideEmptyStaves, true);
+      score->style().set(Sid::smallStaffMag, cap->smallLineDist / cap->normalLineDist);
+      score->style().set(Sid::minSystemDistance, Spatium(8));
+      score->style().set(Sid::maxSystemDistance, Spatium(12));
+      // score->style().set(Sid::hideEmptyStaves, true);
 
 #if 1
       foreach(CapSystem* csys, cap->systems) {

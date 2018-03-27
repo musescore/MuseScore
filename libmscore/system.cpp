@@ -250,7 +250,7 @@ void System::layoutSystem(qreal xo1)
 
       _leftMargin = xoff2;
 
-      qreal bd = score()->styleP(StyleIdx::bracketDistance);
+      qreal bd = score()->styleP(Sid::bracketDistance);
       if (!_brackets.empty()) {
             for (int w : bracketWidth)
                   _leftMargin += w + bd;
@@ -372,9 +372,9 @@ void System::layout2()
 
       qreal _spatium            = spatium();
       qreal y                   = 0.0;
-      qreal minVerticalDistance = score()->styleP(StyleIdx::minVerticalDistance);
-      qreal staffDistance       = score()->styleP(StyleIdx::staffDistance);
-      qreal akkoladeDistance    = score()->styleP(StyleIdx::akkoladeDistance);
+      qreal minVerticalDistance = score()->styleP(Sid::minVerticalDistance);
+      qreal staffDistance       = score()->styleP(Sid::staffDistance);
+      qreal akkoladeDistance    = score()->styleP(Sid::akkoladeDistance);
 
       if (visibleStaves.empty()) {
             qDebug("====no visible staves, staves %d, score staves %d", _staves.size(), score()->nstaves());
@@ -566,7 +566,7 @@ void System::setInstrumentNames(bool longName)
       if (vbox())                 // ignore vbox
             return;
       if (!score()->showInstrumentNames()
-              || (score()->styleB(StyleIdx::hideInstrumentNameIfOneInstrument) && score()->parts().size() == 1)) {
+              || (score()->styleB(Sid::hideInstrumentNameIfOneInstrument) && score()->parts().size() == 1)) {
             for (SysStaff* staff : _staves) {
                   foreach (InstrumentName* t, staff->instrumentNames)
                         score()->removeElement(t);
@@ -1029,8 +1029,8 @@ qreal System::minDistance(System* s2) const
       else if (vbox() && s2->vbox())
             return s2->vbox()->topGap() + vbox()->bottomGap();
 
-      qreal minVerticalDistance = score()->styleP(StyleIdx::minVerticalDistance);
-      qreal dist                = score()->styleP(StyleIdx::minSystemDistance);
+      qreal minVerticalDistance = score()->styleP(Sid::minVerticalDistance);
+      qreal dist                = score()->styleP(Sid::minSystemDistance);
       int lastStaff             = _staves.size() - 1;
 
       fixedDownDistance = false;

@@ -236,8 +236,8 @@ bool MTest::saveCompareMusicXmlScore(MasterScore* score, const QString& saveName
 bool MTest::savePdf(MasterScore* cs, const QString& saveName)
       {
       QPrinter printerDev(QPrinter::HighResolution);
-      double w = cs->styleD(StyleIdx::pageWidth);
-      double h = cs->styleD(StyleIdx::pageHeight);
+      double w = cs->styleD(Sid::pageWidth);
+      double h = cs->styleD(Sid::pageHeight);
       printerDev.setPaperSize(QSizeF(w,h), QPrinter::Inch);
 
       printerDev.setCreator("MuseScore Version: " VERSION);

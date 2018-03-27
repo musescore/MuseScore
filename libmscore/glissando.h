@@ -39,12 +39,12 @@ class GlissandoSegment final : public LineSegment {
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
 
-      virtual QVariant getProperty(P_ID id) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID id) const override;
-      virtual PropertyFlags& propertyFlags(P_ID) override;
-      virtual void setPropertyFlags(P_ID id, PropertyFlags f) override;
-      virtual StyleIdx getPropertyStyle(P_ID) const override;
+      virtual QVariant getProperty(Pid id) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid id) const override;
+      virtual PropertyFlags& propertyFlags(Pid) override;
+      virtual void setPropertyFlags(Pid id, PropertyFlags f) override;
+      virtual Sid getPropertyStyle(Pid) const override;
       };
 
 //---------------------------------------------------------
@@ -80,9 +80,9 @@ class Glissando final : public SLine {
       virtual void read(XmlReader&) override;
 
       // property/style methods
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool     setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool     setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid) const override;
       };
 
 

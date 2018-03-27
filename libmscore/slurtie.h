@@ -73,9 +73,9 @@ class SlurTieSegment : public SpannerSegment {
       virtual void endEditDrag(EditData& ed) override;
       virtual void editDrag(EditData&) override;
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid id) const override;
       virtual void reset() override;
       virtual void move(const QPointF& s) override;
       virtual bool isEditable() const override { return true; }
@@ -140,9 +140,9 @@ class SlurTie : public Spanner {
       virtual SlurTieSegment* newSlurTieSegment() = 0;
 
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid id) const override;
       };
 
 }

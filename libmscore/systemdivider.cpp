@@ -50,9 +50,9 @@ void SystemDivider::layout()
       ScoreFont* sf = score()->scoreFont();
 
       if (_dividerType == SystemDivider::LEFT)
-            sid = Sym::name2id(score()->styleSt(StyleIdx::dividerLeftSym));
+            sid = Sym::name2id(score()->styleSt(Sid::dividerLeftSym));
       else
-            sid = Sym::name2id(score()->styleSt(StyleIdx::dividerRightSym));
+            sid = Sym::name2id(score()->styleSt(Sid::dividerRightSym));
       setSym(sid, sf);
       Symbol::layout();
       }
@@ -65,12 +65,12 @@ void SystemDivider::setDividerType(SystemDivider::Type v)
       {
       _dividerType = v;
       if (v == SystemDivider::LEFT) {
-            setXoff(score()->styleD(StyleIdx::dividerLeftX));
-            setYoff(score()->styleD(StyleIdx::dividerLeftY));
+            setXoff(score()->styleD(Sid::dividerLeftX));
+            setYoff(score()->styleD(Sid::dividerLeftY));
             }
       else {
-            setXoff(score()->styleD(StyleIdx::dividerRightX));
-            setYoff(score()->styleD(StyleIdx::dividerRightY));
+            setXoff(score()->styleD(Sid::dividerRightX));
+            setYoff(score()->styleD(Sid::dividerRightY));
             }
       }
 
@@ -107,17 +107,17 @@ void SystemDivider::read(XmlReader& e)
       ScoreFont* sf = score()->scoreFont();
       if (e.attribute("type") == "left") {
             _dividerType = SystemDivider::Type::LEFT;
-            SymId sym = Sym::name2id(score()->styleSt(StyleIdx::dividerLeftSym));
+            SymId sym = Sym::name2id(score()->styleSt(Sid::dividerLeftSym));
             setSym(sym, sf);
-            setXoff(score()->styleD(StyleIdx::dividerLeftX));
-            setYoff(score()->styleD(StyleIdx::dividerLeftY));
+            setXoff(score()->styleD(Sid::dividerLeftX));
+            setYoff(score()->styleD(Sid::dividerLeftY));
             }
       else {
             _dividerType = SystemDivider::Type::RIGHT;
-            SymId sym = Sym::name2id(score()->styleSt(StyleIdx::dividerRightSym));
+            SymId sym = Sym::name2id(score()->styleSt(Sid::dividerRightSym));
             setSym(sym, sf);
-            setXoff(score()->styleD(StyleIdx::dividerRightX));
-            setYoff(score()->styleD(StyleIdx::dividerRightY));
+            setXoff(score()->styleD(Sid::dividerRightX));
+            setYoff(score()->styleD(Sid::dividerRightY));
             }
       Symbol::read(e);
       }

@@ -252,12 +252,12 @@ void MeasureProperties::apply()
                   score->undo(new ChangeMStaffProperties(m, staffIdx, v, s));
             }
 
-      m->undoChangeProperty(P_ID::REPEAT_COUNT, repeatCount());
-      m->undoChangeProperty(P_ID::BREAK_MMR, breakMultiMeasureRest->isChecked());
-      m->undoChangeProperty(P_ID::USER_STRETCH, layoutStretch->value());
-      m->undoChangeProperty(P_ID::MEASURE_NUMBER_MODE, measureNumberMode->currentIndex());
-      m->undoChangeProperty(P_ID::NO_OFFSET, measureNumberOffset->value());
-      m->undoChangeProperty(P_ID::IRREGULAR, isIrregular());
+      m->undoChangeProperty(Pid::REPEAT_COUNT, repeatCount());
+      m->undoChangeProperty(Pid::BREAK_MMR, breakMultiMeasureRest->isChecked());
+      m->undoChangeProperty(Pid::USER_STRETCH, layoutStretch->value());
+      m->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, measureNumberMode->currentIndex());
+      m->undoChangeProperty(Pid::NO_OFFSET, measureNumberOffset->value());
+      m->undoChangeProperty(Pid::IRREGULAR, isIrregular());
 
       if (m->len() != len()) {
             ScoreRange range;

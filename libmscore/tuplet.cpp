@@ -202,14 +202,14 @@ void Tuplet::layout()
       //
       //    calculate bracket start and end point p1 p2
       //
-      qreal maxSlope      = score()->styleD(StyleIdx::tupletMaxSlope);
-      bool outOfStaff     = score()->styleB(StyleIdx::tupletOufOfStaff);
-      qreal vHeadDistance = score()->styleP(StyleIdx::tupletVHeadDistance);
-      qreal vStemDistance = score()->styleP(StyleIdx::tupletVStemDistance);
-      qreal stemLeft      = score()->styleP(StyleIdx::tupletStemLeftDistance);
-      qreal stemRight     = score()->styleP(StyleIdx::tupletStemRightDistance);
-      qreal noteLeft      = score()->styleP(StyleIdx::tupletNoteLeftDistance);
-      qreal noteRight     = score()->styleP(StyleIdx::tupletNoteRightDistance);
+      qreal maxSlope      = score()->styleD(Sid::tupletMaxSlope);
+      bool outOfStaff     = score()->styleB(Sid::tupletOufOfStaff);
+      qreal vHeadDistance = score()->styleP(Sid::tupletVHeadDistance);
+      qreal vStemDistance = score()->styleP(Sid::tupletVStemDistance);
+      qreal stemLeft      = score()->styleP(Sid::tupletStemLeftDistance);
+      qreal stemRight     = score()->styleP(Sid::tupletStemRightDistance);
+      qreal noteLeft      = score()->styleP(Sid::tupletNoteLeftDistance);
+      qreal noteRight     = score()->styleP(Sid::tupletNoteRightDistance);
 
       int move = 0;
       if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
@@ -242,7 +242,7 @@ void Tuplet::layout()
       qreal beamAdjust = 0.0;
       if (cr1->beam() && cr1->beam() == cr2->beam()) {
             followBeam = true;
-            beamAdjust = score()->styleP(StyleIdx::beamWidth) * 0.5 * mag();
+            beamAdjust = score()->styleP(Sid::beamWidth) * 0.5 * mag();
             }
 
       if (_isUp) {
@@ -674,14 +674,14 @@ void Tuplet::write(XmlWriter& xml) const
             xml.tag("Tuplet", tuplet()->id());
       Element::writeProperties(xml);
 
-      writeProperty(xml, P_ID::DIRECTION);
-      writeProperty(xml, P_ID::NUMBER_TYPE);
-      writeProperty(xml, P_ID::BRACKET_TYPE);
-      writeProperty(xml, P_ID::LINE_WIDTH);
-      writeProperty(xml, P_ID::NORMAL_NOTES);
-      writeProperty(xml, P_ID::ACTUAL_NOTES);
-      writeProperty(xml, P_ID::P1);
-      writeProperty(xml, P_ID::P2);
+      writeProperty(xml, Pid::DIRECTION);
+      writeProperty(xml, Pid::NUMBER_TYPE);
+      writeProperty(xml, Pid::BRACKET_TYPE);
+      writeProperty(xml, Pid::LINE_WIDTH);
+      writeProperty(xml, Pid::NORMAL_NOTES);
+      writeProperty(xml, Pid::ACTUAL_NOTES);
+      writeProperty(xml, Pid::P1);
+      writeProperty(xml, Pid::P2);
 
       xml.tag("baseNote", _baseLen.name());
 
@@ -738,7 +738,7 @@ bool Tuplet::readProperties(XmlReader& e)
             _number->setVisible(visible());     //?? override saved property
             _number->setTrack(track());
             // move property flags from _number
-            for (auto p : { P_ID::FONT_FACE, P_ID::FONT_SIZE, P_ID::FONT_BOLD, P_ID::FONT_ITALIC, P_ID::FONT_UNDERLINE, P_ID::ALIGN })
+            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
                   setPropertyFlags(p, _number->propertyFlags(p));
             }
       else if (!DurationElement::readProperties(e))
@@ -877,8 +877,8 @@ void Tuplet::reset()
 
       score()->addRefresh(canvasBoundingRect());
 
-      undoChangeProperty(P_ID::P1, QPointF());
-      undoChangeProperty(P_ID::P2, QPointF());
+      undoChangeProperty(Pid::P1, QPointF());
+      undoChangeProperty(Pid::P2, QPointF());
 
       Element::reset();
       layout();
@@ -942,31 +942,31 @@ Fraction Tuplet::elementsDuration()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Tuplet::getProperty(P_ID propertyId) const
+QVariant Tuplet::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::DIRECTION:
+            case Pid::DIRECTION:
                   return QVariant::fromValue<Direction>(_direction);
-            case P_ID::NUMBER_TYPE:
+            case Pid::NUMBER_TYPE:
                   return int(_numberType);
-            case P_ID::BRACKET_TYPE:
+            case Pid::BRACKET_TYPE:
                   return int(_bracketType);
-            case P_ID::LINE_WIDTH:
+            case Pid::LINE_WIDTH:
                   return _bracketWidth;
-            case P_ID::NORMAL_NOTES:
+            case Pid::NORMAL_NOTES:
                   return _ratio.denominator();
-            case P_ID::ACTUAL_NOTES:
+            case Pid::ACTUAL_NOTES:
                   return _ratio.numerator();
-            case P_ID::P1:
+            case Pid::P1:
                   return _p1;
-            case P_ID::P2:
+            case Pid::P2:
                   return _p2;
-            case P_ID::FONT_SIZE:
-            case P_ID::FONT_FACE:
-            case P_ID::FONT_BOLD:
-            case P_ID::FONT_ITALIC:
-            case P_ID::FONT_UNDERLINE:
-            case P_ID::ALIGN:
+            case Pid::FONT_SIZE:
+            case Pid::FONT_FACE:
+            case Pid::FONT_BOLD:
+            case Pid::FONT_ITALIC:
+            case Pid::FONT_UNDERLINE:
+            case Pid::ALIGN:
                   return _number ? _number->getProperty(propertyId) : QVariant();
             default:
                   break;
@@ -978,39 +978,39 @@ QVariant Tuplet::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
+bool Tuplet::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::DIRECTION:
+            case Pid::DIRECTION:
                   setDirection(v.value<Direction>());
                   break;
-            case P_ID::NUMBER_TYPE:
+            case Pid::NUMBER_TYPE:
                   setNumberType(TupletNumberType(v.toInt()));
                   break;
-            case P_ID::BRACKET_TYPE:
+            case Pid::BRACKET_TYPE:
                   setBracketType(TupletBracketType(v.toInt()));
                   break;
-            case P_ID::LINE_WIDTH:
+            case Pid::LINE_WIDTH:
                   setBracketWidth(v.value<Spatium>());
                   break;
-            case P_ID::NORMAL_NOTES:
+            case Pid::NORMAL_NOTES:
                   _ratio.setDenominator(v.toInt());
                   break;
-            case P_ID::ACTUAL_NOTES:
+            case Pid::ACTUAL_NOTES:
                   _ratio.setNumerator(v.toInt());
                   break;
-            case P_ID::P1:
+            case Pid::P1:
                   _p1 = v.toPointF();
                   break;
-            case P_ID::P2:
+            case Pid::P2:
                   _p2 = v.toPointF();
                   break;
-            case P_ID::FONT_SIZE:
-            case P_ID::FONT_FACE:
-            case P_ID::FONT_BOLD:
-            case P_ID::FONT_ITALIC:
-            case P_ID::FONT_UNDERLINE:
-            case P_ID::ALIGN:
+            case Pid::FONT_SIZE:
+            case Pid::FONT_FACE:
+            case Pid::FONT_BOLD:
+            case Pid::FONT_ITALIC:
+            case Pid::FONT_UNDERLINE:
+            case Pid::ALIGN:
                   if (_number)
                         _number->setProperty(propertyId, v);
                   break;
@@ -1028,14 +1028,14 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Tuplet::propertyDefault(P_ID id) const
+QVariant Tuplet::propertyDefault(Pid id) const
       {
       switch(id) {
-            case P_ID::NORMAL_NOTES:
-            case P_ID::ACTUAL_NOTES:
+            case Pid::NORMAL_NOTES:
+            case Pid::ACTUAL_NOTES:
                   return 0;
-            case P_ID::P1:
-            case P_ID::P2:
+            case Pid::P1:
+            case Pid::P2:
                   return QPointF();
             default:
                   return DurationElement::propertyDefault(id);

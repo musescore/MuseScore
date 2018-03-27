@@ -31,7 +31,7 @@ void PalmMuteSegment::layout()
             setUserOff(QPointF());
       TextLineBaseSegment::layout();
       if (parent()) {     // for palette
-            rypos() += score()->styleP(palmMute()->placeBelow() ? StyleIdx::palmMutePosBelow : StyleIdx::palmMutePosAbove);
+            rypos() += score()->styleP(palmMute()->placeBelow() ? Sid::palmMutePosBelow : Sid::palmMutePosAbove);
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
                   Shape s1 = shape().translated(pos());
@@ -86,7 +86,7 @@ void PalmMute::write(XmlWriter& xml) const
             return;
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
 
-      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp)
+      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp)
             writeProperty(xml, spp->propertyIdx);
 
       Element::writeProperties(xml);
@@ -108,44 +108,44 @@ LineSegment* PalmMute::createLineSegment()
 
 void PalmMute::setYoff(qreal val)
       {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? StyleIdx::palmMutePosAbove : StyleIdx::palmMutePosBelow);
+      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow);
       }
 
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant PalmMute::propertyDefault(P_ID propertyId) const
+QVariant PalmMute::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::LINE_WIDTH:
-                  return score()->styleV(StyleIdx::palmMuteLineWidth);
+            case Pid::LINE_WIDTH:
+                  return score()->styleV(Sid::palmMuteLineWidth);
 
-            case P_ID::ALIGN:
+            case Pid::ALIGN:
                   return QVariant::fromValue(Align::LEFT | Align::BASELINE);
 
-            case P_ID::LINE_STYLE:
-                  return score()->styleV(StyleIdx::palmMuteLineStyle);
+            case Pid::LINE_STYLE:
+                  return score()->styleV(Sid::palmMuteLineStyle);
 
-            case P_ID::BEGIN_TEXT_OFFSET:
-                  return score()->styleV(StyleIdx::palmMuteBeginTextOffset).toPointF();
+            case Pid::BEGIN_TEXT_OFFSET:
+                  return score()->styleV(Sid::palmMuteBeginTextOffset).toPointF();
 
-            case P_ID::BEGIN_TEXT_ALIGN:
-            case P_ID::CONTINUE_TEXT_ALIGN:
-            case P_ID::END_TEXT_ALIGN:
-                  return score()->styleV(StyleIdx::palmMuteTextAlign);
+            case Pid::BEGIN_TEXT_ALIGN:
+            case Pid::CONTINUE_TEXT_ALIGN:
+            case Pid::END_TEXT_ALIGN:
+                  return score()->styleV(Sid::palmMuteTextAlign);
 
-            case P_ID::BEGIN_HOOK_HEIGHT:
-            case P_ID::END_HOOK_HEIGHT:
-                  return score()->styleV(StyleIdx::palmMuteHookHeight);
+            case Pid::BEGIN_HOOK_HEIGHT:
+            case Pid::END_HOOK_HEIGHT:
+                  return score()->styleV(Sid::palmMuteHookHeight);
 
-            case P_ID::BEGIN_FONT_ITALIC:
-                  return score()->styleV(StyleIdx::palmMuteFontItalic);
+            case Pid::BEGIN_FONT_ITALIC:
+                  return score()->styleV(Sid::palmMuteFontItalic);
 
-            case P_ID::BEGIN_TEXT:
-                  return score()->styleV(StyleIdx::palmMuteText);
+            case Pid::BEGIN_TEXT:
+                  return score()->styleV(Sid::palmMuteText);
 
-            case P_ID::END_HOOK_TYPE:
+            case Pid::END_HOOK_TYPE:
                   return int(HookType::HOOK_90T);
 
             default:
@@ -157,34 +157,34 @@ QVariant PalmMute::propertyDefault(P_ID propertyId) const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-StyleIdx PalmMute::getPropertyStyle(P_ID id) const
+Sid PalmMute::getPropertyStyle(Pid id) const
       {
       switch (id) {
-            case P_ID::PLACEMENT:
-                  return StyleIdx::pedalPlacement;
-            case P_ID::BEGIN_FONT_FACE:
-                  return StyleIdx::pedalFontFace;
-            case P_ID::BEGIN_FONT_SIZE:
-                  return StyleIdx::pedalFontSize;
-            case P_ID::BEGIN_FONT_BOLD:
-                  return StyleIdx::pedalFontBold;
-            case P_ID::BEGIN_FONT_ITALIC:
-                  return StyleIdx::pedalFontItalic;
-            case P_ID::BEGIN_FONT_UNDERLINE:
-                  return StyleIdx::pedalFontUnderline;
-            case P_ID::BEGIN_TEXT_ALIGN:
-            case P_ID::CONTINUE_TEXT_ALIGN:
-            case P_ID::END_TEXT_ALIGN:
-                  return StyleIdx::pedalTextAlign;
-            case P_ID::BEGIN_HOOK_HEIGHT:
-            case P_ID::END_HOOK_HEIGHT:
-                  return StyleIdx::pedalHookHeight;
-            case P_ID::BEGIN_TEXT:
-                  return StyleIdx::palmMuteText;
+            case Pid::PLACEMENT:
+                  return Sid::pedalPlacement;
+            case Pid::BEGIN_FONT_FACE:
+                  return Sid::pedalFontFace;
+            case Pid::BEGIN_FONT_SIZE:
+                  return Sid::pedalFontSize;
+            case Pid::BEGIN_FONT_BOLD:
+                  return Sid::pedalFontBold;
+            case Pid::BEGIN_FONT_ITALIC:
+                  return Sid::pedalFontItalic;
+            case Pid::BEGIN_FONT_UNDERLINE:
+                  return Sid::pedalFontUnderline;
+            case Pid::BEGIN_TEXT_ALIGN:
+            case Pid::CONTINUE_TEXT_ALIGN:
+            case Pid::END_TEXT_ALIGN:
+                  return Sid::pedalTextAlign;
+            case Pid::BEGIN_HOOK_HEIGHT:
+            case Pid::END_HOOK_HEIGHT:
+                  return Sid::pedalHookHeight;
+            case Pid::BEGIN_TEXT:
+                  return Sid::palmMuteText;
             default:
                   break;
             }
-      return StyleIdx::NOSTYLE;
+      return Sid::NOSTYLE;
       }
 
 

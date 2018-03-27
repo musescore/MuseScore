@@ -1299,8 +1299,8 @@ void PreferenceDialog::printShortcutsClicked()
 #ifndef QT_NO_PRINTER
       QPrinter printer(QPrinter::HighResolution);
       const MStyle& s = MScore::defaultStyle();
-      qreal pageW = s.value(StyleIdx::pageWidth).toReal();
-      qreal pageH = s.value(StyleIdx::pageHeight).toReal();
+      qreal pageW = s.value(Sid::pageWidth).toReal();
+      qreal pageH = s.value(Sid::pageHeight).toReal();
       printer.setPaperSize(QSizeF(pageW, pageH), QPrinter::Inch);
 
       printer.setCreator("MuseScore Version: " VERSION);

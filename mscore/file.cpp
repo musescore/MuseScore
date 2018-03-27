@@ -563,9 +563,9 @@ MasterScore* MuseScore::getNewFile()
       score->fileInfo()->setFile(createDefaultName());
 
       if (!score->style().chordList()->loaded()) {
-            if (score->styleB(StyleIdx::chordsXmlFile))
+            if (score->styleB(Sid::chordsXmlFile))
                   score->style().chordList()->read("chords.xml");
-            score->style().chordList()->read(score->styleSt(StyleIdx::chordDescriptionFile));
+            score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
             }
       if (!newWizard->title().isEmpty())
             score->fileInfo()->setFile(newWizard->title());
@@ -607,7 +607,7 @@ MasterScore* MuseScore::getNewFile()
                                     // transpose key
                                     //
                                     KeySigEvent nKey = ks;
-                                    if (!nKey.custom() && !nKey.isAtonal() && part->instrument()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
+                                    if (!nKey.custom() && !nKey.isAtonal() && part->instrument()->transpose().chromatic && !score->styleB(Sid::concertPitch)) {
                                           int diff = -part->instrument()->transpose().chromatic;
                                           nKey.setKey(transposeKey(nKey.key(), diff));
                                           }
@@ -746,7 +746,7 @@ MasterScore* MuseScore::getNewFile()
 
       for (Excerpt* x : excerpts) {
             Score* xs = new Score(static_cast<MasterScore*>(score));
-            xs->style().set(StyleIdx::createMultiMeasureRests, true);
+            xs->style().set(Sid::createMultiMeasureRests, true);
             x->setPartScore(xs);
             xs->setExcerpt(x);
             score->excerpts().append(x);
@@ -1508,7 +1508,7 @@ void MuseScore::printFile()
             }
 
       QPrinter printerDev(QPrinter::HighResolution);
-      QSizeF size(cs->styleD(StyleIdx::pageWidth), cs->styleD(StyleIdx::pageHeight));
+      QSizeF size(cs->styleD(Sid::pageWidth), cs->styleD(Sid::pageHeight));
       QPageSize ps(QPageSize::id(size, QPageSize::Inch));
       printerDev.setPageSize(ps);
       printerDev.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
@@ -1955,7 +1955,7 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
 
       QPdfWriter pdfWriter(saveName);
       pdfWriter.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
-      QSizeF size(cs->styleD(StyleIdx::pageWidth), cs->styleD(StyleIdx::pageHeight));
+      QSizeF size(cs->styleD(Sid::pageWidth), cs->styleD(Sid::pageHeight));
       QPageSize ps(QPageSize::id(size, QPageSize::Inch));
       pdfWriter.setPageSize(ps);
       pdfWriter.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
@@ -2014,7 +2014,7 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       QPdfWriter pdfWriter(saveName);
       pdfWriter.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
 
-      QSizeF size(firstScore->styleD(StyleIdx::pageWidth), firstScore->styleD(StyleIdx::pageHeight));
+      QSizeF size(firstScore->styleD(Sid::pageWidth), firstScore->styleD(Sid::pageHeight));
       QPageSize ps(QPageSize::id(size, QPageSize::Inch));
       pdfWriter.setPageSize(ps);
       pdfWriter.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
@@ -2178,9 +2178,9 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
                         score->style().load(&f);
                   }
             else {
-                  if (score->styleB(StyleIdx::chordsXmlFile))
+                  if (score->styleB(Sid::chordsXmlFile))
                         score->style().chordList()->read("chords.xml");
-                  score->style().chordList()->read(score->styleSt(StyleIdx::chordDescriptionFile));
+                  score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
                   }
             bool found = false;
             for (auto i : imports) {

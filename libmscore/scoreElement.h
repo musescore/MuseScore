@@ -129,9 +129,9 @@ class VibratoSegment;
 class PalmMute;
 class PalmMuteSegment;
 
-enum class P_ID : int;
+enum class Pid : int;
 enum class PropertyFlags : char;
-enum class StyleIdx : int;
+enum class Sid : int;
 
 //---------------------------------------------------------
 //   LinkedElements
@@ -187,10 +187,10 @@ class ScoreElement {
       static ElementType name2type(const QStringRef&);
       static const char* name(ElementType);
 
-      virtual QVariant getProperty(P_ID) const = 0;
-      virtual bool setProperty(P_ID, const QVariant&) = 0;
-      virtual QVariant propertyDefault(P_ID) const;
-      virtual void resetProperty(P_ID id);
+      virtual QVariant getProperty(Pid) const = 0;
+      virtual bool setProperty(Pid, const QVariant&) = 0;
+      virtual QVariant propertyDefault(Pid) const;
+      virtual void resetProperty(Pid id);
       void resetStyledProperties();
 
       SubStyleId subStyleId() const                          { return _subStyleId; }
@@ -198,23 +198,23 @@ class ScoreElement {
       void initSubStyle(SubStyleId);
       virtual const StyledProperty* styledProperties() const { return subStyle(_subStyleId).data(); }
       virtual PropertyFlags* propertyFlagsList()             { return _propertyFlagsList; }
-      virtual PropertyFlags& propertyFlags(P_ID);
+      virtual PropertyFlags& propertyFlags(Pid);
 
-      virtual void setPropertyFlags(P_ID, PropertyFlags);
+      virtual void setPropertyFlags(Pid, PropertyFlags);
 
-      virtual StyleIdx getPropertyStyle(P_ID) const;
-      bool readProperty(const QStringRef&, XmlReader&, P_ID);
+      virtual Sid getPropertyStyle(Pid) const;
+      bool readProperty(const QStringRef&, XmlReader&, Pid);
       bool readStyledProperty(XmlReader& e, const QStringRef& tag);
 
       virtual void styleChanged();
 
-      virtual void undoChangeProperty(P_ID id, const QVariant&, PropertyFlags ps);
-      void undoChangeProperty(P_ID id, const QVariant&);
-      void undoResetProperty(P_ID id);
+      virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps);
+      void undoChangeProperty(Pid id, const QVariant&);
+      void undoResetProperty(Pid id);
 
 
-      void undoPushProperty(P_ID);
-      void writeProperty(XmlWriter& xml, P_ID id) const;
+      void undoPushProperty(Pid);
+      void writeProperty(XmlWriter& xml, Pid id) const;
       void writeStyledProperties(XmlWriter&) const;
 
       QList<ScoreElement*> linkList() const;

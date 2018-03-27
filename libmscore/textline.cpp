@@ -40,10 +40,10 @@ void TextLineSegment::layout()
       if (parent()) {
             if (textLine()->placeBelow()) {
                   qreal sh = staff() ? staff()->height() : 0.0;
-                  rypos() = sh + score()->styleP(StyleIdx::textLinePosBelow) * mag();
+                  rypos() = sh + score()->styleP(Sid::textLinePosBelow) * mag();
                   }
             else
-                  rypos() = score()->styleP(StyleIdx::textLinePosAbove) * mag();
+                  rypos() = score()->styleP(Sid::textLinePosAbove) * mag();
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
                   Shape s1 = shape().translated(pos());
@@ -86,9 +86,9 @@ TextLine::TextLine(Score* s)
       setBeginHookHeight(Spatium(1.5));
       setEndHookHeight(Spatium(1.5));
 
-      resetProperty(P_ID::BEGIN_TEXT_ALIGN);
-      resetProperty(P_ID::CONTINUE_TEXT_ALIGN);
-      resetProperty(P_ID::END_TEXT_ALIGN);
+      resetProperty(Pid::BEGIN_TEXT_ALIGN);
+      resetProperty(Pid::CONTINUE_TEXT_ALIGN);
+      resetProperty(Pid::END_TEXT_ALIGN);
 
       initSubStyle(SubStyleId::TEXTLINE);
       }
@@ -115,7 +115,7 @@ LineSegment* TextLine::createLineSegment()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant TextLine::getProperty(P_ID propertyId) const
+QVariant TextLine::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
             default:
@@ -128,10 +128,10 @@ QVariant TextLine::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TextLine::setProperty(P_ID propertyId, const QVariant& val)
+bool TextLine::setProperty(Pid propertyId, const QVariant& val)
       {
       switch (propertyId) {
-            case P_ID::PLACEMENT:
+            case Pid::PLACEMENT:
                   if (val != getProperty(propertyId)) {
                         // reverse hooks
                         setBeginHookHeight(-beginHookHeight());
@@ -153,34 +153,34 @@ bool TextLine::setProperty(P_ID propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TextLine::propertyDefault(P_ID propertyId) const
+QVariant TextLine::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::PLACEMENT:
+            case Pid::PLACEMENT:
                   return int(Placement::ABOVE);
-            case P_ID::BEGIN_TEXT:
-            case P_ID::CONTINUE_TEXT:
-            case P_ID::END_TEXT:
+            case Pid::BEGIN_TEXT:
+            case Pid::CONTINUE_TEXT:
+            case Pid::END_TEXT:
                   return "";
-            case P_ID::LINE_VISIBLE:
+            case Pid::LINE_VISIBLE:
                   return true;
-            case P_ID::BEGIN_TEXT_OFFSET:
-            case P_ID::CONTINUE_TEXT_OFFSET:
-            case P_ID::END_TEXT_OFFSET:
+            case Pid::BEGIN_TEXT_OFFSET:
+            case Pid::CONTINUE_TEXT_OFFSET:
+            case Pid::END_TEXT_OFFSET:
                   return QPointF(0,0);
-            case P_ID::BEGIN_HOOK_TYPE:
-            case P_ID::END_HOOK_TYPE:
+            case Pid::BEGIN_HOOK_TYPE:
+            case Pid::END_HOOK_TYPE:
                   return int(HookType::NONE);
-            case P_ID::BEGIN_TEXT_PLACE:
-            case P_ID::CONTINUE_TEXT_PLACE:
-            case P_ID::END_TEXT_PLACE:
+            case Pid::BEGIN_TEXT_PLACE:
+            case Pid::CONTINUE_TEXT_PLACE:
+            case Pid::END_TEXT_PLACE:
                   return int(PlaceText::AUTO);
-            case P_ID::BEGIN_HOOK_HEIGHT:
-            case P_ID::END_HOOK_HEIGHT:
+            case Pid::BEGIN_HOOK_HEIGHT:
+            case Pid::END_HOOK_HEIGHT:
                   return Spatium(1.5);
-            case P_ID::BEGIN_TEXT_ALIGN:
-            case P_ID::END_TEXT_ALIGN:
-            case P_ID::CONTINUE_TEXT_ALIGN:
+            case Pid::BEGIN_TEXT_ALIGN:
+            case Pid::END_TEXT_ALIGN:
+            case Pid::CONTINUE_TEXT_ALIGN:
                   return QVariant::fromValue(Align::LEFT | Align::TOP);
             default:
                   return TextLineBase::propertyDefault(propertyId);

@@ -37,9 +37,9 @@ class VoltaSegment final : public TextLineBaseSegment {
       Volta* volta() const                          { return (Volta*)spanner(); }
       virtual void layout() override;
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid) const override;
       };
 
 //---------------------------------------------------------
@@ -74,9 +74,9 @@ class Volta final : public TextLineBase {
       void setVoltaType(Volta::Type);     // deprecated
       Type voltaType() const;             // deprecated
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid) const override;
 
       virtual bool systemFlag() const override  { return true;  }
       virtual QString accessibleInfo() const override;
