@@ -26,25 +26,18 @@
 
 namespace Ms {
 
-constexpr std::array<StyledProperty,11> Tuplet::_styledProperties;
-
 //---------------------------------------------------------
 //   Tuplet
 //---------------------------------------------------------
 
 Tuplet::Tuplet(Score* s)
-  : DurationElement(s)
+  : DurationElement(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
-
-      resetProperty(P_ID::DIRECTION);
-      resetProperty(P_ID::NUMBER_TYPE);
-      resetProperty(P_ID::BRACKET_TYPE);
-      resetProperty(P_ID::LINE_WIDTH);
       _ratio        = Fraction(1, 1);
       _number       = 0;
       _hasBracket   = false;
       _isUp         = true;
+      initSubStyle(SubStyleId::TUPLET);
       }
 
 Tuplet::Tuplet(const Tuplet& t)
@@ -54,13 +47,10 @@ Tuplet::Tuplet(const Tuplet& t)
       _hasBracket   = t._hasBracket;
       _ratio        = t._ratio;
       _baseLen      = t._baseLen;
-
       _direction    = t._direction;
       _numberType   = t._numberType;
       _bracketType  = t._bracketType;
       _bracketWidth = t._bracketWidth;
-
-      *_propertyFlagsList = *t._propertyFlagsList;
 
       _isUp          = t._isUp;
 
@@ -118,10 +108,13 @@ void Tuplet::layout()
       if (staff() && staff()->isTabStaff(tick()) && staff()->staffType(tick())->slashStyle())
             return;
 
+      //
+      // create tuplet number if necessary
+      //
       qreal _spatium = spatium();
       if (_numberType != TupletNumberType::NO_TEXT) {
             if (_number == 0) {
-                  _number = new Text(SubStyleId::TUPLET, score());
+                  _number = new Text(score());
                   _number->setTrack(track());
                   _number->setParent(this);
                   _number->setVisible(visible());
@@ -161,6 +154,10 @@ void Tuplet::layout()
       else
             _isUp = _direction == Direction::UP;
 
+      //
+      // find first and last chord of tuplet
+      // (tuplets can be nested)
+      //
       const DurationElement* cr1 = _elements.front();
       while (cr1->isTuplet()) {
             const Tuplet* t = toTuplet(cr1);
@@ -181,7 +178,7 @@ void Tuplet::layout()
       //
       if (_bracketType == TupletBracketType::AUTO_BRACKET) {
             _hasBracket = false;
-            foreach (DurationElement* e, _elements) {
+            for (DurationElement* e : _elements) {
                   if (e->isTuplet() || e->isRest()) {
                         _hasBracket = true;
                         break;
@@ -205,14 +202,14 @@ void Tuplet::layout()
       //
       //    calculate bracket start and end point p1 p2
       //
-      qreal maxSlope = score()->styleD(StyleIdx::tupletMaxSlope);
-      bool outOfStaff = score()->styleB(StyleIdx::tupletOufOfStaff);
+      qreal maxSlope      = score()->styleD(StyleIdx::tupletMaxSlope);
+      bool outOfStaff     = score()->styleB(StyleIdx::tupletOufOfStaff);
       qreal vHeadDistance = score()->styleP(StyleIdx::tupletVHeadDistance);
       qreal vStemDistance = score()->styleP(StyleIdx::tupletVStemDistance);
-      qreal stemLeft = score()->styleP(StyleIdx::tupletStemLeftDistance);
-      qreal stemRight = score()->styleP(StyleIdx::tupletStemRightDistance);
-      qreal noteLeft = score()->styleP(StyleIdx::tupletNoteLeftDistance);
-      qreal noteRight = score()->styleP(StyleIdx::tupletNoteRightDistance);
+      qreal stemLeft      = score()->styleP(StyleIdx::tupletStemLeftDistance);
+      qreal stemRight     = score()->styleP(StyleIdx::tupletStemRightDistance);
+      qreal noteLeft      = score()->styleP(StyleIdx::tupletNoteLeftDistance);
+      qreal noteRight     = score()->styleP(StyleIdx::tupletNoteRightDistance);
 
       int move = 0;
       if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
@@ -224,7 +221,7 @@ void Tuplet::layout()
                   outOfStaff = false;
             }
 
-      qreal l1 = _spatium;          // bracket tip height
+      qreal l1 = _spatium;          // bracket tip height                     TODO: create style value
       qreal l2l = vHeadDistance;    // left bracket vertical distance
       qreal l2r = vHeadDistance;    // right bracket vertical distance right
 
@@ -390,12 +387,14 @@ void Tuplet::layout()
                   if (stem && !chord2->up()) {
                         // if (chord2->beam())
                         //      p2.setX(stem->abbox().x());
+#if 0 // TODO-ws beam bbox not available at this point
                         if (followBeam)
                               p2.ry() = stem->abbox().bottom() + beamAdjust;
                         if (chord2->beam())
                               p2.ry() = chord2->beam()->abbox().bottom();
                         else
                               p2.ry() = stem->abbox().bottom();
+#endif
                         l2r = vStemDistance;
                         }
                   else {
@@ -481,6 +480,8 @@ void Tuplet::layout()
       p1.ry() -= l2l * (_isUp ? 1.0 : -1.0);
       p2.ry() -= l2r * (_isUp ? 1.0 : -1.0);
 
+      // l2l l2r, mp, _p1, _p2 const
+
       // center number
       qreal x3 = 0.0;
       qreal numberWidth = 0.0;
@@ -556,6 +557,8 @@ void Tuplet::layout()
                         }
                   }
             }
+
+      // collect bounding box
       QRectF r;
       if (_number) {
             r |= _number->bbox().translated(_number->pos());
@@ -655,9 +658,9 @@ Shape Tuplet::shape() const
 
 void Tuplet::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      func(data, this);
       if (_number && all)
             func(data, _number);
+      func(data, this);
       }
 
 //---------------------------------------------------------
@@ -729,7 +732,7 @@ bool Tuplet::readProperties(XmlReader& e)
       else if (tag == "baseNote")
             _baseLen = TDuration(e.readElementText());
       else if (tag == "Number") {
-            _number = new Text(SubStyleId::TUPLET, score());
+            _number = new Text(score());
             _number->setParent(this);
             _number->read(e);
             _number->setVisible(visible());     //?? override saved property
@@ -759,9 +762,9 @@ void Tuplet::add(Element* e)
 #endif
 
       switch (e->type()) {
-            case ElementType::TEXT:
-                  _number = toText(e);
-                  break;
+//            case ElementType::TEXT:
+//                  _number = toText(e);
+//                  break;
             case ElementType::CHORD:
             case ElementType::REST:
             case ElementType::TUPLET: {
@@ -796,10 +799,10 @@ void Tuplet::add(Element* e)
 void Tuplet::remove(Element* e)
       {
       switch (e->type()) {
-            case ElementType::TEXT:
-                  if (e == _number)
-                        _number = 0;
-                  break;
+//            case ElementType::TEXT:
+//                  if (e == _number)
+//                        _number = 0;
+//                  break;
             case ElementType::CHORD:
             case ElementType::REST:
             case ElementType::TUPLET: {
@@ -869,8 +872,8 @@ void Tuplet::updateGrips(EditData& ed) const
 
 void Tuplet::reset()
       {
-      for (auto k : _styledProperties)
-            undoResetProperty(k.propertyIdx);
+//TODO-ws      for (auto k : _styledProperties)
+//            undoResetProperty(k.propertyIdx);
 
       score()->addRefresh(canvasBoundingRect());
 
@@ -1027,10 +1030,6 @@ bool Tuplet::setProperty(P_ID propertyId, const QVariant& v)
 
 QVariant Tuplet::propertyDefault(P_ID id) const
       {
-      for (auto k : _styledProperties) {
-            if (k.propertyIdx == id)
-                  return score()->styleV(k.styleIdx);
-            }
       switch(id) {
             case P_ID::NORMAL_NOTES:
             case P_ID::ACTUAL_NOTES:
@@ -1040,20 +1039,6 @@ QVariant Tuplet::propertyDefault(P_ID id) const
                   return QPointF();
             default:
                   return DurationElement::propertyDefault(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   styleChanged
-//    reset all styled values to actual style
-//---------------------------------------------------------
-
-void Tuplet::styleChanged()
-      {
-      ScoreElement::styleChanged();
-      if (!_elements.empty()) {
-            _elements.front()->triggerLayout();
-            _elements.back()->triggerLayout();
             }
       }
 

@@ -3160,9 +3160,10 @@ void Text::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-
             if (tag == "style") {
                   QString sn = e.readElementText();
+                  if (sn == "Tuplet")          // ugly hack for compatibility
+                        continue;
                   SubStyleId s = subStyleFromName(sn);
                   initSubStyle(s);
                   }

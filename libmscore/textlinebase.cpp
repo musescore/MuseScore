@@ -327,8 +327,6 @@ void TextLineBaseSegment::spatiumChanged(qreal ov, qreal nv)
 
 static constexpr std::array<P_ID, 34> pids = { {
       P_ID::LINE_WIDTH,
-      P_ID::LINE_STYLE,
-
       P_ID::LINE_VISIBLE,
       P_ID::BEGIN_HOOK_TYPE,
       P_ID::BEGIN_HOOK_HEIGHT,
@@ -406,26 +404,11 @@ QVariant TextLineBaseSegment::propertyDefault(P_ID id) const
 //   TextLineBase
 //---------------------------------------------------------
 
-TextLineBase::TextLineBase(Score* s)
-   : SLine(s)
+TextLineBase::TextLineBase(Score* s, ElementFlags f)
+   : SLine(s, f)
       {
-      }
-
-TextLineBase::TextLineBase(const TextLineBase& e)
-   : SLine(e)
-      {
-      for (P_ID pid : pids)
-            setProperty(pid, e.getProperty(pid));
-      }
-
-//---------------------------------------------------------
-//   init
-//---------------------------------------------------------
-
-void TextLineBase::init()
-      {
-      for (P_ID pid : pids)
-            setProperty(pid, propertyDefault(pid));
+      setBeginHookHeight(Spatium(1.9));
+      setEndHookHeight(Spatium(1.9));
       }
 
 //---------------------------------------------------------
@@ -682,58 +665,5 @@ bool TextLineBase::setProperty(P_ID id, const QVariant& v)
       return true;
       }
 
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant TextLineBase::propertyDefault(P_ID id) const
-      {
-      switch (id) {
-            case P_ID::CONTINUE_TEXT:
-            case P_ID::BEGIN_TEXT:
-            case P_ID::END_TEXT:
-                  return QString("");
-            case P_ID::BEGIN_TEXT_PLACE:
-            case P_ID::CONTINUE_TEXT_PLACE:
-            case P_ID::END_TEXT_PLACE:
-                  return int(PlaceText::LEFT);
-            case P_ID::BEGIN_HOOK_TYPE:
-            case P_ID::END_HOOK_TYPE:
-                  return int(HookType::NONE);
-            case P_ID::BEGIN_HOOK_HEIGHT:
-            case P_ID::END_HOOK_HEIGHT:
-                  return Spatium(1.5);
-            case P_ID::BEGIN_FONT_FACE:
-            case P_ID::CONTINUE_FONT_FACE:
-            case P_ID::END_FONT_FACE:
-                  return QString("FreeSerif");
-            case P_ID::BEGIN_FONT_SIZE:
-            case P_ID::CONTINUE_FONT_SIZE:
-            case P_ID::END_FONT_SIZE:
-                  return 12.0;
-            case P_ID::BEGIN_FONT_BOLD:
-            case P_ID::BEGIN_FONT_ITALIC:
-            case P_ID::BEGIN_FONT_UNDERLINE:
-            case P_ID::CONTINUE_FONT_BOLD:
-            case P_ID::CONTINUE_FONT_ITALIC:
-            case P_ID::CONTINUE_FONT_UNDERLINE:
-            case P_ID::END_FONT_BOLD:
-            case P_ID::END_FONT_ITALIC:
-            case P_ID::END_FONT_UNDERLINE:
-                  return false;
-            case P_ID::BEGIN_TEXT_OFFSET:
-            case P_ID::CONTINUE_TEXT_OFFSET:
-            case P_ID::END_TEXT_OFFSET:
-                  return QPointF();
-            case P_ID::BEGIN_TEXT_ALIGN:
-            case P_ID::CONTINUE_TEXT_ALIGN:
-            case P_ID::END_TEXT_ALIGN:
-                  return QVariant::fromValue(Align::VCENTER);
-            case P_ID::LINE_VISIBLE:
-                  return true;
-            default:
-                  return SLine::propertyDefault(id);
-            }
-      }
 }
 

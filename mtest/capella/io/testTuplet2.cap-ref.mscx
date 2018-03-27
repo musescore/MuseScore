@@ -66,7 +66,6 @@
           <actualNotes>3</actualNotes>
           <baseNote>eighth</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>3</text>
             </Number>
           </Tuplet>
@@ -143,7 +142,6 @@
           <actualNotes>5</actualNotes>
           <baseNote>eighth</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>5</text>
             </Number>
           </Tuplet>
@@ -224,7 +222,6 @@
           <actualNotes>7</actualNotes>
           <baseNote>16th</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>7</text>
             </Number>
           </Tuplet>
@@ -337,7 +334,6 @@
           <actualNotes>9</actualNotes>
           <baseNote>16th</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>9</text>
             </Number>
           </Tuplet>
@@ -463,7 +459,6 @@
           <actualNotes>6</actualNotes>
           <baseNote>16th</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>6</text>
             </Number>
           </Tuplet>
@@ -557,7 +552,6 @@
           <actualNotes>2</actualNotes>
           <baseNote>eighth</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>2</text>
             </Number>
           </Tuplet>
@@ -627,7 +621,6 @@
           <actualNotes>4</actualNotes>
           <baseNote>16th</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>4</text>
             </Number>
           </Tuplet>
@@ -724,7 +717,6 @@
           <actualNotes>8</actualNotes>
           <baseNote>16th</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>8</text>
             </Number>
           </Tuplet>
@@ -842,7 +834,6 @@
           <actualNotes>10</actualNotes>
           <baseNote>16th</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>10</text>
             </Number>
           </Tuplet>
@@ -978,7 +969,6 @@
           <actualNotes>14</actualNotes>
           <baseNote>16th</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>14</text>
             </Number>
           </Tuplet>
@@ -1200,7 +1190,6 @@
           <actualNotes>11</actualNotes>
           <baseNote>16th</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>11</text>
             </Number>
           </Tuplet>
@@ -1343,7 +1332,6 @@
           <actualNotes>12</actualNotes>
           <baseNote>16th</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>12</text>
             </Number>
           </Tuplet>
@@ -1491,7 +1479,6 @@
           <actualNotes>13</actualNotes>
           <baseNote>16th</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>13</text>
             </Number>
           </Tuplet>
@@ -1679,7 +1666,6 @@
           <actualNotes>15</actualNotes>
           <baseNote>16th</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>15</text>
             </Number>
           </Tuplet>

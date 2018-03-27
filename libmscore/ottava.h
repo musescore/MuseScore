@@ -57,10 +57,6 @@ class OttavaSegment final : public TextLineBaseSegment {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
-      virtual PropertyFlags& propertyFlags(P_ID) override;
-      virtual void resetProperty(P_ID id) override;
-      virtual void styleChanged() override;
-      virtual StyleIdx getPropertyStyle(P_ID) const override;
       };
 
 //---------------------------------------------------------
@@ -71,7 +67,6 @@ class OttavaSegment final : public TextLineBaseSegment {
 class Ottava final : public TextLineBase {
       OttavaType _ottavaType;
       bool _numbersOnly;
-      PropertyFlags numbersOnlyStyle  { PropertyFlags::STYLED };
 
       int _pitchShift;
 
@@ -101,10 +96,6 @@ class Ottava final : public TextLineBase {
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
-      virtual PropertyFlags& propertyFlags(P_ID) override;
-      virtual StyleIdx getPropertyStyle(P_ID) const override;
-      virtual void styleChanged() override;
-      virtual void reset() override;
 
       virtual void setYoff(qreal) override;
 
