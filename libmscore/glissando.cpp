@@ -474,14 +474,10 @@ void Glissando::write(XmlWriter& xml) const
       if (_showText && !_text.isEmpty())
             xml.tag("text", _text);
 
-      writeProperty(xml, P_ID::GLISS_TYPE);
-      writeProperty(xml, P_ID::PLAY);
-      writeProperty(xml, P_ID::GLISSANDO_STYLE);
-      writeProperty(xml, P_ID::FONT_FACE);
-      writeProperty(xml, P_ID::FONT_SIZE);
-      writeProperty(xml, P_ID::FONT_BOLD);
-      writeProperty(xml, P_ID::FONT_ITALIC);
-      writeProperty(xml, P_ID::FONT_UNDERLINE);
+      for (auto id : { P_ID::GLISS_TYPE, P_ID::PLAY, P_ID::GLISSANDO_STYLE, P_ID::FONT_FACE,
+         P_ID::FONT_SIZE, P_ID::FONT_BOLD, P_ID::FONT_ITALIC, P_ID::FONT_UNDERLINE} )
+            writeProperty(xml, id);
+
       SLine::writeProperties(xml);
       xml.etag();
       }
@@ -794,8 +790,6 @@ QVariant Glissando::propertyDefault(P_ID propertyId) const
       switch (propertyId) {
             case P_ID::GLISS_TYPE:
                   return int(GlissandoType::STRAIGHT);
-            case P_ID::GLISS_TEXT:
-                  return "gliss.";
             case P_ID::GLISS_SHOW_TEXT:
                   return true;
             case P_ID::GLISSANDO_STYLE:
@@ -807,6 +801,5 @@ QVariant Glissando::propertyDefault(P_ID propertyId) const
             }
       return SLine::propertyDefault(propertyId);
       }
-
 }
 

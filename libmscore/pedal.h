@@ -47,10 +47,10 @@ class Pedal final : public TextLineBase {
       virtual Pedal* clone() const override     { return new Pedal(*this);   }
       virtual ElementType type() const override { return ElementType::PEDAL; }
       virtual void read(XmlReader&) override;
+      virtual void write(XmlWriter& xml) const override;
       LineSegment* createLineSegment();
       virtual void setYoff(qreal) override;
       virtual QVariant propertyDefault(P_ID propertyId) const override;
-      virtual StyleIdx getPropertyStyle(P_ID) const override;
 
       friend class PedalLine;
       };

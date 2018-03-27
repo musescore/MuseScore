@@ -407,6 +407,7 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
             // use same code path as drag&drop
 
             QByteArray a = e->mimeData(QPointF());
+
             XmlReader e(a);
             Fraction duration;  // dummy
             QPointF dragOffset;
@@ -428,6 +429,7 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
 
 void Palette::applyPaletteElement(PaletteCell* cell)
       {
+printf("applyPaletteElement\n");
       Score* score = mscore->currentScore();
       if (score == 0)
             return;
@@ -487,7 +489,7 @@ void Palette::applyPaletteElement(PaletteCell* cell)
             else if (element->isSlur() && addSingle) {
                   viewer->addSlur();
                   }
-            else if (element->isSLine() && element->type() != ElementType::GLISSANDO && addSingle) {
+            else if (element->isSLine() && !element->isGlissando() && addSingle) {
                   Segment* startSegment = cr1->segment();
                   Segment* endSegment = cr2->segment();
                   if (element->type() == ElementType::PEDAL && cr2 != cr1)
@@ -496,6 +498,7 @@ void Palette::applyPaletteElement(PaletteCell* cell)
                   int idx = cr1->staffIdx();
 
                   QByteArray a = element->mimeData(QPointF());
+printf("<<%s>>\n", a.data());
                   XmlReader e(a);
                   Fraction duration;  // dummy
                   QPointF dragOffset;

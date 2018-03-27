@@ -179,7 +179,7 @@ class Chord final : public ChordRest {
       void setNoteType(NoteType t)    { _noteType = t; }
       bool isGrace() const            { return _noteType != NoteType::NORMAL; }
       void toGraceAfter();
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
       virtual void setTrack(int val) override;
 

@@ -6,4 +6,5 @@ cp ../../../build.debug/mtest/libmscore/rhythmicGrouping/group8thsCompound.mscx 
 cp ../../../build.debug/mtest/libmscore/rhythmicGrouping/groupSubbeats.mscx     groupSubbeats-ref.mscx
 cp ../../../build.debug/mtest/libmscore/rhythmicGrouping/groupVoices.mscx       groupVoices-ref.mscx
 cp ../../../build.debug/mtest/libmscore/rhythmicGrouping/groupConflicts.mscx    groupConflicts-ref.mscx
+cp ../../../build.debug/mtest/libmscore/rhythmicGrouping/groupArticulationsTies.mscx    groupArticulationsTies-ref.mscx
 

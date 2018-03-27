@@ -75,7 +75,6 @@ struct StyleVal2 {
       { StyleIdx::minSystemDistance,           Spatium(8.5)  },
       { StyleIdx::maxSystemDistance,           Spatium(15.0) },
 
-//      { StyleIdx::lyricsDistance,              2.0  }, //renamed to lyricsPosBelow
       { StyleIdx::lyricsMinBottomDistance,     Spatium(4.0)  },
       { StyleIdx::lyricsLineHeight,            QVariant(1.0) },
       { StyleIdx::figuredBassFontFamily,       QVariant(QString("MScoreBC")) },
@@ -163,7 +162,6 @@ struct StyleVal2 {
       { StyleIdx::smallClefMag,                QVariant(0.8) },
       { StyleIdx::genClef,                     QVariant(true) },
       { StyleIdx::genKeysig,                   QVariant(true) },
-//      { StyleIdx::genTimesig,                  QVariant(true) },
       { StyleIdx::genCourtesyTimesig,          QVariant(true) },
       { StyleIdx::genCourtesyKeysig,           QVariant(true) },
       { StyleIdx::genCourtesyClef,             QVariant(true) },
@@ -203,7 +201,6 @@ struct StyleVal2 {
       { StyleIdx::MusicalSymbolFont,           QVariant(QString("Emmentaler")) },
       { StyleIdx::MusicalTextFont,             QVariant(QString("MScore Text")) },
       { StyleIdx::showHeader,                  QVariant(false) },
-//      { StyleIdx::headerStyled,                QVariant(true) },
       { StyleIdx::headerFirstPage,             QVariant(false) },
       { StyleIdx::headerOddEven,               QVariant(true) },
       { StyleIdx::evenHeaderL,                 QVariant(QString()) },
@@ -213,7 +210,6 @@ struct StyleVal2 {
       { StyleIdx::oddHeaderC,                  QVariant(QString()) },
       { StyleIdx::oddHeaderR,                  QVariant(QString()) },
       { StyleIdx::showFooter,                  QVariant(true) },
-//      { StyleIdx::footerStyled,                QVariant(true) },
       { StyleIdx::footerFirstPage,             QVariant(true) },
       { StyleIdx::footerOddEven,               QVariant(true) },
       { StyleIdx::evenFooterL,                 QVariant(QString("$p")) },
@@ -249,6 +245,7 @@ struct StyleVal2 {
       { StyleIdx::tupletStemRightDistance,     QVariant(.5) },
       { StyleIdx::tupletNoteLeftDistance,      QVariant(0.0) },
       { StyleIdx::tupletNoteRightDistance,     QVariant(0.0) },
+
       { StyleIdx::barreLineWidth,              QVariant(1.0) },
       { StyleIdx::fretMag,                     QVariant(1.0) },
       { StyleIdx::scaleBarlines,               QVariant(true) },

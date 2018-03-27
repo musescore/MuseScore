@@ -64,7 +64,19 @@ void PedalSegment::layout()
 Pedal::Pedal(Score* s)
    : TextLineBase(s)
       {
-      init();
+      setLineVisible(true);
+      resetProperty(P_ID::BEGIN_TEXT);
+      resetProperty(P_ID::END_TEXT);
+
+      resetProperty(P_ID::LINE_WIDTH);
+      resetProperty(P_ID::LINE_STYLE);
+
+      resetProperty(P_ID::BEGIN_HOOK_TYPE);
+      resetProperty(P_ID::END_HOOK_TYPE);
+
+      resetProperty(P_ID::BEGIN_TEXT_PLACE);
+
+      initSubStyle(SubStyleId::PEDAL);
       }
 
 //---------------------------------------------------------
@@ -80,6 +92,35 @@ void Pedal::read(XmlReader& e)
                   e.unknown();
             }
       }
+
+//---------------------------------------------------------
+//   write
+//---------------------------------------------------------
+
+void Pedal::write(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      int id = xml.spannerId(this);
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
+
+      for (auto i : {
+         P_ID::END_HOOK_TYPE,
+         P_ID::BEGIN_TEXT,
+         P_ID::END_TEXT,
+         P_ID::LINE_WIDTH,
+         P_ID::LINE_STYLE,
+         P_ID::BEGIN_HOOK_TYPE
+         }) {
+            writeProperty(xml, i);
+            }
+      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp)
+            writeProperty(xml, spp->propertyIdx);
+
+      Element::writeProperties(xml);
+      xml.etag();
+      }
+
 
 //---------------------------------------------------------
 //   createLineSegment
@@ -109,61 +150,24 @@ QVariant Pedal::propertyDefault(P_ID propertyId) const
             case P_ID::LINE_WIDTH:
                   return score()->styleV(StyleIdx::pedalLineWidth);
 
-            case P_ID::ALIGN:
-                  return QVariant::fromValue(Align::LEFT | Align::BASELINE);
-
             case P_ID::LINE_STYLE:
                   return score()->styleV(StyleIdx::pedalLineStyle);
 
-            case P_ID::BEGIN_TEXT_OFFSET:
-                  return score()->styleV(StyleIdx::pedalBeginTextOffset).toPointF();
+            case P_ID::BEGIN_TEXT:
+            case P_ID::END_TEXT:
+                  return "";
 
-            case P_ID::BEGIN_TEXT_ALIGN:
-            case P_ID::CONTINUE_TEXT_ALIGN:
-            case P_ID::END_TEXT_ALIGN:
-                  return score()->styleV(StyleIdx::pedalTextAlign);
+            case P_ID::BEGIN_TEXT_PLACE:
+                  return int(PlaceText::LEFT);
 
-            case P_ID::BEGIN_HOOK_HEIGHT:
-            case P_ID::END_HOOK_HEIGHT:
-                  return score()->styleV(StyleIdx::pedalHookHeight);
+            case P_ID::BEGIN_HOOK_TYPE:
+            case P_ID::END_HOOK_TYPE:
+                  return int(HookType::NONE);
 
             default:
                   return TextLineBase::propertyDefault(propertyId);
             }
       }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-StyleIdx Pedal::getPropertyStyle(P_ID id) const
-      {
-      switch (id) {
-            case P_ID::PLACEMENT:
-                  return StyleIdx::pedalPlacement;
-            case P_ID::BEGIN_FONT_FACE:
-                  return StyleIdx::pedalFontFace;
-            case P_ID::BEGIN_FONT_SIZE:
-                  return StyleIdx::pedalFontSize;
-            case P_ID::BEGIN_FONT_BOLD:
-                  return StyleIdx::pedalFontBold;
-            case P_ID::BEGIN_FONT_ITALIC:
-                  return StyleIdx::pedalFontItalic;
-            case P_ID::BEGIN_FONT_UNDERLINE:
-                  return StyleIdx::pedalFontUnderline;
-            case P_ID::BEGIN_TEXT_ALIGN:
-            case P_ID::CONTINUE_TEXT_ALIGN:
-            case P_ID::END_TEXT_ALIGN:
-                  return StyleIdx::pedalTextAlign;
-            case P_ID::BEGIN_HOOK_HEIGHT:
-            case P_ID::END_HOOK_HEIGHT:
-                  return StyleIdx::pedalHookHeight;
-            default:
-                  break;
-            }
-      return StyleIdx::NOSTYLE;
-      }
-
 
 //---------------------------------------------------------
 //   linePos

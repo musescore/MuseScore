@@ -174,6 +174,12 @@ static const StyleType styleTypes[] {
       { StyleIdx::hairpinHeight,           "hairpinHeight",           Spatium(1.2) },
       { StyleIdx::hairpinContHeight,       "hairpinContHeight",       Spatium(0.5) },
       { StyleIdx::hairpinLineWidth,        "hairpinWidth",            Spatium(0.13) },
+      { StyleIdx::hairpinFontFace,         "hairpinFontFace",         "FreeSerif" },
+      { StyleIdx::hairpinFontSize,         "hairpinFontSize",         12.0 },
+      { StyleIdx::hairpinFontBold,         "hairpinFontBold",         false },
+      { StyleIdx::hairpinFontItalic,       "hairpinFontItalic",       true },
+      { StyleIdx::hairpinFontUnderline,    "hairpinFontUnderline",    false },
+      { StyleIdx::hairpinTextAlign,        "hairpinTextAlign",        QVariant::fromValue(Align::LEFT | Align::BASELINE) },
 
       { StyleIdx::pedalPlacement,          "pedalPlacement",          int(Placement::BELOW)  },
       { StyleIdx::pedalPosAbove,           "pedalPosAbove",           Spatium(-4) },
@@ -182,6 +188,12 @@ static const StyleType styleTypes[] {
       { StyleIdx::pedalLineStyle,          "pedalListStyle",          QVariant(int(Qt::SolidLine)) },
       { StyleIdx::pedalBeginTextOffset,    "pedalBeginTextOffset",    QPointF(0.0, 0.15) },
       { StyleIdx::pedalHookHeight,         "pedalHookHeight",         Spatium(-1.2) },
+      { StyleIdx::pedalFontFace,           "pedalFontFace",           "FreeSerif" },
+      { StyleIdx::pedalFontSize,           "pedalFontSize",           12.0 },
+      { StyleIdx::pedalFontBold,           "pedalFontBold",           false },
+      { StyleIdx::pedalFontItalic,         "pedalFontItalic",         false },
+      { StyleIdx::pedalFontUnderline,      "pedalFontUnderline",      false },
+      { StyleIdx::pedalTextAlign,          "pedalTextAlign",          QVariant::fromValue(Align::LEFT | Align::BASELINE) },
 
       { StyleIdx::trillPlacement,          "trillPlacement",          int(Placement::ABOVE)  },
       { StyleIdx::trillPosAbove,           "trillPosAbove",           Spatium(-1) },
@@ -281,11 +293,18 @@ static const StyleType styleTypes[] {
       { StyleIdx::oddFooterL,              "oddFooterL",              QVariant(QString()) },
       { StyleIdx::oddFooterC,              "oddFooterC",              QVariant(QString("$:copyright:")) },
       { StyleIdx::oddFooterR,              "oddFooterR",              QVariant(QString("$p")) },
+
       { StyleIdx::voltaY,                  "voltaY",                  Spatium(-3.0) },
       { StyleIdx::voltaHook,               "voltaHook",               Spatium(1.9) },
-
       { StyleIdx::voltaLineWidth,          "voltaLineWidth",          Spatium(.1) },
       { StyleIdx::voltaLineStyle,          "voltaLineStyle",          QVariant(int(Qt::SolidLine)) },
+      { StyleIdx::voltaFontFace,           "voltaFontFace",           "FreeSerif" },
+      { StyleIdx::voltaFontSize,           "voltaFontSize",           11.0 },
+      { StyleIdx::voltaFontBold,           "voltaFontBold",           true },
+      { StyleIdx::voltaFontItalic,         "voltaFontItalic",         false },
+      { StyleIdx::voltaFontUnderline,      "voltaFontUnderline",      false },
+      { StyleIdx::voltaAlign,              "voltaAlign",              QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+      { StyleIdx::voltaOffset,             "voltaOffset",             QPointF(0.5, 1.9) },
 
       { StyleIdx::ottavaPlacement,         "ottavaPlacement",         int(Placement::ABOVE)  },
       { StyleIdx::ottavaPosAbove,          "ottavaPosAbove",          Spatium(-3.0) },
@@ -294,13 +313,20 @@ static const StyleType styleTypes[] {
       { StyleIdx::ottavaLineWidth,         "ottavaLineWidth",         Spatium(.1) },
       { StyleIdx::ottavaLineStyle,         "ottavaLineStyle",         QVariant(int(Qt::DashLine)) },
       { StyleIdx::ottavaNumbersOnly,       "ottavaNumbersOnly",       true },
+      { StyleIdx::ottavaFontFace,          "ottavaFontFace",          "FreeSerif" },
+      { StyleIdx::ottavaFontSize,          "ottavaFontSize",          12.0 },
+      { StyleIdx::ottavaFontBold,          "ottavaFontBold",          false },
+      { StyleIdx::ottavaFontItalic,        "ottavaFontItalic",        false },
+      { StyleIdx::ottavaFontUnderline,     "ottavaFontUnderline",     false },
+      { StyleIdx::ottavaTextAlign,         "ottavaTextAlign",         QVariant::fromValue(Align::LEFT | Align::VCENTER) },
 
       { StyleIdx::tabClef,                 "tabClef",                 QVariant(int(ClefType::TAB)) },
+
       { StyleIdx::tremoloWidth,            "tremoloWidth",            Spatium(1.2) },  // tremolo stroke width: notehead width
       { StyleIdx::tremoloBoxHeight,        "tremoloBoxHeight",        Spatium(0.65) },
-
       { StyleIdx::tremoloStrokeWidth,      "tremoloLineWidth",        Spatium(0.5) },  // was 0.35
       { StyleIdx::tremoloDistance,         "tremoloDistance",         Spatium(0.8) },
+
       { StyleIdx::linearStretch,           "linearStretch",           QVariant(qreal(1.5)) },
       { StyleIdx::crossMeasureValues,      "crossMeasureValues",      QVariant(false) },
       { StyleIdx::keySigNaturals,          "keySigNaturals",          QVariant(int(KeySigNatural::NONE)) },
@@ -317,6 +343,13 @@ static const StyleType styleTypes[] {
       { StyleIdx::tupletDirection,         "tupletDirection",         QVariant::fromValue<Direction>(Direction::AUTO) },
       { StyleIdx::tupletNumberType,        "tupletNumberType",        int(TupletNumberType::SHOW_NUMBER) },
       { StyleIdx::tupletBracketType,       "tupletBracketType",       int(TupletBracketType::AUTO_BRACKET) },
+      { StyleIdx::tupletFontFace,          "tupletFontFace",          "FreeSerif" },
+      { StyleIdx::tupletFontSize,          "tupletFontSize",          10.0 },
+      { StyleIdx::tupletFontBold,          "tupletFontBold",          false },
+      { StyleIdx::tupletFontItalic,        "tupletFontItalic",        true },
+      { StyleIdx::tupletFontUnderline,     "tupletFontUnderline",     false },
+      { StyleIdx::tupletAlign,             "tupletAlign",             QVariant::fromValue(Align::CENTER) },
+
 
       { StyleIdx::barreLineWidth,          "barreLineWidth",          QVariant(1.0) },
       { StyleIdx::fretMag,                 "fretMag",                 QVariant(1.0) },
@@ -363,6 +396,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::defaultOffset,                 "defaultOffset",                 QPointF() },
       { StyleIdx::defaultOffsetType,             "defaultOffsetType",             int(OffsetType::SPATIUM)   },
       { StyleIdx::defaultSystemFlag,             "defaultSystemFlag",             false },
+      { StyleIdx::defaultText,                   "defaultText",                   QString("")    },
 
       { StyleIdx::titleFontFace,                 "titleFontFace",                 "FreeSerif" },
       { StyleIdx::titleFontSize,                 "titleFontSize",                 24.0 },
@@ -551,13 +585,6 @@ static const StyleType styleTypes[] {
       { StyleIdx::translatorFontItalic,          "translatorFontItalic",         false },
       { StyleIdx::translatorFontUnderline,       "translatorFontUnderline",      false },
 
-      { StyleIdx::tupletFontFace,                "tupletFontFace",               "FreeSerif" },
-      { StyleIdx::tupletFontSize,                "tupletFontSize",               10.0 },
-      { StyleIdx::tupletFontBold,                "tupletFontBold",               false },
-      { StyleIdx::tupletFontItalic,              "tupletFontItalic",             true },
-      { StyleIdx::tupletFontUnderline,           "tupletFontUnderline",          false },
-      { StyleIdx::tupletAlign,                   "tupletAlign",                  QVariant::fromValue(Align::CENTER) },
-
       { StyleIdx::systemFontFace,                "systemFontFace",               "FreeSerif" },
       { StyleIdx::systemFontSize,                "systemFontSize",               10.0 },
       { StyleIdx::systemFontBold,                "systemFontBold",               false },
@@ -622,14 +649,6 @@ static const StyleType styleTypes[] {
       { StyleIdx::repeatRightAlign,              "repeatRightAlign",             QVariant::fromValue(Align::RIGHT | Align::BASELINE) },
       { StyleIdx::repeatRightPlacement,          "repeatLeftPlacement",          int(Placement::ABOVE) },
 
-      { StyleIdx::voltaFontFace,                 "voltaFontFace",                "FreeSerif" },
-      { StyleIdx::voltaFontSize,                 "voltaFontSize",                11.0 },
-      { StyleIdx::voltaFontBold,                 "voltaFontBold",                true },
-      { StyleIdx::voltaFontItalic,               "voltaFontItalic",              false },
-      { StyleIdx::voltaFontUnderline,            "voltaFontUnderline",           false },
-      { StyleIdx::voltaAlign,                    "voltaAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
-      { StyleIdx::voltaOffset,                   "voltaOffset",                  QPointF(0.5, 1.9) },
-
       { StyleIdx::frameFontFace,                 "frameFontFace",                "FreeSerif" },
       { StyleIdx::frameFontSize,                 "frameFontSize",                12.0 },
       { StyleIdx::frameFontBold,                 "frameFontBold",                false },
@@ -649,27 +668,7 @@ static const StyleType styleTypes[] {
       { StyleIdx::glissandoFontItalic,           "glissandoFontItalic",          true },
       { StyleIdx::glissandoFontUnderline,        "glissandoFontUnderline",       false },
       { StyleIdx::glissandoLineWidth,            "glissandoLineWidth",           Spatium(0.15) },
-
-      { StyleIdx::ottavaFontFace,                "ottavaFontFace",               "FreeSerif" },
-      { StyleIdx::ottavaFontSize,                "ottavaFontSize",               12.0 },
-      { StyleIdx::ottavaFontBold,                "ottavaFontBold",               false },
-      { StyleIdx::ottavaFontItalic,              "ottavaFontItalic",             false },
-      { StyleIdx::ottavaFontUnderline,           "ottavaFontUnderline",          false },
-      { StyleIdx::ottavaTextAlign,               "ottavaTextAlign",              QVariant::fromValue(Align::LEFT | Align::VCENTER) },
-
-      { StyleIdx::pedalFontFace,                 "pedalFontFace",                "FreeSerif" },
-      { StyleIdx::pedalFontSize,                 "pedalFontSize",                12.0 },
-      { StyleIdx::pedalFontBold,                 "pedalFontBold",                false },
-      { StyleIdx::pedalFontItalic,               "pedalFontItalic",              false },
-      { StyleIdx::pedalFontUnderline,            "pedalFontUnderline",           false },
-      { StyleIdx::pedalTextAlign,                "pedalTextAlign",               QVariant::fromValue(Align::LEFT | Align::BASELINE) },
-
-      { StyleIdx::hairpinFontFace,               "hairpinFontFace",              "FreeSerif" },
-      { StyleIdx::hairpinFontSize,               "hairpinFontSize",              12.0 },
-      { StyleIdx::hairpinFontBold,               "hairpinFontBold",              false },
-      { StyleIdx::hairpinFontItalic,             "hairpinFontItalic",            true },
-      { StyleIdx::hairpinFontUnderline,          "hairpinFontUnderline",         false },
-      { StyleIdx::hairpinTextAlign,              "hairpinTextAlign",             QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+      { StyleIdx::glissandoText,                 "glissandoText",                QString("gliss.") },
 
       { StyleIdx::bendFontFace,                  "bendFontFace",                 "FreeSerif" },
       { StyleIdx::bendFontSize,                  "bendFontSize",                 8.0 },
@@ -783,6 +782,7 @@ const std::vector<StyledProperty> defaultStyle {
       { StyleIdx::defaultOffset,                      P_ID::OFFSET                 },
       { StyleIdx::defaultOffsetType,                  P_ID::OFFSET_TYPE            },
       { StyleIdx::defaultSystemFlag,                  P_ID::SYSTEM_FLAG            },
+      { StyleIdx::defaultText,                        P_ID::TEXT                   },
       { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
       };
 
@@ -1027,13 +1027,17 @@ const std::vector<StyledProperty> translatorStyle {
       };
 
 const std::vector<StyledProperty> tupletStyle {
-      { StyleIdx::tupletFontFace,                     P_ID::FONT_FACE              },
-      { StyleIdx::tupletFontSize,                     P_ID::FONT_SIZE              },
-      { StyleIdx::tupletFontBold,                     P_ID::FONT_BOLD              },
-      { StyleIdx::tupletFontItalic,                   P_ID::FONT_ITALIC            },
-      { StyleIdx::tupletFontUnderline,                P_ID::FONT_UNDERLINE         },
-      { StyleIdx::tupletAlign,                        P_ID::ALIGN                  },
-      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
+      { StyleIdx::tupletDirection,                    P_ID::DIRECTION               },
+      { StyleIdx::tupletNumberType,                   P_ID::NUMBER_TYPE             },
+      { StyleIdx::tupletBracketType,                  P_ID::BRACKET_TYPE            },
+      { StyleIdx::tupletBracketWidth,                 P_ID::LINE_WIDTH              },
+      { StyleIdx::tupletFontFace,                     P_ID::FONT_FACE               },
+      { StyleIdx::tupletFontSize,                     P_ID::FONT_SIZE               },
+      { StyleIdx::tupletFontBold,                     P_ID::FONT_BOLD               },
+      { StyleIdx::tupletFontItalic,                   P_ID::FONT_ITALIC             },
+      { StyleIdx::tupletFontUnderline,                P_ID::FONT_UNDERLINE          },
+      { StyleIdx::tupletAlign,                        P_ID::ALIGN                   },
+      { StyleIdx::NOSTYLE,                            P_ID::END                     }      // end of list marker
       };
 
 const std::vector<StyledProperty> systemStyle {
@@ -1123,55 +1127,114 @@ const std::vector<StyledProperty> frameStyle {
       };
 
 const std::vector<StyledProperty> textLineStyle {
-      { StyleIdx::textLineFontFace,                   P_ID::FONT_FACE              },
-      { StyleIdx::textLineFontSize,                   P_ID::FONT_SIZE              },
-      { StyleIdx::textLineFontBold,                   P_ID::FONT_BOLD              },
-      { StyleIdx::textLineFontItalic,                 P_ID::FONT_ITALIC            },
-      { StyleIdx::textLineFontUnderline,              P_ID::FONT_UNDERLINE         },
-      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
+      { StyleIdx::textLineFontFace,                   P_ID::BEGIN_FONT_FACE         },
+      { StyleIdx::textLineFontFace,                   P_ID::CONTINUE_FONT_FACE      },
+      { StyleIdx::textLineFontFace,                   P_ID::END_FONT_FACE           },
+      { StyleIdx::textLineFontSize,                   P_ID::BEGIN_FONT_SIZE         },
+      { StyleIdx::textLineFontSize,                   P_ID::CONTINUE_FONT_SIZE      },
+      { StyleIdx::textLineFontSize,                   P_ID::END_FONT_SIZE           },
+      { StyleIdx::textLineFontBold,                   P_ID::BEGIN_FONT_BOLD         },
+      { StyleIdx::textLineFontBold,                   P_ID::CONTINUE_FONT_BOLD      },
+      { StyleIdx::textLineFontBold,                   P_ID::END_FONT_BOLD           },
+      { StyleIdx::textLineFontItalic,                 P_ID::BEGIN_FONT_ITALIC       },
+      { StyleIdx::textLineFontItalic,                 P_ID::CONTINUE_FONT_ITALIC    },
+      { StyleIdx::textLineFontItalic,                 P_ID::END_FONT_ITALIC         },
+      { StyleIdx::textLineFontUnderline,              P_ID::BEGIN_FONT_UNDERLINE    },
+      { StyleIdx::textLineFontUnderline,              P_ID::CONTINUE_FONT_UNDERLINE },
+      { StyleIdx::textLineFontUnderline,              P_ID::END_FONT_UNDERLINE      },
+      { StyleIdx::NOSTYLE,                            P_ID::END                     }      // end of list marker
       };
 
 const std::vector<StyledProperty> glissandoStyle {
-      { StyleIdx::glissandoFontFace,                  P_ID::FONT_FACE              },
-      { StyleIdx::glissandoFontSize,                  P_ID::FONT_SIZE              },
-      { StyleIdx::glissandoFontBold,                  P_ID::FONT_BOLD              },
-      { StyleIdx::glissandoFontItalic,                P_ID::FONT_ITALIC            },
-      { StyleIdx::glissandoFontUnderline,             P_ID::FONT_UNDERLINE         },
-      { StyleIdx::glissandoLineWidth,                 P_ID::LINE_WIDTH             },
-      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
+      { StyleIdx::glissandoFontFace,                  P_ID::FONT_FACE               },
+      { StyleIdx::glissandoFontSize,                  P_ID::FONT_SIZE               },
+      { StyleIdx::glissandoFontBold,                  P_ID::FONT_BOLD               },
+      { StyleIdx::glissandoFontItalic,                P_ID::FONT_ITALIC             },
+      { StyleIdx::glissandoFontUnderline,             P_ID::FONT_UNDERLINE          },
+      { StyleIdx::glissandoLineWidth,                 P_ID::LINE_WIDTH              },
+      { StyleIdx::glissandoText,                      P_ID::GLISS_TEXT              },
+      { StyleIdx::NOSTYLE,                            P_ID::END                     }      // end of list marker
       };
 
 const std::vector<StyledProperty> ottavaStyle {
-      { StyleIdx::ottavaFontFace,                     P_ID::FONT_FACE              },
-      { StyleIdx::ottavaFontSize,                     P_ID::FONT_SIZE              },
-      { StyleIdx::ottavaFontBold,                     P_ID::FONT_BOLD              },
-      { StyleIdx::ottavaFontItalic,                   P_ID::FONT_ITALIC            },
-      { StyleIdx::ottavaFontUnderline,                P_ID::FONT_UNDERLINE         },
-      { StyleIdx::ottavaTextAlign,                    P_ID::BEGIN_TEXT_ALIGN       },
-      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
+      { StyleIdx::ottavaNumbersOnly,                  P_ID::NUMBERS_ONLY            },
+      { StyleIdx::ottavaFontFace,                     P_ID::BEGIN_FONT_FACE         },
+      { StyleIdx::ottavaFontFace,                     P_ID::CONTINUE_FONT_FACE      },
+      { StyleIdx::ottavaFontFace,                     P_ID::END_FONT_FACE           },
+      { StyleIdx::ottavaFontSize,                     P_ID::BEGIN_FONT_SIZE         },
+      { StyleIdx::ottavaFontSize,                     P_ID::CONTINUE_FONT_SIZE      },
+      { StyleIdx::ottavaFontSize,                     P_ID::END_FONT_SIZE           },
+      { StyleIdx::ottavaFontBold,                     P_ID::BEGIN_FONT_BOLD         },
+      { StyleIdx::ottavaFontBold,                     P_ID::CONTINUE_FONT_BOLD      },
+      { StyleIdx::ottavaFontBold,                     P_ID::END_FONT_BOLD           },
+      { StyleIdx::ottavaFontItalic,                   P_ID::BEGIN_FONT_ITALIC       },
+      { StyleIdx::ottavaFontItalic,                   P_ID::CONTINUE_FONT_ITALIC    },
+      { StyleIdx::ottavaFontItalic,                   P_ID::END_FONT_ITALIC         },
+      { StyleIdx::ottavaFontUnderline,                P_ID::BEGIN_FONT_UNDERLINE    },
+      { StyleIdx::ottavaFontUnderline,                P_ID::CONTINUE_FONT_UNDERLINE },
+      { StyleIdx::ottavaFontUnderline,                P_ID::END_FONT_UNDERLINE      },
+      { StyleIdx::ottavaTextAlign,                    P_ID::BEGIN_TEXT_ALIGN        },
+      { StyleIdx::ottavaTextAlign,                    P_ID::CONTINUE_TEXT_ALIGN     },
+      { StyleIdx::ottavaTextAlign,                    P_ID::END_TEXT_ALIGN          },
+      { StyleIdx::ottavaLineWidth,                    P_ID::LINE_WIDTH              },
+      { StyleIdx::ottavaLineStyle,                    P_ID::LINE_STYLE              },
+      { StyleIdx::ottavaPlacement,                    P_ID::PLACEMENT               },
+      { StyleIdx::NOSTYLE,                            P_ID::END                     }      // end of list marker
+      };
+
+const std::vector<StyledProperty> voltaStyle {
+      { StyleIdx::voltaFontFace,                      P_ID::BEGIN_FONT_FACE         },
+      { StyleIdx::voltaFontFace,                      P_ID::CONTINUE_FONT_FACE      },
+      { StyleIdx::voltaFontFace,                      P_ID::END_FONT_FACE           },
+      { StyleIdx::voltaFontSize,                      P_ID::BEGIN_FONT_SIZE         },
+      { StyleIdx::voltaFontSize,                      P_ID::CONTINUE_FONT_SIZE      },
+      { StyleIdx::voltaFontSize,                      P_ID::END_FONT_SIZE           },
+      { StyleIdx::voltaFontBold,                      P_ID::BEGIN_FONT_BOLD         },
+      { StyleIdx::voltaFontBold,                      P_ID::CONTINUE_FONT_BOLD      },
+      { StyleIdx::voltaFontBold,                      P_ID::END_FONT_BOLD           },
+      { StyleIdx::voltaFontItalic,                    P_ID::BEGIN_FONT_ITALIC       },
+      { StyleIdx::voltaFontItalic,                    P_ID::CONTINUE_FONT_ITALIC    },
+      { StyleIdx::voltaFontItalic,                    P_ID::END_FONT_ITALIC         },
+      { StyleIdx::voltaFontUnderline,                 P_ID::BEGIN_FONT_UNDERLINE    },
+      { StyleIdx::voltaFontUnderline,                 P_ID::CONTINUE_FONT_UNDERLINE },
+      { StyleIdx::voltaFontUnderline,                 P_ID::END_FONT_UNDERLINE      },
+      { StyleIdx::voltaAlign,                         P_ID::BEGIN_TEXT_ALIGN        },
+      { StyleIdx::voltaAlign,                         P_ID::CONTINUE_TEXT_ALIGN     },
+      { StyleIdx::voltaAlign,                         P_ID::END_TEXT_ALIGN          },
+      { StyleIdx::voltaOffset,                        P_ID::BEGIN_TEXT_OFFSET       },
+      { StyleIdx::voltaOffset,                        P_ID::CONTINUE_TEXT_OFFSET    },
+      { StyleIdx::voltaOffset,                        P_ID::END_TEXT_OFFSET         },
+      { StyleIdx::voltaLineWidth,                     P_ID::LINE_WIDTH              },
+      { StyleIdx::voltaLineStyle,                     P_ID::LINE_STYLE              },
+      { StyleIdx::voltaHook,                          P_ID::BEGIN_HOOK_HEIGHT       },
+      { StyleIdx::voltaHook,                          P_ID::END_HOOK_HEIGHT         },
+      { StyleIdx::NOSTYLE,                            P_ID::END                     }      // end of list marker
       };
 
 const std::vector<StyledProperty> pedalStyle {
-      { StyleIdx::pedalFontFace,                      P_ID::BEGIN_FONT_FACE        },
-      { StyleIdx::pedalFontFace,                      P_ID::CONTINUE_FONT_FACE     },
-      { StyleIdx::pedalFontFace,                      P_ID::END_FONT_FACE          },
-      { StyleIdx::pedalFontSize,                      P_ID::BEGIN_FONT_SIZE        },
-      { StyleIdx::pedalFontSize,                      P_ID::CONTINUE_FONT_SIZE     },
-      { StyleIdx::pedalFontSize,                      P_ID::END_FONT_SIZE          },
-      { StyleIdx::pedalFontBold,                      P_ID::BEGIN_FONT_BOLD        },
-      { StyleIdx::pedalFontBold,                      P_ID::CONTINUE_FONT_BOLD     },
-      { StyleIdx::pedalFontBold,                      P_ID::END_FONT_BOLD          },
-      { StyleIdx::pedalFontItalic,                    P_ID::BEGIN_FONT_ITALIC      },
-      { StyleIdx::pedalFontItalic,                    P_ID::CONTINUE_FONT_ITALIC   },
-      { StyleIdx::pedalFontItalic,                    P_ID::END_FONT_ITALIC        },
-      { StyleIdx::pedalFontUnderline,                 P_ID::BEGIN_FONT_UNDERLINE   },
-      { StyleIdx::pedalFontUnderline,                 P_ID::CONTINUE_FONT_UNDERLINE},
-      { StyleIdx::pedalFontUnderline,                 P_ID::END_FONT_UNDERLINE     },
-      { StyleIdx::pedalTextAlign,                     P_ID::BEGIN_TEXT_ALIGN       },
-      { StyleIdx::pedalTextAlign,                     P_ID::CONTINUE_TEXT_ALIGN    },
-      { StyleIdx::pedalHookHeight,                    P_ID::BEGIN_HOOK_HEIGHT      },
-      { StyleIdx::pedalHookHeight,                    P_ID::END_HOOK_HEIGHT        },
-      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
+      { StyleIdx::pedalFontFace,                      P_ID::BEGIN_FONT_FACE         },
+      { StyleIdx::pedalFontFace,                      P_ID::CONTINUE_FONT_FACE      },
+      { StyleIdx::pedalFontFace,                      P_ID::END_FONT_FACE           },
+      { StyleIdx::pedalFontSize,                      P_ID::BEGIN_FONT_SIZE         },
+      { StyleIdx::pedalFontSize,                      P_ID::CONTINUE_FONT_SIZE      },
+      { StyleIdx::pedalFontSize,                      P_ID::END_FONT_SIZE           },
+      { StyleIdx::pedalFontBold,                      P_ID::BEGIN_FONT_BOLD         },
+      { StyleIdx::pedalFontBold,                      P_ID::CONTINUE_FONT_BOLD      },
+      { StyleIdx::pedalFontBold,                      P_ID::END_FONT_BOLD           },
+      { StyleIdx::pedalFontItalic,                    P_ID::BEGIN_FONT_ITALIC       },
+      { StyleIdx::pedalFontItalic,                    P_ID::CONTINUE_FONT_ITALIC    },
+      { StyleIdx::pedalFontItalic,                    P_ID::END_FONT_ITALIC         },
+      { StyleIdx::pedalFontUnderline,                 P_ID::BEGIN_FONT_UNDERLINE    },
+      { StyleIdx::pedalFontUnderline,                 P_ID::CONTINUE_FONT_UNDERLINE },
+      { StyleIdx::pedalFontUnderline,                 P_ID::END_FONT_UNDERLINE      },
+      { StyleIdx::pedalTextAlign,                     P_ID::BEGIN_TEXT_ALIGN        },
+      { StyleIdx::pedalTextAlign,                     P_ID::CONTINUE_TEXT_ALIGN     },
+      { StyleIdx::pedalTextAlign,                     P_ID::END_TEXT_ALIGN          },
+      { StyleIdx::pedalHookHeight,                    P_ID::BEGIN_HOOK_HEIGHT       },
+      { StyleIdx::pedalHookHeight,                    P_ID::END_HOOK_HEIGHT         },
+      { StyleIdx::pedalBeginTextOffset,               P_ID::BEGIN_TEXT_OFFSET       },
+      { StyleIdx::pedalPlacement,                     P_ID::PLACEMENT               },
+      { StyleIdx::NOSTYLE,                            P_ID::END                     }      // end of list marker
       };
 
 const std::vector<StyledProperty> letRingStyle {
@@ -1194,7 +1257,7 @@ const std::vector<StyledProperty> letRingStyle {
       { StyleIdx::letRingTextAlign,                     P_ID::CONTINUE_TEXT_ALIGN    },
       { StyleIdx::letRingHookHeight,                    P_ID::BEGIN_HOOK_HEIGHT      },
       { StyleIdx::letRingHookHeight,                    P_ID::END_HOOK_HEIGHT        },
-      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
+      { StyleIdx::NOSTYLE,                              P_ID::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> palmMuteStyle {
@@ -1239,7 +1302,11 @@ const std::vector<StyledProperty> hairpinStyle {
       { StyleIdx::hairpinFontItalic,                  P_ID::END_FONT_ITALIC            },
       { StyleIdx::hairpinFontUnderline,               P_ID::END_FONT_UNDERLINE         },
       { StyleIdx::hairpinTextAlign,                   P_ID::END_TEXT_ALIGN             },
-      { StyleIdx::NOSTYLE,                            P_ID::END                    }      // end of list marker
+      { StyleIdx::hairpinLineWidth,                   P_ID::LINE_WIDTH                 },
+      { StyleIdx::hairpinHeight,                      P_ID::HAIRPIN_HEIGHT             },
+      { StyleIdx::hairpinContHeight,                  P_ID::HAIRPIN_CONT_HEIGHT        },
+      { StyleIdx::hairpinPlacement,                   P_ID::PLACEMENT                  },
+      { StyleIdx::NOSTYLE,                            P_ID::END                        }      // end of list marker
       };
 
 const std::vector<StyledProperty> bendStyle {
@@ -1367,6 +1434,7 @@ static constexpr std::array<StyledPropertyListName, int(SubStyleId::SUBSTYLES)> 
       { QT_TRANSLATE_NOOP("TextStyle", "Text Line"),               &textLineStyle,                  SubStyleId::TEXTLINE },
       { QT_TRANSLATE_NOOP("TextStyle", "Glissando"),               &glissandoStyle,                 SubStyleId::GLISSANDO },
       { QT_TRANSLATE_NOOP("TextStyle", "Ottava"),                  &ottavaStyle,                    SubStyleId::OTTAVA },
+      { QT_TRANSLATE_NOOP("TextStyle", "Volta"),                   &voltaStyle,                     SubStyleId::VOLTA },
       { QT_TRANSLATE_NOOP("TextStyle", "Pedal"),                   &pedalStyle,                     SubStyleId::PEDAL },
       { QT_TRANSLATE_NOOP("TextStyle", "LetRing"),                 &letRingStyle,                   SubStyleId::LET_RING },
       { QT_TRANSLATE_NOOP("TextStyle", "PalmMute"),                &palmMuteStyle,                  SubStyleId::PALM_MUTE },

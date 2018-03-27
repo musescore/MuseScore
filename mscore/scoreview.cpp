@@ -265,7 +265,7 @@ ScoreView::~ScoreView()
 void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       {
       // show tuplet properties if number is clicked:
-      if (obj->type() == ElementType::TEXT && obj->parent() && obj->parent()->type() == ElementType::TUPLET) {
+      if (obj->isText() && obj->parent() && obj->parent()->isTuplet()) {
             obj = obj->parent();
             if (!obj->selected())
                   obj->score()->select(obj, SelectType::SINGLE, 0);
@@ -4179,9 +4179,9 @@ Element* ScoreView::elementNear(QPointF p)
             }
       qSort(ll.begin(), ll.end(), elementLower);
 
-#if 0
+#if 1
       qDebug("elementNear");
-      foreach(const Element* e, ll)
+      for (const Element* e : ll)
             qDebug("  %s selected %d z %d", e->name(), e->selected(), e->z());
 #endif
       Element* e = ll.at(0);

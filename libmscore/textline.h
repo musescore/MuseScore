@@ -30,12 +30,6 @@ class TextLineSegment final : public TextLineBaseSegment {
       virtual TextLineSegment* clone() const override { return new TextLineSegment(*this); }
       TextLine* textLine() const                      { return (TextLine*)spanner(); }
       virtual void layout() override;
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID) const override;
-      virtual PropertyFlags& propertyFlags(P_ID) override;
-      virtual void resetProperty(P_ID id) override;
-      virtual void styleChanged() override;
       };
 
 //---------------------------------------------------------
@@ -50,8 +44,6 @@ class TextLine final : public TextLineBase {
 
       virtual TextLine* clone() const           { return new TextLine(*this); }
       virtual ElementType type() const          { return ElementType::TEXTLINE; }
-      virtual void styleChanged() override;
-      virtual void reset() override;
       virtual LineSegment* createLineSegment() override;
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;

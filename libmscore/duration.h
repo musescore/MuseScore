@@ -42,7 +42,7 @@ class DurationElement : public Element {
 #endif
 
    public:
-      DurationElement(Score* s);
+      DurationElement(Score* = 0, ElementFlags = ElementFlag::NOTHING);
       DurationElement(const DurationElement& e);
       ~DurationElement();
 

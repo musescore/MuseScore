@@ -23,7 +23,6 @@ class Spanner;
 enum class TupletNumberType  : char;
 enum class TupletBracketType : char;
 
-
 //------------------------------------------------------------------------
 //   @@ Tuplet
 //!     Example of 1/8 triplet:
@@ -59,37 +58,6 @@ class Tuplet final : public DurationElement {
       QPointF bracketL[4];
       QPointF bracketR[3];
 
-      static constexpr std::array<StyledProperty, 11> _styledProperties {{
-            { StyleIdx::tupletDirection,     P_ID::DIRECTION },
-            { StyleIdx::tupletNumberType,    P_ID::NUMBER_TYPE },
-            { StyleIdx::tupletBracketType,   P_ID::BRACKET_TYPE },
-            { StyleIdx::tupletFontFace,      P_ID::FONT_FACE },
-            { StyleIdx::tupletFontSize,      P_ID::FONT_SIZE },
-            { StyleIdx::tupletFontBold,      P_ID::FONT_BOLD },
-            { StyleIdx::tupletFontItalic,    P_ID::FONT_ITALIC },
-            { StyleIdx::tupletFontUnderline, P_ID::FONT_UNDERLINE },
-            { StyleIdx::tupletAlign,         P_ID::ALIGN },
-            { StyleIdx::tupletBracketWidth,  P_ID::LINE_WIDTH },
-            { StyleIdx::NOSTYLE,             P_ID::END }      // end of list marker
-            }};
-
-      PropertyFlags _propertyFlagsList[10] = {
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            PropertyFlags::STYLED,
-            };
-
-   protected:
-      virtual const StyledProperty* styledProperties() const override { return _styledProperties.data(); }
-      virtual PropertyFlags* propertyFlagsList()       override       { return _propertyFlagsList; }
-
    public:
       Tuplet(Score*);
       Tuplet(const Tuplet&);
@@ -100,6 +68,8 @@ class Tuplet final : public DurationElement {
 
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
+
+      Text* number() const { return _number; }
 
       virtual bool isEditable() const override;
       virtual void startEdit(EditData&) override;
@@ -127,7 +97,6 @@ class Tuplet final : public DurationElement {
 
       virtual void layout() override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
-      Text* number() const { return _number; }
 
       virtual void read(XmlReader&) override;
       virtual void write(XmlWriter&) const override;
@@ -153,12 +122,12 @@ class Tuplet final : public DurationElement {
       void sortElements();
 
       virtual void setVisible(bool f) override;
+
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(P_ID id) const override;
-      virtual void styleChanged() override;
 
-      virtual Shape shape() const;
+      virtual Shape shape() const override;
 
       void sanitizeTuplet();
       };

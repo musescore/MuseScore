@@ -71,8 +71,8 @@ class TextLineBase : public SLine {
       enum class LineType : char { CRESCENDO, DECRESCENDO };
 
       M_PROPERTY(bool,      lineVisible,           setLineVisible)
-      M_PROPERTY(HookType,  beginHookType,         setBeginHookType)
-      M_PROPERTY(HookType,  endHookType,           setEndHookType)
+      M_PROPERTY2(HookType, beginHookType,         setBeginHookType,          HookType::NONE)
+      M_PROPERTY2(HookType, endHookType,           setEndHookType,            HookType::NONE)
       M_PROPERTY(Spatium,   beginHookHeight,       setBeginHookHeight)
       M_PROPERTY(Spatium,   endHookHeight,         setEndHookHeight)
 
@@ -110,9 +110,7 @@ class TextLineBase : public SLine {
       friend class TextLineBaseSegment;
 
    public:
-      TextLineBase(Score* s);
-      TextLineBase(const TextLineBase&);
-      void init();
+      TextLineBase(Score* s, ElementFlags = ElementFlag::NOTHING);
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
@@ -124,7 +122,6 @@ class TextLineBase : public SLine {
 
       virtual QVariant getProperty(P_ID id) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID id) const override;
       };
 
 }     // namespace Ms

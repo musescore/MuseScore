@@ -59,7 +59,7 @@ void LetRingSegment::layout()
 LetRing::LetRing(Score* s)
    : TextLineBase(s)
       {
-      init();
+      initSubStyle(SubStyleId::LET_RING);
       }
 
 //---------------------------------------------------------
@@ -74,6 +74,23 @@ void LetRing::read(XmlReader& e)
             if (!TextLineBase::readProperties(e))
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   write
+//---------------------------------------------------------
+
+void LetRing::write(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+
+      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp)
+            writeProperty(xml, spp->propertyIdx);
+
+      Element::writeProperties(xml);
+      xml.etag();
       }
 
 //---------------------------------------------------------

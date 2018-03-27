@@ -113,7 +113,6 @@
           <actualNotes>3</actualNotes>
           <baseNote>eighth</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>3</text>
             </Number>
           <offset x="0.659334" y="-3.16481"/>
@@ -137,7 +136,6 @@
           <actualNotes>3</actualNotes>
           <baseNote>16th</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>3</text>
             </Number>
           <offset x="-1.05493" y="-1.71427"/>
@@ -157,7 +155,6 @@
           <actualNotes>3</actualNotes>
           <baseNote>32nd</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>3</text>
             </Number>
           </Tuplet>
@@ -194,7 +191,6 @@
           <actualNotes>3</actualNotes>
           <baseNote>eighth</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>3</text>
             </Number>
           <offset x="0.659334" y="-3.16481"/>
@@ -206,7 +202,6 @@
           <actualNotes>3</actualNotes>
           <baseNote>16th</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>3</text>
             </Number>
           <offset x="-1.05493" y="-1.71427"/>
@@ -217,7 +212,6 @@
           <actualNotes>3</actualNotes>
           <baseNote>32nd</baseNote>
           <Number>
-            <style>Tuplet</style>
             <text>3</text>
             </Number>
           </Tuplet>

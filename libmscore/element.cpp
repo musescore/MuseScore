@@ -483,7 +483,7 @@ void Element::writeProperties(XmlWriter& xml) const
             else
                   xml.tag("pos", pos() / score()->spatium());
             }
-      if (((track() != xml.curTrack()) || (type() == ElementType::SLUR)) && (track() != -1)) {
+      if (((track() != xml.curTrack()) || isSlur()) && (track() != -1)) {
             int t;
             t = track() + xml.trackDiff();
             xml.tag("track", t);

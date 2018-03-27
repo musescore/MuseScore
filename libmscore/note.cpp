@@ -2191,10 +2191,8 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
             if (score()->tagIsValid(e->tag()))
                   e->scanElements(data, func, all);
             }
-      for (Spanner* sp : _spannerFor) {
-            printf("Note scan %d %s\n", tick(), sp->name());
+      for (Spanner* sp : _spannerFor)
             sp->scanElements(data, func, all);
-            }
 
       if (!dragMode && _accidental)
             func(data, _accidental);
@@ -2722,6 +2720,9 @@ QVariant Note::propertyDefault(P_ID propertyId) const
                   return 0;
             case P_ID::TPC2:
                   return getProperty(P_ID::TPC1);
+            case P_ID::PITCH:
+            case P_ID::TPC1:
+                  return QVariant();
             default:
                   break;
             }
