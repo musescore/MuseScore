@@ -60,7 +60,7 @@ void OttavaSegment::layout()
 
       TextLineBaseSegment::layout();
       if (parent()) {
-            qreal yo = score()->styleP(ottava()->placeBelow() ? StyleIdx::ottavaPosBelow : StyleIdx::ottavaPosAbove) * mag();
+            qreal yo = score()->styleP(ottava()->placeBelow() ? Sid::ottavaPosBelow : Sid::ottavaPosAbove) * mag();
             rypos() += yo;
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
@@ -85,9 +85,9 @@ void OttavaSegment::layout()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant OttavaSegment::getProperty(P_ID id) const
+QVariant OttavaSegment::getProperty(Pid id) const
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp) {
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
             if (spp->propertyIdx == id)
                   return spanner()->getProperty(id);
             }
@@ -98,9 +98,9 @@ QVariant OttavaSegment::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool OttavaSegment::setProperty(P_ID id, const QVariant& v)
+bool OttavaSegment::setProperty(Pid id, const QVariant& v)
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp) {
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
             if (spp->propertyIdx == id)
                   return spanner()->setProperty(id, v);
             }
@@ -111,9 +111,9 @@ bool OttavaSegment::setProperty(P_ID id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant OttavaSegment::propertyDefault(P_ID id) const
+QVariant OttavaSegment::propertyDefault(Pid id) const
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp) {
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
             if (spp->propertyIdx == id)
                   return spanner()->propertyDefault(id);
             }
@@ -151,11 +151,11 @@ void Ottava::setOttavaType(OttavaType val)
       _ottavaType = val;
 
       const OttavaDefault* def = &ottavaDefault[int(_ottavaType)];
-      setBeginText(propertyDefault(P_ID::BEGIN_TEXT).toString());
-      setContinueText(propertyDefault(P_ID::CONTINUE_TEXT).toString());
+      setBeginText(propertyDefault(Pid::BEGIN_TEXT).toString());
+      setContinueText(propertyDefault(Pid::CONTINUE_TEXT).toString());
 
       setEndHookType(HookType::HOOK_90);
-      setEndHookHeight(score()->styleS(StyleIdx::ottavaHook) * def->hookDirection);
+      setEndHookHeight(score()->styleS(Sid::ottavaHook) * def->hookDirection);
 
       setPlacement(def->place);
       _pitchShift = def->shift;
@@ -179,10 +179,10 @@ void Ottava::write(XmlWriter& xml) const
       if (!xml.canWrite(this))
             return;
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
-//      writeProperty(xml, P_ID::NUMBERS_ONLY);
+//      writeProperty(xml, Pid::NUMBERS_ONLY);
       xml.tag("subtype", ottavaDefault[int(ottavaType())].name);
 
-      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp)
+      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp)
             writeProperty(xml, spp->propertyIdx);
 
       Element::writeProperties(xml);
@@ -244,7 +244,7 @@ bool Ottava::readProperties(XmlReader& e)
 
 void Ottava::undoSetOttavaType(OttavaType val)
       {
-      undoChangeProperty(P_ID::OTTAVA_TYPE, int(val));
+      undoChangeProperty(Pid::OTTAVA_TYPE, int(val));
       }
 
 //---------------------------------------------------------
@@ -254,19 +254,19 @@ void Ottava::undoSetOttavaType(OttavaType val)
 
 void Ottava::setYoff(qreal val)
       {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? StyleIdx::ottavaPosAbove : StyleIdx::ottavaPosBelow);
+      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow);
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Ottava::getProperty(P_ID propertyId) const
+QVariant Ottava::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::OTTAVA_TYPE:
+            case Pid::OTTAVA_TYPE:
                   return int(ottavaType());
-            case P_ID::NUMBERS_ONLY:
+            case Pid::NUMBERS_ONLY:
                   return _numbersOnly;
             default:
                   break;
@@ -278,14 +278,14 @@ QVariant Ottava::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Ottava::setProperty(P_ID propertyId, const QVariant& val)
+bool Ottava::setProperty(Pid propertyId, const QVariant& val)
       {
       switch (propertyId) {
-            case P_ID::OTTAVA_TYPE:
+            case Pid::OTTAVA_TYPE:
                   setOttavaType(OttavaType(val.toInt()));
                   break;
 
-            case P_ID::PLACEMENT:
+            case Pid::PLACEMENT:
                   if (val != getProperty(propertyId)) {
                         // reverse hooks
                         // setBeginHookHeight(-beginHookHeight());
@@ -294,17 +294,17 @@ bool Ottava::setProperty(P_ID propertyId, const QVariant& val)
                   setPlacement(Placement(val.toInt()));
                   break;
 
-            case P_ID::NUMBERS_ONLY:
+            case Pid::NUMBERS_ONLY:
                   setNumbersOnly(val.toBool());
                   setOttavaType(_ottavaType);
                   break;
 
-            case P_ID::SPANNER_TICKS:
+            case Pid::SPANNER_TICKS:
                   setTicks(val.toInt());
                   staff()->updateOttava();
                   break;
 
-            case P_ID::SPANNER_TICK:
+            case Pid::SPANNER_TICK:
                   setTick(val.toInt());
                   staff()->updateOttava();
                   break;
@@ -322,19 +322,19 @@ bool Ottava::setProperty(P_ID propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Ottava::propertyDefault(P_ID propertyId) const
+QVariant Ottava::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::OTTAVA_TYPE:
+            case Pid::OTTAVA_TYPE:
                   return QVariant();
-            case P_ID::END_HOOK_TYPE:
+            case Pid::END_HOOK_TYPE:
                   return int(HookType::HOOK_90);
-            case P_ID::PLACEMENT:
+            case Pid::PLACEMENT:
                   return int(ottavaDefault[int(_ottavaType)].place);
-            case P_ID::END_HOOK_HEIGHT:
-                  return score()->styleS(StyleIdx::ottavaHook) * ottavaDefault[int(_ottavaType)].hookDirection;
-            case P_ID::BEGIN_TEXT:
-            case P_ID::CONTINUE_TEXT: {
+            case Pid::END_HOOK_HEIGHT:
+                  return score()->styleS(Sid::ottavaHook) * ottavaDefault[int(_ottavaType)].hookDirection;
+            case Pid::BEGIN_TEXT:
+            case Pid::CONTINUE_TEXT: {
                   const OttavaDefault* def = &ottavaDefault[int(_ottavaType)];
                   SymId id = _numbersOnly ? def->numbersOnlyId : def->id;
                   return QString("<sym>%1</sym>").arg(Sym::id2name(id));

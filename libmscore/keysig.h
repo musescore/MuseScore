@@ -68,9 +68,9 @@ class KeySig final : public Element {
 
       void setHideNaturals(bool hide)     { _hideNaturals = hide; }
 
-      QVariant getProperty(P_ID propertyId) const;
-      bool setProperty(P_ID propertyId, const QVariant&);
-      QVariant propertyDefault(P_ID id) const;
+      QVariant getProperty(Pid propertyId) const;
+      bool setProperty(Pid propertyId, const QVariant&);
+      QVariant propertyDefault(Pid id) const;
 
       virtual Element* nextSegmentElement() override;
       virtual Element* prevSegmentElement() override;

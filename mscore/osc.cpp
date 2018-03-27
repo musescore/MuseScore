@@ -260,7 +260,7 @@ void MuseScore::oscColorNote(QVariantList list)
                         for (Note* note : chord->notes()) {
                               if (note->pitch() == pitch) {
                                     cs->startCmd();
-                                    cs->undo(new ChangeProperty(note, P_ID::COLOR, noteColor));
+                                    cs->undo(new ChangeProperty(note, Pid::COLOR, noteColor));
                                     cs->endCmd();
                                     return;
                                     }

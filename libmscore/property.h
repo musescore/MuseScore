@@ -16,7 +16,7 @@
 namespace Ms {
 
 class XmlReader;
-enum class StyleIdx : int;
+enum class Sid : int;
 
 //------------------------------------------------------------------------
 //    M_PROPERTY (type, getter_name, setter_name)
@@ -59,7 +59,7 @@ enum class PropertyFlags : char {
 //   Element Properties
 //------------------------------------------------------------------------
 
-enum class P_ID {
+enum class Pid {
       SUBTYPE,
       SELECTED,
       GENERATED,
@@ -372,12 +372,12 @@ enum class P_TYPE : char {
       ALIGN,
       };
 
-extern QVariant getProperty(P_ID type, XmlReader& e);
-extern P_TYPE propertyType(P_ID);
-extern const char* propertyName(P_ID);
-extern const char* propertyQmlName(P_ID);
-extern bool propertyLink(P_ID id);
-extern P_ID propertyId(const QString&);
+extern QVariant getProperty(Pid type, XmlReader& e);
+extern P_TYPE propertyType(Pid);
+extern const char* propertyName(Pid);
+extern const char* propertyQmlName(Pid);
+extern bool propertyLink(Pid id);
+extern Pid propertyId(const QString&);
 
 }     // namespace Ms
 #endif

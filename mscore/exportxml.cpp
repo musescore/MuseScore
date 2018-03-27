@@ -1183,8 +1183,8 @@ static void defaults(XmlWriter& xml, Score* s, double& millimeters, const int& t
       // and LYRIC1 to get MusicXML defaults
 
       // TODO xml.tagE("music-font font-family=\"TBD\" font-size=\"TBD\"");
-      xml.tagE(QString("word-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(StyleIdx::staffTextFontFace)).arg(s->styleD(StyleIdx::staffTextFontSize)));
-      xml.tagE(QString("lyric-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(StyleIdx::lyricsOddFontFace)).arg(s->styleD(StyleIdx::lyricsOddFontSize)));
+      xml.tagE(QString("word-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(Sid::staffTextFontFace)).arg(s->styleD(Sid::staffTextFontSize)));
+      xml.tagE(QString("lyric-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(Sid::lyricsOddFontFace)).arg(s->styleD(Sid::lyricsOddFontSize)));
       xml.etag();
       }
 
@@ -1195,10 +1195,10 @@ static void defaults(XmlWriter& xml, Score* s, double& millimeters, const int& t
 
 static void creditWords(XmlWriter& xml, Score* s, double x, double y, QString just, QString val, const QList<TextFragment>& words)
       {
-      const QString mtf = s->styleSt(StyleIdx::MusicalTextFont);
+      const QString mtf = s->styleSt(Sid::MusicalTextFont);
       CharFormat defFmt;
-      defFmt.setFontFamily(s->styleSt(StyleIdx::staffTextFontFace));
-      defFmt.setFontSize(s->styleD(StyleIdx::staffTextFontSize));
+      defFmt.setFontFamily(s->styleSt(Sid::staffTextFontFace));
+      defFmt.setFontSize(s->styleD(Sid::staffTextFontSize));
 
       // export formatted
       xml.stag("credit page=\"1\"");
@@ -1239,12 +1239,12 @@ void ExportMusicXml::credits(XmlWriter& xml)
       QString rights = _score->metaTag("copyright");
 
       // determine page formatting
-      const double h  = getTenthsFromInches(_score->styleD(StyleIdx::pageHeight));
-      const double w  = getTenthsFromInches(_score->styleD(StyleIdx::pageWidth));
-      const double lm = getTenthsFromInches(_score->styleD(StyleIdx::pageOddLeftMargin));
-      const double rm = getTenthsFromInches(_score->styleD(StyleIdx::pagePrintableWidth) - _score->styleD(StyleIdx::pageOddLeftMargin));
+      const double h  = getTenthsFromInches(_score->styleD(Sid::pageHeight));
+      const double w  = getTenthsFromInches(_score->styleD(Sid::pageWidth));
+      const double lm = getTenthsFromInches(_score->styleD(Sid::pageOddLeftMargin));
+      const double rm = getTenthsFromInches(_score->styleD(Sid::pagePrintableWidth) - _score->styleD(Sid::pageOddLeftMargin));
       //const double tm = getTenthsFromInches(pf->oddTopMargin());
-      const double bm = getTenthsFromInches(_score->styleD(StyleIdx::pageOddBottomMargin));
+      const double bm = getTenthsFromInches(_score->styleD(Sid::pageOddBottomMargin));
       //qDebug("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
 
       // write the credits
@@ -1301,8 +1301,8 @@ void ExportMusicXml::credits(XmlWriter& xml)
             // put copyright at the bottom center of the page
             // note: as the copyright metatag contains plain text, special XML characters must be escaped
             TextFragment f(XmlWriter::xmlString(rights));
-            f.changeFormat(FormatId::FontFamily, _score->styleSt(StyleIdx::footerFontFace));
-            f.changeFormat(FormatId::FontSize, _score->styleD(StyleIdx::footerFontSize));
+            f.changeFormat(FormatId::FontFamily, _score->styleSt(Sid::footerFontFace));
+            f.changeFormat(FormatId::FontSize, _score->styleD(Sid::footerFontSize));
             QList<TextFragment> list;
             list.append(f);
             creditWords(xml, _score, w / 2, bm, "center", "bottom", list);
@@ -2669,7 +2669,7 @@ static QString notePosition(const ExportMusicXml* const expMxml, const Note* con
       QString res;
 
       if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)) {
-            const double pageHeight  = expMxml->getTenthsFromInches(expMxml->score()->styleD(StyleIdx::pageHeight));
+            const double pageHeight  = expMxml->getTenthsFromInches(expMxml->score()->styleD(Sid::pageHeight));
 
             const auto chord = note->chord();
 
@@ -3292,10 +3292,10 @@ static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text)
       QList<TextFragment>       wordsRight; // words right of metronome
 
       // set the default words format
-      const QString mtf = s->styleSt(StyleIdx::MusicalTextFont);
+      const QString mtf = s->styleSt(Sid::MusicalTextFont);
       CharFormat defFmt;
-      defFmt.setFontFamily(s->styleSt(StyleIdx::staffTextFontFace));
-      defFmt.setFontSize(s->styleD(StyleIdx::staffTextFontSize));
+      defFmt.setFontFamily(s->styleSt(Sid::staffTextFontFace));
+      defFmt.setFontSize(s->styleD(Sid::staffTextFontSize));
 
       if (findMetronome(list, wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
             if (wordsLeft.size() > 0) {
@@ -3412,10 +3412,10 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       attr += addPositioningAttributes(rmk);
       if (!rmk->hasFrame()) attr = " enclosure=\"none\"";
       // set the default words format
-      const QString mtf = _score->styleSt(StyleIdx::MusicalTextFont);
+      const QString mtf = _score->styleSt(Sid::MusicalTextFont);
       CharFormat defFmt;
-      defFmt.setFontFamily(_score->styleSt(StyleIdx::staffTextFontFace));
-      defFmt.setFontSize(_score->styleD(StyleIdx::staffTextFontSize));
+      defFmt.setFontFamily(_score->styleSt(Sid::staffTextFontFace));
+      defFmt.setFontSize(_score->styleD(Sid::staffTextFontSize));
       // write formatted
       MScoreTextToMXML mttm("rehearsal", attr, defFmt, mtf);
       mttm.writeTextFragments(rmk->fragmentList(), xml);
@@ -3790,10 +3790,10 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const int trk)
                         xml.tag("syllabic", s);
                         QString attr; // TODO TBD
                         // set the default words format
-                        const QString mtf       = _score->styleSt(StyleIdx::MusicalTextFont);
+                        const QString mtf       = _score->styleSt(Sid::MusicalTextFont);
                         CharFormat defFmt;
-                        defFmt.setFontFamily(_score->styleSt(StyleIdx::lyricsEvenFontFace));
-                        defFmt.setFontSize(_score->styleD(StyleIdx::lyricsOddFontSize));
+                        defFmt.setFontFamily(_score->styleSt(Sid::lyricsEvenFontFace));
+                        defFmt.setFontSize(_score->styleD(Sid::lyricsOddFontSize));
                         // write formatted
                         MScoreTextToMXML mttm("text", attr, defFmt, mtf);
                         mttm.writeTextFragments(l->fragmentList(), xml);
@@ -4659,11 +4659,11 @@ void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
 
             if (doLayout) {
                   xml.stag(QString("print%1").arg(newThing));
-                  const double pageWidth  = getTenthsFromInches(score()->styleD(StyleIdx::pageWidth));
-                  const double lm = getTenthsFromInches(score()->styleD(StyleIdx::pageOddLeftMargin));
-                  const double rm = getTenthsFromInches(score()->styleD(StyleIdx::pageWidth)
-                                                        - score()->styleD(StyleIdx::pagePrintableWidth) - score()->styleD(StyleIdx::pageOddLeftMargin));
-                  const double tm = getTenthsFromInches(score()->styleD(StyleIdx::pageOddTopMargin));
+                  const double pageWidth  = getTenthsFromInches(score()->styleD(Sid::pageWidth));
+                  const double lm = getTenthsFromInches(score()->styleD(Sid::pageOddLeftMargin));
+                  const double rm = getTenthsFromInches(score()->styleD(Sid::pageWidth)
+                                                        - score()->styleD(Sid::pagePrintableWidth) - score()->styleD(Sid::pageOddLeftMargin));
+                  const double tm = getTenthsFromInches(score()->styleD(Sid::pageOddTopMargin));
 
                   // System Layout
 
@@ -5148,10 +5148,10 @@ void ExportMusicXml::write(QIODevice* dev)
       // losing the transposition information
       // if necessary, switch concert pitch mode off
       // before export and restore it after export
-      bool concertPitch = score()->styleB(StyleIdx::concertPitch);
+      bool concertPitch = score()->styleB(Sid::concertPitch);
       if (concertPitch) {
             score()->startCmd();
-            score()->undo(new ChangeStyleVal(score(), StyleIdx::concertPitch, false));
+            score()->undo(new ChangeStyleVal(score(), Sid::concertPitch, false));
             score()->doLayout();    // this is only allowed in a cmd context to not corrupt the undo/redo stack
             }
 

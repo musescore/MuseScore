@@ -125,10 +125,10 @@ QString Fingering::accessibleInfo() const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Fingering::propertyDefault(P_ID id) const
+QVariant Fingering::propertyDefault(Pid id) const
       {
       switch (id) {
-            case P_ID::SUB_STYLE:
+            case Pid::SUB_STYLE:
                   return int(SubStyleId::FINGERING);
             default:
                   return TextBase::propertyDefault(id);

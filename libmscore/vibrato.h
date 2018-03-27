@@ -38,9 +38,9 @@ class VibratoSegment final : public LineSegment {
       virtual VibratoSegment* clone() const override { return new VibratoSegment(*this); }
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid) const override;
       Shape shape() const override;
 
       std::vector<SymId> symbols() const           { return _symbols; }
@@ -82,9 +82,9 @@ class Vibrato final : public SLine {
 
       Segment* segment() const          { return (Segment*)parent(); }
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid) const override;
       virtual void setYoff(qreal) override;
 
       virtual QString accessibleInfo() const override;

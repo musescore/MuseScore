@@ -123,21 +123,21 @@ void GlissandoSegment::draw(QPainter* painter) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant GlissandoSegment::getProperty(P_ID id) const
+QVariant GlissandoSegment::getProperty(Pid id) const
       {
       switch (id) {
             // route properties of the whole Glissando element to it
-            case P_ID::GLISS_TYPE:
-            case P_ID::GLISS_TEXT:
-            case P_ID::GLISS_SHOW_TEXT:
-            case P_ID::GLISSANDO_STYLE:
-            case P_ID::PLAY:
-            case P_ID::FONT_FACE:
-            case P_ID::FONT_SIZE:
-            case P_ID::FONT_BOLD:
-            case P_ID::FONT_ITALIC:
-            case P_ID::FONT_UNDERLINE:
-            case P_ID::LINE_WIDTH:
+            case Pid::GLISS_TYPE:
+            case Pid::GLISS_TEXT:
+            case Pid::GLISS_SHOW_TEXT:
+            case Pid::GLISSANDO_STYLE:
+            case Pid::PLAY:
+            case Pid::FONT_FACE:
+            case Pid::FONT_SIZE:
+            case Pid::FONT_BOLD:
+            case Pid::FONT_ITALIC:
+            case Pid::FONT_UNDERLINE:
+            case Pid::LINE_WIDTH:
                   return glissando()->getProperty(id);
             default:
                   return LineSegment::getProperty(id);
@@ -148,20 +148,20 @@ QVariant GlissandoSegment::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool GlissandoSegment::setProperty(P_ID id, const QVariant& v)
+bool GlissandoSegment::setProperty(Pid id, const QVariant& v)
       {
       switch (id) {
-            case P_ID::GLISS_TYPE:
-            case P_ID::GLISS_TEXT:
-            case P_ID::GLISS_SHOW_TEXT:
-            case P_ID::GLISSANDO_STYLE:
-            case P_ID::PLAY:
-            case P_ID::FONT_FACE:
-            case P_ID::FONT_SIZE:
-            case P_ID::FONT_BOLD:
-            case P_ID::FONT_ITALIC:
-            case P_ID::FONT_UNDERLINE:
-            case P_ID::LINE_WIDTH:
+            case Pid::GLISS_TYPE:
+            case Pid::GLISS_TEXT:
+            case Pid::GLISS_SHOW_TEXT:
+            case Pid::GLISSANDO_STYLE:
+            case Pid::PLAY:
+            case Pid::FONT_FACE:
+            case Pid::FONT_SIZE:
+            case Pid::FONT_BOLD:
+            case Pid::FONT_ITALIC:
+            case Pid::FONT_UNDERLINE:
+            case Pid::LINE_WIDTH:
                   return glissando()->setProperty(id, v);
             default:
                   return LineSegment::setProperty(id, v);
@@ -172,20 +172,20 @@ bool GlissandoSegment::setProperty(P_ID id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant GlissandoSegment::propertyDefault(P_ID id) const
+QVariant GlissandoSegment::propertyDefault(Pid id) const
       {
       switch (id) {
-            case P_ID::GLISS_TYPE:
-            case P_ID::GLISS_TEXT:
-            case P_ID::GLISS_SHOW_TEXT:
-            case P_ID::GLISSANDO_STYLE:
-            case P_ID::PLAY:
-            case P_ID::FONT_FACE:
-            case P_ID::FONT_SIZE:
-            case P_ID::FONT_BOLD:
-            case P_ID::FONT_ITALIC:
-            case P_ID::FONT_UNDERLINE:
-            case P_ID::LINE_WIDTH:
+            case Pid::GLISS_TYPE:
+            case Pid::GLISS_TEXT:
+            case Pid::GLISS_SHOW_TEXT:
+            case Pid::GLISSANDO_STYLE:
+            case Pid::PLAY:
+            case Pid::FONT_FACE:
+            case Pid::FONT_SIZE:
+            case Pid::FONT_BOLD:
+            case Pid::FONT_ITALIC:
+            case Pid::FONT_UNDERLINE:
+            case Pid::LINE_WIDTH:
                   return glissando()->propertyDefault(id);
             default:
                   return LineSegment::propertyDefault(id);
@@ -196,15 +196,15 @@ QVariant GlissandoSegment::propertyDefault(P_ID id) const
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags& GlissandoSegment::propertyFlags(P_ID id)
+PropertyFlags& GlissandoSegment::propertyFlags(Pid id)
       {
       switch (id) {
-            case P_ID::FONT_FACE:
-            case P_ID::FONT_SIZE:
-            case P_ID::FONT_BOLD:
-            case P_ID::FONT_ITALIC:
-            case P_ID::FONT_UNDERLINE:
-            case P_ID::LINE_WIDTH:
+            case Pid::FONT_FACE:
+            case Pid::FONT_SIZE:
+            case Pid::FONT_BOLD:
+            case Pid::FONT_ITALIC:
+            case Pid::FONT_UNDERLINE:
+            case Pid::LINE_WIDTH:
                   return glissando()->propertyFlags(id);
 
             default:
@@ -216,15 +216,15 @@ PropertyFlags& GlissandoSegment::propertyFlags(P_ID id)
 //   setPropertyFlags
 //---------------------------------------------------------
 
-void GlissandoSegment::setPropertyFlags(P_ID id, PropertyFlags f)
+void GlissandoSegment::setPropertyFlags(Pid id, PropertyFlags f)
       {
       switch (id) {
-            case P_ID::FONT_FACE:
-            case P_ID::FONT_SIZE:
-            case P_ID::FONT_BOLD:
-            case P_ID::FONT_ITALIC:
-            case P_ID::FONT_UNDERLINE:
-            case P_ID::LINE_WIDTH:
+            case Pid::FONT_FACE:
+            case Pid::FONT_SIZE:
+            case Pid::FONT_BOLD:
+            case Pid::FONT_ITALIC:
+            case Pid::FONT_UNDERLINE:
+            case Pid::LINE_WIDTH:
                   glissando()->setPropertyFlags(id, f);
                   break;
 
@@ -238,15 +238,15 @@ void GlissandoSegment::setPropertyFlags(P_ID id, PropertyFlags f)
 //   getPropertyStyle
 //---------------------------------------------------------
 
-StyleIdx GlissandoSegment::getPropertyStyle(P_ID id) const
+Sid GlissandoSegment::getPropertyStyle(Pid id) const
       {
       switch (id) {
-            case P_ID::FONT_FACE:
-            case P_ID::FONT_SIZE:
-            case P_ID::FONT_BOLD:
-            case P_ID::FONT_ITALIC:
-            case P_ID::FONT_UNDERLINE:
-            case P_ID::LINE_WIDTH:
+            case Pid::FONT_FACE:
+            case Pid::FONT_SIZE:
+            case Pid::FONT_BOLD:
+            case Pid::FONT_ITALIC:
+            case Pid::FONT_UNDERLINE:
+            case Pid::LINE_WIDTH:
                   return glissando()->getPropertyStyle(id);
 
             default:
@@ -266,11 +266,11 @@ Glissando::Glissando(Score* s)
 
       initSubStyle(SubStyleId::GLISSANDO);
 
-      resetProperty(P_ID::GLISS_SHOW_TEXT);
-      resetProperty(P_ID::PLAY);
-      resetProperty(P_ID::GLISSANDO_STYLE);
-      resetProperty(P_ID::GLISS_TYPE);
-      resetProperty(P_ID::GLISS_TEXT);
+      resetProperty(Pid::GLISS_SHOW_TEXT);
+      resetProperty(Pid::PLAY);
+      resetProperty(Pid::GLISSANDO_STYLE);
+      resetProperty(Pid::GLISS_TYPE);
+      resetProperty(Pid::GLISS_TEXT);
       }
 
 Glissando::Glissando(const Glissando& g)
@@ -474,8 +474,8 @@ void Glissando::write(XmlWriter& xml) const
       if (_showText && !_text.isEmpty())
             xml.tag("text", _text);
 
-      for (auto id : { P_ID::GLISS_TYPE, P_ID::PLAY, P_ID::GLISSANDO_STYLE, P_ID::FONT_FACE,
-         P_ID::FONT_SIZE, P_ID::FONT_BOLD, P_ID::FONT_ITALIC, P_ID::FONT_UNDERLINE} )
+      for (auto id : { Pid::GLISS_TYPE, Pid::PLAY, Pid::GLISSANDO_STYLE, Pid::FONT_FACE,
+         Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE} )
             writeProperty(xml, id);
 
       SLine::writeProperties(xml);
@@ -502,7 +502,7 @@ void Glissando::read(XmlReader& e)
             else if (tag == "subtype")
                   _glissandoType = GlissandoType(e.readInt());
             else if (tag == "glissandoStyle")
-                  setProperty(P_ID::GLISSANDO_STYLE, Ms::getProperty(P_ID::GLISSANDO_STYLE, e));
+                  setProperty(Pid::GLISSANDO_STYLE, Ms::getProperty(Pid::GLISSANDO_STYLE, e));
             else if (tag == "play")
                   setPlayGlissando(e.readBool());
             else if (readStyledProperty(e, tag))
@@ -702,28 +702,28 @@ Note* Glissando::guessFinalNote(Chord* chord)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Glissando::getProperty(P_ID propertyId) const
+QVariant Glissando::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::GLISS_TYPE:
+            case Pid::GLISS_TYPE:
                   return int(glissandoType());
-            case P_ID::GLISS_TEXT:
+            case Pid::GLISS_TEXT:
                   return text();
-            case P_ID::GLISS_SHOW_TEXT:
+            case Pid::GLISS_SHOW_TEXT:
                   return showText();
-            case P_ID::GLISSANDO_STYLE:
+            case Pid::GLISSANDO_STYLE:
                   return int(glissandoStyle());
-            case P_ID::PLAY:
+            case Pid::PLAY:
                   return bool(playGlissando());
-            case P_ID::FONT_FACE:
+            case Pid::FONT_FACE:
                   return _fontFace;
-            case P_ID::FONT_SIZE:
+            case Pid::FONT_SIZE:
                   return _fontSize;
-            case P_ID::FONT_BOLD:
+            case Pid::FONT_BOLD:
                   return _fontBold;
-            case P_ID::FONT_ITALIC:
+            case Pid::FONT_ITALIC:
                   return _fontItalic;
-            case P_ID::FONT_UNDERLINE:
+            case Pid::FONT_UNDERLINE:
                   return _fontUnderline;
             default:
                   break;
@@ -735,37 +735,37 @@ QVariant Glissando::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Glissando::setProperty(P_ID propertyId, const QVariant& v)
+bool Glissando::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::GLISS_TYPE:
+            case Pid::GLISS_TYPE:
                   setGlissandoType(GlissandoType(v.toInt()));
                   break;
-            case P_ID::GLISS_TEXT:
+            case Pid::GLISS_TEXT:
                   setText(v.toString());
                   break;
-            case P_ID::GLISS_SHOW_TEXT:
+            case Pid::GLISS_SHOW_TEXT:
                   setShowText(v.toBool());
                   break;
-            case P_ID::GLISSANDO_STYLE:
+            case Pid::GLISSANDO_STYLE:
                  setGlissandoStyle(GlissandoStyle(v.toInt()));
                  break;
-            case P_ID::PLAY:
+            case Pid::PLAY:
                  setPlayGlissando(v.toBool());
                  break;
-            case P_ID::FONT_FACE:
+            case Pid::FONT_FACE:
                   setFontFace(v.toString());
                   break;
-            case P_ID::FONT_SIZE:
+            case Pid::FONT_SIZE:
                   setFontSize(v.toReal());
                   break;
-            case P_ID::FONT_BOLD:
+            case Pid::FONT_BOLD:
                   setFontBold(v.toBool());
                   break;
-            case P_ID::FONT_ITALIC:
+            case Pid::FONT_ITALIC:
                   setFontItalic(v.toBool());
                   break;
-            case P_ID::FONT_UNDERLINE:
+            case Pid::FONT_UNDERLINE:
                   setFontUnderline(v.toBool());
                   break;
             default:
@@ -781,20 +781,20 @@ bool Glissando::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Glissando::propertyDefault(P_ID propertyId) const
+QVariant Glissando::propertyDefault(Pid propertyId) const
       {
-      StyleIdx si = getPropertyStyle(propertyId);
-      if (si != StyleIdx::NOSTYLE)
+      Sid si = getPropertyStyle(propertyId);
+      if (si != Sid::NOSTYLE)
             return score()->styleV(si);
 
       switch (propertyId) {
-            case P_ID::GLISS_TYPE:
+            case Pid::GLISS_TYPE:
                   return int(GlissandoType::STRAIGHT);
-            case P_ID::GLISS_SHOW_TEXT:
+            case Pid::GLISS_SHOW_TEXT:
                   return true;
-            case P_ID::GLISSANDO_STYLE:
+            case Pid::GLISSANDO_STYLE:
                   return int(GlissandoStyle::CHROMATIC);
-            case P_ID::PLAY:
+            case Pid::PLAY:
                   return true;
             default:
                   break;

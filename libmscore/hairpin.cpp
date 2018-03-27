@@ -98,7 +98,7 @@ void HairpinSegment::layout()
                   if (autoplace()) {
                         qreal dx        = sd->bbox().right() + sd->pos().x()
                                              + sd->segment()->pos().x() + sd->measure()->pos().x();
-                        qreal dist      = dx - pos().x() + score()->styleP(StyleIdx::autoplaceHairpinDynamicsDistance);
+                        qreal dist      = dx - pos().x() + score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
                         rUserXoffset()  = dist;
                         rUserXoffset2() = -dist;
                         }
@@ -113,7 +113,7 @@ void HairpinSegment::layout()
                         rUserXoffset2() -= ed->bbox().width();
                         qreal dx         = ed->bbox().left() + ed->pos().x()
                                            + ed->segment()->pos().x() + ed->measure()->pos().x();
-                        ed->rUserXoffset() = pos2().x() + pos().x() - dx + score()->styleP(StyleIdx::autoplaceHairpinDynamicsDistance);
+                        ed->rUserXoffset() = pos2().x() + pos().x() - dx + score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
                         }
                   else
                         ed->doAutoplace();
@@ -209,11 +209,11 @@ void HairpinSegment::layout()
             QRectF r = QRectF(l1.p1(), l1.p2()).normalized() | QRectF(l2.p1(), l2.p2()).normalized();
             if (!_text->empty())
                   r |= _text->bbox();
-            qreal w  = score()->styleP(StyleIdx::hairpinLineWidth);
+            qreal w  = score()->styleP(Sid::hairpinLineWidth);
             setbbox(r.adjusted(-w*.5, -w*.5, w, w));
             }
       if (parent()) {
-            qreal yo = score()->styleP(hairpin()->placeBelow() ? StyleIdx::hairpinPosBelow : StyleIdx::hairpinPosAbove);
+            qreal yo = score()->styleP(hairpin()->placeBelow() ? Sid::hairpinPosBelow : Sid::hairpinPosAbove);
             rypos() += yo;
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
@@ -333,8 +333,8 @@ void HairpinSegment::startEditDrag(EditData& ed)
       TextLineBaseSegment::startEditDrag(ed);
       ElementEditData* eed = ed.getData(this);
 
-      eed->pushProperty(P_ID::HAIRPIN_HEIGHT);
-      eed->pushProperty(P_ID::HAIRPIN_CONT_HEIGHT);
+      eed->pushProperty(Pid::HAIRPIN_HEIGHT);
+      eed->pushProperty(Pid::HAIRPIN_CONT_HEIGHT);
       }
 
 //---------------------------------------------------------
@@ -379,9 +379,9 @@ void HairpinSegment::draw(QPainter* painter) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant HairpinSegment::getProperty(P_ID id) const
+QVariant HairpinSegment::getProperty(Pid id) const
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp) {
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
             if (spp->propertyIdx == id)
                   return spanner()->getProperty(id);
             }
@@ -392,9 +392,9 @@ QVariant HairpinSegment::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool HairpinSegment::setProperty(P_ID id, const QVariant& v)
+bool HairpinSegment::setProperty(Pid id, const QVariant& v)
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp) {
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
             if (spp->propertyIdx == id)
                   return spanner()->setProperty(id, v);
             }
@@ -405,9 +405,9 @@ bool HairpinSegment::setProperty(P_ID id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant HairpinSegment::propertyDefault(P_ID id) const
+QVariant HairpinSegment::propertyDefault(Pid id) const
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp) {
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
             if (spp->propertyIdx == id)
                   return spanner()->propertyDefault(id);
             }
@@ -489,13 +489,13 @@ void Hairpin::write(XmlWriter& xml) const
       int id = xml.spannerId(this);
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
       xml.tag("subtype", int(_hairpinType));
-      writeProperty(xml, P_ID::VELO_CHANGE);
-      writeProperty(xml, P_ID::HAIRPIN_CIRCLEDTIP);
-      writeProperty(xml, P_ID::DYNAMIC_RANGE);
-      writeProperty(xml, P_ID::BEGIN_TEXT);
-      writeProperty(xml, P_ID::CONTINUE_TEXT);
+      writeProperty(xml, Pid::VELO_CHANGE);
+      writeProperty(xml, Pid::HAIRPIN_CIRCLEDTIP);
+      writeProperty(xml, Pid::DYNAMIC_RANGE);
+      writeProperty(xml, Pid::BEGIN_TEXT);
+      writeProperty(xml, Pid::CONTINUE_TEXT);
 
-      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp)
+      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp)
             writeProperty(xml, spp->propertyIdx);
 
       Element::writeProperties(xml);
@@ -545,7 +545,7 @@ void Hairpin::read(XmlReader& e)
 
 void Hairpin::undoSetHairpinType(HairpinType val)
       {
-      undoChangeProperty(P_ID::HAIRPIN_TYPE, int(val));
+      undoChangeProperty(Pid::HAIRPIN_TYPE, int(val));
       }
 
 //---------------------------------------------------------
@@ -554,7 +554,7 @@ void Hairpin::undoSetHairpinType(HairpinType val)
 
 void Hairpin::undoSetVeloChange(int val)
       {
-      undoChangeProperty(P_ID::VELO_CHANGE, val);
+      undoChangeProperty(Pid::VELO_CHANGE, val);
       }
 
 //---------------------------------------------------------
@@ -563,27 +563,27 @@ void Hairpin::undoSetVeloChange(int val)
 
 void Hairpin::undoSetDynRange(Dynamic::Range val)
       {
-      undoChangeProperty(P_ID::DYNAMIC_RANGE, int(val));
+      undoChangeProperty(Pid::DYNAMIC_RANGE, int(val));
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Hairpin::getProperty(P_ID id) const
+QVariant Hairpin::getProperty(Pid id) const
       {
       switch (id) {
-            case P_ID::HAIRPIN_CIRCLEDTIP:
+            case Pid::HAIRPIN_CIRCLEDTIP:
                 return _hairpinCircledTip;
-            case P_ID::HAIRPIN_TYPE:
+            case Pid::HAIRPIN_TYPE:
                 return int(_hairpinType);
-            case P_ID::VELO_CHANGE:
+            case Pid::VELO_CHANGE:
                   return _veloChange;
-            case P_ID::DYNAMIC_RANGE:
+            case Pid::DYNAMIC_RANGE:
                   return int(_dynRange);
-            case P_ID::HAIRPIN_HEIGHT:
+            case Pid::HAIRPIN_HEIGHT:
                   return _hairpinHeight;
-            case P_ID::HAIRPIN_CONT_HEIGHT:
+            case Pid::HAIRPIN_CONT_HEIGHT:
                   return _hairpinContHeight;
             default:
                   return TextLineBase::getProperty(id);
@@ -594,29 +594,29 @@ QVariant Hairpin::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Hairpin::setProperty(P_ID id, const QVariant& v)
+bool Hairpin::setProperty(Pid id, const QVariant& v)
       {
       switch (id) {
-            case P_ID::HAIRPIN_CIRCLEDTIP:
+            case Pid::HAIRPIN_CIRCLEDTIP:
                 _hairpinCircledTip = v.toBool();
                 break;
-            case P_ID::HAIRPIN_TYPE:
+            case Pid::HAIRPIN_TYPE:
                   setHairpinType(HairpinType(v.toInt()));
                   setGenerated(false);
                   break;
-            case P_ID::VELO_CHANGE:
+            case Pid::VELO_CHANGE:
                   _veloChange = v.toInt();
                   break;
-            case P_ID::DYNAMIC_RANGE:
+            case Pid::DYNAMIC_RANGE:
                   _dynRange = Dynamic::Range(v.toInt());
                   break;
-            case P_ID::LINE_WIDTH:
+            case Pid::LINE_WIDTH:
                   TextLineBase::setProperty(id, v);
                   break;
-            case P_ID::HAIRPIN_HEIGHT:
+            case Pid::HAIRPIN_HEIGHT:
                   _hairpinHeight = v.value<Spatium>();
                   break;
-            case P_ID::HAIRPIN_CONT_HEIGHT:
+            case Pid::HAIRPIN_CONT_HEIGHT:
                   _hairpinContHeight = v.value<Spatium>();
                   break;
             default:
@@ -630,27 +630,27 @@ bool Hairpin::setProperty(P_ID id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Hairpin::propertyDefault(P_ID id) const
+QVariant Hairpin::propertyDefault(Pid id) const
       {
       switch (id) {
-            case P_ID::HAIRPIN_CIRCLEDTIP:
+            case Pid::HAIRPIN_CIRCLEDTIP:
                   return false;
-            case P_ID::VELO_CHANGE:
+            case Pid::VELO_CHANGE:
                   return 0;
-            case P_ID::DYNAMIC_RANGE:
+            case Pid::DYNAMIC_RANGE:
                   return int(Dynamic::Range::PART);
-            case P_ID::LINE_WIDTH:
-                  return score()->styleV(StyleIdx::hairpinLineWidth);
-            case P_ID::HAIRPIN_HEIGHT:
-                  return score()->styleV(StyleIdx::hairpinHeight);
-            case P_ID::HAIRPIN_CONT_HEIGHT:
-                  return score()->styleV(StyleIdx::hairpinContHeight);
-            case P_ID::LINE_STYLE:
+            case Pid::LINE_WIDTH:
+                  return score()->styleV(Sid::hairpinLineWidth);
+            case Pid::HAIRPIN_HEIGHT:
+                  return score()->styleV(Sid::hairpinHeight);
+            case Pid::HAIRPIN_CONT_HEIGHT:
+                  return score()->styleV(Sid::hairpinContHeight);
+            case Pid::LINE_STYLE:
                   if (_hairpinType == HairpinType::CRESC_HAIRPIN || _hairpinType == HairpinType::DECRESC_HAIRPIN)
                         return int(Qt::SolidLine);
                   return int(Qt::CustomDashLine);
-            case P_ID::BEGIN_TEXT:
-            case P_ID::CONTINUE_TEXT:
+            case Pid::BEGIN_TEXT:
+            case Pid::CONTINUE_TEXT:
                   return QString("");
 
             default:
@@ -668,7 +668,7 @@ QVariant Hairpin::propertyDefault(P_ID id) const
 
 void Hairpin::setYoff(qreal val)
       {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? StyleIdx::hairpinPosAbove : StyleIdx::hairpinPosBelow);
+      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::hairpinPosAbove : Sid::hairpinPosBelow);
       }
 
 //---------------------------------------------------------

@@ -28,13 +28,13 @@ InspectorBeam::InspectorBeam(QWidget* parent)
       b.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::STEM_DIRECTION, 0, b.direction,    b.resetDirection    },
-            { P_ID::DISTRIBUTE,     0, b.distribute,   b.resetDistribute   },
-            { P_ID::GROW_LEFT,      0, b.growLeft,     b.resetGrowLeft     },
-            { P_ID::GROW_RIGHT,     0, b.growRight,    b.resetGrowRight    },
-            { P_ID::BEAM_NO_SLOPE,  0, b.noSlope,      b.resetNoSlope      },
-            { P_ID::USER_MODIFIED,  0, b.userPosition, b.resetUserPosition },
-            { P_ID::BEAM_POS,       0, b.pos,          0                   },
+            { Pid::STEM_DIRECTION, 0, b.direction,    b.resetDirection    },
+            { Pid::DISTRIBUTE,     0, b.distribute,   b.resetDistribute   },
+            { Pid::GROW_LEFT,      0, b.growLeft,     b.resetGrowLeft     },
+            { Pid::GROW_RIGHT,     0, b.growRight,    b.resetGrowRight    },
+            { Pid::BEAM_NO_SLOPE,  0, b.noSlope,      b.resetNoSlope      },
+            { Pid::USER_MODIFIED,  0, b.userPosition, b.resetUserPosition },
+            { Pid::BEAM_POS,       0, b.pos,          0                   },
             };
       const std::vector<InspectorPanel> ppList = { {b.title, b.panel} };
       mapSignals(iiList, ppList);
@@ -46,12 +46,12 @@ InspectorBeam::InspectorBeam(QWidget* parent)
 
 void InspectorBeam::valueChanged(int idx)
       {
-      if (iList[idx].t == P_ID::USER_MODIFIED) {
+      if (iList[idx].t == Pid::USER_MODIFIED) {
             bool val = getValue(iList[idx]).toBool();
             b.noSlope->setEnabled(!val);
             b.pos->setEnabled(val);
             }
-      else if (iList[idx].t == P_ID::BEAM_NO_SLOPE) {
+      else if (iList[idx].t == Pid::BEAM_NO_SLOPE) {
             bool val = getValue(iList[idx]).toBool();
             b.userPosition->setEnabled(!val);
             b.pos->setEnabled(!val);

@@ -203,7 +203,7 @@ void Harmony::write(XmlWriter& xml) const
                   Segment* segment = toSegment(parent());
                   int tick = segment ? segment->tick() : -1;
                   const Interval& interval = part()->instrument(tick)->transpose();
-                  if (xml.clipboardmode() && !score()->styleB(StyleIdx::concertPitch) && interval.chromatic) {
+                  if (xml.clipboardmode() && !score()->styleB(Sid::concertPitch) && interval.chromatic) {
                         rRootTpc = transposeTpc(_rootTpc, interval, true);
                         rBaseTpc = transposeTpc(_baseTpc, interval, true);
                         }
@@ -381,29 +381,29 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCase
    NoteSpellingType& baseSpelling, NoteCaseType& baseCase)
       {
       // spelling
-      if (score()->styleB(StyleIdx::useStandardNoteNames))
+      if (score()->styleB(Sid::useStandardNoteNames))
             rootSpelling = NoteSpellingType::STANDARD;
-      else if (score()->styleB(StyleIdx::useGermanNoteNames))
+      else if (score()->styleB(Sid::useGermanNoteNames))
             rootSpelling = NoteSpellingType::GERMAN;
-      else if (score()->styleB(StyleIdx::useFullGermanNoteNames))
+      else if (score()->styleB(Sid::useFullGermanNoteNames))
             rootSpelling = NoteSpellingType::GERMAN_PURE;
-      else if (score()->styleB(StyleIdx::useSolfeggioNoteNames))
+      else if (score()->styleB(Sid::useSolfeggioNoteNames))
             rootSpelling = NoteSpellingType::SOLFEGGIO;
-      else if (score()->styleB(StyleIdx::useFrenchNoteNames))
+      else if (score()->styleB(Sid::useFrenchNoteNames))
             rootSpelling = NoteSpellingType::FRENCH;
       baseSpelling = rootSpelling;
 
       // case
 
       // always use case as typed if automatic capitalization is off
-      if (!score()->styleB(StyleIdx::automaticCapitalization)) {
+      if (!score()->styleB(Sid::automaticCapitalization)) {
             rootCase = _rootCase;
             baseCase = _baseCase;
             return;
             }
 
       // set default
-      if (score()->styleB(StyleIdx::allCapsNoteNames)) {
+      if (score()->styleB(Sid::allCapsNoteNames)) {
             rootCase = NoteCaseType::UPPER;
             baseCase = NoteCaseType::UPPER;
             }
@@ -413,11 +413,11 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCase
             }
 
       // override for bass note
-      if (score()->styleB(StyleIdx::lowerCaseBassNotes))
+      if (score()->styleB(Sid::lowerCaseBassNotes))
             baseCase = NoteCaseType::LOWER;
 
       // override for minor chords
-      if (score()->styleB(StyleIdx::lowerCaseMinorChords)) {
+      if (score()->styleB(Sid::lowerCaseMinorChords)) {
             const ChordDescription* cd = descr();
             QString quality;
             if (cd) {
@@ -651,7 +651,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
             }
       *root = r;
       bool preferMinor;
-      if (score()->styleB(StyleIdx::lowerCaseMinorChords) && s[0].isLower())
+      if (score()->styleB(Sid::lowerCaseMinorChords) && s[0].isLower())
             preferMinor = true;
       else
             preferMinor = false;
@@ -746,13 +746,13 @@ void Harmony::endEdit(EditData& ed)
                   // at this point chord will already have been rendered in same key as original
                   // (as a result of TextBase::endEdit() calling setText() for linked elements)
                   // we may now need to change the TPC's and the text, and re-render
-                  if (score()->styleB(StyleIdx::concertPitch) != h->score()->styleB(StyleIdx::concertPitch)) {
+                  if (score()->styleB(Sid::concertPitch) != h->score()->styleB(Sid::concertPitch)) {
                         Part* partDest = h->part();
                         Segment* segment = toSegment(parent());
                         int tick = segment ? segment->tick() : -1;
                         Interval interval = partDest->instrument(tick)->transpose();
                         if (!interval.isZero()) {
-                              if (!h->score()->styleB(StyleIdx::concertPitch))
+                              if (!h->score()->styleB(Sid::concertPitch))
                                     interval.flip();
                               int rootTpc = transposeTpc(h->rootTpc(), interval, true);
                               int baseTpc = transposeTpc(h->baseTpc(), interval, true);
@@ -1020,20 +1020,20 @@ void Harmony::layout()
             bool fretsFound = false;
             for (Element* e : s->annotations()) {
                   if (e->isFretDiagram() && e->track() == track()) {
-                        yy -= score()->styleP(StyleIdx::fretY);
+                        yy -= score()->styleP(Sid::fretY);
                         e->layout();
                         yy -= e->height();
-                        yy -= score()->styleP(StyleIdx::harmonyFretDist);
+                        yy -= score()->styleP(Sid::harmonyFretDist);
                         fretsFound = true;
                         break;
                         }
                   }
             if (!fretsFound)
-                  yy -= score()->styleP(StyleIdx::harmonyY);
+                  yy -= score()->styleP(Sid::harmonyY);
             }
       else if (parent()->isFretDiagram()) {
             qDebug("Harmony %s with fret diagram as parent", qPrintable(_textName)); // not possible?
-            yy = -score()->styleP(StyleIdx::harmonyFretDist);
+            yy = -score()->styleP(Sid::harmonyFretDist);
             }
       yy += offset().y();           //      yy += offset(_spatium).y();
 
@@ -1326,7 +1326,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
 
 void Harmony::render()
       {
-      int capo = score()->styleI(StyleIdx::capoPosition);
+      int capo = score()->styleI(Sid::capoPosition);
 
       ChordList* chordList = score()->style().chordList();
 
@@ -1619,10 +1619,10 @@ Element* Harmony::drop(EditData& data)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Harmony::propertyDefault(P_ID id) const
+QVariant Harmony::propertyDefault(Pid id) const
       {
       switch (id) {
-            case P_ID::SUB_STYLE:
+            case Pid::SUB_STYLE:
                   return int(SubStyleId::HARMONY);
             default:
                   return TextBase::propertyDefault(id);

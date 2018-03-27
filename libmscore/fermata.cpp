@@ -100,8 +100,8 @@ void Fermata::write(XmlWriter& xml) const
             }
       xml.stag("Fermata");
       xml.tag("subtype", Sym::id2name(_symId));
-      writeProperty(xml, P_ID::TIME_STRETCH);
-      writeProperty(xml, P_ID::PLAY);
+      writeProperty(xml, Pid::TIME_STRETCH);
+      writeProperty(xml, Pid::PLAY);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -198,7 +198,7 @@ void Fermata::layout()
             }
 
       qreal x = score()->noteHeadWidth() * staff()->mag(0) * .5;
-      qreal y = placeAbove() ? styleP(StyleIdx::fermataPosAbove) : styleP(StyleIdx::fermataPosBelow) + staff()->height();
+      qreal y = placeAbove() ? styleP(Sid::fermataPosAbove) : styleP(Sid::fermataPosBelow) + staff()->height();
 
       setPos(QPointF(x, y));
 
@@ -219,7 +219,7 @@ void Fermata::layout()
                   setbbox(b.translated(-0.5 * b.width(), 0.0));
                   }
             }
-      autoplaceSegmentElement(styleP(StyleIdx::fermataMinDistance));
+      autoplaceSegmentElement(styleP(Sid::fermataMinDistance));
       }
 
 //---------------------------------------------------------
@@ -244,12 +244,12 @@ QLineF Fermata::dragAnchor() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Fermata::getProperty(P_ID propertyId) const
+QVariant Fermata::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::TIME_STRETCH:
+            case Pid::TIME_STRETCH:
                   return timeStretch();
-            case P_ID::PLAY:
+            case Pid::PLAY:
                   return play();
             default:
                   return Element::getProperty(propertyId);
@@ -260,10 +260,10 @@ QVariant Fermata::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Fermata::setProperty(P_ID propertyId, const QVariant& v)
+bool Fermata::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::PLACEMENT: {
+            case Pid::PLACEMENT: {
                   Placement p = Placement(v.toInt());
                   if (p != placement()) {
                         QString s = Sym::id2name(_symId);
@@ -276,10 +276,10 @@ bool Fermata::setProperty(P_ID propertyId, const QVariant& v)
                         }
                   }
                   break;
-            case P_ID::PLAY:
+            case Pid::PLAY:
                   setPlay(v.toBool());
                   break;
-            case P_ID::TIME_STRETCH:
+            case Pid::TIME_STRETCH:
                   setTimeStretch(v.toDouble());
                   score()->fixTicks();
                   break;
@@ -294,14 +294,14 @@ bool Fermata::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Fermata::propertyDefault(P_ID propertyId) const
+QVariant Fermata::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::PLACEMENT:
+            case Pid::PLACEMENT:
                   return int(Placement::ABOVE);
-            case P_ID::TIME_STRETCH:
+            case Pid::TIME_STRETCH:
                   return 1.0; // articulationList[int(articulationType())].timeStretch;
-            case P_ID::PLAY:
+            case Pid::PLAY:
                   return true;
             default:
                   break;
@@ -313,23 +313,23 @@ QVariant Fermata::propertyDefault(P_ID propertyId) const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-StyleIdx Fermata::getPropertyStyle(P_ID id) const
+Sid Fermata::getPropertyStyle(Pid id) const
       {
       switch (id) {
             default:
                   break;
             }
-      return StyleIdx::NOSTYLE;
+      return Sid::NOSTYLE;
       }
 
 //---------------------------------------------------------
 //   resetProperty
 //---------------------------------------------------------
 
-void Fermata::resetProperty(P_ID id)
+void Fermata::resetProperty(Pid id)
       {
       switch (id) {
-            case P_ID::TIME_STRETCH:
+            case Pid::TIME_STRETCH:
                   setProperty(id, propertyDefault(id));
                   return;
 
@@ -345,7 +345,7 @@ void Fermata::resetProperty(P_ID id)
 
 qreal Fermata::mag() const
       {
-      return parent() ? parent()->mag() * score()->styleD(StyleIdx::articulationMag): 1.0;
+      return parent() ? parent()->mag() * score()->styleD(Sid::articulationMag): 1.0;
       }
 
 //---------------------------------------------------------

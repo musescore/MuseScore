@@ -309,7 +309,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               // transpose
                               Part* partDest = staff(e.track() / VOICES)->part();
                               Interval interval = partDest->instrument(e.tick())->transpose();
-                              if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
+                              if (!styleB(Sid::concertPitch) && !interval.isZero()) {
                                     interval.flip();
                                     int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
                                     int baseTpc = transposeTpc(harmony->baseTpc(), interval, true);
@@ -409,7 +409,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
             s->connectTies();
 
       if (pasted) {                       //select only if we pasted something
-//TODO?            if (styleB(StyleIdx::createMultiMeasureRests))
+//TODO?            if (styleB(Sid::createMultiMeasureRests))
 //                  createMMRests();
             Segment* s1 = tick2segmentMM(dstTick);
             Segment* s2 = tick2segmentMM(dstTick + tickLen);
@@ -654,7 +654,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                     // transpose
                                     Part* partDest = staff(track2staff(destTrack))->part();
                                     Interval interval = partDest->instrument(destTick)->transpose();
-                                    if (!styleB(StyleIdx::concertPitch) && !interval.isZero()) {
+                                    if (!styleB(Sid::concertPitch) && !interval.isZero()) {
                                           interval.flip();
                                           int rootTpc = transposeTpc(el->rootTpc(), interval, true);
                                           int baseTpc = transposeTpc(el->baseTpc(), interval, true);

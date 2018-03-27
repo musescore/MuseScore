@@ -50,7 +50,7 @@ class Pedal final : public TextLineBase {
       virtual void write(XmlWriter& xml) const override;
       LineSegment* createLineSegment();
       virtual void setYoff(qreal) override;
-      virtual QVariant propertyDefault(P_ID propertyId) const override;
+      virtual QVariant propertyDefault(Pid propertyId) const override;
 
       friend class PedalLine;
       };

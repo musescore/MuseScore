@@ -262,7 +262,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         Staff* s = staff(i);
                         if (s->isPitchedStaff(startTick)) {
                               key = s->key(startTick);
-                              if (!styleB(StyleIdx::concertPitch)) {
+                              if (!styleB(Sid::concertPitch)) {
                                     int diff = s->part()->instrument(startTick)->transpose().chromatic;
                                     if (diff)
                                           key = transposeKey(key, diff);
@@ -673,7 +673,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, int tickStart, int t
       Interval diffV(oldV.chromatic + v.chromatic);
 
       // transpose keys first
-      if (!styleB(StyleIdx::concertPitch))
+      if (!styleB(Sid::concertPitch))
             transposeKeys(part->startTrack() / VOICES, part->endTrack() / VOICES, tickStart, tickEnd, diffV);
 
       // now transpose notes and chord symbols
@@ -694,12 +694,12 @@ void Score::transpositionChanged(Part* part, Interval oldV, int tickStart, int t
                               for (Chord* gc : c->graceNotes()) {
                                     for (Note* n : gc->notes()) {
                                           int tpc = transposeTpc(n->tpc1(), v, true);
-                                          n->undoChangeProperty(P_ID::TPC2, tpc);
+                                          n->undoChangeProperty(Pid::TPC2, tpc);
                                           }
                                     }
                               for (Note* n : c->notes()) {
                                     int tpc = transposeTpc(n->tpc1(), v, true);
-                                    n->undoChangeProperty(P_ID::TPC2, tpc);
+                                    n->undoChangeProperty(Pid::TPC2, tpc);
                                     }
                               }
                         // find chord symbols
@@ -710,7 +710,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, int tickStart, int t
                               int rootTpc = transposeTpc(h->rootTpc(), diffV, false);
                               int baseTpc = transposeTpc(h->baseTpc(), diffV, false);
                               for (ScoreElement* e : h->linkList()) {
-                                    if (!e->score()->styleB(StyleIdx::concertPitch))
+                                    if (!e->score()->styleB(Sid::concertPitch))
                                           undoTransposeHarmony(toHarmony(e), rootTpc, baseTpc);
                                     }
                               }

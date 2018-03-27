@@ -154,8 +154,8 @@ QPointF LineSegment::gripAnchor(Grip grip) const
 void LineSegment::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
-      eed->pushProperty(P_ID::USER_OFF);
-      eed->pushProperty(P_ID::USER_OFF2);
+      eed->pushProperty(Pid::USER_OFF);
+      eed->pushProperty(Pid::USER_OFF2);
       }
 
 //---------------------------------------------------------
@@ -212,8 +212,8 @@ bool LineSegment::edit(EditData& ed)
                         }
                   if (s1 == 0 || s2 == 0 || s1->tick() >= s2->tick())
                         return true;
-                  spanner()->undoChangeProperty(P_ID::SPANNER_TICK, s1->tick());
-                  spanner()->undoChangeProperty(P_ID::SPANNER_TICKS, s2->tick() - s1->tick());
+                  spanner()->undoChangeProperty(Pid::SPANNER_TICK, s1->tick());
+                  spanner()->undoChangeProperty(Pid::SPANNER_TICKS, s2->tick() - s1->tick());
                   }
                   break;
             case Spanner::Anchor::NOTE:
@@ -300,11 +300,11 @@ bool LineSegment::edit(EditData& ed)
                   if (m1->tick() > m2->tick())
                         return true;
                   if (l->startElement() != m1) {
-                        spanner()->undoChangeProperty(P_ID::SPANNER_TICK,  m1->tick());
-                        spanner()->undoChangeProperty(P_ID::SPANNER_TICKS, m2->endTick() - m1->tick());
+                        spanner()->undoChangeProperty(Pid::SPANNER_TICK,  m1->tick());
+                        spanner()->undoChangeProperty(Pid::SPANNER_TICKS, m2->endTick() - m1->tick());
                         }
                   else if (l->endElement() != m2) {
-                        spanner()->undoChangeProperty(P_ID::SPANNER_TICKS, m2->endTick() - m1->tick());
+                        spanner()->undoChangeProperty(Pid::SPANNER_TICKS, m2->endTick() - m1->tick());
                         }
                   }
             }
@@ -347,17 +347,17 @@ void LineSegment::editDrag(EditData& ed)
             case Grip::START: // Resize the begin of element (left grip)
                   setUserOff(userOff() + deltaResize);
                   _userOff2 -= deltaResize;
-                  undoChangeProperty(P_ID::AUTOPLACE, false);
+                  undoChangeProperty(Pid::AUTOPLACE, false);
                   break;
             case Grip::END: // Resize the end of element (right grip)
                   _userOff2 += deltaResize;
-                  undoChangeProperty(P_ID::AUTOPLACE, false);
+                  undoChangeProperty(Pid::AUTOPLACE, false);
                   break;
             case Grip::MIDDLE: { // Move the element (middle grip)
                   // Only for moving, no y limitaion
                   QPointF deltaMove(ed.delta.x(), ed.delta.y());
                   setUserOff(userOff() + deltaMove);
-                  undoChangeProperty(P_ID::AUTOPLACE, false);
+                  undoChangeProperty(Pid::AUTOPLACE, false);
                   }
                   break;
             default:
@@ -415,15 +415,15 @@ void LineSegment::localSpatiumChanged(qreal ov, qreal nv)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant LineSegment::getProperty(P_ID id) const
+QVariant LineSegment::getProperty(Pid id) const
       {
       switch (id) {
-            case P_ID::DIAGONAL:
-            case P_ID::LINE_COLOR:
-            case P_ID::LINE_WIDTH:
-            case P_ID::LINE_STYLE:
-            case P_ID::DASH_LINE_LEN:
-            case P_ID::DASH_GAP_LEN:
+            case Pid::DIAGONAL:
+            case Pid::LINE_COLOR:
+            case Pid::LINE_WIDTH:
+            case Pid::LINE_STYLE:
+            case Pid::DASH_LINE_LEN:
+            case Pid::DASH_GAP_LEN:
                   return line()->getProperty(id);
             default:
                   return SpannerSegment::getProperty(id);
@@ -434,15 +434,15 @@ QVariant LineSegment::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool LineSegment::setProperty(P_ID id, const QVariant& val)
+bool LineSegment::setProperty(Pid id, const QVariant& val)
       {
       switch (id) {
-            case P_ID::DIAGONAL:
-            case P_ID::LINE_COLOR:
-            case P_ID::LINE_WIDTH:
-            case P_ID::LINE_STYLE:
-            case P_ID::DASH_LINE_LEN:
-            case P_ID::DASH_GAP_LEN:
+            case Pid::DIAGONAL:
+            case Pid::LINE_COLOR:
+            case Pid::LINE_WIDTH:
+            case Pid::LINE_STYLE:
+            case Pid::DASH_LINE_LEN:
+            case Pid::DASH_GAP_LEN:
                   return line()->setProperty(id, val);
             default:
                   return SpannerSegment::setProperty(id, val);
@@ -453,15 +453,15 @@ bool LineSegment::setProperty(P_ID id, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant LineSegment::propertyDefault(P_ID id) const
+QVariant LineSegment::propertyDefault(Pid id) const
       {
       switch (id) {
-            case P_ID::DIAGONAL:
-            case P_ID::LINE_COLOR:
-            case P_ID::LINE_WIDTH:
-            case P_ID::LINE_STYLE:
-            case P_ID::DASH_LINE_LEN:
-            case P_ID::DASH_GAP_LEN:
+            case Pid::DIAGONAL:
+            case Pid::LINE_COLOR:
+            case Pid::LINE_WIDTH:
+            case Pid::LINE_STYLE:
+            case Pid::DASH_LINE_LEN:
+            case Pid::DASH_GAP_LEN:
                   return line()->propertyDefault(id);
             default:
                   return SpannerSegment::propertyDefault(id);
@@ -660,14 +660,14 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     }
                               }
                         x = m->pos().x() + offset;
-                        if (score()->styleB(StyleIdx::createMultiMeasureRests) && m->hasMMRest()) {
+                        if (score()->styleB(Sid::createMultiMeasureRests) && m->hasMMRest()) {
                               x = m->mmRest()->pos().x();
                               }
                         }
                   else {
                         qreal _spatium = spatium();
 
-                        if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
+                        if (score()->styleB(Sid::createMultiMeasureRests)) {
                               // find the actual measure where the volta should stop
                               m = startMeasure();
                               if (m->hasMMRest())
@@ -693,25 +693,25 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                           case BarLineType::END_REPEAT:
                                                 // skip dots
                                                 x += symWidth(SymId::repeatDot);
-                                                x += score()->styleS(StyleIdx::endBarDistance).val() * _spatium;
+                                                x += score()->styleS(Sid::endBarDistance).val() * _spatium;
                                                 // fall through
                                           case BarLineType::DOUBLE:
                                                 // center on leftmost (thinner) barline
-                                                x += score()->styleS(StyleIdx::doubleBarWidth).val() * _spatium * 0.5;
+                                                x += score()->styleS(Sid::doubleBarWidth).val() * _spatium * 0.5;
                                                 break;
                                           case BarLineType::START_REPEAT:
                                                 // center on leftmost (thicker) barline
-                                                x += score()->styleS(StyleIdx::endBarWidth).val() * _spatium * 0.5;
+                                                x += score()->styleS(Sid::endBarWidth).val() * _spatium * 0.5;
                                                 break;
                                           default:
                                                 // center on barline
-                                                x += score()->styleS(StyleIdx::barWidth).val() * _spatium * 0.5;
+                                                x += score()->styleS(Sid::barWidth).val() * _spatium * 0.5;
                                                 break;
                                           }
                                     }
                               }
                         }
-                  if (score()->styleB(StyleIdx::createMultiMeasureRests))
+                  if (score()->styleB(Sid::createMultiMeasureRests))
                         m = m->mmRest1();
                   Q_ASSERT(m->system());
                   *sys = m->system();
@@ -1024,12 +1024,12 @@ void SLine::writeProperties(XmlWriter& xml) const
       Spanner::writeProperties(xml);
       if (_diagonal)
             xml.tag("diagonal", _diagonal);
-      writeProperty(xml, P_ID::LINE_WIDTH);
-      writeProperty(xml, P_ID::LINE_STYLE);
-      writeProperty(xml, P_ID::LINE_COLOR);
-      writeProperty(xml, P_ID::ANCHOR);
-      writeProperty(xml, P_ID::DASH_LINE_LEN);
-      writeProperty(xml, P_ID::DASH_GAP_LEN);
+      writeProperty(xml, Pid::LINE_WIDTH);
+      writeProperty(xml, Pid::LINE_STYLE);
+      writeProperty(xml, Pid::LINE_COLOR);
+      writeProperty(xml, Pid::ANCHOR);
+      writeProperty(xml, Pid::DASH_LINE_LEN);
+      writeProperty(xml, Pid::DASH_GAP_LEN);
       if (score() == gscore) {
             // when used as icon
             if (!spannerSegments().empty()) {
@@ -1179,20 +1179,20 @@ void SLine::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant SLine::getProperty(P_ID id) const
+QVariant SLine::getProperty(Pid id) const
       {
       switch (id) {
-            case P_ID::DIAGONAL:
+            case Pid::DIAGONAL:
                   return _diagonal;
-            case P_ID::LINE_COLOR:
+            case Pid::LINE_COLOR:
                   return _lineColor;
-            case P_ID::LINE_WIDTH:
+            case Pid::LINE_WIDTH:
                   return _lineWidth;
-            case P_ID::LINE_STYLE:
+            case Pid::LINE_STYLE:
                   return QVariant(int(_lineStyle));
-            case P_ID::DASH_LINE_LEN:
+            case Pid::DASH_LINE_LEN:
                   return dashLineLen();
-            case P_ID::DASH_GAP_LEN:
+            case Pid::DASH_GAP_LEN:
                   return dashGapLen();
             default:
                   return Spanner::getProperty(id);
@@ -1203,25 +1203,25 @@ QVariant SLine::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool SLine::setProperty(P_ID id, const QVariant& v)
+bool SLine::setProperty(Pid id, const QVariant& v)
       {
       switch (id) {
-            case P_ID::DIAGONAL:
+            case Pid::DIAGONAL:
                   _diagonal = v.toBool();
                   break;
-            case P_ID::LINE_COLOR:
+            case Pid::LINE_COLOR:
                   _lineColor = v.value<QColor>();
                   break;
-            case P_ID::LINE_WIDTH:
+            case Pid::LINE_WIDTH:
                   _lineWidth = v.value<Spatium>();
                   break;
-            case P_ID::LINE_STYLE:
+            case Pid::LINE_STYLE:
                   _lineStyle = Qt::PenStyle(v.toInt());
                   break;
-            case P_ID::DASH_LINE_LEN:
+            case Pid::DASH_LINE_LEN:
                   setDashLineLen(v.toDouble());
                   break;
-            case P_ID::DASH_GAP_LEN:
+            case Pid::DASH_GAP_LEN:
                   setDashGapLen(v.toDouble());
                   break;
             default:
@@ -1235,19 +1235,19 @@ bool SLine::setProperty(P_ID id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SLine::propertyDefault(P_ID id) const
+QVariant SLine::propertyDefault(Pid id) const
       {
       switch (id) {
-            case P_ID::DIAGONAL:
+            case Pid::DIAGONAL:
                   return false;
-            case P_ID::LINE_COLOR:
+            case Pid::LINE_COLOR:
                   return MScore::defaultColor;
-            case P_ID::LINE_WIDTH:
+            case Pid::LINE_WIDTH:
                   return Spatium(0.15);
-            case P_ID::LINE_STYLE:
+            case Pid::LINE_STYLE:
                   return int(Qt::SolidLine);
-            case P_ID::DASH_LINE_LEN:
-            case P_ID::DASH_GAP_LEN:
+            case Pid::DASH_LINE_LEN:
+            case Pid::DASH_GAP_LEN:
                   return 5.0;
             default:
                   return Spanner::propertyDefault(id);
@@ -1258,7 +1258,7 @@ QVariant SLine::propertyDefault(P_ID id) const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-StyleIdx SLine::getPropertyStyle(P_ID id) const
+Sid SLine::getPropertyStyle(Pid id) const
       {
       return Spanner::getPropertyStyle(id);
       }

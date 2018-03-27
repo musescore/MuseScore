@@ -90,15 +90,15 @@ bool Score::read(XmlReader& e)
             else if (tag == "showMargins")
                   _showPageborders = e.readInt();
             else if (tag == "Style") {
-                  qreal sp = style().value(StyleIdx::spatium).toDouble();
+                  qreal sp = style().value(Sid::spatium).toDouble();
                   style().load(e);
                   // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
                   if (_layoutMode == LayoutMode::FLOAT) {
                         // style should not change spatium in
                         // float mode
-                        style().set(StyleIdx::spatium, sp);
+                        style().set(Sid::spatium, sp);
                         }
-                  _scoreFont = ScoreFont::fontFactory(style().value(StyleIdx::MusicalSymbolFont).toString());
+                  _scoreFont = ScoreFont::fontFactory(style().value(Sid::MusicalSymbolFont).toString());
                   }
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);

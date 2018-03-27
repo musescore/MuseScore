@@ -130,7 +130,7 @@ Element* TBox::drop(EditData& data)
                   {
                   Text* t = toText(e);
                   _text->undoSetText(t->xmlText());
-//TODO-ws                  _text->undoChangeProperty(P_ID::SUB_STYLE, int(t->subStyle()));
+//TODO-ws                  _text->undoChangeProperty(Pid::SUB_STYLE, int(t->subStyle()));
                   delete e;
                   return _text;
                   }
@@ -150,7 +150,7 @@ void TBox::add(Element* e)
             // does not normally happen, since drop() handles this directly
             Text* t = toText(e);
             _text->undoSetText(t->xmlText());
-//TODO-ws            _text->undoChangeProperty(P_ID::SUB_STYLE, int(t->subStyle()));
+//TODO-ws            _text->undoChangeProperty(Pid::SUB_STYLE, int(t->subStyle()));
             }
       else {
             VBox::add(e);

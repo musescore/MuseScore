@@ -34,10 +34,10 @@ SystemText::SystemText(SubStyleId ss, Score* s)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SystemText::propertyDefault(P_ID id) const
+QVariant SystemText::propertyDefault(Pid id) const
       {
       switch (id) {
-            case P_ID::SUB_STYLE:
+            case Pid::SUB_STYLE:
                   return int(SubStyleId::SYSTEM);
             default:
                   return TextBase::propertyDefault(id);

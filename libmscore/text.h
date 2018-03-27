@@ -301,7 +301,7 @@ class TextBase : public Element {
       static QString unEscape(QString s);
       static QString escape(QString s);
 
-      void undoSetText(const QString& s) { undoChangeProperty(P_ID::TEXT, s); }
+      void undoSetText(const QString& s) { undoChangeProperty(Pid::TEXT, s); }
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;
 
@@ -318,9 +318,9 @@ class TextBase : public Element {
       QFont font() const;
       QFontMetricsF fontMetrics() const;
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
-      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant& v) override;
+      virtual QVariant propertyDefault(Pid id) const override;
 
       virtual void reset() override;
       virtual void styleChanged() override;

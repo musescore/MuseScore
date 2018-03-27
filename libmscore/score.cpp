@@ -272,27 +272,27 @@ Score::Score(MasterScore* parent)
             // inherit most style settings from parent
             _style = parent->style();
 
-            static const StyleIdx styles[] = {
-                  StyleIdx::pageWidth,
-                  StyleIdx::pageHeight,
-                  StyleIdx::pagePrintableWidth,
-                  StyleIdx::pageEvenLeftMargin,
-                  StyleIdx::pageOddLeftMargin,
-                  StyleIdx::pageEvenTopMargin,
-                  StyleIdx::pageEvenBottomMargin,
-                  StyleIdx::pageOddTopMargin,
-                  StyleIdx::pageOddBottomMargin,
-                  StyleIdx::pageTwosided,
-                  StyleIdx::spatium
+            static const Sid styles[] = {
+                  Sid::pageWidth,
+                  Sid::pageHeight,
+                  Sid::pagePrintableWidth,
+                  Sid::pageEvenLeftMargin,
+                  Sid::pageOddLeftMargin,
+                  Sid::pageEvenTopMargin,
+                  Sid::pageEvenBottomMargin,
+                  Sid::pageOddTopMargin,
+                  Sid::pageOddBottomMargin,
+                  Sid::pageTwosided,
+                  Sid::spatium
                   };
             // but borrow defaultStyle page layout settings
             for (auto i : styles)
                   _style.set(i, MScore::defaultStyle().value(i));
             // and force some style settings that just make sense for parts
-            style().set(StyleIdx::concertPitch, false);
-            style().set(StyleIdx::createMultiMeasureRests, true);
-            style().set(StyleIdx::dividerLeft, false);
-            style().set(StyleIdx::dividerRight, false);
+            style().set(Sid::concertPitch, false);
+            style().set(Sid::createMultiMeasureRests, true);
+            style().set(Sid::dividerLeft, false);
+            style().set(Sid::dividerRight, false);
             }
       _synthesizerState = parent->_synthesizerState;
       }
@@ -1536,7 +1536,7 @@ Measure* Score::firstMeasure() const
 Measure* Score::firstMeasureMM() const
       {
       Measure* m = firstMeasure();
-      if (m && styleB(StyleIdx::createMultiMeasureRests) && m->hasMMRest())
+      if (m && styleB(Sid::createMultiMeasureRests) && m->hasMMRest())
             return m->mmRest();
       return m;
       }
@@ -1550,7 +1550,7 @@ MeasureBase* Score::firstMM() const
       MeasureBase* m = _measures.first();
       if (m
          && m->type() == ElementType::MEASURE
-         && styleB(StyleIdx::createMultiMeasureRests)
+         && styleB(Sid::createMultiMeasureRests)
          && toMeasure(m)->hasMMRest()) {
             return toMeasure(m)->mmRest();
             }
@@ -1591,7 +1591,7 @@ Measure* Score::lastMeasure() const
 Measure* Score::lastMeasureMM() const
       {
       Measure* m = lastMeasure();
-      if (m && styleB(StyleIdx::createMultiMeasureRests)) {
+      if (m && styleB(Sid::createMultiMeasureRests)) {
             Measure* m1 = const_cast<Measure*>(toMeasure(m->mmRest1()));
             if (m1)
                   return m1;
@@ -1910,8 +1910,8 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
             last()->undoSetBreak(true, LayoutBreak::Type::SECTION);
 
       // match concert pitch states
-      if (styleB(StyleIdx::concertPitch) != score->styleB(StyleIdx::concertPitch))
-            score->cmdConcertPitchChanged(styleB(StyleIdx::concertPitch), true);
+      if (styleB(Sid::concertPitch) != score->styleB(Sid::concertPitch))
+            score->cmdConcertPitchChanged(styleB(Sid::concertPitch), true);
 
       // convert any "generated" initial clefs into real "non-generated" clefs if clef type changes
       Measure* fm = score->firstMeasure();
@@ -2100,14 +2100,14 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                                     if (slur->type() != ElementType::SLUR)
                                           continue;
                                     if (slur->startCR() == chord) {
-                                          slur->undoChangeProperty(P_ID::TRACK, slur->track()+VOICES);
+                                          slur->undoChangeProperty(Pid::TRACK, slur->track()+VOICES);
                                           for (ScoreElement* ee : slur->linkList()) {
                                                 Slur* lslur = toSlur(ee);
                                                 lslur->setStartElement(0);
                                                 }
                                           }
                                     if (slur->endCR() == chord) {
-                                          slur->undoChangeProperty(P_ID::SPANNER_TRACK2, slur->track2()+VOICES);
+                                          slur->undoChangeProperty(Pid::SPANNER_TRACK2, slur->track2()+VOICES);
                                           for (ScoreElement* ee : slur->linkList()) {
                                                 Slur* lslur = toSlur(ee);
                                                 lslur->setEndElement(0);
@@ -2312,7 +2312,7 @@ void Score::adjustBracketsDel(int sidx, int eidx)
                   if ((span == 0) || ((staffIdx + span) < sidx) || (staffIdx > eidx))
                         continue;
                   if ((sidx >= staffIdx) && (eidx <= (staffIdx + span)))
-                        bi->undoChangeProperty(P_ID::BRACKET_SPAN, span - (eidx-sidx));
+                        bi->undoChangeProperty(Pid::BRACKET_SPAN, span - (eidx-sidx));
                   }
 #if 0 // TODO
             int span = staff->barLineSpan();
@@ -2339,7 +2339,7 @@ void Score::adjustBracketsIns(int sidx, int eidx)
                   if ((span == 0) || ((staffIdx + span) < sidx) || (staffIdx > eidx))
                         continue;
                   if ((sidx >= staffIdx) && (eidx < (staffIdx + span)))
-                        bi->undoChangeProperty(P_ID::BRACKET_SPAN, span + (eidx-sidx));
+                        bi->undoChangeProperty(Pid::BRACKET_SPAN, span + (eidx-sidx));
                   }
 #if 0 // TODO
             int span = staff->barLineSpan();
@@ -2371,7 +2371,7 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
                   KeySigEvent oKey = i->second;
                   KeySigEvent nKey = oKey;
                   int diff = -staff->part()->instrument(tick)->transpose().chromatic;
-                  if (diff != 0 && !styleB(StyleIdx::concertPitch) && !oKey.custom() && !oKey.isAtonal())
+                  if (diff != 0 && !styleB(Sid::concertPitch) && !oKey.custom() && !oKey.isAtonal())
                         nKey.setKey(transposeKey(nKey.key(), diff));
                   staff->setKey(tick, nKey);
                   KeySig* keysig = new KeySig(this);
@@ -2482,7 +2482,7 @@ void Score::sortStaves(QList<int>& dst)
 
 void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
       {
-      undoChangeStyleVal(StyleIdx::concertPitch, flag);       // change style flag
+      undoChangeStyleVal(Sid::concertPitch, flag);       // change style flag
 
       for (Staff* staff : _staves) {
             if (staff->staffType(0)->group() == StaffGroup::PERCUSSION)       // TODO
@@ -3236,7 +3236,7 @@ qreal Score::tempo(int tick) const
 
 qreal Score::loWidth() const
       {
-      return styleD(StyleIdx::pageWidth) * DPI;
+      return styleD(Sid::pageWidth) * DPI;
       }
 
 //---------------------------------------------------------
@@ -3245,7 +3245,7 @@ qreal Score::loWidth() const
 
 qreal Score::loHeight() const
       {
-      return styleD(StyleIdx::pageHeight) * DPI;
+      return styleD(Sid::pageHeight) * DPI;
       }
 
 //---------------------------------------------------------
@@ -3832,7 +3832,7 @@ int Score::keysig()
                   continue;
             result = key;
             int diff = st->part()->instrument()->transpose().chromatic;
-            if (!styleB(StyleIdx::concertPitch) && diff)
+            if (!styleB(Sid::concertPitch) && diff)
                   result = transposeKey(key, diff);
             break;
             }
@@ -4135,7 +4135,7 @@ void Score::cropPage(qreal margins)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Score::getProperty(P_ID id) const
+QVariant Score::getProperty(Pid id) const
       {
       switch (id) {
             default:
@@ -4148,7 +4148,7 @@ QVariant Score::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Score::setProperty(P_ID id, const QVariant& /*v*/)
+bool Score::setProperty(Pid id, const QVariant& /*v*/)
       {
       switch (id) {
             default:
@@ -4163,7 +4163,7 @@ bool Score::setProperty(P_ID id, const QVariant& /*v*/)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Score::propertyDefault(P_ID id) const
+QVariant Score::propertyDefault(Pid id) const
       {
       switch (id) {
             default:

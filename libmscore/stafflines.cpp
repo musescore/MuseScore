@@ -97,7 +97,7 @@ void StaffLines::layout()
             setColor(MScore::defaultColor);
             }
       qreal w = measure()->width();
-      lw      = score()->styleS(StyleIdx::staffLineWidth).val() * _spatium;
+      lw      = score()->styleS(Sid::staffLineWidth).val() * _spatium;
       qreal x1 = pos().x();
       qreal x2 = x1 + w;
       qreal y  = pos().y();

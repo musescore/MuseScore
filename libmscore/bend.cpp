@@ -190,7 +190,7 @@ void Bend::draw(QPainter* painter) const
       qreal y  = -_spatium * .8;
       qreal x2, y2;
 
-      qreal aw = score()->styleP(StyleIdx::bendArrowWidth);
+      qreal aw = score()->styleP(Sid::bendArrowWidth);
       QPolygonF arrowUp;
       arrowUp << QPointF(0, 0) << QPointF(aw * .5, aw) << QPointF(-aw *.5, aw);
       QPolygonF arrowDown;
@@ -278,7 +278,7 @@ void Bend::write(XmlWriter& xml) const
                .arg(v.time).arg(v.pitch).arg(v.vibrato));
             }
       writeStyledProperties(xml);
-      writeProperty(xml, P_ID::PLAY);
+      writeProperty(xml, Pid::PLAY);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -313,22 +313,22 @@ void Bend::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Bend::getProperty(P_ID id) const
+QVariant Bend::getProperty(Pid id) const
       {
       switch (id) {
-            case P_ID::FONT_FACE:
+            case Pid::FONT_FACE:
                   return _fontFace;
-            case P_ID::FONT_SIZE:
+            case Pid::FONT_SIZE:
                   return _fontSize;
-            case P_ID::FONT_BOLD:
+            case Pid::FONT_BOLD:
                   return _fontBold;
-            case P_ID::FONT_ITALIC:
+            case Pid::FONT_ITALIC:
                   return _fontItalic;
-            case P_ID::FONT_UNDERLINE:
+            case Pid::FONT_UNDERLINE:
                   return _fontUnderline;
-            case P_ID::PLAY:
+            case Pid::PLAY:
                   return bool(playBend());
-            case P_ID::LINE_WIDTH:
+            case Pid::LINE_WIDTH:
                   return _lineWidth;
             default:
                   return Element::getProperty(id);
@@ -339,28 +339,28 @@ QVariant Bend::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Bend::setProperty(P_ID id, const QVariant& v)
+bool Bend::setProperty(Pid id, const QVariant& v)
       {
       switch (id) {
-            case P_ID::FONT_FACE:
+            case Pid::FONT_FACE:
                   _fontFace = v.toString();
                   break;
-            case P_ID::FONT_SIZE:
+            case Pid::FONT_SIZE:
                   _fontSize = v.toReal();
                   break;
-            case P_ID::FONT_BOLD:
+            case Pid::FONT_BOLD:
                   _fontBold = v.toBool();
                   break;
-            case P_ID::FONT_ITALIC:
+            case Pid::FONT_ITALIC:
                   _fontItalic = v.toBool();
                   break;
-            case P_ID::FONT_UNDERLINE:
+            case Pid::FONT_UNDERLINE:
                   _fontUnderline = v.toBool();
                   break;
-            case P_ID::PLAY:
+            case Pid::PLAY:
                  setPlayBend(v.toBool());
                  break;
-            case P_ID::LINE_WIDTH:
+            case Pid::LINE_WIDTH:
                   _lineWidth = v.value<Spatium>();
                   break;
             default:
@@ -374,10 +374,10 @@ bool Bend::setProperty(P_ID id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Bend::propertyDefault(P_ID id) const
+QVariant Bend::propertyDefault(Pid id) const
       {
       switch (id) {
-            case P_ID::PLAY:
+            case Pid::PLAY:
                   return true;
             default:
                   return Element::propertyDefault(id);

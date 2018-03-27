@@ -627,13 +627,13 @@ class ChangeStyle : public UndoCommand {
 
 class ChangeStyleVal : public UndoCommand {
       Score* score;
-      StyleIdx idx;
+      Sid idx;
       QVariant value;
 
       void flip(EditData*) override;
 
    public:
-      ChangeStyleVal(Score* s, StyleIdx i, const QVariant& v) : score(s), idx(i), value(v) {}
+      ChangeStyleVal(Score* s, Sid i, const QVariant& v) : score(s), idx(i), value(v) {}
       UNDO_NAME("ChangeStyleVal")
       };
 
@@ -934,16 +934,16 @@ class ChangeStaffUserDist : public UndoCommand {
 
 class ChangeProperty : public UndoCommand {
       ScoreElement* element;
-      P_ID id;
+      Pid id;
       QVariant property;
       PropertyFlags flags;
 
       void flip(EditData*) override;
 
    public:
-      ChangeProperty(ScoreElement* e, P_ID i, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
+      ChangeProperty(ScoreElement* e, Pid i, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
          : element(e), id(i), property(v), flags(ps) {}
-      P_ID getId() const  { return id; }
+      Pid getId() const  { return id; }
       UNDO_NAME("ChangeProperty")
       };
 

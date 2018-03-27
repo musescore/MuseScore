@@ -157,7 +157,7 @@ void XmlWriter::netag(const char* s)
 //   tag
 //---------------------------------------------------------
 
-void XmlWriter::tag(P_ID id, QVariant data, QVariant defaultData)
+void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
       {
       if (data == defaultData)
             return;

@@ -205,10 +205,10 @@ bool StaffText::getAeolusStop(int group, int idx) const
 void StaffText::layout()
       {
       Staff* s = staff();
-      qreal y = placeAbove() ? styleP(StyleIdx::staffTextPosAbove) : styleP(StyleIdx::staffTextPosBelow) + (s ? s->height() : 0.0);
+      qreal y = placeAbove() ? styleP(Sid::staffTextPosAbove) : styleP(Sid::staffTextPosBelow) + (s ? s->height() : 0.0);
       setPos(QPointF(0.0, y));
       TextBase::layout1();
-      autoplaceSegmentElement(styleP(StyleIdx::staffTextMinDistance));
+      autoplaceSegmentElement(styleP(Sid::staffTextMinDistance));
       }
 
 //---------------------------------------------------------
@@ -229,12 +229,12 @@ Segment* StaffText::segment() const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant StaffText::propertyDefault(P_ID id) const
+QVariant StaffText::propertyDefault(Pid id) const
       {
       switch(id) {
-            case P_ID::SUB_STYLE:
+            case Pid::SUB_STYLE:
                   return int(SubStyleId::STAFF);
-            case P_ID::PLACEMENT:
+            case Pid::PLACEMENT:
                   return int(Placement::ABOVE);
             default:
                   return TextBase::propertyDefault(id);

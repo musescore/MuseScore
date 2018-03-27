@@ -35,7 +35,7 @@ class Fingering final : public TextBase {
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
 
-      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual QVariant propertyDefault(Pid id) const override;
 
       virtual QString accessibleInfo() const override;
       };

@@ -459,10 +459,10 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                               }
                         qreal dotWidth = segment->symWidth(SymId::augmentationDot);
                         // first dot
-                        dotAdjust = styleP(StyleIdx::dotNoteDistance) + dotWidth;
+                        dotAdjust = styleP(Sid::dotNoteDistance) + dotWidth;
                         // additional dots
                         if (dots > 1)
-                              dotAdjust += styleP(StyleIdx::dotDotDistance) * (dots - 1);
+                              dotAdjust += styleP(Sid::dotDotDistance) * (dots - 1);
                         dotAdjust *= mag;
                         // only by amount over threshold
                         dotAdjust = qMax(dotAdjust - dotAdjustThreshold, 0.0);
@@ -830,7 +830,7 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
             if (stem)
                   overlapMirror = stem->lineWidth();
             else if (chord->durationType().headType() == NoteHead::Type::HEAD_WHOLE)
-                  overlapMirror = styleP(StyleIdx::stemWidth) * chord->mag();
+                  overlapMirror = styleP(Sid::stemWidth) * chord->mag();
             else
                   overlapMirror = 0.0;
 
@@ -929,8 +929,8 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
             return;
 
       QVector<int> umi;
-      qreal pd  = styleP(StyleIdx::accidentalDistance);
-      qreal pnd = styleP(StyleIdx::accidentalNoteDistance);
+      qreal pd  = styleP(Sid::accidentalDistance);
+      qreal pnd = styleP(Sid::accidentalNoteDistance);
       qreal colOffset = 0.0;
 
       if (nAcc >= 2 && aclist[nAcc-1].line - aclist[0].line >= 7) {
@@ -1224,9 +1224,9 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
             Staff::HideMode hideMode = staff->hideWhenEmpty();
 
             if (hideMode == Staff::HideMode::ALWAYS
-                || (styleB(StyleIdx::hideEmptyStaves)
+                || (styleB(Sid::hideEmptyStaves)
                     && (staves > 1)
-                    && !(isFirstSystem && styleB(StyleIdx::dontHideStavesInFirstSystem))
+                    && !(isFirstSystem && styleB(Sid::dontHideStavesInFirstSystem))
                     && hideMode != Staff::HideMode::NEVER)) {
                   bool hideStaff = true;
                   for (MeasureBase* m : system->measures()) {
@@ -1396,7 +1396,7 @@ void Score::connectTies(bool silent)
 static void checkDivider(bool left, System* s, qreal yOffset)
       {
       SystemDivider* divider = left ? s->systemDividerLeft() : s->systemDividerRight();
-      if (s->score()->styleB(left ? StyleIdx::dividerLeft : StyleIdx::dividerRight)) {
+      if (s->score()->styleB(left ? Sid::dividerLeft : Sid::dividerRight)) {
             if (!divider) {
                   divider = new SystemDivider(s->score());
                   divider->setDividerType(left ? SystemDivider::Type::LEFT : SystemDivider::Type::RIGHT);
@@ -1406,13 +1406,13 @@ static void checkDivider(bool left, System* s, qreal yOffset)
             divider->layout();
             divider->rypos() = divider->height() * .5 + yOffset;
             if (left) {
-                  divider->rypos() += s->score()->styleD(StyleIdx::dividerLeftY) * SPATIUM20;
-                  divider->rxpos() =  s->score()->styleD(StyleIdx::dividerLeftX) * SPATIUM20;
+                  divider->rypos() += s->score()->styleD(Sid::dividerLeftY) * SPATIUM20;
+                  divider->rxpos() =  s->score()->styleD(Sid::dividerLeftX) * SPATIUM20;
                   }
             else {
-                  divider->rypos() += s->score()->styleD(StyleIdx::dividerRightY) * SPATIUM20;
-                  divider->rxpos() =  s->score()->styleD(StyleIdx::pagePrintableWidth) * DPI - divider->width();
-                  divider->rxpos() += s->score()->styleD(StyleIdx::dividerRightX) * SPATIUM20;
+                  divider->rypos() += s->score()->styleD(Sid::dividerRightY) * SPATIUM20;
+                  divider->rxpos() =  s->score()->styleD(Sid::pagePrintableWidth) * DPI - divider->width();
+                  divider->rxpos() += s->score()->styleD(Sid::dividerRightX) * SPATIUM20;
                   }
             divider->adjustReadPos();
             }
@@ -1474,7 +1474,7 @@ static void layoutPage(Page* page, qreal restHeight)
 
       std::sort(sList.begin(), sList.end(), [](System* a, System* b) { return a->distance() < b->distance(); });
 
-      qreal maxDist = score->styleP(StyleIdx::maxSystemDistance);
+      qreal maxDist = score->styleP(Sid::maxSystemDistance);
 
       qreal dist = sList[0]->distance();
       for (int i = 1; i < sList.size(); ++i) {
@@ -1736,8 +1736,8 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                               BarLine* bd = toBarLine(ds->element(staffIdx * VOICES));
                               BarLine* bs = toBarLine(e);
                               if (bd->barLineType() != bs->barLineType()) {
-                                    bd->undoChangeProperty(P_ID::BARLINE_TYPE, QVariant::fromValue(bs->barLineType()));
-                                    bd->undoChangeProperty(P_ID::GENERATED, true);
+                                    bd->undoChangeProperty(Pid::BARLINE_TYPE, QVariant::fromValue(bs->barLineType()));
+                                    bd->undoChangeProperty(Pid::GENERATED, true);
                                     }
                               }
                         }
@@ -2099,7 +2099,7 @@ int LayoutContext::adjustMeasureNo(MeasureBase* m)
 
 void Score::createBeams(Measure* measure)
       {
-      bool crossMeasure = styleB(StyleIdx::crossMeasureValues);
+      bool crossMeasure = styleB(Sid::crossMeasureValues);
 
       for (int track = 0; track < ntracks(); ++track) {
             Staff* stf = staff(track2staff(track));
@@ -2270,7 +2270,7 @@ static void layoutDrumsetChord(Chord* c, const Drumset* drumset, StaffType* st, 
                   // qDebug("unmapped drum note %d", pitch);
                   }
             else if (!note->fixed()) {
-                  note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
+                  note->undoChangeProperty(Pid::HEAD_GROUP, int(drumset->noteHead(pitch)));
                   int line = drumset->line(pitch);
                   note->setLine(line);
 
@@ -2308,7 +2308,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                   return;
             }
       else if (lc.curMeasure->isMeasure()) {
-            if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
+            if (score()->styleB(Sid::createMultiMeasureRests)) {
                   Measure* m = toMeasure(lc.curMeasure);
                   Measure* nm = m;
                   Measure* lm = nm;
@@ -2329,7 +2329,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                               break;
                         nm = toMeasure(mb);
                         }
-                  if (n >= styleI(StyleIdx::minEmptyMeasures)) {
+                  if (n >= styleI(Sid::minEmptyMeasures)) {
                         createMMRest(m, lm, len);
                         lc.curMeasure  = m->mmRest();
                         lc.nextMeasure = _showVBox ?  lm->next() : lm->nextMeasure();
@@ -2394,13 +2394,13 @@ void Score::getNextMeasure(LayoutContext& lc)
                                     continue;
                               qreal m = staff->mag(segment.tick());
                               if (cr->small())
-                                    m *= score()->styleD(StyleIdx::smallNoteMag);
+                                    m *= score()->styleD(Sid::smallNoteMag);
 
                               if (cr->isChord()) {
                                     Chord* chord = toChord(cr);
                                     chord->cmdUpdateNotes(&as);
                                     for (Chord* c : chord->graceNotes()) {
-                                          c->setMag(m * score()->styleD(StyleIdx::graceNoteMag));
+                                          c->setMag(m * score()->styleD(Sid::graceNoteMag));
                                           c->computeUp();
                                           if (c->stemDirection() != Direction::AUTO)
                                                 c->setUp(c->stemDirection() == Direction::UP);
@@ -2624,7 +2624,7 @@ static qreal findLyricsMaxY(Segment& s, int staffIdx)
                               sh.add(l->bbox().translated(l->pos() + s.pos()));
                               }
                         }
-                  qreal lyricsMinTopDistance = s.score()->styleP(StyleIdx::lyricsMinTopDistance);
+                  qreal lyricsMinTopDistance = s.score()->styleP(Sid::lyricsMinTopDistance);
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeBelow()) {
                               // qreal y = s.staffShape(staffIdx).minVerticalDistance(sh);
@@ -2665,7 +2665,7 @@ static qreal findLyricsMinY(Segment& s, int staffIdx)
                               sh.add(l->bbox().translated(l->pos() + s.pos()));
                               }
                         }
-                  qreal lyricsMinTopDistance = s.score()->styleP(StyleIdx::lyricsMinTopDistance);
+                  qreal lyricsMinTopDistance = s.score()->styleP(Sid::lyricsMinTopDistance);
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeAbove()) {
                               qreal y = sh.minVerticalDistance(s.measure()->staffShape(staffIdx));
@@ -2698,7 +2698,7 @@ static void applyLyricsMax(Segment& s, int staffIdx, qreal yMax)
             ChordRest* cr = s.cr(staffIdx * VOICES + voice);
             if (cr && !cr->lyrics().empty()) {
                   Shape sh;
-                  qreal lyricsMinBottomDistance = s.score()->styleP(StyleIdx::lyricsMinBottomDistance);
+                  qreal lyricsMinBottomDistance = s.score()->styleP(Sid::lyricsMinBottomDistance);
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeBelow()) {
                               l->rUserYoffset() = yMax;
@@ -2724,7 +2724,7 @@ static void applyLyricsMax(Measure* m, int staffIdx, qreal yMax)
 static void applyLyricsMin(ChordRest* cr, int staffIdx, qreal yMin)
       {
       Shape sh;
-      qreal lyricsMinBottomDistance = cr->score()->styleP(StyleIdx::lyricsMinBottomDistance);
+      qreal lyricsMinBottomDistance = cr->score()->styleP(Sid::lyricsMinBottomDistance);
       for (Lyrics* l : cr->lyrics()) {
             if (l->autoplace() && l->placeAbove()) {
                   l->rUserYoffset() = yMin;
@@ -2777,7 +2777,7 @@ void Score::layoutLyrics(System* system)
       //    vertical align lyrics
       //
 
-      VerticalAlignRange ar = VerticalAlignRange(styleI(StyleIdx::autoplaceVerticalAlignRange));
+      VerticalAlignRange ar = VerticalAlignRange(styleI(Sid::autoplaceVerticalAlignRange));
 
       switch (ar) {
             case VerticalAlignRange::MEASURE:
@@ -2904,7 +2904,7 @@ System* Score::collectSystem(LayoutContext& lc)
       qreal minWidth    = 0;
       bool firstMeasure = true;
       bool createHeader = false;
-      qreal systemWidth = styleD(StyleIdx::pagePrintableWidth) * DPI;
+      qreal systemWidth = styleD(Sid::pagePrintableWidth) * DPI;
       system->setWidth(systemWidth);
 
       while (lc.curMeasure) {    // collect measure for system
@@ -3099,7 +3099,7 @@ System* Score::collectSystem(LayoutContext& lc)
             //
             // dont stretch last system row, if accumulated minWidth is <= lastSystemFillLimit
             //
-            if (lc.curMeasure == 0 && ((minWidth / systemWidth) <= styleD(StyleIdx::lastSystemFillLimit))) {
+            if (lc.curMeasure == 0 && ((minWidth / systemWidth) <= styleD(Sid::lastSystemFillLimit))) {
                   if (minWidth > rest)
                         rest = rest * .5;
                   else
@@ -3429,7 +3429,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
 void LayoutContext::collectPage()
       {
-      const qreal slb = score->styleP(StyleIdx::staffLowerBorder);
+      const qreal slb = score->styleP(Sid::staffLowerBorder);
       bool breakPages = score->layoutMode() != LayoutMode::SYSTEM;
       qreal y         = prevSystem ? prevSystem->y() + prevSystem->height() : page->tm();
       qreal ey        = page->height() - page->bm();
@@ -3449,7 +3449,7 @@ void LayoutContext::collectPage()
                   if (curSystem->vbox())
                         distance = 0.0;
                   else {
-                        distance = score->styleP(StyleIdx::staffUpperBorder);
+                        distance = score->styleP(Sid::staffUpperBorder);
                         for (MeasureBase* mb : curSystem->measures()) {
                               if (mb->isMeasure()) {
                                     Measure* m = toMeasure(mb);
@@ -3524,7 +3524,7 @@ void LayoutContext::collectPage()
                                     nextMeasure        = ms->measures()->first();
                                     ms->getNextMeasure(*this);
                                     nextSystem         = ms->collectSystem(*this);
-                                    ms->setScoreFont(ScoreFont::fontFactory(ms->styleSt(StyleIdx::MusicalSymbolFont)));
+                                    ms->setScoreFont(ScoreFont::fontFactory(ms->styleSt(Sid::MusicalSymbolFont)));
                                     ms->setNoteHeadWidth(ms->scoreFont()->width(SymId::noteheadBlack, ms->spatium() / SPATIUM20));
                                     }
                               else {
@@ -3651,7 +3651,7 @@ void Score::doLayoutRange(int stick, int etick)
 
       LayoutContext lc;
       lc.endTick     = etick;
-      _scoreFont     = ScoreFont::fontFactory(style().value(StyleIdx::MusicalSymbolFont).toString());
+      _scoreFont     = ScoreFont::fontFactory(style().value(Sid::MusicalSymbolFont).toString());
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
 
       if (cmdState().layoutFlags & LayoutFlag::FIX_PITCH_VELO)

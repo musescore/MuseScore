@@ -34,7 +34,7 @@ RehearsalMark::RehearsalMark(Score* s)
 
 void RehearsalMark::layout()
       {
-      qreal y = placeAbove() ? styleP(StyleIdx::rehearsalMarkPosAbove) : styleP(StyleIdx::rehearsalMarkPosBelow) + staff()->height();
+      qreal y = placeAbove() ? styleP(Sid::rehearsalMarkPosAbove) : styleP(Sid::rehearsalMarkPosBelow) + staff()->height();
       setPos(QPointF(0.0, y));
       TextBase::layout1();
       Segment* s = segment();
@@ -53,7 +53,7 @@ void RehearsalMark::layout()
                         rxpos() += qMin(leftX, barlineX) + width();
                         }
                   }
-            autoplaceSegmentElement(styleP(StyleIdx::rehearsalMarkMinDistance));
+            autoplaceSegmentElement(styleP(Sid::rehearsalMarkMinDistance));
             }
       }
 
@@ -61,13 +61,13 @@ void RehearsalMark::layout()
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant RehearsalMark::propertyDefault(P_ID id) const
+QVariant RehearsalMark::propertyDefault(Pid id) const
       {
       switch (id) {
-            case P_ID::SUB_STYLE:
+            case Pid::SUB_STYLE:
                   return int(SubStyleId::REHEARSAL_MARK);
-            case P_ID::PLACEMENT:
-                  return score()->styleV(StyleIdx::rehearsalMarkPlacement);
+            case Pid::PLACEMENT:
+                  return score()->styleV(Sid::rehearsalMarkPlacement);
             default:
                   return TextBase::propertyDefault(id);
             }

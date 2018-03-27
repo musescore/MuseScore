@@ -117,8 +117,8 @@ void Rest::draw(QPainter* painter) const
             int dots = durationType().dots();
             if (dots) {
                   qreal y = dotline * _spatium * .5;
-                  qreal dnd = score()->styleP(StyleIdx::dotNoteDistance) * mag();
-                  qreal ddd = score()->styleP(StyleIdx::dotDotDistance) * mag();
+                  qreal dnd = score()->styleP(Sid::dotNoteDistance) * mag();
+                  qreal ddd = score()->styleP(Sid::dotDotDistance) * mag();
                   for (int i = 1; i <= dots; ++i) {
                         qreal x = symWidth(_sym) + dnd + ddd * (i - 1);
                         drawSymbol(SymId::augmentationDot, painter, QPointF(x, y));
@@ -346,7 +346,7 @@ void Rest::layout()
             e->layout();
       qreal _spatium = spatium();
       if (measure() && measure()->isMMRest()) {
-            _mmWidth = score()->styleP(StyleIdx::minMMRestWidth) * mag();
+            _mmWidth = score()->styleP(Sid::minMMRestWidth) * mag();
             // setbbox(QRectF(0.0, -_spatium, _mmWidth, 2.0 * _spatium));
             return;
             }
@@ -621,7 +621,7 @@ void Rest::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 void Rest::reset()
       {
-      undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::NONE));
+      undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::NONE));
       ChordRest::reset();
       }
 
@@ -633,7 +633,7 @@ qreal Rest::mag() const
       {
       qreal m = staff()->mag(tick());
       if (small())
-            m *= score()->styleD(StyleIdx::smallNoteMag);
+            m *= score()->styleD(Sid::smallNoteMag);
       return m;
       }
 
@@ -710,16 +710,16 @@ bool Rest::accent()
 
 void Rest::setAccent(bool flag)
       {
-      undoChangeProperty(P_ID::SMALL, flag);
+      undoChangeProperty(Pid::SMALL, flag);
       if (voice() % 2 == 0) {
             if (flag) {
                   qreal yOffset = -(bbox().bottom());
                   if (durationType() >= TDuration::DurationType::V_HALF)
                         yOffset -= staff()->spatium(tick()) * 0.5;
-                  undoChangeProperty(P_ID::USER_OFF, QPointF(0.0, yOffset));
+                  undoChangeProperty(Pid::USER_OFF, QPointF(0.0, yOffset));
                   }
             else {
-                  undoChangeProperty(P_ID::USER_OFF, QPointF());
+                  undoChangeProperty(Pid::USER_OFF, QPointF());
                   }
             }
       }
@@ -831,10 +831,10 @@ void Rest::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Rest::getProperty(P_ID propertyId) const
+QVariant Rest::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::GAP:
+            case Pid::GAP:
                   return _gap;
             default:
                   return ChordRest::getProperty(propertyId);
@@ -845,10 +845,10 @@ QVariant Rest::getProperty(P_ID propertyId) const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Rest::propertyDefault(P_ID propertyId) const
+QVariant Rest::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::GAP:
+            case Pid::GAP:
                   return false;
             default:
                   return ChordRest::propertyDefault(propertyId);
@@ -859,15 +859,15 @@ QVariant Rest::propertyDefault(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Rest::setProperty(P_ID propertyId, const QVariant& v)
+bool Rest::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::GAP:
+            case Pid::GAP:
                   _gap = v.toBool();
                   score()->setLayout(tick());
                   break;
 
-            case P_ID::USER_OFF:
+            case Pid::USER_OFF:
                   score()->addRefresh(canvasBoundingRect());
                   setUserOff(v.toPointF());
                   layout();

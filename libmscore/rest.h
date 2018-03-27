@@ -87,9 +87,9 @@ class Rest : public ChordRest {
       virtual qreal stemPosX() const;
       virtual QPointF stemPosBeam() const;
 
-      virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual QVariant propertyDefault(P_ID) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant& v) override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual QVariant propertyDefault(Pid) const override;
 
       virtual Element* nextElement() override;
       virtual Element* prevElement() override;

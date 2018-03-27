@@ -105,9 +105,9 @@ class Dynamic final : public TextBase {
       void setDynRange(Range t) { _dynRange = t;    }
       void undoSetDynRange(Range t);
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool     setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool     setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid id) const override;
 
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;

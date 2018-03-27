@@ -406,7 +406,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
                               if (!cr)
                                     continue;
                               if (cr->isRest() && cr->durationType() == TDuration::DurationType::V_MEASURE)
-                                    cr->undoChangeProperty(P_ID::DURATION, QVariant::fromValue(ns));
+                                    cr->undoChangeProperty(Pid::DURATION, QVariant::fromValue(ns));
                               else
                                     return false;
                               }
@@ -557,7 +557,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
                               for (Measure* m = fm1; m; m = m->nextMeasure()) {
                                     ChordRest* cr = m->findChordRest(m->tick(), staffIdx * VOICES);
                                     if (cr && cr->isRest() && cr->durationType() == TDuration::DurationType::V_MEASURE)
-                                          cr->undoChangeProperty(P_ID::DURATION, QVariant::fromValue(fr));
+                                          cr->undoChangeProperty(Pid::DURATION, QVariant::fromValue(fr));
                                     else
                                           break;
                                     }
@@ -573,7 +573,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
                               if (m->first(SegmentType::TimeSig))
                                     break;
                               Fraction fr(ns);
-                              m->undoChangeProperty(P_ID::TIMESIG_NOMINAL, QVariant::fromValue(fr));
+                              m->undoChangeProperty(Pid::TIMESIG_NOMINAL, QVariant::fromValue(fr));
                               }
                         return false;
                         }
@@ -717,18 +717,18 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   Measure* fm = score->tick2measure(tick);
                   for (Measure* m = fm; m != lm; m = m->nextMeasure()) {
                         bool changeActual = m->len() == m->timesig();
-                        m->undoChangeProperty(P_ID::TIMESIG_NOMINAL, QVariant::fromValue(ns));
+                        m->undoChangeProperty(Pid::TIMESIG_NOMINAL, QVariant::fromValue(ns));
                         if (changeActual)
-                              m->undoChangeProperty(P_ID::TIMESIG_ACTUAL,  QVariant::fromValue(ns));
+                              m->undoChangeProperty(Pid::TIMESIG_ACTUAL,  QVariant::fromValue(ns));
                         }
                   }
             int n = nstaves();
             for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
                   TimeSig* nsig = toTimeSig(seg->element(staffIdx * VOICES));
-                  nsig->undoChangeProperty(P_ID::TIMESIG_TYPE,       int(ts->timeSigType()));
-                  nsig->undoChangeProperty(P_ID::NUMERATOR_STRING,   ts->numeratorString());
-                  nsig->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
-                  nsig->undoChangeProperty(P_ID::GROUPS,             QVariant::fromValue(ts->groups()));
+                  nsig->undoChangeProperty(Pid::TIMESIG_TYPE,       int(ts->timeSigType()));
+                  nsig->undoChangeProperty(Pid::NUMERATOR_STRING,   ts->numeratorString());
+                  nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
+                  nsig->undoChangeProperty(Pid::GROUPS,             QVariant::fromValue(ts->groups()));
                   }
             }
       else {
@@ -740,7 +740,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             //
             if (fm == score->firstMeasure() && fm->nextMeasure() && (fm->len() != fm->timesig())) {
                   // handle upbeat
-                  fm->undoChangeProperty(P_ID::TIMESIG_NOMINAL, QVariant::fromValue(ns));
+                  fm->undoChangeProperty(Pid::TIMESIG_NOMINAL, QVariant::fromValue(ns));
                   Measure* m = fm->nextMeasure();
                   Segment* s = m->findSegment(SegmentType::TimeSig, m->tick());
                   fm = s ? 0 : fm->nextMeasure();
@@ -802,16 +802,16 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               undoAddElement(nsig);
                               }
                         else {
-                              nsig->undoChangeProperty(P_ID::SHOW_COURTESY, ts->showCourtesySig());
-                              nsig->undoChangeProperty(P_ID::TIMESIG_TYPE, int(ts->timeSigType()));
-                              nsig->undoChangeProperty(P_ID::TIMESIG, QVariant::fromValue(ts->sig()));
-                              nsig->undoChangeProperty(P_ID::NUMERATOR_STRING, ts->numeratorString());
-                              nsig->undoChangeProperty(P_ID::DENOMINATOR_STRING, ts->denominatorString());
+                              nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
+                              nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
+                              nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
+                              nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
+                              nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
 
                               // HACK do it twice to accommodate undo
-                              nsig->undoChangeProperty(P_ID::TIMESIG_TYPE, int(ts->timeSigType()));
-                              nsig->undoChangeProperty(P_ID::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
-                              nsig->undoChangeProperty(P_ID::GROUPS,  QVariant::fromValue(ts->groups()));
+                              nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
+                              nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
+                              nsig->undoChangeProperty(Pid::GROUPS,  QVariant::fromValue(ts->groups()));
                               nsig->setSelected(false);
                               nsig->setDropTarget(0);       // DEBUG
                               }
@@ -878,7 +878,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
                               // fix measure rest duration
                               ChordRest* cr = nm->findChordRest(nm->tick(), i * VOICES);
                               if (cr && cr->isRest() && cr->durationType() == TDuration::DurationType::V_MEASURE)
-                                    cr->undoChangeProperty(P_ID::DURATION, QVariant::fromValue(nm->stretchedLen(staff(i))));
+                                    cr->undoChangeProperty(Pid::DURATION, QVariant::fromValue(nm->stretchedLen(staff(i))));
                                     //cr->setDuration(nm->stretchedLen(staff(i)));
                               }
                         }
@@ -919,7 +919,7 @@ Note* Score::addMidiPitch(int pitch, bool addFlag)
 
       // if transposing, interpret MIDI pitch as representing desired written pitch
       // set pitch based on corresponding sounding pitch
-      if (!styleB(StyleIdx::concertPitch))
+      if (!styleB(Sid::concertPitch))
             nval.pitch += st->part()->instrument(inputState().tick())->transpose().chromatic;
       // let addPitch calculate tpc values from pitch
       //Key key   = st->key(inputState().tick());
@@ -1080,7 +1080,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                                     }
                               if (_is.slur()) {
                                     // extend slur
-                                    _is.slur()->undoChangeProperty(P_ID::SPANNER_TICKS, nchord->tick() - _is.slur()->tick());
+                                    _is.slur()->undoChangeProperty(Pid::SPANNER_TICKS, nchord->tick() - _is.slur()->tick());
                                     for (ScoreElement* e : _is.slur()->linkList()) {
                                           Slur* slur = toSlur(e);
                                           for (ScoreElement* ee : nchord->linkList()) {
@@ -1298,7 +1298,7 @@ void Score::cmdSetBeamMode(Beam::Mode mode)
       {
       for (ChordRest* cr : getSelectedChordRests()) {
             if (cr)
-                  cr->undoChangeProperty(P_ID::BEAM_MODE, int(mode));
+                  cr->undoChangeProperty(Pid::BEAM_MODE, int(mode));
             }
       }
 
@@ -1342,7 +1342,7 @@ void Score::cmdFlip()
                   else {
                         flipOnce(chord, [chord](){
                               Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
-                              chord->undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
+                              chord->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
                               });
                         }
                   }
@@ -1351,14 +1351,14 @@ void Score::cmdFlip()
                   auto beam = toBeam(e);
                   flipOnce(beam, [beam](){
                         Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
-                        beam->undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
+                        beam->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
                         });
                   }
             else if (e->isSlurTieSegment()) {
                   auto slurTieSegment = toSlurTieSegment(e)->slurTie();
                   flipOnce(slurTieSegment, [slurTieSegment](){
                         Direction dir = slurTieSegment->up() ? Direction::DOWN : Direction::UP;
-                        slurTieSegment->undoChangeProperty(P_ID::SLUR_DIRECTION, QVariant::fromValue<Direction>(dir));
+                        slurTieSegment->undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(dir));
                         });
                   }
             else if (e->isHairpinSegment()) {
@@ -1370,7 +1370,7 @@ void Score::cmdFlip()
                         case HairpinType::CRESC_LINE:        st = HairpinType::DECRESC_LINE; break;
                         case HairpinType::DECRESC_LINE:      st = HairpinType::CRESC_LINE; break;
                         }
-                  h->undoChangeProperty(P_ID::HAIRPIN_TYPE, int(st));
+                  h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(st));
                   }
             else if (e->isArticulation()) {
                   auto articulation = toArticulation(e);
@@ -1393,20 +1393,20 @@ void Score::cmdFlip()
                                     articAnchor = ArticulationAnchor::TOP_STAFF;
                                     break;
                               }
-                        articulation->undoChangeProperty(P_ID::ARTICULATION_ANCHOR, int(articAnchor));
+                        articulation->undoChangeProperty(Pid::ARTICULATION_ANCHOR, int(articAnchor));
                         });
                   }
             else if (e->isTuplet()) {
                   auto tuplet = toTuplet(e);
                   flipOnce(tuplet, [tuplet](){
                         Direction dir = tuplet->isUp() ? Direction::DOWN : Direction::UP;
-                        tuplet->undoChangeProperty(P_ID::DIRECTION, QVariant::fromValue<Direction>(dir));
+                        tuplet->undoChangeProperty(Pid::DIRECTION, QVariant::fromValue<Direction>(dir));
                         });
                   }
             else if (e->isNoteDot()) {
                   Note* note = toNote(e->parent());
                   Direction d = note->dotIsUp() ? Direction::DOWN : Direction::UP;
-                  note->undoChangeProperty(P_ID::DOT_POSITION, QVariant::fromValue<Direction>(d));
+                  note->undoChangeProperty(Pid::DOT_POSITION, QVariant::fromValue<Direction>(d));
                   }
             else if (e->isTempoText()
                || e->isStaffText()
@@ -1418,10 +1418,10 @@ void Score::cmdFlip()
                || e->isFermata()
                || e->isTrillSegment()) {
                   // getProperty() delegates call from spannerSegment to Spanner:
-                  Placement p = Placement(e->getProperty(P_ID::PLACEMENT).toInt());
+                  Placement p = Placement(e->getProperty(Pid::PLACEMENT).toInt());
                   p = (p == Placement::ABOVE) ? Placement::BELOW : Placement::ABOVE;
-                  e->undoChangeProperty(P_ID::AUTOPLACE, true);
-                  e->undoChangeProperty(P_ID::PLACEMENT, int(p));
+                  e->undoChangeProperty(Pid::AUTOPLACE, true);
+                  e->undoChangeProperty(Pid::PLACEMENT, int(p));
                   }
             else if (e->isLyrics()) {
                   toLyrics(e)->chordRest()->flipLyrics(toLyrics(e));
@@ -1548,11 +1548,11 @@ void Score::deleteItem(Element* el)
                   if (rest->tuplet() && rest->tuplet()->elements().empty())
                         undoRemoveElement(rest->tuplet());
                   if (el->voice() != 0) {
-                        rest->undoChangeProperty(P_ID::GAP, true);
+                        rest->undoChangeProperty(Pid::GAP, true);
                         for (ScoreElement* r : el->linkList()) {
                               Rest* rest = toRest(r);
                               if (rest->track() % VOICES)
-                                    rest->undoChangeProperty(P_ID::GAP, true);
+                                    rest->undoChangeProperty(Pid::GAP, true);
                               }
 
                         // delete them really when only gap rests are in the actual measure.
@@ -1658,9 +1658,9 @@ void Score::deleteItem(Element* el)
                         }
                   else {
                         if (bl->barLineType() == BarLineType::START_REPEAT)
-                              m->undoChangeProperty(P_ID::REPEAT_START, false);
+                              m->undoChangeProperty(Pid::REPEAT_START, false);
                         else if (bl->barLineType() == BarLineType::END_REPEAT)
-                              m->undoChangeProperty(P_ID::REPEAT_END, false);
+                              m->undoChangeProperty(Pid::REPEAT_END, false);
                         else
                               undoRemoveElement(el);
                         }
@@ -1775,7 +1775,7 @@ void Score::deleteItem(Element* el)
 
             case ElementType::TEXT:
                   if (el->parent()->isTBox())
-                        el->undoChangeProperty(P_ID::TEXT, QString());
+                        el->undoChangeProperty(Pid::TEXT, QString());
                   else
                         undoRemoveElement(el);
                   break;
@@ -1842,7 +1842,7 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
                         lastDeletedKeySig = toKeySig(sts->element(0));
                         if (lastDeletedKeySig) {
                               lastDeletedKeySigEvent = lastDeletedKeySig->keySigEvent();
-                              if (!styleB(StyleIdx::concertPitch) && !lastDeletedKeySigEvent.isAtonal() && !lastDeletedKeySigEvent.custom()) {
+                              if (!styleB(Sid::concertPitch) && !lastDeletedKeySigEvent.isAtonal() && !lastDeletedKeySigEvent.custom()) {
                                     // convert to concert pitch
                                     transposeKeySigEvent = true;
                                     Interval v = staff(0)->part()->instrument(m->tick())->transpose();
@@ -2185,7 +2185,7 @@ void Score::cmdFullMeasureRest()
       else if (selection().isRange()) {
             s1 = selection().startSegment();
             s2 = selection().endSegment();
-            if (styleB(StyleIdx::createMultiMeasureRests)) {
+            if (styleB(Sid::createMultiMeasureRests)) {
                    // use underlying measures
                    if (s1 && s1->measure()->isMMRest())
                          s1 = tick2segment(stick1);
@@ -2258,7 +2258,7 @@ void Score::cmdFullMeasureRest()
 
       // selected range is probably empty now and possibly subsumed by an mmrest
       // so updating selection requires forcing mmrests to be updated first
-//TODO-ws      if (styleB(StyleIdx::createMultiMeasureRests))
+//TODO-ws      if (styleB(Sid::createMultiMeasureRests))
 //            createMMRests();
       s1 = tick2segmentMM(stick1);
       s2 = tick2segmentMM(stick2, true);
@@ -2409,7 +2409,7 @@ void Score::colorItem(Element* element)
 
       foreach(Element* e, selection().elements()) {
             if (e->color() != c) {
-                  e->undoChangeProperty(P_ID::COLOR, c);
+                  e->undoChangeProperty(Pid::COLOR, c);
                   e->setGenerated(false);
                   addRefresh(e->abbox());
                   if (e->isBarLine()) {
@@ -2789,7 +2789,7 @@ void Score::checkSpanner(int startTick, int endTick)
                         }
                   else {
                         if (s->tick2() > lastTick)
-                              sl2.append(s);    //s->undoChangeProperty(P_ID::SPANNER_TICKS, lastTick - s->tick());
+                              sl2.append(s);    //s->undoChangeProperty(Pid::SPANNER_TICKS, lastTick - s->tick());
                         else
                               s->computeEndElement();
                         }
@@ -2798,7 +2798,7 @@ void Score::checkSpanner(int startTick, int endTick)
       for (auto s : sl)       // actually remove scheduled spanners
             undo(new RemoveElement(s));
       for (auto s : sl2) {    // shorten spanners that extended past end of score
-            undo(new ChangeProperty(s, P_ID::SPANNER_TICKS, lastTick - s->tick()));
+            undo(new ChangeProperty(s, Pid::SPANNER_TICKS, lastTick - s->tick()));
             s->computeEndElement();
             }
       }
@@ -2942,7 +2942,7 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
       undoInsertTime(tick, -len);
       undo(new InsertTime(this, tick, -len));
       for (Segment* s = startSegment->next(); s; s = s->next())
-            s->undoChangeProperty(P_ID::TICK, s->rtick() - len);
+            s->undoChangeProperty(Pid::TICK, s->rtick() - len);
       undo(new ChangeMeasureLen(m, m->len() - f));
       }
 
@@ -3217,7 +3217,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link
 //    return true if an property was actually changed
 //---------------------------------------------------------
 
-bool Score::undoPropertyChanged(Element* e, P_ID t, const QVariant& st)
+bool Score::undoPropertyChanged(Element* e, Pid t, const QVariant& st)
       {
       bool changed = false;
 
@@ -3248,7 +3248,7 @@ bool Score::undoPropertyChanged(Element* e, P_ID t, const QVariant& st)
       return changed;
       }
 
-void Score::undoPropertyChanged(ScoreElement* e, P_ID t, const QVariant& st)
+void Score::undoPropertyChanged(ScoreElement* e, Pid t, const QVariant& st)
       {
       if (e->getProperty(t) != st)
             undoStack()->push1(new ChangeProperty(e, t, st));
@@ -3258,7 +3258,7 @@ void Score::undoPropertyChanged(ScoreElement* e, P_ID t, const QVariant& st)
 //   undoChangeStyleVal
 //---------------------------------------------------------
 
-void Score::undoChangeStyleVal(StyleIdx idx, const QVariant& v)
+void Score::undoChangeStyleVal(Sid idx, const QVariant& v)
       {
       undo(new ChangeStyleVal(this, idx, v));
       }
@@ -3334,13 +3334,13 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
 
             Interval interval = staff->part()->instrument(tick)->transpose();
             KeySigEvent nkey  = key;
-            bool concertPitch = score->styleB(StyleIdx::concertPitch);
+            bool concertPitch = score->styleB(Sid::concertPitch);
             if (interval.chromatic && !concertPitch && !nkey.custom() && !nkey.isAtonal()) {
                   interval.flip();
                   nkey.setKey(transposeKey(key.key(), interval));
                   }
             if (ks) {
-                  ks->undoChangeProperty(P_ID::GENERATED, false);
+                  ks->undoChangeProperty(Pid::GENERATED, false);
                   undo(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
                   }
             else {
@@ -3561,8 +3561,8 @@ void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
                   ncr = toChordRest(findLinkedVoiceElement(cr, staff));
             if (!ncr)
                   continue;
-            ncr->undoChangeProperty(P_ID::DURATION_TYPE, QVariant::fromValue(d));
-            ncr->undoChangeProperty(P_ID::DURATION, QVariant::fromValue(d.fraction()));
+            ncr->undoChangeProperty(Pid::DURATION_TYPE, QVariant::fromValue(d));
+            ncr->undoChangeProperty(Pid::DURATION, QVariant::fromValue(d.fraction()));
             }
       }
 
@@ -3741,7 +3741,7 @@ void Score::undoInsertStaff(Staff* staff, int ridx, bool createRests)
 
 void Score::undoChangeInvisible(Element* e, bool v)
       {
-      e->undoChangeProperty(P_ID::VISIBLE, v);
+      e->undoChangeProperty(Pid::VISIBLE, v);
       e->setGenerated(false);
       }
 
@@ -4085,11 +4085,11 @@ void Score::undoAddElement(Element* element)
                         // transpose harmony if necessary
                         if (element->isHarmony() && ne != element) {
                               Harmony* h = toHarmony(ne);
-                              if (score->styleB(StyleIdx::concertPitch) != element->score()->styleB(StyleIdx::concertPitch)) {
+                              if (score->styleB(Sid::concertPitch) != element->score()->styleB(Sid::concertPitch)) {
                                     Part* partDest = h->part();
                                     Interval interval = partDest->instrument(tick)->transpose();
                                     if (!interval.isZero()) {
-                                          if (!score->styleB(StyleIdx::concertPitch))
+                                          if (!score->styleB(Sid::concertPitch))
                                                 interval.flip();
                                           int rootTpc = transposeTpc(h->rootTpc(), interval, true);
                                           int baseTpc = transposeTpc(h->baseTpc(), interval, true);
@@ -4416,12 +4416,12 @@ void Score::undoRemoveElement(Element* element)
 
 void Score::undoChangeTuning(Note* n, qreal v)
       {
-      n->undoChangeProperty(P_ID::TUNING, v);
+      n->undoChangeProperty(Pid::TUNING, v);
       }
 
 void Score::undoChangeUserMirror(Note* n, MScore::DirectionH d)
       {
-      n->undoChangeProperty(P_ID::MIRROR_HEAD, int(d));
+      n->undoChangeProperty(Pid::MIRROR_HEAD, int(d));
       }
 
 //---------------------------------------------------------
@@ -4431,7 +4431,7 @@ void Score::undoChangeUserMirror(Note* n, MScore::DirectionH d)
 
 void Score::undoChangeTpc(Note* note, int v)
       {
-      note->undoChangeProperty(P_ID::TPC1, v);
+      note->undoChangeProperty(Pid::TPC1, v);
       }
 
 //---------------------------------------------------------
@@ -4505,7 +4505,7 @@ void Score::undoInsertTime(int tick, int len)
                         //  +----spanner--------+
                         //    +---add---
                         //
-                        s->undoChangeProperty(P_ID::SPANNER_TICKS, s->ticks() + len);
+                        s->undoChangeProperty(Pid::SPANNER_TICKS, s->ticks() + len);
                         }
                   else if (tick <= s->tick()) {
                         //
@@ -4515,7 +4515,7 @@ void Score::undoInsertTime(int tick, int len)
                         // and
                         //            +----spanner--------
                         //  +---add---+
-                        s->undoChangeProperty(P_ID::SPANNER_TICK, s->tick() + len);
+                        s->undoChangeProperty(Pid::SPANNER_TICK, s->tick() + len);
                         }
                   }
             else {
@@ -4528,7 +4528,7 @@ void Score::undoInsertTime(int tick, int len)
                         int t = s->tick() + len;
                         if (t < 0)
                               t = 0;
-                        s->undoChangeProperty(P_ID::SPANNER_TICK, t);
+                        s->undoChangeProperty(Pid::SPANNER_TICK, t);
                         }
                   else if ((s->tick() < tick) && (s->tick2() > tick2)) {
                         //
@@ -4538,7 +4538,7 @@ void Score::undoInsertTime(int tick, int len)
                         //
                         int t2 = s->tick2() + len;
                         if (t2 > s->tick()) {
-                              s->undoChangeProperty(P_ID::SPANNER_TICKS, s->ticks() + len);
+                              s->undoChangeProperty(Pid::SPANNER_TICKS, s->ticks() + len);
                               }
                         }
 //                  else if (s->tick() >= tick && s->tick2() < tick2) {
@@ -4563,8 +4563,8 @@ void Score::undoInsertTime(int tick, int len)
                               undoRemoveElement(s);
                               }
                         else {
-                              s->undoChangeProperty(P_ID::SPANNER_TICK, s->tick() - d1);
-                              s->undoChangeProperty(P_ID::SPANNER_TICKS, len);
+                              s->undoChangeProperty(Pid::SPANNER_TICK, s->tick() - d1);
+                              s->undoChangeProperty(Pid::SPANNER_TICKS, len);
                               }
                         }
                   }

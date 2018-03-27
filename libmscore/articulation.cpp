@@ -54,7 +54,7 @@ Articulation::Articulation(SymId id, Score* s)
 void Articulation::setSymId(SymId id)
       {
       _symId  = id;
-      _anchor = ArticulationAnchor(propertyDefault(P_ID::ARTICULATION_ANCHOR).toInt());
+      _anchor = ArticulationAnchor(propertyDefault(Pid::ARTICULATION_ANCHOR).toInt());
       }
 
 //---------------------------------------------------------
@@ -108,10 +108,10 @@ bool Articulation::readProperties(XmlReader& e)
             }
       else if (tag == "anchor")
             _anchor = ArticulationAnchor(e.readInt());
-      else if (readProperty(tag, e, P_ID::DIRECTION))
+      else if (readProperty(tag, e, Pid::DIRECTION))
             ;
       else if ( tag == "ornamentStyle")
-            setProperty(P_ID::ORNAMENT_STYLE, Ms::getProperty(P_ID::ORNAMENT_STYLE, e));
+            setProperty(Pid::ORNAMENT_STYLE, Ms::getProperty(Pid::ORNAMENT_STYLE, e));
       else if ( tag == "play")
             setPlayArticulation(e.readBool());
       else if (tag == "offset") {
@@ -138,12 +138,12 @@ void Articulation::write(XmlWriter& xml) const
       xml.stag("Articulation");
       if (!_channelName.isEmpty())
             xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
-      writeProperty(xml, P_ID::DIRECTION);
+      writeProperty(xml, Pid::DIRECTION);
       xml.tag("subtype", Sym::id2name(_symId));
-      writeProperty(xml, P_ID::PLAY);
-      writeProperty(xml, P_ID::ORNAMENT_STYLE);
+      writeProperty(xml, Pid::PLAY);
+      writeProperty(xml, Pid::ORNAMENT_STYLE);
       Element::writeProperties(xml);
-      writeProperty(xml, P_ID::ARTICULATION_ANCHOR);
+      writeProperty(xml, Pid::ARTICULATION_ANCHOR);
       xml.etag();
       }
 
@@ -244,10 +244,10 @@ void Articulation::reset()
       {
 #if 0
       if (_direction != Direction::AUTO)
-            undoChangeProperty(P_ID::DIRECTION, Direction::AUTO);
+            undoChangeProperty(Pid::DIRECTION, Direction::AUTO);
       ArticulationAnchor a = score()->style()->articulationAnchor(int(articulationType()));
       if (_anchor != a)
-            undoChangeProperty(P_ID::ARTICULATION_ANCHOR, int(a));
+            undoChangeProperty(Pid::ARTICULATION_ANCHOR, int(a));
 #endif
       Element::reset();
       }
@@ -265,13 +265,13 @@ QLineF Articulation::dragAnchor() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Articulation::getProperty(P_ID propertyId) const
+QVariant Articulation::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::DIRECTION:           return QVariant::fromValue<Direction>(direction());
-            case P_ID::ARTICULATION_ANCHOR: return int(anchor());
-            case P_ID::ORNAMENT_STYLE:      return int(ornamentStyle());
-            case P_ID::PLAY:                return bool(playArticulation());
+            case Pid::DIRECTION:           return QVariant::fromValue<Direction>(direction());
+            case Pid::ARTICULATION_ANCHOR: return int(anchor());
+            case Pid::ORNAMENT_STYLE:      return int(ornamentStyle());
+            case Pid::PLAY:                return bool(playArticulation());
             default:
                   return Element::getProperty(propertyId);
             }
@@ -281,19 +281,19 @@ QVariant Articulation::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
+bool Articulation::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::DIRECTION:
+            case Pid::DIRECTION:
                   setDirection(v.value<Direction>());
                   break;
-            case P_ID::ARTICULATION_ANCHOR:
+            case Pid::ARTICULATION_ANCHOR:
                   setAnchor(ArticulationAnchor(v.toInt()));
                   break;
-            case P_ID::PLAY:
+            case Pid::PLAY:
                   setPlayArticulation(v.toBool());
                   break;
-            case P_ID::ORNAMENT_STYLE:
+            case Pid::ORNAMENT_STYLE:
                   setOrnamentStyle(MScore::OrnamentStyle(v.toInt()));
                   break;
             default:
@@ -307,13 +307,13 @@ bool Articulation::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Articulation::propertyDefault(P_ID propertyId) const
+QVariant Articulation::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::DIRECTION:
+            case Pid::DIRECTION:
                   return QVariant::fromValue<Direction>(Direction::AUTO);
 
-            case P_ID::ARTICULATION_ANCHOR:
+            case Pid::ARTICULATION_ANCHOR:
                   switch (_symId) {
                         case SymId::articAccentAbove:
                         case SymId::articAccentBelow:
@@ -375,11 +375,11 @@ QVariant Articulation::propertyDefault(P_ID propertyId) const
                               return int(ArticulationAnchor::TOP_STAFF);
                         }
 
-            case P_ID::ORNAMENT_STYLE:
+            case Pid::ORNAMENT_STYLE:
                   //return int(score()->style()->ornamentStyle(_ornamentStyle));
                   return int(MScore::OrnamentStyle::DEFAULT);
 
-            case P_ID::PLAY:
+            case Pid::PLAY:
                   return true;
 
             default:
@@ -436,27 +436,27 @@ const char* Articulation::articulationName() const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-StyleIdx Articulation::getPropertyStyle(P_ID id) const
+Sid Articulation::getPropertyStyle(Pid id) const
       {
       switch (id) {
             default:
                   break;
             }
-      return StyleIdx::NOSTYLE;
+      return Sid::NOSTYLE;
       }
 
 //---------------------------------------------------------
 //   resetProperty
 //---------------------------------------------------------
 
-void Articulation::resetProperty(P_ID id)
+void Articulation::resetProperty(Pid id)
       {
       switch (id) {
-            case P_ID::DIRECTION:
-            case P_ID::ORNAMENT_STYLE:
+            case Pid::DIRECTION:
+            case Pid::ORNAMENT_STYLE:
                   setProperty(id, propertyDefault(id));
                   return;
-            case P_ID::ARTICULATION_ANCHOR:
+            case Pid::ARTICULATION_ANCHOR:
                   setProperty(id, propertyDefault(id));
                   return;
 
@@ -472,7 +472,7 @@ void Articulation::resetProperty(P_ID id)
 
 qreal Articulation::mag() const
       {
-      return parent() ? parent()->mag() * score()->styleD(StyleIdx::articulationMag): 1.0;
+      return parent() ? parent()->mag() * score()->styleD(Sid::articulationMag): 1.0;
       }
 
 bool Articulation::isTenuto() const
@@ -528,7 +528,7 @@ void Articulation::doAutoplace()
 
       setUserOff(QPointF());
 
-      qreal minDistance = score()->styleP(StyleIdx::dynamicsMinDistance);
+      qreal minDistance = score()->styleP(Sid::dynamicsMinDistance);
       const Shape& s1   = s->measure()->staffShape(staffIdx());
       Shape s2          = shape().translated(s->pos() + pos());
 

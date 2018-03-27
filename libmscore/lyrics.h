@@ -125,9 +125,9 @@ class Lyrics final : public TextBase {
       using TextBase::paste;
       virtual void paste(EditData&) override;
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid id) const override;
       };
 
 //---------------------------------------------------------
@@ -150,7 +150,7 @@ class LyricsLine final : public SLine {
 
       Lyrics* lyrics() const                          { return toLyrics(parent());   }
       Lyrics* nextLyrics() const                      { return _nextLyrics;         }
-      virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
+      virtual bool setProperty(Pid propertyId, const QVariant& v) override;
       };
 
 //---------------------------------------------------------

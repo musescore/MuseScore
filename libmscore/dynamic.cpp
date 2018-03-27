@@ -116,8 +116,8 @@ void Dynamic::write(XmlWriter& xml) const
             return;
       xml.stag("Dynamic");
       xml.tag("subtype", dynamicTypeName());
-      writeProperty(xml, P_ID::VELOCITY);
-      writeProperty(xml, P_ID::DYNAMIC_RANGE);
+      writeProperty(xml, Pid::VELOCITY);
+      writeProperty(xml, Pid::DYNAMIC_RANGE);
       TextBase::writeProperties(xml, dynamicType() == Type::OTHER);
       xml.etag();
       }
@@ -154,10 +154,10 @@ void Dynamic::layout()
 
       qreal y;
       if (placeAbove())
-            y = score()->styleP(StyleIdx::dynamicsPosAbove);
+            y = score()->styleP(Sid::dynamicsPosAbove);
       else {
             qreal sh = staff() ? staff()->height() : 0;
-            y = score()->styleP(StyleIdx::dynamicsPosBelow) + sh + lineSpacing();
+            y = score()->styleP(Sid::dynamicsPosBelow) + sh + lineSpacing();
             }
       setPos(QPointF(0.0, y));
       TextBase::layout1();
@@ -201,7 +201,7 @@ void Dynamic::doAutoplace()
 
       setUserOff(QPointF());
 
-      qreal minDistance = score()->styleP(StyleIdx::dynamicsMinDistance);
+      qreal minDistance = score()->styleP(Sid::dynamicsMinDistance);
       const Shape& s1   = s->measure()->staffShape(staffIdx());
       Shape s2          = shape().translated(s->pos() + pos());
 
@@ -315,19 +315,19 @@ QRectF Dynamic::drag(EditData& ed)
 
 void Dynamic::undoSetDynRange(Range v)
       {
-      undoChangeProperty(P_ID::DYNAMIC_RANGE, int(v));
+      undoChangeProperty(Pid::DYNAMIC_RANGE, int(v));
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Dynamic::getProperty(P_ID propertyId) const
+QVariant Dynamic::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::DYNAMIC_RANGE:     return int(_dynRange);
-            case P_ID::VELOCITY:          return velocity();
-            case P_ID::SUBTYPE:           return int(_dynamicType);
+            case Pid::DYNAMIC_RANGE:     return int(_dynRange);
+            case Pid::VELOCITY:          return velocity();
+            case Pid::SUBTYPE:           return int(_dynamicType);
             default:
                   return TextBase::getProperty(propertyId);
             }
@@ -337,16 +337,16 @@ QVariant Dynamic::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
+bool Dynamic::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::DYNAMIC_RANGE:
+            case Pid::DYNAMIC_RANGE:
                   _dynRange = Range(v.toInt());
                   break;
-            case P_ID::VELOCITY:
+            case Pid::VELOCITY:
                   _velocity = v.toInt();
                   break;
-            case P_ID::SUBTYPE:
+            case Pid::SUBTYPE:
                   _dynamicType = Type(v.toInt());
                   break;
             default:
@@ -362,14 +362,14 @@ bool Dynamic::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Dynamic::propertyDefault(P_ID id) const
+QVariant Dynamic::propertyDefault(Pid id) const
       {
       switch(id) {
-            case P_ID::SUB_STYLE:
+            case Pid::SUB_STYLE:
                   return int(SubStyleId::DYNAMICS);
-            case P_ID::DYNAMIC_RANGE:
+            case Pid::DYNAMIC_RANGE:
                   return int(Range::PART);
-            case P_ID::VELOCITY:
+            case Pid::VELOCITY:
                   return -1;
             default:
                   return TextBase::propertyDefault(id);

@@ -2312,7 +2312,7 @@ void MusicXMLParserPass2::measureStyle(Measure* measure)
                   int multipleRest = _e.readElementText().toInt();
                   if (multipleRest > 1) {
                         _multiMeasureRestCount = multipleRest;
-                        _score->style().set(StyleIdx::createMultiMeasureRests, true);
+                        _score->style().set(Sid::createMultiMeasureRests, true);
                         measure->setBreakMultiMeasureRest(true);
                         }
                   else

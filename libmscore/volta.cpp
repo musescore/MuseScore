@@ -30,7 +30,7 @@ void VoltaSegment::layout()
       TextLineBaseSegment::layout();
       if (!parent())
             return;
-      rypos() = score()->styleP(StyleIdx::voltaY) * mag();
+      rypos() = score()->styleP(Sid::voltaY) * mag();
       if (autoplace()) {
             qreal minDistance = spatium() * .7;
             Shape s1 = shape().translated(pos());
@@ -46,17 +46,17 @@ void VoltaSegment::layout()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant VoltaSegment::getProperty(P_ID id) const
+QVariant VoltaSegment::getProperty(Pid id) const
       {
       switch (id) {
-            case P_ID::BEGIN_HOOK_TYPE:
-            case P_ID::END_HOOK_TYPE:
-            case P_ID::VOLTA_ENDING:
+            case Pid::BEGIN_HOOK_TYPE:
+            case Pid::END_HOOK_TYPE:
+            case Pid::VOLTA_ENDING:
                   return spanner()->getProperty(id);
             default:
                   break;
             }
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp) {
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
             if (spp->propertyIdx == id)
                   return spanner()->getProperty(id);
             }
@@ -67,17 +67,17 @@ QVariant VoltaSegment::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool VoltaSegment::setProperty(P_ID id, const QVariant& v)
+bool VoltaSegment::setProperty(Pid id, const QVariant& v)
       {
       switch (id) {
-            case P_ID::BEGIN_HOOK_TYPE:
-            case P_ID::END_HOOK_TYPE:
-            case P_ID::VOLTA_ENDING:
+            case Pid::BEGIN_HOOK_TYPE:
+            case Pid::END_HOOK_TYPE:
+            case Pid::VOLTA_ENDING:
                   return spanner()->setProperty(id, v);
             default:
                   break;
             }
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp) {
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
             if (spp->propertyIdx == id)
                   return spanner()->setProperty(id, v);
             }
@@ -88,17 +88,17 @@ bool VoltaSegment::setProperty(P_ID id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant VoltaSegment::propertyDefault(P_ID id) const
+QVariant VoltaSegment::propertyDefault(Pid id) const
       {
       switch (id) {
-            case P_ID::BEGIN_HOOK_TYPE:
-            case P_ID::END_HOOK_TYPE:
-            case P_ID::VOLTA_ENDING:
+            case Pid::BEGIN_HOOK_TYPE:
+            case Pid::END_HOOK_TYPE:
+            case Pid::VOLTA_ENDING:
                   return volta()->propertyDefault(id);
             default:
                   break;
             }
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != StyleIdx::NOSTYLE; ++spp) {
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
             if (spp->propertyIdx == id)
                   return spanner()->propertyDefault(id);
             }
@@ -117,14 +117,14 @@ Volta::Volta(Score* s)
       setBeginTextPlace(PlaceText::BELOW);
       setContinueTextPlace(PlaceText::BELOW);
       setLineVisible(true);
-      resetProperty(P_ID::BEGIN_TEXT);
-      resetProperty(P_ID::CONTINUE_TEXT);
-      resetProperty(P_ID::END_TEXT);
-      resetProperty(P_ID::BEGIN_TEXT_PLACE);
-      resetProperty(P_ID::CONTINUE_TEXT_PLACE);
-      resetProperty(P_ID::END_TEXT_PLACE);
-      resetProperty(P_ID::BEGIN_HOOK_TYPE);
-      resetProperty(P_ID::END_HOOK_TYPE);
+      resetProperty(Pid::BEGIN_TEXT);
+      resetProperty(Pid::CONTINUE_TEXT);
+      resetProperty(Pid::END_TEXT);
+      resetProperty(Pid::BEGIN_TEXT_PLACE);
+      resetProperty(Pid::CONTINUE_TEXT_PLACE);
+      resetProperty(Pid::END_TEXT_PLACE);
+      resetProperty(Pid::BEGIN_HOOK_TYPE);
+      resetProperty(Pid::END_HOOK_TYPE);
 
       setAnchor(Anchor::MEASURE);
       }
@@ -228,10 +228,10 @@ int Volta::lastEnding() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Volta::getProperty(P_ID propertyId) const
+QVariant Volta::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::VOLTA_ENDING:
+            case Pid::VOLTA_ENDING:
                   return QVariant::fromValue(endings());
             default:
                   break;
@@ -243,10 +243,10 @@ QVariant Volta::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Volta::setProperty(P_ID propertyId, const QVariant& val)
+bool Volta::setProperty(Pid propertyId, const QVariant& val)
       {
       switch (propertyId) {
-            case P_ID::VOLTA_ENDING:
+            case Pid::VOLTA_ENDING:
                   setEndings(val.value<QList<int>>());
                   break;
             default:
@@ -262,26 +262,26 @@ bool Volta::setProperty(P_ID propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Volta::propertyDefault(P_ID propertyId) const
+QVariant Volta::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::VOLTA_ENDING:
+            case Pid::VOLTA_ENDING:
                   return QVariant::fromValue(QList<int>());
-            case P_ID::ANCHOR:
+            case Pid::ANCHOR:
                   return int(Anchor::MEASURE);
-            case P_ID::BEGIN_HOOK_TYPE:
+            case Pid::BEGIN_HOOK_TYPE:
                   return int(HookType::HOOK_90);
-            case P_ID::END_HOOK_TYPE:
+            case Pid::END_HOOK_TYPE:
                   return int(HookType::NONE);
-            case P_ID::BEGIN_TEXT:
-            case P_ID::CONTINUE_TEXT:
-            case P_ID::END_TEXT:
+            case Pid::BEGIN_TEXT:
+            case Pid::CONTINUE_TEXT:
+            case Pid::END_TEXT:
                   return "";
-            case P_ID::LINE_VISIBLE:
+            case Pid::LINE_VISIBLE:
                   return true;
-            case P_ID::BEGIN_TEXT_PLACE:
-            case P_ID::CONTINUE_TEXT_PLACE:
-            case P_ID::END_TEXT_PLACE:
+            case Pid::BEGIN_TEXT_PLACE:
+            case Pid::CONTINUE_TEXT_PLACE:
+            case Pid::END_TEXT_PLACE:
                   return int(PlaceText::ABOVE);
 
             default:

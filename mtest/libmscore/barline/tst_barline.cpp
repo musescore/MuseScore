@@ -184,9 +184,9 @@ void TestBarline::barline03()
       Score* score = readScore(DIR + "barline03.mscx");
       QVERIFY(score);
       score->startCmd();
-      score->undo(new ChangeProperty(score->staff(0), P_ID::STAFF_BARLINE_SPAN, 1));
-      score->undo(new ChangeProperty(score->staff(0), P_ID::STAFF_BARLINE_SPAN_FROM, 2));
-      score->undo(new ChangeProperty(score->staff(0), P_ID::STAFF_BARLINE_SPAN_TO, -2));
+      score->undo(new ChangeProperty(score->staff(0), Pid::STAFF_BARLINE_SPAN, 1));
+      score->undo(new ChangeProperty(score->staff(0), Pid::STAFF_BARLINE_SPAN_FROM, 2));
+      score->undo(new ChangeProperty(score->staff(0), Pid::STAFF_BARLINE_SPAN_TO, -2));
       score->endCmd();
 
       // 'go' to 5th measure
@@ -237,9 +237,9 @@ void TestBarline::barline04()
       BarLine* bar = static_cast<BarLine*>(seg->element(0));
       QVERIFY2(bar != nullptr, "No start-repeat barline in measure 5.");
 
-      bar->undoChangeProperty(P_ID::BARLINE_SPAN, 2);
-      bar->undoChangeProperty(P_ID::BARLINE_SPAN_FROM, 2);
-      bar->undoChangeProperty(P_ID::BARLINE_SPAN_TO, 6);
+      bar->undoChangeProperty(Pid::BARLINE_SPAN, 2);
+      bar->undoChangeProperty(Pid::BARLINE_SPAN_FROM, 2);
+      bar->undoChangeProperty(Pid::BARLINE_SPAN_TO, 6);
       score->endCmd();
 
       QVERIFY2(bar->spanStaff() && bar->spanFrom() == 2 && bar->spanTo() == 6,

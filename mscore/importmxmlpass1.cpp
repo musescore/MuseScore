@@ -542,7 +542,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
              pf->width(), pf->height(), pf->oddTopMargin(), score->spatium(), DPMM, DPI);
       */
       // page width, height and odd top margin in tenths
-      const double ph  = score->styleD(StyleIdx::pageHeight) * 10 * DPI / score->spatium();
+      const double ph  = score->styleD(Sid::pageHeight) * 10 * DPI / score->spatium();
       const int pw1 = pageWidth / 3;
       const int pw2 = pageWidth * 2 / 3;
       const int ph2 = pageHeight / 2;
@@ -1265,12 +1265,12 @@ static void updateStyles(Score* score,
             }
 #endif
       if (lyricFamily != "") {
-            score->style().set(StyleIdx::lyricsOddFontFace, lyricFamily);
-            score->style().set(StyleIdx::lyricsEvenFontFace, lyricFamily);
+            score->style().set(Sid::lyricsOddFontFace, lyricFamily);
+            score->style().set(Sid::lyricsEvenFontFace, lyricFamily);
             }
       if (fLyricSize > 0.001) {
-            score->style().set(StyleIdx::lyricsOddFontSize, fLyricSize);
-            score->style().set(StyleIdx::lyricsEvenFontSize, fLyricSize);
+            score->style().set(Sid::lyricsOddFontSize, fLyricSize);
+            score->style().set(Sid::lyricsEvenFontSize, fLyricSize);
             }
       }
 
@@ -1326,7 +1326,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                         else if (_e.name() == "system-distance") {
                               Spatium val(_e.readElementText().toDouble() / 10.0);
                               if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
-                                    _score->style().set(StyleIdx::minSystemDistance, val);
+                                    _score->style().set(Sid::minSystemDistance, val);
                                     //qDebug("system distance %f", val.val());
                                     }
                               }
@@ -1341,7 +1341,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                         if (_e.name() == "staff-distance") {
                               Spatium val(_e.readElementText().toDouble() / 10.0);
                               if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT))
-                                    _score->style().set(StyleIdx::staffDistance, val);
+                                    _score->style().set(Sid::staffDistance, val);
                               }
                         else
                               skipLogCurrElem();

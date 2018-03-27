@@ -33,9 +33,9 @@ class BracketItem final : public ScoreElement {
       BracketItem(Score* s) : ScoreElement(s) {}
       BracketItem(Score* s, BracketType a, int b) : ScoreElement(s), _bracketType(a), _bracketSpan(b) { }
       virtual ElementType type() const override   { return ElementType::BRACKET_ITEM; }
-      virtual QVariant getProperty(P_ID) const override;
-      virtual bool setProperty(P_ID, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual QVariant getProperty(Pid) const override;
+      virtual bool setProperty(Pid, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid id) const override;
 
       bool selected() const              { return _selected;    }
       int bracketSpan() const            { return _bracketSpan; }

@@ -367,7 +367,7 @@ void RepeatList::preProcessVoltas()
                         // start by assuming the end of the spanner == the end of this volta (closed volta)
                         Measure* voltaEndMeasure = volta->endMeasure();
                         // open volta may end past its spanner
-                        if (volta->getProperty(P_ID::END_HOOK_TYPE).value<HookType>() == HookType::NONE) {
+                        if (volta->getProperty(Pid::END_HOOK_TYPE).value<HookType>() == HookType::NONE) {
                               Measure* nextMeasureToInspect = voltaEndMeasure->nextMeasure();
                               // open volta ends:
                               while (  (nextMeasureToInspect)     // end of score

@@ -347,7 +347,7 @@ qreal Chord::noteHeadWidth() const
       {
       qreal nhw = score()->noteHeadWidth();
       if (_noteType != NoteType::NORMAL)
-            nhw *= score()->styleD(StyleIdx::graceNoteMag);
+            nhw *= score()->styleD(Sid::graceNoteMag);
       return nhw * mag();
       }
 
@@ -655,7 +655,7 @@ void Chord::addLedgerLines()
 
       LedgerLineData lld;
       // the extra length of a ledger line with respect to notehead (half of it on each side)
-      qreal extraLen = score()->styleP(StyleIdx::ledgerLineLength) * _mag * 0.5;
+      qreal extraLen = score()->styleP(Sid::ledgerLineLength) * _mag * 0.5;
       qreal hw = _notes[0]->headWidth();
       qreal minX, maxX;                         // note extrema in raster units
       int   minLine, maxLine;
@@ -956,7 +956,7 @@ void Chord::write(XmlWriter& xml) const
             _hook->write(xml);
       if (_stemSlash && _stemSlash->isUserModified())
             _stemSlash->write(xml);
-      writeProperty(xml, P_ID::STEM_DIRECTION);
+      writeProperty(xml, Pid::STEM_DIRECTION);
       for (Note* n : _notes)
             n->write(xml);
       if (_arpeggio)
@@ -1047,7 +1047,7 @@ bool Chord::readProperties(XmlReader& e)
             ss->read(e);
             add(ss);
             }
-      else if (readProperty(tag, e, P_ID::STEM_DIRECTION))
+      else if (readProperty(tag, e, Pid::STEM_DIRECTION))
             ;
       else if (tag == "noStem")
             _noStem = e.readInt();
@@ -1252,12 +1252,12 @@ qreal Chord::defaultStemLength()
             --ul;
             --dl;
             }
-      bool shortenStem = score()->styleB(StyleIdx::shortenStem);
+      bool shortenStem = score()->styleB(Sid::shortenStem);
       if (hookIdx >= 2 || _tremolo)
             shortenStem = false;
 
-      Spatium progression = score()->styleS(StyleIdx::shortStemProgression);
-      qreal shortest      = score()->styleS(StyleIdx::shortestStem).val();
+      Spatium progression = score()->styleS(Sid::shortStemProgression);
+      qreal shortest      = score()->styleS(Sid::shortestStem).val();
 
       qreal normalStemLen = small() ? 2.5 : 3.5;
       switch (hookIdx) {
@@ -1280,7 +1280,7 @@ qreal Chord::defaultStemLength()
             // grace notes stems are not subject to normal
             // stem rules
             stemLen =  qAbs(ul - dl) * .5;
-            stemLen += normalStemLen * score()->styleD(StyleIdx::graceNoteMag);
+            stemLen += normalStemLen * score()->styleD(Sid::graceNoteMag);
             if (up())
                   stemLen *= -1;
             }
@@ -1580,7 +1580,7 @@ void Chord::layout2()
 
       QVector<Chord*> gna = graceNotesAfter();
       if (!gna.empty()) {
-            qreal minNoteDist = score()->styleP(StyleIdx::minNoteDistance) * _mag * score()->styleD(StyleIdx::graceNoteMag);
+            qreal minNoteDist = score()->styleP(Sid::minNoteDistance) * _mag * score()->styleD(Sid::graceNoteMag);
             // position grace notes from the rightmost to the leftmost
             // get segment (of whatever type) at the end of this chord; if none, get measure last segment
             Segment* s = measure()->tick2segment(segment()->tick() + actualTicks(), SegmentType::All);
@@ -1594,7 +1594,7 @@ void Chord::layout2()
             // final distance: if near to another chord, leave minNoteDist at right of last grace
             // else leave note-to-barline distance;
             xOff -= (s != nullptr && s->segmentType() != SegmentType::ChordRest)
-                  ? score()->styleP(StyleIdx::noteBarDistance) * _mag
+                  ? score()->styleP(Sid::noteBarDistance) * _mag
                   : minNoteDist;
             // scan grace note list from the end
             int n = gna.size();
@@ -1627,7 +1627,7 @@ static void updatePercussionNotes(Chord* c, const Drumset* drumset)
                         qWarning("unmapped drum note %d", pitch);
                         }
                   else if (!note->fixed()) {
-                        note->undoChangeProperty(P_ID::HEAD_GROUP, int(drumset->noteHead(pitch)));
+                        note->undoChangeProperty(Pid::HEAD_GROUP, int(drumset->noteHead(pitch)));
                         note->setLine(drumset->line(pitch));
                         }
                   }
@@ -1754,12 +1754,12 @@ void Chord::layoutPitched()
 
       qreal _spatium         = spatium();
       qreal _mag             = staff() ? staff()->mag(tick()) : 1.0;    // palette elements do not have a staff
-      qreal dotNoteDistance  = score()->styleP(StyleIdx::dotNoteDistance)  * _mag;
-      qreal minNoteDistance  = score()->styleP(StyleIdx::minNoteDistance)  * _mag;
-      qreal minTieLength     = score()->styleP(StyleIdx::MinTieLength)     * _mag;
-      qreal ledgerLineLength = score()->styleP(StyleIdx::ledgerLineLength) * _mag;
+      qreal dotNoteDistance  = score()->styleP(Sid::dotNoteDistance)  * _mag;
+      qreal minNoteDistance  = score()->styleP(Sid::minNoteDistance)  * _mag;
+      qreal minTieLength     = score()->styleP(Sid::MinTieLength)     * _mag;
+      qreal ledgerLineLength = score()->styleP(Sid::ledgerLineLength) * _mag;
 
-      qreal graceMag         = score()->styleD(StyleIdx::graceNoteMag);
+      qreal graceMag         = score()->styleD(Sid::graceNoteMag);
       qreal chordX           = (_noteType == NoteType::NORMAL) ? ipos().x() : 0.0;
 
       while (_ledgerLines) {
@@ -1814,7 +1814,7 @@ void Chord::layoutPitched()
                   qreal x = accidental->pos().x() + note->pos().x() + chordX;
                   // distance from accidental to note already taken into account
                   // but here perhaps we create more padding in *front* of accidental?
-                  x -= score()->styleP(StyleIdx::accidentalDistance) * _mag;
+                  x -= score()->styleP(Sid::accidentalDistance) * _mag;
                   lll = qMax(lll, -x);
                   }
 
@@ -1876,7 +1876,7 @@ void Chord::layoutPitched()
       addLedgerLines();
 
       if (_arpeggio) {
-            qreal arpeggioDistance = score()->styleP(StyleIdx::ArpeggioNoteDistance) * _mag;
+            qreal arpeggioDistance = score()->styleP(Sid::ArpeggioNoteDistance) * _mag;
             _arpeggio->layout();    // only for width() !
             lll        += _arpeggio->width() + arpeggioDistance + chordX;
             qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
@@ -1899,7 +1899,7 @@ void Chord::layoutPitched()
 
       if (dots()) {
             qreal x = dotPosX() + dotNoteDistance
-               + (dots()-1) * score()->styleP(StyleIdx::dotDotDistance) * _mag;
+               + (dots()-1) * score()->styleP(Sid::dotDotDistance) * _mag;
             x += symWidth(SymId::augmentationDot);
             rrr = qMax(rrr, x);
             }
@@ -2089,9 +2089,9 @@ void Chord::layoutPitched()
 void Chord::layoutTablature()
       {
       qreal _spatium          = spatium();
-      qreal dotNoteDistance   = score()->styleP(StyleIdx::dotNoteDistance);
-      qreal minNoteDistance   = score()->styleP(StyleIdx::minNoteDistance);
-      qreal minTieLength      = score()->styleP(StyleIdx::MinTieLength);
+      qreal dotNoteDistance   = score()->styleP(Sid::dotNoteDistance);
+      qreal minNoteDistance   = score()->styleP(Sid::minNoteDistance);
+      qreal minTieLength      = score()->styleP(Sid::MinTieLength);
 
       for (Chord* c : _graceNotes)
             c->layoutTablature();
@@ -2183,7 +2183,7 @@ void Chord::layoutTablature()
       if (ledgerLines > 0) {
 // there seems to be no need for widening 'ledger lines' beyond fret mark widths; more 'on the field'
 // tests and usage will show if this depends on the metrics of the specific fonts used or not.
-//            qreal extraLen    = score()->styleS(StyleIdx::ledgerLineLength).val() * _spatium;
+//            qreal extraLen    = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
             qreal extraLen    = 0;
             qreal llX         = stemX - (headWidth + extraLen) * 0.5;
             for (int i = 0; i < ledgerLines; i++) {
@@ -2322,7 +2322,7 @@ void Chord::layoutTablature()
       // allocate enough room for glissandi
       if (_endsGlissando) {
             if (rtick())                        // if not at beginning of measure
-                  lll += (0.5 + score()->styleS(StyleIdx::MinTieLength).val()) * _spatium;
+                  lll += (0.5 + score()->styleS(Sid::MinTieLength).val()) * _spatium;
             // special case of system-initial glissando final note is handled in Glissando::layout() itself
             }
 
@@ -2355,7 +2355,7 @@ void Chord::layoutTablature()
             // if stems are through staff, use dot position computed above on fret mark widths
             else
                   x = dotPosX() + dotNoteDistance
-                        + (dots()-1) * score()->styleS(StyleIdx::dotDotDistance).val() * _spatium;
+                        + (dots()-1) * score()->styleS(Sid::dotDotDistance).val() * _spatium;
             x += symWidth(SymId::augmentationDot);
             rrr = qMax(rrr, x);
             }
@@ -2363,7 +2363,7 @@ void Chord::layoutTablature()
       _spaceLw = lll;
       _spaceRw = rrr;
 
-      qreal graceMag = score()->styleD(StyleIdx::graceNoteMag);
+      qreal graceMag = score()->styleD(Sid::graceNoteMag);
 
       QVector<Chord*> graceNotesBefore = Chord::graceNotesBefore();
       int nb = graceNotesBefore.size();
@@ -2621,12 +2621,12 @@ qreal Chord::dotPosX() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Chord::getProperty(P_ID propertyId) const
+QVariant Chord::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::NO_STEM:        return noStem();
-            case P_ID::SMALL:          return small();
-            case P_ID::STEM_DIRECTION: return QVariant::fromValue<Direction>(stemDirection());
+            case Pid::NO_STEM:        return noStem();
+            case Pid::SMALL:          return small();
+            case Pid::STEM_DIRECTION: return QVariant::fromValue<Direction>(stemDirection());
             default:
                   return ChordRest::getProperty(propertyId);
             }
@@ -2636,12 +2636,12 @@ QVariant Chord::getProperty(P_ID propertyId) const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Chord::propertyDefault(P_ID propertyId) const
+QVariant Chord::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::NO_STEM:        return false;
-            case P_ID::SMALL:          return false;
-            case P_ID::STEM_DIRECTION: return QVariant::fromValue<Direction>(Direction::AUTO);
+            case Pid::NO_STEM:        return false;
+            case Pid::SMALL:          return false;
+            case Pid::STEM_DIRECTION: return QVariant::fromValue<Direction>(Direction::AUTO);
             default:
                   return ChordRest::propertyDefault(propertyId);
             }
@@ -2651,16 +2651,16 @@ QVariant Chord::propertyDefault(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Chord::setProperty(P_ID propertyId, const QVariant& v)
+bool Chord::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::NO_STEM:
+            case Pid::NO_STEM:
                   setNoStem(v.toBool());
                   break;
-            case P_ID::SMALL:
+            case Pid::SMALL:
                   setSmall(v.toBool());
                   break;
-            case P_ID::STEM_DIRECTION:
+            case Pid::STEM_DIRECTION:
                   setStemDirection(v.value<Direction>());
                   break;
             default:
@@ -2690,8 +2690,8 @@ Articulation* Chord::hasArticulation(const Articulation* aa)
 
 void Chord::reset()
       {
-      undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
-      undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::AUTO));
+      undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
+      undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::AUTO));
       score()->createPlayEvents(this);
       ChordRest::reset();
       }
@@ -2717,21 +2717,21 @@ void Chord::setSlash(bool flag, bool stemless)
 
       if (!flag) {
             // restore to normal
-            undoChangeProperty(P_ID::NO_STEM, false);
-            undoChangeProperty(P_ID::SMALL, false);
-            undoChangeProperty(P_ID::USER_OFF, QPointF());
+            undoChangeProperty(Pid::NO_STEM, false);
+            undoChangeProperty(Pid::SMALL, false);
+            undoChangeProperty(Pid::USER_OFF, QPointF());
             for (Note* n : _notes) {
-                  n->undoChangeProperty(P_ID::HEAD_GROUP, int(NoteHead::Group::HEAD_NORMAL));
-                  n->undoChangeProperty(P_ID::FIXED, false);
-                  n->undoChangeProperty(P_ID::FIXED_LINE, 0);
-                  n->undoChangeProperty(P_ID::PLAY, true);
-                  n->undoChangeProperty(P_ID::VISIBLE, true);
+                  n->undoChangeProperty(Pid::HEAD_GROUP, int(NoteHead::Group::HEAD_NORMAL));
+                  n->undoChangeProperty(Pid::FIXED, false);
+                  n->undoChangeProperty(Pid::FIXED_LINE, 0);
+                  n->undoChangeProperty(Pid::PLAY, true);
+                  n->undoChangeProperty(Pid::VISIBLE, true);
                   if (staff()->isDrumStaff(tick())) {
                         const Drumset* ds = part()->instrument()->drumset();
                         int pitch = n->pitch();
                         if (ds && ds->isValid(pitch)) {
-                              undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(ds->stemDirection(pitch)));
-                              n->undoChangeProperty(P_ID::HEAD_GROUP, int(ds->noteHead(pitch)));
+                              undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(ds->stemDirection(pitch)));
+                              n->undoChangeProperty(Pid::HEAD_GROUP, int(ds->noteHead(pitch)));
                               }
                         }
                   }
@@ -2739,12 +2739,12 @@ void Chord::setSlash(bool flag, bool stemless)
             }
 
       // set stem to auto (mostly important for rhythmic notation on drum staves)
-      undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
+      undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
 
       // make stemless if asked
       if (stemless) {
-            undoChangeProperty(P_ID::NO_STEM, true);
-            undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::NONE));
+            undoChangeProperty(Pid::NO_STEM, true);
+            undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::NONE));
             }
 
       // voice-dependent attributes - line, size, offset, head
@@ -2754,7 +2754,7 @@ void Chord::setSlash(bool flag, bool stemless)
             }
       else {
             // set small
-            undoChangeProperty(P_ID::SMALL, true);
+            undoChangeProperty(Pid::SMALL, true);
             // set outside the staff
             qreal y = 0.0;
             if (track() % 2) {
@@ -2769,7 +2769,7 @@ void Chord::setSlash(bool flag, bool stemless)
             // for non-drum staves, add an additional offset
             // for drum staves, no offset, but use normal head
             if (!staff()->isDrumStaff(tick()))
-                  undoChangeProperty(P_ID::USER_OFF, QPointF(0.0, y));
+                  undoChangeProperty(Pid::USER_OFF, QPointF(0.0, y));
             else
                   head = NoteHead::Group::HEAD_NORMAL;
             }
@@ -2777,13 +2777,13 @@ void Chord::setSlash(bool flag, bool stemless)
       int ns = _notes.size();
       for (int i = 0; i < ns; ++i) {
             Note* n = _notes[i];
-            n->undoChangeProperty(P_ID::HEAD_GROUP, static_cast<int>(head));
-            n->undoChangeProperty(P_ID::FIXED, true);
-            n->undoChangeProperty(P_ID::FIXED_LINE, line);
-            n->undoChangeProperty(P_ID::PLAY, false);
+            n->undoChangeProperty(Pid::HEAD_GROUP, static_cast<int>(head));
+            n->undoChangeProperty(Pid::FIXED, true);
+            n->undoChangeProperty(Pid::FIXED_LINE, line);
+            n->undoChangeProperty(Pid::PLAY, false);
             // hide all but first notehead
             if (i)
-                  n->undoChangeProperty(P_ID::VISIBLE, false);
+                  n->undoChangeProperty(Pid::VISIBLE, false);
             }
       }
 
@@ -2836,9 +2836,9 @@ qreal Chord::mag() const
       {
       qreal m = staff() ? staff()->mag(tick()) : 1.0;
       if (small())
-            m *= score()->styleD(StyleIdx::smallNoteMag);
+            m *= score()->styleD(Sid::smallNoteMag);
       if (_noteType != NoteType::NORMAL)
-            m *= score()->styleD(StyleIdx::graceNoteMag);
+            m *= score()->styleD(Sid::graceNoteMag);
       return m;
       }
 
@@ -3239,7 +3239,7 @@ void Chord::layoutArticulations()
       if (_articulations.empty())
             return;
       StaffType* staffType = staff()->staffType(tick());
-      qreal mag            = (staffType->small() ? score()->styleD(StyleIdx::smallStaffMag) : 1.0) * staffType->userMag();
+      qreal mag            = (staffType->small() ? score()->styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
       qreal _spatium       = score()->spatium() * mag;
       qreal _spStaff       = _spatium * staffType->lineDistance().val();
 
@@ -3281,7 +3281,7 @@ void Chord::layoutArticulations()
                   if (!headSide && stem()) {
                         y = upPos() + stem()->stemLen();
                         if (beam())
-                              y += score()->styleS(StyleIdx::beamWidth).val() * _spatium * .5;
+                              y += score()->styleS(Sid::beamWidth).val() * _spatium * .5;
                         int line   = lrint((y + 0.5 * _spStaff) / _spStaff);
                         if (line < staffType->lines())  // align between staff lines
                               y = line * _spStaff + _spatium * .5;
@@ -3308,7 +3308,7 @@ void Chord::layoutArticulations()
                   if (!headSide && stem()) {
                         y = downPos() + stem()->stemLen();
                         if (beam())
-                              y -= score()->styleS(StyleIdx::beamWidth).val() * _spatium * .5;
+                              y -= score()->styleS(Sid::beamWidth).val() * _spatium * .5;
                         int line   = lrint((y-0.5*_spStaff) / _spStaff);
                         if (line >= 0)    // align between staff lines
                               y = line * _spStaff - _spatium * .5;
@@ -3347,8 +3347,8 @@ void Chord::layoutArticulations2()
             return;
       qreal _spatium  = spatium();
       qreal x         = centerX();
-      qreal distance0 = score()->styleP(StyleIdx::propertyDistance);
-      qreal distance2 = score()->styleP(StyleIdx::propertyDistanceStem);
+      qreal distance0 = score()->styleP(Sid::propertyDistance);
+      qreal distance2 = score()->styleP(Sid::propertyDistanceStem);
 
       qreal chordTopY = upPos();    // note position of highest note
       qreal chordBotY = downPos();  // note position of lowest note
@@ -3367,7 +3367,7 @@ void Chord::layoutArticulations2()
                   y -= stem()->stemLen();
 
             if (beam()) {
-                  qreal bw = score()->styleS(StyleIdx::beamWidth).val() * _spatium;
+                  qreal bw = score()->styleS(Sid::beamWidth).val() * _spatium;
                   y += up() ? -bw : bw;
                   }
             if (up())
@@ -3384,7 +3384,7 @@ void Chord::layoutArticulations2()
       //
       //    place all articulations with anchor at chord/rest
       //
-      qreal distance1 = score()->styleP(StyleIdx::propertyDistanceHead);
+      qreal distance1 = score()->styleP(Sid::propertyDistanceHead);
       for (Articulation* a : _articulations) {
             ArticulationAnchor aa = a->anchor();
             if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD)

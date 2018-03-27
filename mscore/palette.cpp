@@ -591,7 +591,7 @@ printf("<<%s>>\n", a.data());
                                           {
                                           KeySig* okeysig = new KeySig(score);
                                           okeysig->setKeySigEvent(staff->keySigEvent(tick1));
-                                          if (!score->styleB(StyleIdx::concertPitch) && !okeysig->isCustom() && !okeysig->isAtonal()) {
+                                          if (!score->styleB(Sid::concertPitch) && !okeysig->isCustom() && !okeysig->isAtonal()) {
                                                 Interval v = staff->part()->instrument(tick1)->transpose();
                                                 if (!v.isZero()) {
                                                       Key k = okeysig->key();
@@ -1019,7 +1019,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 
       // QPen pen(palette().color(QPalette::Normal, QPalette::Text));
       QPen pen(Qt::black);
-      pen.setWidthF(MScore::defaultStyle().value(StyleIdx::staffLineWidth).toDouble() * PALETTE_SPATIUM * extraMag);
+      pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * PALETTE_SPATIUM * extraMag);
 
       for (int idx = 0; idx < ccp()->size(); ++idx) {
             int yoffset  = gscore->spatium() * _yOffset;

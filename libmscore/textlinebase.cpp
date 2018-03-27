@@ -325,49 +325,49 @@ void TextLineBaseSegment::spatiumChanged(qreal ov, qreal nv)
 //   pids
 //---------------------------------------------------------
 
-static constexpr std::array<P_ID, 34> pids = { {
-      P_ID::LINE_WIDTH,
-      P_ID::LINE_VISIBLE,
-      P_ID::BEGIN_HOOK_TYPE,
-      P_ID::BEGIN_HOOK_HEIGHT,
-      P_ID::END_HOOK_TYPE,
-      P_ID::END_HOOK_HEIGHT,
-      P_ID::BEGIN_TEXT,
-      P_ID::BEGIN_TEXT_ALIGN,
-      P_ID::BEGIN_TEXT_PLACE,
-      P_ID::BEGIN_FONT_FACE,
-      P_ID::BEGIN_FONT_SIZE,
-      P_ID::BEGIN_FONT_BOLD,
-      P_ID::BEGIN_FONT_ITALIC,
-      P_ID::BEGIN_FONT_UNDERLINE,
-      P_ID::BEGIN_TEXT_OFFSET,
-      P_ID::CONTINUE_TEXT,
-      P_ID::CONTINUE_TEXT_ALIGN,
-      P_ID::CONTINUE_TEXT_PLACE,
-      P_ID::CONTINUE_FONT_FACE,
-      P_ID::CONTINUE_FONT_SIZE,
-      P_ID::CONTINUE_FONT_BOLD,
-      P_ID::CONTINUE_FONT_ITALIC,
-      P_ID::CONTINUE_FONT_UNDERLINE,
-      P_ID::CONTINUE_TEXT_OFFSET,
-      P_ID::END_TEXT,
-      P_ID::END_TEXT_ALIGN,
-      P_ID::END_TEXT_PLACE,
-      P_ID::END_FONT_FACE,
-      P_ID::END_FONT_SIZE,
-      P_ID::END_FONT_BOLD,
-      P_ID::END_FONT_ITALIC,
-      P_ID::END_FONT_UNDERLINE,
-      P_ID::END_TEXT_OFFSET,
+static constexpr std::array<Pid, 34> pids = { {
+      Pid::LINE_WIDTH,
+      Pid::LINE_VISIBLE,
+      Pid::BEGIN_HOOK_TYPE,
+      Pid::BEGIN_HOOK_HEIGHT,
+      Pid::END_HOOK_TYPE,
+      Pid::END_HOOK_HEIGHT,
+      Pid::BEGIN_TEXT,
+      Pid::BEGIN_TEXT_ALIGN,
+      Pid::BEGIN_TEXT_PLACE,
+      Pid::BEGIN_FONT_FACE,
+      Pid::BEGIN_FONT_SIZE,
+      Pid::BEGIN_FONT_BOLD,
+      Pid::BEGIN_FONT_ITALIC,
+      Pid::BEGIN_FONT_UNDERLINE,
+      Pid::BEGIN_TEXT_OFFSET,
+      Pid::CONTINUE_TEXT,
+      Pid::CONTINUE_TEXT_ALIGN,
+      Pid::CONTINUE_TEXT_PLACE,
+      Pid::CONTINUE_FONT_FACE,
+      Pid::CONTINUE_FONT_SIZE,
+      Pid::CONTINUE_FONT_BOLD,
+      Pid::CONTINUE_FONT_ITALIC,
+      Pid::CONTINUE_FONT_UNDERLINE,
+      Pid::CONTINUE_TEXT_OFFSET,
+      Pid::END_TEXT,
+      Pid::END_TEXT_ALIGN,
+      Pid::END_TEXT_PLACE,
+      Pid::END_FONT_FACE,
+      Pid::END_FONT_SIZE,
+      Pid::END_FONT_BOLD,
+      Pid::END_FONT_ITALIC,
+      Pid::END_FONT_UNDERLINE,
+      Pid::END_TEXT_OFFSET,
       } };
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant TextLineBaseSegment::getProperty(P_ID id) const
+QVariant TextLineBaseSegment::getProperty(Pid id) const
       {
-      for (P_ID pid : pids) {
+      for (Pid pid : pids) {
             if (pid == id)
                   return textLineBase()->getProperty(id);
             }
@@ -378,9 +378,9 @@ QVariant TextLineBaseSegment::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TextLineBaseSegment::setProperty(P_ID id, const QVariant& v)
+bool TextLineBaseSegment::setProperty(Pid id, const QVariant& v)
       {
-      for (P_ID pid : pids) {
+      for (Pid pid : pids) {
             if (pid == id)
                   return textLineBase()->setProperty(id, v);
             }
@@ -391,9 +391,9 @@ bool TextLineBaseSegment::setProperty(P_ID id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TextLineBaseSegment::propertyDefault(P_ID id) const
+QVariant TextLineBaseSegment::propertyDefault(Pid id) const
       {
-      for (P_ID pid : pids) {
+      for (Pid pid : pids) {
             if (pid == id)
                   return textLineBase()->propertyDefault(id);
             }
@@ -455,7 +455,7 @@ void TextLineBase::spatiumChanged(qreal /*ov*/, qreal /*nv*/)
 
 void TextLineBase::writeProperties(XmlWriter& xml) const
       {
-      for (P_ID pid : pids)
+      for (Pid pid : pids)
             writeProperty(xml, pid);
       SLine::writeProperties(xml);
       }
@@ -467,7 +467,7 @@ void TextLineBase::writeProperties(XmlWriter& xml) const
 bool TextLineBase::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
-      for (P_ID i :pids) {
+      for (Pid i :pids) {
             if (readProperty(tag, e, i)) {
                   setPropertyFlags(i, PropertyFlags::UNSTYLED);
                   return true;
@@ -480,72 +480,72 @@ bool TextLineBase::readProperties(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant TextLineBase::getProperty(P_ID id) const
+QVariant TextLineBase::getProperty(Pid id) const
       {
       switch (id) {
-            case P_ID::BEGIN_TEXT:
+            case Pid::BEGIN_TEXT:
                   return beginText();
-            case P_ID::BEGIN_TEXT_ALIGN:
+            case Pid::BEGIN_TEXT_ALIGN:
                   return QVariant::fromValue(beginTextAlign());
-            case P_ID::CONTINUE_TEXT_ALIGN:
+            case Pid::CONTINUE_TEXT_ALIGN:
                   return QVariant::fromValue(continueTextAlign());
-            case P_ID::END_TEXT_ALIGN:
+            case Pid::END_TEXT_ALIGN:
                   return QVariant::fromValue(endTextAlign());
-            case P_ID::BEGIN_TEXT_PLACE:
+            case Pid::BEGIN_TEXT_PLACE:
                   return int(_beginTextPlace);
-            case P_ID::BEGIN_HOOK_TYPE:
+            case Pid::BEGIN_HOOK_TYPE:
                   return int(_beginHookType);
-            case P_ID::BEGIN_HOOK_HEIGHT:
+            case Pid::BEGIN_HOOK_HEIGHT:
                   return _beginHookHeight;
-            case P_ID::BEGIN_FONT_FACE:
+            case Pid::BEGIN_FONT_FACE:
                   return _beginFontFamily;
-            case P_ID::BEGIN_FONT_SIZE:
+            case Pid::BEGIN_FONT_SIZE:
                   return _beginFontSize;
-            case P_ID::BEGIN_FONT_BOLD:
+            case Pid::BEGIN_FONT_BOLD:
                   return _beginFontBold;
-            case P_ID::BEGIN_FONT_ITALIC:
+            case Pid::BEGIN_FONT_ITALIC:
                   return _beginFontItalic;
-            case P_ID::BEGIN_FONT_UNDERLINE:
+            case Pid::BEGIN_FONT_UNDERLINE:
                   return _beginFontUnderline;
-            case P_ID::BEGIN_TEXT_OFFSET:
+            case Pid::BEGIN_TEXT_OFFSET:
                   return _beginTextOffset;
-            case P_ID::CONTINUE_TEXT:
+            case Pid::CONTINUE_TEXT:
                   return continueText();
-            case P_ID::CONTINUE_TEXT_PLACE:
+            case Pid::CONTINUE_TEXT_PLACE:
                   return int(_continueTextPlace);
-            case P_ID::CONTINUE_FONT_FACE:
+            case Pid::CONTINUE_FONT_FACE:
                   return _continueFontFamily;
-            case P_ID::CONTINUE_FONT_SIZE:
+            case Pid::CONTINUE_FONT_SIZE:
                   return _continueFontSize;
-            case P_ID::CONTINUE_FONT_BOLD:
+            case Pid::CONTINUE_FONT_BOLD:
                   return _continueFontBold;
-            case P_ID::CONTINUE_FONT_ITALIC:
+            case Pid::CONTINUE_FONT_ITALIC:
                   return _continueFontItalic;
-            case P_ID::CONTINUE_FONT_UNDERLINE:
+            case Pid::CONTINUE_FONT_UNDERLINE:
                   return _continueFontUnderline;
-            case P_ID::CONTINUE_TEXT_OFFSET:
+            case Pid::CONTINUE_TEXT_OFFSET:
                   return _continueTextOffset;
-            case P_ID::END_TEXT:
+            case Pid::END_TEXT:
                   return endText();
-            case P_ID::END_TEXT_PLACE:
+            case Pid::END_TEXT_PLACE:
                   return int(_endTextPlace);
-            case P_ID::END_HOOK_TYPE:
+            case Pid::END_HOOK_TYPE:
                   return int(_endHookType);
-            case P_ID::END_HOOK_HEIGHT:
+            case Pid::END_HOOK_HEIGHT:
                   return _endHookHeight;
-            case P_ID::END_FONT_FACE:
+            case Pid::END_FONT_FACE:
                   return _endFontFamily;
-            case P_ID::END_FONT_SIZE:
+            case Pid::END_FONT_SIZE:
                   return _endFontSize;
-            case P_ID::END_FONT_BOLD:
+            case Pid::END_FONT_BOLD:
                   return _endFontBold;
-            case P_ID::END_FONT_ITALIC:
+            case Pid::END_FONT_ITALIC:
                   return _endFontItalic;
-            case P_ID::END_FONT_UNDERLINE:
+            case Pid::END_FONT_UNDERLINE:
                   return _endFontUnderline;
-            case P_ID::END_TEXT_OFFSET:
+            case Pid::END_TEXT_OFFSET:
                   return _endTextOffset;
-            case P_ID::LINE_VISIBLE:
+            case Pid::LINE_VISIBLE:
                   return lineVisible();
             default:
                   return SLine::getProperty(id);
@@ -556,105 +556,105 @@ QVariant TextLineBase::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TextLineBase::setProperty(P_ID id, const QVariant& v)
+bool TextLineBase::setProperty(Pid id, const QVariant& v)
       {
       switch (id) {
-            case P_ID::BEGIN_TEXT_PLACE:
+            case Pid::BEGIN_TEXT_PLACE:
                   _beginTextPlace = PlaceText(v.toInt());
                   break;
-            case P_ID::BEGIN_TEXT_ALIGN:
+            case Pid::BEGIN_TEXT_ALIGN:
                   _beginTextAlign = v.value<Align>();
                   break;
-            case P_ID::CONTINUE_TEXT_ALIGN:
+            case Pid::CONTINUE_TEXT_ALIGN:
                   _continueTextAlign = v.value<Align>();
                   break;
-            case P_ID::END_TEXT_ALIGN:
+            case Pid::END_TEXT_ALIGN:
                   _endTextAlign = v.value<Align>();
                   break;
-            case P_ID::CONTINUE_TEXT_PLACE:
+            case Pid::CONTINUE_TEXT_PLACE:
                   _continueTextPlace = PlaceText(v.toInt());
                   break;
-            case P_ID::END_TEXT_PLACE:
+            case Pid::END_TEXT_PLACE:
                   _endTextPlace = PlaceText(v.toInt());
                   break;
-            case P_ID::BEGIN_HOOK_HEIGHT:
+            case Pid::BEGIN_HOOK_HEIGHT:
                   _beginHookHeight = v.value<Spatium>();
                   break;
-            case P_ID::END_HOOK_HEIGHT:
+            case Pid::END_HOOK_HEIGHT:
                   _endHookHeight = v.value<Spatium>();
                   break;
-            case P_ID::BEGIN_HOOK_TYPE:
+            case Pid::BEGIN_HOOK_TYPE:
                   _beginHookType = HookType(v.toInt());
                   break;
-            case P_ID::END_HOOK_TYPE:
+            case Pid::END_HOOK_TYPE:
                   _endHookType = HookType(v.toInt());
                   break;
-            case P_ID::BEGIN_TEXT:
+            case Pid::BEGIN_TEXT:
                   setBeginText(v.toString());
                   break;
-            case P_ID::BEGIN_TEXT_OFFSET:
+            case Pid::BEGIN_TEXT_OFFSET:
                   setBeginTextOffset(v.toPointF());
                   break;
-            case P_ID::CONTINUE_TEXT_OFFSET:
+            case Pid::CONTINUE_TEXT_OFFSET:
                   setContinueTextOffset(v.toPointF());
                   break;
-            case P_ID::END_TEXT_OFFSET:
+            case Pid::END_TEXT_OFFSET:
                   setEndTextOffset(v.toPointF());
                   break;
-            case P_ID::CONTINUE_TEXT:
+            case Pid::CONTINUE_TEXT:
                   setContinueText(v.toString());
                   break;
-            case P_ID::END_TEXT:
+            case Pid::END_TEXT:
                   setEndText(v.toString());
                   break;
-            case P_ID::LINE_VISIBLE:
+            case Pid::LINE_VISIBLE:
                   setLineVisible(v.toBool());
                   break;
-            case P_ID::BEGIN_FONT_FACE:
+            case Pid::BEGIN_FONT_FACE:
                   setBeginFontFamily(v.toString());
                   break;
-            case P_ID::BEGIN_FONT_SIZE:
+            case Pid::BEGIN_FONT_SIZE:
                   if (v.toReal() <= 0)
                         qFatal("font size is %f", v.toReal());
                   setBeginFontSize(v.toReal());
                   break;
-            case P_ID::BEGIN_FONT_BOLD:
+            case Pid::BEGIN_FONT_BOLD:
                   setBeginFontBold(v.toBool());
                   break;
-            case P_ID::BEGIN_FONT_ITALIC:
+            case Pid::BEGIN_FONT_ITALIC:
                   setBeginFontItalic(v.toBool());
                   break;
-            case P_ID::BEGIN_FONT_UNDERLINE:
+            case Pid::BEGIN_FONT_UNDERLINE:
                   setBeginFontUnderline(v.toBool());
                   break;
-            case P_ID::CONTINUE_FONT_FACE:
+            case Pid::CONTINUE_FONT_FACE:
                   setContinueFontFamily(v.toString());
                   break;
-            case P_ID::CONTINUE_FONT_SIZE:
+            case Pid::CONTINUE_FONT_SIZE:
                   setContinueFontSize(v.toReal());
                   break;
-            case P_ID::CONTINUE_FONT_BOLD:
+            case Pid::CONTINUE_FONT_BOLD:
                   setContinueFontBold(v.toBool());
                   break;
-            case P_ID::CONTINUE_FONT_ITALIC:
+            case Pid::CONTINUE_FONT_ITALIC:
                   setContinueFontItalic(v.toBool());
                   break;
-            case P_ID::CONTINUE_FONT_UNDERLINE:
+            case Pid::CONTINUE_FONT_UNDERLINE:
                   setContinueFontUnderline(v.toBool());
                   break;
-            case P_ID::END_FONT_FACE:
+            case Pid::END_FONT_FACE:
                   setEndFontFamily(v.toString());
                   break;
-            case P_ID::END_FONT_SIZE:
+            case Pid::END_FONT_SIZE:
                   setEndFontSize(v.toReal());
                   break;
-            case P_ID::END_FONT_BOLD:
+            case Pid::END_FONT_BOLD:
                   setEndFontBold(v.toBool());
                   break;
-            case P_ID::END_FONT_ITALIC:
+            case Pid::END_FONT_ITALIC:
                   setEndFontItalic(v.toBool());
                   break;
-            case P_ID::END_FONT_UNDERLINE:
+            case Pid::END_FONT_UNDERLINE:
                   setEndFontUnderline(v.toBool());
                   break;
 

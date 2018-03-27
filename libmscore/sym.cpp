@@ -5947,29 +5947,29 @@ void ScoreFont::load()
                   }
             }
       oo = metadataJson.value("engravingDefaults").toObject();
-      static std::list<std::pair<QString, StyleIdx>> engravingDefaultsMapping = {
-            { "staffLineThickness",            StyleIdx::staffLineWidth },
-            { "stemThickness",                 StyleIdx::stemWidth },
-            { "beamThickness",                 StyleIdx::beamWidth },
-            { "beamSpacing",                   StyleIdx::beamDistance },
-            { "legerLineThickness",            StyleIdx::ledgerLineWidth },
-            { "legerLineExtension",            StyleIdx::ledgerLineLength },
-            { "slurEndpointThickness",         StyleIdx::SlurEndWidth },
-            { "slurMidpointThickness",         StyleIdx::SlurMidWidth },
-            { "thinBarlineThickness",          StyleIdx::barWidth },
-            { "thinBarlineThickness",          StyleIdx::doubleBarWidth },
-            { "thickBarlineThickness",         StyleIdx::endBarWidth },
-            { "dashedBarlineThickness",        StyleIdx::barWidth },
-            { "barlineSeparation",             StyleIdx::doubleBarDistance },
-            { "barlineSeparation",             StyleIdx::endBarDistance },
-            { "repeatBarlineDotSeparation",    StyleIdx::repeatBarlineDotSeparation },
-            { "bracketThickness",              StyleIdx::bracketWidth },
-            { "hairpinThickness",              StyleIdx::hairpinLineWidth },
-            { "octaveLineThickness",           StyleIdx::ottavaLineWidth },
-            { "pedalLineThickness",            StyleIdx::pedalLineWidth },
-            { "repeatEndingLineThickness",     StyleIdx::voltaLineWidth },
-            { "lyricLineThickness",            StyleIdx::lyricsLineThickness },
-            { "tupletBracketThickness",        StyleIdx::tupletBracketWidth }
+      static std::list<std::pair<QString, Sid>> engravingDefaultsMapping = {
+            { "staffLineThickness",            Sid::staffLineWidth },
+            { "stemThickness",                 Sid::stemWidth },
+            { "beamThickness",                 Sid::beamWidth },
+            { "beamSpacing",                   Sid::beamDistance },
+            { "legerLineThickness",            Sid::ledgerLineWidth },
+            { "legerLineExtension",            Sid::ledgerLineLength },
+            { "slurEndpointThickness",         Sid::SlurEndWidth },
+            { "slurMidpointThickness",         Sid::SlurMidWidth },
+            { "thinBarlineThickness",          Sid::barWidth },
+            { "thinBarlineThickness",          Sid::doubleBarWidth },
+            { "thickBarlineThickness",         Sid::endBarWidth },
+            { "dashedBarlineThickness",        Sid::barWidth },
+            { "barlineSeparation",             Sid::doubleBarDistance },
+            { "barlineSeparation",             Sid::endBarDistance },
+            { "repeatBarlineDotSeparation",    Sid::repeatBarlineDotSeparation },
+            { "bracketThickness",              Sid::bracketWidth },
+            { "hairpinThickness",              Sid::hairpinLineWidth },
+            { "octaveLineThickness",           Sid::ottavaLineWidth },
+            { "pedalLineThickness",            Sid::pedalLineWidth },
+            { "repeatEndingLineThickness",     Sid::voltaLineWidth },
+            { "lyricLineThickness",            Sid::lyricsLineThickness },
+            { "tupletBracketThickness",        Sid::tupletBracketWidth }
             };
       for (auto i : oo.keys()) {
             for (auto mapping : engravingDefaultsMapping) {
@@ -5979,7 +5979,7 @@ void ScoreFont::load()
                         _textEnclosureThickness = oo.value(i).toDouble();
                   }
             }
-      _engravingDefaults.push_back(std::make_pair(StyleIdx::MusicalTextFont, QString("%1 Text").arg(_family)));
+      _engravingDefaults.push_back(std::make_pair(Sid::MusicalTextFont, QString("%1 Text").arg(_family)));
 
       // create missing composed glyphs
       struct Composed {

@@ -233,8 +233,8 @@ void Element::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 void Element::reset()
       {
-      undoResetProperty(P_ID::AUTOPLACE);
-      undoResetProperty(P_ID::PLACEMENT);
+      undoResetProperty(Pid::AUTOPLACE);
+      undoResetProperty(Pid::PLACEMENT);
       }
 
 //---------------------------------------------------------
@@ -496,10 +496,10 @@ void Element::writeProperties(XmlWriter& xml) const
                         }
                   }
             }
-      writeProperty(xml, P_ID::COLOR);
-      writeProperty(xml, P_ID::VISIBLE);
-      writeProperty(xml, P_ID::Z);
-      writeProperty(xml, P_ID::PLACEMENT);
+      writeProperty(xml, Pid::COLOR);
+      writeProperty(xml, Pid::VISIBLE);
+      writeProperty(xml, Pid::Z);
+      writeProperty(xml, Pid::PLACEMENT);
       }
 
 //---------------------------------------------------------
@@ -571,7 +571,7 @@ bool Element::readProperties(XmlReader& e)
                   }
             }
       else if (tag == "placement")
-            _placement = Placement(Ms::getProperty(P_ID::PLACEMENT, e).toInt());
+            _placement = Placement(Ms::getProperty(Pid::PLACEMENT, e).toInt());
       else if (tag == "z")
             setZ(e.readInt());
       else
@@ -979,35 +979,35 @@ void collectElements(void* data, Element* e)
 
 void Element::undoSetPlacement(Placement v)
       {
-      undoChangeProperty(P_ID::PLACEMENT, int(v));
+      undoChangeProperty(Pid::PLACEMENT, int(v));
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Element::getProperty(P_ID propertyId) const
+QVariant Element::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::TRACK:
+            case Pid::TRACK:
                   return track();
-            case P_ID::GENERATED:
+            case Pid::GENERATED:
                   return generated();
-            case P_ID::COLOR:
+            case Pid::COLOR:
                   return color();
-            case P_ID::VISIBLE:
+            case Pid::VISIBLE:
                   return visible();
-            case P_ID::SELECTED:
+            case Pid::SELECTED:
                   return selected();
-            case P_ID::USER_OFF:
+            case Pid::USER_OFF:
                   return _userOff;
-            case P_ID::PLACEMENT:
+            case Pid::PLACEMENT:
                   return int(placement());
-            case P_ID::AUTOPLACE:
+            case Pid::AUTOPLACE:
                   return autoplace();
-            case P_ID::Z:
+            case Pid::Z:
                   return z();
-            case P_ID::SYSTEM_FLAG:
+            case Pid::SYSTEM_FLAG:
                   return systemFlag();
             default:
                   return QVariant();
@@ -1018,38 +1018,38 @@ QVariant Element::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Element::setProperty(P_ID propertyId, const QVariant& v)
+bool Element::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::TRACK:
+            case Pid::TRACK:
                   setTrack(v.toInt());
                   break;
-            case P_ID::GENERATED:
+            case Pid::GENERATED:
                   setGenerated(v.toBool());
                   break;
-            case P_ID::COLOR:
+            case Pid::COLOR:
                   setColor(v.value<QColor>());
                   break;
-            case P_ID::VISIBLE:
+            case Pid::VISIBLE:
                   setVisible(v.toBool());
                   break;
-            case P_ID::SELECTED:
+            case Pid::SELECTED:
                   setSelected(v.toBool());
                   break;
-            case P_ID::USER_OFF:
+            case Pid::USER_OFF:
                   score()->addRefresh(canvasBoundingRect());
                   _userOff = v.toPointF();
                   break;
-            case P_ID::PLACEMENT:
+            case Pid::PLACEMENT:
                   setPlacement(Placement(v.toInt()));
                   break;
-            case P_ID::AUTOPLACE:
+            case Pid::AUTOPLACE:
                   setAutoplace(v.toBool());
                   break;
-            case P_ID::Z:
+            case Pid::Z:
                   setZ(v.toInt());
                   break;
-            case P_ID::SYSTEM_FLAG:
+            case Pid::SYSTEM_FLAG:
                   setSystemFlag(v.toBool());
                   break;
             default:
@@ -1066,24 +1066,24 @@ bool Element::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Element::propertyDefault(P_ID id) const
+QVariant Element::propertyDefault(Pid id) const
       {
       switch(id) {
-            case P_ID::GENERATED:
+            case Pid::GENERATED:
                   return false;
-            case P_ID::VISIBLE:
+            case Pid::VISIBLE:
                   return true;
-            case P_ID::COLOR:
+            case Pid::COLOR:
                   return MScore::defaultColor;
-            case P_ID::PLACEMENT:
+            case Pid::PLACEMENT:
                   return int(Placement::BELOW);
-            case P_ID::SELECTED:
+            case Pid::SELECTED:
                   return false;
-            case P_ID::USER_OFF:
+            case Pid::USER_OFF:
                   return QPointF();
-            case P_ID::AUTOPLACE:
+            case Pid::AUTOPLACE:
                   return true;
-            case P_ID::Z:
+            case Pid::Z:
                   return int(type()) * 100;
             default:
                   return ScoreElement::propertyDefault(id);
@@ -1095,7 +1095,7 @@ QVariant Element::propertyDefault(P_ID id) const
 //    check if property is != default
 //---------------------------------------------------------
 
-bool Element::custom(P_ID id) const
+bool Element::custom(Pid id) const
       {
       return propertyDefault(id) != getProperty(id);
       }
@@ -1148,7 +1148,7 @@ Element* Element::findMeasure()
 
 void Element::undoSetColor(const QColor& c)
       {
-      undoChangeProperty(P_ID::COLOR, c);
+      undoChangeProperty(Pid::COLOR, c);
       }
 
 //---------------------------------------------------------
@@ -1157,7 +1157,7 @@ void Element::undoSetColor(const QColor& c)
 
 void Element::undoSetVisible(bool v)
       {
-      undoChangeProperty(P_ID::VISIBLE, v);
+      undoChangeProperty(Pid::VISIBLE, v);
       }
 
 //---------------------------------------------------------
@@ -1193,7 +1193,7 @@ QPointF Element::scriptPos() const
 
 void Element::scriptSetPos(const QPointF& p)
       {
-      undoChangeProperty(P_ID::USER_OFF, p*spatium() - ipos());
+      undoChangeProperty(Pid::USER_OFF, p*spatium() - ipos());
       }
 
 QPointF Element::scriptUserOff() const
@@ -1203,7 +1203,7 @@ QPointF Element::scriptUserOff() const
 
 void Element::scriptSetUserOff(const QPointF& o)
       {
-      undoChangeProperty(P_ID::USER_OFF, o * spatium());
+      undoChangeProperty(Pid::USER_OFF, o * spatium());
       }
 
 //void Element::draw(SymId id, QPainter* p) const { score()->scoreFont()->draw(id, p, magS()); }
@@ -1334,7 +1334,7 @@ bool Element::symIsValid(SymId id) const
 
 bool Element::concertPitch() const
       {
-      return score()->styleB(StyleIdx::concertPitch);
+      return score()->styleB(Sid::concertPitch);
       }
 //---------------------------------------------------------
 //   nextElement
@@ -1669,7 +1669,7 @@ void Element::startDrag(EditData& ed)
       {
       ElementEditData* eed = new ElementEditData();
       eed->e = this;
-      eed->pushProperty(P_ID::USER_OFF);
+      eed->pushProperty(Pid::USER_OFF);
       ed.addData(eed);
       }
 
@@ -1749,7 +1749,7 @@ void Element::endDrag(EditData& ed)
       ElementEditData* eed = ed.getData(this);
       for (PropertyData pd : eed->propertyData)
             score()->undoPropertyChanged(this, pd.id, pd.data);
-      undoChangeProperty(P_ID::AUTOPLACE, false);
+      undoChangeProperty(Pid::AUTOPLACE, false);
       }
 
 //---------------------------------------------------------
@@ -1784,7 +1784,7 @@ bool Element::edit(EditData& ed)
 void Element::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
-      eed->pushProperty(P_ID::USER_OFF);
+      eed->pushProperty(Pid::USER_OFF);
       }
 
 //---------------------------------------------------------
@@ -1795,7 +1795,7 @@ void Element::editDrag(EditData& ed)
       {
       score()->addRefresh(canvasBoundingRect());
       setUserOff(userOff() + ed.delta);
-      undoChangeProperty(P_ID::AUTOPLACE, false);
+      undoChangeProperty(Pid::AUTOPLACE, false);
       score()->addRefresh(canvasBoundingRect());
       }
 
@@ -1815,7 +1815,7 @@ void Element::endEditDrag(EditData& ed)
             eed->propertyData.clear();
             }
       if (changed)
-            undoChangeProperty(P_ID::AUTOPLACE, false);
+            undoChangeProperty(Pid::AUTOPLACE, false);
       }
 
 //---------------------------------------------------------
@@ -1830,7 +1830,7 @@ void Element::endEdit(EditData&)
 //   styleP
 //---------------------------------------------------------
 
-qreal Element::styleP(StyleIdx idx) const
+qreal Element::styleP(Sid idx) const
       {
       return score()->styleP(idx);
       }

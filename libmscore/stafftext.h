@@ -54,7 +54,7 @@ class StaffText final : public TextBase  {
       virtual int subtype() const                         { return (int) subStyleId(); }
       virtual void layout() override;
       virtual QString subtypeName() const                 { return "??"; }
-      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual QVariant propertyDefault(Pid id) const override;
 
       Segment* segment() const;
       QString channelName(int voice) const                { return _channelNames[voice]; }

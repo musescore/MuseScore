@@ -465,7 +465,7 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
                   if (v.isZero())
                         ntpc1 = ntpc2 = ntpc;
                   else {
-                        if (styleB(StyleIdx::concertPitch)) {
+                        if (styleB(Sid::concertPitch)) {
                               v.flip();
                               ntpc1 = ntpc;
                               ntpc2 = Ms::transposeTpc(ntpc, v, true);
@@ -542,7 +542,7 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
       chord->setDurationType(d);
       chord->setDuration(d.fraction());
       chord->setNoteType(type);
-      chord->setMag(ch->staff()->mag(chord->tick()) * styleD(StyleIdx::graceNoteMag));
+      chord->setMag(ch->staff()->mag(chord->tick()) * styleD(Sid::graceNoteMag));
 
       undoAddElement(chord);
       select(note, SelectType::SINGLE, 0);
@@ -709,7 +709,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   // extend slur
                   //
                   Chord* chord = toNote(nr)->chord();
-                  _is.slur()->undoChangeProperty(P_ID::SPANNER_TICKS, chord->tick() - _is.slur()->tick());
+                  _is.slur()->undoChangeProperty(Pid::SPANNER_TICKS, chord->tick() - _is.slur()->tick());
                   for (ScoreElement* e : _is.slur()->linkList()) {
                         Slur* slur = toSlur(e);
                         for (ScoreElement* ee : chord->linkList()) {
@@ -1390,7 +1390,7 @@ void Score::upDown(bool up, UpDownMode mode)
                                     }
                                     // store the fretting change before undoChangePitch() chooses
                                     // a fretting of its own liking!
-                                    oNote->undoChangeProperty(P_ID::FRET, fret);
+                                    oNote->undoChangeProperty(Pid::FRET, fret);
                                     }
                                     break;
                               }
@@ -1468,11 +1468,11 @@ void Score::upDown(bool up, UpDownMode mode)
             else if (staff->staffType(tick)->group() == StaffGroup::TAB) {
                   bool refret = false;
                   if (oNote->string() != string) {
-                        oNote->undoChangeProperty(P_ID::STRING, string);
+                        oNote->undoChangeProperty(Pid::STRING, string);
                         refret = true;
                         }
                   if (oNote->fret() != fret) {
-                        oNote->undoChangeProperty(P_ID::FRET, fret);
+                        oNote->undoChangeProperty(Pid::FRET, fret);
                         refret = true;
                         }
                   if (refret) {
@@ -1556,7 +1556,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
             }
       int tpc1;
       int tpc2 = n->transposeTpc(tpc);
-      if (score->styleB(StyleIdx::concertPitch))
+      if (score->styleB(Sid::concertPitch))
             tpc1 = tpc;
       else {
             tpc1 = tpc2;
@@ -1710,7 +1710,7 @@ void Score::resetUserStretch()
             return;
 
       for (Measure* m = m1; m; m = m->nextMeasureMM()) {
-            m->undoChangeProperty(P_ID::USER_STRETCH, 1.0);
+            m->undoChangeProperty(Pid::USER_STRETCH, 1.0);
             if (m == m2)
                   break;
             }
@@ -1791,7 +1791,7 @@ void Score::cmdAddStretch(qreal val)
             stretch += val;
             if (stretch < 0)
                   stretch = 0;
-            m->undoChangeProperty(P_ID::USER_STRETCH, stretch);
+            m->undoChangeProperty(Pid::USER_STRETCH, stretch);
             }
       }
 
@@ -1818,11 +1818,11 @@ void Score::cmdResetBeamMode()
                         continue;
                   if (cr->type() == ElementType::CHORD) {
                         if (cr->beamMode() != Beam::Mode::AUTO)
-                              cr->undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::AUTO));
+                              cr->undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::AUTO));
                         }
                   else if (cr->type() == ElementType::REST) {
                         if (cr->beamMode() != Beam::Mode::NONE)
-                              cr->undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::NONE));
+                              cr->undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::NONE));
                         }
                   }
             }
@@ -1893,7 +1893,7 @@ bool Score::processMidiInput()
                   else
                         p = staff(staffIdx)->part();
                   if (p) {
-                        if (!styleB(StyleIdx::concertPitch)) {
+                        if (!styleB(Sid::concertPitch)) {
                               ev.pitch += p->instrument(selection().tickStart())->transpose().chromatic;
                               }
                         MScore::seq->startNote(
@@ -2227,7 +2227,7 @@ void Score::cmdMirrorNoteHead()
             if (e->type() == ElementType::NOTE) {
                   Note* note = toNote(e);
                   if (note->staff() && note->staff()->isTabStaff(note->chord()->tick()))
-                        e->undoChangeProperty(P_ID::GHOST, !note->ghost());
+                        e->undoChangeProperty(Pid::GHOST, !note->ghost());
                   else {
                         MScore::DirectionH d = note->userMirror();
                         if (d == MScore::DirectionH::AUTO)
@@ -2289,7 +2289,7 @@ void Score::cmdAddBracket()
                   }
             else if (el->type() == ElementType::ACCIDENTAL) {
                   Accidental* acc = toAccidental(el);
-                  acc->undoChangeProperty(P_ID::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS));
+                  acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS));
                   }
             else if (el->type() == ElementType::HARMONY) {
                   Harmony* h = toHarmony(el);
@@ -2312,7 +2312,7 @@ void Score::cmdMoveRest(Rest* rest, Direction dir)
             pos.ry() -= spatium();
       else if (dir == Direction::DOWN)
             pos.ry() += spatium();
-      rest->undoChangeProperty(P_ID::USER_OFF, pos);
+      rest->undoChangeProperty(Pid::USER_OFF, pos);
       }
 
 //---------------------------------------------------------
@@ -2338,8 +2338,8 @@ void Score::cmdMoveLyrics(Lyrics* lyrics, Direction dir)
             newVerse = verse + 1;
       Lyrics* nl = cr->lyrics(newVerse, placement);
       if (nl)
-            nl->undoChangeProperty(P_ID::VERSE, verse);
-      lyrics->undoChangeProperty(P_ID::VERSE, newVerse);
+            nl->undoChangeProperty(Pid::VERSE, verse);
+      lyrics->undoChangeProperty(Pid::VERSE, newVerse);
       score()->setLayout(cr->tick());
       }
 
@@ -2842,7 +2842,7 @@ void Score::cmdResequenceRehearsalMarks()
                         if (last) {
                               QString rmText = nextRehearsalMarkText(last, rm);
                               for (ScoreElement* le : rm->linkList())
-                                    le->undoChangeProperty(P_ID::TEXT, rmText);
+                                    le->undoChangeProperty(Pid::TEXT, rmText);
                               }
                         last = rm;
                         }
@@ -2952,7 +2952,7 @@ void Score::cmdPitchUp()
       if (el && el->isLyrics())
             cmdMoveLyrics(toLyrics(el), Direction::UP);
       else if (el && (el->isArticulation() || el->isText()))
-            el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
+            el->undoChangeProperty(Pid::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
       else if (el && el->isRest())
             cmdMoveRest(toRest(el), Direction::UP);
       else
@@ -2969,7 +2969,7 @@ void Score::cmdPitchDown()
       if (el && el->isLyrics())
             cmdMoveLyrics(toLyrics(el), Direction::DOWN);
       else if (el && (el->isArticulation() || el->isText()))
-            el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
+            el->undoChangeProperty(Pid::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
       else if (el && el->isRest())
             cmdMoveRest(toRest(el), Direction::DOWN);
       else
@@ -3003,7 +3003,7 @@ void Score::cmdPitchUpOctave()
       {
       Element* el = selection().element();
       if (el && (el->isArticulation() || el->isText()))
-            el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()));
+            el->undoChangeProperty(Pid::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()));
       else
             upDown(true, UpDownMode::OCTAVE);
       }
@@ -3016,7 +3016,7 @@ void Score::cmdPitchDownOctave()
       {
       Element* el = selection().element();
       if (el && (el->isArticulation() || el->isText()))
-            el->undoChangeProperty(P_ID::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()));
+            el->undoChangeProperty(Pid::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()));
       else
             upDown(false, UpDownMode::OCTAVE);
       }
@@ -3200,9 +3200,9 @@ void Score::cmdToggleLayoutBreak(LayoutBreak::Type type)
 
 void Score::cmdToggleMmrest()
       {
-      bool val = !styleB(StyleIdx::createMultiMeasureRests);
+      bool val = !styleB(Sid::createMultiMeasureRests);
       deselectAll();
-      undo(new ChangeStyleVal(this, StyleIdx::createMultiMeasureRests, val));
+      undo(new ChangeStyleVal(this, Sid::createMultiMeasureRests, val));
       }
 
 //---------------------------------------------------------
@@ -3211,9 +3211,9 @@ void Score::cmdToggleMmrest()
 
 void Score::cmdToggleHideEmpty()
       {
-      bool val = !styleB(StyleIdx::hideEmptyStaves);
+      bool val = !styleB(Sid::hideEmptyStaves);
       deselectAll();
-      undo(new ChangeStyleVal(this, StyleIdx::hideEmptyStaves, val));
+      undo(new ChangeStyleVal(this, Sid::hideEmptyStaves, val));
       }
 
 //---------------------------------------------------------
@@ -3223,7 +3223,7 @@ void Score::cmdToggleHideEmpty()
 void Score::cmdSetVisible()
       {
       for (Element* e : selection().elements())
-            undo(new ChangeProperty(e, P_ID::VISIBLE, true));
+            undo(new ChangeProperty(e, Pid::VISIBLE, true));
       }
 
 //---------------------------------------------------------
@@ -3233,7 +3233,7 @@ void Score::cmdSetVisible()
 void Score::cmdUnsetVisible()
       {
       for (Element* e : selection().elements())
-            undo(new ChangeProperty(e, P_ID::VISIBLE, false));
+            undo(new ChangeProperty(e, Pid::VISIBLE, false));
       }
 
 //---------------------------------------------------------
@@ -3397,7 +3397,7 @@ void Score::cmdToggleVisible()
                   continue;
             bool spannerSegment = e->isSpannerSegment();
             if (!spannerSegment || !spanners.contains(toSpannerSegment(e)->spanner()))
-                  e->undoChangeProperty(P_ID::VISIBLE, !e->getProperty(P_ID::VISIBLE).toBool());
+                  e->undoChangeProperty(Pid::VISIBLE, !e->getProperty(Pid::VISIBLE).toBool());
             if (spannerSegment)
                   spanners.insert(toSpannerSegment(e)->spanner());
             }

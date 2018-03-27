@@ -50,14 +50,14 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
             chord->setStemDirection(Direction::UP);
             chords->push_back(chord);
             }
-      c.score()->style().set(StyleIdx::pageEvenLeftMargin, 0.0);
-      c.score()->style().set(StyleIdx::pageOddLeftMargin, 0.0);
+      c.score()->style().set(Sid::pageEvenLeftMargin, 0.0);
+      c.score()->style().set(Sid::pageOddLeftMargin, 0.0);
 
       c.score()->parts().front()->setLongName("");
-      c.score()->style().set(StyleIdx::linearStretch, 1.3);
-      c.score()->style().set(StyleIdx::MusicalSymbolFont, QString("Bravura"));
-      c.score()->style().set(StyleIdx::MusicalTextFont, QString("Bravura Text"));
-      c.score()->style().set(StyleIdx::startBarlineSingle, true);
+      c.score()->style().set(Sid::linearStretch, 1.3);
+      c.score()->style().set(Sid::MusicalSymbolFont, QString("Bravura"));
+      c.score()->style().set(Sid::MusicalTextFont, QString("Bravura Text"));
+      c.score()->style().set(Sid::startBarlineSingle, true);
 
       c.score()->staff(0)->setLines(0, 1); // single line only
       c.score()->staff(0)->staffType(0)->setGenClef(false); // no clef

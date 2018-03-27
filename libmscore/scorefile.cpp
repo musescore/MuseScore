@@ -67,7 +67,7 @@ static void writeMeasure(XmlWriter& xml, MeasureBase* m, int staffIdx, bool writ
       if (m->isMeasure() || staffIdx == 0)
             m->write(xml, staffIdx, writeSystemElements, forceTimeSig);
 
-      if (m->score()->styleB(StyleIdx::createMultiMeasureRests) && m->isMeasure() && toMeasure(m)->mmRest())
+      if (m->score()->styleB(Sid::createMultiMeasureRests) && m->isMeasure() && toMeasure(m)->mmRest())
             toMeasure(m)->mmRest()->write(xml, staffIdx, writeSystemElements, forceTimeSig);
 
       xml.setCurTick(m->endTick());
@@ -85,14 +85,14 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
 
       QList<Part*> hiddenParts;
       bool unhide = false;
-      if (styleB(StyleIdx::createMultiMeasureRests)) {
+      if (styleB(Sid::createMultiMeasureRests)) {
             for (Part* part : _parts) {
                   if (!part->show()) {
                         if (!unhide) {
                               startCmd();
                               unhide = true;
                               }
-                        part->undoChangeProperty(P_ID::VISIBLE, true);
+                        part->undoChangeProperty(Pid::VISIBLE, true);
                         hiddenParts.append(part);
                         }
                   }

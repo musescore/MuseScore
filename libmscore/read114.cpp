@@ -66,101 +66,101 @@ static int g_celloStrings[]  = {36,43,50,57};
 //---------------------------------------------------------
 
 struct StyleVal2 {
-      StyleIdx idx;
+      Sid idx;
       QVariant val;
       };
 
 static const StyleVal2 style114[] = {
-      { StyleIdx::lyricsMinBottomDistance,      Spatium(2) },
-      { StyleIdx::frameSystemDistance,          Spatium(1.0) },
-      { StyleIdx::minMeasureWidth,              Spatium(4.0) },
-      { StyleIdx::endBarDistance,               Spatium(0.30) },
+      { Sid::lyricsMinBottomDistance,      Spatium(2) },
+      { Sid::frameSystemDistance,          Spatium(1.0) },
+      { Sid::minMeasureWidth,              Spatium(4.0) },
+      { Sid::endBarDistance,               Spatium(0.30) },
 
-      { StyleIdx::repeatBarTips,                QVariant(false) },
-      { StyleIdx::startBarlineSingle,           QVariant(false) },
-      { StyleIdx::startBarlineMultiple,         QVariant(true) },
-      { StyleIdx::bracketWidth,                 QVariant(0.35) },
-      { StyleIdx::bracketDistance,              QVariant(0.25) },
-      { StyleIdx::clefLeftMargin,               QVariant(0.5) },
-      { StyleIdx::keysigLeftMargin,             QVariant(0.5) },
-      { StyleIdx::timesigLeftMargin,            QVariant(0.5) },
-      { StyleIdx::clefKeyRightMargin,           QVariant(1.75) },
-      { StyleIdx::clefBarlineDistance,          QVariant(0.18) },
-      { StyleIdx::stemWidth,                    QVariant(0.13) },
-      { StyleIdx::shortenStem,                  QVariant(true) },
-      { StyleIdx::shortStemProgression,         QVariant(0.25) },
-      { StyleIdx::shortestStem,                 QVariant(2.25) },
-      { StyleIdx::beginRepeatLeftMargin,        QVariant(1.0) },
-      { StyleIdx::minNoteDistance,              QVariant(0.4) },
-      { StyleIdx::barNoteDistance,              QVariant(1.2) },
-      { StyleIdx::noteBarDistance,              QVariant(1.0) },
-      { StyleIdx::measureSpacing,               QVariant(1.2) },
-      { StyleIdx::staffLineWidth,               QVariant(0.08) },
-      { StyleIdx::ledgerLineWidth,              QVariant(0.12) },
-      { StyleIdx::akkoladeWidth,                QVariant(1.6) },
-      { StyleIdx::accidentalDistance,           QVariant(0.22) },
-      { StyleIdx::accidentalNoteDistance,       QVariant(0.22) },
-      { StyleIdx::beamWidth,                    QVariant(0.48) },
-      { StyleIdx::beamDistance,                 QVariant(0.5) },
-      { StyleIdx::beamMinLen,                   QVariant(1.25) },
-      { StyleIdx::dotNoteDistance,              QVariant(0.35) },
-      { StyleIdx::dotRestDistance,              QVariant(0.25) },
-      { StyleIdx::dotDotDistance,               QVariant(0.5) },
-      { StyleIdx::propertyDistanceHead,         QVariant(1.0) },
-      { StyleIdx::propertyDistanceStem,         QVariant(0.5) },
-      { StyleIdx::propertyDistance,             QVariant(1.0) },
-      { StyleIdx::articulationMag,              QVariant(qreal(1.0)) },
-      { StyleIdx::lastSystemFillLimit,          QVariant(0.3) },
-      { StyleIdx::hairpinHeight,                QVariant(1.2) },
-      { StyleIdx::hairpinContHeight,            QVariant(0.5) },
-      { StyleIdx::hairpinLineWidth,             QVariant(0.13) },
-      { StyleIdx::showPageNumber,               QVariant(true) },
-      { StyleIdx::showPageNumberOne,            QVariant(false) },
-      { StyleIdx::pageNumberOddEven,            QVariant(true) },
-      { StyleIdx::showMeasureNumber,            QVariant(true) },
-      { StyleIdx::showMeasureNumberOne,         QVariant(false) },
-      { StyleIdx::measureNumberInterval,        QVariant(5) },
-      { StyleIdx::measureNumberSystem,          QVariant(true) },
-      { StyleIdx::measureNumberAllStaffs,       QVariant(false) },
-      { StyleIdx::smallNoteMag,                 QVariant(qreal(0.7)) },
-      { StyleIdx::graceNoteMag,                 QVariant(qreal(0.7)) },
-      { StyleIdx::smallStaffMag,                QVariant(qreal(0.7)) },
-      { StyleIdx::smallClefMag,                 QVariant(qreal(0.8)) },
-      { StyleIdx::genClef,                      QVariant(true) },
-      { StyleIdx::genKeysig,                    QVariant(true) },
-      { StyleIdx::genCourtesyTimesig,           QVariant(true) },
-      { StyleIdx::genCourtesyKeysig,            QVariant(true) },
-      { StyleIdx::useStandardNoteNames,         QVariant(true) },
-      { StyleIdx::useGermanNoteNames,           QVariant(false) },
-      { StyleIdx::useFullGermanNoteNames,       QVariant(false) },
-      { StyleIdx::useSolfeggioNoteNames,        QVariant(false) },
-      { StyleIdx::useFrenchNoteNames,           QVariant(false) },
-      { StyleIdx::chordDescriptionFile,         QVariant(QString("stdchords.xml")) },
-      { StyleIdx::chordStyle,                   QVariant(QString("custom")) },
-      { StyleIdx::chordsXmlFile,                QVariant(true) },
-      { StyleIdx::harmonyY,                     QVariant(0.0) },
-      { StyleIdx::concertPitch,                 QVariant(false) },
-      { StyleIdx::createMultiMeasureRests,      QVariant(false) },
-      { StyleIdx::minEmptyMeasures,             QVariant(2) },
-      { StyleIdx::minMMRestWidth,               QVariant(4.0) },
-      { StyleIdx::hideEmptyStaves,              QVariant(false) },
-      { StyleIdx::gateTime,                     QVariant(100) },
-      { StyleIdx::tenutoGateTime,               QVariant(100) },
-      { StyleIdx::staccatoGateTime,             QVariant(50) },
-      { StyleIdx::slurGateTime,                 QVariant(100) },
-      { StyleIdx::ArpeggioNoteDistance,         QVariant(.5) },
-      { StyleIdx::ArpeggioLineWidth,            QVariant(.18) },
-      { StyleIdx::ArpeggioHookLen,              QVariant(.8) },
-      { StyleIdx::keySigNaturals,               QVariant(int(KeySigNatural::BEFORE)) },
-      { StyleIdx::tupletMaxSlope,               QVariant(qreal(0.5)) },
-      { StyleIdx::tupletOufOfStaff,             QVariant(false) },
-      { StyleIdx::tupletVHeadDistance,          QVariant(.5) },
-      { StyleIdx::tupletVStemDistance,          QVariant(.25) },
-      { StyleIdx::tupletStemLeftDistance,       QVariant(.5) },
-      { StyleIdx::tupletStemRightDistance,      QVariant(.5) },
-      { StyleIdx::tupletNoteLeftDistance,       QVariant(0.0) },
-      { StyleIdx::tupletNoteRightDistance,      QVariant(0.0) },
-      { StyleIdx::hideInstrumentNameIfOneInstrument, QVariant(false) },
+      { Sid::repeatBarTips,                QVariant(false) },
+      { Sid::startBarlineSingle,           QVariant(false) },
+      { Sid::startBarlineMultiple,         QVariant(true) },
+      { Sid::bracketWidth,                 QVariant(0.35) },
+      { Sid::bracketDistance,              QVariant(0.25) },
+      { Sid::clefLeftMargin,               QVariant(0.5) },
+      { Sid::keysigLeftMargin,             QVariant(0.5) },
+      { Sid::timesigLeftMargin,            QVariant(0.5) },
+      { Sid::clefKeyRightMargin,           QVariant(1.75) },
+      { Sid::clefBarlineDistance,          QVariant(0.18) },
+      { Sid::stemWidth,                    QVariant(0.13) },
+      { Sid::shortenStem,                  QVariant(true) },
+      { Sid::shortStemProgression,         QVariant(0.25) },
+      { Sid::shortestStem,                 QVariant(2.25) },
+      { Sid::beginRepeatLeftMargin,        QVariant(1.0) },
+      { Sid::minNoteDistance,              QVariant(0.4) },
+      { Sid::barNoteDistance,              QVariant(1.2) },
+      { Sid::noteBarDistance,              QVariant(1.0) },
+      { Sid::measureSpacing,               QVariant(1.2) },
+      { Sid::staffLineWidth,               QVariant(0.08) },
+      { Sid::ledgerLineWidth,              QVariant(0.12) },
+      { Sid::akkoladeWidth,                QVariant(1.6) },
+      { Sid::accidentalDistance,           QVariant(0.22) },
+      { Sid::accidentalNoteDistance,       QVariant(0.22) },
+      { Sid::beamWidth,                    QVariant(0.48) },
+      { Sid::beamDistance,                 QVariant(0.5) },
+      { Sid::beamMinLen,                   QVariant(1.25) },
+      { Sid::dotNoteDistance,              QVariant(0.35) },
+      { Sid::dotRestDistance,              QVariant(0.25) },
+      { Sid::dotDotDistance,               QVariant(0.5) },
+      { Sid::propertyDistanceHead,         QVariant(1.0) },
+      { Sid::propertyDistanceStem,         QVariant(0.5) },
+      { Sid::propertyDistance,             QVariant(1.0) },
+      { Sid::articulationMag,              QVariant(qreal(1.0)) },
+      { Sid::lastSystemFillLimit,          QVariant(0.3) },
+      { Sid::hairpinHeight,                QVariant(1.2) },
+      { Sid::hairpinContHeight,            QVariant(0.5) },
+      { Sid::hairpinLineWidth,             QVariant(0.13) },
+      { Sid::showPageNumber,               QVariant(true) },
+      { Sid::showPageNumberOne,            QVariant(false) },
+      { Sid::pageNumberOddEven,            QVariant(true) },
+      { Sid::showMeasureNumber,            QVariant(true) },
+      { Sid::showMeasureNumberOne,         QVariant(false) },
+      { Sid::measureNumberInterval,        QVariant(5) },
+      { Sid::measureNumberSystem,          QVariant(true) },
+      { Sid::measureNumberAllStaffs,       QVariant(false) },
+      { Sid::smallNoteMag,                 QVariant(qreal(0.7)) },
+      { Sid::graceNoteMag,                 QVariant(qreal(0.7)) },
+      { Sid::smallStaffMag,                QVariant(qreal(0.7)) },
+      { Sid::smallClefMag,                 QVariant(qreal(0.8)) },
+      { Sid::genClef,                      QVariant(true) },
+      { Sid::genKeysig,                    QVariant(true) },
+      { Sid::genCourtesyTimesig,           QVariant(true) },
+      { Sid::genCourtesyKeysig,            QVariant(true) },
+      { Sid::useStandardNoteNames,         QVariant(true) },
+      { Sid::useGermanNoteNames,           QVariant(false) },
+      { Sid::useFullGermanNoteNames,       QVariant(false) },
+      { Sid::useSolfeggioNoteNames,        QVariant(false) },
+      { Sid::useFrenchNoteNames,           QVariant(false) },
+      { Sid::chordDescriptionFile,         QVariant(QString("stdchords.xml")) },
+      { Sid::chordStyle,                   QVariant(QString("custom")) },
+      { Sid::chordsXmlFile,                QVariant(true) },
+      { Sid::harmonyY,                     QVariant(0.0) },
+      { Sid::concertPitch,                 QVariant(false) },
+      { Sid::createMultiMeasureRests,      QVariant(false) },
+      { Sid::minEmptyMeasures,             QVariant(2) },
+      { Sid::minMMRestWidth,               QVariant(4.0) },
+      { Sid::hideEmptyStaves,              QVariant(false) },
+      { Sid::gateTime,                     QVariant(100) },
+      { Sid::tenutoGateTime,               QVariant(100) },
+      { Sid::staccatoGateTime,             QVariant(50) },
+      { Sid::slurGateTime,                 QVariant(100) },
+      { Sid::ArpeggioNoteDistance,         QVariant(.5) },
+      { Sid::ArpeggioLineWidth,            QVariant(.18) },
+      { Sid::ArpeggioHookLen,              QVariant(.8) },
+      { Sid::keySigNaturals,               QVariant(int(KeySigNatural::BEFORE)) },
+      { Sid::tupletMaxSlope,               QVariant(qreal(0.5)) },
+      { Sid::tupletOufOfStaff,             QVariant(false) },
+      { Sid::tupletVHeadDistance,          QVariant(.5) },
+      { Sid::tupletVStemDistance,          QVariant(.25) },
+      { Sid::tupletStemLeftDistance,       QVariant(.5) },
+      { Sid::tupletStemRightDistance,      QVariant(.5) },
+      { Sid::tupletNoteLeftDistance,       QVariant(0.0) },
+      { Sid::tupletNoteRightDistance,      QVariant(0.0) },
+      { Sid::hideInstrumentNameIfOneInstrument, QVariant(false) },
       };
 
 #define MM(x) ((x)/INCH)
@@ -1047,9 +1047,9 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "BarLine") {
                   BarLine* barLine = new BarLine(m->score());
                   barLine->setTrack(e.track());
-                  barLine->resetProperty(P_ID::BARLINE_SPAN);
-                  barLine->resetProperty(P_ID::BARLINE_SPAN_FROM);
-                  barLine->resetProperty(P_ID::BARLINE_SPAN_TO);
+                  barLine->resetProperty(Pid::BARLINE_SPAN);
+                  barLine->resetProperty(Pid::BARLINE_SPAN_FROM);
+                  barLine->resetProperty(Pid::BARLINE_SPAN_TO);
 
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
@@ -2005,7 +2005,7 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
 
 static void readStyle(MStyle* style, XmlReader& e)
       {
-      QString oldChordDescriptionFile = style->value(StyleIdx::chordDescriptionFile).toString();
+      QString oldChordDescriptionFile = style->value(Sid::chordDescriptionFile).toString();
       bool chordListTag = false;
       while (e.readNextStartElement()) {
             QString tag = e.name().toString();
@@ -2020,7 +2020,7 @@ static void readStyle(MStyle* style, XmlReader& e)
                   e.skipCurrentElement();
                   }
             else if (tag == "Spatium")
-                  style->set(StyleIdx::spatium, e.readDouble() * DPMM);
+                  style->set(Sid::spatium, e.readDouble() * DPMM);
             else if (tag == "page-layout") {
                   PageFormat pf;
                   initPageFormat(style, &pf);
@@ -2028,7 +2028,7 @@ static void readStyle(MStyle* style, XmlReader& e)
                   setPageFormat(style, pf);
                   }
             else if (tag == "displayInConcertPitch")
-                  style->set(StyleIdx::concertPitch, QVariant(bool(e.readInt())));
+                  style->set(Sid::concertPitch, QVariant(bool(e.readInt())));
             else if (tag == "ChordList") {
                   style->chordList()->clear();
                   style->chordList()->read(e);
@@ -2043,7 +2043,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             else if (tag == "pageFillLimit" || tag == "genTimesig" || tag == "FixMeasureNumbers" || tag == "FixMeasureWidth")   // obsolete
                   e.skipCurrentElement();
             else if (tag == "systemDistance")  // obsolete
-                  style->set(StyleIdx::minSystemDistance, QVariant(e.readDouble()));
+                  style->set(Sid::minSystemDistance, QVariant(e.readDouble()));
             else {
                   if (tag == "stemDir") {
                         int voice = e.attribute("voice", "1").toInt() - 1;
@@ -2072,8 +2072,8 @@ static void readStyle(MStyle* style, XmlReader& e)
                               || QString::compare(tag, QString("U").append(ai.name).append("Anchor"), Qt::CaseInsensitive) == 0
                               || QString::compare(tag, QString("D").append(ai.name).append("Anchor"), Qt::CaseInsensitive) == 0
                               ) {
-                              StyleIdx si = MStyle::styleIdx(QString(ai.name).append("Anchor"));
-                              if (si != StyleIdx::NOSTYLE) {
+                              Sid si = MStyle::styleIdx(QString(ai.name).append("Anchor"));
+                              if (si != Sid::NOSTYLE) {
                                     QString val(e.readElementText());
                                     style->set(si, val.toInt());
                                     break;
@@ -2092,16 +2092,16 @@ static void readStyle(MStyle* style, XmlReader& e)
       // and didn't encounter a ChordList tag
       // then load the chord description file
 
-      QString newChordDescriptionFile = style->value(StyleIdx::chordDescriptionFile).toString();
+      QString newChordDescriptionFile = style->value(Sid::chordDescriptionFile).toString();
       if (newChordDescriptionFile != oldChordDescriptionFile && !chordListTag) {
-            if (!newChordDescriptionFile.startsWith("chords_") && style->value(StyleIdx::chordStyle).toString() == "std") {
+            if (!newChordDescriptionFile.startsWith("chords_") && style->value(Sid::chordStyle).toString() == "std") {
                   // should not normally happen,
                   // but treat as "old" (114) score just in case
-                  style->set(StyleIdx::chordStyle, QVariant(QString("custom")));
-                  style->set(StyleIdx::chordsXmlFile, QVariant(true));
+                  style->set(Sid::chordStyle, QVariant(QString("custom")));
+                  style->set(Sid::chordsXmlFile, QVariant(true));
                   qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
                   }
-            if (style->value(StyleIdx::chordStyle).toString() == "custom")
+            if (style->value(Sid::chordStyle).toString() == "custom")
                   style->setCustomChordList(true);
             else
                   style->setCustomChordList(false);
@@ -2110,7 +2110,7 @@ static void readStyle(MStyle* style, XmlReader& e)
 
       // make sure we have a chordlist
       if (!style->chordList()->loaded() && !chordListTag) {
-            if (style->value(StyleIdx::chordsXmlFile).toBool())
+            if (style->value(Sid::chordsXmlFile).toBool())
                   style->chordList()->read("chords.xml");
             style->chordList()->read(newChordDescriptionFile);
             }
@@ -2121,7 +2121,7 @@ static void readStyle(MStyle* style, XmlReader& e)
       //  into spatium units
       //
       int n = style->textStyles().size();
-      qreal _spatium = style->value(StyleIdx::spatium).toDouble();
+      qreal _spatium = style->value(Sid::spatium).toDouble();
       qreal spMM = _spatium / DPMM;
       for (int i = 0; i < n; ++i) {
             TextStyle* s = &style->textStyle(StyledPropertyListIdx(i));
@@ -2223,8 +2223,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   //style()->load(e);
                   // adjust this now so chords render properly on read
                   // other style adjustments can wait until reading is finished
-                  if (styleB(StyleIdx::useGermanNoteNames))
-                        style().set(StyleIdx::useStandardNoteNames, false);
+                  if (styleB(Sid::useGermanNoteNames))
+                        style().set(Sid::useStandardNoteNames, false);
                   if (_layoutMode == LayoutMode::FLOAT) {
                         // style should not change spatium in
                         // float mode
@@ -2416,15 +2416,15 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   qreal yo = 0;
                   if (s->isOttava()) {
                       // fix ottava position
-                      yo = styleP(StyleIdx::ottavaPosAbove);
+                      yo = styleP(Sid::ottavaPosAbove);
                       if (s->placeBelow())
                             yo = -yo + s->staff()->height();
                       }
                   else if (s->isPedal()) {
-                        yo = styleP(StyleIdx::pedalPosBelow);
+                        yo = styleP(Sid::pedalPosBelow);
                         }
                   else if (s->isTrill()) {
-                        yo = styleP(StyleIdx::trillPosAbove);
+                        yo = styleP(Sid::trillPosAbove);
                         }
                   else if (s->isTextLine()) {
                         yo = -5.0 * spatium();
@@ -2494,7 +2494,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
             if (mb->isVBox()) {
                   VBox* b  = toVBox(mb);
-                  qreal y = styleP(StyleIdx::staffUpperBorder);
+                  qreal y = styleP(Sid::staffUpperBorder);
                   b->setBottomGap(y);
                   }
             }
@@ -2516,20 +2516,20 @@ Score::FileError MasterScore::read114(XmlReader& e)
             }
 
       // adjust some styles
-      Spatium lmbd = styleS(StyleIdx::lyricsMinBottomDistance);
-      style().set(StyleIdx::lyricsMinBottomDistance, Spatium(lmbd.val() + 4.0));
-      if (styleB(StyleIdx::hideEmptyStaves))        // http://musescore.org/en/node/16228
-            style().set(StyleIdx::dontHideStavesInFirstSystem, false);
-      if (styleB(StyleIdx::showPageNumberOne)) {    // http://musescore.org/en/node/21207
-            style().set(StyleIdx::evenFooterL, QString("$P"));
-            style().set(StyleIdx::oddFooterR, QString("$P"));
+      Spatium lmbd = styleS(Sid::lyricsMinBottomDistance);
+      style().set(Sid::lyricsMinBottomDistance, Spatium(lmbd.val() + 4.0));
+      if (styleB(Sid::hideEmptyStaves))        // http://musescore.org/en/node/16228
+            style().set(Sid::dontHideStavesInFirstSystem, false);
+      if (styleB(Sid::showPageNumberOne)) {    // http://musescore.org/en/node/21207
+            style().set(Sid::evenFooterL, QString("$P"));
+            style().set(Sid::oddFooterR, QString("$P"));
             }
-      if (styleI(StyleIdx::minEmptyMeasures) == 0)
-            style().set(StyleIdx::minEmptyMeasures, 1);
-      style().set(StyleIdx::frameSystemDistance, styleS(StyleIdx::frameSystemDistance) + Spatium(6.0));
+      if (styleI(Sid::minEmptyMeasures) == 0)
+            style().set(Sid::minEmptyMeasures, 1);
+      style().set(Sid::frameSystemDistance, styleS(Sid::frameSystemDistance) + Spatium(6.0));
       // hack: net overall effect of layout changes has been for things to take slightly more room
-      qreal adjustedSpacing = qMax(styleD(StyleIdx::measureSpacing) * 0.95, 1.0);
-      style().set(StyleIdx::measureSpacing, adjustedSpacing);
+      qreal adjustedSpacing = qMax(styleD(Sid::measureSpacing) * 0.95, 1.0);
+      style().set(Sid::measureSpacing, adjustedSpacing);
 
       _showOmr = false;
 
@@ -2566,7 +2566,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
             if (!excerpt->parts().isEmpty()) {
                   Score* nscore = new Score(this);
                   excerpt->setPartScore(nscore);
-                  nscore->style().set(StyleIdx::createMultiMeasureRests, true);
+                  nscore->style().set(Sid::createMultiMeasureRests, true);
                   Excerpt::createExcerpt(excerpt);
                   }
             }
@@ -2574,8 +2574,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
       // volta offsets in older scores are hardcoded to be relative to a voltaY of -2.0sp
       // we'll force this and live with it for the score
       // but we wait until now to do it so parts don't have this issue
-      if (styleV(StyleIdx::voltaY) == MScore::baseStyle().value(StyleIdx::voltaY))
-            style().set(StyleIdx::voltaY, -2.0f);
+      if (styleV(Sid::voltaY) == MScore::baseStyle().value(Sid::voltaY))
+            style().set(Sid::voltaY, -2.0f);
 
       fixTicks();
       rebuildMidiMapping();

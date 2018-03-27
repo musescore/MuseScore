@@ -1343,10 +1343,10 @@ void ChangeStyle::flip(EditData*)
       {
       MStyle tmp = score->style();
 
-      if (score->styleV(StyleIdx::concertPitch) != style.value(StyleIdx::concertPitch))
-            score->cmdConcertPitchChanged(style.value(StyleIdx::concertPitch).toBool(), true);
-      if (score->styleV(StyleIdx::MusicalSymbolFont) != style.value(StyleIdx::MusicalSymbolFont)) {
-            score->setScoreFont(ScoreFont::fontFactory(style.value(StyleIdx::MusicalSymbolFont).toString()));
+      if (score->styleV(Sid::concertPitch) != style.value(Sid::concertPitch))
+            score->cmdConcertPitchChanged(style.value(Sid::concertPitch).toBool(), true);
+      if (score->styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
+            score->setScoreFont(ScoreFont::fontFactory(style.value(Sid::MusicalSymbolFont).toString()));
             }
       score->setStyle(style);
       score->styleChanged();
@@ -1362,7 +1362,7 @@ void ChangeStyleVal::flip(EditData*)
       QVariant v = score->styleV(idx);
       if (v != value) {
             score->style().set(idx, value);
-            if (idx == StyleIdx::chordDescriptionFile) {
+            if (idx == Sid::chordDescriptionFile) {
                   score->style().chordList()->unload();
                   score->style().chordList()->read(value.toString());
                   }
@@ -1817,7 +1817,7 @@ void ChangeProperty::flip(EditData*)
       {
       qCDebug(undoRedo) << element->name() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id) << "->" << property;
 
-//      if (id == P_ID::SPANNER_TICK)
+//      if (id == Pid::SPANNER_TICK)
 //            static_cast<Element*>(element)->score()->removeSpanner(static_cast<Spanner*>(element));
 
       QVariant v       = element->getProperty(id);
@@ -1827,7 +1827,7 @@ void ChangeProperty::flip(EditData*)
       element->setPropertyFlags(id, flags);
 
 #if 0
-      if (id == P_ID::SPANNER_TICK) {
+      if (id == Pid::SPANNER_TICK) {
             static_cast<Element*>(element)->score()->addSpanner(static_cast<Spanner*>(element));
             // while updating ticks for an Ottava, the parent staff calls updateOttava()
             // and expects to find the Ottava spanner(s) in the score lists;

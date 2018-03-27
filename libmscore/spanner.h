@@ -89,12 +89,12 @@ class SpannerSegment : public Element {
 
       virtual bool isEditable() const override { return true; }
 
-      virtual QVariant getProperty(P_ID id) const override;
-      virtual bool setProperty(P_ID id, const QVariant& v) override;
-      virtual QVariant propertyDefault(P_ID id) const override;
-      virtual StyleIdx getPropertyStyle(P_ID id) const override;
-      virtual PropertyFlags& propertyFlags(P_ID id) override;
-      virtual void resetProperty(P_ID id) override;
+      virtual QVariant getProperty(Pid id) const override;
+      virtual bool setProperty(Pid id, const QVariant& v) override;
+      virtual QVariant propertyDefault(Pid id) const override;
+      virtual Sid getPropertyStyle(Pid id) const override;
+      virtual PropertyFlags& propertyFlags(Pid id) override;
+      virtual void resetProperty(Pid id) override;
       virtual void styleChanged() override;
       void reset() override;
 
@@ -178,9 +178,9 @@ class Spanner : public Element {
       virtual void undoInsertTimeUnmanaged(int tick, int len);
       virtual void setYoff(qreal) {}    // used in musicxml import
 
-      QVariant getProperty(P_ID propertyId) const;
-      bool setProperty(P_ID propertyId, const QVariant& v);
-      QVariant propertyDefault(P_ID propertyId) const;
+      QVariant getProperty(Pid propertyId) const;
+      bool setProperty(Pid propertyId, const QVariant& v);
+      QVariant propertyDefault(Pid propertyId) const;
 
       void computeStartElement();
       void computeEndElement();

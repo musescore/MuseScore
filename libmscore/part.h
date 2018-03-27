@@ -125,8 +125,8 @@ class Part final : public ScoreElement {
       QString partName() const                 { return _partName; }
       void setPartName(const QString& s)       { _partName = s; }
 
-      QVariant getProperty(P_ID) const override;
-      bool setProperty(P_ID, const QVariant&) override;
+      QVariant getProperty(Pid) const override;
+      bool setProperty(Pid, const QVariant&) override;
 
       int lyricCount();
       int harmonyCount();
