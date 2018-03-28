@@ -40,9 +40,6 @@ class StaffText final : public TextBase  {
       int aeolusStops[4]   { 0, 0, 0, 0 };
       bool _swing          { false };
 
-   protected:
-      virtual void writeProperties(XmlWriter& xml) const;
-
    public:
       StaffText(Score* = 0);
       StaffText(SubStyleId, Score* = 0);

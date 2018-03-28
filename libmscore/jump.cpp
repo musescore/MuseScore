@@ -251,6 +251,8 @@ QVariant Jump::propertyDefault(Pid propertyId) const
                   return QString("");
             case Pid::PLAY_REPEATS:
                   return false;
+            case Pid::PLACEMENT:
+                  return int(Placement::ABOVE);
             default:
                   break;
             }

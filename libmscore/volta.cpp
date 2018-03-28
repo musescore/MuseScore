@@ -56,8 +56,8 @@ QVariant VoltaSegment::getProperty(Pid id) const
             default:
                   break;
             }
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
-            if (spp->propertyIdx == id)
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
+            if (spp->pid == id)
                   return spanner()->getProperty(id);
             }
       return TextLineBaseSegment::getProperty(id);
@@ -77,8 +77,8 @@ bool VoltaSegment::setProperty(Pid id, const QVariant& v)
             default:
                   break;
             }
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
-            if (spp->propertyIdx == id)
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
+            if (spp->pid == id)
                   return spanner()->setProperty(id, v);
             }
       return TextLineBaseSegment::setProperty(id, v);
@@ -98,8 +98,8 @@ QVariant VoltaSegment::propertyDefault(Pid id) const
             default:
                   break;
             }
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
-            if (spp->propertyIdx == id)
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
+            if (spp->pid == id)
                   return spanner()->propertyDefault(id);
             }
       return TextLineBaseSegment::propertyDefault(id);

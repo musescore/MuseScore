@@ -327,7 +327,6 @@
       <Measure number="11">
         <StaffText>
           <style>Expression</style>
-          <offset x="0" y="5.5"/>
           <text>technique</text>
           </StaffText>
         <Rest>
@@ -365,7 +364,6 @@
           </LayoutBreak>
         <StaffText>
           <style>Metronome</style>
-          <offset x="0" y="5.5"/>
           <text>metronome</text>
           </StaffText>
         <Rest>
