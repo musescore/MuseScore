@@ -384,15 +384,5 @@ QVariant Bend::propertyDefault(Pid id) const
             }
       }
 
-//---------------------------------------------------------
-//   reset
-//---------------------------------------------------------
-
-void Bend::reset()
-      {
-      resetStyledProperties();
-      Element::reset();
-      }
-
 }
 

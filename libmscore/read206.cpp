@@ -237,6 +237,7 @@ struct StyleVal2 {
       { Sid::linearStretch,               QVariant(qreal(1.5)) },
       { Sid::crossMeasureValues,          QVariant(false) },
       { Sid::keySigNaturals,              QVariant(int(KeySigNatural::NONE)) },
+
       { Sid::tupletMaxSlope,              QVariant(qreal(0.5)) },
       { Sid::tupletOufOfStaff,            QVariant(true) },
       { Sid::tupletVHeadDistance,         QVariant(.5) },
@@ -963,52 +964,6 @@ static void readNote(Note* note, XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   readTuplet
-//---------------------------------------------------------
-
-static void readTuplet(Tuplet* tuplet, XmlReader& e)
-      {
-      tuplet->setId(e.intAttribute("id", 0));
-      while (e.readNextStartElement()) {
-            if (!tuplet->readProperties(e))
-                  e.unknown();
-            }
-      Fraction r = (tuplet->ratio() == 1) ? tuplet->ratio() : tuplet->ratio().reduced();
-      Fraction f(r.denominator(), tuplet->baseLen().fraction().denominator());
-      tuplet->setDuration(f.reduced());
-      }
-
-//---------------------------------------------------------
-//   readChord
-//---------------------------------------------------------
-
-static void readChord(Chord* chord, XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "Note") {
-                  Note* note = new Note(chord->score());
-                  // the note needs to know the properties of the track it belongs to
-                  note->setTrack(chord->track());
-                  note->setChord(chord);
-                  readNote(note, e);
-                  chord->add(note);
-                  }
-            else if (tag == "Articulation") {
-                  Element* el = readArticulation(chord, e);
-                  if (el->isFermata())
-                        chord->segment()->add(el);
-                  else
-                        chord->add(el);
-                  }
-            else if (chord->readProperties(e))
-                  ;
-            else
-                  e.unknown();
-            }
-      }
-
-//---------------------------------------------------------
 //   readText
 //---------------------------------------------------------
 
@@ -1018,8 +973,10 @@ static void readText(XmlReader& e, TextBase* t, Element* be)
             const QStringRef& tag(e.name());
             if (tag == "style") {
                   QString s = e.readElementText();
-                  SubStyleId ss = subStyleFromName(s);
-                  be->initSubStyle(ss);
+                  if (!be->isTuplet()) {      // Hack
+                        SubStyleId ss = subStyleFromName(s);
+                        be->initSubStyle(ss);
+                        }
                   }
             else if (tag == "foregroundColor")  // same as "color" ?
                   e.skipCurrentElement();
@@ -1059,6 +1016,64 @@ static void readText(XmlReader& e, TextBase* t, Element* be)
       }
 
 //---------------------------------------------------------
+//   readTuplet
+//---------------------------------------------------------
+
+static void readTuplet(Tuplet* tuplet, XmlReader& e)
+      {
+      tuplet->setId(e.intAttribute("id", 0));
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Number") {
+                  Text* _number = new Text(tuplet->score());
+                  _number->setParent(tuplet);
+                  tuplet->setNumber(_number);
+                  readText(e, _number, tuplet);
+                  _number->setVisible(tuplet->visible());     //?? override saved property
+                  _number->setTrack(tuplet->track());
+                  // move property flags from _number
+                  for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
+                        tuplet->setPropertyFlags(p, _number->propertyFlags(p));
+                  }
+            else if (!tuplet->readProperties(e))
+                  e.unknown();
+            }
+      Fraction r = (tuplet->ratio() == 1) ? tuplet->ratio() : tuplet->ratio().reduced();
+      Fraction f(r.denominator(), tuplet->baseLen().fraction().denominator());
+      tuplet->setDuration(f.reduced());
+      }
+
+//---------------------------------------------------------
+//   readChord
+//---------------------------------------------------------
+
+static void readChord(Chord* chord, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Note") {
+                  Note* note = new Note(chord->score());
+                  // the note needs to know the properties of the track it belongs to
+                  note->setTrack(chord->track());
+                  note->setChord(chord);
+                  readNote(note, e);
+                  chord->add(note);
+                  }
+            else if (tag == "Articulation") {
+                  Element* el = readArticulation(chord, e);
+                  if (el->isFermata())
+                        chord->segment()->add(el);
+                  else
+                        chord->add(el);
+                  }
+            else if (chord->readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
 //   readTextLineProperties
 //---------------------------------------------------------
 
@@ -1068,8 +1083,7 @@ static bool readTextLineProperties(XmlReader& e, TextLineBase* tl)
 
       if (tag == "beginText") {
             Text* text = new Text(tl->score());
-//            readText(e, text, tl);
-            readText(e, text, text);
+            readText(e, text, tl);
             tl->setBeginText(text->xmlText());
             delete text;
             }

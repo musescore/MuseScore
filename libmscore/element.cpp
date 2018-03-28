@@ -235,6 +235,7 @@ void Element::reset()
       {
       undoResetProperty(Pid::AUTOPLACE);
       undoResetProperty(Pid::PLACEMENT);
+      ScoreElement::reset();
       }
 
 //---------------------------------------------------------

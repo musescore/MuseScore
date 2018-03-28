@@ -872,17 +872,9 @@ void Tuplet::updateGrips(EditData& ed) const
 
 void Tuplet::reset()
       {
-//TODO-ws      for (auto k : _styledProperties)
-//            undoResetProperty(k.propertyIdx);
-
-      score()->addRefresh(canvasBoundingRect());
-
       undoChangeProperty(Pid::P1, QPointF());
       undoChangeProperty(Pid::P2, QPointF());
-
       Element::reset();
-      layout();
-      score()->addRefresh(canvasBoundingRect());
       }
 
 //---------------------------------------------------------

@@ -283,7 +283,9 @@ Undo/Redo:
 Serialization:
 
       void ScoreElement::writeProperty(XmlWriter& xml, P_ID id) const;
+
       bool Element::readProperty(const QStringRef&, XmlReader&, P_ID);
+            This sets the property state to UNSTYLED if it is a styled property.
 
 Styled properties:
 
@@ -316,16 +318,13 @@ Macros:
           };
     this defines:
           bool _bold;
-          PropertyFlags _boldStyle { PropertyFlags::STYLED };
           const bool& bold() const { return _bold; }
           void setBold(const a& val) { _bold = val; }
 
 
-Functions which must be implemented by ScoreElement:
+Functions which must be implemented for any new ScoreElement:
 
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
 
-      virtual const StyledProperty* styledProperties() const override;
-      virtual PropertyFlags* propertyFlagsList()       override;

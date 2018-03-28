@@ -2724,14 +2724,18 @@ bool TextBase::setProperty(Pid propertyId, const QVariant& v)
 
 QVariant TextBase::propertyDefault(Pid id) const
       {
-      switch (id) {
-            case Pid::SUB_STYLE:
-                  return int(SubStyleId::DEFAULT);
-            case Pid::TEXT:
-                  return QString();
-            default:
-                  return Element::propertyDefault(id);
+      QVariant v = styledPropertyDefault(id);
+      if (!v.isValid()) {
+            switch (id) {
+                  case Pid::SUB_STYLE:
+                        return int(SubStyleId::DEFAULT);
+                  case Pid::TEXT:
+                        return QString();
+                  default:
+                        return Element::propertyDefault(id);
+                  }
             }
+      return v;
       }
 
 //---------------------------------------------------------

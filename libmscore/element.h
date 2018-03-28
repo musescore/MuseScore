@@ -361,7 +361,7 @@ class Element : public ScoreElement {
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
-      virtual void reset();         // reset all properties & position to default
+      virtual void reset() override;         // reset all properties & position to default
 
       virtual qreal mag() const        { return _mag;   }
       void setMag(qreal val)           { _mag = val;    }

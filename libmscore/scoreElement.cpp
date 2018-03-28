@@ -182,11 +182,26 @@ QVariant ScoreElement::propertyDefault(Pid id) const
       {
       if (id == Pid::SUB_STYLE)
             return int(SubStyleId::DEFAULT);
+#if 1       // this is wrong, styled properties should be considered first
       for (const StyledProperty& p : subStyle(subStyleId())) {
             if (p.pid == id)
                   return score()->styleV(p.sid);
             }
-//      qDebug("<%s> not found in <%s> style <%s>", propertyName(id), name(), subStyleName(subStyleId()));
+#endif
+      qDebug("<%s> not found in <%s> style <%s>", propertyName(id), name(), subStyleName(subStyleId()));
+      return QVariant();
+      }
+
+//---------------------------------------------------------
+//   styledPropertyDefault
+//---------------------------------------------------------
+
+QVariant ScoreElement::styledPropertyDefault(Pid id) const
+      {
+      for (const StyledProperty& p : subStyle(subStyleId())) {
+            if (p.pid == id)
+                  return score()->styleV(p.sid);
+            }
       return QVariant();
       }
 
@@ -312,6 +327,24 @@ void ScoreElement::undoPushProperty(Pid id)
       }
 
 //---------------------------------------------------------
+//   readProperty
+//---------------------------------------------------------
+
+bool ScoreElement::readProperty(const QStringRef& s, XmlReader& e, Pid id)
+      {
+      if (s == propertyName(id)) {
+            if (id == Pid::SUB_STYLE)
+                  initSubStyle(SubStyleId(Ms::getProperty(id, e).toInt()));
+            else {
+                  setProperty(id, Ms::getProperty(id, e));
+                  setPropertyFlags(id, PropertyFlags::UNSTYLED);
+                  }
+            return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   writeProperty
 //---------------------------------------------------------
 
@@ -331,6 +364,19 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid id) const
       }
 
 //---------------------------------------------------------
+//   readStyledProperty
+//---------------------------------------------------------
+
+bool ScoreElement::readStyledProperty(XmlReader& e, const QStringRef& tag)
+      {
+      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
+            if (readProperty(tag, e, spp->pid))
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   writeStyledProperties
 //---------------------------------------------------------
 
@@ -341,13 +387,13 @@ void ScoreElement::writeStyledProperties(XmlWriter& xml) const
       }
 
 //---------------------------------------------------------
-//   resetStyledProperties
+//   reset
 //---------------------------------------------------------
 
-void ScoreElement::resetStyledProperties()
+void ScoreElement::reset()
       {
       for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            resetProperty(spp->pid);
+            undoResetProperty(spp->pid);
       }
 
 //---------------------------------------------------------
@@ -499,41 +545,6 @@ Sid ScoreElement::getPropertyStyle(Pid id) const
                   return k.sid;
             }
       return Sid::NOSTYLE;
-      }
-
-//---------------------------------------------------------
-//   readProperty
-//---------------------------------------------------------
-
-bool ScoreElement::readProperty(const QStringRef& s, XmlReader& e, Pid id)
-      {
-      if (s == propertyName(id)) {
-            if (id == Pid::SUB_STYLE)
-                  initSubStyle(SubStyleId(Ms::getProperty(id, e).toInt()));
-            else {
-                  setProperty(id, Ms::getProperty(id, e));
-                  setPropertyFlags(id, PropertyFlags::UNSTYLED);
-                  }
-            return true;
-            }
-      return false;
-      }
-
-//---------------------------------------------------------
-//   readStyledProperty
-//---------------------------------------------------------
-
-bool ScoreElement::readStyledProperty(XmlReader& e, const QStringRef& tag)
-      {
-      const StyledProperty* spl = styledProperties();
-      for (int i = 0;;++i) {
-            const StyledProperty& k = spl[i];
-            if (k.sid == Sid::NOSTYLE)
-                  break;
-            if (readProperty(tag, e, k.pid))
-                  return true;
-             }
-      return false;
       }
 
 //---------------------------------------------------------
