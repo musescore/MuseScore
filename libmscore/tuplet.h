@@ -69,7 +69,8 @@ class Tuplet final : public DurationElement {
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
 
-      Text* number() const { return _number; }
+      Text* number() const    { return _number; }
+      void setNumber(Text* t) { _number = t; }
 
       virtual bool isEditable() const override;
       virtual void startEdit(EditData&) override;

@@ -190,8 +190,10 @@ class ScoreElement {
       virtual QVariant getProperty(Pid) const = 0;
       virtual bool setProperty(Pid, const QVariant&) = 0;
       virtual QVariant propertyDefault(Pid) const;
+      QVariant styledPropertyDefault(Pid id) const;
       virtual void resetProperty(Pid id);
-      void resetStyledProperties();
+
+      virtual void reset();                     // reset all properties & position to default
 
       SubStyleId subStyleId() const                          { return _subStyleId; }
       void setSubStyleId(SubStyleId);
