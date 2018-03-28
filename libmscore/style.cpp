@@ -350,7 +350,6 @@ static const StyleType styleTypes[] {
       { Sid::tupletFontUnderline,     "tupletFontUnderline",     false },
       { Sid::tupletAlign,             "tupletAlign",             QVariant::fromValue(Align::CENTER) },
 
-
       { Sid::barreLineWidth,          "barreLineWidth",          QVariant(1.0) },
       { Sid::fretMag,                 "fretMag",                 QVariant(1.0) },
       { Sid::scaleBarlines,           "scaleBarlines",           QVariant(true) },
