@@ -15,5 +15,6 @@ done
 echo "updating CapellaXML files ..."
 for f in $capxfiles; do
       echo "${f}.capx -> ${f}.capx-ref.mscx"
-      $MSCORE -t ${f}.capx -o ${f}.capx-ref.mscx &> /dev/null
+#      $MSCORE -t ${f}.capx -o ${f}.capx-ref.mscx &> /dev/null
+      cp ../../../build.debug/mtest/capella/io/${f}.capx.mscx ${f}.capx-ref.mscx
 done

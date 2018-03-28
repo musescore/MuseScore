@@ -114,8 +114,8 @@ void Pedal::write(XmlWriter& xml) const
          }) {
             writeProperty(xml, i);
             }
-      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->propertyIdx);
+      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
+            writeProperty(xml, spp->pid);
 
       Element::writeProperties(xml);
       xml.etag();

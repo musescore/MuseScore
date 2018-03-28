@@ -1254,14 +1254,5 @@ QVariant SLine::propertyDefault(Pid id) const
             }
       }
 
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid SLine::getPropertyStyle(Pid id) const
-      {
-      return Spanner::getPropertyStyle(id);
-      }
-
 }
 
