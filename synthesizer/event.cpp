@@ -396,7 +396,7 @@ void EventMap::fixupMIDI()
             if (it->second.type() == ME_NOTEON) {
                   unsigned short np = info[it->second.channel()].nowPlaying[it->second.pitch()];
                   if (it->second.velo() == 0) {
-                        /* already off or still playing? */
+                        /* already off (should not happen) or still playing? */
                         if (np == 0 || --np > 0)
                               discard = true;
                         else {
