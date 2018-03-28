@@ -22,6 +22,7 @@
 #include "measureproperties.h"
 #include "musescore.h"
 #include "navigator.h"
+#include "noteeditcontext.h"
 #include "preferences.h"
 #include "scoretab.h"
 #include "seq.h"
@@ -158,6 +159,7 @@ ScoreView::ScoreView(QWidget* parent)
       _curLoopOut = new PositionCursor(this);
       _curLoopOut->setType(CursorType::LOOP_OUT);
 
+      noteEditContextMenu = new NoteEditContext(this);
       if (converterMode)      // HACK
             return;
 
@@ -258,6 +260,12 @@ ScoreView::~ScoreView()
       delete shadowNote;
       }
 
+
+void ScoreView::noteEntryPopup(const QPoint& pos)
+      {
+      noteEditContextMenu->open(pos);//entryContextMenu->exec(pos);
+      }
+
 //---------------------------------------------------------
 //   objectPopup
 //    the menu can be extended by Elements with
@@ -317,6 +325,8 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       popup->addSeparator();
       popup->addAction("Debugger")->setData("list");
 #endif
+      popup->addAction(getAction("note-input"));
+      popup->addSeparator();
 
       a = popup->exec(pos);
       if (a == 0)
@@ -417,6 +427,8 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
 #ifndef NDEBUG
       popup->addAction("Object Debugger")->setData("list");
 #endif
+      popup->addAction(getAction("note-input"));
+      popup->addSeparator();
 
       a = popup->exec(gpos);
       if (a == 0)

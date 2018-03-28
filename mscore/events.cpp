@@ -330,8 +330,8 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                         r.translate(0.0, -m->spatium());
                         }
                   if (r.contains(editData.startMove)) {
-                        _score->select(m, st, staffIdx);
-                        _score->setUpdateAll();
+                  _score->select(m, st, staffIdx);
+                  _score->setUpdateAll();
                         clickOffElement = false;
                         }
                   else
@@ -396,12 +396,14 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   break;
 
             case ViewState::NOTE_ENTRY:
+                  if (ev->button() == Qt::LeftButton) {
                   _score->startCmd();
                   _score->putNote(editData.startMove, ev->modifiers() & Qt::ShiftModifier, ev->modifiers() & Qt::ControlModifier);
                   _score->endCmd();
                   if (_score->inputState().cr())
                         adjustCanvasPosition(_score->inputState().cr(), false);
                   shadowNote->setVisible(false);
+                  }
                   break;
 
             case ViewState::EDIT: {
@@ -468,8 +470,8 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
 
       switch (state) {
             case ViewState::NORMAL:
-                   if (!drag)
-                        return;
+                        if (!drag)
+                              return;
                   if (!editData.element && (me->modifiers() & Qt::ShiftModifier))
                         changeState(ViewState::LASSO);
                   else if (editData.element && !(me->modifiers()) && editData.element->isMovable())
@@ -702,6 +704,24 @@ void ScoreView::contextMenuEvent(QContextMenuEvent* ev)
       QPoint gp          = ev->globalPos();
       editData.startMove = toLogical(ev->pos());
       Element* e         = elementNear(editData.startMove);
+      InputState& is = _score->inputState();
+
+      if (is.noteEntryMode()) {
+            noteEntryPopup(gp);
+            QCursor::setPos(gp);
+            return;
+            }
+      else if(e){
+            if( e->isNote() && !(e->selected())){
+            //editData.element = e;
+            e->score()->select(e, SelectType::SINGLE, -1);
+            noteEntryPopup(gp);
+            QCursor::setPos(gp);
+            return;
+            }
+      }
+
+
       if (e) {
             if (!e->selected()) {
                   // bool control = (ev->modifiers() & Qt::ControlModifier) ? true : false;
@@ -723,6 +743,10 @@ void ScoreView::contextMenuEvent(QContextMenuEvent* ev)
                   popup->addAction(getAction("edit-style"));
                   popup->addAction(getAction("page-settings"));
                   popup->addAction(getAction("load-style"));
+
+                  popup->addSeparator();
+                  popup->addAction(getAction("note-input"));
+
                   _score->update();
                   popup->popup(gp);
                   }

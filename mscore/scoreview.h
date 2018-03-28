@@ -46,6 +46,7 @@ class Tuplet;
 class FretDiagram;
 class Bend;
 class TremoloBar;
+class NoteEditContext;
 
 #ifdef Q_OS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
@@ -144,6 +145,7 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void objectPopup(const QPoint&, Element*);
       void measurePopup(QContextMenuEvent* ev, Measure*);
+      void noteEntryPopup(const QPoint&);
 
       void saveChord(XmlWriter&);
 
@@ -243,6 +245,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void endLasso();
       Element* getDropTarget(EditData&);
+
+      void initNoteEditPopup();
 
    private slots:
       void posChanged(POS pos, unsigned tick);
@@ -406,6 +410,9 @@ class ScoreView : public QWidget, public MuseScoreView {
       void updateGrips();
       bool moveWhenInactive() const { return _moveWhenInactive; }
       bool moveWhenInactive(bool move) { bool m = _moveWhenInactive; _moveWhenInactive = move; return m; }
+
+      NoteEditContext* noteEditContextMenu;
+
       };
 
 } // namespace Ms
