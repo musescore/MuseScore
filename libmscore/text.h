@@ -322,9 +322,6 @@ class TextBase : public Element {
       virtual bool setProperty(Pid propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(Pid id) const override;
 
-      virtual void reset() override;
-      virtual void styleChanged() override;
-
       void editInsertText(TextCursor*, const QString&);
 
       TextCursor* cursor(EditData&);

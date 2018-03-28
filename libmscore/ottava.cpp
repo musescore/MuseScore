@@ -87,8 +87,8 @@ void OttavaSegment::layout()
 
 QVariant OttavaSegment::getProperty(Pid id) const
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
-            if (spp->propertyIdx == id)
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
+            if (spp->pid == id)
                   return spanner()->getProperty(id);
             }
       return TextLineBaseSegment::getProperty(id);
@@ -100,8 +100,8 @@ QVariant OttavaSegment::getProperty(Pid id) const
 
 bool OttavaSegment::setProperty(Pid id, const QVariant& v)
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
-            if (spp->propertyIdx == id)
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
+            if (spp->pid == id)
                   return spanner()->setProperty(id, v);
             }
       return TextLineBaseSegment::setProperty(id, v);
@@ -113,8 +113,8 @@ bool OttavaSegment::setProperty(Pid id, const QVariant& v)
 
 QVariant OttavaSegment::propertyDefault(Pid id) const
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
-            if (spp->propertyIdx == id)
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
+            if (spp->pid == id)
                   return spanner()->propertyDefault(id);
             }
       return TextLineBaseSegment::propertyDefault(id);
@@ -182,8 +182,8 @@ void Ottava::write(XmlWriter& xml) const
 //      writeProperty(xml, Pid::NUMBERS_ONLY);
       xml.tag("subtype", ottavaDefault[int(ottavaType())].name);
 
-      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->propertyIdx);
+      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
+            writeProperty(xml, spp->pid);
 
       Element::writeProperties(xml);
       xml.etag();
@@ -341,8 +341,8 @@ QVariant Ottava::propertyDefault(Pid propertyId) const
                   }
             default:
                   for (const StyledProperty& p : subStyle(subStyleId())) {
-                        if (p.propertyIdx == propertyId)
-                              return score()->styleV(p.styleIdx);
+                        if (p.pid == propertyId)
+                              return score()->styleV(p.sid);
                         }
                   return getProperty(propertyId);
             }

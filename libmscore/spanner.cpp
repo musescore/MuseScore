@@ -144,8 +144,8 @@ PropertyFlags& SpannerSegment::propertyFlags(Pid id)
 
 void SpannerSegment::resetProperty(Pid id)
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp) {
-            if (spp->propertyIdx == id)
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
+            if (spp->pid == id)
                   return spanner()->resetProperty(id);
             }
       return Element::resetProperty(id);

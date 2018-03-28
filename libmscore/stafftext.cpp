@@ -39,11 +39,15 @@ StaffText::StaffText(SubStyleId ss, Score* s)
       }
 
 //---------------------------------------------------------
-//   writeProperties
+//   write
 //---------------------------------------------------------
 
-void StaffText::writeProperties(XmlWriter& xml) const
+void StaffText::write(XmlWriter& xml) const
       {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag("StaffText");
+
       for (ChannelActions s : _channelActions) {
             int channel = s.channel;
             for (QString name : s.midiActionNames)
@@ -69,18 +73,7 @@ void StaffText::writeProperties(XmlWriter& xml) const
             xml.tagE(QString("swing unit=\"%1\" ratio= \"%2\"").arg(swingUnit).arg(swingRatio));
             }
       TextBase::writeProperties(xml);
-      }
 
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void StaffText::write(XmlWriter& xml) const
-      {
-      if (!xml.canWrite(this))
-            return;
-      xml.stag("StaffText");
-      writeProperties(xml);
       xml.etag();
       }
 

@@ -1863,8 +1863,9 @@ static const std::array<Pid, 18> pids { {
 void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
       {
       Element::writeProperties(xml);
-      for (Pid i :pids)
-            writeProperty(xml, i);
+      writeProperty(xml, Pid::SUB_STYLE);
+
+      writeStyledProperties(xml);
       if (writeText)
             xml.writeXml("text", xmlText());
       }
@@ -2731,30 +2732,6 @@ QVariant TextBase::propertyDefault(Pid id) const
             default:
                   return Element::propertyDefault(id);
             }
-      }
-
-//---------------------------------------------------------
-//   reset
-//---------------------------------------------------------
-
-void TextBase::reset()
-      {
-//      for (const StyledProperty& p : Ms::subStyle(_subStyle))
-//            undoResetProperty(p.propertyIdx);
-      Element::reset();
-      }
-
-//---------------------------------------------------------
-//   styleChanged
-//---------------------------------------------------------
-
-void TextBase::styleChanged()
-      {
-//      for (const StyledProperty& p : Ms::subStyle(_subStyle)) {
-//            if (propertyFlags(p.propertyIdx) == PropertyFlags::STYLED)
-//                  setProperty(p.propertyIdx, propertyDefault(p.propertyIdx));
-//            }
-      Element::styleChanged();
       }
 
 //---------------------------------------------------------

@@ -86,8 +86,8 @@ void LetRing::write(XmlWriter& xml) const
             return;
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
 
-      for (const StyledProperty* spp = styledProperties(); spp->styleIdx != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->propertyIdx);
+      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
+            writeProperty(xml, spp->pid);
 
       Element::writeProperties(xml);
       xml.etag();

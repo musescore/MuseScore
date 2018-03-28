@@ -735,8 +735,8 @@ enum class Sid {
 //---------------------------------------------------------
 
 struct StyledProperty {
-      Sid styleIdx;
-      Pid propertyIdx;
+      Sid sid;
+      Pid pid;
       };
 
 //-------------------------------------------------------------------

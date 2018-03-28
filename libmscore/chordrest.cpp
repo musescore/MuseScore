@@ -143,8 +143,7 @@ void ChordRest::writeProperties(XmlWriter& xml) const
       //    REST  - Beam::Mode::NONE
       //    CHORD - Beam::Mode::AUTO
       //
-      if ((type() == ElementType::REST && _beamMode != Beam::Mode::NONE)
-         || (type() == ElementType::CHORD && _beamMode != Beam::Mode::AUTO)) {
+      if ((isRest() && _beamMode != Beam::Mode::NONE) || (isChord() && _beamMode != Beam::Mode::AUTO)) {
             QString s;
             switch(_beamMode) {
                   case Beam::Mode::AUTO:    s = "auto"; break;

@@ -119,7 +119,6 @@ class SLine : public Spanner {
       virtual QVariant getProperty(Pid id) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid id) const override;
-      virtual Sid getPropertyStyle(Pid) const override;
 
       friend class LineSegment;
       };

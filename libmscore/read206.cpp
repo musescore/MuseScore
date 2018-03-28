@@ -494,7 +494,9 @@ void readTextStyle206(MStyle* style, XmlReader& e)
             const std::vector<StyledProperty>& spl = subStyle(ss);
             for (const auto& i : spl) {
                   QVariant value;
-                  switch (i.propertyIdx) {
+                  if (i.sid == Sid::NOSTYLE)
+                        break;
+                  switch (i.pid) {
                         case Pid::SUB_STYLE:
                               value = int(ss);
                               break;
@@ -575,11 +577,11 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                               value = QVariant();
                               break;
                         default:
-                              qDebug("unhandled property %s", propertyName(i.propertyIdx));
+                              qDebug("unhandled property <%s>%d", propertyName(i.pid), int (i.pid));
                               break;
                         }
                   if (value.isValid())
-                        style->set(i.styleIdx, value);
+                        style->set(i.sid, value);
                   }
             }
       }
