@@ -673,7 +673,7 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
                   _cachedFrames = 0;
                   }
             
-            static const unsigned requiredNumberOfFramesToGenerateEnvelope = FLUID_VOICE_ENVLAST * volenv_data[FLUID_VOICE_ENVDELAY].count;
+            const unsigned requiredNumberOfFramesToGenerateEnvelope = FLUID_VOICE_ENVLAST * volenv_data[FLUID_VOICE_ENVDELAY].count;
             const unsigned framesToGenerateData = std::max(leftBufferFramesToFill, requiredNumberOfFramesToGenerateEnvelope);
             if (generateDataForDSPChain(framesToGenerateData)) {
                   auto interpolationRes = interpolateGeneratedDSPData(framesToGenerateData);
