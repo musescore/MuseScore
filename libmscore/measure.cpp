@@ -3793,7 +3793,7 @@ static bool hasAccidental(Segment* s)
 //   dumpMeasure
 //---------------------------------------------------------
 
-#ifndef NDEBUG
+#if 0
 static void dumpMeasure(Measure* m)
       {
       printf("Measure tick %d  width %f\n", m->tick(), m->width());
