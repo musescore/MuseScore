@@ -476,6 +476,7 @@
         <TextLine id="5">
           <endHookType>1</endHookType>
           <beginText>VII</beginText>
+          <beginTextPlace>3</beginTextPlace>
           </TextLine>
         <Rest>
           <durationType>measure</durationType>
