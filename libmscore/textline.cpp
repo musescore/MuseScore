@@ -80,7 +80,8 @@ TextLine::TextLine(Score* s)
       setLineVisible(true);
       setBeginHookType(HookType::NONE);
       setEndHookType(HookType::NONE);
-      setBeginTextPlace(PlaceText::AUTO);
+      setBeginTextPlace(PlaceText::LEFT);
+//      setBeginTextPlace(PlaceText::AUTO);
       setContinueTextPlace(PlaceText::AUTO);
       setEndTextPlace(PlaceText::AUTO);
       setBeginHookHeight(Spatium(1.5));
@@ -181,7 +182,8 @@ QVariant TextLine::propertyDefault(Pid propertyId) const
             case Pid::BEGIN_TEXT_ALIGN:
             case Pid::END_TEXT_ALIGN:
             case Pid::CONTINUE_TEXT_ALIGN:
-                  return QVariant::fromValue(Align::LEFT | Align::TOP);
+//                  return QVariant::fromValue(Align::LEFT | Align::TOP);
+                  return QVariant::fromValue(Align::LEFT | Align::VCENTER);
             default:
                   return TextLineBase::propertyDefault(propertyId);
             }
