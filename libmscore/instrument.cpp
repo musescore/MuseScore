@@ -674,7 +674,7 @@ void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const QString
       {
       for (const MidiArticulation& a : _articulation) {
             if (a.name == name) {
-                  *gateTime = a.gateTime;
+                  *gateTime = *gateTime * a.gateTime / 100;
                   break;
                   }
             }
