@@ -1862,7 +1862,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                               // be reconstructed from measure flags
                               bool endBarLineGenerated = (blt == BarLineType::NORMAL || blt == BarLineType::END_REPEAT
                                     || blt == BarLineType::END_START_REPEAT || blt == BarLineType::START_REPEAT);
-                              setEndBarLineType(blt, endBarLineGenerated, true);
+                              setEndBarLineType(blt, barLine->el()->empty() && endBarLineGenerated, true);
                               }
                         if (!barLine->customSpan()) {
                               Staff* staff = score()->staff(staffIdx);
