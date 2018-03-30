@@ -137,23 +137,25 @@ Preset::~Preset()
 
 void Preset::loadSamples()
       {
-//      sfont->synth->mutex.lock();
-      if (_global_zone && _global_zone->instrument) {
-            Instrument* i = _global_zone->instrument;
-            if (i->global_zone && i->global_zone->sample)
-                  i->global_zone->sample->load();
-            foreach(Zone* iz, i->zones)
-                  iz->sample->load();
-            }
+      if (sfont->synth->mutex.tryLock()) {
+            if (_global_zone && _global_zone->instrument) {
+                  Instrument* i = _global_zone->instrument;
+                  if (i->global_zone && i->global_zone->sample)
+                        i->global_zone->sample->load();
+                  foreach(Zone* iz, i->zones)
+                        iz->sample->load();
+                  }
 
-      foreach(Zone* z, zones) {
-            Instrument* i = z->instrument;
-            if (i->global_zone && i->global_zone->sample)
-                  i->global_zone->sample->load();
-            foreach(Zone* iz, i->zones)
-                  iz->sample->load();
+            foreach(Zone* z, zones) {
+                  Instrument* i = z->instrument;
+                  if (i->global_zone && i->global_zone->sample)
+                        i->global_zone->sample->load();
+                  foreach(Zone* iz, i->zones)
+                        iz->sample->load();
+                  }
+            
+            sfont->synth->mutex.unlock();
             }
-//      sfont->synth->mutex.unlock();
       }
 
 //---------------------------------------------------------
