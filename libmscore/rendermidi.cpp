@@ -222,7 +222,7 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
       NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
       ev.setOriginatingStaff(staffIdx);
       ev.setTuning(note->tuning());
-      ev.notes.push_back(note);
+      ev.setNote(note);
       if (offTime < onTime)
             offTime = onTime;
       events->insert(std::pair<int, NPlayEvent>(onTime, ev));

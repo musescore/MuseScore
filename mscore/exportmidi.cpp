@@ -288,7 +288,17 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportR
 
                         for (auto i = events.begin(); i != events.end(); ++i) {
                               const NPlayEvent& event = i->second;
+
+                              if (event.discard() == staffIdx + 1 && event.velo() > 0)
+                                    // turn note off so we can restrike it in another track
+                                    track.insert(pauseMap.addPauseTicks(i->first), MidiEvent(ME_NOTEON, channel,
+                                                                     event.pitch(), 0));
+
                               if (event.getOriginatingStaff() != staffIdx)
+                                    continue;
+
+                              if (event.discard() && event.velo() == 0)
+                                    // ignore noteoff but restrike noteon
                                     continue;
 
                               char eventPort    = cs->masterScore()->midiPort(event.channel());
