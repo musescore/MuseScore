@@ -390,29 +390,26 @@ void EventMap::fixupMIDI()
 
       auto it = begin();
       while (it != end()) {
-            bool discard = false;
-
             /* ME_NOTEOFF is never emitted, no need to check for it */
             if (it->second.type() == ME_NOTEON) {
                   unsigned short np = info[it->second.channel()].nowPlaying[it->second.pitch()];
                   if (it->second.velo() == 0) {
                         /* already off or still playing? */
                         if (np == 0 || --np > 0)
-                              discard = true;
+                              it->second.setDiscard(1);
                         else {
                               /* hoist NOTEOFF to same track as NOTEON */
                               it->second.setOriginatingStaff(info[it->second.channel()].event[it->second.pitch()]->getOriginatingStaff());
                               }
                         }
-                  else if (++np > 1)
-                        discard = true;
-                  else
+                  else {
+                        if (++np > 1)
+                              /* restrike, possibly on different track */
+                              it->second.setDiscard(info[it->second.channel()].event[it->second.pitch()]->getOriginatingStaff() + 1);
                         info[it->second.channel()].event[it->second.pitch()] = &(it->second);
+                        }
                   info[it->second.channel()].nowPlaying[it->second.pitch()] = np;
                   }
-
-            if (discard)
-                  it->second.setDiscard(true);
 
             ++it;
             }
