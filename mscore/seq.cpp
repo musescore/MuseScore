@@ -512,15 +512,22 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
       if (type == ME_NOTEON) {
             bool mute = false;
 
-            if (!event.notes.empty()) {
-                  const Note* note  = event.notes[0];
+            const Note* note = event.note();
+            if (note) {
                   Staff* staff      = note->staff();
                   Instrument* instr = staff->part()->instrument(note->chord()->tick());
                   const Channel* a = instr->channel(note->subchannel());
                   mute = a->mute() || a->soloMute() || !staff->playbackVoice(note->voice());
                   }
-            if (!mute)
+            if (!mute) {
+                  if (event.discard()) { // ignore noteoff but restrike noteon
+                        if (event.velo() > 0)
+                              putEvent(NPlayEvent(ME_NOTEON, event.channel(), event.pitch(), 0) ,framePos);
+                        else
+                              return;
+                        }
                   putEvent(event, framePos);
+                  }
             }
       else if (type == ME_CONTROLLER || type == ME_PITCHBEND)
             putEvent(event, framePos);
@@ -1486,18 +1493,20 @@ void Seq::heartBeatTimeout()
                         break;
             const NPlayEvent& n = guiPos->second;
             if (n.type() == ME_NOTEON) {
-                  for (auto it = n.notes.cbegin(); it != n.notes.cend(); ++it) {
-                        const Note* note1 = *it;
+                  const Note* note1 = n.note();
+                  if (n.velo()) {
                         while (note1) {
-                              if (n.velo()) {
-                                    note1->setMark(true);
-                                    markedNotes.append(note1);
-                                    }
-                              else {
-                                    note1->setMark(false);
-                                    markedNotes.removeOne(note1);
-                                    }
+                              note1->setMark(true);
+                              markedNotes.append(note1);
                               r |= note1->canvasBoundingRect();
+                              note1 = note1->tieFor() ? note1->tieFor()->endNote() : 0;
+                              }
+                        }
+                  else {
+                        while (note1) {
+                              note1->setMark(false);
+                              r |= note1->canvasBoundingRect();
+                              markedNotes.removeOne(note1);
                               note1 = note1->tieFor() ? note1->tieFor()->endNote() : 0;
                               }
                         }

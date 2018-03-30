@@ -391,37 +391,28 @@ void EventMap::fixupMIDI()
 
       auto it = begin();
       while (it != end()) {
-            bool discard = false;
-
             /* ME_NOTEOFF is never emitted, no need to check for it */
             if (it->second.type() == ME_NOTEON) {
                   unsigned short np = info[it->second.channel()].nowPlaying[it->second.pitch()];
                   if (it->second.velo() == 0) {
                         /* already off (should not happen) or still playing? */
                         if (np == 0 || --np > 0)
-                              discard = true;
+                              it->second.setDiscard(1);
                         else {
                               /* hoist NOTEOFF to same track as NOTEON */
                               it->second.setOriginatingStaff(info[it->second.channel()].event[it->second.pitch()]->getOriginatingStaff());
-                              /* copy linked Notes */
-                              it->second.notes = info[it->second.channel()].event[it->second.pitch()]->notes;
                               }
                         }
-                  else if (++np > 1) {
-                        /* already playing */
-                        discard = true;
-                        /* carry over the corresponding score notes */
-                        info[it->second.channel()].event[it->second.pitch()]->notes.insert(info[it->second.channel()].event[it->second.pitch()]->notes.end(), it->second.notes.begin(), it->second.notes.end());
-                        }
-                  else
+                  else {
+                        if (++np > 1)
+                              /* restrike, possibly on different track */
+                              it->second.setDiscard(info[it->second.channel()].event[it->second.pitch()]->getOriginatingStaff() + 1);
                         info[it->second.channel()].event[it->second.pitch()] = &(it->second);
+                        }
                   info[it->second.channel()].nowPlaying[it->second.pitch()] = np;
                   }
 
-            if (discard)
-                  it = erase(it);
-            else
-                  ++it;
+            ++it;
             }
 
             free((void *)info);
