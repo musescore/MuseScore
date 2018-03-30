@@ -613,13 +613,14 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
             qDebug("Fluid:loadSoundFonts: already loaded");
             return true;
             }
-      mutex.lock();
+      QMutexLocker locker(&mutex);
       foreach(Voice* v, activeVoices)
             v->off();
       foreach(Channel* c, channel)
             c->reset();
       foreach (SFont* sf, sfonts)
             sfunload(sf->id());
+      locker.unlock();
       bool ok = true;
 
 
@@ -643,13 +644,14 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
                   ok = false;
                   }
             else {
+                  locker.relock();
                   if (sfload(path) == -1) {
                         qDebug("loading sf failed: <%s>", qPrintable(path));
                         ok = false;
                         }
+                  locker.unlock();
                   }
             }
-      mutex.unlock();
       return ok;
       }
 
@@ -660,9 +662,8 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
 
 bool Fluid::addSoundFont(const QString& s)
       {
-      mutex.lock();
+      QMutexLocker locker(&mutex);
       bool rv = (sfload(s) == -1) ? false : true;
-      mutex.unlock();
       return rv;
       }
 
@@ -673,12 +674,11 @@ bool Fluid::addSoundFont(const QString& s)
 
 bool Fluid::removeSoundFont(const QString& s)
       {
-      mutex.lock();
+      QMutexLocker locker(&mutex);
       foreach(Voice* v, activeVoices)
             v->off();
       SFont* sf = get_sfont_by_name(s);
       sfunload(sf->id());
-      mutex.unlock();
       return true;
       }
 
