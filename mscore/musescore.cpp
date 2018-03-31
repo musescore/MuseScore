@@ -1920,7 +1920,8 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             magChanged(midx);
             }
 
-      setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->title());
+      updateWindowTitle(cs);
+      setWindowModified(cs->dirty());
 
       QAction* a = getAction("concert-pitch");
       a->setChecked(cs->styleB(Sid::concertPitch));
@@ -3719,6 +3720,9 @@ void MuseScore::dirtyChanged(Score* s)
       tab1->setTabText(idx, label);
       if (tab2)
             tab2->setTabText(idx, label);
+#ifdef Q_OS_MAC
+      setWindowModified(score->dirty());
+#endif
       }
 
 //---------------------------------------------------------
@@ -5491,6 +5495,22 @@ void MuseScore::restoreGeometry(QWidget *const qw)
             qw->restoreGeometry(settings.value(objectName).toByteArray());
             settings.endGroup();
             }
+      }
+
+void MuseScore::updateWindowTitle(Score* score)
+      {
+#ifdef Q_OS_MAC
+      if (score->created()) {
+            setWindowTitle(score->title());
+            setWindowFilePath(QString());
+            }
+      else {
+            setWindowTitle(QString());
+            setWindowFilePath(score->masterScore()->fileInfo()->absoluteFilePath());
+            }
+#else
+      setWindowTitle(MUSESCORE_NAME_VERSION ": " + score->title());
+#endif
       }
 
 //---------------------------------------------------------
