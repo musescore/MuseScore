@@ -698,6 +698,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       static void saveGeometry(QWidget const*const qw);
       static void restoreGeometry(QWidget*const qw);
+
+      void updateWindowTitle(Score* score);
       };
 
 extern MuseScore* mscore;

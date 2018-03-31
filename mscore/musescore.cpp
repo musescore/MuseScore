@@ -1552,10 +1552,8 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             magChanged(midx);
             }
 
-      if (cs->parentScore())
-            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->parentScore()->name() + "-" + cs->name());
-      else
-            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->name());
+      updateWindowTitle(cs);
+      setWindowModified(cs->dirty());
 
       QAction* a = getAction("concert-pitch");
       a->setChecked(cs->styleB(StyleIdx::concertPitch));
@@ -3293,6 +3291,9 @@ void MuseScore::dirtyChanged(Score* s)
       tab1->setTabText(idx, label);
       if (tab2)
             tab2->setTabText(idx, label);
+#ifdef Q_OS_MAC
+      setWindowModified(score->dirty());
+#endif
       }
 
 //---------------------------------------------------------
@@ -5007,6 +5008,25 @@ void MuseScore::restoreGeometry(QWidget *const qw)
             qw->restoreGeometry(settings.value(objectName).toByteArray());
             settings.endGroup();
             }
+      }
+
+void MuseScore::updateWindowTitle(Score* score)
+      {
+#ifdef Q_OS_MAC
+      if (cs->parentScore())
+            setWindowTitle(cs->parentScore()->title() + "-" + cs->title());
+      else
+            setWindowTitle(cs->title());
+      if (score->rootScore()->created())
+            setWindowFilePath(QString());
+      else
+            setWindowFilePath(score->rootScore()->fileInfo()->absoluteFilePath());
+#else
+      if (cs->parentScore())
+            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->parentScore()->title() + "-" + cs->title());
+      else
+            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->title());
+#endif
       }
 
 //---------------------------------------------------------
