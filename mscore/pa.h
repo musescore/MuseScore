@@ -57,7 +57,9 @@ class Portaudio : public Driver {
       virtual Transport getState() override;
       virtual int sampleRate() const { return _sampleRate; }
       virtual void midiRead();
+#ifdef USE_PORTMIDI
       virtual void putEvent(const NPlayEvent&, unsigned framePos);
+#endif
 
       int framePos() const;
       float* getLBuffer(long n);
