@@ -1106,8 +1106,9 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Chord") {
                   Chord* chord = new Chord(m->score());
                   chord->setTrack(e.track());
-                  readChord(chord, e);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
+                  chord->setParent(segment);
+                  readChord(chord, e);
                   if (chord->noteType() != NoteType::NORMAL) {
                         graceNotes.push_back(chord);
                         if (chord->tremolo() && chord->tremolo()->tremoloType() < TremoloType::R8) {
@@ -1196,8 +1197,9 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   rest->setDurationType(TDuration::DurationType::V_MEASURE);
                   rest->setDuration(m->timesig()/timeStretch);
                   rest->setTrack(e.track());
-                  readRest(rest, e);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
+                  rest->setParent(segment);
+                  readRest(rest, e);
                   segment->add(rest);
 
                   if (!rest->duration().isValid())     // hack

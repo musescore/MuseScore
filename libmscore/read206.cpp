@@ -1482,6 +1482,11 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
                         e.unknown();
                   }
             }
+      // Special case for "no type" = ufermata, with missing subtype tag
+      if (!el) {
+            el = new Fermata(sym, cr->score());
+            setFermataPlacement(el, anchor, direction);
+            }
       el->setTrack(cr->staffIdx() * VOICES);
       return el;
       }
@@ -1634,8 +1639,9 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   rest->setDurationType(TDuration::DurationType::V_MEASURE);
                   rest->setDuration(m->timesig()/timeStretch);
                   rest->setTrack(e.track());
-                  readRest(rest, e);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
+                  rest->setParent(segment);
+                  readRest(rest, e);
                   segment->add(rest);
 
                   if (!rest->duration().isValid())     // hack
