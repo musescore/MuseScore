@@ -1834,6 +1834,32 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
+        </Measure>
+      <Measure number="40">
+        <Rest>
+          <durationType>quarter</durationType>
+          <Articulation>
+            <subtype>fermata</subtype>
+            </Articulation>
+          </Rest>
+        <Rest>
+          <durationType>quarter</durationType>
+          <Articulation>
+            <subtype>shortfermata</subtype>
+            </Articulation>
+          </Rest>
+        <Rest>
+          <durationType>quarter</durationType>
+          <Articulation>
+            <subtype>longfermata</subtype>
+            </Articulation>
+          </Rest>
+        <Rest>
+          <durationType>quarter</durationType>
+          <Articulation>
+            <subtype>verylongfermata</subtype>
+            </Articulation>
+          </Rest>
         <BarLine>
           <subtype>end</subtype>
           <span>1</span>

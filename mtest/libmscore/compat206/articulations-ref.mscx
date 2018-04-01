@@ -1829,6 +1829,32 @@
             <tpc>14</tpc>
             </Note>
           </Chord>
+        </Measure>
+      <Measure number="40">
+        <Fermata>
+          <subtype>fermataAbove</subtype>
+          </Fermata>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Fermata>
+          <subtype>fermataShortAbove</subtype>
+          </Fermata>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Fermata>
+          <subtype>fermataLongAbove</subtype>
+          </Fermata>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Fermata>
+          <subtype>fermataVeryLongAbove</subtype>
+          </Fermata>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
         <BarLine>
           </BarLine>
         </Measure>
