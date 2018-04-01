@@ -48,10 +48,12 @@
 
 #include <vorbis/vorbisfile.h>
 
+#ifdef USE_PORTMIDI
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
   #include "portmidi/porttime/porttime.h"
 #else
   #include <porttime.h>
+#endif
 #endif
 
 namespace Ms {
