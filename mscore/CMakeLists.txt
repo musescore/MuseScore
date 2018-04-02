@@ -437,7 +437,7 @@ if (MINGW)
       ${PROJECT_BINARY_DIR}/resfile.o
       PROPERTIES generated true
       )
-   string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
+   string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
    # Windows: Add -mconsole to LINK_FLAGS to get a console window for debug output
    if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
      set_target_properties( mscore
