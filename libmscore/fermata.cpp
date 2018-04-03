@@ -197,7 +197,12 @@ void Fermata::layout()
             return;
             }
 
-      qreal x = score()->noteHeadWidth() * staff()->mag(0) * .5;
+      qreal x = 0.0;
+      Element* e = s->element(track());
+      if (e)
+            x = e->x() + e->width() * staff()->mag(0) * .5;
+      else
+            x = score()->noteHeadWidth() * staff()->mag(0) * .5;
       qreal y = placeAbove() ? styleP(Sid::fermataPosAbove) : styleP(Sid::fermataPosBelow) + staff()->height();
 
       setPos(QPointF(x, y));
