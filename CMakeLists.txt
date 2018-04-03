@@ -621,7 +621,7 @@ subdirs(
       )
 #      thirdparty/xmlstream
 
-string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
+string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 # With xcode, we need to have all the targets in the same project
 add_subdirectory(mtest)
