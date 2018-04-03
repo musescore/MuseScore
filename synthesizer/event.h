@@ -236,7 +236,7 @@ class PlayEvent : public MidiCoreEvent {
 class NPlayEvent : public PlayEvent {
       const Note* _note = 0;
       int _origin = -1;
-      bool _discard = false;
+      int _discard = 0;
 
    public:
       NPlayEvent() : PlayEvent() {}
@@ -250,8 +250,8 @@ class NPlayEvent : public PlayEvent {
 
       int getOriginatingStaff() const { return _origin; }
       void setOriginatingStaff(int i) { _origin = i; }
-      void setDiscard(bool d) {_discard = d; }
-      bool discard() const { return _discard; }
+      void setDiscard(int d) { _discard = d; }
+      int discard() const { return _discard; }
       };
 
 //---------------------------------------------------------
