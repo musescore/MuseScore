@@ -8183,7 +8183,7 @@ Group under the W3C Community Contributor License Accordo
     <message>
         <location filename="../../mscore/searchComboBox.cpp" line="104"/>
         <source>Rehearsal Mark</source>
-        <translation>Numero di chiamata</translation>
+        <translation>Numero/Lettera di chiamata</translation>
     </message>
     <message>
         <location filename="../../mscore/searchComboBox.cpp" line="107"/>
@@ -9634,7 +9634,7 @@ Vuoi sostituirlo?
     <message>
         <location filename="../../mscore/menus.cpp" line="1078"/>
         <source>Rehearsal mark</source>
-        <translation>Numero di chiamata</translation>
+        <translation>Numero/Lettera di chiamata</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1081"/>
@@ -16189,7 +16189,7 @@ Vuoi sovrascriverlo?</translation>
     <message>
         <location filename="../../libmscore/style.cpp" line="331"/>
         <source>Rehearsal Mark</source>
-        <translation>Numero di chiamata</translation>
+        <translation>Numero/Lettera di chiamata</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="335"/>
@@ -19671,12 +19671,12 @@ dividere di nuovo alle posizioni ritmiche</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1965"/>
         <source>Rehearsal Mark</source>
-        <translation>Numero di chiamata</translation>
+        <translation>Numero/Lettera di chiamata</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1966"/>
         <source>Add rehearsal mark</source>
-        <translation>Aggiungi numero di chiamata</translation>
+        <translation>Aggiungi numero/lettera di chiamata</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1972"/>
@@ -23397,7 +23397,7 @@ la battuta non è vuota</translation>
     <message>
         <location filename="../../libmscore/element.cpp" line="132"/>
         <source>Rehearsal Mark</source>
-        <translation>Numero di chiamata</translation>
+        <translation>Numero/Lettera di chiamata</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="133"/>

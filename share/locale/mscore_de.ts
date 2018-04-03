@@ -12929,7 +12929,7 @@ fehlgeschlagen: </translation>
     <message>
         <location filename="../../mscore/pluginManager.ui" line="119"/>
         <source>Clear Shortcut</source>
-        <translation>Tastaturkürzel löschen</translation>
+        <translation>Tastenkürzel löschen</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginManager.ui" line="126"/>

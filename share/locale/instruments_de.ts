@@ -2614,7 +2614,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1193"/>
         <source>Contrabasses</source>
-        <translation>Kontrabasse</translation>
+        <translation>Kontrabässe</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1194"/>

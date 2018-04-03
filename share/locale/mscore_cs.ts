@@ -9614,7 +9614,7 @@ Chcete jej nahradit?</translation>
     <message>
         <location filename="../../mscore/menus.cpp" line="1063"/>
         <source>Staff text</source>
-        <translation>Text u notové osnovy</translation>
+        <translation>Text notové osnovy</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1067"/>
@@ -9624,7 +9624,7 @@ Chcete jej nahradit?</translation>
     <message>
         <location filename="../../mscore/menus.cpp" line="1068"/>
         <source>System text</source>
-        <translation>Text u notového systému</translation>
+        <translation>Text notového systému</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1072"/>
@@ -11259,12 +11259,12 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="223"/>
         <source>System Text Properties...</source>
-        <translation>Vlastnosti textu u notového systému</translation>
+        <translation>Vlastnosti textu notového systému</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="225"/>
         <source>Staff Text Properties...</source>
-        <translation>Vlastnosti textu u notové osnovy...</translation>
+        <translation>Vlastnosti textu notové osnovy...</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="250"/>
@@ -11343,7 +11343,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="1038"/>
         <source>System Text</source>
-        <translation>Text u notového systému</translation>
+        <translation>Text notového systému</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="1043"/>
@@ -11548,12 +11548,12 @@ Vyberte, prosím, takt a zkuste to znovu</translation>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="58"/>
         <source>System Text Properties</source>
-        <translation>Vlastnosti textu u notového systému</translation>
+        <translation>Vlastnosti textu notového systému</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="64"/>
         <source>Staff Text Properties</source>
-        <translation>Vlastnosti textu u notové osnovy</translation>
+        <translation>Vlastnosti textu notové osnovy</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="196"/>
@@ -11600,7 +11600,7 @@ Vyberte, prosím, takt a zkuste to znovu</translation>
         <location filename="../../libmscore/text.cpp" line="3076"/>
         <location filename="../../libmscore/text.cpp" line="3108"/>
         <source>System Text</source>
-        <translation>Text u notového systému</translation>
+        <translation>Text notového systému</translation>
     </message>
 </context>
 <context>
@@ -15873,7 +15873,7 @@ Chcete ji nahradit?</translation>
     <message>
         <location filename="../../mscore/textproperties.ui" line="302"/>
         <source>Size follows &apos;Staff space&apos; setting</source>
-        <translation>Velikost podle „mezery notové osnovy”</translation>
+        <translation>Velikost podle mezery notové osnovy</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="319"/>
@@ -15888,7 +15888,7 @@ Chcete ji nahradit?</translation>
     <message>
         <location filename="../../mscore/textproperties.ui" line="367"/>
         <source>System flag</source>
-        <translation>U notového systému</translation>
+        <translation>K notovému systému</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="392"/>
@@ -16177,12 +16177,12 @@ Chcete ji nahradit?</translation>
     <message>
         <location filename="../../libmscore/style.cpp" line="322"/>
         <source>System</source>
-        <translation>Text u notového systému</translation>
+        <translation>Notový systém</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="326"/>
         <source>Staff</source>
-        <translation>Text osnovy</translation>
+        <translation>Notová osnova</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="328"/>
@@ -19583,22 +19583,22 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1902"/>
         <source>System Text</source>
-        <translation>Text u notového systému</translation>
+        <translation>Text notového systému</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1903"/>
         <source>Add system text</source>
-        <translation>Přidat text k notovému systému</translation>
+        <translation>Přidat text notového systému</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1909"/>
         <source>Staff Text</source>
-        <translation>Text u notové osnovy</translation>
+        <translation>Text notové osnovy</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1910"/>
         <source>Add staff text</source>
-        <translation>Přidat text k notové osnově</translation>
+        <translation>Přidat text notové osnovy</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1916"/>
@@ -23394,7 +23394,7 @@ takt není prázdný</translation>
     <message>
         <location filename="../../libmscore/element.cpp" line="131"/>
         <source>Staff Text</source>
-        <translation>Text u notové osnovy</translation>
+        <translation>Text notové osnovy</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="132"/>

@@ -2440,7 +2440,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1137"/>
         <source>6-str. Electric Bass</source>
-        <translation type="unfinished"/>
+        <translation>6-струнная бас-гитара</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1138"/>

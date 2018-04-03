@@ -1871,7 +1871,7 @@
         <location filename="../../mscore/editstafftype.ui" line="265"/>
         <location filename="../../mscore/editstafftype.ui" line="315"/>
         <source>Stemless</source>
-        <translation>棒なし</translation>
+        <translation>符幹なし</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="308"/>
@@ -3646,7 +3646,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="93"/>
         <source>Head group:</source>
-        <translation>玉の種類:</translation>
+        <translation>符頭の分類:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="106"/>
@@ -4049,7 +4049,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="816"/>
         <source>Head type:</source>
-        <translation>玉の種類:</translation>
+        <translation>符頭の種類:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="832"/>
@@ -4069,7 +4069,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="898"/>
         <source>Reset &apos;Head type&apos; value</source>
-        <translation>玉の種類をリセット</translation>
+        <translation>符頭の種類をリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="918"/>
@@ -4674,7 +4674,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="217"/>
         <source>Horizontal offset:</source>
-        <translation>水平位置のリセット:</translation>
+        <translation>水平位置</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="230"/>
@@ -4857,7 +4857,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="233"/>
         <source>Horizontal offset:</source>
-        <translation>水平位置のリセット:</translation>
+        <translation>水平位置</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="249"/>
@@ -5895,7 +5895,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="343"/>
         <source>Head type:</source>
-        <translation>玉の種類:</translation>
+        <translation>符頭の種類:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="359"/>
@@ -5920,7 +5920,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="416"/>
         <source>Head group:</source>
-        <translation>玉の種類:</translation>
+        <translation>符頭の分類:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="435"/>
@@ -5976,7 +5976,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="618"/>
         <source>Reset &apos;Head type&apos; value</source>
-        <translation>玉の種類をリセット</translation>
+        <translation>符頭の種類をリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="635"/>

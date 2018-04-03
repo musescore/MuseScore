@@ -5865,7 +5865,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="258"/>
         <source>Mirror head:</source>
-        <translation type="unfinished"/>
+        <translation>Zrkadlová hlavička</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="274"/>
@@ -5885,7 +5885,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="305"/>
         <source>Dot position:</source>
-        <translation type="unfinished"/>
+        <translation>Umiestnenie bodky</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="321"/>
@@ -5930,7 +5930,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="449"/>
         <source>Line:</source>
-        <translation type="unfinished"/>
+        <translation>Čiara:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="465"/>
@@ -5950,7 +5950,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="524"/>
         <source>Tuning:</source>
-        <translation type="unfinished"/>
+        <translation>Ladenie:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="537"/>
@@ -6027,7 +6027,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="105"/>
         <source>Placement:</source>
-        <translation type="unfinished"/>
+        <translation>Umiestnanie:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="112"/>
@@ -6309,7 +6309,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="91"/>
         <source>Top margin:</source>
-        <translation type="unfinished"/>
+        <translation>Horný okraj:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="98"/>
@@ -6867,7 +6867,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="243"/>
         <source>Top margin:</source>
-        <translation type="unfinished"/>
+        <translation>Horný okraj:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="250"/>
@@ -7709,7 +7709,7 @@ Chcete lokalizovať %2 teraz?</translation>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="60"/>
         <source>Arpeggios &amp; Glissandos</source>
-        <translation type="unfinished"/>
+        <translation>Arpeggiá a glissandá</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="65"/>
@@ -7744,7 +7744,7 @@ Chcete lokalizovať %2 teraz?</translation>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="95"/>
         <source>Noteheads</source>
-        <translation type="unfinished"/>
+        <translation>Hlavičky nôt</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="100"/>
@@ -8204,7 +8204,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/albummanager.cpp" line="102"/>
         <source>Load Album</source>
-        <translation type="unfinished"/>
+        <translation>Načítať album</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="149"/>
@@ -8334,7 +8334,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/harmonyedit.cpp" line="47"/>
         <source>Chord Symbols Style Editor</source>
-        <translation type="unfinished"/>
+        <translation>Editor štýlu akordických značiek</translation>
     </message>
 </context>
 <context>
@@ -8417,7 +8417,7 @@ zlyhalo.</translation>
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="389"/>
         <source>Open File</source>
-        <translation type="unfinished"/>
+        <translation>Otvoriť súbor</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="399"/>
@@ -8740,7 +8740,7 @@ zlyhalo.</translation>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="75"/>
         <source>Save Instrument List</source>
-        <translation type="unfinished"/>
+        <translation>Uložiť zoznam nástrojov</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="77"/>
@@ -12325,7 +12325,7 @@ prosím zvoľte iné meno:</translation>
     <message>
         <location filename="../../mscore/menus.cpp" line="519"/>
         <source>Noteheads</source>
-        <translation type="unfinished"/>
+        <translation>Hlavičky nôt</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="550"/>
@@ -12345,7 +12345,7 @@ prosím zvoľte iné meno:</translation>
     <message>
         <location filename="../../mscore/menus.cpp" line="656"/>
         <source>Arpeggios &amp;&amp; Glissandos</source>
-        <translation type="unfinished"/>
+        <translation>Arpeggiá a glissandá</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="719"/>
@@ -15281,7 +15281,7 @@ Chcete ho prepísať?
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="47"/>
         <source>Same notehead:</source>
-        <translation type="unfinished"/>
+        <translation>Rovnaká hlavička</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="54"/>
@@ -18207,12 +18207,12 @@ zlyhal: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="709"/>
         <source>Regroup Rhythms</source>
-        <translation type="unfinished"/>
+        <translation>Preskupiť rytmy</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="710"/>
         <source>Regroup rhythms</source>
-        <translation type="unfinished"/>
+        <translation>Preskupiť rytmy</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="711"/>
@@ -20149,12 +20149,12 @@ zlyhal: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2439"/>
         <source>Mirror Notehead</source>
-        <translation type="unfinished"/>
+        <translation>Zrkadlová hlavička</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2440"/>
         <source>Mirror notehead</source>
-        <translation type="unfinished"/>
+        <translation>Zrkadlová hlavička</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2450"/>
@@ -20574,7 +20574,7 @@ zlyhal: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2804"/>
         <source>Toggle &apos;Loop Playback&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Prepnúť „prehrávanie v slučke“</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2814"/>
@@ -20619,7 +20619,7 @@ zlyhal: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2848"/>
         <source>Toggle &apos;Count-In&apos; playback</source>
-        <translation type="unfinished"/>
+        <translation>Prepnúť odpočítavanie na začiatku prehrǽvania</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2849"/>
@@ -23469,7 +23469,7 @@ Takt nie je prázdny</translation>
     <message>
         <location filename="../../libmscore/element.cpp" line="151"/>
         <source>Notehead</source>
-        <translation type="unfinished"/>
+        <translation>Hlavička noty</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="152"/>

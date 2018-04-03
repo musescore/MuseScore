@@ -2440,7 +2440,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1137"/>
         <source>6-str. Electric Bass</source>
-        <translation type="unfinished"/>
+        <translation>6弦电贝斯</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1138"/>
@@ -2451,7 +2451,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1141"/>
         <source>6-str. Electric Bass [Tablature]</source>
-        <translation type="unfinished"/>
+        <translation>6弦电贝斯[指法谱]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1142"/>
@@ -2688,13 +2688,13 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="11"/>
         <source>D♭ Piccolo</source>
-        <translation type="unfinished"/>
+        <translation>降D调短笛</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="12"/>
         <source>D♭ Picc.</source>
         <comment>D♭ Piccolo</comment>
-        <translation type="unfinished"/>
+        <translation>降D调短笛</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="14"/>
@@ -3380,13 +3380,13 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="235"/>
         <source>G Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>G调单簧管</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="236"/>
         <source>G Cl.</source>
         <comment>G Clarinet</comment>
-        <translation type="unfinished"/>
+        <translation>G调单簧管</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="238"/>
@@ -3427,35 +3427,35 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="249"/>
         <source>B♭ Bass Clarinet (Bass Clef)</source>
-        <translation type="unfinished"/>
+        <translation>降B调低音单簧管(低音谱号)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="250"/>
         <source>B♭ B. Cl.</source>
         <comment>B♭ Bass Clarinet (Bass Clef)</comment>
-        <translation type="unfinished"/>
+        <translation>降B调低音单簧管</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="251"/>
         <source>A Bass Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>A调低音单簧管</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="252"/>
         <source>A B. Cl.</source>
         <comment>A Bass Clarinet</comment>
-        <translation type="unfinished"/>
+        <translation>A调低音单簧管</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="253"/>
         <source>A Bass Clarinet (Bass Clef)</source>
-        <translation type="unfinished"/>
+        <translation>A调低音单簧管(低音谱号)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="254"/>
         <source>A B. Cl.</source>
         <comment>A Bass Clarinet (Bass Clef)</comment>
-        <translation type="unfinished"/>
+        <translation>A调低音单簧管</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="256"/>
@@ -5783,7 +5783,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1032"/>
         <source>Acoustic Guitar (Treble Clef)</source>
-        <translation type="unfinished"/>
+        <translation>原音吉他(高音谱号)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1035"/>
@@ -5813,7 +5813,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1044"/>
         <source>Electric Guitar (Treble Clef)</source>
-        <translation type="unfinished"/>
+        <translation>电子吉他(高音谱号)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1047"/>

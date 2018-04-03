@@ -647,12 +647,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="275"/>
         <source>Bassoon</source>
-        <translation type="unfinished"/>
+        <translation>Fagot</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="277"/>
         <source>Contrabassoon</source>
-        <translation type="unfinished"/>
+        <translation>Kontrafagot</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="279"/>
@@ -717,17 +717,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="303"/>
         <source>Sopranissimo Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Sopranissimo saxofón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="305"/>
         <source>Sopranino Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Sopranino saxofón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="307"/>
         <source>Soprano Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Sopránsaxofón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="309"/>
@@ -737,42 +737,42 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="311"/>
         <source>Mezzo-Soprano Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Mezzosopránsaxofón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="313"/>
         <source>Alto Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Altsaxofón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="315"/>
         <source>Melody Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Melodický saxofón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="317"/>
         <source>Tenor Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Tenorsaxofón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="319"/>
         <source>Baritone Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Barytónsaxofón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="321"/>
         <source>Bass Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Bassaxofón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="323"/>
         <source>Contrabass Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Kontrabassaxofón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="325"/>
         <source>Subcontrabass Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Subkontrabassaxofón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="327"/>
@@ -792,62 +792,62 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="332"/>
         <source>12 Hole C Chromatic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Chromatická ústná harmonika (12 dier, C)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="334"/>
         <source>14 Hole C Chromatic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Chromatická ústná harmonika (14 dier, C)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="336"/>
         <source>12 Hole G Chromatic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Chromatická ústná harmonika (12 dier, G)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="338"/>
         <source>16 Hole C Chromatic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Chromatická ústná harmonika (16 dier, C)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="340"/>
         <source>12 Hole Tenor C Chromatic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Chromatická ústná harmonika (12 dier, tenorové C)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="342"/>
         <source>10 Hole High G Diatonic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Diatonická ústna harmonika (10 dier, vysoké G)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="344"/>
         <source>10 Hole F Diatonic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Diatonická ústna harmonika (10 dier, F)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="346"/>
         <source>10 Hole D Diatonic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Diatonická ústna harmonika (10 dier, D)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="348"/>
         <source>10 Hole C Diatonic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Diatonická ústna harmonika (10 dier, C)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="350"/>
         <source>10 Hole A Diatonic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Diatonická ústna harmonika (10 dier, A)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="352"/>
         <source>10 Hole G Diatonic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Diatonická ústna harmonika (10 dier, G)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="354"/>
         <source>10 Hole Low D Diatonic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Diatonická ústna harmonika (10 dier, nízke D)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="356"/>
@@ -857,17 +857,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="358"/>
         <source>Bass Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Basová harmonika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="360"/>
         <source>Bass Hohner Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Basová Hohner ústna harmonika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="362"/>
         <source>Bass Huang Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Basová Huang harmonika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="364"/>
@@ -1398,7 +1398,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="617"/>
         <source>Shofar</source>
-        <translation type="unfinished"/>
+        <translation>Šofar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="619"/>
@@ -1518,7 +1518,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="664"/>
         <source>Hand Bells</source>
-        <translation type="unfinished"/>
+        <translation>Ručné zvončeky</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="666"/>
@@ -1543,7 +1543,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="674"/>
         <source>Glass Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Sklenená harmonika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="676"/>
@@ -1614,7 +1614,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="707"/>
         <source>Drumset</source>
-        <translation>Bicie</translation>
+        <translation>Bicia súprava</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="709"/>
@@ -1695,12 +1695,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="739"/>
         <source>Bells</source>
-        <translation type="unfinished"/>
+        <translation>Zvony</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="741"/>
         <source>Sleigh Bells</source>
-        <translation type="unfinished"/>
+        <translation>Roľničky</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="743"/>
@@ -1900,7 +1900,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="828"/>
         <source>Tenor Drums</source>
-        <translation type="unfinished"/>
+        <translation>Tenorové bubny</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="830"/>
@@ -2759,7 +2759,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="33"/>
         <source>Traverso</source>
-        <translation type="unfinished"/>
+        <translation>Priečna flauta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="34"/>
