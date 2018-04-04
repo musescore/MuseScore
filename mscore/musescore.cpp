@@ -5500,14 +5500,14 @@ void MuseScore::restoreGeometry(QWidget *const qw)
 void MuseScore::updateWindowTitle(Score* score)
       {
 #ifdef Q_OS_MAC
-      if (score->created()) {
-            setWindowTitle(score->title());
+      if (!cs->isMaster())
+            setWindowTitle(cs->masterScore()->title() + "-" + cs->title());
+      else
+            setWindowTitle(cs->title());
+      if (score->masterScore()->created())
             setWindowFilePath(QString());
-            }
-      else {
-            setWindowTitle(QString());
+      else
             setWindowFilePath(score->masterScore()->fileInfo()->absoluteFilePath());
-            }
 #else
       setWindowTitle(MUSESCORE_NAME_VERSION ": " + score->title());
 #endif
