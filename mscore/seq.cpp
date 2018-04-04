@@ -1553,7 +1553,7 @@ void Seq::updateSynthesizerState(int tick1, int tick2)
 
 double Seq::curTempo() const
       {
-      return cs->tempomap()->tempo(playPos->first);
+      return cs ? cs->tempomap()->tempo(playPos->first) : 0.0;
       }
 
 //---------------------------------------------------------
