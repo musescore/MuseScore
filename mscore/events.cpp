@@ -297,7 +297,7 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                   _score->select(m, st, staffIdx);
                   _score->setUpdateAll();
                   }
-            else
+            else if (st != SelectType::ADD)
                   _score->deselectAll();
             }
       _score->update();
