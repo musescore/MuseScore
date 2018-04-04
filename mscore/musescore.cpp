@@ -5507,7 +5507,10 @@ void MuseScore::updateWindowTitle(Score* score)
       else
             setWindowFilePath(score->masterScore()->fileInfo()->absoluteFilePath());
 #else
-      setWindowTitle(MUSESCORE_NAME_VERSION ": " + score->title() + "[*]");
+      if (!cs->isMaster())
+            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->masterScore()->title() + "-" + cs->title() + "[*]");
+      else
+            setWindowTitle(MUSESCORE_NAME_VERSION ": " + score->title() + "[*]");
 #endif
       }
 
