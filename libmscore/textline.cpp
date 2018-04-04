@@ -296,7 +296,9 @@ void TextLineSegment::layout1()
       bbox().setRect(x1, y1, x2 - x1, y2 - y1);
       // set end text position and extend bbox
       if (_endText) {
-            _endText->setPos(bbox().right(), 0);
+
+            // up to 2.2(.1) was setting y to constant 0 here via setPos
+            _endText->setUserXoffset(bbox().right());
             bbox() |= _endText->bbox().translated(_endText->pos());
             }
       }
