@@ -2777,14 +2777,10 @@ void Score::selectAdd(Element* e)
                                       m == lastMeasure() ? 0 : m->last(),
                                       0,
                                       nstaves());
+                  setUpdateAll();
+                  selState = SelState::RANGE;
+                  _selection.updateSelectedElements();
                   }
-            else {
-                  select(0, SelectType::SINGLE, 0);
-                  return;
-                  }
-            setUpdateAll();
-            selState = SelState::RANGE;
-            _selection.updateSelectedElements();
             }
       else { // None or List
             addRefresh(e->abbox());
