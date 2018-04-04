@@ -1593,7 +1593,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                                           QList<Note*> nl1 = nchord->notes();
                                           QList<Note*> nl2 = nchord2->notes();
                                           if (!firstpart)
-                                                for (unsigned j = 0; j < nl1.size(); ++j) {
+                                                for (int j = 0; j < nl1.size(); ++j) {
                                                       tie = new Tie(this);
                                                       tie->setStartNote(nl1[j]);
                                                       tie->setEndNote(nl2[j]);
