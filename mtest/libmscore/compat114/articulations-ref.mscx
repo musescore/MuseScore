@@ -538,12 +538,26 @@
           </Chord>
         </Measure>
       <Measure number="10">
+        <Fermata>
+          <subtype>fermataAbove</subtype>
+          </Fermata>
         <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>quarter</durationType>
           </Rest>
         </Measure>
       <Measure number="11">
+        <Fermata>
+          <subtype>fermataAbove</subtype>
+          </Fermata>
         <Rest>
           <durationType>measure</durationType>
           <duration>4/4</duration>
