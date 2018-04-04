@@ -426,7 +426,7 @@ bool MuseScore::saveFile(MasterScore* score)
             return false;
             }
       score->setCreated(false);
-      setWindowTitle(QString(MUSESCORE_NAME_VERSION) + ": " + score->fileInfo()->completeBaseName());
+      updateWindowTitle(score);
       int idx = scoreList.indexOf(score->masterScore());
       tab1->setTabText(idx, score->fileInfo()->completeBaseName());
       if (tab2)
@@ -1864,7 +1864,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
 
             if (rv && !saveCopy) {
                   cs->masterScore()->fileInfo()->setFile(fn);
-                  setWindowTitle(QString(MUSESCORE_NAME_VERSION) + ": " + cs->title());
+                  updateWindowTitle(cs);
                   cs->undoStack()->setClean();
                   dirtyChanged(cs);
                   cs->setCreated(false);
