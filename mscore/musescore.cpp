@@ -3720,9 +3720,7 @@ void MuseScore::dirtyChanged(Score* s)
       tab1->setTabText(idx, label);
       if (tab2)
             tab2->setTabText(idx, label);
-#ifdef Q_OS_MAC
       setWindowModified(score->dirty());
-#endif
       }
 
 //---------------------------------------------------------
@@ -5509,7 +5507,7 @@ void MuseScore::updateWindowTitle(Score* score)
       else
             setWindowFilePath(score->masterScore()->fileInfo()->absoluteFilePath());
 #else
-      setWindowTitle(MUSESCORE_NAME_VERSION ": " + score->title());
+      setWindowTitle(MUSESCORE_NAME_VERSION ": " + score->title() + "[*]");
 #endif
       }
 
