@@ -213,6 +213,35 @@ static void scanFile(const QString& in)
       }
 
 //---------------------------------------------------------
+//   linkClass
+//
+//   Given something like "array[Note]", will return "array[<a href="note.html">Note</a>]"
+//---------------------------------------------------------
+static QRegExp reClasses("");
+
+static QString linkClass(const QString& in)
+      {
+      if (reClasses.pattern().isEmpty()) {
+            QStringList classNames;
+            foreach(const Class& cl, classes)
+                  classNames.append(cl.name);
+
+            reClasses.setPattern("\\b(" + classNames.join('|') + ")\\b");
+            Q_ASSERT(reClasses.isValid());
+            }
+
+      int pos = reClasses.indexIn(in);
+      if (pos != -1) {
+            QString out(in);
+            out.insert(pos + reClasses.matchedLength(), "</a>");
+            out.insert(pos, "<a href=\"" + in.mid(pos, reClasses.matchedLength()).toLower() + ".html\">");
+
+            return out;
+            }
+      return in;
+      }
+
+//---------------------------------------------------------
 //   writeOutput
 //---------------------------------------------------------
 
@@ -249,27 +278,11 @@ static void writeOutput()
                   out += "<div class=\"methods\">\n";
                   foreach(const Proc& p, cl.procs) {
                         out += "<div class=\"method\">\n";
-
-                        QString type(p.type);
-                        bool found = false;
-                        if (type.endsWith("*")) {
-                              type = type.left(type.size()-1);
-                              foreach(const Class& cl, classes) {
-                                    if (cl.name == type) {
-                                          found = true;
-                                          break;
-                                          }
-                                    }
-                              }
-                        if (found)
-                              out += QString("<a href=\"%1.html\">%2</a> ")
-                                 .arg(type.toLower()).arg(type);
-                        else
-                              out += QString("%1 ").arg(type);
+                        out += linkClass(p.type) + " ";
 
                         QRegExp re("([^(]+)\\(([^)]*)\\)");
                         if (re.indexIn(p.name, 0) != -1) {
-                              out += QString("<b>%2</b>(%3)\n") .arg(re.cap(1)).arg(re.cap(2));
+                              out += QString("<b>%2</b>(%3)\n") .arg(re.cap(1)).arg(linkClass(re.cap(2)));
                               }
                         else {
                               out += QString("<b>%2</b>\n").arg(p.name);
@@ -296,7 +309,7 @@ static void writeOutput()
                         out += QString("<td class=\"prop-name\">%1</td>"
                                "<td class=\"prop-type\">%2</td>"
                                "<td class=\"prop-desc\">%3</td>")
-                               .arg(m.name).arg(m.type).arg(m.description);
+                               .arg(m.name).arg(linkClass(m.type)).arg(m.description);
                         out += "</tr>\n";
                         count++;
                         }
