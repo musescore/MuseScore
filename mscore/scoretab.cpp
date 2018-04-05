@@ -293,6 +293,8 @@ void ScoreTab::updateExcerpts()
       blockSignals(true);
       setExcerpt(0);
       blockSignals(false);
+
+      getAction("file-part-export")->setEnabled(excerpts.size() > 0);
       }
 
 //---------------------------------------------------------
