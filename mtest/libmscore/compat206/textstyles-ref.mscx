@@ -206,7 +206,7 @@
         <Tempo>
           <tempo>1.33333</tempo>
           <followText>1</followText>
-          <text><sym>unicodeNoteQuarterUp</sym> = 80</text>
+          <text><sym>metNoteQuarterUp</sym> = 80</text>
           </Tempo>
         <Rest>
           <durationType>measure</durationType>
