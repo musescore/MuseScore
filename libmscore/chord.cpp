@@ -1355,7 +1355,7 @@ qreal Chord::defaultStemLength()
 void Chord::layoutStem1()
       {
       StaffType* st = staff() ? staff()->staffType(tick()) : 0;
-      if (durationType().hasStem() && !(_noStem || measure()->slashStyle(staffIdx()) || (st && st->isTabStaff() && st->slashStyle()))) {
+      if (durationType().hasStem() && !(_noStem || (measure() && measure()->slashStyle(staffIdx())) || (st && st->isTabStaff() && st->slashStyle()))) {
             if (!_stem) {
                   Stem* stem = new Stem(score());
                   stem->setParent(this);
@@ -1789,7 +1789,7 @@ void Chord::layoutPitched()
                   note->setPos(x, y);
                   }
             computeUp();
-            layoutStem();
+            layoutStem1();
             addLedgerLines();
             return;
             }
