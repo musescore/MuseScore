@@ -75,8 +75,8 @@ void Stem::layout()
       Staff* stf = staff();
       if (chord()) {
             int tick = chord()->tick();
-            StaffType* st = stf->staffType(tick);
-            if (st->isTabStaff() ) {            // TAB staves
+            StaffType* st = stf ? stf->staffType(tick) : nullptr;
+            if (st && st->isTabStaff() ) {            // TAB staves
                   if (st->stemThrough()) {
                         // if stems through staves, gets Y pos. of stem-side note relative to chord other side
                         qreal lineDist = st->lineDistance().val() * spatium();
