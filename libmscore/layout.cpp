@@ -2515,11 +2515,15 @@ void Score::getNextMeasure(LayoutContext& lc)
       // even if they are equivalent 4/4 vs 2/2
       // also check if nominal time signature has changed
 
-      if (isMaster() && (!measure->len().identical(lc.sig)
+      if (isMaster() && ((!measure->len().identical(lc.sig)
+         && measure->len() != lc.sig * measure->mmRestCount())
          || (lc.prevMeasure && lc.prevMeasure->isMeasure()
          && !measure->timesig().identical(toMeasure(lc.prevMeasure)->timesig()))))
             {
-            lc.sig = measure->len();
+            if (measure->isMMRest())
+                  lc.sig = measure->mmRestFirst()->len();
+            else
+                  lc.sig = measure->len();
             sigmap()->add(lc.tick, SigEvent(lc.sig, measure->timesig(), measure->no()));
             }
 
