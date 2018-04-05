@@ -5020,6 +5020,7 @@ void MuseScore::updateWindowTitle(Score* score)
       else
             setWindowFilePath(score->rootScore()->fileInfo()->absoluteFilePath());
 #else
+      Q_UNUSED(score);
       if (cs->parentScore())
             setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->parentScore()->title() + "-" + cs->title() + "[*]");
       else
