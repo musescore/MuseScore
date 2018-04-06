@@ -3,7 +3,7 @@
       <Genre id="common">
             <name>Common</name>
       </Genre>
- <Genre id="popular">
+    <Genre id="popular">
         <name>Pop/Rock</name>
     </Genre>
         <Genre id="jazz">
@@ -5124,7 +5124,7 @@
             <name>Percussion - Unpitched</name>
             <Instrument id="drumset">
                   <longName>Drumset</longName>
-                  <shortName>D. Set</shortName>
+                  <shortName>Drs.</shortName>
                   <description>Drumset</description>
                   <musicXMLid>drum.group.set</musicXMLid>
                   <clef>PERC</clef>
@@ -5143,8 +5143,8 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="snare-drum">
-                  <longName>Concert Snare Drum</longName>
-                  <shortName>Con. Sn.</shortName>
+                  <longName>Snare Drum</longName>
+                  <shortName>Sn. Dr.</shortName>
                   <description>Snare Drum</description>
                   <clef>PERC</clef>
                   <musicXMLid>drum.snare-drum</musicXMLid>
