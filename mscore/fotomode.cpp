@@ -687,7 +687,7 @@ void ScoreView::fotoModeCopy()
       // See https://bugreports.qt.io/browse/QTBUG-11463
       // while transparent copy/paste works fine inside musescore,
       // it does not paste into other programs in Windows though
-      bool transparent = false; // preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY);
+      bool transparent = false;
 #else
       bool transparent = preferences.pngTransparent;
 #endif
