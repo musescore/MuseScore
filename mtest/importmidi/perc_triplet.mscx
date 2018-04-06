@@ -32,11 +32,11 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Snare Drum</trackName>
+      <trackName>Concert Snare Drum</trackName>
       <Instrument>
-        <longName>Snare Drum</longName>
-        <shortName>Sn. Dr.</shortName>
-        <trackName>Snare Drum</trackName>
+        <longName>Concert Snare Drum</longName>
+        <shortName>Con. Sn.</shortName>
+        <trackName>Concert Snare Drum</trackName>
         <instrumentId>drum.snare-drum</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="37">

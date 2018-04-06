@@ -93,7 +93,7 @@
       <trackName>Drumset</trackName>
       <Instrument>
         <longName>Drumset</longName>
-        <shortName>Drs.</shortName>
+        <shortName>D. Set</shortName>
         <trackName>Drumset</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
