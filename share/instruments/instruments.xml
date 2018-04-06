@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore>
       <Genre id="common">
-            <name>Common instruments</name>
+            <name>Common</name>
       </Genre>
       <Genre id="jazz">
-            <name>Jazz instruments</name>
+            <name>Jazz</name>
       </Genre>
       <Genre id="orchestra">
-            <name>Orchestral instruments</name>
+            <name>Orchestral</name>
       </Genre>
       <Genre id="earlymusic">
             <name>Early music</name>
       </Genre>
-      <Genre id="ethnic">
-            <name>Ethnic instruments</name>
+      <Genre id="world">
+            <name>World music</name>
       </Genre>
       <Articulation>
             <velocity>100</velocity>
@@ -293,7 +293,7 @@
                   <Channel>
                         <program value="76"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="d-dizi">
                   <longName>Dizi</longName>
@@ -307,7 +307,7 @@
                   <Channel>
                         <program value="72"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="c-dizi">
                   <longName>C Dizi</longName>
@@ -321,7 +321,7 @@
                   <Channel>
                         <program value="72"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="a-dizi">
                   <longName>A Dizi</longName>
@@ -335,7 +335,7 @@
                   <Channel>
                         <program value="72"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="g-dizi">
                   <longName>G Dizi</longName>
@@ -349,7 +349,7 @@
                   <Channel>
                         <program value="72"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="f-dizi">
                   <longName>F Dizi</longName>
@@ -363,7 +363,7 @@
                   <Channel>
                         <program value="72"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="e-dizi">
                   <longName>E Dizi</longName>
@@ -377,7 +377,7 @@
                   <Channel>
                         <program value="72"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="fife">
                   <longName>B♭ Fife</longName>
@@ -445,7 +445,7 @@
                   <Channel>
                         <program value="73"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="gemshorn">
                   <longName>Gemshorn</longName>
@@ -529,7 +529,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="g-soprano-ocarina">
                   <longName>G Soprano Ocarina</longName>
@@ -543,7 +543,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="f-soprano-ocarina">
                   <longName>F Soprano Ocarina</longName>
@@ -557,7 +557,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="c-soprano-ocarina">
                   <longName>C Soprano Ocarina</longName>
@@ -571,7 +571,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="bb-soprano-ocarina">
                   <longName>B♭ Soprano Ocarina</longName>
@@ -585,7 +585,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="g-alto-ocarina">
                   <longName>G Alto Ocarina</longName>
@@ -599,7 +599,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="f-alto-ocarina">
                   <longName>F Alto Ocarina</longName>
@@ -613,7 +613,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="c-alto-ocarina">
                   <longName>C Alto Ocarina</longName>
@@ -627,7 +627,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="bb-alto-ocarina">
                   <longName>B♭­ Alto Ocarina</longName>
@@ -641,7 +641,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="c-bass-ocarina">
                   <longName>C Bass Ocarina</longName>
@@ -655,7 +655,7 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="pan-flute">
                   <longName>Pan Flute</longName>
@@ -669,7 +669,7 @@
                   <Channel>
                         <program value="75"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="quena">
                   <longName>Quena</longName>
@@ -683,7 +683,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="c-quena">
                   <longName>C Quena</longName>
@@ -697,7 +697,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="g-quena">
                   <longName>G Quena</longName>
@@ -711,7 +711,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="f-quena">
                   <longName>F Quena</longName>
@@ -725,7 +725,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="d-quena">
                   <longName>Quena</longName>
@@ -739,7 +739,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="recorder">
                   <longName>Recorder</longName>
@@ -1339,7 +1339,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="f-duduk">
                   <longName>F Duduk</longName>
@@ -1353,7 +1353,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="e-duduk">
                   <longName>E Duduk</longName>
@@ -1367,7 +1367,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="d-duduk">
                   <longName>Duduk</longName>
@@ -1381,7 +1381,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="c-duduk">
                   <longName>C Duduk</longName>
@@ -1395,7 +1395,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="b-duduk">
                   <longName>B Duduk</longName>
@@ -1409,7 +1409,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="bb-duduk">
                   <longName>B♭ Duduk</longName>
@@ -1423,7 +1423,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="a-duduk">
                   <longName>A Duduk</longName>
@@ -1437,7 +1437,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="g-duduk">
                   <longName>G Duduk</longName>
@@ -1451,7 +1451,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="a-bass-duduk">
                   <longName>A Bass Duduk</longName>
@@ -1465,7 +1465,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="soprano-kelhorn">
                   <longName>Soprano Kelhorn</longName>
@@ -1478,7 +1478,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="alto-kelhorn">
                   <longName>Alto Kelhorn</longName>
@@ -1491,7 +1491,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="tenor-kelhorn">
                   <longName>Tenor Kelhorn</longName>
@@ -1504,7 +1504,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="bass-kelhorn">
                   <longName>Bass Kelhorn</longName>
@@ -1517,7 +1517,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="greatbass-kelhorn">
                   <longName>Greatbass Kelhorn</longName>
@@ -1530,7 +1530,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="rauschpfeife">
                   <longName>Rauschpfeife</longName>
@@ -1544,7 +1544,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="sopranino-rauschpfeife">
                   <longName>Sopranino Rauschpfeife</longName>
@@ -1558,7 +1558,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="soprano-rauschpfeife">
                   <longName>Soprano Rauschpfeife</longName>
@@ -1572,7 +1572,7 @@
                   <Channel>
                         <program value="67"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="shenai">
                   <longName>Shenai</longName>
@@ -1586,7 +1586,7 @@
                   <Channel>
                         <program value="111"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="clarinet">
                   <longName>Clarinet</longName>
@@ -1693,7 +1693,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="bb-clarinet">
                   <longName>B♭ Clarinet</longName>
@@ -1979,7 +1979,7 @@
                   <Channel>
                         <program value="69"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="octavin">
                   <longName>Octavin</longName>
@@ -2729,7 +2729,7 @@
                   <Channel>
                         <program value="20"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="soprano-sheng">
                   <longName>Soprano Sheng</longName>
@@ -2743,7 +2743,7 @@
                   <Channel>
                         <program value="20"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="alto-sheng">
                   <longName>Alto Sheng</longName>
@@ -2757,7 +2757,7 @@
                   <Channel>
                         <program value="20"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="tenor-sheng">
                   <longName>Tenor Sheng</longName>
@@ -2771,7 +2771,7 @@
                   <Channel>
                         <program value="20"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="bass-sheng">
                   <longName>Bass Sheng</longName>
@@ -2785,7 +2785,7 @@
                   <Channel>
                         <program value="20"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="brass">
@@ -3603,7 +3603,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="bugle">
                   <longName>Bugle</longName>
@@ -4369,7 +4369,7 @@
                   <Channel>
                         <program value="60"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="didgeridoo">
                   <longName>Didgeridoo</longName>
@@ -4383,7 +4383,7 @@
                   <Channel>
                         <program value="57"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="horagai">
                   <longName>Horagai</longName>
@@ -4397,7 +4397,7 @@
                   <Channel>
                         <program value="60"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="shofar">
                   <longName>Shofar</longName>
@@ -4411,7 +4411,7 @@
                   <Channel>
                         <program value="60"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="vuvuzela">
                   <longName>Vuvuzela</longName>
@@ -4425,7 +4425,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="pitched-percussion">
@@ -5004,7 +5004,7 @@
                   <Channel>
                         <program value="108"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="treble-kalimba">
                   <longName>Treble Kalimba</longName>
@@ -5016,7 +5016,7 @@
                   <Channel>
                         <program value="108"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="alto-kalimba">
                   <longName>Alto Kalimba</longName>
@@ -5028,7 +5028,7 @@
                   <Channel>
                         <program value="108"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="unpitched-percussion">
@@ -5244,7 +5244,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="48"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="bongos">
                   <longName>Bongos</longName>
@@ -5400,7 +5400,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="cuica">
                   <longName>Cuica</longName>
@@ -5431,7 +5431,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="finger-cymbals">
                   <longName>Finger Cymbals</longName>
@@ -5603,7 +5603,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="tubo">
                   <longName>Tubo</longName>
@@ -5625,7 +5625,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="metal-castanets">
                   <longName>Metal Castanets</longName>
@@ -5647,7 +5647,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="automobile-brake-drums">
@@ -6019,7 +6019,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="guiro">
                   <longName>Güiro</longName>
@@ -6042,7 +6042,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="maracas">
@@ -6066,7 +6066,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="cabasa">
@@ -6090,7 +6090,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="quijada">
                   <longName>Quijada</longName>
@@ -6113,7 +6113,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="vibraslap">
                   <longName>Vibraslap</longName>
@@ -8669,7 +8669,7 @@
               <shortName>ITB</shortName>
               <description>4 string Irish Tenor Banjo</description>
               <musicXMLid>pluck.banjo.tenor</musicXMLid>
-              <genre>ethnic</genre>
+              <genre>world</genre>
               <StringData>
                 <frets>19</frets>
                 <string>43</string>
@@ -8692,7 +8692,7 @@
               <musicXMLid>pluck.banjo.tenor</musicXMLid>
               <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
 <!--                  <clef>TAB</clef> -->
-              <genre>ethnic</genre>
+              <genre>world</genre>
             </Instrument>
             <Instrument id="balalaika">
                   <longName>Balalaika</longName>
@@ -8713,7 +8713,7 @@
                   <Channel>
                         <program value="107"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="balalaika-piccolo">
                   <longName>Piccolo Balalaika</longName>
@@ -8854,7 +8854,7 @@
                   <Channel>
                         <program value="24"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="bouzouki-4-course">
                   <longName>Bouzouki</longName>
@@ -8876,7 +8876,7 @@
                   <Channel>
                         <program value="24"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="soprano-guitar">
                   <longName>Soprano Guitar</longName>
@@ -9032,7 +9032,7 @@
                   <Channel>
                         <program value="24"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="guitar-steel">
                   <longName>Acoustic Guitar</longName>
@@ -9255,7 +9255,7 @@
                   <Channel>
                         <program value="107"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="oud">
                   <longName>Oud</longName>
@@ -9282,7 +9282,7 @@
                         <program value="25"/>
                   </Channel>
                   <genre>earlymusic</genre>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="lute">
                   <longName>Lute</longName>
@@ -9701,7 +9701,7 @@
                   <Channel>
                         <program value="106"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="sitar">
                   <longName>Sitar</longName>
@@ -9715,7 +9715,7 @@
                   <Channel>
                         <program value="104"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="ukulele">
                   <longName>Ukulele</longName>
@@ -10090,7 +10090,7 @@
                   <Channel>
                         <program value="24"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="brac">
                   <longName>Brač</longName>
@@ -10111,7 +10111,7 @@
                   <Channel>
                         <program value="24"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="celo">
                   <longName>Čelo</longName>
@@ -10134,7 +10134,7 @@
                   <Channel>
                         <program value="24"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="bugarija">
                   <longName>Bugarija</longName>
@@ -10157,7 +10157,7 @@
                   <Channel>
                         <program value="24"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="berda">
                   <longName>Berda</longName>
@@ -10180,7 +10180,7 @@
                   <Channel>
                         <program value="32"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="strings">
@@ -10231,7 +10231,7 @@
                   <Channel name="tremolo">
                         <program value="44"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="nyckelharpa">
                   <longName>Nyckelharpa</longName>
@@ -10251,7 +10251,7 @@
                   <Channel name="tremolo">
                         <program value="44"/>
                   </Channel>
-                  <genre>ethnic</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="violin">
                   <longName>Violin</longName>
