@@ -1,6 +1,10 @@
 #!/bin/bash
 
-MSCORE=../../build.debug/mtest/importmidi
+if [ "`uname`" = 'Darwin' ]; then
+   MSCORE=../../build.xcode/mtest/importmidi/Debug
+else
+   MSCORE=../../build.debug/mtest/importmidi
+fi
 
 # min_duration_no_reduce.mscx
 
