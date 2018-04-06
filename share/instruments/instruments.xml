@@ -5141,7 +5141,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="snare-drum">
-                  <longName>Concert Snare Drum</longName>
+                  <longName>Snare Drum</longName>
                   <shortName>Sn. Dr.</shortName>
                   <description>Snare Drum</description>
                   <clef>PERC</clef>
