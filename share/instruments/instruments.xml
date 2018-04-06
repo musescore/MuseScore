@@ -3,17 +3,32 @@
       <Genre id="common">
             <name>Common</name>
       </Genre>
+      <Genre id="popular">
+            <name>Pop/Rock</name>
+      </Genre>
       <Genre id="jazz">
             <name>Jazz</name>
       </Genre>
       <Genre id="orchestra">
-            <name>Orchestral</name>
+            <name>Orchestra</name>
       </Genre>
-      <Genre id="earlymusic">
-            <name>Early music</name>
+      <Genre id="concertband">
+            <name>Concert Band</name>
+      </Genre>
+      <Genre id="marching">
+            <name>Marching Band</name>
+      </Genre>
+      <Genre id="electronic">
+            <name>Electronic Music</name>
       </Genre>
       <Genre id="world">
-            <name>World music</name>
+            <name>World Music</name>
+      </Genre>
+      <Genre id="earlymusic">
+            <name>Early Music</name>
+      </Genre>
+      <Genre id="classroom">
+            <name>Classroom</name>
       </Genre>
       <Articulation>
             <velocity>100</velocity>
@@ -80,6 +95,8 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
                   <Instrument id="db-piccolo">
                         <longName>D♭ Piccolo</longName>
@@ -116,6 +133,9 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>popular</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="treble-flute">
                   <longName>Treble Flute</longName>
@@ -180,7 +200,7 @@
                   </Channel>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
-                  <genre>common</genre>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="bass-flute">
                   <longName>Bass Flute</longName>
@@ -754,6 +774,7 @@
                         <program value="74"/>
                   </Channel>
                   <genre>common</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="garklein-recorder">
                   <longName>Garklein Recorder</longName>
@@ -892,6 +913,7 @@
                   <Channel>
                         <program value="78"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="bflat-tin-whistle">
                   <longName>B♭ Tin Whistle</longName>
@@ -948,6 +970,7 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="baroque-oboe">
                   <longName>Baroque Oboe</longName>
@@ -1009,8 +1032,8 @@
                   <Channel>
                         <program value="69"/>
                   </Channel>
-                  <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="baritone-oboe">
                   <longName>Baritone Oboe</longName>
@@ -1602,7 +1625,6 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>jazz</genre>
             </Instrument>
             <Instrument id="piccolo-clarinet">
                   <longName>Piccolo Clarinet</longName>
@@ -1633,6 +1655,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="c-clarinet">
                   <longName>C Clarinet</longName>
@@ -1678,6 +1701,7 @@
                   </Channel>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="g-clarinet">
                   <longName>G Clarinet</longName>
@@ -1693,7 +1717,6 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>world</genre>
             </Instrument>
             <Instrument id="bb-clarinet">
                   <longName>B♭ Clarinet</longName>
@@ -1712,6 +1735,9 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>jazz</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="a-clarinet">
                   <longName>A Clarinet</longName>
@@ -1727,7 +1753,6 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="alto-clarinet">
@@ -1744,6 +1769,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="basset-clarinet">
                   <longName>Basset Clarinet</longName>
@@ -1794,6 +1820,8 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="bb-bass-clarinet-bass-clef">
                   <longName>B♭ Bass Clarinet (Bass Clef)</longName>
@@ -1810,7 +1838,6 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="a-bass-clarinet">
@@ -1828,7 +1855,6 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
-                  <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="a-bass-clarinet-bass-clef)">
@@ -1846,7 +1872,6 @@
                  <Channel>
                        <program value="71"/>
                  </Channel>
-                 <genre>common</genre>
                  <genre>orchestra</genre>
            </Instrument>
             <Instrument id="contra-alto-clarinet">
@@ -1864,6 +1889,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="contrabass-clarinet">
                   <longName>Contrabass Clarinet</longName>
@@ -1882,6 +1908,7 @@
                   </Channel>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="chalumeau">
                   <longName>Chalumeau</longName>
@@ -2008,6 +2035,7 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="contrabassoon">
                   <longName>Contrabassoon</longName>
@@ -2023,8 +2051,8 @@
                   <Channel>
                         <program value="70"/>
                   </Channel>
-                  <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="reed-contrabass">
                   <longName>Reed Contrabass</longName>
@@ -2257,6 +2285,8 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="aulochrome">
                   <longName>Aulochrome</longName>
@@ -2305,6 +2335,9 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>popular</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="melody-saxophone">
                   <longName>Melody Saxophone</longName>
@@ -2340,6 +2373,9 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>popular</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="baritone-saxophone">
                   <longName>Baritone Saxophone</longName>
@@ -2359,6 +2395,8 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="bass-saxophone">
                   <longName>Bass Saxophone</longName>
@@ -2423,7 +2461,7 @@
                   <Channel>
                         <program value="109"/>
                   </Channel>
-                  <genre>common</genre>
+                  <genre>world</genre>
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="free-reed">
@@ -2442,6 +2480,7 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="harmonica-c12c">
                   <longName>12 Hole C Chromatic Harmonica</longName>
@@ -2686,6 +2725,7 @@
                   <Channel>
                         <program value="23"/>
                   </Channel>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="concertina">
                   <longName>Concertina</longName>
@@ -2823,6 +2863,8 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="high-c-horn">
                   <longName>High C Horn</longName>
@@ -3002,6 +3044,7 @@
                   <Channel name="mute">
                         <program value="59"/>
                   </Channel>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="c-cornet">
                   <longName>C Cornet</longName>
@@ -3039,6 +3082,7 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="a-cornet">
                   <longName>A Cornet</longName>
@@ -3116,6 +3160,8 @@
                   <Channel>
                         <program value="60"/>
                   </Channel>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="baritone-horn-treble">
                   <trackName>Baritone Horn (Treble Clef)</trackName>
@@ -3133,6 +3179,7 @@
                   <Channel>
                         <program value="60"/>
                   </Channel>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="posthorn">
                   <longName>Posthorn</longName>
@@ -3177,7 +3224,6 @@
                   <Channel name="mute">
                         <program value="59"/>
                   </Channel>
-                  <genre>jazz</genre>
             </Instrument>
             <Instrument id="piccolo-trumpet">
                   <longName>Piccolo Trumpet</longName>
@@ -3215,6 +3261,7 @@
                         <program value="59"/>
                   </Channel>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="a-piccolo-trumpet">
                   <longName>Piccolo Trumpet in A</longName>
@@ -3326,7 +3373,6 @@
                   <Channel name="mute">
                         <program value="59"/>
                   </Channel>
-                  <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="bb-trumpet">
@@ -3346,8 +3392,10 @@
                   <Channel name="mute">
                         <program value="59"/>
                   </Channel>
-                  <genre>common</genre>
-                  <genre>orchestra</genre>
+                  <genre>jazz</genre>
+                  <genre>popular</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="a-trumpet">
                   <longName>A Trumpet</longName>
@@ -3630,6 +3678,7 @@
                   <Channel>
                         <program value="58"/>
                   </Channel>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="alto-bugle">
                   <longName>Alto Bugle</longName>
@@ -3643,6 +3692,7 @@
                   <Channel>
                         <program value="58"/>
                   </Channel>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="baritone-bugle">
                   <longName>Baritone Bugle</longName>
@@ -3658,6 +3708,7 @@
                   <Channel>
                         <program value="58"/>
                   </Channel>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="flugelhorn">
                   <longName>Flugelhorn</longName>
@@ -3675,6 +3726,8 @@
                   </Channel>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="fiscorn">
                   <longName>Fiscorn</longName>
@@ -3720,6 +3773,7 @@
                   <Channel>
                         <program value="58"/>
                   </Channel>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="mellophon-bugle">
                   <longName>Mellophone Bugle</longName>
@@ -3733,6 +3787,7 @@
                   <Channel>
                         <program value="58"/>
                   </Channel>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="contrabass-bugle">
                   <longName>Contrabass Bugle</longName>
@@ -3748,6 +3803,7 @@
                   <Channel>
                         <program value="58"/>
                   </Channel>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="mellophone">
                   <longName>Mellophone</longName>
@@ -3764,6 +3820,7 @@
                         <program value="60"/>
                   </Channel>
                   <genre>jazz</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="ophicleide">
                   <longName>Ophicleide</longName>
@@ -3986,6 +4043,9 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>popular</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="trombone-treble">
                   <trackName>Trombone (Treble Clef)</trackName>
@@ -4043,8 +4103,6 @@
                   <Channel>
                         <program value="57"/>
                   </Channel>
-                  <genre>common</genre>
-                  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="bass-trombone">
                   <longName>Bass Trombone</longName>
@@ -4058,9 +4116,10 @@
                   <Channel>
                         <program value="57"/>
                   </Channel>
-                  <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="contrabass-trombone">
                   <longName>Contrabass Trombone</longName>
@@ -4102,8 +4161,9 @@
                   <Channel>
                         <program value="58"/>
                   </Channel>
-                  <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="euphonium-treble">
                   <trackName>Euphonium (Treble Clef)</trackName>
@@ -4121,6 +4181,8 @@
                   <Channel>
                         <program value="58"/>
                   </Channel>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="tuba">
                   <longName>Tuba</longName>
@@ -4137,6 +4199,8 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="f-tuba">
                   <longName>F Tuba</longName>
@@ -4207,7 +4271,6 @@
                   <Channel>
                         <program value="58"/>
                   </Channel>
-                  <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="bb-tuba-treble">
@@ -4292,6 +4355,7 @@
                         <program value="58"/>
                   </Channel>
                   <genre>jazz</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="bb-sousaphone">
                   <longName>B♭ Sousaphone</longName>
@@ -4308,6 +4372,7 @@
                         <program value="58"/>
                   </Channel>
                   <genre>jazz</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="wagner-tuba">
                   <longName>Wagner Tuba</longName>
@@ -4444,6 +4509,8 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="roto-toms">
                   <longName>Roto-toms</longName>
@@ -4457,7 +4524,6 @@
                   <Channel>
                         <program value="117"/>
                   </Channel>
-                  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="glockenspiel">
                   <longName>Glockenspiel</longName>
@@ -4477,6 +4543,9 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-soprano-glockenspiel">
                   <longName>Orff Soprano Glockenspiel</longName>
@@ -4490,6 +4559,7 @@
                   <Channel>
                         <program value="9"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-alto-glockenspiel">
                   <longName>Orff Alto Glockenspiel</longName>
@@ -4503,6 +4573,7 @@
                   <Channel>
                         <program value="9"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="crotales">
                   <longName>Crotales</longName>
@@ -4519,8 +4590,9 @@
                   <Channel>
                         <program value="10"/>
                   </Channel>
-                  <genre>common</genre>
+                  <genre>concertband</genre>
                   <genre>orchestra</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="tubaphone">
                   <longName>Tubaphone</longName>
@@ -4567,6 +4639,8 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="metallophone">
                   <longName>Metallophone</longName>
@@ -4580,6 +4654,7 @@
                   <Channel>
                         <program value="11"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-soprano-metallophone">
                   <longName>Orff Soprano Metallophone</longName>
@@ -4593,6 +4668,7 @@
                   <Channel>
                         <program value="11"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-alto-metallophone">
                   <longName>Orff Alto Metallophone</longName>
@@ -4606,6 +4682,7 @@
                   <Channel>
                         <program value="11"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-bass-metallophone">
                   <longName>Orff Bass Metallophone</longName>
@@ -4619,6 +4696,7 @@
                   <Channel>
                         <program value="11"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="tubular-bells">
                   <longName>Tubular Bells</longName>
@@ -4634,6 +4712,7 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="steel-drums">
                   <longName>Steel Drums</longName>
@@ -4833,6 +4912,9 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-soprano-xylophone">
                   <longName>Orff Soprano Xylophone</longName>
@@ -4846,6 +4928,7 @@
                   <Channel>
                         <program value="12"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-alto-xylophone">
                   <longName>Orff Alto Xylophone</longName>
@@ -4859,6 +4942,7 @@
                   <Channel>
                         <program value="12"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="orff-bass-xylophone">
                   <longName>Orff Bass Xylophone</longName>
@@ -4872,6 +4956,7 @@
                   <Channel>
                         <program value="12"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="xylomarimba">
                   <longName>Xylomarimba</longName>
@@ -4912,6 +4997,8 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="marimba-single">
                   <longName>Marimba</longName>
@@ -4930,6 +5017,8 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="bass-marimba">
                   <longName>Bass Marimba</longName>
@@ -5049,6 +5138,9 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>popular</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="snare-drum">
                   <longName>Snare Drum</longName>
@@ -5081,6 +5173,8 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="bass-drum">
                   <longName>Bass Drum</longName>
@@ -5105,6 +5199,8 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="piccolo-snare-drum">
                   <longName>Piccolo Snare Drum</longName>
@@ -5222,6 +5318,8 @@
                         <program value="48"/>
                   </Channel>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="chinese-tom-toms">
                   <longName>Chinese Tom-toms</longName>
@@ -5277,6 +5375,10 @@
                   </Channel>
                   <genre>orchestra</genre>
                   <genre>jazz</genre>
+                  <genre>popular</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="congas">
                   <longName>Congas</longName>
@@ -5317,6 +5419,9 @@
                   </Channel>
                   <genre>orchestra</genre>
                   <genre>jazz</genre>
+                  <genre>popular</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="timbales">
                   <longName>Timbales</longName>
@@ -5348,6 +5453,8 @@
                         <program value="0"/>
                   </Channel>
                   <genre>jazz</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="frame-drum">
                   <longName>Frame Drum</longName>
@@ -5370,6 +5477,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="tablas">
                   <longName>Tablas</longName>
@@ -5454,6 +5562,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="hi-hat">
                   <longName>Hi-hat</longName>
@@ -5515,6 +5624,8 @@
                         <program value="0"/>
                   </Channel>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="bells">
                   <longName>Bells</longName>
@@ -5536,7 +5647,6 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
-                  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="sleigh-bells">
                   <longName>Sleigh Bells</longName>
@@ -5559,6 +5669,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="bell-plate">
                   <longName>Bell Plate</longName>
@@ -5671,6 +5782,8 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="iron-pipes">
                   <longName>Iron Pipes</longName>
@@ -5768,6 +5881,9 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="temple-blocks">
                   <longName>Temple Blocks</longName>
@@ -5799,6 +5915,8 @@
                         <program value="0"/>
                   </Channel>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="triangle">
                   <longName>Triangle</longName>
@@ -5831,6 +5949,9 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="cymbal">
                   <longName>Cymbal</longName>
@@ -5856,6 +5977,9 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="ride-cymbal">
                   <longName>Ride Cymbal</longName>
@@ -5908,6 +6032,8 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="crash-cymbal">
                   <longName>Crash Cymbal</longName>
@@ -5930,6 +6056,8 @@
                         <controller ctrl="0" value="1"/>
                         <program value="48"/>
                   </Channel>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="splash-cymbal">
                   <longName>Splash Cymbal</longName>
@@ -5951,6 +6079,8 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="cowbell">
                   <longName>Cowbell</longName>
@@ -5973,6 +6103,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="claves">
                   <longName>Claves</longName>
@@ -5997,6 +6128,9 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="castanets">
                   <longName>Castanets</longName>
@@ -6044,6 +6178,7 @@
                   </Channel>
                   <genre>world</genre>
                   <genre>jazz</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="maracas">
                   <longName>Maracas</longName>
@@ -6068,6 +6203,7 @@
                   </Channel>
                   <genre>world</genre>
                   <genre>orchestra</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="cabasa">
                   <longName>Cabasa</longName>
@@ -6136,6 +6272,8 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+                  <genre>concertband</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="slit-drum">
                   <longName>Slit Drum</longName>
@@ -6181,6 +6319,8 @@
                         <program value="0"/>
                   </Channel>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="ratchet">
                   <longName>Ratchet</longName>
@@ -6247,6 +6387,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="wooden-wind-chimes">
                   <longName>Wooden Wind Chimes</longName>
@@ -6314,6 +6455,8 @@
                         <program value="0"/>
                   </Channel>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="glass-wind-chimes">
                   <longName>Glass Wind Chimes</longName>
@@ -6400,6 +6543,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="hand-clap">
                   <longName>Hand Clap</longName>
@@ -6422,6 +6566,8 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="slap">
                   <longName>Slap</longName>
@@ -6466,6 +6612,8 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="tambourine">
                   <longName>Tambourine</longName>
@@ -6490,6 +6638,10 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>popular</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="percussion">
                   <longName>Percussion</longName>
@@ -6659,6 +6811,9 @@
                         <program value="48"/>
                   </Channel>
                   <genre>orchestra</genre>
+                  <genre>popular</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="marching-percussion">
@@ -6757,7 +6912,7 @@
                   <channel>
                         <program>56</program>
                   </channel>
-                  <genre>common</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="marching-tenor-drums">
                   <longName>Tenor Drums</longName>
@@ -6962,7 +7117,7 @@
                   <channel>
                         <program>96</program>
                   </channel>
-                  <genre>common</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="marching-bass-drums">
                   <longName>Bass Drums</longName>
@@ -7069,7 +7224,7 @@
                   <channel>
                         <program>59</program>
                   </channel>
-                  <genre>common</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="marching-cymbals">
                   <longName>Cymbals</longName>
@@ -7177,8 +7332,8 @@
                   <channel>
                         <program>58</program>
                   </channel>
-                  <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>marching</genre>
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="vocals">
@@ -7380,6 +7535,7 @@
                   <Channel>
                         <program value="85"/>
                   </Channel>
+                  <genre>common</genre>
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="keyboards">
@@ -7407,6 +7563,8 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>popular</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="grand-piano">
                   <longName>Grand Piano</longName>
@@ -7429,6 +7587,7 @@
                         <gateTime>95</gateTime>
                   </Articulation>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="upright-piano">
                   <longName>Upright Piano</longName>
@@ -7472,6 +7631,7 @@
                         <gateTime>95</gateTime>
                   </Articulation>
                   <genre>jazz</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="toy-piano">
                   <longName>Toy Piano</longName>
@@ -7493,6 +7653,7 @@
                         <velocity>100</velocity>
                         <gateTime>95</gateTime>
                   </Articulation>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="clavichord">
                   <longName>Clavichord</longName>
@@ -7589,6 +7750,7 @@
                         <program value="4"/>
                   </Channel>
                   <genre>jazz</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="clavinet">
                   <longName>Clavinet</longName>
@@ -7628,6 +7790,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="percussive-organ">
                   <longName>Percussive Organ</longName>
@@ -7663,6 +7826,7 @@
                         <program value="16"/>
                   </Channel>
                   <genre>jazz</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="rotary-organ">
                   <longName>Rotary Organ</longName>
@@ -8118,6 +8282,8 @@
                   <Channel name="scifi">
                         <program value="103"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="atmosphere-synth">
                   <longName>Atmosphere Synthesizer</longName>
@@ -8135,6 +8301,8 @@
                   <Channel>
                         <program value="99"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="brightness-synth">
                   <longName>Brightness Synthesizer</longName>
@@ -8152,6 +8320,8 @@
                   <Channel>
                         <program value="100"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="crystal-synth">
                   <longName>Crystal Synthesizer</longName>
@@ -8169,6 +8339,8 @@
                   <Channel>
                         <program value="98"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="echoes-synth">
                   <longName>Echoes Synthesizer</longName>
@@ -8186,6 +8358,8 @@
                   <Channel>
                         <program value="102"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="goblins-synth">
                   <longName>Goblins Synthesizer</longName>
@@ -8203,6 +8377,8 @@
                   <Channel>
                         <program value="101"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="rain-synth">
                   <longName>Rain Synthesizer</longName>
@@ -8220,6 +8396,8 @@
                   <Channel>
                         <program value="96"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="sci-fi-synth">
                   <longName>Sci-fi Synthesizer</longName>
@@ -8237,6 +8415,8 @@
                   <Channel>
                         <program value="103"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="soundtrack-synth">
                   <longName>Soundtrack Synthesizer</longName>
@@ -8254,6 +8434,8 @@
                   <Channel>
                         <program value="97"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="pad-synth">
                   <longName>Pad Synthesizer</longName>
@@ -8292,6 +8474,8 @@
                   <Channel name="sweep">
                         <program value="95"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="new-age-synth">
                   <longName>New Age Synthesizer</longName>
@@ -8309,6 +8493,8 @@
                   <Channel>
                         <program value="88"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="warm-synth">
                   <longName>Warm Synthesizer</longName>
@@ -8326,6 +8512,8 @@
                   <Channel>
                         <program value="89"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="poly-synth">
                   <longName>Poly Synthesizer</longName>
@@ -8343,6 +8531,8 @@
                   <Channel>
                         <program value="90"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="choir-synth">
                   <longName>Choir Synthesizer</longName>
@@ -8360,6 +8550,8 @@
                   <Channel>
                         <program value="91"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="bowed-synth">
                   <longName>Bowed Synthesizer</longName>
@@ -8377,6 +8569,8 @@
                   <Channel>
                         <program value="92"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="metallic-synth">
                   <longName>Metallic Synthesizer</longName>
@@ -8394,6 +8588,8 @@
                   <Channel>
                         <program value="93"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="halo-synth">
                   <longName>Halo Synthesizer</longName>
@@ -8411,6 +8607,8 @@
                   <Channel>
                         <program value="94"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="sweep-synth">
                   <longName>Sweep Synthesizer</longName>
@@ -8428,6 +8626,8 @@
                   <Channel>
                         <program value="95"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="saw-synth">
                   <longName>Saw Synthesizer</longName>
@@ -8445,6 +8645,8 @@
                   <Channel>
                         <program value="81"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="sine-synth">
                   <longName>Sine Synthesizer</longName>
@@ -8462,6 +8664,8 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="square-synth">
                   <longName>Square Synthesizer</longName>
@@ -8479,6 +8683,8 @@
                   <Channel>
                         <program value="80"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="ondes-martenot">
                   <longName>Ondes Martenot</longName>
@@ -8494,6 +8700,8 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="mallet-synthesizer">
                   <longName>Mallet Synthesizer</longName>
@@ -8508,6 +8716,8 @@
                   <Channel>
                         <program value="80"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="bass-synthesizer">
                   <longName>Bass Synthesizer</longName>
@@ -8528,6 +8738,8 @@
                   <Channel name="synth-bass-2">
                         <program value="39"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="brass-synthesizer">
                   <longName>Brass Synthesizer</longName>
@@ -8548,6 +8760,8 @@
                   <Channel name="synth-brass-2">
                         <program value="63"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="string-synthesizer">
                   <longName>String Synthesizer</longName>
@@ -8568,6 +8782,8 @@
                   <Channel name="synth-string-2">
                         <program value="51"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="theremin">
                   <longName>Theremin</longName>
@@ -8585,6 +8801,8 @@
                   <Channel>
                         <program value="79"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="percussion-synthesizer">
                   <longName>Percussion Synthesizer</longName>
@@ -8607,6 +8825,8 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="plucked-strings">
@@ -8633,6 +8853,7 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="banjo-tablature">
                   <trackName>Banjo [Tablature]</trackName>
@@ -8944,6 +9165,7 @@
                         <program value="24"/>
                   </Channel>
                   <genre>common</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="guitar-nylon-treble-clef">
                   <trackName>Guitar (Treble Clef)</trackName>
@@ -9057,6 +9279,8 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
+                  <genre>popular</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="guitar-steel-treble-clef">
                   <trackName>Acoustic Guitar (Treble Clef)</trackName>
@@ -9092,6 +9316,7 @@
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
 <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="11-string-alto-guitar">
                   <longName>11-string Alto Guitar</longName>
@@ -9145,6 +9370,7 @@
                   <Channel>
                         <program value="24"/>
                   </Channel>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="pedal-steel-guitar">
                   <longName>Pedal Steel Guitar</longName>
@@ -9158,6 +9384,7 @@
                   <Channel>
                         <program value="25"/>
                   </Channel>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="electric-guitar">
             <!-- don't remove this instrument, it is used in ...mtest/libmscore/links/tst_links.cpp
@@ -9184,6 +9411,8 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="electric-guitar-treble-clef">
                   <trackName>Electric Guitar (Treble Clef)</trackName>
@@ -9217,6 +9446,7 @@
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
 <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="harp">
                   <longName>Harp</longName>
@@ -9581,6 +9811,7 @@
                   <Channel>
                         <program value="24"/>
                   </Channel>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="mandolin-tablature">
                   <trackName>Mandolin [Tablature]</trackName>
@@ -9589,6 +9820,7 @@
                   <musicXMLid>pluck.mandolin</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
 <!--                  <clef>TAB</clef> -->
+            <genre>popular</genre>
             </Instrument>
             <Instrument id="mandola">
                   <longName>Mandola</longName>
@@ -9737,6 +9969,8 @@
                         <program value="24"/>
                   </Channel>
                   <genre>common</genre>
+                  <genre>popular</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="ukulele-4-str-tab">
                   <trackName>Ukulele [Tablature]</trackName>
@@ -9746,6 +9980,8 @@
                   <stafftype staffTypePreset="tabUkulele">tablature</stafftype>
 <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
+                  <genre>popular</genre>
+                  <genre>classroom</genre>
             </Instrument>
             <Instrument id="ukulele-low-g">
                   <longName>Ukulele (Low G)</longName>
@@ -9831,6 +10067,8 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
+                  <genre>popular</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="bass-guitar-tablature">
                   <trackName>Bass Guitar [Tablature]</trackName>
@@ -9840,6 +10078,7 @@
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
 <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="acoustic-bass">
                   <!-- Same instrument as the orchestral contrabass, but used by default plucked, rather than bowed
@@ -9910,6 +10149,7 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="electric-bass-4-str-tab">
                   <trackName>Electric Bass [Tablature]</trackName>
@@ -9919,6 +10159,7 @@
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
 <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="fretless-electric-bass">
                   <longName>Fretless Electric Bass</longName>
@@ -9948,6 +10189,8 @@
                   <Channel name="pop">
                         <program value="37"/>
                   </Channel>
+                  <genre>popular</genre>
+                  <genre>jazz</genre>
             </Instrument>
             <Instrument id="5-string-electric-bass">
                   <longName>5-str. Electric Bass</longName>
@@ -9980,6 +10223,7 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="5-string-electric-bass-tab">
                   <trackName>5-str. Electric Bass [Tablature]</trackName>
@@ -9988,6 +10232,7 @@
                   <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
 <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="5-string-electric-bass-high-c">
                   <longName>5-str. Electric Bass</longName>
@@ -10274,6 +10519,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="violins">
                   <longName>Violins</longName>
@@ -10358,6 +10604,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>popular</genre>
             </Instrument>
             <Instrument id="violoncellos">
                   <longName>Violoncellos</longName>
@@ -10403,6 +10650,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="contrabasses">
                   <longName>Contrabasses</longName>
@@ -10425,15 +10673,11 @@
                   <Channel name="tremolo">
                         <program value="44"/>
                   </Channel>
-                  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="double-bass">
                   <init>contrabass</init>
                   <longName>Double Bass</longName>
                   <shortName>Db.</shortName>
-                  <genre>common</genre>
-                  <genre>jazz</genre>
-                  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="pardessus-de-viole">
                   <longName>Pardessus de viole</longName>
