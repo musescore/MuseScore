@@ -73,7 +73,7 @@ void Shape::draw(QPainter* p) const
 //   minHorizontalDistance
 //    a is located right of this shape.
 //    Calculates the minimum vertical distance between the two shapes
-//    so they dont touch.
+//    so they don't touch.
 //-------------------------------------------------------------------
 
 qreal Shape::minHorizontalDistance(const Shape& a) const

@@ -156,7 +156,7 @@ void ScoreView::endEdit()
       else if (editData.element->isText()) {
             Text* text = toText(editData.element);
             // remove text if empty
-            // dont do this for TBOX
+            // don't do this for TBOX
             if (text->empty() && text->parent() && text->parent()->type() != ElementType::TBOX)
                   _score->undoRemoveElement(text);
             }

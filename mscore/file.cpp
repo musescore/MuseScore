@@ -330,7 +330,7 @@ MasterScore* MuseScore::readScore(const QString& name)
       if (rv == Score::FileError::FILE_TOO_OLD || rv == Score::FileError::FILE_TOO_NEW || rv == Score::FileError::FILE_CORRUPTED) {
             if (readScoreError(name, rv, true)) {
                   if (rv != Score::FileError::FILE_CORRUPTED) {
-                        // dont read file again if corrupted
+                        // don't read file again if corrupted
                         // the check routine may try to fix it
                         delete score;
                         score = new MasterScore();
@@ -587,7 +587,7 @@ MasterScore* MuseScore::getNewFile()
                   measure->setTick(tick);
 
                   if (pickupMeasure && tick == 0) {
-                        measure->setIrregular(true);        // dont count pickup measure
+                        measure->setIrregular(true);        // don't count pickup measure
                         measure->setLen(Fraction(pickupTimesigZ, pickupTimesigN));
                         }
                   _score->measures()->add(measure);
@@ -2420,7 +2420,7 @@ bool MuseScore::savePng(Score* score, const QString& name)
 bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool transparent, double convDpi, int trimMargin, QImage::Format format)
       {
       bool rv = true;
-      score->setPrinting(!screenshot);    // dont print page break symbols etc.
+      score->setPrinting(!screenshot);    // don't print page break symbols etc.
       double pr = MScore::pixelRatio;
 
       QImage::Format f;

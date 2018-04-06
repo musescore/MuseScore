@@ -1518,7 +1518,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, 
             }
       else if (chord->arpeggio() && chord->arpeggio()->playArpeggio()) {
             renderArpeggio(chord, ell);
-            return ell;  // dont apply gateTime to arpeggio events
+            return ell;  // don't apply gateTime to arpeggio events
             }
       else
             renderChordArticulation(chord, ell, gateTime);
@@ -1696,7 +1696,7 @@ void Score::createPlayEvents(Chord* chord)
             for (int i = 0; i < n; ++i)
                   chord->notes()[i]->setPlayEvents(el[i]);
             }
-      // dont change event list if type is PlayEventType::User
+      // don't change event list if type is PlayEventType::User
       }
 
 void Score::createPlayEvents()
