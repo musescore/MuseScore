@@ -456,7 +456,7 @@ void MuseScore::pluginTriggered(int idx)
                   }
             }
 
-      // dont call startCmd for non modal dialog
+      // don't call startCmd for non modal dialog
       if (cs && p->pluginType() != "dock")
             cs->startCmd();
       p->runPlugin();

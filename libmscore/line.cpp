@@ -354,7 +354,7 @@ void LineSegment::editDrag(EditData& ed)
                   undoChangeProperty(Pid::AUTOPLACE, false);
                   break;
             case Grip::MIDDLE: { // Move the element (middle grip)
-                  // Only for moving, no y limitaion
+                  // Only for moving, no y limitation
                   QPointF deltaMove(ed.delta.x(), ed.delta.y());
                   setUserOff(userOff() + deltaMove);
                   undoChangeProperty(Pid::AUTOPLACE, false);

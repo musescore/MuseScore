@@ -178,7 +178,7 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
                   qreal x1   = stringDist * string;
                   qreal x2   = stringDist * (_strings-1);
                   qreal y    = fretDist * (_barre-1) + fretDist * .5;
-                  pen.setWidthF(stringDist * .6 * .7);      // dont use style barreLineWidth
+                  pen.setWidthF(stringDist * .6 * .7);      // don't use style barreLineWidth
                   pen.setCapStyle(Qt::RoundCap);
                   p.setPen(pen);
                   p.drawLine(QLineF(x1, y, x2, y));

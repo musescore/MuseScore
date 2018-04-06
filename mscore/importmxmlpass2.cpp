@@ -157,7 +157,7 @@ void MusicXmlLyricsExtend::setExtend(const int no, const int track, const int ti
                   if (par->track() == track && (no == -1 || l->no() == no)) {
                         int lct = lastChordTicks(l->segment(), track, tick);
                         if (lct > 0) {
-                              // set lyric tick to the total length fron the lyric note
+                              // set lyric tick to the total length from the lyric note
                               // plus all notes covered by the melisma minus the last note length
                               l->setTicks(tick - par->tick() - lct);
                               }

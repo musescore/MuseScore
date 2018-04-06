@@ -930,7 +930,7 @@ void PowerTab::addToScore(ptSection& sec)
 
 void PowerTab::ptSection::copyTracks(ptTrack* track)
       {
-      //if not found GuitarIn in section or all tracks are readed -> return
+      //if not found GuitarIn in section or all tracks are read -> return
       if (staffs == int(staffMap.size())) {
             return;
             }
