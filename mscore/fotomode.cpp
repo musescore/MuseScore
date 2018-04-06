@@ -683,7 +683,14 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
 
 void ScoreView::fotoModeCopy()
       {
+#if defined(Q_OS_WIN)
+      // See https://bugreports.qt.io/browse/QTBUG-11463
+      // while transparent copy/paste works fine inside musescore,
+      // it does not paste into other programs in Windows though
+      bool transparent = false; // preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY);
+#else
       bool transparent = preferences.pngTransparent;
+#endif
       double convDpi   = preferences.pngResolution;
       double mag       = convDpi / DPI;
 
