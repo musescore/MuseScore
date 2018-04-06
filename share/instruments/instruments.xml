@@ -59,7 +59,7 @@
             <gateTime>100</gateTime>
       </Articulation>
       <InstrumentGroup id="woodwinds">
-            <name>Woodwind</name>
+            <name>Woodwinds</name>
             <Instrument id="Winds">
                   <longName>Winds</longName>
                   <shortName>W.</shortName>
@@ -4494,7 +4494,7 @@
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="pitched-percussion">
-            <name>Pitched Percussion</name>
+            <name>Percussion - Pitched</name>
             <Instrument id="timpani">
                   <longName>Timpani</longName>
                   <shortName>Timp.</shortName>
@@ -5121,7 +5121,7 @@
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="unpitched-percussion">
-            <name>Unpitched Percussion</name>
+            <name>Percussion - Unpitched</name>
             <Instrument id="drumset">
                   <longName>Drumset</longName>
                   <shortName>Drs.</shortName>
@@ -6817,7 +6817,7 @@
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="marching-percussion">
-            <name>Battery Percussion</name>
+            <name>Percussion - Marching</name>
             <Instrument id="marching-snare">
                   <longName>Snare Drum</longName>
                   <shortName>S.D.</shortName>
@@ -8244,7 +8244,7 @@
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="electronic-instruments">
-            <name>Electronic Instruments</name>
+            <name>Electronic</name>
             <Instrument id="effect-synth">
                   <longName>Effect Synthesizer</longName>
                   <shortName>Synth.</shortName>
@@ -8830,7 +8830,7 @@
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="plucked-strings">
-            <name>Plucked Strings</name>
+            <name>Strings - Plucked</name>
             <Instrument id="banjo">
                   <longName>Banjo</longName>
                   <shortName>Bj.</shortName>
@@ -10429,7 +10429,7 @@
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="strings">
-            <name>Strings</name>
+            <name>Strings - Bowed</name>
             <Instrument id="strings">
                   <longName>Strings</longName>
                   <shortName>St.</shortName>
