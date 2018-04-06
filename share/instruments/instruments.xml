@@ -4513,9 +4513,9 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="roto-toms">
-                  <longName>Roto-toms</longName>
-                  <shortName>Rt-t.</shortName>
-                  <description>Roto-toms</description>
+                  <longName>Roto-Toms</longName>
+                  <shortName>Roto</shortName>
+                  <description>Roto-Toms</description>
                   <musicXMLid>drum.rototom</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -4527,7 +4527,7 @@
             </Instrument>
             <Instrument id="glockenspiel">
                   <longName>Glockenspiel</longName>
-                  <shortName>Glk.</shortName>
+                  <shortName>Glock.</shortName>
                   <description>Glockenspiel</description>
                   <musicXMLid>pitched-percussion.glockenspiel</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -4577,7 +4577,7 @@
             </Instrument>
             <Instrument id="crotales">
                   <longName>Crotales</longName>
-                  <shortName>Cro.</shortName>
+                  <shortName>Crot.</shortName>
                   <description>Crotales</description>
                   <musicXMLid>metal.crotales</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -4608,7 +4608,7 @@
             </Instrument>
             <Instrument id="almglocken">
                   <longName>Almglocken</longName>
-                  <shortName>Agl.</shortName>
+                  <shortName>Almg.</shortName>
                   <description>Almglocken</description>
                   <musicXMLid>metal.bells.almglocken</musicXMLid>
                   <staves>2</staves>
@@ -4699,9 +4699,9 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="tubular-bells">
-                  <longName>Tubular Bells</longName>
-                  <shortName>Tu. Be.</shortName>
-                  <description>Tubular Bells</description>
+                  <longName>Chimes</longName>
+                  <shortName>Cme.</shortName>
+                  <description>Chimes or Tubular Bells</description>
                   <musicXMLid>pitched-percussion.tubular-bells</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -4831,7 +4831,7 @@
             </Instrument>
             <Instrument id="tuned-gongs">
                   <longName>Tuned Gongs</longName>
-                  <shortName>Td. Go.</shortName>
+                  <shortName>Td. Gon.</shortName>
                   <description>Tuned Gongs</description>
                   <musicXMLid>metal.gong</musicXMLid>
                   <clef>F</clef>
@@ -5124,7 +5124,7 @@
             <name>Percussion - Unpitched</name>
             <Instrument id="drumset">
                   <longName>Drumset</longName>
-                  <shortName>Drs.</shortName>
+                  <shortName>D. Set</shortName>
                   <description>Drumset</description>
                   <musicXMLid>drum.group.set</musicXMLid>
                   <clef>PERC</clef>
@@ -5143,8 +5143,8 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="snare-drum">
-                  <longName>Snare Drum</longName>
-                  <shortName>Sn. Dr.</shortName>
+                  <longName>Concert Snare Drum</longName>
+                  <shortName>Con. Sn.</shortName>
                   <description>Snare Drum</description>
                   <clef>PERC</clef>
                   <musicXMLid>drum.snare-drum</musicXMLid>
@@ -5177,8 +5177,8 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="bass-drum">
-                  <longName>Bass Drum</longName>
-                  <shortName>B. Dr.</shortName>
+                  <longName>Concert Bass Drum</longName>
+                  <shortName>Con. BD </shortName>
                   <description>Bass Drum</description>
                   <clef>PERC</clef>
                   <musicXMLid>drum.bass-drum</musicXMLid>
@@ -5203,8 +5203,8 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="piccolo-snare-drum">
-                  <longName>Piccolo Snare Drum</longName>
-                  <shortName>P. Sn. Dr.</shortName>
+                  <longName>Piccolo Snare</longName>
+                  <shortName>Picc. Sn.</shortName>
                   <description>Piccolo Snare Drum</description>
                   <clef>PERC</clef>
                   <musicXMLid>drum.snare-drum</musicXMLid>
@@ -5233,9 +5233,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="military-drum">
-                  <longName>Military Drum</longName>
-                  <shortName>Mil. Dr.</shortName>
-                  <description>Military Drum</description>
+                  <longName>Field Drum</longName>
+                  <shortName>Field Dr.</shortName>
+                  <description>Military Field Drum</description>
                   <musicXMLid>drum.snare-drum</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
@@ -5263,9 +5263,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="tom-toms">
-                  <longName>Tom Toms</longName>
-                  <shortName>Toms</shortName>
-                  <description>Tom Toms</description>
+                  <longName>Concert Toms</longName>
+                  <shortName>C. Toms</shortName>
+                  <description>Concert Toms</description>
                   <musicXMLid>drum.tom-tom</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc5Line">percussion</stafftype>
@@ -5322,8 +5322,8 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="chinese-tom-toms">
-                  <longName>Chinese Tom-toms</longName>
-                  <shortName>Ch. To.</shortName>
+                  <longName>Chinese Tom-Toms</longName>
+                  <shortName>Ch. Toms</shortName>
                   <description>Chinese Tom-toms</description>
                   <musicXMLid>drum.group.chinese</musicXMLid>
                   <clef>PERC</clef>
@@ -5346,7 +5346,7 @@
             </Instrument>
             <Instrument id="bongos">
                   <longName>Bongos</longName>
-                  <shortName>Bo.</shortName>
+                  <shortName>Bon.</shortName>
                   <description>Bongos</description>
                   <musicXMLid>drum.bongo</musicXMLid>
                   <clef>PERC</clef>
@@ -5382,7 +5382,7 @@
             </Instrument>
             <Instrument id="congas">
                   <longName>Congas</longName>
-                  <shortName>Co.</shortName>
+                  <shortName>Con.</shortName>
                   <description>Congas</description>
                   <musicXMLid>drum.conga</musicXMLid>
                   <clef>PERC</clef>
@@ -5603,9 +5603,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="tam-tam">
-                  <longName>Tam-tam</longName>
-                  <shortName>Tam-tam</shortName>
-                  <description>Tam-tam</description>
+                  <longName>Tam-Tam</longName>
+                  <shortName>Tam</shortName>
+                  <description>Tam-Tam</description>
                   <musicXMLid>metal.tamtam</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
@@ -5695,7 +5695,7 @@
             </Instrument>
             <Instrument id="bowl-gongs">
                   <longName>Bowl Gongs</longName>
-                  <shortName>Bw. Go.</shortName>
+                  <shortName>Bw. Gon.</shortName>
                   <description>Bowl Gongs</description>
                   <musicXMLid>metal.gong</musicXMLid>
                   <clef>PERC</clef>
@@ -6207,7 +6207,7 @@
             </Instrument>
             <Instrument id="cabasa">
                   <longName>Cabasa</longName>
-                  <shortName>Cab.</shortName>
+                  <shortName>Cabs.</shortName>
                   <description>Cabasa</description>
                   <musicXMLid>rattle.cabasa</musicXMLid>
                   <clef>PERC</clef>
