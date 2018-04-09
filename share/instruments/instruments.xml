@@ -5104,7 +5104,7 @@
             <name>Percussion - Unpitched</name>
             <Instrument id="drumset">
                   <longName>Drumset</longName>
-                  <shortName>Drs.</shortName>
+                  <shortName>D. Set</shortName>
                   <description>Drumset</description>
                   <musicXMLid>drum.group.set</musicXMLid>
                   <clef>PERC</clef>
@@ -5123,8 +5123,8 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="snare-drum">
-                  <longName>Snare Drum</longName>
-                  <shortName>Sn. Dr.</shortName>
+                  <longName>Concert Snare Drum</longName>
+                  <shortName>Con. Sn.</shortName>
                   <description>Snare Drum</description>
                   <clef>PERC</clef>
                   <musicXMLid>drum.snare-drum</musicXMLid>
