@@ -58,9 +58,10 @@ enum class ElementFlag {
       DROP_TARGET     = 0x00000001,
       SELECTABLE      = 0x00000002,
       MOVABLE         = 0x00000004,
-      SEGMENT         = 0x00000008,
-      HAS_TAG         = 0x00000010,   // true if this is a layered element
-      ON_STAFF        = 0x00000020,   // parent is Segment() type
+//      SEGMENT         = 0x00000008,
+      COMPOSITION     = 0x00000008,       // true if element is part of another element
+      HAS_TAG         = 0x00000010,       // true if this is a layered element
+      ON_STAFF        = 0x00000020,
       SELECTED        = 0x00000040,
       GENERATED       = 0x00000080,
       VISIBLE         = 0x00000100,
@@ -79,6 +80,7 @@ enum class ElementFlag {
       HEADER          = 0x00080000,
       TRAILER         = 0x00100000,    // also used in segment
       KEYSIG          = 0x00200000,
+
       // segment flags
       ENABLED         = 0x00400000,    // used for segments
       EMPTY           = 0x00800000,
@@ -397,8 +399,11 @@ class Element : public ScoreElement {
       bool dropTarget() const          { return flag(ElementFlag::DROP_TARGET); }
       void setDropTarget(bool v) const { setFlag(ElementFlag::DROP_TARGET, v);  }
 
+      bool composition() const          { return flag(ElementFlag::COMPOSITION); }
+      void setComposition(bool v) const { setFlag(ElementFlag::COMPOSITION, v);  }
+
       virtual bool isMovable() const   { return flag(ElementFlag::MOVABLE);     }
-      bool isSegmentFlag() const       { return flag(ElementFlag::SEGMENT);     }
+//      bool isSegmentFlag() const       { return flag(ElementFlag::SEGMENT);   }
 
       bool enabled() const             { return flag(ElementFlag::ENABLED); }
       void setEnabled(bool val)        { setFlag(ElementFlag::ENABLED, val); }

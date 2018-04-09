@@ -4179,7 +4179,7 @@ Element* ScoreView::elementNear(QPointF p)
             }
       qSort(ll.begin(), ll.end(), elementLower);
 
-#if 1
+#if 0
       qDebug("elementNear");
       for (const Element* e : ll)
             qDebug("  %s selected %d z %d", e->name(), e->selected(), e->z());

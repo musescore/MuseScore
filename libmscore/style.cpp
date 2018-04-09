@@ -1254,6 +1254,7 @@ const std::vector<StyledProperty> letRingStyle {
       { Sid::letRingFontUnderline,                 Pid::END_FONT_UNDERLINE     },
       { Sid::letRingTextAlign,                     Pid::BEGIN_TEXT_ALIGN       },
       { Sid::letRingTextAlign,                     Pid::CONTINUE_TEXT_ALIGN    },
+      { Sid::letRingTextAlign,                     Pid::END_TEXT_ALIGN         },
       { Sid::letRingHookHeight,                    Pid::BEGIN_HOOK_HEIGHT      },
       { Sid::letRingHookHeight,                    Pid::END_HOOK_HEIGHT        },
       { Sid::NOSTYLE,                              Pid::END                    }      // end of list marker
@@ -1277,9 +1278,10 @@ const std::vector<StyledProperty> palmMuteStyle {
       { Sid::palmMuteFontUnderline,                 Pid::END_FONT_UNDERLINE     },
       { Sid::palmMuteTextAlign,                     Pid::BEGIN_TEXT_ALIGN       },
       { Sid::palmMuteTextAlign,                     Pid::CONTINUE_TEXT_ALIGN    },
+      { Sid::palmMuteTextAlign,                     Pid::END_TEXT_ALIGN         },
       { Sid::palmMuteHookHeight,                    Pid::BEGIN_HOOK_HEIGHT      },
       { Sid::palmMuteHookHeight,                    Pid::END_HOOK_HEIGHT        },
-      { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
+      { Sid::NOSTYLE,                               Pid::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> hairpinStyle {
