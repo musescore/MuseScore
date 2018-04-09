@@ -63,7 +63,7 @@ namespace Ms {
 //    notehead groups
 //---------------------------------------------------------
 
-static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead::Type::HEAD_TYPES)] = {
+static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS) - 1][int(NoteHead::Type::HEAD_TYPES)] = {
    {     // down stem
       { SymId::noteheadWhole,               SymId::noteheadHalf,                SymId::noteheadBlack,               SymId::noteheadDoubleWhole  },
       { SymId::noteheadXWhole,              SymId::noteheadXHalf,               SymId::noteheadXBlack,              SymId::noteheadXDoubleWhole  },
@@ -279,7 +279,8 @@ static NoteHeadName noteHeadGroupNames[] = {
       {"g-name",       QT_TRANSLATE_NOOP("noteheadnames",  "G (Name)") },
       {"g-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "G Flat (Name)") },
       {"h-name",       QT_TRANSLATE_NOOP("noteheadnames",  "H (Name)") },
-      {"h-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "H Sharp (Name)") }
+      {"h-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "H Sharp (Name)") },
+      {"custom",       QT_TRANSLATE_NOOP("noteheadnames",  "Custom") }
       };
 
 // same order as NoteHead::Type
@@ -817,6 +818,8 @@ SymId Note::noteHead() const
             if (tick >= 0) {
                   key    = chord()->staff()->key(tick);
                   scheme = chord()->staff()->staffType(tick)->noteHeadScheme();
+                  if (chord()->staff()->staffType(tick)->isDrumStaff() && _headGroup == NoteHead::Group::HEAD_CUSTOM)
+                        return chord()->staff()->part()->instrument()->drumset()->noteHeads(_pitch, ht);
                   }
             }
       SymId t = noteHead(up, _headGroup, ht, tpc(), key, scheme);

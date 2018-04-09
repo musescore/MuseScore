@@ -29,6 +29,8 @@
 
 namespace Ms {
 
+extern QMap<QString, QStringList>* smuflRanges();
+
 enum Column : char { PITCH, NOTE, SHORTCUT, NAME };
 
 //---------------------------------------------------------
@@ -111,6 +113,22 @@ EditDrumset::EditDrumset(const Drumset* ds, QWidget* parent)
       pitchList->setColumnWidth(1, 60);
       pitchList->setColumnWidth(2, 30);
 
+      for (const QString& s : smuflRanges()->keys())
+                  qDebug() << s;
+      for (QString s : smuflRanges()->value("Noteheads"))
+            qDebug() << s;
+
+      QComboBox* combos[] = { wholeCmb, halfCmb, quarterCmb, doubleWholeCmb };
+      for (QComboBox* combo : combos) {
+            QFont f = combo->font();
+            f.setFamily("Bravura Text");
+            combo->setFont(f);
+            for (auto symName : (*smuflRanges())["Noteheads"]) {
+                  SymId id = Sym::name2id(symName);
+                  combo->addItem(ScoreFont::fallbackFont()->toString(id) +  " " + Sym::id2userName(id), symName);
+                  }
+            }
+      noteHead->setEnabled(false);
       MuseScore::restoreGeometry(this);
       }
 

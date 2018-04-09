@@ -119,6 +119,7 @@ class NoteHead final : public Symbol {
             HEAD_H,
             HEAD_H_SHARP,
 
+            HEAD_CUSTOM,
             HEAD_GROUPS,
             HEAD_INVALID = -1
             };
