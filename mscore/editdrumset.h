@@ -50,6 +50,7 @@ class EditDrumset : public QDialog, private Ui::EditDrumsetBase {
       void valueChanged();
       void load();
       void save();
+      void customGboxToggled(bool);
 
    public:
       EditDrumset(const Drumset* ds, QWidget* parent = 0);

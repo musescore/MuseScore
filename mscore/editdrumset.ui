@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>506</width>
-    <height>247</height>
+    <height>414</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -141,7 +141,7 @@
        <property name="spacing">
         <number>1</number>
        </property>
-       <item row="2" column="0">
+       <item row="3" column="0">
         <widget class="QLabel" name="label_3">
          <property name="text">
           <string>Staff line:</string>
@@ -151,14 +151,14 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="3" column="1">
         <widget class="QSpinBox" name="staffLine">
          <property name="minimum">
           <number>-12</number>
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item row="4" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>Stem direction:</string>
@@ -168,7 +168,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="4" column="1">
         <widget class="QComboBox" name="stemDirection">
          <item>
           <property name="text">
@@ -187,7 +187,7 @@
          </item>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="5" column="0">
         <widget class="QLabel" name="label_5">
          <property name="text">
           <string>Default voice:</string>
@@ -197,7 +197,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="5" column="1">
         <widget class="QComboBox" name="voice">
          <item>
           <property name="text">
@@ -221,7 +221,7 @@
          </item>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item row="6" column="0">
         <widget class="QLabel" name="label_6">
          <property name="text">
           <string>Shortcut:</string>
@@ -231,7 +231,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item row="6" column="1">
         <widget class="QComboBox" name="shortcut">
          <item>
           <property name="text">
@@ -287,6 +287,61 @@
        </item>
        <item row="1" column="1">
         <widget class="QComboBox" name="noteHead"/>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QGroupBox" name="customGbox">
+         <property name="title">
+          <string>Custom notehead</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="1" column="1">
+           <widget class="QComboBox" name="halfCmb"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="wholeLbl">
+            <property name="text">
+             <string>Whole note</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="quarterCmb"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="wholeCmb"/>
+          </item>
+          <item row="3" column="1">
+           <widget class="QComboBox" name="doubleWholeCmb"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="halfLbl">
+            <property name="text">
+             <string>Half note</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="quarterLbl">
+            <property name="text">
+             <string>Quarter note</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="doubleWholeLbl">
+            <property name="text">
+             <string>Double Whole note</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </item>

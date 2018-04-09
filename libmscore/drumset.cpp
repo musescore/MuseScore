@@ -30,6 +30,13 @@ void Drumset::save(XmlWriter& xml) const
                   continue;
             xml.stag(QString("Drum pitch=\"%1\"").arg(i));
             xml.tag("head", NoteHead::group2name(noteHead(i)));
+            if (noteHead(i) == NoteHead::Group::HEAD_CUSTOM) {
+                  xml.stag("noteheads");
+                  for (int j = 0; j < int(NoteHead::Type::HEAD_TYPES) - 1; j++) {
+                        xml.tag(NoteHead::type2name(NoteHead::Type(j)), Sym::id2name((noteHeads(i, NoteHead::Type(j)))));
+                        }
+                  xml.etag();
+                  }
             xml.tag("line", line(i));
             xml.tag("voice", voice(i));
             xml.tag("name", name(i));
@@ -64,6 +71,12 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
       const QStringRef& tag(e.name());
       if (tag == "head")
             _drum[pitch].notehead = NoteHead::name2group(e.readElementText());
+      else if (tag == "noteheads") {
+            while (e.readNextStartElement()) {
+                   const QStringRef& tag(e.name());
+                   _drum[pitch].noteheads[int(NoteHead::name2type(tag.toString()))] = Sym::name2id(e.readElementText());
+                   }
+            }
       else if (tag == "line")
             _drum[pitch].line = e.readInt();
       else if (tag == "voice")

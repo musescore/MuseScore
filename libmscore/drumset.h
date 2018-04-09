@@ -15,6 +15,7 @@
 
 #include "mscore.h"
 #include "note.h"
+#include "sym.h"
 
 namespace Ms {
 
@@ -26,7 +27,11 @@ class XmlWriter;
 
 struct DrumInstrument {
       QString name;
+
+      // if notehead = HEAD_CUSTOM, custom, use noteheads
       NoteHead::Group notehead; ///< notehead symbol set
+      SymId noteheads[int(NoteHead::Type::HEAD_TYPES)] = { SymId::noteheadWhole, SymId::noteheadHalf, SymId::noteheadBlack, SymId::noteheadDoubleWhole  };
+
       int line;                 ///< place notehead onto this line
       Direction stemDirection;
       int voice;
@@ -52,6 +57,7 @@ class Drumset {
    public:
       bool isValid(int pitch) const             { return _drum[pitch].notehead != NoteHead::Group::HEAD_INVALID; }
       NoteHead::Group noteHead(int pitch) const { return _drum[pitch].notehead;       }
+      SymId noteHeads(int pitch, NoteHead::Type t) const  { return _drum[pitch].noteheads[int(t)];      }
       int line(int pitch) const                 { return _drum[pitch].line;           }
       int voice(int pitch) const                { return _drum[pitch].voice;          }
       Direction stemDirection(int pitch) const  { return _drum[pitch].stemDirection;  }
