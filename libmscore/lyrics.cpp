@@ -766,7 +766,8 @@ bool LyricsLine::setProperty(Pid propertyId, const QVariant& v)
 LyricsLineSegment::LyricsLineSegment(Score* s)
       : LineSegment(s)
       {
-      setFlags(ElementFlag::SEGMENT | ElementFlag::ON_STAFF);
+//      setFlags(ElementFlag::SEGMENT | ElementFlag::ON_STAFF);
+      setFlags(ElementFlag::ON_STAFF);
       clearFlags(ElementFlag::SELECTABLE | ElementFlag::MOVABLE);
       setGenerated(true);
       }

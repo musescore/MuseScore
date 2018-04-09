@@ -31,8 +31,9 @@ namespace Ms {
 //---------------------------------------------------------
 
 Tuplet::Tuplet(Score* s)
-  : DurationElement(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE)
+  : DurationElement(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
       {
+      _tick         = 0;
       _ratio        = Fraction(1, 1);
       _number       = 0;
       _hasBracket   = false;
@@ -59,8 +60,8 @@ Tuplet::Tuplet(const Tuplet& t)
       _p1            = t._p1;
       _p2            = t._p2;
 
-     // recreated on layout
-     _number = 0;
+      // recreated on layout
+      _number = 0;
       }
 
 //---------------------------------------------------------
@@ -115,9 +116,13 @@ void Tuplet::layout()
       if (_numberType != TupletNumberType::NO_TEXT) {
             if (_number == 0) {
                   _number = new Text(score());
+                  _number->setComposition(true);
                   _number->setTrack(track());
                   _number->setParent(this);
                   _number->setVisible(visible());
+                  // initSubStyle(SubStyleId::TUPLET);   // hack
+                  for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
+                        _number->resetProperty(p);
                   }
             if (_numberType == TupletNumberType::SHOW_NUMBER)
                   _number->setXmlText(QString("%1").arg(_ratio.numerator()));
@@ -719,6 +724,7 @@ void Tuplet::read(XmlReader& e)
 bool Tuplet::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
+
       if (readStyledProperty(e, tag))
             ;
       else if (tag == "normalNotes")
@@ -733,7 +739,12 @@ bool Tuplet::readProperties(XmlReader& e)
             _baseLen = TDuration(e.readElementText());
       else if (tag == "Number") {
             _number = new Text(score());
+            _number->setComposition(true);
             _number->setParent(this);
+//            _number->setSubStyleId(SubStyleId::TUPLET);
+//            initSubStyle(SubStyleId::TUPLET);   // hack: initialize number
+            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
+                  _number->resetProperty(p);
             _number->read(e);
             _number->setVisible(visible());     //?? override saved property
             _number->setTrack(track());
