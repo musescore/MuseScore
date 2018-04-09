@@ -386,9 +386,7 @@ bool ChordRest::readProperties(XmlReader& e)
             }
       else if (tag == "offset")
             DurationElement::readProperties(e);
-      else if (DurationElement::readProperties(e))
-            return true;
-      else
+      else if (!DurationElement::readProperties(e))
             return false;
       return true;
       }
@@ -723,6 +721,9 @@ void ChordRest::add(Element* e)
       e->setParent(this);
       e->setTrack(track());
       switch (e->type()) {
+            case ElementType::ARTICULATION:     // for backward compatibility
+                  qDebug("ChordRest::add: unknown element %s", e->name());
+                  break;
             case ElementType::LYRICS:
                   _lyrics.push_back(toLyrics(e));
                   break;

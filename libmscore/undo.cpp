@@ -936,7 +936,8 @@ void ChangeElement::flip(EditData*)
             TempoText* t = toTempoText(oldElement);
             score->setTempo(t->segment(), t->tempo());
             }
-      if (newElement->isSegmentFlag()) {
+//      if (newElement->isSegmentFlag()) {
+      if (newElement->isSpannerSegment()) {
             SpannerSegment* os = toSpannerSegment(oldElement);
             SpannerSegment* ns = toSpannerSegment(newElement);
             if (os->system())

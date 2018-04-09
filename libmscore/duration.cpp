@@ -117,7 +117,7 @@ bool DurationElement::readProperties(XmlReader& e)
                   }
             return true;
             }
-      if (Element::readProperties(e))
+      else if (Element::readProperties(e))
             return true;
       return false;
       }

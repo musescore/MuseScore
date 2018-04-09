@@ -2694,6 +2694,11 @@ bool TextBase::setProperty(Pid propertyId, const QVariant& v)
 
 QVariant TextBase::propertyDefault(Pid id) const
       {
+      if (composition()) {
+            QVariant v = parent()->styledPropertyDefault(id);
+            if (v.isValid())
+                  return v;
+            }
       QVariant v = styledPropertyDefault(id);
       if (!v.isValid()) {
             switch (id) {
