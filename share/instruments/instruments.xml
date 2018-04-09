@@ -9,6 +9,9 @@
       <Genre id="jazz">
             <name>Jazz</name>
       </Genre>
+      <Genre id="choral">
+            <name>Choral</name>
+      </Genre>
       <Genre id="orchestra">
             <name>Orchestra</name>
       </Genre>
@@ -4804,6 +4807,7 @@
                         <program value="112"/>
                   </Channel>
                   <genre>common</genre>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="tuned-gongs">
                   <longName>Tuned Gongs</longName>
@@ -5151,6 +5155,7 @@
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="bass-drum">
                   <longName>Concert Bass Drum</longName>
@@ -6501,99 +6506,6 @@
                         <program value="0"/>
                   </Channel>
             </Instrument>
-            <Instrument id="finger-snap">
-                  <longName>Finger Snap</longName>
-                  <shortName>Fi. Sna.</shortName>
-                  <description>Finger Snap</description>
-                  <musicXMLid>effect.snap</musicXMLid>
-                  <clef>PERC</clef>
-                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
-                  <barlineSpan>1</barlineSpan>
-                  <drumset>1</drumset>
-                  <Drum pitch="75">
-                        <head>normal</head>
-                        <line>0</line>
-                        <voice>0</voice>
-                        <name>Claves</name>
-                        <stem>1</stem>
-                        <shortcut>A</shortcut>
-                  </Drum>
-                  <Channel>
-                        <controller ctrl="0" value="1"/>
-                        <program value="0"/>
-                  </Channel>
-                  <genre>classroom</genre>
-            </Instrument>
-            <Instrument id="hand-clap">
-                  <longName>Hand Clap</longName>
-                  <shortName>Hd. Clp.</shortName>
-                  <description>Hand Clap</description>
-                  <musicXMLid>effect.hand-clap</musicXMLid>
-                  <clef>PERC</clef>
-                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
-                  <barlineSpan>1</barlineSpan>
-                  <drumset>1</drumset>
-                  <Drum pitch="39">
-                        <head>normal</head>
-                        <line>0</line>
-                        <voice>0</voice>
-                        <name>Hand Clap</name>
-                        <stem>1</stem>
-                        <shortcut>A</shortcut>
-                  </Drum>
-                  <Channel>
-                        <controller ctrl="0" value="1"/>
-                        <program value="0"/>
-                  </Channel>
-                  <genre>popular</genre>
-                  <genre>classroom</genre>
-            </Instrument>
-            <Instrument id="slap">
-                  <longName>Slap</longName>
-                  <shortName>Sla.</shortName>
-                  <description>Slap</description>
-                  <musicXMLid>effect.slap</musicXMLid>
-                  <clef>PERC</clef>
-                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
-                  <barlineSpan>1</barlineSpan>
-                  <drumset>1</drumset>
-                  <Drum pitch="41">
-                        <head>normal</head>
-                        <line>0</line>
-                        <voice>0</voice>
-                        <name>Low Tom 2</name>
-                        <stem>1</stem>
-                        <shortcut>A</shortcut>
-                  </Drum>
-                  <Channel>
-                        <controller ctrl="0" value="1"/>
-                        <program value="0"/>
-                  </Channel>
-            </Instrument>
-            <Instrument id="stamp">
-                  <longName>Stamp</longName>
-                  <shortName>Sta.</shortName>
-                  <description>Stamp</description>
-                  <musicXMLid>effect.stamp</musicXMLid>
-                  <clef>PERC</clef>
-                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
-                  <barlineSpan>1</barlineSpan>
-                  <drumset>1</drumset>
-                  <Drum pitch="35">
-                        <head>normal</head>
-                        <line>0</line>
-                        <voice>0</voice>
-                        <name>Bass Drum 2</name>
-                        <stem>1</stem>
-                        <shortcut>A</shortcut>
-                  </Drum>
-                  <Channel>
-                        <controller ctrl="0" value="1"/>
-                        <program value="0"/>
-                  </Channel>
-                  <genre>popular</genre>
-                  <genre>classroom</genre>
-            </Instrument>
             <Instrument id="tambourine">
                   <longName>Tambourine</longName>
                   <shortName>Tamb.</shortName>
@@ -6793,6 +6705,7 @@
                   <genre>popular</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
+                  <genre>choral</genre>
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="marching-percussion">
@@ -7314,6 +7227,113 @@
                   <genre>marching</genre>
             </Instrument>
       </InstrumentGroup>
+      <InstrumentGroup id="body-percussion">
+            <name>Percussion - Body</name>
+            <Instrument id="finger-snap">
+                  <longName>Finger Snap</longName>
+                  <shortName>Fi. Sna.</shortName>
+                  <description>Finger Snap</description>
+                  <musicXMLid>effect.snap</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <Drum pitch="75">
+                        <head>0</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Claves</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                  </Drum>
+                  <Channel>
+                        <controller ctrl="0" value="1"/>
+                        <program value="0"/>
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>popular</genre>
+                  <genre>choral</genre>
+                  <genre>classroom</genre>
+            </Instrument>
+            <Instrument id="hand-clap">
+                  <longName>Hand Clap</longName>
+                  <shortName>Hd. Clp.</shortName>
+                  <description>Hand Clap</description>
+                  <musicXMLid>effect.hand-clap</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <Drum pitch="39">
+                        <head>0</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Hand Clap</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                  </Drum>
+                  <Channel>
+                        <controller ctrl="0" value="1"/>
+                        <program value="0"/>
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>popular</genre>
+                  <genre>choral</genre>
+                  <genre>classroom</genre>
+            </Instrument>
+            <Instrument id="slap">
+                  <longName>Slap</longName>
+                  <shortName>Sla.</shortName>
+                  <description>Slap</description>
+                  <musicXMLid>effect.slap</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <Drum pitch="41">
+                        <head>0</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Low Tom 2</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                  </Drum>
+                  <Channel>
+                        <controller ctrl="0" value="1"/>
+                        <program value="0"/>
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>popular</genre>
+                  <genre>choral</genre>
+                  <genre>classroom</genre>
+            </Instrument>
+            <Instrument id="stamp">
+                  <longName>Stamp</longName>
+                  <shortName>Sta.</shortName>
+                  <description>Stamp</description>
+                  <musicXMLid>effect.stamp</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <Drum pitch="35">
+                        <head>0</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Bass Drum 2</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                  </Drum>
+                  <Channel>
+                        <controller ctrl="0" value="1"/>
+                        <program value="0"/>
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>popular</genre>
+                  <genre>choral</genre>
+                  <genre>classroom</genre>
+            </Instrument>
+      </InstrumentGroup>
       <InstrumentGroup id="vocals">
             <name>Vocals</name>
             <Instrument id="voice">
@@ -7332,6 +7352,7 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="boy-soprano">
                   <longName>Boy Soprano</longName>
@@ -7346,6 +7367,7 @@
                         <program value="52"/>
                   </Channel>
                   <genre>orchestra</genre>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="soprano">
                   <longName>Soprano</longName>
@@ -7362,6 +7384,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="mezzo-soprano">
                   <longName>Mezzo-soprano</longName>
@@ -7377,6 +7400,7 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="alto">
                   <longName>Alto</longName>
@@ -7393,6 +7417,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="contralto">
                   <longName>Contralto</longName>
@@ -7407,6 +7432,7 @@
                         <program value="52"/>
                   </Channel>
                   <genre>orchestra</genre>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="countertenor">
                   <longName>Countertenor</longName>
@@ -7420,6 +7446,7 @@
                   <Channel>
                         <program value="52"/>
                   </Channel>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="tenor">
                   <longName>Tenor</longName>
@@ -7436,6 +7463,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="baritone">
                   <longName>Baritone</longName>
@@ -7452,6 +7480,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="bass">
                   <longName>Bass</longName>
@@ -7468,6 +7497,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="women">
                   <longName>Women</longName>
@@ -7484,6 +7514,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="men">
                   <longName>Men</longName>
@@ -7500,6 +7531,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="kazoo">
                   <longName>Kazoo</longName>
@@ -7514,6 +7546,7 @@
                         <program value="85"/>
                   </Channel>
                   <genre>common</genre>
+                  <genre>choral</genre>
             </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="keyboards">
@@ -7543,6 +7576,7 @@
                   <genre>orchestra</genre>
                   <genre>popular</genre>
                   <genre>classroom</genre>
+                  <genre>choral</genre>
             </Instrument>
             <Instrument id="grand-piano">
                   <longName>Grand Piano</longName>
