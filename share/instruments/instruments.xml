@@ -3441,7 +3441,7 @@
             <Instrument id="tenor-trumpet">
                   <longName>Tenor Trumpet</longName>
                   <shortName>T. Tpt.</shortName>
-                  <description>Tenor Trumpet (included for MusicXML 3 compatibility no                        range information available)</description>
+                  <description>Tenor Trumpet (included for MusicXML 3 compatibility no range information available)</description>
                   <musicXMLid>brass.trumpet.tenor</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
