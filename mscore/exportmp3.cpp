@@ -111,20 +111,20 @@ bool MP3Exporter::loadLibrary(AskUser askuser)
 
       // First try loading it from a previously located path
       if (!mLibPath.isEmpty()) {
-            //qDebug("Attempting to load LAME from previously defined path");
+            qDebug("Attempting to load LAME from previously defined path");
             mLibraryLoaded = initLibrary(mLibPath);
             }
 
       // If not successful, try loading using system search paths
       if (!validLibraryLoaded()) {
-            //qDebug("Attempting to load LAME from system search paths");
+            qDebug("Attempting to load LAME from system search paths");
             mLibPath = getLibraryName();
             mLibraryLoaded = initLibrary(mLibPath);
             }
 
       // If not successful, try loading using compiled in path
       if (!validLibraryLoaded()) {
-            //qDebug("Attempting to load LAME from builtin path");
+            qDebug("Attempting to load LAME from builtin path");
             QFileInfo fn(QDir(getLibraryPath()), getLibraryName());
             mLibPath = fn.absoluteFilePath();
             mLibraryLoaded = initLibrary(mLibPath);
@@ -132,7 +132,7 @@ bool MP3Exporter::loadLibrary(AskUser askuser)
 
       // If not successful, must ask the user
       if (!validLibraryLoaded() && askuser != MP3Exporter::AskUser::NO) {
-            //qDebug("(Maybe) ask user for library");
+            qDebug("(Maybe) ask user for library");
             int ret = QMessageBox::question(0, qApp->translate("MP3Exporter", "Save as MP3"),
                   qApp->translate("MP3Exporter", "MuseScore does not export MP3 files directly, but instead uses "
                    "the freely available LAME library.  You must obtain %1 "
@@ -151,7 +151,7 @@ bool MP3Exporter::loadLibrary(AskUser askuser)
             return false;
             }
 
-      //qDebug("LAME library successfully loaded");
+      qDebug("LAME library successfully loaded");
       return true;
       }
 
@@ -187,7 +187,7 @@ void MP3Exporter::setChannel(int mode)
 
 bool MP3Exporter::initLibrary(QString libpath)
       {
-      //qDebug("Loading LAME from %s", qPrintable(libpath));
+      qDebug("Loading LAME from %s", qPrintable(libpath));
       lame_lib = new QLibrary(libpath, 0);
       if (!lame_lib->load()) {
             qDebug("load failed <%s>", qPrintable(lame_lib->errorString()));
