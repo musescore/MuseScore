@@ -2916,9 +2916,8 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
                   showRect.setHeight(r.height());
                   }
             }
-      if (mscore->state() & ScoreState::STATE_NOTE_ENTRY) {
+      if (_score->inputState().noteEntryMode())
             setShadowNote(p);
-            }
 
       if (r.contains(showRect))
             return;
