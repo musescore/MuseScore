@@ -160,8 +160,8 @@ TitleWizard::TitleWizard(QWidget* parent)
 void TitleWizard::characterAfterCursor(int old_pos, int new_pos)
       {
       QLineEdit* edit = static_cast<QLineEdit*>(QObject::sender());
-      if (edit) {
-            QChar c = edit->text().at(new_pos);
+      if (edit && new_pos > 0) {
+            QChar c = edit->text().at(new_pos-1);
             QString descr;
             if (c == ' ')
                   descr = "space";
