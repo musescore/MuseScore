@@ -346,9 +346,9 @@ bool ChordRest::readProperties(XmlReader& e)
                   else if (atype == "stop") {
                         spanner->setTick2(e.tick());
                         spanner->setTrack2(track());
-                        if (spanner->type() == ElementType::SLUR)
+                        if (spanner->isSlur())
                               spanner->setEndElement(this);
-                        Chord* start = toChord(spanner->startElement());
+                        ChordRest* start = toChordRest(spanner->startElement());
                         if (start)
                               spanner->setTrack(start->track());
                         if (e.pasteMode()) {

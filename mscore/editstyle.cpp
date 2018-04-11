@@ -45,6 +45,32 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       buttonApplyToAllParts->setEnabled(!cs->isMaster());
       setModal(true);
 
+      // create button groups for every set of radio button widgets
+      // use this group widgets in list styleWidgets
+      // This works for groups which represent an int enumeration.
+
+      QButtonGroup* fretNumGroup = new QButtonGroup(this);
+      fretNumGroup->addButton(radioFretNumLeft, 0);
+      fretNumGroup->addButton(radioFretNumRight, 1);
+
+      QButtonGroup* keySigNatGroup = new QButtonGroup(this);
+      keySigNatGroup->addButton(radioKeySigNatNone, int(KeySigNatural::NONE));
+      keySigNatGroup->addButton(radioKeySigNatBefore, int(KeySigNatural::BEFORE));
+      keySigNatGroup->addButton(radioKeySigNatAfter, int(KeySigNatural::AFTER));
+
+      QButtonGroup* clefTypeGroup = new QButtonGroup(this);
+      clefTypeGroup->addButton(clefTab1, int(ClefType::TAB));
+      clefTypeGroup->addButton(clefTab2, int(ClefType::TAB_SERIF));
+
+      QButtonGroup* fbAlign = new QButtonGroup(this);
+      fbAlign->addButton(radioFBTop, 0);
+      fbAlign->addButton(radioFBBottom, 1);
+
+      QButtonGroup* fbStyle = new QButtonGroup(this);
+      fbStyle->addButton(radioFBModern, 0);
+      fbStyle->addButton(radioFBHistoric, 1);
+
+
       const char* styles[] = {
             QT_TRANSLATE_NOOP("EditStyleBase", "Continuous"),
             QT_TRANSLATE_NOOP("EditStyleBase", "Dashed"),
@@ -66,9 +92,13 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       styleWidgets = {
       //   idx                --- showPercent      --- widget          --- resetButton
-      { Sid::voltaLineStyle,          false, voltaLineStyle,          resetVoltaLineStyle },
+      { Sid::figuredBassAlignment,    false, fbAlign,                 0                    },
+      { Sid::figuredBassStyle,        false, fbStyle,                 0                    },
+      { Sid::tabClef,                 false, clefTypeGroup,           0                    },
+      { Sid::keySigNaturals,          false, keySigNatGroup,          0                    },
+      { Sid::voltaLineStyle,          false, voltaLineStyle,          resetVoltaLineStyle  },
       { Sid::ottavaLineStyle,         false, ottavaLineStyle,         resetOttavaLineStyle },
-      { Sid::pedalLineStyle,          false, pedalLineStyle,          resetPedalLineStyle },
+      { Sid::pedalLineStyle,          false, pedalLineStyle,          resetPedalLineStyle  },
 
       { Sid::staffUpperBorder,        false, staffUpperBorder,        resetStaffUpperBorder  },
       { Sid::staffLowerBorder,        false, staffLowerBorder,        resetStaffLowerBorder  },
@@ -314,6 +344,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::ottavaNumbersOnly,       false, ottavaNumbersOnly,            resetOttavaNumbersOnly },
       { Sid::capoPosition,            false, capoPosition,                 0 },
       { Sid::fretNumMag,              true,  fretNumMag,                   0 },
+      { Sid::fretNumPos,              false, fretNumGroup,                 0 },
       { Sid::fretY,                   false, fretY,                        0 },
       { Sid::barreLineWidth,          false, barreLineWidth,               0 },
       { Sid::fretMag,                 false, fretMag,                      0 },
@@ -483,9 +514,11 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(chordsStandard,      SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
       connect(chordsJazz,          SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
       connect(chordsCustom,        SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
+
       connect(SwingOff,            SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
       connect(swingEighth,         SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
       connect(swingSixteenth,      SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
+
       connect(hideEmptyStaves,     SIGNAL(clicked(bool)), dontHideStavesInFirstSystem, SLOT(setEnabled(bool)));
       connect(lyricsDashMinLength, SIGNAL(valueChanged(double)),      SLOT(lyricsDashMinLengthValueChanged(double)));
       connect(lyricsDashMaxLength, SIGNAL(valueChanged(double)),      SLOT(lyricsDashMaxLengthValueChanged(double)));
@@ -525,6 +558,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
                   connect(qobject_cast<QCheckBox*>(sw.widget), SIGNAL(stateChanged(int)), mapper2, SLOT(map()));
             else if (qobject_cast<QTextEdit*>(sw.widget))
                   connect(qobject_cast<QTextEdit*>(sw.widget), SIGNAL(textChanged()), mapper2, SLOT(map()));
+            else if (qobject_cast<QButtonGroup*>(sw.widget))
+                  connect(qobject_cast<QButtonGroup*>(sw.widget), SIGNAL(buttonClicked(int)), mapper2, SLOT(map()));
             else {
                   qFatal("unhandled gui widget type %s valueType %s",
                      sw.widget->metaObject()->className(),
@@ -647,6 +682,10 @@ QVariant EditStyle::getValue(Sid idx)
                   }
             else if (qobject_cast<QSpinBox*>(sw.widget))
                   return qobject_cast<QSpinBox*>(sw.widget)->value() / (sw.showPercent ? 100 : 1);
+            else if (qobject_cast<QButtonGroup*>(sw.widget)) {
+                  QButtonGroup* bg = qobject_cast<QButtonGroup*>(sw.widget);
+                  return bg->checkedId();
+                  }
             else
                   qFatal("unhandled int");
             }
@@ -718,6 +757,15 @@ void EditStyle::setValues()
                   else if (qobject_cast<QSpinBox*>(sw.widget)) {
                         qobject_cast<QSpinBox*>(sw.widget)->setValue(val.toInt()
                            * (sw.showPercent ? 100 : 1));
+                        }
+                  else if (qobject_cast<QButtonGroup*>(sw.widget)) {
+                        QButtonGroup* bg = qobject_cast<QButtonGroup*>(sw.widget);
+                        for (auto a : bg->buttons()) {
+                              if (bg->id(a) == val.toInt()) {
+                                    a->setChecked(true);
+                                    break;
+                                    }
+                              }
                         }
                   else
                         unhandledType(&sw);
@@ -795,10 +843,6 @@ void EditStyle::setValues()
       doubleSpinFBSize->setValue(lstyle.value(Sid::figuredBassFontSize).toDouble());
       doubleSpinFBVertPos->setValue(lstyle.value(Sid::figuredBassYOffset).toDouble());
       spinFBLineHeight->setValue(lstyle.value(Sid::figuredBassLineHeight).toDouble() * 100.0);
-      radioFBTop->setChecked(lstyle.value(Sid::figuredBassAlignment).toInt() == 0);
-      radioFBBottom->setChecked(lstyle.value(Sid::figuredBassAlignment).toInt() == 1);
-      radioFBModern->setChecked(lstyle.value(Sid::figuredBassStyle).toInt() == 0);
-      radioFBHistoric->setChecked(lstyle.value(Sid::figuredBassStyle).toInt() == 1);
 
       QString mfont(lstyle.value(Sid::MusicalSymbolFont).toString());
       int idx = 0;
@@ -823,18 +867,7 @@ void EditStyle::setValues()
       musicalTextFont->blockSignals(false);
 
       toggleHeaderOddEven(lstyle.value(Sid::headerOddEven).toBool());
-
       toggleFooterOddEven(lstyle.value(Sid::footerOddEven).toBool());
-
-      radioFretNumLeft->setChecked(lstyle.value(Sid::fretNumPos).toInt() == 0);
-      radioFretNumRight->setChecked(lstyle.value(Sid::fretNumPos).toInt() == 1);
-
-      clefTab1->setChecked(lstyle.value(Sid::tabClef).toInt() == int(ClefType::TAB));
-      clefTab2->setChecked(lstyle.value(Sid::tabClef).toInt() == int(ClefType::TAB_SERIF));
-
-      radioKeySigNatNone->setChecked  (lstyle.value(Sid::keySigNaturals).toInt() == int(KeySigNatural::NONE));
-      radioKeySigNatBefore->setChecked(lstyle.value(Sid::keySigNaturals).toInt() == int(KeySigNatural::BEFORE));
-      radioKeySigNatAfter->setChecked (lstyle.value(Sid::keySigNaturals).toInt() == int(KeySigNatural::AFTER));
       }
 
 //---------------------------------------------------------

@@ -218,6 +218,8 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::FRET_FRETS,              "fret_frets",              false, "frets",                 P_TYPE::INT             },
       { Pid::FRET_BARRE,              "fret_barre",              false, "barre",                 P_TYPE::INT             },
       { Pid::FRET_OFFSET,             "fret_offset",             false, "fretOffset",            P_TYPE::INT             },
+      { Pid::FRET_NUM_POS,            "fret_num_pos",            false, "fretNumPos",            P_TYPE::INT             },
+
       { Pid::SYSTEM_BRACKET,          "system_bracket",          false, "type",                  P_TYPE::INT             },
       { Pid::GAP,                     "gap",                     false, 0,                       P_TYPE::BOOL            },
       { Pid::AUTOPLACE,               "autoplace",               false, "autoplace",             P_TYPE::BOOL            },

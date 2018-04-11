@@ -240,6 +240,8 @@ enum class Pid {
       FRET_FRETS,
       FRET_BARRE,
       FRET_OFFSET,
+      FRET_NUM_POS,
+
       SYSTEM_BRACKET,
       GAP,
       AUTOPLACE,

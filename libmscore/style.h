@@ -790,6 +790,7 @@ enum class SubStyleId {
       FIGURED_BASS,
       BEAM,
       BOX,
+      FRET,
       USER1,
       USER2,
       SUBSTYLES
