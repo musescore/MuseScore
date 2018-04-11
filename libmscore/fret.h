@@ -55,6 +55,7 @@ class FretDiagram final : public Element {
       qreal fretDist;
       QFont font;
       qreal _userMag     { 1.0   };             // allowed 0.1 - 10.0
+      int _numPos;
 
    public:
       FretDiagram(Score* s);

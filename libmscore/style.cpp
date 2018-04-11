@@ -1369,6 +1369,11 @@ const std::vector<StyledProperty> boxStyle {
       { Sid::NOSTYLE,                            Pid::END                     }      // end of list marker
       };
 
+const std::vector<StyledProperty> fretStyle {
+      { Sid::fretNumPos,                         Pid::FRET_NUM_POS            },
+      { Sid::NOSTYLE,                            Pid::END                     }      // end of list marker
+      };
+
 const std::vector<StyledProperty> user1Style {
       { Sid::user1FontFace,                      Pid::FONT_FACE              },
       { Sid::user1FontSize,                      Pid::FONT_SIZE              },
@@ -1447,6 +1452,7 @@ static constexpr std::array<StyledPropertyListName, int(SubStyleId::SUBSTYLES)> 
       { QT_TRANSLATE_NOOP("TextStyle", "Figured Bass"),            &figuredBassStyle,               SubStyleId::FIGURED_BASS },
       { QT_TRANSLATE_NOOP("TextStyle", "Beam"),                    &beamStyle,                      SubStyleId::BEAM  },
       { QT_TRANSLATE_NOOP("TextStyle", "Box"),                     &boxStyle,                       SubStyleId::BOX   },
+      { QT_TRANSLATE_NOOP("TextStyle", "FretDiagram"),             &fretStyle,                      SubStyleId::FRET  },
       { QT_TRANSLATE_NOOP("TextStyle", "User-1"),                  &user1Style,                     SubStyleId::USER1 },
       { QT_TRANSLATE_NOOP("TextStyle", "User-2"),                  &user2Style,                     SubStyleId::USER2 },
       } };

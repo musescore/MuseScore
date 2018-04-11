@@ -36,6 +36,7 @@ FretDiagram::FretDiagram(Score* score)
       setFlags(ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SELECTABLE);
       font.setFamily("FreeSans");
       font.setPointSize(4.0 * mag());
+      initSubStyle(SubStyleId::FRET);
       }
 
 FretDiagram::FretDiagram(const FretDiagram& f)
@@ -330,14 +331,16 @@ void FretDiagram::draw(QPainter* painter) const
             QFont scaledFont(font);
             scaledFont.setPointSizeF(font.pointSize() * fretNumMag * _userMag * score()->styleD(Sid::fretMag) * MScore::pixelRatio);
             painter->setFont(scaledFont);
-            if (score()->styleI(Sid::fretNumPos) == 0)
+            if (_numPos == 0) {
                   painter->drawText(QRectF(-stringDist *.4, .0, .0, fretDist),
                      Qt::AlignVCenter|Qt::AlignRight|Qt::TextDontClip,
                      QString("%1").arg(_fretOffset+1));
-            else
+                  }
+            else {
                   painter->drawText(QRectF(x2 + (stringDist * 0.4), .0, .0, fretDist),
                      Qt::AlignVCenter|Qt::AlignLeft|Qt::TextDontClip,
                      QString("%1").arg(_fretOffset+1));
+                  }
             painter->setFont(font);
             }
       }
@@ -573,63 +576,6 @@ void FretDiagram::scanElements(void* data, void (*func)(void*, Element*), bool a
             func(data, _harmony);
       }
 
-#if 0
-//---------------------------------------------------------
-//   Read MusicXML
-//
-// Set the FretDiagram state based on the MusicXML <figure> node de.
-//---------------------------------------------------------
-
-void FretDiagram::readMusicXML(XmlReader& e)
-      {
-      qDebug("FretDiagram::readMusicXML");
-
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "frame-frets") {
-                  int val = e.readInt();
-                  if (val > 0)
-                        setFrets(val);
-                  else
-                        qDebug("FretDiagram::readMusicXML: illegal frame-fret %d", val);
-                  }
-            else if (tag == "frame-note") {
-                  int fret   = -1;
-                  int string = -1;
-                  while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        int val = e.readInt();
-                        if (tag == "fret")
-                              fret = val;
-                        else if (tag == "string")
-                              string = val;
-                        else
-                              e.unknown();
-                        }
-                  qDebug("FretDiagram::readMusicXML string %d fret %d", string, fret);
-                  if (string > 0) {
-                        if (fret == 0)
-                              setMarker(strings() - string, 79 /* ??? */);
-                        else if (fret > 0)
-                              setDot(strings() - string, fret);
-                        }
-                  }
-            else if (tag == "frame-strings") {
-                  int val = e.readInt();
-                  if (val > 0) {
-                        setStrings(val);
-                        for (int i = 0; i < val; ++i)
-                              setMarker(i, 88 /* ??? */);
-                        }
-                  else
-                        qDebug("FretDiagram::readMusicXML: illegal frame-strings %d", val);
-                  }
-            else
-                  e.unknown();
-            }
-      }
-#endif
-
 //---------------------------------------------------------
 //   Write MusicXML
 //---------------------------------------------------------
@@ -677,30 +623,20 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
 QVariant FretDiagram::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case Pid::MAG:            return userMag();
-            case Pid::FRET_STRINGS:         return strings();
-            case Pid::FRET_FRETS:           return frets();
-            case Pid::FRET_BARRE:           return barre();
-            case Pid::FRET_OFFSET:          return fretOffset();
+            case Pid::MAG:
+                  return userMag();
+            case Pid::FRET_STRINGS:
+                  return strings();
+            case Pid::FRET_FRETS:
+                  return frets();
+            case Pid::FRET_BARRE:
+                  return barre();
+            case Pid::FRET_OFFSET:
+                  return fretOffset();
+            case Pid::FRET_NUM_POS:
+                  return _numPos;
             default:
                   return Element::getProperty(propertyId);
-            }
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant FretDiagram::propertyDefault(Pid propertyId) const
-      {
-      switch (propertyId) {
-            case Pid::MAG:            return 1.0;
-            case Pid::FRET_STRINGS:         return DEFAULT_STRINGS;
-            case Pid::FRET_FRETS:           return DEFAULT_FRETS;
-            case Pid::FRET_BARRE:           return 0;
-            case Pid::FRET_OFFSET:          return 0;
-            default:
-                  return Element::propertyDefault(propertyId);
             }
       }
 
@@ -726,11 +662,31 @@ bool FretDiagram::setProperty(Pid propertyId, const QVariant& v)
             case Pid::FRET_OFFSET:
                   setOffset(v.toInt());
                   break;
+            case Pid::FRET_NUM_POS:
+                  _numPos = v.toInt();
+                  break;
             default:
                   return Element::setProperty(propertyId, v);
             }
       score()->setLayoutAll();
       return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant FretDiagram::propertyDefault(Pid propertyId) const
+      {
+      switch (propertyId) {
+            case Pid::MAG:            return 1.0;
+            case Pid::FRET_STRINGS:   return DEFAULT_STRINGS;
+            case Pid::FRET_FRETS:     return DEFAULT_FRETS;
+            case Pid::FRET_BARRE:     return 0;
+            case Pid::FRET_OFFSET:    return 0;
+            default:
+                  return Element::propertyDefault(propertyId);
+            }
       }
 
 }

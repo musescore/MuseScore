@@ -555,8 +555,9 @@ void ScoreElement::styleChanged()
       {
       for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
             PropertyFlags& f = propertyFlags(spp->pid);
-            if (f == PropertyFlags::STYLED)
+            if (f == PropertyFlags::STYLED) {
                   setProperty(spp->pid, score()->styleV(spp->sid));
+                  }
             }
       }
 
