@@ -113,24 +113,45 @@ EditDrumset::EditDrumset(const Drumset* ds, QWidget* parent)
       pitchList->setColumnWidth(1, 60);
       pitchList->setColumnWidth(2, 30);
 
-      for (const QString& s : smuflRanges()->keys())
-                  qDebug() << s;
-      for (QString s : smuflRanges()->value("Noteheads"))
-            qDebug() << s;
-
       QComboBox* combos[] = { wholeCmb, halfCmb, quarterCmb, doubleWholeCmb };
       for (QComboBox* combo : combos) {
-            QFont f = combo->font();
-            f.setFamily("Bravura Text");
-            combo->setFont(f);
+            // TODO replace smuflRanges by a list of selected symbols
             for (auto symName : (*smuflRanges())["Noteheads"]) {
                   SymId id = Sym::name2id(symName);
-                  combo->addItem(ScoreFont::fallbackFont()->toString(id) +  " " + Sym::id2userName(id), symName);
+                  // create icon
+                  QIcon icon;
+                  int w = combo->iconSize().width()  * qApp->devicePixelRatio();
+                  int h = combo->iconSize().height() * qApp->devicePixelRatio();
+                  QPixmap image(w, h );
+                  image.fill(Qt::transparent);
+                  QPainter painter(&image);
+                  painter.setFont(QFont("Bravura Text", 60));
+                  painter.setRenderHint(QPainter::Antialiasing);
+                  painter.setRenderHint(QPainter::TextAntialiasing);
+                  painter.setPen(QPen(Qt::black));
+                  painter.drawText(QRect(0, 0, w, h), Qt::AlignCenter, ScoreFont::fallbackFont()->toString(id));
+                  painter.end();
+                  icon.addPixmap(image);
+                  combo->addItem(icon, Sym::id2userName(id), symName);
                   }
             }
-      noteHead->setEnabled(false);
+      wholeCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(SymId::noteheadWhole)));
+      halfCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(SymId::noteheadHalf)));
+      quarterCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(SymId::noteheadBlack)));
+      doubleWholeCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(SymId::noteheadDoubleWhole)));
+
+      connect(customGbox, SIGNAL(toggled(bool)), this, SLOT(customGboxToggled(bool)));
+
       MuseScore::restoreGeometry(this);
       }
+
+//---------------------------------------------------------
+//   customGboxToggled
+//---------------------------------------------------------
+
+void EditDrumset::customGboxToggled(bool checked) {
+      noteHead->setEnabled(!checked);
+}
 
 //---------------------------------------------------------
 //   updateList
@@ -262,7 +283,15 @@ void EditDrumset::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previou
       if (previous) {
             int pitch = previous->data(0, Qt::UserRole).toInt();
             nDrumset.drum(pitch).name          = name->text();
-            nDrumset.drum(pitch).notehead      = NoteHead::Group(noteHead->currentData().toInt());
+            if (customGbox->isChecked()) {
+            nDrumset.drum(pitch).notehead = NoteHead::Group::HEAD_CUSTOM;
+            nDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_WHOLE)] = Sym::name2id(wholeCmb->currentData().toString());
+            nDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_QUARTER)] = Sym::name2id(quarterCmb->currentData().toString());
+            nDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_HALF)] = Sym::name2id(halfCmb->currentData().toString());
+            nDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_BREVIS)] = Sym::name2id(doubleWholeCmb->currentData().toString());
+                  }
+            else
+                  nDrumset.drum(pitch).notehead = NoteHead::Group(noteHead->currentData().toInt());
             nDrumset.drum(pitch).line          = staffLine->value();
             nDrumset.drum(pitch).voice         = voice->currentIndex();
             if (shortcut->currentIndex() == 7)
@@ -288,7 +317,18 @@ void EditDrumset::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previou
       qDebug("AFTER %d", nDrumset.voice(pitch));
       stemDirection->setCurrentIndex(int(nDrumset.stemDirection(pitch)));
       NoteHead::Group nh = nDrumset.noteHead(pitch);
-      noteHead->setCurrentIndex(noteHead->findData(int(nh)));
+      if (nh != NoteHead::Group::HEAD_CUSTOM) {
+            noteHead->setEnabled(true);
+            noteHead->setCurrentIndex(noteHead->findData(int(nh)));
+            }
+      else {
+            noteHead->setEnabled(false);
+            noteHead->setCurrentIndex(noteHead->findData(int(NoteHead::Group::HEAD_INVALID)));
+            wholeCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(nDrumset.noteHeads(pitch, NoteHead::Type::HEAD_WHOLE))));
+            halfCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(nDrumset.noteHeads(pitch, NoteHead::Type::HEAD_HALF))));
+            quarterCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(nDrumset.noteHeads(pitch, NoteHead::Type::HEAD_QUARTER))));
+            doubleWholeCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(nDrumset.noteHeads(pitch, NoteHead::Type::HEAD_BREVIS))));
+            }
       if (nDrumset.shortcut(pitch) == 0)
             shortcut->setCurrentIndex(7);
       else
@@ -313,7 +353,15 @@ void EditDrumset::valueChanged()
             return;
       int pitch = pitchList->currentItem()->data(Column::PITCH, Qt::UserRole).toInt();
       nDrumset.drum(pitch).name          = name->text();
-      nDrumset.drum(pitch).notehead      = NoteHead::Group(noteHead->currentData().toInt());
+      if (customGbox->isChecked()) {
+            nDrumset.drum(pitch).notehead = NoteHead::Group::HEAD_CUSTOM;
+            nDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_WHOLE)] = Sym::name2id(wholeCmb->currentData().toString());
+            nDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_QUARTER)] = Sym::name2id(quarterCmb->currentData().toString());
+            nDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_HALF)] = Sym::name2id(halfCmb->currentData().toString());
+            nDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_BREVIS)] = Sym::name2id(doubleWholeCmb->currentData().toString());
+            }
+      else
+            nDrumset.drum(pitch).notehead = NoteHead::Group(noteHead->currentData().toInt());
       nDrumset.drum(pitch).line          = staffLine->value();
       nDrumset.drum(pitch).voice         = voice->currentIndex();
       nDrumset.drum(pitch).stemDirection = Direction(stemDirection->currentIndex());
