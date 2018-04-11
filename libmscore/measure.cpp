@@ -3489,7 +3489,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                   kSegment->setEnabled(true);
                   }
             else {
-                  if (kSegment) {
+                  if (kSegment && staff->isPitchedStaff(tick())) {
                         // do not disable user modified keysigs
                         bool disable = true;
                         for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
