@@ -201,6 +201,7 @@ Element::~Element()
 Element* Element::linkedClone()
       {
       Element* e = clone();
+      e->setAutoplace(true);
       score()->undo(new Link(e, this));
       return e;
       }
