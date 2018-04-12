@@ -791,6 +791,7 @@ enum class SubStyleId {
       BEAM,
       BOX,
       FRET,
+      TREMOLO_BAR,
       USER1,
       USER2,
       SUBSTYLES
