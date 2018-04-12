@@ -179,10 +179,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::SPANNER_TICKS,           "spanner_ticks",           true,  "ticks",                 P_TYPE::INT             },
       { Pid::SPANNER_TRACK2,          "spanner_track2",          true,  "track2",                P_TYPE::INT             },
       { Pid::USER_OFF2,               "user_off2",               false, "userOff2",              P_TYPE::POINT_SP        },
-      { Pid::BEGIN_TEXT_STYLE,        "begin_text_style",        false, "beginTextStyle",        P_TYPE::TEXT_STYLE      },
-      { Pid::CONTINUE_TEXT_STYLE,     "continue_text_style",     false, "continueTextStyle",     P_TYPE::TEXT_STYLE      },
 
-      { Pid::END_TEXT_STYLE,          "end_text_style",          false, "endTextStyle",          P_TYPE::TEXT_STYLE      },
       { Pid::BREAK_MMR,               "break_mmr",               false, "breakMultiMeasureRest", P_TYPE::BOOL            },
       { Pid::REPEAT_COUNT,            "repeat_count",            true,  "endRepeat",             P_TYPE::INT             },
       { Pid::USER_STRETCH,            "user_stretch",            false, "stretch",               P_TYPE::REAL            },
@@ -487,7 +484,6 @@ QVariant getProperty(Pid id, XmlReader& e)
             case P_TYPE::POINT_MM:              // not supported
             case P_TYPE::TDURATION:
             case P_TYPE::SIZE_MM:
-            case P_TYPE::TEXT_STYLE:
             case P_TYPE::INT_LIST:
                   return QVariant();
             case P_TYPE::SUB_STYLE:
