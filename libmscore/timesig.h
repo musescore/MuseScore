@@ -57,7 +57,7 @@ class TimeSig final : public Element {
       TimeSigType _timeSigType;
       bool _showCourtesySig;
       bool _largeParentheses;
-      PropertyFlags scaleStyle;
+//      PropertyFlags scaleStyle;
 
       void layout1();
 
@@ -115,9 +115,6 @@ class TimeSig final : public Element {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid id) const override;
-      virtual Sid getPropertyStyle(Pid id) const override;
-      virtual void styleChanged() override;
-      virtual PropertyFlags& propertyFlags(Pid id) override;
 
       const Groups& groups() const    { return _groups; }
       void setGroups(const Groups& e) { _groups = e; }
