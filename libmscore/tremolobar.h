@@ -28,7 +28,6 @@ namespace Ms {
 
 class TremoloBar final : public Element {
       Spatium _lw;
-      PropertyFlags lineWidthStyle;
       qreal _userMag     { 1.0   };       // allowed 0.1 - 10.0
       bool  _play        { true  };
 
@@ -52,23 +51,15 @@ class TremoloBar final : public Element {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
-      virtual PropertyFlags& propertyFlags(Pid id) override;
-      virtual void resetProperty(Pid id) override;
-      virtual void styleChanged() override;
-      virtual void reset() override;
-      virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
 
       qreal userMag() const               { return _userMag;   }
       void setUserMag(qreal m)            { _userMag = m;      }
-      void undoSetUserMag(qreal val);
 
       void setLineWidth(Spatium v)        { _lw = v;        }
       Spatium lineWidth() const           { return _lw;     }
-      void undoSetLineWidth(Spatium);
 
       bool play() const                   { return _play;    }
       void setPlay(bool val)              { _play = val;     }
-      void undoSetPlay(bool);
       };
 
 
