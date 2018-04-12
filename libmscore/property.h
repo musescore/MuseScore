@@ -201,10 +201,7 @@ enum class Pid {
       SPANNER_TICKS,
       SPANNER_TRACK2,
       USER_OFF2,
-      BEGIN_TEXT_STYLE,
-      CONTINUE_TEXT_STYLE,
 
-      END_TEXT_STYLE,
       BREAK_MMR,
       REPEAT_COUNT,
       USER_STRETCH,
@@ -362,7 +359,6 @@ enum class P_TYPE : char {
       TEMPO,
       GROUPS,
       SYMID,
-      TEXT_STYLE,
       INT_LIST,
       GLISSANDO_STYLE,
       BARLINE_TYPE,
