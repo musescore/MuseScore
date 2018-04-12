@@ -294,7 +294,6 @@ class TextBase : public Element {
 
       friend class TextBlock;
       friend class TextFragment;
-      virtual void textChanged() {}
       QString convertFromHtml(const QString& ss) const;
       static QString convertToHtml(const QString&, const TextStyle&);
       static QString tagEscape(QString s);

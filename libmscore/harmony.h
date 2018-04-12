@@ -117,7 +117,7 @@ class Harmony final : public TextBase {
       void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,
          NoteSpellingType& baseSpelling, NoteCaseType& baseCase);
 
-      virtual void textChanged() override;
+      void textChanged();
       virtual void layout() override;
 
       const QRectF& bboxtight() const          { return _tbbox;        }
@@ -155,7 +155,7 @@ class Harmony final : public TextBase {
       const QString& extensionName() const;
 
       QString xmlKind() const;
-      QString xmlText() const;
+      QString musicXmlText() const;
       QString xmlSymbols() const;
       QString xmlParens() const;
       QStringList xmlDegrees() const;

@@ -2148,7 +2148,6 @@ void TextBase::setXmlText(const QString& s)
       _text = s;
       layoutInvalid = true;
       textInvalid   = false;
-      textChanged();
       }
 
 //---------------------------------------------------------
@@ -2703,11 +2702,14 @@ QVariant TextBase::propertyDefault(Pid id) const
       if (!v.isValid()) {
             switch (id) {
                   case Pid::SUB_STYLE:
-                        return int(SubStyleId::DEFAULT);
+                        v = int(SubStyleId::DEFAULT);
+                        break;
                   case Pid::TEXT:
-                        return QString();
+                        v = QString();
+                        break;
                   default:
-                        return Element::propertyDefault(id);
+                        v = Element::propertyDefault(id);
+                        break;
                   }
             }
       return v;
