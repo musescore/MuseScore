@@ -32,12 +32,11 @@ namespace Ms {
 //---------------------------------------------------------
 
 TimeSig::TimeSig(Score* s)
-  : Element(s)
+  : Element(s, ElementFlag::SELECTABLE | ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
       {
-      setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
+      initSubStyle(SubStyleId::TIMESIG);
+
       _showCourtesySig = true;
-      scaleStyle       = PropertyFlags::STYLED;
-      setProperty(Pid::SCALE, propertyDefault(Pid::SCALE));
       _stretch.set(1, 1);
       _sig.set(0, 1);               // initialize to invalid
       _timeSigType      = TimeSigType::NORMAL;
@@ -203,10 +202,8 @@ void TimeSig::read(XmlReader& e)
                   setDenominatorString(e.readElementText());
             else if (tag == "Groups")
                   _groups.read(e);
-            else if (tag == "scale") {
-                  _scale = e.readSize();
-                  scaleStyle = PropertyFlags::UNSTYLED;
-                  }
+            else if (readStyledProperty(e, tag))
+                  ;
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -482,47 +479,6 @@ QVariant TimeSig::propertyDefault(Pid id) const
             default:
                   return Element::propertyDefault(id);
             }
-      }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid TimeSig::getPropertyStyle(Pid id) const
-      {
-      switch (id) {
-            case Pid::SCALE:
-                  return Sid::timesigScale;
-            default:
-                  break;
-            }
-      return Element::getPropertyStyle(id);
-      }
-
-//---------------------------------------------------------
-//   propertyStyle
-//---------------------------------------------------------
-
-PropertyFlags& TimeSig::propertyFlags(Pid id)
-      {
-      switch (id) {
-            case Pid::SCALE:
-                  return scaleStyle;
-            default:
-                  return Element::propertyFlags(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   styleChanged
-//    reset all styled values to actual style
-//---------------------------------------------------------
-
-void TimeSig::styleChanged()
-      {
-      if (scaleStyle == PropertyFlags::STYLED)
-            setScale(score()->styleV(Sid::timesigScale).toSizeF());
-      Element::styleChanged();
       }
 
 //---------------------------------------------------------
