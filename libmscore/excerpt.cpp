@@ -147,12 +147,12 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
       score->setPageNumberOffset(oscore->pageNumberOffset());
 
       // Set instruments and create linked staffs
-      foreach (Part* part, parts) {
+      for (const Part* part : parts) {
             Part* p = new Part(score);
             p->setInstrument(*part->instrument());
             p->setPartName(part->partName());
 
-            foreach (Staff* staff, *part->staves()) {
+            for (Staff* staff : *part->staves()) {
                   Staff* s = new Staff(score);
                   s->setPart(p);
                   s->setStaffType(0, staff->staffType(0));              // TODO
@@ -246,7 +246,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                               interval.flip();
 
                         for (auto e : segment->annotations()) {
-                              if ((e->type() != ElementType::HARMONY) || (e->track() < startTrack) || (e->track() >= endTrack))
+                              if (!e->isHarmony() || (e->track() < startTrack) || (e->track() >= endTrack))
                                     continue;
                               Harmony* h  = toHarmony(e);
                               int rootTpc = Ms::transposeTpc(h->rootTpc(), interval, true);
@@ -494,7 +494,6 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                               QList<int> t = trackList.values(srcTrack);
 
                               for (int track : t) {
-
                                     //Clone KeySig TimeSig and Clefs if voice 1 of source staff is not mapped to a track
                                     Element* oef = oseg->element(srcTrack & ~3);
                                     if (oef && (oef->isTimeSig() || oef->isKeySig()) && oef->tick() == 0

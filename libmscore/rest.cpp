@@ -58,8 +58,10 @@ Rest::Rest(Score* s, const TDuration& d)
 Rest::Rest(const Rest& r, bool link)
    : ChordRest(r, link)
       {
-      if (link)
+      if (link) {
             score()->undo(new Link(const_cast<Rest*>(&r), this));
+            setAutoplace(true);
+            }
       _gap     = r._gap;
       _sym     = r._sym;
       dotline  = r.dotline;
