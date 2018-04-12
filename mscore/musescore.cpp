@@ -910,7 +910,8 @@ MuseScore::MuseScore()
             "file-part-export",
             "file-import-pdf",
             "",
-            "file-close",
+            "close-window",
+            "file-close-tab",
             "",
             "parts",
             "album" }) {
@@ -1311,7 +1312,18 @@ MuseScore::MuseScore()
       a->setChecked(MScore::autoplaceSlurs);
       menuDebug->addAction(a);
 #endif
-
+          
+      //---------------------
+      //    Menu Window
+      //---------------------
+      
+#ifdef Q_OS_MAC
+      QMenu* menuWindow = mb->addMenu("Window");
+      menuWindow->setObjectName("Window");
+      a = getAction("minimize-window");
+      menuWindow->addAction(a);
+#endif
+          
       //---------------------
       //    Menu Help
       //---------------------
@@ -4683,11 +4695,13 @@ void MuseScore::cmd(QAction* a)
       MScore::setError(MS_NO_ERROR);
 
       QString cmdn(a->data().toString());
-
+          
+       
       if (MScore::debugMode)
             qDebug("MuseScore::cmd <%s>", qPrintable(cmdn));
 
       const Shortcut* sc = Shortcut::getShortcut(cmdn.toLatin1().data());
+          
       if (sc == 0) {
             qDebug("MuseScore::cmd(): unknown action <%s>", qPrintable(cmdn));
             return;
@@ -4865,6 +4879,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             if (mixer)
                   mixer->updateAll(cs->masterScore());
             }
+      else if (cmd == "minimize-window")
+            MuseScoreApplication::activeWindow()->showMinimized();
       else if (cmd == "rewind") {
             seq->rewindStart();
             if (playPanel)
@@ -4896,8 +4912,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             exportParts();
       else if (cmd == "file-import-pdf")
             openExternalLink("https://musescore.com/import");
-      else if (cmd == "file-close")
+      else if (cmd == "file-close-tab")
             closeScore(cs);
+      else if (cmd == "close-window")
+            MuseScoreApplication::activeWindow()->close();
       else if (cmd == "file-save-as")
             saveAs(cs, false);
       else if (cmd == "file-save-selection")

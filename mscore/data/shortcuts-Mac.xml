@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Shortcuts>
   <SC>
+    <key>minimize-window</key>
+    <seq>Ctrl+M</seq>
+  </SC>
+  <SC>
+    <key>close-window</key>
+    <seq>Ctrl+Shift+W</seq>
+  </SC>
+  <SC>
     <key>plugin-creator</key>
     <seq>Ctrl+Shift+P</seq>
     </SC>
@@ -21,7 +29,7 @@
     <std>63</std>
     </SC>
   <SC>
-    <key>file-close</key>
+    <key>file-close-tab</key>
     <std>4</std>
     </SC>
   <SC>
@@ -564,7 +572,7 @@
     </SC>
   <SC>
     <key>rehearsalmark-text</key>
-    <seq>Ctrl+M</seq>
+    <seq>Ctrl+Shift+M</seq>
     </SC>
   <SC>
     <key>play</key>

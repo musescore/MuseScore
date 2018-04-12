@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Shortcuts>
   <SC>
+    <key>close-window</key>
+    <seq>Ctrl+Shift+W</seq>
+  </SC>
+  <SC>
     <key>plugin-creator</key>
     <seq>Ctrl+Shift+P</seq>
     </SC>
@@ -21,7 +25,7 @@
     <std>63</std>
     </SC>
   <SC>
-    <key>file-close</key>
+    <key>file-close-tab</key>
     <std>4</std>
     </SC>
   <SC>

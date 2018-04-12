@@ -31,6 +31,22 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
+         "minimize-window",
+         QT_TRANSLATE_NOOP("action","Minimize"),            // Appears in menu
+         QT_TRANSLATE_NOOP("action","Minimize Window"),     // Appears in Edit > Preferences > Shortcuts
+         QT_TRANSLATE_NOOP("action","Minimize Window"),     // Appears if you use Help > What's This?
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "close-window",
+         QT_TRANSLATE_NOOP("action","Close Window"),            // Appears in menu
+         QT_TRANSLATE_NOOP("action","Close Window"),     // Appears in Edit > Preferences > Shortcuts
+         QT_TRANSLATE_NOOP("action","Close currently active window"),     // Appears if you use Help > What's This?
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
          "help",
          QT_TRANSLATE_NOOP("action","Online Handbook..."),   // Appears in menu
          QT_TRANSLATE_NOOP("action","Online handbook"),      // Appears in Edit > Preferences > Shortcuts
@@ -136,10 +152,10 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
-         "file-close",
-         QT_TRANSLATE_NOOP("action","Close"),
-         QT_TRANSLATE_NOOP("action","File: Close"),
-         QT_TRANSLATE_NOOP("action","Close current score")
+         "file-close-tab",
+         QT_TRANSLATE_NOOP("action","Close Tab"),
+         QT_TRANSLATE_NOOP("action","File: Close tab"),
+         QT_TRANSLATE_NOOP("action","Close current score/tab")
          },
       {
          MsWidget::MAIN_WINDOW,
@@ -3703,6 +3719,7 @@ Shortcut* Shortcut::getShortcut(const char* id)
       Shortcut* s = _shortcuts.value(QByteArray(id));
       if (s == 0) {
             qDebug("Internal error: shortcut <%s> not found", id);
+//            _shortcuts
             return 0;
             }
       return s;
