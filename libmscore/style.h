@@ -792,6 +792,7 @@ enum class SubStyleId {
       BOX,
       FRET,
       TREMOLO_BAR,
+      TIMESIG,
       USER1,
       USER2,
       SUBSTYLES
