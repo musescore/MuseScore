@@ -33,7 +33,7 @@ MuseScore is licensed under GPL version 2.0. See LICENSE.GPL in the same directo
 Disabled by default in the stable releases. See http://dev-list.musescore.org/Aeolus-Organ-Synth-td7578364.html
 Kept as an example of how to integrate with a complex synthesizer.
 
-* **assets** Graphical assets, use them if you need a MuseScore icon. For the logo, color etc... see https://musescore.org/en/about/logos-and-graphics
+* **assets** Graphical assets, use them if you need a MuseScore icon. For logos, colors etc... see https://musescore.org/en/about/logos-and-graphics
 
 * **awl** Audio Widget Library, from the MusE project
 
