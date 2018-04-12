@@ -836,6 +836,7 @@ class MStyle {
 typedef std::vector<StyledProperty> SubStyle;
 
 extern const SubStyle emptyStyle;
+extern const SubStyle defaultStyle;
 extern const SubStyle fingeringStyle;
 
 const SubStyle& subStyle(SubStyleId);

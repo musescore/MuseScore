@@ -3670,6 +3670,7 @@ void ScoreView::cmdAddChordName()
       harmony->setTrack(track);
       harmony->setParent(segment);
       _score->undoAddElement(harmony);
+      _score->endCmd();
 
       _score->select(harmony, SelectType::SINGLE, 0);
       startEditMode(harmony);

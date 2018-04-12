@@ -31,7 +31,9 @@ class TempoText final : public TextBase  {
       bool _followText;       // parse text to determine tempo
       qreal _relative;
       bool _isRelative;
+
       void updateScore();
+      void textChanged();
 
    public:
       TempoText(Score*);
@@ -55,7 +57,6 @@ class TempoText final : public TextBase  {
       void undoSetFollowText(bool v);
       void updateRelative();
 
-      virtual void textChanged() override;
       virtual void layout();
 
       static int findTempoDuration(const QString& s, int& len, TDuration& dur);
