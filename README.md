@@ -63,7 +63,7 @@ Kept as an example of how to integrate with a complex synthesizer.
 
 * **vtest** Visual tests. Compare reference images with current implementation
 
-* **third party** Contains projects which are included for convenience, usually to integrate them into the build system to make them available for all supported platforms.
+* **thirdparty** Contains projects which are included for convenience, usually to integrate them into the build system to make them available for all supported platforms.
 
     * **thirdparty/rtf2html**
     Used for capella import
