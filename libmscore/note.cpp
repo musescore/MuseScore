@@ -811,6 +811,17 @@ SymId Note::noteHead() const
             }
       if (_headType != NoteHead::Type::HEAD_AUTO)
             ht = _headType;
+
+      if (_headGroup == NoteHead::Group::HEAD_CUSTOM) {
+            if (chord() && chord()->staff()) {
+                  if (chord()->staff()->staffType(chord()->tick())->isDrumStaff())
+                        return chord()->staff()->part()->instrument(chord()->tick())->drumset()->noteHeads(_pitch, ht);
+                  }
+            else {
+                  return _cachedNoteheadSym;
+                  }
+            }
+
       Key key = Key::C;
       NoteHeadScheme scheme = NoteHeadScheme::HEAD_NORMAL;
       if (chord() && chord()->staff()){
@@ -818,8 +829,6 @@ SymId Note::noteHead() const
             if (tick >= 0) {
                   key    = chord()->staff()->key(tick);
                   scheme = chord()->staff()->staffType(tick)->noteHeadScheme();
-                  if (chord()->staff()->staffType(tick)->isDrumStaff() && _headGroup == NoteHead::Group::HEAD_CUSTOM)
-                        return chord()->staff()->part()->instrument()->drumset()->noteHeads(_pitch, ht);
                   }
             }
       SymId t = noteHead(up, _headGroup, ht, tpc(), key, scheme);

@@ -113,26 +113,43 @@ EditDrumset::EditDrumset(const Drumset* ds, QWidget* parent)
       pitchList->setColumnWidth(1, 60);
       pitchList->setColumnWidth(2, 30);
 
+      QStringList validNoteheadRanges = { "Noteheads", "Slash noteheads", "Round and square noteheads" };
+      QSet<QString> excludeSym = {"noteheadParenthesisLeft", "noteheadParenthesisRight"};
+      struct SymbolIcon {
+            SymId id;
+            QIcon icon;
+            SymbolIcon(SymId i, QIcon j) : id(i), icon(j){};
+      };
+      int w = quarterCmb->iconSize().width()  * qApp->devicePixelRatio();
+      int h = quarterCmb->iconSize().height() * qApp->devicePixelRatio();
+      QList<SymbolIcon> validNoteheads;
+      for (QString range : validNoteheadRanges) {
+            for (auto symName : (*smuflRanges())[range]) {
+                   SymId id = Sym::name2id(symName);
+                   if (!excludeSym.contains(symName)) {
+                         QIcon icon;
+                         QPixmap image(w, h );
+                         image.fill(Qt::transparent);
+                         QPainter painter(&image);
+                         painter.setFont(QFont("Bravura Text", 60));
+                         painter.setRenderHint(QPainter::Antialiasing);
+                         painter.setRenderHint(QPainter::TextAntialiasing);
+                         painter.setPen(QPen(Qt::black));
+                         painter.drawText(QRect(0, 0, w, h), Qt::AlignCenter, ScoreFont::fallbackFont()->toString(id));
+                         painter.end();
+                         icon.addPixmap(image);
+                         validNoteheads.append(SymbolIcon(id, icon));
+                         }
+                   }
+            }
+
       QComboBox* combos[] = { wholeCmb, halfCmb, quarterCmb, doubleWholeCmb };
       for (QComboBox* combo : combos) {
-            // TODO replace smuflRanges by a list of selected symbols
-            for (auto symName : (*smuflRanges())["Noteheads"]) {
-                  SymId id = Sym::name2id(symName);
-                  // create icon
-                  QIcon icon;
-                  int w = combo->iconSize().width()  * qApp->devicePixelRatio();
-                  int h = combo->iconSize().height() * qApp->devicePixelRatio();
-                  QPixmap image(w, h );
-                  image.fill(Qt::transparent);
-                  QPainter painter(&image);
-                  painter.setFont(QFont("Bravura Text", 60));
-                  painter.setRenderHint(QPainter::Antialiasing);
-                  painter.setRenderHint(QPainter::TextAntialiasing);
-                  painter.setPen(QPen(Qt::black));
-                  painter.drawText(QRect(0, 0, w, h), Qt::AlignCenter, ScoreFont::fallbackFont()->toString(id));
-                  painter.end();
-                  icon.addPixmap(image);
-                  combo->addItem(icon, Sym::id2userName(id), symName);
+            for (auto si : validNoteheads) {
+                  SymId id = si.id;
+                  QIcon icon = si.icon;
+                  combo->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+                  combo->addItem(icon, Sym::id2userName(id), Sym::id2name(id));
                   }
             }
       wholeCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(SymId::noteheadWhole)));

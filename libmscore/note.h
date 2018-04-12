@@ -283,6 +283,7 @@ class Note final : public Element {
 
       void layout();
       void layout2();
+      void setCachedNoteheadSym(SymId i) { _cachedNoteheadSym = i; };
       void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
       void setTrack(int val);
 
