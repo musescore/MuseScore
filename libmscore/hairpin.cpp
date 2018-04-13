@@ -385,7 +385,15 @@ QVariant HairpinSegment::getProperty(Pid id) const
             if (spp->pid == id)
                   return spanner()->getProperty(id);
             }
-      return TextLineBaseSegment::getProperty(id);
+      switch (id) {
+            case Pid::VELO_CHANGE:
+            case Pid::HAIRPIN_TYPE:
+            case Pid::HAIRPIN_CIRCLEDTIP:
+            case Pid::DYNAMIC_RANGE:
+                  return spanner()->getProperty(id);
+            default:
+                  return TextLineBaseSegment::getProperty(id);
+            }
       }
 
 //---------------------------------------------------------
@@ -398,7 +406,15 @@ bool HairpinSegment::setProperty(Pid id, const QVariant& v)
             if (spp->pid == id)
                   return spanner()->setProperty(id, v);
             }
-      return TextLineBaseSegment::setProperty(id, v);
+      switch (id) {
+            case Pid::VELO_CHANGE:
+            case Pid::HAIRPIN_TYPE:
+            case Pid::HAIRPIN_CIRCLEDTIP:
+            case Pid::DYNAMIC_RANGE:
+                  return spanner()->setProperty(id, v);
+            default:
+                  return TextLineBaseSegment::setProperty(id, v);
+            }
       }
 
 //---------------------------------------------------------
@@ -411,7 +427,15 @@ QVariant HairpinSegment::propertyDefault(Pid id) const
             if (spp->pid == id)
                   return spanner()->propertyDefault(id);
             }
-      return TextLineBaseSegment::propertyDefault(id);
+      switch (id) {
+            case Pid::VELO_CHANGE:
+            case Pid::HAIRPIN_TYPE:
+            case Pid::HAIRPIN_CIRCLEDTIP:
+            case Pid::DYNAMIC_RANGE:
+                  return spanner()->propertyDefault(id);
+            default:
+                  return TextLineBaseSegment::propertyDefault(id);
+            }
       }
 
 //---------------------------------------------------------
