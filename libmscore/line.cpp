@@ -718,14 +718,14 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                   }
                   break;
 
-            case Spanner::Anchor::NOTE:
-                  {
+            case Spanner::Anchor::NOTE: {
                   Element* e = grip == Grip::START ? startElement() : endElement();
                   if (!e)
                         return QPointF();
                   System* s = toNote(e)->chord()->segment()->system();
                   if (s == 0) {
-                        qFatal("no system: %s  start %s chord parent %s\n", name(), e->name(), toNote(e)->chord()->parent()->name());
+                        qDebug("no system: %s  start %s chord parent %s\n", name(), e->name(), toNote(e)->chord()->parent()->name());
+                        return QPointF();
                         }
                   *sys = s;
                   // return the position of the anchor note relative to the system
