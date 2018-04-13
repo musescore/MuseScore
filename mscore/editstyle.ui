@@ -191,7 +191,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>27</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -3249,7 +3249,7 @@
                 <string extracomment="spatium unit">sp</string>
                </property>
                <property name="singleStep">
-                <double>0.010000000000000</double>
+                <double>0.100000000000000</double>
                </property>
               </widget>
              </item>
@@ -3818,7 +3818,7 @@
              <item row="15" column="4">
               <widget class="QLabel" name="label_112">
                <property name="text">
-                <string>System header to time signature distance:</string>
+                <string>System header with signature distance:</string>
                </property>
                <property name="buddy">
                 <cstring>systemHeaderTimeSigDistance</cstring>
@@ -3877,7 +3877,7 @@
                 <string extracomment="spatium unit">sp</string>
                </property>
                <property name="singleStep">
-                <double>0.010000000000000</double>
+                <double>0.100000000000000</double>
                </property>
               </widget>
              </item>

@@ -1925,17 +1925,17 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                   }
             }
       else if (nst == SegmentType::ChordRest) {
-            qreal d;
             if (systemHeaderGap) {
                   if (st == SegmentType::TimeSig)
-                        d = score()->styleP(Sid::systemHeaderTimeSigDistance);
+                        w += score()->styleP(Sid::systemHeaderTimeSigDistance);
                   else
-                        d = score()->styleP(Sid::systemHeaderDistance);
+                        w += score()->styleP(Sid::systemHeaderDistance);
                   }
-            else
-                  d = score()->styleP(Sid::barNoteDistance);
-            qreal dd = minRight() + ns->minLeft() + spatium();
-            w = qMax(d, dd);
+            else {
+                  qreal d = score()->styleP(Sid::barNoteDistance);      // ??
+                  qreal dd = minRight() + ns->minLeft() + spatium();
+                  w = qMax(d, dd);
+                  }
             // d -= ns->minLeft() * .7;      // hack
             // d = qMax(d, ns->minLeft());
             // d = qMax(d, spatium());       // minimum distance is one spatium
