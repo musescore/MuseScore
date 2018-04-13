@@ -1693,14 +1693,17 @@ System* Score::getNextSystem(LayoutContext& lc)
 void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       {
       int n = 1;
-      for (Measure* mm = m->nextMeasure(); mm; mm = mm->nextMeasure()) {
-            ++n;
-            mm->setMMRestCount(-1);
-            if (mm->mmRest())
-                  undo(new ChangeMMRest(mm, 0));
-            if (mm == lm)
-                  break;
+      if (m != lm) {
+            for (Measure* mm = m->nextMeasure(); mm; mm = mm->nextMeasure()) {
+                  ++n;
+                  mm->setMMRestCount(-1);
+                  if (mm->mmRest())
+                        undo(new ChangeMMRest(mm, 0));
+                  if (mm == lm)
+                        break;
+                  }
             }
+
       Measure* mmr = m->mmRest();
       if (mmr) {
             if (mmr->len() != len) {
