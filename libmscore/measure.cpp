@@ -3277,8 +3277,10 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
       Segment* seg = findSegmentR(SegmentType::EndBarLine, ticks());
       Measure* nm  = nextMeasure();
 
+#if 0
 #ifndef NDEBUG
       computeMinWidth();
+#endif
 #endif
       qreal oldWidth = width();
 
@@ -3814,6 +3816,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
       Segment* fs = s;
       bool first  = system()->firstMeasure() == this;
       const Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
+
       while (s) {
             s->rxpos() = x;
             if (!s->enabled()) {
@@ -3846,7 +3849,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
                         else {
                               if (ps->isChordRestType())
                                     ++n;
-                              ww = ps->minHorizontalDistance(ns, false) - (s->x() - ps->x());
+                              ww = ps->minHorizontalCollidingDistance(ns) - (s->x() - ps->x());
                               }
                         if (ww > w) {
                               // overlap !
@@ -3919,9 +3922,8 @@ void Measure::computeMinWidth()
                   }
             }
 
-      if (s->isChordRestType()) {
+      if (s->isChordRestType())
             x += score()->styleP(hasAccidental(s) ? Sid::barAccidentalDistance : Sid::barNoteDistance);
-            }
       else if (s->isClefType() || s->isHeaderClefType())
             x += score()->styleP(Sid::clefLeftMargin);
       else if (s->isKeySigType())

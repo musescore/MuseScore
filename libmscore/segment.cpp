@@ -1883,19 +1883,35 @@ qreal Segment::minLeft() const
       }
 
 //---------------------------------------------------------
-//   minHorizontalDistance
+//   minHorizontalCollidingDistance
+//    calculate the minimum distance to ns avoiding collisions
 //---------------------------------------------------------
 
-qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
+qreal Segment::minHorizontalCollidingDistance(Segment* ns) const
       {
-      SegmentType st  = segmentType();
-      SegmentType nst = ns ? ns->segmentType() : SegmentType::Invalid;
-
       qreal w = 0.0;
       for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
             qreal d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx));
             w       = qMax(w, d);
             }
+      return w;
+      }
+
+//---------------------------------------------------------
+//   minHorizontalDistance
+//    calculate the minimum layout distance to Segment ns
+//---------------------------------------------------------
+
+qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
+      {
+      qreal w = 0.0;
+      for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
+            qreal d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx));
+            w       = qMax(w, d);
+            }
+
+      SegmentType st  = segmentType();
+      SegmentType nst = ns ? ns->segmentType() : SegmentType::Invalid;
 
       if (isChordRestType()) {
             if (nst == SegmentType::EndBarLine) {
@@ -1925,6 +1941,7 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                   }
             }
       else if (nst == SegmentType::ChordRest) {
+            // <non ChordRest> - <ChordRest>
             if (systemHeaderGap) {
                   if (st == SegmentType::TimeSig)
                         w += score()->styleP(Sid::systemHeaderTimeSigDistance);
@@ -1932,9 +1949,10 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                         w += score()->styleP(Sid::systemHeaderDistance);
                   }
             else {
-                  qreal d = score()->styleP(Sid::barNoteDistance);      // ??
-                  qreal dd = minRight() + ns->minLeft() + spatium();
-                  w = qMax(d, dd);
+//                  qreal d = score()->styleP(Sid::barNoteDistance);
+//                  qreal dd = minRight() + ns->minLeft() + spatium();
+//                  w = qMax(d, dd);
+                  w += score()->styleP(Sid::barNoteDistance);
                   }
             // d -= ns->minLeft() * .7;      // hack
             // d = qMax(d, ns->minLeft());
