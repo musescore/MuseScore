@@ -3900,6 +3900,7 @@ void MuseScore::showPianoKeyboard(bool on)
             }
       if (on) {
             _pianoTools->show();
+            _pianoTools->changeSelection(currentScore()->selection());
             }
       else {
             if (_pianoTools)
