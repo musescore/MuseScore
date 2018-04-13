@@ -1094,6 +1094,7 @@ qreal System::minDistance(System* s2) const
 
 qreal System::topDistance(int staffIdx, const Shape& s) const
       {
+      Q_ASSERT(!vbox());
       qreal dist = -1000000.0;
       for (MeasureBase* mb1 : ml) {
             if (!mb1->isMeasure())
@@ -1110,6 +1111,7 @@ qreal System::topDistance(int staffIdx, const Shape& s) const
 
 qreal System::bottomDistance(int staffIdx, const Shape& s) const
       {
+      Q_ASSERT(!vbox());
       qreal dist = -1000000.0;
       for (MeasureBase* mb1 : ml) {
             if (!mb1->isMeasure())
@@ -1129,10 +1131,9 @@ qreal System::minTop() const
       {
       qreal dist = 0.0;
       for (MeasureBase* mb : ml) {
-            if (mb->type() != ElementType::MEASURE)
+            if (!mb->isMeasure())
                   continue;
-            for (Segment* s = toMeasure(mb)->first(); s; s = s->next())
-                  dist = qMin(dist, s->staffShape(0).top());
+            dist = qMax(dist, toMeasure(mb)->staffShape(0).top() + mb->pos().y());
             }
       return dist;
       }
@@ -1147,10 +1148,11 @@ qreal System::minBottom() const
       qreal dist = 0.0;
       int staffIdx = score()->nstaves() - 1;
       for (MeasureBase* mb : ml) {
-            if (mb->type() != ElementType::MEASURE)
+            if (!mb->isMeasure())
                   continue;
-            for (Segment* s = toMeasure(mb)->first(); s; s = s->next())
-                  dist = qMax(dist, s->staffShape(staffIdx).bottom());
+//            for (Segment* s = toMeasure(mb)->first(); s; s = s->next())
+//                  dist = qMax(dist, s->staffShape(staffIdx).bottom());
+            dist = qMax(dist, toMeasure(mb)->staffShape(staffIdx).bottom() + mb->pos().y());
             }
       return dist - spatium() * 4;
       }
