@@ -294,23 +294,21 @@ void Lyrics::layout1()
             QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)", QRegularExpression::UseUnicodePropertiesOption);
             QRegularExpressionMatch punctuationMatch = punctuationPattern.match(s);
             if (punctuationMatch.hasMatch()) {
-#if 0 // TODO::ws
                   // leading and trailing punctuation
                   QString lp = punctuationMatch.captured(1);
                   QString tp = punctuationMatch.captured(3);
                   // actual lyric
                   //QString actualLyric = punctuationMatch.captured(2);
-                  Text leading(*this);
+                  Lyrics leading(*this);
                   leading.setPlainText(lp);
                   leading.layout1();
-                  Text trailing(*this);
+                  Lyrics trailing(*this);
                   trailing.setPlainText(tp);
                   trailing.layout1();
                   leftAdjust = leading.width();
                   centerAdjust = leading.width() - trailing.width();
                   if (!lp.isEmpty() && lp[0].isDigit())
                         hasNumber = true;
-#endif
                   }
             }
 
