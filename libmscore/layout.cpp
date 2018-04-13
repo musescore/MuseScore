@@ -3309,7 +3309,6 @@ System* Score::collectSystem(LayoutContext& lc)
                               spanner.push_back(sp);
                         }
                   }
-
             processLines(system, ottavas, false);
             processLines(system, pedal, true);
             processLines(system, spanner, false);

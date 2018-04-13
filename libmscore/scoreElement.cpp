@@ -556,7 +556,13 @@ void ScoreElement::styleChanged()
       for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
             PropertyFlags& f = propertyFlags(spp->pid);
             if (f == PropertyFlags::STYLED) {
-                  setProperty(spp->pid, score()->styleV(spp->sid));
+                  if (propertyType(spp->pid) == P_TYPE::SP_REAL) {
+                        qreal val = score()->styleP(spp->sid);
+                        setProperty(spp->pid, val);
+                        }
+                  else {
+                        setProperty(spp->pid, score()->styleV(spp->sid));
+                        }
                   }
             }
       }
