@@ -29,6 +29,20 @@ class AccessibleScoreView : public QObject, QAccessibleWidget {
       };
 
 //---------------------------------------------------------
+//   StatusBarLabel
+//---------------------------------------------------------
+
+//class StatusBarLabel : public QLabel {
+//      Q_OBJECT
+
+//   public:
+//      StatusBarLabel(QWidget* parent) : QLabel(parent) {}
+//      setText() {
+//          QLabel::setText()
+//      }
+//}
+
+//---------------------------------------------------------
 //   ScoreAccessibility
 //---------------------------------------------------------
 
@@ -37,7 +51,9 @@ class ScoreAccessibility : public QObject {
 
       static ScoreAccessibility* inst;
       QMainWindow* mainWindow;
-      QLabel* statusBarLabel;
+      QLabel* statusBarLabel = 0;
+      QLabel* statusBarDummyLabel = 0;
+      QTextEdit* statusBarTextEdit;
       ScoreAccessibility(QMainWindow* statusBar);
       std::pair<int, float>barbeat(Element* e);
 

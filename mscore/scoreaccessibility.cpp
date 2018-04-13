@@ -109,12 +109,20 @@ void ScoreAccessibility::clearAccessibilityInfo()
             statusBarLabel = 0;
             static_cast<MuseScore*>(mainWindow)->currentScoreView()->score()->setAccessibleInfo(tr("No selection"));
             }
+      if (statusBarDummyLabel != 0) {
+            mainWindow->statusBar()->removeWidget(statusBarDummyLabel);
+            delete statusBarDummyLabel;
+            statusBarDummyLabel = 0;
+            }
       }
 
 void ScoreAccessibility::currentInfoChanged()
       {
       clearAccessibilityInfo();
       statusBarLabel  = new QLabel(mainWindow->statusBar());
+      statusBarDummyLabel  = new QLabel(mainWindow->statusBar());
+      statusBarDummyLabel->setVisible(false);
+      statusBarDummyLabel->setFocusPolicy(Qt::NoFocus);
       ScoreView* scoreView =  static_cast<MuseScore*>(mainWindow)->currentScoreView();
       Score* score = scoreView->score();
       if (score->selection().isSingle()) {
@@ -161,8 +169,24 @@ void ScoreAccessibility::currentInfoChanged()
                   }
 
             statusBarLabel->setText(rez);
+            statusBarTextEdit = new QTextEdit(mainWindow);
+            statusBarTextEdit->setText(rez);
+            //mainWindow->statusBar()->showMessage("foobar", 2000);
+            //statusBarTextEdit->setAccessibleDescription("foobar");
+            //QAccessibleEvent event(statusBarLabel, QAccessible::DescriptionChanged);
+            //QAccessible::updateAccessibility(&event);
             QString screenReaderRez = QString("%1%2 %3 %4").arg(e->screenReaderInfo()).arg(barsAndBeats).arg(staff).arg(e->accessibleExtraInfo());
             score->setAccessibleInfo(screenReaderRez);
+            //score->setAccessibleDescription("foobar");
+            QAccessibleEvent event(score, QAccessible::DescriptionChanged);
+            QAccessible::updateAccessibility(&event);
+//            statusBarLabel->setAccessibleName(rez);
+//            statusBarLabel->setAccessibleDescription(screenReaderRez);
+//            statusBarLabel->setFocus();
+
+            statusBarDummyLabel->setText(rez);
+            statusBarDummyLabel->setAccessibleDescription(screenReaderRez);
+            statusBarDummyLabel->setAccessibleName(rez);
             }
       else if (score->selection().isRange()) {
             QString barsAndBeats = "";
@@ -181,12 +205,20 @@ void ScoreAccessibility::currentInfoChanged()
             barsAndBeats += " " + tr("End Measure: %1; End Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
             statusBarLabel->setText(tr("Range Selection") + barsAndBeats);
             score->setAccessibleInfo(tr("Range Selection") + barsAndBeats);
+            statusBarDummyLabel->setText(tr("Range Selection") + barsAndBeats);
+            statusBarDummyLabel->setAccessibleDescription(tr("Range Selection") + barsAndBeats);
+            statusBarDummyLabel->setAccessibleName(tr("Range Selection") + barsAndBeats);
             }
       else if (score->selection().isList()) {
             statusBarLabel->setText(tr("List Selection"));
             score->setAccessibleInfo(tr("List Selection"));
+            statusBarDummyLabel->setText(tr("List Selection"));
+            statusBarDummyLabel->setAccessibleDescription(tr("List Selection"));
+            statusBarDummyLabel->setAccessibleName(tr("List Selection"));
             }
       mainWindow->statusBar()->addWidget(statusBarLabel);
+      mainWindow->statusBar()->addWidget(statusBarDummyLabel);
+      statusBarDummyLabel->setFocus();
       }
 
 ScoreAccessibility* ScoreAccessibility::instance()
