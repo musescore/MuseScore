@@ -1688,6 +1688,7 @@ void ScoreView::cmd(const char* s)
       {
       const QByteArray cmd(s);
 
+      shadowNote->setVisible(false);
       if (MScore::debugMode)
             qDebug("ScoreView::cmd <%s>", s);
 
@@ -2916,9 +2917,8 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
                   showRect.setHeight(r.height());
                   }
             }
-      if (mscore->state() & ScoreState::STATE_NOTE_ENTRY) {
+      if (shadowNote->visible())
             setShadowNote(p);
-            }
 
       if (r.contains(showRect))
             return;
@@ -4341,7 +4341,8 @@ void ScoreView::updateContinuousPanel()
 
 void ScoreView::updateShadowNotes()
       {
-      setShadowNote(shadowNote->pos());
+      if (shadowNote->visible())
+            setShadowNote(shadowNote->pos());
       }
 
 //---------------------------------------------------------
