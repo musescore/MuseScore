@@ -3818,7 +3818,7 @@
              <item row="15" column="4">
               <widget class="QLabel" name="label_112">
                <property name="text">
-                <string>System header with signature distance:</string>
+                <string>System header with time signature distance:</string>
                </property>
                <property name="buddy">
                 <cstring>systemHeaderTimeSigDistance</cstring>

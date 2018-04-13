@@ -91,7 +91,12 @@ QVariant OttavaSegment::getProperty(Pid id) const
             if (spp->pid == id)
                   return spanner()->getProperty(id);
             }
-      return TextLineBaseSegment::getProperty(id);
+      switch (id) {
+            case Pid::OTTAVA_TYPE:
+                  return spanner()->getProperty(id);
+            default:
+                  return TextLineBaseSegment::getProperty(id);
+            }
       }
 
 //---------------------------------------------------------
@@ -104,7 +109,12 @@ bool OttavaSegment::setProperty(Pid id, const QVariant& v)
             if (spp->pid == id)
                   return spanner()->setProperty(id, v);
             }
-      return TextLineBaseSegment::setProperty(id, v);
+      switch (id) {
+            case Pid::OTTAVA_TYPE:
+                  return spanner()->setProperty(id, v);
+            default:
+                  return TextLineBaseSegment::setProperty(id, v);
+            }
       }
 
 //---------------------------------------------------------
@@ -117,7 +127,12 @@ QVariant OttavaSegment::propertyDefault(Pid id) const
             if (spp->pid == id)
                   return spanner()->propertyDefault(id);
             }
-      return TextLineBaseSegment::propertyDefault(id);
+      switch (id) {
+            case Pid::OTTAVA_TYPE:
+                  return spanner()->propertyDefault(id);
+            default:
+                  return TextLineBaseSegment::propertyDefault(id);
+            }
       }
 
 //---------------------------------------------------------
