@@ -332,7 +332,10 @@ void Glissando::layout()
             s->layout();
             return;
             }
-
+      if (spannerSegments().empty()) {
+            qDebug("no segments");
+            return;
+            }
       SLine::layout();
       setPos(0.0, 0.0);
       adjustReadPos();
