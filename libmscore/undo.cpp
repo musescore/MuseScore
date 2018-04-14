@@ -538,8 +538,9 @@ void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType st)
 
             // move measure-initial clef to last segment of prev measure
 
-            if (firstSeg                        // if at start of measure
-               && measure->prevMeasure()        // and there is a previous measure
+            if ((firstSeg                        // if at start of measure
+               && measure->prevMeasure())        // and there is a previous measure
+               || tick == seg->measure()->endTick() 
                ) {
                   measure = measure->prevMeasure();
                   destSeg = measure->findSegment(Segment::Type::Clef, tick);
