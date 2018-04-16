@@ -55,7 +55,7 @@ class Drumset {
       DrumInstrument _drum[DRUM_INSTRUMENTS];
 
    public:
-      bool isValid(int pitch) const             { return _drum[pitch].notehead != NoteHead::Group::HEAD_INVALID; }
+      bool isValid(int pitch) const             { return !_drum[pitch].name.isEmpty(); }
       NoteHead::Group noteHead(int pitch) const { return _drum[pitch].notehead;       }
       SymId noteHeads(int pitch, NoteHead::Type t) const  { return _drum[pitch].noteheads[int(t)];      }
       int line(int pitch) const                 { return _drum[pitch].line;           }

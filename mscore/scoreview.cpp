@@ -858,7 +858,11 @@ void ScoreView::setShadowNote(const QPointF& p)
             shadowNote->setState(symNotehead, voice, d, true);
             }
       else {
-            symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
+            if (NoteHead::Group::HEAD_CUSTOM == noteheadGroup)
+                  symNotehead = instr->drumset()->noteHeads(is.drumNote(), noteHead);
+            else
+                  symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
+            
             shadowNote->setState(symNotehead, voice, d);
             }
 
