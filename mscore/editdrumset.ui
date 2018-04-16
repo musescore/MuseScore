@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>506</width>
-    <height>414</height>
+    <width>696</width>
+    <height>355</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,66 +19,14 @@
      <property name="spacing">
       <number>8</number>
      </property>
-     <item row="0" column="1">
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Name:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="name"/>
-       </item>
-      </layout>
-     </item>
-     <item row="6" column="0" colspan="3">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QPushButton" name="loadButton">
-         <property name="text">
-          <string>Load...</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="saveButton">
-         <property name="text">
-          <string>Save As...</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QDialogButtonBox" name="buttonBox">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="standardButtons">
-          <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
      <item row="0" column="0" rowspan="4">
       <widget class="QTreeWidget" name="pitchList">
+       <property name="minimumSize">
+        <size>
+         <width>250</width>
+         <height>250</height>
+        </size>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
@@ -136,162 +84,106 @@
        </item>
       </widget>
      </item>
+     <item row="0" column="1">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Name:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="name">
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="placeholderText">
+          <string>Enter a name to enable pitch editing</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="6" column="0" colspan="3">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="loadButton">
+         <property name="text">
+          <string>Load...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="saveButton">
+         <property name="text">
+          <string>Save As...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QDialogButtonBox" name="buttonBox">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="standardButtons">
+          <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
      <item row="1" column="1">
       <layout class="QGridLayout" name="gridLayout">
-       <property name="spacing">
+       <property name="horizontalSpacing">
+        <number>8</number>
+       </property>
+       <property name="verticalSpacing">
         <number>1</number>
        </property>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Staff line:</string>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="noteHead">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QSpinBox" name="staffLine">
-         <property name="minimum">
-          <number>-12</number>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Stem direction:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QComboBox" name="stemDirection">
-         <item>
-          <property name="text">
-           <string>Auto</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Up</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Down</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Default voice:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QComboBox" name="voice">
-         <item>
-          <property name="text">
-           <string>1</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>2</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>3</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>4</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Shortcut:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QComboBox" name="shortcut">
-         <item>
-          <property name="text">
-           <string notr="true">A</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string notr="true">B</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string notr="true">C</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string notr="true">D</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string notr="true">E</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string notr="true">F</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string notr="true">G</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string notr="true">--</string>
-          </property>
-         </item>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Notehead:</string>
+          <string>Noteheads group:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="noteHead"/>
-       </item>
        <item row="2" column="0" colspan="2">
         <widget class="QGroupBox" name="customGbox">
          <property name="title">
-          <string>Custom notehead</string>
+          <string>Edit noteheads</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -300,24 +192,56 @@
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
-          <item row="1" column="1">
-           <widget class="QComboBox" name="halfCmb"/>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="wholeCmb">
+            <property name="minimumSize">
+             <size>
+              <width>250</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
           </item>
-          <item row="0" column="0">
+          <item row="5" column="1">
+           <widget class="QComboBox" name="doubleWholeCmb">
+            <property name="minimumSize">
+             <size>
+              <width>250</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="doubleWholeLbl">
+            <property name="text">
+             <string>Double Whole note</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
            <widget class="QLabel" name="wholeLbl">
             <property name="text">
              <string>Whole note</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QComboBox" name="quarterCmb"/>
-          </item>
           <item row="0" column="1">
-           <widget class="QComboBox" name="wholeCmb"/>
+           <widget class="QComboBox" name="quarterCmb">
+            <property name="minimumSize">
+             <size>
+              <width>250</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QComboBox" name="doubleWholeCmb"/>
+          <item row="0" column="0">
+           <widget class="QLabel" name="quarterLbl">
+            <property name="text">
+             <string>Quarter note</string>
+            </property>
+           </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="halfLbl">
@@ -326,17 +250,13 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="quarterLbl">
-            <property name="text">
-             <string>Quarter note</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="doubleWholeLbl">
-            <property name="text">
-             <string>Double Whole note</string>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="halfCmb">
+            <property name="minimumSize">
+             <size>
+              <width>250</width>
+              <height>0</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -389,6 +309,214 @@
          </property>
         </spacer>
        </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>6</number>
+         </property>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <item>
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Default voice:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="voice">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>50</width>
+               <height>0</height>
+              </size>
+             </property>
+             <item>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>4</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <property name="spacing">
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Staff line:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="staffLine">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>50</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="minimum">
+              <number>-12</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Shortcut:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="shortcut">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>50</width>
+               <height>0</height>
+              </size>
+             </property>
+             <item>
+              <property name="text">
+               <string notr="true">A</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string notr="true">B</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string notr="true">C</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string notr="true">D</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string notr="true">E</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string notr="true">F</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string notr="true">G</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string notr="true">--</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Stem direction:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="stemDirection">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>50</width>
+               <height>0</height>
+              </size>
+             </property>
+             <item>
+              <property name="text">
+               <string>Auto</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Up</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Down</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
       </layout>
      </item>
     </layout>
@@ -404,16 +532,16 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>pitchList</tabstop>
   <tabstop>name</tabstop>
   <tabstop>noteHead</tabstop>
-  <tabstop>staffLine</tabstop>
-  <tabstop>stemDirection</tabstop>
-  <tabstop>voice</tabstop>
-  <tabstop>shortcut</tabstop>
+  <tabstop>customGbox</tabstop>
+  <tabstop>quarterCmb</tabstop>
+  <tabstop>halfCmb</tabstop>
+  <tabstop>wholeCmb</tabstop>
+  <tabstop>doubleWholeCmb</tabstop>
   <tabstop>loadButton</tabstop>
   <tabstop>saveButton</tabstop>
-  <tabstop>buttonBox</tabstop>
-  <tabstop>pitchList</tabstop>
  </tabstops>
  <resources/>
  <connections>
