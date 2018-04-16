@@ -285,6 +285,7 @@ class Note final : public Element {
 
       void layout();
       void layout2();
+      //setter is used only in drumset tools to setup the notehead preview in the drumset editor and the palette
       void setCachedNoteheadSym(SymId i) { _cachedNoteheadSym = i; };
       void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
       void setTrack(int val);
