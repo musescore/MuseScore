@@ -468,7 +468,7 @@
       <fret value="19" letter="0">Ɠ</fret>
       <fret value="20" letter="0">Ɣ</fret>
       <fret value="21" letter="0">ƕ</fret>
-	  <fret value="22" letter="0">Ɩ</fret>
+      <fret value="22" letter="0">Ɩ</fret>
       <fret value="0"  letter="1">ƙ</fret>
       <fret value="1"  letter="1">ƚ</fret>
       <fret value="2"  letter="1">ƛ</fret>
@@ -486,15 +486,15 @@
       <fret value="14" letter="1">Ƨ</fret>
       <fret value="15" letter="1">ƨ</fret>
       <fret value="16" letter="1">Ʃ</fret>
-	  <fret value="17" letter="1">ƪ</fret>
+      <fret value="17" letter="1">ƪ</fret>
       <fret value="18" letter="1">ƫ</fret>
       <fret value="19" letter="1">Ƭ</fret>
-	  <fret value="20" letter="1">ƭ</fret>
+      <fret value="20" letter="1">ƭ</fret>
       <fret value="21" letter="1">Ʈ</fret>
       <fret value="22" letter="1">Ư</fret>
       <fret value="23" letter="1">ư</fret>
       <fret value="24" letter="1">Ʊ</fret>
-	  <fret value="25" letter="1">Ʋ</fret>
+      <fret value="25" letter="1">Ʋ</fret>
       <fret value="26" letter="1">Ƴ</fret>
       <fret value="27" letter="1">ƴ</fret>
       <fret value="28" letter="1">Ƶ</fret>
@@ -506,7 +506,7 @@
       <fret value="34" letter="1">ƻ</fret>
       <fret value="35" letter="1">Ƽ</fret>
       <fret value="36" letter="1">ƽ</fret>
-	  <fret value="37" letter="1">ƾ</fret>
+      <fret value="37" letter="1">ƾ</fret>
       <mark value="x">X</mark>
       <mark value="ghost">×</mark>
       <mark value="slash" number="1">/</mark>
@@ -624,7 +624,7 @@
       <defaultPitch>15</defaultPitch>
       <defaultYOffset>0</defaultYOffset>
       <zeroBeamValue>semiminima</zeroBeamValue>
-	  <duration value="minima">ɓ</duration>
+      <duration value="minima">ɓ</duration>
       <duration value="fusa">ɕ</duration>
       <duration value="semifusa">ɖ</duration>
       <duration value="32">ɗ</duration>
@@ -633,5 +633,4 @@
       <duration value="256">ɚ</duration>
       <duration value="dot">ɜ</duration>
    </durationFont>
-   
 </museScore>
