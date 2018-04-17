@@ -78,8 +78,8 @@ class XmlWriter;
 //   TablatureFont
 //---------------------------------------------------------
 
-#define NUM_OF_DIGITFRETS                 25    // the max fret number which can be rendered with numbers
-#define NUM_OF_LETTERFRETS                17    // the max fret number which can be rendered with letters
+#define NUM_OF_DIGITFRETS                 23    // the max fret number which can be rendered with numbers
+#define NUM_OF_LETTERFRETS                38    // the max fret number which can be rendered with letters
 #define NUM_OF_BASSSTRING_SLASHES         5     // the max number of slashes supported for French bass strings notation
                                                 // (currently, only 3 slashes are used at most; another two are
                                                 // foreseen for future customizability)
@@ -154,7 +154,7 @@ enum class StaffTypes : signed char {
       PERC_1LINE, PERC_3LINE, PERC_5LINE,
       TAB_6SIMPLE, TAB_6COMMON, TAB_6FULL,
             TAB_4SIMPLE, TAB_4COMMON, TAB_4FULL,
-            TAB_UKULELE, TAB_BALALAJKA, TAB_ITALIAN, TAB_FRENCH,
+            TAB_UKULELE, TAB_BALALAJKA, TAB_ITALIAN, TAB_FRENCH, TAB_SHAMISEN,
       STAFF_TYPES,
       // some useful shorthands:
             PERC_DEFAULT = StaffTypes::PERC_5LINE,

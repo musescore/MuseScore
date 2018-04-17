@@ -441,6 +441,80 @@
       <mark value="slash" number="4">Ĺ</mark>
       <mark value="slash" number="5">ĺ</mark>
    </fretFont>
+   <fretFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore Tab 三味線</displayName>
+      <defaultPitch>9</defaultPitch>
+      <defaultYOffset>0.0</defaultYOffset>
+      <fret value="0"  letter="0">ƀ</fret>
+      <fret value="1"  letter="0">Ɓ</fret>
+      <fret value="2"  letter="0">Ƃ</fret>
+      <fret value="3"  letter="0">ƃ</fret>
+      <fret value="4"  letter="0">Ƅ</fret>
+      <fret value="5"  letter="0">ƅ</fret>
+      <fret value="6"  letter="0">Ɔ</fret>
+      <fret value="7"  letter="0">Ƈ</fret>
+      <fret value="8"  letter="0">ƈ</fret>
+      <fret value="9"  letter="0">Ɖ</fret>
+      <fret value="10" letter="0">Ɗ</fret>
+      <fret value="11" letter="0">Ƌ</fret>
+      <fret value="12" letter="0">ƌ</fret>
+      <fret value="13" letter="0">ƍ</fret>
+      <fret value="14" letter="0">Ǝ</fret>
+      <fret value="15" letter="0">Ə</fret>
+      <fret value="16" letter="0">Ɛ</fret>
+      <fret value="17" letter="0">Ƒ</fret>
+      <fret value="18" letter="0">ƒ</fret>
+      <fret value="19" letter="0">Ɠ</fret>
+      <fret value="20" letter="0">Ɣ</fret>
+      <fret value="21" letter="0">ƕ</fret>
+	  <fret value="22" letter="0">Ɩ</fret>
+      <fret value="0"  letter="1">ƙ</fret>
+      <fret value="1"  letter="1">ƚ</fret>
+      <fret value="2"  letter="1">ƛ</fret>
+      <fret value="3"  letter="1">Ɯ</fret>
+      <fret value="4"  letter="1">Ɲ</fret>
+      <fret value="5"  letter="1">ƞ</fret>
+      <fret value="6"  letter="1">Ɵ</fret>
+      <fret value="7"  letter="1">Ơ</fret>
+      <fret value="8"  letter="1">ơ</fret>
+      <fret value="9"  letter="1">Ƣ</fret>
+      <fret value="10" letter="1">ƣ</fret>
+      <fret value="11" letter="1">Ƥ</fret>
+      <fret value="12" letter="1">ƥ</fret>
+      <fret value="13" letter="1">Ʀ</fret>
+      <fret value="14" letter="1">Ƨ</fret>
+      <fret value="15" letter="1">ƨ</fret>
+      <fret value="16" letter="1">Ʃ</fret>
+	  <fret value="17" letter="1">ƪ</fret>
+      <fret value="18" letter="1">ƫ</fret>
+      <fret value="19" letter="1">Ƭ</fret>
+	  <fret value="20" letter="1">ƭ</fret>
+      <fret value="21" letter="1">Ʈ</fret>
+      <fret value="22" letter="1">Ư</fret>
+      <fret value="23" letter="1">ư</fret>
+      <fret value="24" letter="1">Ʊ</fret>
+	  <fret value="25" letter="1">Ʋ</fret>
+      <fret value="26" letter="1">Ƴ</fret>
+      <fret value="27" letter="1">ƴ</fret>
+      <fret value="28" letter="1">Ƶ</fret>
+      <fret value="29" letter="1">ƶ</fret>
+      <fret value="30" letter="1">Ʒ</fret>
+      <fret value="31" letter="1">Ƹ</fret>
+      <fret value="32" letter="1">ƹ</fret>
+      <fret value="33" letter="1">ƺ</fret>
+      <fret value="34" letter="1">ƻ</fret>
+      <fret value="35" letter="1">Ƽ</fret>
+      <fret value="36" letter="1">ƽ</fret>
+	  <fret value="37" letter="1">ƾ</fret>
+      <mark value="x">X</mark>
+      <mark value="ghost">×</mark>
+      <mark value="slash" number="1">/</mark>
+      <mark value="slash" number="2">//</mark>
+      <mark value="slash" number="3">///</mark>
+      <mark value="slash" number="4">////</mark>
+      <mark value="slash" number="5">/////</mark>
+   </fretFont>
 
    <durationFont>
       <family>MScoreTabulature</family>
@@ -544,5 +618,20 @@
       <duration value="256">Ɋ</duration>
       <duration value="dot">Ɍ</duration>
    </durationFont>
-
+   <durationFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore Tab 三味線</displayName>
+      <defaultPitch>15</defaultPitch>
+      <defaultYOffset>0</defaultYOffset>
+      <zeroBeamValue>semiminima</zeroBeamValue>
+	  <duration value="minima">ɓ</duration>
+      <duration value="fusa">ɕ</duration>
+      <duration value="semifusa">ɖ</duration>
+      <duration value="32">ɗ</duration>
+      <duration value="64">ɘ</duration>
+      <duration value="128">ə</duration>
+      <duration value="256">ɚ</duration>
+      <duration value="dot">ɜ</duration>
+   </durationFont>
+   
 </museScore>

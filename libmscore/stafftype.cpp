@@ -936,6 +936,21 @@ void TabDurationSymbol::layout()
                   // once horiz. positions of chords are known
                   }
             }
+      
+      if (_tab->xmlName() == "tabShamisen" && _tab->durationFontName() == "MuseScore Tab 三味線") {
+          int aboveLine = chord->downLine();
+          // Downmost note on first string : fret symbol under
+          TDuration::DurationType dur = chord->durationType().type();
+          if(dur == TDuration::DurationType::V_HALF) {
+              if(aboveLine != 0) aboveLine -= 2;
+              xpos += 1.5 * SPATIUM20;
+              }
+          else if (dur == TDuration::DurationType::V_QUARTER) {
+              xpos += SPATIUM20;
+              }
+          ypos  += 90 + _tab->lineDistance().val() * SPATIUM20 * aboveLine / 2;
+      }
+      
       // set this' mag from parent chord mag (include staff mag)
       qreal mag = chord != nullptr ? chord->mag() : 1.0;
       setMag(mag);
@@ -1406,6 +1421,7 @@ void StaffType::initStaffTypes()
          StaffType(StaffGroup::TAB, "tab5StrFull",   QObject::tr("Tab. 5-str. full"),   5, 0,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, false, true, true),
          StaffType(StaffGroup::TAB, "tabUkulele",    QObject::tr("Tab. ukulele"),       4, 0,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, false, true, true),
          StaffType(StaffGroup::TAB, "tabBalajka",    QObject::tr("Tab. balalaika"),     3, -2,    1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, false, true, true),
+         StaffType(StaffGroup::TAB, "tabShamisen",   QObject::tr("Tab. shamisen"),      3, 0,     3.5, true,  true, false, false, "MuseScore Tab 三味線",  15, 0, true, "MuseScore Tab 三味線",  12, 0, TablatureSymbolRepeat::ALWAYS, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, false, true, true),
 //         StaffType(StaffGroup::TAB, "tab6StrItalian",QObject::tr("Tab. 6-str. Italian"),6, 2,     1.5, false, true, true,  true,  "MuseScore Tab Italian",15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   true,  true,  false, false, true,  false, true, false),
 //         StaffType(StaffGroup::TAB, "tab6StrFrench", QObject::tr("Tab. 6-str. French"), 6, 2,     1.5, false, true, true,  true,  "MuseScore Tab French", 15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   false, false, false, false, false, false, false,false)
          StaffType(StaffGroup::TAB, "tab6StrItalian",QObject::tr("Tab. 6-str. Italian"),6, 0,     1.5, false, true, true,  true,  "MuseScore Tab Italian",15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   true,  true,  false, false, true,  false, true, false),
