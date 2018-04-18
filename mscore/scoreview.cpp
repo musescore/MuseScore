@@ -3689,6 +3689,7 @@ void ScoreView::cmdAddText(TEXT type)
             changeState(ViewState::NORMAL);
 
       TextBase* s = 0;
+      TextBase* es = 0;
       _score->startCmd();
       switch(type) {
             case TEXT::TITLE:
@@ -3733,8 +3734,21 @@ void ScoreView::cmdAddText(TEXT type)
                   if (!cr)
                         break;
                   s = new StaffText(SubStyleId::STAFF, _score);
+                  Segment* parent = 0;
+                  if (cr->segment()->measure()->isMMRest()) {     // mm hack
+printf("add to mmrest\n");
+                        Measure* m = cr->segment()->measure()->mmRestFirst();
+                        parent = m->findSegmentR(SegmentType::ChordRest, 0);
+                        es = new StaffText(SubStyleId::STAFF, _score);
+                        es->setTrack(cr->track());
+                        es->setParent(cr->segment());
+                        _score->addElement(es);
+                        s->linkTo(es);
+                        }
+                  else
+                        parent = cr->segment();
                   s->setTrack(cr->track());
-                  s->setParent(cr->segment());
+                  s->setParent(parent);
                   }
                   break;
             case TEXT::SYSTEM:
@@ -3785,7 +3799,8 @@ void ScoreView::cmdAddText(TEXT type)
             _score->undoAddElement(s);
             _score->select(s, SelectType::SINGLE, 0);
             _score->endCmd();
-            startEditMode(s);
+            s->layout();
+            startEditMode(es ? es : s);
             }
       else
             _score->endCmd();
