@@ -156,12 +156,12 @@ void ScoreView::endEdit()
       else if (editData.element->isText()) {
             Text* text = toText(editData.element);
             if (text->links()) {
-//                  TextEditData* ted = static_cast<TextEditData*>(ed.getData(text));
                   for (ScoreElement* se : *text->links()) {
                         Text* lt = toText(se);
                         if (lt != text) {
-printf("update link");
                               lt->setXmlText(text->xmlText());
+                              lt->layout();
+                              lt->triggerLayout();
                               }
                         }
                   }

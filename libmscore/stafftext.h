@@ -45,6 +45,7 @@ class StaffText final : public TextBase  {
       StaffText(SubStyleId, Score* = 0);
       virtual StaffText* clone() const                    { return new StaffText(*this);    }
       virtual ElementType type() const                    { return ElementType::STAFF_TEXT; }
+
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual bool readProperties(XmlReader&) override;

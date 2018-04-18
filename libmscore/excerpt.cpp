@@ -1063,7 +1063,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick
                                     nt->add(ncr);
                                     }
 
-                              foreach (Element* e, oseg->annotations()) {
+                              for (Element* e : oseg->annotations()) {
                                     if (e->generated() || e->systemFlag())
                                           continue;
                                     if (e->track() != srcTrack)
@@ -1087,7 +1087,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick
                                                 score->undoAddElement(ne);
                                           }
                                     }
-                              if (oe->type() == ElementType::CHORD) {
+                              if (oe->isChord()) {
                                     Chord* och = toChord(ocr);
                                     Chord* nch = toChord(ncr);
                                     int n = och->notes().size();

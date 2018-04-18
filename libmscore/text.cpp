@@ -1111,6 +1111,7 @@ TextBase::TextBase(const TextBase& st)
       frame                        = st.frame;
       _layoutToParentWidth         = st._layoutToParentWidth;
       hexState                     = -1;
+
       _family                      = st._family;
       _size                        = st._size;
       _bold                        = st._bold;
