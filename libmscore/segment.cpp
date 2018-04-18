@@ -420,10 +420,10 @@ void Segment::removeStaff(int staff)
 void Segment::checkElement(Element* el, int track)
       {
       if (_elist[track]) {
-            qDebug("Segment::add(%s) there is already a %s at %s(%d) track %d. score %p %s",
+            qDebug("add(%s): there is already a %s at %s(%d) track %d. score %p %s",
                el->name(), _elist[track]->name(),
                qPrintable(score()->sigmap()->pos(tick())), tick(), track, score(), score()->isMaster() ? "Master" : "Part");
-            // abort();
+//            abort();
             }
       }
 
