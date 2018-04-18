@@ -503,8 +503,8 @@ Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** se
       System* s = m->system();
       qreal y   = p.y() - s->canvasPos().y();
 
-      int i;
-      for (i = 0; i < nstaves();) {
+      int i = 0;
+      for (; i < nstaves();) {
             SysStaff* stff = s->staff(i);
             if (!stff->show() || !staff(i)->show()) {
                   ++i;
@@ -537,7 +537,8 @@ Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** se
       int strack = i * VOICES;
       if (!staff(i))
             return 0;
-      int etrack = staff(i)->part()->nstaves() * VOICES + strack;
+//      int etrack = staff(i)->part()->nstaves() * VOICES + strack;
+      int etrack = VOICES + strack;
 
       SysStaff* sstaff = m->system()->staff(i);
       SegmentType st = SegmentType::ChordRest;
