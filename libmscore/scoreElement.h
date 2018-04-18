@@ -77,6 +77,7 @@ class Ambitus;
 class Bracket;
 class InstrumentChange;
 class Text;
+class TextBase;
 class Hairpin;
 class HairpinSegment;
 class Bend;
@@ -324,6 +325,7 @@ class ScoreElement {
       CONVERT(ChordLine,     CHORDLINE)
       CONVERT(FretDiagram,   FRET_DIAGRAM)
       CONVERT(Page,          PAGE)
+      CONVERT(Text,          TEXT)
       CONVERT(StaffText,     STAFF_TEXT)
       CONVERT(SystemText,    SYSTEM_TEXT)
       CONVERT(BracketItem,   BRACKET_ITEM)
@@ -337,7 +339,7 @@ class ScoreElement {
       bool isSLineSegment() const;
       bool isBox() const { return isVBox() || isHBox() || isTBox() || isFBox(); }
       bool isMeasureBase() const { return isMeasure() || isBox(); }
-      bool isText() const;
+      bool isTextBase() const;
       bool isTextLineBaseSegment() const {
          return isHairpinSegment()
          || isLetRingSegment()
@@ -451,6 +453,10 @@ static inline BSymbol* toBSymbol(ScoreElement* e) {
 static inline TextLineBase* toTextLineBase(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isTextLineBase());
       return (TextLineBase*)e;
+      }
+static inline TextBase* toTextBase(ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isTextBase());
+      return (TextBase*)e;
       }
 
 #define CONVERT(a)  \

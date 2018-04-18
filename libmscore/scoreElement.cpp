@@ -429,16 +429,23 @@ void ScoreElement::linkTo(ScoreElement* element)
 void ScoreElement::unlink()
       {
       if (_links) {
-            Q_ASSERT(_links->contains(this));
+            if (!_links->contains(this)) {
+                  qDebug("%s: links size %d, this %p score %p", name(), _links->size(), this, score());
+                  for (auto e : *_links)
+                        printf("   %s %p score %p\n", e->name(), e, e->score());
+                  qFatal("list does not contain 'this'");
+                  }
             _links->removeOne(this);
 
             // if link list is empty, remove list
             if (_links->size() <= 1) {
-                  if (!_links->empty())         // abnormal case: only "this" is in list
+                  if (!_links->empty()) {         // abnormal case: only "this" is in list
                         _links->front()->_links = 0;
+                        qDebug("one element left in list");
+                        }
                   delete _links;
                   }
-            _links = 0;
+            _links = 0; // this element is not linked anymore
             }
       }
 
@@ -623,7 +630,7 @@ bool ScoreElement::isSLineSegment() const
 //   isText
 //---------------------------------------------------------
 
-bool ScoreElement::isText() const
+bool ScoreElement::isTextBase() const
       {
       return type()  == ElementType::TEXT
          || type() == ElementType::LYRICS
