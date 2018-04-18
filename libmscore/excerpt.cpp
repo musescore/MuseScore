@@ -672,8 +672,8 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                   }
 
             nmb->linkTo(mb);
-            foreach (Element* e, mb->el()) {
-                  if (e->type() == ElementType::LAYOUT_BREAK) {
+            for (Element* e : mb->el()) {
+                  if (e->isLayoutBreak()) {
                         LayoutBreak::Type st = toLayoutBreak(e)->layoutBreakType();
                         if (st == LayoutBreak::Type::PAGE || st == LayoutBreak::Type::LINE)
                               continue;
@@ -697,8 +697,11 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                   // layout breaks other than section were skipped above,
                   // but section breaks do need to be cloned & linked
                   // other measure-attached elements (?) are cloned but not linked
-                  if (e->isText() || e->type() == ElementType::LAYOUT_BREAK)
-                        ne = e->linkedClone();
+                  if (e->isTextBase() || e->isLayoutBreak()) {
+                        ne = e->clone();
+                        ne->setAutoplace(true);
+                        ne->linkTo(e);
+                        }
                   else
                         ne = e->clone();
                   ne->setScore(score);

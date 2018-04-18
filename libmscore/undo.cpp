@@ -550,9 +550,9 @@ void AddElement::redo(EditData*)
 const char* AddElement::name() const
       {
       static char buffer[64];
-      if (element->isText())
+      if (element->isTextBase())
             snprintf(buffer, 64, "Add:    %s <%s> %p", element->name(),
-               qPrintable(toText(element)->plainText()), element);
+               qPrintable(toTextBase(element)->plainText()), element);
       else if (element->isSegment())
             snprintf(buffer, 64, "Add:    <%s-%s> %p", element->name(), toSegment(element)->subTypeName(), element);
       else
@@ -667,9 +667,9 @@ void RemoveElement::redo(EditData*)
 const char* RemoveElement::name() const
       {
       static char buffer[64];
-      if (element->isText())
+      if (element->isTextBase())
             snprintf(buffer, 64, "Remove: %s <%s> %p", element->name(),
-               qPrintable(toText(element)->plainText()), element);
+               qPrintable(toTextBase(element)->plainText()), element);
       else if (element->isSegment())
             snprintf(buffer, 64, "Remove: <%s-%s> %p", element->name(), toSegment(element)->subTypeName(), element);
       else
@@ -2065,6 +2065,7 @@ void LinkUnlink::doUnlink()
       {
       // find appropriate target element to unlink
       // use current le if valid; pick something else in link list if not but that shouldn't happen!
+
       const LinkedElements* l = e->links();
       if (l) {
             // don't use current le if null or if it is no longer linked (shouldn't happen)
@@ -2085,7 +2086,7 @@ void LinkUnlink::doUnlink()
                   }
             }
       else
-            qWarning("current element %p has no links", e);
+            qWarning("current element %p(%s) has no links", e, e->name());
 
       if (e)
             e->unlink();
