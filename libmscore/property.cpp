@@ -108,7 +108,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::SCALE,                   "scale",                   false, "scale",                 P_TYPE::SCALE           },
       { Pid::LOCK_ASPECT_RATIO,       "lock_aspect_ratio",       false, "lockAspectRatio",       P_TYPE::BOOL            },
       { Pid::SIZE_IS_SPATIUM,         "size_is_spatium",         false, "sizeIsSpatium",         P_TYPE::BOOL            },
-      { Pid::TEXT,                    "text",                    false, 0,                       P_TYPE::STRING          },
+      { Pid::TEXT,                    "text",                    true,  0,                       P_TYPE::STRING          },
       { Pid::HTML_TEXT,               "html_text",               false, 0,                       P_TYPE::STRING          },
       { Pid::USER_MODIFIED,           "user_modified",           false, 0,                       P_TYPE::BOOL            },
       { Pid::BEAM_POS,                "beam_pos",                false, 0,                       P_TYPE::POINT           },

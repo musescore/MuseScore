@@ -229,6 +229,8 @@ QVariant StaffText::propertyDefault(Pid id) const
                   return int(SubStyleId::STAFF);
             case Pid::PLACEMENT:
                   return int(Placement::ABOVE);
+            case Pid::FRAME:
+                  return false;
             default:
                   return TextBase::propertyDefault(id);
             }

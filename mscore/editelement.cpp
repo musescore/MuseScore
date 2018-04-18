@@ -155,9 +155,19 @@ void ScoreView::endEdit()
             figuredBassEndEdit();
       else if (editData.element->isText()) {
             Text* text = toText(editData.element);
+            if (text->links()) {
+//                  TextEditData* ted = static_cast<TextEditData*>(ed.getData(text));
+                  for (ScoreElement* se : *text->links()) {
+                        Text* lt = toText(se);
+                        if (lt != text) {
+printf("update link");
+                              lt->setXmlText(text->xmlText());
+                              }
+                        }
+                  }
             // remove text if empty
             // dont do this for TBOX
-            if (text->empty() && text->parent() && text->parent()->type() != ElementType::TBOX)
+            if (text->empty() && text->parent() && !text->parent()->isTBox())
                   _score->undoRemoveElement(text);
             }
 #if 0

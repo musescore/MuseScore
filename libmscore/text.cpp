@@ -2708,6 +2708,11 @@ QVariant TextBase::propertyDefault(Pid id) const
                         v = QString();
                         break;
                   default:
+                        // to allow "uncomplete" substyles, fallback to default style
+                        for (const StyledProperty& p : subStyle(SubStyleId::DEFAULT)) {
+                              if (p.pid == id)
+                                    return score()->styleV(p.sid);
+                              }
                         v = Element::propertyDefault(id);
                         break;
                   }
