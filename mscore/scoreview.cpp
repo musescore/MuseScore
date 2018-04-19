@@ -2778,9 +2778,15 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
             */
 
             qreal xo = 0.0;  // new x offset
-            // at one point, the code used _cursor->rect(), but this only works during note entry or playback
-            // see issue #33391
-            QRectF curPos = el->canvasBoundingRect();
+            QRectF curPos = playBack ? _cursor->rect() : el->canvasBoundingRect();
+            // keep current note in view as well if applicable (note input mode)
+            Element* current = nullptr;
+            if (noteEntryMode()) {
+                  current = score()->selection().cr();
+                  if (current && current != el)
+                        curPos |= current->canvasBoundingRect();
+                  }
+
             qreal curPosR = curPos.right();                    // Position on the canvas
             qreal curPosL = curPos.left();                     // Position on the canvas
             qreal curPosMagR = curPosR * mag() + xoffset(); // Position in the screen
@@ -2792,26 +2798,37 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
                   marginLeft += _continuousPanel->width() * mag();
 
             if (round(curPosMagR) > round(width() - marginRight)) {
-                  xo = -curPosL * mag() + marginLeft;
-
-                  // Keeps the score up to the right to avoid blank gap on the right.
-                  qreal scoreEnd = score()->pages().front()->width() * mag() + xo;
-                  if (scoreEnd < width())
-                        xo += width() - scoreEnd;
-
-                  setOffset(xo, yoffset());
-                  update();
+                  // focus in or beyond right margin
+                  // pan to left margin in playback,
+                  // most of the way left in note entry,
+                  // otherwise just enforce right margin
+                  if (playBack)
+                        xo = -curPosL * mag() + marginLeft;
+                  else if (noteEntryMode())
+                        xo = -curPosL * mag() + marginLeft + width() * 0.2;
+                  else
+                        xo = -curPosR * mag() + width() - marginRight;
                   }
             else if (round(curPosMagL) < round(marginLeft) ) {
-                  xo = -curPosR * mag() + width() - marginRight;
-
-                  // Bring back the score to the left to avoid blank gap on the left.
-                  if (xo > 10)
-                        xo = 10;
-
-                  setOffset(xo, yoffset());
-                  update();
+                  // focus in or beyond left margin
+                  // enforce left margin
+                  // (previously we moved canvas all the way right,
+                  // but this made sense only when navigating right-to-left)
+                  xo = -curPosL * mag() + marginLeft;
                   }
+            else {
+                  // focus is within margins, so do nothing
+                  return;
+                  }
+            // avoid empty space on either side of "page"
+            qreal scoreEnd = score()->pages().front()->width() * mag() + xo;
+            if (xo > 10)
+                  xo = 10;
+            else if (scoreEnd < width())
+                  xo += width() - scoreEnd;
+
+            setOffset(xo, yoffset());
+            update();
             return;
             }
 
