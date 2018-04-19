@@ -130,6 +130,12 @@ void DrumTools::updateDrumset(const Drumset* ds)
             note->setLine(line);
             note->setPos(0.0, _spatium * .5 * line);
             note->setHeadGroup(noteHead);
+            SymId noteheadSym = SymId::noteheadBlack;
+            if (noteHead == NoteHead::Group::HEAD_CUSTOM)
+                  noteheadSym = drumset->noteHeads(pitch, NoteHead::Type::HEAD_QUARTER);
+            else
+                  noteheadSym = note->noteHead(true, noteHead, NoteHead::Type::HEAD_QUARTER);
+            note->setCachedNoteheadSym(noteheadSym); // we use the cached notehead so we don't recompute it at each layout
             chord->add(note);
             Stem* stem = new Stem(gscore);
             stem->setLen((up ? -3.0 : 3.0) * _spatium);
