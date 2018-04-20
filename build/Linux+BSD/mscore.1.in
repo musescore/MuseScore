@@ -187,10 +187,10 @@ Execute the named plugin
 Save template mode, no page size
 .TP
 .B \-F, \-\-factory\-settings
-Use only the standard built-in presets or "factory-settings" and delete preferences
+Use only the standard built-in presets or "factory settings" and delete preferences
 .TP
 .B \-R, \-\-revert\-settings
-Use only the standard built-in presets or "factory-settings", but do not delete preferences
+Use only the standard built-in presets or "factory settings", but do not delete preferences
 .TP
 .B \-i, \-\-load\-icons
 Load icons from the file system. Useful if you want to edit the MuseScore icons and preview the changes
