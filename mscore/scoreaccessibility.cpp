@@ -218,7 +218,13 @@ void ScoreAccessibility::currentInfoChanged()
             }
       mainWindow->statusBar()->addWidget(statusBarLabel);
       mainWindow->statusBar()->addWidget(statusBarDummyLabel);
-      statusBarDummyLabel->setFocus();
+      QWidget* lastFocusWidget = QApplication::focusWidget();
+      statusBarDummyLabel->setText("Text: " + statusBarDummyLabel->text());
+      statusBarDummyLabel->setAccessibleName("Name: " + statusBarDummyLabel->accessibleName());
+      statusBarDummyLabel->setAccessibleDescription("Description: " + statusBarDummyLabel->accessibleDescription());
+      statusBarDummyLabel->setFocus(); // read label with screen reader
+      if (lastFocusWidget)
+            lastFocusWidget->setFocus(); // give back focus
       }
 
 ScoreAccessibility* ScoreAccessibility::instance()
