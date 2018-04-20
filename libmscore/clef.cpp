@@ -148,6 +148,14 @@ void Clef::layout()
                         _clefTypes = staff()->clefType(0);
                   }
 
+            Measure* meas = clefSeg->measure();
+            if (meas && meas->system()) {
+                  auto ml = meas->system()->measures();
+                  bool found = (std::find(ml.begin(), ml.end(), meas) != ml.end());
+                  bool courtesy = (tick == meas->endTick() && (meas == meas->system()->lastMeasure() || !found));
+                  if (courtesy && (!showCourtesy() || !score()->styleB(Sid::genCourtesyClef) || meas->isFinalMeasureOfSection()))
+                        show = false;
+                  }
             // if clef not to show or not compatible with staff group
             if (!show) {
                   setbbox(QRectF());
@@ -450,6 +458,7 @@ bool Clef::setProperty(Pid propertyId, const QVariant& v)
             default:
                   return Element::setProperty(propertyId, v);
             }
+      triggerLayout();
       return true;
       }
 

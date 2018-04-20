@@ -2418,7 +2418,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                               e->layout();
                               }
                         }
-                  else if (segment.isType(SegmentType::TimeSig | SegmentType::Ambitus)) {
+                  else if (segment.isType(SegmentType::TimeSig | SegmentType::Ambitus | SegmentType::HeaderClef)) {
                         Element* e = segment.element(staffIdx * VOICES);
                         if (e)
                               e->layout();

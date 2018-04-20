@@ -870,7 +870,7 @@ void InspectorClef::setElement()
             otherMeas = meas->nextMeasure();                // look for a next measure
       // look for a clef segment in the 'other' measure at the same tick of this clef segment
       if (otherMeas)
-            otherSegm = otherMeas->findSegment(SegmentType::Clef, segmTick);
+            otherSegm = otherMeas->findSegment(SegmentType::Clef | SegmentType::HeaderClef, segmTick);
       // if any 'other' segment found, look for a clef in the same track as this
       if (otherSegm)
             otherClef = toClef(otherSegm->element(clef->track()));
