@@ -68,9 +68,9 @@ For help with the full MuseScore program see:
 .TP
 These pages cover the topics in this manual and may be more up-to-date:
 
-<https://musescore.org/handbook/command-line-options-0>
+<https://musescore.org/handbook/command\-line\-options\-0>
 .br
-<https://musescore.org/handbook/revert-factory-settings-0>
+<https://musescore.org/handbook/revert\-factory\-settings\-0>
 
 .SH OPTIONS
 A summary of options is included below. Running
@@ -81,7 +81,7 @@ program and opens any specified files.
 @BEGIN_section_to_only_appear_in_portable_builds@
 @MAN_PORTABLE@.SS Special options for the portable version
 @MAN_PORTABLE@.TP
-@MAN_PORTABLE@.B \-h, --help
+@MAN_PORTABLE@.B \-h, \-\-help
 @MAN_PORTABLE@Lists the various command line options and their usage.
 @MAN_PORTABLE@.TP
 @MAN_PORTABLE@.B man, manual, manpage
@@ -89,9 +89,9 @@ program and opens any specified files.
 @MAN_PORTABLE@If MuseScore is installed the manual can be viewed using the familiar `man
 @MAN_PORTABLE@.BR mscore@MSCORE_INSTALL_SUFFIX@ `.
 @MAN_PORTABLE@.TP
-@MAN_PORTABLE@.B install [-i] [PREFIX]
+@MAN_PORTABLE@.B install [\-i] [PREFIX]
 @MAN_PORTABLE@.RS
-@MAN_PORTABLE@Run this without '-i' or 'PREFIX' to fully integrate MuseScore
+@MAN_PORTABLE@Run this without '\-i' or 'PREFIX' to fully integrate MuseScore
 @MAN_PORTABLE@with the desktop environment (GNOME, KDE, etc). This should:
 @MAN_PORTABLE@.RS 2
 @MAN_PORTABLE@.IP \[bu] 2
@@ -109,7 +109,7 @@ program and opens any specified files.
 @MAN_PORTABLE@.RE
 @MAN_PORTABLE@
 @MAN_PORTABLE@Run as root (sudo) to install for all users.
-@MAN_PORTABLE@Advanced users can use '-i' to enter interactive mode
+@MAN_PORTABLE@Advanced users can use '\-i' to enter interactive mode
 @MAN_PORTABLE@and 'PREFIX' to install to a custom location.
 @MAN_PORTABLE@Installation not required to run the program.
 @MAN_PORTABLE@.RE
@@ -123,7 +123,7 @@ program and opens any specified files.
 @MAN_PORTABLE@If you installed for all users then it will be removed for all users.
 @MAN_PORTABLE@
 @MAN_PORTABLE@.TP
-@MAN_PORTABLE@.B check-depends, check-dependencies [exes-only]
+@MAN_PORTABLE@.B check\-depends, check\-dependencies [exes\-only]
 @MAN_PORTABLE@System information for developers.
 @MAN_PORTABLE@This detects which software libraries needed
 @MAN_PORTABLE@by MuseScore are not available from the system
@@ -132,86 +132,86 @@ program and opens any specified files.
 @MAN_PORTABLE@.SS Normal MuseScore options
 @END_section_to_only_appear_in_portable_builds@
 .TP
-.B \-h, --help
+.B \-h, \-\-help
 Displays help.
 .TP
-.B \-v, --version
+.B \-v, \-\-version
 Displays MuseScore's current version in the command line without starting the graphical interface.
 .TP
-.B \--long-version
+.B \-\-long\-version
 Displays MuseScore's current version and revision in the command line without starting the graphical interface.
 .TP
-.B \-d, --debug
+.B \-d, \-\-debug
 Starts MuseScore in debug mode.
 .TP
-.B \-L, --layout-debug
+.B \-L, \-\-layout\-debug
 Starts MuseScore in layout debug mode
 .TP
-.B \-s, --no-synthesizer
+.B \-s, \-\-no\-synthesizer
 Disables the integrated software synthesizer
 .TP
-.B \-m, --no-midi
+.B \-m, \-\-no\-midi
 Disables MIDI input
 .TP
-.B \-a, --use-audio <driver>
+.B \-a, \-\-use\-audio <driver>
 Use audio driver: jack, alsa, pulse, portaudio
 .TP
-.B \-n, --new-score
+.B \-n, \-\-new\-score
 Starts with the new score wizard regardless of preference setting for start mode
 .TP
-.B \-I, --dump-midi-in
+.B \-I, \-\-dump\-midi\-in
 Displays all MIDI input on the console
 .TP
-.B \-O, --dump-midi-out
+.B \-O, \-\-dump\-midi\-out
 Displays all MIDI output on the console
 .TP
-.B \-o, --export-to <filename>
-Exports the currently opened file to the specified <filename>. The file type depends on the filename extension. This option switches to the "converter" mode and avoids any graphical interface. You can also add a filename before the -o if you want to import and export files from the command line. For example mscore@MSCORE_INSTALL_SUFFIX@ -o "My Score.pdf" "My Score.mscz"
+.B \-o, \-\-export\-to <filename>
+Exports the currently opened file to the specified <filename>. The file type depends on the filename extension. This option switches to the "converter" mode and avoids any graphical interface. You can also add a filename before the \-o if you want to import and export files from the command line. For example mscore@MSCORE_INSTALL_SUFFIX@ \-o "My Score.pdf" "My Score.mscz"
 .TP
-.B \-r, --image-resolution <dpi>
+.B \-r, \-\-image\-resolution <dpi>
 Determines the output resolution for the output to "*.png" files in the converter mode. The default resolution is 300 dpi.
 .TP
-.B \-T, --trim-margin <margin>
+.B \-T, \-\-trim\-margin <margin>
 Trims exported PNG and SVG images to remove surrounding whitespace around the score. The specified number of pixels of whitespace will be added as a margin; use 0 for a tightly cropped image. For SVG, this option works only with single-page scores.
 .TP
-.B \-x, --gui-scaling <factor>
+.B \-x, \-\-gui\-scaling <factor>
 Scales the score display and other GUI elements by the specified factor, for use with high resolution displays.
 .TP
-.B \-S, --style <style>
+.B \-S, \-\-style <style>
 Loads a style file; useful when you convert with the \-o option
 .TP
-.B \-p, --plugin <name>
+.B \-p, \-\-plugin <name>
 Execute the named plugin
 .TP
-.B \--template-mode
+.B \-\-template\-mode
 Save template mode, no page size
 .TP
-.B \-F, --factory-settings
-Use only the standard built-in presets or "factory-settings" and delete preferences
+.B \-F, \-\-factory\-settings
+Use only the standard built-in presets or "factory settings" and delete preferences
 .TP
-.B \-R, --revert-settings
-Use only the standard built-in presets or "factory-settings", but do not delete preferences
+.B \-R, \-\-revert\-settings
+Use only the standard built-in presets or "factory settings", but do not delete preferences
 .TP
-.B \-i, --load-icons
+.B \-i, \-\-load\-icons
 Load icons from the file system. Useful if you want to edit the MuseScore icons and preview the changes
 .TP
-.B \-e, --experimental
+.B \-e, \-\-experimental
 Enable experimental features. (E.g. layers).
 .TP
-.B \-c, --config-folder <pathname>
+.B \-c, \-\-config\-folder <pathname>
 Set config path
 .TP
-.B \-t, --test-mode
+.B \-t, \-\-test\-mode
 Enable Test Mode
 .TP
-.B \-M, --midi-operations <file>
+.B \-M, \-\-midi\-operations <file>
 Specify MIDI import operations file
 .TP
-.B \-w, --no-webview
+.B \-w, \-\-no\-webview
 No web view in Start Center
 .TP
-.B \-P, --export-score-parts
-Used with -o .pdf, export score and parts
+.B \-P, \-\-export\-score\-parts
+Used with \-o .pdf, export score and parts
 
 .SH FILES
 Advanced users can find MuseScore's configuration files at:
