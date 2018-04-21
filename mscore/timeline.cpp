@@ -1019,7 +1019,7 @@ void Timeline::tempo_meta(Segment* seg, int* stagger, int pos)
       const std::vector<Element*> annotations = seg->annotations();
       for (Element* element : annotations) {
             if (element->isTempoText()) {
-                  Text* text = toText(element);
+                  TempoText* text = toTempoText(element);
                   qreal x = pos + (*stagger) * spacing;
                   if (addMetaValue(x, pos, text->plainText(), row, ElementType::TEMPO_TEXT, element, 0, seg->measure())) {
                         (*stagger)++;
