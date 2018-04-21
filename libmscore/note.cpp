@@ -63,7 +63,8 @@ namespace Ms {
 //    notehead groups
 //---------------------------------------------------------
 
-static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS)][int(NoteHead::Type::HEAD_TYPES)] = {
+//int(NoteHead::Group::HEAD_GROUPS) - 1: "-1" is needed to prevent building CUSTOM_GROUP noteheads set, since it is built by users and keep a specific set of existing noteheads
+static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS) - 1][int(NoteHead::Type::HEAD_TYPES)] = {
    // previous non-SMUFL data kept in comments for future reference
    {     // down stem
       { SymId::noteheadWhole,       SymId::noteheadHalf,          SymId::noteheadBlack,     SymId::noteheadDoubleWhole  },
@@ -137,6 +138,14 @@ static const char* noteHeadNames[] = {
     QT_TRANSLATE_NOOP("noteheadnames", "Alt. Brevis")
 };
 
+// same order as NoteHead::Type, partially extracted from master code to support custom noteheads in drumset file
+static const char* noteHeadTypeNames[] = {
+      "auto",
+      "whole",
+      "half",
+      "quarter",
+      "breve"
+      };
 //---------------------------------------------------------
 //   noteHead
 //---------------------------------------------------------
@@ -450,6 +459,16 @@ SymId Note::noteHead() const
       if (_headType != NoteHead::Type::HEAD_AUTO)
             ht = _headType;
 
+      if (_headGroup == NoteHead::Group::HEAD_CUSTOM) {
+            if (chord() && chord()->staff()) {
+                  if (chord()->staff()->isDrumStaff())
+                        return chord()->staff()->part()->instrument(chord()->tick())->drumset()->noteHeads(_pitch, ht);
+                  }
+            else {
+                  return _cachedNoteheadSym;
+                  }
+            }
+            
       SymId t = noteHead(up, _headGroup, ht);
       if (t == SymId::noSym) {
             qDebug("invalid notehead %d/%d", int(_headGroup), int(ht));
@@ -2722,6 +2741,26 @@ const char* NoteHead::groupToGroupName(NoteHead::Group group)
       return noteHeadNames[int(group)];
       }
 
+//---------------------------------------------------------
+//   type2name
+//---------------------------------------------------------
+const char* NoteHead::type2name(Type type)
+      {
+            return noteHeadTypeNames[int(type) + 1];
+      }
+      
+//---------------------------------------------------------
+//   name2type
+//---------------------------------------------------------
+
+NoteHead::Type NoteHead::name2type(const QString& s)
+      {
+      for (int i = 0; i <= int(NoteHead::Type::HEAD_TYPES); ++i) {
+            if (s.compare(QString(noteHeadTypeNames[i])) == 0)
+                  return NoteHead::Type(i - 1);
+      }
+      return NoteHead::Type::HEAD_AUTO;
+      }
 //---------------------------------------------------------
 //   subtypeName
 //---------------------------------------------------------

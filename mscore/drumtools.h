@@ -39,6 +39,7 @@ class DrumTools : public QDockWidget {
       Staff* staff;
       Palette* drumPalette;
       const Drumset* drumset;
+      QLabel* pitchName;
 
    private slots:
       void drumNoteSelected(int val);

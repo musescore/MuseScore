@@ -700,6 +700,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static void restoreGeometry(QWidget*const qw);
 
       void updateWindowTitle(Score* score);
+      static QMap<QString, QStringList>* bravuraRanges();
       };
 
 extern MuseScore* mscore;

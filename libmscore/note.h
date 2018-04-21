@@ -70,6 +70,7 @@ class NoteHead : public Symbol {
             HEAD_TI,
             HEAD_SOL,
             HEAD_BREVIS_ALT,
+            HEAD_CUSTOM,
             HEAD_GROUPS,
             HEAD_INVALID = -1
             };
@@ -92,6 +93,8 @@ class NoteHead : public Symbol {
       Group headGroup() const;
 
       static const char* groupToGroupName(Group group);
+      static const char* type2name(Type type);
+      static Type name2type(const QString&);
       };
 
 //---------------------------------------------------------
@@ -236,7 +239,9 @@ class Note : public Element {
       NoteEventList _playEvents;
       QVector<Spanner*> _spannerFor;
       QVector<Spanner*> _spannerBack;
-
+      
+      SymId _cachedNoteheadSym; // use in draw to avoid recomputing at every update
+      
       virtual QRectF drag(EditData*) override;
       void endDrag();
       void endEdit();
@@ -260,6 +265,8 @@ class Note : public Element {
       QPointF canvasPos() const;    ///< position in page coordinates
       void layout();
       void layout2();
+      //setter is used only in drumset tools to setup the notehead preview in the drumset editor and the palette
+      void setCachedNoteheadSym(SymId i) { _cachedNoteheadSym = i; };
       void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
       void setTrack(int val);
 

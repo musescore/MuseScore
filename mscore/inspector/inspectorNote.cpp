@@ -18,6 +18,7 @@
 #include "libmscore/stem.h"
 #include "libmscore/hook.h"
 #include "libmscore/tuplet.h"
+#include "libmscore/staff.h"
 #include "inspector.h"
 #include "inspectorNote.h"
 
@@ -169,7 +170,11 @@ void InspectorNote::setElement()
       hook->setEnabled(note->chord()->hook());
       beam->setEnabled(note->chord()->beam());
       tuplet->setEnabled(note->chord()->tuplet());
+      bool isNHGroupEnabled = note->chord()->staff()->isPitchedStaff();
+      n.noteHeadGroup->setEnabled(isNHGroupEnabled);
       InspectorBase::setElement();
+      //must be after InspectorBase::setElement(); cause the last sets resetButton enability
+      n.resetNoteHeadGroup->setEnabled(isNHGroupEnabled);
       bool nograce = !note->chord()->isGrace();
       s.leadingSpace->setEnabled(nograce);
       s.trailingSpace->setEnabled(nograce);

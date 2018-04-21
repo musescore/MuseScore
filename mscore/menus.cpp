@@ -521,7 +521,7 @@ Palette* MuseScore::newNoteHeadsPalette()
       sp->setGrid(33, 36);
       sp->setDrawGrid(true);
 
-      for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i) {
+      for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS) - 1; ++i) {
             SymId sym = Note::noteHead(0, NoteHead::Group(i), NoteHead::Type::HEAD_HALF);
             // HEAD_BREVIS_ALT shows up only for brevis value
             if (i == int(NoteHead::Group::HEAD_BREVIS_ALT) )
@@ -1399,6 +1399,36 @@ void MuseScore::addTempo()
       cs->select(tt, SelectType::SINGLE, 0);
       cs->endCmd();
       cv->startEdit(tt);
+      }
+
+QMap<QString, QStringList>* MuseScore::bravuraRanges()
+      {
+      static QMap<QString, QStringList> ranges;
+
+      if (ranges.empty()) {
+            QFile fi(":fonts/bravura/ranges.json");
+            if (!fi.open(QIODevice::ReadOnly))
+                  qDebug("ScoreFont: open ranges file <%s> failed", qPrintable(fi.fileName()));
+            QJsonParseError error;
+            QJsonObject o = QJsonDocument::fromJson(fi.readAll(), &error).object();
+            if (error.error != QJsonParseError::NoError)
+                  qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
+                     error.offset, qPrintable(error.errorString()));
+
+            for (auto s : o.keys()) {
+                  QJsonObject range = o.value(s).toObject();
+                  QString desc      = range.value("description").toString();
+                  QJsonArray glyphs = range.value("glyphs").toArray();
+                  if (glyphs.size() > 0) {
+                        QStringList glyphNames;
+                        for (QJsonValue g : glyphs)
+                              glyphNames.append(g.toString());
+                        ranges.insert(desc, glyphNames);
+                        }
+                  }
+            }
+      return &ranges;
+
       }
 }
 
