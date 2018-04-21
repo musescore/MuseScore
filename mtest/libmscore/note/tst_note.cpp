@@ -312,6 +312,7 @@ void TestNote::note()
       QCOMPARE(n->veloType(), Note::ValueType::OFFSET_VAL);
       delete n;
 
+      delete chord;
       }
 
 //---------------------------------------------------------
