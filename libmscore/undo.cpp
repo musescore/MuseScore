@@ -77,8 +77,6 @@
 #include "stafflines.h"
 #include "bracket.h"
 
-//      Q_LOGGING_CATEGORY(undoRedo, "undoRedo")
-
 namespace Ms {
 
 extern Measure* tick2measure(int tick);
@@ -1034,12 +1032,19 @@ void ChangeMeasureLen::flip(EditData*)
       // move EndBarLine and TimeSigAnnounce
       // to end of measure:
       //
-      int endTick = measure->tick() + len.ticks();
-      for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-            if (segment->segmentType() != SegmentType::EndBarLine
-               && segment->segmentType() != SegmentType::TimeSigAnnounce)
+
+      Segment* s = measure->first();
+      std::list<Segment*> sl;
+      for (; s;) {
+            Segment* ns = s->next();
+            if (!s->isEndBarLineType() && !s->isTimeSigAnnounceType()) {
+                  s = ns;
                   continue;
-            segment->setTick(endTick);
+                  }
+            s->setRtick(len.ticks());
+            sl.push_back(s);
+            measure->remove(s);
+            s = ns;
             }
       measure->setLen(len);
       measure->score()->fixTicks();
