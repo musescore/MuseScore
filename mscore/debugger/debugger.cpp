@@ -1272,7 +1272,7 @@ void RestView::setElement(Element* e)
 
       rb.sym->setValue(int(rest->sym()));
       rb.dotline->setValue(rest->getDotline());
-      rb.mmWidth->setValue(rest->mmWidth());
+      rb.mmWidth->setValue((rest->measure() && rest->measure()->isMMRest()) ? rest->mmWidth() : 0.0);
       rb.gap->setChecked(rest->isGap());
       }
 
