@@ -354,7 +354,11 @@ static QString addPositioningAttributes(Element const* const el, bool isSpanStar
       float relativeY = 0;
       float spatium = el->spatium();
 
-      if (SLine const* const span = dynamic_cast<SLine const* const>(el)) {
+      const SLine* span = nullptr;
+      if (el->isSLine())
+            span = static_cast<const SLine*>(el);
+
+      if (span && !span->spannerSegments().isEmpty()) {
             if (isSpanStart) {
                   const auto seg = span->spannerSegments().first();
                   const auto userOff = seg->userOff();
