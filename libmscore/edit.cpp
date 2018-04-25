@@ -2895,6 +2895,8 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
       int len   = f.ticks();
       int etick = tick + len;
 
+//      printf("time delete %d at %d, start %s\n", len, tick, startSegment->subTypeName());
+
       Segment* fs = m->first(CR_TYPE);
 
       for (int track = 0; track < _staves.size() * VOICES; ++track) {
@@ -2941,8 +2943,14 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
             }
       undoInsertTime(tick, -len);
       undo(new InsertTime(this, tick, -len));
-      for (Segment* s = startSegment->next(); s; s = s->next())
+
+      for (Segment* s = startSegment->next(); s; s = s->next()) {
+            if (s->isTimeSigType() || s->isKeySigType())
+                  continue;
+//            printf("   change segment %s tick %d -> %d\n", s->subTypeName(), s->tick(), s->tick() - len),
             s->undoChangeProperty(Pid::TICK, s->rtick() - len);
+            }
+
       undo(new ChangeMeasureLen(m, m->len() - f));
       }
 

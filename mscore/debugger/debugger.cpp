@@ -852,8 +852,9 @@ void SegmentView::setElement(Element* e)
       int tick = s->tick();
       TimeSigMap* sm = s->score()->sigmap();
 
-      int bar, beat, ticks;
-      sm->tickValues(tick, &bar, &beat, &ticks);
+      int bar = -1, beat = -1, ticks = -1;
+      if (tick >= 0)
+            sm->tickValues(tick, &bar, &beat, &ticks);
       sb.bar->setValue(bar);
       sb.beat->setValue(beat);
       sb.ticks->setValue(ticks);
