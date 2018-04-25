@@ -1229,6 +1229,23 @@ void ScoreView::resizeEvent(QResizeEvent* /*ev*/)
       {
       if (_magIdx != MagIdx::MAG_FREE)
             setMag(mscore->getMag(this));
+
+      // The score may need to be repositioned now.
+      // So figure out how far it needs to move in each direction...
+      int dx = 0, dy = 0;
+      constraintCanvas(&dx, &dy);
+
+      if (dx == 0 && dy == 0)
+            return;
+
+      // ...and adjust its position accordingly.
+      _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
+         _matrix.m22(), _matrix.m23(), _matrix.dx()+dx, _matrix.dy()+dy, _matrix.m33());
+      imatrix = _matrix.inverted();
+
+      scroll(dx, dy, QRect(0, 0, width(), height()));
+      emit viewRectChanged();
+      emit offsetChanged(_matrix.dx(), _matrix.dy());
       }
 
 //---------------------------------------------------------
@@ -2241,13 +2258,22 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
                                          lastPage->width() * mag(),
                                          lastPage->height() * mag());
             QRectF pagesRect = firstPageRect.unite(lastPageRect).translated(offsetPt);
-            qreal hmargin = this->width() * 0.75;
-            qreal vmargin = this->height() * 0.75;
-            pagesRect.adjust(-hmargin, -vmargin, hmargin, vmargin);
+            if (!preferences.limitScrollArea) {
+                  qreal hmargin = this->width() * 0.75;
+                  qreal vmargin = this->height() * 0.75;
+                  pagesRect.adjust(-hmargin, -vmargin, hmargin, vmargin);
+                  }
             QRectF toPagesRect = pagesRect.translated(dx, dy);
 
-            // move right
-            if (dx > 0) {
+            if (preferences.limitScrollArea && pagesRect.width() <= width()) {
+                  if (score()->layoutMode() == LayoutMode::LINE)
+                        // keep score fixed in place horizontally
+                        dx = 0;
+                  else
+                        // center horizontally on screen
+                        dx = (width() - pagesRect.width()) / 2 - pagesRect.left();
+                  }
+            else if (dx > 0) { // move right
                   if (toPagesRect.right() > rect.right() && toPagesRect.left() > rect.left()) {
                         if(pagesRect.width() <= rect.width()) {
                               dx = rect.right() - pagesRect.right();
@@ -2268,8 +2294,15 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
                         }
                   }
 
-            // move down
-            if (dy > 0) {
+            if (preferences.limitScrollArea && pagesRect.height() <= height()) {
+                  if (score()->layoutMode() == LayoutMode::LINE)
+                        // keep score fixed in place vertically
+                        dy = 0;
+                  else
+                        // center vertically on screen
+                        dy = (height() - pagesRect.height()) / 2 - pagesRect.top();
+                  }
+            else if (dy > 0) { // move down
                   if (toPagesRect.bottom() > rect.bottom() && toPagesRect.top() > rect.top()) {
                         if (pagesRect.height() <= rect.height()) {
                               dy = rect.bottom() - pagesRect.bottom();

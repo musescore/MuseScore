@@ -121,6 +121,7 @@ struct Preferences {
       int portMidiOutputLatencyMilliseconds;
 
       bool antialiasedDrawing;
+      bool limitScrollArea;
       SessionStart sessionStart;
       QString startScore;
       QString defaultStyleFile;
