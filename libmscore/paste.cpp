@@ -834,6 +834,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
             QPointF dragOffset;
             Fraction duration(1, 4);
             ElementType type = Element::readType(e, &dragOffset, &duration);
+            e.setPasteMode(true);
 
             QList<Element*> els;
             if (_selection.isSingle())
@@ -845,23 +846,22 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   Element* el = Element::create(type, this);
                   if (el) {
                         el->read(e);
-                        if (el) {
-                              for (Element* target : els) {
-                                    Element* nel = el->clone();
-                                    addRefresh(target->abbox());   // layout() ?!
-                                    EditData ddata(view);
-                                    ddata.view       = view;
-                                    ddata.element    = nel;
-                                    ddata.duration   = duration;
-                                    if (target->acceptDrop(ddata)) {
-                                          target->drop(ddata);
-                                          if (_selection.element())
-                                                addRefresh(_selection.element()->abbox());
-                                          }
+                        for (Element* target : els) {
+                              el->setTrack(target->track());
+                              Element* nel = el->clone();
+                              addRefresh(target->abbox());   // layout() ?!
+                              EditData ddata(view);
+                              ddata.view       = view;
+                              ddata.element    = nel;
+                              ddata.duration   = duration;
+                              if (target->acceptDrop(ddata)) {
+                                    target->drop(ddata);
+                                    if (_selection.element())
+                                          addRefresh(_selection.element()->abbox());
                                     }
                               }
-                              delete el;
                         }
+                  delete el;
                   }
             else
                   qDebug("cannot read type");
