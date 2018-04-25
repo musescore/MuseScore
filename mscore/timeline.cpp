@@ -1724,7 +1724,8 @@ void Timeline::drawSelection()
                   }
 
             int staffIdx;
-            Measure* measure = _score->tick2measure(element->tick());
+            int tick = element->tick();
+            Measure* measure = _score->tick2measure(tick);
             staffIdx = element->staffIdx();
             if (numToStaff(staffIdx) && !numToStaff(staffIdx)->show())
                   continue;
