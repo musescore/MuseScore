@@ -1040,6 +1040,40 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="0">
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="limitScrollArea">
+            <property name="toolTip">
+             <string>Limit the scroll area to the edges of the score</string>
+            </property>
+            <property name="whatsThis">
+             <string>If this is checked, scrolling will stop at the edge of the score.</string>
+            </property>
+            <property name="accessibleName">
+             <string>Limit scroll area to page borders</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>If this is checked, scrolling will stop at the edge of the score.</string>
+            </property>
+            <property name="text">
+             <string>Limit scroll area to page borders</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -4275,6 +4309,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>printShortcuts</tabstop>
   <tabstop>resetToDefault</tabstop>
   <tabstop>buttonBox</tabstop>
+  <tabstop>limitScrollArea</tabstop>
   <tabstop>drawAntialiased</tabstop>
   <tabstop>proximity</tabstop>
  </tabstops>
