@@ -144,6 +144,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_CANVAS_FG_WALLPAPER,                          Preference(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/paper5.png")).absoluteFilePath())},
             {PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING,               Preference(true)},
             {PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY,               Preference(6)},
+            {PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA,                Preference(false)},
             {PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION,            Preference(false)},
             {PREF_UI_APP_STARTUP_CHECKUPDATE,                      Preference(checkUpdateStartup)},
             {PREF_UI_APP_STARTUP_SHOWNAVIGATOR,                    Preference(false)},

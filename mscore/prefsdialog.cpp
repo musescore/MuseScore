@@ -352,6 +352,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
 
       alsaFragments->setValue(preferences.getInt(PREF_IO_ALSA_FRAGMENTS));
       drawAntialiased->setChecked(preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
+      limitScrollArea->setChecked(preferences.getBool(PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA));
       switch(preferences.sessionStart()) {
             case SessionStart::EMPTY:  emptySession->setChecked(true); break;
             case SessionStart::LAST:   lastSession->setChecked(true); break;
@@ -888,6 +889,7 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_UI_CANVAS_FG_WALLPAPER, fgWallpaper->text());
       preferences.setPreference(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING, drawAntialiased->isChecked());
       preferences.setPreference(PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY, proximity->value());
+      preferences.setPreference(PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA, limitScrollArea->isChecked());
       preferences.setPreference(PREF_UI_THEME_ICONWIDTH, iconWidth->value());
       preferences.setPreference(PREF_UI_THEME_ICONHEIGHT, iconHeight->value());
 

@@ -154,6 +154,7 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING              "ui/canvas/misc/antialiasedDrawing"
 #define PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY              "ui/canvas/misc/selectionProximity"
 #define PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION           "ui/canvas/scroll/verticalOrientation"
+#define PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA               "ui/canvas/scroll/limitScrollArea"
 #define PREF_UI_APP_STARTUP_CHECKUPDATE                     "ui/application/startup/checkUpdate"
 #define PREF_UI_APP_STARTUP_SHOWNAVIGATOR                   "ui/application/startup/showNavigator"
 #define PREF_UI_APP_STARTUP_SHOWPLAYPANEL                   "ui/application/startup/showPlayPanel"
