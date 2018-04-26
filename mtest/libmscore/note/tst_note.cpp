@@ -307,7 +307,8 @@ void TestNote::note()
       n = static_cast<Note*>(writeReadElement(note));
       QCOMPARE(n->veloType(), Note::ValueType::OFFSET_VAL);
       delete n;
-
+      
+      delete chord;
       }
 
 //---------------------------------------------------------
