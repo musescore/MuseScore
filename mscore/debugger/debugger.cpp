@@ -124,6 +124,9 @@ void ElementItem::init()
                   s = "Measure-" + no;
                   }
                   break;
+            case ElementType::SEGMENT:
+                  s = QString("Segment %1").arg(toSegment(el)->subTypeName());
+                  break;
             default:
                   s = el->name();
                   break;

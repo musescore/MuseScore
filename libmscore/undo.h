@@ -1165,10 +1165,11 @@ class LinkStaff : public UndoCommand {
 
    public:
       LinkStaff(Staff* _s1, Staff* _s2) : s1(_s1), s2(_s2) {}
-      virtual void undo(EditData*) override;
-      virtual void redo(EditData*) override;
+      virtual void undo(EditData*) override { s2->unlink(s1); } // s1 is removed
+      virtual void redo(EditData*) override { s1->linkTo(s2); } // s1 is added
       UNDO_NAME("LinkStaff")
       };
+
 
 //---------------------------------------------------------
 //   UnlinkStaff
@@ -1180,8 +1181,8 @@ class UnlinkStaff : public UndoCommand {
 
    public:
       UnlinkStaff(Staff* _s1, Staff* _s2) : s1(_s1), s2(_s2) {}
-      virtual void undo(EditData*) override;
-      virtual void redo(EditData*) override;
+      virtual void undo(EditData*) override { s2->linkTo(s1); } // s2 is added
+      virtual void redo(EditData*) override { s1->unlink(s2); } // s2 is removed
       UNDO_NAME("UnlinkStaff")
       };
 

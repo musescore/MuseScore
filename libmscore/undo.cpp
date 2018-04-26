@@ -2099,10 +2099,6 @@ void LinkUnlink::doUnlink()
             qWarning("nothing found to unlink");
       }
 
-void LinkStaff::redo(EditData*)   { s1->linkTo(s2); } // s1 is added
-void LinkStaff::undo(EditData*)   { s2->unlink(s1); } // s1 is removed
-void UnlinkStaff::redo(EditData*) { s1->unlink(s2); } // s2 is removed
-void UnlinkStaff::undo(EditData*) { s2->linkTo(s1); } // s2 is added
 
 //---------------------------------------------------------
 //   ChangeStartEndSpanner::flip

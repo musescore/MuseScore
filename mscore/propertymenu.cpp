@@ -558,7 +558,7 @@ void ScoreView::editBendProperties(Bend* bend)
       BendProperties bp(bend, 0);
       if (bp.exec()) {
             for (ScoreElement* b : bend->linkList())
-                  b->score()->undo(new ChangeBend(static_cast<Bend*>(b), bp.points()));
+                  b->score()->undo(new ChangeBend(toBend(b), bp.points()));
             }
       }
 

@@ -3164,4 +3164,15 @@ Shape Note::shape() const
       return shape;
       }
 
+//---------------------------------------------------------
+//   undoUnlink
+//---------------------------------------------------------
+
+void Note::undoUnlink()
+      {
+      Element::undoUnlink();
+      for (Element* e : _el)
+            e->undoUnlink();
+      }
+
 }
