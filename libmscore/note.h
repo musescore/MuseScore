@@ -278,6 +278,8 @@ class Note final : public Element {
       virtual Note* clone() const override  { return new Note(*this, false); }
       ElementType type() const override   { return ElementType::NOTE; }
 
+      virtual void undoUnlink() override;
+
       virtual qreal mag() const override;
 
       void layout();
