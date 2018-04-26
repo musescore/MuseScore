@@ -884,7 +884,7 @@ void Staff::linkTo(Staff* staff)
             }
       else {
             _linkedStaves->add(staff);
-            if (!staff->linkedStaves())
+            if (!staff->_linkedStaves)
                   staff->_linkedStaves = _linkedStaves;
             }
       }
@@ -937,8 +937,8 @@ bool Staff::isLinked(Staff* staff)
       if (staff == this || !_linkedStaves)
             return false;
 
-      for(Staff* s : _linkedStaves->staves()) {
-            if(s == staff)
+      for (Staff* s : _linkedStaves->staves()) {
+            if (s == staff)
                   return true;
             }
       return false;
