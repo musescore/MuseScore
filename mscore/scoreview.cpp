@@ -2763,6 +2763,9 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
       {
       if (this != mscore->currentScoreView())
             return;
+      // TODO: change icon, or add panning options
+      if (!mscore->panDuringPlayback())
+            return;
 
       if (score()->layoutMode() == LayoutMode::LINE) {
 
@@ -2797,6 +2800,13 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
             if (_continuousPanel->active())
                   marginLeft += _continuousPanel->width() * mag();
 
+            // this code implements "continuous" panning
+            // it could potentially be enabled via more panning options
+            //if (playBack && _cursor) {
+            //      // keep playback cursor pinned at 25%
+            //      xo = -curPosL * mag() + marginLeft + width() * 0.2;
+            //      }
+            //else
             if (round(curPosMagR) > round(width() - marginRight)) {
                   // focus in or beyond right margin
                   // pan to left margin in playback,
