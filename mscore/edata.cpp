@@ -146,10 +146,39 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                         const Note* n = toNote(e);
                         SymId symId = n->noteHead();
                         QString symName = Sym::id2userName(symId);
-                        writeData(xml, mag, n->mag(), symName, n);
+                        switch (n->noteType()) {
+                              case NoteType::NORMAL:
+                                    writeData(xml, mag, n->mag(), "noteNormal " + symName , n);
+                                    break;
+                              case NoteType::ACCIACCATURA:
+                                    writeData(xml, mag, n->mag(), "graceNoteAcciaccatura " + symName, n);
+                                    break;
+                              case NoteType::APPOGGIATURA:
+                                    writeData(xml, mag, n->mag(), "graceNoteAppoggiatura " + symName, n);
+                                    break;
+                              case NoteType::GRACE4:
+                                    writeData(xml, mag, n->mag(), "graceNote4 " + symName, n);
+                                    break;
+                              case NoteType::GRACE16:
+                                    writeData(xml, mag, n->mag(), "graceNote16 " + symName, n);
+                                    break;
+                              case NoteType::GRACE32:
+                                    writeData(xml, mag, n->mag(), "graceNote32 " + symName, n);
+                                    break;
+                              case NoteType::GRACE8_AFTER:
+                                    writeData(xml, mag, n->mag(), "graceNote8_After " + symName, n);
+                                    break;
+                              case NoteType::GRACE16_AFTER:
+                                    writeData(xml, mag, n->mag(), "graceNote16_After " + symName, n);
+                                    break;
+                              case NoteType::GRACE32_AFTER:
+                                    writeData(xml, mag, n->mag(), "graceNote32_After " + symName, n);
+                                    break;
+                              case NoteType::INVALID:
+                                    break;
+                              }
                         }
                         break;
-
                   case ElementType::ACCIDENTAL: {
                         const Accidental* a = toAccidental(e);
                         switch (a->accidentalType()) {
