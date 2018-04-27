@@ -447,6 +447,8 @@ Hairpin::Hairpin(Score* s)
       {
       _hairpinType           = HairpinType::CRESC_HAIRPIN;
       initSubStyle(SubStyleId::HAIRPIN);
+      resetProperty(Pid::BEGIN_TEXT_PLACE);
+
       _hairpinCircledTip     = false;
       _veloChange            = 0;
       _dynRange              = Dynamic::Range::PART;
@@ -670,6 +672,9 @@ QVariant Hairpin::propertyDefault(Pid id) const
             case Pid::BEGIN_TEXT:
             case Pid::CONTINUE_TEXT:
                   return QString("");
+
+            case Pid::BEGIN_TEXT_PLACE:
+                  return int(PlaceText::LEFT);
 
             default:
                   return TextLineBase::propertyDefault(id);
