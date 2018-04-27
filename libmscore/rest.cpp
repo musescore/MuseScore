@@ -59,7 +59,7 @@ Rest::Rest(const Rest& r, bool link)
    : ChordRest(r, link)
       {
       if (link) {
-            score()->undo(new Link(const_cast<Rest*>(&r), this));
+            score()->undo(new Link(this, const_cast<Rest*>(&r)));
             setAutoplace(true);
             }
       _gap     = r._gap;

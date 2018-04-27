@@ -303,7 +303,7 @@ void TestLinks::test4LinkedParts_94911()
       // we should have now 2 staves and 4 linked rests
       QVERIFY(score->staves().size() == 2);
       QVERIFY(nscore->staves().size() == 2);
-      QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 4);
+      QVERIFY(score->staves()[0]->links()->size() == 4);
       e = s->element(0);
       QVERIFY(e->type() == ElementType::REST);
       QVERIFY(e->links()->size() == 4);
@@ -325,7 +325,7 @@ void TestLinks::test4LinkedParts_94911()
       // we should have now 2 staves and *4* linked rest
       // no excerpt
       QVERIFY(score->staves().size() == 1);
-      QVERIFY(score->staves()[0]->linkedStaves() == nullptr);
+//      QVERIFY(score->staves()[0]->links() == nullptr);
       e = s->element(0);
       QVERIFY(e->isRest());
       QVERIFY(e->links() == nullptr);
@@ -336,7 +336,7 @@ void TestLinks::test4LinkedParts_94911()
       // we should have now 2 staves and 4 linked rests
       QCOMPARE(nscore->staves().size(), 2);
       QCOMPARE(score->staves().size(), 2);
-      QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 4);
+      QVERIFY(score->staves()[0]->links()->size() == 4);
       e = s->element(0);
       QVERIFY(e->type() == ElementType::REST);
       QVERIFY(e->links()->size() == 4);
@@ -350,7 +350,7 @@ void TestLinks::test4LinkedParts_94911()
       // we should have now 2 staves and *4* linked rest
       // no excerpt
       QVERIFY(score->staves().size() == 1);
-      QVERIFY(score->staves()[0]->linkedStaves() == nullptr);
+      QVERIFY(score->staves()[0]->links() == nullptr);
       e = s->element(0);
       QVERIFY(e->type() == ElementType::REST);
       QVERIFY(e->links() == nullptr);
@@ -421,7 +421,7 @@ void TestLinks::test5LinkedParts_94911()
       // we should have now 2 staves and 3 linked rests
       QCOMPARE(score->staves().size(), 2);
       QCOMPARE(nscore->staves().size(), 1);
-      QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 3);
+      QVERIFY(score->staves()[0]->links()->size() == 3);
       e = s->element(0);
       QVERIFY(e->type() == ElementType::REST);
       QVERIFY(e->links()->size() == 3);
@@ -434,7 +434,7 @@ void TestLinks::test5LinkedParts_94911()
       score->undoStack()->undo(&ed);
       // we should have now 1 staves and 2 linked rests
       QVERIFY(score->staves().size() == 1);
-      QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 2);
+      QVERIFY(score->staves()[0]->links()->size() == 2);
       e = s->element(0);
       QVERIFY(e->type() == ElementType::REST);
       QVERIFY(e->links()->size() == 2);
@@ -444,7 +444,7 @@ void TestLinks::test5LinkedParts_94911()
       score->undoStack()->redo(&ed);
       // we should have now 2 staves and 3 linked rests
       QVERIFY(score->staves().size() == 2);
-      QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 3);
+      QVERIFY(score->staves()[0]->links()->size() == 3);
       e = s->element(0);
       QVERIFY(e->type() == ElementType::REST);
       QVERIFY(e->links()->size() == 3);
@@ -453,7 +453,6 @@ void TestLinks::test5LinkedParts_94911()
       QVERIFY(e->links()->size() == 3);
       QVERIFY(score->excerpts().size() == 1);
       }
-
 
 QTEST_MAIN(TestLinks)
 #include "tst_links.moc"

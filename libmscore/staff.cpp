@@ -250,11 +250,13 @@ QString Staff::partName() const
 
 Staff::~Staff()
       {
+#if 0
       if (_linkedStaves) {
             _linkedStaves->remove(this);
             if (_linkedStaves->empty())
                   delete _linkedStaves;
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -551,9 +553,10 @@ void Staff::write(XmlWriter& xml) const
       {
       int idx = this->idx();
       xml.stag(QString("Staff id=\"%1\"").arg(idx + 1));
-      if (linkedStaves()) {
+      if (links()) {
             Score* s = masterScore();
-            for (Staff* staff : linkedStaves()->staves()) {
+            for (auto le : *links()) {
+                  Staff* staff = toStaff(le);
                   if ((staff->score() == s) && (staff != this))
                         xml.tag("linkedTo", staff->idx() + 1);
                   }
@@ -865,6 +868,7 @@ void Staff::setSlashStyle(int tick, bool val)
       staffType(tick)->setSlashStyle(val);
       }
 
+#if 0
 //---------------------------------------------------------
 //   linkTo
 //---------------------------------------------------------
@@ -925,24 +929,7 @@ void LinkedStaves::remove(Staff* staff)
       {
       _staves.removeOne(staff);
       }
-
-//---------------------------------------------------------
-//   isLinked
-///  return true if staff is different and
-///  linked to this staff
-//---------------------------------------------------------
-
-bool Staff::isLinked(Staff* staff)
-      {
-      if (staff == this || !_linkedStaves)
-            return false;
-
-      for (Staff* s : _linkedStaves->staves()) {
-            if (s == staff)
-                  return true;
-            }
-      return false;
-      }
+#endif
 
 //---------------------------------------------------------
 //   primaryStaff
@@ -954,11 +941,12 @@ bool Staff::isLinked(Staff* staff)
 
 bool Staff::primaryStaff() const
       {
-      if (!_linkedStaves)
+      if (!_links)
             return true;
       QList<Staff*> s;
       QList<Staff*> ss;
-      foreach(Staff* staff, _linkedStaves->staves()) {
+      for (auto e : *_links) {
+            Staff* staff = toStaff(e);
             if (staff->score() == score()) {
                   s.append(staff);
                   if (!staff->isTabStaff(0))
@@ -1214,8 +1202,11 @@ void Staff::insertTime(int tick, int len)
 QList<Staff*> Staff::staffList() const
       {
       QList<Staff*> staffList;
-      if (_linkedStaves)
-            staffList = _linkedStaves->staves();
+      if (_links) {
+            for (ScoreElement* e : *_links)
+                  staffList.append(toStaff(e));
+//            staffList = _linkedStaves->staves();
+            }
       else
             staffList.append(const_cast<Staff*>(this));
       return staffList;

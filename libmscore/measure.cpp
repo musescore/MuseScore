@@ -1101,10 +1101,10 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
       QList<int> sl;
       for (int staffIdx = sStaff; staffIdx < eStaff; ++staffIdx) {
             Staff* s = score()->staff(staffIdx);
-            if (s->linkedStaves()) {
+            if (s->links()) {
                   bool alreadyInList = false;
                   for (int idx : sl) {
-                        if (s->linkedStaves()->staves().contains(score()->staff(idx))) {
+                        if (s->links()->contains(score()->staff(idx))) {
                               alreadyInList = true;
                               break;
                               }
