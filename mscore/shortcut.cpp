@@ -2113,7 +2113,7 @@ Shortcut Shortcut::_sc[] = {
          "pan",
          QT_TRANSLATE_NOOP("action","Pan Score"),
          QT_TRANSLATE_NOOP("action","Toggle 'Pan Score'"),
-         QT_TRANSLATE_NOOP("action","Pan score during playback"),
+         QT_TRANSLATE_NOOP("action","Pan score automatically"),
          Icons::pan_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_SCORE | ShortcutFlags::A_CHECKABLE | ShortcutFlags::A_CHECKED
