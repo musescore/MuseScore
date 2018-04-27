@@ -559,7 +559,7 @@ Note::Note(const Note& n, bool link)
    : Element(n)
       {
       if (link)
-            score()->undo(new Link(const_cast<Note*>(&n), this));
+            score()->undo(new Link(this, const_cast<Note*>(&n)));
       _subchannel        = n._subchannel;
       _line              = n._line;
       _fret              = n._fret;
@@ -599,7 +599,7 @@ Note::Note(const Note& n, bool link)
             Element* ce = e->clone();
             add(ce);
             if (link)
-                  score()->undo(new Link(const_cast<Element*>(e), ce));
+                  score()->undo(new Link(ce, const_cast<Element*>(e)));
             }
 
       _playEvents = n._playEvents;
@@ -1363,7 +1363,7 @@ bool Note::readProperties(XmlReader& e)
                   if (id != -1 &&
                               // DISABLE if pasting into a staff with linked staves
                               // because the glissando is not properly cloned into the linked staves
-                              (!e.pasteMode() || !staff()->linkedStaves() || staff()->linkedStaves()->empty())) {
+                              (!e.pasteMode() || !staff()->links() || staff()->links()->empty())) {
                         Spanner* placeholder = new TextLine(score());
                         placeholder->setAnchor(Spanner::Anchor::NOTE);
                         placeholder->setEndElement(this);
@@ -1399,7 +1399,7 @@ bool Note::readProperties(XmlReader& e)
             sp->read(e);
             // DISABLE pasting of glissandi into staves with other lionked staves
             // because the glissando is not properly cloned into the linked staves
-            if (e.pasteMode() && staff()->linkedStaves() && !staff()->linkedStaves()->empty()) {
+            if (e.pasteMode() && staff()->links() && !staff()->links()->empty()) {
                   e.removeSpanner(sp);    // read() added the element to the XMLReader: remove it
                   delete sp;
                   }

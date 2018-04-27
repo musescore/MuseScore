@@ -222,7 +222,7 @@ Chord::Chord(const Chord& c, bool link)
    : ChordRest(c, link)
       {
       if (link)
-            score()->undo(new Link(const_cast<Chord*>(&c), this));
+            score()->undo(new Link(this, const_cast<Chord*>(&c)));
       _ledgerLines = 0;
 
       for (Note* onote : c._notes) {
@@ -265,12 +265,12 @@ Chord::Chord(const Chord& c, bool link)
             Arpeggio* a = new Arpeggio(*(c._arpeggio));
             add(a);
             if (link)
-                  score()->undo(new Link(const_cast<Arpeggio*>(c._arpeggio), a));
+                  score()->undo(new Link(a, const_cast<Arpeggio*>(c._arpeggio)));
             }
       if (c._tremolo) {
             Tremolo* t = new Tremolo(*(c._tremolo));
             if (link) {
-                  score()->undo(new Link(const_cast<Tremolo*>(c._tremolo), t));
+                  score()->undo(new Link(t, const_cast<Tremolo*>(c._tremolo)));
                   if (c._tremolo->twoNotes())
                         t->setChords(0, 0);
                   }

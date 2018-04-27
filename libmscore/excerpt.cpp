@@ -157,7 +157,10 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                   s->setPart(p);
                   s->setStaffType(0, staff->staffType(0));              // TODO
                   s->setDefaultClefType(staff->defaultClefType());
-                  score->undo(new LinkStaff(s, staff));
+                  // the order of staff - s matters as staff should be the first entry in the
+                  // created link list to make primaryStaff() work
+                  // TODO: change implementation, maybe create an explicit "primary" flag
+                  score->undo(new Link(s, staff));
                   p->staves()->append(s);
                   score->staves().append(s);
                   srcStaves.append(staff->idx());
@@ -169,13 +172,15 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
       if (excerpt->tracks().isEmpty()) {
             QMultiMap<int, int> tracks;
             for (Staff* s : score->staves()) {
-                  LinkedStaves* ls = s->linkedStaves();
+                  const LinkedElements* ls = s->links();
                   if (ls == 0)
                         continue;
-                  for (Staff* ps : ls->staves()) {
+                  for (auto le : *ls) {
+                        Staff* ps = toStaff(le);
                         if (ps->primaryStaff()) {
-                              for (int i = 0; i < VOICES; i++)
+                              for (int i = 0; i < VOICES; i++) {
                                     tracks.insert(ps->idx() * VOICES + i % VOICES, s->idx() * VOICES + i % VOICES);
+                                    }
                               break;
                               }
                         }
@@ -284,8 +289,9 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
       for (Staff* s : partScore->staves()) {
             Staff* staff = nullptr;
             // find staff in the main score
-            if (s->linkedStaves()) {
-                  for (Staff* s2 : s->linkedStaves()->staves()) {
+            if (s->links()) {
+                  for (auto le : *s->links()) {
+                        Staff* s2 = toStaff(le);
                         if ((s2->score() == this) && s2->primaryStaff()) {
                               staff = s2;
                               break;
@@ -315,7 +321,7 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
                               }
                         }
                   // unlink the staff
-                  undo(new UnlinkStaff(staff, s));
+                  undo(new Unlink(staff));
                   }
             }
       undo(new RemoveExcerpt(excerpt));
@@ -801,7 +807,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
       Score* score = srcStaff->score();
       TieMap tieMap;
 
-      score->undo(new LinkStaff(dstStaff, srcStaff));
+      score->undo(new Link(dstStaff, srcStaff));
 
       int srcStaffIdx = srcStaff->idx();
       int dstStaffIdx = dstStaff->idx();

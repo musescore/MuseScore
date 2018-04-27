@@ -1788,10 +1788,11 @@ void MasterScore::addExcerpt(Excerpt* ex)
       Score* score = ex->partScore();
 
       for (Staff* s : score->staves()) {
-            LinkedStaves* ls = s->linkedStaves();
+            const LinkedElements* ls = s->links();
             if (ls == 0)
                   continue;
-            for (Staff* ps : ls->staves()) {
+            for (auto le : *ls) {
+                  Staff* ps = toStaff(le);
                   if (ps->score() == this) {
                         ex->parts().append(ps->part());
                         break;
@@ -1801,10 +1802,11 @@ void MasterScore::addExcerpt(Excerpt* ex)
       if (ex->tracks().isEmpty()) {                         // SHOULDN'T HAPPEN, protected in the UI
             QMultiMap<int, int> tracks;
             for (Staff* s : score->staves()) {
-                  LinkedStaves* ls = s->linkedStaves();
+                  const LinkedElements* ls = s->links();
                   if (ls == 0)
                         continue;
-                  for (Staff* ps : ls->staves()) {
+                  for (auto le : *ls) {
+                        Staff* ps = toStaff(le);
                         if (ps->primaryStaff()) {
                               for (int i = 0; i < VOICES; i++)
                                     tracks.insert(ps->idx() * VOICES + i % VOICES, s->idx() * VOICES + i % VOICES);
@@ -2412,16 +2414,18 @@ void Score::cmdRemoveStaff(int staffIdx)
 
       // remove linked staff and measures in linked staves in excerpts
       // unlink staff in the same score
-      if (s->linkedStaves()) {
-            Staff* sameScoreLinkedStaff = nullptr;
-            auto staves = s->linkedStaves()->staves();
-            for (Staff* staff : staves) {
+
+      if (s->links()) {
+            Staff* sameScoreLinkedStaff = 0;
+            auto staves = s->links();
+            for (auto le : *staves) {
+                  Staff* staff = toStaff(le);
                   if (staff == s)
                         continue;
                   Score* lscore = staff->score();
                   if (lscore != this) {
                         lscore->undoRemoveStaff(staff);
-                        s->score()->undo(new UnlinkStaff(s, staff));
+                        s->score()->undo(new Unlink(staff));
                         if (staff->part()->nstaves() == 0) {
                               int pIndex    = lscore->staffIdx(staff->part());
                               lscore->undoRemovePart(staff->part(), pIndex);
@@ -2431,7 +2435,8 @@ void Score::cmdRemoveStaff(int staffIdx)
                        sameScoreLinkedStaff = staff;
                   }
             if (sameScoreLinkedStaff)
-                  s->score()->undo(new UnlinkStaff(sameScoreLinkedStaff, s)); // once should be enough
+//                  s->score()->undo(new Unlink(sameScoreLinkedStaff)); // once should be enough
+                  s->score()->undo(new Unlink(s)); // once should be enough
             }
       }
 
@@ -3531,10 +3536,10 @@ QList<int> Score::uniqueStaves() const
 
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             Staff* s = staff(staffIdx);
-            if (s->linkedStaves()) {
+            if (s->links()) {
                   bool alreadyInList = false;
                   for (int idx : sl) {
-                        if (s->linkedStaves()->staves().contains(staff(idx))) {
+                        if (s->links()->contains(staff(idx))) {
                               alreadyInList = true;
                               break;
                               }

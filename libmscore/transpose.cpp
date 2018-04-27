@@ -364,7 +364,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                   continue;
             bool alreadyThere = false;
             for (Staff* s2 : sl) {
-                  if (s2 == s || (s2->linkedStaves() && s2->linkedStaves()->staves().contains(s))) {
+                  if (s2 == s || (s2->links() && s2->links()->contains(s))) {
                         alreadyThere = true;
                         break;
                         }

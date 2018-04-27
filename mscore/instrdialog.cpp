@@ -485,8 +485,9 @@ void MuseScore::editInstrList()
                   masterScore->undo(new RemoveExcerpt(excerpt));
             else {
                   for (Staff* s : sl) {
-                        LinkedStaves* sll = s->linkedStaves();
-                        for (Staff* ss : sll->staves())
+                        const LinkedElements* sll = s->links();
+                        for (auto le : *sll) {
+                              Staff* ss = toStaff(le);
                               if (ss->primaryStaff()) {
                                     for (int i = s->idx() * VOICES; i < (s->idx() + 1) * VOICES; i++) {
                                           int strack = tr.key(i, -1);
@@ -496,6 +497,7 @@ void MuseScore::editInstrList()
                                                 tr.insert(ss->idx() + strack % VOICES, tr.value(strack, -1));
                                           }
                                     }
+                              }
                         }
                   }
             }

@@ -519,7 +519,7 @@ MasterScore* MuseScore::getNewFile()
                         Staff* staff = new Staff(score);
                         staff->setPart(part);
                         staff->init(tstaff);
-                        if (tstaff->linkedStaves() && !part->staves()->isEmpty()) {
+                        if (tstaff->links() && !part->staves()->isEmpty()) {
                               Staff* linkedStaff = part->staves()->back();
                               staff->linkTo(linkedStaff);
                               }
