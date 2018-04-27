@@ -1118,15 +1118,18 @@ class ChangeNoteEvent : public UndoCommand {
 //---------------------------------------------------------
 
 class LinkUnlink : public UndoCommand {
-      ScoreElement* e;
-      ScoreElement* le;
+      bool mustDelete  { false };
 
    protected:
-      void doLink();
-      void doUnlink();
+      LinkedElements* le;
+      ScoreElement* e;
+
+      void link();
+      void unlink();
 
    public:
-      LinkUnlink(ScoreElement* _e, ScoreElement* _le) : e(_e), le(_le) {}
+      LinkUnlink() {}
+      ~LinkUnlink();
       };
 
 //---------------------------------------------------------
@@ -1134,11 +1137,10 @@ class LinkUnlink : public UndoCommand {
 //---------------------------------------------------------
 
 class Unlink : public LinkUnlink {
-
    public:
-      Unlink(ScoreElement* _e) : LinkUnlink(_e, 0) {}
-      virtual void undo(EditData*) override { doLink(); }
-      virtual void redo(EditData*) override { doUnlink(); }
+      Unlink(ScoreElement*);
+      virtual void undo(EditData*) override { link(); }
+      virtual void redo(EditData*) override { unlink(); }
       UNDO_NAME("Unlink")
       };
 
@@ -1147,14 +1149,14 @@ class Unlink : public LinkUnlink {
 //---------------------------------------------------------
 
 class Link : public LinkUnlink {
-
    public:
-      Link(ScoreElement* e, ScoreElement* le) : LinkUnlink(le, e) {}
-      virtual void undo(EditData*) override { doUnlink(); }
-      virtual void redo(EditData*) override { doLink();   }
+      Link(ScoreElement*, ScoreElement*);
+      virtual void undo(EditData*) override { unlink(); }
+      virtual void redo(EditData*) override { link();   }
       UNDO_NAME("Link")
       };
 
+#if 0
 //---------------------------------------------------------
 //   LinkStaff
 //---------------------------------------------------------
@@ -1185,6 +1187,7 @@ class UnlinkStaff : public UndoCommand {
       virtual void redo(EditData*) override { s1->unlink(s2); } // s2 is removed
       UNDO_NAME("UnlinkStaff")
       };
+#endif
 
 //---------------------------------------------------------
 //   ChangeStartEndSpanner

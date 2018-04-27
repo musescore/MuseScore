@@ -2060,45 +2060,62 @@ void ChangeNoteEvent::flip(EditData*)
 //   LinkUnlink
 //---------------------------------------------------------
 
-void LinkUnlink::doLink()
+LinkUnlink::~LinkUnlink()
       {
-      Q_ASSERT(le);
-      e->linkTo(le);
+      if (le && mustDelete)
+            delete le;
       }
 
-void LinkUnlink::doUnlink()
+void LinkUnlink::link()
       {
-      // find appropriate target element to unlink
-      // use current le if valid; pick something else in link list if not but that shouldn't happen!
+      if (le->size() == 1)
+            le->front()->setLinks(le);
 
-      const LinkedElements* l = e->links();
-      if (l) {
-            // don't use current le if null or if it is no longer linked (shouldn't happen)
-            if (le && !l->contains(le)) {
-                  le = nullptr;
-                  qWarning("current le %p no longer linked", le);
-                  }
-            if (!le) {
-                  // shouldn't happen
-                  // find something other than current element (e) in link list, so we can link if asked to redo
-                  for (ScoreElement* ee : *l) {
-                        if (e != ee) {
-                              le = ee;
-                              break;
-                              }
-                        }
-                  qDebug("current le was null... we picked a new one le %p", le);
-                  }
+      le->append(e);
+      e->setLinks(le);
+      }
+
+void LinkUnlink::unlink()
+      {
+      Q_ASSERT(le->contains(e));
+      le->removeOne(e);
+      if (le->size() == 1) {
+            le->front()->setLinks(0);
+            mustDelete = true;
             }
-      else
-            qWarning("current element %p(%s) has no links", e, e->name());
 
-      if (e)
-            e->unlink();
-      else
-            qWarning("nothing found to unlink");
+      e->setLinks(0);
       }
 
+//---------------------------------------------------------
+//   Link
+//    link e1 to e2
+//---------------------------------------------------------
+
+Link::Link(ScoreElement* e1, ScoreElement* e2)
+      {
+      Q_ASSERT(e1->links() == 0);
+      le = e2->links();
+      if (!le) {
+            if (e1->isStaff())
+                  le = new LinkedElements(e1->score(), -1);
+            else
+                  le = new LinkedElements(e1->score());
+            le->push_back(e2);
+            }
+      e = e1;
+      }
+
+//---------------------------------------------------------
+//   Unlink
+//---------------------------------------------------------
+
+Unlink::Unlink(ScoreElement* _e)
+      {
+      e  = _e;
+      le = e->links();
+      Q_ASSERT(le);
+      }
 
 //---------------------------------------------------------
 //   ChangeStartEndSpanner::flip

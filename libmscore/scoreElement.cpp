@@ -398,28 +398,28 @@ void ScoreElement::reset()
 
 //---------------------------------------------------------
 //   linkTo
+//    link this to element
 //---------------------------------------------------------
 
 void ScoreElement::linkTo(ScoreElement* element)
       {
       Q_ASSERT(element != this);
-      if (!_links) {
-            if (element->links()) {
-                  _links = element->_links;
-                  Q_ASSERT(_links->contains(element));
-                  }
-            else {
-                  _links = new LinkedElements(score());
-                  _links->append(element);
-                  element->_links = _links;
-                  }
-            Q_ASSERT(!_links->contains(this));
-            _links->append(this);
+      Q_ASSERT(!_links);
+
+      if (element->links()) {
+            _links = element->_links;
+            Q_ASSERT(_links->contains(element));
             }
       else {
+            if (isStaff())
+                  _links = new LinkedElements(score(), -1); // dont use lid
+            else
+                  _links = new LinkedElements(score());
             _links->append(element);
             element->_links = _links;
             }
+      Q_ASSERT(!_links->contains(this));
+      _links->append(this);
       }
 
 //---------------------------------------------------------
@@ -428,25 +428,28 @@ void ScoreElement::linkTo(ScoreElement* element)
 
 void ScoreElement::unlink()
       {
-      if (_links) {
-            if (!_links->contains(this)) {
-                  qDebug("%s: links size %d, this %p score %p", name(), _links->size(), this, score());
-                  for (auto e : *_links)
-                        printf("   %s %p score %p\n", e->name(), e, e->score());
-                  qFatal("list does not contain 'this'");
-                  }
-            _links->removeOne(this);
+      Q_ASSERT(_links);
+      Q_ASSERT(_links->contains(this));
+      _links->removeOne(this);
 
-            // if link list is empty, remove list
-            if (_links->size() <= 1) {
-                  if (!_links->empty()) {         // abnormal case: only "this" is in list
-                        _links->front()->_links = 0;
-                        qDebug("one element left in list");
-                        }
-                  delete _links;
-                  }
-            _links = 0; // this element is not linked anymore
+      // if link list is empty, remove list
+      if (_links->size() <= 1) {
+            if (!_links->empty())
+                  _links->front()->_links = 0;
+            delete _links;
             }
+      _links = 0; // this element is not linked anymore
+      }
+
+//---------------------------------------------------------
+//   isLinked
+///  return true if se is different and
+///  linked to this element
+//---------------------------------------------------------
+
+bool ScoreElement::isLinked(ScoreElement* se)
+      {
+      return se != this && _links && _links->contains(se);
       }
 
 //---------------------------------------------------------
@@ -467,7 +470,7 @@ QList<ScoreElement*> ScoreElement::linkList() const
       {
       QList<ScoreElement*> el;
       if (_links)
-            el.append(*_links);
+            el = *_links;
       else
             el.append(const_cast<ScoreElement*>(this));
       return el;
@@ -485,7 +488,8 @@ LinkedElements::LinkedElements(Score* score)
 LinkedElements::LinkedElements(Score* score, int id)
       {
       _lid = id;
-      score->linkId(id);      // remember used id
+      if (_lid != -1)
+            score->linkId(id);      // remember used id
       }
 
 //---------------------------------------------------------
