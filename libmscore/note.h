@@ -293,6 +293,9 @@ class Note final : public Element {
       qreal tabHeadHeight(StaffType* tab = 0) const;
       QPointF stemDownNW() const;
       QPointF stemUpSE() const;
+      qreal bboxXShift() const;
+      qreal noteheadCenterX() const;
+      qreal headBBoxRightPos() const;
 
       NoteHead::Group headGroup() const   { return _headGroup; }
       NoteHead::Type headType() const     { return _headType;  }

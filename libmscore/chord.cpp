@@ -361,7 +361,7 @@ qreal Chord::stemPosX() const
       StaffType* st = staff() ? staff()->staffType(tick()) : 0;
       if (st && st->isTabStaff())
             return st->chordStemPosX(this) * spatium();
-      return _up ? noteHeadWidth() : 0.0;
+      return _up ? upNote()->headBBoxRightPos() + upNote()->bboxXShift() : 0.0;
       }
 
 //---------------------------------------------------------
@@ -378,7 +378,7 @@ QPointF Chord::stemPos() const
             return st->chordStemPos(this) * spatium() + p;
 
       if (_up) {
-            qreal nhw = _notes.size() == 1 ? downNote()->headWidth() : noteHeadWidth();
+            qreal nhw = _notes.size() == 1 ? downNote()->headBBoxRightPos() : noteHeadWidth();
             p.rx() += nhw;
             p.ry() += downNote()->pos().y();
             }
@@ -709,7 +709,9 @@ void Chord::addLedgerLines()
                   // check if note horiz. pos. is outside current range
                   // if more length on the right, increase range
 //                  note->layout();
-                  x = note->pos().x();
+
+                  //ledger lines need the leftmost point of the notehead with a respect of bbox
+                  x = note->pos().x() + note->bboxXShift();
                   if (x - extraLen < minX) {
                         minX  = x - extraLen;
                         // increase width of all lines between this one and the staff
@@ -1126,9 +1128,7 @@ qreal Chord::centerX() const
             return staff()->staffType(tick())->chordStemPosX(this) * spatium();
 
       const Note* note = up() ? upNote() : downNote();
-      qreal x = note->pos().x() + note->headWidth() * .5;
-      if (note->mirror())
-            x += note->headWidth() * (up() ? -1.0 : 1.0);
+      qreal x = note->pos().x() + note->noteheadCenterX();
       return x;
       }
 
@@ -1802,7 +1802,7 @@ void Chord::layoutPitched()
             note->layout();
 
             qreal x1 = note->pos().x() + chordX;
-            qreal x2 = x1 + note->headWidth();
+            qreal x2 = x1 + note->headBBoxRightPos();
             lll      = qMax(lll, -x1);
             rrr      = qMax(rrr, x2);
             // track amount of space due to notehead only
@@ -1836,10 +1836,10 @@ void Chord::layoutPitched()
                               if (sc->width() > sn->width()) {
                                     // chord with second?
                                     // account for noteheads further to right
-                                    qreal snEnd = sn->x() + sn->headWidth();
+                                    qreal snEnd = sn->x() + sn->headBBoxRightPos();
                                     qreal scEnd = snEnd;
                                     for (unsigned i = 0; i < sc->notes().size(); ++i)
-                                          scEnd = qMax(scEnd, sc->notes().at(i)->x() + sc->notes().at(i)->headWidth());
+                                          scEnd = qMax(scEnd, sc->notes().at(i)->x() + sc->notes().at(i)->headBBoxRightPos());
                                     overlap += scEnd - snEnd;
                                     }
                               else
@@ -3286,7 +3286,7 @@ void Chord::layoutArticulations()
                         else
                               y += _spatium;
                         if (_up)
-                              x = downNote()->headWidth() - stem()->width() * .5;
+                              x = downNote()->noteheadCenterX() - stem()->width() * .5;
                         else
                               x = stem()->width() * .5;
                         }
@@ -3313,7 +3313,7 @@ void Chord::layoutArticulations()
                         else
                               y -= _spatium;
                         if (_up)
-                              x = downNote()->headWidth() - stem()->width() * .5;
+                              x = downNote()->noteheadCenterX() - stem()->width() * .5;
                         else
                               x = stem()->width() * .5;
                         }
