@@ -26,6 +26,7 @@
 #include "libmscore/durationtype.h"
 #include "libmscore/sym.h"
 #include "libmscore/staff.h"
+#include "libmscore/bracket.h"
 
 //##  write out extended metadata about every painted symbol
 
@@ -134,6 +135,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                         writeData(xml, mag, a->mag(), symName, a);
                         }
                         break;
+
                   case Element::Type::CLEF: {
                         const Clef* c = static_cast<const Clef*>(e);
                         SymId symId = c->sym();
@@ -173,6 +175,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                               }
                         }
                         break;
+
                   case Element::Type::KEYSIG: {
                         const KeySig* k = static_cast<const KeySig*>(e);
                         QPointF p (k->pagePos());
@@ -368,6 +371,27 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                                     break;
                               }
 
+                        }
+                        break;
+                    
+                  case Element::Type::BRACKET: {
+                        const Bracket* b = static_cast<const Bracket*>(e);
+                        switch (b->bracketType()) {
+                              case BracketType::BRACE:
+                                    writeData(xml, mag, b->mag(), "brace", b);
+                                    break;
+                              case BracketType::NORMAL:
+                                    writeData(xml, mag, b->mag(), "bracket", b);
+                                    break;
+                              case BracketType::SQUARE:
+                                    writeData(xml, mag, b->mag(), "bracketSquare", b);
+                                    break;
+                              case BracketType::LINE:
+                                    writeData(xml, mag, b->mag(), "bracketLine", b);
+                                    break;
+                              default:
+                                    break;
+                              }
                         }
                         break;
 
