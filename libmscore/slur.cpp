@@ -622,7 +622,7 @@ void Slur::slurPosChord(SlurPos* sp)
             }
       Note* _startNote = stChord->downNote();
       Note* _endNote   = enChord->downNote();
-      qreal hw         = _startNote->headWidth();
+      qreal hw         = _startNote->bboxRightPos();
       qreal __up       = _up ? -1.0 : 1.0;
       qreal _spatium = spatium();
 
@@ -753,7 +753,7 @@ void Slur::slurPos(SlurPos* sp)
                   // place slur starting point at stem base point
                   pt = sc->stemPos() - sc->pagePos() + sc->stem()->p2();
                   if (useTablature)                   // in tabs, stems are centred on note:
-                        pt.rx() = hw1 * 0.5;          // skip half notehead to touch stem
+                        pt.rx() = hw1 * 0.5 + (note1 ? note1->bboxXShift() : 0.0);          // skip half notehead to touch stem, anatoly-os: incorrect. half notehead width is not always the stem position
                   sp->p1 += pt;
                   sp->p1 += QPointF(0.35 * _spatium, 0.25 * _spatium);  // clear the stem (x) and the notehead (y)
                   break;
@@ -783,7 +783,7 @@ void Slur::slurPos(SlurPos* sp)
             bool stemPos = false;   // p1 starts at chord stem side
 
             // default positions
-            xo = hw1 * .5;
+            xo = hw1 * .5 + (note1 ? note1->bboxXShift() : 0.0);
             if (note1)
                   yo = note1->pos().y();
             else if (_up)
@@ -879,7 +879,7 @@ void Slur::slurPos(SlurPos* sp)
             if (sa2 == SlurAnchor::NONE) {
 
                   // default positions
-                  xo = hw2 * .5;
+                  xo = hw2 * .5 + (note2 ? note2->bboxXShift() : 0.0);
                   if (note2)
                         yo = note2->pos().y();
                   else if (_up)

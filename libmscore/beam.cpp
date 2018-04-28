@@ -1909,7 +1909,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
             if (c->hook())
                   score()->undoRemoveElement(c->hook());
 
-            QPointF stemPos(c->stemPos());
+            QPointF stemPos(c->stemPosX() + c->pagePos().x(), c->stemPos().y());
             qreal x2   = stemPos.x() - _pagePos.x();
             qreal y1   = (x2 - x1) * slope + py1 + _pagePos.y();
             qreal y2   = stemPos.y();

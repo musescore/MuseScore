@@ -116,12 +116,12 @@ void ChordLine::layout()
             QPointF p(note->pos());
             // chordlines to the right of the note
             if (_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT)
-                  setPos(p.x() + note->headWidth() + _spatium * .2, p.y());
+                  setPos(p.x() + note->bboxRightPos() + _spatium * .2, p.y());
             // chordlines to the left of the note
             if (_chordLineType == ChordLineType::PLOP)
-                  setPos(p.x() + note->headWidth() * .25, p.y() - note->headHeight() * .75);
+                  setPos(p.x() + note->bboxRightPos() * .25, p.y() - note->headHeight() * .75);
             if (_chordLineType == ChordLineType::SCOOP) {
-                  qreal x = p.x() + (chord()->up() ? note->headWidth() * .25 : _spatium * -.2);
+                  qreal x = p.x() + (chord()->up() ? note->bboxRightPos() * .25 : _spatium * -.2);
                   setPos(x, p.y() + note->headHeight() * .75);
                   }
             }

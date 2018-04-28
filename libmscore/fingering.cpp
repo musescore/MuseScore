@@ -58,7 +58,7 @@ void Fingering::layout()
 
             qreal x = 0.0;
             qreal y = 0.0;
-            qreal headWidth = note()->headWidth();
+            qreal headWidth = note()->bboxRightPos();
             qreal headHeight = note()->headHeight();
             qreal fh = headHeight;        // TODO: fingering number height
 
