@@ -255,6 +255,15 @@ bool Shape::intersects(const QRectF& rr) const
       return false;
       }
 
+bool Shape::intersects(const Shape& s) const
+      {
+      for (const QRectF& r : s) {
+            if (intersects(r))
+                  return true;
+            }
+      return false;
+      }
+
 //---------------------------------------------------------
 //   paint
 //---------------------------------------------------------

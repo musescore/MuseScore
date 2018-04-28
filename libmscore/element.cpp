@@ -1849,13 +1849,15 @@ void Element::autoplaceSegmentElement(qreal minDistance)
                   Measure* nm = m->nextMeasure();
                   s1.add(nm->staffShape(si).translated(QPointF(m->width(), 0.0)));
                   }
-            qreal d = placeAbove() ? s2.minVerticalDistance(s1) : s1.minVerticalDistance(s2);
-            if (d > -minDistance) {
-                  qreal yd = d + minDistance;
-                  if (placeAbove())
-                        yd *= -1.0;
-                  rUserYoffset() = yd;
-                  s2.translateY(yd);
+            if (s1.intersects(s2)) {
+                  qreal d = placeAbove() ? s2.minVerticalDistance(s1) : s1.minVerticalDistance(s2);
+                  if (d > -minDistance) {
+                        qreal yd = d + minDistance;
+                        if (placeAbove())
+                              yd *= -1.0;
+                        rUserYoffset() = yd;
+                        s2.translateY(yd);
+                        }
                   }
             m->staffShape(si).add(s2);
             if (cnm) {
