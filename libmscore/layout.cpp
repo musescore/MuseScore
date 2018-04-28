@@ -600,7 +600,7 @@ qreal Score::layoutChords2(std::vector<Note*>& notes, bool up)
 
             // accumulate return value
             if (!mirror)
-                  maxWidth = qMax(maxWidth, note->headWidth());
+                  maxWidth = qMax(maxWidth, note->bboxRightPos());
 
             // prepare for next iteration
             lvisible = note->visible();
@@ -820,10 +820,8 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
                   ++nAcc;
                   }
 
-            qreal hw     = note->headWidth();   // actual head width, including note & chord mag
             Chord* chord = note->chord();
             bool _up     = chord->up();
-            qreal stemX  = chord->stemPosX();   // stem position for nominal notehead, but allowing for mag
 
             qreal overlapMirror;
             Stem* stem = chord->stem();
@@ -834,19 +832,14 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
             else
                   overlapMirror = 0.0;
 
-            qreal x;
-            if (note->mirror()) {
+            qreal x = 0.0;
+            if (note->mirror())
                   if (_up)
-                        x = stemX - overlapMirror;
+                        x = chord->stemPosX() - overlapMirror;
                   else
-                        x = stemX - hw + overlapMirror;
-                  }
-            else {
-                  if (_up)
-                        x = stemX - hw;
-                  else
-                        x = 0.0;
-                  }
+                        x = -note->headBodyWidth() + overlapMirror;
+            else if (_up)
+                  x = chord->stemPosX() - note->headBodyWidth();
 
             note->rypos()  = (note->line() + stepOffset) * stepDistance;
             note->rxpos()  = x;
@@ -860,14 +853,16 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
             else if (sx < lx)
                   lx = sx;
 
-            qreal xx = x + hw + chord->pos().x();
+            qreal xx = x + chord->stemPosX() + chord->pos().x();
 
             Direction dotPosition = note->userDotPosition();
             if (chord->dots()) {
                   if (chord->up())
                         upDotPosX = qMax(upDotPosX, xx);
-                  else
-                        downDotPosX = qMax(downDotPosX, xx);
+                  else {
+                        qreal noteheadShift = note->headBodyWidth();
+                        downDotPosX = qMax(downDotPosX, xx + noteheadShift);
+                        }
 
                   if (dotPosition == Direction::AUTO && nNotes > 1 && note->visible() && !note->dotsHidden()) {
                         // resolve dot conflicts

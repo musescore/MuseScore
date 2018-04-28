@@ -161,6 +161,7 @@ class Chord final : public ChordRest {
       virtual QPointF stemPos() const;          ///< page coordinates
       virtual QPointF stemPosBeam() const;      ///< page coordinates
       virtual qreal stemPosX() const;
+
       bool underBeam() const;
       Hook* hook() const                     { return _hook; }
 
