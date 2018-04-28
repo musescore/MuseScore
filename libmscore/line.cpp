@@ -583,7 +583,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                           // chord bbox() is unreliable, look at notes
                                           // this also allows us to more easily ignore ledger lines
                                           for (Note* n : toChord(cr)->notes())
-                                                maxRight = qMax(maxRight, cr->x() + n->x() + n->headWidth());
+                                                maxRight = qMax(maxRight, cr->x() + n->x() + n->bboxRightPos());
                                           }
                                     else {
                                           // rest - won't normally happen
