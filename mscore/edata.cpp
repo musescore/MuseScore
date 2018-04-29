@@ -28,6 +28,7 @@
 #include "libmscore/sym.h"
 #include "libmscore/staff.h"
 #include "libmscore/bracket.h"
+#include "libmscore/tuplet.h"
 
 //##  write out extended metadata about every painted symbol
 
@@ -58,6 +59,89 @@ static void writeData(XmlWriter& xml, qreal spatium, qreal scale, const QString&
          .arg(r.y(),      0, 'f', 3)
          .arg(r.width(),  0, 'f', 3)
          .arg(r.height(), 0, 'f', 3);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   writeTupletData
+//---------------------------------------------------------
+
+static void writeTupletData(XmlWriter& xml, qreal spatium, qreal scale, int num, Element* e)
+      {
+      qreal interline = 20.0;
+      if (e->staff()) {
+            interline *= (e->staff()->spatium(e->tick()) / e->score()->spatium());
+            scale     *= (e->score()->spatium() / e->staff()->spatium(e->tick()));
+      }
+      if (scale == 1.0)
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"bracketedTuplet%2\"").arg(interline).arg(num));
+      else
+            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"bracketedTuplet%3\"").arg(interline).arg(scale).arg(num));
+      QRectF rr(e->pageBoundingRect());
+      QRectF outerElement(rr.x() * spatium, rr.y() * spatium, rr.width() * spatium, rr.height() * spatium);
+      xml.putLevel();
+      xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+         .arg(outerElement.x(),      0, 'f', 3)
+         .arg(outerElement.y(),      0, 'f', 3)
+         .arg(outerElement.width(),  0, 'f', 3)
+         .arg(outerElement.height(), 0, 'f', 3);
+
+      Tuplet* t = toTuplet(e);
+
+      // Calculation for the left bracket
+
+      QPointF* bracketLeft = t->getLeftBracket();
+      QPointF* bracketRight = t->getRightBracket();
+
+      qreal widthInnerElement = bracketLeft[2].x() - bracketLeft[1].x();
+      qreal heightInnerElement = bracketLeft[0].y() - bracketLeft[1].y();
+
+      if (scale == 1.0)
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"tupletBracketStart\"").arg(interline));
+      else
+            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"tupletBracketStart\"").arg(interline).arg(scale));
+      QRectF innerBracketStart(rr.x() * spatium, (rr.y() - (bracketLeft[1].y() / 2)) * spatium, widthInnerElement * spatium, heightInnerElement * spatium);
+      xml.putLevel();
+      xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+         .arg(innerBracketStart.x(),      0, 'f', 3)
+         .arg(innerBracketStart.y(),      0, 'f', 3)
+         .arg(innerBracketStart.width(),  0, 'f', 3)
+         .arg(innerBracketStart.height(), 0, 'f', 3);
+      xml.etag();
+
+      // Calculation for the center text element
+
+      if (scale == 1.0)
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"tuplet%2\"").arg(interline).arg(num));
+      else
+            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"tuplet%3\"").arg(interline).arg(scale).arg(num));
+      QRectF centralBounds = t->getText()->pageBoundingRect();
+      QRectF tupletInfo(centralBounds.x() * spatium, centralBounds.y() * spatium, centralBounds.width() * spatium, centralBounds.height() * spatium);
+      xml.putLevel();
+      xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+         .arg(tupletInfo.x(),      0, 'f', 3)
+         .arg(tupletInfo.y(),      0, 'f', 3)
+         .arg(tupletInfo.width(),  0, 'f', 3)
+         .arg(tupletInfo.height(), 0, 'f', 3);
+      xml.etag();
+
+      // Calculation for the right bracket
+
+      widthInnerElement = bracketRight[1].x() - bracketRight[0].x();
+      heightInnerElement = bracketRight[2].y() - bracketRight[1].y();
+
+      if (scale == 1.0)
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"tupletBracketEnd\"").arg(interline));
+      else
+            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"tupletBracketEnd\"").arg(interline).arg(scale));
+      QRectF innerBracketEnd((rr.x() + rr.width() - widthInnerElement) * spatium, (rr.y() - (bracketRight[0].y() / 2)) * spatium, widthInnerElement * spatium, heightInnerElement * spatium);
+      xml.putLevel();
+      xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+         .arg(innerBracketEnd.x(),      0, 'f', 3)
+         .arg(innerBracketEnd.y(),      0, 'f', 3)
+         .arg(innerBracketEnd.width(),  0, 'f', 3)
+         .arg(innerBracketEnd.height(), 0, 'f', 3);
+      xml.etag();
       xml.etag();
       }
 
@@ -97,7 +181,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
       xml.stag("Annotations version=\"1.0\"");
       xml.tag("Source", "MuseScore 3.0");
 
-      for (const Element* e : pel) {
+      for (Element* e : pel) {
           if (e->isPage()) {
                   xml.stag("Page");
                   QUrl url = QUrl::fromLocalFile(imageName);
@@ -109,7 +193,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                   break;
                   }
             }
-      for (const Element* e : pel) {
+      for (Element* e : pel) {
             if (!e->visible())
                   continue;
             Staff* staff = e->staff();
@@ -120,6 +204,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                   case ElementType::NOTEDOT:
                         writeData(xml, mag, e->mag(), "augmentationDot", e);
                         break;
+
                   case ElementType::STEM:
                         writeData(xml, mag, e->mag() / smag, "stem", e);
                         break;
@@ -131,15 +216,15 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                   case ElementType::ARTICULATION: {
                         const Articulation* a = toArticulation(e);
                         SymId symId = a->symId();
-                        QString symName = Sym::id2userName(symId);
+                        QString symName = Sym::id2name(symId);
                         writeData(xml, mag, a->mag(), symName, a);
                         }
                         break;
-                    
+
                   case ElementType::CLEF: {
                         const Clef* c = toClef(e);
                         SymId symId = c->sym();
-                        QString symName = Sym::id2userName(symId);
+                        QString symName = Sym::id2name(symId);
                         writeData(xml, mag, c->symMag(), symName, c);   // hack symMag
                         }
                         break;
@@ -147,7 +232,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                   case ElementType::NOTE: {
                         const Note* n = toNote(e);
                         SymId symId = n->noteHead();
-                        QString symName = Sym::id2userName(symId);
+                        QString symName = Sym::id2name(symId);
                         switch (n->noteType()) {
                               case NoteType::NORMAL:
                                     writeData(xml, mag, n->mag(), "noteNormal " + symName , n);
@@ -181,7 +266,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                               }
                         }
                         break;
-                    
+
                   case ElementType::ACCIDENTAL: {
                         const Accidental* a = toAccidental(e);
                         switch (a->accidentalType()) {
@@ -205,7 +290,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                               }
                         }
                         break;
-                    
+
                   case ElementType::KEYSIG: {
                         const KeySig* k = toKeySig(e);
                         QPointF p (k->pagePos());
@@ -345,7 +430,6 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                               default:
                                     break;
                               }
-
                         }
                         break;
 
@@ -400,10 +484,35 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                               default:
                                     break;
                               }
-
                         }
                         break;
-                    
+
+                  case ElementType::TUPLET: {
+                        Tuplet* t = toTuplet(e);
+                        Fraction f = t->ratio();
+                        TupletNumberType _numberType = t->numberType();
+                        bool hasBracket = t->hasBracket();
+                        if (_numberType == TupletNumberType::SHOW_NUMBER) {
+                             QString s = QString("tuplet%1").arg(f.numerator());
+                             switch (f.numerator()) {
+                                   case 3:
+                                         if (hasBracket)
+                                               writeTupletData(xml, mag, t->mag(), 3, t);
+                                         else
+                                               writeData(xml, mag, t->mag(), s, t);
+                                         break;
+                                   case 6:
+                                         if (hasBracket)
+                                               writeTupletData(xml, mag, t->mag(), 6, t);
+                                         else
+                                               writeData(xml, mag, t->mag(), s, t);
+                                   default:
+                                         break;
+                                   }
+                             }
+                        }
+                        break;
+
                   case ElementType::BRACKET: {
                         const Bracket* b = toBracket(e);
                         switch (b->bracketType()) {
