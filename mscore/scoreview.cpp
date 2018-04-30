@@ -4078,6 +4078,9 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
       {
       if (this != mscore->currentScoreView())
             return;
+      // TODO: change icon, or add panning options
+      if (!mscore->panDuringPlayback())
+            return;
 
       if (score()->layoutMode() == LayoutMode::LINE) {
 
@@ -4093,9 +4096,15 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
             */
 
             qreal xo = 0.0;  // new x offset
-            // at one point, the code used _cursor->rect(), but this only works during note entry or playback
-            // see issue #33391
-            QRectF curPos = el->canvasBoundingRect();
+            QRectF curPos = playBack ? _cursor->rect() : el->canvasBoundingRect();
+            // keep current note in view as well if applicable (note input mode)
+            Element* current = nullptr;
+            if (noteEntryMode()) {
+                  current = score()->selection().cr();
+                  if (current && current != el)
+                        curPos |= current->canvasBoundingRect();
+                  }
+
             qreal curPosR = curPos.right();                    // Position on the canvas
             qreal curPosL = curPos.left();                     // Position on the canvas
             qreal curPosMagR = curPosR * mag() + xoffset(); // Position in the screen
@@ -4106,27 +4115,45 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
             if (_continuousPanel->active())
                   marginLeft += _continuousPanel->width() * mag();
 
+            // this code implements "continuous" panning
+            // it could potentially be enabled via more panning options
+            //if (playBack && _cursor) {
+            //      // keep playback cursor pinned at 25%
+            //      xo = -curPosL * mag() + marginLeft + width() * 0.2;
+            //      }
+            //else
             if (round(curPosMagR) > round(width() - marginRight)) {
-                  xo = -curPosL * mag() + marginLeft;
-
-                  // Keeps the score up to the right to avoid blank gap on the right.
-                  qreal scoreEnd = score()->pages().front()->width() * mag() + xo;
-                  if (scoreEnd < width())
-                        xo += width() - scoreEnd;
-
-                  setOffset(xo, yoffset());
-                  update();
+                  // focus in or beyond right margin
+                  // pan to left margin in playback,
+                  // most of the way left in note entry,
+                  // otherwise just enforce right margin
+                  if (playBack)
+                        xo = -curPosL * mag() + marginLeft;
+                  else if (noteEntryMode())
+                        xo = -curPosL * mag() + marginLeft + width() * 0.2;
+                  else
+                        xo = -curPosR * mag() + width() - marginRight;
                   }
             else if (round(curPosMagL) < round(marginLeft) ) {
-                  xo = -curPosR * mag() + width() - marginRight;
-
-                  // Bring back the score to the left to avoid blank gap on the left.
-                  if (xo > 10)
-                        xo = 10;
-
-                  setOffset(xo, yoffset());
-                  update();
+                  // focus in or beyond left margin
+                  // enforce left margin
+                  // (previously we moved canvas all the way right,
+                  // but this made sense only when navigating right-to-left)
+                  xo = -curPosL * mag() + marginLeft;
                   }
+            else {
+                  // focus is within margins, so do nothing
+                  return;
+                  }
+            // avoid empty space on either side of "page"
+            qreal scoreEnd = score()->pages().front()->width() * mag() + xo;
+            if (xo > 10)
+                  xo = 10;
+            else if (scoreEnd < width())
+                  xo += width() - scoreEnd;
+
+            setOffset(xo, yoffset());
+            update();
             return;
             }
 
@@ -4241,18 +4268,14 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack)
 
       // align to page borders if extends beyond
       Page* page = sys->page();
-      if (!MScore::verticalOrientation()) {
-            if (x < page->x() || r.width() >= page->width())
-                  x = page->x();
-            else if (r.width() < page->width() && r.width() + x > page->width() + page->x())
-                  x = (page->width() + page->x()) - r.width();
-                  }
-      else {
-            if (y < page->y() || r.height() >= page->height())
-                  y = page->y();
-            else if (r.height() < page->height() && r.height() + y > page->height() + page->y())
-                  y = (page->height() + page->y()) - r.height();
-            }
+      if (x < page->x() || r.width() >= page->width())
+            x = page->x();
+      else if (r.width() < page->width() && r.width() + x > page->width() + page->x())
+            x = (page->width() + page->x()) - r.width();
+      if (y < page->y() || r.height() >= page->height())
+            y = page->y();
+      else if (r.height() < page->height() && r.height() + y > page->height() + page->y())
+            y = (page->height() + page->y()) - r.height();
 
       // hack: don't update if we haven't changed the offset
       if (oldX == x && oldY == y)
