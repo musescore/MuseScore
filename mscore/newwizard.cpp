@@ -393,7 +393,7 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
       _tempo = new QDoubleSpinBox;
       _tempo->setAccessibleName(tr("Beats per minute"));
       _tempo->setRange(20.0, 400.0);
-      _tempo->setValue(100.0);
+      _tempo->setValue(120.0);
       _tempo->setDecimals(1);
       QHBoxLayout* l2 = new QHBoxLayout;
       l2->addWidget(bpm);
