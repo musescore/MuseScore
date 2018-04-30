@@ -501,15 +501,6 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                         }
                   }
             }
-      else {
-            if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
-                  QPointF staffOffset;
-                  if (system() && track() >= 0)
-                        staffOffset = QPointF(0.0, system()->staff(staffIdx())->y());
-                  setReadPos(readPos() + staffOffset);
-                  }
-            adjustReadPos();
-            }
       setbbox(path.boundingRect());
       }
 
@@ -563,15 +554,6 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                   else
                         rUserYoffset() += (gdist + spatium() * .5);
                   }
-            }
-      else {
-            if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
-                  QPointF staffOffset;
-                  if (system() && track() >= 0)
-                        staffOffset = QPointF(0.0, system()->staff(staffIdx())->y());
-                  setReadPos(readPos() + staffOffset);
-                  }
-            adjustReadPos();
             }
       setbbox(path.boundingRect());
       }

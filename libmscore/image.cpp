@@ -484,7 +484,6 @@ void Image::layout()
             }
 
       // in any case, adjust position relative to parent
-      adjustReadPos();
       setbbox(QRectF(QPointF(), size2pixel(_size)));
       }
 

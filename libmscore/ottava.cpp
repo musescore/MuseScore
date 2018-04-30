@@ -76,8 +76,6 @@ void OttavaSegment::layout()
                               rUserYoffset() = d + minDistance;
                         }
                   }
-            else
-                  adjustReadPos();
             }
       }
 

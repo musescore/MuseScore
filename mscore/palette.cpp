@@ -925,7 +925,6 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
       if (s) {
             s->setPos(0.0, 0.0);
             s->setUserOff(QPointF());
-            s->setReadPos(QPointF());
             }
 
       PaletteCell* cell = new PaletteCell;

@@ -115,7 +115,6 @@
           <Number>
             <text>3</text>
             </Number>
-          <offset x="0.659334" y="-3.16481"/>
           </Tuplet>
         <Chord>
           <Tuplet>1</Tuplet>
@@ -138,7 +137,6 @@
           <Number>
             <text>3</text>
             </Number>
-          <offset x="-1.05493" y="-1.71427"/>
           </Tuplet>
         <Chord>
           <Tuplet>2</Tuplet>
@@ -193,7 +191,6 @@
           <Number>
             <text>3</text>
             </Number>
-          <offset x="0.659334" y="-3.16481"/>
           </Tuplet>
         <Tuplet id="5">
           <Tuplet>4</Tuplet>
@@ -204,7 +201,6 @@
           <Number>
             <text>3</text>
             </Number>
-          <offset x="-1.05493" y="-1.71427"/>
           </Tuplet>
         <Tuplet id="6">
           <Tuplet>5</Tuplet>

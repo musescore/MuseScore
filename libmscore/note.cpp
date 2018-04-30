@@ -1973,7 +1973,6 @@ void Note::layout2()
       // so that the results are available there
 
       if (staff()->isTabStaff(chord()->tick())) {
-            adjustReadPos();
             StaffType* tab = staff()->staffType(tick());
             qreal mags = magS();
             bool paren = false;
@@ -2013,7 +2012,6 @@ void Note::layout2()
             qreal xx = x + d;
             for (NoteDot* dot : _dots) {
                   dot->rxpos() = xx;
-                  dot->adjustReadPos();
                   xx += dd;
                   }
             }
@@ -2026,7 +2024,7 @@ void Note::layout2()
             if (e->isSymbol()) {
                   qreal w = headWidth();
                   Symbol* sym = toSymbol(e);
-                  QPointF rp = e->readPos();
+//                  QPointF rp = e->readPos();
                   e->layout();
                   if (sym->sym() == SymId::noteheadParenthesisRight) {
                         if (staff()->isTabStaff(chord()->tick())) {
@@ -2038,14 +2036,11 @@ void Note::layout2()
                   else if (sym->sym() == SymId::noteheadParenthesisLeft) {
                         e->rxpos() -= symWidth(SymId::noteheadParenthesisLeft);
                         }
-                  if (sym->sym() == SymId::noteheadParenthesisLeft || sym->sym() == SymId::noteheadParenthesisRight) {
-                        // adjustReadPos() was called too early in layout(), adjust:
-                        if (!rp.isNull()) {
+/*                  if (sym->sym() == SymId::noteheadParenthesisLeft || sym->sym() == SymId::noteheadParenthesisRight) {
+                        if (!rp.isNull())
                               e->setUserOff(QPointF());
-                              e->setReadPos(rp);
-                              e->adjustReadPos();
-                              }
                         }
+ */
                   }
             else
                   e->layout();

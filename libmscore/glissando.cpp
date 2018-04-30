@@ -54,7 +54,6 @@ void GlissandoSegment::layout()
       QRectF r = QRectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
       qreal lw = spatium() * glissando()->lineWidth().val() * .5;
       setbbox(r.adjusted(-lw, -lw, lw, lw));
-      adjustReadPos();
       }
 
 //---------------------------------------------------------
@@ -338,7 +337,6 @@ void Glissando::layout()
             }
       SLine::layout();
       setPos(0.0, 0.0);
-      adjustReadPos();
 
       Note*       anchor1     = toNote(startElement());
       Note*       anchor2     = toNote(endElement());

@@ -325,16 +325,6 @@ Score::~Score()
       }
 
 //---------------------------------------------------------
-//   elementAdjustReadPos
-//---------------------------------------------------------
-
-static void elementAdjustReadPos(void*, Element* e)
-      {
-      if (e->isMovable())
-            e->adjustReadPos();
-      }
-
-//---------------------------------------------------------
 //   addMeasure
 //---------------------------------------------------------
 
@@ -1857,7 +1847,6 @@ MasterScore* MasterScore::clone()
 
       score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
-      score->scanElements(0, elementAdjustReadPos);  //??
       return score;
       }
 

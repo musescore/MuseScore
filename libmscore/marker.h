@@ -67,7 +67,6 @@ class Marker final : public TextBase {
 
       virtual void styleChanged() override;
       virtual bool systemFlag() const override  { return true;        }
-      virtual void adjustReadPos() override;
 
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;

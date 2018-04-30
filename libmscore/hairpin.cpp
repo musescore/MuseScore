@@ -250,8 +250,6 @@ void HairpinSegment::layout()
                         }
                   rUserYoffset() = ymax - pos().y();
                   }
-            else
-                  adjustReadPos();
             }
       }
 

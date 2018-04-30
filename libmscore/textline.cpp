@@ -58,8 +58,6 @@ void TextLineSegment::layout()
                               rUserYoffset() = d + minDistance;
                         }
                   }
-            else
-                  adjustReadPos();
             }
       }
 

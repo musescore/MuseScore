@@ -374,8 +374,6 @@ void FretDiagram::layout()
       bbox().setRect(x, y, w, h);
 
       setPos(-_spatium, -h - styleP(Sid::fretY) + _spatium );
-      if (!autoplace())
-            adjustReadPos();
 
       if (_harmony)
             _harmony->layout();
