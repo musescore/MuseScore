@@ -47,8 +47,6 @@ void LetRingSegment::layout()
                               rUserYoffset() = -(d + minDistance);
                         }
                   }
-            else
-                  adjustReadPos();
             }
       }
 

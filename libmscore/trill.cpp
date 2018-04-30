@@ -134,7 +134,6 @@ void TrillSegment::layout()
                   a->setMag(a->mag() * .6);
                   qreal _spatium = spatium();
                   a->setPos(_spatium * 1.3, -2.2 * _spatium);
-                  a->adjustReadPos();
                   a->setParent(this);
                   }
             switch (trill()->trillType()) {
@@ -174,8 +173,6 @@ void TrillSegment::layout()
                               rUserYoffset() = d + minDistance;
                         }
                   }
-            else
-                  adjustReadPos();
             }
       }
 

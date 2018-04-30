@@ -184,7 +184,6 @@ void Dynamic::layout()
             }
       else
             setPos(QPointF());      // for palette
-      adjustReadPos();
       }
 
 //-------------------------------------------------------------------

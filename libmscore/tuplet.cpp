@@ -695,8 +695,6 @@ void Tuplet::write(XmlWriter& xml) const
             _number->writeProperties(xml);
             xml.etag();
             }
-      if (!userOff().isNull())
-            xml.tag("offset", userOff() / spatium());
       xml.etag();
       }
 

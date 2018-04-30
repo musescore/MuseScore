@@ -38,8 +38,6 @@ void VoltaSegment::layout()
             if (d > -minDistance)
                   rUserYoffset() = -d - minDistance;
             }
-      else
-            adjustReadPos();
       }
 
 //---------------------------------------------------------

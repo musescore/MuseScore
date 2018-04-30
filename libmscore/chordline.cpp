@@ -127,7 +127,6 @@ void ChordLine::layout()
             }
       else
             setPos(0.0, 0.0);
-      adjustReadPos();
       QRectF r(path.boundingRect());
       int x1, y1, width, height = 0;
 

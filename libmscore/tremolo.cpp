@@ -231,7 +231,6 @@ void Tremolo::layout()
 
             setbbox(path.boundingRect());
             setPos(x, y);
-            adjustReadPos();
             return;
             }
       y += (h - bbox().height()) * .5;
@@ -342,7 +341,6 @@ void Tremolo::layout()
 
       setbbox(path.boundingRect());
       setPos(x, y + beamYOffset);
-      adjustReadPos();
       }
 
 //---------------------------------------------------------
