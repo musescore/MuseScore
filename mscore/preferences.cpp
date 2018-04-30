@@ -126,6 +126,7 @@ void Preferences::init()
       portMidiOutputLatencyMilliseconds = 0;
 
       antialiasedDrawing       = true;
+      limitScrollArea          = false;
       sessionStart             = SessionStart::SCORE;
       startScore               = ":/data/My_First_Score.mscz";
       defaultStyleFile         = "";
@@ -268,6 +269,7 @@ void Preferences::write()
       s.setValue("layoutBreakColor",   MScore::layoutBreakColor.name(QColor::NameFormat::HexArgb));
       s.setValue("frameMarginColor",   MScore::frameMarginColor.name(QColor::NameFormat::HexArgb));
       s.setValue("antialiasedDrawing", antialiasedDrawing);
+      s.setValue("limitScrollArea",    limitScrollArea);
       switch(sessionStart) {
             case SessionStart::EMPTY:  s.setValue("sessionStart", "empty"); break;
             case SessionStart::LAST:   s.setValue("sessionStart", "last"); break;
@@ -436,6 +438,7 @@ void Preferences::read()
       MScore::layoutBreakColor   = readColor("layoutBreakColor", MScore::layoutBreakColor);
       MScore::frameMarginColor   = readColor("frameMarginColor", MScore::frameMarginColor);
       antialiasedDrawing      = s.value("antialiasedDrawing", antialiasedDrawing).toBool();
+      limitScrollArea         = s.value("limitScrollArea", limitScrollArea).toBool();
 
       defaultStyleFile         = s.value("defaultStyle", defaultStyleFile).toString();
 
@@ -910,6 +913,7 @@ void PreferenceDialog::updateValues()
 
       alsaFragments->setValue(prefs.alsaFragments);
       drawAntialiased->setChecked(prefs.antialiasedDrawing);
+      limitScrollArea->setChecked(prefs.limitScrollArea);
       switch(prefs.sessionStart) {
             case SessionStart::EMPTY:  emptySession->setChecked(true); break;
             case SessionStart::LAST:   lastSession->setChecked(true); break;
@@ -1393,6 +1397,7 @@ void PreferenceDialog::apply()
       prefs.showStartcenter    = showStartcenter->isChecked();
 
       prefs.antialiasedDrawing = drawAntialiased->isChecked();
+      prefs.limitScrollArea    = limitScrollArea->isChecked();
 
       prefs.useJackTransport   = jackDriver->isChecked() && useJackTransport->isChecked();
       prefs.jackTimebaseMaster = becomeTimebaseMaster->isChecked();
