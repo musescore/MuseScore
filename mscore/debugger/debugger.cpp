@@ -588,7 +588,7 @@ void Debugger::itemClicked(QTreeWidgetItem* i, int)
 
 void Debugger::updateElement(Element* el)
       {
-      if (el == 0 || !isVisible())
+      if (el == 0 || !isVisible() || !el->score())
             return;
 
       if (cs != el->score())
@@ -1806,8 +1806,6 @@ void ShowElementBase::setElement(Element* e)
       eb.cposy->setValue(e->pagePos().y());
       eb.offsetx->setValue(e->userOff().x());
       eb.offsety->setValue(e->userOff().y());
-      eb.readPosX->setValue(e->readPos().x());
-      eb.readPosY->setValue(e->readPos().y());
       eb.autoplace->setChecked(e->autoplace());
       eb.placement->setCurrentIndex(int(e->placement()));
 

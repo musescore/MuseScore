@@ -397,13 +397,6 @@ void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             }
 
       setbbox(bbox);
-      if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
-            QPointF staffOffset;
-            if (system() && track() >= 0)
-                  staffOffset = QPointF(0.0, system()->staff(staffIdx())->y());
-            setReadPos(readPos() + staffOffset);
-            }
-      adjustReadPos();
       }
 
 //---------------------------------------------------------

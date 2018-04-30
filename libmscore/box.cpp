@@ -470,7 +470,6 @@ void HBox::layout()
             bbox().setRect(0.0, 0.0, point(boxWidth()), system()->height());
             }
       Box::layout();
-      adjustReadPos();
       }
 
 //---------------------------------------------------------

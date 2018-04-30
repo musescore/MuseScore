@@ -105,7 +105,6 @@ void Stem::layout()
       // compute bounding rectangle
       QRectF r(line.p1(), line.p2());
       setbbox(r.normalized().adjusted(-lw5, -lw5, lw5, lw5));
-      adjustReadPos();  // does not work if stem is layouted twice
       }
 
 //---------------------------------------------------------

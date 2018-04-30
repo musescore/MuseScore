@@ -47,8 +47,6 @@ void PalmMuteSegment::layout()
                               rUserYoffset() = -(d + minDistance);
                         }
                   }
-            else
-                  adjustReadPos();
             }
       }
 

@@ -3130,7 +3130,6 @@ void Measure::stretchMeasure(qreal targetWidth)
                               // center full measure rest
                               //
                               e->rxpos() = (x2 - x1 - e->width()) * .5 + x1 - s.x() - e->bbox().x();
-                              e->adjustReadPos();
                               s.createShape(staffIdx);  // DEBUG
                               }
                         }
@@ -3146,10 +3145,7 @@ void Measure::stretchMeasure(qreal targetWidth)
                         e->rypos() = 0.0;
                         e->rxpos() = 0.0;
 //                        e->rxpos() = s.isEndBarLineType() ? s.width() * .5 : 0.0;
-                        e->adjustReadPos();
                         }
-                  else
-                        e->adjustReadPos();
                   }
             }
       }

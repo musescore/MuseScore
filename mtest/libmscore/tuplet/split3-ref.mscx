@@ -115,7 +115,6 @@
           <Number>
             <text>3</text>
             </Number>
-          <offset x="0.3956" y="-1.84614"/>
           </Tuplet>
         <Chord>
           <Tuplet>1</Tuplet>
@@ -149,7 +148,6 @@
           <Number>
             <text>3</text>
             </Number>
-          <offset x="0.3956" y="-1.84614"/>
           </Tuplet>
         <Chord>
           <Tuplet>2</Tuplet>

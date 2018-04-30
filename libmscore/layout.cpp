@@ -850,10 +850,6 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
 
             note->rypos()  = (note->line() + stepOffset) * stepDistance;
             note->rxpos()  = x;
-            // we need to do this now
-            // or else note pos / readPos / userOff will be out of sync
-            // and we rely on note->x() throughout the layout process
-            note->adjustReadPos();
 
             // find leftmost non-mirrored note to set as X origin for accidental layout
             // a mirrored note that extends to left of segment X origin
@@ -1099,7 +1095,6 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
             Note* note = e.note;
             qreal x    = e.x + lx - (note->x() + note->chord()->x());
             note->accidental()->setPos(x, 0);
-            note->accidental()->adjustReadPos();
             }
       }
 
@@ -1414,7 +1409,6 @@ static void checkDivider(bool left, System* s, qreal yOffset)
                   divider->rxpos() =  s->score()->styleD(Sid::pagePrintableWidth) * DPI - divider->width();
                   divider->rxpos() += s->score()->styleD(Sid::dividerRightX) * SPATIUM20;
                   }
-            divider->adjustReadPos();
             }
       else if (divider) {
             if (divider->generated()) {

@@ -1343,7 +1343,6 @@ void TextBase::layout()
 
       setPos(o);
       layout1();
-      adjustReadPos();
       }
 
 //---------------------------------------------------------

@@ -239,7 +239,6 @@ bool Lyrics::isMelisma() const
 void Lyrics::layout()
       {
       layout1();
-      adjustReadPos();
       }
 
 //---------------------------------------------------------
@@ -890,7 +889,6 @@ void LyricsLineSegment::layout()
       QRectF r = QRectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
       qreal lw = spatium() * lyricsLine()->lineWidth().val() * HALF;
       setbbox(r.adjusted(-lw, -lw, lw, lw));
-      adjustReadPos();
       }
 
 //---------------------------------------------------------
@@ -917,33 +915,5 @@ void LyricsLineSegment::draw(QPainter* painter) const
             }
       }
 
-#if 0
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid Lyrics::getPropertyStyle(Pid id) const
-      {
-      switch (id) {
-            case Pid::PLACEMENT:
-                  return Sid::lyricsPlacement;
-            case Pid::FONT_FACE:
-                  return isEven() ? Sid::lyricsEvenFontFace : Sid::lyricsOddFontFace;
-            case Pid::FONT_SIZE:
-                  return isEven() ? Sid::lyricsEvenFontSize : Sid::lyricsOddFontSize;
-            case Pid::FONT_BOLD:
-                  return isEven() ? Sid::lyricsEvenFontBold : Sid::lyricsOddFontBold;
-            case Pid::FONT_ITALIC:
-                  return isEven() ? Sid::lyricsEvenFontItalic : Sid::lyricsOddFontItalic;
-            case Pid::FONT_UNDERLINE:
-                  return isEven() ? Sid::lyricsEvenFontUnderline : Sid::lyricsOddFontUnderline;
-            case Pid::ALIGN:
-                  return isEven() ? Sid::lyricsEvenAlign : Sid::lyricsOddAlign;
-            default:
-                  break;
-            }
-      return Sid::NOSTYLE;
-      }
-#endif
 }
 

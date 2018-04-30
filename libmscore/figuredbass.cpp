@@ -1101,7 +1101,6 @@ void FiguredBass::layout()
                   addbbox(item->bbox().translated(item->pos()));
                   }
             }
-      adjustReadPos();
       }
 
 //---------------------------------------------------------

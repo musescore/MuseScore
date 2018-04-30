@@ -1056,16 +1056,6 @@ void Harmony::layout()
 
       setPos(xx, yy);
 
-      if (!readPos().isNull()) {
-            // version 114 is measure based
-            // rebase to segment
-            if (score()->mscVersion() == 114) {
-                  setReadPos(readPos() - parent()->pos());
-                  }
-            setUserOff(readPos() - ipos());
-            setReadPos(QPointF());
-            }
-
       if (parent()->isFretDiagram() && parent()->parent()->isSegment()) {
             qDebug("Harmony %s with fret diagram as parent and segment as grandparent", qPrintable(_textName));
 //            MStaff* mstaff = toSegment(parent()->parent())->measure()->mstaff(staffIdx());

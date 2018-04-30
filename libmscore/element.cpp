@@ -103,7 +103,7 @@ namespace Ms {
 void Element::spatiumChanged(qreal oldValue, qreal newValue)
       {
       _userOff *= (newValue / oldValue);
-      _readPos *= (newValue / oldValue);
+//      _readPos *= (newValue / oldValue);
       }
 
 //---------------------------------------------------------
@@ -170,7 +170,7 @@ Element::Element(const Element& e)
       _mag        = e._mag;
       _pos        = e._pos;
       _userOff    = e._userOff;
-      _readPos    = e._readPos;
+//      _readPos    = e._readPos;
       _bbox       = e._bbox;
       _tag        = e._tag;
       _z          = e._z;
@@ -204,18 +204,6 @@ Element* Element::linkedClone()
       e->setAutoplace(true);
       score()->undo(new Link(e, this));
       return e;
-      }
-
-//---------------------------------------------------------
-//   adjustReadPos
-//---------------------------------------------------------
-
-void Element::adjustReadPos()
-      {
-      if (!_readPos.isNull()) {
-            _userOff = _readPos - _pos;
-            _readPos = QPointF();
-            }
       }
 
 //---------------------------------------------------------
@@ -473,17 +461,16 @@ void Element::writeProperties(XmlWriter& xml) const
       // copy paste should not keep links
       if (_links && (_links->size() > 1) && !xml.clipboardmode())
             xml.tag("lid", _links->lid());
-      if (!autoplace() && !userOff().isNull()) {
-            if (isVoltaSegment()
-                || isGlissandoSegment()
-                || isChordRest()
-                || isRehearsalMark()
-                || isDynamic()
-                || isSystemDivider()
-                || (xml.clipboardmode() && isSLineSegment()))
-                  xml.tag("offset", userOff() / spatium());
+      if (!autoplace() && !userOff().isNull()) {      // TODO: remove pos of offset
+            if (isFingering() || isHarmony() || isTuplet() || isStaffText()) {
+                  QPointF p = userOff() / score()->spatium();
+                  if (isStaffText())
+                        xml.tag("pos", p + QPointF(0.0, -2.0));
+                  else
+                        xml.tag("pos", p);
+                  }
             else
-                  xml.tag("pos", pos() / score()->spatium());
+                  xml.tag("offset", userOff() / score()->spatium());
             }
       if (((track() != xml.curTrack()) || isSlur()) && (track() != -1)) {
             int t;
@@ -520,10 +507,6 @@ bool Element::readProperties(XmlReader& e)
             setVisible(e.readInt());
       else if (tag == "selected") // obsolete
             e.readInt();
-      else if (tag == "userOff") {
-            _userOff = e.readPoint();
-            setAutoplace(false);
-            }
       else if (tag == "lid") {
             int id = e.readInt();
             _links = e.linkIds().value(id);
@@ -552,13 +535,20 @@ bool Element::readProperties(XmlReader& e)
             if (val >= 0)
                   e.initTick(score()->fileDivision(val));
             }
+#if 0
+      else if (tag == "userOff") {
+            _userOff = e.readPoint();
+            setAutoplace(false);
+            }
+#endif
       else if (tag == "offset") {
-            setUserOff(e.readPoint() * spatium());
+            setUserOff(e.readPoint() * score()->spatium());
             setAutoplace(false);
             }
       else if (tag == "pos") {
             QPointF pt = e.readPoint();
-            _readPos = pt * score()->spatium();
+//            _readPos = pt * score()->spatium();
+            _userOff = pt * score()->spatium();
             setAutoplace(false);
             }
       else if (tag == "voice")
@@ -1874,8 +1864,6 @@ void Element::autoplaceSegmentElement(qreal minDistance)
                   nm->staffShape(staffIdx()).add(s2);
                   }
             }
-      else
-            adjustReadPos();
       }
 
 }

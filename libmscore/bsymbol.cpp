@@ -161,7 +161,6 @@ void BSymbol::layout()
             setMag(staff()->mag(tick()));
       for (Element* e : _leafs)
             e->layout();
-      adjustReadPos();
       }
 
 //---------------------------------------------------------

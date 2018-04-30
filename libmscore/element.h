@@ -157,7 +157,7 @@ class Element : public ScoreElement {
       qreal _mag;                 ///< standard magnification (derived value)
       QPointF _pos;               ///< Reference position, relative to _parent.
       QPointF _userOff;           ///< offset from normal layout position:
-      QPointF _readPos;
+//      QPointF _readPos;
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
@@ -236,10 +236,8 @@ class Element : public ScoreElement {
       QPointF scriptUserOff() const;
       void scriptSetUserOff(const QPointF& o);
 
-      bool isNudged() const                       { return !(_readPos.isNull() && _userOff.isNull()); }
-      const QPointF& readPos() const              { return _readPos;   }
-      void setReadPos(const QPointF& p)           { _readPos = p;      }
-      virtual void adjustReadPos();
+//      bool isNudged() const                       { return !(_readPos.isNull() && _userOff.isNull()); }
+      bool isNudged() const                       { return !_userOff.isNull(); }
 
       virtual const QRectF& bbox() const          { return _bbox;              }
       virtual QRectF& bbox()                      { return _bbox;              }

@@ -1915,8 +1915,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   tt->setXmlText(tt->xmlText().replace("<sym>unicode", "<sym>met"));
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
-                  // vertical alignment changed from top to baseline
-                  el->setReadPos(el->readPos() + QPointF(0.0, el->baseLine() * MScore::pixelRatio));
                   }
             else if (tag == "Harmony"
                || tag == "FretDiagram"
