@@ -1570,8 +1570,15 @@ void Score::respace(std::vector<ChordRest*>* elements)
       qreal x1       = cr1->segment()->pos().x();
       qreal x2       = cr2->segment()->pos().x();
 
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       qreal width[n-1];
       int ticksList[n-1];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<qreal> width(n-1);
+      std::vector<int> ticksList(n-1);
+#endif
       int minTick = 100000;
 
       for (int i = 0; i < n-1; ++i) {

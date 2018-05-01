@@ -313,7 +313,7 @@ QColor Element::curColor(bool isVisible, QColor normalColor) const
                   int red = originalColor.red();
                   int green = originalColor.green();
                   int blue = originalColor.blue();
-                  float tint = .6;  // Between 0 and 1. Higher means lighter, lower means darker
+                  float tint = .6f;  // Between 0 and 1. Higher means lighter, lower means darker
                   return QColor(red + tint * (255 - red), green + tint * (255 - green), blue + tint * (255 - blue));
                   }
             }

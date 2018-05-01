@@ -2506,7 +2506,14 @@ void GuitarPro6::readGpif(QByteArray* data)
                   continue;
             const StringData* sd = instr->stringData();
             if (sd) {
-                  int tuning[sd->strings()];
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+               int tuning[sd->strings()];
+#else
+               // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+               //    heap allocation is slow, an optimization might be used.
+               std::vector<int> vTuning(sd->strings());
+               int* tuning = vTuning.data();
+#endif
                   int frets   = sd->frets();
                   int strings;
                   for (strings = 0; strings < sd->strings(); strings++) {
