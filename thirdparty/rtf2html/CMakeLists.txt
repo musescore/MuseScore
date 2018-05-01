@@ -25,9 +25,15 @@ else (APPLE)
         set(INCS "")
 endif (APPLE)
 
+if (NOT MSVC)
+   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
+else (NOT MSVC)
+   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
+endif (NOT MSVC)
+
 add_library (
   rtf2html STATIC
-  ${PROJECT_BINARY_DIR}/all.h
+  ${_all_h_file}
   ${INCS}
   fmt_opts.cpp
   rtf2html.cpp
@@ -35,13 +41,26 @@ add_library (
   rtf_table.cpp
   )
 
-set_target_properties( rtf2html
-   PROPERTIES
-      COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
-   )
+if (NOT MSVC)
+   set_target_properties( rtf2html
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
+      )
+else (NOT MSVC)
+   set_target_properties ( rtf2html
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE}"
+      )
+endif (NOT MSVC)   
 
 xcode_pch(rtf2html all)
 
-ADD_DEPENDENCIES(rtf2html mops1)
-ADD_DEPENDENCIES(rtf2html mops2)
+# Use MSVC pre-compiled headers
+vstudio_pch( rtf2html )
+
+# MSVC does not depend on mops1 & mops2 for PCH
+if (NOT MSVC)
+   ADD_DEPENDENCIES(rtf2html mops1)
+   ADD_DEPENDENCIES(rtf2html mops2)
+endif (NOT MSVC)   
 

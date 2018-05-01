@@ -26,10 +26,16 @@ QT5_WRAP_UI (ui_headers
       compressor/compressor_gui.ui
       )
 
+if (NOT MSVC)
+   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
+else (NOT MSVC)
+   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
+endif (NOT MSVC)
+
 add_library (effects STATIC
       ${ui_headers}
       ${qrc_effects_files}
-      ${PROJECT_BINARY_DIR}/all.h
+      ${_all_h_file}
       ${PCH}
       effect.cpp
       effectgui.cpp
@@ -41,14 +47,29 @@ add_library (effects STATIC
       compressor/compressorgui.cpp
       ${INCS}
       )
-set_target_properties (
+
+if (NOT MSVC)
+   set_target_properties (
       effects
       PROPERTIES
          COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+else (NOT MSVC)
+   set_target_properties (
+      effects
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE}"
+      )
+endif (NOT MSVC)   
 
 xcode_pch(effects all)
 
-ADD_DEPENDENCIES(effects mops1)
-ADD_DEPENDENCIES(effects mops2)
+# Use MSVC pre-compiled headers
+vstudio_pch( effects )
+
+# MSVC does not depend on mops1 & mops2 for PCH
+if (NOT MSVC)
+   ADD_DEPENDENCIES(effects mops1)
+   ADD_DEPENDENCIES(effects mops2)
+endif (NOT MSVC)   
 

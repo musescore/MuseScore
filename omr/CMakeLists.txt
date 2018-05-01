@@ -29,9 +29,15 @@ if (OCR)
       set (OCR_SRC ocr.cpp)
 endif (OCR)
 
+if (NOT MSVC)
+   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
+else (NOT MSVC)
+   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
+endif (NOT MSVC)
+
 add_library (
       omr STATIC
-      ${PROJECT_BINARY_DIR}/all.h
+      ${_all_h_file}
       ${PCH}
       omrview.cpp pdf.cpp omrpage.cpp
       skew.cpp utils.cpp
@@ -39,14 +45,28 @@ add_library (
       ${OCR_SRC}
       )
 
-set_target_properties (
+if (NOT MSVC)
+   set_target_properties (
       omr
       PROPERTIES
          COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-unused-private-field"
       )
+else (NOT MSVC)
+   set_target_properties (
+      omr
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE}"    # TODO: Add disabling of unused private field warning?
+      )
+endif (NOT MSVC)   
 
 xcode_pch(omr all)
 
-ADD_DEPENDENCIES(omr mops1)
-ADD_DEPENDENCIES(omr mops2)
+# Use MSVC pre-compiled headers
+vstudio_pch( omr )
+
+# MSVC does not depend on mops1 & mops2 for PCH
+if (NOT MSVC)
+   ADD_DEPENDENCIES(omr mops1)
+   ADD_DEPENDENCIES(omr mops2)
+endif (NOT MSVC)   
 
