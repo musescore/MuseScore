@@ -86,8 +86,15 @@
 #endif
 
 /* Defines if gettimeofday is available on your system */
-#ifndef HAVE_GETTIMEOFDAY
-#define HAVE_GETTIMEOFDAY 1
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+   // MSVC does not have time of day
+   #ifndef HAVE_GETTIMEOFDAY
+   #define HAVE_GETTIMEOFDAY 1
+   #endif
+#else
+   #ifdef HAVE_GETTIMEOFDAY
+   #undef HAVE_GETTIMEOFDAY
+   #endif
 #endif
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
@@ -179,10 +186,11 @@ char * strtok_r (char *s, const char *delim, char **save_ptr);
 #define GCC_PRINTF_FORMAT(fmt_index, va_index)
 #endif
 
-#if defined(_MSC_VER)
-#define fmax(a, b) std::max(a, b)
-#define fmin(a, b) std::min(a, b)
-#endif
+// Causes compilation errors with Visual Studio 17, and fmax/fmin are available
+//#if defined(_MSC_VER)
+//#define fmax(a, b) std::max(a, b)
+//#define fmin(a, b) std::min(a, b)
+//#endif
 
 
 #endif /* POPPLER_CONFIG_H */
