@@ -1674,7 +1674,7 @@ MuseScore::MuseScore()
       menuHelp->addAction(aboutMusicXMLAction);
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-#if not defined(FOR_WINSTORE)
+#if !defined(FOR_WINSTORE)
       checkForUpdateAction = menuHelp->addAction("", this, SLOT(checkForUpdate()));
 #endif
 #endif
@@ -6149,8 +6149,15 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               break;
                         int n = f - playTime;
                         if (n) {
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
                               float bu[n * 2];
                               memset(bu, 0, sizeof(float) * 2 * n);
+#else
+                              // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+                              //    heap allocation is slow, an optimization might be used.
+                              std::vector<float> vBu(n * 2, 0);   // Default initialized, memset() not required.
+                              float* bu = vBu.data();
+#endif
 
                               synti->process(n, bu);
                               float* sp = bu;
@@ -6171,8 +6178,15 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               }
                         }
                   if (frames) {
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
                         float bu[frames * 2];
                         memset(bu, 0, sizeof(float) * 2 * frames);
+#else
+                        // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+                        //    heap allocation is slow, an optimization might be used.
+                        std::vector<float> vBu(frames * 2, 0);   // Default initialized, memset() not required.
+                        float* bu = vBu.data();
+#endif
                         synti->process(frames, bu);
                         float* sp = bu;
                         for (unsigned i = 0; i < frames; ++i) {
