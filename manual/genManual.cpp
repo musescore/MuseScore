@@ -12,6 +12,13 @@
 
 #include <stdio.h>
 #include <QString>
+// Load replacement for getopt() for VS
+#if (defined (_MSCVER) || defined (_MSC_VER))
+   #define STATIC_GETOPT 1
+   #undef _UNICODE
+   #include "getopt/getopt.h"
+#endif
+
 
 QString srcPath;
 QString dstPath;

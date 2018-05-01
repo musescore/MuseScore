@@ -15,3 +15,5 @@ original licence, Oxford Nanopore Technologies does not take any liability
 or warranty whatsoever.
 
 Building the Release and Debug DLL is done via the Microsoft Visual Studio IDE.
+
+Original CodeProject article: https://www.codeproject.com/KB/cpp/getopt4win.aspx?msg=3987371

@@ -145,6 +145,7 @@ float OmrPage::searchBarLines(int start_staff, int end_staff)
             }
 
       int vpw = x2 - x1;
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       float vp[vpw];
       memset(vp, 0, sizeof(float) * vpw);
 
@@ -152,6 +153,12 @@ float OmrPage::searchBarLines(int start_staff, int end_staff)
       //searchNotes();
 
       int note_constraints[x2 - x1];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<float> vp(vpw);      // Default-initialized, doesn't need to be cleared
+      std::vector<int> note_constraints(x2 - x1);
+#endif
       for (OmrNote* n : r1.notes()) {
             for(int x = n->x(); x <= n->x() + n->width(); ++x)
                   note_constraints[x - x1] = 1;
@@ -176,8 +183,15 @@ float OmrPage::searchBarLines(int start_staff, int end_staff)
                   vp[x - x1] = -HUGE_VAL;
             }
 
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       float scores[x2 - x1 + 1][2];
       BAR_STATE pred[x2 - x1 + 1][2];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<float[2]> scores(x2 - x1 + 1);
+      std::vector<BAR_STATE[2]> pred(x2 - x1 + 1);
+#endif
       BAR_STATE bs;
 
       //initialization
@@ -671,6 +685,7 @@ void OmrSystem::searchSysBarLines()
       int th = /*r1.height() + r2.height() - 5;*/ h / 2;     // threshold, data score for null model
 
       int vpw = x2 - x1;
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       float vp[vpw];
       memset(vp, 0, sizeof(float) * vpw);
 
@@ -678,6 +693,16 @@ void OmrSystem::searchSysBarLines()
       searchNotes();
 
       int note_constraints[x2 - x1];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<float> vp(vpw);      // Default-initialized, doesn't need to be cleared
+      
+      //using note constraints
+      searchNotes();
+
+      std::vector<int> note_constraints(x2 - x1);
+#endif
       for (int i = 0; i < _staves.size(); i++) {
             OmrStaff& r = _staves[i];
             for (OmrNote* n : r.notes()) {
@@ -701,8 +726,15 @@ void OmrSystem::searchSysBarLines()
                   vp[x - x1] = -HUGE_VAL;
             }
 
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       float scores[x2 - x1 + 1][2];
       BSTATE pred[x2 - x1 + 1][2];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<float[2]> scores(x2 - x1 + 1);
+      std::vector<BSTATE[2]> pred(x2 - x1 + 1);
+#endif
       BSTATE bs;
 
       //initialization
@@ -795,9 +827,16 @@ float OmrSystem::searchBarLinesvar(int n_staff, int **note_labels)
       //
 
       int vpw = x2 - x1 + 1;
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       float vp[vpw];
 
       for(int i = 0; i < vpw; i++) vp[i] = -HUGE_VAL;
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<float> vp(vpw, -HUGE_VAL);       // auto-initialized to -HUGE_VAL, doesn't need the loop
+#endif
+
 
       int bar_max_width = 3;
       for (int x = x1 + bar_max_width; x < x2 - bar_max_width; ++x) {
@@ -1466,7 +1505,13 @@ void OmrPage::getStaffLines()
       if (y2 >= h)
             --y2;
 
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       double projection[h];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<double> projection(h);
+#endif
       for (int y = 0; y < y1; ++y)
             projection[y] = 0;
       for (int y = y2; y < h; ++y)
@@ -1476,11 +1521,21 @@ void OmrPage::getStaffLines()
       int autoTableSize = (wl * 32) / 20;       // 1/20 page width
       if (autoTableSize > y2 - y1)
             autoTableSize = y2 - y1;
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       double autoTable[autoTableSize];
       memset(autoTable, 0, sizeof(autoTable));
       for (int i = 0; i < autoTableSize; ++i) {
             autoTable[i] = covariance(projection + y1, projection + i + y1, y2 - y1 - i);
             }
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<double> autoTable(autoTableSize);      // Default-initialized, doesn't need to be cleared
+      for(int i = 0; i < autoTableSize; ++i)
+         {
+         autoTable[i] = covariance(&(projection[y1]), &(projection[i + y1]), y2 - y1 - i);
+         }
+#endif
 
       //
       // search for first maximum in covariance starting at 10 to skip
