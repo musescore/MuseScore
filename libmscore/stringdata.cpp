@@ -245,6 +245,22 @@ void StringData::fretChords(Chord * chord) const
       bFretting = false;
       }
 
+
+//---------------------------------------------------------
+//   frettedStrings
+//    Returns the number of fretted strings.
+//---------------------------------------------------------
+
+int StringData::frettedStrings() const
+      {
+      int num = 0;
+      for (auto s : stringTable)
+            if (!s.open)
+                  num++;
+      return num;
+      }
+
+
 //********************
 // STATIC METHODS
 //********************
