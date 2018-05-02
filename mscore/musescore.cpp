@@ -5934,8 +5934,7 @@ void MuseScore::updateUiStyleAndTheme()
       qApp->setStyleSheet(css);
 
       genIcons();
-
-      // TODO update gui so icons are correct?
+      Shortcut::refreshIcons();
       }
 }
 

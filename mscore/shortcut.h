@@ -164,6 +164,7 @@ class Shortcut {
 
       static void init();
       static void retranslate();
+      static void refreshIcons();
       static void load();
       static void loadFromNewFile(QString fileLocation);
       static void save();
