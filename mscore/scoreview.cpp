@@ -3509,9 +3509,9 @@ void ScoreView::changeVoice(int voice)
       {
       InputState* is = &score()->inputState();
       int track = (is->track() / VOICES) * VOICES + voice;
-      is->setTrack(track);
 
       if (is->noteEntryMode()) {
+            is->setTrack(track);
             if (is->segment()) { // can be null for eg repeatMeasure
                   is->setSegment(is->segment()->measure()->first(SegmentType::ChordRest));
                   moveCursor();
@@ -3523,6 +3523,12 @@ void ScoreView::changeVoice(int voice)
       else {
             // treat as command to move notes to another voice
             score()->changeVoice(voice);
+            // modify the input state only if the command was successful
+            for (ChordRest* cr : score()->getSelectedChordRests())
+                  if (cr->voice() == voice) {
+                        is->setTrack(track);
+                        break;
+                        }
             }
       }
 
