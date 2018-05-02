@@ -2160,7 +2160,7 @@ void MusicXMLParserPass2::attributes(const QString& partId, Measure* measure, co
 static void setStaffLines(Score* score, int staffIdx, int stafflines)
       {
       score->staff(staffIdx)->setLines(stafflines);
-      score->staff(staffIdx)->setBarLineTo(0);        // default
+      score->staff(staffIdx)->setBarLineTo((stafflines - 1) * 2);
       }
 
 //---------------------------------------------------------
