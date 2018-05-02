@@ -517,6 +517,10 @@ void AddElement::endUndoRedo(bool isUndo) const
             element->score()->setLayout(element->tick());
             element->score()->setLayout(element->staff()->nextClefTick(element->tick()));
             }
+      else if (element->isKeySig()) {
+            element->score()->setLayout(element->tick());
+            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()));
+            }
       }
 
 //---------------------------------------------------------
@@ -1011,7 +1015,8 @@ void ChangeKeySig::flip(EditData*)
 
       showCourtesy = sc;
       ks           = oe;
-      keysig->score()->setLayoutAll();  //TODO: reduce update to range covered by keysig
+      keysig->score()->setLayout(tick);
+      keysig->score()->setLayout(keysig->staff()->nextKeyTick(tick));
       }
 
 //---------------------------------------------------------
