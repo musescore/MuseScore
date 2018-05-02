@@ -55,6 +55,7 @@ public:
       int         getPitch(int string, int fret, Staff* staff, int tick) const;
       static int  pitchOffsetAt(Staff* staff, int tick);
       int         strings() const                   { return stringTable.size(); }
+      int         frettedStrings() const;
       const QList<instrString>&  stringList() const { return stringTable; }
       QList<instrString>&  stringList()         { return stringTable; }
       int         frets() const                 { return _frets; }
