@@ -69,9 +69,9 @@ Zerberus::~Zerberus()
             i->setRefCount(i->refCount() - 1);
             if (i->refCount() <= 0) {
                   delete i;
-                  auto it = find(globalInstruments.begin(), globalInstruments.end(), i);
-                  if (it != globalInstruments.end())
-                        globalInstruments.erase(it);
+                  auto it1 = find(globalInstruments.begin(), globalInstruments.end(), i);
+                  if (it1 != globalInstruments.end())
+                        globalInstruments.erase(it1);
                   }
             }
       for (Channel* c : _channel)
@@ -351,17 +351,17 @@ bool Zerberus::removeSoundFont(const QString& s)
                               _channel[k]->setInstrument(0);
                         }
                   if (!instruments.empty()) {
-                        for (int i = 0; i < MAX_CHANNEL; ++i) {
-                              if (_channel[i]->instrument() == 0)
-                                    _channel[i]->setInstrument(instruments.front());
+                        for (int ii = 0; ii < MAX_CHANNEL; ++ii) {
+                              if (_channel[ii]->instrument() == 0)
+                                    _channel[ii]->setInstrument(instruments.front());
                               }
                         }
                   i->setRefCount(i->refCount() - 1);
                   if (i->refCount() <= 0) {
-                        auto it = find(globalInstruments.begin(), globalInstruments.end(), i);
-                        if (it == globalInstruments.end())
+                        auto it1 = find(globalInstruments.begin(), globalInstruments.end(), i);
+                        if (it1 == globalInstruments.end())
                               return false;
-                        globalInstruments.erase(it);
+                        globalInstruments.erase(it1);
                         delete i;
                         }
                   return true;
@@ -470,6 +470,9 @@ bool Zerberus::loadInstrument(const QString& s)
             }
       catch (std::bad_alloc& a) {
             qDebug("Unable to allocate memory when loading Zerberus soundfont %s", qPrintable(s));
+
+            // Prevent "Unreferenced local variable" warning for a
+            Q_UNUSED(a);
             }
       catch (...) {
             }

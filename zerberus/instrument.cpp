@@ -141,12 +141,12 @@ bool ZInstrument::loadFromDir(const QString& s)
             printf("cannot load orchestra.xml in <%s>\n", qPrintable(s));
             return false;
             }
-      QByteArray buf = f.readAll();
-      if (buf.isEmpty()) {
+      QByteArray buff = f.readAll();
+      if (buff.isEmpty()) {
             printf("Instrument::loadFromFile: orchestra.xml is empty\n");
             return false;
             }
-      return read(buf, 0, s);
+      return read(buff, 0, s);
       }
 
 //---------------------------------------------------------
@@ -166,12 +166,12 @@ bool ZInstrument::loadFromFile(const QString& path)
             printf("Instrument::load: %s not found\n", qPrintable(path));
             return false;
             }
-      QByteArray buf = uz.fileData("orchestra.xml");
-      if (buf.isEmpty()) {
+      QByteArray buff = uz.fileData("orchestra.xml");
+      if (buff.isEmpty()) {
             printf("Instrument::loadFromFile: orchestra.xml not found\n");
             return false;
             }
-      return read(buf, &uz, QString());
+      return read(buff, &uz, QString());
       }
 
 //---------------------------------------------------------
@@ -179,9 +179,9 @@ bool ZInstrument::loadFromFile(const QString& path)
 //    read orchestra
 //---------------------------------------------------------
 
-bool ZInstrument::read(const QByteArray& buf, MQZipReader* /*uz*/, const QString& /*path*/)
+bool ZInstrument::read(const QByteArray& buff, MQZipReader* /*uz*/, const QString& /*path*/)
       {
-      Ms::XmlReader e(buf);
+      Ms::XmlReader e(buff);
       while (e.readNextStartElement()) {
             if (e.name() == "MuseSynth") {
                   while (e.readNextStartElement()) {

@@ -218,13 +218,13 @@ void Beam::draw(QPainter* painter) const
             d = M_PI/6.0;
       double ww = lw2 / sin(M_PI_2 - atan(d));
 
-      for (const QLineF* bs : beamSegments) {
+      for (const QLineF* bs1 : beamSegments) {
             painter->drawPolygon(
                QPolygonF({
-                  QPointF(bs->x1(), bs->y1() - ww),
-                  QPointF(bs->x2(), bs->y2() - ww),
-                  QPointF(bs->x2(), bs->y2() + ww),
-                  QPointF(bs->x1(), bs->y1() + ww),
+                  QPointF(bs1->x1(), bs1->y1() - ww),
+                  QPointF(bs1->x2(), bs1->y2() - ww),
+                  QPointF(bs1->x2(), bs1->y2() + ww),
+                  QPointF(bs1->x1(), bs1->y1() + ww),
                   }),
             Qt::OddEvenFill);
             }
@@ -1627,9 +1627,9 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                         if (!cr->isChord())
                               continue;
                         Chord* c = toChord(cr);
-                        bool _up = c->up();
-                        qreal y = (_up ? c->upNote() : c->downNote())->pagePos().y();
-                        if (_up)
+                        bool _up1 = c->up();
+                        qreal y = (_up1 ? c->upNote() : c->downNote())->pagePos().y();
+                        if (_up1)
                               yUpMin = qMin(y, yUpMin);
                         else
                               yDownMax = qMax(y, yDownMax);

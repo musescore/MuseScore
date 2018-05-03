@@ -304,11 +304,11 @@ void Score::readStaff(XmlReader& e)
                         else {
                               // this is a multi measure rest
                               // always preceded by the first measure it replaces
-                              Measure* m = e.lastMeasure();
+                              Measure* m1 = e.lastMeasure();
 
-                              if (m) {
-                                    m->setMMRest(measure);
-                                    measure->setTick(m->tick());
+                              if (m1) {
+                                    m1->setMMRest(measure);
+                                    measure->setTick(m1->tick());
                                     }
                               }
                         }
@@ -589,15 +589,15 @@ bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
             int n = masterScore()->omr()->numPages();
             for (int i = 0; i < n; ++i) {
                   QString path = QString("OmrPages/page%1.png").arg(i+1);
-                  QBuffer cbuf;
+                  QBuffer cbuf1;
                   OmrPage* page = masterScore()->omr()->page(i);
                   const QImage& image = page->image();
-                  if (!image.save(&cbuf, "PNG")) {
+                  if (!image.save(&cbuf1, "PNG")) {
                         MScore::lastError = tr("save file: cannot save image (%1x%2)").arg(image.width(), image.height());
                         return false;
                         }
-                  uz.addFile(path, cbuf.data());
-                  cbuf.close();
+                  uz.addFile(path, cbuf1.data());
+                  cbuf1.close();
                   }
             }
 #endif
@@ -810,10 +810,10 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
             int n = masterScore()->omr()->numPages();
             for (int i = 0; i < n; ++i) {
                   QString path = QString("OmrPages/page%1.png").arg(i+1);
-                  QByteArray dbuf = uz.fileData(path);
+                  QByteArray dbuf1 = uz.fileData(path);
                   OmrPage* page = masterScore()->omr()->page(i);
                   QImage image;
-                  if (image.loadFromData(dbuf, "PNG")) {
+                  if (image.loadFromData(dbuf1, "PNG")) {
                         page->setImage(image);
                         }
                   else
@@ -825,8 +825,8 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
       //  read audio
       //
       if (audio()) {
-            QByteArray dbuf = uz.fileData("audio.ogg");
-            audio()->setData(dbuf);
+            QByteArray dbuf1 = uz.fileData("audio.ogg");
+            audio()->setData(dbuf1);
             }
       return retval;
       }
@@ -1136,8 +1136,8 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                                     }
                               }
                         }
-                  for (Element* e : segment->annotations()) {
-                        if (e->track() != track || e->generated() || (e->systemFlag() && !writeSystemElements))
+                  for (Element* e1 : segment->annotations()) {
+                        if (e1->track() != track || e1->generated() || (e1->systemFlag() && !writeSystemElements))
                               continue;
                         if (needTick) {
                               // xml.tag("tick", segment->tick() - xml.tickDiff);
@@ -1146,7 +1146,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                               xml.setCurTick(segment->tick());
                               needTick = false;
                               }
-                        e->write(xml);
+                        e1->write(xml);
                         }
                   Measure* m = segment->measure();
                   // don't write spanners for multi measure rests
