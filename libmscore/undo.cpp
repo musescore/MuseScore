@@ -2067,15 +2067,17 @@ void ChangeNoteEvent::flip(EditData*)
 
 LinkUnlink::~LinkUnlink()
       {
-      if (le && mustDelete)
+      if (le && mustDelete) {
+            Q_ASSERT(le->size() <= 1);
             delete le;
+            }
       }
 
 void LinkUnlink::link()
       {
       if (le->size() == 1)
             le->front()->setLinks(le);
-
+      mustDelete = false;
       le->append(e);
       e->setLinks(le);
       }
