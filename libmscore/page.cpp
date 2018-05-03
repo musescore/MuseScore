@@ -187,6 +187,7 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       p->translate(-text->pos());
       }
 
+#if 0
 //---------------------------------------------------------
 //   styleChanged
 //---------------------------------------------------------
@@ -200,6 +201,7 @@ void Page::styleChanged()
       if (t)
             t->styleChanged();
       }
+#endif
 
 //---------------------------------------------------------
 //   scanElements

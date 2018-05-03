@@ -54,7 +54,7 @@ class Page final : public Element {
 
       virtual void write(XmlWriter&) const;
       virtual void read(XmlReader&);
-      virtual void styleChanged() override;
+      virtual void styleChanged() override {}
 
       void appendSystem(System* s);
 
