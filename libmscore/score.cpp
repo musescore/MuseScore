@@ -1196,6 +1196,10 @@ static void updateStyle(void*, Element* e)
 void Score::styleChanged()
       {
       scanElements(0, updateStyle);
+      if (headerText())
+            headerText()->styleChanged();
+      if (footerText())
+            footerText()->styleChanged();
       setLayoutAll();
       }
 
