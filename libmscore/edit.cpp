@@ -3854,15 +3854,6 @@ void Score::undoAddElement(Element* element)
                   }
             if (links == 0) {
                   undo(new AddElement(element));
-#ifndef QT_NO_DEBUG
-                  if (element->isChord()) {
-                        for (Note* n : toChord(element)->notes()) {
-                        //      if(n->tpc() == Tpc::TPC_INVALID)
-                        //            n->setTpcFromPitch();
-                              Q_ASSERT(n->tpc() != Tpc::TPC_INVALID);
-                              }
-                        }
-#endif
                   return;
                   }
             for (ScoreElement* ee : *links) {
@@ -3893,14 +3884,6 @@ void Score::undoAddElement(Element* element)
                   ne->setSelected(false);
                   ne->setParent(e);
                   undo(new AddElement(ne));
-#ifndef QT_NO_DEBUG
-                  if (ne->isChord()) {
-                        for (Note* n : toChord(ne)->notes()) {
-                              Q_ASSERT(n->tpc() != Tpc::TPC_INVALID);
-                        //      n->setTpcFromPitch();
-                              }
-                        }
-#endif
                   }
             return;
             }

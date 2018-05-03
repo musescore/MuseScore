@@ -429,7 +429,6 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
 
 void Palette::applyPaletteElement(PaletteCell* cell)
       {
-printf("applyPaletteElement\n");
       Score* score = mscore->currentScore();
       if (score == 0)
             return;
@@ -498,7 +497,7 @@ printf("applyPaletteElement\n");
                   int idx = cr1->staffIdx();
 
                   QByteArray a = element->mimeData(QPointF());
-printf("<<%s>>\n", a.data());
+// printf("<<%s>>\n", a.data());
                   XmlReader e(a);
                   Fraction duration;  // dummy
                   QPointF dragOffset;
