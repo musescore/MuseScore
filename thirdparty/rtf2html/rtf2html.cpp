@@ -148,8 +148,8 @@ QString rtf2html(const QString& iString)
                      {
                      case '\\':
                      {
-                        rtf_keyword kw(++buf_in);
-                        if (kw.keyword()==rtf_keyword::rkw_title)
+                        rtf_keyword kw1(++buf_in);
+                        if (kw1.keyword()==rtf_keyword::rkw_title)
                            in_title=true;
                         break;
                      }
@@ -170,17 +170,17 @@ QString rtf2html(const QString& iString)
                      {
                      case '\\':
                      {
-                        rtf_keyword kw(++buf_in);
-                        switch (kw.keyword())
+                        rtf_keyword kw1(++buf_in);
+                        switch (kw1.keyword())
                         {
                         case rtf_keyword::rkw_red:
-                           clr.r=kw.parameter();
+                           clr.r=kw1.parameter();
                            break;
                         case rtf_keyword::rkw_green:
-                           clr.g=kw.parameter();
+                           clr.g=kw1.parameter();
                            break;
                         case rtf_keyword::rkw_blue:
-                           clr.b=kw.parameter();
+                           clr.b=kw1.parameter();
                            break;
                         default:
                            break;
@@ -212,20 +212,20 @@ QString rtf2html(const QString& iString)
                      {
                      case '\\':
                      {
-                        rtf_keyword kw(++buf_in);
-                        if (kw.is_control_char() && kw.control_char()=='*')
+                        rtf_keyword kw1(++buf_in);
+                        if (kw1.is_control_char() && kw1.control_char()=='*')
                            skip_group(buf_in);
                         else
-                           switch (kw.keyword())
+                           switch (kw1.keyword())
                            {
                            case rtf_keyword::rkw_f:
-                              font_num=kw.parameter();
+                              font_num=kw1.parameter();
                               break;
                            case rtf_keyword::rkw_fprq:
-                              fnt.pitch=kw.parameter();
+                              fnt.pitch=kw1.parameter();
                               break;
                            case rtf_keyword::rkw_fcharset:
-                              fnt.charset=kw.parameter();
+                              fnt.charset=kw1.parameter();
                               break;
                            case rtf_keyword::rkw_fnil:
                               fnt.family=font::ff_none;
