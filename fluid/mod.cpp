@@ -322,19 +322,19 @@ void Mod::dump() const
       {
       const Mod* mod = this;
 
-      int src1     = mod->src1;
-      int dest     = mod->dest;
-      int src2     = mod->src2;
-      int flags1   = mod->flags1;
-      int flags2   = mod->flags2;
-      float amount = (float)mod->amount;
+      int lsrc1     = mod->src1;
+      int ldest     = mod->dest;
+      int lsrc2     = mod->src2;
+      int lflags1   = mod->flags1;
+      int lflags2   = mod->flags2;
+      float lamount = (float)mod->amount;
 
       printf("Src: ");
       if (flags1 & FLUID_MOD_CC){
-            printf("MIDI CC=%i",src1);
+            printf("MIDI CC=%i",lsrc1);
             }
       else {
-            switch(src1){
+            switch(lsrc1){
                   case FLUID_MOD_NONE:
                         printf("None");
                         break;
@@ -357,19 +357,19 @@ void Mod::dump() const
                         printf("Pitch Wheel sens");
                         break;
                   default:
-                        printf("(unknown: %i)", src1);
+                        printf("(unknown: %i)", lsrc1);
                   } /* switch src1 */
             }; /* if not CC */
-      if (flags1 & FLUID_MOD_NEGATIVE)
+      if (lflags1 & FLUID_MOD_NEGATIVE)
             printf("- ");
       else
             {printf("+ ");};
-      if (flags1 & FLUID_MOD_BIPOLAR)
+      if (lflags1 & FLUID_MOD_BIPOLAR)
             printf("bip ");
       else
             printf("unip ");
       printf("-> ");
-      switch(dest){
+      switch(ldest){
             case GEN_FILTERQ:
                   printf("Q");
                   break;
@@ -398,10 +398,10 @@ void Mod::dump() const
                   printf("att");
                   break;
             default:
-                  printf("dest %i", dest);
+                  printf("dest %i", ldest);
                   break;
             } /* switch dest */
-      printf(", amount %f flags %i src2 %i flags2 %i\n",amount, flags1, src2, flags2);
+      printf(", amount %f flags %i src2 %i flags2 %i\n",lamount, lflags1, lsrc2, lflags2);
       }
 
 }

@@ -293,7 +293,9 @@ bool MidiFile::read(QIODevice* in)
                   break;
             default:
                   throw(QString("midi file format %1 not implemented").arg(_format));
-                  return false;
+
+                  // Prevent "unreachable code" warning 
+                  // return false;
             }
       return true;
       }
@@ -721,9 +723,9 @@ void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType *mt)
                               ++ii;
                               bool found = false;
                               for (; ii != _events.end(); ++ii) {
-                                    MidiEvent& ev = ii->second;
-                                    if (ev.type() == ME_CONTROLLER) {
-                                          if (ev.controller() == CTRL_LDATA) {
+                                    MidiEvent& ev1 = ii->second;
+                                    if (ev1.type() == ME_CONTROLLER) {
+                                          if (ev1.controller() == CTRL_LDATA) {
                                                 // handle later
                                                 found = true;
                                                 }

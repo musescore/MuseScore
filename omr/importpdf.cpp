@@ -278,10 +278,10 @@ Score::FileError importPdf(MasterScore* score, const QString& path)
 
       OmrState state;
       state.score = score;
-      foreach (OmrPage* omrPage, omr->pages()) {
-            OmrStaff staff = omrPage->systems().last().staves().first();
+      for (OmrPage* omrPage1 : omr->pages()) {
+            OmrStaff staff = omrPage1->systems().last().staves().first();
             qreal top = staff.top()/omr->spatium();
-            state.importPdfPage(omrPage, top);
+            state.importPdfPage(omrPage1, top);
             }
 
       //---create bracket

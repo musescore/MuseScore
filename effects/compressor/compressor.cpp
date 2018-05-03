@@ -76,8 +76,8 @@ static inline float f_max(float x, float a)
 
 static inline void round_to_zero(volatile float *f)
       {
-      *f += 1e-18;
-      *f -= 1e-18;
+      *f += 1e-18f;
+      *f -= 1e-18f;
       }
 
 // Linearly interpolate [ = a * (1 - f) + b * f]

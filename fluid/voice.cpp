@@ -1444,8 +1444,8 @@ void Voice::noteoff()
                   */
                   if (volenv_val > 0) {
                         float lfo = modlfo_val * -modlfo_to_vol;
-                        float amp = volenv_val * pow (10.0, lfo / -200);
-                        float env_value = - ((-200 * log (amp) / log (10.0) - lfo) / 960.0 - 1);
+                        float ampl = volenv_val * pow (10.0, lfo / -200);
+                        float env_value = - ((-200 * log (ampl) / log (10.0) - lfo) / 960.0 - 1);
                         fluid_clip (env_value, 0.0, 1.0);
                         volenv_val = env_value;
                         }

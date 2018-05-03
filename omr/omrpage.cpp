@@ -427,12 +427,12 @@ void OmrPage::readBarLines()
                         int nx = 0;
                         SymId nsym = SymId::noSym;
                         OmrChord chord;
-                        foreach(OmrNote* n, staff.notes()) {
-                              int x = n->x();
+                        for(OmrNote* n1 : staff.notes()) {
+                              int x = n1->x();
                               if (x >= m.x2())
                                     break;
                               if (x >= m.x1() && x < m.x2()) {
-                                    if (qAbs(x - nx) > int(_spatium / 2) || (nsym != n->sym)) {
+                                    if (qAbs(x - nx) > int(_spatium / 2) || (nsym != n1->sym)) {
                                           if (!chord.notes.isEmpty()) {
                                                 SymId sym = chord.notes.front()->sym;
                                                 if (sym == SymId::noteheadBlack)
@@ -444,8 +444,8 @@ void OmrPage::readBarLines()
                                                 }
                                           }
                                     nx = x;
-                                    nsym = n->sym;
-                                    chord.notes.append(n);
+                                    nsym = n1->sym;
+                                    chord.notes.append(n1);
                                     }
                               }
                         if (!chord.notes.isEmpty()) {
@@ -991,8 +991,8 @@ void OmrSystem::searchNotes()
             // detect collisions
             //
             int fuzz = int(_page->spatium()) / 2;
-            foreach(OmrNote* n, r->notes()) {
-                  foreach(OmrNote* m, r->notes()) {
+            for(OmrNote* n : r->notes()) {
+                  for(OmrNote* m : r->notes()) {
                         if (m == n)
                               continue;
                         if (intersectFuzz(*m, *n, fuzz)) {
@@ -1027,7 +1027,7 @@ void OmrSystem::searchNotes(int *note_labels, int ran)
             //
             // save detected note horizontal positions into note_labels
             //
-            foreach(OmrNote* n, r->notes()) {
+            for(OmrNote* n : r->notes()) {
                   QPoint p = n->center();
                   int h_cent = p.x();
                   for(int h = h_cent - ran; h <= h_cent + ran; h++){
@@ -1309,7 +1309,7 @@ void OmrPage::deSkew()
       uint* db = new uint[wl * h];
       memset(db, 0, wl * h * sizeof(uint));
 
-      foreach(const QRect& r, _slices) {
+      for(const QRect& r : _slices) {
             double rot = skew(r);
             if (qAbs(rot) < 0.1) {
                   memcpy(db + wl * r.y(), scanLine(r.y()), wl * r.height() * sizeof(uint));
@@ -1575,12 +1575,12 @@ void OmrPage::getStaffLines()
 
       QList<Lv> staveTop;
       int staffHeight = _spatium * 6;
-      foreach (Lv a, lv) {
+      for (Lv a : lv) {
             if (a.val < 500)   // MAGIC to avoid false positives
                   continue;
             int line = a.line;
             bool ok = true;
-            foreach (Lv b, staveTop) {
+            for (Lv b : staveTop) {
                   if ((line > (b.line - staffHeight)) && (line < (b.line + staffHeight))) {
                         ok = false;
                         break;
@@ -1590,7 +1590,7 @@ void OmrPage::getStaffLines()
                   staveTop.append(a);
             }
       qSort(staveTop.begin(), staveTop.end(), sortLvStaves);
-      foreach (Lv a, staveTop) {
+      for (Lv a : staveTop) {
             staves.append(OmrStaff(cropL * 32, a.line, (wordsPerLine() - cropL - cropR) * 32, _spatium * 4));
             }
       }
@@ -1644,9 +1644,9 @@ void OmrSystem::searchNotes(QList<OmrNote*>* noteList, int x1, int x2, int y, in
       int n = notePeaks.size();
       for (int i = 0; i < n; ++i) {
             OmrNote* note = new OmrNote;
-            int hh = pattern->h();
-            int hw = pattern->w();
-            note->setRect(notePeaks[i].x, y - hh / 2, hw, hh);
+            int hh1 = pattern->h();
+            int hw1 = pattern->w();
+            note->setRect(notePeaks[i].x, y - hh1 / 2, hw1, hh1);
             note->line = line;
             note->sym = pattern->id();
             note->prob = notePeaks[i].val;
@@ -1688,7 +1688,7 @@ void OmrPage::write(XmlWriter& xml) const
       xml.tag("cropR", cropR);
       xml.tag("cropT", cropT);
       xml.tag("cropB", cropB);
-      foreach(const QRect& r, staves)
+      for(const QRect& r : staves)
             xml.tag("staff", QRectF(r));
       xml.etag();
       }

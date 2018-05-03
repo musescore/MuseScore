@@ -519,15 +519,15 @@ bool ZInstrument::loadSfz(const QString& s)
       for (int i = 0;i < 128; i++)
             c.set_cc[i] = -1;
 
-      int idx = 0;
+      int idx0 = 0;
       bool inBlockComment = false;
       // preprocessor
-      while(idx < fileContents.size()) {
+      while(idx0 < fileContents.size()) {
             QRegularExpression findWithSpaces("\"(.+)\"");
             QRegularExpression comment("//.*$");
             QRegularExpression trailingSpacesOrTab("^[\\s\\t]*");
             QRegularExpressionMatch foundWithSpaces;
-            QString curLine = fileContents[idx];
+            QString curLine = fileContents[idx0];
             QString curLineCopy = curLine;
             bool nextIsImportant = false;
             int idxBlockComment = 0;
@@ -564,7 +564,7 @@ bool ZInstrument::loadSfz(const QString& s)
 
             curLine = curLine.remove(comment);
             curLine.remove(trailingSpacesOrTab);
-            fileContents[idx] = curLine;
+            fileContents[idx0] = curLine;
 
             if (curLine.startsWith("#define")) {
                   QStringList define = curLine.split(" ");
@@ -573,7 +573,7 @@ bool ZInstrument::loadSfz(const QString& s)
                         c.defines.insert(std::pair<QString, QString>(define[1], define[2]));
                   else if(foundWithSpaces.hasMatch())
                         c.defines.insert(std::pair<QString, QString>(define[1], foundWithSpaces.captured(1)));
-                  fileContents.removeAt(idx);
+                  fileContents.removeAt(idx0);
                   }
             else if (curLine.startsWith("#include")) {
                   foundWithSpaces = findWithSpaces.match(curLine);
@@ -590,17 +590,17 @@ bool ZInstrument::loadSfz(const QString& s)
 
                         int offset = 1;
                         for (QString newFileLine : newFileContents) {
-                              fileContents.insert(idx+offset, newFileLine);
+                              fileContents.insert(idx0+offset, newFileLine);
                               offset++;
                               }
 
-                        fileContents.removeAt(idx);
+                        fileContents.removeAt(idx0);
                         }
                   }
             else if (curLine.isEmpty())
-                  fileContents.removeAt(idx);
+                  fileContents.removeAt(idx0);
             else
-                  idx++;
+                  idx0++;
             }
 
       int total = fileContents.size();
@@ -615,9 +615,9 @@ bool ZInstrument::loadSfz(const QString& s)
       bool globMode = false;
       zerberus->setLoadProgress(0);
 
-      for (int idx = 0; idx < fileContents.size(); idx++) {
-            QString curLine = fileContents[idx];
-            zerberus->setLoadProgress(((qreal) idx * 100) /  (qreal) total);
+      for (int idx1 = 0; idx1 < fileContents.size(); idx1++) {
+            QString curLine = fileContents[idx1];
+            zerberus->setLoadProgress(((qreal) idx1 * 100) /  (qreal) total);
 
             if (zerberus->loadWasCanceled())
                   return false;
@@ -676,8 +676,8 @@ bool ZInstrument::loadSfz(const QString& s)
                         }
                   else
                         ei = curLine.size();
-                  QString s = curLine.mid(si, ei-si);
-                  r.readOp(match.captured(1), s, c);
+                  QString str = curLine.mid(si, ei-si);
+                  r.readOp(match.captured(1), str, c);
                   }
             }
 
