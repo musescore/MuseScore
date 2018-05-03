@@ -17,7 +17,13 @@ static PtCallback *time_callback;
 void CALLBACK winmm_time_callback(UINT uID, UINT uMsg, DWORD dwUser, 
                                   DWORD dw1, DWORD dw2)
 {
-    (*time_callback)(Pt_Time(), (void *) dwUser);
+#if (defined (_MSCVER) || defined (_MSC_VER))
+   UNREFERENCED_PARAMETER(uID);
+   UNREFERENCED_PARAMETER(uMsg);
+   UNREFERENCED_PARAMETER(dw1);
+   UNREFERENCED_PARAMETER(dw2);
+#endif
+   (*time_callback)(Pt_Time(), (void *) dwUser);
 }
  
 
