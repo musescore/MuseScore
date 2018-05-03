@@ -1704,7 +1704,6 @@ void Timeline::drawSelection()
       const Selection selection = _score->selection();
       QList<Element*> element_list = selection.elements();
       for (Element* element : element_list) {
-
             if (element->tick() == -1)
                   continue;
             else {
@@ -1753,7 +1752,11 @@ void Timeline::drawSelection()
             ElementType element_type = (staffIdx == -1)? element->type() : ElementType::INVALID;
 
             //If has a multi measure rest, find the count and add each measure to it
-            if (measure->mmRest()) {
+            // ws: If style flag Sid::createMultiMeasureRests is not set, then
+            // measure->mmRest() is not valid
+
+//            if (measure->mmRest() ) {
+            if (measure->mmRest() && measure->score()->styleB(Sid::createMultiMeasureRests)) {
                   int mmrest_count = measure->mmRest()->mmRestCount();
                   Measure* tmp_measure = measure;
                   for (int mmrest_measure = 0; mmrest_measure < mmrest_count; mmrest_measure++) {
