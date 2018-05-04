@@ -115,13 +115,13 @@ void Lasso::startEdit(EditData& ed)
 //   setProperty
 //---------------------------------------------------------
 
-bool Lasso::setProperty(Pid propertyId, const QVariant& v)
+bool Lasso::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case Pid::LASSO_POS:
+            case P_ID::LASSO_POS:
                   bbox().moveTo(v.toPointF());
                   break;
-            case Pid::LASSO_SIZE:
+            case P_ID::LASSO_SIZE:
                   bbox().setSize(v.toSizeF());
                   break;
             default:
@@ -137,12 +137,12 @@ bool Lasso::setProperty(Pid propertyId, const QVariant& v)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Lasso::getProperty(Pid propertyId) const
+QVariant Lasso::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::LASSO_POS:
+            case P_ID::LASSO_POS:
                   return bbox().topLeft();
-            case Pid::LASSO_SIZE:
+            case P_ID::LASSO_SIZE:
                   return bbox().size();
             default:
                   break;

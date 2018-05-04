@@ -32,11 +32,12 @@ namespace Ms {
 //---------------------------------------------------------
 
 TimeSig::TimeSig(Score* s)
-  : Element(s, ElementFlag::SELECTABLE | ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
+  : Element(s)
       {
-      initSubStyle(SubStyleId::TIMESIG);
-
+      setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
       _showCourtesySig = true;
+      scaleStyle       = PropertyFlags::STYLED;
+      setProperty(P_ID::SCALE, propertyDefault(P_ID::SCALE));
       _stretch.set(1, 1);
       _sig.set(0, 1);               // initialize to invalid
       _timeSigType      = TimeSigType::NORMAL;
@@ -122,7 +123,7 @@ void TimeSig::setDenominatorString(const QString& a)
 void TimeSig::write(XmlWriter& xml) const
       {
       xml.stag("TimeSig");
-      writeProperty(xml, Pid::TIMESIG_TYPE);
+      writeProperty(xml, P_ID::TIMESIG_TYPE);
       Element::writeProperties(xml);
 
       xml.tag("sigN",  _sig.numerator());
@@ -131,12 +132,12 @@ void TimeSig::write(XmlWriter& xml) const
             xml.tag("stretchN", stretch().numerator());
             xml.tag("stretchD", stretch().denominator());
             }
-      writeProperty(xml, Pid::NUMERATOR_STRING);
-      writeProperty(xml, Pid::DENOMINATOR_STRING);
+      writeProperty(xml, P_ID::NUMERATOR_STRING);
+      writeProperty(xml, P_ID::DENOMINATOR_STRING);
       if (!_groups.empty())
             _groups.write(xml);
-      writeProperty(xml, Pid::SHOW_COURTESY);
-      writeProperty(xml, Pid::SCALE);
+      writeProperty(xml, P_ID::SHOW_COURTESY);
+      writeProperty(xml, P_ID::SCALE);
 
       xml.etag();
       }
@@ -202,8 +203,10 @@ void TimeSig::read(XmlReader& e)
                   setDenominatorString(e.readElementText());
             else if (tag == "Groups")
                   _groups.read(e);
-            else if (readStyledProperty(e, tag))
-                  ;
+            else if (tag == "scale") {
+                  _scale = e.readSize();
+                  scaleStyle = PropertyFlags::UNSTYLED;
+                  }
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -383,26 +386,26 @@ void TimeSig::setSSig(const QString& s)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant TimeSig::getProperty(Pid propertyId) const
+QVariant TimeSig::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::SHOW_COURTESY:
+            case P_ID::SHOW_COURTESY:
                   return int(showCourtesySig());
-            case Pid::NUMERATOR_STRING:
+            case P_ID::NUMERATOR_STRING:
                   return numeratorString();
-            case Pid::DENOMINATOR_STRING:
+            case P_ID::DENOMINATOR_STRING:
                   return denominatorString();
-            case Pid::GROUPS:
+            case P_ID::GROUPS:
                   return QVariant::fromValue(groups());
-            case Pid::TIMESIG:
+            case P_ID::TIMESIG:
                   return QVariant::fromValue(_sig);
-            case Pid::TIMESIG_GLOBAL:
+            case P_ID::TIMESIG_GLOBAL:
                   return QVariant::fromValue(globalSig());
-            case Pid::TIMESIG_STRETCH:
+            case P_ID::TIMESIG_STRETCH:
                   return QVariant::fromValue(stretch());
-            case Pid::TIMESIG_TYPE:
+            case P_ID::TIMESIG_TYPE:
                   return int(_timeSigType);
-            case Pid::SCALE:
+            case P_ID::SCALE:
                   return _scale;
             default:
                   return Element::getProperty(propertyId);
@@ -413,36 +416,36 @@ QVariant TimeSig::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
+bool TimeSig::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case Pid::SHOW_COURTESY:
+            case P_ID::SHOW_COURTESY:
                   if (generated())
                         return false;
                   setShowCourtesySig(v.toBool());
                   break;
-            case Pid::NUMERATOR_STRING:
+            case P_ID::NUMERATOR_STRING:
                   setNumeratorString(v.toString());
                   break;
-            case Pid::DENOMINATOR_STRING:
+            case P_ID::DENOMINATOR_STRING:
                   setDenominatorString(v.toString());
                   break;
-            case Pid::GROUPS:
+            case P_ID::GROUPS:
                   setGroups(v.value<Groups>());
                   break;
-            case Pid::TIMESIG:
+            case P_ID::TIMESIG:
                   setSig(v.value<Fraction>());
                   break;
-            case Pid::TIMESIG_GLOBAL:
+            case P_ID::TIMESIG_GLOBAL:
                   setGlobalSig(v.value<Fraction>());
                   break;
-            case Pid::TIMESIG_STRETCH:
+            case P_ID::TIMESIG_STRETCH:
                   setStretch(v.value<Fraction>());
                   break;
-            case Pid::TIMESIG_TYPE:
+            case P_ID::TIMESIG_TYPE:
                   _timeSigType = (TimeSigType)(v.toInt());
                   break;
-            case Pid::SCALE:
+            case P_ID::SCALE:
                   _scale = v.toSizeF();
                   break;
             default:
@@ -459,26 +462,67 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TimeSig::propertyDefault(Pid id) const
+QVariant TimeSig::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case Pid::SHOW_COURTESY:
+            case P_ID::SHOW_COURTESY:
                   return true;
-            case Pid::NUMERATOR_STRING:
+            case P_ID::NUMERATOR_STRING:
                   return QString();
-            case Pid::DENOMINATOR_STRING:
+            case P_ID::DENOMINATOR_STRING:
                   return QString();
-            case Pid::TIMESIG:
+            case P_ID::TIMESIG:
                   return QVariant::fromValue(Fraction(4,4));
-            case Pid::TIMESIG_GLOBAL:
+            case P_ID::TIMESIG_GLOBAL:
                   return QVariant::fromValue(Fraction(1,1));
-            case Pid::TIMESIG_TYPE:
+            case P_ID::TIMESIG_TYPE:
                   return int(TimeSigType::NORMAL);
-            case Pid::SCALE:
-                  return score()->styleV(Sid::timesigScale);
+            case P_ID::SCALE:
+                  return score()->styleV(StyleIdx::timesigScale);
             default:
                   return Element::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx TimeSig::getPropertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::SCALE:
+                  return StyleIdx::timesigScale;
+            default:
+                  break;
+            }
+      return Element::getPropertyStyle(id);
+      }
+
+//---------------------------------------------------------
+//   propertyStyle
+//---------------------------------------------------------
+
+PropertyFlags& TimeSig::propertyFlags(P_ID id)
+      {
+      switch (id) {
+            case P_ID::SCALE:
+                  return scaleStyle;
+            default:
+                  return Element::propertyFlags(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//    reset all styled values to actual style
+//---------------------------------------------------------
+
+void TimeSig::styleChanged()
+      {
+      if (scaleStyle == PropertyFlags::STYLED)
+            setScale(score()->styleV(StyleIdx::timesigScale).toSizeF());
+      Element::styleChanged();
       }
 
 //---------------------------------------------------------

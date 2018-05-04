@@ -34,14 +34,16 @@ class Box : public MeasureBase {
       Spatium _boxWidth             { Spatium(0) };  // only valid for HBox
       Spatium _boxHeight            { Spatium(0) };  // only valid for VBox
       qreal _topGap                 { 0.0   };       // distance from previous system (left border for hbox)
-                                                     // initialized with Sid::systemFrameDistance
+                                                     // initialized with StyleIdx::systemFrameDistance
       qreal _bottomGap              { 0.0   };       // distance to next system (right border for hbox)
-                                                     // initialized with Sid::frameSystemDistance
+                                                     // initialized with StyleIdx::frameSystemDistance
       qreal _leftMargin             { 0.0   };
       qreal _rightMargin            { 0.0   };       // inner margins in metric mm
       qreal _topMargin              { 0.0   };
       qreal _bottomMargin           { 0.0   };
       bool editMode                 { false };
+      PropertyFlags topGapStyle     { PropertyFlags::STYLED };
+      PropertyFlags bottomGapStyle  { PropertyFlags::STYLED };
       qreal dragX;                        // used during drag of hbox
 
    public:
@@ -84,9 +86,13 @@ class Box : public MeasureBase {
       void setBottomGap(qreal val)    { _bottomGap = val;     }
       void copyValues(Box* origin);
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
+      virtual PropertyFlags& propertyFlags(P_ID id) override;
+      virtual void resetProperty(P_ID id) override;
+      virtual void styleChanged() override;
+      virtual StyleIdx getPropertyStyle(P_ID id) const override;
       };
 
 //---------------------------------------------------------
@@ -94,7 +100,7 @@ class Box : public MeasureBase {
 ///    horizontal frame
 //---------------------------------------------------------
 
-class HBox final : public Box {
+class HBox : public Box {
       bool _createSystemHeader { true };
 
    public:
@@ -114,9 +120,9 @@ class HBox final : public Box {
       bool createSystemHeader() const      { return _createSystemHeader; }
       void setCreateSystemHeader(bool val) { _createSystemHeader = val;  }
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
       };
 
 //---------------------------------------------------------

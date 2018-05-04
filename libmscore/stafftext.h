@@ -40,19 +40,21 @@ class StaffText final : public TextBase  {
       int aeolusStops[4]   { 0, 0, 0, 0 };
       bool _swing          { false };
 
+   protected:
+      virtual void writeProperties(XmlWriter& xml) const;
+
    public:
       StaffText(Score* = 0);
-      StaffText(SubStyleId, Score* = 0);
+      StaffText(SubStyle, Score* = 0);
       virtual StaffText* clone() const                    { return new StaffText(*this);    }
       virtual ElementType type() const                    { return ElementType::STAFF_TEXT; }
-
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual bool readProperties(XmlReader&) override;
-      virtual int subtype() const                         { return (int) subStyleId(); }
+      virtual int subtype() const                         { return (int) subStyle(); }
       virtual void layout() override;
       virtual QString subtypeName() const                 { return "??"; }
-      virtual QVariant propertyDefault(Pid id) const override;
+      virtual QVariant propertyDefault(P_ID id) const override;
 
       Segment* segment() const;
       QString channelName(int voice) const                { return _channelNames[voice]; }

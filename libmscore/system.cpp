@@ -250,7 +250,7 @@ void System::layoutSystem(qreal xo1)
 
       _leftMargin = xoff2;
 
-      qreal bd = score()->styleP(Sid::bracketDistance);
+      qreal bd = score()->styleP(StyleIdx::bracketDistance);
       if (!_brackets.empty()) {
             for (int w : bracketWidth)
                   _leftMargin += w + bd;
@@ -372,13 +372,12 @@ void System::layout2()
 
       qreal _spatium            = spatium();
       qreal y                   = 0.0;
-      qreal minVerticalDistance = score()->styleP(Sid::minVerticalDistance);
-      qreal staffDistance       = score()->styleP(Sid::staffDistance);
-      qreal akkoladeDistance    = score()->styleP(Sid::akkoladeDistance);
+      qreal minVerticalDistance = score()->styleP(StyleIdx::minVerticalDistance);
+      qreal staffDistance       = score()->styleP(StyleIdx::staffDistance);
+      qreal akkoladeDistance    = score()->styleP(StyleIdx::akkoladeDistance);
 
       if (visibleStaves.empty()) {
             qDebug("====no visible staves, staves %d, score staves %d", _staves.size(), score()->nstaves());
-            return;
             }
 
       for (auto i = visibleStaves.begin();; ++i) {
@@ -566,7 +565,7 @@ void System::setInstrumentNames(bool longName)
       if (vbox())                 // ignore vbox
             return;
       if (!score()->showInstrumentNames()
-              || (score()->styleB(Sid::hideInstrumentNameIfOneInstrument) && score()->parts().size() == 1)) {
+              || (score()->styleB(StyleIdx::hideInstrumentNameIfOneInstrument) && score()->parts().size() == 1)) {
             for (SysStaff* staff : _staves) {
                   foreach (InstrumentName* t, staff->instrumentNames)
                         score()->removeElement(t);
@@ -1029,8 +1028,8 @@ qreal System::minDistance(System* s2) const
       else if (vbox() && s2->vbox())
             return s2->vbox()->topGap() + vbox()->bottomGap();
 
-      qreal minVerticalDistance = score()->styleP(Sid::minVerticalDistance);
-      qreal dist                = score()->styleP(Sid::minSystemDistance);
+      qreal minVerticalDistance = score()->styleP(StyleIdx::minVerticalDistance);
+      qreal dist                = score()->styleP(StyleIdx::minSystemDistance);
       int lastStaff             = _staves.size() - 1;
 
       fixedDownDistance = false;
@@ -1094,7 +1093,6 @@ qreal System::minDistance(System* s2) const
 
 qreal System::topDistance(int staffIdx, const Shape& s) const
       {
-      Q_ASSERT(!vbox());
       qreal dist = -1000000.0;
       for (MeasureBase* mb1 : ml) {
             if (!mb1->isMeasure())
@@ -1111,7 +1109,6 @@ qreal System::topDistance(int staffIdx, const Shape& s) const
 
 qreal System::bottomDistance(int staffIdx, const Shape& s) const
       {
-      Q_ASSERT(!vbox());
       qreal dist = -1000000.0;
       for (MeasureBase* mb1 : ml) {
             if (!mb1->isMeasure())
@@ -1131,9 +1128,10 @@ qreal System::minTop() const
       {
       qreal dist = 0.0;
       for (MeasureBase* mb : ml) {
-            if (!mb->isMeasure())
+            if (mb->type() != ElementType::MEASURE)
                   continue;
-            dist = qMax(dist, toMeasure(mb)->staffShape(0).top() + mb->pos().y());
+            for (Segment* s = toMeasure(mb)->first(); s; s = s->next())
+                  dist = qMin(dist, s->staffShape(0).top());
             }
       return dist;
       }
@@ -1148,11 +1146,10 @@ qreal System::minBottom() const
       qreal dist = 0.0;
       int staffIdx = score()->nstaves() - 1;
       for (MeasureBase* mb : ml) {
-            if (!mb->isMeasure())
+            if (mb->type() != ElementType::MEASURE)
                   continue;
-//            for (Segment* s = toMeasure(mb)->first(); s; s = s->next())
-//                  dist = qMax(dist, s->staffShape(staffIdx).bottom());
-            dist = qMax(dist, toMeasure(mb)->staffShape(staffIdx).bottom() + mb->pos().y());
+            for (Segment* s = toMeasure(mb)->first(); s; s = s->next())
+                  dist = qMax(dist, s->staffShape(staffIdx).bottom());
             }
       return dist - spatium() * 4;
       }

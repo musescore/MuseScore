@@ -58,10 +58,8 @@ Rest::Rest(Score* s, const TDuration& d)
 Rest::Rest(const Rest& r, bool link)
    : ChordRest(r, link)
       {
-      if (link) {
-            score()->undo(new Link(this, const_cast<Rest*>(&r)));
-            setAutoplace(true);
-            }
+      if (link)
+            score()->undo(new Link(const_cast<Rest*>(&r), this));
       _gap     = r._gap;
       _sym     = r._sym;
       dotline  = r.dotline;
@@ -119,8 +117,8 @@ void Rest::draw(QPainter* painter) const
             int dots = durationType().dots();
             if (dots) {
                   qreal y = dotline * _spatium * .5;
-                  qreal dnd = score()->styleP(Sid::dotNoteDistance) * mag();
-                  qreal ddd = score()->styleP(Sid::dotDotDistance) * mag();
+                  qreal dnd = score()->styleP(StyleIdx::dotNoteDistance) * mag();
+                  qreal ddd = score()->styleP(StyleIdx::dotDotDistance) * mag();
                   for (int i = 1; i <= dots; ++i) {
                         qreal x = symWidth(_sym) + dnd + ddd * (i - 1);
                         drawSymbol(SymId::augmentationDot, painter, QPointF(x, y));
@@ -348,7 +346,7 @@ void Rest::layout()
             e->layout();
       qreal _spatium = spatium();
       if (measure() && measure()->isMMRest()) {
-            _mmWidth = score()->styleP(Sid::minMMRestWidth) * mag();
+            _mmWidth = score()->styleP(StyleIdx::minMMRestWidth) * mag();
             // setbbox(QRectF(0.0, -_spatium, _mmWidth, 2.0 * _spatium));
             return;
             }
@@ -623,7 +621,7 @@ void Rest::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 void Rest::reset()
       {
-      undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::NONE));
+      undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::NONE));
       ChordRest::reset();
       }
 
@@ -635,7 +633,7 @@ qreal Rest::mag() const
       {
       qreal m = staff()->mag(tick());
       if (small())
-            m *= score()->styleD(Sid::smallNoteMag);
+            m *= score()->styleD(StyleIdx::smallNoteMag);
       return m;
       }
 
@@ -712,16 +710,16 @@ bool Rest::accent()
 
 void Rest::setAccent(bool flag)
       {
-      undoChangeProperty(Pid::SMALL, flag);
+      undoChangeProperty(P_ID::SMALL, flag);
       if (voice() % 2 == 0) {
             if (flag) {
                   qreal yOffset = -(bbox().bottom());
                   if (durationType() >= TDuration::DurationType::V_HALF)
                         yOffset -= staff()->spatium(tick()) * 0.5;
-                  undoChangeProperty(Pid::USER_OFF, QPointF(0.0, yOffset));
+                  undoChangeProperty(P_ID::USER_OFF, QPointF(0.0, yOffset));
                   }
             else {
-                  undoChangeProperty(Pid::USER_OFF, QPointF());
+                  undoChangeProperty(P_ID::USER_OFF, QPointF());
                   }
             }
       }
@@ -833,10 +831,10 @@ void Rest::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Rest::getProperty(Pid propertyId) const
+QVariant Rest::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::GAP:
+            case P_ID::GAP:
                   return _gap;
             default:
                   return ChordRest::getProperty(propertyId);
@@ -847,10 +845,10 @@ QVariant Rest::getProperty(Pid propertyId) const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Rest::propertyDefault(Pid propertyId) const
+QVariant Rest::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::GAP:
+            case P_ID::GAP:
                   return false;
             default:
                   return ChordRest::propertyDefault(propertyId);
@@ -861,15 +859,15 @@ QVariant Rest::propertyDefault(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Rest::setProperty(Pid propertyId, const QVariant& v)
+bool Rest::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case Pid::GAP:
+            case P_ID::GAP:
                   _gap = v.toBool();
                   score()->setLayout(tick());
                   break;
 
-            case Pid::USER_OFF:
+            case P_ID::USER_OFF:
                   score()->addRefresh(canvasBoundingRect());
                   setUserOff(v.toPointF());
                   layout();

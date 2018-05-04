@@ -164,13 +164,6 @@ enum class Placement {
       ABOVE, BELOW
       };
 
-//---------------------------------------------------------
-//   Tuplets
-//---------------------------------------------------------
-
-enum class TupletNumberType  : char { SHOW_NUMBER, SHOW_RELATION, NO_TEXT         };
-enum class TupletBracketType : char { AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET };
-
 
 Q_ENUM_NS(ElementType)
 Q_ENUM_NS(Direction)

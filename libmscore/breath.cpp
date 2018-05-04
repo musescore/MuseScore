@@ -78,8 +78,8 @@ void Breath::write(XmlWriter& xml) const
       if (!xml.canWrite(this))
             return;
       xml.stag("Breath");
-      writeProperty(xml, Pid::SYMBOL);
-      writeProperty(xml, Pid::PAUSE);
+      writeProperty(xml, P_ID::SYMBOL);
+      writeProperty(xml, P_ID::PAUSE);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -144,12 +144,12 @@ QPointF Breath::pagePos() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Breath::getProperty(Pid propertyId) const
+QVariant Breath::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::SYMBOL:
+            case P_ID::SYMBOL:
                   return QVariant::fromValue(_symId);
-            case Pid::PAUSE:
+            case P_ID::PAUSE:
                   return _pause;
             default:
                   return Element::getProperty(propertyId);
@@ -160,14 +160,14 @@ QVariant Breath::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Breath::setProperty(Pid propertyId, const QVariant& v)
+bool Breath::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case Pid::SYMBOL:
+            case P_ID::SYMBOL:
                   setSymId(v.value<SymId>());
                   break;
 
-            case Pid::PAUSE:
+            case P_ID::PAUSE:
                   setPause(v.toDouble());
                   break;
             default:
@@ -184,10 +184,10 @@ bool Breath::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Breath::propertyDefault(Pid id) const
+QVariant Breath::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case Pid::PAUSE:
+            case P_ID::PAUSE:
                   return 0.0;
             default:
                   return Element::propertyDefault(id);

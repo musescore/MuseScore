@@ -407,7 +407,6 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
             // use same code path as drag&drop
 
             QByteArray a = e->mimeData(QPointF());
-
             XmlReader e(a);
             Fraction duration;  // dummy
             QPointF dragOffset;
@@ -488,7 +487,7 @@ void Palette::applyPaletteElement(PaletteCell* cell)
             else if (element->isSlur() && addSingle) {
                   viewer->addSlur();
                   }
-            else if (element->isSLine() && !element->isGlissando() && addSingle) {
+            else if (element->isSLine() && element->type() != ElementType::GLISSANDO && addSingle) {
                   Segment* startSegment = cr1->segment();
                   Segment* endSegment = cr2->segment();
                   if (element->type() == ElementType::PEDAL && cr2 != cr1)
@@ -497,7 +496,6 @@ void Palette::applyPaletteElement(PaletteCell* cell)
                   int idx = cr1->staffIdx();
 
                   QByteArray a = element->mimeData(QPointF());
-// printf("<<%s>>\n", a.data());
                   XmlReader e(a);
                   Fraction duration;  // dummy
                   QPointF dragOffset;
@@ -590,7 +588,7 @@ void Palette::applyPaletteElement(PaletteCell* cell)
                                           {
                                           KeySig* okeysig = new KeySig(score);
                                           okeysig->setKeySigEvent(staff->keySigEvent(tick1));
-                                          if (!score->styleB(Sid::concertPitch) && !okeysig->isCustom() && !okeysig->isAtonal()) {
+                                          if (!score->styleB(StyleIdx::concertPitch) && !okeysig->isCustom() && !okeysig->isAtonal()) {
                                                 Interval v = staff->part()->instrument(tick1)->transpose();
                                                 if (!v.isZero()) {
                                                       Key k = okeysig->key();
@@ -924,6 +922,7 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
       if (s) {
             s->setPos(0.0, 0.0);
             s->setUserOff(QPointF());
+            s->setReadPos(QPointF());
             }
 
       PaletteCell* cell = new PaletteCell;
@@ -1017,7 +1016,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 
       // QPen pen(palette().color(QPalette::Normal, QPalette::Text));
       QPen pen(Qt::black);
-      pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * PALETTE_SPATIUM * extraMag);
+      pen.setWidthF(MScore::defaultStyle().value(StyleIdx::staffLineWidth).toDouble() * PALETTE_SPATIUM * extraMag);
 
       for (int idx = 0; idx < ccp()->size(); ++idx) {
             int yoffset  = gscore->spatium() * _yOffset;

@@ -24,9 +24,7 @@
       <stemWidth>0.16</stemWidth>
       <barNoteDistance>1.2</barNoteDistance>
       <lastSystemFillLimit>0.25</lastSystemFillLimit>
-      <hairpinFontFace>MuseJazz Text</hairpinFontFace>
       <pedalPosBelow>0</pedalPosBelow>
-      <pedalFontFace>MuseJazz Text</pedalFontFace>
       <trillPosAbove>0</trillPosAbove>
       <measureNumberSystem>0</measureNumberSystem>
       <chordStyle>jazz</chordStyle>
@@ -37,10 +35,6 @@
       <oddFooterC>$C$p</oddFooterC>
       <oddFooterR></oddFooterR>
       <voltaY>-6</voltaY>
-      <ottavaFontFace>MuseJazz Text</ottavaFontFace>
-      <ottavaFontSize>10</ottavaFontSize>
-      <ottavaFontItalic>1</ottavaFontItalic>
-      <tupletFontFace>MuseJazz Text</tupletFontFace>
       <titleFontFace>MuseJazz Text</titleFontFace>
       <titleFontSize>28</titleFontSize>
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
@@ -74,6 +68,7 @@
       <metronomeFontFace>MuseJazz Text</metronomeFontFace>
       <measureNumberFontFace>MuseJazz Text</measureNumberFontFace>
       <translatorFontFace>MuseJazz Text</translatorFontFace>
+      <tupletFontFace>MuseJazz Text</tupletFontFace>
       <systemFontFace>MuseJazz Text</systemFontFace>
       <systemFontSize>11</systemFontSize>
       <systemOffset x="0" y="-2"/>
@@ -94,6 +89,11 @@
       <textLineFontFace>MuseJazz Text</textLineFontFace>
       <textLineFontSize>10</textLineFontSize>
       <glissandoFontFace>MuseJazz Text</glissandoFontFace>
+      <ottavaFontFace>MuseJazz Text</ottavaFontFace>
+      <ottavaFontSize>10</ottavaFontSize>
+      <ottavaFontItalic>1</ottavaFontItalic>
+      <pedalFontFace>MuseJazz Text</pedalFontFace>
+      <hairpinFontFace>MuseJazz Text</hairpinFontFace>
       <bendFontFace>MuseJazz Text</bendFontFace>
       <headerFontFace>MuseJazz Text</headerFontFace>
       <footerFontFace>MuseJazz Text</footerFontFace>
@@ -206,7 +206,7 @@
         <Tempo>
           <tempo>1.33333</tempo>
           <followText>1</followText>
-          <text><sym>metNoteQuarterUp</sym> = 80</text>
+          <text><sym>unicodeNoteQuarterUp</sym> = 80</text>
           </Tempo>
         <Rest>
           <durationType>measure</durationType>
@@ -327,6 +327,7 @@
       <Measure number="11">
         <StaffText>
           <style>Expression</style>
+          <offset x="0" y="5.5"/>
           <text>technique</text>
           </StaffText>
         <Rest>
@@ -364,6 +365,7 @@
           </LayoutBreak>
         <StaffText>
           <style>Metronome</style>
+          <offset x="0" y="5.5"/>
           <text>metronome</text>
           </StaffText>
         <Rest>
@@ -420,6 +422,7 @@
         <Pedal id="2">
           <endHookType>1</endHookType>
           <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+          <continueText>(&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;)</continueText>
           </Pedal>
         <Chord>
           <durationType>quarter</durationType>
@@ -476,7 +479,6 @@
         <TextLine id="5">
           <endHookType>1</endHookType>
           <beginText>VII</beginText>
-          <beginTextPlace>3</beginTextPlace>
           </TextLine>
         <Rest>
           <durationType>measure</durationType>

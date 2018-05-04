@@ -123,11 +123,11 @@ void ArticulationProperties::saveValues()
 #endif
       if (int(articulation->direction()) != direction->currentIndex())
             articulation->score()->undo(new ChangeProperty(articulation,
-               Pid::DIRECTION, direction->currentIndex()));
+               P_ID::DIRECTION, direction->currentIndex()));
 
       if (int(articulation->anchor()) != anchor->currentIndex())
             articulation->score()->undo(new ChangeProperty(articulation,
-               Pid::ARTICULATION_ANCHOR, anchor->currentIndex()));
+               P_ID::ARTICULATION_ANCHOR, anchor->currentIndex()));
       }
 
 //---------------------------------------------------------

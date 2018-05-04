@@ -42,7 +42,7 @@ class DurationElement : public Element {
 #endif
 
    public:
-      DurationElement(Score* = 0, ElementFlags = ElementFlag::NOTHING);
+      DurationElement(Score* s);
       DurationElement(const DurationElement& e);
       ~DurationElement();
 
@@ -63,8 +63,8 @@ class DurationElement : public Element {
       Fraction globalDuration() const;
       void setDuration(const Fraction& f) { _duration = f;    }
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       };
 
 

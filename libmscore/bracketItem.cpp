@@ -21,14 +21,14 @@ namespace Ms {
 //   getProperty
 //---------------------------------------------------------
 
-QVariant BracketItem::getProperty(Pid id) const
+QVariant BracketItem::getProperty(P_ID id) const
       {
       switch (id) {
-            case Pid::SYSTEM_BRACKET:
+            case P_ID::SYSTEM_BRACKET:
                   return int(_bracketType);
-            case Pid::BRACKET_COLUMN:
+            case P_ID::BRACKET_COLUMN:
                   return _column;
-            case Pid::BRACKET_SPAN:
+            case P_ID::BRACKET_SPAN:
                   return _bracketSpan;
                   break;
             default:
@@ -40,16 +40,16 @@ QVariant BracketItem::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool BracketItem::setProperty(Pid id, const QVariant& v)
+bool BracketItem::setProperty(P_ID id, const QVariant& v)
       {
       switch (id) {
-            case Pid::SYSTEM_BRACKET:
+            case P_ID::SYSTEM_BRACKET:
                   // staff()->setBracketType(level(), BracketType(v.toInt()));   // change bracket type global
                   break;
-            case Pid::BRACKET_COLUMN:
+            case P_ID::BRACKET_COLUMN:
                   _column = v.toInt();
                   break;
-            case Pid::BRACKET_SPAN:
+            case P_ID::BRACKET_SPAN:
                   _bracketSpan = v.toInt();
                   break;
             default:
@@ -64,12 +64,12 @@ bool BracketItem::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant BracketItem::propertyDefault(Pid id) const
+QVariant BracketItem::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case Pid::SYSTEM_BRACKET:
+            case P_ID::SYSTEM_BRACKET:
                   return int(BracketType::NORMAL);
-            case Pid::BRACKET_COLUMN:
+            case P_ID::BRACKET_COLUMN:
                   return 0;
             default:
                   return QVariant();

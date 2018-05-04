@@ -124,9 +124,6 @@ void ElementItem::init()
                   s = "Measure-" + no;
                   }
                   break;
-            case ElementType::SEGMENT:
-                  s = QString("Segment %1").arg(toSegment(el)->subTypeName());
-                  break;
             default:
                   s = el->name();
                   break;
@@ -487,7 +484,7 @@ void Debugger::updateList(Score* s)
                         if (mb->type() != ElementType::MEASURE)
                               continue;
                         Measure* measure = (Measure*) mb;
-                        if (cs->styleB(Sid::concertPitch)) {
+                        if (cs->styleB(StyleIdx::concertPitch)) {
                               if (measure->mmRest()) {
                                     ElementItem* mmi = new ElementItem(mi, measure->mmRest());
                                     addMeasure(mmi, measure->mmRest());
@@ -588,7 +585,7 @@ void Debugger::itemClicked(QTreeWidgetItem* i, int)
 
 void Debugger::updateElement(Element* el)
       {
-      if (el == 0 || !isVisible() || !el->score())
+      if (el == 0 || !isVisible())
             return;
 
       if (cs != el->score())
@@ -855,9 +852,8 @@ void SegmentView::setElement(Element* e)
       int tick = s->tick();
       TimeSigMap* sm = s->score()->sigmap();
 
-      int bar = -1, beat = -1, ticks = -1;
-      if (tick >= 0)
-            sm->tickValues(tick, &bar, &beat, &ticks);
+      int bar, beat, ticks;
+      sm->tickValues(tick, &bar, &beat, &ticks);
       sb.bar->setValue(bar);
       sb.beat->setValue(beat);
       sb.ticks->setValue(ticks);
@@ -1276,7 +1272,7 @@ void RestView::setElement(Element* e)
 
       rb.sym->setValue(int(rest->sym()));
       rb.dotline->setValue(rest->getDotline());
-      rb.mmWidth->setValue((rest->measure() && rest->measure()->isMMRest()) ? rest->mmWidth() : 0.0);
+      rb.mmWidth->setValue(rest->mmWidth());
       rb.gap->setChecked(rest->isGap());
       }
 
@@ -1363,7 +1359,7 @@ void TextView::setElement(Element* e)
       {
       Text* te = static_cast<Text*>(e);
 
-      tb.subStyle->setText(subStyleName(te->subStyleId()));
+      tb.subStyle->setText(subStyleName(te->subStyle()));
 
       ShowElementBase::setElement(e);
       tb.text->setPlainText(te->xmlText());
@@ -1806,6 +1802,8 @@ void ShowElementBase::setElement(Element* e)
       eb.cposy->setValue(e->pagePos().y());
       eb.offsetx->setValue(e->userOff().x());
       eb.offsety->setValue(e->userOff().y());
+      eb.readPosX->setValue(e->readPos().x());
+      eb.readPosY->setValue(e->readPos().y());
       eb.autoplace->setChecked(e->autoplace());
       eb.placement->setCurrentIndex(int(e->placement()));
 

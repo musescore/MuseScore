@@ -387,7 +387,7 @@ bool MuseScore::saveFile(MasterScore* score)
             return false;
       if (score->created()) {
             QString fn = score->masterScore()->fileInfo()->fileName();
-            Text* t = score->getText(SubStyleId::TITLE);
+            Text* t = score->getText(SubStyle::TITLE);
             if (t)
                   fn = t->plainText();
             QString name = createDefaultFileName(fn);
@@ -426,7 +426,7 @@ bool MuseScore::saveFile(MasterScore* score)
             return false;
             }
       score->setCreated(false);
-      updateWindowTitle(score);
+      setWindowTitle(QString(MUSESCORE_NAME_VERSION) + ": " + score->fileInfo()->completeBaseName());
       int idx = scoreList.indexOf(score->masterScore());
       tab1->setTabText(idx, score->fileInfo()->completeBaseName());
       if (tab2)
@@ -519,7 +519,7 @@ MasterScore* MuseScore::getNewFile()
                         Staff* staff = new Staff(score);
                         staff->setPart(part);
                         staff->init(tstaff);
-                        if (tstaff->links() && !part->staves()->isEmpty()) {
+                        if (tstaff->linkedStaves() && !part->staves()->isEmpty()) {
                               Staff* linkedStaff = part->staves()->back();
                               staff->linkTo(linkedStaff);
                               }
@@ -563,9 +563,9 @@ MasterScore* MuseScore::getNewFile()
       score->fileInfo()->setFile(createDefaultName());
 
       if (!score->style().chordList()->loaded()) {
-            if (score->styleB(Sid::chordsXmlFile))
+            if (score->styleB(StyleIdx::chordsXmlFile))
                   score->style().chordList()->read("chords.xml");
-            score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
+            score->style().chordList()->read(score->styleSt(StyleIdx::chordDescriptionFile));
             }
       if (!newWizard->title().isEmpty())
             score->fileInfo()->setFile(newWizard->title());
@@ -607,7 +607,7 @@ MasterScore* MuseScore::getNewFile()
                                     // transpose key
                                     //
                                     KeySigEvent nKey = ks;
-                                    if (!nKey.custom() && !nKey.isAtonal() && part->instrument()->transpose().chromatic && !score->styleB(Sid::concertPitch)) {
+                                    if (!nKey.custom() && !nKey.isAtonal() && part->instrument()->transpose().chromatic && !score->styleB(StyleIdx::concertPitch)) {
                                           int diff = -part->instrument()->transpose().chromatic;
                                           nKey.setKey(transposeKey(nKey.key(), diff));
                                           }
@@ -697,24 +697,24 @@ MasterScore* MuseScore::getNewFile()
                   delete nvb;
                   }
             if (!title.isEmpty()) {
-                  Text* s = new Text(SubStyleId::TITLE, score);
+                  Text* s = new Text(SubStyle::TITLE, score);
                   s->setPlainText(title);
                   measure->add(s);
                   score->setMetaTag("workTitle", title);
                   }
             if (!subtitle.isEmpty()) {
-                  Text* s = new Text(SubStyleId::SUBTITLE, score);
+                  Text* s = new Text(SubStyle::SUBTITLE, score);
                   s->setPlainText(subtitle);
                   measure->add(s);
                   }
             if (!composer.isEmpty()) {
-                  Text* s = new Text(SubStyleId::COMPOSER, score);
+                  Text* s = new Text(SubStyle::COMPOSER, score);
                   s->setPlainText(composer);
                   measure->add(s);
                   score->setMetaTag("composer", composer);
                   }
             if (!poet.isEmpty()) {
-                  Text* s = new Text(SubStyleId::POET, score);
+                  Text* s = new Text(SubStyle::POET, score);
                   s->setPlainText(poet);
                   measure->add(s);
                   // the poet() functions returns data called lyricist in the dialog
@@ -746,7 +746,7 @@ MasterScore* MuseScore::getNewFile()
 
       for (Excerpt* x : excerpts) {
             Score* xs = new Score(static_cast<MasterScore*>(score));
-            xs->style().set(Sid::createMultiMeasureRests, true);
+            xs->style().set(StyleIdx::createMultiMeasureRests, true);
             x->setPartScore(xs);
             xs->setExcerpt(x);
             score->excerpts().append(x);
@@ -1508,7 +1508,7 @@ void MuseScore::printFile()
             }
 
       QPrinter printerDev(QPrinter::HighResolution);
-      QSizeF size(cs->styleD(Sid::pageWidth), cs->styleD(Sid::pageHeight));
+      QSizeF size(cs->styleD(StyleIdx::pageWidth), cs->styleD(StyleIdx::pageHeight));
       QPageSize ps(QPageSize::id(size, QPageSize::Inch));
       printerDev.setPageSize(ps);
       printerDev.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
@@ -1864,7 +1864,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
 
             if (rv && !saveCopy) {
                   cs->masterScore()->fileInfo()->setFile(fn);
-                  updateWindowTitle(cs);
+                  setWindowTitle(QString(MUSESCORE_NAME_VERSION) + ": " + cs->title());
                   cs->undoStack()->setClean();
                   dirtyChanged(cs);
                   cs->setCreated(false);
@@ -1955,7 +1955,7 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
 
       QPdfWriter pdfWriter(saveName);
       pdfWriter.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
-      QSizeF size(cs->styleD(Sid::pageWidth), cs->styleD(Sid::pageHeight));
+      QSizeF size(cs->styleD(StyleIdx::pageWidth), cs->styleD(StyleIdx::pageHeight));
       QPageSize ps(QPageSize::id(size, QPageSize::Inch));
       pdfWriter.setPageSize(ps);
       pdfWriter.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
@@ -2014,7 +2014,7 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
       QPdfWriter pdfWriter(saveName);
       pdfWriter.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
 
-      QSizeF size(firstScore->styleD(Sid::pageWidth), firstScore->styleD(Sid::pageHeight));
+      QSizeF size(firstScore->styleD(StyleIdx::pageWidth), firstScore->styleD(StyleIdx::pageHeight));
       QPageSize ps(QPageSize::id(size, QPageSize::Inch));
       pdfWriter.setPageSize(ps);
       pdfWriter.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
@@ -2178,9 +2178,9 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
                         score->style().load(&f);
                   }
             else {
-                  if (score->styleB(Sid::chordsXmlFile))
+                  if (score->styleB(StyleIdx::chordsXmlFile))
                         score->style().chordList()->read("chords.xml");
-                  score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
+                  score->style().chordList()->read(score->styleSt(StyleIdx::chordDescriptionFile));
                   }
             bool found = false;
             for (auto i : imports) {

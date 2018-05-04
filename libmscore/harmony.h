@@ -117,7 +117,7 @@ class Harmony final : public TextBase {
       void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,
          NoteSpellingType& baseSpelling, NoteCaseType& baseCase);
 
-      void textChanged();
+      virtual void textChanged() override;
       virtual void layout() override;
 
       const QRectF& bboxtight() const          { return _tbbox;        }
@@ -155,7 +155,7 @@ class Harmony final : public TextBase {
       const QString& extensionName() const;
 
       QString xmlKind() const;
-      QString musicXmlText() const;
+      QString xmlText() const;
       QString xmlSymbols() const;
       QString xmlParens() const;
       QStringList xmlDegrees() const;
@@ -178,7 +178,7 @@ class Harmony final : public TextBase {
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
 
-      virtual QVariant propertyDefault(Pid id) const override;
+      virtual QVariant propertyDefault(P_ID id) const override;
       };
 
 }     // namespace Ms

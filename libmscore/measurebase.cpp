@@ -178,7 +178,7 @@ void MeasureBase::remove(Element* el)
                         break;
                   case LayoutBreak::SECTION:
                         setSectionBreak(false);
-                        score()->setPause(endTick(), 0);
+                        score()->setPause(endTick()-1, 0);
                         score()->setLayoutAll();
                         break;
                   case LayoutBreak::NOBREAK:
@@ -213,7 +213,7 @@ Measure* MeasureBase::nextMeasure() const
 Measure* MeasureBase::nextMeasureMM() const
       {
       Measure* mm = nextMeasure();
-      if (mm && score()->styleB(Sid::createMultiMeasureRests) && mm->hasMMRest())
+      if (mm && score()->styleB(StyleIdx::createMultiMeasureRests) && mm->hasMMRest())
             return mm->mmRest();
       return mm;
       }
@@ -243,7 +243,7 @@ Measure* MeasureBase::prevMeasureMM() const
       while (m) {
             if (m->isMeasure()) {
                   Measure* mm = toMeasure(m);
-                  if (score()->styleB(Sid::createMultiMeasureRests)) {
+                  if (score()->styleB(StyleIdx::createMultiMeasureRests)) {
                         if (mm->mmRestCount() >= 0) {
                               if (mm->hasMMRest())
                                     return mm->mmRest();
@@ -323,14 +323,14 @@ MeasureBase* Score::last()  const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant MeasureBase::getProperty(Pid id) const
+QVariant MeasureBase::getProperty(P_ID id) const
       {
       switch (id) {
-            case Pid::REPEAT_END:
+            case P_ID::REPEAT_END:
                   return repeatEnd();
-            case Pid::REPEAT_START:
+            case P_ID::REPEAT_START:
                   return repeatStart();
-            case Pid::REPEAT_JUMP:
+            case P_ID::REPEAT_JUMP:
                   return repeatJump();
             default:
                   return Element::getProperty(id);
@@ -341,16 +341,16 @@ QVariant MeasureBase::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool MeasureBase::setProperty(Pid id, const QVariant& value)
+bool MeasureBase::setProperty(P_ID id, const QVariant& value)
       {
       switch (id) {
-            case Pid::REPEAT_END:
+            case P_ID::REPEAT_END:
                   setRepeatEnd(value.toBool());
                   break;
-            case Pid::REPEAT_START:
+            case P_ID::REPEAT_START:
                   setRepeatStart(value.toBool());
                   break;
-            case Pid::REPEAT_JUMP:
+            case P_ID::REPEAT_JUMP:
                   setRepeatJump(value.toBool());
                   break;
             default:
@@ -366,12 +366,12 @@ bool MeasureBase::setProperty(Pid id, const QVariant& value)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant MeasureBase::propertyDefault(Pid propertyId) const
+QVariant MeasureBase::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::REPEAT_END:
-            case Pid::REPEAT_START:
-            case Pid::REPEAT_JUMP:
+            case P_ID::REPEAT_END:
+            case P_ID::REPEAT_START:
+            case P_ID::REPEAT_JUMP:
                   return false;
             default:
                   break;
@@ -473,7 +473,7 @@ MeasureBase* MeasureBase::nextMM() const
       {
       if (_next
          && _next->isMeasure()
-         && score()->styleB(Sid::createMultiMeasureRests)
+         && score()->styleB(StyleIdx::createMultiMeasureRests)
          && toMeasure(_next)->hasMMRest()) {
             return toMeasure(_next)->mmRest();
             }

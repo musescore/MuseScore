@@ -16,9 +16,9 @@
 namespace Ms {
 
 class XmlReader;
-enum class Sid : int;
+enum class StyleIdx : int;
 
-//------------------------------------------------------------------------
+//---------------------------------------------------------
 //    M_PROPERTY (type, getter_name, setter_name)
 //       helper macro to define a styled ScoreElement property
 //
@@ -27,21 +27,11 @@ enum class Sid : int;
 //          M_PROPERTY(bool, bold, setBold)
 //          ...
 //          };
-//    this defines:
-//          bool _bold;
-//          const bool& bold() const { return _bold; }
-//          void setBold(const a& val) { _bold = val; }
 //---------------------------------------------------------
 
 #define M_PROPERTY(a,b,c)                                      \
       a _ ## b;                                                \
-   public:                                                     \
-      const a& b() const   { return _ ## b; }                  \
-      void c(const a& val) { _ ## b = val;  }                  \
-   private:
-
-#define M_PROPERTY2(a,b,c,d)                                   \
-      a _ ## b { d };                                          \
+      PropertyFlags _ ## b ## Style { PropertyFlags::STYLED }; \
    public:                                                     \
       const a& b() const   { return _ ## b; }                  \
       void c(const a& val) { _ ## b = val;  }                  \
@@ -59,7 +49,7 @@ enum class PropertyFlags : char {
 //   Element Properties
 //------------------------------------------------------------------------
 
-enum class Pid {
+enum class P_ID {
       SUBTYPE,
       SELECTED,
       GENERATED,
@@ -201,7 +191,10 @@ enum class Pid {
       SPANNER_TICKS,
       SPANNER_TRACK2,
       USER_OFF2,
+      BEGIN_TEXT_STYLE,
+      CONTINUE_TEXT_STYLE,
 
+      END_TEXT_STYLE,
       BREAK_MMR,
       REPEAT_COUNT,
       USER_STRETCH,
@@ -237,8 +230,6 @@ enum class Pid {
       FRET_FRETS,
       FRET_BARRE,
       FRET_OFFSET,
-      FRET_NUM_POS,
-
       SYSTEM_BRACKET,
       GAP,
       AUTOPLACE,
@@ -359,6 +350,7 @@ enum class P_TYPE : char {
       TEMPO,
       GROUPS,
       SYMID,
+      TEXT_STYLE,
       INT_LIST,
       GLISSANDO_STYLE,
       BARLINE_TYPE,
@@ -370,12 +362,12 @@ enum class P_TYPE : char {
       ALIGN,
       };
 
-extern QVariant getProperty(Pid type, XmlReader& e);
-extern P_TYPE propertyType(Pid);
-extern const char* propertyName(Pid);
-extern const char* propertyQmlName(Pid);
-extern bool propertyLink(Pid id);
-extern Pid propertyId(const QString&);
+extern QVariant getProperty(P_ID type, XmlReader& e);
+extern P_TYPE propertyType(P_ID);
+extern const char* propertyName(P_ID);
+extern const char* propertyQmlName(P_ID);
+extern bool propertyLink(P_ID id);
+extern P_ID propertyId(const QString&);
 
 }     // namespace Ms
 #endif

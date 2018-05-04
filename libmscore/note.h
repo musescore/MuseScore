@@ -278,8 +278,6 @@ class Note final : public Element {
       virtual Note* clone() const override  { return new Note(*this, false); }
       ElementType type() const override   { return ElementType::NOTE; }
 
-      virtual void undoUnlink() override;
-
       virtual qreal mag() const override;
 
       void layout();
@@ -452,9 +450,9 @@ class Note final : public Element {
       void undoSetHeadGroup(NoteHead::Group);
       void undoSetHeadType(NoteHead::Type);
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
       bool mark() const               { return _mark;   }
       void setMark(bool v) const      { _mark = v;   }

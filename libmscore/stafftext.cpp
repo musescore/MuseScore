@@ -26,28 +26,24 @@ namespace Ms {
 StaffText::StaffText(Score* s)
    : TextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(SubStyleId::STAFF);
+      init(SubStyle::STAFF);
       setSwingParameters(MScore::division / 2, 60);
       }
 
-StaffText::StaffText(SubStyleId ss, Score* s)
+StaffText::StaffText(SubStyle ss, Score* s)
    : TextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(ss);
+      init(ss);
       setPlacement(Placement::ABOVE);     // default
       setSwingParameters(MScore::division / 2, 60);
       }
 
 //---------------------------------------------------------
-//   write
+//   writeProperties
 //---------------------------------------------------------
 
-void StaffText::write(XmlWriter& xml) const
+void StaffText::writeProperties(XmlWriter& xml) const
       {
-      if (!xml.canWrite(this))
-            return;
-      xml.stag("StaffText");
-
       for (ChannelActions s : _channelActions) {
             int channel = s.channel;
             for (QString name : s.midiActionNames)
@@ -73,7 +69,18 @@ void StaffText::write(XmlWriter& xml) const
             xml.tagE(QString("swing unit=\"%1\" ratio= \"%2\"").arg(swingUnit).arg(swingRatio));
             }
       TextBase::writeProperties(xml);
+      }
 
+//---------------------------------------------------------
+//   write
+//---------------------------------------------------------
+
+void StaffText::write(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag("StaffText");
+      writeProperties(xml);
       xml.etag();
       }
 
@@ -198,10 +205,10 @@ bool StaffText::getAeolusStop(int group, int idx) const
 void StaffText::layout()
       {
       Staff* s = staff();
-      qreal y = placeAbove() ? styleP(Sid::staffTextPosAbove) : styleP(Sid::staffTextPosBelow) + (s ? s->height() : 0.0);
+      qreal y = placeAbove() ? styleP(StyleIdx::staffTextPosAbove) : styleP(StyleIdx::staffTextPosBelow) + (s ? s->height() : 0.0);
       setPos(QPointF(0.0, y));
       TextBase::layout1();
-      autoplaceSegmentElement(styleP(Sid::staffTextMinDistance));
+      autoplaceSegmentElement(styleP(StyleIdx::staffTextMinDistance));
       }
 
 //---------------------------------------------------------
@@ -222,15 +229,13 @@ Segment* StaffText::segment() const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant StaffText::propertyDefault(Pid id) const
+QVariant StaffText::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case Pid::SUB_STYLE:
-                  return int(SubStyleId::STAFF);
-            case Pid::PLACEMENT:
+            case P_ID::SUB_STYLE:
+                  return int(SubStyle::STAFF);
+            case P_ID::PLACEMENT:
                   return int(Placement::ABOVE);
-            case Pid::FRAME:
-                  return false;
             default:
                   return TextBase::propertyDefault(id);
             }

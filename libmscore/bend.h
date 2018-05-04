@@ -16,7 +16,6 @@
 #include "element.h"
 #include "pitchvalue.h"
 #include "property.h"
-#include "style.h"
 
 namespace Ms {
 
@@ -25,16 +24,23 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Bend final : public Element {
-      M_PROPERTY(QString, fontFace,      setFontFace)
-      M_PROPERTY(qreal,   fontSize,      setFontSize)
-      M_PROPERTY(bool,    fontBold,      setFontBold)
-      M_PROPERTY(bool,    fontItalic,    setFontItalic)
-      M_PROPERTY(bool,    fontUnderline, setFontUnderline)
-      M_PROPERTY(Spatium, lineWidth,     setLineWidth)
+      QString fontFace   { "FreeSerif" };
+      qreal fontSize     { 8.0         };
+      bool fontBold      { false       };
+      bool fontItalic    { false       };
+      bool fontUnderline { false       };
+
+      PropertyFlags propertyFlagsList[5] = {
+            PropertyFlags::STYLED,
+            PropertyFlags::STYLED,
+            PropertyFlags::STYLED,
+            PropertyFlags::STYLED,
+            PropertyFlags::STYLED,
+            };
 
       bool _playBend     { true };
       QList<PitchValue> _points;
-
+      qreal _lw;
       QPointF notePos;
       qreal noteWidth;
 
@@ -55,9 +61,15 @@ class Bend final : public Element {
       void setPlayBend(bool v)                   { _playBend = v;    }
 
       // property methods
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
+
+      virtual void setPropertyFlags(P_ID, PropertyFlags) override;
+      virtual PropertyFlags& propertyFlags(P_ID) override;
+      virtual void resetProperty(P_ID id) override;
+      virtual StyleIdx getPropertyStyle(P_ID) const override;
+      virtual void reset() override;
       };
 
 

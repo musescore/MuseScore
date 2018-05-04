@@ -492,10 +492,10 @@ static void determineMeasureStart(const QVector<Fraction>& ml, QVector<Fraction>
 //---------------------------------------------------------
 
 /**
- Add text \a strTxt to VBox \a vbx using SubStyleId \a stl.
+ Add text \a strTxt to VBox \a vbx using SubStyle \a stl.
  */
 
-static void addText(VBox* vbx, Score* s, QString strTxt, SubStyleId stl)
+static void addText(VBox* vbx, Score* s, QString strTxt, SubStyle stl)
       {
       if (!strTxt.isEmpty()) {
             Text* text = new Text(stl, s);
@@ -509,11 +509,11 @@ static void addText(VBox* vbx, Score* s, QString strTxt, SubStyleId stl)
 //---------------------------------------------------------
 
 /**
- Add text \a strTxt to VBox \a vbx using SubStyleId \a stl.
+ Add text \a strTxt to VBox \a vbx using SubStyle \a stl.
  Also sets Align and Yoff.
  */
 
-static void addText2(VBox* vbx, Score* s, QString strTxt, SubStyleId stl, Align v, double yoffs)
+static void addText2(VBox* vbx, Score* s, QString strTxt, SubStyle stl, Align v, double yoffs)
       {
       if (!strTxt.isEmpty()) {
             Text* text = new Text(stl, s);
@@ -542,7 +542,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
              pf->width(), pf->height(), pf->oddTopMargin(), score->spatium(), DPMM, DPI);
       */
       // page width, height and odd top margin in tenths
-      const double ph  = score->styleD(Sid::pageHeight) * 10 * DPI / score->spatium();
+      const double ph  = score->styleD(StyleIdx::pageHeight) * 10 * DPI / score->spatium();
       const int pw1 = pageWidth / 3;
       const int pw2 = pageWidth * 2 / 3;
       const int ph2 = pageHeight / 2;
@@ -628,14 +628,14 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                   if (pw2 < defx) {
                         // found composer
                         addText2(vbox, score, w->words,
-                                 SubStyleId::COMPOSER, Align::RIGHT | Align::BOTTOM,
+                                 SubStyle::COMPOSER, Align::RIGHT | Align::BOTTOM,
                                  (miny - w->defaultY) * score->spatium() / (10 * DPI));
                         }
                   // poet is in the left column
                   else if (defx < pw1) {
                         // found poet/lyricist
                         addText2(vbox, score, w->words,
-                                 SubStyleId::POET, Align::LEFT | Align::BOTTOM,
+                                 SubStyle::POET, Align::LEFT | Align::BOTTOM,
                                  (miny - w->defaultY) * score->spatium() / (10 * DPI));
                         }
                   // save others (in the middle column) to be handled later
@@ -678,7 +678,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             CreditWords* w = creditMap.value(keys.at(keys.size() - 1));
             //qDebug("title='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
-                     SubStyleId::TITLE, Align::HCENTER | Align::TOP,
+                     SubStyle::TITLE, Align::HCENTER | Align::TOP,
                      (maxy - w->defaultY) * score->spatium() / (10 * DPI));
             }
 
@@ -687,7 +687,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             CreditWords* w = creditMap.value(keys.at(i));
             //qDebug("subtitle='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
-                     SubStyleId::SUBTITLE, Align::HCENTER | Align::TOP,
+                     SubStyle::SUBTITLE, Align::HCENTER | Align::TOP,
                      (maxy - w->defaultY) * score->spatium() / (10 * DPI));
             }
 
@@ -718,11 +718,11 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             if (!metaPoet.isEmpty()) strPoet = metaPoet;
             if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
 
-            addText(vbox, score, strTitle.toHtmlEscaped(),      SubStyleId::TITLE);
-            addText(vbox, score, strSubTitle.toHtmlEscaped(),   SubStyleId::SUBTITLE);
-            addText(vbox, score, strComposer.toHtmlEscaped(),   SubStyleId::COMPOSER);
-            addText(vbox, score, strPoet.toHtmlEscaped(),       SubStyleId::POET);
-            addText(vbox, score, strTranslator.toHtmlEscaped(), SubStyleId::TRANSLATOR);
+            addText(vbox, score, strTitle.toHtmlEscaped(),      SubStyle::TITLE);
+            addText(vbox, score, strSubTitle.toHtmlEscaped(),   SubStyle::SUBTITLE);
+            addText(vbox, score, strComposer.toHtmlEscaped(),   SubStyle::COMPOSER);
+            addText(vbox, score, strPoet.toHtmlEscaped(),       SubStyle::POET);
+            addText(vbox, score, strTranslator.toHtmlEscaped(), SubStyle::TRANSLATOR);
             }
 
       if (vbox) {
@@ -1209,23 +1209,23 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
 static bool mustSetSize(const int i)
       {
       return
-            i == int(SubStyleId::TITLE)
-            || i == int(SubStyleId::SUBTITLE)
-            || i == int(SubStyleId::COMPOSER)
-            || i == int(SubStyleId::POET)
-            || i == int(SubStyleId::INSTRUMENT_LONG)
-            || i == int(SubStyleId::INSTRUMENT_SHORT)
-            || i == int(SubStyleId::INSTRUMENT_EXCERPT)
-            || i == int(SubStyleId::TEMPO)
-            || i == int(SubStyleId::METRONOME)
-            || i == int(SubStyleId::TRANSLATOR)
-            || i == int(SubStyleId::SYSTEM)
-            || i == int(SubStyleId::STAFF)
-            || i == int(SubStyleId::REPEAT_LEFT)
-            || i == int(SubStyleId::REPEAT_RIGHT)
-            || i == int(SubStyleId::TEXTLINE)
-            || i == int(SubStyleId::GLISSANDO)
-            || i == int(SubStyleId::INSTRUMENT_CHANGE);
+            i == int(SubStyle::TITLE)
+            || i == int(SubStyle::SUBTITLE)
+            || i == int(SubStyle::COMPOSER)
+            || i == int(SubStyle::POET)
+            || i == int(SubStyle::INSTRUMENT_LONG)
+            || i == int(SubStyle::INSTRUMENT_SHORT)
+            || i == int(SubStyle::INSTRUMENT_EXCERPT)
+            || i == int(SubStyle::TEMPO)
+            || i == int(SubStyle::METRONOME)
+            || i == int(SubStyle::TRANSLATOR)
+            || i == int(SubStyle::SYSTEM)
+            || i == int(SubStyle::STAFF)
+            || i == int(SubStyle::REPEAT_LEFT)
+            || i == int(SubStyle::REPEAT_RIGHT)
+            || i == int(SubStyle::TEXTLINE)
+            || i == int(SubStyle::GLISSANDO)
+            || i == int(SubStyle::INSTRUMENT_CHANGE);
       }
 #endif
 
@@ -1247,9 +1247,9 @@ static void updateStyles(Score* score,
       // loop over all text styles (except the empty, always hidden, first one)
       // set all text styles to the MusicXML defaults
 #if 0 // TODO:ws
-      for (int i = int(SubStyleId::DEFAULT) + 1; i < int(SubStyleId::TEXT_STYLES); ++i) {
+      for (int i = int(SubStyle::DEFAULT) + 1; i < int(SubStyle::TEXT_STYLES); ++i) {
             TextStyle ts = score->style().textStyle(TextStyleType(i));
-            if (i == int(SubStyleId::LYRIC1) || i == int(SubStyleId::LYRIC2)) {
+            if (i == int(SubStyle::LYRIC1) || i == int(SubStyle::LYRIC2)) {
                   if (lyricFamily != "")
                         ts.setFamily(lyricFamily);
                   if (fLyricSize > 0.001)
@@ -1265,12 +1265,12 @@ static void updateStyles(Score* score,
             }
 #endif
       if (lyricFamily != "") {
-            score->style().set(Sid::lyricsOddFontFace, lyricFamily);
-            score->style().set(Sid::lyricsEvenFontFace, lyricFamily);
+            score->style().set(StyleIdx::lyricsOddFontFace, lyricFamily);
+            score->style().set(StyleIdx::lyricsEvenFontFace, lyricFamily);
             }
       if (fLyricSize > 0.001) {
-            score->style().set(Sid::lyricsOddFontSize, QVariant(fLyricSize));
-            score->style().set(Sid::lyricsEvenFontSize, QVariant(fLyricSize));
+            score->style().set(StyleIdx::lyricsOddFontSize, fLyricSize);
+            score->style().set(StyleIdx::lyricsEvenFontSize, fLyricSize);
             }
       }
 
@@ -1326,7 +1326,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                         else if (_e.name() == "system-distance") {
                               Spatium val(_e.readElementText().toDouble() / 10.0);
                               if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
-                                    _score->style().set(Sid::minSystemDistance, val);
+                                    _score->style().set(StyleIdx::minSystemDistance, val);
                                     //qDebug("system distance %f", val.val());
                                     }
                               }
@@ -1341,7 +1341,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                         if (_e.name() == "staff-distance") {
                               Spatium val(_e.readElementText().toDouble() / 10.0);
                               if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT))
-                                    _score->style().set(Sid::staffDistance, val);
+                                    _score->style().set(StyleIdx::staffDistance, val);
                               }
                         else
                               skipLogCurrElem();
@@ -1855,22 +1855,6 @@ void MusicXMLParserPass1::midiInstrument(const QString& partId)
       }
 
 //---------------------------------------------------------
-//   setNumberOfStavesForPart
-//---------------------------------------------------------
-
-/**
- Set number of staves for part \a partId to the max value
- of the current value \a staves.
- */
-
-static void setNumberOfStavesForPart(Part* const part, const int staves)
-      {
-      Q_ASSERT(part);
-      if (staves > part->nstaves())
-            part->setStaves(staves);
-      }
-
-//---------------------------------------------------------
 //   part
 //---------------------------------------------------------
 
@@ -1906,8 +1890,6 @@ void MusicXMLParserPass1::part()
                   skipLogCurrElem();
             }
 
-      // Bug fix for Cubase 6.5.5..9.5.10 which generate <staff>2</staff> in a single staff part
-      setNumberOfStavesForPart(_partMap.value(id), _parts[id].maxStaff());
       // allocate MuseScore staff to MusicXML voices
       allocateStaves(_parts[id].voicelist);
       // allocate MuseScore voice to MusicXML voices
@@ -2291,7 +2273,8 @@ void MusicXMLParserPass1::divisions()
 //---------------------------------------------------------
 
 /**
- Parse the /score-partwise/part/measure/attributes/staves node.
+ Set number of staves for part \a partId to the max value of the current value
+ and the value in the <staves> element.
  */
 
 void MusicXMLParserPass1::staves(const QString& partId)
@@ -2305,7 +2288,10 @@ void MusicXMLParserPass1::staves(const QString& partId)
             return;
             }
 
-      setNumberOfStavesForPart(_partMap.value(partId), staves);
+      Part* part = _partMap.value(partId);
+      Q_ASSERT(part);
+      if (staves > part->nstaves())
+            part->setStaves(staves);
       }
 
 //---------------------------------------------------------
@@ -2562,14 +2548,16 @@ void MusicXMLParserPass1::note(const QString& partId,
                   rest();
                   }
             else if (_e.name() == "staff") {
-                  auto ok = false;
-                  auto strStaff = _e.readElementText();
-                  staff = strStaff.toInt(&ok);
-                  _parts[partId].setMaxStaff(staff);
+                  QString strStaff = _e.readElementText();
+                  staff = strStaff.toInt();
+                  // Bug fix for Cubase 6.5.5 which generates <staff>2</staff> in a single staff part
+                  // Same fix is required in pass 1 and pass 2
                   Part* part = _partMap.value(partId);
                   Q_ASSERT(part);
-                  if (!ok || staff <= 0 || staff > part->nstaves())
+                  if (staff <= 0 || staff > part->nstaves()) {
                         _logger->logError(QString("illegal staff '%1'").arg(strStaff), &_e);
+                        staff = 1;
+                        }
                   }
             else if (_e.name() == "stem")
                   _e.skipCurrentElement();  // skip but don't log

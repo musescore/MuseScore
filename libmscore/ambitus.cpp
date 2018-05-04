@@ -183,11 +183,11 @@ void Ambitus::setBottomTpc(int val)
 void Ambitus::write(XmlWriter& xml) const
       {
       xml.stag("Ambitus");
-      xml.tag(Pid::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
-      xml.tag(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
-      xml.tag(Pid::MIRROR_HEAD,int(_dir),           int(DIR_DEFAULT));
+      xml.tag(P_ID::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
+      xml.tag(P_ID::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
+      xml.tag(P_ID::MIRROR_HEAD,int(_dir),           int(DIR_DEFAULT));
       xml.tag("hasLine",    _hasLine,       true);
-      xml.tag(Pid::LINE_WIDTH, _lineWidth,     LINEWIDTH_DEFAULT);
+      xml.tag(P_ID::LINE_WIDTH, _lineWidth,     LINEWIDTH_DEFAULT);
       xml.tag("topPitch",   _topPitch);
       xml.tag("topTpc",     _topTpc);
       xml.tag("bottomPitch",_bottomPitch);
@@ -226,15 +226,15 @@ bool Ambitus::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
       if (tag == "head")
-            setProperty(Pid::HEAD_GROUP, Ms::getProperty(Pid::HEAD_GROUP, e));
+            setProperty(P_ID::HEAD_GROUP, Ms::getProperty(P_ID::HEAD_GROUP, e));
       else if (tag == "headType")
-            setProperty(Pid::HEAD_TYPE, Ms::getProperty(Pid::HEAD_TYPE, e));
+            setProperty(P_ID::HEAD_TYPE, Ms::getProperty(P_ID::HEAD_TYPE, e));
       else if (tag == "mirror")
-            setProperty(Pid::MIRROR_HEAD, Ms::getProperty(Pid::MIRROR_HEAD, e).toInt());
+            setProperty(P_ID::MIRROR_HEAD, Ms::getProperty(P_ID::MIRROR_HEAD, e).toInt());
       else if (tag == "hasLine")
             setHasLine(e.readInt());
       else if (tag == "lineWidth")
-            setProperty(Pid::LINE_WIDTH, Ms::getProperty(Pid::LINE_WIDTH, e));
+            setProperty(P_ID::LINE_WIDTH, Ms::getProperty(P_ID::LINE_WIDTH, e));
       else if (tag == "topPitch")
             _topPitch = e.readInt();
       else if (tag == "bottomPitch")
@@ -363,7 +363,7 @@ void Ambitus::layout()
       //
       // Note: manages colliding accidentals
       //
-      qreal accNoteDist = point(score()->styleS(Sid::accidentalNoteDistance));
+      qreal accNoteDist = point(score()->styleS(StyleIdx::accidentalNoteDistance));
       xAccidOffTop      = _topAccid.width() + accNoteDist;
       xAccidOffBottom   = _bottomAccid.width() + accNoteDist;
 
@@ -451,8 +451,8 @@ void Ambitus::draw(QPainter* p) const
             int numOfLines    = stf->lines(tick);
             qreal step        = lineDist * _spatium;
             qreal stepTolerance = step * 0.1;
-            qreal ledgerOffset = score()->styleS(Sid::ledgerLineLength).val() * 0.5 * _spatium;
-            p->setPen(QPen(curColor(), score()->styleS(Sid::ledgerLineWidth).val() * _spatium,
+            qreal ledgerOffset = score()->styleS(StyleIdx::ledgerLineLength).val() * 0.5 * _spatium;
+            p->setPen(QPen(curColor(), score()->styleS(StyleIdx::ledgerLineWidth).val() * _spatium,
                         Qt::SolidLine, Qt::RoundCap) );
             if (_topPos.y()-stepTolerance <= -step) {
                   qreal xMin = _topPos.x() - ledgerOffset;
@@ -615,30 +615,30 @@ void Ambitus::updateRange()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Ambitus::getProperty(Pid propertyId) const
+QVariant Ambitus::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case Pid::HEAD_GROUP:
+            case P_ID::HEAD_GROUP:
                   return int(noteHeadGroup());
-            case Pid::HEAD_TYPE:
+            case P_ID::HEAD_TYPE:
                   return int(noteHeadType());
-            case Pid::MIRROR_HEAD:
+            case P_ID::MIRROR_HEAD:
                   return int(direction());
-            case Pid::GHOST:                 // recycled property = _hasLine
+            case P_ID::GHOST:                 // recycled property = _hasLine
                   return hasLine();
-            case Pid::LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   return lineWidth();
-            case Pid::TPC1:
+            case P_ID::TPC1:
                   return topTpc();
-            case Pid::FBPARENTHESIS1:        // recycled property = _bottomTpc
+            case P_ID::FBPARENTHESIS1:        // recycled property = _bottomTpc
                   return bottomTpc();
-            case Pid::PITCH:
+            case P_ID::PITCH:
                   return topPitch();
-            case Pid::FBPARENTHESIS2:        // recycled property = _bottomPitch
+            case P_ID::FBPARENTHESIS2:        // recycled property = _bottomPitch
                   return bottomPitch();
-            case Pid::FBPARENTHESIS3:        // recycled property = octave of _topPitch
+            case P_ID::FBPARENTHESIS3:        // recycled property = octave of _topPitch
                   return topOctave();
-            case Pid::FBPARENTHESIS4:        // recycled property = octave of _bottomPitch
+            case P_ID::FBPARENTHESIS4:        // recycled property = octave of _bottomPitch
                   return bottomOctave();
             default:
                   return Element::getProperty(propertyId);
@@ -649,40 +649,40 @@ QVariant Ambitus::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Ambitus::setProperty(Pid propertyId, const QVariant& v)
+bool Ambitus::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case Pid::HEAD_GROUP:
+            case P_ID::HEAD_GROUP:
                   setNoteHeadGroup( NoteHead::Group(v.toInt()) );
                   break;
-            case Pid::HEAD_TYPE:
+            case P_ID::HEAD_TYPE:
                   setNoteHeadType( NoteHead::Type(v.toInt()) );
                   break;
-            case Pid::MIRROR_HEAD:
+            case P_ID::MIRROR_HEAD:
                   setDirection(MScore::DirectionH(v.toInt()) );
                   break;
-            case Pid::GHOST:                 // recycled property = _hasLine
+            case P_ID::GHOST:                 // recycled property = _hasLine
                   setHasLine(v.toBool());
                   break;
-            case Pid::LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   setLineWidth(v.value<Spatium>());
                   break;
-            case Pid::TPC1:
+            case P_ID::TPC1:
                   setTopTpc(v.toInt());
                   break;
-            case Pid::FBPARENTHESIS1:        // recycled property = _bottomTpc
+            case P_ID::FBPARENTHESIS1:        // recycled property = _bottomTpc
                   setBottomTpc(v.toInt());
                   break;
-            case Pid::PITCH:
+            case P_ID::PITCH:
                   setTopPitch(v.toInt());
                   break;
-            case Pid::FBPARENTHESIS2:        // recycled property = _bottomPitch
+            case P_ID::FBPARENTHESIS2:        // recycled property = _bottomPitch
                   setBottomPitch(v.toInt());
                   break;
-            case Pid::FBPARENTHESIS3:        // recycled property = octave of _topPitch
+            case P_ID::FBPARENTHESIS3:        // recycled property = octave of _topPitch
                   setTopPitch(topPitch() % 12 + v.toInt() * 12);
                   break;
-            case Pid::FBPARENTHESIS4:        // recycled property = octave of _bottomPitch
+            case P_ID::FBPARENTHESIS4:        // recycled property = octave of _bottomPitch
                   setBottomPitch(bottomPitch() % 12 + v.toInt() * 12);
                   break;
             default:
@@ -696,25 +696,25 @@ bool Ambitus::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Ambitus::propertyDefault(Pid id) const
+QVariant Ambitus::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case Pid::HEAD_GROUP:
+            case P_ID::HEAD_GROUP:
                   return int(NOTEHEADGROUP_DEFAULT);
-            case Pid::HEAD_TYPE:
+            case P_ID::HEAD_TYPE:
                   return int(NOTEHEADTYPE_DEFAULT);
-            case Pid::MIRROR_HEAD:
+            case P_ID::MIRROR_HEAD:
                   return int(DIR_DEFAULT);
-            case Pid::GHOST:
+            case P_ID::GHOST:
                   return HASLINE_DEFAULT;
-            case Pid::LINE_WIDTH:
+            case P_ID::LINE_WIDTH:
                   return Spatium(LINEWIDTH_DEFAULT);
-            case Pid::TPC1:                  // no defaults for pitches, tpc's and octaves
-            case Pid::FBPARENTHESIS1:
-            case Pid::PITCH:
-            case Pid::FBPARENTHESIS2:
-            case Pid::FBPARENTHESIS3:
-            case Pid::FBPARENTHESIS4:
+            case P_ID::TPC1:                  // no defaults for pitches, tpc's and octaves
+            case P_ID::FBPARENTHESIS1:
+            case P_ID::PITCH:
+            case P_ID::FBPARENTHESIS2:
+            case P_ID::FBPARENTHESIS3:
+            case P_ID::FBPARENTHESIS4:
                   break;
             default:
                   return Element::propertyDefault(id);

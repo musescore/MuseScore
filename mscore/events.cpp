@@ -172,23 +172,6 @@ void ScoreView::resizeEvent(QResizeEvent* /*ev*/)
       if (_magIdx != MagIdx::MAG_FREE)
             setMag(mscore->getMag(this));
       emit sizeChanged();
-
-      // The score may need to be repositioned now.
-      // So figure out how far it needs to move in each direction...
-      int dx = 0, dy = 0;
-      constraintCanvas(&dx, &dy);
-
-      if (dx == 0 && dy == 0)
-            return;
-
-      // ...and adjust its position accordingly.
-      _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
-         _matrix.m22(), _matrix.m23(), _matrix.dx()+dx, _matrix.dy()+dy, _matrix.m33());
-      imatrix = _matrix.inverted();
-
-      scroll(dx, dy, QRect(0, 0, width(), height()));
-      emit viewRectChanged();
-      emit offsetChanged(_matrix.dx(), _matrix.dy());
       }
 
 //---------------------------------------------------------
@@ -314,7 +297,7 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                   _score->select(m, st, staffIdx);
                   _score->setUpdateAll();
                   }
-            else if (st != SelectType::ADD)
+            else
                   _score->deselectAll();
             }
       _score->update();
@@ -375,7 +358,6 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   _score->endCmd();
                   if (_score->inputState().cr())
                         adjustCanvasPosition(_score->inputState().cr(), false);
-                  shadowNote->setVisible(false);
                   break;
 
             case ViewState::EDIT: {

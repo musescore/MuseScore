@@ -103,7 +103,7 @@ namespace Ms {
 void Element::spatiumChanged(qreal oldValue, qreal newValue)
       {
       _userOff *= (newValue / oldValue);
-//      _readPos *= (newValue / oldValue);
+      _readPos *= (newValue / oldValue);
       }
 
 //---------------------------------------------------------
@@ -164,17 +164,17 @@ Element::Element(const Element& e)
    : ScoreElement(e)
       {
       _parent     = e._parent;
-      _flags      = e._flags;
+      _z          = e._z;
       _placement  = e._placement;
+      _flags      = e._flags;
       _track      = e._track;
+      _color      = e._color;
       _mag        = e._mag;
       _pos        = e._pos;
       _userOff    = e._userOff;
-//      _readPos    = e._readPos;
+      _readPos    = e._readPos;
       _bbox       = e._bbox;
       _tag        = e._tag;
-      _z          = e._z;
-      _color      = e._color;
       itemDiscovered = false;
       }
 
@@ -201,9 +201,20 @@ Element::~Element()
 Element* Element::linkedClone()
       {
       Element* e = clone();
-      e->setAutoplace(true);
       score()->undo(new Link(e, this));
       return e;
+      }
+
+//---------------------------------------------------------
+//   adjustReadPos
+//---------------------------------------------------------
+
+void Element::adjustReadPos()
+      {
+      if (!_readPos.isNull()) {
+            _userOff = _readPos - _pos;
+            _readPos = QPointF();
+            }
       }
 
 //---------------------------------------------------------
@@ -222,9 +233,8 @@ void Element::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 void Element::reset()
       {
-      undoResetProperty(Pid::AUTOPLACE);
-      undoResetProperty(Pid::PLACEMENT);
-      ScoreElement::reset();
+      undoResetProperty(P_ID::AUTOPLACE);
+      undoResetProperty(P_ID::PLACEMENT);
       }
 
 //---------------------------------------------------------
@@ -461,18 +471,19 @@ void Element::writeProperties(XmlWriter& xml) const
       // copy paste should not keep links
       if (_links && (_links->size() > 1) && !xml.clipboardmode())
             xml.tag("lid", _links->lid());
-      if (!autoplace() && !userOff().isNull()) {      // TODO: remove pos of offset
-            if (isFingering() || isHarmony() || isTuplet() || isStaffText()) {
-                  QPointF p = userOff() / score()->spatium();
-                  if (isStaffText())
-                        xml.tag("pos", p + QPointF(0.0, -2.0));
-                  else
-                        xml.tag("pos", p);
-                  }
+      if (!autoplace() && !userOff().isNull()) {
+            if (isVoltaSegment()
+                || isGlissandoSegment()
+                || isChordRest()
+                || isRehearsalMark()
+                || isDynamic()
+                || isSystemDivider()
+                || (xml.clipboardmode() && isSLineSegment()))
+                  xml.tag("offset", userOff() / spatium());
             else
-                  xml.tag("offset", userOff() / score()->spatium());
+                  xml.tag("pos", pos() / score()->spatium());
             }
-      if (((track() != xml.curTrack()) || isSlur()) && (track() != -1)) {
+      if (((track() != xml.curTrack()) || (type() == ElementType::SLUR)) && (track() != -1)) {
             int t;
             t = track() + xml.trackDiff();
             xml.tag("track", t);
@@ -485,10 +496,10 @@ void Element::writeProperties(XmlWriter& xml) const
                         }
                   }
             }
-      writeProperty(xml, Pid::COLOR);
-      writeProperty(xml, Pid::VISIBLE);
-      writeProperty(xml, Pid::Z);
-      writeProperty(xml, Pid::PLACEMENT);
+      writeProperty(xml, P_ID::COLOR);
+      writeProperty(xml, P_ID::VISIBLE);
+      writeProperty(xml, P_ID::Z);
+      writeProperty(xml, P_ID::PLACEMENT);
       }
 
 //---------------------------------------------------------
@@ -507,6 +518,10 @@ bool Element::readProperties(XmlReader& e)
             setVisible(e.readInt());
       else if (tag == "selected") // obsolete
             e.readInt();
+      else if (tag == "userOff") {
+            _userOff = e.readPoint();
+            setAutoplace(false);
+            }
       else if (tag == "lid") {
             int id = e.readInt();
             _links = e.linkIds().value(id);
@@ -535,20 +550,13 @@ bool Element::readProperties(XmlReader& e)
             if (val >= 0)
                   e.initTick(score()->fileDivision(val));
             }
-#if 0
-      else if (tag == "userOff") {
-            _userOff = e.readPoint();
-            setAutoplace(false);
-            }
-#endif
       else if (tag == "offset") {
-            setUserOff(e.readPoint() * score()->spatium());
+            setUserOff(e.readPoint() * spatium());
             setAutoplace(false);
             }
       else if (tag == "pos") {
             QPointF pt = e.readPoint();
-//            _readPos = pt * score()->spatium();
-            _userOff = pt * score()->spatium();
+            _readPos = pt * score()->spatium();
             setAutoplace(false);
             }
       else if (tag == "voice")
@@ -563,7 +571,7 @@ bool Element::readProperties(XmlReader& e)
                   }
             }
       else if (tag == "placement")
-            _placement = Placement(Ms::getProperty(Pid::PLACEMENT, e).toInt());
+            _placement = Placement(Ms::getProperty(P_ID::PLACEMENT, e).toInt());
       else if (tag == "z")
             setZ(e.readInt());
       else
@@ -971,35 +979,35 @@ void collectElements(void* data, Element* e)
 
 void Element::undoSetPlacement(Placement v)
       {
-      undoChangeProperty(Pid::PLACEMENT, int(v));
+      undoChangeProperty(P_ID::PLACEMENT, int(v));
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Element::getProperty(Pid propertyId) const
+QVariant Element::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::TRACK:
+            case P_ID::TRACK:
                   return track();
-            case Pid::GENERATED:
+            case P_ID::GENERATED:
                   return generated();
-            case Pid::COLOR:
+            case P_ID::COLOR:
                   return color();
-            case Pid::VISIBLE:
+            case P_ID::VISIBLE:
                   return visible();
-            case Pid::SELECTED:
+            case P_ID::SELECTED:
                   return selected();
-            case Pid::USER_OFF:
+            case P_ID::USER_OFF:
                   return _userOff;
-            case Pid::PLACEMENT:
+            case P_ID::PLACEMENT:
                   return int(placement());
-            case Pid::AUTOPLACE:
+            case P_ID::AUTOPLACE:
                   return autoplace();
-            case Pid::Z:
+            case P_ID::Z:
                   return z();
-            case Pid::SYSTEM_FLAG:
+            case P_ID::SYSTEM_FLAG:
                   return systemFlag();
             default:
                   return QVariant();
@@ -1010,43 +1018,43 @@ QVariant Element::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Element::setProperty(Pid propertyId, const QVariant& v)
+bool Element::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case Pid::TRACK:
+            case P_ID::TRACK:
                   setTrack(v.toInt());
                   break;
-            case Pid::GENERATED:
+            case P_ID::GENERATED:
                   setGenerated(v.toBool());
                   break;
-            case Pid::COLOR:
+            case P_ID::COLOR:
                   setColor(v.value<QColor>());
                   break;
-            case Pid::VISIBLE:
+            case P_ID::VISIBLE:
                   setVisible(v.toBool());
                   break;
-            case Pid::SELECTED:
+            case P_ID::SELECTED:
                   setSelected(v.toBool());
                   break;
-            case Pid::USER_OFF:
+            case P_ID::USER_OFF:
                   score()->addRefresh(canvasBoundingRect());
                   _userOff = v.toPointF();
                   break;
-            case Pid::PLACEMENT:
+            case P_ID::PLACEMENT:
                   setPlacement(Placement(v.toInt()));
                   break;
-            case Pid::AUTOPLACE:
+            case P_ID::AUTOPLACE:
                   setAutoplace(v.toBool());
                   break;
-            case Pid::Z:
+            case P_ID::Z:
                   setZ(v.toInt());
                   break;
-            case Pid::SYSTEM_FLAG:
+            case P_ID::SYSTEM_FLAG:
                   setSystemFlag(v.toBool());
                   break;
             default:
-                  qFatal("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
-//                  qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
+                  qFatal("unknown %s <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
+//                  qDebug("unknown %s <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
                   return false;
             }
       triggerLayout();
@@ -1058,27 +1066,42 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Element::propertyDefault(Pid id) const
+QVariant Element::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case Pid::GENERATED:
+            case P_ID::GENERATED:
                   return false;
-            case Pid::VISIBLE:
+            case P_ID::VISIBLE:
                   return true;
-            case Pid::COLOR:
+            case P_ID::COLOR:
                   return MScore::defaultColor;
-            case Pid::PLACEMENT:
+            case P_ID::PLACEMENT:
                   return int(Placement::BELOW);
-            case Pid::SELECTED:
+            case P_ID::SELECTED:
                   return false;
-            case Pid::USER_OFF:
+            case P_ID::USER_OFF:
                   return QPointF();
-            case Pid::AUTOPLACE:
+            case P_ID::AUTOPLACE:
                   return true;
-            case Pid::Z:
+            case P_ID::Z:
                   return int(type()) * 100;
-            default:
-                  return ScoreElement::propertyDefault(id);
+            case P_ID::SYSTEM_FLAG:
+                  return false;
+            default:    // not all properties have a default
+                  break;
+            }
+      return QVariant();
+      }
+
+//---------------------------------------------------------
+//   setStyle
+//---------------------------------------------------------
+
+void Element::initSubStyle(SubStyle st)
+      {
+      for (const StyledProperty& p : subStyle(st)) {
+            setProperty(p.propertyIdx, score()->styleV(p.styleIdx));
+            setPropertyFlags(p.propertyIdx, PropertyFlags::STYLED);
             }
       }
 
@@ -1087,9 +1110,22 @@ QVariant Element::propertyDefault(Pid id) const
 //    check if property is != default
 //---------------------------------------------------------
 
-bool Element::custom(Pid id) const
+bool Element::custom(P_ID id) const
       {
       return propertyDefault(id) != getProperty(id);
+      }
+
+//---------------------------------------------------------
+//   readProperty
+//---------------------------------------------------------
+
+bool Element::readProperty(const QStringRef& s, XmlReader& e, P_ID id)
+      {
+      if (s == propertyName(id)) {
+            setProperty(id, Ms::getProperty(id, e));
+            return true;
+            }
+      return false;
       }
 
 //---------------------------------------------------------
@@ -1140,7 +1176,7 @@ Element* Element::findMeasure()
 
 void Element::undoSetColor(const QColor& c)
       {
-      undoChangeProperty(Pid::COLOR, c);
+      undoChangeProperty(P_ID::COLOR, c);
       }
 
 //---------------------------------------------------------
@@ -1149,7 +1185,7 @@ void Element::undoSetColor(const QColor& c)
 
 void Element::undoSetVisible(bool v)
       {
-      undoChangeProperty(Pid::VISIBLE, v);
+      undoChangeProperty(P_ID::VISIBLE, v);
       }
 
 //---------------------------------------------------------
@@ -1185,7 +1221,7 @@ QPointF Element::scriptPos() const
 
 void Element::scriptSetPos(const QPointF& p)
       {
-      undoChangeProperty(Pid::USER_OFF, p*spatium() - ipos());
+      undoChangeProperty(P_ID::USER_OFF, p*spatium() - ipos());
       }
 
 QPointF Element::scriptUserOff() const
@@ -1195,7 +1231,7 @@ QPointF Element::scriptUserOff() const
 
 void Element::scriptSetUserOff(const QPointF& o)
       {
-      undoChangeProperty(Pid::USER_OFF, o * spatium());
+      undoChangeProperty(P_ID::USER_OFF, o * spatium());
       }
 
 //void Element::draw(SymId id, QPainter* p) const { score()->scoreFont()->draw(id, p, magS()); }
@@ -1326,7 +1362,7 @@ bool Element::symIsValid(SymId id) const
 
 bool Element::concertPitch() const
       {
-      return score()->styleB(Sid::concertPitch);
+      return score()->styleB(StyleIdx::concertPitch);
       }
 //---------------------------------------------------------
 //   nextElement
@@ -1661,7 +1697,7 @@ void Element::startDrag(EditData& ed)
       {
       ElementEditData* eed = new ElementEditData();
       eed->e = this;
-      eed->pushProperty(Pid::USER_OFF);
+      eed->pushProperty(P_ID::USER_OFF);
       ed.addData(eed);
       }
 
@@ -1692,7 +1728,7 @@ QRectF Element::drag(EditData& ed)
       setUserOff(QPointF(x, y));
       setGenerated(false);
 
-      if (isTextBase()) {         // TODO: check for other types
+      if (isText()) {         // TODO: check for other types
             //
             // restrict move to page boundaries
             //
@@ -1741,7 +1777,7 @@ void Element::endDrag(EditData& ed)
       ElementEditData* eed = ed.getData(this);
       for (PropertyData pd : eed->propertyData)
             score()->undoPropertyChanged(this, pd.id, pd.data);
-      undoChangeProperty(Pid::AUTOPLACE, false);
+      undoChangeProperty(P_ID::AUTOPLACE, false);
       }
 
 //---------------------------------------------------------
@@ -1776,7 +1812,7 @@ bool Element::edit(EditData& ed)
 void Element::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
-      eed->pushProperty(Pid::USER_OFF);
+      eed->pushProperty(P_ID::USER_OFF);
       }
 
 //---------------------------------------------------------
@@ -1787,7 +1823,7 @@ void Element::editDrag(EditData& ed)
       {
       score()->addRefresh(canvasBoundingRect());
       setUserOff(userOff() + ed.delta);
-      undoChangeProperty(Pid::AUTOPLACE, false);
+      undoChangeProperty(P_ID::AUTOPLACE, false);
       score()->addRefresh(canvasBoundingRect());
       }
 
@@ -1807,7 +1843,7 @@ void Element::endEditDrag(EditData& ed)
             eed->propertyData.clear();
             }
       if (changed)
-            undoChangeProperty(Pid::AUTOPLACE, false);
+            undoChangeProperty(P_ID::AUTOPLACE, false);
       }
 
 //---------------------------------------------------------
@@ -1822,7 +1858,7 @@ void Element::endEdit(EditData&)
 //   styleP
 //---------------------------------------------------------
 
-qreal Element::styleP(Sid idx) const
+qreal Element::styleP(StyleIdx idx) const
       {
       return score()->styleP(idx);
       }
@@ -1864,6 +1900,8 @@ void Element::autoplaceSegmentElement(qreal minDistance)
                   nm->staffShape(staffIdx()).add(s2);
                   }
             }
+      else
+            adjustReadPos();
       }
 
 }

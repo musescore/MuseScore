@@ -58,17 +58,17 @@ void TupletDialog::setupTuplet(Tuplet* tuplet)
       {
       tuplet->setRatio(Fraction(actualNotes->value(), normalNotes->value()));
       if (number->isChecked())
-            tuplet->setNumberType(TupletNumberType::SHOW_NUMBER);
+            tuplet->setNumberType(Tuplet::NumberType::SHOW_NUMBER);
       else if (relation->isChecked())
-            tuplet->setNumberType(TupletNumberType::SHOW_RELATION);
+            tuplet->setNumberType(Tuplet::NumberType::SHOW_RELATION);
       else if (noNumber->isChecked())
-            tuplet->setNumberType(TupletNumberType::NO_TEXT);
+            tuplet->setNumberType(Tuplet::NumberType::NO_TEXT);
       if (autoBracket->isChecked())
-            tuplet->setBracketType(TupletBracketType::AUTO_BRACKET);
+            tuplet->setBracketType(Tuplet::BracketType::AUTO_BRACKET);
       else if (bracket->isChecked())
-            tuplet->setBracketType(TupletBracketType::SHOW_BRACKET);
+            tuplet->setBracketType(Tuplet::BracketType::SHOW_BRACKET);
       else if (noBracket->isChecked())
-            tuplet->setBracketType(TupletBracketType::SHOW_NO_BRACKET);
+            tuplet->setBracketType(Tuplet::BracketType::SHOW_NO_BRACKET);
       }
 
 //---------------------------------------------------------

@@ -89,22 +89,19 @@ class SpannerSegment : public Element {
 
       virtual bool isEditable() const override { return true; }
 
-      virtual QVariant getProperty(Pid id) const override;
-      virtual bool setProperty(Pid id, const QVariant& v) override;
-      virtual QVariant propertyDefault(Pid id) const override;
-      virtual Sid getPropertyStyle(Pid id) const override;
-      virtual PropertyFlags& propertyFlags(Pid id) override;
-      virtual void resetProperty(Pid id) override;
-      virtual void styleChanged() override;
+      virtual QVariant getProperty(P_ID id) const override;
+      virtual bool setProperty(P_ID id, const QVariant& v) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
       void reset() override;
-
       virtual void setSelected(bool f) override;
       virtual void setVisible(bool f) override;
       virtual void setColor(const QColor& col) override;
 
       virtual Element* nextSegmentElement() override;
       virtual Element* prevSegmentElement() override;
+//      virtual bool isSpannerSegment() const override { return true; }
       virtual QString accessibleInfo() const override;
+      virtual void styleChanged() override;
       virtual void triggerLayout() const override;
       };
 
@@ -140,7 +137,7 @@ class Spanner : public Element {
       QList<SpannerSegment*> segments;
 
    public:
-      Spanner(Score* s, ElementFlags = ElementFlag::NOTHING);
+      Spanner(Score* = 0);
       Spanner(const Spanner&);
       ~Spanner();
 
@@ -178,9 +175,9 @@ class Spanner : public Element {
       virtual void undoInsertTimeUnmanaged(int tick, int len);
       virtual void setYoff(qreal) {}    // used in musicxml import
 
-      QVariant getProperty(Pid propertyId) const;
-      bool setProperty(Pid propertyId, const QVariant& v);
-      QVariant propertyDefault(Pid propertyId) const;
+      QVariant getProperty(P_ID propertyId) const;
+      bool setProperty(P_ID propertyId, const QVariant& v);
+      QVariant propertyDefault(P_ID propertyId) const;
 
       void computeStartElement();
       void computeEndElement();

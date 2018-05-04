@@ -675,10 +675,9 @@ bool ScoreRange::write(Score* score, int tick) const
                   // clone staff if appropriate after all voices have been copied
                   int staffIdx = track / VOICES;
                   Staff* ostaff = score->staff(staffIdx);
-                  const LinkedElements* linkedStaves = ostaff->links();
+                  LinkedStaves* linkedStaves = ostaff->linkedStaves();
                   if (linkedStaves) {
-                        for (auto le : *linkedStaves) {
-                              Staff* nstaff = toStaff(le);
+                        for (Staff* nstaff : linkedStaves->staves()) {
                               if (nstaff == ostaff)
                                     continue;
                               Excerpt::cloneStaff2(ostaff, nstaff, tick, tick + dl->duration().ticks());

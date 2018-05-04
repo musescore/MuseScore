@@ -67,6 +67,7 @@ class Lyrics final : public TextBase {
                               ///< (melisma)
       Syllabic _syllabic;
       LyricsLine* _separator;
+      PropertyFlags placementStyle;
 
    protected:
       int _no;                ///< row index
@@ -125,9 +126,14 @@ class Lyrics final : public TextBase {
       using TextBase::paste;
       virtual void paste(EditData&) override;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid id) const override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual PropertyFlags& propertyFlags(P_ID) override;
+      virtual StyleIdx getPropertyStyle(P_ID) const override;
+      virtual void reset() override;
+      virtual void styleChanged() override;
+      virtual void resetProperty(P_ID id) override;
       };
 
 //---------------------------------------------------------
@@ -150,7 +156,7 @@ class LyricsLine final : public SLine {
 
       Lyrics* lyrics() const                          { return toLyrics(parent());   }
       Lyrics* nextLyrics() const                      { return _nextLyrics;         }
-      virtual bool setProperty(Pid propertyId, const QVariant& v) override;
+      virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
       };
 
 //---------------------------------------------------------

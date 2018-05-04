@@ -460,25 +460,12 @@
       </Measure>
     <Measure number="10">
       <Rest>
-        <durationType>quarter</durationType>
-        <Articulation>
-          </Articulation>
-        </Rest>
-      <Rest>
-        <durationType>quarter</durationType>
-        </Rest>
-      <Rest>
-        <durationType>quarter</durationType>
-        </Rest>
-      <Rest>
-        <durationType>quarter</durationType>
+        <durationType>measure</durationType>
         </Rest>
       </Measure>
     <Measure number="11">
       <Rest>
         <durationType>measure</durationType>
-        <Articulation>
-          </Articulation>
         </Rest>
       </Measure>
     <Measure number="12">

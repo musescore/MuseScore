@@ -310,6 +310,7 @@ solo concert</text>
           <baseNote>eighth</baseNote>
           <Number>
             <track>1</track>
+            <style>Tuplet</style>
             <text>3</text>
             </Number>
           </Tuplet>
@@ -382,6 +383,7 @@ solo concert</text>
           <baseNote>eighth</baseNote>
           <Number>
             <track>1</track>
+            <style>Tuplet</style>
             <text>3</text>
             </Number>
           </Tuplet>
@@ -453,6 +455,7 @@ solo concert</text>
           <baseNote>eighth</baseNote>
           <Number>
             <track>1</track>
+            <style>Tuplet</style>
             <text>3</text>
             </Number>
           </Tuplet>
@@ -1048,6 +1051,7 @@ solo concert</text>
             <baseNote>eighth</baseNote>
             <Number>
               <track>1</track>
+              <style>Tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -1120,6 +1124,7 @@ solo concert</text>
             <baseNote>eighth</baseNote>
             <Number>
               <track>1</track>
+              <style>Tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -1191,6 +1196,7 @@ solo concert</text>
             <baseNote>eighth</baseNote>
             <Number>
               <track>1</track>
+              <style>Tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -1643,6 +1649,7 @@ solo concert</text>
             <baseNote>eighth</baseNote>
             <Number>
               <track>5</track>
+              <style>Tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -1715,6 +1722,7 @@ solo concert</text>
             <baseNote>eighth</baseNote>
             <Number>
               <track>5</track>
+              <style>Tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -1782,6 +1790,7 @@ solo concert</text>
             <baseNote>eighth</baseNote>
             <Number>
               <track>5</track>
+              <style>Tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>

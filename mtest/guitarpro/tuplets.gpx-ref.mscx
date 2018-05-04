@@ -124,6 +124,7 @@
           <actualNotes>3</actualNotes>
           <baseNote>eighth</baseNote>
           <Number>
+            <style>Tuplet</style>
             <text>3</text>
             </Number>
           </Tuplet>
@@ -176,6 +177,7 @@
           <actualNotes>5</actualNotes>
           <baseNote>eighth</baseNote>
           <Number>
+            <style>Tuplet</style>
             <text>5</text>
             </Number>
           </Tuplet>
@@ -285,6 +287,7 @@
           <actualNotes>15</actualNotes>
           <baseNote>16th</baseNote>
           <Number>
+            <style>Tuplet</style>
             <text>15:8</text>
             </Number>
           </Tuplet>
@@ -696,6 +699,7 @@
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
+              <style>Tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -748,6 +752,7 @@
             <actualNotes>5</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
+              <style>Tuplet</style>
               <text>5</text>
               </Number>
             </Tuplet>
@@ -857,6 +862,7 @@
             <actualNotes>15</actualNotes>
             <baseNote>16th</baseNote>
             <Number>
+              <style>Tuplet</style>
               <text>15:8</text>
               </Number>
             </Tuplet>
@@ -1141,6 +1147,7 @@
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
+              <style>Tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -1193,6 +1200,7 @@
             <actualNotes>5</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
+              <style>Tuplet</style>
               <text>5</text>
               </Number>
             </Tuplet>
@@ -1302,6 +1310,7 @@
             <actualNotes>15</actualNotes>
             <baseNote>16th</baseNote>
             <Number>
+              <style>Tuplet</style>
               <text>15:8</text>
               </Number>
             </Tuplet>

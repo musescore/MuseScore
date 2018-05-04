@@ -54,9 +54,13 @@ class OttavaSegment final : public TextLineBaseSegment {
       virtual OttavaSegment* clone() const override { return new OttavaSegment(*this); }
       Ottava* ottava() const                        { return (Ottava*)spanner(); }
       virtual void layout() override;
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
+      virtual PropertyFlags& propertyFlags(P_ID) override;
+      virtual void resetProperty(P_ID id) override;
+      virtual void styleChanged() override;
+      virtual StyleIdx getPropertyStyle(P_ID) const override;
       };
 
 //---------------------------------------------------------
@@ -67,6 +71,7 @@ class OttavaSegment final : public TextLineBaseSegment {
 class Ottava final : public TextLineBase {
       OttavaType _ottavaType;
       bool _numbersOnly;
+      PropertyFlags numbersOnlyStyle  { PropertyFlags::STYLED };
 
       int _pitchShift;
 
@@ -93,9 +98,13 @@ class Ottava final : public TextLineBase {
       virtual void read(XmlReader& de) override;
       bool readProperties(XmlReader& e);
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
+      virtual PropertyFlags& propertyFlags(P_ID) override;
+      virtual StyleIdx getPropertyStyle(P_ID) const override;
+      virtual void styleChanged() override;
+      virtual void reset() override;
 
       virtual void setYoff(qreal) override;
 
