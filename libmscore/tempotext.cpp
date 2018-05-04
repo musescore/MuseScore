@@ -23,14 +23,16 @@ namespace Ms {
 #define MIN_TEMPO 5.0/60
 #define MAX_TEMPO 999.0/60
 
+//TODO: textChanged() needs to be called during/after editing
+
 //---------------------------------------------------------
 //   TempoText
 //---------------------------------------------------------
 
 TempoText::TempoText(Score* s)
-   : TextBase(s, ElementFlag::SYSTEM)
+   : TextBase(s, ElementFlags(ElementFlag::SYSTEM))
       {
-      init(SubStyle::TEMPO);
+      initSubStyle(SubStyleId::TEMPO);
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
       _relative   = 1.0;
@@ -43,7 +45,7 @@ TempoText::TempoText(Score* s)
 
 void TempoText::write(XmlWriter& xml) const
       {
-      xml.stag("Tempo");
+      xml.stag(name());
       xml.tag("tempo", _tempo);
       if (_followText)
             xml.tag("followText", _followText);
@@ -267,7 +269,7 @@ void TempoText::setTempo(qreal v)
 
 void TempoText::undoSetTempo(qreal v)
       {
-      undoChangeProperty(P_ID::TEMPO, v);
+      undoChangeProperty(Pid::TEMPO, v);
       }
 
 //---------------------------------------------------------
@@ -276,19 +278,19 @@ void TempoText::undoSetTempo(qreal v)
 
 void TempoText::undoSetFollowText(bool v)
       {
-      undoChangeProperty(P_ID::TEMPO_FOLLOW_TEXT, v);
+      undoChangeProperty(Pid::TEMPO_FOLLOW_TEXT, v);
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant TempoText::getProperty(P_ID propertyId) const
+QVariant TempoText::getProperty(Pid propertyId) const
       {
-      switch(propertyId) {
-            case P_ID::TEMPO:
+      switch (propertyId) {
+            case Pid::TEMPO:
                   return _tempo;
-            case P_ID::TEMPO_FOLLOW_TEXT:
+            case Pid::TEMPO_FOLLOW_TEXT:
                   return _followText;
             default:
                   return TextBase::getProperty(propertyId);
@@ -299,15 +301,15 @@ QVariant TempoText::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
+bool TempoText::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::TEMPO:
+            case Pid::TEMPO:
                   setTempo(v.toDouble());
                   score()->setTempo(segment(), _tempo);
                   score()->fixTicks();
                   break;
-            case P_ID::TEMPO_FOLLOW_TEXT:
+            case Pid::TEMPO_FOLLOW_TEXT:
                   _followText = v.toBool();
                   break;
             default:
@@ -323,17 +325,15 @@ bool TempoText::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TempoText::propertyDefault(P_ID id) const
+QVariant TempoText::propertyDefault(Pid id) const
       {
       switch(id) {
-            case P_ID::SUB_STYLE:
-                  return int(SubStyle::TEMPO);
-            case P_ID::TEMPO:
+            case Pid::SUB_STYLE:
+                  return int(SubStyleId::TEMPO);
+            case Pid::TEMPO:
                   return 2.0;
-            case P_ID::TEMPO_FOLLOW_TEXT:
+            case Pid::TEMPO_FOLLOW_TEXT:
                   return false;
-            case P_ID::PLACEMENT:
-                  return int(Placement::ABOVE);
             default:
                   return TextBase::propertyDefault(id);
             }
@@ -346,7 +346,7 @@ QVariant TempoText::propertyDefault(P_ID id) const
 
 void TempoText::layout()
       {
-      qreal y = placeAbove() ? styleP(StyleIdx::tempoPosAbove) : styleP(StyleIdx::tempoPosBelow) + staff()->height();
+      qreal y = placeAbove() ? styleP(Sid::tempoPosAbove) : styleP(Sid::tempoPosBelow) + staff()->height();
       setPos(QPointF(0.0, y));
       TextBase::layout1();
 
@@ -365,7 +365,7 @@ void TempoText::layout()
                         rxpos() += e->x();
                   }
             }
-      autoplaceSegmentElement(styleP(StyleIdx::tempoMinDistance));
+      autoplaceSegmentElement(styleP(Sid::tempoMinDistance));
       }
 
 //---------------------------------------------------------

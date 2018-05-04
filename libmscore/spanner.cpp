@@ -29,7 +29,8 @@ namespace Ms {
 SpannerSegment::SpannerSegment(Score* s)
    : Element(s)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::SEGMENT | ElementFlag::ON_STAFF);
+//      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::SEGMENT | ElementFlag::ON_STAFF);
+      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setSpannerSegmentType(SpannerSegmentType::SINGLE);
       _spanner = 0;
       }
@@ -70,13 +71,13 @@ void SpannerSegment::setSystem(System* s)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant SpannerSegment::getProperty(P_ID id) const
+QVariant SpannerSegment::getProperty(Pid id) const
       {
       switch (id) {
-            case P_ID::COLOR:
-            case P_ID::VISIBLE:
+            case Pid::COLOR:
+            case Pid::VISIBLE:
                   return spanner()->getProperty(id);
-            case P_ID::USER_OFF2:
+            case Pid::USER_OFF2:
                   return _userOff2;
             default:
                   return Element::getProperty(id);
@@ -87,13 +88,13 @@ QVariant SpannerSegment::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool SpannerSegment::setProperty(P_ID id, const QVariant& v)
+bool SpannerSegment::setProperty(Pid id, const QVariant& v)
       {
       switch (id) {
-            case P_ID::COLOR:
-            case P_ID::VISIBLE:
+            case Pid::COLOR:
+            case Pid::VISIBLE:
                  return spanner()->setProperty(id, v);
-            case P_ID::USER_OFF2:
+            case Pid::USER_OFF2:
                   _userOff2 = v.toPointF();
                   score()->setLayoutAll();
                   break;
@@ -107,17 +108,57 @@ bool SpannerSegment::setProperty(P_ID id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SpannerSegment::propertyDefault(P_ID id) const
+QVariant SpannerSegment::propertyDefault(Pid id) const
       {
       switch (id) {
-            case P_ID::COLOR:
-            case P_ID::VISIBLE:
+            case Pid::COLOR:
+            case Pid::VISIBLE:
                   return spanner()->propertyDefault(id);
-            case P_ID::USER_OFF2:
+            case Pid::USER_OFF2:
                   return QVariant();
             default:
                   return Element::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid SpannerSegment::getPropertyStyle(Pid id) const
+      {
+      return spanner()->getPropertyStyle(id);
+      }
+
+//---------------------------------------------------------
+//   propertyFlags
+//---------------------------------------------------------
+
+PropertyFlags& SpannerSegment::propertyFlags(Pid id)
+      {
+      return spanner()->propertyFlags(id);
+      }
+
+//---------------------------------------------------------
+//   resetProperty
+//---------------------------------------------------------
+
+void SpannerSegment::resetProperty(Pid id)
+      {
+      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
+            if (spp->pid == id)
+                  return spanner()->resetProperty(id);
+            }
+      return Element::resetProperty(id);
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//---------------------------------------------------------
+
+void SpannerSegment::styleChanged()
+      {
+      spanner()->styleChanged();
       }
 
 //---------------------------------------------------------
@@ -126,7 +167,7 @@ QVariant SpannerSegment::propertyDefault(P_ID id) const
 
 void SpannerSegment::reset()
       {
-      undoChangeProperty(P_ID::USER_OFF2, QPointF());
+      undoChangeProperty(Pid::USER_OFF2, QPointF());
       Element::reset();
       spanner()->reset();
       }
@@ -200,15 +241,6 @@ QString SpannerSegment::accessibleInfo() const
       }
 
 //---------------------------------------------------------
-//   styleChanged
-//---------------------------------------------------------
-
-void SpannerSegment::styleChanged()
-      {
-      _spanner->styleChanged();
-      }
-
-//---------------------------------------------------------
 //   triggerLayout
 //---------------------------------------------------------
 
@@ -221,8 +253,8 @@ void SpannerSegment::triggerLayout() const
 //   Spanner
 //---------------------------------------------------------
 
-Spanner::Spanner(Score* s)
-   : Element(s)
+Spanner::Spanner(Score* s, ElementFlags f)
+   : Element(s, f)
       {
       }
 
@@ -333,9 +365,9 @@ void Spanner::undoInsertTimeUnmanaged(int fromTick, int len)
             }
       else {                                    // if either TICKS or TICK did change, update property
             if (newTick2-newTick1 != tick2()- tick())
-                  setProperty(P_ID::SPANNER_TICKS, newTick2-newTick1);
+                  setProperty(Pid::SPANNER_TICKS, newTick2-newTick1);
             if (newTick1 != tick())
-                  setProperty(P_ID::SPANNER_TICK, newTick1);
+                  setProperty(Pid::SPANNER_TICK, newTick1);
             }
       }
 
@@ -366,16 +398,16 @@ void Spanner::setScore(Score* s)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Spanner::getProperty(P_ID propertyId) const
+QVariant Spanner::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::SPANNER_TICK:
+            case Pid::SPANNER_TICK:
                   return tick();
-            case P_ID::SPANNER_TICKS:
+            case Pid::SPANNER_TICKS:
                   return ticks();
-            case P_ID::SPANNER_TRACK2:
+            case Pid::SPANNER_TRACK2:
                   return track2();
-            case P_ID::ANCHOR:
+            case Pid::ANCHOR:
                   return int(anchor());
             default:
                   break;
@@ -387,29 +419,29 @@ QVariant Spanner::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
+bool Spanner::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::SPANNER_TICK:
+            case Pid::SPANNER_TICK:
                   setTick(v.toInt());
                   setStartElement(0);     // invalidate
                   setEndElement(0);       //
                   if (score() && score()->spannerMap().removeSpanner(this))
                         score()->addSpanner(this);
                   break;
-            case P_ID::SPANNER_TICKS:
+            case Pid::SPANNER_TICKS:
                   setTicks(v.toInt());
                   setEndElement(0);       // invalidate
                   break;
-            case P_ID::TRACK:
+            case Pid::TRACK:
                   setTrack(v.toInt());
                   setStartElement(0);     // invalidate
                   break;
-            case P_ID::SPANNER_TRACK2:
+            case Pid::SPANNER_TRACK2:
                   setTrack2(v.toInt());
                   setEndElement(0);       // invalidate
                   break;
-            case P_ID::ANCHOR:
+            case Pid::ANCHOR:
                   setAnchor(Anchor(v.toInt()));
                   break;
             default:
@@ -423,10 +455,10 @@ bool Spanner::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Spanner::propertyDefault(P_ID propertyId) const
+QVariant Spanner::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::ANCHOR:
+            case Pid::ANCHOR:
                   return int(Anchor::SEGMENT);
             default:
                   break;

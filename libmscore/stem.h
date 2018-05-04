@@ -50,8 +50,8 @@ class Stem final : public Element {
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&);
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
+      virtual QVariant getProperty(Pid propertyId) const;
+      virtual bool setProperty(Pid propertyId, const QVariant&);
 
       Chord* chord() const            { return (Chord*)parent(); }
       bool up() const;

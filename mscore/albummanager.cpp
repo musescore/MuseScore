@@ -68,7 +68,7 @@ static QString getScoreTitle(Score* score)
       {
       QString name = score->metaTag("movementTitle");
       if (name.isEmpty()) {
-            Text* t = score->getText(SubStyle::TITLE);
+            Text* t = score->getText(SubStyleId::TITLE);
             if (t)
                   name = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
             name = name.simplified();

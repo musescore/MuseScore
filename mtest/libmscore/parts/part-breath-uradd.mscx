@@ -138,7 +138,7 @@
           </Chord>
         <Breath>
           <symbol>breathMarkComma</symbol>
-          <lid>117</lid>
+          <lid>116</lid>
           </Breath>
         <Chord>
           <lid>10</lid>
@@ -738,7 +738,7 @@
             </Chord>
           <Breath>
             <symbol>breathMarkComma</symbol>
-            <lid>117</lid>
+            <lid>116</lid>
             </Breath>
           <Chord>
             <lid>10</lid>

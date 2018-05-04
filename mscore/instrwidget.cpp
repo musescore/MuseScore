@@ -462,10 +462,11 @@ void InstrumentsWidget::genPartList(Score* cs)
                   sli->setClefType(s->clefType(0));
                   sli->setDefaultClefType(s->defaultClefType());
                   sli->setPartIdx(s->rstaff());
-                  const LinkedStaves* ls = s->linkedStaves();
+                  const LinkedElements* ls = s->links();
                   bool bLinked = false;
                   if (ls && !ls->empty()) {
-                        foreach(Staff* ps, ls->staves()) {
+                        for (auto le : *ls) {
+                              Staff* ps = toStaff(le);
                               if (ps != s && ps->score() == s->score()) {
                                     bLinked = true;
                                     break;

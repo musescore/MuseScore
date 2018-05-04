@@ -35,9 +35,9 @@ class Score;
 //---------------------------------------------------------
 
 struct StyleWidget {
-      StyleIdx idx;
+      Sid idx;
       bool showPercent;
-      QWidget* widget;
+      QObject* widget;
       QToolButton* reset;
       };
 
@@ -52,13 +52,15 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       QPushButton* buttonApplyToAllParts;
       QButtonGroup* stemGroups[VOICES];
       QVector<StyleWidget> styleWidgets;
+      QButtonGroup* keySigNatGroup;
+      QButtonGroup* clefTypeGroup;
 
       virtual void hideEvent(QHideEvent*);
-      QVariant getValue(StyleIdx idx);
+      QVariant getValue(Sid idx);
       void setValues();
 
       void applyToAllParts();
-      const StyleWidget& styleWidget(StyleIdx) const;
+      const StyleWidget& styleWidget(Sid) const;
 
    private slots:
       void selectChordDescriptionFile();

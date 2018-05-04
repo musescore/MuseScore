@@ -323,42 +323,42 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             mscore->addImage(score(), static_cast<HBox*>(e));
             }
       else if (cmd == "frame-text") {
-            Text* t = new Text(SubStyle::FRAME, score());
+            Text* t = new Text(SubStyleId::FRAME, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "title-text") {
-            Text* t = new Text(SubStyle::TITLE, score());
+            Text* t = new Text(SubStyleId::TITLE, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "subtitle-text") {
-            Text* t = new Text(SubStyle::SUBTITLE, score());
+            Text* t = new Text(SubStyleId::SUBTITLE, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "composer-text") {
-            Text* t = new Text(SubStyle::COMPOSER, score());
+            Text* t = new Text(SubStyleId::COMPOSER, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "poet-text") {
-            Text* t = new Text(SubStyle::POET, score());
+            Text* t = new Text(SubStyleId::POET, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "part-text") {
-            Text* t = new Text(SubStyle::INSTRUMENT_EXCERPT, score());
+            Text* t = new Text(SubStyleId::INSTRUMENT_EXCERPT, score());
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
@@ -377,7 +377,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             editTremoloBarProperties(static_cast<TremoloBar*>(e));
       if (cmd == "ts-courtesy") {
             TimeSig* ts = static_cast<TimeSig*>(e);
-            ts->undoChangeProperty(P_ID::SHOW_COURTESY, !ts->showCourtesySig());
+            ts->undoChangeProperty(Pid::SHOW_COURTESY, !ts->showCourtesySig());
             }
       else if (cmd == "ts-props") {
             TimeSig* ts = static_cast<TimeSig*>(e);
@@ -385,11 +385,11 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             TimeSigProperties tsp(r);
 
             if (tsp.exec()) {
-                  ts->undoChangeProperty(P_ID::SHOW_COURTESY,      r->showCourtesySig());
-                  ts->undoChangeProperty(P_ID::NUMERATOR_STRING,   r->numeratorString());
-                  ts->undoChangeProperty(P_ID::DENOMINATOR_STRING, r->denominatorString());
-                  ts->undoChangeProperty(P_ID::TIMESIG_TYPE,       int(r->timeSigType()));
-                  ts->undoChangeProperty(P_ID::GROUPS,        QVariant::fromValue<Groups>(r->groups()));
+                  ts->undoChangeProperty(Pid::SHOW_COURTESY,      r->showCourtesySig());
+                  ts->undoChangeProperty(Pid::NUMERATOR_STRING,   r->numeratorString());
+                  ts->undoChangeProperty(Pid::DENOMINATOR_STRING, r->denominatorString());
+                  ts->undoChangeProperty(Pid::TIMESIG_TYPE,       int(r->timeSigType()));
+                  ts->undoChangeProperty(Pid::GROUPS,        QVariant::fromValue<Groups>(r->groups()));
 
                   if (r->sig() != ts->sig()) {
                         score()->cmdAddTimeSig(ts->measure(), ts->staffIdx(), r, true);
@@ -399,10 +399,10 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             delete r;
             }
       else if (cmd == "smallNote")
-            e->undoChangeProperty(P_ID::SMALL, !static_cast<Note*>(e)->small());
+            e->undoChangeProperty(Pid::SMALL, !static_cast<Note*>(e)->small());
       else if (cmd == "clef-courtesy") {
             bool show = !static_cast<Clef*>(e)->showCourtesy();
-            e->undoChangeProperty(P_ID::SHOW_COURTESY, show);
+            e->undoChangeProperty(Pid::SHOW_COURTESY, show);
             }
       else if (cmd == "st-props") {
             StaffTextProperties rp(static_cast<StaffText*>(e));
@@ -433,12 +433,12 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   qDebug("text-props %d %d", int(ot->textStyleType()), int(nText->textStyleType()));
 //                  if (ot->textStyleType() != nText->textStyleType()) {
 //                        nText->restyle(ot->textStyleType());
-//                        ot->undoChangeProperty(P_ID::TEXT_STYLE_TYPE, int(nText->textStyleType()));
+//                        ot->undoChangeProperty(Pid::TEXT_STYLE_TYPE, int(nText->textStyleType()));
 //                        }
 //                  if (ot->textStyle() != nText->textStyle())
-//                        ot->undoChangeProperty(P_ID::TEXT_STYLE, QVariant::fromValue<TextStyle>(nText->textStyle()));
+//                        ot->undoChangeProperty(Pid::TEXT_STYLE, QVariant::fromValue<TextStyle>(nText->textStyle()));
                   if (ot->xmlText() != nText->xmlText())
-                        ot->undoChangeProperty(P_ID::TEXT, nText->xmlText());
+                        ot->undoChangeProperty(Pid::TEXT, nText->xmlText());
                   }
             delete nText;
             }
@@ -486,7 +486,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         nlb->setStartWithLongNames(sbp.startWithLongNames());
                         nlb->setStartWithMeasureOne(sbp.startWithMeasureOne());
                         // propagate in parts
-                        lb->undoChangeProperty(P_ID::PAUSE, sbp.pause());
+                        lb->undoChangeProperty(Pid::PAUSE, sbp.pause());
                         score()->undoChangeElement(lb, nlb);
                         }
                   }
@@ -558,7 +558,7 @@ void ScoreView::editBendProperties(Bend* bend)
       BendProperties bp(bend, 0);
       if (bp.exec()) {
             for (ScoreElement* b : bend->linkList())
-                  b->score()->undo(new ChangeBend(static_cast<Bend*>(b), bp.points()));
+                  b->score()->undo(new ChangeBend(toBend(b), bp.points()));
             }
       }
 

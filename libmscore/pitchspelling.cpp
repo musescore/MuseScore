@@ -639,8 +639,8 @@ void changeAllTpcs(Note* n, int tpc1)
             v.flip();
             }
       int tpc2 = Ms::transposeTpc(tpc1, v, true);
-      n->undoChangeProperty(P_ID::TPC1, tpc1);
-      n->undoChangeProperty(P_ID::TPC2, tpc2);
+      n->undoChangeProperty(Pid::TPC1, tpc1);
+      n->undoChangeProperty(Pid::TPC2, tpc2);
       }
 
 //---------------------------------------------------------

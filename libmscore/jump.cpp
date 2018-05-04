@@ -22,12 +22,12 @@ namespace Ms {
 //---------------------------------------------------------
 
 const JumpTypeTable jumpTypeTable[] = {
-      { Jump::Type::DC,         SubStyle::REPEAT_RIGHT, "D.C.",         "start", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo")        },
-      { Jump::Type::DC_AL_FINE, SubStyle::REPEAT_RIGHT, "D.C. al Fine", "start", "fine", "" ,     QT_TRANSLATE_NOOP("jumpType", "Da Capo al Fine")},
-      { Jump::Type::DC_AL_CODA, SubStyle::REPEAT_RIGHT, "D.C. al Coda", "start", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "Da Capo al Coda")},
-      { Jump::Type::DS_AL_CODA, SubStyle::REPEAT_RIGHT, "D.S. al Coda", "segno", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda")   },
-      { Jump::Type::DS_AL_FINE, SubStyle::REPEAT_RIGHT, "D.S. al Fine", "segno", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "D.S. al Fine")   },
-      { Jump::Type::DS,         SubStyle::REPEAT_RIGHT, "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.")           }
+      { Jump::Type::DC,         SubStyleId::REPEAT_RIGHT, "D.C.",         "start", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo")        },
+      { Jump::Type::DC_AL_FINE, SubStyleId::REPEAT_RIGHT, "D.C. al Fine", "start", "fine", "" ,     QT_TRANSLATE_NOOP("jumpType", "Da Capo al Fine")},
+      { Jump::Type::DC_AL_CODA, SubStyleId::REPEAT_RIGHT, "D.C. al Coda", "start", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "Da Capo al Coda")},
+      { Jump::Type::DS_AL_CODA, SubStyleId::REPEAT_RIGHT, "D.S. al Coda", "segno", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda")   },
+      { Jump::Type::DS_AL_FINE, SubStyleId::REPEAT_RIGHT, "D.S. al Fine", "segno", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "D.S. al Fine")   },
+      { Jump::Type::DS,         SubStyleId::REPEAT_RIGHT, "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.")           }
       };
 
 int jumpTypeTableSize()
@@ -42,7 +42,7 @@ int jumpTypeTableSize()
 Jump::Jump(Score* s)
    : TextBase(s)
       {
-      init(SubStyle::REPEAT_RIGHT);
+      initSubStyle(SubStyleId::REPEAT_RIGHT);
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       setLayoutToParentWidth(true);
       _playRepeats = false;
@@ -93,13 +93,13 @@ QString Jump::jumpTypeUserName() const
 
 void Jump::layout()
       {
-      setPos(QPointF(0.0, score()->styleP(StyleIdx::jumpPosAbove)));
+      setPos(QPointF(0.0, score()->styleP(Sid::jumpPosAbove)));
       TextBase::layout1();
 
       if (parent() && autoplace()) {
             setUserOff(QPointF());
             int si             = staffIdx();
-            qreal minDistance  = 0.5 * spatium(); // score()->styleP(StyleIdx::tempoMinDistance);
+            qreal minDistance  = 0.5 * spatium(); // score()->styleP(Sid::tempoMinDistance);
             Shape& s1          = measure()->staffShape(si);
             Shape s2           = shape().translated(pos());
             if (placeAbove()) {
@@ -119,9 +119,6 @@ void Jump::layout()
                         }
                   }
             s1.add(s2);
-            }
-      else {
-            adjustReadPos();
             }
       }
 
@@ -157,7 +154,7 @@ void Jump::write(XmlWriter& xml) const
       xml.tag("jumpTo", _jumpTo);
       xml.tag("playUntil", _playUntil);
       xml.tag("continueAt", _continueAt);
-      writeProperty(xml, P_ID::PLAY_REPEATS);
+      writeProperty(xml, Pid::PLAY_REPEATS);
       xml.etag();
       }
 
@@ -167,7 +164,7 @@ void Jump::write(XmlWriter& xml) const
 
 void Jump::undoSetJumpTo(const QString& s)
       {
-      undoChangeProperty(P_ID::JUMP_TO, s);
+      undoChangeProperty(Pid::JUMP_TO, s);
       }
 
 //---------------------------------------------------------
@@ -176,7 +173,7 @@ void Jump::undoSetJumpTo(const QString& s)
 
 void Jump::undoSetPlayUntil(const QString& s)
       {
-      undoChangeProperty(P_ID::PLAY_UNTIL, s);
+      undoChangeProperty(Pid::PLAY_UNTIL, s);
       }
 
 //---------------------------------------------------------
@@ -185,23 +182,23 @@ void Jump::undoSetPlayUntil(const QString& s)
 
 void Jump::undoSetContinueAt(const QString& s)
       {
-      undoChangeProperty(P_ID::CONTINUE_AT, s);
+      undoChangeProperty(Pid::CONTINUE_AT, s);
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Jump::getProperty(P_ID propertyId) const
+QVariant Jump::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::JUMP_TO:
+            case Pid::JUMP_TO:
                   return jumpTo();
-            case P_ID::PLAY_UNTIL:
+            case Pid::PLAY_UNTIL:
                   return playUntil();
-            case P_ID::CONTINUE_AT:
+            case Pid::CONTINUE_AT:
                   return continueAt();
-            case P_ID::PLAY_REPEATS:
+            case Pid::PLAY_REPEATS:
                   return playRepeats();
             default:
                   break;
@@ -213,19 +210,19 @@ QVariant Jump::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Jump::setProperty(P_ID propertyId, const QVariant& v)
+bool Jump::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case P_ID::JUMP_TO:
+            case Pid::JUMP_TO:
                   setJumpTo(v.toString());
                   break;
-            case P_ID::PLAY_UNTIL:
+            case Pid::PLAY_UNTIL:
                   setPlayUntil(v.toString());
                   break;
-            case P_ID::CONTINUE_AT:
+            case Pid::CONTINUE_AT:
                   setContinueAt(v.toString());
                   break;
-            case P_ID::PLAY_REPEATS:
+            case Pid::PLAY_REPEATS:
                   setPlayRepeats(v.toInt());
                   break;
             default:
@@ -242,16 +239,16 @@ bool Jump::setProperty(P_ID propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Jump::propertyDefault(P_ID propertyId) const
+QVariant Jump::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::JUMP_TO:
-            case P_ID::PLAY_UNTIL:
-            case P_ID::CONTINUE_AT:
+            case Pid::JUMP_TO:
+            case Pid::PLAY_UNTIL:
+            case Pid::CONTINUE_AT:
                   return QString("");
-            case P_ID::PLAY_REPEATS:
+            case Pid::PLAY_REPEATS:
                   return false;
-            case P_ID::PLACEMENT:
+            case Pid::PLACEMENT:
                   return int(Placement::ABOVE);
             default:
                   break;

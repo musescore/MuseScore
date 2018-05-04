@@ -210,9 +210,9 @@ class Segment final : public Element {
       virtual void write(XmlWriter&) const;
       virtual void read(XmlReader&);
 
-      virtual QVariant getProperty(P_ID propertyId) const;
-      virtual bool setProperty(P_ID propertyId, const QVariant&);
-      virtual QVariant propertyDefault(P_ID) const;
+      virtual QVariant getProperty(Pid propertyId) const;
+      virtual bool setProperty(Pid propertyId, const QVariant&);
+      virtual QVariant propertyDefault(Pid) const;
 
       bool operator<(const Segment&) const;
       bool operator>(const Segment&) const;
@@ -250,6 +250,7 @@ class Segment final : public Element {
       qreal minLeft(const Shape&) const;
       qreal minLeft() const;
       qreal minHorizontalDistance(Segment*, bool isSystemGap) const;
+      qreal minHorizontalCollidingDistance(Segment* ns) const;
 
       // some helper function
       ChordRest* cr(int track) const        { return toChordRest(_elist[track]); }

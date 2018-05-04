@@ -77,8 +77,6 @@
 #include "stafflines.h"
 #include "bracket.h"
 
-//      Q_LOGGING_CATEGORY(undoRedo, "undoRedo")
-
 namespace Ms {
 
 extern Measure* tick2measure(int tick);
@@ -519,6 +517,10 @@ void AddElement::endUndoRedo(bool isUndo) const
             element->score()->setLayout(element->tick());
             element->score()->setLayout(element->staff()->nextClefTick(element->tick()));
             }
+      else if (element->isKeySig()) {
+            element->score()->setLayout(element->tick());
+            element->score()->setLayout(element->staff()->nextKeyTick(element->tick()));
+            }
       }
 
 //---------------------------------------------------------
@@ -550,9 +552,9 @@ void AddElement::redo(EditData*)
 const char* AddElement::name() const
       {
       static char buffer[64];
-      if (element->isText())
+      if (element->isTextBase())
             snprintf(buffer, 64, "Add:    %s <%s> %p", element->name(),
-               qPrintable(toText(element)->plainText()), element);
+               qPrintable(toTextBase(element)->plainText()), element);
       else if (element->isSegment())
             snprintf(buffer, 64, "Add:    <%s-%s> %p", element->name(), toSegment(element)->subTypeName(), element);
       else
@@ -667,9 +669,9 @@ void RemoveElement::redo(EditData*)
 const char* RemoveElement::name() const
       {
       static char buffer[64];
-      if (element->isText())
+      if (element->isTextBase())
             snprintf(buffer, 64, "Remove: %s <%s> %p", element->name(),
-               qPrintable(toText(element)->plainText()), element);
+               qPrintable(toTextBase(element)->plainText()), element);
       else if (element->isSegment())
             snprintf(buffer, 64, "Remove: <%s-%s> %p", element->name(), toSegment(element)->subTypeName(), element);
       else
@@ -936,7 +938,8 @@ void ChangeElement::flip(EditData*)
             TempoText* t = toTempoText(oldElement);
             score->setTempo(t->segment(), t->tempo());
             }
-      if (newElement->isSegmentFlag()) {
+//      if (newElement->isSegmentFlag()) {
+      if (newElement->isSpannerSegment()) {
             SpannerSegment* os = toSpannerSegment(oldElement);
             SpannerSegment* ns = toSpannerSegment(newElement);
             if (os->system())
@@ -1012,7 +1015,8 @@ void ChangeKeySig::flip(EditData*)
 
       showCourtesy = sc;
       ks           = oe;
-      keysig->score()->setLayoutAll();  //TODO: reduce update to range covered by keysig
+      keysig->score()->setLayout(tick);
+      keysig->score()->setLayout(keysig->staff()->nextKeyTick(tick));
       }
 
 //---------------------------------------------------------
@@ -1033,12 +1037,19 @@ void ChangeMeasureLen::flip(EditData*)
       // move EndBarLine and TimeSigAnnounce
       // to end of measure:
       //
-      int endTick = measure->tick() + len.ticks();
-      for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-            if (segment->segmentType() != SegmentType::EndBarLine
-               && segment->segmentType() != SegmentType::TimeSigAnnounce)
+
+      Segment* s = measure->first();
+      std::list<Segment*> sl;
+      for (; s;) {
+            Segment* ns = s->next();
+            if (!s->isEndBarLineType() && !s->isTimeSigAnnounceType()) {
+                  s = ns;
                   continue;
-            segment->setTick(endTick);
+                  }
+            s->setRtick(len.ticks());
+            sl.push_back(s);
+            measure->remove(s);
+            s = ns;
             }
       measure->setLen(len);
       measure->score()->fixTicks();
@@ -1343,10 +1354,10 @@ void ChangeStyle::flip(EditData*)
       {
       MStyle tmp = score->style();
 
-      if (score->styleV(StyleIdx::concertPitch) != style.value(StyleIdx::concertPitch))
-            score->cmdConcertPitchChanged(style.value(StyleIdx::concertPitch).toBool(), true);
-      if (score->styleV(StyleIdx::MusicalSymbolFont) != style.value(StyleIdx::MusicalSymbolFont)) {
-            score->setScoreFont(ScoreFont::fontFactory(style.value(StyleIdx::MusicalSymbolFont).toString()));
+      if (score->styleV(Sid::concertPitch) != style.value(Sid::concertPitch))
+            score->cmdConcertPitchChanged(style.value(Sid::concertPitch).toBool(), true);
+      if (score->styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
+            score->setScoreFont(ScoreFont::fontFactory(style.value(Sid::MusicalSymbolFont).toString()));
             }
       score->setStyle(style);
       score->styleChanged();
@@ -1362,7 +1373,7 @@ void ChangeStyleVal::flip(EditData*)
       QVariant v = score->styleV(idx);
       if (v != value) {
             score->style().set(idx, value);
-            if (idx == StyleIdx::chordDescriptionFile) {
+            if (idx == Sid::chordDescriptionFile) {
                   score->style().chordList()->unload();
                   score->style().chordList()->read(value.toString());
                   }
@@ -1817,7 +1828,7 @@ void ChangeProperty::flip(EditData*)
       {
       qCDebug(undoRedo) << element->name() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id) << "->" << property;
 
-//      if (id == P_ID::SPANNER_TICK)
+//      if (id == Pid::SPANNER_TICK)
 //            static_cast<Element*>(element)->score()->removeSpanner(static_cast<Spanner*>(element));
 
       QVariant v       = element->getProperty(id);
@@ -1827,7 +1838,7 @@ void ChangeProperty::flip(EditData*)
       element->setPropertyFlags(id, flags);
 
 #if 0
-      if (id == P_ID::SPANNER_TICK) {
+      if (id == Pid::SPANNER_TICK) {
             static_cast<Element*>(element)->score()->addSpanner(static_cast<Spanner*>(element));
             // while updating ticks for an Ottava, the parent staff calls updateOttava()
             // and expects to find the Ottava spanner(s) in the score lists;
@@ -2054,48 +2065,64 @@ void ChangeNoteEvent::flip(EditData*)
 //   LinkUnlink
 //---------------------------------------------------------
 
-void LinkUnlink::doLink()
+LinkUnlink::~LinkUnlink()
       {
-      Q_ASSERT(le);
-      e->linkTo(le);
-      }
-
-void LinkUnlink::doUnlink()
-      {
-      // find appropriate target element to unlink
-      // use current le if valid; pick something else in link list if not but that shouldn't happen!
-      const LinkedElements* l = e->links();
-      if (l) {
-            // don't use current le if null or if it is no longer linked (shouldn't happen)
-            if (le && !l->contains(le)) {
-                  le = nullptr;
-                  qWarning("current le %p no longer linked", le);
-                  }
-            if (!le) {
-                  // shouldn't happen
-                  // find something other than current element (e) in link list, so we can link if asked to redo
-                  for (ScoreElement* ee : *l) {
-                        if (e != ee) {
-                              le = ee;
-                              break;
-                              }
-                        }
-                  qDebug("current le was null... we picked a new one le %p", le);
-                  }
+      if (le && mustDelete) {
+            Q_ASSERT(le->size() <= 1);
+            delete le;
             }
-      else
-            qWarning("current element %p has no links", e);
-
-      if (e)
-            e->unlink();
-      else
-            qWarning("nothing found to unlink");
       }
 
-void LinkStaff::redo(EditData*)   { s1->linkTo(s2); } // s1 is added
-void LinkStaff::undo(EditData*)   { s2->unlink(s1); } // s1 is removed
-void UnlinkStaff::redo(EditData*) { s1->unlink(s2); } // s2 is removed
-void UnlinkStaff::undo(EditData*) { s2->linkTo(s1); } // s2 is added
+void LinkUnlink::link()
+      {
+      if (le->size() == 1)
+            le->front()->setLinks(le);
+      mustDelete = false;
+      le->append(e);
+      e->setLinks(le);
+      }
+
+void LinkUnlink::unlink()
+      {
+      Q_ASSERT(le->contains(e));
+      le->removeOne(e);
+      if (le->size() == 1) {
+            le->front()->setLinks(0);
+            mustDelete = true;
+            }
+
+      e->setLinks(0);
+      }
+
+//---------------------------------------------------------
+//   Link
+//    link e1 to e2
+//---------------------------------------------------------
+
+Link::Link(ScoreElement* e1, ScoreElement* e2)
+      {
+      Q_ASSERT(e1->links() == 0);
+      le = e2->links();
+      if (!le) {
+            if (e1->isStaff())
+                  le = new LinkedElements(e1->score(), -1);
+            else
+                  le = new LinkedElements(e1->score());
+            le->push_back(e2);
+            }
+      e = e1;
+      }
+
+//---------------------------------------------------------
+//   Unlink
+//---------------------------------------------------------
+
+Unlink::Unlink(ScoreElement* _e)
+      {
+      e  = _e;
+      le = e->links();
+      Q_ASSERT(le);
+      }
 
 //---------------------------------------------------------
 //   ChangeStartEndSpanner::flip

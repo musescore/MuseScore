@@ -14,6 +14,7 @@
 #define __SCORE_ELEMENT_H__
 
 #include "types.h"
+#include "style.h"
 
 namespace Ms {
 
@@ -76,6 +77,7 @@ class Ambitus;
 class Bracket;
 class InstrumentChange;
 class Text;
+class TextBase;
 class Hairpin;
 class HairpinSegment;
 class Bend;
@@ -128,9 +130,9 @@ class VibratoSegment;
 class PalmMute;
 class PalmMuteSegment;
 
-enum class P_ID : int;
+enum class Pid : int;
 enum class PropertyFlags : char;
-enum class StyleIdx : int;
+enum class Sid : int;
 
 //---------------------------------------------------------
 //   LinkedElements
@@ -164,12 +166,16 @@ struct ElementName {
 class ScoreElement {
       Score* _score;
 
+      PropertyFlags* _propertyFlagsList { 0 };
+      SubStyleId _subStyleId            { SubStyleId::EMPTY };
+
    protected:
-      LinkedElements* _links { 0 };
+      LinkedElements* _links            { 0 };
 
    public:
       ScoreElement(Score* s) : _score(s)   {}
       ScoreElement(const ScoreElement& se);
+
       virtual ~ScoreElement();
 
       Score* score() const                 { return _score;      }
@@ -182,31 +188,48 @@ class ScoreElement {
       static ElementType name2type(const QStringRef&);
       static const char* name(ElementType);
 
-      virtual QVariant getProperty(P_ID) const = 0;
-      virtual bool setProperty(P_ID, const QVariant&) = 0;
-      virtual QVariant propertyDefault(P_ID) const { return QVariant(); }
-      virtual void resetProperty(P_ID id);
+      virtual QVariant getProperty(Pid) const = 0;
+      virtual bool setProperty(Pid, const QVariant&) = 0;
+      virtual QVariant propertyDefault(Pid) const;
+      QVariant styledPropertyDefault(Pid id) const;
+      virtual void resetProperty(Pid id);
 
-      virtual PropertyFlags& propertyFlags(P_ID);
+      virtual void reset();                     // reset all properties & position to default
 
-      virtual void setPropertyFlags(P_ID, PropertyFlags);
+      SubStyleId subStyleId() const                          { return _subStyleId; }
+      void setSubStyleId(SubStyleId);
+      void initSubStyle(SubStyleId);
+      virtual const StyledProperty* styledProperties() const { return subStyle(_subStyleId).data(); }
+      virtual PropertyFlags* propertyFlagsList()             { return _propertyFlagsList; }
+      virtual PropertyFlags& propertyFlags(Pid);
 
-      virtual StyleIdx getPropertyStyle(P_ID) const;
+      virtual void setPropertyFlags(Pid, PropertyFlags);
 
-      virtual void undoChangeProperty(P_ID id, const QVariant&, PropertyFlags ps);
-      void undoChangeProperty(P_ID id, const QVariant&);
-      void undoResetProperty(P_ID id);
+      virtual Sid getPropertyStyle(Pid) const;
+      bool readProperty(const QStringRef&, XmlReader&, Pid);
+      bool readStyledProperty(XmlReader& e, const QStringRef& tag);
 
-      void undoPushProperty(P_ID);
-      void writeProperty(XmlWriter& xml, P_ID id) const;
+      virtual void styleChanged();
+
+      virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps);
+      void undoChangeProperty(Pid id, const QVariant&);
+      void undoResetProperty(Pid id);
+
+
+      void undoPushProperty(Pid);
+      void writeProperty(XmlWriter& xml, Pid id) const;
+      void writeStyledProperties(XmlWriter&) const;
 
       QList<ScoreElement*> linkList() const;
 
       void linkTo(ScoreElement*);
       void unlink();
+      bool isLinked(ScoreElement*);
+
       virtual void undoUnlink();
       int lid() const                         { return _links ? _links->lid() : 0; }
-      const LinkedElements* links() const     { return _links;      }
+//      const LinkedElements* links() const     { return _links;      }
+      LinkedElements* links() const           { return _links;      }
       void setLinks(LinkedElements* le)       { _links = le;        }
 
       //---------------------------------------------------
@@ -305,6 +328,7 @@ class ScoreElement {
       CONVERT(ChordLine,     CHORDLINE)
       CONVERT(FretDiagram,   FRET_DIAGRAM)
       CONVERT(Page,          PAGE)
+      CONVERT(Text,          TEXT)
       CONVERT(StaffText,     STAFF_TEXT)
       CONVERT(SystemText,    SYSTEM_TEXT)
       CONVERT(BracketItem,   BRACKET_ITEM)
@@ -318,7 +342,7 @@ class ScoreElement {
       bool isSLineSegment() const;
       bool isBox() const { return isVBox() || isHBox() || isTBox() || isFBox(); }
       bool isMeasureBase() const { return isMeasure() || isBox(); }
-      bool isText() const;
+      bool isTextBase() const;
       bool isTextLineBaseSegment() const {
          return isHairpinSegment()
          || isLetRingSegment()
@@ -432,6 +456,10 @@ static inline BSymbol* toBSymbol(ScoreElement* e) {
 static inline TextLineBase* toTextLineBase(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isTextLineBase());
       return (TextLineBase*)e;
+      }
+static inline TextBase* toTextBase(ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isTextBase());
+      return (TextBase*)e;
       }
 
 #define CONVERT(a)  \

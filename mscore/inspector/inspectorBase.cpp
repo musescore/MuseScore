@@ -129,7 +129,7 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
       {
       QWidget* w = ii.w;
 
-      P_ID id  = ii.t;
+      Pid id  = ii.t;
 
       switch (propertyType(id)) {
             case P_TYPE::POINT_SP:
@@ -219,7 +219,7 @@ bool InspectorBase::isDefault(const InspectorItem& ii)
       for (int i = 0; i < ii.parent; ++i)
             e = e->parent();
 
-      P_ID id      = ii.t;
+      Pid id      = ii.t;
       QVariant val = e->getProperty(id);
       QVariant def = e->propertyDefault(id);
       return val == def;
@@ -231,7 +231,7 @@ bool InspectorBase::isDefault(const InspectorItem& ii)
 
 bool InspectorBase::compareValues(const InspectorItem& ii, QVariant a, QVariant b)
       {
-      P_ID id  = ii.t;
+      Pid id  = ii.t;
       P_TYPE t = propertyType(id);
       if (t == P_TYPE::SIZE) {
             QSizeF s1 = a.toSizeF();
@@ -267,7 +267,7 @@ bool InspectorBase::dirty() const
 void InspectorBase::setElement()
       {
       for (const InspectorItem& ii : iList) {
-            P_ID id    = ii.t;
+            Pid id    = ii.t;
             Element* e = inspector->element();
             for (int k = 0; k < ii.parent; ++k)
                   e = e->parent();
@@ -294,8 +294,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
       QColor c(preferences.isThemeDark() ? Qt::yellow : Qt::darkCyan);
 
       if (inspector->el()->size() > 1) {
-            P_ID id      = ii.t;
-//            P_TYPE pt    = propertyType(id);
+            Pid id      = ii.t;
             QVariant val = getValue(ii);
 
             for (Element* e : *inspector->el()) {
@@ -338,10 +337,15 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
 
 void InspectorBase::valueChanged(int idx, bool reset)
       {
-      const InspectorItem& ii = iList[idx];
-      P_ID id       = ii.t;
-      QVariant val2 = getValue(ii);
+      static bool recursion = false;
 
+      if (recursion)
+            return;
+      recursion = true;
+
+      const InspectorItem& ii = iList[idx];
+      Pid id       = ii.t;
+      QVariant val2 = getValue(ii);                   // get new value from UI
       Score* score  = inspector->element()->score();
 
       score->startCmd();
@@ -359,14 +363,11 @@ void InspectorBase::valueChanged(int idx, bool reset)
             QVariant val1 = e->getProperty(id);
             if (reset) {
                   val2 = e->propertyDefault(id);
+                  if (!val2.isValid())
+                        continue;
+                  setValue(ii, val2);           // set UI, this may call valueChanged()
                   }
-            if (val2.isValid() && val1 != val2) {
-                  if (reset) {
-//ws:??                        val2 = e->propertyDefault(id);
-                        setValue(ii, val2);
-                        }
-                  e->undoChangeProperty(id, val2, ps);
-                  }
+            e->undoChangeProperty(id, val2, ps);
             }
       inspector->setInspectorEdit(true);
       checkDifferentValues(ii);
@@ -375,8 +376,9 @@ void InspectorBase::valueChanged(int idx, bool reset)
       postInit();
 
       // a subStyle change may change several other values:
-      if (id == P_ID::SUB_STYLE)
+      if (id == Pid::SUB_STYLE)
             setElement();
+      recursion = false;
       }
 
 //---------------------------------------------------------
@@ -397,13 +399,13 @@ void InspectorBase::setStyleClicked(int i)
       Element* e   = inspector->element();
       const InspectorItem& ii = iList[i];
 
-      StyleIdx sidx = e->getPropertyStyle(ii.t);
-      if (sidx == StyleIdx::NOSTYLE)
+      Sid sidx = e->getPropertyStyle(ii.t);
+      if (sidx == Sid::NOSTYLE)
             return;
       e->score()->startCmd();
       QVariant val = getValue(ii);
       e->undoChangeProperty(ii.t, val, PropertyFlags::STYLED);
-      P_ID id      = ii.t;
+      Pid id      = ii.t;
       P_TYPE t     = propertyType(id);
       if (t == P_TYPE::SP_REAL)
             val = val.toDouble() / e->score()->spatium();
@@ -456,8 +458,8 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
             if (resetButton) {
                   resetButton->setIcon(*icons[int(Icons::reset_ICON)]);
                   connect(resetButton, &QToolButton::clicked, [=] { resetClicked(i); });
-                  StyleIdx sidx = inspector->element()->getPropertyStyle(ii.t);
-                  if (sidx != StyleIdx::NOSTYLE) {
+                  Sid sidx = inspector->element()->getPropertyStyle(ii.t);
+                  if (sidx != Sid::NOSTYLE) {
                         QMenu* menu = new QMenu(this);
                         resetButton->setMenu(menu);
                         resetButton->setPopupMode(QToolButton::MenuButtonPopup);
@@ -546,7 +548,7 @@ void InspectorBase::resetToStyle()
       for (Element* e : *inspector->el()) {     // TODO: ??
             Text* text = toText(e);
             // Preserve <sym> tags
-            text->undoChangeProperty(P_ID::TEXT, text->plainText().toHtmlEscaped().replace("&lt;sym&gt;","<sym>").replace("&lt;/sym&gt;","</sym>"));
+            text->undoChangeProperty(Pid::TEXT, text->plainText().toHtmlEscaped().replace("&lt;sym&gt;","<sym>").replace("&lt;/sym&gt;","</sym>"));
             }
       score->endCmd();
       }

@@ -558,7 +558,7 @@ void MuseScore::populateNoteInputMenu()
                         noteEntryMethods->addAction(getAction("note-input-realtime-auto"));
                         noteEntryMethods->addAction(getAction("note-input-realtime-manual"));
 
-                        connect(noteEntryMethods, SIGNAL(triggered(QAction*)), this, SLOT(setNoteEntryState()));
+                        connect(noteEntryMethods, SIGNAL(triggered(QAction*)), this, SLOT(cmd(QAction*)));
 
                         w = new ToolButtonMenu(tr("Note Entry Methods"),
                            ToolButtonMenu::TYPES::ICON_CHANGED,
@@ -1920,10 +1920,11 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             magChanged(midx);
             }
 
-      setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->title());
+      updateWindowTitle(cs);
+      setWindowModified(cs->dirty());
 
       QAction* a = getAction("concert-pitch");
-      a->setChecked(cs->styleB(StyleIdx::concertPitch));
+      a->setChecked(cs->styleB(Sid::concertPitch));
 
       setPos(cs->inputPos());
       //showMessage(cs->filePath(), 2000);
@@ -2686,7 +2687,7 @@ static bool doConvert(Score* cs, QString fn, QString plugin = "")
                         for (Excerpt* e : excerpts) {
                               Score* nscore = new Score(e->oscore());
                               e->setPartScore(nscore);
-                              nscore->style().set(StyleIdx::createMultiMeasureRests, true);
+                              nscore->style().set(Sid::createMultiMeasureRests, true);
                               Excerpt::createExcerpt(e);
                               cs->startCmd();
                               cs->undo(new AddExcerpt(e));
@@ -2712,7 +2713,7 @@ static bool doConvert(Score* cs, QString fn, QString plugin = "")
                               e->setPartScore(nscore);
                               nscore->setExcerpt(e);
                               // nscore->setName(e->title()); // needed before AddExcerpt
-                              nscore->style().set(StyleIdx::createMultiMeasureRests, true);
+                              nscore->style().set(Sid::createMultiMeasureRests, true);
                               Excerpt::createExcerpt(e);
                               cs->startCmd();
                               cs->undo(new AddExcerpt(e));
@@ -3719,6 +3720,7 @@ void MuseScore::dirtyChanged(Score* s)
       tab1->setTabText(idx, label);
       if (tab2)
             tab2->setTabText(idx, label);
+      setWindowModified(score->dirty());
       }
 
 //---------------------------------------------------------
@@ -4282,6 +4284,7 @@ void MuseScore::showPianoKeyboard(bool on)
             }
       if (on) {
             _pianoTools->show();
+            _pianoTools->changeSelection(currentScore()->selection());
             }
       else {
             if (_pianoTools)
@@ -4649,7 +4652,7 @@ void MuseScore::transpose()
             Staff* staff = cs->staff(i);
             if (staff->isPitchedStaff(startTick)) {
                   key = staff->key(startTick);
-                  if (!cs->styleB(StyleIdx::concertPitch)) {
+                  if (!cs->styleB(Sid::concertPitch)) {
                         int diff = staff->part()->instrument(startTick)->transpose().chromatic;
                         if (diff)
                               key = transposeKey(key, diff);
@@ -4827,7 +4830,7 @@ void MuseScore::endCmd()
                   SelState ss = cs->selection().state();
                   selectionChanged(ss);
                   }
-            getAction("concert-pitch")->setChecked(cs->styleB(StyleIdx::concertPitch));
+            getAction("concert-pitch")->setChecked(cs->styleB(Sid::concertPitch));
 
             if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();
@@ -5493,6 +5496,25 @@ void MuseScore::restoreGeometry(QWidget *const qw)
             }
       }
 
+void MuseScore::updateWindowTitle(Score* score)
+      {
+#ifdef Q_OS_MAC
+      if (!cs->isMaster())
+            setWindowTitle(cs->masterScore()->title() + "-" + cs->title());
+      else
+            setWindowTitle(cs->title());
+      if (score->masterScore()->created())
+            setWindowFilePath(QString());
+      else
+            setWindowFilePath(score->masterScore()->fileInfo()->absoluteFilePath());
+#else
+      if (!cs->isMaster())
+            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->masterScore()->title() + "-" + cs->title() + "[*]");
+      else
+            setWindowTitle(MUSESCORE_NAME_VERSION ": " + score->title() + "[*]");
+#endif
+      }
+
 //---------------------------------------------------------
 //   recentScores
 //    return a list of recent scores
@@ -6120,11 +6142,11 @@ int main(int argc, char* av[])
       if (!MScore::testMode) {
             QPrinter p;
             if (p.isValid()) {
-                  qDebug("set paper size from default printer");
+//                  qDebug("set paper size from default printer");
                   QRectF psf = p.paperRect(QPrinter::Inch);
-                  MScore::defaultStyle().set(StyleIdx::pageWidth,  psf.width());
-                  MScore::defaultStyle().set(StyleIdx::pageHeight, psf.height());
-                  MScore::defaultStyle().set(StyleIdx::pagePrintableWidth, psf.width()-20.0/INCH);
+                  MScore::defaultStyle().set(Sid::pageWidth,  psf.width());
+                  MScore::defaultStyle().set(Sid::pageHeight, psf.height());
+                  MScore::defaultStyle().set(Sid::pagePrintableWidth, psf.width()-20.0/INCH);
                   }
             }
 #endif
@@ -6284,7 +6306,7 @@ int main(int argc, char* av[])
       gscore->setMovements(new Movements());
       gscore->setStyle(MScore::baseStyle());
 
-      gscore->style().set(StyleIdx::MusicalTextFont, QString("Bravura Text"));
+      gscore->style().set(Sid::MusicalTextFont, QString("Bravura Text"));
       ScoreFont* scoreFont = ScoreFont::fontFactory("Bravura");
       gscore->setScoreFont(scoreFont);
       gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / SPATIUM20);

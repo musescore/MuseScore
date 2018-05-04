@@ -559,7 +559,7 @@ Note::Note(const Note& n, bool link)
    : Element(n)
       {
       if (link)
-            score()->undo(new Link(const_cast<Note*>(&n), this));
+            score()->undo(new Link(this, const_cast<Note*>(&n)));
       _subchannel        = n._subchannel;
       _line              = n._line;
       _fret              = n._fret;
@@ -599,7 +599,7 @@ Note::Note(const Note& n, bool link)
             Element* ce = e->clone();
             add(ce);
             if (link)
-                  score()->undo(new Link(const_cast<Element*>(e), ce));
+                  score()->undo(new Link(ce, const_cast<Element*>(e)));
             }
 
       _playEvents = n._playEvents;
@@ -654,7 +654,7 @@ void Note::setPitch(int pitch, int tpc1, int tpc2)
 
 void Note::undoSetPitch(int p)
       {
-      undoChangeProperty(P_ID::PITCH, p);
+      undoChangeProperty(Pid::PITCH, p);
       }
 
 //---------------------------------------------------------
@@ -743,11 +743,11 @@ void Note::undoSetTpc(int v)
       {
       if (concertPitch()) {
             if (v != tpc1())
-                  undoChangeProperty(P_ID::TPC1, v);
+                  undoChangeProperty(Pid::TPC1, v);
             }
       else {
             if (v != tpc2())
-                  undoChangeProperty(P_ID::TPC2, v);
+                  undoChangeProperty(Pid::TPC2, v);
             }
       }
 
@@ -1148,9 +1148,9 @@ void Note::write(XmlWriter& xml) const
                   e.write(xml);
             xml.etag();
             }
-      for (P_ID id : { P_ID::PITCH, P_ID::TPC1, P_ID::TPC2, P_ID::SMALL, P_ID::MIRROR_HEAD, P_ID::DOT_POSITION,
-         P_ID::HEAD_GROUP, P_ID::VELO_OFFSET, P_ID::PLAY, P_ID::TUNING, P_ID::FRET, P_ID::STRING,
-         P_ID::GHOST, P_ID::HEAD_TYPE, P_ID::VELO_TYPE, P_ID::FIXED, P_ID::FIXED_LINE
+      for (Pid id : { Pid::PITCH, Pid::TPC1, Pid::TPC2, Pid::SMALL, Pid::MIRROR_HEAD, Pid::DOT_POSITION,
+         Pid::HEAD_GROUP, Pid::VELO_OFFSET, Pid::PLAY, Pid::TUNING, Pid::FRET, Pid::STRING,
+         Pid::GHOST, Pid::HEAD_TYPE, Pid::VELO_TYPE, Pid::FIXED, Pid::FIXED_LINE
             }) {
             writeProperty(xml, id);
             }
@@ -1264,15 +1264,15 @@ bool Note::readProperties(XmlReader& e)
       else if (tag == "small")
             setSmall(e.readInt());
       else if (tag == "mirror")
-            setProperty(P_ID::MIRROR_HEAD, Ms::getProperty(P_ID::MIRROR_HEAD, e));
+            setProperty(Pid::MIRROR_HEAD, Ms::getProperty(Pid::MIRROR_HEAD, e));
       else if (tag == "dotPosition")
-            setProperty(P_ID::DOT_POSITION, Ms::getProperty(P_ID::DOT_POSITION, e));
+            setProperty(Pid::DOT_POSITION, Ms::getProperty(Pid::DOT_POSITION, e));
       else if (tag == "fixed")
             setFixed(e.readBool());
       else if (tag == "fixedLine")
             setFixedLine(e.readInt());
       else if (tag == "head")
-            setProperty(P_ID::HEAD_GROUP, Ms::getProperty(P_ID::HEAD_GROUP, e));
+            setProperty(Pid::HEAD_GROUP, Ms::getProperty(Pid::HEAD_GROUP, e));
       else if (tag == "velocity")
             setVeloOffset(e.readInt());
       else if (tag == "play")
@@ -1286,9 +1286,9 @@ bool Note::readProperties(XmlReader& e)
       else if (tag == "ghost")
             setGhost(e.readInt());
       else if (tag == "headType")
-            setProperty(P_ID::HEAD_TYPE, Ms::getProperty(P_ID::HEAD_TYPE, e));
+            setProperty(Pid::HEAD_TYPE, Ms::getProperty(Pid::HEAD_TYPE, e));
       else if (tag == "veloType")
-            setProperty(P_ID::VELO_TYPE, Ms::getProperty(P_ID::VELO_TYPE, e));
+            setProperty(Pid::VELO_TYPE, Ms::getProperty(Pid::VELO_TYPE, e));
       else if (tag == "line")
             setLine(e.readInt());
       else if (tag == "Fingering") {
@@ -1363,7 +1363,7 @@ bool Note::readProperties(XmlReader& e)
                   if (id != -1 &&
                               // DISABLE if pasting into a staff with linked staves
                               // because the glissando is not properly cloned into the linked staves
-                              (!e.pasteMode() || !staff()->linkedStaves() || staff()->linkedStaves()->empty())) {
+                              (!e.pasteMode() || !staff()->links() || staff()->links()->empty())) {
                         Spanner* placeholder = new TextLine(score());
                         placeholder->setAnchor(Spanner::Anchor::NOTE);
                         placeholder->setEndElement(this);
@@ -1399,7 +1399,7 @@ bool Note::readProperties(XmlReader& e)
             sp->read(e);
             // DISABLE pasting of glissandi into staves with other lionked staves
             // because the glissando is not properly cloned into the linked staves
-            if (e.pasteMode() && staff()->linkedStaves() && !staff()->linkedStaves()->empty()) {
+            if (e.pasteMode() && staff()->links() && !staff()->links()->empty()) {
                   e.removeSpanner(sp);    // read() added the element to the XMLReader: remove it
                   delete sp;
                   }
@@ -1448,9 +1448,9 @@ void Note::startDrag(EditData& ed)
       NoteEditData* ned = new NoteEditData();
       ned->e    = this;
       ned->line = _line;
-      ned->pushProperty(P_ID::PITCH);
-      ned->pushProperty(P_ID::TPC1);
-      ned->pushProperty(P_ID::TPC2);
+      ned->pushProperty(Pid::PITCH);
+      ned->pushProperty(Pid::TPC1);
+      ned->pushProperty(Pid::TPC2);
 
       ed.addData(ned);
       }
@@ -1513,11 +1513,11 @@ void Note::endDrag(EditData& ed)
             for (Note* nn : tiedNotes()) {
                   bool refret = false;
                   if (nn->fret() != nFret) {
-                        nn->undoChangeProperty(P_ID::FRET, nFret);
+                        nn->undoChangeProperty(Pid::FRET, nFret);
                         refret = true;
                         }
                   if (nn->string() != nString) {
-                        nn->undoChangeProperty(P_ID::STRING, nString);
+                        nn->undoChangeProperty(Pid::STRING, nString);
                         refret = true;
                         }
                   if (refret)
@@ -1677,14 +1677,14 @@ Element* Note::drop(EditData& data)
                   if (group != _headGroup) {
                         if (links()) {
                               for (ScoreElement* e : *links()) {
-                                    e->undoChangeProperty(P_ID::HEAD_GROUP, int(group));
+                                    e->undoChangeProperty(Pid::HEAD_GROUP, int(group));
                                     Note* note = toNote(e);
                                     if (note->staff() && note->staff()->isTabStaff(ch->tick()) && group == NoteHead::Group::HEAD_CROSS)
-                                          e->undoChangeProperty(P_ID::GHOST, true);
+                                          e->undoChangeProperty(Pid::GHOST, true);
                                     }
                               }
                         else {
-                              undoChangeProperty(P_ID::HEAD_GROUP, int(group));
+                              undoChangeProperty(Pid::HEAD_GROUP, int(group));
                               }
                         }
                   }
@@ -1973,7 +1973,6 @@ void Note::layout2()
       // so that the results are available there
 
       if (staff()->isTabStaff(chord()->tick())) {
-            adjustReadPos();
             StaffType* tab = staff()->staffType(tick());
             qreal mags = magS();
             bool paren = false;
@@ -1992,8 +1991,8 @@ void Note::layout2()
 
       int dots = chord()->dots();
       if (dots) {
-            qreal d  = score()->point(score()->styleS(StyleIdx::dotNoteDistance)) * mag();
-            qreal dd = score()->point(score()->styleS(StyleIdx::dotDotDistance)) * mag();
+            qreal d  = score()->point(score()->styleS(Sid::dotNoteDistance)) * mag();
+            qreal dd = score()->point(score()->styleS(Sid::dotDotDistance)) * mag();
             qreal x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
             // if TAB and stems through staff
             if (staff()->isTabStaff(chord()->tick())) {
@@ -2013,7 +2012,6 @@ void Note::layout2()
             qreal xx = x + d;
             for (NoteDot* dot : _dots) {
                   dot->rxpos() = xx;
-                  dot->adjustReadPos();
                   xx += dd;
                   }
             }
@@ -2026,7 +2024,7 @@ void Note::layout2()
             if (e->isSymbol()) {
                   qreal w = headWidth();
                   Symbol* sym = toSymbol(e);
-                  QPointF rp = e->readPos();
+//                  QPointF rp = e->readPos();
                   e->layout();
                   if (sym->sym() == SymId::noteheadParenthesisRight) {
                         if (staff()->isTabStaff(chord()->tick())) {
@@ -2038,14 +2036,11 @@ void Note::layout2()
                   else if (sym->sym() == SymId::noteheadParenthesisLeft) {
                         e->rxpos() -= symWidth(SymId::noteheadParenthesisLeft);
                         }
-                  if (sym->sym() == SymId::noteheadParenthesisLeft || sym->sym() == SymId::noteheadParenthesisRight) {
-                        // adjustReadPos() was called too early in layout(), adjust:
-                        if (!rp.isNull()) {
+/*                  if (sym->sym() == SymId::noteheadParenthesisLeft || sym->sym() == SymId::noteheadParenthesisRight) {
+                        if (!rp.isNull())
                               e->setUserOff(QPointF());
-                              e->setReadPos(rp);
-                              e->adjustReadPos();
-                              }
                         }
+ */
                   }
             else
                   e->layout();
@@ -2191,10 +2186,8 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
             if (score()->tagIsValid(e->tag()))
                   e->scanElements(data, func, all);
             }
-      for (Spanner* sp : _spannerFor) {
-            printf("Note scan %d %s\n", tick(), sp->name());
+      for (Spanner* sp : _spannerFor)
             sp->scanElements(data, func, all);
-            }
 
       if (!dragMode && _accidental)
             func(data, _accidental);
@@ -2240,9 +2233,9 @@ void Note::setTrack(int val)
 
 void Note::reset()
       {
-      undoChangeProperty(P_ID::USER_OFF, QPointF());
-      chord()->undoChangeProperty(P_ID::USER_OFF, QPointF());
-      chord()->undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
+      undoChangeProperty(Pid::USER_OFF, QPointF());
+      chord()->undoChangeProperty(Pid::USER_OFF, QPointF());
+      chord()->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
       }
 
 //---------------------------------------------------------
@@ -2253,7 +2246,7 @@ qreal Note::mag() const
       {
       qreal m = chord()->mag();
       if (_small)
-            m *= score()->styleD(StyleIdx::smallNoteMag);
+            m *= score()->styleD(Sid::smallNoteMag);
       return m;
       }
 
@@ -2341,7 +2334,7 @@ void Note::endEdit(EditData&)
       {
       Chord* ch = chord();
       if (ch->notes().size() == 1) {
-            ch->undoChangeProperty(P_ID::USER_OFF, ch->userOff() + userOff());
+            ch->undoChangeProperty(Pid::USER_OFF, ch->userOff() + userOff());
             setUserOff(QPointF());
             triggerLayout();
             }
@@ -2371,7 +2364,7 @@ void Note::updateRelLine(int relLine, bool undoable)
             if (idx < minStaff || idx >= maxStaff || st->group() != this->staff()->staffType(tick())->group()) {
                   qDebug("staffMove out of scope %d + %d min %d max %d",
                      staffIdx(), chord()->staffMove(), minStaff, maxStaff);
-                  chord()->undoChangeProperty(P_ID::STAFF_MOVE, 0);
+                  chord()->undoChangeProperty(Pid::STAFF_MOVE, 0);
                   }
             }
 
@@ -2379,7 +2372,7 @@ void Note::updateRelLine(int relLine, bool undoable)
       int line      = relStep(relLine, clef);
 
       if (undoable && _line != INVALID_LINE)
-            undoChangeProperty(P_ID::LINE, line);
+            undoChangeProperty(Pid::LINE, line);
       else
             setLine(line);
 
@@ -2437,44 +2430,44 @@ void Note::setNval(const NoteVal& nval, int tick)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Note::getProperty(P_ID propertyId) const
+QVariant Note::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::PITCH:
+            case Pid::PITCH:
                   return pitch();
-            case P_ID::TPC1:
+            case Pid::TPC1:
                   return _tpc[0];
-            case P_ID::TPC2:
+            case Pid::TPC2:
                   return _tpc[1];
-            case P_ID::SMALL:
+            case Pid::SMALL:
                   return small();
-            case P_ID::MIRROR_HEAD:
+            case Pid::MIRROR_HEAD:
                   return int(userMirror());
-            case P_ID::DOT_POSITION:
+            case Pid::DOT_POSITION:
                   return QVariant::fromValue<Direction>(userDotPosition());
-            case P_ID::HEAD_GROUP:
+            case Pid::HEAD_GROUP:
                   return int(headGroup());
-            case P_ID::VELO_OFFSET:
+            case Pid::VELO_OFFSET:
                   return veloOffset();
-            case P_ID::TUNING:
+            case Pid::TUNING:
                   return tuning();
-            case P_ID::FRET:
+            case Pid::FRET:
                   return fret();
-            case P_ID::STRING:
+            case Pid::STRING:
                   return string();
-            case P_ID::GHOST:
+            case Pid::GHOST:
                   return ghost();
-            case P_ID::HEAD_TYPE:
+            case Pid::HEAD_TYPE:
                   return int(headType());
-            case P_ID::VELO_TYPE:
+            case Pid::VELO_TYPE:
                   return int(veloType());
-            case P_ID::PLAY:
+            case Pid::PLAY:
                   return play();
-            case P_ID::LINE:
+            case Pid::LINE:
                   return _line;
-            case P_ID::FIXED:
+            case Pid::FIXED:
                   return fixed();
-            case P_ID::FIXED_LINE:
+            case Pid::FIXED_LINE:
                   return fixedLine();
             default:
                   break;
@@ -2486,61 +2479,61 @@ QVariant Note::getProperty(P_ID propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Note::setProperty(P_ID propertyId, const QVariant& v)
+bool Note::setProperty(Pid propertyId, const QVariant& v)
       {
       Measure* m = chord() ? chord()->measure() : nullptr;
       switch(propertyId) {
-            case P_ID::PITCH:
+            case Pid::PITCH:
                   setPitch(v.toInt());
                   score()->setPlaylistDirty();
                   break;
-            case P_ID::TPC1:
+            case Pid::TPC1:
                   _tpc[0] = v.toInt();
                   break;
-            case P_ID::TPC2:
+            case Pid::TPC2:
                   _tpc[1] = v.toInt();
                   break;
-            case P_ID::LINE:
+            case Pid::LINE:
                   setLine(v.toInt());
                   break;
-            case P_ID::SMALL:
+            case Pid::SMALL:
                   setSmall(v.toBool());
                   break;
-            case P_ID::MIRROR_HEAD:
+            case Pid::MIRROR_HEAD:
                   setUserMirror(MScore::DirectionH(v.toInt()));
                   break;
-            case P_ID::DOT_POSITION:
+            case Pid::DOT_POSITION:
                   setUserDotPosition(v.value<Direction>());
                   score()->setLayout(tick());
                   return true;
-            case P_ID::HEAD_GROUP:
+            case Pid::HEAD_GROUP:
                   setHeadGroup(NoteHead::Group(v.toInt()));
                   break;
-            case P_ID::VELO_OFFSET:
+            case Pid::VELO_OFFSET:
                   setVeloOffset(v.toInt());
                   score()->setPlaylistDirty();
                   break;
-            case P_ID::TUNING:
+            case Pid::TUNING:
                   setTuning(v.toDouble());
                   score()->setPlaylistDirty();
                   break;
-            case P_ID::FRET:
+            case Pid::FRET:
                   setFret(v.toInt());
                   break;
-            case P_ID::STRING:
+            case Pid::STRING:
                   setString(v.toInt());
                   break;
-            case P_ID::GHOST:
+            case Pid::GHOST:
                   setGhost(v.toBool());
                   break;
-            case P_ID::HEAD_TYPE:
+            case Pid::HEAD_TYPE:
                   setHeadType(NoteHead::Type(v.toInt()));
                   break;
-            case P_ID::VELO_TYPE:
+            case Pid::VELO_TYPE:
                   setVeloType(ValueType(v.toInt()));
                   score()->setPlaylistDirty();
                   break;
-            case P_ID::VISIBLE: {                     // P_ID::VISIBLE requires reflecting property on dots
+            case Pid::VISIBLE: {                     // Pid::VISIBLE requires reflecting property on dots
                   setVisible(v.toBool());
                   int dots = chord()->dots();
                   for (int i = 0; i < dots; ++i) {
@@ -2551,14 +2544,14 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
                         m->checkMultiVoices(chord()->staffIdx());
                   break;
                   }
-            case P_ID::PLAY:
+            case Pid::PLAY:
                   setPlay(v.toBool());
                   score()->setPlaylistDirty();
                   break;
-            case P_ID::FIXED:
+            case Pid::FIXED:
                   setFixed(v.toBool());
                   break;
-            case P_ID::FIXED_LINE:
+            case Pid::FIXED_LINE:
                   setFixedLine(v.toInt());
                   break;
             default:
@@ -2576,7 +2569,7 @@ bool Note::setProperty(P_ID propertyId, const QVariant& v)
 
 void Note::undoSetFret(int val)
       {
-      undoChangeProperty(P_ID::FRET, val);
+      undoChangeProperty(Pid::FRET, val);
       }
 
 //---------------------------------------------------------
@@ -2585,7 +2578,7 @@ void Note::undoSetFret(int val)
 
 void Note::undoSetString(int val)
       {
-      undoChangeProperty(P_ID::STRING, val);
+      undoChangeProperty(Pid::STRING, val);
       }
 
 //---------------------------------------------------------
@@ -2594,7 +2587,7 @@ void Note::undoSetString(int val)
 
 void Note::undoSetGhost(bool val)
       {
-      undoChangeProperty(P_ID::GHOST, val);
+      undoChangeProperty(Pid::GHOST, val);
       }
 
 //---------------------------------------------------------
@@ -2603,7 +2596,7 @@ void Note::undoSetGhost(bool val)
 
 void Note::undoSetSmall(bool val)
       {
-      undoChangeProperty(P_ID::SMALL, val);
+      undoChangeProperty(Pid::SMALL, val);
       }
 
 //---------------------------------------------------------
@@ -2612,7 +2605,7 @@ void Note::undoSetSmall(bool val)
 
 void Note::undoSetPlay(bool val)
       {
-      undoChangeProperty(P_ID::PLAY, val);
+      undoChangeProperty(Pid::PLAY, val);
       }
 
 //---------------------------------------------------------
@@ -2621,7 +2614,7 @@ void Note::undoSetPlay(bool val)
 
 void Note::undoSetTuning(qreal val)
       {
-      undoChangeProperty(P_ID::TUNING, val);
+      undoChangeProperty(Pid::TUNING, val);
       }
 
 //---------------------------------------------------------
@@ -2630,7 +2623,7 @@ void Note::undoSetTuning(qreal val)
 
 void Note::undoSetVeloType(ValueType val)
       {
-      undoChangeProperty(P_ID::VELO_TYPE, int(val));
+      undoChangeProperty(Pid::VELO_TYPE, int(val));
       }
 
 //---------------------------------------------------------
@@ -2639,7 +2632,7 @@ void Note::undoSetVeloType(ValueType val)
 
 void Note::undoSetVeloOffset(int val)
       {
-      undoChangeProperty(P_ID::VELO_OFFSET, val);
+      undoChangeProperty(Pid::VELO_OFFSET, val);
       }
 
 //---------------------------------------------------------
@@ -2648,7 +2641,7 @@ void Note::undoSetVeloOffset(int val)
 
 void Note::undoSetUserMirror(MScore::DirectionH val)
       {
-      undoChangeProperty(P_ID::MIRROR_HEAD, int(val));
+      undoChangeProperty(Pid::MIRROR_HEAD, int(val));
       }
 
 //---------------------------------------------------------
@@ -2657,7 +2650,7 @@ void Note::undoSetUserMirror(MScore::DirectionH val)
 
 void Note::undoSetUserDotPosition(Direction val)
       {
-      undoChangeProperty(P_ID::DOT_POSITION, QVariant::fromValue<Direction>(val));
+      undoChangeProperty(Pid::DOT_POSITION, QVariant::fromValue<Direction>(val));
       }
 
 //---------------------------------------------------------
@@ -2666,7 +2659,7 @@ void Note::undoSetUserDotPosition(Direction val)
 
 void Note::undoSetHeadGroup(NoteHead::Group val)
       {
-      undoChangeProperty(P_ID::HEAD_GROUP, int(val));
+      undoChangeProperty(Pid::HEAD_GROUP, int(val));
       }
 
 //---------------------------------------------------------
@@ -2684,44 +2677,47 @@ void Note::setHeadType(NoteHead::Type t)
 
 void Note::undoSetHeadType(NoteHead::Type val)
       {
-      undoChangeProperty(P_ID::HEAD_TYPE, int(val));
+      undoChangeProperty(Pid::HEAD_TYPE, int(val));
       }
 
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Note::propertyDefault(P_ID propertyId) const
+QVariant Note::propertyDefault(Pid propertyId) const
       {
       switch(propertyId) {
-            case P_ID::GHOST:
-            case P_ID::SMALL:
+            case Pid::GHOST:
+            case Pid::SMALL:
                   return false;
-            case P_ID::MIRROR_HEAD:
+            case Pid::MIRROR_HEAD:
                   return int(MScore::DirectionH::AUTO);
-            case P_ID::DOT_POSITION:
+            case Pid::DOT_POSITION:
                   return QVariant::fromValue<Direction>(Direction::AUTO);
-            case P_ID::HEAD_GROUP:
+            case Pid::HEAD_GROUP:
                   return int(NoteHead::Group::HEAD_NORMAL);
-            case P_ID::VELO_OFFSET:
+            case Pid::VELO_OFFSET:
                   return 0;
-            case P_ID::TUNING:
+            case Pid::TUNING:
                   return 0.0;
-            case P_ID::FRET:
-            case P_ID::STRING:
+            case Pid::FRET:
+            case Pid::STRING:
                   return -1;
-            case P_ID::HEAD_TYPE:
+            case Pid::HEAD_TYPE:
                   return int(NoteHead::Type::HEAD_AUTO);
-            case P_ID::VELO_TYPE:
+            case Pid::VELO_TYPE:
                   return int (ValueType::OFFSET_VAL);
-            case P_ID::PLAY:
+            case Pid::PLAY:
                   return true;
-            case P_ID::FIXED:
+            case Pid::FIXED:
                   return false;
-            case P_ID::FIXED_LINE:
+            case Pid::FIXED_LINE:
                   return 0;
-            case P_ID::TPC2:
-                  return getProperty(P_ID::TPC1);
+            case Pid::TPC2:
+                  return getProperty(Pid::TPC1);
+            case Pid::PITCH:
+            case Pid::TPC1:
+                  return QVariant();
             default:
                   break;
             }
@@ -3161,6 +3157,17 @@ Shape Note::shape() const
             shape.add(_accidental->bbox().translated(_accidental->pos()));
 #endif
       return shape;
+      }
+
+//---------------------------------------------------------
+//   undoUnlink
+//---------------------------------------------------------
+
+void Note::undoUnlink()
+      {
+      Element::undoUnlink();
+      for (Element* e : _el)
+            e->undoUnlink();
       }
 
 }

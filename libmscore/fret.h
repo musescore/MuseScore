@@ -55,6 +55,7 @@ class FretDiagram final : public Element {
       qreal fretDist;
       QFont font;
       qreal _userMag     { 1.0   };             // allowed 0.1 - 10.0
+      int _numPos;
 
    public:
       FretDiagram(Score* s);
@@ -109,9 +110,9 @@ class FretDiagram final : public Element {
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID) const override;
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid) const override;
 
       qreal userMag() const         { return _userMag;   }
       void setUserMag(qreal m)      { _userMag = m;      }

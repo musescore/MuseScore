@@ -410,7 +410,14 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
 
 void ScoreView::fotoModeCopy()
       {
+#if defined(Q_OS_WIN)
+      // See https://bugreports.qt.io/browse/QTBUG-11463
+      // while transparent copy/paste works fine inside musescore,
+      // it does not paste into other programs in Windows though
+      bool transparent = false; // preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY);
+#else
       bool transparent = preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY);
+#endif
       double convDpi   = preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION);
       double mag       = convDpi / DPI;
 
@@ -427,14 +434,7 @@ void ScoreView::fotoModeCopy()
       printer.fill(transparent ? 0 : 0xffffffff);
       QPainter p(&printer);
       paintRect(true, p, r, mag);
-#if defined(Q_OS_WIN)
-      // workaround for apparent Qt 5.4 bug; corrupt clipboard when using setImage()
-      QPixmap px;
-      px.convertFromImage(printer);
-      QApplication::clipboard()->setPixmap(px);
-#else
       QApplication::clipboard()->setImage(printer);
-#endif
       }
 
 //---------------------------------------------------------

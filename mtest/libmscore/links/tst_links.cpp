@@ -74,43 +74,43 @@ void TestLinks::test3LinkedSameScore_99796()
       Measure* m = score->firstMeasure();
       Segment* s = m->first(SegmentType::ChordRest);
       Element* e = s->element(0);
-      QVERIFY(e->type() == ElementType::CHORD);
+      QVERIFY(e->isChord());
 
       score->select(e);
       score->cmdDeleteSelection();
       e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
+      QVERIFY(e->isRest());
       QVERIFY(e->links() == nullptr);
 
       // add a linked staff
       score->startCmd();
       Staff* oStaff = score->staff(0);
-      Staff* staff       = new Staff(score);
+      Staff* staff  = new Staff(score);
       staff->setPart(oStaff->part());
-      score->undoInsertStaff(staff, 1);
+      score->undoInsertStaff(staff, 1, false);
       Excerpt::cloneStaff(oStaff, staff);
 
       e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
+      QVERIFY(e->isRest());
       QVERIFY(e->links()->size() == 2);
 
       // add a second linked staff
-      Staff* staff2       = new Staff(score);
+      Staff* staff2 = new Staff(score);
       staff2->setPart(oStaff->part());
-      score->undoInsertStaff(staff2, 2);
+      score->undoInsertStaff(staff2, 2, false);
       Excerpt::cloneStaff(oStaff, staff2);
       score->endCmd();
 
       // we should have now 3 staves and 3 linked rests
       QVERIFY(score->staves().size() == 3);
       e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
+      QVERIFY(e->isRest());
       QVERIFY(e->links()->size() == 3);
       e = s->element(4);
-      QVERIFY(e->type() == ElementType::REST);
+      QVERIFY(e->isRest());
       QVERIFY(e->links()->size() == 3);
       e = s->element(8);
-      QVERIFY(e->type() == ElementType::REST);
+      QVERIFY(e->isRest());
       QVERIFY(e->links()->size() == 3);
 
       // delete staff
@@ -121,10 +121,10 @@ void TestLinks::test3LinkedSameScore_99796()
       // we have now 2 staves
       QVERIFY(score->staves().size() == 2);
       e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
+      QVERIFY(e->isRest());
       QVERIFY(e->links()->size() == 2);
       e = s->element(4);
-      QVERIFY(e->type() == ElementType::REST);
+      QVERIFY(e->isRest());
       QVERIFY(e->links()->size() == 2);
 
       // undo
@@ -205,7 +205,7 @@ void TestLinks::test3LinkedParts_99796()
       Staff* oStaff = score->staff(0);
       Staff* staff       = new Staff(score);
       staff->setPart(oStaff->part());
-      score->undoInsertStaff(staff, 1);
+      score->undoInsertStaff(staff, 1, false);
       Excerpt::cloneStaff(oStaff, staff);
       score->endCmd();
 
@@ -249,8 +249,8 @@ void TestLinks::test4LinkedParts_94911()
       c.addPart("electric-guitar");
       c.move(0, 0);     // move to track 0 tick 0
 
-      c.addKeySig(Key(1));
-      c.addTimeSig(Fraction(4,4));
+//      c.addKeySig(Key(1));
+//      c.addTimeSig(Fraction(4,4));
       c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
       MasterScore* score = c.score();
@@ -272,7 +272,7 @@ void TestLinks::test4LinkedParts_94911()
       Staff* oStaff = score->staff(0);
       Staff* staff       = new Staff(score);
       staff->setPart(oStaff->part());
-      score->undoInsertStaff(staff, 1);
+      score->undoInsertStaff(staff, 1, false);
       Excerpt::cloneStaff(oStaff, staff);
       score->endCmd();
 
@@ -303,7 +303,7 @@ void TestLinks::test4LinkedParts_94911()
       // we should have now 2 staves and 4 linked rests
       QVERIFY(score->staves().size() == 2);
       QVERIFY(nscore->staves().size() == 2);
-      QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 4);
+      QVERIFY(score->staves()[0]->links()->size() == 4);
       e = s->element(0);
       QVERIFY(e->type() == ElementType::REST);
       QVERIFY(e->links()->size() == 4);
@@ -325,9 +325,9 @@ void TestLinks::test4LinkedParts_94911()
       // we should have now 2 staves and *4* linked rest
       // no excerpt
       QVERIFY(score->staves().size() == 1);
-      QVERIFY(score->staves()[0]->linkedStaves() == nullptr);
+//      QVERIFY(score->staves()[0]->links() == nullptr);
       e = s->element(0);
-      QVERIFY(e->type() == ElementType::REST);
+      QVERIFY(e->isRest());
       QVERIFY(e->links() == nullptr);
       qDebug() << score->excerpts().size();
 
@@ -336,7 +336,7 @@ void TestLinks::test4LinkedParts_94911()
       // we should have now 2 staves and 4 linked rests
       QCOMPARE(nscore->staves().size(), 2);
       QCOMPARE(score->staves().size(), 2);
-      QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 4);
+      QVERIFY(score->staves()[0]->links()->size() == 4);
       e = s->element(0);
       QVERIFY(e->type() == ElementType::REST);
       QVERIFY(e->links()->size() == 4);
@@ -350,7 +350,7 @@ void TestLinks::test4LinkedParts_94911()
       // we should have now 2 staves and *4* linked rest
       // no excerpt
       QVERIFY(score->staves().size() == 1);
-      QVERIFY(score->staves()[0]->linkedStaves() == nullptr);
+      QVERIFY(score->staves()[0]->links() == nullptr);
       e = s->element(0);
       QVERIFY(e->type() == ElementType::REST);
       QVERIFY(e->links() == nullptr);
@@ -371,8 +371,8 @@ void TestLinks::test5LinkedParts_94911()
       c.addPart("electric-guitar");
       c.move(0, 0);     // move to track 0 tick 0
 
-      c.addKeySig(Key(1));
-      c.addTimeSig(Fraction(4,4));
+//      c.addKeySig(Key(1));
+//      c.addTimeSig(Fraction(4,4));
       c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
       MasterScore* score = c.score();
@@ -414,14 +414,14 @@ void TestLinks::test5LinkedParts_94911()
       Staff* oStaff = score->staff(0);
       Staff* staff       = new Staff(score);
       staff->setPart(oStaff->part());
-      score->undoInsertStaff(staff, 1);
+      score->undoInsertStaff(staff, 1, false);
       Excerpt::cloneStaff(oStaff, staff);
       score->endCmd();
 
       // we should have now 2 staves and 3 linked rests
       QCOMPARE(score->staves().size(), 2);
       QCOMPARE(nscore->staves().size(), 1);
-      QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 3);
+      QVERIFY(score->staves()[0]->links()->size() == 3);
       e = s->element(0);
       QVERIFY(e->type() == ElementType::REST);
       QVERIFY(e->links()->size() == 3);
@@ -434,7 +434,7 @@ void TestLinks::test5LinkedParts_94911()
       score->undoStack()->undo(&ed);
       // we should have now 1 staves and 2 linked rests
       QVERIFY(score->staves().size() == 1);
-      QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 2);
+      QVERIFY(score->staves()[0]->links()->size() == 2);
       e = s->element(0);
       QVERIFY(e->type() == ElementType::REST);
       QVERIFY(e->links()->size() == 2);
@@ -444,7 +444,7 @@ void TestLinks::test5LinkedParts_94911()
       score->undoStack()->redo(&ed);
       // we should have now 2 staves and 3 linked rests
       QVERIFY(score->staves().size() == 2);
-      QVERIFY(score->staves()[0]->linkedStaves()->staves().size() == 3);
+      QVERIFY(score->staves()[0]->links()->size() == 3);
       e = s->element(0);
       QVERIFY(e->type() == ElementType::REST);
       QVERIFY(e->links()->size() == 3);
@@ -453,7 +453,6 @@ void TestLinks::test5LinkedParts_94911()
       QVERIFY(e->links()->size() == 3);
       QVERIFY(score->excerpts().size() == 1);
       }
-
 
 QTEST_MAIN(TestLinks)
 #include "tst_links.moc"

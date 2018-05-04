@@ -972,7 +972,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         case CapellaType::TEXT: {
 
                               TextObj* to = static_cast<TextObj*>(o);
-                              Text* s = new Text(SubStyle::TITLE, score);
+                              Text* s = new Text(SubStyleId::TITLE, score);
                               QString ss = ::rtf2html(QString(to->text));
 
                               // qDebug("string %f:%f w %d ratio %d <%s>",
@@ -1126,12 +1126,12 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       if (cap->systems.isEmpty())
             return;
 
-      score->style().set(StyleIdx::measureSpacing, 1.0);
+      score->style().set(Sid::measureSpacing, 1.0);
       score->setSpatium(cap->normalLineDist * DPMM);
-      score->style().set(StyleIdx::smallStaffMag, cap->smallLineDist / cap->normalLineDist);
-      score->style().set(StyleIdx::minSystemDistance, Spatium(8));
-      score->style().set(StyleIdx::maxSystemDistance, Spatium(12));
-      // score->style().set(StyleIdx::hideEmptyStaves, true);
+      score->style().set(Sid::smallStaffMag, cap->smallLineDist / cap->normalLineDist);
+      score->style().set(Sid::minSystemDistance, Spatium(8));
+      score->style().set(Sid::maxSystemDistance, Spatium(12));
+      // score->style().set(Sid::hideEmptyStaves, true);
 
 #if 1
       foreach(CapSystem* csys, cap->systems) {
@@ -1237,13 +1237,14 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   case CapellaType::SIMPLE_TEXT:
                         {
                         SimpleTextObj* to = static_cast<SimpleTextObj*>(o);
-                        Text* s = new Text(score);
+                        SubStyleId ssid;
                         switch (to->textalign()) {
-                              case 0:   s->initSubStyle(SubStyle::POET);    break;
-                              case 1:   s->initSubStyle(SubStyle::TITLE);   break;
-                              case 2:   s->initSubStyle(SubStyle::COMPOSER); break;
-                              default:                                      break;
+                              case 0:   ssid = SubStyleId::POET;    break;
+                              case 1:   ssid = SubStyleId::TITLE;   break;
+                              case 2:   ssid = SubStyleId::COMPOSER; break;
+                              default:  ssid = SubStyleId::DEFAULT; break;
                               }
+                        Text* s = new Text(ssid, score);
                         QFont f(to->font());
                         s->setItalic(f.italic());
                         // s->setUnderline(f.underline());

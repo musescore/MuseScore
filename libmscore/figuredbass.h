@@ -200,9 +200,9 @@ class FiguredBassItem final : public Element {
       QString           normalizedText() const;
       QString           displayText() const           { return _displayText;  }
 
-      virtual QVariant  getProperty(P_ID propertyId) const override;
-      virtual bool      setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant  propertyDefault(P_ID) const override;
+      virtual QVariant  getProperty(Pid propertyId) const override;
+      virtual bool      setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant  propertyDefault(Pid) const override;
       };
 
 //---------------------------------------------------------
@@ -296,9 +296,9 @@ class FiguredBass final : public TextBase {
       qreal             additionalContLineX(qreal pagePosY) const;// returns the X coord (in page coord) of cont. line at pagePosY, if any
       FiguredBass *     nextFiguredBass() const;                  // returns next *adjacent* f.b. item, if any
 
-      virtual QVariant  getProperty(P_ID propertyId) const override;
-      virtual bool      setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant  propertyDefault(P_ID) const override;
+      virtual QVariant  getProperty(Pid propertyId) const override;
+      virtual bool      setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant  propertyDefault(Pid) const override;
 
       void appendItem(FiguredBassItem* item) {  items.push_back(item); }
       };

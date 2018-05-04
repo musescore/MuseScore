@@ -560,7 +560,7 @@ void GuitarPro::setupTupletStyle(Tuplet* tuplet)
             default: real = false;
             }
       if (!real)
-            tuplet->setNumberType(Tuplet::NumberType::SHOW_RELATION);
+            tuplet->setNumberType(TupletNumberType::SHOW_RELATION);
       }
 
 //---------------------------------------------------------
@@ -1268,8 +1268,10 @@ void GuitarPro::setTempo(int tempo, Measure* measure)
 
 		Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
 		for (Element* e : segment->annotations()) {
-			if (e->isTempoText())
+			if (e->isTempoText()) {
+                        qDebug("already there");
 				return;
+                        }
       		}
 
 		TempoText* tt = new TempoText(score);
@@ -1859,7 +1861,7 @@ bool GuitarPro1::readNote(int string, Note* note)
 					  gc->setDurationType(d);
 					  gc->setDuration(d.fraction());
 					  gc->setNoteType(NoteType::ACCIACCATURA);
-					  gc->setMag(note->chord()->staff()->mag(0) * score->styleD(StyleIdx::graceNoteMag));
+					  gc->setMag(note->chord()->staff()->mag(0) * score->styleD(Sid::graceNoteMag));
 					  note->chord()->add(gc); // sets parent + track
 					  addDynamic(gn, dynamic);
 				  }
@@ -2774,7 +2776,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             return Score::FileError::FILE_NO_ERROR;
             }
 
-      score->style().set(StyleIdx::ArpeggioHiddenInStdIfTab, true);
+      score->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
 
       MeasureBase* m;
       if (!score->measures()->first()) {
@@ -2792,12 +2794,12 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
                   }
             }
       if (!gp->title.isEmpty()) {
-            Text* s = new Text(SubStyle::TITLE, score);
+            Text* s = new Text(SubStyleId::TITLE, score);
             s->setPlainText(gp->title);
             m->add(s);
             }
       if (!gp->subtitle.isEmpty()|| !gp->artist.isEmpty() || !gp->album.isEmpty()) {
-            Text* s = new Text(SubStyle::SUBTITLE, score);
+            Text* s = new Text(SubStyleId::SUBTITLE, score);
             QString str;
             if (!gp->subtitle.isEmpty())
                   str.append(gp->subtitle);
@@ -2815,7 +2817,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             m->add(s);
             }
       if (!gp->composer.isEmpty()) {
-            Text* s = new Text(SubStyle::COMPOSER, score);
+            Text* s = new Text(SubStyleId::COMPOSER, score);
             s->setPlainText(gp->composer);
             m->add(s);
             }
@@ -2843,8 +2845,8 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             QMultiMap<int, int> tracks;
 	      Score* pscore = new Score(score);
 //TODO-ws		pscore->showLyrics = score->showLyrics;
-            pscore->style().set(StyleIdx::createMultiMeasureRests, false);
-            pscore->style().set(StyleIdx::ArpeggioHiddenInStdIfTab, true);
+            pscore->style().set(Sid::createMultiMeasureRests, false);
+            pscore->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
 
             QList<int> stavesMap;
             Part*   p = new Part(pscore);
@@ -2902,7 +2904,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
                   pscore->addMeasure(mb, measure);
                   measure = mb;
                   }
-            Text* txt = new Text(SubStyle::INSTRUMENT_EXCERPT, pscore);
+            Text* txt = new Text(SubStyleId::INSTRUMENT_EXCERPT, pscore);
             txt->setPlainText(part->longName());
             measure->add(txt);
 

@@ -27,14 +27,14 @@ InspectorFingering::InspectorFingering(QWidget* parent)
       f.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { P_ID::SUB_STYLE, 0, f.subStyle,     f.resetSubStyle     },
+            { Pid::SUB_STYLE, 0, f.subStyle,     f.resetSubStyle     },
             };
       const std::vector<InspectorPanel> ppList = {
             { f.title, f.panel }
             };
 
       f.subStyle->clear();
-      for (auto ss : { SubStyle::FINGERING, SubStyle::LH_GUITAR_FINGERING, SubStyle::RH_GUITAR_FINGERING, SubStyle::STRING_NUMBER } )
+      for (auto ss : { SubStyleId::FINGERING, SubStyleId::LH_GUITAR_FINGERING, SubStyleId::RH_GUITAR_FINGERING, SubStyleId::STRING_NUMBER } )
             {
             f.subStyle->addItem(subStyleUserName(ss), int(ss));
             }

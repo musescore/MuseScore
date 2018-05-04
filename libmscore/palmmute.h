@@ -49,10 +49,11 @@ class PalmMute final : public TextLineBase {
       virtual PalmMute* clone() const override  { return new PalmMute(*this);   }
       virtual ElementType type() const override { return ElementType::PALM_MUTE; }
       virtual void read(XmlReader&) override;
+      virtual void write(XmlWriter& xml) const override;
       LineSegment* createLineSegment();
       virtual void setYoff(qreal) override;
-      virtual QVariant propertyDefault(P_ID propertyId) const override;
-      virtual StyleIdx getPropertyStyle(P_ID) const override;
+      virtual QVariant propertyDefault(Pid propertyId) const override;
+      virtual Sid getPropertyStyle(Pid) const override;
 
       friend class PalmMuteLine;
       };

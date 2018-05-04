@@ -24,11 +24,11 @@ namespace Ms {
 class SystemText final : public TextBase  {
    public:
       SystemText(Score* score);
-      SystemText(SubStyle, Score* = 0);
+      SystemText(SubStyleId, Score* = 0);
       virtual SystemText* clone() const override    { return new SystemText(*this); }
       virtual ElementType type() const override     { return ElementType::SYSTEM_TEXT; }
       Segment* segment() const                      { return (Segment*)parent(); }
-      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual QVariant propertyDefault(Pid id) const override;
       virtual void write(XmlWriter& xml) const;
       };
 

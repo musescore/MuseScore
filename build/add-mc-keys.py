@@ -51,5 +51,11 @@ if __name__ == '__main__':
         exit()
     consumerKey = sys.argv[1]
     consumerSecret = sys.argv[2]
+    if len(consumerKey) != 32:
+        print "Wrong size of consumerKey"
+        exit()
+    if len(consumerSecret) != 32:
+        print "Wrong size of consumerSecret"
+        exit()
     processFile(consumerKey, consumerSecret)
 

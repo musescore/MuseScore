@@ -355,9 +355,9 @@ void EditStaff::apply()
             if (v1 != v2)
                   score->transpositionChanged(part, v2, _tickStart, _tickEnd);
             }
-      orgStaff->undoChangeProperty(P_ID::MAG, mag->value() / 100.0);
-      orgStaff->undoChangeProperty(P_ID::COLOR, color->color());
-      orgStaff->undoChangeProperty(P_ID::SMALL, small->isChecked());
+      orgStaff->undoChangeProperty(Pid::MAG, mag->value() / 100.0);
+      orgStaff->undoChangeProperty(Pid::COLOR, color->color());
+      orgStaff->undoChangeProperty(Pid::SMALL, small->isChecked());
 
       if (inv != orgStaff->invisible()
          || clefType != orgStaff->defaultClefType()

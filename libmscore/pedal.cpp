@@ -33,9 +33,9 @@ void PedalSegment::layout()
       TextLineBaseSegment::layout();
       if (parent()) {     // for palette
             if (pedal()->placeBelow())
-                  rypos() += score()->styleP(StyleIdx::pedalPosBelow) + (staff() ? staff()->height() : 0.0);
+                  rypos() += score()->styleP(Sid::pedalPosBelow) + (staff() ? staff()->height() : 0.0);
             else
-                  rypos() += score()->styleP(StyleIdx::pedalPosAbove);
+                  rypos() += score()->styleP(Sid::pedalPosAbove);
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
                   Shape s1 = shape().translated(pos());
@@ -51,8 +51,6 @@ void PedalSegment::layout()
                               rUserYoffset() = -(d + minDistance);
                         }
                   }
-            else
-                  adjustReadPos();
             }
       }
 
@@ -64,7 +62,19 @@ void PedalSegment::layout()
 Pedal::Pedal(Score* s)
    : TextLineBase(s)
       {
-      init();
+      setLineVisible(true);
+      resetProperty(Pid::BEGIN_TEXT);
+      resetProperty(Pid::END_TEXT);
+
+      resetProperty(Pid::LINE_WIDTH);
+      resetProperty(Pid::LINE_STYLE);
+
+      resetProperty(Pid::BEGIN_HOOK_TYPE);
+      resetProperty(Pid::END_HOOK_TYPE);
+
+      resetProperty(Pid::BEGIN_TEXT_PLACE);
+
+      initSubStyle(SubStyleId::PEDAL);
       }
 
 //---------------------------------------------------------
@@ -82,6 +92,35 @@ void Pedal::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   write
+//---------------------------------------------------------
+
+void Pedal::write(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      int id = xml.spannerId(this);
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
+
+      for (auto i : {
+         Pid::END_HOOK_TYPE,
+         Pid::BEGIN_TEXT,
+         Pid::END_TEXT,
+         Pid::LINE_WIDTH,
+         Pid::LINE_STYLE,
+         Pid::BEGIN_HOOK_TYPE
+         }) {
+            writeProperty(xml, i);
+            }
+      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
+            writeProperty(xml, spp->pid);
+
+      Element::writeProperties(xml);
+      xml.etag();
+      }
+
+
+//---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
 
@@ -96,74 +135,37 @@ LineSegment* Pedal::createLineSegment()
 
 void Pedal::setYoff(qreal val)
       {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? StyleIdx::pedalPosAbove : StyleIdx::pedalPosBelow);
+      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::pedalPosAbove : Sid::pedalPosBelow);
       }
 
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Pedal::propertyDefault(P_ID propertyId) const
+QVariant Pedal::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case P_ID::LINE_WIDTH:
-                  return score()->styleV(StyleIdx::pedalLineWidth);
+            case Pid::LINE_WIDTH:
+                  return score()->styleV(Sid::pedalLineWidth);
 
-            case P_ID::ALIGN:
-                  return QVariant::fromValue(Align::LEFT | Align::BASELINE);
+            case Pid::LINE_STYLE:
+                  return score()->styleV(Sid::pedalLineStyle);
 
-            case P_ID::LINE_STYLE:
-                  return score()->styleV(StyleIdx::pedalLineStyle);
+            case Pid::BEGIN_TEXT:
+            case Pid::END_TEXT:
+                  return "";
 
-            case P_ID::BEGIN_TEXT_OFFSET:
-                  return score()->styleV(StyleIdx::pedalBeginTextOffset).toPointF();
+            case Pid::BEGIN_TEXT_PLACE:
+                  return int(PlaceText::LEFT);
 
-            case P_ID::BEGIN_TEXT_ALIGN:
-            case P_ID::CONTINUE_TEXT_ALIGN:
-            case P_ID::END_TEXT_ALIGN:
-                  return score()->styleV(StyleIdx::pedalTextAlign);
-
-            case P_ID::BEGIN_HOOK_HEIGHT:
-            case P_ID::END_HOOK_HEIGHT:
-                  return score()->styleV(StyleIdx::pedalHookHeight);
+            case Pid::BEGIN_HOOK_TYPE:
+            case Pid::END_HOOK_TYPE:
+                  return int(HookType::NONE);
 
             default:
                   return TextLineBase::propertyDefault(propertyId);
             }
       }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-StyleIdx Pedal::getPropertyStyle(P_ID id) const
-      {
-      switch (id) {
-            case P_ID::PLACEMENT:
-                  return StyleIdx::pedalPlacement;
-            case P_ID::BEGIN_FONT_FACE:
-                  return StyleIdx::pedalFontFace;
-            case P_ID::BEGIN_FONT_SIZE:
-                  return StyleIdx::pedalFontSize;
-            case P_ID::BEGIN_FONT_BOLD:
-                  return StyleIdx::pedalFontBold;
-            case P_ID::BEGIN_FONT_ITALIC:
-                  return StyleIdx::pedalFontItalic;
-            case P_ID::BEGIN_FONT_UNDERLINE:
-                  return StyleIdx::pedalFontUnderline;
-            case P_ID::BEGIN_TEXT_ALIGN:
-            case P_ID::CONTINUE_TEXT_ALIGN:
-            case P_ID::END_TEXT_ALIGN:
-                  return StyleIdx::pedalTextAlign;
-            case P_ID::BEGIN_HOOK_HEIGHT:
-            case P_ID::END_HOOK_HEIGHT:
-                  return StyleIdx::pedalHookHeight;
-            default:
-                  break;
-            }
-      return StyleIdx::NOSTYLE;
-      }
-
 
 //---------------------------------------------------------
 //   linePos

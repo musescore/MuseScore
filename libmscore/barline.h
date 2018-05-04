@@ -124,10 +124,10 @@ class BarLine final : public Element {
       virtual int subtype() const override         { return int(_barLineType); }
       virtual QString subtypeName() const override { return qApp->translate("barline", barLineTypeName().toUtf8()); }
 
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID propertyId) const override;
-      virtual void undoChangeProperty(P_ID id, const QVariant&, PropertyFlags ps);
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid propertyId) const override;
+      virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps);
       using ScoreElement::undoChangeProperty;
 
       static qreal layoutWidth(Score*, BarLineType);

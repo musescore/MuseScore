@@ -250,11 +250,13 @@ QString Staff::partName() const
 
 Staff::~Staff()
       {
+#if 0
       if (_linkedStaves) {
             _linkedStaves->remove(this);
             if (_linkedStaves->empty())
                   delete _linkedStaves;
             }
+#endif
       }
 
 //---------------------------------------------------------
@@ -268,7 +270,7 @@ ClefTypeList Staff::clefType(int tick) const
             switch(staffType(tick)->group()) {
                   case StaffGroup::TAB:
                         {
-                        ClefType sct = ClefType(score()->styleI(StyleIdx::tabClef));
+                        ClefType sct = ClefType(score()->styleI(Sid::tabClef));
                         ct = staffType(tick)->lines() <= 4 ?  ClefTypeList(sct == ClefType::TAB ? ClefType::TAB4 : ClefType::TAB4_SERIF) : ClefTypeList(sct == ClefType::TAB ? ClefType::TAB : ClefType::TAB_SERIF);
                         }
                         break;
@@ -290,7 +292,7 @@ ClefTypeList Staff::clefType(int tick) const
 ClefType Staff::clef(int tick) const
       {
       ClefTypeList c = clefType(tick);
-      return score()->styleB(StyleIdx::concertPitch) ? c._concertClef : c._transposingClef;
+      return score()->styleB(Sid::concertPitch) ? c._concertClef : c._transposingClef;
       }
 
 //---------------------------------------------------------
@@ -551,9 +553,10 @@ void Staff::write(XmlWriter& xml) const
       {
       int idx = this->idx();
       xml.stag(QString("Staff id=\"%1\"").arg(idx + 1));
-      if (linkedStaves()) {
+      if (links()) {
             Score* s = masterScore();
-            for (Staff* staff : linkedStaves()->staves()) {
+            for (auto le : *links()) {
+                  Staff* staff = toStaff(le);
                   if ((staff->score() == s) && (staff != this))
                         xml.tag("linkedTo", staff->idx() + 1);
                   }
@@ -598,15 +601,15 @@ void Staff::write(XmlWriter& xml) const
                   xml.tagE(QString("bracket type=\"%1\" span=\"%2\" col=\"%3\"").arg((int)(a)).arg(b).arg(c));
             }
 
-      writeProperty(xml, P_ID::STAFF_BARLINE_SPAN);
-      writeProperty(xml, P_ID::STAFF_BARLINE_SPAN_FROM);
-      writeProperty(xml, P_ID::STAFF_BARLINE_SPAN_TO);
-      writeProperty(xml, P_ID::STAFF_USERDIST);
-      writeProperty(xml, P_ID::COLOR);
-      writeProperty(xml, P_ID::PLAYBACK_VOICE1);
-      writeProperty(xml, P_ID::PLAYBACK_VOICE2);
-      writeProperty(xml, P_ID::PLAYBACK_VOICE3);
-      writeProperty(xml, P_ID::PLAYBACK_VOICE4);
+      writeProperty(xml, Pid::STAFF_BARLINE_SPAN);
+      writeProperty(xml, Pid::STAFF_BARLINE_SPAN_FROM);
+      writeProperty(xml, Pid::STAFF_BARLINE_SPAN_TO);
+      writeProperty(xml, Pid::STAFF_USERDIST);
+      writeProperty(xml, Pid::COLOR);
+      writeProperty(xml, Pid::PLAYBACK_VOICE1);
+      writeProperty(xml, Pid::PLAYBACK_VOICE2);
+      writeProperty(xml, Pid::PLAYBACK_VOICE3);
+      writeProperty(xml, Pid::PLAYBACK_VOICE4);
       xml.etag();
       }
 
@@ -745,7 +748,7 @@ qreal Staff::spatium(int tick) const
 
 qreal Staff::mag(int tick) const
       {
-      return (small(tick) ? score()->styleD(StyleIdx::smallStaffMag) : 1.0) * userMag(tick);
+      return (small(tick) ? score()->styleD(Sid::smallStaffMag) : 1.0) * userMag(tick);
       }
 
 //---------------------------------------------------------
@@ -792,8 +795,8 @@ SwingParameters Staff::swing(int tick) const
       {
       SwingParameters sp;
       int swingUnit = 0;
-      QString unit = score()->styleSt(StyleIdx::swingUnit);
-      int swingRatio = score()->styleI(StyleIdx::swingRatio);
+      QString unit = score()->styleSt(Sid::swingUnit);
+      int swingRatio = score()->styleI(Sid::swingRatio);
       if (unit == TDuration(TDuration::DurationType::V_EIGHTH).name()) {
             swingUnit = MScore::division / 2;
             }
@@ -865,6 +868,7 @@ void Staff::setSlashStyle(int tick, bool val)
       staffType(tick)->setSlashStyle(val);
       }
 
+#if 0
 //---------------------------------------------------------
 //   linkTo
 //---------------------------------------------------------
@@ -884,7 +888,7 @@ void Staff::linkTo(Staff* staff)
             }
       else {
             _linkedStaves->add(staff);
-            if (!staff->linkedStaves())
+            if (!staff->_linkedStaves)
                   staff->_linkedStaves = _linkedStaves;
             }
       }
@@ -925,24 +929,7 @@ void LinkedStaves::remove(Staff* staff)
       {
       _staves.removeOne(staff);
       }
-
-//---------------------------------------------------------
-//   isLinked
-///  return true if staff is different and
-///  linked to this staff
-//---------------------------------------------------------
-
-bool Staff::isLinked(Staff* staff)
-      {
-      if (staff == this || !_linkedStaves)
-            return false;
-
-      for(Staff* s : _linkedStaves->staves()) {
-            if(s == staff)
-                  return true;
-            }
-      return false;
-      }
+#endif
 
 //---------------------------------------------------------
 //   primaryStaff
@@ -954,11 +941,12 @@ bool Staff::isLinked(Staff* staff)
 
 bool Staff::primaryStaff() const
       {
-      if (!_linkedStaves)
+      if (!_links)
             return true;
       QList<Staff*> s;
       QList<Staff*> ss;
-      foreach(Staff* staff, _linkedStaves->staves()) {
+      for (auto e : *_links) {
+            Staff* staff = toStaff(e);
             if (staff->score() == score()) {
                   s.append(staff);
                   if (!staff->isTabStaff(0))
@@ -1141,7 +1129,7 @@ void Staff::updateOttava()
 
 void Staff::undoSetColor(const QColor& /*val*/)
       {
-//      undoChangeProperty(P_ID::COLOR, val);
+//      undoChangeProperty(Pid::COLOR, val);
       }
 
 //---------------------------------------------------------
@@ -1214,8 +1202,11 @@ void Staff::insertTime(int tick, int len)
 QList<Staff*> Staff::staffList() const
       {
       QList<Staff*> staffList;
-      if (_linkedStaves)
-            staffList = _linkedStaves->staves();
+      if (_links) {
+            for (ScoreElement* e : *_links)
+                  staffList.append(toStaff(e));
+//            staffList = _linkedStaves->staves();
+            }
       else
             staffList.append(const_cast<Staff*>(this));
       return staffList;
@@ -1243,30 +1234,30 @@ bool Staff::isTop() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Staff::getProperty(P_ID id) const
+QVariant Staff::getProperty(Pid id) const
       {
       switch (id) {
-            case P_ID::SMALL:
+            case Pid::SMALL:
                   return small(0);
-            case P_ID::MAG:
+            case Pid::MAG:
                   return userMag(0);
-            case P_ID::COLOR:
+            case Pid::COLOR:
                   return color();
-            case P_ID::PLAYBACK_VOICE1:
+            case Pid::PLAYBACK_VOICE1:
                   return playbackVoice(0);
-            case P_ID::PLAYBACK_VOICE2:
+            case Pid::PLAYBACK_VOICE2:
                   return playbackVoice(1);
-            case P_ID::PLAYBACK_VOICE3:
+            case Pid::PLAYBACK_VOICE3:
                   return playbackVoice(2);
-            case P_ID::PLAYBACK_VOICE4:
+            case Pid::PLAYBACK_VOICE4:
                   return playbackVoice(3);
-            case P_ID::STAFF_BARLINE_SPAN:
+            case Pid::STAFF_BARLINE_SPAN:
                   return barLineSpan();
-            case P_ID::STAFF_BARLINE_SPAN_FROM:
+            case Pid::STAFF_BARLINE_SPAN_FROM:
                   return barLineFrom();
-            case P_ID::STAFF_BARLINE_SPAN_TO:
+            case Pid::STAFF_BARLINE_SPAN_TO:
                   return barLineTo();
-            case P_ID::STAFF_USERDIST:
+            case Pid::STAFF_USERDIST:
                   return userDist();
             default:
                   qDebug("unhandled id %s", propertyName(id));
@@ -1278,43 +1269,43 @@ QVariant Staff::getProperty(P_ID id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Staff::setProperty(P_ID id, const QVariant& v)
+bool Staff::setProperty(Pid id, const QVariant& v)
       {
       switch (id) {
-            case P_ID::SMALL:
+            case Pid::SMALL:
                   setSmall(0, v.toBool());
                   break;
-            case P_ID::MAG: {
+            case Pid::MAG: {
                   qreal _spatium = spatium(0);
                   setUserMag(0, v.toReal());
                   score()->spatiumChanged(_spatium, spatium(0));
                   }
                   break;
-            case P_ID::COLOR:
+            case Pid::COLOR:
                   setColor(v.value<QColor>());
                   break;
-            case P_ID::PLAYBACK_VOICE1:
+            case Pid::PLAYBACK_VOICE1:
                   setPlaybackVoice(0, v.toBool());
                   break;
-            case P_ID::PLAYBACK_VOICE2:
+            case Pid::PLAYBACK_VOICE2:
                   setPlaybackVoice(1, v.toBool());
                   break;
-            case P_ID::PLAYBACK_VOICE3:
+            case Pid::PLAYBACK_VOICE3:
                   setPlaybackVoice(2, v.toBool());
                   break;
-            case P_ID::PLAYBACK_VOICE4:
+            case Pid::PLAYBACK_VOICE4:
                   setPlaybackVoice(3, v.toBool());
                   break;
-            case P_ID::STAFF_BARLINE_SPAN:
+            case Pid::STAFF_BARLINE_SPAN:
                   setBarLineSpan(v.toInt());
                   break;
-            case P_ID::STAFF_BARLINE_SPAN_FROM:
+            case Pid::STAFF_BARLINE_SPAN_FROM:
                   setBarLineFrom(v.toInt());
                   break;
-            case P_ID::STAFF_BARLINE_SPAN_TO:
+            case Pid::STAFF_BARLINE_SPAN_TO:
                   setBarLineTo(v.toInt());
                   break;
-            case P_ID::STAFF_USERDIST:
+            case Pid::STAFF_USERDIST:
                   setUserDist(v.toReal());
                   break;
             default:
@@ -1329,26 +1320,26 @@ bool Staff::setProperty(P_ID id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Staff::propertyDefault(P_ID id) const
+QVariant Staff::propertyDefault(Pid id) const
       {
       switch (id) {
-            case P_ID::SMALL:
+            case Pid::SMALL:
                   return false;
-            case P_ID::MAG:
+            case Pid::MAG:
                   return 1.0;
-            case P_ID::COLOR:
+            case Pid::COLOR:
                   return QColor(Qt::black);
-            case P_ID::PLAYBACK_VOICE1:
-            case P_ID::PLAYBACK_VOICE2:
-            case P_ID::PLAYBACK_VOICE3:
-            case P_ID::PLAYBACK_VOICE4:
+            case Pid::PLAYBACK_VOICE1:
+            case Pid::PLAYBACK_VOICE2:
+            case Pid::PLAYBACK_VOICE3:
+            case Pid::PLAYBACK_VOICE4:
                   return true;
-            case P_ID::STAFF_BARLINE_SPAN:
+            case Pid::STAFF_BARLINE_SPAN:
                   return false;
-            case P_ID::STAFF_BARLINE_SPAN_FROM:
-            case P_ID::STAFF_BARLINE_SPAN_TO:
+            case Pid::STAFF_BARLINE_SPAN_FROM:
+            case Pid::STAFF_BARLINE_SPAN_TO:
                   return 0;
-            case P_ID::STAFF_USERDIST:
+            case Pid::STAFF_USERDIST:
                   return qreal(0.0);
             default:
                   qDebug("unhandled id %s", propertyName(id));

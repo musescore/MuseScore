@@ -33,8 +33,8 @@ namespace Ms {
 class XmlReader;
 class XmlWriter;
 enum class SymId;
-enum class P_ID;
-enum class SubStyle;
+enum class Pid;
+enum class SubStyleId;
 
 //---------------------------------------------------------
 //   Grip
@@ -58,9 +58,10 @@ enum class ElementFlag {
       DROP_TARGET     = 0x00000001,
       SELECTABLE      = 0x00000002,
       MOVABLE         = 0x00000004,
-      SEGMENT         = 0x00000008,
-      HAS_TAG         = 0x00000010,   // true if this is a layered element
-      ON_STAFF        = 0x00000020,   // parent is Segment() type
+//      SEGMENT         = 0x00000008,
+      COMPOSITION     = 0x00000008,       // true if element is part of another element
+      HAS_TAG         = 0x00000010,       // true if this is a layered element
+      ON_STAFF        = 0x00000020,
       SELECTED        = 0x00000040,
       GENERATED       = 0x00000080,
       VISIBLE         = 0x00000100,
@@ -79,6 +80,7 @@ enum class ElementFlag {
       HEADER          = 0x00080000,
       TRAILER         = 0x00100000,    // also used in segment
       KEYSIG          = 0x00200000,
+
       // segment flags
       ENABLED         = 0x00400000,    // used for segments
       EMPTY           = 0x00800000,
@@ -155,7 +157,7 @@ class Element : public ScoreElement {
       qreal _mag;                 ///< standard magnification (derived value)
       QPointF _pos;               ///< Reference position, relative to _parent.
       QPointF _userOff;           ///< offset from normal layout position:
-      QPointF _readPos;
+//      QPointF _readPos;
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
@@ -234,10 +236,8 @@ class Element : public ScoreElement {
       QPointF scriptUserOff() const;
       void scriptSetUserOff(const QPointF& o);
 
-      bool isNudged() const                       { return !(_readPos.isNull() && _userOff.isNull()); }
-      const QPointF& readPos() const              { return _readPos;   }
-      void setReadPos(const QPointF& p)           { _readPos = p;      }
-      virtual void adjustReadPos();
+//      bool isNudged() const                       { return !(_readPos.isNull() && _userOff.isNull()); }
+      bool isNudged() const                       { return !_userOff.isNull(); }
 
       virtual const QRectF& bbox() const          { return _bbox;              }
       virtual QRectF& bbox()                      { return _bbox;              }
@@ -361,7 +361,7 @@ class Element : public ScoreElement {
 
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
-      virtual void reset();         // reset all properties & position to default
+      virtual void reset() override;         // reset all properties & position to default
 
       virtual qreal mag() const        { return _mag;   }
       void setMag(qreal val)           { _mag = val;    }
@@ -397,8 +397,11 @@ class Element : public ScoreElement {
       bool dropTarget() const          { return flag(ElementFlag::DROP_TARGET); }
       void setDropTarget(bool v) const { setFlag(ElementFlag::DROP_TARGET, v);  }
 
+      bool composition() const          { return flag(ElementFlag::COMPOSITION); }
+      void setComposition(bool v) const { setFlag(ElementFlag::COMPOSITION, v);  }
+
       virtual bool isMovable() const   { return flag(ElementFlag::MOVABLE);     }
-      bool isSegmentFlag() const       { return flag(ElementFlag::SEGMENT);     }
+//      bool isSegmentFlag() const       { return flag(ElementFlag::SEGMENT);   }
 
       bool enabled() const             { return flag(ElementFlag::ENABLED); }
       void setEnabled(bool val)        { setFlag(ElementFlag::ENABLED, val); }
@@ -409,16 +412,12 @@ class Element : public ScoreElement {
       bool autoplace() const           { return flag(ElementFlag::AUTOPLACE); }
       void setAutoplace(bool v)        { setFlag(ElementFlag::AUTOPLACE, v); }
 
-      virtual QVariant getProperty(P_ID) const override;
-      virtual bool setProperty(P_ID, const QVariant&) override;
-      virtual QVariant propertyDefault(P_ID) const override;
-      virtual void initSubStyle(SubStyle);
+      virtual QVariant getProperty(Pid) const override;
+      virtual bool setProperty(Pid, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid) const override;
 
-      bool custom(P_ID) const;
-      bool readProperty(const QStringRef&, XmlReader&, P_ID);
+      bool custom(Pid) const;
       virtual bool isUserModified() const;
-
-      virtual void styleChanged() {}
 
       void drawSymbol(SymId id, QPainter* p, const QPointF& o = QPointF(), qreal scale = 1.0) const;
       void drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const;
@@ -457,7 +456,7 @@ class Element : public ScoreElement {
       virtual void drawEditMode(QPainter*, EditData&);
 
       void autoplaceSegmentElement(qreal minDistance);      // helper function
-      qreal styleP(StyleIdx idx) const;
+      qreal styleP(Sid idx) const;
       };
 
 //-----------------------------------------------------------------------------
@@ -470,7 +469,7 @@ class Element : public ScoreElement {
 //-----------------------------------------------------------------------------
 
 struct PropertyData {
-      P_ID id;
+      Pid id;
       QVariant data;
       };
 
@@ -479,7 +478,7 @@ class ElementEditData {
       Element* e;
       QList<PropertyData> propertyData;
 
-      void pushProperty(P_ID pid) { propertyData.push_back(PropertyData({pid, e->getProperty(pid) })); }
+      void pushProperty(Pid pid) { propertyData.push_back(PropertyData({pid, e->getProperty(pid) })); }
       };
 
 //---------------------------------------------------------

@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2010-2011 Werner Schweer
+//  Copyright (C) 2010-2018 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -14,19 +14,19 @@
 #define __FINGERING_H__
 
 #include "text.h"
-#include "property.h"
 
 namespace Ms {
-
-class Note;
 
 //---------------------------------------------------------
 //   @@ Fingering
 //---------------------------------------------------------
 
 class Fingering final : public TextBase {
+
    public:
+      Fingering(SubStyleId ssid, Score* s, ElementFlag ef = ElementFlag::HAS_TAG);
       Fingering(Score* s);
+
       virtual Fingering* clone() const override { return new Fingering(*this); }
       virtual ElementType type() const override { return ElementType::FINGERING; }
 
@@ -34,21 +34,10 @@ class Fingering final : public TextBase {
 
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
-      virtual void write(XmlWriter&) const override;
-      virtual void read(XmlReader&) override;
-      virtual int subtype() const override         { return (int) subStyle(); }
-      virtual QString subtypeName() const override;
+
+      virtual QVariant propertyDefault(Pid id) const override;
 
       virtual QString accessibleInfo() const override;
-
-      virtual QVariant getProperty(P_ID propertyId) const override;
-      virtual bool setProperty(P_ID propertyId, const QVariant& v) override;
-      virtual QVariant propertyDefault(P_ID id) const override;
-      virtual PropertyFlags& propertyFlags(P_ID) override;
-      virtual void resetProperty(P_ID id) override;
-      virtual StyleIdx getPropertyStyle(P_ID) const override;
-      virtual void styleChanged() override;
-      virtual void reset() override;
       };
 
 
