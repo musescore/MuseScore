@@ -48,12 +48,10 @@
 
 #include <vorbis/vorbisfile.h>
 
-#ifdef USE_PORTMIDI
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
   #include "portmidi/porttime/porttime.h"
 #else
   #include <porttime.h>
-#endif
 #endif
 
 namespace Ms {
@@ -1553,7 +1551,7 @@ void Seq::updateSynthesizerState(int tick1, int tick2)
 
 double Seq::curTempo() const
       {
-      return cs ? cs->tempomap()->tempo(playPos->first) : 0.0;
+      return cs->tempomap()->tempo(playPos->first);
       }
 
 //---------------------------------------------------------

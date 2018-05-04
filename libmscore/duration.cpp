@@ -24,8 +24,8 @@ namespace Ms {
 //   DurationElement
 //---------------------------------------------------------
 
-DurationElement::DurationElement(Score* s, ElementFlags f)
-   : Element(s, f)
+DurationElement::DurationElement(Score* s)
+   : Element(s)
       {
       _tuplet = 0;
       }
@@ -117,7 +117,7 @@ bool DurationElement::readProperties(XmlReader& e)
                   }
             return true;
             }
-      else if (Element::readProperties(e))
+      if (Element::readProperties(e))
             return true;
       return false;
       }
@@ -150,10 +150,10 @@ void DurationElement::writeTuplet(XmlWriter& xml)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant DurationElement::getProperty(Pid propertyId) const
+QVariant DurationElement::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::DURATION:
+            case P_ID::DURATION:
                   return QVariant::fromValue(_duration);
             default:
                   return Element::getProperty(propertyId);
@@ -164,10 +164,10 @@ QVariant DurationElement::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool DurationElement::setProperty(Pid propertyId, const QVariant& v)
+bool DurationElement::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case Pid::DURATION: {
+            case P_ID::DURATION: {
                   Fraction f(v.value<Fraction>());
                   setDuration(f);
                   score()->setLayoutAll();

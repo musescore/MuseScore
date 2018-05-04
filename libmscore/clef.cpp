@@ -116,7 +116,7 @@ qreal Clef::mag() const
       {
       qreal mag = staff() ? staff()->mag(tick()) : 1.0;
       if (_small)
-            mag *= score()->styleD(Sid::smallClefMag);
+            mag *= score()->styleD(StyleIdx::smallClefMag);
       return mag;
       }
 
@@ -421,18 +421,18 @@ void Clef::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Clef::undoSetShowCourtesy(bool v)
       {
-      undoChangeProperty(Pid::SHOW_COURTESY, v);
+      undoChangeProperty(P_ID::SHOW_COURTESY, v);
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Clef::getProperty(Pid propertyId) const
+QVariant Clef::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case Pid::SHOW_COURTESY: return showCourtesy();
-            case Pid::SMALL:         return small();
+            case P_ID::SHOW_COURTESY: return showCourtesy();
+            case P_ID::SMALL:         return small();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -442,11 +442,11 @@ QVariant Clef::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Clef::setProperty(Pid propertyId, const QVariant& v)
+bool Clef::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch(propertyId) {
-            case Pid::SHOW_COURTESY: _showCourtesy = v.toBool(); break;
-            case Pid::SMALL:         setSmall(v.toBool()); break;
+            case P_ID::SHOW_COURTESY: _showCourtesy = v.toBool(); break;
+            case P_ID::SMALL:         setSmall(v.toBool()); break;
             default:
                   return Element::setProperty(propertyId, v);
             }
@@ -457,11 +457,11 @@ bool Clef::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Clef::propertyDefault(Pid id) const
+QVariant Clef::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case Pid::SHOW_COURTESY: return true;
-            case Pid::SMALL:         return false;
+            case P_ID::SHOW_COURTESY: return true;
+            case P_ID::SMALL:         return false;
             default:              return Element::propertyDefault(id);
             }
       }

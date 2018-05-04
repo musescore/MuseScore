@@ -277,8 +277,6 @@ void Portaudio::midiRead()
 //   putEvent
 //---------------------------------------------------------
 
-#ifdef USE_PORTMIDI
-
 // Prevent killing sequencer with wrong data
 #define less128(__less) ((__less >=0 && __less <= 127) ? __less : 0)
 
@@ -351,7 +349,6 @@ void Portaudio::putEvent(const NPlayEvent& e, unsigned framePos)
                   break;
             }
       }
-#endif
 
 //---------------------------------------------------------
 //   currentApi

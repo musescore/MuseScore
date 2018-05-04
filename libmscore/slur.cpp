@@ -40,21 +40,21 @@ void SlurSegment::draw(QPainter* painter) const
                   painter->setBrush(QBrush(pen.color()));
                   pen.setCapStyle(Qt::RoundCap);
                   pen.setJoinStyle(Qt::RoundJoin);
-                  pen.setWidthF(score()->styleP(Sid::SlurEndWidth));
+                  pen.setWidthF(score()->styleP(StyleIdx::SlurEndWidth));
                   break;
             case 1:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth));
+                  pen.setWidthF(score()->styleP(StyleIdx::SlurDottedWidth));
                   pen.setStyle(Qt::DotLine);
                   break;
             case 2:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth));
+                  pen.setWidthF(score()->styleP(StyleIdx::SlurDottedWidth));
                   pen.setStyle(Qt::DashLine);
                   break;
             case 3:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth));
+                  pen.setWidthF(score()->styleP(StyleIdx::SlurDottedWidth));
                   pen.setStyle(Qt::CustomDashLine);
                   QVector<qreal> dashes { 5.0, 5.0 };
                   pen.setDashPattern(dashes);
@@ -110,7 +110,7 @@ bool SlurSegment::edit(EditData& ed)
       Slur* sl = slur();
 
       if (ed.key == Qt::Key_X) {
-            sl->undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(sl->up() ? Direction::DOWN : Direction::UP));
+            sl->undoChangeProperty(P_ID::SLUR_DIRECTION, QVariant::fromValue<Direction>(sl->up() ? Direction::DOWN : Direction::UP));
             sl->layout();
             return true;
             }
@@ -164,15 +164,15 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
       {
       if (ed.curGrip == Grip::START) {
             int ticks = spanner()->endElement()->tick() - element->tick();
-            spanner()->undoChangeProperty(Pid::SPANNER_TICK, element->tick());
-            spanner()->undoChangeProperty(Pid::SPANNER_TICKS, ticks);
-            spanner()->undoChangeProperty(Pid::TRACK, element->track());
+            spanner()->undoChangeProperty(P_ID::SPANNER_TICK, element->tick());
+            spanner()->undoChangeProperty(P_ID::SPANNER_TICKS, ticks);
+            spanner()->undoChangeProperty(P_ID::TRACK, element->track());
             if (score()->spannerMap().removeSpanner(spanner()))
                   score()->addSpanner(spanner());
             }
       else {
-            spanner()->undoChangeProperty(Pid::SPANNER_TICKS,  element->tick() - spanner()->startElement()->tick());
-            spanner()->undoChangeProperty(Pid::SPANNER_TRACK2, element->track());
+            spanner()->undoChangeProperty(P_ID::SPANNER_TICKS,  element->tick() - spanner()->startElement()->tick());
+            spanner()->undoChangeProperty(P_ID::SPANNER_TRACK2, element->track());
             }
       int segments  = spanner()->spannerSegments().size();
       ups(ed.curGrip).off = QPointF();
@@ -250,7 +250,7 @@ void SlurSegment::computeBezier(QPointF p6o)
       QPointF p3(c1, -shoulderH);
       QPointF p4(c2, -shoulderH);
 
-      qreal w = score()->styleP(Sid::SlurMidWidth) - score()->styleP(Sid::SlurEndWidth);
+      qreal w = score()->styleP(StyleIdx::SlurMidWidth) - score()->styleP(StyleIdx::SlurEndWidth);
       if ((c2 - c1) <= _spatium)
             w *= .5;
       QPointF th(0.0, w);    // thickness of slur
@@ -371,7 +371,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                   Collision(qreal a, const QPointF b) : dist(a), p(b) {}
                   };
             QList<Collision> pl;                // skyline
-            qreal sdist = score()->styleP(Sid::SlurMinDistance);
+            qreal sdist = score()->styleP(StyleIdx::SlurMinDistance);
 
             QPointF pp1 = ups(Grip::START).p;
             QPointF pp2 = ups(Grip::END).p;
@@ -501,6 +501,15 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                         }
                   }
             }
+      else {
+            if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
+                  QPointF staffOffset;
+                  if (system() && track() >= 0)
+                        staffOffset = QPointF(0.0, system()->staff(staffIdx())->y());
+                  setReadPos(readPos() + staffOffset);
+                  }
+            adjustReadPos();
+            }
       setbbox(path.boundingRect());
       }
 
@@ -554,6 +563,15 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                   else
                         rUserYoffset() += (gdist + spatium() * .5);
                   }
+            }
+      else {
+            if ((staffIdx() > 0) && score()->mscVersion() < 206 && !readPos().isNull()) {
+                  QPointF staffOffset;
+                  if (system() && track() >= 0)
+                        staffOffset = QPointF(0.0, system()->staff(staffIdx())->y());
+                  setReadPos(readPos() + staffOffset);
+                  }
+            adjustReadPos();
             }
       setbbox(path.boundingRect());
       }
@@ -622,7 +640,7 @@ void Slur::slurPosChord(SlurPos* sp)
             }
       Note* _startNote = stChord->downNote();
       Note* _endNote   = enChord->downNote();
-      qreal hw         = _startNote->headWidth();
+      qreal hw         = _startNote->headBBoxRightPos();
       qreal __up       = _up ? -1.0 : 1.0;
       qreal _spatium = spatium();
 
@@ -753,7 +771,7 @@ void Slur::slurPos(SlurPos* sp)
                   // place slur starting point at stem base point
                   pt = sc->stemPos() - sc->pagePos() + sc->stem()->p2();
                   if (useTablature)                   // in tabs, stems are centred on note:
-                        pt.rx() = hw1 * 0.5;          // skip half notehead to touch stem
+                        pt.rx() = hw1 * 0.5;          // skip half notehead to touch stem, anatoly-os: incorrect. half notehead width is not always the stem position
                   sp->p1 += pt;
                   sp->p1 += QPointF(0.35 * _spatium, 0.25 * _spatium);  // clear the stem (x) and the notehead (y)
                   break;

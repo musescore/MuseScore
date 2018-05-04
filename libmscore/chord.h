@@ -179,7 +179,7 @@ class Chord final : public ChordRest {
       void setNoteType(NoteType t)    { _noteType = t; }
       bool isGrace() const            { return _noteType != NoteType::NORMAL; }
       void toGraceAfter();
-      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true);
 
       virtual void setTrack(int val) override;
 
@@ -205,9 +205,9 @@ class Chord final : public ChordRest {
 
       virtual void crossMeasureSetup(bool on);
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
       virtual void reset();
 

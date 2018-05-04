@@ -30,14 +30,14 @@ namespace Ms {
 InstrumentChange::InstrumentChange(Score* s)
    : TextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(SubStyleId::INSTRUMENT_CHANGE);
+      init(SubStyle::INSTRUMENT_CHANGE);
       _instrument = new Instrument();
       }
 
 InstrumentChange::InstrumentChange(const Instrument& i, Score* s)
    : TextBase(s)
       {
-      initSubStyle(SubStyleId::INSTRUMENT_CHANGE);
+      init(SubStyle::INSTRUMENT_CHANGE);
       setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _instrument = new Instrument(i);
       }
@@ -102,7 +102,7 @@ void InstrumentChange::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant InstrumentChange::getProperty(Pid propertyId) const
+QVariant InstrumentChange::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
             default:
@@ -114,11 +114,11 @@ QVariant InstrumentChange::getProperty(Pid propertyId) const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant InstrumentChange::propertyDefault(Pid propertyId) const
+QVariant InstrumentChange::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::SUB_STYLE:
-                  return int(SubStyleId::INSTRUMENT_CHANGE);
+            case P_ID::SUB_STYLE:
+                  return int(SubStyle::INSTRUMENT_CHANGE);
             default:
                   return TextBase::propertyDefault(propertyId);
             }
@@ -128,7 +128,7 @@ QVariant InstrumentChange::propertyDefault(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool InstrumentChange::setProperty(Pid propertyId, const QVariant& v)
+bool InstrumentChange::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
             default:

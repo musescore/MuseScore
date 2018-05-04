@@ -52,10 +52,7 @@ void MasterSynthesizer::init()
             else
                   e.unknown();
             }
-      if (!setState(state)) {
-            f.remove();
-            setState(defaultState);
-            }
+      setState(state);
       }
 
 //---------------------------------------------------------

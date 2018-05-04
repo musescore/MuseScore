@@ -221,10 +221,10 @@ void Image::write(XmlWriter& xml) const
       xml.tag("path", _storeItem ? _storeItem->hashName() : relativeFilePath);
       xml.tag("linkPath", relativeFilePath);
 
-      writeProperty(xml, Pid::AUTOSCALE);
-      writeProperty(xml, Pid::SIZE);
-      writeProperty(xml, Pid::LOCK_ASPECT_RATIO);
-      writeProperty(xml, Pid::SIZE_IS_SPATIUM);
+      writeProperty(xml, P_ID::AUTOSCALE);
+      writeProperty(xml, P_ID::SIZE);
+      writeProperty(xml, P_ID::LOCK_ASPECT_RATIO);
+      writeProperty(xml, P_ID::SIZE_IS_SPATIUM);
 
       xml.etag();
       }
@@ -241,13 +241,13 @@ void Image::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "autoScale")
-                  setProperty(Pid::AUTOSCALE, Ms::getProperty(Pid::AUTOSCALE, e));
+                  setProperty(P_ID::AUTOSCALE, Ms::getProperty(P_ID::AUTOSCALE, e));
             else if (tag == "size")
-                  setProperty(Pid::SIZE, Ms::getProperty(Pid::SIZE, e));
+                  setProperty(P_ID::SIZE, Ms::getProperty(P_ID::SIZE, e));
             else if (tag == "lockAspectRatio")
-                  setProperty(Pid::LOCK_ASPECT_RATIO, Ms::getProperty(Pid::LOCK_ASPECT_RATIO, e));
+                  setProperty(P_ID::LOCK_ASPECT_RATIO, Ms::getProperty(P_ID::LOCK_ASPECT_RATIO, e));
             else if (tag == "sizeIsSpatium")
-                  setProperty(Pid::SIZE_IS_SPATIUM, Ms::getProperty(Pid::SIZE_IS_SPATIUM, e));
+                  setProperty(P_ID::SIZE_IS_SPATIUM, Ms::getProperty(P_ID::SIZE_IS_SPATIUM, e));
             else if (tag == "path")
                   _storePath = e.readElementText();
             else if (tag == "linkPath")
@@ -408,7 +408,7 @@ void Image::endEditDrag(EditData& ed)
       {
       ImageEditData* ied = static_cast<ImageEditData*>(ed.getData(this));
       if (_size != ied->size)
-            score()->undoPropertyChanged(this, Pid::SIZE, ied->size);
+            score()->undoPropertyChanged(this, P_ID::SIZE, ied->size);
       }
 
 //---------------------------------------------------------
@@ -484,6 +484,7 @@ void Image::layout()
             }
 
       // in any case, adjust position relative to parent
+      adjustReadPos();
       setbbox(QRectF(QPointF(), size2pixel(_size)));
       }
 
@@ -491,16 +492,16 @@ void Image::layout()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Image::getProperty(Pid propertyId) const
+QVariant Image::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case Pid::AUTOSCALE:
+            case P_ID::AUTOSCALE:
                   return autoScale();
-            case Pid::SIZE:
+            case P_ID::SIZE:
                   return size();
-            case Pid::LOCK_ASPECT_RATIO:
+            case P_ID::LOCK_ASPECT_RATIO:
                   return lockAspectRatio();
-            case Pid::SIZE_IS_SPATIUM:
+            case P_ID::SIZE_IS_SPATIUM:
                   return sizeIsSpatium();
             default:
                   return Element::getProperty(propertyId);
@@ -511,21 +512,21 @@ QVariant Image::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Image::setProperty(Pid propertyId, const QVariant& v)
+bool Image::setProperty(P_ID propertyId, const QVariant& v)
       {
       bool rv = true;
       score()->addRefresh(canvasBoundingRect());
       switch(propertyId) {
-            case Pid::AUTOSCALE:
+            case P_ID::AUTOSCALE:
                   setAutoScale(v.toBool());
                   break;
-            case Pid::SIZE:
+            case P_ID::SIZE:
                   setSize(v.toSizeF());
                   break;
-            case Pid::LOCK_ASPECT_RATIO:
+            case P_ID::LOCK_ASPECT_RATIO:
                   setLockAspectRatio(v.toBool());
                   break;
-            case Pid::SIZE_IS_SPATIUM:
+            case P_ID::SIZE_IS_SPATIUM:
                   {
                   QSizeF s = size2pixel(_size);
                   setSizeIsSpatium(v.toBool());
@@ -546,16 +547,16 @@ bool Image::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Image::propertyDefault(Pid id) const
+QVariant Image::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case Pid::AUTOSCALE:
+            case P_ID::AUTOSCALE:
                   return defaultAutoScale;
-            case Pid::SIZE:
+            case P_ID::SIZE:
                   return pixel2size(imageSize());
-            case Pid::LOCK_ASPECT_RATIO:
+            case P_ID::LOCK_ASPECT_RATIO:
                   return defaultLockAspectRatio;
-            case Pid::SIZE_IS_SPATIUM:
+            case P_ID::SIZE_IS_SPATIUM:
                   return defaultSizeIsSpatium;
             default:
                   return Element::propertyDefault(id);

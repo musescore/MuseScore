@@ -59,17 +59,17 @@ void InstrumentName::setInstrumentNameType(const QString& s)
 void InstrumentName::setInstrumentNameType(InstrumentNameType st)
       {
       _instrumentNameType = st;
-      initSubStyle(st == InstrumentNameType::SHORT ? SubStyleId::INSTRUMENT_SHORT : SubStyleId::INSTRUMENT_LONG);
+      initSubStyle(st == InstrumentNameType::SHORT ? SubStyle::INSTRUMENT_SHORT : SubStyle::INSTRUMENT_LONG);
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant InstrumentName::getProperty(Pid id) const
+QVariant InstrumentName::getProperty(P_ID id) const
       {
       switch (id) {
-            case Pid::INAME_LAYOUT_POSITION:
+            case P_ID::INAME_LAYOUT_POSITION:
                   return _layoutPos;
             default:
                   return TextBase::getProperty(id);
@@ -80,19 +80,19 @@ QVariant InstrumentName::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool InstrumentName::setProperty(Pid id, const QVariant& v)
+bool InstrumentName::setProperty(P_ID id, const QVariant& v)
       {
       bool rv = true;
       switch (id) {
-            case Pid::INAME_LAYOUT_POSITION:
+            case P_ID::INAME_LAYOUT_POSITION:
                   _layoutPos = v.toInt();
                   break;
             default:
                   rv = TextBase::setProperty(id, v);
                   break;
             }
-      Sid sidx = getPropertyStyle(id);
-      if (sidx != Sid::NOSTYLE) {
+      StyleIdx sidx = getPropertyStyle(id);
+      if (sidx != StyleIdx::NOSTYLE) {
             score()->undoChangeStyleVal(sidx, getProperty(id));
             }
       score()->setLayoutAll();
@@ -103,10 +103,10 @@ bool InstrumentName::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant InstrumentName::propertyDefault(Pid id) const
+QVariant InstrumentName::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case Pid::INAME_LAYOUT_POSITION:
+            case P_ID::INAME_LAYOUT_POSITION:
                   return 0;
             default:
                   return TextBase::propertyDefault(id);

@@ -143,7 +143,8 @@ void ChordRest::writeProperties(XmlWriter& xml) const
       //    REST  - Beam::Mode::NONE
       //    CHORD - Beam::Mode::AUTO
       //
-      if ((isRest() && _beamMode != Beam::Mode::NONE) || (isChord() && _beamMode != Beam::Mode::AUTO)) {
+      if ((type() == ElementType::REST && _beamMode != Beam::Mode::NONE)
+         || (type() == ElementType::CHORD && _beamMode != Beam::Mode::AUTO)) {
             QString s;
             switch(_beamMode) {
                   case Beam::Mode::AUTO:    s = "auto"; break;
@@ -157,10 +158,10 @@ void ChordRest::writeProperties(XmlWriter& xml) const
                   }
             xml.tag("BeamMode", s);
             }
-      writeProperty(xml, Pid::SMALL);
+      writeProperty(xml, P_ID::SMALL);
       if (actualDurationType().dots())
             xml.tag("dots", actualDurationType().dots());
-      writeProperty(xml, Pid::STAFF_MOVE);
+      writeProperty(xml, P_ID::STAFF_MOVE);
 
       if (actualDurationType().isValid())
             xml.tag("durationType", actualDurationType().name());
@@ -346,9 +347,9 @@ bool ChordRest::readProperties(XmlReader& e)
                   else if (atype == "stop") {
                         spanner->setTick2(e.tick());
                         spanner->setTrack2(track());
-                        if (spanner->isSlur())
+                        if (spanner->type() == ElementType::SLUR)
                               spanner->setEndElement(this);
-                        ChordRest* start = toChordRest(spanner->startElement());
+                        Chord* start = toChord(spanner->startElement());
                         if (start)
                               spanner->setTrack(start->track());
                         if (e.pasteMode()) {
@@ -386,7 +387,9 @@ bool ChordRest::readProperties(XmlReader& e)
             }
       else if (tag == "offset")
             DurationElement::readProperties(e);
-      else if (!DurationElement::readProperties(e))
+      else if (DurationElement::readProperties(e))
+            return true;
+      else
             return false;
       return true;
       }
@@ -406,7 +409,7 @@ void ChordRest::setSmall(bool val)
 
 void ChordRest::undoSetSmall(bool val)
       {
-      undoChangeProperty(Pid::SMALL, val);
+      undoChangeProperty(P_ID::SMALL, val);
       }
 
 //---------------------------------------------------------
@@ -521,7 +524,7 @@ Element* ChordRest::drop(EditData& data)
                   // transpose
                   Harmony* harmony = toHarmony(e);
                   Interval interval = staff()->part()->instrument(tick())->transpose();
-                  if (!score()->styleB(Sid::concertPitch) && !interval.isZero()) {
+                  if (!score()->styleB(StyleIdx::concertPitch) && !interval.isZero()) {
                         interval.flip();
                         int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
                         int baseTpc = transposeTpc(harmony->baseTpc(), interval, true);
@@ -572,22 +575,22 @@ Element* ChordRest::drop(EditData& data)
                   {
                   switch (toIcon(e)->iconType()) {
                         case IconType::SBEAM:
-                              undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::BEGIN));
+                              undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::BEGIN));
                               break;
                         case IconType::MBEAM:
-                              undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::MID));
+                              undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::MID));
                               break;
                         case IconType::NBEAM:
-                              undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::NONE));
+                              undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::NONE));
                               break;
                         case IconType::BEAM32:
-                              undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::BEGIN32));
+                              undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::BEGIN32));
                               break;
                         case IconType::BEAM64:
-                              undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::BEGIN64));
+                              undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::BEGIN64));
                               break;
                         case IconType::AUTOBEAM:
-                              undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::AUTO));
+                              undoChangeProperty(P_ID::BEAM_MODE, int(Beam::Mode::AUTO));
                               break;
                         default:
                               break;
@@ -721,9 +724,6 @@ void ChordRest::add(Element* e)
       e->setParent(this);
       e->setTrack(track());
       switch (e->type()) {
-            case ElementType::ARTICULATION:     // for backward compatibility
-                  qDebug("ChordRest::add: unknown element %s", e->name());
-                  break;
             case ElementType::LYRICS:
                   _lyrics.push_back(toLyrics(e));
                   break;
@@ -779,20 +779,20 @@ void ChordRest::removeDeleteBeam(bool beamed)
 
 void ChordRest::undoSetBeamMode(Beam::Mode mode)
       {
-      undoChangeProperty(Pid::BEAM_MODE, int(mode));
+      undoChangeProperty(P_ID::BEAM_MODE, int(mode));
       }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant ChordRest::getProperty(Pid propertyId) const
+QVariant ChordRest::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::SMALL:      return QVariant(small());
-            case Pid::BEAM_MODE:  return int(beamMode());
-            case Pid::STAFF_MOVE: return staffMove();
-            case Pid::DURATION_TYPE: return QVariant::fromValue(actualDurationType());
+            case P_ID::SMALL:      return QVariant(small());
+            case P_ID::BEAM_MODE:  return int(beamMode());
+            case P_ID::STAFF_MOVE: return staffMove();
+            case P_ID::DURATION_TYPE: return QVariant::fromValue(actualDurationType());
             default:               return DurationElement::getProperty(propertyId);
             }
       }
@@ -801,23 +801,23 @@ QVariant ChordRest::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool ChordRest::setProperty(Pid propertyId, const QVariant& v)
+bool ChordRest::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case Pid::SMALL:
+            case P_ID::SMALL:
                   setSmall(v.toBool());
                   break;
-            case Pid::BEAM_MODE:
+            case P_ID::BEAM_MODE:
                   setBeamMode(Beam::Mode(v.toInt()));
                   break;
-            case Pid::STAFF_MOVE:
+            case P_ID::STAFF_MOVE:
                   setStaffMove(v.toInt());
                   break;
-            case Pid::VISIBLE:
+            case P_ID::VISIBLE:
                   setVisible(v.toBool());
                   measure()->checkMultiVoices(staffIdx());
                   break;
-            case Pid::DURATION_TYPE:
+            case P_ID::DURATION_TYPE:
                   setDurationType(v.value<TDuration>());
                   break;
             default:
@@ -831,14 +831,14 @@ bool ChordRest::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant ChordRest::propertyDefault(Pid propertyId) const
+QVariant ChordRest::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::SMALL:
+            case P_ID::SMALL:
                   return false;
-            case Pid::BEAM_MODE:
+            case P_ID::BEAM_MODE:
                   return int(Beam::Mode::AUTO);
-            case Pid::STAFF_MOVE:
+            case P_ID::STAFF_MOVE:
                   return 0;
             default:
                   return DurationElement::propertyDefault(propertyId);
@@ -1220,9 +1220,9 @@ void ChordRest::flipLyrics(Lyrics* l)
       else
             p = Placement::ABOVE;
       int verses = lastVerse(p);
-      l->undoChangeProperty(Pid::VERSE, verses + 1);
-      l->undoChangeProperty(Pid::AUTOPLACE, true);
-      l->undoChangeProperty(Pid::PLACEMENT, int(p));
+      l->undoChangeProperty(P_ID::VERSE, verses + 1);
+      l->undoChangeProperty(P_ID::AUTOPLACE, true);
+      l->undoChangeProperty(P_ID::PLACEMENT, int(p));
       }
 
 //---------------------------------------------------------

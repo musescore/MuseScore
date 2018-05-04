@@ -17,18 +17,18 @@
 
 namespace Ms {
 
-enum class Pid : int;
+enum class P_ID : int;
 class XmlWriter;
 struct ChordDescription;
 class Element;
 
 //---------------------------------------------------------
-//   Sid
+//   StyleIdx
 //
 //    Keep in sync with styleTypes[] in style.cpp
 //---------------------------------------------------------
 
-enum class Sid {
+enum class StyleIdx {
       NOSTYLE = -1,
 
       pageWidth,
@@ -151,12 +151,6 @@ enum class Sid {
       hairpinHeight,
       hairpinContHeight,
       hairpinLineWidth,
-      hairpinFontFace,
-      hairpinFontSize,
-      hairpinFontBold,
-      hairpinFontItalic,
-      hairpinFontUnderline,
-      hairpinTextAlign,
 
       pedalPlacement,
       pedalPosAbove,
@@ -165,12 +159,6 @@ enum class Sid {
       pedalLineStyle,
       pedalBeginTextOffset,
       pedalHookHeight,
-      pedalFontFace,
-      pedalFontSize,
-      pedalFontBold,
-      pedalFontItalic,
-      pedalFontUnderline,
-      pedalTextAlign,
 
       trillPlacement,
       trillPosAbove,
@@ -275,13 +263,6 @@ enum class Sid {
       voltaHook,
       voltaLineWidth,
       voltaLineStyle,
-      voltaFontFace,
-      voltaFontSize,
-      voltaFontBold,
-      voltaFontItalic,
-      voltaFontUnderline,
-      voltaAlign,
-      voltaOffset,
 
       ottavaPlacement,
       ottavaPosAbove,
@@ -290,12 +271,6 @@ enum class Sid {
       ottavaLineWidth,
       ottavaLineStyle,
       ottavaNumbersOnly,
-      ottavaFontFace,
-      ottavaFontSize,
-      ottavaFontBold,
-      ottavaFontItalic,
-      ottavaFontUnderline,
-      ottavaTextAlign,
 
       tabClef,
 
@@ -322,12 +297,6 @@ enum class Sid {
       tupletDirection,
       tupletNumberType,
       tupletBracketType,
-      tupletFontFace,
-      tupletFontSize,
-      tupletFontBold,
-      tupletFontItalic,
-      tupletFontUnderline,
-      tupletAlign,
 
       barreLineWidth,
       fretMag,
@@ -373,7 +342,6 @@ enum class Sid {
       defaultOffset,
       defaultOffsetType,
       defaultSystemFlag,
-      defaultText,
 
       titleFontFace,
       titleFontSize,
@@ -562,6 +530,13 @@ enum class Sid {
       translatorFontItalic,
       translatorFontUnderline,
 
+      tupletFontFace,
+      tupletFontSize,
+      tupletFontBold,
+      tupletFontItalic,
+      tupletFontUnderline,
+      tupletAlign,
+
       systemFontFace,
       systemFontSize,
       systemFontBold,
@@ -616,7 +591,6 @@ enum class Sid {
       repeatLeftFontItalic,
       repeatLeftFontUnderline,
       repeatLeftAlign,
-      repeatLeftPlacement,
 
       repeatRightFontFace,
       repeatRightFontSize,
@@ -624,7 +598,14 @@ enum class Sid {
       repeatRightFontItalic,
       repeatRightFontUnderline,
       repeatRightAlign,
-      repeatRightPlacement,
+
+      voltaFontFace,
+      voltaFontSize,
+      voltaFontBold,
+      voltaFontItalic,
+      voltaFontUnderline,
+      voltaAlign,
+      voltaOffset,
 
       frameFontFace,
       frameFontSize,
@@ -645,15 +626,33 @@ enum class Sid {
       glissandoFontItalic,
       glissandoFontUnderline,
       glissandoLineWidth,
-      glissandoText,
+
+      ottavaFontFace,
+      ottavaFontSize,
+      ottavaFontBold,
+      ottavaFontItalic,
+      ottavaFontUnderline,
+      ottavaTextAlign,
+
+      pedalFontFace,
+      pedalFontSize,
+      pedalFontBold,
+      pedalFontItalic,
+      pedalFontUnderline,
+      pedalTextAlign,
+
+      hairpinFontFace,
+      hairpinFontSize,
+      hairpinFontBold,
+      hairpinFontItalic,
+      hairpinFontUnderline,
+      hairpinTextAlign,
 
       bendFontFace,
       bendFontSize,
       bendFontBold,
       bendFontItalic,
       bendFontUnderline,
-      bendLineWidth,
-      bendArrowWidth,
 
       headerFontFace,
       headerFontSize,
@@ -735,25 +734,27 @@ enum class Sid {
 //---------------------------------------------------------
 
 struct StyledProperty {
-      Sid sid;
-      Pid pid;
+      StyleIdx styleIdx;
+      P_ID propertyIdx;
       };
 
+extern const std::vector<StyledProperty> fingeringStyle;
+extern const std::vector<StyledProperty> titleStyle;
+
 //-------------------------------------------------------------------
-//   SubStyleId
+//   SubStyle
 //    Enumerate the list of built-in substyles
 //    must be in sync with namedStyles array
 //-------------------------------------------------------------------
 
-enum class SubStyleId {
-      EMPTY,
+enum class SubStyle {
       DEFAULT,
       TITLE,
       SUBTITLE,
       COMPOSER,
       POET,
-      LYRIC_ODD,
-      LYRIC_EVEN,
+      LYRIC1,
+      LYRIC2,
       FINGERING,
       LH_GUITAR_FINGERING,
       RH_GUITAR_FINGERING,
@@ -778,7 +779,6 @@ enum class SubStyleId {
       TEXTLINE,
       GLISSANDO,
       OTTAVA,
-      VOLTA,
       PEDAL,
       LET_RING,
       PALM_MUTE,
@@ -788,24 +788,18 @@ enum class SubStyleId {
       FOOTER,
       INSTRUMENT_CHANGE,
       FIGURED_BASS,
-      BEAM,
-      BOX,
-      FRET,
-      TREMOLO_BAR,
-      TIMESIG,
       USER1,
       USER2,
       SUBSTYLES
       };
-
 
 //---------------------------------------------------------
 //   MStyle
 //---------------------------------------------------------
 
 class MStyle {
-      std::array<QVariant, int(Sid::STYLES)> _values;
-      std::array<qreal, int(Sid::STYLES)> _precomputedValues;
+      std::array<QVariant, int(StyleIdx::STYLES)> _values;
+      std::array<qreal, int(StyleIdx::STYLES)> _precomputedValues;
 
       ChordList _chordList;
       bool _customChordList;        // if true, chordlist will be saved as part of score
@@ -814,11 +808,11 @@ class MStyle {
       MStyle();
 
       void precomputeValues();
-      QVariant value(Sid idx) const;
-      qreal pvalue(Sid idx) const    { return _precomputedValues[int(idx)]; }
-      void set(Sid idx, const QVariant& v);
+      QVariant value(StyleIdx idx) const;
+      qreal pvalue(StyleIdx idx) const    { return _precomputedValues[int(idx)]; }
+      void set(StyleIdx idx, const QVariant& v);
 
-      bool isDefault(Sid idx) const;
+      bool isDefault(StyleIdx idx) const;
 
       const ChordDescription* chordDescription(int id) const;
       ChordList* chordList()  { return &_chordList; }
@@ -830,23 +824,16 @@ class MStyle {
       void save(XmlWriter& xml, bool optimize);
       bool readProperties(XmlReader&);
 
-      static const char* valueType(const Sid);
-      static const char* valueName(const Sid);
-      static Sid styleIdx(const QString& name);
+      static const char* valueType(const StyleIdx);
+      static const char* valueName(const StyleIdx);
+      static StyleIdx styleIdx(const QString& name);
       };
 
-typedef std::vector<StyledProperty> SubStyle;
-
-extern const SubStyle emptyStyle;
-extern const SubStyle defaultStyle;
-extern const SubStyle fingeringStyle;
-
-const SubStyle& subStyle(SubStyleId);
-const SubStyle& subStyle(const char*);
-
-const char* subStyleName(SubStyleId);
-QString subStyleUserName(SubStyleId);
-SubStyleId subStyleFromName(const QString&);
+const std::vector<StyledProperty>& subStyle(const char*);
+const std::vector<StyledProperty>& subStyle(SubStyle);
+const char* subStyleName(SubStyle);
+QString subStyleUserName(SubStyle);
+SubStyle subStyleFromName(const QString&);
 
 #ifndef NDEBUG
 extern void checkStyles();

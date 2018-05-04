@@ -52,9 +52,9 @@ class LineSegment : public SpannerSegment {
       virtual void read(XmlReader&) override;
       bool readProperties(XmlReader&);
 
-      virtual QVariant getProperty(Pid id) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid id) const override;
+      virtual QVariant getProperty(P_ID id) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
       virtual QLineF dragAnchor() const override;
       };
 
@@ -79,7 +79,7 @@ class SLine : public Spanner {
       virtual QPointF linePos(Grip, System** system) const;
 
    public:
-      SLine(Score* s, ElementFlags = ElementFlag::NOTHING);
+      SLine(Score* s);
       SLine(const SLine&);
 
       virtual void layout() override;
@@ -116,9 +116,10 @@ class SLine : public Spanner {
       LineSegment* takeLastSegment()      { return (LineSegment*)spannerSegments().takeLast(); }
       LineSegment* segmentAt(int n) const { return (LineSegment*)spannerSegments().at(n); }
 
-      virtual QVariant getProperty(Pid id) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid id) const override;
+      virtual QVariant getProperty(P_ID id) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID id) const override;
+      virtual StyleIdx getPropertyStyle(P_ID) const override;
 
       friend class LineSegment;
       };

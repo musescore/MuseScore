@@ -484,22 +484,22 @@ void Part::setPlainShortName(const QString& s)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Part::getProperty(Pid id) const
+QVariant Part::getProperty(P_ID id) const
       {
       switch (id) {
-            case Pid::VISIBLE:
+            case P_ID::VISIBLE:
                   return QVariant(_show);
-            case Pid::USE_DRUMSET:
+            case P_ID::USE_DRUMSET:
                   return instrument()->useDrumset();
-            case Pid::PART_VOLUME:
+            case P_ID::PART_VOLUME:
                   return volume();
-            case Pid::PART_MUTE:
+            case P_ID::PART_MUTE:
                   return mute();
-            case Pid::PART_PAN:
+            case P_ID::PART_PAN:
                   return pan();
-            case Pid::PART_REVERB:
+            case P_ID::PART_REVERB:
                   return reverb();
-            case Pid::PART_CHORUS:
+            case P_ID::PART_CHORUS:
                   return chorus();
             default:
                   return QVariant();
@@ -510,28 +510,28 @@ QVariant Part::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Part::setProperty(Pid id, const QVariant& property)
+bool Part::setProperty(P_ID id, const QVariant& property)
       {
       switch (id) {
-            case Pid::VISIBLE:
+            case P_ID::VISIBLE:
                   setShow(property.toBool());
                   break;
-            case Pid::USE_DRUMSET:
+            case P_ID::USE_DRUMSET:
                   instrument()->setUseDrumset(property.toBool());
                   break;
-            case Pid::PART_VOLUME:
+            case P_ID::PART_VOLUME:
                   setVolume(property.toInt());
                   break;
-            case Pid::PART_MUTE:
+            case P_ID::PART_MUTE:
                   setMute(property.toBool());
                   break;
-            case Pid::PART_PAN:
+            case P_ID::PART_PAN:
                   setPan(property.toInt());
                   break;
-            case Pid::PART_REVERB:
+            case P_ID::PART_REVERB:
                   setReverb(property.toInt());
                   break;
-            case Pid::PART_CHORUS:
+            case P_ID::PART_CHORUS:
                   setChorus(property.toInt());
                   break;
             default:

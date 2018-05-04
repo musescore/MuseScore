@@ -100,8 +100,8 @@ void Fermata::write(XmlWriter& xml) const
             }
       xml.stag("Fermata");
       xml.tag("subtype", Sym::id2name(_symId));
-      writeProperty(xml, Pid::TIME_STRETCH);
-      writeProperty(xml, Pid::PLAY);
+      writeProperty(xml, P_ID::TIME_STRETCH);
+      writeProperty(xml, P_ID::PLAY);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -197,13 +197,8 @@ void Fermata::layout()
             return;
             }
 
-      qreal x = 0.0;
-      Element* e = s->element(track());
-      if (e)
-            x = e->x() + e->width() * staff()->mag(0) * .5;
-      else
-            x = score()->noteHeadWidth() * staff()->mag(0) * .5;
-      qreal y = placeAbove() ? styleP(Sid::fermataPosAbove) : styleP(Sid::fermataPosBelow) + staff()->height();
+      qreal x = score()->noteHeadWidth() * staff()->mag(0) * .5;
+      qreal y = placeAbove() ? styleP(StyleIdx::fermataPosAbove) : styleP(StyleIdx::fermataPosBelow) + staff()->height();
 
       setPos(QPointF(x, y));
 
@@ -224,7 +219,7 @@ void Fermata::layout()
                   setbbox(b.translated(-0.5 * b.width(), 0.0));
                   }
             }
-      autoplaceSegmentElement(styleP(Sid::fermataMinDistance));
+      autoplaceSegmentElement(styleP(StyleIdx::fermataMinDistance));
       }
 
 //---------------------------------------------------------
@@ -249,12 +244,12 @@ QLineF Fermata::dragAnchor() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Fermata::getProperty(Pid propertyId) const
+QVariant Fermata::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::TIME_STRETCH:
+            case P_ID::TIME_STRETCH:
                   return timeStretch();
-            case Pid::PLAY:
+            case P_ID::PLAY:
                   return play();
             default:
                   return Element::getProperty(propertyId);
@@ -265,10 +260,10 @@ QVariant Fermata::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Fermata::setProperty(Pid propertyId, const QVariant& v)
+bool Fermata::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case Pid::PLACEMENT: {
+            case P_ID::PLACEMENT: {
                   Placement p = Placement(v.toInt());
                   if (p != placement()) {
                         QString s = Sym::id2name(_symId);
@@ -281,10 +276,10 @@ bool Fermata::setProperty(Pid propertyId, const QVariant& v)
                         }
                   }
                   break;
-            case Pid::PLAY:
+            case P_ID::PLAY:
                   setPlay(v.toBool());
                   break;
-            case Pid::TIME_STRETCH:
+            case P_ID::TIME_STRETCH:
                   setTimeStretch(v.toDouble());
                   score()->fixTicks();
                   break;
@@ -299,14 +294,14 @@ bool Fermata::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Fermata::propertyDefault(Pid propertyId) const
+QVariant Fermata::propertyDefault(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::PLACEMENT:
+            case P_ID::PLACEMENT:
                   return int(Placement::ABOVE);
-            case Pid::TIME_STRETCH:
+            case P_ID::TIME_STRETCH:
                   return 1.0; // articulationList[int(articulationType())].timeStretch;
-            case Pid::PLAY:
+            case P_ID::PLAY:
                   return true;
             default:
                   break;
@@ -315,26 +310,44 @@ QVariant Fermata::propertyDefault(Pid propertyId) const
       }
 
 //---------------------------------------------------------
+//   propertyStyle
+//---------------------------------------------------------
+
+PropertyFlags& Fermata::propertyFlags(P_ID id)
+      {
+#if 0
+      switch (id) {
+            case P_ID::TIME_STRETCH:
+                  return PropertyFlags::NOSTYLE;
+
+            default:
+                  break;
+            }
+#endif
+      return Element::propertyFlags(id);
+      }
+
+//---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
 
-Sid Fermata::getPropertyStyle(Pid id) const
+StyleIdx Fermata::getPropertyStyle(P_ID id) const
       {
       switch (id) {
             default:
                   break;
             }
-      return Sid::NOSTYLE;
+      return StyleIdx::NOSTYLE;
       }
 
 //---------------------------------------------------------
 //   resetProperty
 //---------------------------------------------------------
 
-void Fermata::resetProperty(Pid id)
+void Fermata::resetProperty(P_ID id)
       {
       switch (id) {
-            case Pid::TIME_STRETCH:
+            case P_ID::TIME_STRETCH:
                   setProperty(id, propertyDefault(id));
                   return;
 
@@ -350,7 +363,7 @@ void Fermata::resetProperty(Pid id)
 
 qreal Fermata::mag() const
       {
-      return parent() ? parent()->mag() * score()->styleD(Sid::articulationMag): 1.0;
+      return parent() ? parent()->mag() * score()->styleD(StyleIdx::articulationMag): 1.0;
       }
 
 //---------------------------------------------------------

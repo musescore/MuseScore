@@ -52,9 +52,9 @@ struct BeamFragment {
 //---------------------------------------------------------
 
 Beam::Beam(Score* s)
-   : Element(s, ElementFlag::SELECTABLE)
+   : Element(s)
       {
-      initSubStyle(SubStyleId::BEAM);
+      setFlags(ElementFlag::SELECTABLE);
       _direction       = Direction::AUTO;
       _up              = true;
       _distribute      = false;
@@ -64,6 +64,8 @@ Beam::Beam(Score* s)
       _grow2           = 1.0;
       _isGrace         = false;
       _cross           = false;
+      _noSlope         = score()->styleB(StyleIdx::beamNoSlope);
+      noSlopeStyle     = PropertyFlags::STYLED;
       }
 
 //---------------------------------------------------------
@@ -93,6 +95,7 @@ Beam::Beam(const Beam& b)
       maxDuration      = b.maxDuration;
       slope            = b.slope;
       _noSlope         = b._noSlope;
+      noSlopeStyle     = b.noSlopeStyle;
       }
 
 //---------------------------------------------------------
@@ -203,7 +206,7 @@ void Beam::draw(QPainter* painter) const
             return;
       painter->setBrush(QBrush(curColor()));
       painter->setPen(Qt::NoPen);
-      qreal lw2 = score()->styleP(Sid::beamWidth) * .5 * mag();
+      qreal lw2 = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
 
       // make beam thickness independent of slant
       // (expression can be simplified?)
@@ -343,7 +346,7 @@ void Beam::layout1()
 
             int staffIdx = -1;
             for (ChordRest* cr : _elements) {
-                  qreal m = cr->small() ? score()->styleD(Sid::smallNoteMag) : 1.0;
+                  qreal m = cr->small() ? score()->styleD(StyleIdx::smallNoteMag) : 1.0;
                   mag     = qMax(mag, m);
                   if (cr->isChord()) {
                         c2 = toChord(cr);
@@ -437,7 +440,7 @@ void Beam::layoutGraceNotes()
       minMove = 1000;
       maxMove = -1000;
       _isGrace = true;
-      qreal graceMag   = score()->styleD(Sid::graceNoteMag);
+      qreal graceMag   = score()->styleD(StyleIdx::graceNoteMag);
       setMag(graceMag);
 
       for (ChordRest* cr : _elements) {
@@ -526,7 +529,7 @@ void Beam::layout()
                   fragments.append(new BeamFragment);
             layout2(crl, st, n);
 
-            qreal lw2      = score()->styleP(Sid::beamWidth) * .5 * mag();
+            qreal lw2      = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
 //            ChordRest* cr  = crl.front();
 //            Shape& s       = cr->segment()->shape(staffIdx());
 //            QPointF offset = cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
@@ -1506,12 +1509,12 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
 
       qreal _spatium   = spatium();
       QPointF _pagePos(pagePos());
-      qreal beamMinLen = score()->styleP(Sid::beamMinLen) * mag();
+      qreal beamMinLen = score()->styleP(StyleIdx::beamMinLen) * mag();
 
       if (beamLevels == 4)
-            _beamDist = score()->styleP(Sid::beamWidth) * (1 + score()->styleD(Sid::beamDistance)*4/3);
+            _beamDist = score()->styleP(StyleIdx::beamWidth) * (1 + score()->styleD(StyleIdx::beamDistance)*4/3);
       else
-            _beamDist = score()->styleP(Sid::beamWidth) * (1 + score()->styleD(Sid::beamDistance));
+            _beamDist = score()->styleP(StyleIdx::beamWidth) * (1 + score()->styleD(StyleIdx::beamDistance));
 
       _beamDist *= mag();
       _beamDist *= c1->staff()->mag(c1->tick());
@@ -1742,7 +1745,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               crBase[i] = bl;
                         }
 
-                  qreal stemWidth  = score()->styleP(Sid::stemWidth);
+                  qreal stemWidth  = score()->styleP(StyleIdx::stemWidth);
                   qreal x2         = cr1->stemPosX() + cr1->pageX() - _pagePos.x();
                   qreal x3;
 
@@ -1909,7 +1912,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
             if (c->hook())
                   score()->undoRemoveElement(c->hook());
 
-            QPointF stemPos(c->stemPos());
+            QPointF stemPos(c->stemPosX() + c->pagePos().x(), c->stemPos().y());
             qreal x2   = stemPos.x() - _pagePos.x();
             qreal y1   = (x2 - x1) * slope + py1 + _pagePos.y();
             qreal y2   = stemPos.y();
@@ -1981,11 +1984,11 @@ void Beam::write(XmlWriter& xml) const
       xml.stag(QString("Beam id=\"%1\"").arg(_id));
       Element::writeProperties(xml);
 
-      writeProperty(xml, Pid::STEM_DIRECTION);
-      writeProperty(xml, Pid::DISTRIBUTE);
-      writeProperty(xml, Pid::BEAM_NO_SLOPE);
-      writeProperty(xml, Pid::GROW_LEFT);
-      writeProperty(xml, Pid::GROW_RIGHT);
+      writeProperty(xml, P_ID::STEM_DIRECTION);
+      writeProperty(xml, P_ID::DISTRIBUTE);
+      writeProperty(xml, P_ID::BEAM_NO_SLOPE);
+      writeProperty(xml, P_ID::GROW_LEFT);
+      writeProperty(xml, P_ID::GROW_RIGHT);
 
       int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       if (_userModified[idx]) {
@@ -2023,13 +2026,15 @@ void Beam::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "StemDirection") {
-                  setProperty(Pid::STEM_DIRECTION, Ms::getProperty(Pid::STEM_DIRECTION, e));
+                  setProperty(P_ID::STEM_DIRECTION, Ms::getProperty(P_ID::STEM_DIRECTION, e));
                   e.readNext();
                   }
             else if (tag == "distribute")
                   setDistribute(e.readInt());
-            else if (readStyledProperty(e, tag))
-                  ;
+            else if (tag == "noSlope") {
+                  setNoSlope(e.readInt());
+                  noSlopeStyle = PropertyFlags::UNSTYLED;
+                  }
             else if (tag == "growLeft")
                   setGrowLeft(e.readDouble());
             else if (tag == "growRight")
@@ -2101,9 +2106,9 @@ void Beam::editDrag(EditData& ed)
             y1 += dy;
 
       qreal _spatium = spatium();
-      undoChangeProperty(Pid::BEAM_POS, QPointF(y1 / _spatium, y2 / _spatium));
-      undoChangeProperty(Pid::USER_MODIFIED, true);
-      undoChangeProperty(Pid::GENERATED, false);
+      undoChangeProperty(P_ID::BEAM_POS, QPointF(y1 / _spatium, y2 / _spatium));
+      undoChangeProperty(P_ID::USER_MODIFIED, true);
+      undoChangeProperty(P_ID::GENERATED, false);
 
       triggerLayout();
       }
@@ -2157,17 +2162,20 @@ void Beam::setBeamDirection(Direction d)
 void Beam::reset()
       {
       if (distribute())
-            undoChangeProperty(Pid::DISTRIBUTE, false);
+            undoChangeProperty(P_ID::DISTRIBUTE, false);
       if (growLeft() != 1.0)
-            undoChangeProperty(Pid::GROW_LEFT, 1.0);
+            undoChangeProperty(P_ID::GROW_LEFT, 1.0);
       if (growRight() != 1.0)
-            undoChangeProperty(Pid::GROW_RIGHT, 1.0);
+            undoChangeProperty(P_ID::GROW_RIGHT, 1.0);
       if (userModified()) {
-            undoChangeProperty(Pid::BEAM_POS, QVariant(beamPos()));
-            undoChangeProperty(Pid::USER_MODIFIED, false);
+            undoChangeProperty(P_ID::BEAM_POS, QVariant(beamPos()));
+            undoChangeProperty(P_ID::USER_MODIFIED, false);
             }
-      undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
-      resetProperty(Pid::BEAM_NO_SLOPE);
+      if (beamDirection() != Direction::AUTO)
+            undoChangeProperty(P_ID::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
+      if (noSlopeStyle == PropertyFlags::UNSTYLED)
+            resetProperty(P_ID::BEAM_NO_SLOPE);       // TODO: make undoable
+
       setGenerated(true);
       }
 
@@ -2253,9 +2261,9 @@ Element* Beam::drop(EditData& data)
       else
             return 0;
       if (g1 != growLeft())
-            undoChangeProperty(Pid::GROW_LEFT, g1);
+            undoChangeProperty(P_ID::GROW_LEFT, g1);
       if (g2 != growRight())
-            undoChangeProperty(Pid::GROW_RIGHT, g2);
+            undoChangeProperty(P_ID::GROW_RIGHT, g2);
       return 0;
       }
 
@@ -2315,16 +2323,16 @@ void Beam::setUserModified(bool val)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Beam::getProperty(Pid propertyId) const
+QVariant Beam::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::STEM_DIRECTION: return QVariant::fromValue<Direction>(beamDirection());
-            case Pid::DISTRIBUTE:     return distribute();
-            case Pid::GROW_LEFT:      return growLeft();
-            case Pid::GROW_RIGHT:     return growRight();
-            case Pid::USER_MODIFIED:  return userModified();
-            case Pid::BEAM_POS:       return beamPos();
-            case Pid::BEAM_NO_SLOPE:  return noSlope();
+            case P_ID::STEM_DIRECTION: return QVariant::fromValue<Direction>(beamDirection());
+            case P_ID::DISTRIBUTE:     return distribute();
+            case P_ID::GROW_LEFT:      return growLeft();
+            case P_ID::GROW_RIGHT:     return growRight();
+            case P_ID::USER_MODIFIED:  return userModified();
+            case P_ID::BEAM_POS:       return beamPos();
+            case P_ID::BEAM_NO_SLOPE:  return noSlope();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -2334,30 +2342,31 @@ QVariant Beam::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Beam::setProperty(Pid propertyId, const QVariant& v)
+bool Beam::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case Pid::STEM_DIRECTION:
+            case P_ID::STEM_DIRECTION:
                   setBeamDirection(v.value<Direction>());
                   break;
-            case Pid::DISTRIBUTE:
+            case P_ID::DISTRIBUTE:
                   setDistribute(v.toBool());
                   break;
-            case Pid::GROW_LEFT:
+            case P_ID::GROW_LEFT:
                   setGrowLeft(v.toDouble());
                   break;
-            case Pid::GROW_RIGHT:
+            case P_ID::GROW_RIGHT:
                   setGrowRight(v.toDouble());
                   break;
-            case Pid::USER_MODIFIED:
+            case P_ID::USER_MODIFIED:
                   setUserModified(v.toBool());
                   break;
-            case Pid::BEAM_POS:
+            case P_ID::BEAM_POS:
                   if (userModified())
                         setBeamPos(v.toPointF());
                   break;
-            case Pid::BEAM_NO_SLOPE:
+            case P_ID::BEAM_NO_SLOPE:
                   setNoSlope(v.toBool());
+                  noSlopeStyle = PropertyFlags::UNSTYLED;
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
@@ -2376,18 +2385,61 @@ bool Beam::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Beam::propertyDefault(Pid id) const
+QVariant Beam::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case Pid::SUB_STYLE:      return int(SubStyleId::BEAM);
-            case Pid::STEM_DIRECTION: return QVariant::fromValue<Direction>(Direction::AUTO);
-            case Pid::DISTRIBUTE:     return false;
-            case Pid::GROW_LEFT:      return 1.0;
-            case Pid::GROW_RIGHT:     return 1.0;
-            case Pid::USER_MODIFIED:  return false;
-            case Pid::BEAM_POS:       return beamPos();
-            default:                   return Element::propertyDefault(id);
+            case P_ID::STEM_DIRECTION: return QVariant::fromValue<Direction>(Direction::AUTO);
+            case P_ID::DISTRIBUTE:     return false;
+            case P_ID::GROW_LEFT:      return 1.0;
+            case P_ID::GROW_RIGHT:     return 1.0;
+            case P_ID::USER_MODIFIED:  return false;
+            case P_ID::BEAM_POS:       return beamPos();
+            case P_ID::BEAM_NO_SLOPE:  return score()->styleB(StyleIdx::beamNoSlope);
+            default:               return Element::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   propertyFlags
+//---------------------------------------------------------
+
+PropertyFlags& Beam::propertyFlags(P_ID id)
+      {
+      switch (id) {
+            case P_ID::BEAM_NO_SLOPE:
+                  return noSlopeStyle;
+
+            default:
+                  return Element::propertyFlags(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   resetProperty
+//---------------------------------------------------------
+
+void Beam::resetProperty(P_ID id)
+      {
+      switch (id) {
+            case P_ID::BEAM_NO_SLOPE:
+                  setNoSlope(score()->styleB(StyleIdx::beamNoSlope));
+                  noSlopeStyle = PropertyFlags::STYLED;
+                  break;
+
+            default:
+                  return Element::resetProperty(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//    reset all styled values to actual style
+//---------------------------------------------------------
+
+void Beam::styleChanged()
+      {
+      if (noSlopeStyle == PropertyFlags::STYLED)
+            setNoSlope(score()->styleB(StyleIdx::beamNoSlope));
       }
 
 //---------------------------------------------------------
@@ -2396,7 +2448,7 @@ QVariant Beam::propertyDefault(Pid id) const
 
 Shape Beam::shape() const
       {
-      qreal lw2 = score()->styleP(Sid::beamWidth) * .5 * mag();
+      qreal lw2 = score()->styleP(StyleIdx::beamWidth) * .5 * mag();
       const QLineF* bs = beamSegments.front();
       double d  = (qAbs(bs->y2() - bs->y1())) / (bs->x2() - bs->x1());
       if (beamSegments.size() > 1 && d > M_PI/6.0)
@@ -2428,6 +2480,21 @@ Shape Beam::shape() const
                   shape.add(QRectF(x, y-ww, w, bs->y2() - y + ww*2));
             }
       return shape;
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx Beam::getPropertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::BEAM_NO_SLOPE:
+                  return StyleIdx::beamNoSlope;
+            default:
+                  break;
+            }
+      return StyleIdx::NOSTYLE;
       }
 
 //---------------------------------------------------------

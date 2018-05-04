@@ -137,7 +137,7 @@ Preset::~Preset()
 
 void Preset::loadSamples()
       {
-      bool locked = sfont->synth->mutex.tryLock();
+//      sfont->synth->mutex.lock();
       if (_global_zone && _global_zone->instrument) {
             Instrument* i = _global_zone->instrument;
             if (i->global_zone && i->global_zone->sample)
@@ -153,8 +153,7 @@ void Preset::loadSamples()
             foreach(Zone* iz, i->zones)
                   iz->sample->load();
             }
-      if (locked)
-            sfont->synth->mutex.unlock();
+//      sfont->synth->mutex.unlock();
       }
 
 //---------------------------------------------------------

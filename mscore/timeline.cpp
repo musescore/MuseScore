@@ -1019,7 +1019,7 @@ void Timeline::tempo_meta(Segment* seg, int* stagger, int pos)
       const std::vector<Element*> annotations = seg->annotations();
       for (Element* element : annotations) {
             if (element->isTempoText()) {
-                  TempoText* text = toTempoText(element);
+                  Text* text = toText(element);
                   qreal x = pos + (*stagger) * spacing;
                   if (addMetaValue(x, pos, text->plainText(), row, ElementType::TEMPO_TEXT, element, 0, seg->measure())) {
                         (*stagger)++;
@@ -1704,6 +1704,7 @@ void Timeline::drawSelection()
       const Selection selection = _score->selection();
       QList<Element*> element_list = selection.elements();
       for (Element* element : element_list) {
+
             if (element->tick() == -1)
                   continue;
             else {
@@ -1723,8 +1724,7 @@ void Timeline::drawSelection()
                   }
 
             int staffIdx;
-            int tick = element->tick();
-            Measure* measure = _score->tick2measure(tick);
+            Measure* measure = _score->tick2measure(element->tick());
             staffIdx = element->staffIdx();
             if (numToStaff(staffIdx) && !numToStaff(staffIdx)->show())
                   continue;
@@ -1752,11 +1752,7 @@ void Timeline::drawSelection()
             ElementType element_type = (staffIdx == -1)? element->type() : ElementType::INVALID;
 
             //If has a multi measure rest, find the count and add each measure to it
-            // ws: If style flag Sid::createMultiMeasureRests is not set, then
-            // measure->mmRest() is not valid
-
-//            if (measure->mmRest() ) {
-            if (measure->mmRest() && measure->score()->styleB(Sid::createMultiMeasureRests)) {
+            if (measure->mmRest()) {
                   int mmrest_count = measure->mmRest()->mmRestCount();
                   Measure* tmp_measure = measure;
                   for (int mmrest_measure = 0; mmrest_measure < mmrest_count; mmrest_measure++) {
@@ -2269,7 +2265,7 @@ void Timeline::updateView()
             for (Measure* curr_measure = _score->firstMeasure(); curr_measure; curr_measure = curr_measure->nextMeasure()) {
                   System* system = curr_measure->system();
 
-                  if (curr_measure->mmRest() && _score->styleB(Sid::createMultiMeasureRests)) {
+                  if (curr_measure->mmRest() && _score->styleB(StyleIdx::createMultiMeasureRests)) {
                         //Handle mmRests
                         Measure* mmrest_measure = curr_measure->mmRest();
                         system = mmrest_measure->system();
@@ -2641,7 +2637,7 @@ void Timeline::toggleShow(int staff)
       QList<Part*> parts = _score->parts();
       if (parts.size() > staff && staff >= 0) {
             parts.at(staff)->setShow(!parts.at(staff)->show());
-            parts.at(staff)->undoChangeProperty(Pid::VISIBLE, parts.at(staff)->show());
+            parts.at(staff)->undoChangeProperty(P_ID::VISIBLE, parts.at(staff)->show());
             _score->masterScore()->setLayoutAll();
             _score->masterScore()->update();
             mscore->endCmd();

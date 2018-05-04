@@ -59,8 +59,8 @@ struct MusicXmlTupletDesc {
       MusicXmlTupletDesc();
       MxmlStartStop type;
       Placement placement;
-      TupletBracketType bracket;
-      TupletNumberType shownumber;
+      Tuplet::BracketType bracket;
+      Tuplet::NumberType shownumber;
       };
 
 //---------------------------------------------------------

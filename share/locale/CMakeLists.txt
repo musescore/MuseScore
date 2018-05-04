@@ -23,13 +23,27 @@ install(DIRECTORY ./
     REGEX ".*\\.qm"
     REGEX "languages\\.xml")
 
-install(DIRECTORY ${QT_INSTALL_PREFIX}/translations/
-    DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
-    FILES_MATCHING
-    REGEX "qt_.*\\.qm"
-    REGEX "qt_help_.*\\.qm" EXCLUDE
-    REGEX "qtbase_.*\\.qm"
-    REGEX "qtmultimedia_.*\\.qm"
-    REGEX "qtquick1_.*\\.qm"
-    REGEX "qtscript_.*\\.qm"
-    REGEX "qtxmlpatterns_.*\\.qm")
+if (MINGW)
+    install(DIRECTORY ${CROSSQT}/translations/
+        DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
+        FILES_MATCHING
+        REGEX "qt_.*\\.qm"
+        REGEX "qt_help_.*\\.qm" EXCLUDE
+        REGEX "qtbase_.*\\.qm"
+        REGEX "qtmultimedia_.*\\.qm"
+        REGEX "qtquick1_.*\\.qm"
+        REGEX "qtscript_.*\\.qm"
+        REGEX "qtxmlpatterns_.*\\.qm")
+else (MINGW)
+    install(DIRECTORY ${QT_INSTALL_PREFIX}/translations/
+        DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
+        FILES_MATCHING
+        REGEX "qt_.*\\.qm"
+        REGEX "qt_help_.*\\.qm" EXCLUDE
+        REGEX "qtbase_.*\\.qm"
+        REGEX "qtmultimedia_.*\\.qm"
+        REGEX "qtquick1_.*\\.qm"
+        REGEX "qtscript_.*\\.qm"
+        REGEX "qtxmlpatterns_.*\\.qm")
+endif (MINGW)
+

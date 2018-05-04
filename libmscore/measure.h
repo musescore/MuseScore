@@ -126,7 +126,6 @@ class Measure final : public MeasureBase {
       void setCorrupted(int staffIdx, bool val);
       void setNoText(int staffIdx, Text*);
       Text* noText(int staffIdx) const;
-
       const Shape& staffShape(int staffIdx) const;
       Shape& staffShape(int staffIdx);
       void createStaves(int);
@@ -231,9 +230,9 @@ class Measure final : public MeasureBase {
       void setPlaybackCount(int val) { _playbackCount = val; }
       QRectF staffabbox(int staffIdx) const;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      virtual QVariant getProperty(P_ID propertyId) const override;
+      virtual bool setProperty(P_ID propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(P_ID) const override;
 
       bool hasMMRest() const        { return _mmRest != 0; }
       bool isMMRest() const         { return _mmRestCount > 0; }

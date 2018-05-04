@@ -120,34 +120,34 @@ void StaffTypeChange::draw(QPainter* painter) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant StaffTypeChange::getProperty(Pid propertyId) const
+QVariant StaffTypeChange::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::STEP_OFFSET:
+            case P_ID::STEP_OFFSET:
                   return _staffType->stepOffset();
-            case Pid::STAFF_LINES:
+            case P_ID::STAFF_LINES:
                   return _staffType->lines();
-            case Pid::LINE_DISTANCE:
+            case P_ID::LINE_DISTANCE:
                   return _staffType->lineDistance();
-            case Pid::STAFF_SHOW_BARLINES:
+            case P_ID::STAFF_SHOW_BARLINES:
                   return _staffType->showBarlines();
-            case Pid::STAFF_SHOW_LEDGERLINES:
+            case P_ID::STAFF_SHOW_LEDGERLINES:
                   return _staffType->showLedgerLines();
-            case Pid::STAFF_SLASH_STYLE:
+            case P_ID::STAFF_SLASH_STYLE:
                   return _staffType->slashStyle();
-            case Pid::STAFF_NOTEHEAD_SCHEME:
+            case P_ID::STAFF_NOTEHEAD_SCHEME:
                   return int(_staffType->noteHeadScheme());
-            case Pid::STAFF_GEN_CLEF:
+            case P_ID::STAFF_GEN_CLEF:
                   return _staffType->genClef();
-            case Pid::STAFF_GEN_TIMESIG:
+            case P_ID::STAFF_GEN_TIMESIG:
                   return _staffType->genTimesig();
-            case Pid::STAFF_GEN_KEYSIG:
+            case P_ID::STAFF_GEN_KEYSIG:
                   return _staffType->genKeysig();
-            case Pid::MAG:
+            case P_ID::MAG:
                   return _staffType->userMag();
-            case Pid::SMALL:
+            case P_ID::SMALL:
                   return _staffType->small();
-            case Pid::STAFF_YOFFSET:
+            case P_ID::STAFF_YOFFSET:
                   return _staffType->yoffset();
             default:
                   return Element::getProperty(propertyId);
@@ -158,46 +158,46 @@ QVariant StaffTypeChange::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
+bool StaffTypeChange::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case Pid::STEP_OFFSET:
+            case P_ID::STEP_OFFSET:
                   _staffType->setStepOffset(v.toInt());
                   break;
-            case Pid::STAFF_LINES:
+            case P_ID::STAFF_LINES:
                   _staffType->setLines(v.toInt());
                   break;
-            case Pid::LINE_DISTANCE:
+            case P_ID::LINE_DISTANCE:
                   _staffType->setLineDistance(v.value<Spatium>());
                   break;
-            case Pid::STAFF_SHOW_BARLINES:
+            case P_ID::STAFF_SHOW_BARLINES:
                   _staffType->setShowBarlines(v.toBool());
                   break;
-            case Pid::STAFF_SHOW_LEDGERLINES:
+            case P_ID::STAFF_SHOW_LEDGERLINES:
                   _staffType->setShowLedgerLines(v.toBool());
                   break;
-            case Pid::STAFF_SLASH_STYLE:
+            case P_ID::STAFF_SLASH_STYLE:
                   _staffType->setSlashStyle(v.toBool());
                   break;
-            case Pid::STAFF_NOTEHEAD_SCHEME:
+            case P_ID::STAFF_NOTEHEAD_SCHEME:
                   _staffType->setNoteHeadScheme(NoteHeadScheme(v.toInt()));
                   break;
-            case Pid::STAFF_GEN_CLEF:
+            case P_ID::STAFF_GEN_CLEF:
                   _staffType->setGenClef(v.toBool());
                   break;
-            case Pid::STAFF_GEN_TIMESIG:
+            case P_ID::STAFF_GEN_TIMESIG:
                   _staffType->setGenTimesig(v.toBool());
                   break;
-            case Pid::STAFF_GEN_KEYSIG:
+            case P_ID::STAFF_GEN_KEYSIG:
                   _staffType->setGenKeysig(v.toBool());
                   break;
-            case Pid::MAG:
+            case P_ID::MAG:
                   _staffType->setUserMag(v.toDouble());
                   break;
-            case Pid::SMALL:
+            case P_ID::SMALL:
                   _staffType->setSmall(v.toBool());
                   break;
-            case Pid::STAFF_YOFFSET:
+            case P_ID::STAFF_YOFFSET:
                   _staffType->setYoffset(v.value<Spatium>());
                   break;
             default:
@@ -213,34 +213,34 @@ bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant StaffTypeChange::propertyDefault(Pid id) const
+QVariant StaffTypeChange::propertyDefault(P_ID id) const
       {
       switch (id) {
-            case Pid::STEP_OFFSET:
+            case P_ID::STEP_OFFSET:
                   return 0;
-            case Pid::STAFF_LINES:
+            case P_ID::STAFF_LINES:
                   return 5;
-            case Pid::LINE_DISTANCE:
+            case P_ID::LINE_DISTANCE:
                   return Spatium(1.0);
-            case Pid::STAFF_SHOW_BARLINES:
+            case P_ID::STAFF_SHOW_BARLINES:
                   return true;
-            case Pid::STAFF_SHOW_LEDGERLINES:
+            case P_ID::STAFF_SHOW_LEDGERLINES:
                   return true;
-            case Pid::STAFF_SLASH_STYLE:
+            case P_ID::STAFF_SLASH_STYLE:
                   return false;
-            case Pid::STAFF_NOTEHEAD_SCHEME:
+            case P_ID::STAFF_NOTEHEAD_SCHEME:
                   return int(NoteHeadScheme::HEAD_NORMAL);
-            case Pid::STAFF_GEN_CLEF:
+            case P_ID::STAFF_GEN_CLEF:
                   return true;
-            case Pid::STAFF_GEN_TIMESIG:
+            case P_ID::STAFF_GEN_TIMESIG:
                   return true;
-            case Pid::STAFF_GEN_KEYSIG:
+            case P_ID::STAFF_GEN_KEYSIG:
                   return true;
-            case Pid::MAG:
+            case P_ID::MAG:
                   return 1.0;
-            case Pid::SMALL:
+            case P_ID::SMALL:
                   return false;
-            case Pid::STAFF_YOFFSET:
+            case P_ID::STAFF_YOFFSET:
                   return Spatium(0.0);
             default:
                   return Element::propertyDefault(id);

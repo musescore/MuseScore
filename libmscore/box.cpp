@@ -30,6 +30,7 @@
 
 namespace Ms {
 
+
 //---------------------------------------------------------
 //   Box
 //---------------------------------------------------------
@@ -118,9 +119,9 @@ void Box::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
       if (isHBox())
-            eed->pushProperty(Pid::BOX_WIDTH);
+            eed->pushProperty(P_ID::BOX_WIDTH);
       else
-            eed->pushProperty(Pid::BOX_HEIGHT);
+            eed->pushProperty(P_ID::BOX_HEIGHT);
       }
 
 //---------------------------------------------------------
@@ -192,11 +193,15 @@ void Box::write(XmlWriter& xml) const
 
 void Box::writeProperties(XmlWriter& xml) const
       {
-      for (Pid id : {
-         Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
-         Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN }) {
-            writeProperty(xml, id);
-            }
+      writeProperty(xml, P_ID::BOX_HEIGHT);
+      writeProperty(xml, P_ID::BOX_WIDTH);
+      writeProperty(xml, P_ID::TOP_GAP);
+      writeProperty(xml, P_ID::BOTTOM_GAP);
+      writeProperty(xml, P_ID::LEFT_MARGIN);
+      writeProperty(xml, P_ID::RIGHT_MARGIN);
+      writeProperty(xml, P_ID::TOP_MARGIN);
+      writeProperty(xml, P_ID::BOTTOM_MARGIN);
+
       Element::writeProperties(xml);
       for (const Element* e : el())
             e->write(xml);
@@ -247,13 +252,13 @@ bool Box::readProperties(XmlReader& e)
             _topGap = e.readDouble();
             if (score()->mscVersion() >= 206)
                   _topGap *= score()->spatium();
-            setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
+            topGapStyle = PropertyFlags::UNSTYLED;
             }
       else if (tag == "bottomGap") {
             _bottomGap = e.readDouble();
              if (score()->mscVersion() >= 206)
                   _bottomGap *= score()->spatium();
-            setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
+            bottomGapStyle = PropertyFlags::UNSTYLED;
             }
       else if (tag == "leftMargin")
             _leftMargin = e.readDouble();
@@ -272,8 +277,9 @@ bool Box::readProperties(XmlReader& e)
             else {
                   t = new Text(score());
                   t->read(e);
-                  if (t->empty())
+                  if (t->empty()) {
                         qDebug("read empty text");
+                        }
                   else
                         add(t);
                   }
@@ -331,24 +337,24 @@ void Box::add(Element* e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Box::getProperty(Pid propertyId) const
+QVariant Box::getProperty(P_ID propertyId) const
       {
       switch(propertyId) {
-            case Pid::BOX_HEIGHT:
+            case P_ID::BOX_HEIGHT:
                   return _boxHeight;
-            case Pid::BOX_WIDTH:
+            case P_ID::BOX_WIDTH:
                   return _boxWidth;
-            case Pid::TOP_GAP:
+            case P_ID::TOP_GAP:
                   return _topGap;
-            case Pid::BOTTOM_GAP:
+            case P_ID::BOTTOM_GAP:
                   return _bottomGap;
-            case Pid::LEFT_MARGIN:
+            case P_ID::LEFT_MARGIN:
                   return _leftMargin;
-            case Pid::RIGHT_MARGIN:
+            case P_ID::RIGHT_MARGIN:
                   return _rightMargin;
-            case Pid::TOP_MARGIN:
+            case P_ID::TOP_MARGIN:
                   return _topMargin;
-            case Pid::BOTTOM_MARGIN:
+            case P_ID::BOTTOM_MARGIN:
                   return _bottomMargin;
             default:
                   return MeasureBase::getProperty(propertyId);
@@ -359,32 +365,34 @@ QVariant Box::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Box::setProperty(Pid propertyId, const QVariant& v)
+bool Box::setProperty(P_ID propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
-      switch (propertyId) {
-            case Pid::BOX_HEIGHT:
+      switch(propertyId) {
+            case P_ID::BOX_HEIGHT:
                   _boxHeight = v.value<Spatium>();
                   break;
-            case Pid::BOX_WIDTH:
+            case P_ID::BOX_WIDTH:
                   _boxWidth = v.value<Spatium>();
                   break;
-            case Pid::TOP_GAP:
+            case P_ID::TOP_GAP:
                   _topGap = v.toDouble();
+                  topGapStyle = PropertyFlags::UNSTYLED;
                   break;
-            case Pid::BOTTOM_GAP:
+            case P_ID::BOTTOM_GAP:
                   _bottomGap = v.toDouble();
+                  bottomGapStyle = PropertyFlags::UNSTYLED;
                   break;
-            case Pid::LEFT_MARGIN:
+            case P_ID::LEFT_MARGIN:
                   _leftMargin = v.toDouble();
                   break;
-            case Pid::RIGHT_MARGIN:
+            case P_ID::RIGHT_MARGIN:
                   _rightMargin = v.toDouble();
                   break;
-            case Pid::TOP_MARGIN:
+            case P_ID::TOP_MARGIN:
                   _topMargin = v.toDouble();
                   break;
-            case Pid::BOTTOM_MARGIN:
+            case P_ID::BOTTOM_MARGIN:
                   _bottomMargin = v.toDouble();
                   break;
             default:
@@ -398,28 +406,94 @@ bool Box::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Box::propertyDefault(Pid id) const
+QVariant Box::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case Pid::SUB_STYLE:
-                  return int(SubStyleId::BOX);
-            case Pid::BOX_HEIGHT:
-            case Pid::BOX_WIDTH:
+            case P_ID::BOX_HEIGHT:
+            case P_ID::BOX_WIDTH:
                   return Spatium(0.0);
 
-            case Pid::TOP_GAP:
-                  return isHBox() ? 0.0 : score()->styleP(Sid::systemFrameDistance);
-            case Pid::BOTTOM_GAP:
-                  return isHBox() ? 0.0 : score()->styleP(Sid::frameSystemDistance);
+            case P_ID::TOP_GAP:
+                  return isHBox() ? 0.0 : score()->styleP(StyleIdx::systemFrameDistance);
+            case P_ID::BOTTOM_GAP:
+                  return isHBox() ? 0.0 : score()->styleP(StyleIdx::frameSystemDistance);
 
-            case Pid::LEFT_MARGIN:
-            case Pid::RIGHT_MARGIN:
-            case Pid::TOP_MARGIN:
-            case Pid::BOTTOM_MARGIN:
+            case P_ID::LEFT_MARGIN:
+            case P_ID::RIGHT_MARGIN:
+            case P_ID::TOP_MARGIN:
+            case P_ID::BOTTOM_MARGIN:
                   return 0.0;
             default:
                   return MeasureBase::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   propertyFlags
+//---------------------------------------------------------
+
+PropertyFlags& Box::propertyFlags(P_ID id)
+      {
+      switch (id) {
+            case P_ID::TOP_GAP:
+                  return topGapStyle;
+            case P_ID::BOTTOM_GAP:
+                  return bottomGapStyle;
+            default:
+                  return MeasureBase::propertyFlags(id);
+            }
+      }
+
+//---------------------------------------------------------
+//   resetProperty
+//---------------------------------------------------------
+
+void Box::resetProperty(P_ID id)
+      {
+      switch (id) {
+            case P_ID::TOP_GAP:
+                  setTopGap(isHBox() ? 0.0 : score()->styleP(StyleIdx::systemFrameDistance));
+                  topGapStyle = PropertyFlags::STYLED;
+                  break;
+            case P_ID::BOTTOM_GAP:
+                  setBottomGap(isHBox() ? 0.0 : score()->styleP(StyleIdx::frameSystemDistance));
+                  bottomGapStyle = PropertyFlags::STYLED;
+                  break;
+            default:
+                  return MeasureBase::resetProperty(id);
+            }
+      score()->setLayout(tick());
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//    reset all styled values to actual style
+//---------------------------------------------------------
+
+void Box::styleChanged()
+      {
+      if (topGapStyle == PropertyFlags::STYLED)
+            setTopGap(isHBox() ? 0.0 : score()->styleP(StyleIdx::systemFrameDistance));
+      if (bottomGapStyle == PropertyFlags::STYLED)
+            setBottomGap(isHBox() ? 0.0 : score()->styleP(StyleIdx::frameSystemDistance));
+      score()->setLayout(tick());
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+StyleIdx Box::getPropertyStyle(P_ID id) const
+      {
+      switch (id) {
+            case P_ID::TOP_GAP:
+                  return isHBox() ? StyleIdx::NOSTYLE : StyleIdx::systemFrameDistance;
+            case P_ID::BOTTOM_GAP:
+                  return isHBox() ? StyleIdx::NOSTYLE : StyleIdx::frameSystemDistance;
+            default:
+                  break;
+            }
+      return StyleIdx::NOSTYLE;
       }
 
 //---------------------------------------------------------
@@ -447,7 +521,6 @@ void Box::copyValues(Box* origin)
 HBox::HBox(Score* score)
    : Box(score)
       {
-      initSubStyle(SubStyleId::BOX);
       setBoxWidth(Spatium(5.0));
       }
 
@@ -470,6 +543,7 @@ void HBox::layout()
             bbox().setRect(0.0, 0.0, point(boxWidth()), system()->height());
             }
       Box::layout();
+      adjustReadPos();
       }
 
 //---------------------------------------------------------
@@ -558,7 +632,8 @@ Element* Box::drop(EditData& data)
 
             case ElementType::STAFF_TEXT:
                   {
-                  Text* text = new Text(SubStyleId::FRAME, score());
+                  Text* text = new Text(score());
+                  text->init(SubStyle::FRAME);
                   text->setParent(this);
                   text->setXmlText(toStaffText(e)->xmlText());
                   score()->undoAddElement(text);
@@ -642,10 +717,10 @@ bool HBox::isMovable() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant HBox::getProperty(Pid propertyId) const
+QVariant HBox::getProperty(P_ID propertyId) const
       {
       switch (propertyId) {
-            case Pid::CREATE_SYSTEM_HEADER:
+            case P_ID::CREATE_SYSTEM_HEADER:
                   return createSystemHeader();
             default:
                   return Box::getProperty(propertyId);
@@ -656,10 +731,10 @@ QVariant HBox::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool HBox::setProperty(Pid propertyId, const QVariant& v)
+bool HBox::setProperty(P_ID propertyId, const QVariant& v)
       {
       switch (propertyId) {
-            case Pid::CREATE_SYSTEM_HEADER:
+            case P_ID::CREATE_SYSTEM_HEADER:
                   setCreateSystemHeader(v.toBool());
                   score()->setLayout(tick());
                   break;
@@ -673,12 +748,10 @@ bool HBox::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant HBox::propertyDefault(Pid id) const
+QVariant HBox::propertyDefault(P_ID id) const
       {
       switch(id) {
-            case Pid::SUB_STYLE:
-                  return int(SubStyleId::BOX);
-            case Pid::CREATE_SYSTEM_HEADER:
+            case P_ID::CREATE_SYSTEM_HEADER:
                   return true;
             default:
                   return Box::propertyDefault(id);
@@ -692,8 +765,9 @@ QVariant HBox::propertyDefault(Pid id) const
 VBox::VBox(Score* score)
    : Box(score)
       {
-      initSubStyle(SubStyleId::BOX);
       setBoxHeight(Spatium(10.0));
+      setTopGap(score->styleP(StyleIdx::systemFrameDistance));
+      setBottomGap(score->styleP(StyleIdx::frameSystemDistance));
       setLineBreak(true);
       }
 
@@ -740,5 +814,6 @@ void FBox::add(Element* e)
             }
       el().push_back(e);
       }
+
 }
 
