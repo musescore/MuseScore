@@ -190,7 +190,7 @@ void XmlReader::unknown()
             qDebug("tag in <%s> line %lld col %lld: %s",
                qPrintable(docName), lineNumber(), columnNumber(), name().toUtf8().data());
       else
-            qDebug("tag; line %lld col %lld: %s", lineNumber(), columnNumber(), name().toUtf8().data());
+            qDebug("line %lld col %lld: %s", lineNumber(), columnNumber(), name().toUtf8().data());
       skipCurrentElement();
       }
 

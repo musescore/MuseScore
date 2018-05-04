@@ -68,6 +68,7 @@ bool LineSegment::readProperties(XmlReader& e)
       else if (tag == "pos") {
             setUserOff(QPointF());
             setAutoplace(false);
+            e.readNext();
             }
       else if (!SpannerSegment::readProperties(e)) {
             e.unknown();
