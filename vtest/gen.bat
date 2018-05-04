@@ -47,7 +47,7 @@ set JSON_FILE=vtestjob.json
 
 echo [ >> %JSON_FILE%
 FOR /D %%a IN (%SRC%) DO (
-      echo { "in": "..\\%%a.mscz",    "out": "%%a.png"}, >> %JSON_FILE%
+      echo { "in": "..\\%%a.mscx",    "out": "%%a.png"}, >> %JSON_FILE%
 
 )
 echo {}] >> %JSON_FILE%
