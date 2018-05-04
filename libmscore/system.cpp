@@ -225,8 +225,7 @@ void System::layoutSystem(qreal xo1)
                               if (bi->selected() != b->selected()) {
                                     bi->selected() ? score()->select(b) : score()->deselect(b);
                                     }
-                              b->setFirstStaff(firstStaff);
-                              b->setLastStaff(lastStaff);
+                              b->setStaffSpan(firstStaff, lastStaff);
                               bracketWidth[i] = qMax(bracketWidth[i], b->width());
                               }
                         }

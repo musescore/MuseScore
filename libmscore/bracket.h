@@ -53,13 +53,13 @@ class Bracket final : public Element {
       BracketType bracketType() const           { return _bi->bracketType(); }
 
       int firstStaff() const                    { return _firstStaff; }
-      void setFirstStaff(int val)               { _firstStaff = val;  }
-
       int lastStaff() const                     { return _lastStaff; }
-      void setLastStaff(int val)                { _lastStaff = val;  }
+      void setStaffSpan(int a, int b);
 
+      SymId braceSymbol() const                 { return _braceSymbol; }
       int column() const                        { return _bi->column();  }
       int span() const                          { return _bi->bracketSpan();    }
+      qreal magx() const                        { return _magx;                 }
 
       System* system() const                    { return (System*)parent(); }
 

@@ -41,31 +41,6 @@ Bracket::~Bracket()
       {
       }
 
-#if 0
-//---------------------------------------------------------
-//   setSpan
-//---------------------------------------------------------
-
-void Bracket::setSpan(int v)
-      {
-      _span = v;
-      if (bracketType() == BracketType::BRACE) {
-            // total default height of a system of n staves / height of a 5 line staff
-            _magx = v + ((v - 1) * score()->styleS(Sid::akkoladeDistance).val() / 4.0);
-            if (v == 1)
-                  _braceSymbol = SymId::braceSmall;
-            else if (v <= 2)
-                  _braceSymbol = SymId::brace;
-            else if (v <= 3)
-                  _braceSymbol = SymId::braceLarge;
-            else
-                  _braceSymbol = SymId::braceLarger;
-            if (!symIsValid(_braceSymbol))
-                  _braceSymbol = SymId::brace;
-            }
-      }
-#endif
-
 //---------------------------------------------------------
 //   setHeight
 //---------------------------------------------------------
@@ -104,6 +79,32 @@ qreal Bracket::width() const
                   break;
             }
       return w;
+      }
+
+//---------------------------------------------------------
+//   setStaffSpan
+//---------------------------------------------------------
+
+void Bracket::setStaffSpan(int a, int b)
+      {
+      _firstStaff = a;
+      _lastStaff = b;
+
+      if (bracketType() == BracketType::BRACE &&
+         score()->styleSt(Sid::MusicalSymbolFont) != "Emmentaler" && score()->styleSt(Sid::MusicalSymbolFont) != "Gonville")
+            {
+            int v = _lastStaff - _firstStaff + 1;
+            // total default height of a system of n staves / height of a 5 line staff
+            _magx = v + ((v - 1) * score()->styleS(Sid::akkoladeDistance).val() / 4.0);
+            if (v == 1)
+                  _braceSymbol = SymId::braceSmall;
+            else if (v <= 2)
+                  _braceSymbol = SymId::brace;
+            else if (v <= 3)
+                  _braceSymbol = SymId::braceLarge;
+            else
+                  _braceSymbol = SymId::braceLarger;
+            }
       }
 
 //---------------------------------------------------------
@@ -151,7 +152,6 @@ void Bracket::layout()
                         _shape.add(bbox());
                         }
                   else {
-                        _braceSymbol = SymId::brace;
                         qreal h = h2 * 2;
                         qreal w = symWidth(_braceSymbol) * _magx;
                         bbox().setRect(0, 0, w, h);
@@ -419,6 +419,8 @@ bool Bracket::setProperty(Pid id, const QVariant& v)
 
 QVariant Bracket::propertyDefault(Pid id) const
       {
+      if (id == Pid::BRACKET_COLUMN)
+            return 0;
       QVariant v = Element::propertyDefault(id);
       if (!v.isValid())
             v = _bi->propertyDefault(id);

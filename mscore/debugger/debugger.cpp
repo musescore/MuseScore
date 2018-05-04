@@ -65,6 +65,7 @@
 #include "libmscore/pitchspelling.h"
 #include "libmscore/chordlist.h"
 #include "libmscore/bracket.h"
+#include "libmscore/bracketItem.h"
 #include "libmscore/trill.h"
 #include "libmscore/timesig.h"
 #include "libmscore/systemdivider.h"
@@ -671,7 +672,10 @@ void Debugger::updateElement(Element* el)
                   case ElementType::TRILL_SEGMENT:
                   case ElementType::VIBRATO_SEGMENT:
                   case ElementType::HAIRPIN_SEGMENT:
-                        ew = new LineSegmentView; break;
+                        ew = new LineSegmentView;
+                        break;
+                  case ElementType::BRACKET:
+                        ew = new BracketView;
                         break;
                   default:
                         ew = new ElementView;
@@ -2748,6 +2752,30 @@ void SystemView::measureClicked(QListWidgetItem* i)
       {
       ElementListWidgetItem* item = (ElementListWidgetItem*)i;
       emit elementChanged(item->element());
+      }
+
+//---------------------------------------------------------
+//   BracketView
+//---------------------------------------------------------
+
+BracketView::BracketView()
+   : ShowElementBase()
+      {
+      br.setupUi(addWidget());
+      }
+
+void BracketView::setElement(Element* e)
+      {
+      ShowElementBase::setElement(e);
+      Bracket* b = toBracket(element());
+
+      br.braceSymbol->setValue(int(b->braceSymbol()));
+      br.type->setValue(int(b->bracketType()));
+      br.firstStaff->setValue(b->firstStaff());
+      br.lastStaff->setValue(b->lastStaff());
+      br.column->setValue(b->column());
+      br.span->setValue(b->span());
+      br.magx->setValue(int(b->magx()));
       }
 
 }
