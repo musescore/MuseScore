@@ -86,6 +86,7 @@ QT5_WRAP_UI (ui_headers
       debugger/stem.ui
       debugger/system.ui
       debugger/timesig.ui
+      debugger/bracket.ui
 
       inspector/inspector_element.ui
       inspector/inspector_vbox.ui

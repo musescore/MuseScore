@@ -56,6 +56,7 @@
 #include "ui_spanner.h"
 #include "ui_system.h"
 #include "ui_timesig.h"
+#include "ui_bracket.h"
 
 #include "globals.h"
 #include "libmscore/element.h"
@@ -782,6 +783,21 @@ class TimeSigView : public ShowElementBase {
       TimeSigView();
       virtual void setElement(Element*);
       };
+
+//---------------------------------------------------------
+//   BracketView
+//---------------------------------------------------------
+
+class BracketView : public ShowElementBase {
+      Q_OBJECT;
+
+      Ui::Bracket br;
+
+   public:
+      BracketView();
+      virtual void setElement(Element*);
+      };
+
 
 } // namespace Ms
 #endif
