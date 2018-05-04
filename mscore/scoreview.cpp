@@ -1031,7 +1031,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       QMenu* popup = new QMenu(this);
       popup->setSeparatorsCollapsible(false);
       QAction* a = popup->addSeparator();
-      
+
       // Set Slur or Tie according to the selected object
       if (obj->type() != Element::Type::SLUR_SEGMENT) {
             if ((obj->type() == Element::Type::STAFF_TEXT) && obj->systemFlag())
@@ -2265,13 +2265,21 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
                   }
             QRectF toPagesRect = pagesRect.translated(dx, dy);
 
-            if (preferences.limitScrollArea && pagesRect.width() <= width()) {
-                  if (score()->layoutMode() == LayoutMode::LINE)
-                        // keep score fixed in place horizontally
-                        dx = 0;
-                  else
-                        // center horizontally on screen
-                        dx = (width() - pagesRect.width()) / 2 - pagesRect.left();
+            if (preferences.limitScrollArea) {
+                  if (pagesRect.width() <= rect.width()) {
+                        if (score()->layoutMode() == LayoutMode::LINE)
+                              // keep score fixed in place horizontally
+                              dx = 0;
+                        else
+                              // center horizontally on screen
+                              dx = (rect.width() - pagesRect.width()) / 2 - pagesRect.left();
+                        }
+                  else if (toPagesRect.left() > rect.left())
+                        // get rid of the left margin
+                        dx = rect.left() - pagesRect.left();
+                  else if (toPagesRect.right() < rect.right())
+                        // get rid of the right margin
+                        dx = rect.right() - pagesRect.right();
                   }
             else if (dx > 0) { // move right
                   if (toPagesRect.right() > rect.right() && toPagesRect.left() > rect.left()) {
@@ -2294,13 +2302,21 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
                         }
                   }
 
-            if (preferences.limitScrollArea && pagesRect.height() <= height()) {
-                  if (score()->layoutMode() == LayoutMode::LINE)
-                        // keep score fixed in place vertically
-                        dy = 0;
-                  else
-                        // center vertically on screen
-                        dy = (height() - pagesRect.height()) / 2 - pagesRect.top();
+            if (preferences.limitScrollArea) {
+                  if (pagesRect.height() <= rect.height()) {
+                        if (score()->layoutMode() == LayoutMode::LINE)
+                              // keep score fixed in place vertically
+                              dy = 0;
+                        else
+                              // center vertically on screen
+                              dy = (rect.height() - pagesRect.height()) / 2 - pagesRect.top();
+                        }
+                  else if (toPagesRect.top() > rect.top())
+                        // get rid of the top margin
+                        dy = rect.top() - pagesRect.top();
+                  else if (toPagesRect.bottom() < rect.bottom())
+                        // get rid of the bottom margin
+                        dy = rect.bottom() - pagesRect.bottom();
                   }
             else if (dy > 0) { // move down
                   if (toPagesRect.bottom() > rect.bottom() && toPagesRect.top() > rect.top()) {
@@ -2452,6 +2468,15 @@ void ScoreView::setMag(MagIdx idx, double mag)
       {
       _magIdx = idx;
       setMag(mag * (mscore->physicalDotsPerInch() / DPI));
+      int dx = 0, dy = 0;
+      constraintCanvas(&dx, &dy);
+      if (dx != 0 || dy != 0) {
+            _matrix.setMatrix(_matrix.m11(), _matrix.m12(), _matrix.m13(), _matrix.m21(),
+               _matrix.m22(), _matrix.m23(), _matrix.dx()+dx, _matrix.dy()+dy, _matrix.m33());
+            imatrix = _matrix.inverted();
+            scroll(dx, dy, QRect(0, 0, width(), height()));
+            emit offsetChanged(_matrix.dx(), _matrix.dy());
+            }
       emit viewRectChanged();
       update();
       }
