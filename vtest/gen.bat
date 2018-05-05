@@ -34,7 +34,8 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  lyrics-1,lyrics-2,lyrics-3,lyrics-4,lyrics-5,lyrics-6,lyrics-7,voice-1,voice-2,slash-1,slash-2, ^
  system-1,system-2,system-3,system-4,system-5,system-6,system-7,hide-1,small-1,tremolo-1, ^
  staff-1,staff-2, ^
- slashed_chord-layout-12, slashed_chord-layout-7, slashed_grace-3, slashed_noteheadposition-1
+ slashed_chord-layout-12, slashed_chord-layout-7, slashed_grace-3, slashed_noteheadposition-1, ^
+ drumset-custom-1
 
 set MSCORE=..\win32install\bin\musescore.exe
 set DPI=130

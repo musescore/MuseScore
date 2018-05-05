@@ -60,7 +60,8 @@ else
        staff-1 staff-2 layout-1 layout-2 layout-3 layout-4 layout-5 layout-6 layout-7 layout-8\
        articulation-1\
        percussion-grace\
-       slashed_chord-layout-12 slashed_chord-layout-7 slashed_grace-3 slashed_noteheadposition-1"
+       slashed_chord-layout-12 slashed_chord-layout-7 slashed_grace-3 slashed_noteheadposition-1\
+       drumset-custom-1"
 fi
 
 #####DEBUG: failed tests
