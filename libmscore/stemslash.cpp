@@ -60,7 +60,7 @@ void StemSlash::layout()
             y += l * 1.2;
             h2 = l * .4;
             }
-      qreal w  = chord()->upNote()->headWidth() * .7;
+      qreal w  = chord()->upNote()->bboxRightPos() * .7;
       setLine(QLineF(QPointF(x + w, y - h2), QPointF(x - w, y + h2)));
       }
 
