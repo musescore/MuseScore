@@ -5954,7 +5954,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Used with '-o <file>.pdf', export score and parts"));
       parser.addOption(QCommandLineOption(      "no-fallback-font", "Don't use Bravura as fallback musical font"));
       parser.addOption(QCommandLineOption({"f", "force"}, "Used with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
-      parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate", "bitrate"));
+      parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -6006,7 +6006,12 @@ int main(int argc, char* av[])
             QString temp = parser.value("r");
             if (temp.isEmpty())
                    parser.showHelp(EXIT_FAILURE);
-            preferences.setTemporaryPreference(PREF_EXPORT_PNG_RESOLUTION, temp.toDouble());
+            bool ok = false;
+            double res = temp.toDouble(&ok);
+            if (ok)
+                  preferences.setTemporaryPreference(PREF_EXPORT_PNG_RESOLUTION, res);
+            else
+                  fprintf(stderr, "PNG resolution value '%s' not recognized, using default setting from preferences instead.\n", qPrintable(temp));
             }
       if (parser.isSet("T")) {
             QString temp = parser.value("T");
@@ -6014,8 +6019,10 @@ int main(int argc, char* av[])
                    parser.showHelp(EXIT_FAILURE);
             bool ok = false;
             trimMargin = temp.toInt(&ok);
-            if (!ok)
+            if (!ok) {
+                  fprintf(stderr, "Trim margin value '%s' not recognized, so no trimming will be done.\n", qPrintable(temp));
                   trimMargin = -1;
+                  }
            }
       if (parser.isSet("x")) {
             QString temp = parser.value("x");
@@ -6023,17 +6030,21 @@ int main(int argc, char* av[])
                    parser.showHelp(EXIT_FAILURE);
             bool ok = false;
             guiScaling = temp.toDouble(&ok);
-            if (!ok)
+            if (!ok) {
+                  fprintf(stderr, "GUI scaling value '%s' not recognized, so the values detected by Qt are taken.\n", qPrintable(temp));
                   guiScaling = 0.0;
+                  }
             }
       if (parser.isSet("D")) {
             QString temp = parser.value("D");
             if (temp.isEmpty())
                    parser.showHelp(EXIT_FAILURE);
-            bool ok = 0.0;
+            bool ok = false;
             userDPI = temp.toDouble(&ok);
-            if (!ok)
+            if (!ok) {
+                  fprintf(stderr, "DPI value '%s' not recognized, so the values detected by Qt are taken.\n", qPrintable(temp));
                   userDPI = 0.0;
+                  }
             }
       if (parser.isSet("S")) {
             styleFile = parser.value("S");
@@ -6074,6 +6085,8 @@ int main(int argc, char* av[])
             int rate = temp.toInt(&ok);
             if (ok)
                   preferences.setTemporaryPreference(PREF_EXPORT_MP3_BITRATE, rate);
+            else
+                  fprintf(stderr, "MP3 bitrate value '%s' not recognized, using default setting from preferences instead.\n", qPrintable(temp));
            }
 
       QStringList argv = parser.positionalArguments();
