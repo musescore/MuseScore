@@ -141,7 +141,8 @@ bool processJob = false;
 bool externalIcons = false;
 bool pluginMode = false;
 static bool startWithNewScore = false;
-double converterDpi = 0;
+double converterDpi = 0.0;
+static int mp3BitRate = 0;
 double guiScaling = 0.0;
 static double userDPI = 0.0;
 int trimMargin = -1;
@@ -5160,7 +5161,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       int oldSampleRate = MScore::sampleRate;
       int sampleRate = preferences.exportAudioSampleRate;
-      exporter.setBitrate(preferences.exportMp3BitRate);
+      exporter.setBitrate(mp3BitRate);
 
       int inSamples = exporter.initializeStream(channels, sampleRate);
       if (inSamples < 0) {
@@ -5453,7 +5454,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"w", "no-webview"}, "No web view in start center"));
       parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Used with '-o <file>.pdf', export score and parts"));
       parser.addOption(QCommandLineOption({"f", "force"}, "Used with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
-      parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate", "bitrate"));
+      parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -5504,7 +5505,12 @@ int main(int argc, char* av[])
             QString temp = parser.value("r");
             if (temp.isEmpty())
                    parser.showHelp(EXIT_FAILURE);
-            converterDpi = temp.toDouble();
+            bool ok = false;
+            converterDpi = temp.toDouble(&ok);
+            if (!ok) {
+                  fprintf(stderr, "PNG resolution value '%s' not recognized, using default setting from preferences instead.\n", qPrintable(temp));
+                  converterDpi = 0.0;
+                  }
             }
       if (parser.isSet("T")) {
             QString temp = parser.value("T");
@@ -5512,8 +5518,10 @@ int main(int argc, char* av[])
                    parser.showHelp(EXIT_FAILURE);
             bool ok = false;
             trimMargin = temp.toInt(&ok);
-            if (!ok)
+            if (!ok) {
+                  fprintf(stderr, "Trim margin value '%s' not recognized, so no trimming will be done.\n", qPrintable(temp));
                   trimMargin = -1;
+                  }
            }
       if (parser.isSet("x")) {
             QString temp = parser.value("x");
@@ -5521,8 +5529,10 @@ int main(int argc, char* av[])
                    parser.showHelp(EXIT_FAILURE);
             bool ok = false;
             guiScaling = temp.toDouble(&ok);
-            if (!ok)
+            if (!ok) {
+                  fprintf(stderr, "GUI scaling value '%s' not recognized, so the values detected by Qt are taken.\n", qPrintable(temp));
                   guiScaling = 0.0;
+                  }
             }
       if (parser.isSet("D")) {
             QString temp = parser.value("D");
@@ -5530,8 +5540,10 @@ int main(int argc, char* av[])
                    parser.showHelp(EXIT_FAILURE);
             bool ok = 0.0;
             userDPI = temp.toDouble(&ok);
-            if (!ok)
+            if (!ok) {
+                  fprintf(stderr, "DPI value '%s' not recognized, so the values detected by Qt are taken.\n", qPrintable(temp));
                   userDPI = 0.0;
+                  }
             }
       if (parser.isSet("S")) {
             styleFile = parser.value("S");
@@ -5569,9 +5581,11 @@ int main(int argc, char* av[])
             if (temp.isEmpty())
                    parser.showHelp(EXIT_FAILURE);
             bool ok = false;
-            preferences.exportMp3BitRate = temp.toInt(&ok);
-            if (!ok)
-                  preferences.exportMp3BitRate = 128;
+            mp3BitRate = temp.toInt(&ok);
+            if (!ok) {
+                  fprintf(stderr, "MP3 bitrate value '%s' not recognized, using default setting from preferences instead.\n", qPrintable(temp));
+                  mp3BitRate = 0;
+                  }
            }
 
       QStringList argv = parser.positionalArguments();
@@ -5674,8 +5688,10 @@ int main(int argc, char* av[])
 
       preferences.readDefaultStyle();
 
-      if (converterDpi == 0)
+      if (converterDpi == 0.0)
             converterDpi = preferences.pngResolution;
+      if (mp3BitRate == 0)
+            mp3BitRate = preferences.exportMp3BitRate;
 
       QSplashScreen* sc = 0;
       QTimer* stimer = 0;
