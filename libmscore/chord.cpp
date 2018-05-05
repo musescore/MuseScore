@@ -353,7 +353,7 @@ qreal Chord::noteHeadWidth() const
 
 //---------------------------------------------------------
 //   stemPosX
-//    return Chord coordinates
+//    return Chord coordinates. Based on nominal notehead
 //---------------------------------------------------------
 
 qreal Chord::stemPosX() const
@@ -378,7 +378,7 @@ QPointF Chord::stemPos() const
             return st->chordStemPos(this) * spatium() + p;
 
       if (_up) {
-            qreal nhw = _notes.size() == 1 ? downNote()->headWidth() : noteHeadWidth();
+            qreal nhw = _notes.size() == 1 ? downNote()->bboxRightPos() : noteHeadWidth();
             p.rx() += nhw;
             p.ry() += downNote()->pos().y();
             }
@@ -709,7 +709,9 @@ void Chord::addLedgerLines()
                   // check if note horiz. pos. is outside current range
                   // if more length on the right, increase range
 //                  note->layout();
-                  x = note->pos().x();
+
+                  //ledger lines need the leftmost point of the notehead with a respect of bbox
+                  x = note->pos().x() + note->bboxXShift();
                   if (x - extraLen < minX) {
                         minX  = x - extraLen;
                         // increase width of all lines between this one and the staff
@@ -1126,9 +1128,9 @@ qreal Chord::centerX() const
             return staff()->staffType(tick())->chordStemPosX(this) * spatium();
 
       const Note* note = up() ? upNote() : downNote();
-      qreal x = note->pos().x() + note->headWidth() * .5;
+      qreal x = note->pos().x() + note->noteheadCenterX();
       if (note->mirror())
-            x += note->headWidth() * (up() ? -1.0 : 1.0);
+                  x += (note->headBodyWidth()) * (up() ? -1.0 : 1.0);
       return x;
       }
 
@@ -1834,10 +1836,10 @@ void Chord::layoutPitched()
                               if (sc->width() > sn->width()) {
                                     // chord with second?
                                     // account for noteheads further to right
-                                    qreal snEnd = sn->x() + sn->headWidth();
+                                    qreal snEnd = sn->x() + sn->bboxRightPos();
                                     qreal scEnd = snEnd;
                                     for (unsigned i = 0; i < sc->notes().size(); ++i)
-                                          scEnd = qMax(scEnd, sc->notes().at(i)->x() + sc->notes().at(i)->headWidth());
+                                          scEnd = qMax(scEnd, sc->notes().at(i)->x() + sc->notes().at(i)->bboxRightPos());
                                     overlap += scEnd - snEnd;
                                     }
                               else
@@ -3284,7 +3286,7 @@ void Chord::layoutArticulations()
                         else
                               y += _spatium;
                         if (_up)
-                              x = downNote()->headWidth() - stem()->width() * .5;
+                              x = downNote()->bboxRightPos() - stem()->width() * .5;
                         else
                               x = stem()->width() * .5;
                         }
@@ -3311,7 +3313,7 @@ void Chord::layoutArticulations()
                         else
                               y -= _spatium;
                         if (_up)
-                              x = downNote()->headWidth() - stem()->width() * .5;
+                              x = downNote()->bboxRightPos() - stem()->width() * .5;
                         else
                               x = stem()->width() * .5;
                         }
