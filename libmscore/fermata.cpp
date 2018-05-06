@@ -199,7 +199,7 @@ void Fermata::layout()
 
       qreal x = 0.0;
       Element* e = s->element(track());
-      if (e)
+      if (e && !e->isChord())
             x = e->x() + e->width() * staff()->mag(0) * .5;
       else
             x = score()->noteHeadWidth() * staff()->mag(0) * .5;
