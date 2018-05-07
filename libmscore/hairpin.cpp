@@ -443,14 +443,15 @@ QVariant HairpinSegment::propertyDefault(Pid id) const
 Hairpin::Hairpin(Score* s)
    : TextLineBase(s)
       {
-      _hairpinType           = HairpinType::CRESC_HAIRPIN;
       initSubStyle(SubStyleId::HAIRPIN);
+
       resetProperty(Pid::BEGIN_TEXT_PLACE);
+      resetProperty(Pid::HAIRPIN_TYPE);
+      resetProperty(Pid::LINE_VISIBLE);
 
       _hairpinCircledTip     = false;
       _veloChange            = 0;
       _dynRange              = Dynamic::Range::PART;
-      setLineVisible(false);
       }
 
 //---------------------------------------------------------
@@ -673,6 +674,12 @@ QVariant Hairpin::propertyDefault(Pid id) const
 
             case Pid::BEGIN_TEXT_PLACE:
                   return int(PlaceText::LEFT);
+
+            case Pid::LINE_VISIBLE:
+                  return true;
+
+            case Pid::HAIRPIN_TYPE:
+                  return int(HairpinType::CRESC_HAIRPIN);
 
             default:
                   return TextLineBase::propertyDefault(id);
