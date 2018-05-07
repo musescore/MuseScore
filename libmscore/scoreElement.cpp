@@ -188,7 +188,7 @@ QVariant ScoreElement::propertyDefault(Pid id) const
                   return score()->styleV(p.sid);
             }
 #endif
-      qDebug("<%s> not found in <%s> style <%s>", propertyName(id), name(), subStyleName(subStyleId()));
+      qDebug("<%s>(%d) not found in <%s> style <%s>", propertyName(id), int(id), name(), subStyleName(subStyleId()));
       return QVariant();
       }
 
