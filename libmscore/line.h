@@ -64,7 +64,7 @@ class LineSegment : public SpannerSegment {
 //---------------------------------------------------------
 
 class SLine : public Spanner {
-      Spatium _lineWidth      { 0.15 };
+      qreal _lineWidth;
       QColor _lineColor       { MScore::defaultColor };
       Qt::PenStyle _lineStyle { Qt::SolidLine };
       qreal _dashLineLen      { 5.0   };
@@ -98,10 +98,10 @@ class SLine : public Spanner {
       bool diagonal() const               { return _diagonal; }
       void setDiagonal(bool v)            { _diagonal = v;    }
 
-      Spatium lineWidth() const           { return _lineWidth;            }
+      qreal lineWidth() const             { return _lineWidth;            }
       QColor lineColor() const            { return _lineColor;            }
       Qt::PenStyle lineStyle() const      { return _lineStyle;            }
-      void setLineWidth(const Spatium& v) { _lineWidth = v;               }
+      void setLineWidth(const qreal& v)   { _lineWidth = v;               }
       void setLineColor(const QColor& v)  { _lineColor = v;               }
       void setLineStyle(Qt::PenStyle v)   { _lineStyle = v;               }
 

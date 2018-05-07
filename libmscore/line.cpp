@@ -488,6 +488,7 @@ SLine::SLine(Score* s, ElementFlags f)
    : Spanner(s, f)
       {
       setTrack(0);
+      _lineWidth = 0.15 * spatium();
       }
 
 SLine::SLine(const SLine& s)
@@ -559,7 +560,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                           ns = ns->next();
                                           }
                                     if (crFound) {
-                                          qreal nextNoteDistance = ns->x() - s->x() + lineWidth().val() * sp;
+                                          qreal nextNoteDistance = ns->x() - s->x() + lineWidth();
                                           if (x > nextNoteDistance)
                                                 x = qMax(width, nextNoteDistance);
                                           }
@@ -1100,7 +1101,7 @@ bool SLine::readProperties(XmlReader& e)
       else if (tag == "anchor")
             setAnchor(Anchor(e.readInt()));
       else if (tag == "lineWidth")
-            _lineWidth = Spatium(e.readDouble());
+            _lineWidth = e.readDouble() * spatium();
       else if (tag == "lineStyle")
             _lineStyle = Qt::PenStyle(e.readInt());
       else if (tag == "dashLineLength")
@@ -1209,7 +1210,7 @@ bool SLine::setProperty(Pid id, const QVariant& v)
                   _lineColor = v.value<QColor>();
                   break;
             case Pid::LINE_WIDTH:
-                  _lineWidth = v.value<Spatium>();
+                  _lineWidth = v.toReal();
                   break;
             case Pid::LINE_STYLE:
                   _lineStyle = Qt::PenStyle(v.toInt());
@@ -1239,7 +1240,7 @@ QVariant SLine::propertyDefault(Pid id) const
             case Pid::LINE_COLOR:
                   return MScore::defaultColor;
             case Pid::LINE_WIDTH:
-                  return Spatium(0.15);
+                  return 0.15 * spatium();
             case Pid::LINE_STYLE:
                   return int(Qt::SolidLine);
             case Pid::DASH_LINE_LEN:

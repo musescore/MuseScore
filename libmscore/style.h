@@ -793,6 +793,7 @@ enum class SubStyleId {
       FRET,
       TREMOLO_BAR,
       TIMESIG,
+      STEM,
       USER1,
       USER2,
       SUBSTYLES

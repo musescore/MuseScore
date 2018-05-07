@@ -364,7 +364,7 @@ void HairpinSegment::draw(QPainter* painter) const
             color = curColor();
       else
             color = hairpin()->lineColor();
-      QPen pen(color, point(hairpin()->lineWidth()), hairpin()->lineStyle());
+      QPen pen(color, hairpin()->lineWidth(), hairpin()->lineStyle());
       painter->setPen(pen);
 
       if (drawCircledTip) {
@@ -421,10 +421,6 @@ bool HairpinSegment::setProperty(Pid id, const QVariant& v)
 
 QVariant HairpinSegment::propertyDefault(Pid id) const
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->propertyDefault(id);
-            }
       switch (id) {
             case Pid::VELO_CHANGE:
             case Pid::HAIRPIN_TYPE:
@@ -432,6 +428,10 @@ QVariant HairpinSegment::propertyDefault(Pid id) const
             case Pid::DYNAMIC_RANGE:
                   return spanner()->propertyDefault(id);
             default:
+                  for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
+                        if (spp->pid == id)
+                              return spanner()->propertyDefault(id);
+                        }
                   return TextLineBaseSegment::propertyDefault(id);
             }
       }
@@ -479,6 +479,8 @@ void Hairpin::setHairpinType(HairpinType val)
                   setBeginText("dim.");
                   setContinueText("(dim.)");
                   setLineStyle(Qt::CustomDashLine);
+                  break;
+            case HairpinType::INVALID:
                   break;
             };
       }
@@ -634,9 +636,6 @@ bool Hairpin::setProperty(Pid id, const QVariant& v)
                   break;
             case Pid::DYNAMIC_RANGE:
                   _dynRange = Dynamic::Range(v.toInt());
-                  break;
-            case Pid::LINE_WIDTH:
-                  TextLineBase::setProperty(id, v);
                   break;
             case Pid::HAIRPIN_HEIGHT:
                   _hairpinHeight = v.value<Spatium>();

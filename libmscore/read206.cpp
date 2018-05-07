@@ -1130,7 +1130,7 @@ static void readVolta(XmlReader& e, Volta* volta)
                         }
                   }
             else if (tag == "lineWidth") {
-                  volta->setLineWidth(Spatium(e.readDouble()));
+                  volta->setLineWidth(e.readDouble() * volta->spatium());
                   // TODO lineWidthStyle = PropertyStyle::UNSTYLED;
                   }
             else if (!readTextLineProperties(e, volta))
@@ -1196,7 +1196,7 @@ static void readHairpin(XmlReader& e, Hairpin* h)
             if (tag == "subtype")
                   h->setHairpinType(HairpinType(e.readInt()));
             else if (tag == "lineWidth") {
-                  h->setLineWidth(Spatium(e.readDouble()));
+                  h->setLineWidth(e.readDouble() * h->spatium());
                   // lineWidthStyle = PropertyFlags::UNSTYLED;
                   }
             else if (tag == "hairpinHeight") {
