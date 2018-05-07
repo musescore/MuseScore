@@ -207,6 +207,7 @@ void ShortcutCaptureDialog::clearClicked()
       replaceButton->setEnabled(false);
       nshrtLabel->setText("");
       key = 0;
+      nshrtLabel->setFocus();
       }
 
 //---------------------------------------------------------
