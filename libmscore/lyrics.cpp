@@ -603,7 +603,7 @@ LyricsLine::LyricsLine(Score* s)
 
       setGenerated(true);           // no need to save it, as it can be re-generated
       setDiagonal(false);
-      setLineWidth(Spatium(Lyrics::LYRICS_DASH_DEFAULT_LINE_THICKNESS));
+      setLineWidth(Lyrics::LYRICS_DASH_DEFAULT_LINE_THICKNESS * spatium());
       setAnchor(Spanner::Anchor::SEGMENT);
       _nextLyrics = 0;
       }
@@ -622,7 +622,7 @@ void LyricsLine::layout()
       {
       bool tempMelismaTicks = (lyrics()->ticks() == Lyrics::TEMP_MELISMA_TICKS);
       if (lyrics()->ticks()) {              // melisma
-            setLineWidth(score()->styleS(Sid::lyricsLineThickness));
+            setLineWidth(score()->styleP(Sid::lyricsLineThickness));
             // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
             if (tempMelismaTicks)
                   lyrics()->setTicks(0);
@@ -841,7 +841,7 @@ void LyricsLineSegment::layout()
       // MELISMA vs. DASHES
       if (isEndMelisma) {                 // melisma
             _numOfDashes = 1;
-            rypos()  -= lyricsLine()->lineWidth().val() * sp * HALF; // let the line 'sit on' the base line
+            rypos()  -= lyricsLine()->lineWidth() * HALF; // let the line 'sit on' the base line
             qreal offsetX = score()->styleP(Sid::minNoteDistance) * mag();
             // if final segment, extend slightly after the chord, otherwise shorten it
             rxpos2() +=
@@ -887,7 +887,7 @@ void LyricsLineSegment::layout()
 
       // set bounding box
       QRectF r = QRectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
-      qreal lw = spatium() * lyricsLine()->lineWidth().val() * HALF;
+      qreal lw = lyricsLine()->lineWidth() * HALF;
       setbbox(r.adjusted(-lw, -lw, lw, lw));
       }
 
@@ -902,7 +902,7 @@ void LyricsLineSegment::draw(QPainter* painter) const
       qreal _spatium = spatium();
 
       QPen pen(lyricsLine()->lyrics()->curColor());
-      pen.setWidthF(lyricsLine()->lineWidth().val() * _spatium);
+      pen.setWidthF(lyricsLine()->lineWidth());
       pen.setCapStyle(Qt::FlatCap);
       painter->setPen(pen);
       if (lyricsLine()->lyrics()->ticks() > 0)           // melisma

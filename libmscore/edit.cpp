@@ -1365,10 +1365,20 @@ void Score::cmdFlip()
                   Hairpin* h = toHairpinSegment(e)->hairpin();
                   HairpinType st = h->hairpinType();
                   switch (st)  {
-                        case HairpinType::CRESC_HAIRPIN:     st = HairpinType::DECRESC_HAIRPIN; break;
-                        case HairpinType::DECRESC_HAIRPIN:   st = HairpinType::CRESC_HAIRPIN; break;
-                        case HairpinType::CRESC_LINE:        st = HairpinType::DECRESC_LINE; break;
-                        case HairpinType::DECRESC_LINE:      st = HairpinType::CRESC_LINE; break;
+                        case HairpinType::CRESC_HAIRPIN:
+                              st = HairpinType::DECRESC_HAIRPIN;
+                              break;
+                        case HairpinType::DECRESC_HAIRPIN:
+                              st = HairpinType::CRESC_HAIRPIN;
+                              break;
+                        case HairpinType::CRESC_LINE:
+                              st = HairpinType::DECRESC_LINE;
+                              break;
+                        case HairpinType::DECRESC_LINE:
+                              st = HairpinType::CRESC_LINE;
+                              break;
+                        case HairpinType::INVALID:
+                              break;
                         }
                   h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(st));
                   }

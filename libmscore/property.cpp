@@ -165,7 +165,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::GROUPS,                  "groups",                  false, 0,                       P_TYPE::GROUPS          },
       { Pid::LINE_STYLE,              "line_style",              false, "lineStyle",             P_TYPE::INT             },
       { Pid::LINE_COLOR,              "line_color",              false, 0,                       P_TYPE::COLOR           },
-      { Pid::LINE_WIDTH,              "line_width",              false, "lineWidth",             P_TYPE::SPATIUM         },
+      { Pid::LINE_WIDTH,              "line_width",              false, "lineWidth",             P_TYPE::SP_REAL         },
       { Pid::LASSO_POS,               "lasso_pos",               false, 0,                       P_TYPE::POINT_MM        },
       { Pid::LASSO_SIZE,              "lasso_size",              false, 0,                       P_TYPE::SIZE_MM         },
       { Pid::TIME_STRETCH,            "time_stretch",            false, "timeStretch",           P_TYPE::REAL            },

@@ -1384,6 +1384,11 @@ const std::vector<StyledProperty> timesigStyle {
       { Sid::NOSTYLE,                            Pid::END                     }      // end of list marker
       };
 
+const std::vector<StyledProperty> stemStyle {
+      { Sid::stemWidth,                          Pid::LINE_WIDTH              },
+      { Sid::NOSTYLE,                            Pid::END                     }      // end of list marker
+      };
+
 const std::vector<StyledProperty> user1Style {
       { Sid::user1FontFace,                      Pid::FONT_FACE              },
       { Sid::user1FontSize,                      Pid::FONT_SIZE              },
@@ -1465,6 +1470,7 @@ static constexpr std::array<StyledPropertyListName, int(SubStyleId::SUBSTYLES)> 
       { QT_TRANSLATE_NOOP("TextStyle", "FretDiagram"),             &fretStyle,                      SubStyleId::FRET  },
       { "TremoloBar",                                              &tremoloBarStyle,                SubStyleId::TREMOLO_BAR },
       { "TimeSig",                                                 &timesigStyle,                   SubStyleId::TIMESIG },
+      { "Stem",                                                    &stemStyle,                      SubStyleId::STEM },
       { QT_TRANSLATE_NOOP("TextStyle", "User-1"),                  &user1Style,                     SubStyleId::USER1 },
       { QT_TRANSLATE_NOOP("TextStyle", "User-2"),                  &user2Style,                     SubStyleId::USER2 },
       } };
@@ -1538,6 +1544,10 @@ const char* MStyle::valueType(const Sid i)
 
 QVariant MStyle::value(Sid idx) const
       {
+      if (!_values[int(idx)].isValid()) {
+            qDebug("invalid style value %d %s", int(idx), MStyle::valueName(idx));
+            return QVariant();
+            }
       return _values[int(idx)];
       }
 
