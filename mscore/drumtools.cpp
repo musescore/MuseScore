@@ -54,6 +54,10 @@ DrumTools::DrumTools(QWidget* parent)
       w->setLayout(layout);
 
       QVBoxLayout* layout1 = new QVBoxLayout;
+      layout1->setSpacing(6);
+      pitchName = new QLabel;
+      pitchName->setAlignment(Qt::AlignCenter);
+      layout1->addWidget(pitchName);
       editButton = new QToolButton;
       layout1->addWidget(editButton);
       layout1->addStretch();
@@ -77,6 +81,7 @@ DrumTools::DrumTools(QWidget* parent)
       void boxClicked(int);
       connect(drumPalette, SIGNAL(boxClicked(int)), SLOT(drumNoteSelected(int)));
       retranslate();
+      drumPalette->setContextMenuPolicy(Qt::PreventContextMenu);
       }
 
 //---------------------------------------------------------
@@ -121,6 +126,9 @@ void DrumTools::updateDrumset(const Drumset* ds)
             chord->setStemDirection(dir);
             chord->setUp(up);
             chord->setTrack(voice);
+            Stem* stem = new Stem(gscore);
+            stem->setLen((up ? -3.0 : 3.0) * _spatium);
+            chord->add(stem);
             Note* note = new Note(gscore);
             note->setMark(true);
             note->setParent(chord);
@@ -130,11 +138,14 @@ void DrumTools::updateDrumset(const Drumset* ds)
             note->setLine(line);
             note->setPos(0.0, _spatium * .5 * line);
             note->setHeadGroup(noteHead);
+            SymId noteheadSym = SymId::noteheadBlack;
+            if (noteHead == NoteHead::Group::HEAD_CUSTOM)
+                  noteheadSym = drumset->noteHeads(pitch, NoteHead::Type::HEAD_QUARTER);
+            else
+                  noteheadSym = note->noteHead(true, noteHead, NoteHead::Type::HEAD_QUARTER);
+            
+            note->setCachedNoteheadSym(noteheadSym); // we use the cached notehead so we don't recompute it at each layout
             chord->add(note);
-            Stem* stem = new Stem(gscore);
-            stem->setLen((up ? -3.0 : 3.0) * _spatium);
-            chord->add(stem);
-            stem->setPos(chord->stemPos());
             int sc = drumset->shortcut(pitch);
             QString shortcut;
             if (sc)
@@ -197,6 +208,9 @@ void DrumTools::drumNoteSelected(int val)
             getAction("voice-2")->setChecked(element->voice() == 1);
             getAction("voice-3")->setChecked(element->voice() == 2);
             getAction("voice-4")->setChecked(element->voice() == 3);
+
+            auto pitchCell = drumPalette->cellAt(drumPalette->getCurrentIdx());
+            pitchName->setText(pitchCell->name);
             }
       }
 
