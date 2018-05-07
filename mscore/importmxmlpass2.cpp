@@ -4501,16 +4501,18 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       if (grace && lastGraceAFter)
             gac = gcl.size();
 
-      if (!chord && !grace) {
-            // do tuplet if valid time-modification is not 1/1 and is not 1/2 (tremolo)
-            auto timeMod = mnd.timeMod();
-            if (timeMod.isValid() && timeMod != Fraction(1, 1) && timeMod != Fraction(1, 2)) {
-                  // find part-relative track
-                  Part* part = _pass1.getPart(partId);
-                  Q_ASSERT(part);
-                  int scoreRelStaff = _score->staffIdx(part); // zero-based number of parts first staff in the score
-                  int partRelTrack = msTrack + msVoice - scoreRelStaff * VOICES;
-                  addTupletToChord(cr, _tuplets[partRelTrack], _tuplImpls[partRelTrack], timeMod, tupletDesc, mnd.normalType());
+      if (cr) {
+            if (!chord && !grace) {
+                  // do tuplet if valid time-modification is not 1/1 and is not 1/2 (tremolo)
+                  auto timeMod = mnd.timeMod();
+                  if (timeMod.isValid() && timeMod != Fraction(1, 1) && timeMod != Fraction(1, 2)) {
+                        // find part-relative track
+                        Part* part = _pass1.getPart(partId);
+                        Q_ASSERT(part);
+                        int scoreRelStaff = _score->staffIdx(part); // zero-based number of parts first staff in the score
+                        int partRelTrack = msTrack + msVoice - scoreRelStaff * VOICES;
+                        addTupletToChord(cr, _tuplets[partRelTrack], _tuplImpls[partRelTrack], timeMod, tupletDesc, mnd.normalType());
+                        }
                   }
             }
 
