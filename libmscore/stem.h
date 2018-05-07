@@ -50,8 +50,9 @@ class Stem final : public Element {
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&);
 
-      virtual QVariant getProperty(Pid propertyId) const;
-      virtual bool setProperty(Pid propertyId, const QVariant&);
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid id) const override;
 
       Chord* chord() const            { return (Chord*)parent(); }
       bool up() const;
@@ -60,6 +61,7 @@ class Stem final : public Element {
       void setUserLen(qreal l)        { _userLen = l; }
 
       qreal lineWidth() const         { return _lineWidth; }
+      void setLineWidth(qreal w)      { _lineWidth = w; }
 
       QPointF hookPos() const;
       void setLen(qreal l);

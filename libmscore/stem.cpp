@@ -32,10 +32,10 @@ namespace Ms {
 //---------------------------------------------------------
 
 Stem::Stem(Score* s)
-   : Element(s)
+   : Element(s, ElementFlag::SELECTABLE)
       {
-      setFlags(ElementFlag::SELECTABLE);
-      _lineWidth = score()->styleS(Sid::stemWidth).val() * spatium();
+//      _lineWidth = score()->styleP(Sid::stemWidth);
+      initSubStyle(SubStyleId::STEM);
       }
 
 //---------------------------------------------------------
@@ -203,6 +203,7 @@ void Stem::write(XmlWriter& xml) const
       Element::writeProperties(xml);
       if (_userLen != 0.0)
             xml.tag("userLen", _userLen / spatium());
+      writeProperty(xml, Pid::LINE_WIDTH);
       xml.etag();
       }
 
@@ -218,6 +219,8 @@ void Stem::read(XmlReader& e)
                   _userLen = e.readDouble() * spatium();
             else if (tag == "subtype")        // obsolete
                   e.skipCurrentElement();
+            else if (readStyledProperty(e, tag))
+                  ;
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -309,7 +312,10 @@ Element* Stem::drop(EditData& data)
 QVariant Stem::getProperty(Pid propertyId) const
       {
       switch(propertyId) {
-            case Pid::USER_LEN: return userLen();
+            case Pid::LINE_WIDTH:
+                  return lineWidth();
+            case Pid::USER_LEN:
+                  return userLen();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -322,6 +328,9 @@ QVariant Stem::getProperty(Pid propertyId) const
 bool Stem::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case Pid::LINE_WIDTH:
+                  setLineWidth(v.toReal());
+                  break;
             case Pid::USER_LEN:
                   setUserLen(v.toDouble());
                   break;
@@ -330,6 +339,20 @@ bool Stem::setProperty(Pid propertyId, const QVariant& v)
             }
       triggerLayout();
       return true;
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Stem::propertyDefault(Pid id) const
+      {
+      switch (id) {
+            case Pid::LINE_WIDTH:
+                  return score()->styleP(Sid::stemWidth);
+            default:
+                  return Element::propertyDefault(id);
+            }
       }
 
 //---------------------------------------------------------

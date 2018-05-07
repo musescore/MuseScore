@@ -25,6 +25,7 @@ class Score;
 class Hairpin;
 
 enum class HairpinType : char {
+      INVALID = -1,
       CRESC_HAIRPIN,
       DECRESC_HAIRPIN,
       CRESC_LINE,
@@ -70,7 +71,7 @@ class HairpinSegment final : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class Hairpin final : public TextLineBase {
-      HairpinType _hairpinType;
+      HairpinType _hairpinType { HairpinType::INVALID };
       int _veloChange;
       bool  _hairpinCircledTip;
       Dynamic::Range _dynRange;

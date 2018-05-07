@@ -1533,6 +1533,20 @@ bool Element::prevGrip(EditData& ed) const
 
 bool Element::isUserModified() const
       {
+      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
+            Pid pid               = spp->pid;
+            QVariant val          = getProperty(pid);
+            QVariant defaultValue = propertyDefault(pid);
+
+            if (propertyType(pid) == P_TYPE::SP_REAL) {
+                  if (qAbs(val.toReal() - defaultValue.toReal()) > 0.0001)    // we dont care spatium diffs that small
+                        return true;
+                  }
+            else  {
+                  if (getProperty(pid) != propertyDefault(pid))
+                        return true;
+                  }
+            }
       return !visible() || !userOff().isNull() || (color() != MScore::defaultColor);
       }
 

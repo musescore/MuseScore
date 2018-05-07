@@ -141,6 +141,7 @@ QT5_WRAP_UI (ui_headers
       inspector/offset_select.ui
       inspector/scale_select.ui
       inspector/size_select.ui
+      inspector/inspector_stem.ui
       ${SCRIPT_UI}
       )
 

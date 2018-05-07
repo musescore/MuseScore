@@ -2052,7 +2052,7 @@ void VoltaView::setElement(Element* e)
       Volta* volta = (Volta*)e;
       ShowElementBase::setElement(e);
 
-      tlb.lineWidth->setValue(volta->lineWidth().val());
+      tlb.lineWidth->setValue(volta->lineWidth());
 //      lb.anchor->setCurrentIndex(int(volta->anchor()));
       lb.diagonal->setChecked(volta->diagonal());
 //      lb.leftElement->setText(QString("%1").arg((unsigned long)volta->startElement(), 8, 16));
@@ -2624,7 +2624,7 @@ void TextLineView::setElement(Element* e)
       Volta* volta = (Volta*)e;
       SpannerView::setElement(e);
 
-      tlb.lineWidth->setValue(volta->lineWidth().val());
+      tlb.lineWidth->setValue(volta->lineWidth());
       lb.diagonal->setChecked(volta->diagonal());
 
 //      tlb.beginText->setEnabled(volta->beginTextElement());

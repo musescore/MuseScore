@@ -318,6 +318,9 @@ void Inspector::update(Score* s)
                         case ElementType::FINGERING:
                               ie = new InspectorFingering(this);
                               break;
+                        case ElementType::STEM:
+                              ie = new InspectorStem(this);
+                              break;
                         default:
                               if (element()->isText())
                                     ie = new InspectorText(this);
@@ -879,6 +882,21 @@ void InspectorClef::valueChanged(int idx)
       if (idx == 6 && otherClef)
             otherClef->setShowCourtesy(c.showCourtesy->isChecked());
       InspectorBase::valueChanged(idx);
+      }
+
+//---------------------------------------------------------
+//   InspectorStem
+//---------------------------------------------------------
+
+InspectorStem::InspectorStem(QWidget* parent)
+   : InspectorElementBase(parent)
+      {
+      s.setupUi(addWidget());
+
+      const std::vector<InspectorItem> iiList = {
+            { Pid::LINE_WIDTH, 0, s.lineWidth,  s.resetLineWidth  },
+            };
+      mapSignals(iiList);
       }
 
 //---------------------------------------------------------

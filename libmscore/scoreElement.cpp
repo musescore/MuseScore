@@ -183,9 +183,9 @@ QVariant ScoreElement::propertyDefault(Pid id) const
       if (id == Pid::SUB_STYLE)
             return int(SubStyleId::DEFAULT);
 #if 1       // this is wrong, styled properties should be considered first
-      for (const StyledProperty& p : subStyle(subStyleId())) {
-            if (p.pid == id)
-                  return score()->styleV(p.sid);
+      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
+            if (spp->pid == id)
+                  return score()->styleV(spp->sid);
             }
 #endif
       qDebug("<%s>(%d) not found in <%s> style <%s>", propertyName(id), int(id), name(), subStyleName(subStyleId()));
@@ -198,9 +198,12 @@ QVariant ScoreElement::propertyDefault(Pid id) const
 
 QVariant ScoreElement::styledPropertyDefault(Pid id) const
       {
-      for (const StyledProperty& p : subStyle(subStyleId())) {
-            if (p.pid == id)
-                  return score()->styleV(p.sid);
+      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
+            if (spp->pid == id) {
+                  if (propertyType(id) == P_TYPE::SP_REAL)
+                        return score()->styleP(spp->sid);
+                  return score()->styleV(spp->sid);
+                  }
             }
       return QVariant();
       }
@@ -333,10 +336,15 @@ void ScoreElement::undoPushProperty(Pid id)
 bool ScoreElement::readProperty(const QStringRef& s, XmlReader& e, Pid id)
       {
       if (s == propertyName(id)) {
+            QVariant v = Ms::getProperty(id, e);
             if (id == Pid::SUB_STYLE)
-                  initSubStyle(SubStyleId(Ms::getProperty(id, e).toInt()));
+                  initSubStyle(SubStyleId(v.toInt()));
             else {
-                  setProperty(id, Ms::getProperty(id, e));
+                  if (propertyType(id) == P_TYPE::SP_REAL) {
+                        qreal _spatium = score()->spatium();
+                        v = v.toReal() * _spatium;
+                        }
+                  setProperty(id, v);
                   setPropertyFlags(id, PropertyFlags::UNSTYLED);
                   }
             return true;
@@ -352,8 +360,13 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid id) const
       {
       if (propertyType(id) == P_TYPE::SP_REAL) {
             qreal _spatium = score()->spatium();
-            xml.tag(id, QVariant(getProperty(id).toReal()/_spatium),
-               QVariant(propertyDefault(id).toReal()/_spatium));
+            qreal f1       = getProperty(id).toReal();
+            qreal f2       = propertyDefault(id).toReal();
+            if (qAbs(f1 - f2) < 0.0001)
+                  return;
+            QVariant val          = QVariant(f1/_spatium);
+            QVariant defaultValue = QVariant(f2/_spatium);
+            xml.tag(id, val, defaultValue);
             }
       else {
             if (getProperty(id).isValid())

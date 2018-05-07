@@ -72,7 +72,7 @@ void TextLineBaseSegment::setSelected(bool f)
 void TextLineBaseSegment::draw(QPainter* painter) const
       {
       TextLineBase* tl   = textLineBase();
-      qreal _spatium = spatium();
+//      qreal _spatium = spatium();
 
       if (!_text->empty()) {
             painter->translate(_text->pos());
@@ -98,7 +98,7 @@ void TextLineBaseSegment::draw(QPainter* painter) const
       else
             color = tl->lineColor();
 
-      qreal textlineLineWidth    = tl->lineWidth().val() * _spatium;
+      qreal textlineLineWidth = tl->lineWidth();
       QPen pen(color, textlineLineWidth, tl->lineStyle());
       if (tl->lineStyle() == Qt::CustomDashLine) {
             QVector<qreal> dashes { tl->dashLineLen(), tl->dashGapLen() };
@@ -127,7 +127,7 @@ Shape TextLineBaseSegment::shape() const
             shape.add(_text->bbox().translated(_text->pos()));
       if (!_endText->empty())
             shape.add(_endText->bbox().translated(_endText->pos()));
-      qreal lw  = textLineBase()->lineWidth().val() * spatium();
+      qreal lw  = textLineBase()->lineWidth();
       qreal lw2 = lw * .5;
       if (twoLines) {   // hairpins
             shape.add(QRectF(points[0].x(), points[0].y() - lw2,
@@ -216,7 +216,7 @@ void TextLineBaseSegment::layout()
 
       qreal x1 = qMin(0.0, pp2.x());
       qreal x2 = qMax(0.0, pp2.x());
-      qreal y0 = point(-textLineBase()->lineWidth());
+      qreal y0 = -textLineBase()->lineWidth();
       qreal y1 = qMin(0.0, pp2.y()) + y0;
       qreal y2 = qMax(0.0, pp2.y()) - y0;
 
