@@ -74,13 +74,6 @@ void TextLineBaseSegment::draw(QPainter* painter) const
       TextLineBase* tl   = textLineBase();
       qreal _spatium = spatium();
 
-      // color for line (text color comes from the text properties)
-      QColor color;
-      if ((selected() && !(score() && score()->printing())) || !tl->visible() || !tl->lineVisible())
-            color = curColor();
-      else
-            color = tl->lineColor();
-
       if (!_text->empty()) {
             painter->translate(_text->pos());
             _text->setVisible(tl->visible());
@@ -97,6 +90,14 @@ void TextLineBaseSegment::draw(QPainter* painter) const
 
       if (npoints == 0)
             return;
+
+      // color for line (text color comes from the text properties)
+      QColor color;
+      if ((selected() && !(score() && score()->printing())) || !tl->visible() || !tl->lineVisible())
+            color = curColor(tl->visible() && tl->lineVisible());
+      else
+            color = tl->lineColor();
+
       qreal textlineLineWidth    = tl->lineWidth().val() * _spatium;
       QPen pen(color, textlineLineWidth, tl->lineStyle());
       if (tl->lineStyle() == Qt::CustomDashLine) {
@@ -676,7 +677,6 @@ QVariant TextLineBase::propertyDefault(Pid id) const
             v = SLine::propertyDefault(id);
       return v;
       }
-
 
 }
 
