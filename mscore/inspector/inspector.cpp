@@ -895,6 +895,7 @@ InspectorStem::InspectorStem(QWidget* parent)
 
       const std::vector<InspectorItem> iiList = {
             { Pid::LINE_WIDTH, 0, s.lineWidth,  s.resetLineWidth  },
+            { Pid::USER_LEN,   0, s.userLength, s.resetUserLength },
             };
       mapSignals(iiList);
       }

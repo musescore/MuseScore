@@ -899,7 +899,6 @@ void LyricsLineSegment::draw(QPainter* painter) const
       {
       if (_numOfDashes < 1)               // nothing to draw
             return;
-      qreal _spatium = spatium();
 
       QPen pen(lyricsLine()->lyrics()->curColor());
       pen.setWidthF(lyricsLine()->lineWidth());

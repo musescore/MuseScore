@@ -34,8 +34,8 @@ namespace Ms {
 Stem::Stem(Score* s)
    : Element(s, ElementFlag::SELECTABLE)
       {
-//      _lineWidth = score()->styleP(Sid::stemWidth);
       initSubStyle(SubStyleId::STEM);
+      resetProperty(Pid::USER_LEN);
       }
 
 //---------------------------------------------------------
@@ -201,8 +201,7 @@ void Stem::write(XmlWriter& xml) const
       {
       xml.stag("Stem");
       Element::writeProperties(xml);
-      if (_userLen != 0.0)
-            xml.tag("userLen", _userLen / spatium());
+      writeProperty(xml, Pid::USER_LEN);
       writeProperty(xml, Pid::LINE_WIDTH);
       xml.etag();
       }
@@ -214,16 +213,28 @@ void Stem::write(XmlWriter& xml) const
 void Stem::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "userLen")
-                  _userLen = e.readDouble() * spatium();
-            else if (tag == "subtype")        // obsolete
-                  e.skipCurrentElement();
-            else if (readStyledProperty(e, tag))
-                  ;
-            else if (!Element::readProperties(e))
+            if (!readProperties(e))
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Stem::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (readProperty(tag, e, Pid::USER_LEN))
+            ;
+      else if (readStyledProperty(e, tag))
+            ;
+      else if (Element::readProperties(e))
+            ;
+      else
+            return false;
+      return true;
       }
 
 //---------------------------------------------------------
@@ -348,8 +359,10 @@ bool Stem::setProperty(Pid propertyId, const QVariant& v)
 QVariant Stem::propertyDefault(Pid id) const
       {
       switch (id) {
-            case Pid::LINE_WIDTH:
-                  return score()->styleP(Sid::stemWidth);
+            case Pid::USER_LEN:
+                  return 0.0;
+//            case Pid::LINE_WIDTH:
+//                  return score()->styleP(Sid::stemWidth);
             default:
                   return Element::propertyDefault(id);
             }
