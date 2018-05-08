@@ -972,13 +972,25 @@ void Measure::spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)
 
 void Measure::moveTicks(int diff)
       {
+      std::set<Tuplet*> tuplets;
       setTick(tick() + diff);
       for (Segment* segment = last(); segment; segment = segment->prev()) {
             if (segment->segmentType() & (SegmentType::EndBarLine | SegmentType::TimeSigAnnounce))
                   segment->setTick(tick() + ticks());
             else if (segment->isChordRestType())
-                  break;
+                  // Tuplet ticks are stored as absolute ticks, so they must be adjusted.
+                  // But each tuplet must only be adjusted once.
+                  for (Element* e : segment->elist())
+                        if (e) {
+                              ChordRest* cr = toChordRest(e);
+                              Tuplet* tuplet = cr->tuplet();
+                              if (tuplet && tuplets.count(tuplet) == 0) {
+                                    tuplet->setTick(tuplet->tick() + diff);
+                                    tuplets.insert(tuplet);
+                                    }
+                              }
             }
+      tuplets.clear();
       }
 
 //---------------------------------------------------------
