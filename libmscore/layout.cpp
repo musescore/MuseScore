@@ -926,6 +926,11 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
                   }
             }
 
+      // if there are no non-mirrored notes in a downstem chord,
+      // then use the stem X position as X origin for accidental layout
+      if (nNotes && leftNotes.size() == nNotes)
+            lx = notes.front()->chord()->stemPosX();
+
       if (segment) {
             // align all dots for segment/staff
             // it would be possible to dots for up & down chords separately
