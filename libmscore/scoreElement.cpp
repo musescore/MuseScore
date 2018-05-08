@@ -182,14 +182,12 @@ QVariant ScoreElement::propertyDefault(Pid id) const
       {
       if (id == Pid::SUB_STYLE)
             return int(SubStyleId::DEFAULT);
-#if 1       // this is wrong, styled properties should be considered first
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return score()->styleV(spp->sid);
+      // this is wrong, styled properties should be considered first:
+      QVariant v = styledPropertyDefault(id);
+      if (!v.isValid()) {
+            qDebug("<%s>(%d) not found in <%s> style <%s>", propertyName(id), int(id), name(), subStyleName(subStyleId()));
             }
-#endif
-      qDebug("<%s>(%d) not found in <%s> style <%s>", propertyName(id), int(id), name(), subStyleName(subStyleId()));
-      return QVariant();
+      return v;
       }
 
 //---------------------------------------------------------
