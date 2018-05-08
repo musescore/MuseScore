@@ -50,6 +50,7 @@
 #include "box.h"
 #include "textframe.h"
 #include "fermata.h"
+#include "stem.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -1065,6 +1066,17 @@ static void readChord(Chord* chord, XmlReader& e)
                         chord->segment()->add(el);
                   else
                         chord->add(el);
+                  }
+            else if (tag == "Stem") {
+                  Stem* stem = new Stem(chord->score());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "subtype")        // obsolete
+                              e.skipCurrentElement();
+                        else if (!stem->readProperties(e))
+                              e.unknown();
+                        }
+                  chord->add(stem);
                   }
             else if (chord->readProperties(e))
                   ;

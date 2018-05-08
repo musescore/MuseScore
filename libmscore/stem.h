@@ -26,35 +26,36 @@ class Chord;
 
 class Stem final : public Element {
       QLineF line;                  // p1 is attached to notehead
-      qreal _userLen   { 0.0 };
-      qreal _len       { 0.0 };     // always positive
       qreal _lineWidth;
+      qreal _userLen;
+      qreal _len       { 0.0 };     // always positive
 
    public:
       Stem(Score* = 0);
       Stem &operator=(const Stem&) = delete;
 
-      virtual Stem* clone() const        { return new Stem(*this); }
-      virtual ElementType type() const   { return ElementType::STEM; }
-      virtual void draw(QPainter*) const;
-      virtual bool isEditable() const    { return true; }
-      virtual void layout();
-      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
+      virtual Stem* clone() const override        { return new Stem(*this); }
+      virtual ElementType type() const override   { return ElementType::STEM; }
+      virtual void draw(QPainter*) const override;
+      virtual bool isEditable() const override    { return true; }
+      virtual void layout() override;
+      virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
       virtual void startEdit(EditData&) override;
       virtual void editDrag(EditData&) override;
       virtual void updateGrips(EditData&) const override;
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader& e) override;
+      virtual bool readProperties(XmlReader&) override;
       virtual void reset() override;
       virtual bool acceptDrop(EditData&) const override;
-      virtual Element* drop(EditData&);
+      virtual Element* drop(EditData&) override;
 
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid id) const override;
 
-      Chord* chord() const            { return (Chord*)parent(); }
+      Chord* chord() const            { return toChord(parent()); }
       bool up() const;
 
       qreal userLen() const           { return _userLen; }
@@ -63,9 +64,10 @@ class Stem final : public Element {
       qreal lineWidth() const         { return _lineWidth; }
       void setLineWidth(qreal w)      { _lineWidth = w; }
 
-      QPointF hookPos() const;
       void setLen(qreal l);
       qreal len() const               { return _len; }
+
+      QPointF hookPos() const;
       qreal stemLen() const;
       QPointF p2() const              { return line.p2(); }
       };
