@@ -192,11 +192,11 @@ void HPiano::changeSelection(Selection selection)
             key->setSelected(false);
             }
       for (Note* n : selection.noteList()) {
-            if (n->pitch() >= _firstKey && n->pitch() <= _lastKey)
-                  keys[n->pitch() - _firstKey]->setSelected(true);
+            if (n->epitch() >= _firstKey && n->epitch() <= _lastKey)
+                  keys[n->epitch() - _firstKey]->setSelected(true);
             for (Note* other : n->chord()->notes())
-                  if (other->pitch() >= _firstKey && other->pitch() <= _lastKey)
-                        keys[other->pitch() - _firstKey]->setHighlighted(true);
+                  if (other->epitch() >= _firstKey && other->epitch() <= _lastKey)
+                        keys[other->epitch() - _firstKey]->setHighlighted(true);
             }
       for (PianoKeyItem* key : keys)
             key->update();
