@@ -600,7 +600,7 @@ void Tuplet::draw(QPainter* painter) const
             painter->translate(-pos);
             }
       if (_hasBracket) {
-            painter->setPen(QPen(color, spatium() * _bracketWidth.val()));
+            painter->setPen(QPen(color, _bracketWidth.val()));
             if (!_number)
                   painter->drawPolyline(bracketL, 4);
             else {
@@ -639,7 +639,7 @@ Shape Tuplet::shape() const
       {
       Shape s;
       if (_hasBracket) {
-            qreal w = spatium() * _bracketWidth.val();
+            qreal w = _bracketWidth.val();
             if (_number) {
                   s.add(Rect(bracketL[0], bracketL[1], w));
                   s.add(Rect(bracketL[1], bracketL[2], w));
