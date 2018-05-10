@@ -459,15 +459,59 @@ SymId Note::noteHead() const
       }
 
 //---------------------------------------------------------
+//   bboxRightPos
+//
+//    returns the x of the symbol bbox. It is different from headWidth() because zero point could be different from leftmost bbox position.
+//---------------------------------------------------------
+
+qreal Note::bboxRightPos() const
+      {
+      const auto& bbox = score()->scoreFont()->bbox(noteHead(), magS());
+      return bbox.right();
+      }
+
+//---------------------------------------------------------
+//   headBodyWidth
+//
+//    returns the width of the notehead "body". It is actual for slashed noteheads like -O-, where O is body.
+//---------------------------------------------------------
+
+qreal Note::headBodyWidth() const
+      {
+      return headWidth() + 2 * bboxXShift();
+      }
+
+//---------------------------------------------------------
 //   headWidth
 //
-//    returns the width of the notehead symbol
+//    returns the width of the symbol bbox
 //    or the width of the string representation of the fret mark
 //---------------------------------------------------------
 
 qreal Note::headWidth() const
       {
       return symWidth(noteHead());
+      }
+
+//---------------------------------------------------------
+//   bboxXShift
+//
+//    returns the x shift of the notehead bounding box
+//---------------------------------------------------------
+qreal Note::bboxXShift() const
+      {
+      const auto& bbox = score()->scoreFont()->bbox(noteHead(), magS());
+      return bbox.bottomLeft().x();
+      }
+
+//---------------------------------------------------------
+//   noteheadCenterX
+//
+//    returns the x coordinate of the notehead center related to the basepoint of the notehead bbox
+//---------------------------------------------------------
+qreal Note::noteheadCenterX() const
+      {
+      return score()->scoreFont()->width(noteHead(), magS()) / 2 + bboxXShift();
       }
 
 //---------------------------------------------------------
