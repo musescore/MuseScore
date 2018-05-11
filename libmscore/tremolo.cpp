@@ -377,7 +377,26 @@ void Tremolo::read(XmlReader& e)
 
 QString Tremolo::tremoloTypeName() const
       {
-      switch(tremoloType()) {
+      return type2name(tremoloType());
+      }
+
+//---------------------------------------------------------
+//   setTremoloType
+//---------------------------------------------------------
+
+void Tremolo::setTremoloType(const QString& s)
+      {
+      setTremoloType(name2Type(s));
+      }
+
+
+//---------------------------------------------------------
+//   type2Name
+//---------------------------------------------------------
+
+QString Tremolo::type2name(TremoloType t)
+      {
+      switch(t) {
             case TremoloType::R8:  return QString("r8");
             case TremoloType::R16: return QString("r16");
             case TremoloType::R32: return QString("r32");
@@ -392,11 +411,12 @@ QString Tremolo::tremoloTypeName() const
       return QString("??");
       }
 
+
 //---------------------------------------------------------
-//   setTremoloType
+//   nameToType
 //---------------------------------------------------------
 
-void Tremolo::setTremoloType(const QString& s)
+TremoloType Tremolo::name2Type(const QString& s)
       {
       TremoloType t;
       if (s == "r8")
@@ -417,7 +437,7 @@ void Tremolo::setTremoloType(const QString& s)
             t = TremoloType::C64;
       else
             t = TremoloType(s.toInt());    // for compatibility with old tremolo type
-      setTremoloType(t);
+      return t;
       }
 
 //---------------------------------------------------------

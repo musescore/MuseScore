@@ -21,6 +21,7 @@ class Chord;
 
 // Tremolo subtypes:
 enum class TremoloType : char {
+      INVALID_TREMOLO = -1,
       OLD_R8 = 0,
       OLD_R16,
       OLD_R32,
@@ -55,6 +56,8 @@ class Tremolo final : public Element {
 
       QString tremoloTypeName() const;
       void setTremoloType(const QString& s);
+      static TremoloType name2Type(const QString& s);
+      static QString type2name(TremoloType t);
 
       Chord* chord() const { return (Chord*)parent(); }
 
