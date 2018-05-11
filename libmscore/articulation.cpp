@@ -427,6 +427,15 @@ const char* Articulation::articulationName() const
             case SymId::articAccentBelow:
                   return "sforzato";
 
+            case SymId::brassMuteOpen:
+                  return "open";
+
+            case SymId::brassMuteClosed:
+                  return "closed";
+
+            case SymId::stringsHarmonic:
+                  return "harmonic";
+
             default:
                   return "---";
             }
