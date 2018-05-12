@@ -29,11 +29,14 @@ void Drumset::save(XmlWriter& xml) const
             if (!isValid(i))
                   continue;
             xml.stag(QString("Drum pitch=\"%1\"").arg(i));
-            xml.tag("head", NoteHead::group2name(noteHead(i)));
-            if (noteHead(i) == NoteHead::Group::HEAD_CUSTOM) {
+            const NoteHead::Group nh = noteHead(i);
+            //write custom as Normal notehead group + noteheads tag to keep compatibility with 2.X versions
+            const NoteHead::Group saveNHValue = (nh == NoteHead::Group::HEAD_CUSTOM) ? NoteHead::Group::HEAD_NORMAL : nh;
+            xml.tag("head", NoteHead::group2name(saveNHValue));
+            if (nh == NoteHead::Group::HEAD_CUSTOM) {
                   xml.stag("noteheads");
                   for (int j = 0; j < int(NoteHead::Type::HEAD_TYPES); j++) {
-                        xml.tag(NoteHead::type2name(NoteHead::Type(j)), Sym::id2name((noteHeads(i, NoteHead::Type(j)))));
+                        xml.tag(NoteHead::type2name(NoteHead::Type(j)), Sym::id2name(noteHeads(i, NoteHead::Type(j))));
                         }
                   xml.etag();
                   }
@@ -75,6 +78,7 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
       if (tag == "head")
             _drum[pitch].notehead = NoteHead::name2group(e.readElementText());
       else if (tag == "noteheads") {
+            _drum[pitch].notehead = NoteHead::Group::HEAD_CUSTOM;
             while (e.readNextStartElement()) {
                   const QStringRef& nhTag(e.name());
                   int noteType = int(NoteHead::name2type(nhTag.toString()));
