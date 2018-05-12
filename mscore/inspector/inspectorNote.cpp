@@ -129,8 +129,12 @@ void InspectorNote::setElement()
       n.hook->setEnabled(note->chord()->hook());
       n.beam->setEnabled(note->chord()->beam());
       n.tuplet->setEnabled(note->chord()->tuplet());
-      n.noteHeadGroup->setEnabled(note->chord()->staff()->isPitchedStaff(note->tick()) && note->chord()->staff()->staffType(note->tick())->noteHeadScheme() == NoteHeadScheme::HEAD_NORMAL);
+      bool isNHGroupEnabled = note->chord()->staff()->isPitchedStaff(note->tick()) &&
+                  note->chord()->staff()->staffType(note->tick())->noteHeadScheme() == NoteHeadScheme::HEAD_NORMAL;
+      n.noteHeadGroup->setEnabled(isNHGroupEnabled);
       InspectorElementBase::setElement();
+      //must be placed after InspectorBase::setElement() cause the last one sets resetButton enability
+      n.resetNoteHeadGroup->setEnabled(isNHGroupEnabled);
       bool nograce = !note->chord()->isGrace();
       s.leadingSpace->setEnabled(nograce);
       s.resetLeadingSpace->setEnabled(nograce && s.leadingSpace->value());
