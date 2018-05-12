@@ -89,6 +89,7 @@
 
 namespace Ms {
 
+extern bool edata;
 extern void importSoundfont(QString name);
 extern bool savePositions(Score*, const QString& name, bool segments);
 extern MasterSynthesizer* synti;
@@ -2431,6 +2432,12 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
 
       const QList<Page*>& pl = score->pages();
       int pages = pl.size();
+       
+      if (edata) {
+            convDpi     = DPI * 10.0 / score->spatium();          // spatium is allways 10 pixel in image output
+            transparent = false;
+            format      = QImage::Format_Grayscale8;
+            }
 
       int padding = QString("%1").arg(pages).size();
       bool overwrite = false;
@@ -2482,13 +2489,16 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
                         }
                   printer = printer.convertToFormat(QImage::Format_Indexed8, colorTable);
                   }
+            else if (format == QImage::Format_Grayscale8) {
+                  printer = printer.convertToFormat(QImage::Format_Grayscale8);
+                  }
 
-            QString fileName(name);
-            if (fileName.endsWith(".png"))
-                  fileName = fileName.left(fileName.size() - 4);
-            fileName += QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+            QString fName(name);
+            if (fName.endsWith(".png"))
+                  fName = fName.left(fName.size() - 4);
+            QString fileName = fName + QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
             if (!converterMode) {
-                  QFileInfo fip(fileName);
+                  QFileInfo fip(fName);
                   if(fip.exists() && !overwrite) {
                         if(noToAll)
                               continue;
@@ -2512,6 +2522,10 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
                         }
                   }
             rv = printer.save(fileName, "png");
+            if (edata) {
+                  QString edataName = fName + QString("-%1.xml").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+                  writeEdata(edataName, fileName, score, mag, pel);
+                  }
             if (!rv)
                   break;
             }
