@@ -61,7 +61,7 @@ else
        articulation-1\
        percussion-grace\
        slashed_chord-layout-12 slashed_chord-layout-7 slashed_grace-3 slashed_noteheadposition-1\
-       drumset-custom-1"
+       drumset-custom-1 read-206-custom-drumset-1"
 fi
 
 #####DEBUG: failed tests
