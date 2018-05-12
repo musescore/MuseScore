@@ -82,6 +82,8 @@ class TimeSig final : public Element {
       void setSig(const Fraction& f, TimeSigType st = TimeSigType::NORMAL);
       int numerator() const              { return _sig.numerator(); }
       int denominator() const            { return _sig.denominator(); }
+      std::vector<SymId> getNs() const   { return ns; }
+      std::vector<SymId> getDs() const   { return ds; }
 
       Fraction stretch() const           { return _stretch;   }
       void setStretch(const Fraction& s) { _stretch = s;      }

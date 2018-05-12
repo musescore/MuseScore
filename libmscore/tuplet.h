@@ -90,9 +90,9 @@ class Tuplet final : public DurationElement {
       void setHasBracket(bool b)           { _hasBracket = b;          }
       Spatium bracketWidth() const         { return _bracketWidth;     }
       void setBracketWidth(Spatium s)      { _bracketWidth = s;        }
-      QPointF* getLeftBracket()            { return bracketL;}
-      QPointF* getRightBracket()           { return bracketR;}
-      Text* getText()                      { return _number;}
+      QPointF* getLeftBracket()            { return bracketL; }
+      QPointF* getRightBracket()           { return bracketR; }
+      Text* getText()                      { return _number;  }
 
       Fraction ratio() const               { return _ratio;         }
       void setRatio(const Fraction& r)     { _ratio = r;            }

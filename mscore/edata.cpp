@@ -212,6 +212,78 @@ static void writeTupletData(XmlWriter& xml, qreal spatium, qreal scale, int num,
       }
 
 //---------------------------------------------------------
+//   writeTimeSigData
+//---------------------------------------------------------
+
+static void writeTimeSigData(XmlWriter& xml, qreal spatium, qreal scale, int num, int denom, const Element* e)
+      {
+      qreal interline = 20.0;
+      if (e->staff()) {
+            interline *= (e->staff()->spatium(e->tick()) / e->score()->spatium());
+            scale     *= (e->score()->spatium() / e->staff()->spatium(e->tick()));
+      }
+      QString name = QString("timeSig%1over%2").arg(num).arg(denom);
+      if (scale == 1.0)
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(name));
+      else
+            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(name));
+      QRectF rr(e->pageBoundingRect());
+      QRectF outerElement(rr.x() * spatium, rr.y() * spatium, rr.width() * spatium, rr.height() * spatium);
+      xml.putLevel();
+      xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+         .arg(outerElement.x(),      0, 'f', 3)
+         .arg(outerElement.y(),      0, 'f', 3)
+         .arg(outerElement.width(),  0, 'f', 3)
+         .arg(outerElement.height(), 0, 'f', 3);
+
+      // Nested Symbol start
+
+      ScoreFont* font = e->score()->scoreFont();
+      const TimeSig* ts = toTimeSig(e);
+      QRectF numRect = font->bbox(ts->getNs(), spatium);
+      QRectF denomRect = font->bbox(ts->getDs(), spatium);
+
+      qreal midHorizontal = rr.x() + (rr.width()) / 2;
+      qreal midVertical = rr.y() + (rr.height()) / 2;
+
+      // Numerator Info
+
+      name = QString("timeSig%1").arg(num);
+      if (scale == 1.0)
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(name));
+      else
+            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(name));
+      QRectF numInfo((midHorizontal * spatium - (numRect.width() / 2)), rr.y() * spatium, numRect.width(), numRect.height());
+      xml.putLevel();
+      xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+         .arg(numInfo.x(),      0, 'f', 3)
+         .arg(numInfo.y(),      0, 'f', 3)
+         .arg(numInfo.width(),  0, 'f', 3)
+         .arg(numInfo.height(), 0, 'f', 3);
+      xml.etag();
+
+      // Denominator Info
+
+      name = QString("timeSig%1").arg(denom);
+      if (scale == 1.0)
+             xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(name));
+      else
+             xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(name));
+      QRectF denomInfo((midHorizontal * spatium - (denomRect.width() / 2)), midVertical * spatium, denomRect.width(), denomRect.height());
+      xml.putLevel();
+      xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+         .arg(denomInfo.x(),      0, 'f', 3)
+         .arg(denomInfo.y(),      0, 'f', 3)
+         .arg(denomInfo.width(),  0, 'f', 3)
+         .arg(denomInfo.height(), 0, 'f', 3);
+      xml.etag();
+
+      // End
+
+      xml.etag();
+      }
+
+//---------------------------------------------------------
 //   writeSymbol
 //---------------------------------------------------------
 
@@ -504,16 +576,14 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                         Fraction sig      = ts->sig();
                         TimeSigType t     = ts->timeSigType();
                         switch (t) {
-                              case TimeSigType::NORMAL: {
-                                    QString s = QString("timeSig%1over%2").arg(sig.numerator()).arg(sig.denominator());
-                                    writeData(xml, mag, ts->mag(), s, ts);
-                                    }
+                              case TimeSigType::NORMAL:
+                                    writeTimeSigData(xml, mag, ts->mag(), sig.numerator(), sig.denominator(), ts);
                                     break;
                               case TimeSigType::FOUR_FOUR:
                                     writeData(xml, mag, ts->mag(), "timeSigCommon", ts);
                                     break;
                               case TimeSigType::ALLA_BREVE:
-                                    writeData(xml, mag, ts->mag(), "timesigCut", ts);
+                                    writeData(xml, mag, ts->mag(), "timeSigCutCommon", ts);
                                     break;
                               }
                         }
