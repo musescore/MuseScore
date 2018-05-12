@@ -765,7 +765,7 @@ void Slur::slurPosChord(SlurPos* sp)
             }
       Note* _startNote = stChord->downNote();
       Note* _endNote   = enChord->downNote();
-      qreal hw         = _startNote->headWidth();
+      qreal hw         = _startNote->bboxRightPos();
       qreal __up       = _up ? -1.0 : 1.0;
       qreal _spatium = spatium();
 
@@ -920,7 +920,7 @@ void Slur::slurPos(SlurPos* sp)
             bool stemPos = false;   // p1 starts at chord stem side
 
             // default positions
-            xo = hw1 * .5;
+            xo = hw1 * .5 + (note1 ? note1->bboxXShift() : 0.0);
             if (note1)
                   yo = note1->pos().y();
             else if (_up)
@@ -1016,7 +1016,7 @@ void Slur::slurPos(SlurPos* sp)
             if (sa2 == SlurAnchor::NONE) {
 
                   // default positions
-                  xo = hw2 * .5;
+                  xo = hw2 * .5 + (note2 ? note2->bboxXShift() : 0.0);
                   if (note2)
                         yo = note2->pos().y();
                   else if (_up)

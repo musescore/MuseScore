@@ -29,7 +29,17 @@ void Drumset::save(Xml& xml) const
             if (!isValid(i))
                   continue;
             xml.stag(QString("Drum pitch=\"%1\"").arg(i));
-            xml.tag("head", int(noteHead(i)));
+            const NoteHead::Group nh = noteHead(i);
+            //write custom as Normal notehead group + noteheads tag to keep compatibility with 2.X versions
+            int saveValue = (nh == NoteHead::Group::HEAD_CUSTOM) ? int(NoteHead::Group::HEAD_NORMAL) : int(nh);
+            xml.tag("head", saveValue);
+            if (nh == NoteHead::Group::HEAD_CUSTOM) {
+                  xml.stag("noteheads");
+                  for (int j = 0; j < int(NoteHead::Type::HEAD_TYPES); j++) {
+                        xml.tag(NoteHead::type2name(NoteHead::Type(j)), Sym::id2name(noteHeads(i, NoteHead::Type(j))));
+                        }
+                  xml.etag();
+                  }
             xml.tag("line", line(i));
             xml.tag("voice", voice(i));
             xml.tag("name", name(i));
@@ -75,6 +85,17 @@ void Drumset::load(XmlReader& e)
 
             if (tag == "head")
                   _drum[pitch].notehead = NoteHead::Group(e.readInt());
+            else if (tag == "noteheads") {
+                  _drum[pitch].notehead = NoteHead::Group::HEAD_CUSTOM;
+                  while (e.readNextStartElement()) {
+                        const QStringRef& nhTag(e.name());
+                        int noteType = int(NoteHead::name2type(nhTag.toString()));
+                        if (noteType > int(NoteHead::Type::HEAD_TYPES) - 1 || noteType < 0)
+                              return;
+
+                        _drum[pitch].noteheads[noteType] = Sym::name2id(e.readElementText());
+                        }
+                  }
             else if (tag == "line")
                   _drum[pitch].line = e.readInt();
             else if (tag == "voice")

@@ -55,6 +55,10 @@ DrumTools::DrumTools(QWidget* parent)
       w->setLayout(layout);
 
       QVBoxLayout* layout1 = new QVBoxLayout;
+      layout1->setSpacing(6);
+      pitchName = new QLabel;
+      pitchName->setAlignment(Qt::AlignCenter);
+      layout1->addWidget(pitchName);
       QToolButton* tb = new QToolButton;
       tb->setText(tr("Edit Drumset"));
       layout1->addWidget(tb);
@@ -79,6 +83,8 @@ DrumTools::DrumTools(QWidget* parent)
       connect(tb, SIGNAL(clicked()), SLOT(editDrumset()));
       void boxClicked(int);
       connect(drumPalette, SIGNAL(boxClicked(int)), SLOT(drumNoteSelected(int)));
+
+      drumPalette->setContextMenuPolicy(Qt::PreventContextMenu);
       }
 
 //---------------------------------------------------------
@@ -120,6 +126,13 @@ void DrumTools::updateDrumset(const Drumset* ds)
             note->setLine(line);
             note->setPos(0.0, _spatium * .5 * line);
             note->setHeadGroup(noteHead);
+            SymId noteheadSym = SymId::noteheadBlack;
+            if (noteHead == NoteHead::Group::HEAD_CUSTOM)
+                  noteheadSym = drumset->noteHeads(pitch, NoteHead::Type::HEAD_QUARTER);
+            else
+                  noteheadSym = note->noteHead(true, noteHead, NoteHead::Type::HEAD_QUARTER);
+
+            note->setCachedNoteheadSym(noteheadSym); // we use the cached notehead so we don't recompute it at each layout
             chord->add(note);
             Stem* stem = new Stem(gscore);
             stem->setLen((up ? -3.0 : 3.0) * _spatium);
@@ -187,6 +200,8 @@ void DrumTools::drumNoteSelected(int val)
             getAction("voice-2")->setChecked(element->voice() == 1);
             getAction("voice-3")->setChecked(element->voice() == 2);
             getAction("voice-4")->setChecked(element->voice() == 3);
+
+            pitchName->setText(drumPalette->currentCellName());
             }
       }
 

@@ -2527,6 +2527,7 @@ QVector<const char*> Sym::symNames = {
       "noteLongaSquareUp",
       "noteLongaSquareDown",
       "space"
+
       };
 
 QVector<QString> Sym::symUserNames = {
@@ -5317,7 +5318,11 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
             return;
             }
       if (!isValid(id)) {
-            qDebug("ScoreFont::draw: invalid sym %d\n", int(id));
+            if (/*MScore::useFallbackFont &&*/this != ScoreFont::fallbackFont())
+                  fallbackFont()->draw(id, painter, mag, pos, worldScale);
+            else
+                  qDebug("ScoreFont::draw: invalid sym %d\n", int(id));
+
             return;
             }
       int rv = FT_Load_Glyph(face, sym(id).index(), FT_LOAD_DEFAULT);
@@ -5831,6 +5836,9 @@ const char* ScoreFont::fallbackTextFont()
 
 const QRectF ScoreFont::bbox(SymId id, qreal mag) const
       {
+      if (useFallbackFont(id))
+            return fallbackFont()->bbox(id, mag);
+
       QRectF r = sym(id).bbox();
       return QRectF(r.x() * mag, r.y() * mag, r.width() * mag, r.height() * mag);
       }
@@ -5871,6 +5879,15 @@ ScoreFont::ScoreFont(const ScoreFont& f)
 ScoreFont::~ScoreFont()
       {
       delete cache;
+      }
+
+//---------------------------------------------------------
+//   useFallbackFont
+//---------------------------------------------------------
+
+bool ScoreFont::useFallbackFont(SymId id) const
+      {
+      return /*MScore::useFallbackFont &&*/!sym(id).isValid() && this != ScoreFont::fallbackFont();
       }
 }
 

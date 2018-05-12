@@ -734,7 +734,8 @@ void Chord::addLedgerLines()
 
                   // check if note horiz. pos. is outside current range
                   // if more length on the right, increase range
-                  x = note->pos().x();
+                  // ledger lines need the leftmost point of the notehead with a respect of bbox
+                  x = note->pos().x() + note->bboxXShift();
                   if (x-extraLen < minX) {
                         minX  = x - extraLen;
 //                        minXr = minX - extraLen;
@@ -1154,10 +1155,9 @@ qreal Chord::centerX() const
             return staff()->staffType()->chordStemPosX(this) * spatium();
 
       const Note* note = up() ? upNote() : downNote();
-      qreal x = note->pos().x();
-      x += note->headWidth() * .5;
+      qreal x = note->pos().x() + note->noteheadCenterX();
       if (note->mirror()) {
-            x += note->headWidth() * (up() ? -1.0 : 1.0);
+            x += note->headBodyWidth() * (up() ? -1.0 : 1.0);
             }
       return x;
       }
@@ -1872,10 +1872,10 @@ void Chord::layoutPitched()
                               if (sc->notes().size() > 1) {
                                     // some notes may be further to the right than start note
                                     // allow overlap with those notes to count toward the minimum
-                                    qreal snEnd = sn->x() + sn->headWidth();
+                                    qreal snEnd = sn->x() + sn->bboxRightPos();
                                     qreal scEnd = snEnd;
                                     for (Note* n : sc->notes())
-                                          scEnd = qMax(scEnd, n->x() + n->headWidth());
+                                          scEnd = qMax(scEnd, n->x() + n->bboxRightPos());
                                     overlap += scEnd - snEnd;
                                     }
                               }
@@ -2798,9 +2798,9 @@ QPointF Chord::layoutArticulation(Articulation* a)
                   }
             if (!staff()->isTabStaff() && !alignToStem) {
                   if (up())
-                        pos.rx() -= upNote()->headWidth() * .5;   // move half-a-note-head to left
+                        pos.rx() -= upNote()->headBodyWidth() * .5;   // move half-a-note-head to left
                   else
-                        pos.rx() += upNote()->headWidth() * .5;   // move half-a-note-head to right
+                        pos.rx() += upNote()->headBodyWidth() * .5;   // move half-a-note-head to right
                   }
             a->setPos(pos);
             a->adjustReadPos();
