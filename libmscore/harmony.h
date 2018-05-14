@@ -103,6 +103,9 @@ class Harmony final : public TextBase {
       void setId(int d)                        { _id = d; }
       int id() const                           { return _id;           }
 
+      void setBaseCase(NoteCaseType c)         { _baseCase = c; }
+      void setRootCase(NoteCaseType c)         { _rootCase = c; }
+
       bool leftParen() const                   { return _leftParen;    }
       bool rightParen() const                  { return _rightParen;   }
       void setLeftParen(bool leftParen)        { _leftParen = leftParen; }

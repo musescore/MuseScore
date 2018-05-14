@@ -52,6 +52,10 @@
 #include "marker.h"
 #include "read206.h"
 #include "bracketItem.h"
+#include "harmony.h"
+#include "lyrics.h"
+#include "image.h"
+#include "textframe.h"
 
 namespace Ms {
 
@@ -332,7 +336,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element* be)
                   case 24: ss = SubStyleId::HARMONY;        break;
                   case 25: ss = SubStyleId::REHEARSAL_MARK; break;
                   case 26: ss = SubStyleId::REPEAT_LEFT;         break;
-//??                  case 27: ss = SubStyleId::VOLTA;          break;
+                  case 27: ss = SubStyleId::VOLTA;          break;
                   case 28: ss = SubStyleId::FRAME;          break;
                   case 29: ss = SubStyleId::TEXTLINE;       break;
                   case 30: ss = SubStyleId::GLISSANDO;      break;
@@ -352,14 +356,18 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element* be)
             }
       else if (tag == "subtype")
             e.skipCurrentElement();
-      else if (tag == "html-data")
-            t->setXmlText(convertFromHtml(t, e.readXml()));
+      else if (tag == "html-data") {
+            QString ss = e.readXml();
+            QString s  = convertFromHtml(t, ss);
+// qDebug("html-data <%s>", qPrintable(s));
+            t->setXmlText(s);
+            }
       else if (tag == "foregroundColor")  // same as "color" ?
             e.skipCurrentElement();
       else if (tag == "frame")
             t->setHasFrame(e.readBool());
       else if (tag == "halign") {
-            Align align = Align(int(t->align()) & int(~(Align::HCENTER | Align::RIGHT)));
+            Align align = Align(int(t->align()) & int(~Align::HMASK));
             const QString& val(e.readElementText());
             if (val == "center")
                   align = align | Align::HCENTER;
@@ -371,16 +379,45 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element* be)
                   qDebug("readText: unknown alignment: <%s>", qPrintable(val));
             t->setAlign(align);
             }
+      else if (tag == "valign") {
+            Align align = Align(int(t->align()) & int(~Align::VMASK));
+            const QString& val(e.readElementText());
+            if (val == "bottom")
+                  align = align | Align::BOTTOM;
+            else if (val == "top")
+                  ;
+            else if (val == "vcenter")
+                  align = align | Align::VCENTER;
+            else if (val == "baseline")
+                  align = align | Align::BASELINE;
+            else
+                  qDebug("readText: unknown alignment: <%s>", qPrintable(val));
+            t->setAlign(align);
+            }
+      else if (tag == "rxoffset") {       // TODO
+            e.readElementText();
+            }
+      else if (tag == "ryoffset") {       // TODO
+            e.readElementText();
+            }
+      else if (tag == "yoffset") {       // TODO
+            e.readElementText();
+            }
+      else if (tag == "systemFlag") {       // TODO
+            e.readElementText();
+            }
       else if (!t->readProperties(e))
             return false;
+      t->setUserOff(QPointF());     // ignore user offsets
+      t->setAutoplace(true);
       return true;
       }
 
 //---------------------------------------------------------
-//   readText
+//   readText114
 //---------------------------------------------------------
 
-static void readText(XmlReader& e, Text* t, Element* be)
+static void readText114(XmlReader& e, Text* t, Element* be)
       {
       while (e.readNextStartElement()) {
             if (!readTextProperties(e, t, be))
@@ -919,7 +956,7 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
 //   readChord
 //---------------------------------------------------------
 
-static void readChord(Chord* chord, XmlReader& e)
+static void readChord(Measure* m, Chord* chord, XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -933,8 +970,11 @@ static void readChord(Chord* chord, XmlReader& e)
                   }
             else if (tag == "Attribute" || tag == "Articulation") {
                   Element* el = readArticulation(chord, e);
-                  if (el->isFermata())
+                  if (el->isFermata()) {
+                        if (!chord->segment())
+                              chord->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));
                         chord->segment()->add(el);
+                        }
                   else
                         chord->add(el);
                   }
@@ -949,14 +989,17 @@ static void readChord(Chord* chord, XmlReader& e)
 //   readRest
 //---------------------------------------------------------
 
-static void readRest(Rest* rest, XmlReader& e)
+static void readRest(Measure* m, Rest* rest, XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Attribute" || tag == "Articulation") {
                   Element* el = readArticulation(rest, e);
-                  if (el->isFermata())
+                  if (el->isFermata()) {
+                        if (!rest->segment())
+                              rest->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));
                         rest->segment()->add(el);
+                        }
                   else
                         rest->add(el);
                   }
@@ -992,6 +1035,217 @@ void readStaffText(StaffText* t, XmlReader& e)
             if (!readTextProperties(e, t, t))
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   readLineSegment114
+//---------------------------------------------------------
+
+static void readLineSegment114(XmlReader& e, LineSegment* ls)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "off1")
+                  ls->setUserOff(e.readPoint() * ls->spatium());
+            else
+                  ls->readProperties(e);
+            }
+      }
+
+//---------------------------------------------------------
+//   readTextLineProperties114
+//---------------------------------------------------------
+
+static bool readTextLineProperties114(XmlReader& e, TextLineBase* tl)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "beginText") {
+            Text* text = new Text(tl->score());
+            readText114(e, text, tl);
+            tl->setBeginText(text->xmlText());
+            delete text;
+            }
+      else if (tag == "continueText") {
+            Text* text = new Text(tl->score());
+            readText114(e, text, tl);
+            tl->setContinueText(text->xmlText());
+            delete text;
+            }
+      else if (tag == "endText") {
+            Text* text = new Text(tl->score());
+            readText114(e, text, tl);
+            tl->setEndText(text->xmlText());
+            delete text;
+            }
+      else if (tag == "beginHook")
+            tl->setBeginHookType(e.readBool() ? HookType::HOOK_90 : HookType::NONE);
+      else if (tag == "endHook")
+            tl->setEndHookType(e.readBool() ? HookType::HOOK_90 : HookType::NONE);
+      else if (tag == "beginHookType")
+            tl->setBeginHookType(e.readInt() == 0 ? HookType::HOOK_90 : HookType::HOOK_45);
+      else if (tag == "endHookType")
+            tl->setEndHookType(e.readInt() == 0 ? HookType::HOOK_90 : HookType::HOOK_45);
+      else if (tag == "Segment") {
+            LineSegment* ls = tl->createLineSegment();
+            ls->setTrack(tl->track()); // needed in read to get the right staff mag
+            readLineSegment114(e, ls);
+            // in v1.x "visible" is a property of the segment only;
+            // we must ensure that it propagates also to the parent element.
+            // That's why the visibility is set after adding the segment
+            // to the corresponding spanner
+            ls->setVisible(ls->visible());
+            ls->setUserOff(QPointF());        // ignore offsets
+            ls->setAutoplace(true);
+            tl->add(ls);
+            }
+      else if (tl->readProperties(e))
+            return true;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   readVolta114
+//---------------------------------------------------------
+
+static void readVolta114(XmlReader& e, Volta* volta)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "endings") {
+                  QString s = e.readElementText();
+                  QStringList sl = s.split(",", QString::SkipEmptyParts);
+                  volta->endings().clear();
+                  for (const QString& l : sl) {
+                        int i = l.simplified().toInt();
+                        volta->endings().append(i);
+                        }
+                  }
+            else if (tag == "subtype") {
+                  e.readInt();    // TODO
+                  }
+            else if (tag == "lineWidth") {
+                  volta->setLineWidth(e.readDouble() * volta->spatium());
+                  }
+            else if (!readTextLineProperties114(e, volta))
+                  e.unknown();
+            }
+      volta->setUserOff(QPointF());        // ignore offsets
+      volta->setAutoplace(true);
+      }
+
+//---------------------------------------------------------
+//   readHarmony114
+//---------------------------------------------------------
+
+static void readHarmony114(XmlReader& e, Harmony* h)
+      {
+      // convert table to tpc values
+      static const int table[] = {
+            14, 9, 16, 11, 18, 13, 8, 15, 10, 17, 12, 19
+            };
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "base") {
+                  if (h->score()->mscVersion() >= 106)
+                        h->setBaseTpc(e.readInt());
+                  else
+                        h->setBaseTpc(table[e.readInt()-1]);
+                  }
+            else if (tag == "baseCase")
+                  h->setBaseCase(static_cast<NoteCaseType>(e.readInt()));
+            else if (tag == "extension")
+                  h->setId(e.readInt());
+            else if (tag == "name")
+                  h->setTextName(e.readElementText());
+            else if (tag == "root") {
+                  if (h->score()->mscVersion() >= 106)
+                        h->setRootTpc(e.readInt());
+                  else
+                        h->setRootTpc(table[e.readInt()-1]);
+                  }
+            else if (tag == "rootCase")
+                  h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
+            else if (tag == "degree") {
+                  int degreeValue = 0;
+                  int degreeAlter = 0;
+                  QString degreeType = "";
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "degree-value")
+                              degreeValue = e.readInt();
+                        else if (tag == "degree-alter")
+                              degreeAlter = e.readInt();
+                        else if (tag == "degree-type")
+                              degreeType = e.readElementText();
+                        else
+                              e.unknown();
+                        }
+                  if (degreeValue <= 0 || degreeValue > 13
+                      || degreeAlter < -2 || degreeAlter > 2
+                      || (degreeType != "add" && degreeType != "alter" && degreeType != "subtract")) {
+                        qDebug("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
+                               degreeValue, degreeAlter, qPrintable(degreeType));
+                        }
+                  else {
+                        if (degreeType == "add")
+                              h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
+                        else if (degreeType == "alter")
+                              h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ALTER));
+                        else if (degreeType == "subtract")
+                              h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT));
+                        }
+                  }
+            else if (tag == "leftParen") {
+                  h->setLeftParen(true);
+                  e.readNext();
+                  }
+            else if (tag == "rightParen") {
+                  h->setRightParen(true);
+                  e.readNext();
+                  }
+            else if (!readTextProperties(e, h, h))
+                  e.unknown();
+            }
+
+      // TODO: now that we can render arbitrary chords,
+      // we could try to construct a full representation from a degree list.
+      // These will typically only exist for chords imported from MusicXML prior to MuseScore 2.0
+      // or constructed in the Chord Symbol Properties dialog.
+
+      if (h->rootTpc() != Tpc::TPC_INVALID) {
+            if (h->id() > 0) {
+                  // positive id will happen only for scores that were created with explicit chord lists
+                  // lookup id in chord list and generate new description if necessary
+                  h->getDescription();
+                  }
+            else
+                  {
+                  // default case: look up by name
+                  // description will be found for any chord already read in this score
+                  // and we will generate a new one if necessary
+                  h->getDescription(h->hTextName());
+                  }
+            }
+      else if (h->hTextName() == "") {
+            // unrecognized chords prior to 2.0 were stored as text with markup
+            // we need to strip away the markup
+            // this removes any user-applied formatting,
+            // but we no longer support user-applied formatting for chord symbols anyhow
+            // with any luck, the resulting text will be parseable now, so give it a shot
+//            h->createLayout();
+            QString s = h->plainText();
+            if (!s.isEmpty()) {
+                  h->setHarmony(s);
+                  return;
+                  }
+            // empty text could also indicate a root-less slash chord ("/E")
+            // we'll fall through and render it normally
+            }
+
+      // render chord from description (or _textName)
+      h->render();
       }
 
 //---------------------------------------------------------
@@ -1106,9 +1360,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Chord") {
                   Chord* chord = new Chord(m->score());
                   chord->setTrack(e.track());
-                  segment = m->getSegment(SegmentType::ChordRest, e.tick());
-                  chord->setParent(segment);
-                  readChord(chord, e);
+                  readChord(m, chord, e);
+                  if (!chord->segment())
+                        chord->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));
+                  segment = chord->segment();
                   if (chord->noteType() != NoteType::NORMAL) {
                         graceNotes.push_back(chord);
                         if (chord->tremolo() && chord->tremolo()->tremoloType() < TremoloType::R8) {
@@ -1197,9 +1452,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   rest->setDurationType(TDuration::DurationType::V_MEASURE);
                   rest->setDuration(m->timesig()/timeStretch);
                   rest->setTrack(e.track());
-                  segment = m->getSegment(SegmentType::ChordRest, e.tick());
-                  rest->setParent(segment);
-                  readRest(rest, e);
+                  readRest(m, rest, e);
+                  if (!rest->segment())
+                        rest->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));
+                  segment = rest->segment();
                   segment->add(rest);
 
                   if (!rest->duration().isValid())     // hack
@@ -1279,7 +1535,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   sp->setTrack(e.track());
                   sp->setTick(e.tick());
                   // ?? sp->setAnchor(Spanner::Anchor::SEGMENT);
-                  sp->read(e);
+                  if (tag == "Volta")
+                        readVolta114(e, toVolta(sp));
+                  else
+                        readTextLine206(e, toTextLineBase(sp));
                   m->score()->addSpanner(sp);
                   //
                   // check if we already saw "endSpanner"
@@ -1386,17 +1645,63 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         }
                   }
             else if (tag == "Lyrics") {
-                  Element* element = Element::name2Element(tag, m->score());
-                  element->setTrack(e.track());
-                  element->read(e);
+                  Lyrics* l = new Lyrics(m->score());
+                  l->setTrack(e.track());
+
+                  int   iEndTick = 0;           // used for backward compatibility
+                  Text* _verseNumber = 0;
+
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "no")
+                              l->setNo(e.readInt());
+                        else if (tag == "syllabic") {
+                              QString val(e.readElementText());
+                              if (val == "single")
+                                    l->setSyllabic(Lyrics::Syllabic::SINGLE);
+                              else if (val == "begin")
+                                    l->setSyllabic(Lyrics::Syllabic::BEGIN);
+                              else if (val == "end")
+                                    l->setSyllabic(Lyrics::Syllabic::END);
+                              else if (val == "middle")
+                                    l->setSyllabic(Lyrics::Syllabic::MIDDLE);
+                              else
+                                    qDebug("bad syllabic property");
+                              }
+                        else if (tag == "endTick") {          // obsolete
+                              // store <endTick> tag value until a <ticks> tag has been read
+                              // which positions this lyrics element in the score
+                              iEndTick = e.readInt();
+                              }
+                        else if (tag == "ticks")
+                              l->setTicks(e.readInt());
+                        else if (tag == "Number") {                           // obsolete
+                              _verseNumber = new Text(l->score());
+                              _verseNumber->read(e);
+                              _verseNumber->setParent(l);
+                              }
+                        else if (!readTextProperties(e, l, l))
+                              e.unknown();
+                        }
+                  // if any endTick, make it relative to current tick
+                  if (iEndTick) {
+                        l->setTicks(iEndTick - e.tick());
+                        // qDebug("Lyrics::endTick: %d  ticks %d", iEndTick, _ticks);
+                        }
+                  if (_verseNumber) {
+                        // TODO: add text to main text
+                        }
+
+                  delete _verseNumber;
+
                   segment       = m->getSegment(SegmentType::ChordRest, e.tick());
-                  ChordRest* cr = toChordRest(segment->element(element->track()));
+                  ChordRest* cr = toChordRest(segment->element(l->track()));
                   if (!cr)
                         cr = toChordRest(segment->element(e.track())); // in case lyric itself has bad track info
                   if (!cr)
                         qDebug("Internal error: no chord/rest for lyrics");
                   else
-                        cr->add(element);
+                        cr->add(l);
                   }
             else if (tag == "Text") {
                   StaffText* t = new StaffText(m->score());
@@ -1432,6 +1737,13 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   readStaffText(t, e);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(t);
+                  }
+            else if (tag == "Harmony") {
+                  Harmony* h = new Harmony(m->score());
+                  h->setTrack(e.track());
+                  readHarmony114(e, h);
+                  segment = m->getSegment(SegmentType::ChordRest, e.tick());
+                  segment->add(h);
                   }
             else if (tag == "Harmony"
                || tag == "FretDiagram"
@@ -1549,17 +1861,15 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   }
             else if (tag == "Segment") {
                   segment->read(e);
-#if 0
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "off1") {
                               qreal o = e.readDouble();
-                              qDebug("TODO: off1");
+                              qDebug("TODO: off1 %f", o);
                               }
                         else
                               e.unknown();
                         }
-#endif
                   }
             else if (tag == "MeasureNumber") {
                   Text* noText = new Text(SubStyleId::MEASURE_NUMBER, m->score());
@@ -1607,19 +1917,113 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             }
       e.checkTuplets();
       }
+
 //---------------------------------------------------------
-//   readMeasureBase
+//   readBoxProperties
 //---------------------------------------------------------
 
-static void readMeasureBase(MeasureBase* mb, XmlReader& e)
+static void readBox(XmlReader& e, Box* b);
+
+static bool readBoxProperties(XmlReader& e, Box* b)
       {
+      const QStringRef& tag(e.name());
+      if (tag == "height")
+            b->setBoxHeight(Spatium(e.readDouble()));
+      else if (tag == "width")
+            b->setBoxWidth(Spatium(e.readDouble()));
+      else if (tag == "topGap") {
+            b->setTopGap(e.readDouble());
+            b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "bottomGap") {
+            b->setBottomGap(e.readDouble());
+            b->setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "leftMargin")
+            b->setLeftMargin(e.readDouble());
+      else if (tag == "rightMargin")
+            b->setRightMargin(e.readDouble());
+      else if (tag == "topMargin")
+            b->setTopMargin(e.readDouble());
+      else if (tag == "bottomMargin")
+            b->setBottomMargin(e.readDouble());
+      else if (tag == "offset")
+            b->setUserOff(e.readPoint() * b->spatium());
+      else if (tag == "pos")
+            e.readPoint();
+      else if (tag == "Text") {
+            Text* t;
+            if (b->isTBox()) {
+                  t = toTBox(b)->text();
+                  readText114(e, t, t);
+                  }
+            else {
+                  t = new Text(b->score());
+                  readText114(e, t, t);
+                  if (t->empty())
+                        qDebug("read empty text");
+                  else
+                        b->add(t);
+                  }
+            }
+      else if (tag == "Symbol") {
+            Symbol* s = new Symbol(b->score());
+            s->read(e);
+            b->add(s);
+            }
+      else if (tag == "Image") {
+            if (MScore::noImages)
+                  e.skipCurrentElement();
+            else {
+                  Image* image = new Image(b->score());
+                  image->setTrack(e.track());
+                  image->read(e);
+                  b->add(image);
+                  }
+            }
+      else if (tag == "HBox") {
+            HBox* hb = new HBox(b->score());
+            readBox(e, hb);
+            b->add(hb);
+            }
+      else if (tag == "VBox") {
+            VBox* vb = new VBox(b->score());
+            readBox(e, vb);
+            b->add(vb);
+            }
+//      else if (MeasureBase::readProperties(e))
+//            ;
+      else
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   readBox
+//---------------------------------------------------------
+
+static void readBox(XmlReader& e, Box* b)
+      {
+      b->setLeftMargin(0.0);
+      b->setRightMargin(0.0);
+      b->setTopMargin(0.0);
+      b->setBottomMargin(0.0);
+      b->setBoxHeight(Spatium(0));     // override default set in constructor
+      b->setBoxWidth(Spatium(0));
+
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "Text") {
-                  Text* t = new Text(mb->score());
-                  readText(e, t, t);
+            if (tag == "HBox") {
+                  HBox* hb = new HBox(b->score());
+                  readBox(e, hb);
+                  b->add(hb);
                   }
-            else
+            else if (tag == "VBox") {
+                  VBox* vb = new VBox(b->score());
+                  readBox(e, vb);
+                  b->add(vb);
+                  }
+            else if (!readBoxProperties(e, b))
                   e.unknown();
             }
       }
@@ -1689,8 +2093,8 @@ static void readStaffContent(Score* score, XmlReader& e)
                         }
                   }
             else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
-                  MeasureBase* mb = toMeasureBase(Element::name2Element(tag, score));
-                  readMeasureBase(mb, e);
+                  Box* mb = toBox(Element::name2Element(tag, score));
+                  readBox(e, mb);
                   mb->setTick(e.tick());
                   score->measures()->add(mb);
                   }
@@ -1888,7 +2292,7 @@ static void readPart(Part* part, XmlReader& e)
                   }
             else if (tag == "name") {
                   Text* t = new Text(_score);
-                  readText(e, t, t);
+                  readText114(e, t, t);
                   part->instrument()->setLongName(t->xmlText());
                   delete t;
                   }
@@ -2262,8 +2666,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   }
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);
-                  text->read(e);
-                  text->layout();
+                  readText114(e, text, text);
                   setMetaTag("copyright", text->plainText());
                   delete text;
                   }
@@ -2298,7 +2701,10 @@ Score::FileError MasterScore::read114(XmlReader& e)
                 || (tag == "Trill")
                 || (tag == "Pedal")) {
                   Spanner* s = toSpanner(Element::name2Element(tag, this));
-                  s->read(e);
+                  if (tag == "Volta")
+                        readVolta114(e, toVolta(s));
+                  else
+                        s->read(e);
                   if (s->track() == -1)
                         s->setTrack(e.track());
                   else
@@ -2338,8 +2744,10 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   e.unknown();
             }
 
-      if (e.error() != QXmlStreamReader::NoError)
+      if (e.error() != QXmlStreamReader::NoError) {
+            qDebug("%lld %lld: %s ", e.lineNumber(), e.columnNumber(), qPrintable(e.errorString()));
             return FileError::FILE_BAD_FORMAT;
+            }
 
       for (Staff* s : staves()) {
             int idx   = s->idx();

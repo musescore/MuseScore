@@ -69,6 +69,9 @@ extern Element* readArticulation(ChordRest*, XmlReader&);
 extern void setPageFormat(MStyle*, const PageFormat&);
 extern void initPageFormat(MStyle*, PageFormat*);
 extern void readTextStyle206(MStyle* style, XmlReader& e);
+//extern void readText206(XmlReader& e, TextBase* t, Element* be);
+// extern void readVolta206(XmlReader& e, Volta* volta);
+extern void readTextLine206(XmlReader& e, TextLineBase* tlb);
 }
 
 #endif
