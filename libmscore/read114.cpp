@@ -953,6 +953,40 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   readTremolo
+//---------------------------------------------------------
+
+static void readTremolo(Tremolo* tremolo, XmlReader& e)
+      {
+      enum class OldTremoloType : char {
+            OLD_R8 = 0,
+            OLD_R16,
+            OLD_R32,
+            OLD_C8,
+            OLD_C16,
+            OLD_C32
+            };
+      while (e.readNextStartElement()) {
+            if (e.name() == "subtype") {
+                  OldTremoloType sti = OldTremoloType(e.readElementText().toInt());
+                  TremoloType st;
+                  switch (sti) {
+                        default:
+                        case OldTremoloType::OLD_R8:  st = TremoloType::R8;  break;
+                        case OldTremoloType::OLD_R16: st = TremoloType::R16; break;
+                        case OldTremoloType::OLD_R32: st = TremoloType::R32; break;
+                        case OldTremoloType::OLD_C8:  st = TremoloType::C8;  break;
+                        case OldTremoloType::OLD_C16: st = TremoloType::C16; break;
+                        case OldTremoloType::OLD_C32: st = TremoloType::C32; break;
+                        }
+                  tremolo->setTremoloType(st);
+                  }
+            else if (!tremolo->Element::readProperties(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
 //   readChord
 //---------------------------------------------------------
 
@@ -978,6 +1012,13 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e)
                   else
                         chord->add(el);
                   }
+            else if (tag == "Tremolo") {
+                  Tremolo* tremolo = new Tremolo(chord->score());
+                  chord->setTremolo(tremolo);
+                  tremolo->setTrack(chord->track());
+                  readTremolo(tremolo, e);
+                  tremolo->setParent(chord);
+            }
             else if (chord->readProperties(e))
                   ;
             else
@@ -1366,21 +1407,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   segment = chord->segment();
                   if (chord->noteType() != NoteType::NORMAL) {
                         graceNotes.push_back(chord);
-                        if (chord->tremolo() && chord->tremolo()->tremoloType() < TremoloType::R8) {
-                              // old style tremolo found
-                              Tremolo* tremolo = chord->tremolo();
-                              TremoloType st;
-                              switch (tremolo->tremoloType()) {
-                                    default:
-                                    case TremoloType::OLD_R8:  st = TremoloType::R8;  break;
-                                    case TremoloType::OLD_R16: st = TremoloType::R16; break;
-                                    case TremoloType::OLD_R32: st = TremoloType::R32; break;
-                                    case TremoloType::OLD_C8:  st = TremoloType::C8;  break;
-                                    case TremoloType::OLD_C16: st = TremoloType::C16; break;
-                                    case TremoloType::OLD_C32: st = TremoloType::C32; break;
-                                    }
-                              tremolo->setTremoloType(st);
-                              }
                         }
                   else {
                         segment->add(chord);
@@ -1394,21 +1420,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         graceNotes.clear();
                         int crticks = chord->actualTicks();
 
-                        if (chord->tremolo() && chord->tremolo()->tremoloType() < TremoloType::R8) {
-                              // old style tremolo found
-
+                        if (chord->tremolo()) {
                               Tremolo* tremolo = chord->tremolo();
-                              TremoloType st;
-                              switch (tremolo->tremoloType()) {
-                                    default:
-                                    case TremoloType::OLD_R8:  st = TremoloType::R8;  break;
-                                    case TremoloType::OLD_R16: st = TremoloType::R16; break;
-                                    case TremoloType::OLD_R32: st = TremoloType::R32; break;
-                                    case TremoloType::OLD_C8:  st = TremoloType::C8;  break;
-                                    case TremoloType::OLD_C16: st = TremoloType::C16; break;
-                                    case TremoloType::OLD_C32: st = TremoloType::C32; break;
-                                    }
-                              tremolo->setTremoloType(st);
                               if (tremolo->twoNotes()) {
                                     int track = chord->track();
                                     Segment* ss = 0;

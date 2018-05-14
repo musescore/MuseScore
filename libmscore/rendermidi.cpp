@@ -826,13 +826,16 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
             Drumset* ds = chord->staff()->part()->instrument(chord->tick())->drumset();
             for (Note* n : chord->notes()) {
                   DrumInstrumentVariant div = ds->findVariant(n->pitch(), chord->articulations(), chord->tremolo());
-                  if (div.pitch !=INVALID_PITCH && div.tremolo == tremolo->tremoloType())
+                  if (div.pitch != INVALID_PITCH && div.tremolo == tremolo->tremoloType())
                         return; // already rendered
                   }
             }
 
-      //int n = 1 << tremolo->lines();
-      //int l = 1000 / n;
+      // we cannot render buzz roll with MIDI events only
+      if (tremolo->tremoloType() == TremoloType::BUZZ_ROLL)
+            return;
+
+      // render tremolo with multiple events
       if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
             int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
             SegmentType st = SegmentType::ChordRest;
