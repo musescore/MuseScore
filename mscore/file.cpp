@@ -725,10 +725,52 @@ MasterScore* MuseScore::getNewFile()
             delete nvb;
             }
 
-      if (newWizard->createTempo()) {
-            double tempo = newWizard->tempo();
+      double tempo = 120;
+      if (newWizard->tempo(&tempo)) {
+
+            Fraction timesig = newWizard->timesig();
+
+            QString text("<sym>metNoteQuarterUp</sym> = %1");
+            switch (timesig.denominator()) {
+                  case 1:
+                        text = "<sym>metNoteWhole</sym> = %1";
+                        break;
+                  case 2:
+                        text = "<sym>metNoteHalfUp</sym> = %1";
+                        break;
+                  case 4:
+                        text = "<sym>metNoteQuarterUp</sym> = %1";
+                        break;
+                  case 8:
+                        if(timesig.numerator() % 3 == 0)
+                              text = "<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+                        else
+                              text = "<sym>metNote8thUp</sym> = %1";
+                        break;
+                  case 16:
+                        if(timesig.numerator() % 3 == 0)
+                              text = "<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+                        else
+                              text = "<sym>metNote16thUp</sym> = %1";
+                        break;
+                  case 32:
+                        if(timesig.numerator() % 3 == 0)
+                              text = "<sym>metNote16thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+                        else
+                              text = "<sym>metNote32ndUp</sym> = %1";
+                        break;
+                  case 64:
+                        if(timesig.numerator() % 3 == 0)
+                              text = "<sym>metNote32ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+                        else
+                              text = "<sym>metNote64thUp</sym> = %1";
+                        break;
+                  default:
+                        break;
+                  }
+
             TempoText* tt = new TempoText(score);
-            tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempo));
+            tt->setXmlText(text.arg(tempo));
             tempo /= 60;      // bpm -> bps
 
             tt->setTempo(tempo);

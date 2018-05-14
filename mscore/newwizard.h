@@ -55,6 +55,7 @@ class TimesigWizard : public QWidget, private Ui::TimesigWizard {
       int measures() const;
       Fraction timesig() const;
       bool pickup(int* z, int* n) const;
+      bool tempo(double* t) const;
       TimeSigType type() const;
       };
 
@@ -123,6 +124,7 @@ class NewWizardPage3 : public QWizardPage {
       Fraction timesig() const                 { return w->timesig();    }
       bool pickupMeasure(int* z, int* n) const { return w->pickup(z, n); }
       TimeSigType timesigType() const          { return w->type();       }
+      bool tempo(double* t) const              { return w->tempo(t);     }
       };
 
 //---------------------------------------------------------
@@ -155,15 +157,11 @@ class NewWizardPage5 : public QWizardPage {
       Q_OBJECT
 
       Palette* sp;
-      QDoubleSpinBox* _tempo;
-      QGroupBox* tempoGroup;
 
    public:
       NewWizardPage5(QWidget* parent = 0);
       virtual bool isComplete() const override { return true; }
       KeySigEvent keysig() const;
-      double tempo() const            { return _tempo->value(); }
-      bool createTempo() const        { return tempoGroup->isChecked(); }
       void init();
       };
 
@@ -203,9 +201,8 @@ class NewWizard : public QWizard {
       QString copyright() const          { return p1->copyright();   }
       KeySigEvent keysig() const         { return p5->keysig();      }
       bool pickupMeasure(int* z, int* n) const { return p3->pickupMeasure(z, n); }
-      TimeSigType timesigType() const     { return p3->timesigType();       }
-      double tempo() const                { return p5->tempo();       }
-      bool createTempo() const            { return p5->createTempo(); }
+      TimeSigType timesigType() const     { return p3->timesigType(); }
+      bool tempo(double* t) const         { return p3->tempo(t);     }
       bool emptyScore() const;
       };
 

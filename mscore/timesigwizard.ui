@@ -361,6 +361,63 @@
      </layout>
     </widget>
    </item>
+   <item>
+    <widget class="QGroupBox" name="tempoGroup">
+     <property name="accessibleName">
+      <string>Tempo</string>
+     </property>
+     <property name="title">
+      <string>Tempo</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QHBoxLayout">
+      <item>
+       <widget class="QLabel" name="labelBpm">
+        <property name="text">
+         <string>BPM:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="spinboxTempo">
+        <property name="accessibleName">
+         <string>Beats per minute</string>
+        </property>
+        <property name="minimum">
+         <number>20</number>
+        </property>
+        <property name="maximum">
+         <number>400</number>
+        </property>
+        <property name="decimals">
+         <number>1</number>
+        </property>
+        <property name="value">
+         <number>120</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
  <tabstops>
@@ -373,6 +430,8 @@
   <tabstop>pickupTimesigZ</tabstop>
   <tabstop>pickupTimesigN</tabstop>
   <tabstop>measureCount</tabstop>
+  <tabstop>tempoGroup</tabstop>
+  <tabstop>spinboxTempo</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>

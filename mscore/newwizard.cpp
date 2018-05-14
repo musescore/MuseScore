@@ -90,6 +90,16 @@ bool TimesigWizard::pickup(int* z, int* n) const
       }
 
 //---------------------------------------------------------
+//   tempo
+//---------------------------------------------------------
+
+bool TimesigWizard::tempo(double* t) const
+    {
+    *t = spinboxTempo->value();
+    return tempoGroup->isChecked();
+    }
+
+//---------------------------------------------------------
 //   type
 //---------------------------------------------------------
 
@@ -249,7 +259,7 @@ NewWizardPage3::NewWizardPage3(QWidget* parent)
       {
       setFinalPage(true);
       setTitle(tr("Create New Score"));
-      setSubTitle(tr("Choose time signature:"));
+      setSubTitle(tr("Choose time signature and tempo:"));
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
 
@@ -366,7 +376,7 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
       {
       setFinalPage(true);
       setTitle(tr("Create New Score"));
-      setSubTitle(tr("Choose key signature and tempo:"));
+      setSubTitle(tr("Choose key signature:"));
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
 
@@ -384,26 +394,8 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
       l1->addWidget(sa);
       b1->setLayout(l1);
 
-      tempoGroup = new QGroupBox;
-      tempoGroup->setCheckable(true);
-      tempoGroup->setChecked(false);
-      tempoGroup->setTitle(tr("Tempo"));
-      QLabel* bpm = new QLabel;
-      bpm->setText(tr("BPM:"));
-      _tempo = new QDoubleSpinBox;
-      _tempo->setAccessibleName(tr("Beats per minute"));
-      _tempo->setRange(20.0, 400.0);
-      _tempo->setValue(120.0);
-      _tempo->setDecimals(1);
-      QHBoxLayout* l2 = new QHBoxLayout;
-      l2->addWidget(bpm);
-      l2->addWidget(_tempo);
-      l2->addStretch(100);
-      tempoGroup->setLayout(l2);
-
       QVBoxLayout* l3 = new QVBoxLayout;
       l3->addWidget(b1);
-      l3->addWidget(tempoGroup);
       l3->addStretch(100);
       setLayout(l3);
       setFocusPolicy(Qt::StrongFocus);
