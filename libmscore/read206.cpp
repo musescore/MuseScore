@@ -968,7 +968,7 @@ static void readNote(Note* note, XmlReader& e)
 //   readText
 //---------------------------------------------------------
 
-static void readText(XmlReader& e, TextBase* t, Element* be)
+static void readText206(XmlReader& e, TextBase* t, Element* be)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -1029,7 +1029,7 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
                   Text* _number = new Text(tuplet->score());
                   _number->setParent(tuplet);
                   tuplet->setNumber(_number);
-                  readText(e, _number, tuplet);
+                  readText206(e, _number, tuplet);
                   _number->setVisible(tuplet->visible());     //?? override saved property
                   _number->setTrack(tuplet->track());
                   // move property flags from _number
@@ -1095,19 +1095,19 @@ static bool readTextLineProperties(XmlReader& e, TextLineBase* tl)
 
       if (tag == "beginText") {
             Text* text = new Text(tl->score());
-            readText(e, text, tl);
+            readText206(e, text, tl);
             tl->setBeginText(text->xmlText());
             delete text;
             }
       else if (tag == "continueText") {
             Text* text = new Text(tl->score());
-            readText(e, text, tl);
+            readText206(e, text, tl);
             tl->setContinueText(text->xmlText());
             delete text;
             }
       else if (tag == "endText") {
             Text* text = new Text(tl->score());
-            readText(e, text, tl);
+            readText206(e, text, tl);
             tl->setEndText(text->xmlText());
             delete text;
             }
@@ -1125,10 +1125,10 @@ static bool readTextLineProperties(XmlReader& e, TextLineBase* tl)
       }
 
 //---------------------------------------------------------
-//   readVolta
+//   readVolta206
 //---------------------------------------------------------
 
-static void readVolta(XmlReader& e, Volta* volta)
+static void readVolta206(XmlReader& e, Volta* volta)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -1269,10 +1269,10 @@ static void readTrill(XmlReader& e, Trill* t)
       }
 
 //---------------------------------------------------------
-//   readTextLine
+//   readTextLine206
 //---------------------------------------------------------
 
-static void readTextLine(XmlReader& e, TextLineBase* tlb)
+void readTextLine206(XmlReader& e, TextLineBase* tlb)
       {
       while (e.readNextStartElement()) {
             if (!readTextLineProperties(e, tlb))
@@ -1737,7 +1737,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   e.addSpanner(e.intAttribute("id", -1), sp);
 
                   if (tag == "Volta")
-                        readVolta(e, toVolta(sp));
+                        readVolta206(e, toVolta(sp));
                   else if (tag == "Pedal")
                         readPedal(e, toPedal(sp));
                   else if (tag == "Ottava")
@@ -1747,7 +1747,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   else if (tag == "Trill")
                         readTrill(e, toTrill(sp));
                   else
-                        readTextLine(e, toTextLineBase(sp));
+                        readTextLine206(e, toTextLineBase(sp));
                   score->addSpanner(sp);
                   //
                   // check if we already saw "endSpanner"
@@ -1884,7 +1884,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Text") {
                   StaffText* t = new StaffText(score);
                   t->setTrack(e.track());
-                  readText(e, t, t);
+                  readText206(e, t, t);
                   if (t->empty()) {
                         qDebug("reading empty text: deleted");
                         delete t;
@@ -1908,7 +1908,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "RehearsalMark") {
                   RehearsalMark* el = new RehearsalMark(score);
                   el->setTrack(e.track());
-                  readText(e, el, el);
+                  readText206(e, el, el);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
                   }
@@ -2113,11 +2113,11 @@ static void readBox(Box* b, XmlReader& e)
                   Text* t;
                   if (b->isTBox()) {
                         t = toTBox(b)->text();
-                        readText(e, t, t);
+                        readText206(e, t, t);
                         }
                   else {
                         t = new Text(b->score());
-                        readText(e, t, t);
+                        readText206(e, t, t);
                         if (t->empty()) {
                               qDebug("read empty text");
                               }
