@@ -765,11 +765,22 @@ bool Score::isSubdivided(ChordRest* chord, int swingUnit)
 //   renderTremolo
 //---------------------------------------------------------
 
-void renderTremolo(Chord *chord, QList<NoteEventList> & ell)
+void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
       {
       Segment* seg = chord->segment();
       Tremolo* tremolo = chord->tremolo();
       int notes = chord->notes().size();
+
+      // check if tremolo was rendered before for drum staff
+      if (chord->staff() && chord->staff()->isDrumStaff()) {
+            Drumset* ds = chord->staff()->part()->instrument(chord->tick())->drumset();
+            for (Note* n : chord->notes()) {
+                  DrumInstrumentVariant div = ds->findVariant(n->pitch(), chord->articulations(), chord->tremolo());
+                  if (div.pitch !=INVALID_PITCH && div.tremolo == tremolo->tremoloType())
+                        return; // already rendered
+                  }
+            }
+
       //int n = 1 << tremolo->lines();
       //int l = 1000 / n;
       if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {

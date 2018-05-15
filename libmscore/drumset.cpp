@@ -65,6 +65,19 @@ void Drumset::save(Xml& xml) const
                               break;
                         }
                   }
+            auto vs = variants(i);
+            if (!vs.isEmpty()) {
+                  xml.stag("variants");
+                  for (auto v : vs) {
+                        xml.stag(QString("variant pitch=\"%1\"").arg(v.pitch));
+                        if (!v.articulationName.isEmpty())
+                              xml.tag("articulation", v.articulationName);
+                        if (v.tremolo != TremoloType::INVALID_TREMOLO)
+                              xml.tag("tremolo", Tremolo::type2name(v.tremolo));
+                        xml.etag();
+                        }
+                  xml.etag();
+                  }
             xml.etag();
             }
       }
@@ -109,6 +122,25 @@ void Drumset::load(XmlReader& e)
                   QString val(e.readElementText());
                   int i = val.toInt(&isNum);
                   _drum[pitch].shortcut = isNum ? i : toupper(val[0].toLatin1());
+                  }
+            else if (tag == "variants") {
+                  while(e.readNextStartElement()) {
+                        const QStringRef& tagv(e.name());
+                        if (tagv == "variant") {
+                              DrumInstrumentVariant div;
+                              div.pitch = e.attribute("pitch").toInt();
+                              while (e.readNextStartElement()) {
+                                    const QStringRef& taga(e.name());
+                                    if (taga == "articulation") {
+                                          div.articulationName = e.readElementText();
+                                          }
+                                    else if (taga == "tremolo") {
+                                          div.tremolo = Tremolo::name2Type(e.readElementText());
+                                          }
+                                    }
+                              _drum[pitch].addVariant(div);
+                              }
+                        }
                   }
             else
                   e.unknown();
@@ -160,6 +192,31 @@ int Drumset::prevPitch(int ii) const
                   return i;
             }
       return 0;
+      }
+
+//---------------------------------------------------------
+//   findVariant
+/// find a variant for the given pitch with matching chord articulation and tremolo
+//---------------------------------------------------------
+
+DrumInstrumentVariant Drumset::findVariant(int p, const QList<Articulation*> articulations, Tremolo* tremolo)
+      {
+      DrumInstrumentVariant div;
+      auto vs = variants(p);
+      for (auto v : vs) {
+            bool matchTremolo = (!tremolo && v.tremolo == TremoloType::INVALID_TREMOLO) || v.tremolo == tremolo->tremoloType();
+            bool matchArticulation = v.articulationName.isEmpty() && articulations.isEmpty();
+            for (auto a : articulations) {
+                  matchArticulation = a->subtypeName() == v.articulationName;
+                  if (!matchArticulation)
+                        break;
+                  }
+            if (matchArticulation && matchTremolo) {
+                  div = v;
+                  break;
+                  }
+            }
+      return div;
       }
 
 //---------------------------------------------------------

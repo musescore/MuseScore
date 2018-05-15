@@ -818,7 +818,7 @@ void Note::draw(QPainter* painter) const
             // by coloring the notehead
             //
             if (chord() && chord()->segment() && staff() && !selected()
-               && !score()->printing() && MScore::warnPitchRange) {
+               && !score()->printing() && MScore::warnPitchRange && !staff()->isDrumStaff()) {
                   const Instrument* in = part()->instrument(chord()->tick());
                   int i = ppitch();
                   if (i < in->minPitchP() || i > in->maxPitchP())
@@ -2181,7 +2181,17 @@ void Note::setHeadGroup(NoteHead::Group val)
 
 int Note::ppitch() const
       {
-      return _pitch + staff()->pitchOffset(chord()->segment()->tick());
+      Chord* ch = chord();
+      // if staff is drum
+      // match tremolo and articulation between variants and chord
+      if (play() && ch && ch->staff() && ch->staff()->isDrumStaff()) {
+            Drumset* ds = ch->staff()->part()->instrument(ch->tick())->drumset();
+            DrumInstrumentVariant div = ds->findVariant(_pitch, ch->articulations(), ch->tremolo());
+            if (div.pitch != INVALID_PITCH)
+                  return div.pitch;
+            }
+      return _pitch + staff()->pitchOffset(ch->segment()->tick());
+
       }
 
 //---------------------------------------------------------

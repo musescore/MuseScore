@@ -14,12 +14,24 @@
 #define __DRUMSET_H__
 
 #include "mscore.h"
+#include "tremolo.h"
 #include "note.h"
+#include "articulation.h"
 #include "sym.h"
 
 namespace Ms {
 
 class Xml;
+
+struct DrumInstrumentVariant {
+      int pitch;
+      QString articulationName;
+      TremoloType tremolo;
+      DrumInstrumentVariant() {
+            pitch = INVALID_PITCH;
+            tremolo = TremoloType::INVALID_TREMOLO;
+      }
+};
 
 //---------------------------------------------------------
 //   DrumInstrument
@@ -36,11 +48,13 @@ struct DrumInstrument {
       MScore::Direction stemDirection;
       int voice;
       char shortcut;            ///< accelerator key (CDEFGAB)
+      QList<DrumInstrumentVariant> variants;
 
       DrumInstrument() {}
       DrumInstrument(const char* s, NoteHead::Group nh, int l, MScore::Direction d,
          int v = 0, char sc = 0)
          : name(s), notehead(nh), line(l), stemDirection(d), voice(v), shortcut(sc) {}
+      void addVariant(DrumInstrumentVariant v) { variants.append(v); }
       };
 
 static const int DRUM_INSTRUMENTS = 128;
@@ -64,6 +78,7 @@ class Drumset {
       MScore::Direction stemDirection(int pitch) const  { return _drum[pitch].stemDirection;  }
       const QString& name(int pitch) const      { return _drum[pitch].name;           }
       int shortcut(int pitch) const             { return _drum[pitch].shortcut;       }
+      QList<DrumInstrumentVariant> variants(int pitch) const   { return _drum[pitch].variants; }
 
       void save(Xml&) const;
       void load(XmlReader&);
@@ -72,6 +87,7 @@ class Drumset {
       int prevPitch(int) const;
       DrumInstrument& drum(int i) { return _drum[i]; }
       const DrumInstrument& drum(int i) const { return _drum[i]; }
+      DrumInstrumentVariant findVariant(int pitch, const QList<Articulation*> articulations, Tremolo* tremolo);
       };
 
 extern Drumset* smDrumset;
