@@ -61,6 +61,52 @@ static void writeData(Xml& xml, qreal spatium, qreal scale, const QString& name,
       }
 
 //---------------------------------------------------------
+//   writeRestData
+//---------------------------------------------------------
+
+static void writeRestData(Xml& xml, qreal spatium, qreal scale, const QString& name, const Element* e)
+      {
+      qreal interline = 20.0;
+      if (e->staff()) {
+            interline *= (e->staff()->spatium() / e->score()->spatium());
+            scale     *= (e->score()->spatium() / e->staff()->spatium());
+            }
+      if (scale == 1.0)
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(name));
+      else
+            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(name));
+
+      QRectF rr(e->pageBoundingRect());
+      QRectF r(rr.x() * spatium, rr.y() * spatium, rr.width() * spatium, rr.height() * spatium);
+      xml.putLevel();
+      xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+         .arg(r.x(),      0, 'f', 3)
+         .arg(r.y(),      0, 'f', 3)
+         .arg(r.width(),  0, 'f', 3)
+         .arg(r.height(), 0, 'f', 3);
+      xml.etag();
+
+      const Rest* rest = static_cast<const Rest*>(e);
+      int dots = rest->durationType().dots();
+      if (dots) {
+            QString dotname = "restDot";
+            if (scale == 1.0)
+                  xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(dotname));
+            else
+                  xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(dotname));
+            QRectF rd(rest->symBbox(SymId::augmentationDot));
+            QRectF dot((rr.x() + (3 * rr.width()) / 2) * spatium, (rr.y() - rd.y() + (rr.height() / 4)) * spatium, rd.width() * spatium, rd.height() * spatium);
+            xml.putLevel();
+            xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+               .arg(dot.x(),      0, 'f', 3)
+               .arg(dot.y(),      0, 'f', 3)
+               .arg(dot.width(),  0, 'f', 3)
+               .arg(dot.height(), 0, 'f', 3);
+            xml.etag();
+            }
+      }
+
+//---------------------------------------------------------
 //   writeTimeSigData
 //---------------------------------------------------------
 
@@ -348,44 +394,44 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                         const Rest* r = static_cast<const Rest*>(e);
                         switch (r->durationType().type()) {
                               case TDuration::DurationType::V_1024TH:
-                                    writeData(xml, mag, r->mag(), "rest1024th", r);
+                                    writeRestData(xml, mag, r->mag(), "rest1024th", r);
                                     break;
                               case TDuration::DurationType::V_512TH:
-                                    writeData(xml, mag, r->mag(), "rest512th", r);
+                                    writeRestData(xml, mag, r->mag(), "rest512th", r);
                                     break;
                               case TDuration::DurationType::V_256TH:
-                                    writeData(xml, mag, r->mag(), "rest256th", r);
+                                    writeRestData(xml, mag, r->mag(), "rest256th", r);
                                     break;
                               case TDuration::DurationType::V_128TH:
-                                    writeData(xml, mag, r->mag(), "rest128th", r);
+                                    writeRestData(xml, mag, r->mag(), "rest128th", r);
                                     break;
                               case TDuration::DurationType::V_64TH:
-                                    writeData(xml, mag, r->mag(), "rest64th", r);
+                                    writeRestData(xml, mag, r->mag(), "rest64th", r);
                                     break;
                               case TDuration::DurationType::V_32ND:
-                                    writeData(xml, mag, r->mag(), "rest32nd", r);
+                                    writeRestData(xml, mag, r->mag(), "rest32nd", r);
                                     break;
                               case TDuration::DurationType::V_16TH:
-                                    writeData(xml, mag, r->mag(), "rest16th", r);
+                                    writeRestData(xml, mag, r->mag(), "rest16th", r);
                                     break;
                               case TDuration::DurationType::V_EIGHTH:
-                                    writeData(xml, mag, r->mag(), "rest8th", r);
+                                    writeRestData(xml, mag, r->mag(), "rest8th", r);
                                     break;
                               case TDuration::DurationType::V_QUARTER:
-                                    writeData(xml, mag, r->mag(), "restQuarter", r);
+                                    writeRestData(xml, mag, r->mag(), "restQuarter", r);
                                     break;
                               case TDuration::DurationType::V_HALF:
-                                    writeData(xml, mag, r->mag(), "restHalf", r);
+                                    writeRestData(xml, mag, r->mag(), "restHalf", r);
                                     break;
                               case TDuration::DurationType::V_WHOLE:
                               case TDuration::DurationType::V_MEASURE:
-                                    writeData(xml, mag, r->mag(), "restWhole", r);
+                                    writeRestData(xml, mag, r->mag(), "restWhole", r);
                                     break;
                               case TDuration::DurationType::V_BREVE:
-                                    writeData(xml, mag, r->mag(), "restDoubleWhole", r);
+                                    writeRestData(xml, mag, r->mag(), "restDoubleWhole", r);
                                     break;
                               case TDuration::DurationType::V_LONG:
-                                    writeData(xml, mag, r->mag(), "restLonga", r);
+                                    writeRestData(xml, mag, r->mag(), "restLonga", r);
                                     break;
                               default:
                                     break;
