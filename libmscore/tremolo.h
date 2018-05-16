@@ -23,6 +23,7 @@ class Chord;
 
 // Tremolo subtypes:
 enum class TremoloType : char {
+      INVALID_TREMOLO = -1,
       OLD_R8 = 0,
       OLD_R16,
       OLD_R32,
@@ -62,6 +63,8 @@ class Tremolo : public Element {
 
       void setTremoloType(TremoloType t);
       TremoloType tremoloType() const      { return _tremoloType; }
+      static TremoloType name2Type(const QString& s);
+      static QString type2name(TremoloType t);
 
       virtual qreal mag() const;
       virtual void draw(QPainter*) const;
