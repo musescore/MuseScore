@@ -369,7 +369,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                   xml.stag("Page");
                   QUrl url = QUrl::fromLocalFile(imageName);
 //                  xml.tag("Image", url.toDisplayString());
-                  xml.tag("Image", QString("file:%1").arg(imageName));  // no path
+                  xml.tag("Image", QString("%1").arg(imageName));  // no path
                   QRectF r(e->pageBoundingRect());
                   xml.tag("Size", QVariant(QSize(lrint(r.width() * gmag), lrint(r.height() * gmag))));
                   xml.etag();
