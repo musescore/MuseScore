@@ -175,7 +175,7 @@ void Bend::layout()
 void Bend::draw(QPainter* painter) const
       {
       qreal _spatium = spatium();
-      qreal _lw = _lineWidth.val() * _spatium;
+      qreal _lw = _lineWidth.val();
 
       QPen pen(curColor(), _lw, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
       painter->setPen(pen);
