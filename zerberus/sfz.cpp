@@ -89,6 +89,10 @@ struct SfzRegion {
       LoopMode loop_mode;
       OffMode off_mode;
       std::map<int, double> gain_oncc;
+      float delay; //seconds
+      int pan;    // [-100, 100]
+      unsigned long offset; // [0, 4Gb) or [0, 4294967295]
+      float group_volume; // [-144 to 6] (dB)
 
       void init(const QString&);
       bool isEmpty() const { return sample.isEmpty(); }
@@ -150,6 +154,10 @@ void SfzRegion::init(const QString& _path)
       use_cc         = false;
       off_mode = OffMode::FAST;
       gain_oncc.clear();
+      delay = 0.0f;
+      pan = 0;
+      offset = 0;
+      group_volume = 0.0f;
       }
 
 //---------------------------------------------------------
@@ -164,7 +172,7 @@ void SfzRegion::setZone(Zone* z) const
       z->veloLo       = lovel;
       z->veloHi       = hivel;
       z->keyBase      = pitch_keycenter;
-      z->offset       = 0;
+      z->offset       = offset;
       z->volume       = pow(10.0, volume / 20.0);
       z->ampVeltrack  = amp_veltrack;
       z->ampegAttack  = ampeg_attack * 1000;
@@ -204,6 +212,9 @@ void SfzRegion::setZone(Zone* z) const
       z->loopEnd      = loopEnd;
       z->loopStart    = loopStart;
       z->gainOnCC     = gain_oncc;
+      z->delay        = delay * 1000; //convert seconds from sfz to ms for computations
+      z->pan          = pan;
+      z->group_volume = pow(10.0, group_volume / 20.0); //dB -> volume multiplier
       }
 
 //---------------------------------------------------------
@@ -276,6 +287,18 @@ void ZInstrument::addRegion(SfzRegion& r)
       r.setZone(z);
       if (z->sample)
             addZone(z);
+      }
+
+//---------------------------------------------------------
+//   readFloat
+//---------------------------------------------------------
+
+static void readFloat(const QString& data, float& val)
+      {
+      bool ok;
+      float d = data.toFloat(&ok);
+      if (ok)
+            val = d;
       }
 
 //---------------------------------------------------------
@@ -480,6 +503,14 @@ void SfzRegion::readOp(const QString& b, const QString& data, SfzControl &c)
             seq_position = i;
       else if (opcode == "transpose")
             transpose = i;
+      else if (opcode == "delay")
+            readFloat(opcode_data, delay);
+      else if (opcode == "pan")
+            pan = i;
+      else if (opcode == "offset")
+            offset = opcode_data.toULong();
+      else if (opcode == "group_volume")
+            readFloat(opcode_data, group_volume);
       else
             qDebug("SfzRegion: unknown opcode <%s>", qPrintable(opcode));
       }

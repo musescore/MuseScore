@@ -107,7 +107,8 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
       Sample* s = z->sample;
       audioChan = s->channel();
       data      = s->data() + z->offset * audioChan;
-      eidx      = s->frames() * audioChan;
+      //avoid processing sample if offset is bigger than sample length
+      eidx      = std::max((s->frames() - long(z->offset) - 1) * audioChan, long(0));
       _loopMode = z->loopMode;
       _loopStart = z->loopStart;
       _loopEnd   = z->loopEnd;
@@ -134,7 +135,7 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
       //    -> afterwards 0.5 (-6dB) is applied to compensate possible coherent
       //       signals in a stereo output see http://www.sengpielaudio.com/calculator-coherentsources.htm
       //    -> 0.005 = 0.01 * 0.5
-      gain        = z->volume * (offset + z->ampVeltrack * curve)
+      gain        = (z->volume * z->group_volume) * (offset + z->ampVeltrack * curve)
                     * .005 * c->gain() * rt_decay_value;
 
       phase.set(0);
@@ -166,7 +167,7 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
       float velPercent = _velocity / 127.0;
 
       envelopes[V1Envelopes::DELAY].setTable(Envelope::egLin);
-      envelopes[V1Envelopes::DELAY].setTime(z->ampegDelay + (z->ampegVel2Delay * velPercent), _zerberus->sampleRate());
+      envelopes[V1Envelopes::DELAY].setTime(z->ampegDelay + (z->ampegVel2Delay * velPercent) + z->delay, _zerberus->sampleRate());
       envelopes[V1Envelopes::DELAY].setConstant(0.0);
 
       envelopes[V1Envelopes::ATTACK].setTable(Envelope::egLin);
@@ -325,6 +326,8 @@ void Voice::process(int frames, float* p)
             last_fres = _fres;
             }
 
+      const float opcodePanLeftGain = 1.f - std::fmax(0.0f, z->pan / 100.0); //[0, 1]
+      const float opcodePanRightGain = 1.f + std::fmin(0.0f, z->pan / 100.0); //[0, 1]
       if (audioChan == 1) {
             while (frames--) {
 
@@ -361,9 +364,11 @@ void Voice::process(int frames, float* p)
                         break;
                   v *= envelopes[currentEnvelope].val * z->ccGain;
 
-                  *p++  += v * _channel->panLeftGain();
-                  *p++  += v * _channel->panRightGain();
-                  phase += phaseIncr;
+                  *p++  += v * _channel->panLeftGain() * opcodePanLeftGain;
+                  *p++  += v * _channel->panRightGain() * opcodePanRightGain;
+                  if (V1Envelopes::DELAY != currentEnvelope)
+                        phase += phaseIncr;
+
                   _samplesSinceStart++;
                   }
             }
@@ -422,9 +427,12 @@ void Voice::process(int frames, float* p)
                         b1  += b1_incr;
                         }
 
-                  *p++  += vl;
-                  *p++  += vr;
-                  phase += phaseIncr;
+                  *p++  += vl * opcodePanLeftGain;
+                  *p++  += vr * opcodePanRightGain;
+
+                  if (V1Envelopes::DELAY != currentEnvelope)
+                        phase += phaseIncr;
+
                   _samplesSinceStart++;
                   }
             }
