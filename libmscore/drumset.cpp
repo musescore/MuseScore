@@ -130,9 +130,6 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
                               else if (taga == "tremolo") {
                                     div.tremolo = Tremolo::name2Type(e.readElementText());
                                     }
-                              else {
-                                    qDebug() << "trdf";
-                                    }
                               }
                         _drum[pitch].addVariant(div);
                         }

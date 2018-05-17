@@ -389,12 +389,12 @@ QVariant Articulation::propertyDefault(Pid propertyId) const
       }
 
 //---------------------------------------------------------
-//   articulationName
+//   symId2ArticulationName
 //---------------------------------------------------------
 
-const char* Articulation::articulationName() const
+const char* Articulation::symId2ArticulationName(SymId symId)
       {
-      switch (_symId) {
+      switch (symId) {
             case SymId::articStaccatissimoAbove:
             case SymId::articStaccatissimoBelow:
             case SymId::articStaccatissimoStrokeAbove:
@@ -439,6 +439,15 @@ const char* Articulation::articulationName() const
             default:
                   return "---";
             }
+      }
+
+//---------------------------------------------------------
+//   articulationName
+//---------------------------------------------------------
+
+const char* Articulation::articulationName() const
+      {
+      return symId2ArticulationName(_symId);
       }
 
 //---------------------------------------------------------
