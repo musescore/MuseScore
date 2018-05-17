@@ -558,6 +558,7 @@ class Score : public QObject, ScoreElement {
       void addMeasure(MeasureBase*, MeasureBase*);
       void readStaff(XmlReader&);
       bool read(XmlReader&);
+      bool read300old(XmlReader&);
 
       Excerpt* excerpt()            { return _excerpt; }
       void setExcerpt(Excerpt* e)   { _excerpt = e;     }
@@ -586,7 +587,9 @@ class Score : public QObject, ScoreElement {
       bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
       void write(XmlWriter&, bool onlySelection);
+      void write300old(XmlWriter&, bool onlySelection);
       void writeMovement(XmlWriter&, bool onlySelection);
+      void writeMovement300old(XmlWriter&, bool onlySelection);
 
       QList<Staff*>& staves()                { return _staves; }
       const QList<Staff*>& staves() const    { return _staves; }
@@ -736,8 +739,8 @@ class Score : public QObject, ScoreElement {
       void setShowInstrumentNames(bool v) { _showInstrumentNames = v; }
       void setShowVBox(bool v)            { _showVBox = v;            }
 
-      bool saveFile(QFileInfo& info);
-      bool saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false);
+      bool saveFile(QFileInfo& info, bool oldFormat = false);
+      bool saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false, bool oldFormat = false);
       bool saveCompressedFile(QFileInfo&, bool onlySelection);
       bool saveCompressedFile(QIODevice*, QFileInfo&, bool onlySelection, bool createThumbnail = true);
       bool exportFile();
@@ -986,6 +989,7 @@ class Score : public QObject, ScoreElement {
       void setMasterScore(MasterScore* s) { _masterScore = s;    }
       void createRevision();
       void writeSegments(XmlWriter& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool, bool);
+      void writeSegments300old(XmlWriter& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool, bool);
 
       const QMap<QString, QString>& metaTags() const   { return _metaTags; }
       QMap<QString, QString>& metaTags()               { return _metaTags; }
@@ -1188,6 +1192,7 @@ class MasterScore : public Score {
       QFileInfo info;
 
       bool read(XmlReader&);
+      bool read300old(XmlReader&);
       void setPrev(MasterScore* s) { _prev = s; }
       void setNext(MasterScore* s) { _next = s; }
 
@@ -1238,6 +1243,7 @@ class MasterScore : public Score {
       FileError loadMsc(QString name, QIODevice*, bool ignoreVersionError);
       FileError read114(XmlReader&);
       FileError read206(XmlReader&);
+      FileError read300old1(XmlReader&);
       FileError read300(XmlReader&);
       QByteArray readToBuffer();
       QByteArray readCompressedToBuffer();

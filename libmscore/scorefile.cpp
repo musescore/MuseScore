@@ -611,7 +611,7 @@ bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
 //    return true on success
 //---------------------------------------------------------
 
-bool Score::saveFile(QFileInfo& info)
+bool Score::saveFile(QFileInfo& info, bool oldFormat)
       {
       if (info.suffix().isEmpty())
             info.setFile(info.filePath() + ".mscx");
@@ -620,7 +620,7 @@ bool Score::saveFile(QFileInfo& info)
             MScore::lastError = tr("Open File\n%1\nfailed: %2").arg(info.filePath(), strerror(errno));
             return false;
             }
-      saveFile(&fp, false);
+      saveFile(&fp, false, false, oldFormat);
       fp.close();
       return true;
       }
@@ -683,19 +683,30 @@ bool Score::saveStyle(const QString& name)
 
 extern QString revision;
 
-bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
+bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection, bool oldFormat)
       {
       XmlWriter xml(this, f);
       xml.setWriteOmr(msczFormat);
       xml.header();
-      if (!MScore::testMode) {
+      if (!oldFormat) {
+            // Temporarily denote the new format flavor by a large version number.
+            xml.stag("museScore version=\"123.45\"");
+            if (!MScore::testMode) {
+                  xml.tag("programVersion", VERSION);
+                  xml.tag("programRevision", revision);
+                  }
+            }
+      else if (!MScore::testMode) {
             xml.stag("museScore version=\"" MSC_VERSION "\"");
             xml.tag("programVersion", VERSION);
             xml.tag("programRevision", revision);
             }
       else
             xml.stag("museScore version=\"3.00\"");
-      write(xml, onlySelection);
+      if (oldFormat)
+            write300old(xml, onlySelection);
+      else
+            write(xml, onlySelection);
       xml.etag();
       if (isMaster())
             masterScore()->revisions()->write(xml);
@@ -916,7 +927,9 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                   if (!ignoreVersionError) {
                         QString message;
                         if (mscVersion() > MSCVERSION)
-                              return FileError::FILE_TOO_NEW;
+                              // WARNING: temporary check on a new format flavor
+                              if (mscVersion() != 12345)
+                                    return FileError::FILE_TOO_NEW;
                         if (mscVersion() < 114)
                               return FileError::FILE_TOO_OLD;
                         }
@@ -925,8 +938,10 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                         error = read114(e);
                   else if (mscVersion() <= 207)
                         error = read206(e);
-                  else
+                  else if (mscVersion() == 12345)
                         error = read300(e);
+                  else
+                        error = read300old1(e);
                   setExcerptsChanged(false);
                   return error;
                   }
