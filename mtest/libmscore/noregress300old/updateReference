@@ -1,0 +1,20 @@
+#!/bin/sh
+
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/noregress300old/Debug
+else
+   S=../../../build.debug/mtest/libmscore/noregress300old
+fi
+
+cp $S/accidentals-test-old.mscx     accidentals-ref.mscx
+cp $S/ambitus-test-old.mscx         ambitus-ref.mscx
+cp $S/articulations-test-old.mscx   articulations-ref.mscx
+cp $S/breath-test-old.mscx          breath-ref.mscx
+cp $S/clefs-test-old.mscx           clefs-ref.mscx
+cp $S/drumset-test-old.mscx         drumset-ref.mscx
+cp $S/markers-test-old.mscx         markers-ref.mscx
+cp $S/noteheads-test-old.mscx       noteheads-ref.mscx
+cp $S/textstyles-test-old.mscx      textstyles-ref.mscx
+cp $S/tuplets-test-old.mscx         tuplets-ref.mscx
+cp $S/hairpin-test-old.mscx         hairpin-ref.mscx
+cp $S/barlines-test-old.mscx        barlines-ref.mscx

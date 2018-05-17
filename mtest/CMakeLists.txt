@@ -149,6 +149,7 @@ add_custom_target(reporthtml
 subdirs (
 #        libmscore/compat114
         libmscore/compat206
+        libmscore/noregress300old
 #        libmscore/album            # obsolete
         libmscore/barline
         libmscore/beam
