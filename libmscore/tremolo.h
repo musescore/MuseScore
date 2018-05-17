@@ -31,7 +31,7 @@ enum class TremoloType : char {
       OLD_C16,
       OLD_C32,
 
-      R8=6, R16, R32, R64,  // one note tremolo (repeat)
+      R8=6, R16, R32, R64, BUZZ_ROLL,  // one note tremolo (repeat)
       C8, C16, C32, C64     // two note tremolo (change)
       };
 
@@ -80,7 +80,7 @@ class Tremolo : public Element {
             _chord2 = c2;
             }
       Fraction tremoloLen() const;
-      bool twoNotes() const { return tremoloType() > TremoloType::R64; } // is it a two note tremolo?
+      bool twoNotes() const { return tremoloType() >= TremoloType::C8; } // is it a two note tremolo?
       int lines() const { return _lines; }
 
       virtual QString accessibleInfo() override;
