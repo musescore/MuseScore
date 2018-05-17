@@ -1,0 +1,34 @@
+#!/bin/sh
+
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/compat300/Debug
+else
+   S=../../../build.debug/mtest/libmscore/compat300
+fi
+
+update() {
+    for SCORE in $@
+    do
+        cp -v $S/$SCORE-test.mscx $SCORE-ref.mscx
+    done
+}
+
+update \
+    accidentals \
+    ambitus \
+    articulations \
+    breath \
+    clefs \
+    drumset \
+    markers \
+    noteheads \
+    textstyles \
+    tuplets \
+    hairpin \
+    barlines \
+    grace \
+    irregular \
+    parts \
+    link-not-master \
+    moonlight \
+

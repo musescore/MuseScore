@@ -101,6 +101,8 @@ class Measure final : public MeasureBase {
 
       void read(XmlReader&, int idx);
       void read(XmlReader& d) { read(d, 0); }
+      void read300(XmlReader&, int idx);
+      void read300(XmlReader& d) { read300(d, 0); }
       virtual void write(XmlWriter& xml) const override { Element::write(xml); }
       void write(XmlWriter&, int, bool writeSystemElements, bool forceTimeSig) const;
       void writeBox(XmlWriter&) const;

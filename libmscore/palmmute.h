@@ -49,6 +49,7 @@ class PalmMute final : public TextLineBase {
       virtual PalmMute* clone() const override  { return new PalmMute(*this);   }
       virtual ElementType type() const override { return ElementType::PALM_MUTE; }
       virtual void read(XmlReader&) override;
+      virtual void read300(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
       LineSegment* createLineSegment();
       virtual void setYoff(qreal) override;

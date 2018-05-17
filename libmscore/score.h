@@ -554,7 +554,9 @@ class Score : public QObject, public ScoreElement {
       void removeStaff(Staff*);
       void addMeasure(MeasureBase*, MeasureBase*);
       void readStaff(XmlReader&);
+      void readStaff300(XmlReader&);
       bool read(XmlReader&);
+      bool read300(XmlReader&);
 
       Excerpt* excerpt()            { return _excerpt; }
       void setExcerpt(Excerpt* e)   { _excerpt = e;     }
@@ -1194,6 +1196,7 @@ class MasterScore : public Score {
       QFileInfo info;
 
       bool read(XmlReader&);
+      bool read300(XmlReader&);
       void setPrev(MasterScore* s) { _prev = s; }
       void setNext(MasterScore* s) { _next = s; }
 
@@ -1244,7 +1247,8 @@ class MasterScore : public Score {
       FileError loadMsc(QString name, QIODevice*, bool ignoreVersionError);
       FileError read114(XmlReader&);
       FileError read206(XmlReader&);
-      FileError read300(XmlReader&);
+      FileError readScore300(XmlReader&);
+      FileError read301(XmlReader&);
       QByteArray readToBuffer();
       QByteArray readCompressedToBuffer();
 

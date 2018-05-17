@@ -2286,6 +2286,457 @@ void Measure::read(XmlReader& e, int staffIdx)
       }
 
 //---------------------------------------------------------
+//   Measure::read300
+//---------------------------------------------------------
+
+void Measure::read300(XmlReader& e, int staffIdx)
+      {
+      Segment* segment = 0;
+      qreal _spatium = spatium();
+
+      QList<Chord*> graceNotes;
+      e.tuplets().clear();
+      e.setTrack(staffIdx * VOICES);
+
+      for (int n = _mstaves.size(); n <= staffIdx; ++n) {
+            Staff* staff = score()->staff(n);
+            MStaff* s    = new MStaff;
+            s->setLines(new StaffLines(score()));
+            s->lines()->setParent(this);
+            s->lines()->setTrack(n * VOICES);
+            s->lines()->setVisible(!staff->invisible());
+            _mstaves.push_back(s);
+            }
+
+      // tick is obsolete
+      if (e.hasAttribute("tick"))
+            e.initTick(score()->fileDivision(e.intAttribute("tick")));
+
+      bool irregular;
+      if (e.hasAttribute("len")) {
+            QStringList sl = e.attribute("len").split('/');
+            if (sl.size() == 2)
+                  _len = Fraction(sl[0].toInt(), sl[1].toInt());
+            else
+                  qDebug("illegal measure size <%s>", qPrintable(e.attribute("len")));
+            irregular = true;
+            score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
+            score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
+            }
+      else
+            irregular = false;
+
+      Staff* staff = score()->staff(staffIdx);
+      Fraction timeStretch(staff->timeStretch(tick()));
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+
+            if (tag == "move")
+                  e.initTick(e.readFraction().ticks() + tick());
+            else if (tag == "tick") {
+                  e.initTick(score()->fileDivision(e.readInt()));
+                  }
+            else if (tag == "BarLine") {
+                  BarLine* barLine = new BarLine(score());
+                  barLine->setTrack(e.track());
+                  barLine->read300(e);
+                  //
+                  //  StartRepeatBarLine: at rtick == 0, always BarLineType::START_REPEAT
+                  //  BarLine:            in the middle of a measure, has no semantic
+                  //  EndBarLine:         at the end of a measure
+                  //  BeginBarLine:       first segment of a measure, systemic barline
+
+                  SegmentType st;
+                  int t = e.tick() - tick();
+                  if (t && (t != ticks()))
+                        st = SegmentType::BarLine;
+                  else if (barLine->barLineType() == BarLineType::START_REPEAT && t == 0)
+                        st = SegmentType::StartRepeatBarLine;
+                  else if (barLine->barLineType() == BarLineType::START_REPEAT && t == ticks()) {
+                        // old version, ignore
+                        delete barLine;
+                        barLine = 0;
+                        }
+                  else if (t == 0 && segment == 0)
+                        st = SegmentType::BeginBarLine;
+                  else
+                        st = SegmentType::EndBarLine;
+                  if (barLine) {
+                        segment = getSegmentR(st, t);
+                        segment->add(barLine);
+                        barLine->layout();
+                        }
+                  }
+            else if (tag == "Chord") {
+                  Chord* chord = new Chord(score());
+                  chord->setTrack(e.track());
+                  chord->read300(e);
+                  segment = getSegment(SegmentType::ChordRest, e.tick());
+                  if (chord->noteType() != NoteType::NORMAL)
+                        graceNotes.push_back(chord);
+                  else {
+                        segment->add(chord);
+                        for (int i = 0; i < graceNotes.size(); ++i) {
+                              Chord* gc = graceNotes[i];
+                              gc->setGraceIndex(i);
+                              chord->add(gc);
+                              }
+                        graceNotes.clear();
+                        int crticks = chord->actualTicks();
+                        e.incTick(crticks);
+                        }
+                  }
+            else if (tag == "Rest") {
+                  Rest* rest = new Rest(score());
+                  rest->setDurationType(TDuration::DurationType::V_MEASURE);
+                  rest->setDuration(timesig()/timeStretch);
+                  rest->setTrack(e.track());
+                  rest->read300(e);
+                  segment = getSegment(SegmentType::ChordRest, e.tick());
+                  segment->add(rest);
+
+                  if (!rest->duration().isValid())     // hack
+                        rest->setDuration(timesig()/timeStretch);
+
+                  e.incTick(rest->actualTicks());
+                  }
+            else if (tag == "Breath") {
+                  Breath* breath = new Breath(score());
+                  breath->setTrack(e.track());
+                  int tick = e.tick();
+                  breath->read300(e);
+                  segment = getSegment(SegmentType::Breath, tick);
+                  segment->add(breath);
+                  }
+            else if (tag == "endSpanner") {
+                  int id = e.attribute("id").toInt();
+                  Spanner* spanner = e.findSpanner(id);
+                  if (spanner) {
+                        spanner->setTicks(e.tick() - spanner->tick());
+                        // if (spanner->track2() == -1)
+                              // the absence of a track tag [?] means the
+                              // track is the same as the beginning of the slur
+                        if (spanner->track2() == -1)
+                              spanner->setTrack2(spanner->track() ? spanner->track() : e.track());
+                        }
+                  else {
+                        // remember "endSpanner" values
+                        SpannerValues sv;
+                        sv.spannerId = id;
+                        sv.track2    = e.track();
+                        sv.tick2     = e.tick();
+                        e.addSpannerValues(sv);
+                        }
+                  e.readNext();
+                  }
+            else if (tag == "Slur") {
+                  Slur *sl = new Slur(score());
+                  sl->setTick(e.tick());
+                  sl->read300(e);
+                  //
+                  // check if we already saw "endSpanner"
+                  //
+                  int id = e.spannerId(sl);
+                  const SpannerValues* sv = e.spannerValues(id);
+                  if (sv) {
+                        sl->setTick2(sv->tick2);
+                        sl->setTrack2(sv->track2);
+                        }
+                  score()->addSpanner(sl);
+                  }
+            else if (tag == "HairPin"
+               || tag == "Pedal"
+               || tag == "Ottava"
+               || tag == "Trill"
+               || tag == "TextLine"
+               || tag == "LetRing"
+               || tag == "Vibrato"
+               || tag == "PalmMute"
+               || tag == "Volta") {
+                  Spanner* sp = toSpanner(Element::name2Element(tag, score()));
+                  sp->setTrack(e.track());
+                  sp->setTick(e.tick());
+                  // ?? sp->setAnchor(Spanner::Anchor::SEGMENT);
+                  sp->read300(e);
+                  score()->addSpanner(sp);
+                  //
+                  // check if we already saw "endSpanner"
+                  //
+                  int id = e.spannerId(sp);
+                  const SpannerValues* sv = e.spannerValues(id);
+                  if (sv) {
+                        sp->setTicks(sv->tick2 - sp->tick());
+                        sp->setTrack2(sv->track2);
+                        }
+                  }
+            else if (tag == "RepeatMeasure") {
+                  RepeatMeasure* rm = new RepeatMeasure(score());
+                  rm->setTrack(e.track());
+                  rm->read300(e);
+                  segment = getSegment(SegmentType::ChordRest, e.tick());
+                  segment->add(rm);
+                  e.incTick(ticks());
+                  }
+            else if (tag == "Clef") {
+                  Clef* clef = new Clef(score());
+                  clef->setTrack(e.track());
+                  clef->read300(e);
+                  clef->setGenerated(false);
+
+                  // there may be more than one clef segment for same tick position
+                  // the first clef may be missing and is added later in layout
+
+                  bool header;
+                  if (e.tick() != tick())
+                        header = false;
+                  else if (!segment)
+                        header = true;
+                  else {
+                        header = true;
+                        for (Segment* s = _segments.first(); s && !s->rtick(); s = s->next()) {
+                              if (s->isKeySigType() || s->isTimeSigType()) {
+                                    // hack: there may be other segment types which should
+                                    // generate a clef at current position
+                                    header = false;
+                                    break;
+                                    }
+                              }
+                        }
+                  segment = getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, e.tick());
+                  segment->add(clef);
+                  }
+            else if (tag == "TimeSig") {
+                  TimeSig* ts = new TimeSig(score());
+                  ts->setTrack(e.track());
+                  ts->read300(e);
+                  // if time sig not at beginning of measure => courtesy time sig
+                  int currTick = e.tick();
+                  bool courtesySig = (currTick > tick());
+                  if (courtesySig) {
+                        // if courtesy sig., just add it without map processing
+                        segment = getSegment(SegmentType::TimeSigAnnounce, currTick);
+                        segment->add(ts);
+                        }
+                  else {
+                        // if 'real' time sig., do full process
+                        segment = getSegment(SegmentType::TimeSig, currTick);
+                        segment->add(ts);
+
+                        timeStretch = ts->stretch().reduced();
+                        _timesig    = ts->sig() / timeStretch;
+
+                        if (irregular) {
+                              score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
+                              score()->sigmap()->add(tick() + ticks(), SigEvent(_timesig));
+                              }
+                        else {
+                              _len = _timesig;
+                              score()->sigmap()->add(tick(), SigEvent(_timesig));
+                              }
+                        }
+                  }
+            else if (tag == "KeySig") {
+                  KeySig* ks = new KeySig(score());
+                  ks->setTrack(e.track());
+                  ks->read300(e);
+                  int curTick = e.tick();
+                  if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick == 0) {
+                        // ignore empty key signature
+                        qDebug("remove keysig c at tick 0");
+                        if (ks->links()) {
+                              if (ks->links()->size() == 1)
+                                    e.linkIds().remove(ks->links()->lid());
+                              }
+                        }
+                  else {
+                        // if key sig not at beginning of measure => courtesy key sig
+//                        bool courtesySig = (curTick > tick());
+                        bool courtesySig = (curTick == endTick());
+                        segment = getSegment(courtesySig ? SegmentType::KeySigAnnounce : SegmentType::KeySig, curTick);
+                        segment->add(ks);
+                        if (!courtesySig)
+                              staff->setKey(curTick, ks->keySigEvent());
+                        }
+                  }
+            else if (tag == "Text") {
+                  StaffText* t = new StaffText(score());
+                  t->setTrack(e.track());
+                  t->read300(e);
+                  if (t->empty()) {
+                        qDebug("==reading empty text: deleted");
+                        delete t;
+                        }
+                  else {
+                        segment = getSegment(SegmentType::ChordRest, e.tick());
+                        segment->add(t);
+                        }
+                  }
+
+            //----------------------------------------------------
+            // Annotation
+
+            else if (tag == "Dynamic") {
+                  Dynamic* dyn = new Dynamic(score());
+                  dyn->setTrack(e.track());
+                  dyn->read300(e);
+                  segment = getSegment(SegmentType::ChordRest, e.tick());
+                  segment->add(dyn);
+                  }
+            else if (tag == "Harmony"
+               || tag == "FretDiagram"
+               || tag == "TremoloBar"
+               || tag == "Symbol"
+               || tag == "Tempo"
+               || tag == "StaffText"
+               || tag == "SystemText"
+               || tag == "RehearsalMark"
+               || tag == "InstrumentChange"
+               || tag == "StaffState"
+               || tag == "FiguredBass"
+               || tag == "Fermata"
+               ) {
+                  Element* el = Element::name2Element(tag, score());
+                  // hack - needed because tick tags are unreliable in 1.3 scores
+                  // for symbols attached to anything but a measure
+                  el->setTrack(e.track());
+                  el->read300(e);
+                  segment = getSegment(SegmentType::ChordRest, e.tick());
+                  segment->add(el);
+                  }
+            else if (tag == "Marker" || tag == "Jump"
+               ) {
+                  Element* el = Element::name2Element(tag, score());
+                  el->setTrack(e.track());
+                  el->read300(e);
+                  add(el);
+                  }
+            else if (tag == "Image") {
+                  if (MScore::noImages)
+                        e.skipCurrentElement();
+                  else {
+                        Element* el = Element::name2Element(tag, score());
+                        el->setTrack(e.track());
+                        el->read300(e);
+                        segment = getSegment(SegmentType::ChordRest, e.tick());
+                        segment->add(el);
+                        }
+                  }
+            //----------------------------------------------------
+            else if (tag == "stretch") {
+                  double val = e.readDouble();
+                  if (val < 0.0)
+                        val = 0;
+                  setUserStretch(val);
+                  }
+            else if (tag == "noOffset")
+                  setNoOffset(e.readInt());
+            else if (tag == "measureNumberMode")
+                  setMeasureNumberMode(MeasureNumberMode(e.readInt()));
+            else if (tag == "irregular")
+                  setIrregular(e.readBool());
+            else if (tag == "breakMultiMeasureRest")
+                  _breakMultiMeasureRest = e.readBool();
+            else if (tag == "sysInitBarLineType") {
+                  const QString& val(e.readElementText());
+                  BarLine* barLine = new BarLine(score());
+                  barLine->setTrack(e.track());
+                  barLine->setBarLineType(val);
+                  segment = getSegmentR(SegmentType::BeginBarLine, 0);
+                  segment->add(barLine);
+                  }
+            else if (tag == "Tuplet") {
+                  Tuplet* tuplet = new Tuplet(score());
+                  tuplet->setTrack(e.track());
+                  tuplet->setTick(e.tick());
+                  tuplet->setParent(this);
+                  tuplet->read300(e);
+                  e.addTuplet(tuplet);
+                  }
+            else if (tag == "startRepeat") {
+                  setRepeatStart(true);
+                  e.readNext();
+                  }
+            else if (tag == "endRepeat") {
+                  _repeatCount = e.readInt();
+                  setRepeatEnd(true);
+                  }
+            else if (tag == "vspacer" || tag == "vspacerDown") {
+                  if (!_mstaves[staffIdx]->vspacerDown()) {
+                        Spacer* spacer = new Spacer(score());
+                        spacer->setSpacerType(SpacerType::DOWN);
+                        spacer->setTrack(staffIdx * VOICES);
+                        add(spacer);
+                        }
+                  _mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
+                  }
+            else if (tag == "vspacerFixed") {
+                  if (!_mstaves[staffIdx]->vspacerDown()) {
+                        Spacer* spacer = new Spacer(score());
+                        spacer->setSpacerType(SpacerType::FIXED);
+                        spacer->setTrack(staffIdx * VOICES);
+                        add(spacer);
+                        }
+                  _mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
+                  }
+            else if (tag == "vspacerUp") {
+                  if (!_mstaves[staffIdx]->vspacerUp()) {
+                        Spacer* spacer = new Spacer(score());
+                        spacer->setSpacerType(SpacerType::UP);
+                        spacer->setTrack(staffIdx * VOICES);
+                        add(spacer);
+                        }
+                  _mstaves[staffIdx]->vspacerUp()->setGap(e.readDouble() * _spatium);
+                  }
+            else if (tag == "visible")
+                  _mstaves[staffIdx]->setVisible(e.readInt());
+            else if (tag == "slashStyle")
+                  _mstaves[staffIdx]->setSlashStyle(e.readInt());
+            else if (tag == "Beam") {
+                  Beam* beam = new Beam(score());
+                  beam->setTrack(e.track());
+                  beam->read300(e);
+                  beam->setParent(0);
+                  e.addBeam(beam);
+                  }
+            else if (tag == "Segment")
+                  segment->read300(e);
+            else if (tag == "MeasureNumber") {
+                  Text* noText = new Text(score(), Tid::MEASURE_NUMBER);
+                  noText->read(e);
+                  noText->setFlag(ElementFlag::ON_STAFF, true);
+                  noText->setTrack(e.track());
+                  noText->setParent(this);
+                  _mstaves[noText->staffIdx()]->setNoText(noText);
+                  }
+            else if (tag == "SystemDivider") {
+                  SystemDivider* sd = new SystemDivider(score());
+                  sd->read300(e);
+                  add(sd);
+                  }
+            else if (tag == "Ambitus") {
+                  Ambitus* range = new Ambitus(score());
+                  range->read300(e);
+                  segment = getSegment(SegmentType::Ambitus, e.tick());
+                  range->setParent(segment);          // a parent segment is needed for setTrack() to work
+                  range->setTrack(trackZeroVoice(e.track()));
+                  segment->add(range);
+                  }
+            else if (tag == "multiMeasureRest") {
+                  _mmRestCount = e.readInt();
+                  // set tick to previous measure
+                  setTick(e.lastMeasure()->tick());
+                  e.initTick(e.lastMeasure()->tick());
+                  }
+            else if (MeasureBase::readProperties300(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      e.checkTuplets();
+      }
+
+//---------------------------------------------------------
 //   visible
 //---------------------------------------------------------
 
