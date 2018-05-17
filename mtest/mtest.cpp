@@ -55,6 +55,8 @@ static void scanDir(QDir d)
 
 int main(int argc, char* argv[])
       {
+      Q_UNUSED(argc);
+      Q_UNUSED(argv);
 #if 0
       log.setFileName("mtest.log");
       if (!log.open(QIODevice::WriteOnly)) {
