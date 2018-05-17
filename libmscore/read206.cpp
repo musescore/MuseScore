@@ -722,6 +722,73 @@ static NoteHead::Type convertHeadType(int i)
       }
 
 //---------------------------------------------------------
+//   ArticulationNames
+//---------------------------------------------------------
+
+static struct ArticulationNames {
+      SymId id;
+      const char* name;
+      } articulationNames[] = {
+      { SymId::fermataAbove,              "fermata",                   },
+      { SymId::fermataShortAbove,         "shortfermata",              },
+      { SymId::fermataLongAbove,          "longfermata",               },
+      { SymId::fermataVeryLongAbove,      "verylongfermata",           },
+      { SymId::articAccentAbove,          "sforzato",                  },
+      { SymId::articStaccatoAbove,        "staccato",                  },
+      { SymId::articStaccatissimoAbove,   "staccatissimo",             },
+      { SymId::articTenutoAbove,          "tenuto",                    },
+      { SymId::articTenutoStaccatoAbove,  "portato",                   },
+      { SymId::articMarcatoAbove,         "marcato",                   },
+      { SymId::guitarFadeIn,              "fadein",                    },
+      { SymId::guitarFadeOut,             "fadeout",                   },
+      { SymId::guitarVolumeSwell,         "volumeswell",               },
+      { SymId::wiggleSawtooth,            "wigglesawtooth",            },
+      { SymId::wiggleSawtoothWide,        "wigglesawtoothwide",        },
+      { SymId::wiggleVibratoLargeFaster,  "wigglevibratolargefaster",  },
+      { SymId::wiggleVibratoLargeSlowest, "wigglevibratolargeslowest", },
+      { SymId::brassMuteOpen,             "ouvert",                    },
+      { SymId::brassMuteClosed,           "plusstop",                  },
+      { SymId::stringsUpBow,              "upbow",                     },
+      { SymId::stringsDownBow,            "downbow",                   },
+      { SymId::ornamentTurnInverted,      "reverseturn",               },
+      { SymId::ornamentTurn,              "turn",                      },
+      { SymId::ornamentTrill,             "trill",                     },
+      { SymId::ornamentMordent,           "prall",                     },
+      { SymId::ornamentMordentInverted,   "mordent",                   },
+      { SymId::ornamentTremblement,       "prallprall",                },
+      { SymId::ornamentPrallMordent,      "prallmordent",              },
+      { SymId::ornamentUpPrall,           "upprall",                   },
+      { SymId::ornamentUpMordent,         "upmordent",                 },
+      { SymId::ornamentDownMordent,       "downmordent",               },
+      { SymId::ornamentPrallDown,         "pralldown",                 },
+      { SymId::ornamentPrallUp,           "prallup",                   },
+      { SymId::ornamentLinePrall,         "lineprall",                 },
+      { SymId::ornamentPrecompSlide,      "schleifer",                 },
+      { SymId::pluckedSnapPizzicatoAbove, "snappizzicato",             },
+      { SymId::stringsThumbPosition,      "thumb",                     },
+      { SymId::luteFingeringRHThumb,      "lutefingeringthumb",        },
+      { SymId::luteFingeringRHFirst,      "lutefingering1st",          },
+      { SymId::luteFingeringRHSecond,     "lutefingering2nd",          },
+      { SymId::luteFingeringRHThird,      "lutefingering3rd",          },
+
+      { SymId::ornamentPrecompMordentUpperPrefix, "downprall"   },
+      { SymId::ornamentPrecompMordentUpperPrefix, "ornamentDownPrall"   },
+      };
+
+//---------------------------------------------------------
+//   oldArticulationNames2SymId
+//---------------------------------------------------------
+
+SymId oldArticulationNames2SymId(const QString& s)
+      {
+      for (auto i : articulationNames) {
+            if (i.name == s)
+                  return i.id;
+            }
+      return SymId::noSym;
+      }
+
+//---------------------------------------------------------
 //   readDrumset
 //---------------------------------------------------------
 
@@ -736,6 +803,27 @@ static void readDrumset(Drumset* ds, XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "head")
                   ds->drum(pitch).notehead = convertHeadGroup(e.readInt());
+            else if (tag == "variants") {
+                  while(e.readNextStartElement()) {
+                        const QStringRef& tagv(e.name());
+                        if (tagv == "variant") {
+                              DrumInstrumentVariant div;
+                              div.pitch = e.attribute("pitch").toInt();
+                              while (e.readNextStartElement()) {
+                                    const QStringRef& taga(e.name());
+                                    if (taga == "articulation") {
+                                          QString oldArticulationName = e.readElementText();
+                                          SymId oldId = oldArticulationNames2SymId(oldArticulationName);
+                                          div.articulationName = Articulation::symId2ArticulationName(oldId);
+                                          }
+                                    else if (taga == "tremolo") {
+                                          div.tremolo = Tremolo::name2Type(e.readElementText());
+                                          }
+                                    }
+                              ds->drum(pitch).addVariant(div);
+                              }
+                        }
+                  }
             else if (ds->readProperties(e, pitch))
                   ;
             else
@@ -1278,73 +1366,6 @@ void readTextLine206(XmlReader& e, TextLineBase* tlb)
             if (!readTextLineProperties(e, tlb))
                   e.unknown();
             }
-      }
-
-//---------------------------------------------------------
-//   ArticulationNames
-//---------------------------------------------------------
-
-static struct ArticulationNames {
-      SymId id;
-      const char* name;
-      } articulationNames[] = {
-      { SymId::fermataAbove,              "fermata",                   },
-      { SymId::fermataShortAbove,         "shortfermata",              },
-      { SymId::fermataLongAbove,          "longfermata",               },
-      { SymId::fermataVeryLongAbove,      "verylongfermata",           },
-      { SymId::articAccentAbove,          "sforzato",                  },
-      { SymId::articStaccatoAbove,        "staccato",                  },
-      { SymId::articStaccatissimoAbove,   "staccatissimo",             },
-      { SymId::articTenutoAbove,          "tenuto",                    },
-      { SymId::articTenutoStaccatoAbove,  "portato",                   },
-      { SymId::articMarcatoAbove,         "marcato",                   },
-      { SymId::guitarFadeIn,              "fadein",                    },
-      { SymId::guitarFadeOut,             "fadeout",                   },
-      { SymId::guitarVolumeSwell,         "volumeswell",               },
-      { SymId::wiggleSawtooth,            "wigglesawtooth",            },
-      { SymId::wiggleSawtoothWide,        "wigglesawtoothwide",        },
-      { SymId::wiggleVibratoLargeFaster,  "wigglevibratolargefaster",  },
-      { SymId::wiggleVibratoLargeSlowest, "wigglevibratolargeslowest", },
-      { SymId::brassMuteOpen,             "ouvert",                    },
-      { SymId::brassMuteClosed,           "plusstop",                  },
-      { SymId::stringsUpBow,              "upbow",                     },
-      { SymId::stringsDownBow,            "downbow",                   },
-      { SymId::ornamentTurnInverted,      "reverseturn",               },
-      { SymId::ornamentTurn,              "turn",                      },
-      { SymId::ornamentTrill,             "trill",                     },
-      { SymId::ornamentMordent,           "prall",                     },
-      { SymId::ornamentMordentInverted,   "mordent",                   },
-      { SymId::ornamentTremblement,       "prallprall",                },
-      { SymId::ornamentPrallMordent,      "prallmordent",              },
-      { SymId::ornamentUpPrall,           "upprall",                   },
-      { SymId::ornamentUpMordent,         "upmordent",                 },
-      { SymId::ornamentDownMordent,       "downmordent",               },
-      { SymId::ornamentPrallDown,         "pralldown",                 },
-      { SymId::ornamentPrallUp,           "prallup",                   },
-      { SymId::ornamentLinePrall,         "lineprall",                 },
-      { SymId::ornamentPrecompSlide,      "schleifer",                 },
-      { SymId::pluckedSnapPizzicatoAbove, "snappizzicato",             },
-      { SymId::stringsThumbPosition,      "thumb",                     },
-      { SymId::luteFingeringRHThumb,      "lutefingeringthumb",        },
-      { SymId::luteFingeringRHFirst,      "lutefingering1st",          },
-      { SymId::luteFingeringRHSecond,     "lutefingering2nd",          },
-      { SymId::luteFingeringRHThird,      "lutefingering3rd",          },
-
-      { SymId::ornamentPrecompMordentUpperPrefix, "downprall"   },
-      { SymId::ornamentPrecompMordentUpperPrefix, "ornamentDownPrall"   },
-      };
-
-//---------------------------------------------------------
-//   oldArticulationNames2SymId
-//---------------------------------------------------------
-
-SymId oldArticulationNames2SymId(const QString& s)
-      {
-      for (auto i : articulationNames) {
-            if (i.name == s)
-                  return i.id;
-            }
-      return SymId::noSym;
       }
 
 //---------------------------------------------------------
