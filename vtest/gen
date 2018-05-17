@@ -75,7 +75,7 @@ DPI=130
 DIR="$(cd "$(dirname "$0")" && pwd)"
 mkdir -p $DIR/html
 cd $DIR/html
-rm *.png
+rm -f *.png
 
 if test -f LOG; then
       rm LOG
