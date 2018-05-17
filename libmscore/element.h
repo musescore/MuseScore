@@ -256,9 +256,11 @@ class Element : public ScoreElement {
 
       virtual void writeProperties(XmlWriter& xml) const;
       virtual bool readProperties(XmlReader&);
+      virtual bool readProperties300(XmlReader& xml) { return Element::readProperties(xml); }
 
       virtual void write(XmlWriter&) const;
       virtual void read(XmlReader&);
+      virtual void read300(XmlReader& xml) { read(xml); }
 
       virtual void startDrag(EditData&);
       virtual QRectF drag(EditData&);

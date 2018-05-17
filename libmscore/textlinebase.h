@@ -113,9 +113,11 @@ class TextLineBase : public SLine {
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
+      virtual void read300(XmlReader&) override;
 
       virtual void writeProperties(XmlWriter& xml) const override;
       virtual bool readProperties(XmlReader& node) override;
+      virtual bool readProperties300(XmlReader&) override;
 
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 

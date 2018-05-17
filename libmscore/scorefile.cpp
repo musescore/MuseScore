@@ -628,7 +628,7 @@ bool Score::saveFile(QFileInfo& info)
             MScore::lastError = tr("Open File\n%1\nfailed: %2").arg(info.filePath(), strerror(errno));
             return false;
             }
-      saveFile(&fp, false);
+      saveFile(&fp, false, false);
       fp.close();
       return true;
       }
@@ -702,7 +702,7 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
             xml.tag("programRevision", revision);
             }
       else
-            xml.stag("museScore version=\"3.00\"");
+            xml.stag("museScore version=\"3.01\"");
       write(xml, onlySelection);
       xml.etag();
       if (isMaster())
@@ -934,8 +934,10 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                         error = read114(e);
                   else if (mscVersion() <= 207)
                         error = read206(e);
+                  else if (mscVersion() < 301)
+                        error = readScore300(e);
                   else
-                        error = read300(e);
+                        error = read301(e);
                   setExcerptsChanged(false);
                   return error;
                   }

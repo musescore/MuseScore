@@ -260,6 +260,7 @@ class FiguredBass final : public TextBase {
       virtual void      endEdit(EditData&) override;
       virtual void      layout() override;
       virtual void      read(XmlReader&) override;
+      virtual void      read300(XmlReader&) override;
       virtual void      setSelected(bool f) override;
       virtual void      setVisible(bool f) override;
       virtual void      startEdit(EditData&) override;

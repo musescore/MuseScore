@@ -117,6 +117,7 @@ class MeasureBase : public Element {
       virtual void remove(Element*) override;
       virtual void writeProperties(XmlWriter&) const override;
       virtual bool readProperties(XmlReader&) override;
+      virtual bool readProperties300(XmlReader&) override;
 
       virtual int tick() const override      { return _tick;  }
       virtual int ticks() const              { return 0;      }
