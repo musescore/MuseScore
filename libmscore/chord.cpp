@@ -1790,6 +1790,8 @@ void Chord::layoutPitched()
                   }
             computeUp();
             layoutStem1();
+            qreal stemWidth5 = _stem->lineWidth() * .5;
+            _stem->rxpos()   = up() ? (upNote()->headBodyWidth() - stemWidth5) : stemWidth5;
             addLedgerLines();
             return;
             }
