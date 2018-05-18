@@ -50,6 +50,7 @@ DrumTools::DrumTools(QWidget* parent)
 
       QWidget* w = new QWidget(this);
       w->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+      w->setMaximumHeight(100);
       QHBoxLayout* layout = new QHBoxLayout;
       w->setLayout(layout);
 
@@ -57,10 +58,16 @@ DrumTools::DrumTools(QWidget* parent)
       layout1->setSpacing(6);
       pitchName = new QLabel;
       pitchName->setAlignment(Qt::AlignCenter);
+      pitchName->setWordWrap(true);
+      pitchName->setContentsMargins(25, 0, 25, 0);
       layout1->addWidget(pitchName);
+      QHBoxLayout* buttonLayout = new QHBoxLayout;
+      buttonLayout->setContentsMargins(25, 10, 25, 10);
       editButton = new QToolButton;
-      layout1->addWidget(editButton);
-      layout1->addStretch();
+      editButton->setMinimumWidth(100);
+      editButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+      buttonLayout->addWidget(editButton);
+      layout1->addLayout(buttonLayout);
       layout->addLayout(layout1);
 
       drumPalette = new Palette;
@@ -72,7 +79,6 @@ DrumTools::DrumTools(QWidget* parent)
       layout->addWidget(sa);
 
       setWidget(w);
-//      setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
 
       w = new QWidget(this);
       setTitleBarWidget(w);
@@ -150,7 +156,7 @@ void DrumTools::updateDrumset(const Drumset* ds)
             QString shortcut;
             if (sc)
                   shortcut = QChar(sc);
-            drumPalette->append(chord, qApp->translate("drumset", drumset->name(pitch).toLatin1().data()), shortcut);
+            drumPalette->append(chord, qApp->translate("drumset", drumset->name(pitch).toUtf8().data()), shortcut);
             }
       }
 
@@ -209,7 +215,7 @@ void DrumTools::drumNoteSelected(int val)
             getAction("voice-3")->setChecked(element->voice() == 2);
             getAction("voice-4")->setChecked(element->voice() == 3);
 
-            auto pitchCell = drumPalette->cellAt(drumPalette->getCurrentIdx());
+            auto pitchCell = drumPalette->cellAt(val);
             pitchName->setText(pitchCell->name);
             }
       }
@@ -223,6 +229,8 @@ int DrumTools::selectedDrumNote()
       if (element && element->type() == ElementType::CHORD) {
             Chord* ch  = static_cast<Chord*>(element);
             Note* note = ch->downNote();
+            auto pitchCell = drumPalette->cellAt(idx);
+            pitchName->setText(pitchCell->name);
             return note->pitch();
             }
       else {
