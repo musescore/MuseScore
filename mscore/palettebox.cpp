@@ -119,13 +119,13 @@ void PaletteBox::filterPalettes(const QString& text)
             bool f = p->filter(text);
             b->setVisible(!f);
             if (b->isVisible()) {
-                 if (text.isEmpty())
-                      b->showPalette(false);
-                 else
-                      b->showPalette(true);
+                 b->showPalette(!text.isEmpty());
                  }
             else
                  b->showPalette(false);
+
+            // disable editing while palette is filtered
+            b->enableEditing(text.isEmpty());
             }
       }
 
