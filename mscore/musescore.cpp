@@ -1283,8 +1283,12 @@ void MuseScore::selectionChanged(SelState selectionState)
             pianorollEditor->changeSelection(selectionState);
       if (drumrollEditor)
             drumrollEditor->changeSelection(selectionState);
-      if (_pianoTools && _pianoTools->isVisible())
-            _pianoTools->changeSelection(cs->selection());
+      if (_pianoTools && _pianoTools->isVisible()) {
+            if (cs)
+                  _pianoTools->changeSelection(cs->selection());
+            else
+                  _pianoTools->clearSelection();
+            }
       if (_inspector)
             updateInspector();
       }
@@ -3901,7 +3905,10 @@ void MuseScore::showPianoKeyboard(bool on)
             }
       if (on) {
             _pianoTools->show();
-            _pianoTools->changeSelection(currentScore()->selection());
+            if (currentScore())
+                  _pianoTools->changeSelection(currentScore()->selection());
+            else
+                  _pianoTools->clearSelection();
             }
       else {
             if (_pianoTools)
