@@ -52,10 +52,10 @@ class PaletteBoxButton : public QToolButton {
       void upTriggered()         { emit paletteCmd(PaletteCommand::UP, id);      }
       void downTriggered()       { emit paletteCmd(PaletteCommand::DOWN, id);    }
       void newTriggered()        { emit paletteCmd(PaletteCommand::NEW, id);     }
-      void enableEditing(bool);
 
    public slots:
       void showPalette(bool);
+      void enableEditing(bool);
 
    signals:
       void paletteCmd(PaletteCommand, int);
