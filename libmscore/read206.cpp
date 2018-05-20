@@ -1511,7 +1511,7 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
                   if (!el) {
                         qDebug("not handled <%s>", qPrintable(tag.toString()));
                         }
-                  if (!el->readProperties(e))
+                  if (!el || !el->readProperties(e))
                         e.unknown();
                   }
             }
