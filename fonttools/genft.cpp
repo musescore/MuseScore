@@ -11,7 +11,7 @@
 //=============================================================================
 
 //
-//    q+d hack to create an font description file from
+//    q+d hack to create a font description file from
 //    lilipond tables embedded in mscore.ttf
 //
 //
