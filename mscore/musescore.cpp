@@ -3244,8 +3244,10 @@ void MuseScore::changeState(ScoreState val)
 
       if (_sstate == STATE_FOTO)
             updateInspector();
-      if (_sstate != STATE_NOTE_ENTRY_STAFF_DRUM)
-            showDrumTools(0, 0);
+
+      //always hide drumtools to support hiding on switching docs, switching node entry mode off, etc.
+      //it will be shown later if (_sstate == STATE_NOTE_ENTRY_STAFF_DRUM)
+      showDrumTools(0, 0);
 
       switch (val) {
             case STATE_DISABLED:
