@@ -316,6 +316,16 @@ void Workspace::write()
             xml.tag("action", i);
       xml.etag();
 
+      xml.stag("Toolbar name=\"fileOperation\"");
+      for (auto i : *mscore->fileOperationEntries())
+            xml.tag("action", i);
+      xml.etag();
+
+      xml.stag("Toolbar name=\"playbackControl\"");
+      for (auto i : *mscore->playbackControlEntries())
+            xml.tag("action", i);
+      xml.etag();
+
       xml.etag();
       xml.etag();
       f.addFile("workspace.xml", cbuf.data());
@@ -340,6 +350,10 @@ void Workspace::read()
                   p->setSystemPalette(true);
             mscore->setNoteInputMenuEntries(MuseScore::advancedNoteInputMenuEntries());
             mscore->populateNoteInputMenu();
+            mscore->setFileOperationEntries(mscore->allFileOperationEntries());
+            mscore->populateFileOperations();
+            mscore->setPlaybackControlEntries(mscore->allPlaybackControlEntries());
+            mscore->populatePlaybackControls();
             return;
             }
       if (_path == "Basic") {
@@ -348,6 +362,10 @@ void Workspace::read()
                   p->setSystemPalette(true);
             mscore->setNoteInputMenuEntries(MuseScore::basicNoteInputMenuEntries());
             mscore->populateNoteInputMenu();
+            mscore->setFileOperationEntries(mscore->allFileOperationEntries());
+            mscore->populateFileOperations();
+            mscore->setPlaybackControlEntries(mscore->allPlaybackControlEntries());
+            mscore->populatePlaybackControls();
             return;
             }
       if (_path.isEmpty() || !QFile(_path).exists()) {
@@ -390,6 +408,8 @@ void Workspace::read()
 void Workspace::read(XmlReader& e)
       {
       bool niToolbar = false;
+      bool foToolbar = false;
+      bool pcToolbar = false;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name")
@@ -406,12 +426,22 @@ void Workspace::read(XmlReader& e)
                   }
             else if (tag == "Toolbar") {
                   QString name = e.attribute("name");
+                  std::list<const char *> toolbarEntries;
+                  if (name == "noteInput")
+                        toolbarEntries = mscore->allNoteInputMenuEntries();
+                  else if (name == "fileOperation")
+                        toolbarEntries = mscore->allFileOperationEntries();
+                  else if (name == "playbackControl")
+                        toolbarEntries = mscore->allPlaybackControlEntries();
+                  else
+                        qDebug() << "Error in loading workspace: " + name + " is not a toolbar";
+
                   std::list<const char*> l;
                   while (e.readNextStartElement()) {
                         const QStringRef& t(e.name());
                         if (t == "action") {
                               QString s = e.readElementText();
-                              for (auto k : mscore->allNoteInputMenuEntries()) {
+                              for (auto k : toolbarEntries) {
                                     if (k == s) {
                                           l.push_back(k);
                                           break;
@@ -426,6 +456,16 @@ void Workspace::read(XmlReader& e)
                         mscore->populateNoteInputMenu();
                         niToolbar = true;
                         }
+                  else if (name == "fileOperation") {
+                        mscore->setFileOperationEntries(l);
+                        mscore->populateFileOperations();
+                        foToolbar = true;
+                        }
+                  else if (name == "playbackControl") {
+                        mscore->setPlaybackControlEntries(l);
+                        mscore->populatePlaybackControls();
+                        pcToolbar = true;
+                        }
                   }
             else
                   e.unknown();
@@ -433,6 +473,14 @@ void Workspace::read(XmlReader& e)
       if (!niToolbar) {
             mscore->setNoteInputMenuEntries(mscore->allNoteInputMenuEntries());
             mscore->populateNoteInputMenu();
+            }
+      if (!foToolbar) {
+            mscore->setFileOperationEntries(mscore->allFileOperationEntries());
+            mscore->populateFileOperations();
+            }
+      if (!pcToolbar) {
+            mscore->setPlaybackControlEntries(mscore->allPlaybackControlEntries());
+            mscore->populatePlaybackControls();
             }
       }
 
