@@ -202,6 +202,16 @@ void HPiano::changeSelection(Selection selection)
             key->update();
       }
 
+// used when currentScore() is NULL; same as above except the for loop
+void HPiano::clearSelection()
+      {
+      for (PianoKeyItem* key : keys) {
+            key->setHighlighted(false);
+            key->setSelected(false);
+            key->update();
+            }
+      }
+
 //---------------------------------------------------------
 //   updateAllKeys
 //---------------------------------------------------------
@@ -523,5 +533,9 @@ void PianoTools::changeSelection(Selection selection)
       {
       _piano->changeSelection(selection);
       }
-}
 
+void PianoTools::clearSelection()
+      {
+      _piano->clearSelection();
+      }
+}
