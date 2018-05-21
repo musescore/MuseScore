@@ -17,6 +17,7 @@
 #include "measure.h"
 #include "segment.h"
 #include "stem.h"
+#include "sym.h"
 #include "xml.h"
 
 namespace Ms {
@@ -30,6 +31,7 @@ static const char* tremoloName[] = {
       QT_TRANSLATE_NOOP("Tremolo", "16th through stem"),
       QT_TRANSLATE_NOOP("Tremolo", "32nd through stem"),
       QT_TRANSLATE_NOOP("Tremolo", "64th through stem"),
+      QT_TRANSLATE_NOOP("Tremolo", "Buzz roll"),
       QT_TRANSLATE_NOOP("Tremolo", "Eighth between notes"),
       QT_TRANSLATE_NOOP("Tremolo", "16th between notes"),
       QT_TRANSLATE_NOOP("Tremolo", "32nd between notes"),
@@ -71,7 +73,10 @@ void Tremolo::draw(QPainter* painter) const
       {
       painter->setBrush(QBrush(curColor()));
       painter->setPen(Qt::NoPen);
-      painter->drawPath(path);
+      if (tremoloType() == TremoloType::BUZZ_ROLL)
+            drawSymbol(SymId::buzzRoll, painter);
+      else
+            painter->drawPath(path);
       if ((parent() == 0) && !twoNotes()) {
             qreal x = 0.0; // bbox().width() * .25;
             QPen pen(curColor(), point(score()->styleS(StyleIdx::stemWidth)));
@@ -400,6 +405,7 @@ QString Tremolo::type2name(TremoloType t)
             case TremoloType::R16: return QString("r16");
             case TremoloType::R32: return QString("r32");
             case TremoloType::R64: return QString("r64");
+            case TremoloType::BUZZ_ROLL: return QString("buzzroll");
             case TremoloType::C8:  return QString("c8");
             case TremoloType::C16: return QString("c16");
             case TremoloType::C32: return QString("c32");
@@ -433,6 +439,8 @@ TremoloType Tremolo::name2Type(const QString& s)
             t = TremoloType::C32;
       else if (s == "c64")
             t = TremoloType::C64;
+      else if (s == "buzzroll")
+            t = TremoloType::BUZZ_ROLL;
       else
             t = TremoloType(s.toInt());    // for compatibility with old tremolo type
       return  t;
