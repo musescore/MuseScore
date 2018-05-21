@@ -780,10 +780,14 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       std::list<const char*>* noteInputMenuEntries()                 { return &_noteInputMenuEntries; }
 
       static const std::list<const char*>& allFileOperationEntries() { return _allFileOperationEntries; }
-      std::list<const char*>* fileOperationEntries()              { return &_fileOperationEntries; }
+      std::list<const char*>* fileOperationEntries()                 { return &_fileOperationEntries; }
+      void setFileOperationEntries(std::list<const char*> l)         { _fileOperationEntries = l; }
+      void populateFileOperations();
 
       static const std::list<const char*>& allPlaybackControlEntries() { return _allPlaybackControlEntries; }
-      std::list<const char*>* playbackControlEntries()      { return &_playbackControlEntries; }
+      std::list<const char*>* playbackControlEntries()               { return &_playbackControlEntries; }
+      void setPlaybackControlEntries(std::list<const char*> l)       { _playbackControlEntries = l; }
+      void populatePlaybackControls();
 
       void setNoteInputMenuEntries(std::list<const char*> l)         { _noteInputMenuEntries = l; }
       void populateNoteInputMenu();

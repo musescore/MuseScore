@@ -283,10 +283,14 @@ const std::list<const char*> MuseScore::_allFileOperationEntries {
             };
 
 const std::list<const char*> MuseScore::_allPlaybackControlEntries {
+#ifdef HAS_MIDI
             "midi-on",
+            "",
+#endif
             "rewind",
             "play",
             "loop",
+            "",
             "repeat",
             "pan",
             "metronome"
@@ -922,6 +926,82 @@ bool MuseScore::isInstalledExtension(QString extensionId)
       }
 
 //---------------------------------------------------------
+//   populateFileOperations
+//---------------------------------------------------------
+
+void MuseScore::populateFileOperations()
+      {
+      fileTools->clear();
+
+      if (qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight) {
+            for (auto s : _fileOperationEntries) {
+                  if (!*s)
+                        fileTools->addSeparator();
+                  else
+                        fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(s)));
+                  }
+            }
+      else {
+            _fileOperationEntries.reverse();
+            for (auto s : _fileOperationEntries) {
+                  if (!*s)
+                        fileTools->addSeparator();
+                  else
+                        fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(s)));
+                  }
+            _fileOperationEntries.reverse();
+            }
+
+      // Currently not customizable in ToolbarEditor
+      fileTools->addSeparator();
+      mag = new MagBox;
+      connect(mag, SIGNAL(magChanged(MagIdx)), SLOT(magChanged(MagIdx)));
+      fileTools->addWidget(mag);
+
+      viewModeCombo = new QComboBox(this);
+#if defined(Q_OS_MAC)
+      viewModeCombo->setFocusPolicy(Qt::StrongFocus);
+#else
+      viewModeCombo->setFocusPolicy(Qt::TabFocus);
+#endif
+      viewModeCombo->setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
+
+      viewModeCombo->setAccessibleName(tr("View Mode"));
+      viewModeCombo->addItem(tr("Page View"), int(LayoutMode::PAGE));
+      viewModeCombo->addItem(tr("Continuous View"), int(LayoutMode::LINE));
+      viewModeCombo->addItem(tr("Single Page"), int(LayoutMode::SYSTEM));
+
+      connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
+      fileTools->addWidget(viewModeCombo);
+      }
+
+//---------------------------------------------------------
+//   populatePlaybackControls
+//---------------------------------------------------------
+
+void MuseScore::populatePlaybackControls()
+      {
+      transportTools->clear();
+
+      for (const auto s : _playbackControlEntries) {
+            if (!*s)
+                  transportTools->addSeparator();
+            else {
+                  if (QString(s) == "repeat") {
+                              QAction* repeatAction = getAction("repeat");
+                              repeatAction->setChecked(preferences.getBool(PREF_APP_PLAYBACK_PLAYREPEATS));
+                              QWidget* w = new AccessibleToolButton(transportTools, repeatAction);
+                              transportTools->addWidget(w);
+                        }
+                  else {
+                        QWidget* w = new AccessibleToolButton(transportTools, getAction(s));
+                        transportTools->addWidget(w);
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   MuseScore
 //---------------------------------------------------------
 
@@ -1138,31 +1218,7 @@ MuseScore::MuseScore()
 
       fileTools = addToolBar("");
       fileTools->setObjectName("file-operations");
-      if (qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight) {
-            for (auto i : { "file-new", "file-open", "file-save", "print", "undo", "redo"})
-                  fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(i)));
-            }
-      else {
-            for (auto i : { "undo", "redo", "print", "file-save", "file-open", "file-new"})
-                  fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(i)));
-            }
-
-      fileTools->addSeparator();
-      mag = new MagBox;
-      connect(mag, SIGNAL(magChanged(MagIdx)), SLOT(magChanged(MagIdx)));
-      fileTools->addWidget(mag);
-      viewModeCombo = new QComboBox(this);
-#if defined(Q_OS_MAC)
-      viewModeCombo->setFocusPolicy(Qt::StrongFocus);
-#else
-      viewModeCombo->setFocusPolicy(Qt::TabFocus);
-#endif
-      viewModeCombo->setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
-      viewModeCombo->addItem("",       int(LayoutMode::PAGE));
-      viewModeCombo->addItem("", int(LayoutMode::LINE));
-      viewModeCombo->addItem("", int(LayoutMode::SYSTEM));
-      connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
-      fileTools->addWidget(viewModeCombo);
+      populateFileOperations();
 
       //---------------------
       //    Transport Tool Bar
@@ -1170,20 +1226,7 @@ MuseScore::MuseScore()
 
       transportTools = addToolBar("");
       transportTools->setObjectName("transport-tools");
-#ifdef HAS_MIDI
-      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("midi-on")));
-      transportTools->addSeparator();
-#endif
-      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("rewind")));
-      _playButton = new AccessibleToolButton(transportTools, getAction("play"));
-      transportTools->addWidget(_playButton);
-      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("loop")));
-      transportTools->addSeparator();
-      QAction* repeatAction = getAction("repeat");
-      repeatAction->setChecked(preferences.getBool(PREF_APP_PLAYBACK_PLAYREPEATS));
-      transportTools->addWidget(new AccessibleToolButton(transportTools, repeatAction));
-      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("pan")));
-      transportTools->addWidget(new AccessibleToolButton(transportTools, metronomeAction));
+      populatePlaybackControls();
 
       //-------------------------------
       //    Concert Pitch Tool Bar
