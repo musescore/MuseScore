@@ -27,6 +27,7 @@
 #include "libmscore/sym.h"
 #include "libmscore/staff.h"
 #include "libmscore/bracket.h"
+#include "libmscore/barline.h"
 
 //##  write out extended metadata about every painted symbol
 
@@ -89,7 +90,7 @@ static void writeRestData(Xml& xml, qreal spatium, qreal scale, const QString& n
       const Rest* rest = static_cast<const Rest*>(e);
       int dots = rest->durationType().dots();
       if (dots) {
-            QString dotname = "restDot";
+            QString dotname = "augmentationDot";
             if (scale == 1.0)
                   xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(dotname));
             else
@@ -173,6 +174,138 @@ static void writeTimeSigData(Xml& xml, qreal spatium, qreal scale, int num, int 
          .arg(denomInfo.y(),      0, 'f', 3)
          .arg(denomInfo.width(),  0, 'f', 3)
          .arg(denomInfo.height(), 0, 'f', 3);
+      xml.etag();
+
+      // End
+
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   writeRepeatDotData
+//---------------------------------------------------------
+
+static void writeRepeatDotData(Xml& xml, qreal spatium, qreal scale, QString name, const Element* e)
+      {
+      qreal interline = 20.0;
+      if (e->staff()) {
+            interline *= (e->staff()->spatium() / e->score()->spatium());
+            scale     *= (e->score()->spatium() / e->staff()->spatium());
+      }
+      if (scale == 1.0)
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(name));
+      else
+            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(name));
+      QRectF rr(e->pageBoundingRect());
+      QRectF outerElement(rr.x() * spatium, rr.y() * spatium, rr.width() * spatium, rr.height() * spatium);
+      xml.putLevel();
+      xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+         .arg(outerElement.x(),      0, 'f', 3)
+         .arg(outerElement.y(),      0, 'f', 3)
+         .arg(outerElement.width(),  0, 'f', 3)
+         .arg(outerElement.height(), 0, 'f', 3);
+
+      // Nested Symbol start
+
+      const BarLine* bl = static_cast<const BarLine*>(e);
+      bool revFlag = false;
+      if (bl->barLineType() == BarLineType::END_REPEAT)
+            revFlag = true;
+
+      QRectF thickBar(e->symBbox(SymId::barlineHeavy));
+      QRectF thinBar(e->symBbox(SymId::barlineSingle));
+      QRectF aDot(e->symBbox(SymId::augmentationDot));
+
+      // Thick BarLine
+
+      QString n = "barlineHeavy";
+      if (scale == 1.0)
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(n));
+      else
+            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(n));
+
+      QRectF hBar = QRectF();
+      if (revFlag) {
+            hBar = QRectF((rr.x() + rr.width() - (4 * thickBar.width() / 5)) * spatium, rr.y() * spatium, (4 * thickBar.width() / 5) * spatium, thickBar.height() * spatium);
+            }
+      else {
+            hBar = QRectF(rr.x() * spatium, rr.y() * spatium, (4 * thickBar.width() / 5) * spatium, thickBar.height() * spatium);
+            }
+      xml.putLevel();
+      xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+         .arg(hBar.x(),      0, 'f', 3)
+         .arg(hBar.y(),      0, 'f', 3)
+         .arg(hBar.width(),  0, 'f', 3)
+         .arg(hBar.height(), 0, 'f', 3);
+      xml.etag();
+
+      // Thin BarLine
+
+      n = "barlineSingle";
+      if (scale == 1.0)
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(n));
+      else
+            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(n));
+
+      QRectF lBar = QRectF();
+      if (revFlag) {
+            lBar = QRectF((rr.x() + aDot.width() + (3 * thinBar.width() / 2)) * spatium, rr.y() * spatium, (thinBar.width() / 2) * spatium, thinBar.height() * spatium);
+            }
+      else {
+            lBar = QRectF((rr.x() + rr.width() - aDot.width() - (3 * thinBar.width() / 2)) * spatium, rr.y() * spatium, (thinBar.width() / 2) * spatium, thinBar.height() * spatium);
+           }
+
+      xml.putLevel();
+      xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+         .arg(lBar.x(),      0, 'f', 3)
+         .arg(lBar.y(),      0, 'f', 3)
+         .arg(lBar.width(),  0, 'f', 3)
+         .arg(lBar.height(), 0, 'f', 3);
+         xml.etag();
+
+      // Dots
+
+      n = "augmentationDot";
+      if (scale == 1.0)
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(n));
+      else
+              xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(n));
+
+      QRectF dotOne = QRectF();
+      if (revFlag) {
+            dotOne = QRectF(rr.x() * spatium, (rr.y() + (rr.height() / 2) - (3 * aDot.height() / 2)) * spatium, aDot.width() * spatium, aDot.height() * spatium);
+            }
+      else {
+            dotOne = QRectF((rr.x() + rr.width() - aDot.width() + 1) * spatium, (rr.y() + (rr.height() / 2) - (3 * aDot.height() / 2)) * spatium, (aDot.width() - 1) * spatium, aDot.height() * spatium);
+            }
+
+      xml.putLevel();
+      xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+         .arg(dotOne.x(),      0, 'f', 3)
+         .arg(dotOne.y(),      0, 'f', 3)
+         .arg(dotOne.width(),  0, 'f', 3)
+         .arg(dotOne.height(), 0, 'f', 3);
+      xml.etag();
+
+      if (scale == 1.0)
+             xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(n));
+      else
+             xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(n));
+
+      QRectF dotTwo = QRectF();
+      if (revFlag) {
+            dotTwo = QRectF(rr.x() * spatium, (rr.y() + (rr.height() + (3 * aDot.height() / 2)) / 2) * spatium, aDot.width() * spatium, aDot.height() * spatium);
+            }
+      else {
+            dotTwo = QRectF((rr.x() + rr.width() - aDot.width() + 1) * spatium, (rr.y() + (rr.height() + (3 * aDot.height() / 2)) / 2) * spatium, (aDot.width() - 1) * spatium, aDot.height() * spatium);
+            }
+
+      xml.putLevel();
+      xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+         .arg(dotTwo.x(),      0, 'f', 3)
+         .arg(dotTwo.y(),      0, 'f', 3)
+         .arg(dotTwo.width(),  0, 'f', 3)
+         .arg(dotTwo.height(), 0, 'f', 3);
       xml.etag();
 
       // End
@@ -458,6 +591,36 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                         }
                         break;
 
+                  case Element::Type::BAR_LINE: {
+                        const BarLine* bl = static_cast<const BarLine*>(e);
+                        switch (bl->barLineType()) {
+                              case BarLineType::NORMAL:
+                                    writeData(xml, mag, bl->mag(), "barlineSingle", bl);
+                                    break;
+                              case BarLineType::DOUBLE:
+                                    writeData(xml, mag, bl->mag(), "barlineDouble", bl);
+                                    break;
+                              case BarLineType::START_REPEAT:
+                                    writeRepeatDotData(xml, mag, bl->mag(), "repeatLeft", bl);
+                                    break;
+                              case BarLineType::END_REPEAT:
+                                    writeRepeatDotData(xml, mag, bl->mag(), "repeatRight", bl);
+                                    break;
+                              case BarLineType::BROKEN:
+                                    writeData(xml, mag, bl->mag(), "barlineDashed", bl);
+                                    break;
+                              case BarLineType::END:
+                                    writeData(xml, mag, bl->mag(), "barlineSingle", bl);
+                                    break;
+                              case BarLineType::DOTTED:
+                                    writeData(xml, mag, bl->mag(), "barlineDotted", bl);
+                                    break;
+                              default:
+                                    break;
+                              }
+                        }
+                        break;
+
                   case Element::Type::MARKER: {
                         const Marker* m = static_cast<const Marker*>(e);
                         switch (m->markerType()) {
@@ -465,27 +628,21 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                               case Marker::Type::VARSEGNO:
                                     writeData(xml, mag, m->mag(), "segno", m);
                                     break;
-
                               case Marker::Type::VARCODA:
                                     writeData(xml, mag, m->mag(), "codaSquare", m);
                                     break;
-
                               case Marker::Type::CODA:
                                     writeData(xml, mag, m->mag(), "coda", m);
                                     break;
-
                               case Marker::Type::FINE:
                                     writeData(xml, mag, m->mag(), "fine", m);
                                     break;
-
                               case Marker::Type::TOCODA:
                                     writeData(xml, mag, m->mag(), "toCoda", m);
                                     break;
-
                               case Marker::Type::CODETTA:
                                     writeData(xml, mag, m->mag(), "unknown", m);
                                     break;
-
                               default:
                                     break;
                               }
