@@ -78,8 +78,8 @@ void Stem::layout()
 
       qreal y1 = 0.0;                           // vertical displacement to match note attach point
       Staff* st = staff();
-      if (chord() && st ) {
-            if (st->isTabStaff() ) {            // TAB staves
+      if (chord()) {
+            if (st && st->isTabStaff()) {            // TAB staves
                   if (st->staffType()->stemThrough()) {
                         // if stems through staves, gets Y pos. of stem-side note relative to chord other side
                         qreal lineDist = st->lineDistance() * spatium();
