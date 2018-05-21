@@ -980,12 +980,12 @@ void Measure::moveTicks(int diff)
       for (Segment* segment = first(); segment; segment = segment->next()) {
             if (segment->segmentType() & (Segment::Type::EndBarLine | Segment::Type::TimeSigAnnounce))
                   segment->setTick(tick() + ticks());
-            else if (segment->isChordRestType())
+            else if (segment->isChordRest())
                   // Tuplet ticks are stored as absolute ticks, so they must be adjusted.
                   // But each tuplet must only be adjusted once.
                   for (Element* e : segment->elist())
-                        if (e) {
-                              ChordRest* cr = toChordRest(e);
+                        if (e && e->isChordRest()) {
+                              ChordRest* cr = static_cast<ChordRest*>(e);
                               Tuplet* tuplet = cr->tuplet();
                               if (tuplet && tuplets.count(tuplet) == 0) {
                                     tuplet->setTick(tuplet->tick() + diff);
