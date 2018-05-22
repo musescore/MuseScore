@@ -1769,13 +1769,16 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
 
 void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool forceTimeSig) const
       {
-      int mno = no() + 1;
+      if (MScore::debugMode) {
+            const int mno = no() + 1;
+            xml.comment(QString("Measure %1").arg(mno));
+            }
       if (_len != _timesig) {
             // this is an irregular measure
-            xml.stag(QString("Measure number=\"%1\" len=\"%2/%3\"").arg(mno).arg(_len.numerator()).arg(_len.denominator()));
+            xml.stag(QString("Measure len=\"%1/%2\"").arg(_len.numerator()).arg(_len.denominator()));
             }
       else
-            xml.stag(QString("Measure number=\"%1\"").arg(mno));
+            xml.stag("Measure");
 
       xml.setCurTick(tick());
 
