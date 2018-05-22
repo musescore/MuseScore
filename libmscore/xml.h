@@ -218,6 +218,8 @@ class XmlWriter : public QTextStream {
       void tag(const char* name, const QString& s) { tag(name, QVariant(s)); }
       void tag(const char* name, const QWidget*);
 
+      void comment(const QString&);
+
       void writeXml(const QString&, QString s);
       void dump(int len, const unsigned char* p);
 
