@@ -62,6 +62,7 @@ class XmlReader : public QXmlStreamReader {
       bool _pasteMode       { false   };        // modifies read behaviour on paste operation
       Measure* _lastMeasure { 0       };
       Measure* _currMeasure { 0       };
+      int _currMeasureIdx   { 0       };
       QHash<int, Beam*>    _beams;
       QHash<int, Tuplet*>  _tuplets;
 
@@ -135,6 +136,8 @@ class XmlReader : public QXmlStreamReader {
       Measure* lastMeasure() const    { return _lastMeasure; }
       void setCurrentMeasure(Measure* m) { _currMeasure = m; }
       Measure* currentMeasure() const { return _currMeasure; }
+      void setCurrentMeasureIndex(int idx)  { _currMeasureIdx = idx;  }
+      int currentMeasureIndex() const       { return _currMeasureIdx; }
 
       void removeSpanner(const Spanner*);
       void addSpanner(int id, Spanner*);
@@ -236,6 +239,8 @@ class XmlWriter : public QTextStream {
       void tag(const char* name, const char* s)    { tag(name, QVariant(s)); }
       void tag(const char* name, const QString& s) { tag(name, QVariant(s)); }
       void tag(const char* name, const QWidget*);
+
+      void comment(const QString&);
 
       void writeXml(const QString&, QString s);
       void dump(int len, const unsigned char* p);

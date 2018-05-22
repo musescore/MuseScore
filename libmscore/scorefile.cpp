@@ -273,6 +273,8 @@ void Score::write(XmlWriter& xml, bool selectionOnly)
 void Score::readStaff(XmlReader& e)
       {
       int staff = e.intAttribute("id", 1) - 1;
+      int measureIdx = 0;
+      e.setCurrentMeasureIndex(0);
       e.initTick(0);
       e.setTrack(staff * VOICES);
 
@@ -284,6 +286,7 @@ void Score::readStaff(XmlReader& e)
                         Measure* measure = 0;
                         measure = new Measure(this);
                         measure->setTick(e.tick());
+                        e.setCurrentMeasureIndex(measureIdx++);
                         //
                         // inherit timesig from previous measure
                         //
@@ -335,6 +338,7 @@ void Score::readStaff(XmlReader& e)
                               measures()->add(measure);
                               }
                         e.initTick(measure->tick());
+                        e.setCurrentMeasureIndex(measureIdx++);
                         measure->read(e, staff);
                         measure->checkMeasure(staff);
                         if (measure->isMMRest())
