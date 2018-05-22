@@ -42,6 +42,7 @@ class TestNoRegress300old : public QObject, public MTest
       void tuplets()          { noregress("tuplets");          }
       void hairpin()          { noregress("hairpin");          }
       void brlines()          { noregress("barlines");         }
+      void moonlight()        { noregress("moonlight");        }
       };
 
 //---------------------------------------------------------
