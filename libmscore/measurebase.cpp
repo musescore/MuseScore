@@ -552,7 +552,6 @@ Fraction MeasureBase::afrac() const
 
 //---------------------------------------------------------
 //   index
-//    for debugging only
 //---------------------------------------------------------
 
 int MeasureBase::index() const
@@ -563,6 +562,7 @@ int MeasureBase::index() const
             if (m == this)
                   return idx;
             m = m->next();
+            ++idx;
             }
       return  -1;
       }
