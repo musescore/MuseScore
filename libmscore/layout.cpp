@@ -1358,12 +1358,13 @@ void Score::connectTies(bool silent)
                   Tremolo* tremolo = c->tremolo();
                   if (tremolo && tremolo->twoNotes() && !tremolo->chord2()) {
                         for (Segment* ls = s->next1(st); ls; ls = ls->next1(st)) {
-                              Chord* nc = toChord(ls->element(i));
-                              if (nc == 0)
+                              Element* e = ls->element(i);
+                              if (!e)
                                     continue;
-                              if (!nc->isChord())
+                              if (!e->isChord())
                                     qDebug("cannot connect tremolo");
                               else {
+                                    Chord* nc = toChord(e);
                                     nc->setTremolo(tremolo);
                                     tremolo->setChords(c, nc);
                                     // cross-measure tremolos are not supported
