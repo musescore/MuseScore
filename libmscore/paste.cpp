@@ -274,20 +274,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               sp->setTick(e.tick());
                               addSpanner(sp);
                               }
-                        else if (tag == "Slur") {
-                              Slur* sp = new Slur(this);
-                              sp->read(e);
-                              sp->setTrack(e.track());
-                              sp->setTick(e.tick());
-                              // check if we saw endSpanner / stop element already
-                              int id = e.spannerId(sp);
-                              const SpannerValues* sv = e.spannerValues(id);
-                              if (sv) {
-                                    sp->setTick2(sv->tick2);
-                                    sp->setTrack2(sv->track2);
-                                    }
-                              undoAddElement(sp);
-                              }
                         else if (tag == "endSpanner") {
                               int id = e.intAttribute("id");
                               Spanner* spanner = e.findSpanner(id);
