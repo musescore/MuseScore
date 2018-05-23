@@ -557,6 +557,7 @@ class Score : public QObject, ScoreElement {
       void removeStaff(Staff*);
       void addMeasure(MeasureBase*, MeasureBase*);
       void readStaff(XmlReader&);
+      void readStaff300old(XmlReader&);
       bool read(XmlReader&);
       bool read300old(XmlReader&);
 

@@ -50,6 +50,7 @@ class DurationElement : public Element {
 
       virtual bool readProperties(XmlReader& e);
       virtual void writeProperties(XmlWriter& xml) const;
+      virtual void writeProperties300old(XmlWriter&) const;
       void writeTuplet(XmlWriter& xml);
 
       void setTuplet(Tuplet* t)           { _tuplet = t;      }

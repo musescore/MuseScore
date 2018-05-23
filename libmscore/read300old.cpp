@@ -10,6 +10,19 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#include "arpeggio.h"
+#include "articulation.h"
+#include "chord.h"
+#include "chordline.h"
+#include "glissando.h"
+#include "hook.h"
+#include "image.h"
+#include "measure.h"
+#include "rest.h"
+#include "stem.h"
+#include "stemslash.h"
+#include "timesig.h"
+#include "tuplet.h"
 #include "xml.h"
 #include "score.h"
 #include "staff.h"
@@ -32,6 +45,443 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   ChordRest::readProperties300old
+//---------------------------------------------------------
+
+bool ChordRest::readProperties300old(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "durationType") {
+            setDurationType(e.readElementText());
+            if (actualDurationType().type() != TDuration::DurationType::V_MEASURE) {
+                  if (score()->mscVersion() < 112 && (type() == ElementType::REST) &&
+                              // for backward compatibility, convert V_WHOLE rests to V_MEASURE
+                              // if long enough to fill a measure.
+                              // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
+                              // (see Fraction() constructor in fraction.h; this happens for instance
+                              // when pasting selection from clipboard): they should not be converted
+                              duration().numerator() != 0 &&
+                              // rest durations are initialized to full measure duration when
+                              // created upon reading the <Rest> tag (see Measure::read300old() )
+                              // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
+                              (actualDurationType()==TDuration::DurationType::V_WHOLE && duration() <= Fraction(4, 4)) ) {
+                        // old pre 2.0 scores: convert
+                        setDurationType(TDuration::DurationType::V_MEASURE);
+                        }
+                  else  // not from old score: set duration fraction from duration type
+                        setDuration(actualDurationType().fraction());
+                  }
+            else {
+                  if (score()->mscVersion() <= 114) {
+                        SigEvent event = score()->sigmap()->timesig(e.tick());
+                        setDuration(event.timesig());
+                        }
+                  }
+            }
+      else if (tag == "BeamMode") {
+            QString val(e.readElementText());
+            Beam::Mode bm = Beam::Mode::AUTO;
+            if (val == "auto")
+                  bm = Beam::Mode::AUTO;
+            else if (val == "begin")
+                  bm = Beam::Mode::BEGIN;
+            else if (val == "mid")
+                  bm = Beam::Mode::MID;
+            else if (val == "end")
+                  bm = Beam::Mode::END;
+            else if (val == "no")
+                  bm = Beam::Mode::NONE;
+            else if (val == "begin32")
+                  bm = Beam::Mode::BEGIN32;
+            else if (val == "begin64")
+                  bm = Beam::Mode::BEGIN64;
+            else
+                  bm = Beam::Mode(val.toInt());
+            _beamMode = Beam::Mode(bm);
+            }
+      else if (tag == "Articulation") {
+            Articulation* atr = new Articulation(score());
+            atr->setTrack(track());
+            atr->read300old(e);
+            add(atr);
+            }
+      else if (tag == "leadingSpace" || tag == "trailingSpace") {
+            qDebug("ChordRest: %s obsolete", tag.toLocal8Bit().data());
+            e.skipCurrentElement();
+            }
+      else if (tag == "Beam") {
+            int id = e.readInt();
+            Beam* beam = e.findBeam(id);
+            if (beam)
+                  beam->add(this);        // also calls this->setBeam(beam)
+            else
+                  qDebug("Beam id %d not found", id);
+            }
+      else if (tag == "small")
+            _small = e.readInt();
+      else if (tag == "duration")
+            setDuration(e.readFraction());
+      else if (tag == "ticklen") {      // obsolete (version < 1.12)
+            int mticks = score()->sigmap()->timesig(e.tick()).timesig().ticks();
+            int i = e.readInt();
+            if (i == 0)
+                  i = mticks;
+            if ((type() == ElementType::REST) && (mticks == i)) {
+                  setDurationType(TDuration::DurationType::V_MEASURE);
+                  setDuration(Fraction::fromTicks(i));
+                  }
+            else {
+                  Fraction f = Fraction::fromTicks(i);
+                  setDuration(f);
+                  setDurationType(TDuration(f));
+                  }
+            }
+      else if (tag == "dots")
+            setDots(e.readInt());
+      else if (tag == "move")
+            _staffMove = e.readInt();
+      else if (tag == "Slur") {
+            int id = e.intAttribute("id");
+            if (id == 0)
+                  id = e.intAttribute("number");                  // obsolete
+            Spanner* spanner = e.findSpanner(id);
+            QString atype(e.attribute("type"));
+
+            if (!spanner) {
+                  if (atype == "stop") {
+                        SpannerValues sv;
+                        sv.spannerId = id;
+                        sv.track2    = track();
+                        sv.tick2     = e.tick();
+                        e.addSpannerValues(sv);
+                        }
+                  else if (atype == "start")
+                        qDebug("spanner: start without spanner");
+                  }
+            else {
+                  if (atype == "start") {
+                        if (spanner->ticks() > 0 && spanner->tick() == -1) // stop has been read first
+                              spanner->setTicks(spanner->ticks() - e.tick() - 1);
+                        spanner->setTick(e.tick());
+                        spanner->setTrack(track());
+                        if (spanner->type() == ElementType::SLUR)
+                              spanner->setStartElement(this);
+                        if (e.pasteMode()) {
+                              for (ScoreElement* e : spanner->linkList()) {
+                                    if (e == spanner)
+                                          continue;
+                                    Spanner* ls = static_cast<Spanner*>(e);
+                                    ls->setTick(spanner->tick());
+                                    for (ScoreElement* ee : linkList()) {
+                                          ChordRest* cr = toChordRest(ee);
+                                          if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
+                                                ls->setTrack(cr->track());
+                                                if (ls->type() == ElementType::SLUR)
+                                                      ls->setStartElement(cr);
+                                                break;
+                                                }
+                                          }
+                                    }
+                              }
+                        }
+                  else if (atype == "stop") {
+                        spanner->setTick2(e.tick());
+                        spanner->setTrack2(track());
+                        if (spanner->isSlur())
+                              spanner->setEndElement(this);
+                        ChordRest* start = toChordRest(spanner->startElement());
+                        if (start)
+                              spanner->setTrack(start->track());
+                        if (e.pasteMode()) {
+                              for (ScoreElement* e : spanner->linkList()) {
+                                    if (e == spanner)
+                                          continue;
+                                    Spanner* ls = static_cast<Spanner*>(e);
+                                    ls->setTick2(spanner->tick2());
+                                    for (ScoreElement* ee : linkList()) {
+                                          ChordRest* cr = toChordRest(ee);
+                                          if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
+                                                ls->setTrack2(cr->track());
+                                                if (ls->type() == ElementType::SLUR)
+                                                      ls->setEndElement(cr);
+                                                break;
+                                                }
+                                          }
+                                    }
+                              }
+                        }
+                  else
+                        qDebug("ChordRest::read300old(): unknown Slur type <%s>", qPrintable(atype));
+                  }
+            e.readNext();
+            }
+      else if (tag == "Lyrics" /*|| tag == "FiguredBass"*/) {
+            Element* element = Element::name2Element(tag, score());
+            element->setTrack(e.track());
+            element->read300old(e);
+            add(element);
+            }
+      else if (tag == "pos") {
+            QPointF pt = e.readPoint();
+            setUserOff(pt * spatium());
+            }
+      else if (tag == "offset")
+            DurationElement::readProperties300old(e);
+      else if (!DurationElement::readProperties300old(e))
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   Rest::read300old
+//---------------------------------------------------------
+
+void Rest::read300old(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Symbol") {
+                  Symbol* s = new Symbol(score());
+                  s->setTrack(track());
+                  s->read300old(e);
+                  add(s);
+                  }
+            else if (tag == "Image") {
+                  if (MScore::noImages)
+                        e.skipCurrentElement();
+                  else {
+                        Image* image = new Image(score());
+                        image->setTrack(track());
+                        image->read300old(e);
+                        add(image);
+                        }
+                  }
+            else if (ChordRest::readProperties300old(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   Chord::read300old
+//---------------------------------------------------------
+
+void Chord::read300old(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            if (readProperties300old(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   Chord::readProperties300old
+//---------------------------------------------------------
+
+bool Chord::readProperties300old(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "Note") {
+            Note* note = new Note(score());
+            // the note needs to know the properties of the track it belongs to
+            note->setTrack(track());
+            note->setChord(this);
+            note->read300old(e);
+            add(note);
+            }
+      else if (ChordRest::readProperties300old(e))
+            ;
+      else if (tag == "Stem") {
+            Stem* s = new Stem(score());
+            s->read300old(e);
+            add(s);
+            }
+      else if (tag == "Hook") {
+            _hook = new Hook(score());
+            _hook->read300old(e);
+            add(_hook);
+            }
+      else if (tag == "appoggiatura") {
+            _noteType = NoteType::APPOGGIATURA;
+            e.readNext();
+            }
+      else if (tag == "acciaccatura") {
+            _noteType = NoteType::ACCIACCATURA;
+            e.readNext();
+            }
+      else if (tag == "grace4") {
+            _noteType = NoteType::GRACE4;
+            e.readNext();
+            }
+      else if (tag == "grace16") {
+            _noteType = NoteType::GRACE16;
+            e.readNext();
+            }
+      else if (tag == "grace32") {
+            _noteType = NoteType::GRACE32;
+            e.readNext();
+            }
+      else if (tag == "grace8after") {
+            _noteType = NoteType::GRACE8_AFTER;
+            e.readNext();
+            }
+      else if (tag == "grace16after") {
+            _noteType = NoteType::GRACE16_AFTER;
+            e.readNext();
+            }
+      else if (tag == "grace32after") {
+            _noteType = NoteType::GRACE32_AFTER;
+            e.readNext();
+            }
+      else if (tag == "StemSlash") {
+            StemSlash* ss = new StemSlash(score());
+            ss->read300old(e);
+            add(ss);
+            }
+      else if (readProperty(tag, e, Pid::STEM_DIRECTION))
+            ;
+      else if (tag == "noStem")
+            _noStem = e.readInt();
+      else if (tag == "Arpeggio") {
+            _arpeggio = new Arpeggio(score());
+            _arpeggio->setTrack(track());
+            _arpeggio->read300old(e);
+            _arpeggio->setParent(this);
+            }
+      // old glissando format, chord-to-chord, attached to its final chord
+      else if (tag == "Glissando") {
+            // the measure we are reading is not inserted in the score yet
+            // as well as, possibly, the glissando intended initial chord;
+            // then we cannot fully link the glissando right now;
+            // temporarily attach the glissando to its final note as a back spanner;
+            // after the whole score is read, Score::connectTies() will look for
+            // the suitable initial note
+            Note* finalNote = upNote();
+            Glissando* gliss = new Glissando(score());
+            gliss->read300old(e);
+            gliss->setAnchor(Spanner::Anchor::NOTE);
+            gliss->setStartElement(nullptr);
+            gliss->setEndElement(nullptr);
+            // in TAB, use straight line with no text
+            if (score()->staff(e.track() >> 2)->isTabStaff(tick())) {
+                  gliss->setGlissandoType(GlissandoType::STRAIGHT);
+                  gliss->setShowText(false);
+                  }
+            finalNote->addSpannerBack(gliss);
+            }
+      else if (tag == "Tremolo") {
+            _tremolo = new Tremolo(score());
+            _tremolo->setTrack(track());
+            _tremolo->read300old(e);
+            _tremolo->setParent(this);
+            }
+      else if (tag == "tickOffset")       // obsolete
+            ;
+      else if (tag == "ChordLine") {
+            ChordLine* cl = new ChordLine(score());
+            cl->read300old(e);
+            add(cl);
+            }
+      else
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   Score::readStaff300old
+//---------------------------------------------------------
+
+void Score::readStaff300old(XmlReader& e)
+      {
+      int staff = e.intAttribute("id", 1) - 1;
+      e.initTick(0);
+      e.setTrack(staff * VOICES);
+
+      if (staff == 0) {
+            while (e.readNextStartElement()) {
+                  const QStringRef& tag(e.name());
+
+                  if (tag == "Measure") {
+                        Measure* measure = 0;
+                        measure = new Measure(this);
+                        measure->setTick(e.tick());
+                        //
+                        // inherit timesig from previous measure
+                        //
+                        Measure* m = e.lastMeasure(); // measure->prevMeasure();
+                        Fraction f(m ? m->timesig() : Fraction(4,4));
+                        measure->setLen(f);
+                        measure->setTimesig(f);
+
+                        measure->read300old(e, staff);
+                        measure->checkMeasure(staff);
+                        if (!measure->isMMRest()) {
+                              measures()->add(measure);
+                              e.setLastMeasure(measure);
+                              e.initTick(measure->tick() + measure->ticks());
+                              }
+                        else {
+                              // this is a multi measure rest
+                              // always preceded by the first measure it replaces
+                              Measure* m = e.lastMeasure();
+
+                              if (m) {
+                                    m->setMMRest(measure);
+                                    measure->setTick(m->tick());
+                                    }
+                              }
+                        }
+                  else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
+                        MeasureBase* mb = toMeasureBase(Element::name2Element(tag, this));
+                        mb->read300old(e);
+                        mb->setTick(e.tick());
+                        measures()->add(mb);
+                        }
+                  else if (tag == "tick")
+                        e.initTick(fileDivision(e.readInt()));
+                  else
+                        e.unknown();
+                  }
+            }
+      else {
+            Measure* measure = firstMeasure();
+            while (e.readNextStartElement()) {
+                  const QStringRef& tag(e.name());
+
+                  if (tag == "Measure") {
+                        if (measure == 0) {
+                              qDebug("Score::readStaff300old(): missing measure!");
+                              measure = new Measure(this);
+                              measure->setTick(e.tick());
+                              measures()->add(measure);
+                              }
+                        e.initTick(measure->tick());
+                        measure->read300old(e, staff);
+                        measure->checkMeasure(staff);
+                        if (measure->isMMRest())
+                              measure = e.lastMeasure()->nextMeasure();
+                        else {
+                              e.setLastMeasure(measure);
+                              if (measure->mmRest())
+                                    measure = measure->mmRest();
+                              else
+                                    measure = measure->nextMeasure();
+                              }
+                        }
+                  else if (tag == "tick")
+                        e.initTick(fileDivision(e.readInt()));
+                  else
+                        e.unknown();
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   read300old
 //    return false on error
 //---------------------------------------------------------
@@ -42,7 +492,7 @@ bool Score::read300old(XmlReader& e)
             e.setTrack(-1);
             const QStringRef& tag(e.name());
             if (tag == "Staff")
-                  readStaff(e);
+                  readStaff300old(e);
             else if (tag == "Omr") {
 #ifdef OMR
                   masterScore()->setOmr(new Omr(this));

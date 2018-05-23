@@ -83,7 +83,9 @@ class ChordRest : public DurationElement {
       virtual Measure* measure() const = 0;
 
       virtual void writeProperties(XmlWriter& xml) const;
+      virtual void writeProperties300old(XmlWriter&) const;
       virtual bool readProperties(XmlReader&);
+      virtual bool readProperties300old(XmlReader&);
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 
       void setBeamMode(Beam::Mode m)            { _beamMode = m;    }

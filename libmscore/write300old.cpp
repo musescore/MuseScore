@@ -10,8 +10,14 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#include "arpeggio.h"
+#include "articulation.h"
 #include "config.h"
+#include "hook.h"
+#include "lyrics.h"
 #include "score.h"
+#include "stem.h"
+#include "stemslash.h"
 #include "xml.h"
 #include "element.h"
 #include "measure.h"
@@ -461,6 +467,171 @@ void Score::writeSegments300old(XmlWriter& xml, int strack, int etrack,
                         }
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   ChordRest::writeProperties300old
+//---------------------------------------------------------
+
+void ChordRest::writeProperties300old(XmlWriter& xml) const
+      {
+      DurationElement::writeProperties300old(xml);
+
+      //
+      // Beam::Mode default:
+      //    REST  - Beam::Mode::NONE
+      //    CHORD - Beam::Mode::AUTO
+      //
+      if ((isRest() && _beamMode != Beam::Mode::NONE) || (isChord() && _beamMode != Beam::Mode::AUTO)) {
+            QString s;
+            switch(_beamMode) {
+                  case Beam::Mode::AUTO:    s = "auto"; break;
+                  case Beam::Mode::BEGIN:   s = "begin"; break;
+                  case Beam::Mode::MID:     s = "mid"; break;
+                  case Beam::Mode::END:     s = "end"; break;
+                  case Beam::Mode::NONE:    s = "no"; break;
+                  case Beam::Mode::BEGIN32: s = "begin32"; break;
+                  case Beam::Mode::BEGIN64: s = "begin64"; break;
+                  case Beam::Mode::INVALID: s = "?"; break;
+                  }
+            xml.tag("BeamMode", s);
+            }
+      writeProperty(xml, Pid::SMALL);
+      if (actualDurationType().dots())
+            xml.tag("dots", actualDurationType().dots());
+      writeProperty(xml, Pid::STAFF_MOVE);
+
+      if (actualDurationType().isValid())
+            xml.tag("durationType", actualDurationType().name());
+
+      if (!duration().isZero() && (!actualDurationType().fraction().isValid()
+         || (actualDurationType().fraction() != duration()))) {
+            xml.tag("duration", duration());
+            //xml.tagE("duration z=\"%d\" n=\"%d\"", duration().numerator(), duration().denominator());
+            }
+
+#ifndef NDEBUG
+      if (_beam && (MScore::testMode || !_beam->generated()))
+            xml.tag("Beam", _beam->id());
+#else
+      if (_beam && !_beam->generated())
+            xml.tag("Beam", _beam->id());
+#endif
+      for (Lyrics* lyrics : _lyrics)
+            lyrics->write300old(xml);
+      if (!isGrace()) {
+            Fraction t(globalDuration());
+            if (staff())
+                  t /= staff()->timeStretch(xml.curTick());
+            xml.incCurTick(t.ticks());
+            }
+      for (auto i : score()->spanner()) {     // TODO: dont search whole list
+            Spanner* s = i.second;
+            if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !xml.canWrite(s))
+                  continue;
+
+            if (s->startElement() == this) {
+                  int id = xml.spannerId(s);
+                  xml.tagE(QString("Slur type=\"start\" id=\"%1\"").arg(id));
+                  }
+            else if (s->endElement() == this) {
+                  int id = xml.spannerId(s);
+                  xml.tagE(QString("Slur type=\"stop\" id=\"%1\"").arg(id));
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   Chord::write300old
+//---------------------------------------------------------
+
+void Chord::write300old(XmlWriter& xml) const
+      {
+      for (Chord* c : _graceNotes) {
+            c->writeBeam(xml);
+            c->write300old(xml);
+            }
+      xml.stag("Chord");
+      ChordRest::writeProperties300old(xml);
+      for (const Articulation* a : _articulations)
+            a->write300old(xml);
+      switch (_noteType) {
+            case NoteType::NORMAL:
+                  break;
+            case NoteType::ACCIACCATURA:
+                  xml.tagE("acciaccatura");
+                  break;
+            case NoteType::APPOGGIATURA:
+                  xml.tagE("appoggiatura");
+                  break;
+            case NoteType::GRACE4:
+                  xml.tagE("grace4");
+                  break;
+            case NoteType::GRACE16:
+                  xml.tagE("grace16");
+                  break;
+            case NoteType::GRACE32:
+                  xml.tagE("grace32");
+                  break;
+            case NoteType::GRACE8_AFTER:
+                  xml.tagE("grace8after");
+                  break;
+            case NoteType::GRACE16_AFTER:
+                  xml.tagE("grace16after");
+                  break;
+            case NoteType::GRACE32_AFTER:
+                  xml.tagE("grace32after");
+                  break;
+            default:
+                  break;
+            }
+
+      if (_noStem)
+            xml.tag("noStem", _noStem);
+      else if (_stem && (_stem->isUserModified() || (_stem->userLen() != 0.0)))
+            _stem->write300old(xml);
+      if (_hook && _hook->isUserModified())
+            _hook->write300old(xml);
+      if (_stemSlash && _stemSlash->isUserModified())
+            _stemSlash->write300old(xml);
+      writeProperty(xml, Pid::STEM_DIRECTION);
+      for (Note* n : _notes)
+            n->write300old(xml);
+      if (_arpeggio)
+            _arpeggio->write300old(xml);
+      if (_tremolo && tremoloChordType() != TremoloChordType::TremoloSecondNote)
+            _tremolo->write300old(xml);
+      for (Element* e : el())
+            e->write300old(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Slur::write300old
+//---------------------------------------------------------
+
+void Slur::write300old(XmlWriter& xml) const
+      {
+      if (broken()) {
+            qDebug("broken slur not written");
+            return;
+            }
+      if (!xml.canWrite(this))
+            return;
+      xml.stag(QString("Slur id=\"%1\"").arg(xml.spannerId(this)));
+      SlurTie::writeProperties300old(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   DurationElement::writeProperties300old
+//---------------------------------------------------------
+
+void DurationElement::writeProperties300old(XmlWriter& xml) const
+      {
+      Element::writeProperties(xml);
+      if (tuplet())
+            xml.tag("Tuplet", tuplet()->id());
       }
 
 }
