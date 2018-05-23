@@ -326,8 +326,8 @@ void Voice::process(int frames, float* p)
             last_fres = _fres;
             }
 
-      const float opcodePanLeftGain = 1.f - std::fmax(0.0f, z->pan / 100.0); //[0, 1]
-      const float opcodePanRightGain = 1.f + std::fmin(0.0f, z->pan / 100.0); //[0, 1]
+      const float opcodePanLeftGain = 1.f - fmax(0.0f, z->pan / 100.0); //[0, 1]
+      const float opcodePanRightGain = 1.f + fmin(0.0f, z->pan / 100.0); //[0, 1]
       if (audioChan == 1) {
             while (frames--) {
 
