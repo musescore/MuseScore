@@ -3472,29 +3472,37 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
 
 //---------------------------------------------------------
 //   undoChangeClef
-//    change clef if seg contains a clef
+//    change clef if e is a clef
 //    else
-//    create a clef before segment seg
+//    create a clef before element e
 //---------------------------------------------------------
 
-void Score::undoChangeClef(Staff* ostaff, Segment* seg, ClefType ct)
+void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct)
       {
-      SegmentType st;
-      if (seg->isHeaderClefType())
-            st = SegmentType::HeaderClef;
-      else if (seg->isClefType())
-            st = SegmentType::Clef;
-      else if (seg->rtick() == 0)
-            st = SegmentType::HeaderClef;
-      else
-            st = SegmentType::Clef;
-
-      bool moveClef = (st == SegmentType::HeaderClef) && seg->measure()->prevMeasure();
-      bool small = !seg->header() || moveClef;
+      bool moveClef = false;
+      SegmentType st = SegmentType::Clef;
+      if (e->isMeasure()) {
+            if (toMeasure(e)->prevMeasure())
+                  moveClef = true;
+            else
+                  st = SegmentType::HeaderClef;
+            }
+      else if (e->isClef()) {
+            Clef* clef = toClef(e);
+            if (clef->segment()->isHeaderClefType()) {
+                  if (clef->measure()->prevMeasure())
+                        moveClef = true;
+                  else
+                        st = SegmentType::HeaderClef;
+                  }
+            else if (clef->rtick() == clef->measure()->ticks())
+                  moveClef = true;
+            }
 
       Clef* gclef = 0;
-      int tick = seg->tick();
-      int rtick = seg->rtick();
+      int tick = e->tick();
+      int rtick = e->rtick();
+      bool small = (st == SegmentType::Clef);
       for (Staff* staff : ostaff->staffList()) {
             if (staff->staffType(tick)->group() != ClefInfo::staffGroup(ct))
                   continue;
