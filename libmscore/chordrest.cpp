@@ -191,14 +191,10 @@ void ChordRest::writeProperties(XmlWriter& xml) const
             if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !xml.canWrite(s))
                   continue;
 
-            if (s->startElement() == this) {
-                  int id = xml.spannerId(s);
-                  xml.tagE(QString("Slur type=\"start\" id=\"%1\"").arg(id));
-                  }
-            else if (s->endElement() == this) {
-                  int id = xml.spannerId(s);
-                  xml.tagE(QString("Slur type=\"stop\" id=\"%1\"").arg(id));
-                  }
+            if (s->startElement() == this)
+                  s->writeSpannerStart(xml, this, track());
+            else if (s->endElement() == this)
+                  s->writeSpannerEnd(xml, this, track());
             }
       }
 
@@ -299,33 +295,44 @@ bool ChordRest::readProperties(XmlReader& e)
             setDots(e.readInt());
       else if (tag == "move")
             _staffMove = e.readInt();
-      else if (tag == "Slur") {
-            int id = e.intAttribute("id");
-            if (id == 0)
-                  id = e.intAttribute("number");                  // obsolete
-            Spanner* spanner = e.findSpanner(id);
-            QString atype(e.attribute("type"));
+      else if (tag == "Spanner")
+            Spanner::readSpanner(e, this, track());
+      else if (tag == "Lyrics") {
+            Element* element = new Lyrics(score());
+            element->setTrack(e.track());
+            element->read(e);
+            add(element);
+            }
+      else if (tag == "pos") {
+            QPointF pt = e.readPoint();
+            setUserOff(pt * spatium());
+            }
+      else if (tag == "offset")
+            DurationElement::readProperties(e);
+      else if (!DurationElement::readProperties(e))
+            return false;
+      return true;
+      }
 
-            if (!spanner) {
-                  if (atype == "stop") {
-                        SpannerValues sv;
-                        sv.spannerId = id;
-                        sv.track2    = track();
-                        sv.tick2     = e.tick();
-                        e.addSpannerValues(sv);
-                        }
-                  else if (atype == "start")
-                        qDebug("spanner: start without spanner");
-                  }
-            else {
-                  if (atype == "start") {
-                        if (spanner->ticks() > 0 && spanner->tick() == -1) // stop has been read first
-                              spanner->setTicks(spanner->ticks() - e.tick() - 1);
-                        spanner->setTick(e.tick());
-                        spanner->setTrack(track());
-                        if (spanner->type() == ElementType::SLUR)
-                              spanner->setStartElement(this);
-                        if (e.pasteMode()) {
+//---------------------------------------------------------
+//   ChordRest::readAddConnector
+//---------------------------------------------------------
+
+void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
+      {
+      const ElementType type = info->type();
+      switch(type) {
+            case ElementType::SLUR:
+                  {
+                  Spanner* spanner = toSpanner(info->connector());
+                  const Location& l = info->location();
+
+                  if (info->isStart()) {
+                        spanner->setTrack(l.track());
+                        spanner->setTick(tick());
+                        spanner->setStartElement(this);
+                        if (pasteMode) {
+                              score()->undoAddElement(spanner);
                               for (ScoreElement* ee : spanner->linkList()) {
                                     if (ee == spanner)
                                           continue;
@@ -342,16 +349,14 @@ bool ChordRest::readProperties(XmlReader& e)
                                           }
                                     }
                               }
+                        else
+                              score()->addSpanner(spanner);
                         }
-                  else if (atype == "stop") {
-                        spanner->setTick2(e.tick());
-                        spanner->setTrack2(track());
-                        if (spanner->isSlur())
-                              spanner->setEndElement(this);
-                        ChordRest* start = toChordRest(spanner->startElement());
-                        if (start)
-                              spanner->setTrack(start->track());
-                        if (e.pasteMode()) {
+                  else if (info->isEnd()) {
+                        spanner->setTrack2(l.track());
+                        spanner->setTick2(tick());
+                        spanner->setEndElement(this);
+                        if (pasteMode) {
                               for (ScoreElement* ee : spanner->linkList()) {
                                     if (ee == spanner)
                                           continue;
@@ -370,25 +375,12 @@ bool ChordRest::readProperties(XmlReader& e)
                               }
                         }
                   else
-                        qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(atype));
+                        qDebug("ChordRest::readAddConnector(): Slur end is neither start nor end");
                   }
-            e.readNext();
+                  break;
+            default:
+                  break;
             }
-      else if (tag == "Lyrics") {
-            Element* element = new Lyrics(score());
-            element->setTrack(e.track());
-            element->read(e);
-            add(element);
-            }
-      else if (tag == "pos") {
-            QPointF pt = e.readPoint();
-            setUserOff(pt * spatium());
-            }
-      else if (tag == "offset")
-            DurationElement::readProperties(e);
-      else if (!DurationElement::readProperties(e))
-            return false;
-      return true;
       }
 
 //---------------------------------------------------------

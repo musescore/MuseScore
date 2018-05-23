@@ -1003,7 +1003,7 @@ void Slur::write(XmlWriter& xml) const
             }
       if (!xml.canWrite(this))
             return;
-      xml.stag(QString("Slur id=\"%1\"").arg(xml.spannerId(this)));
+      xml.stag(name());
       SlurTie::writeProperties(xml);
       xml.etag();
       }
@@ -1015,7 +1015,6 @@ void Slur::write(XmlWriter& xml) const
 void Slur::read(XmlReader& e)
       {
       setTrack(e.track());      // set staff
-      e.addSpanner(e.intAttribute("id"), this);
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "track2")

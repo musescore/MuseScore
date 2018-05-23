@@ -253,7 +253,7 @@ void Ottava::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      xml.stag(name());
       xml.tag("subtype", ottavaDefault[int(ottavaType())].name);
 
       for (const StyledProperty& spp : *styledProperties())
@@ -271,7 +271,6 @@ void Ottava::read(XmlReader& e)
       {
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
-      e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement())
             readProperties(e);
       updateStyledProperties();

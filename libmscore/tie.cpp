@@ -519,7 +519,7 @@ Tie::Tie(Score* s)
 
 void Tie::write(XmlWriter& xml) const
       {
-      xml.stag(QString("Tie id=\"%1\"").arg(xml.spannerId(this)));
+      xml.stag(name());
       SlurTie::writeProperties(xml);
       xml.etag();
       }
@@ -530,7 +530,6 @@ void Tie::write(XmlWriter& xml) const
 
 void Tie::read(XmlReader& e)
       {
-      e.addSpanner(e.intAttribute("id"), this);
       while (e.readNextStartElement()) {
             if (SlurTie::readProperties(e))
                   ;

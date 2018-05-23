@@ -1052,27 +1052,6 @@ bool Chord::readProperties(XmlReader& e)
             _arpeggio->read(e);
             _arpeggio->setParent(this);
             }
-      // old glissando format, chord-to-chord, attached to its final chord
-      else if (tag == "Glissando") {
-            // the measure we are reading is not inserted in the score yet
-            // as well as, possibly, the glissando intended initial chord;
-            // then we cannot fully link the glissando right now;
-            // temporarily attach the glissando to its final note as a back spanner;
-            // after the whole score is read, Score::connectTies() will look for
-            // the suitable initial note
-            Note* finalNote = upNote();
-            Glissando* gliss = new Glissando(score());
-            gliss->read(e);
-            gliss->setAnchor(Spanner::Anchor::NOTE);
-            gliss->setStartElement(nullptr);
-            gliss->setEndElement(nullptr);
-            // in TAB, use straight line with no text
-            if (score()->staff(e.track() >> 2)->isTabStaff(tick())) {
-                  gliss->setGlissandoType(GlissandoType::STRAIGHT);
-                  gliss->setShowText(false);
-                  }
-            finalNote->addSpannerBack(gliss);
-            }
       else if (tag == "Tremolo") {
             _tremolo = new Tremolo(score());
             _tremolo->setTrack(track());

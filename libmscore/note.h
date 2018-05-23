@@ -385,6 +385,7 @@ class Note final : public Element {
 
       virtual void read(XmlReader&) override;
       virtual bool readProperties(XmlReader&) override;
+      virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
       virtual void read300(XmlReader&) override;
       virtual bool readProperties300(XmlReader&) override;
       virtual void write(XmlWriter&) const override;

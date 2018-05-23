@@ -1192,12 +1192,12 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                                           end = s->tick2() < endTick;
                                     else
                                           end = s->tick2() <= endTick;
-                                    if (s->tick() == segment->tick() && (!clip || end)) {
+                                    if (s->tick() == segment->tick() && (!clip || end) && !s->isSlur()) {
                                           if (needTick) {
                                                 writeMove(xml, segment, track);
                                                 needTick = false;
                                                 }
-                                          s->write(xml);
+                                          s->writeSpannerStart(xml, segment, track);
                                           }
                                     }
                               if ((s->tick2() == segment->tick())
@@ -1209,7 +1209,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                                           writeMove(xml, segment, track);
                                           needTick = false;
                                           }
-                                    xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(s)));
+                                    s->writeSpannerEnd(xml, segment, track);
                                     }
                               }
                         }
@@ -1270,7 +1270,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                           && (s->track2() == track || (s->track2() == -1 && s->track() == track))
                           && (!clip || s->tick() >= fs->tick())
                           ) {
-                              xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(s)));
+                              s->writeSpannerEnd(xml, lastMeasure(), track, endTick);
                               }
                         }
                   }
