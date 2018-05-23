@@ -46,7 +46,7 @@ enum class OffMode : char {
 
 struct Zone {
       Sample* sample = 0;
-      int  offset  = 0;
+      unsigned long offset  = 0; //[0, 4294967295]
       int  seq     = 0;
       int seqLen   = 0;
       int seqPos   = 0;
@@ -76,6 +76,9 @@ struct Zone {
       float ampegVel2Sustain  = 0.0;
       float ampegVel2Release  = 0.0;
       float rtDecay = 0.0;
+      float delay = 0.0;
+      int pan = 0;
+      float group_volume = 1.0;
 
       Trigger trigger = Trigger::ATTACK;
       LoopMode loopMode = LoopMode::NO_LOOP;
