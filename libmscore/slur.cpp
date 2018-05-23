@@ -1003,7 +1003,7 @@ void Slur::write(XmlWriter& xml) const
             }
       if (!xml.canWrite(this))
             return;
-      xml.stag(QString("Slur id=\"%1\"").arg(xml.spannerId(this)));
+      xml.stag(QString("Slur type=\"start\" id=\"%1\"").arg(xml.spannerId(this)));
       SlurTie::writeProperties(xml);
       xml.etag();
       }

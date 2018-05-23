@@ -192,8 +192,7 @@ void ChordRest::writeProperties(XmlWriter& xml) const
                   continue;
 
             if (s->startElement() == this) {
-                  int id = xml.spannerId(s);
-                  xml.tagE(QString("Slur type=\"start\" id=\"%1\"").arg(id));
+                  s->write(xml);
                   }
             else if (s->endElement() == this) {
                   int id = xml.spannerId(s);
@@ -314,10 +313,24 @@ bool ChordRest::readProperties(XmlReader& e)
                         sv.tick2     = e.tick();
                         e.addSpannerValues(sv);
                         }
-                  else if (atype == "start")
-                        qDebug("spanner: start without spanner");
+                  else if (atype == "start") {
+                        spanner = new Slur(score());
+                        spanner->setTick(e.tick());
+                        spanner->read(e);
+                        // check if we already saw "endSpanner"
+                        const SpannerValues* sv = e.spannerValues(id);
+                        if (sv) {
+                              spanner->setTick2(sv->tick2);
+                              spanner->setTrack2(sv->track2);
+                              }
+                        if (e.pasteMode())
+                              score()->undoAddElement(spanner);
+                        else
+                              score()->addSpanner(spanner);
+                        }
                   }
-            else {
+
+            if (spanner) {
                   if (atype == "start") {
                         if (spanner->ticks() > 0 && spanner->tick() == -1) // stop has been read first
                               spanner->setTicks(spanner->ticks() - e.tick() - 1);

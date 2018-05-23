@@ -1158,7 +1158,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                                           end = s->tick2() < endTick;
                                     else
                                           end = s->tick2() <= endTick;
-                                    if (s->tick() == segment->tick() && (!clip || end)) {
+                                    if (s->tick() == segment->tick() && (!clip || end) && !s->isSlur()) {
                                           if (needTick) {
                                                 // xml.tag("tick", segment->tick() - xml.tickDiff);
                                                 int tick = xml.clipboardmode() ? segment->tick() : segment->rtick();
