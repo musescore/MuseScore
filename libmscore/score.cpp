@@ -2004,7 +2004,7 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
                         if (clef && clef->generated() && clef->clefType() != this->staff(staffIdx)->clef(tickOfAppend)) {
                               // then convert that generated clef into a real non-generated clef
                               // so that its different type will be copied to joined score
-                              score->undoChangeClef(staff, seg, clef->clefType());
+                              score->undoChangeClef(staff, clef, clef->clefType());
                               }
                         }
                   }

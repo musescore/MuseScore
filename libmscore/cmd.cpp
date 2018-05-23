@@ -2401,7 +2401,7 @@ void Score::cmdInsertClef(ClefType type)
       {
       if (!noteEntryMode())
             return;
-      undoChangeClef(staff(inputTrack()/VOICES), inputState().segment(), type);
+      undoChangeClef(staff(inputTrack()/VOICES), inputState().cr(), type);
       }
 
 //---------------------------------------------------------
@@ -2411,7 +2411,7 @@ void Score::cmdInsertClef(ClefType type)
 
 void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
       {
-      undoChangeClef(cr->staff(), cr->segment(), clef->clefType());
+      undoChangeClef(cr->staff(), cr, clef->clefType());
       delete clef;
       }
 

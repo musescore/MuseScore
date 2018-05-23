@@ -1361,7 +1361,7 @@ Element* Measure::drop(EditData& data)
                   return 0;
 
             case ElementType::CLEF:
-                  score()->undoChangeClef(staff, first(), toClef(e)->clefType());
+                  score()->undoChangeClef(staff, this, toClef(e)->clefType());
                   delete e;
                   break;
 
@@ -3567,7 +3567,17 @@ void Measure::addSystemHeader(bool isFirstSystem)
                   }
 
             if (isFirstSystem || score()->styleB(Sid::genClef)) {
-                  ClefTypeList cl = staff->clefType(tick());
+                  // find the clef type at the previous tick
+                  ClefTypeList cl = staff->clefType(tick() - 1);
+                  // look for a clef change at the end of the previous measure
+                  if (prevMeasure()) {
+                        Segment* s = prevMeasure()->findSegment(SegmentType::Clef, tick());
+                        if (s) {
+                              Clef* c = toClef(s->element(track));
+                              if (c)
+                                    cl = c->clefTypeList();
+                              }
+                        }
                   Clef* clef;
                   if (!cSegment) {
                         cSegment = new Segment(this, SegmentType::HeaderClef, 0);

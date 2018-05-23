@@ -252,7 +252,7 @@ Element* Clef::drop(EditData& data)
             Clef* clef = toClef(e);
             ClefType stype  = clef->clefType();
             if (clefType() != stype) {
-                  score()->undoChangeClef(staff(), segment(), stype);
+                  score()->undoChangeClef(staff(), this, stype);
                   c = this;
                   }
             }

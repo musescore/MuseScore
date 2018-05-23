@@ -389,8 +389,10 @@ void Staff::setClef(Clef* clef)
       if (clef->generated())
             return;
       int tick = clef->segment()->tick();
-      for (Segment* s = clef->segment()->next(); s && s->tick() == tick; s = s->next()) {
-            if (s->segmentType() == SegmentType::Clef && s->element(clef->track())) {
+      for (Segment* s = clef->segment()->next1(); s && s->tick() == tick; s = s->next1()) {
+            if ((s->segmentType() == SegmentType::Clef || s->segmentType() == SegmentType::HeaderClef)
+                && s->element(clef->track())
+                && !s->element(clef->track())->generated()) {
                   // adding this clef has no effect on the clefs list
                   return;
                   }
@@ -409,15 +411,17 @@ void Staff::removeClef(Clef* clef)
       if (clef->generated())
             return;
       int tick = clef->segment()->tick();
-      for (Segment* s = clef->segment()->next(); s && s->tick() == tick; s = s->next()) {
-            if (s->segmentType() == SegmentType::Clef && s->element(clef->track())) {
+      for (Segment* s = clef->segment()->next1(); s && s->tick() == tick; s = s->next1()) {
+            if ((s->segmentType() == SegmentType::Clef || s->segmentType() == SegmentType::HeaderClef)
+                && s->element(clef->track())
+                && !s->element(clef->track())->generated()) {
                   // removal of this clef has no effect on the clefs list
                   return;
                   }
             }
       clefs.erase(clef->segment()->tick());
-      for (Segment* s = clef->segment()->prev(); s && s->tick() == tick; s = s->prev()) {
-            if (s->segmentType() == SegmentType::Clef
+      for (Segment* s = clef->segment()->prev1(); s && s->tick() == tick; s = s->prev1()) {
+            if ((s->segmentType() == SegmentType::Clef || s->segmentType() == SegmentType::HeaderClef)
                && s->element(clef->track())
                && !s->element(clef->track())->generated()) {
                   // a previous clef at the same tick position gets valid
