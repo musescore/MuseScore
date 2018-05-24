@@ -187,9 +187,11 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
       envelopes[V1Envelopes::SUSTAIN].setTable(Envelope::egLin);
       if (trigger == Trigger::RELEASE || trigger == Trigger::CC) {
             // Sample is played on noteoff. We need to stop the voice when it's done. Set the sustain duration accordingly.
-            double sampleDur = ((z->sample->frames()/z->sample->channel()) / z->sample->sampleRate()) * 1000; // in ms
+            //in ZInstrument::readSample we create sample data array using frames*channels
+            //so no need to devide by number of channels here, otherwise it reduces duration of samples by (Number of Channels)
+            double sampleDur = ((double) z->sample->frames() / z->sample->sampleRate()) * 1000; // in ms
             double scaledSampleDur = sampleDur / (phaseIncr.data / 256.0);
-            double sustainDur   = scaledSampleDur - (z->ampegDelay + z->ampegAttack + z->ampegHold + z->ampegDecay + z->ampegRelease);
+            double sustainDur   = scaledSampleDur - (z->ampegDelay + z->ampegAttack + z->ampegHold + z->ampegDecay + z->ampegRelease + z->delay);
             envelopes[V1Envelopes::SUSTAIN].setTime(sustainDur, _zerberus->sampleRate());
             }
       else
@@ -362,6 +364,7 @@ void Voice::process(int frames, float* p)
                   updateEnvelopes();
                   if (_state == VoiceState::OFF)
                         break;
+
                   v *= envelopes[currentEnvelope].val * z->ccGain;
 
                   *p++  += v * _channel->panLeftGain() * opcodePanLeftGain;
