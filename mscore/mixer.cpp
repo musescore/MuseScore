@@ -342,7 +342,7 @@ void Mixer::patchListChanged()
             bool drum        = m.part->instrument()->useDrumset();
             pe->patch->clear();
             for (const MidiPatch* p : pl) {
-                  if (p->drum == drum)
+                  if (p->drum == drum || p->synti != "Fluid")
                         pe->patch->addItem(p->name, QVariant::fromValue<void*>((void*)p));
                   }
             pe->setPart(m.part, m.articulation);
