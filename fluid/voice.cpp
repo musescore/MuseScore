@@ -41,7 +41,7 @@ namespace FluidS {
  * 16 bits => 96+4=100 dB dynamic range => 0.00001
  * 0.00001 * 2 is approximately 0.00003 :)
  */
-#define FLUID_NOISE_FLOOR 0.00003
+#define FLUID_NOISE_FLOOR 0.00003f
 
 /* these should be the absolute minimum that FluidSynth can deal with */
 #define FLUID_MIN_LOOP_SIZE 2
@@ -925,7 +925,7 @@ void Voice::update_param(int _gen)
       float y;
       unsigned int count;
       // Alternate attenuation scale used by EMU10K1 cards when setting the attenuation at the preset or instrument level within the SoundFont bank.
-      static const float ALT_ATTENUATION_SCALE = 0.4;
+      static const float ALT_ATTENUATION_SCALE = 0.4f;
 
       double gain = 1.0 / 32768.0f;
       switch (_gen) {
@@ -1444,8 +1444,8 @@ void Voice::noteoff()
                   */
                   if (volenv_val > 0) {
                         float lfo = modlfo_val * -modlfo_to_vol;
-                        float amp = volenv_val * pow (10.0, lfo / -200);
-                        float env_value = - ((-200 * log (amp) / log (10.0) - lfo) / 960.0 - 1);
+                        float ampl = volenv_val * pow (10.0, lfo / -200);
+                        float env_value = - ((-200 * log (ampl) / log (10.0) - lfo) / 960.0 - 1);
                         fluid_clip (env_value, 0.0, 1.0);
                         volenv_val = env_value;
                         }

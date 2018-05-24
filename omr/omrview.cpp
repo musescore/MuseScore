@@ -131,7 +131,7 @@ void OmrView::paintEvent(QPaintEvent* event)
       rr.adjust(-1, -1, 2, 2);
 
       QList<Tile*> nl;
-      foreach(Tile* t, usedTiles) {
+      for(Tile* t : usedTiles) {
             if (t->r.intersects(rr))
                   nl.append(t);
             else
@@ -198,7 +198,7 @@ void OmrView::paintEvent(QPaintEvent* event)
 
       int minPage = 9000;
       int maxPage = 0;
-      foreach(const Tile* t, usedTiles) {
+      for(const Tile* t : usedTiles) {
             p.drawPixmap(t->r, t->pm);
             if (t->pageNo < minPage)
                   minPage = t->pageNo;
@@ -211,36 +211,36 @@ void OmrView::paintEvent(QPaintEvent* event)
             p.translate(w * pageNo, 0);
             if (_showLines) {
                   p.setPen(QPen(QColor(255, 0, 0, 80), 1.0));
-                  foreach(QLine l, page->sl())
+                  for(QLine l : page->sl())
                         p.drawLine(QLineF(l.x1()+.5, l.y1()+.5, l.x2()+.5, l.y2()+.5));
                   }
             if (_showSlices) {
-                  foreach(const QRect r, page->slices())
-                        p.fillRect(r, QBrush(QColor(0, 100, 100, 50)));
+                  for(const QRect r1 : page->slices())
+                        p.fillRect(r1, QBrush(QColor(0, 100, 100, 50)));
                   }
 
             if (_showStaves) {
-                  foreach(const OmrSystem& s, page->systems()) {       // staves
-                        foreach(const OmrStaff& r, s.staves())
-                              p.fillRect(r, QBrush(QColor(0, 0, 100, 50)));
+                  for(const OmrSystem& s : page->systems()) {       // staves
+                        for(const OmrStaff& r1 : s.staves())
+                              p.fillRect(r1, QBrush(QColor(0, 0, 100, 50)));
                         }
                   }
 
-            foreach (const OmrSystem& system, page->systems()) {
+            for (const OmrSystem& system : page->systems()) {
                   if (_showBarlines) {
                         p.setPen(QPen(Qt::blue, 3.0));
-                        foreach(const QLineF& l, system.barLines)
-                            for(int w = 0; w < 10; w++)
-                              p.drawLine(l.x1()+w, l.y1(), l.x2()+w, l.y2() ); //add width to barline
+                        for(const QLineF& l : system.barLines)
+                            for(int w1 = 0; w1 < 10; w1++)
+                              p.drawLine(l.x1()+w1, l.y1(), l.x2()+w1, l.y2() ); //add width to barline
                         }
 
-                  foreach (const OmrStaff& staff, system.staves()) {
-                        foreach (const OmrNote* n, staff.notes()) {
-                            if (n->sym == SymId::noteheadBlack)
+                  for (const OmrStaff& staff : system.staves()) {
+                        for (const OmrNote* n1 : staff.notes()) {
+                            if (n1->sym == SymId::noteheadBlack)
                                     p.setPen(QPen(QColor(255, 0, 0), 2.0));
                               else
                                     p.setPen(QPen(QColor(0, 0, 255), 2.0));
-                              p.drawRect(*n);
+                              p.drawRect(*n1);
                               }
                         }
                   }
@@ -252,8 +252,8 @@ void OmrView::paintEvent(QPaintEvent* event)
             p.setBrush(QColor(0, 0, 50, 50));
             QPen pen(QColor(0, 0, 255));
             // always 2 pixel width
-            qreal w = 2.0 / p.matrix().m11();
-            pen.setWidthF(w);
+            qreal w1 = 2.0 / p.matrix().m11();
+            pen.setWidthF(w1);
             p.setPen(pen);
             p.drawRect(_foto);
             }

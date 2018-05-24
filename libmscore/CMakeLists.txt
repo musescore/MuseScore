@@ -15,13 +15,16 @@
       set (LIB_SCRIPT_FILES plugins.cpp)
 #endif (SCRIPT_INTERFACE)
 
-add_custom_command(
-   OUTPUT ${PROJECT_BINARY_DIR}/all.h
-   COMMAND ${CMAKE_COMMAND}
-   ARGS -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
-   DEPENDS ${PROJECT_SOURCE_DIR}/all.h
-   WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-   )
+# MSVC does not depend on copying all.h to the binary directory
+if (NOT MSVC)
+   add_custom_command(
+      OUTPUT ${PROJECT_BINARY_DIR}/all.h
+      COMMAND ${CMAKE_COMMAND}
+      ARGS -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
+      DEPENDS ${PROJECT_SOURCE_DIR}/all.h
+      WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+      )
+endif (NOT MSVC)
 
 if (APPLE)
         file(GLOB_RECURSE INCS "*.h")
@@ -29,9 +32,15 @@ else (APPLE)
         set(INCS "")
 endif (APPLE)
 
+if (NOT MSVC)
+   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
+else (NOT MSVC)
+   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
+endif (NOT MSVC)
+
 add_library (
       libmscore STATIC
-      ${PROJECT_BINARY_DIR}/all.h
+      ${_all_h_file}
       ${INCS}
       ${LIB_SCRIPT_FILES}
       types.h
@@ -79,23 +88,37 @@ add_library (
 ##
 
 set(COVERAGE_OPTIONS "")
-if (NOT APPLE AND NOT MINGW AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
+if (NOT APPLE AND NOT MINGW AND NOT MSVC AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
    if (COVERAGE)
       set(COVERAGE_OPTIONS "-O0 --coverage")
       set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
       target_link_libraries(libmscore gcov)
    endif (COVERAGE)
-endif (NOT APPLE AND NOT MINGW AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
+endif (NOT APPLE AND NOT MINGW AND NOT MSVC AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
 
 
-set_target_properties (
+if (NOT MSVC)
+   set_target_properties (
       libmscore
       PROPERTIES
          COMPILE_FLAGS "-g ${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch -Woverloaded-virtual ${COVERAGE_OPTIONS}"
       )
+else (NOT MSVC)
+   set_target_properties (
+      libmscore
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE}"
+      )
+endif (NOT MSVC)   
 
 xcode_pch(libmscore all)
 
-ADD_DEPENDENCIES(libmscore mops1)
-ADD_DEPENDENCIES(libmscore mops2)
+# Use MSVC pre-compiled headers
+vstudio_pch( libmscore )
+
+# MSVC does not depend on mops1 & mops2 for PCH
+if (NOT MSVC)
+   ADD_DEPENDENCIES(libmscore mops1)
+   ADD_DEPENDENCIES(libmscore mops2)
+endif (NOT MSVC)   

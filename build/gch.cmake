@@ -19,11 +19,13 @@
 #=============================================================================
 
 
-SET_SOURCE_FILES_PROPERTIES(
-   ${PCH}
-   ${PROJECT_BINARY_DIR}/all.h
-   PROPERTIES GENERATED 1
-   )
+if (NOT MSVC)
+   SET_SOURCE_FILES_PROPERTIES(
+      ${PCH}
+      ${PROJECT_BINARY_DIR}/all.h
+      PROPERTIES GENERATED 1
+      )
+endif (NOT MSVC)
 
 
 

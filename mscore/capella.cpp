@@ -1412,7 +1412,14 @@ void TextObj::read()
       {
       BasicRectObj::read();
       unsigned size = cap->readUnsigned();
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       char txt[size+1];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<char> vtxt(size+1);
+      char* txt = vtxt.data();
+#endif
       cap->read(txt, size);
       txt[size] = 0;
       text = QString(txt);
@@ -1496,7 +1503,14 @@ void MetafileObj::read()
       {
       BasicRectObj::read();
       unsigned size = cap->readUnsigned();
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       char enhMetaFileBits[size];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<char> vEnhMetaFileBits(size);
+      char* enhMetaFileBits = vEnhMetaFileBits.data();
+#endif
       cap->read(enhMetaFileBits, size);
       // qDebug("MetaFileObj::read %d bytes", size);
       }
@@ -2210,7 +2224,7 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
             uchar iMin = readByte();
             Q_UNUSED(iMin);
             uchar n    = readByte();
-            Q_ASSERT (n > 0 and iMin + n <= 128);
+            Q_ASSERT (n > 0 && iMin + n <= 128);
             f->read(sl->soundMapIn, n);
             curPos += n;
             }
@@ -2218,7 +2232,7 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
             unsigned char iMin = readByte();
             Q_UNUSED(iMin);
             unsigned char n    = readByte();
-            Q_ASSERT (n > 0 and iMin + n <= 128);
+            Q_ASSERT (n > 0 && iMin + n <= 128);
             f->read(sl->soundMapOut, n);
             curPos += n;
             }

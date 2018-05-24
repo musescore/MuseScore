@@ -711,13 +711,13 @@ namespace Bww {
   {
     qDebug() << "Parser::parseGraces() value:" << qPrintable(lex.symValue());
 
-    const QString type = "32";
+    const QString c_type = "32";
     const int dots = 0;
     QStringList graces = lex.symValue().split(" ");
     for (int i = 0; i < graces.size(); ++i)
     {
       const QString beam = graceBeam(graces.size(), i);
-      NoteDescription noteDesc(graces.at(i), beam, type, dots, false, false, ST_NONE, true);
+      NoteDescription noteDesc(graces.at(i), beam, c_type, dots, false, false, ST_NONE, true);
       if (measures.isEmpty())
       {
         errorHandler("cannot append note: no measure");

@@ -18,13 +18,13 @@ set(_components
     LinguistTools
     Help
   )
-if (NOT MINGW)
+if (NOT MINGW AND NOT MSVC)
   set(_components
     ${_components}
     WebEngine
     WebEngineCore
     WebEngineWidgets)
-endif()
+endif(NOT MINGW AND NOT MSVC)
 foreach(_component ${_components})
   find_package(Qt5${_component})
   list(APPEND QT_LIBRARIES ${Qt5${_component}_LIBRARIES})

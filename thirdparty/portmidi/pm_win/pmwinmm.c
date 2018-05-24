@@ -7,6 +7,11 @@
     #define _WIN32_WINNT 0x0500
 #endif
 
+// Undefine UNICODE to get the char-based library functions
+#ifdef UNICODE
+#undef UNICODE
+#endif
+
 #include "windows.h"
 #include "mmsystem.h"
 #include "portmidi.h"
@@ -157,7 +162,12 @@ general MIDI device queries
 static void pm_winmm_general_inputs()
 {
     UINT i;
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
     WORD wRtn;
+#else
+    // The result type is MMRESULT in MSVC. Keeping it as WORD generated a "possible loss of data" warning
+    MMRESULT wRtn;
+#endif
     midi_num_inputs = midiInGetNumDevs();
     midi_in_caps = (MIDIINCAPS *) pm_alloc(sizeof(MIDIINCAPS) * 
                                            midi_num_inputs);
@@ -184,8 +194,13 @@ static void pm_winmm_general_inputs()
 
 static void pm_winmm_mapper_input()
 {
-    WORD wRtn;
-    /* Note: if MIDIMAPPER opened as input (documentation implies you
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+   WORD wRtn;
+#else
+   // The result type is MMRESULT in MSVC. Keeping it as WORD generated a "possible loss of data" warning
+   MMRESULT wRtn;
+#endif
+   /* Note: if MIDIMAPPER opened as input (documentation implies you
         can, but current system fails to retrieve input mapper
         capabilities) then you still should retrieve some formof
         setup info. */
@@ -224,8 +239,13 @@ static void pm_winmm_general_outputs()
 
 static void pm_winmm_mapper_output()
 {
-    WORD wRtn;
-    /* Note: if MIDIMAPPER opened as output (pseudo MIDI device
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+   WORD wRtn;
+#else
+   // The result type is MMRESULT in MSVC. Keeping it as WORD generated a "possible loss of data" warning
+   MMRESULT wRtn;
+#endif
+   /* Note: if MIDIMAPPER opened as output (pseudo MIDI device
         maps device independent messages into device dependant ones,
         via NT midimapper program) you still should get some setup info */
     wRtn = midiOutGetDevCaps((UINT) MIDIMAPPER, (LPMIDIOUTCAPS)
@@ -267,7 +287,10 @@ static void winmm_get_host_error(PmInternal * midi, char * msg, UINT len)
     /* precondition: midi != NULL */
     midiwinmm_node * m = (midiwinmm_node *) midi->descriptor;
     char *hdr1 = "Host error: ";
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+    /* This variable generates a not-referenced warning in MSVC */
     char *hdr2 = "Host callback error: ";
+#endif
 
     msg[0] = 0; /* initialize result string to empty */
 
@@ -537,6 +560,9 @@ static PmError allocate_input_buffer(HMIDIIN h, long buffer_len)
 
 static PmError winmm_in_open(PmInternal *midi, void *driverInfo)
 {
+#if (defined (_MSCVER) || defined (_MSC_VER))
+    UNREFERENCED_PARAMETER(driverInfo);
+#endif
     DWORD dwDevice;
     int i = midi->device_id;
     int max_sysex_len = midi->buffer_len * 4;
@@ -636,13 +662,17 @@ static PmError winmm_in_close(PmInternal *midi)
     midiwinmm_type m = (midiwinmm_type) midi->descriptor;
     if (!m) return pmBadPtr;
     /* device to close */
-    if (pm_hosterror = midiInStop(m->handle.in)) {
+    pm_hosterror = midiInStop(m->handle.in);
+    if (pm_hosterror) {
         midiInReset(m->handle.in); /* try to reset and close port */
         midiInClose(m->handle.in);
-    } else if (pm_hosterror = midiInReset(m->handle.in)) {
-        midiInClose(m->handle.in); /* best effort to close midi port */
     } else {
-        pm_hosterror = midiInClose(m->handle.in);
+        pm_hosterror = midiInReset(m->handle.in);
+        if(pm_hosterror) {
+            midiInClose(m->handle.in); /* best effort to close midi port */
+        } else {
+            pm_hosterror = midiInClose(m->handle.in);
+        }
     }
     midi->descriptor = NULL;
     DeleteCriticalSection(&m->lock);
@@ -690,7 +720,10 @@ static void FAR PASCAL winmm_in_callback(
             in [ms] from when midiInStart called.
            each message is expanded to include the status byte */
 
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+        /* This variable generates a "local variable not referenced" warning in MSVC. */
         long new_driver_time = dwParam2;
+#endif
 
         if ((dwParam1 & 0x80) == 0) {
             /* not a status byte -- ignore it. This happened running the
@@ -782,7 +815,10 @@ begin midi output implementation
 static int add_to_buffer(midiwinmm_type m, LPMIDIHDR hdr,
                          unsigned long delta, unsigned long msg)
 {
-    unsigned long *ptr = (unsigned long *)
+#if (defined (_MSCVER) || defined (_MSC_VER))
+    UNREFERENCED_PARAMETER(m);
+#endif
+   unsigned long *ptr = (unsigned long *)
                          (hdr->lpData + hdr->dwBytesRecorded);
     *ptr++ = delta; /* dwDeltaTime */
     *ptr++ = 0;     /* dwStream */
@@ -812,7 +848,10 @@ static PmTimestamp pm_time_get(midiwinmm_type m)
 
 static PmError winmm_out_open(PmInternal *midi, void *driverInfo)
 {
-    DWORD dwDevice;
+#if (defined (_MSCVER) || defined (_MSC_VER))
+    UNREFERENCED_PARAMETER(driverInfo);
+#endif
+   DWORD dwDevice;
     int i = midi->device_id;
     midiwinmm_type m;
     MIDIPROPTEMPO propdata;
@@ -881,7 +920,10 @@ static PmError winmm_out_open(PmInternal *midi, void *driverInfo)
         if (output_buffer_len < MIN_SIMPLE_SYSEX_LEN)
             output_buffer_len = MIN_SIMPLE_SYSEX_LEN;
     } else {
-        long dur = 0;
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+       /* This variable generates a "local variable not referenced" warning in MSVC. */
+       long dur = 0;
+#endif
         num_buffers = max(midi->buffer_len, midi->latency / 2);
         if (num_buffers < MIN_STREAM_BUFFERS)
             num_buffers = MIN_STREAM_BUFFERS;
@@ -1000,7 +1042,10 @@ static PmError winmm_out_abort(PmInternal *midi)
 
 static PmError winmm_write_flush(PmInternal *midi, PmTimestamp timestamp)
 {
-    midiwinmm_type m = (midiwinmm_type) midi->descriptor;
+#if (defined (_MSCVER) || defined (_MSC_VER))
+    UNREFERENCED_PARAMETER(timestamp);
+#endif
+   midiwinmm_type m = (midiwinmm_type) midi->descriptor;
     assert(m);
     if (m->hdr) {
         m->error = midiOutPrepareHeader(m->handle.out, m->hdr, 
@@ -1316,7 +1361,11 @@ static void CALLBACK winmm_out_callback(HMIDIOUT hmo, UINT wMsg,
 static void CALLBACK winmm_streamout_callback(HMIDIOUT hmo, UINT wMsg,
         DWORD dwInstance, DWORD dwParam1, DWORD dwParam2)
 {
-    PmInternal *midi = (PmInternal *) dwInstance;
+#if (defined (_MSCVER) || defined (_MSC_VER))
+    UNREFERENCED_PARAMETER(dwParam2);
+    UNREFERENCED_PARAMETER(hmo);
+#endif
+   PmInternal *midi = (PmInternal *) dwInstance;
     midiwinmm_type m = (midiwinmm_type) midi->descriptor;
     LPMIDIHDR hdr = (LPMIDIHDR) dwParam1;
     int err;

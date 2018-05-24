@@ -48,6 +48,7 @@
 #include <signal.h>
 #include <math.h>
 #include <limits.h>
+#include <algorithm>       // Required for std::min() & std::max()  (on MSVC, and per-standard)
 #include "goo/GooString.h"
 #include "goo/GooList.h"
 #include "goo/GooHash.h"

@@ -9,7 +9,7 @@
 # if pkg-config was NOT found or the specified software package doesn't exist, the
 # variable will be empty when the function returns, otherwise they will contain the respective information
 #
-IF (NOT MINGW)
+IF (NOT MINGW AND NOT MSVC)
   FIND_PROGRAM(PKGCONFIG_EXECUTABLE NAMES pkg-config PATHS ${PATH} /usr/bin /usr/local/bin )
 
   MACRO(PKGCONFIG1 _package _minVersion _include_DIR _link_DIR _link_FLAGS _cflags)
@@ -43,5 +43,5 @@ IF (NOT MINGW)
   ENDMACRO(PKGCONFIG1 _include_DIR _link_DIR _link_FLAGS _cflags)
 
   MARK_AS_ADVANCED(PKGCONFIG_EXECUTABLE)
-ENDIF (NOT MINGW)
+ENDIF (NOT MINGW AND NOT MSVC)
 

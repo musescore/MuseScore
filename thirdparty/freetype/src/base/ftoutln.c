@@ -938,7 +938,8 @@
       FT_Fixed   l_in, l_out, l_anchor = 0, l, q, d;
       FT_Int     i, j, k;
 
-
+      anchor.x = anchor.y = 0;      // Prevent "potentially unitialized local variable" warning in VS.
+      in.x = in.y = 0;              // Prevent "potentially unitialized local variable" warning in VS.
       l_in = 0;
       last = outline->contours[c];
 

@@ -29,6 +29,12 @@
 
 #if defined __cplusplus
 
+#if (defined (_MSCVER) || defined (_MSC_VER))
+   // Define to opt-in to deprecated features (bind2nd, mem_fun) removed in VS2017 c++17 mode.
+   #undef _HAS_AUTO_PTR_ETC
+   #define _HAS_AUTO_PTR_ETC 1
+#endif
+
 #include <stdio.h>
 #include <limits.h>
 #include <map>
@@ -36,11 +42,23 @@
 #include <set>
 #include <errno.h>
 #include <fcntl.h>
-#include <unistd.h>
+// VStudio does not have <unistd.h>, <io.h> & <process.h> replace many functions from it...
+#if (defined (_MSCVER) || defined (_MSC_VER))
+   #include <io.h>
+   #include <process.h>
+#else
+   #include <unistd.h>
+#endif
 #include <math.h>
 #include <array>
 #include <functional>
 #include <memory>
+
+// Disable warning C4127: conditional expression is constant in VS2017 (generated in header file qvector.h)
+#if (defined (_MSCVER) || defined (_MSC_VER))
+   #pragma warning ( push )
+   #pragma warning ( disable: 4127)
+#endif
 
 #include <QtGui>
 #include <QLoggingCategory>
@@ -191,6 +209,12 @@
 #define Q_ASSERT_X(a,b,c)
 #undef Q_ASSERT
 #define Q_ASSERT(a)
+#endif
+
+#if (defined (_MSCVER) || defined (_MSC_VER))
+   // Undefined problematic #def'd macros in Microsoft headers
+   #undef STRING_NONE
+   #undef small
 #endif
 
 #endif  // __cplusplus

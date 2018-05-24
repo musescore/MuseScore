@@ -51,7 +51,10 @@
 /* #undef HAVE_FSEEK64 */
 
 /* Define to 1 if fseeko (and presumably ftello) exists and is declared. */
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+// MSVC does not have fseeko/ftello. Might be uncommented if an implementation is added.
 #define HAVE_FSEEKO 1
+#endif
 
 /* Define to 1 if you have the `ftell64' function. */
 /* #undef HAVE_FTELL64 */
@@ -152,7 +155,10 @@
 /* #undef HAVE_TIFFIO_H */
 
 /* Define to 1 if you have the <unistd.h> header file. */
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+   // MSVC does not have <unistd.h>. Might be uncommented if an implementation is added.
 #define HAVE_UNISTD_H 1
+#endif
 
 /* Define to 1 if you have the <zlib.h> header file. */
 #define HAVE_ZLIB_H 1
@@ -280,3 +286,10 @@
 
 /* Define for large files, on AIX-style hosts. */
 /* #undef _LARGE_FILES */
+
+#if (defined (_MSCVER) || defined (_MSC_VER))
+   // Undefine UNICODE for MSVC to get the char-based library functions
+   #ifdef UNICODE
+   #undef UNICODE
+   #endif
+#endif
