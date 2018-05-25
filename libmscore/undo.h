@@ -136,6 +136,8 @@ class UndoStack {
       bool canUndo() const          { return curIdx > 0;           }
       bool canRedo() const          { return curIdx < list.size(); }
       bool isClean() const          { return cleanIdx == curIdx;   }
+      int getCurIdx() const         { return curIdx; }
+      void remove(int idx);
       bool empty() const            { return !canUndo() && !canRedo();  }
       UndoCommand* current() const  { return curCmd;               }
       void undo(EditData*);
