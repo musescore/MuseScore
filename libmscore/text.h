@@ -10,8 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __SIMPLETEXT_H__
-#define __SIMPLETEXT_H__
+#ifndef __TEXT_H__
+#define __TEXT_H__
 
 #include "element.h"
 #include "elementlayout.h"
@@ -97,7 +97,7 @@ class TextCursor {
       void setColumn(int val)       { _column = val; }
       void setSelectLine(int val)   { _selectLine = val; }
       void setSelectColumn(int val) { _selectColumn = val; }
-      void setText(TextBase* t)     { _text = t; }
+//      void setText(TextBase* t)     { _text = t; }
       int columns() const;
       void init();
 

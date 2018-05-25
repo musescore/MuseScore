@@ -392,8 +392,8 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                                     }
                               }
                         if (!gripFound) {
-                              editData.element = e;
                               changeState(ViewState::NORMAL);
+                              editData.element = e;
                               mousePressEventNormal(ev);
                               break;
                               }

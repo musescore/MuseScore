@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "text.h"
+#include "textedit.h"
 #include "jump.h"
 #include "marker.h"
 #include "score.h"
@@ -38,23 +39,6 @@ static const qreal subScriptOffset   = 0.5;       // of x-height
 static const qreal superScriptOffset = -.9;      // of x-height
 
 //static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
-
-//---------------------------------------------------------
-//   TextEditData
-//---------------------------------------------------------
-
-struct TextEditData : public ElementEditData {
-      QString oldXmlText;
-      int startUndoIdx;
-
-      TextCursor* cursor;
-
-      TextEditData()  {
-            cursor = 0;
-            }
-      ~TextEditData() {
-            }
-      };
 
 //---------------------------------------------------------
 //   operator==
@@ -1891,7 +1875,7 @@ QRectF TextBase::pageRectangle() const
 void TextBase::dragTo(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-      TextCursor* _cursor = ted->cursor;
+      TextCursor* _cursor = &ted->cursor;
       _cursor->set(ed.pos, QTextCursor::KeepAnchor);
       score()->setUpdateAll();
       score()->update();
@@ -1927,7 +1911,7 @@ QLineF TextBase::dragAnchor() const
 void TextBase::paste(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-      TextCursor* _cursor = ted->cursor;
+      TextCursor* _cursor = &ted->cursor;
 
       QString txt = QApplication::clipboard()->text(QClipboard::Clipboard);
       if (MScore::debugMode)
@@ -2026,7 +2010,7 @@ bool TextBase::mousePress(EditData& ed)
       {
       bool shift = ed.modifiers & Qt::ShiftModifier;
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-      if (!ted->cursor->set(ed.startMove, shift ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor))
+      if (!ted->cursor.set(ed.startMove, shift ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor))
             return false;
       if (ed.buttons == Qt::MidButton)
             paste(ed);
@@ -2697,7 +2681,7 @@ QVariant TextBase::propertyDefault(Pid id) const
 void TextBase::editCut(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-      TextCursor* _cursor = ted->cursor;
+      TextCursor* _cursor = &ted->cursor;
       QString s = _cursor->selectedText();
 
       if (!s.isEmpty()) {
@@ -2719,7 +2703,7 @@ void TextBase::editCopy(EditData& ed)
       // store selection as plain text
       //
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-      TextCursor* _cursor = ted->cursor;
+      TextCursor* _cursor = &ted->cursor;
       QString s = _cursor->selectedText();
       if (!s.isEmpty())
             QApplication::clipboard()->setText(s, QClipboard::Clipboard);
@@ -2732,7 +2716,7 @@ void TextBase::editCopy(EditData& ed)
 TextCursor* TextBase::cursor(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-      return ted->cursor;
+      return &ted->cursor;
       }
 
 //---------------------------------------------------------
@@ -2782,7 +2766,7 @@ void TextBase::drawEditMode(QPainter* p, EditData& ed)
             qDebug("ted not found");
             return;
             }
-      TextCursor* _cursor = ted->cursor;
+      TextCursor* _cursor = &ted->cursor;
 
       if (_cursor->hasSelection()) {
             p->setBrush(Qt::NoBrush);
@@ -2865,213 +2849,6 @@ bool TextCursor::deleteChar() const
       }
 
 //---------------------------------------------------------
-//   edit
-//---------------------------------------------------------
-
-bool TextBase::edit(EditData& ed)
-      {
-      TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-      TextCursor* _cursor = ted->cursor;
-
-      // do nothing on Shift, it messes up IME on Windows. See #64046
-      if (ed.key == Qt::Key_Shift)
-            return false;
-      QString s         = ed.s;
-      bool ctrlPressed  = ed.modifiers & Qt::ControlModifier;
-      bool shiftPressed = ed.modifiers & Qt::ShiftModifier;
-
-      QTextCursor::MoveMode mm = shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
-
-      bool wasHex = false;
-      if (hexState >= 0) {
-            if (ed.modifiers == (Qt::ControlModifier | Qt::ShiftModifier | Qt::KeypadModifier)) {
-                  switch (ed.key) {
-                        case Qt::Key_0 ... Qt::Key_9:
-                              s = QChar::fromLatin1(ed.key);
-                              ++hexState;
-                              wasHex = true;
-                              break;
-                        default:
-                              break;
-                        }
-                  }
-            else if (ed.modifiers == (Qt::ControlModifier | Qt::ShiftModifier)) {
-                  switch (ed.key) {
-                        case Qt::Key_A ... Qt::Key_F:
-                              s = QChar::fromLatin1(ed.key);
-                              ++hexState;
-                              wasHex = true;
-                              break;
-                        default:
-                              break;
-                        }
-                  }
-            }
-
-      if (!wasHex) {
-            // printf("======%x\n", s.isEmpty() ? -1 : s[0].unicode());
-
-            switch (ed.key) {
-                  case Qt::Key_Enter:
-                  case Qt::Key_Return:
-                        deleteSelectedText(ed);
-                        score()->undo(new SplitText(_cursor), &ed);
-                        return true;
-
-                  case Qt::Key_Delete:
-                        if (!deleteSelectedText(ed))
-                              score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())), &ed);
-                        return true;
-
-                  case Qt::Key_Backspace:
-                        if (!deleteSelectedText(ed)) {
-                              if (_cursor->column() == 0 && _cursor->row() != 0)
-                                    score()->undo(new JoinText(_cursor), &ed);
-                              else {
-                                    if (!_cursor->movePosition(QTextCursor::Left))
-                                          return false;
-                                    score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())));
-                                    }
-                              }
-                        return true;
-
-                  case Qt::Key_Left:
-                        if (!_cursor->movePosition(ctrlPressed ? QTextCursor::WordLeft : QTextCursor::Left, mm) && type() == ElementType::LYRICS)
-                              return false;
-                        s.clear();
-                        break;
-
-                  case Qt::Key_Right:
-                        if (!_cursor->movePosition(ctrlPressed ? QTextCursor::NextWord : QTextCursor::Right, mm) && type() == ElementType::LYRICS)
-                              return false;
-                        s.clear();
-                        break;
-
-                  case Qt::Key_Up:
-#if defined(Q_OS_MAC)
-                        if (!_cursor->movePosition(QTextCursor::Up, mm))
-                              _cursor->movePosition(QTextCursor::StartOfLine, mm);
-#else
-                        _cursor->movePosition(QTextCursor::Up, mm);
-#endif
-                        s.clear();
-                        break;
-
-                  case Qt::Key_Down:
-#if defined(Q_OS_MAC)
-                        if (!_cursor->movePosition(QTextCursor::Down, mm))
-                              _cursor->movePosition(QTextCursor::EndOfLine, mm);
-#else
-                        _cursor->movePosition(QTextCursor::Down, mm);
-#endif
-                        s.clear();
-                        break;
-
-                  case Qt::Key_Home:
-                        if (ctrlPressed)
-                              _cursor->movePosition(QTextCursor::Start, mm);
-                        else
-                              _cursor->movePosition(QTextCursor::StartOfLine, mm);
-
-                        s.clear();
-                        break;
-
-                  case Qt::Key_End:
-                        if (ctrlPressed)
-                              _cursor->movePosition(QTextCursor::End, mm);
-                        else
-                              _cursor->movePosition(QTextCursor::EndOfLine, mm);
-
-                        s.clear();
-                        break;
-
-                  case Qt::Key_Tab:
-                        s = " ";
-                        ed.modifiers = 0;
-                        break;
-
-                  case Qt::Key_Space:
-                        if (ed.modifiers & CONTROL_MODIFIER)
-                              s = QString(QChar(0xa0)); // non-breaking space
-                        else
-                              s = " ";
-                        ed.modifiers = 0;
-                        break;
-
-                  case Qt::Key_Minus:
-                        if (ed.modifiers == 0)
-                              s = "-";
-                        break;
-
-                  case Qt::Key_Underscore:
-                        if (ed.modifiers == 0)
-                              s = "_";
-                        break;
-
-                  case Qt::Key_A:
-                        if (ctrlPressed) {
-                              selectAll(_cursor);
-                              s.clear();
-                        }
-                        break;
-                  default:
-                        break;
-                  }
-            if (ctrlPressed && shiftPressed) {
-                  switch (ed.key) {
-                        case Qt::Key_U:
-                              if (hexState == -1) {
-                                    hexState = 0;
-                                    s = "u";
-                                    }
-                              break;
-                        case Qt::Key_B:
-                              insertSym(ed, SymId::accidentalFlat);
-                              return true;
-                        case Qt::Key_NumberSign:
-                              insertSym(ed, SymId::accidentalSharp);
-                              return true;
-                        case Qt::Key_H:
-                              insertSym(ed, SymId::accidentalNatural);
-                              return true;
-                        case Qt::Key_Space:
-                              insertSym(ed, SymId::space);
-                              return true;
-                        case Qt::Key_F:
-                              insertSym(ed, SymId::dynamicForte);
-                              return true;
-                        case Qt::Key_M:
-                              insertSym(ed, SymId::dynamicMezzo);
-                              return true;
-                        case Qt::Key_N:
-                              insertSym(ed, SymId::dynamicNiente);
-                              return true;
-                        case Qt::Key_P:
-                              insertSym(ed, SymId::dynamicPiano);
-                              return true;
-                        case Qt::Key_S:
-                              insertSym(ed, SymId::dynamicSforzando);
-                              return true;
-                        case Qt::Key_R:
-                              insertSym(ed, SymId::dynamicRinforzando);
-                              return true;
-                        case Qt::Key_Z:
-                              // Ctrl+Z is normally "undo"
-                              // but this code gets hit even if you are also holding Shift
-                              // so Shift+Ctrl+Z works
-                              insertSym(ed, SymId::dynamicZ);
-                              return true;
-                        }
-                  }
-            }
-      if (!s.isEmpty()) {
-            deleteSelectedText(ed);
-            score()->undo(new InsertText(_cursor, s), &ed);
-            }
-      return true;
-      }
-
-//---------------------------------------------------------
 //   Text
 //---------------------------------------------------------
 
@@ -3103,56 +2880,6 @@ void Text::read(XmlReader& e)
             else if (!readProperties(e))
                   e.unknown();
             }
-      }
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void TextBase::startEdit(EditData& ed)
-      {
-      ed.grips = 0;
-      TextEditData* ted = new TextEditData();
-      ted->e      = this;
-      ted->cursor = new TextCursor(this);
-
-      ted->cursor->setText(this);
-      ted->cursor->setRow(0);
-      ted->cursor->setColumn(0);
-      ted->cursor->clearSelection();
-
-      ted->oldXmlText = xmlText();
-      ted->startUndoIdx = score()->undoStack()->getCurIdx();
-
-      if (!ted->cursor->set(ed.startMove))
-            ted->cursor->init();
-      ed.addData(ted);
-      if (layoutInvalid)
-            layout();
-      }
-
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
-
-void TextBase::endEdit(EditData& ed)
-      {
-      TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-printf("Remove undo from %d -> %d\n", score()->undoStack()->getCurIdx(), ted->startUndoIdx);
-      score()->undoStack()->remove(ted->startUndoIdx);           // remove all undo/redo records
-
-      // replace all undo/redo records collected during text editing with
-      // one property change
-
-      QString actualText = xmlText();
-      setXmlText(ted->oldXmlText);                    // reset text to value before editing
-      score()->startCmd();
-      undoChangeProperty(Pid::TEXT, actualText);      // change property to set text to actual value again
-                                                      // this also changes text of linked elements
-      score()->endCmd();
-
-      static const qreal w = 2.0;
-      score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
       }
 
 }

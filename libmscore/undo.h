@@ -1253,67 +1253,6 @@ class ChangeGap : public UndoCommand {
       };
 
 //---------------------------------------------------------
-//   ChangeText
-//---------------------------------------------------------
-
-class ChangeText : public UndoCommand {
-      TextCursor c;
-      QString s;
-
-   protected:
-      void insertText(EditData*);
-      void removeText(EditData*);
-
-   public:
-      ChangeText(const TextCursor* tc, const QString& t) : c(*tc), s(t) {}
-      virtual void undo(EditData*) override = 0;
-      virtual void redo(EditData*) override = 0;
-      const TextCursor& cursor() const { return c; }
-      const QString& string() const    { return s; }
-      };
-
-//---------------------------------------------------------
-//   InsertText
-//---------------------------------------------------------
-
-class InsertText : public ChangeText {
-
-   public:
-      InsertText(const TextCursor* tc, const QString& t) : ChangeText(tc, t) {}
-      virtual void redo(EditData* ed) override { insertText(ed); }
-      virtual void undo(EditData* ed) override { removeText(ed); }
-      UNDO_NAME("InsertText")
-      };
-
-//---------------------------------------------------------
-//   RemoveText
-//---------------------------------------------------------
-
-class RemoveText : public ChangeText {
-
-   public:
-      RemoveText(const TextCursor* tc, const QString& t) : ChangeText(tc, t) {}
-      virtual void redo(EditData* ed) override { removeText(ed); }
-      virtual void undo(EditData* ed) override { insertText(ed); }
-      UNDO_NAME("InsertText")
-      };
-
-//---------------------------------------------------------
-//   SplitText
-//---------------------------------------------------------
-
-class SplitText : public UndoCommand {
-      TextCursor c;
-
-      virtual void undo(EditData*) override;
-      virtual void redo(EditData*) override;
-
-   public:
-      SplitText(const TextCursor* tc) : c(*tc) {}
-      UNDO_NAME("SplitText");
-      };
-
-//---------------------------------------------------------
 //   JoinText
 //---------------------------------------------------------
 
