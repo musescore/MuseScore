@@ -2311,7 +2311,7 @@ static void readPart(Part* part, XmlReader& e)
                   }
             else if (tag == "shortName") {
                   Text* t = new Text(_score);
-                  t->read(e);
+                  readText114(e, t, t);
                   part->instrument()->setShortName(t->xmlText());
                   delete t;
                   }

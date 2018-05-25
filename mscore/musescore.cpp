@@ -3146,12 +3146,8 @@ void MuseScore::showModeText(const QString& s)
 
 void MuseScore::changeState(ScoreState val)
       {
-// printf("MuseScore::changeState: %s\n", stateName(val));
       if (MScore::debugMode)
             qDebug("MuseScore::changeState: %s", stateName(val));
-
-//      if (_sstate == val)
-//            return;
 
       // disallow change to edit modes if currently in play mode
       if (_sstate == STATE_PLAY && (val == STATE_EDIT || val & STATE_ALLTEXTUAL_EDIT || val & STATE_NOTE_ENTRY))

@@ -862,7 +862,7 @@ void ScoreView::setShadowNote(const QPointF& p)
                   symNotehead = instr->drumset()->noteHeads(is.drumNote(), noteHead);
             else
                   symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
-            
+
             shadowNote->setState(symNotehead, voice, d);
             }
 
@@ -3094,12 +3094,12 @@ ScoreState ScoreView::mscoreState() const
                   }
             }
       if (state == ViewState::EDIT || state == ViewState::DRAG_EDIT) {
-            if (editData.element && (editData.element->type() == ElementType::LYRICS))
+            if (editData.element && (editData.element->isLyrics()))
                   return STATE_LYRICS_EDIT;
             else if (editData.element &&
-                  ( (editData.element->type() == ElementType::HARMONY) || editData.element->type() == ElementType::FIGURED_BASS) )
+                  ( (editData.element->isHarmony()) || editData.element->isFiguredBass()) )
                   return STATE_HARMONY_FIGBASS_EDIT;
-            else if (editData.element && editData.element->isText())
+            else if (editData.element && editData.element->isTextBase())
                   return STATE_TEXT_EDIT;
             return STATE_EDIT;
             }
