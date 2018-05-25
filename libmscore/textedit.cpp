@@ -109,6 +109,9 @@ bool TextBase::edit(EditData& ed)
             // printf("======%x\n", s.isEmpty() ? -1 : s[0].unicode());
 
             switch (ed.key) {
+                  case Qt::Key_Z:         // happens when the undo stack is empty
+                        return true;
+
                   case Qt::Key_Enter:
                   case Qt::Key_Return:
                         deleteSelectedText(ed);

@@ -560,7 +560,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
 
       if (!( (editData.modifiers & Qt::ShiftModifier) && (editData.key == Qt::Key_Backtab) )) {
             if (editData.element->edit(editData)) {
-                  if (editData.element->isText())
+                  if (editData.element->isTextBase())
                         mscore->textTools()->updateTools(editData);
                   else
                         updateGrips();
