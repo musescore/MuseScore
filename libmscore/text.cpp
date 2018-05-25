@@ -44,6 +44,9 @@ static const qreal superScriptOffset = -.9;      // of x-height
 //---------------------------------------------------------
 
 struct TextEditData : public ElementEditData {
+      QString oldXmlText;
+      int startUndoIdx;
+
       TextCursor* cursor;
 
       TextEditData()  {
@@ -1628,39 +1631,6 @@ void TextBase::genText()
       }
 
 //---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void TextBase::startEdit(EditData& ed)
-      {
-      ed.grips = 0;
-      TextEditData* ted = new TextEditData();
-      ted->e      = this;
-      ted->cursor = new TextCursor(this);
-
-      ted->cursor->setText(this);
-      ted->cursor->setRow(0);
-      ted->cursor->setColumn(0);
-      ted->cursor->clearSelection();
-
-      if (!ted->cursor->set(ed.startMove))
-            ted->cursor->init();
-      ed.addData(ted);
-      if (layoutInvalid)
-            layout();
-      }
-
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
-
-void TextBase::endEdit(EditData&)
-      {
-      static const qreal w = 2.0;
-      score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
-      }
-
-//---------------------------------------------------------
 //   editInsertText
 //---------------------------------------------------------
 
@@ -3133,6 +3103,56 @@ void Text::read(XmlReader& e)
             else if (!readProperties(e))
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void TextBase::startEdit(EditData& ed)
+      {
+      ed.grips = 0;
+      TextEditData* ted = new TextEditData();
+      ted->e      = this;
+      ted->cursor = new TextCursor(this);
+
+      ted->cursor->setText(this);
+      ted->cursor->setRow(0);
+      ted->cursor->setColumn(0);
+      ted->cursor->clearSelection();
+
+      ted->oldXmlText = xmlText();
+      ted->startUndoIdx = score()->undoStack()->getCurIdx();
+
+      if (!ted->cursor->set(ed.startMove))
+            ted->cursor->init();
+      ed.addData(ted);
+      if (layoutInvalid)
+            layout();
+      }
+
+//---------------------------------------------------------
+//   endEdit
+//---------------------------------------------------------
+
+void TextBase::endEdit(EditData& ed)
+      {
+      TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+printf("Remove undo from %d -> %d\n", score()->undoStack()->getCurIdx(), ted->startUndoIdx);
+      score()->undoStack()->remove(ted->startUndoIdx);           // remove all undo/redo records
+
+      // replace all undo/redo records collected during text editing with
+      // one property change
+
+      QString actualText = xmlText();
+      setXmlText(ted->oldXmlText);                    // reset text to value before editing
+      score()->startCmd();
+      undoChangeProperty(Pid::TEXT, actualText);      // change property to set text to actual value again
+                                                      // this also changes text of linked elements
+      score()->endCmd();
+
+      static const qreal w = 2.0;
+      score()->addRefresh(canvasBoundingRect().adjusted(-w, -w, w, w));
       }
 
 }
