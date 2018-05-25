@@ -10,15 +10,22 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#include "accidental.h"
 #include "arpeggio.h"
 #include "articulation.h"
+#include "bend.h"
 #include "chord.h"
 #include "chordline.h"
+#include "fingering.h"
 #include "glissando.h"
 #include "hook.h"
 #include "image.h"
 #include "measure.h"
+#include "notedot.h"
 #include "rest.h"
+#include "textline.h"
+#include "tie.h"
+#include "utils.h"
 #include "stem.h"
 #include "stemslash.h"
 #include "timesig.h"
@@ -43,6 +50,264 @@
 #endif
 
 namespace Ms {
+
+
+//---------------------------------------------------------
+//   Note::read300old
+//---------------------------------------------------------
+
+void Note::read300old(XmlReader& e)
+      {
+      setTpc1(Tpc::TPC_INVALID);
+      setTpc2(Tpc::TPC_INVALID);
+
+      while (e.readNextStartElement()) {
+            if (readProperties300old(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      // ensure sane values:
+      _pitch = limit(_pitch, 0, 127);
+
+      if (!tpcIsValid(_tpc[0]) && !tpcIsValid(_tpc[1])) {
+            Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
+            int tpc = pitch2tpc(_pitch, key, Prefer::NEAREST);
+            if (concertPitch())
+                  _tpc[0] = tpc;
+            else
+                  _tpc[1] = tpc;
+            }
+      if (!(tpcIsValid(_tpc[0]) && tpcIsValid(_tpc[1]))) {
+            int tick = chord() ? chord()->tick() : -1;
+            Interval v = staff() ? part()->instrument(tick)->transpose() : Interval();
+            if (tpcIsValid(_tpc[0])) {
+                  v.flip();
+                  if (v.isZero())
+                        _tpc[1] = _tpc[0];
+                  else
+                        _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
+                  }
+            else {
+                  if (v.isZero())
+                        _tpc[0] = _tpc[1];
+                  else
+                        _tpc[0] = Ms::transposeTpc(_tpc[1], v, true);
+                  }
+            }
+
+      // check consistency of pitch, tpc1, tpc2, and transposition
+      // see note in InstrumentChange::read300old() about a known case of tpc corruption produced in 2.0.x
+      // but since there are other causes of tpc corruption (eg, https://musescore.org/en/node/74746)
+      // including perhaps some we don't know about yet,
+      // we will attempt to fix some problems here regardless of version
+
+      if (!e.pasteMode() && !MScore::testMode) {
+            int tpc1Pitch = (tpc2pitch(_tpc[0]) + 12) % 12;
+            int tpc2Pitch = (tpc2pitch(_tpc[1]) + 12) % 12;
+            int concertPitch = _pitch % 12;
+            if (tpc1Pitch != concertPitch) {
+                  qDebug("bad tpc1 - concertPitch = %d, tpc1 = %d", concertPitch, tpc1Pitch);
+                  _pitch += tpc1Pitch - concertPitch;
+                  }
+            Interval v = staff()->part()->instrument(e.tick())->transpose();
+            int transposedPitch = (_pitch - v.chromatic) % 12;
+            if (tpc2Pitch != transposedPitch) {
+                  qDebug("bad tpc2 - transposedPitch = %d, tpc2 = %d", transposedPitch, tpc2Pitch);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Note::readProperties300old(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "pitch")
+            _pitch = e.readInt();
+      else if (tag == "tpc") {
+            _tpc[0] = e.readInt();
+            _tpc[1] = _tpc[0];
+            }
+      else if (tag == "track")            // for performance
+            setTrack(e.readInt());
+      else if (tag == "Accidental") {
+            Accidental* a = new Accidental(score());
+            a->setTrack(track());
+            a->read300old(e);
+            add(a);
+            }
+      else if (tag == "Tie") {
+            Tie* tie = new Tie(score());
+            tie->setParent(this);
+            tie->setTrack(track());
+            tie->read300old(e);
+            tie->setStartNote(this);
+            _tieFor = tie;
+            }
+      else if (tag == "tpc2")
+            _tpc[1] = e.readInt();
+      else if (tag == "small")
+            setSmall(e.readInt());
+      else if (tag == "mirror")
+            setProperty(Pid::MIRROR_HEAD, Ms::getProperty(Pid::MIRROR_HEAD, e));
+      else if (tag == "dotPosition")
+            setProperty(Pid::DOT_POSITION, Ms::getProperty(Pid::DOT_POSITION, e));
+      else if (tag == "fixed")
+            setFixed(e.readBool());
+      else if (tag == "fixedLine")
+            setFixedLine(e.readInt());
+      else if (tag == "head")
+            setProperty(Pid::HEAD_GROUP, Ms::getProperty(Pid::HEAD_GROUP, e));
+      else if (tag == "velocity")
+            setVeloOffset(e.readInt());
+      else if (tag == "play")
+            setPlay(e.readInt());
+      else if (tag == "tuning")
+            setTuning(e.readDouble());
+      else if (tag == "fret")
+            setFret(e.readInt());
+      else if (tag == "string")
+            setString(e.readInt());
+      else if (tag == "ghost")
+            setGhost(e.readInt());
+      else if (tag == "headType")
+            setProperty(Pid::HEAD_TYPE, Ms::getProperty(Pid::HEAD_TYPE, e));
+      else if (tag == "veloType")
+            setProperty(Pid::VELO_TYPE, Ms::getProperty(Pid::VELO_TYPE, e));
+      else if (tag == "line")
+            setLine(e.readInt());
+      else if (tag == "Fingering") {
+            Fingering* f = new Fingering(score());
+            f->read300old(e);
+            add(f);
+            }
+      else if (tag == "Symbol") {
+            Symbol* s = new Symbol(score());
+            s->setTrack(track());
+            s->read300old(e);
+            add(s);
+            }
+      else if (tag == "Image") {
+            if (MScore::noImages)
+                  e.skipCurrentElement();
+            else {
+                  Image* image = new Image(score());
+                  image->setTrack(track());
+                  image->read300old(e);
+                  add(image);
+                  }
+            }
+      else if (tag == "Bend") {
+            Bend* b = new Bend(score());
+            b->setTrack(track());
+            b->read300old(e);
+            add(b);
+            }
+      else if (tag == "NoteDot") {
+            NoteDot* dot = new NoteDot(score());
+            dot->read300old(e);
+            add(dot);
+            }
+      else if (tag == "Events") {
+            _playEvents.clear();    // remove default event
+            while (e.readNextStartElement()) {
+                  const QStringRef& tag(e.name());
+                  if (tag == "Event") {
+                        NoteEvent ne;
+                        ne.read(e);
+                        _playEvents.append(ne);
+                        }
+                  else
+                        e.unknown();
+                  }
+            if (chord())
+                  chord()->setPlayEventType(PlayEventType::User);
+            }
+      else if (tag == "endSpanner") {
+            int id = e.intAttribute("id");
+            Spanner* sp = e.findSpanner(id);
+            if (sp) {
+                  sp->setEndElement(this);
+                  if (sp->isTie())
+                        _tieBack = toTie(sp);
+                  else {
+                        if (sp->isGlissando() && parent() && parent()->isChord())
+                              toChord(parent())->setEndsGlissando(true);
+                        addSpannerBack(sp);
+                        }
+                  e.removeSpanner(sp);
+                  }
+            else {
+                  // End of a spanner whose start element will appear later;
+                  // may happen for cross-staff spanner from a lower to a higher staff
+                  // (for instance a glissando from bass to treble staff of piano).
+                  // Create a place-holder spanner with end data
+                  // (a TextLine is used only because both Spanner or SLine are abstract,
+                  // the actual class does not matter, as long as it is derived from Spanner)
+                  int id = e.intAttribute("id", -1);
+                  if (id != -1 &&
+                              // DISABLE if pasting into a staff with linked staves
+                              // because the glissando is not properly cloned into the linked staves
+                              (!e.pasteMode() || !staff()->links() || staff()->links()->empty())) {
+                        Spanner* placeholder = new TextLine(score());
+                        placeholder->setAnchor(Spanner::Anchor::NOTE);
+                        placeholder->setEndElement(this);
+                        placeholder->setTrack2(track());
+                        placeholder->setTick(0);
+                        placeholder->setTick2(e.tick());
+                        e.addSpanner(id, placeholder);
+                        }
+                  }
+            e.readNext();
+            }
+      else if (tag == "TextLine"
+            || tag == "Glissando") {
+            Spanner* sp = toSpanner(Element::name2Element(tag, score()));
+            // check this is not a lower-to-higher cross-staff spanner we already got
+            int id = e.intAttribute("id");
+            Spanner* placeholder = e.findSpanner(id);
+            if (placeholder && placeholder->endElement()) {
+                  // if it is, fill end data from place-holder
+                  sp->setAnchor(Spanner::Anchor::NOTE);           // make sure we can set a Note as end element
+                  sp->setEndElement(placeholder->endElement());
+                  sp->setTrack2(placeholder->track2());
+                  sp->setTick(e.tick());                          // make sure tick2 will be correct
+                  sp->setTick2(placeholder->tick2());
+                  toNote(placeholder->endElement())->addSpannerBack(sp);
+                  // remove no longer needed place-holder before reading the new spanner,
+                  // as reading it also adds it to XML reader list of spanners,
+                  // which would overwrite the place-holder
+                  e.removeSpanner(placeholder);
+                  delete placeholder;
+                  }
+            sp->setTrack(track());
+            sp->read300old(e);
+            // DISABLE pasting of glissandi into staves with other lionked staves
+            // because the glissando is not properly cloned into the linked staves
+            if (e.pasteMode() && staff()->links() && !staff()->links()->empty()) {
+                  e.removeSpanner(sp);    // read300old() added the element to the XMLReader: remove it
+                  delete sp;
+                  }
+            else {
+                  sp->setAnchor(Spanner::Anchor::NOTE);
+                  sp->setStartElement(this);
+                  sp->setTick(e.tick());
+                  addSpannerFor(sp);
+                  sp->setParent(this);
+                  }
+            }
+      else if (tag == "offset")
+            Element::readProperties(e);
+      else if (Element::readProperties(e))
+            ;
+      else
+            return false;
+      return true;
+      }
 
 //---------------------------------------------------------
 //   ChordRest::readProperties300old

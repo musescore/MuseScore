@@ -495,6 +495,7 @@ class ElementList : public std::vector<Element*> {
       bool remove(Element*);
       void replace(Element* old, Element* n);
       void write(XmlWriter&) const;
+      void write300old(XmlWriter&) const;
       void write(XmlWriter&, const char* name) const;
       };
 

@@ -10,9 +10,12 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#include "accidental.h"
 #include "arpeggio.h"
 #include "articulation.h"
+#include "bend.h"
 #include "config.h"
+#include "fingering.h"
 #include "hook.h"
 #include "lyrics.h"
 #include "score.h"
@@ -21,8 +24,10 @@
 #include "xml.h"
 #include "element.h"
 #include "measure.h"
+#include "notedot.h"
 #include "segment.h"
 #include "slur.h"
+#include "tie.h"
 #include "chordrest.h"
 #include "chord.h"
 #include "tuplet.h"
@@ -77,6 +82,16 @@ static void writeMeasure(XmlWriter& xml, MeasureBase* m, int staffIdx, bool writ
             toMeasure(m)->mmRest()->write300old(xml, staffIdx, writeSystemElements, forceTimeSig);
 
       xml.setCurTick(m->endTick());
+      }
+
+//---------------------------------------------------------
+//   ElementList::write300old
+//---------------------------------------------------------
+
+void ElementList::write300old(XmlWriter& xml) const
+      {
+      for (const Element* e : *this)
+            e->write300old(xml);
       }
 
 //---------------------------------------------------------
@@ -603,6 +618,65 @@ void Chord::write300old(XmlWriter& xml) const
             _tremolo->write300old(xml);
       for (Element* e : el())
             e->write300old(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Rest::write300old
+//---------------------------------------------------------
+
+void Rest::write300old(XmlWriter& xml) const
+      {
+      if (_gap)
+            return;
+      xml.stag(name());
+      ChordRest::writeProperties300old(xml);
+      el().write300old(xml);
+      xml.etag();
+      }
+
+//--------------------------------------------------
+//   Note::write300old
+//---------------------------------------------------------
+
+void Note::write300old(XmlWriter& xml) const
+      {
+      xml.stag("Note");
+      Element::writeProperties(xml);
+
+      if (_accidental)
+            _accidental->write300old(xml);
+      _el.write300old(xml);
+      for (NoteDot* dot : _dots) {
+            if (!dot->userOff().isNull() || !dot->visible() || dot->color() != Qt::black || dot->visible() != visible()) {
+                  dot->write300old(xml);
+                  break;
+                  }
+            }
+      if (_tieFor)
+            _tieFor->write300old(xml);
+      if (_tieBack) {
+            int id = xml.spannerId(_tieBack);
+            xml.tagE(QString("endSpanner id=\"%1\"").arg(id));
+            }
+      if ((chord() == 0 || chord()->playEventType() != PlayEventType::Auto) && !_playEvents.empty()) {
+            xml.stag("Events");
+            for (const NoteEvent& e : _playEvents)
+                  e.write(xml);
+            xml.etag();
+            }
+      for (Pid id : { Pid::PITCH, Pid::TPC1, Pid::TPC2, Pid::SMALL, Pid::MIRROR_HEAD, Pid::DOT_POSITION,
+         Pid::HEAD_GROUP, Pid::VELO_OFFSET, Pid::PLAY, Pid::TUNING, Pid::FRET, Pid::STRING,
+         Pid::GHOST, Pid::HEAD_TYPE, Pid::VELO_TYPE, Pid::FIXED, Pid::FIXED_LINE
+            }) {
+            writeProperty(xml, id);
+            }
+
+      for (Spanner* e : _spannerFor)
+            e->write300old(xml);
+      for (Spanner* e : _spannerBack)
+            xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(e)));
+
       xml.etag();
       }
 
