@@ -20,6 +20,7 @@
 #include "staff.h"
 #include "segment.h"
 #include "undo.h"
+#include "textedit.h"
 
 namespace Ms {
 
