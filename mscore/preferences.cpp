@@ -21,7 +21,6 @@
 #include "libmscore/style.h"
 #include "libmscore/mscore.h"
 #include "preferences.h"
-#include <sstream>
 
 namespace Ms {
 
@@ -71,7 +70,7 @@ void Preferences::init(bool storeInMemoryOnly)
 
       QString wd = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
 
-      _allPreferences.insert(
+      _allPreferences = prefs_map_t(
       {
             {PREF_APP_AUTOSAVE_AUTOSAVETIME,                       new IntPreference(2 /* minutes */, false)},
             {PREF_APP_AUTOSAVE_USEAUTOSAVE,                        new BoolPreference(true, false)},
@@ -170,7 +169,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_SCORE_VOICE4_COLOR,                           new ColorPreference(QColor("#70167a"))},    // purple
             {PREF_UI_THEME_ICONWIDTH,                              new IntPreference(28, false)},
             {PREF_UI_THEME_ICONHEIGHT,                             new IntPreference(24, false)}
-            });
+      });
 
       _initialized = true;
       }
@@ -180,11 +179,11 @@ void Preferences::save()
       settings()->sync();
       }
 
-QVariant Preferences::defaultValue(const std::string key) const
+QVariant Preferences::defaultValue(const QString key) const
       {
       checkIfKeyExists(key);
-      auto pref = _allPreferences.find(key);
-      return pref->second->defaultValue();
+      Preference* pref = _allPreferences.value(key);
+      return pref->defaultValue();
       }
 
 QSettings* Preferences::settings() const
@@ -197,39 +196,39 @@ QSettings* Preferences::settings() const
       return _settings;
       }
 
-QVariant Preferences::get(const std::string key) const
+QVariant Preferences::get(const QString key) const
       {
-      auto pref = _inMemorySettings.find(key);
+      QVariant pref = _inMemorySettings.value(key);
 
       if (_storeInMemoryOnly)
-            return (pref != _inMemorySettings.end()) ? pref->second : QVariant(); // invalid QVariant returned when not found
-      else if (pref != _inMemorySettings.end()) // if there exists a temporary value stored "in memory" return this value
-            return pref->second;
+            return (_inMemorySettings.contains(key)) ? pref : QVariant(); // invalid QVariant returned when not found
+      else if (_inMemorySettings.contains(key)) // if there exists a temporary value stored "in memory" return this value
+            return pref;
       else
-            return settings()->value(QString(key.c_str()));
+            return settings()->value(key);
       }
 
-void Preferences::set(const std::string key, QVariant value, bool temporary)
+void Preferences::set(const QString key, QVariant value, bool temporary)
       {
       if (_storeInMemoryOnly || temporary)
             _inMemorySettings[key] = value;
       else
-            settings()->setValue(QString(key.c_str()), value);
+            settings()->setValue(key, value);
       }
 
-void Preferences::remove(const std::string key)
+void Preferences::remove(const QString key)
       {
       // remove both preference stored "in memory" and in QSettings
-      _inMemorySettings.erase(key);
-      settings()->remove(QString(key.c_str()));
+      _inMemorySettings.remove(key);
+      settings()->remove(key);
       }
 
-bool Preferences::has(const std::string key) const
+bool Preferences::has(const QString key) const
       {
-      return _inMemorySettings.count(key) > 0 || settings()->contains(QString(key.c_str()));
+      return _inMemorySettings.contains(key) > 0 || settings()->contains(key);
       }
 
-QVariant Preferences::preference(const std::string key) const
+QVariant Preferences::preference(const QString key) const
       {
       checkIfKeyExists(key);
       QVariant pref = get(key);
@@ -241,30 +240,29 @@ QVariant Preferences::preference(const std::string key) const
             return pref;
       }
 
-bool Preferences::checkIfKeyExists(const std::string key) const
+bool Preferences::checkIfKeyExists(const QString key) const
       {
-      auto pref = _allPreferences.find(key);
-      if (pref == _allPreferences.end()) {
-            qWarning("Preference not found: %s", key.c_str());
-            Q_ASSERT(pref != _allPreferences.end());
+      bool exists = _allPreferences.contains(key);
+      if (!exists) {
+            qWarning("Preference not found: %s", key.toStdString().c_str());
+            Q_ASSERT(exists);
             }
-      return pref != _allPreferences.end();
+      return exists;
       }
 
-QMetaType::Type Preferences::type(const std::string key) const
+QMetaType::Type Preferences::type(const QString key) const
       {
-      auto pref = _allPreferences.find(key);
-      if (pref != _allPreferences.end())
-            return pref->second->type();
+      if (_allPreferences.contains(key))
+            return _allPreferences.value(key)->type();
       else {
             return QMetaType::UnknownType;
             }
       }
 
-bool Preferences::checkType(const std::string key, QMetaType::Type t) const
+bool Preferences::checkType(const QString key, QMetaType::Type t) const
       {
       if (type(key) != t) {
-            qWarning("Preference is not of correct type: %s", key.c_str());
+            qWarning("Preference is not of correct type: %s", key.toStdString().c_str());
             Q_ASSERT(type(key) == QMetaType::Bool);
             }
       return type(key) == t;
@@ -277,21 +275,21 @@ Preferences::Preferences()
 Preferences::~Preferences()
       {
       // clean up _allPreferences
-      for (auto item : _allPreferences)
-            delete item.second;
+      for (Preference* pref : _allPreferences.values())
+            delete pref;
 
       if (_settings) {
             delete _settings;
             }
       }
 
-bool Preferences::getBool(const std::string key) const
+bool Preferences::getBool(const QString key) const
       {
       checkType(key, QMetaType::Bool);
       return preference(key).toBool();
       }
 
-QColor Preferences::getColor(const std::string key) const
+QColor Preferences::getColor(const QString key) const
       {
       checkType(key, QMetaType::QColor);
       QVariant v = preference(key);
@@ -304,33 +302,33 @@ QColor Preferences::getColor(const std::string key) const
             }
       }
 
-QString Preferences::getString(const std::string key) const
+QString Preferences::getString(const QString key) const
       {
       checkType(key, QMetaType::QString);
       return preference(key).toString();
       }
 
-int Preferences::getInt(const std::string key) const
+int Preferences::getInt(const QString key) const
       {
       checkType(key, QMetaType::Int);
       QVariant v = preference(key);
       bool ok;
       int pref = v.toInt(&ok);
       if (!ok) {
-            qWarning("Can not convert preference %s to int. Returning default value.", key.c_str());
+            qWarning("Can not convert preference %s to int. Returning default value.", key.toStdString().c_str());
             return defaultValue(key).toInt();
             }
       return pref;
 }
 
-double Preferences::getDouble(const std::string key) const
+double Preferences::getDouble(const QString key) const
       {
       checkType(key, QMetaType::Double);
       QVariant v = preference(key);
       bool ok;
       double pref = v.toDouble(&ok);
       if (!ok) {
-            qWarning("Can not convert preference %s to double. Returning default value.", key.c_str());
+            qWarning("Can not convert preference %s to double. Returning default value.", key.toStdString().c_str());
             return defaultValue(key).toDouble();
             }
       return pref;
@@ -356,19 +354,19 @@ bool Preferences::isThemeDark() const
       return globalStyle() == MuseScoreStyleType::DARK_FUSION;
       }
 
-void Preferences::revertToDefaultValue(const std::string key)
+void Preferences::revertToDefaultValue(const QString key)
       {
       set(key, defaultValue(key));
       }
 
 
-void Preferences::setPreference(const std::string key, QVariant value)
+void Preferences::setPreference(const QString key, QVariant value)
       {
       checkIfKeyExists(key);
       set(key, value);
       }
 
-void Preferences::setTemporaryPreference(const std::string key, QVariant value)
+void Preferences::setTemporaryPreference(const QString key, QVariant value)
       {
       // note: this function should not call checkIfKeyExists() because it may be
       // called before init() which is ok since the preference is only stored "in memory"
@@ -378,9 +376,7 @@ void Preferences::setTemporaryPreference(const std::string key, QVariant value)
 MidiRemote Preferences::midiRemote(int recordId) const
       {
       MidiRemote remote;
-      std::stringstream ss;
-      ss << PREF_IO_MIDI_REMOTE << "/" << recordId << "/";
-      std::string baseKey = ss.str();
+      QString baseKey = QString(PREF_IO_MIDI_REMOTE) + QString("%1%2%3").arg("/").arg(recordId).arg("/");
 
       if (has(baseKey + "type")) {
             remote.type = MidiRemoteType(get(baseKey + "type").toInt());
@@ -395,19 +391,14 @@ MidiRemote Preferences::midiRemote(int recordId) const
 
 void Preferences::updateMidiRemote(int recordId, MidiRemoteType type, int data)
       {
-      std::stringstream ss;
-      ss << PREF_IO_MIDI_REMOTE << "/" << recordId << "/";
-      std::string baseKey = ss.str();
-
+      QString baseKey = QString(PREF_IO_MIDI_REMOTE) + QString("%1%2%3").arg("/").arg(recordId).arg("/");
       set(baseKey + "type", static_cast<int>(type));
       set(baseKey + "data", data);
       }
 
 void Preferences::clearMidiRemote(int recordId)
       {
-      std::stringstream ss;
-      ss << PREF_IO_MIDI_REMOTE << "/" << recordId;
-      std::string baseKey = ss.str();
+      QString baseKey = QString(PREF_IO_MIDI_REMOTE) + QString("%1%2").arg("/").arg(recordId);
       remove(baseKey);
       }
 
@@ -422,7 +413,7 @@ IntPreference::IntPreference(int defaultValue, bool showInAdvancedList)
       : Preference(defaultValue, QMetaType::Int, showInAdvancedList)
       {}
 
-void IntPreference::accept(std::string key, PreferenceVisitor& v)
+void IntPreference::accept(QString key, PreferenceVisitor& v)
       {
       v.visit(key, this);
       }
@@ -431,7 +422,7 @@ DoublePreference::DoublePreference(double defaultValue, bool showInAdvancedList)
       : Preference(defaultValue, QMetaType::Double, showInAdvancedList)
       {}
 
-void DoublePreference::accept(std::string key, PreferenceVisitor& v)
+void DoublePreference::accept(QString key, PreferenceVisitor& v)
       {
       v.visit(key, this);
       }
@@ -440,7 +431,7 @@ BoolPreference::BoolPreference(bool defaultValue, bool showInAdvancedList)
       : Preference(defaultValue, QMetaType::Bool, showInAdvancedList)
       {}
 
-void BoolPreference::accept(std::string key, PreferenceVisitor& v)
+void BoolPreference::accept(QString key, PreferenceVisitor& v)
       {
       v.visit(key, this);
       }
@@ -449,7 +440,7 @@ StringPreference::StringPreference(QString defaultValue, bool showInAdvancedList
       : Preference(defaultValue, QMetaType::QString, showInAdvancedList)
       {}
 
-void StringPreference::accept(std::string key, PreferenceVisitor& v)
+void StringPreference::accept(QString key, PreferenceVisitor& v)
       {
       v.visit(key, this);
       }
@@ -458,7 +449,7 @@ ColorPreference::ColorPreference(QColor defaultValue, bool showInAdvancedList)
       : Preference(defaultValue, QMetaType::QColor, showInAdvancedList)
       {}
 
-void ColorPreference::accept(std::string key, PreferenceVisitor& v)
+void ColorPreference::accept(QString key, PreferenceVisitor& v)
       {
       v.visit(key, this);
       }
@@ -467,7 +458,7 @@ EnumPreference::EnumPreference(QVariant defaultValue, bool showInAdvancedList)
       : Preference(defaultValue, QMetaType::User, showInAdvancedList)
       {}
 
-void EnumPreference::accept(std::string, PreferenceVisitor&)
+void EnumPreference::accept(QString, PreferenceVisitor&)
       {
       }
 

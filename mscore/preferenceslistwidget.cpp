@@ -39,10 +39,8 @@ PreferencesListWidget::PreferencesListWidget(QWidget* parent)
 
 void PreferencesListWidget::loadPreferences()
       {
-      for (auto item : preferences.allPreferences()) {
-
-            std::string key = item.first;
-            Preference* pref = item.second;
+      for (QString key : preferences.allPreferences().keys()) {
+            Preference* pref = preferences.allPreferences().value(key);
 
             if (pref->showInAdvancedList()) {
                   // multiple dispatch using Visitor pattern, see overloaded visit() methods
@@ -53,8 +51,8 @@ void PreferencesListWidget::loadPreferences()
 
 void PreferencesListWidget::updatePreferences()
       {
-      for (auto item : preferenceItems)
-            item.second->update();
+      for (PreferenceItem* item : preferenceItems.values())
+            item->update();
       }
 
 void PreferencesListWidget::addPreference(PreferenceItem* item)
@@ -64,31 +62,31 @@ void PreferencesListWidget::addPreference(PreferenceItem* item)
       preferenceItems[item->name()] = item;
       }
 
-void PreferencesListWidget::visit(std::string key, IntPreference*)
+void PreferencesListWidget::visit(QString key, IntPreference*)
       {
       IntPreferenceItem* item = new IntPreferenceItem(key);
       addPreference(item);
       }
 
-void PreferencesListWidget::visit(std::string key, DoublePreference*)
+void PreferencesListWidget::visit(QString key, DoublePreference*)
       {
       DoublePreferenceItem* item = new DoublePreferenceItem(key);
       addPreference(item);
       }
 
-void PreferencesListWidget::visit(std::string key, BoolPreference*)
+void PreferencesListWidget::visit(QString key, BoolPreference*)
       {
       BoolPreferenceItem* item = new BoolPreferenceItem(key);
       addPreference(item);
       }
 
-void PreferencesListWidget::visit(std::string key, StringPreference*)
+void PreferencesListWidget::visit(QString key, StringPreference*)
       {
       StringPreferenceItem* item = new StringPreferenceItem(key);
       addPreference(item);
       }
 
-void PreferencesListWidget::visit(std::string key, ColorPreference*)
+void PreferencesListWidget::visit(QString key, ColorPreference*)
       {
       ColorPreferenceItem* item = new ColorPreferenceItem(key);
       addPreference(item);
@@ -101,7 +99,7 @@ std::vector<QString> PreferencesListWidget::save()
             PreferenceItem* item = static_cast<PreferenceItem*>(topLevelItem(i));
             if (item->isModified()) {
                   item->save();
-                  changedPreferences.push_back(QString::fromStdString(item->name()));
+                  changedPreferences.push_back(item->name());
                   }
             }
 
@@ -116,10 +114,10 @@ PreferenceItem::PreferenceItem()
 {
 }
 
-PreferenceItem::PreferenceItem(std::string name)
+PreferenceItem::PreferenceItem(QString name)
       : _name(name)
       {
-      setText(0, QString::fromStdString(name));
+      setText(0, name);
       setSizeHint(0, QSize(0, 25));
       }
 
@@ -132,7 +130,7 @@ void PreferenceItem::save(QVariant value)
 //   ColorPreferenceItem
 //---------------------------------------------------------
 
-ColorPreferenceItem::ColorPreferenceItem(std::string name)
+ColorPreferenceItem::ColorPreferenceItem(QString name)
       : PreferenceItem(name),
         _initialValue(preferences.getColor(name)),
         _editor(new Awl::ColorLabel)
@@ -169,7 +167,7 @@ bool ColorPreferenceItem::isModified() const
 //   IntPreferenceItem
 //---------------------------------------------------------
 
-IntPreferenceItem::IntPreferenceItem(std::string name)
+IntPreferenceItem::IntPreferenceItem(QString name)
       : PreferenceItem(name),
         _initialValue(preferences.getInt(name))
 {
@@ -207,7 +205,7 @@ bool IntPreferenceItem::isModified() const
 //   DoublePreferenceItem
 //---------------------------------------------------------
 
-DoublePreferenceItem::DoublePreferenceItem(std::string name)
+DoublePreferenceItem::DoublePreferenceItem(QString name)
       : PreferenceItem(name),
         _initialValue(preferences.getDouble(name)),
         _editor(new QDoubleSpinBox)
@@ -245,7 +243,7 @@ bool DoublePreferenceItem::isModified() const
 //   BoolPreferenceItem
 //---------------------------------------------------------
 
-BoolPreferenceItem::BoolPreferenceItem(std::string name)
+BoolPreferenceItem::BoolPreferenceItem(QString name)
       : PreferenceItem(name),
         _initialValue(preferences.getBool(name)),
         _editor(new QCheckBox)
@@ -280,7 +278,7 @@ bool BoolPreferenceItem::isModified() const
 //   StringPreferenceItem
 //---------------------------------------------------------
 
-StringPreferenceItem::StringPreferenceItem(std::string name)
+StringPreferenceItem::StringPreferenceItem(QString name)
       : PreferenceItem(name),
         _initialValue(preferences.getString(name)),
         _editor(new QLineEdit)

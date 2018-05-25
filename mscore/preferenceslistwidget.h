@@ -32,14 +32,14 @@ namespace Ms {
 //---------------------------------------------------------
 class PreferenceItem : public QTreeWidgetItem, public QObject {
 
-      std::string _name;
+      QString _name;
 
     protected:
       void save(QVariant value);
 
     public:
       PreferenceItem();
-      PreferenceItem(std::string name);
+      PreferenceItem(QString name);
 
       virtual void save() = 0;
       virtual void update() = 0;
@@ -47,7 +47,7 @@ class PreferenceItem : public QTreeWidgetItem, public QObject {
       virtual QWidget* editor() const = 0;
       virtual bool isModified() const = 0;
 
-      std::string name() const {return _name;}
+      QString name() const {return _name;}
 
       };
 
@@ -60,7 +60,7 @@ class BoolPreferenceItem : public PreferenceItem {
       QCheckBox* _editor;
 
    public:
-      BoolPreferenceItem(std::string name);
+      BoolPreferenceItem(QString name);
 
       void save();
       void update();
@@ -79,7 +79,7 @@ class IntPreferenceItem : public PreferenceItem {
       QSpinBox* _editor;
 
    public:
-      IntPreferenceItem(std::string name);
+      IntPreferenceItem(QString name);
 
       void save();
       void update();
@@ -96,7 +96,7 @@ class DoublePreferenceItem : public PreferenceItem {
       QDoubleSpinBox* _editor;
 
    public:
-      DoublePreferenceItem(std::string name);
+      DoublePreferenceItem(QString name);
 
       void save();
       void update();
@@ -113,7 +113,7 @@ class StringPreferenceItem : public PreferenceItem {
       QLineEdit* _editor;
 
    public:
-      StringPreferenceItem(std::string name);
+      StringPreferenceItem(QString name);
 
       void save();
       void update();
@@ -130,7 +130,7 @@ class ColorPreferenceItem : public PreferenceItem {
       Awl::ColorLabel* _editor;
 
    public:
-      ColorPreferenceItem(std::string name);
+      ColorPreferenceItem(QString name);
 
       void save();
       void update();
@@ -146,7 +146,7 @@ class ColorPreferenceItem : public PreferenceItem {
 
 class PreferencesListWidget : public QTreeWidget, public PreferenceVisitor {
 
-      std::unordered_map<std::string, PreferenceItem*> preferenceItems;
+      QHash<QString, PreferenceItem*> preferenceItems;
 
       void addPreference(PreferenceItem* item);
 
@@ -157,11 +157,11 @@ class PreferencesListWidget : public QTreeWidget, public PreferenceVisitor {
 
       std::vector<QString> save();
 
-      void visit(std::string key, IntPreference*);
-      void visit(std::string key, DoublePreference*);
-      void visit(std::string key, BoolPreference*);
-      void visit(std::string key, StringPreference*);
-      void visit(std::string key, ColorPreference*);
+      void visit(QString key, IntPreference*);
+      void visit(QString key, DoublePreference*);
+      void visit(QString key, BoolPreference*);
+      void visit(QString key, StringPreference*);
+      void visit(QString key, ColorPreference*);
 
 };
 

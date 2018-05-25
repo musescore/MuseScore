@@ -200,43 +200,44 @@ class Preference {
       QVariant defaultValue() const {return _defaultValue;}
       bool showInAdvancedList() const {return _showInAdvancedList;}
       QMetaType::Type type() {return _type;}
-      virtual void accept(std::string key, PreferenceVisitor&) = 0;
+      virtual void accept(QString key, PreferenceVisitor&) = 0;
       };
 
 class IntPreference : public Preference {
    public:
       IntPreference(int defaultValue, bool showInAdvancedList = true);
-      virtual void accept(std::string key, PreferenceVisitor&);
+      virtual void accept(QString key, PreferenceVisitor&);
       };
 
 class DoublePreference : public Preference {
    public:
       DoublePreference(double defaultValue, bool showInAdvancedList = true);
-      virtual void accept(std::string key, PreferenceVisitor&);
+      virtual void accept(QString key, PreferenceVisitor&);
       };
 
 class BoolPreference : public Preference {
    public:
       BoolPreference(bool defaultValue, bool showInAdvancedList = true);
-      virtual void accept(std::string key, PreferenceVisitor&);
+      virtual void accept(QString key, PreferenceVisitor&);
       };
 
 class StringPreference: public Preference {
    public:
       StringPreference(QString defaultValue, bool showInAdvancedList = true);
-      virtual void accept(std::string key, PreferenceVisitor&);
+      virtual void accept(QString key, PreferenceVisitor&);
       };
 
 class ColorPreference: public Preference {
    public:
       ColorPreference(QColor defaultValue, bool showInAdvancedList = true);
-      virtual void accept(std::string key, PreferenceVisitor&);
+      virtual void accept(QString key, PreferenceVisitor&);
       };
 
+// Support for EnumPreference is currently not fully implemented
 class EnumPreference: public Preference {
    public:
       EnumPreference(QVariant defaultValue, bool showInAdvancedList = true);
-      virtual void accept(std::string, PreferenceVisitor&);
+      virtual void accept(QString, PreferenceVisitor&);
       };
 
 //---------------------------------------------------------
@@ -245,7 +246,7 @@ class EnumPreference: public Preference {
 
 class Preferences {
    public:
-      typedef std::unordered_map<std::string, Preference*> prefs_map_t;
+      typedef QHash<QString, Preference*> prefs_map_t;
 
    private:
 
@@ -255,7 +256,7 @@ class Preferences {
       prefs_map_t _allPreferences;
       // used for storing preferences in memory when _storeInMemoryOnly is true
       // and for storing temporary preferences
-      std::unordered_map<std::string, QVariant> _inMemorySettings;
+      QHash<QString, QVariant> _inMemorySettings;
       bool _storeInMemoryOnly = false;
       bool _returnDefaultValues = false;
       bool _initialized = false;
@@ -264,15 +265,15 @@ class Preferences {
       QSettings* settings() const;
       // the following functions must be used to access and change a preference
       // instead of using QSettings directly
-      QVariant get(const std::string key) const;
-      bool has(const std::string key) const;
-      void set(const std::string key, QVariant value, bool temporary = false);
-      void remove(const std::string key);
+      QVariant get(const QString key) const;
+      bool has(const QString key) const;
+      void set(const QString key, QVariant value, bool temporary = false);
+      void remove(const QString key);
 
-      QVariant preference(const std::string key) const;
-      QMetaType::Type type(const std::string key) const;
-      bool checkIfKeyExists(const std::string key) const;
-      bool checkType(const std::string key, QMetaType::Type t) const;
+      QVariant preference(const QString key) const;
+      QMetaType::Type type(const QString key) const;
+      bool checkIfKeyExists(const QString key) const;
+      bool checkType(const QString key, QMetaType::Type t) const;
 
    public:
       Preferences();
@@ -285,21 +286,21 @@ class Preferences {
       const prefs_map_t& allPreferences() const {return _allPreferences;}
 
       // general getters
-      QVariant defaultValue(const std::string key) const;
-      bool getBool(const std::string key) const;
-      QColor getColor(const std::string key) const;
-      QString getString(const std::string key) const;
-      int getInt(const std::string key) const;
-      double getDouble(const std::string key) const;
+      QVariant defaultValue(const QString key) const;
+      bool getBool(const QString key) const;
+      QColor getColor(const QString key) const;
+      QString getString(const QString key) const;
+      int getInt(const QString key) const;
+      double getDouble(const QString key) const;
 
       // general setters
-      void revertToDefaultValue(const std::string key);
-      void setPreference(const std::string key, QVariant value);
+      void revertToDefaultValue(const QString key);
+      void setPreference(const QString key, QVariant value);
 
       // A temporary preference is stored "in memory" only and not written to file.
       // If there is both a "normal" preference and a temporary preference with the same
       // key the temporary preference is used
-      void setTemporaryPreference(const std::string key, QVariant value);
+      void setTemporaryPreference(const QString key, QVariant value);
 
       /*
        * Some preferences like enums and structs/classes are not easily read using the general set/get methods
@@ -311,7 +312,7 @@ class Preferences {
       bool isThemeDark() const;
 
       template<typename T>
-      void setCustomPreference(const std::string key, T t)
+      void setCustomPreference(const QString key, T t)
             {
             set(key, QVariant::fromValue<T>(t));
             }
@@ -344,11 +345,11 @@ inline QDataStream &operator>>(QDataStream &in, T &val)
 
 class PreferenceVisitor {
    public:
-      virtual void visit(std::string key, IntPreference*) = 0;
-      virtual void visit(std::string key, DoublePreference*) = 0;
-      virtual void visit(std::string key, BoolPreference*) = 0;
-      virtual void visit(std::string key, StringPreference*) = 0;
-      virtual void visit(std::string key, ColorPreference*) = 0;
+      virtual void visit(QString key, IntPreference*) = 0;
+      virtual void visit(QString key, DoublePreference*) = 0;
+      virtual void visit(QString key, BoolPreference*) = 0;
+      virtual void visit(QString key, StringPreference*) = 0;
+      virtual void visit(QString key, ColorPreference*) = 0;
       };
 
 
