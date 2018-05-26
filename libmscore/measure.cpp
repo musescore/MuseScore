@@ -1998,52 +1998,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   segment = getSegment(SegmentType::Breath, tick);
                   segment->add(breath);
                   }
-            else if (tag == "endSpanner") {
-                  int id = e.attribute("id").toInt();
-                  Spanner* spanner = e.findSpanner(id);
-                  if (spanner) {
-                        spanner->setTicks(e.tick() - spanner->tick());
-                        // if (spanner->track2() == -1)
-                              // the absence of a track tag [?] means the
-                              // track is the same as the beginning of the slur
-                        if (spanner->track2() == -1)
-                              spanner->setTrack2(spanner->track() ? spanner->track() : e.track());
-                        }
-                  else {
-                        // remember "endSpanner" values
-                        SpannerValues sv;
-                        sv.spannerId = id;
-                        sv.track2    = e.track();
-                        sv.tick2     = e.tick();
-                        e.addSpannerValues(sv);
-                        }
-                  e.readNext();
-                  }
-            else if (tag == "HairPin"
-               || tag == "Pedal"
-               || tag == "Ottava"
-               || tag == "Trill"
-               || tag == "TextLine"
-               || tag == "LetRing"
-               || tag == "Vibrato"
-               || tag == "PalmMute"
-               || tag == "Volta") {
-                  Spanner* sp = toSpanner(Element::name2Element(tag, score()));
-                  sp->setTrack(e.track());
-                  sp->setTick(e.tick());
-                  // ?? sp->setAnchor(Spanner::Anchor::SEGMENT);
-                  sp->read(e);
-                  score()->addSpanner(sp);
-                  //
-                  // check if we already saw "endSpanner"
-                  //
-                  int id = e.spannerId(sp);
-                  const SpannerValues* sv = e.spannerValues(id);
-                  if (sv) {
-                        sp->setTicks(sv->tick2 - sp->tick());
-                        sp->setTrack2(sv->track2);
-                        }
-                  }
+            else if (tag == "Spanner")
+                  Spanner::readSpanner(e, this, e.track());
             else if (tag == "RepeatMeasure") {
                   RepeatMeasure* rm = new RepeatMeasure(score());
                   rm->setTrack(e.track());
@@ -2308,6 +2264,44 @@ void Measure::read(XmlReader& e, int staffIdx)
                   e.unknown();
             }
       e.checkTuplets();
+      }
+
+//---------------------------------------------------------
+//   Measure::readAddConnector
+//---------------------------------------------------------
+
+void Measure::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
+      {
+      Q_UNUSED(pasteMode);
+      const ElementType type = info->type();
+      switch(type) {
+            case ElementType::HAIRPIN:
+            case ElementType::PEDAL:
+            case ElementType::OTTAVA:
+            case ElementType::TRILL:
+            case ElementType::TEXTLINE:
+            case ElementType::LET_RING:
+            case ElementType::VIBRATO:
+            case ElementType::PALM_MUTE:
+            case ElementType::VOLTA:
+                  {
+                  Spanner* sp = toSpanner(info->connector());
+                  const ConnectorPointInfo& pi = info->info();
+                  if (info->isStart()) {
+                        sp->setTrack(pi.track);
+                        sp->setTick(pi.tick);
+                        score()->addSpanner(sp);
+                        }
+                  else if (info->isEnd()) {
+                        sp->setTrack2(pi.track);
+                        sp->setTick2(pi.tick);
+                        }
+                  }
+                  break;
+            default:
+                  // TODO add handling for beams and tuplets
+                  break;
+            }
       }
 
 //---------------------------------------------------------

@@ -1166,7 +1166,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                                                 xml.setCurTick(segment->tick());
                                                 needTick = false;
                                                 }
-                                          s->write(xml);
+                                          s->writeSpanner(xml, segment, track);
                                           }
                                     }
                               if ((s->tick2() == segment->tick())
@@ -1181,7 +1181,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                                           xml.setCurTick(segment->tick());
                                           needTick = false;
                                           }
-                                    xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(s)));
+                                    s->writeSpanner(xml, segment, track);
                                     }
                               }
                         }
@@ -1245,7 +1245,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                           && (s->track2() == track || (s->track2() == -1 && s->track() == track))
                           && (!clip || s->tick() >= fs->tick())
                           ) {
-                              xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(s)));
+                              s->writeSpanner(xml, lastMeasure(), track, endTick);
                               }
                         }
                   }

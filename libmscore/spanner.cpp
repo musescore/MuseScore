@@ -10,6 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "connector.h"
 #include "score.h"
 #include "spanner.h"
 #include "system.h"
@@ -21,6 +22,17 @@
 #include "staff.h"
 
 namespace Ms {
+
+//-----------------------------------------------------------------------------
+//   @@ SpannerWriter
+///   Helper class for writing Spanners
+//-----------------------------------------------------------------------------
+class SpannerWriter : public ConnectorInfoWriter {
+   protected:
+      const char* tagName() const override { return "Spanner"; }
+   public:
+      SpannerWriter(const Element* current, const Spanner* spanner, int track, int tick = -1);
+      };
 
 //---------------------------------------------------------
 //   SpannerSegment
@@ -923,6 +935,71 @@ SpannerSegment* Spanner::layoutSystem(System*)
       {
       qDebug(" %s", name());
       return 0;
+      }
+
+//--------------------------------------------------
+//   Spanner::writeSpanner
+//---------------------------------------------------------
+
+void Spanner::writeSpanner(XmlWriter& xml, const Element* current, int track, int tick) const
+      {
+      SpannerWriter w(current, this, track, tick);
+      w.write(xml);
+      }
+
+//--------------------------------------------------
+//   Spanner::readSpanner
+//---------------------------------------------------------
+
+void Spanner::readSpanner(XmlReader& e, Element* current, int track)
+      {
+      ConnectorInfoReader info(track, current);
+      if (!info.read(e)) {
+            e.skipCurrentElement();
+            return;
+            }
+      e.addConnectorInfo(info);
+      }
+
+//---------------------------------------------------------
+//   SpannerWriter::SpannerWriter
+//---------------------------------------------------------
+
+SpannerWriter::SpannerWriter(const Element* current, const Spanner* sp, int track, int tick)
+   : ConnectorInfoWriter(track, current, sp)
+      {
+      if (tick != -1) {
+            // Override the current element's tick (e.g. to write to the last
+            // score's tick).
+            _currentInfo.tick = tick;
+            }
+      const bool needNote = (sp->anchor() == Spanner::Anchor::NOTE);
+      Q_ASSERT(!needNote || current->isNote());
+      if (current->isMeasure() || current->isSegment() || (sp->startElement()->type() != current->type())) {
+            // (The latter is the hairpins' case, for example, though they are
+            // covered by the other checks too.)
+            // We cannot determine position of the spanner from its start/end
+            // elements and will try to obtain this info from the spanner itself.
+            Q_ASSERT(!needNote);
+            if ((sp->track() != _currentInfo.track) || (sp->tick() != _currentInfo.tick)) {
+                  _prevInfo.track = sp->track();
+                  _prevInfo.tick = sp->tick();
+                  }
+            const int track2 = (sp->track2() != -1) ? sp->track2() : sp->track();
+            if ((track2 != _currentInfo.track) || (sp->tick2() != _currentInfo.tick)) {
+                  _nextInfo.track = track2;
+                  _nextInfo.tick = sp->tick2();
+                  }
+            }
+      else {
+            // We can obtain the spanner position info from its start/end
+            // elements and will prefer this source of information.
+            // Reason: some spanners contain no or wrong information (e.g. Ties).
+            if (sp->startElement() != current)
+                  updatePointInfo(sp->startElement(), _prevInfo, needNote);
+            if (sp->endElement() != current)
+                  updatePointInfo(sp->endElement(), _nextInfo, needNote);
+            }
       }
 
 }

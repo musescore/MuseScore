@@ -191,13 +191,8 @@ void ChordRest::writeProperties(XmlWriter& xml) const
             if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !xml.canWrite(s))
                   continue;
 
-            if (s->startElement() == this) {
-                  s->write(xml);
-                  }
-            else if (s->endElement() == this) {
-                  int id = xml.spannerId(s);
-                  xml.tagE(QString("Slur type=\"stop\" id=\"%1\"").arg(id));
-                  }
+            if ((s->startElement() == this) || (s->endElement() == this))
+                  s->writeSpanner(xml, this, track());
             }
       }
 
@@ -298,47 +293,45 @@ bool ChordRest::readProperties(XmlReader& e)
             setDots(e.readInt());
       else if (tag == "move")
             _staffMove = e.readInt();
-      else if (tag == "Slur") {
-            int id = e.intAttribute("id");
-            if (id == 0)
-                  id = e.intAttribute("number");                  // obsolete
-            Spanner* spanner = e.findSpanner(id);
-            QString atype(e.attribute("type"));
+      else if (tag == "Spanner")
+            Spanner::readSpanner(e, this, track());
+      else if (tag == "Lyrics" /*|| tag == "FiguredBass"*/) {
+            Element* element = Element::name2Element(tag, score());
+            element->setTrack(e.track());
+            element->read(e);
+            add(element);
+            }
+      else if (tag == "pos") {
+            QPointF pt = e.readPoint();
+            setUserOff(pt * spatium());
+            }
+      else if (tag == "offset")
+            DurationElement::readProperties(e);
+      else if (!DurationElement::readProperties(e))
+            return false;
+      return true;
+      }
 
-            if (!spanner) {
-                  if (atype == "stop") {
-                        SpannerValues sv;
-                        sv.spannerId = id;
-                        sv.track2    = track();
-                        sv.tick2     = e.tick();
-                        e.addSpannerValues(sv);
-                        }
-                  else if (atype == "start") {
-                        spanner = new Slur(score());
-                        spanner->setTick(e.tick());
-                        spanner->read(e);
-                        // check if we already saw "endSpanner"
-                        const SpannerValues* sv = e.spannerValues(id);
-                        if (sv) {
-                              spanner->setTick2(sv->tick2);
-                              spanner->setTrack2(sv->track2);
-                              }
-                        if (e.pasteMode())
+//---------------------------------------------------------
+//   ChordRest::readAddConnector
+//---------------------------------------------------------
+
+void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
+      {
+      const ElementType type = info->type();
+      switch(type) {
+            case ElementType::SLUR:
+                  {
+                  Spanner* spanner = toSpanner(info->connector());
+                  const ConnectorPointInfo& pi = info->info();
+
+                  if (info->isStart()) {
+                        spanner->setTrack(pi.track);
+                        spanner->setTick(pi.tick);
+                        spanner->setStartElement(this);
+                        if (pasteMode) {
                               score()->undoAddElement(spanner);
-                        else
-                              score()->addSpanner(spanner);
-                        }
-                  }
 
-            if (spanner) {
-                  if (atype == "start") {
-                        if (spanner->ticks() > 0 && spanner->tick() == -1) // stop has been read first
-                              spanner->setTicks(spanner->ticks() - e.tick() - 1);
-                        spanner->setTick(e.tick());
-                        spanner->setTrack(track());
-                        if (spanner->type() == ElementType::SLUR)
-                              spanner->setStartElement(this);
-                        if (e.pasteMode()) {
                               for (ScoreElement* e : spanner->linkList()) {
                                     if (e == spanner)
                                           continue;
@@ -355,16 +348,14 @@ bool ChordRest::readProperties(XmlReader& e)
                                           }
                                     }
                               }
+                        else
+                              score()->addSpanner(spanner);
                         }
-                  else if (atype == "stop") {
-                        spanner->setTick2(e.tick());
-                        spanner->setTrack2(track());
-                        if (spanner->isSlur())
-                              spanner->setEndElement(this);
-                        ChordRest* start = toChordRest(spanner->startElement());
-                        if (start)
-                              spanner->setTrack(start->track());
-                        if (e.pasteMode()) {
+                  else if (info->isEnd()) {
+                        spanner->setTrack2(pi.track);
+                        spanner->setTick2(pi.tick);
+                        spanner->setEndElement(this);
+                        if (pasteMode) {
                               for (ScoreElement* e : spanner->linkList()) {
                                     if (e == spanner)
                                           continue;
@@ -383,25 +374,13 @@ bool ChordRest::readProperties(XmlReader& e)
                               }
                         }
                   else
-                        qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(atype));
+                        qDebug("ChordRest::readAddConnector(): Slur end is neither start nor end");
                   }
-            e.readNext();
+                  break;
+            default:
+                  // TODO add handling for beams and tuplets
+                  break;
             }
-      else if (tag == "Lyrics" /*|| tag == "FiguredBass"*/) {
-            Element* element = Element::name2Element(tag, score());
-            element->setTrack(e.track());
-            element->read(e);
-            add(element);
-            }
-      else if (tag == "pos") {
-            QPointF pt = e.readPoint();
-            setUserOff(pt * spatium());
-            }
-      else if (tag == "offset")
-            DurationElement::readProperties(e);
-      else if (!DurationElement::readProperties(e))
-            return false;
-      return true;
       }
 
 //---------------------------------------------------------

@@ -147,6 +147,9 @@ class Spanner : public Element {
       virtual ElementType type() const = 0;
       virtual void setScore(Score* s) override;
 
+      void writeSpanner(XmlWriter& xml, const Element* current, int track, int tick = -1) const;
+      static void readSpanner(XmlReader& e, Element* current, int track);
+
       virtual int tick() const override { return _tick;          }
       int tick2() const                 { return _tick + _ticks; }
       int ticks() const                 { return _ticks;         }

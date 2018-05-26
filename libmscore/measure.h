@@ -101,6 +101,7 @@ class Measure final : public MeasureBase {
 
       void read(XmlReader&, int idx);
       void read(XmlReader& d) { read(d, 0); }
+      virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
       void read300old(XmlReader&, int idx);
       void read300old(XmlReader& d) { read300old(d, 0); }
       virtual void write(XmlWriter& xml) const override { Element::write(xml); }
