@@ -46,7 +46,7 @@ enum class OffMode : char {
 
 struct Zone {
       Sample* sample = 0;
-      unsigned long offset  = 0; //[0, 4294967295]
+      long long offset  = 0; //[0, 4294967295]
       int  seq     = 0;
       int seqLen   = 0;
       int seqPos   = 0;
@@ -85,7 +85,7 @@ struct Zone {
       OffMode offMode = OffMode::FAST;
       int group = 0;
       int offBy = 0;
-      int loopStart, loopEnd;
+      long long loopStart, loopEnd;
       double loRand = 0.0;
       double hiRand = 1.0;
 

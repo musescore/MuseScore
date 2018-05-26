@@ -33,10 +33,10 @@ class AudioFile {
 
       bool open(const QByteArray&);
       const char* error() const     { return sf_strerror(sf); }
-      int read(short*, int);
+      sf_count_t readData(short* data, sf_count_t frames);
 
       int channels() const   { return info.channels; }
-      int frames() const     { return info.frames; }
+      sf_count_t frames() const     { return info.frames; }
       int samplerate() const { return info.samplerate; }
 
       sf_count_t getFileLen() const { return buf.size(); }

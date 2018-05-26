@@ -68,10 +68,10 @@ bool AudioFile::open(const QByteArray& b)
       }
 
 //---------------------------------------------------------
-//   read
+//   readData
 //---------------------------------------------------------
 
-int AudioFile::read(short* data, int frames)
+sf_count_t AudioFile::readData(short* data, sf_count_t frames)
       {
       return sf_readf_short(sf, data, frames);
       }

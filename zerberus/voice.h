@@ -121,12 +121,12 @@ class Voice {
       int audioChan;
 
       short* data;
-      int eidx;
+      long long eidx;
       LoopMode _loopMode;
       OffMode _offMode;
       int _offBy;
-      int _loopStart;
-      int _loopEnd;
+      long long _loopStart;
+      long long _loopEnd;
       bool _looping;
       int _samplesSinceStart;
 
@@ -183,7 +183,7 @@ class Voice {
       void updateEnvelopes();
       void process(int frames, float*);
       void updateLoop();
-      short getData(int pos);
+      short getData(long long pos);
 
       Channel* channel() const    { return _channel; }
       int key() const             { return _key;     }
