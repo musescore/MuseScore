@@ -437,10 +437,6 @@ static inline Box* toBox(ScoreElement* e) {
      Q_ASSERT(e == 0 || e->isBox());
       return (Box*)e;
       }
-static inline Spanner* toSpanner(ScoreElement* e) {
-      Q_ASSERT(e == 0 || e->isSpanner());
-      return (Spanner*)e;
-      }
 static inline SpannerSegment* toSpannerSegment(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isSpannerSegment());
       return (SpannerSegment*)e;
@@ -483,6 +479,7 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(VBox)
       CONVERT(TBox)
       CONVERT(FBox)
+      CONVERT(Spanner)
       CONVERT(Tie)
       CONVERT(Slur)
       CONVERT(Glissando)

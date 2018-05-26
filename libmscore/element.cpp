@@ -77,6 +77,7 @@
 #include "textframe.h"
 #include "text.h"
 #include "textline.h"
+#include "tie.h"
 #include "timesig.h"
 #include "tremolobar.h"
 #include "tremolo.h"
@@ -887,6 +888,7 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::FIGURED_BASS:      return new FiguredBass(score);
             case ElementType::STEM:              return new Stem(score);
             case ElementType::SLUR:              return new Slur(score);
+            case ElementType::TIE:               return new Tie(score);
             case ElementType::FINGERING:          return new Fingering(score);
             case ElementType::HBOX:              return new HBox(score);
             case ElementType::VBOX:              return new VBox(score);
@@ -905,7 +907,6 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::SLUR_SEGMENT:
             case ElementType::TIE_SEGMENT:
             case ElementType::STEM_SLASH:
-            case ElementType::TIE:
             case ElementType::PAGE:
             case ElementType::BEAM:
             case ElementType::HOOK:
