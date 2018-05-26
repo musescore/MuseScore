@@ -278,6 +278,7 @@ bool Album::read(const QString& p)
 
 void Album::load(XmlReader& e)
       {
+      QDir albumDir = QDir(QFileInfo(QFile(_path)).path());
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Score") {
@@ -287,7 +288,7 @@ void Album::load(XmlReader& e)
                         if (tag == "name")
                               i->name = e.readElementText();
                         else if (tag == "path")
-                              i->path = e.readElementText();
+                              i->path = albumDir.filePath(e.readElementText());
                         else
                               e.unknown();
                         }
