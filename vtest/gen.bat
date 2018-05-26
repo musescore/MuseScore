@@ -24,7 +24,7 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  chord-layout-6,chord-layout-7,chord-layout-8,chord-layout-9,chord-layout-10, ^
  chord-layout-11,chord-layout-12,chord-layout-13,chord-layout-14,chord-layout-15,chord-layout-16,cross-1,cross-2, ^
  accidental-1,accidental-2,accidental-3,accidental-4,accidental-5, ^
- accidental-6,accidental-7,accidental-8,accidental-9,accidental-10, ^
+ accidental-6,accidental-7,accidental-8,accidental-9,accidental-10, accidental-mirror ^
  tie-1,tie-2,tie-3,grace-1,grace-2,grace-3,grace-4,tuplets-1,tuplets-2,breath-1, ^
  harmony-1,harmony-2,harmony-3,harmony-4,harmony-5,harmony-6,harmony-7, ^
  harmony-8,harmony-9,harmony-10,harmony-11,harmony-12, ^
