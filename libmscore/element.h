@@ -30,6 +30,7 @@ namespace Ms {
 #define VOICES 4
 #endif
 
+class ConnectorInfoReader;
 class XmlReader;
 class XmlWriter;
 enum class SymId;

@@ -24,6 +24,24 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   ~XmlReader
+//---------------------------------------------------------
+
+XmlReader::~XmlReader()
+      {
+      if (!_connectors.isEmpty() || !_pendingConnectors.isEmpty()) {
+            qDebug("XmlReader::~XmlReader: there are unpaired connectors left");
+            for (ConnectorInfoReader& c : _connectors) {
+                  Element* conn = c.releaseConnector();
+                  if (conn && !conn->isTuplet()) // tuplets are added to score even when not finished
+                        delete conn;
+                  }
+            for (ConnectorInfoReader& c : _pendingConnectors)
+                  delete c.releaseConnector();
+            }
+      }
+
+//---------------------------------------------------------
 //   intAttribute
 //---------------------------------------------------------
 
@@ -536,6 +554,122 @@ Tid XmlReader::lookupUserTextStyle(const QString& name)
                   return i.ss;
             }
       return Tid::TEXT_STYLES;       // not found
+      }
+
+//---------------------------------------------------------
+//   addConnectorInfo
+//---------------------------------------------------------
+
+void XmlReader::addConnectorInfo(const ConnectorInfoReader& c)
+      {
+      _connectors.push_back(c);
+      ConnectorInfoReader& c1 = _connectors.back();
+      c1.update();
+      for (ConnectorInfoReader& c2 : _connectors) {
+            if (c2.connect(&c1)) {
+                  if (c2.finished()) {
+                        c2.addToScore(pasteMode());
+                        removeConnector(c2);
+                        }
+                  break;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   removeConnectorInfo
+//---------------------------------------------------------
+
+void XmlReader::removeConnectorInfo(const ConnectorInfoReader& c)
+      {
+      _connectors.removeOne(c);
+      }
+
+//---------------------------------------------------------
+//   removeConnector
+//---------------------------------------------------------
+
+void XmlReader::removeConnector(const ConnectorInfoReader& cref)
+      {
+      const ConnectorInfoReader* c = &cref;
+      while (c->prev())
+            c = c->prev();
+      while (c) {
+            removeConnectorInfo(*c);
+            c = c->next();
+            }
+      }
+
+//---------------------------------------------------------
+//   addConnectorInfoLater
+//---------------------------------------------------------
+
+void XmlReader::addConnectorInfoLater(const ConnectorInfoReader& c)
+      {
+      _pendingConnectors.push_back(c);
+      }
+
+//---------------------------------------------------------
+//   checkConnectors
+//---------------------------------------------------------
+
+void XmlReader::checkConnectors()
+      {
+      for (ConnectorInfoReader& c : _pendingConnectors) {
+            addConnectorInfo(c);
+            }
+      _pendingConnectors.clear();
+      }
+
+//---------------------------------------------------------
+//   distanceSort
+//---------------------------------------------------------
+
+static bool distanceSort(const QPair<int, QPair<ConnectorInfoReader*, ConnectorInfoReader*>>& p1, const QPair<int, QPair<ConnectorInfoReader*, ConnectorInfoReader*>>& p2)
+      {
+      return p1.first < p2.first;
+      }
+
+//---------------------------------------------------------
+//   reconnectBrokenConnectors
+//---------------------------------------------------------
+
+void XmlReader::reconnectBrokenConnectors()
+      {
+      if (_connectors.isEmpty())
+            return;
+      qDebug("Reconnecting broken connectors (%d nodes)", _connectors.size());
+      QList<QPair<int, QPair<ConnectorInfoReader*, ConnectorInfoReader*>>> brokenPairs;
+      for (int i = 1; i < _connectors.size(); ++i) {
+            for (int j = 0; j < i; ++j) {
+                  ConnectorInfoReader& c1 = _connectors[i];
+                  ConnectorInfoReader& c2 = _connectors[j];
+                  int d = c1.connectionDistance(c2);
+                  if (d >= 0)
+                        brokenPairs.append(qMakePair(d, qMakePair(&c1, &c2)));
+                  else
+                        brokenPairs.append(qMakePair(-d, qMakePair(&c2, &c1)));
+                  }
+            }
+      std::sort(brokenPairs.begin(), brokenPairs.end(), distanceSort);
+      for (auto& distPair : brokenPairs) {
+            if (distPair.first == INT_MAX)
+                  continue;
+            auto& pair = distPair.second;
+            if (pair.first->next() || pair.second->prev())
+                  continue;
+            pair.first->forceConnect(pair.second);
+            }
+      QSet<ConnectorInfoReader*> reconnected;
+      for (ConnectorInfoReader& c : _connectors) {
+            if (c.finished())
+                  reconnected.insert(static_cast<ConnectorInfoReader*>(c.start()));
+            }
+      for (ConnectorInfoReader* cptr : reconnected) {
+            cptr->addToScore(pasteMode());
+            removeConnector(*cptr);
+            }
+      qDebug("reconnected %d broken connectors", reconnected.count());
       }
 }
 
