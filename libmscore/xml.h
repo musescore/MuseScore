@@ -13,6 +13,7 @@
 #ifndef __XML_H__
 #define __XML_H__
 
+#include "connector.h"
 #include "stafftype.h"
 #include "interval.h"
 #include "element.h"
@@ -70,6 +71,9 @@ class XmlReader : public QXmlStreamReader {
       QList<std::pair<int,Spanner*>> _spanner;
       QList<StaffType> _staffTypes;
 
+      QList<ConnectorInfoReader> _connectors;
+      QList<ConnectorInfoReader> _pendingConnectors; // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
+
       void htmlToString(int level, QString*);
       Interval _transpose;
       QMap<int, LinkedElements*> _elinks;
@@ -82,6 +86,8 @@ class XmlReader : public QXmlStreamReader {
       XmlReader(const QByteArray& d, const QString& st = QString()) : QXmlStreamReader(d), docName(st)  {}
       XmlReader(QIODevice* d, const QString& st = QString()) : QXmlStreamReader(d), docName(st) {}
       XmlReader(const QString& d, const QString& st = QString()) : QXmlStreamReader(d), docName(st) {}
+      XmlReader(const XmlReader&) = delete;
+      ~XmlReader();
 
       bool hasAccidental;                     // used for userAccidental backward compatibility
       void unknown();
@@ -147,10 +153,19 @@ class XmlReader : public QXmlStreamReader {
       void removeSpanner(const Spanner*);
       void addSpanner(int id, Spanner*);
       Spanner* findSpanner(int id);
+
       int spannerId(const Spanner*);      // returns spanner id, allocates new one if none exists
 
       void addSpannerValues(const SpannerValues& sv) { _spannerValues.append(sv); }
       const SpannerValues* spannerValues(int id) const;
+
+      void addConnectorInfo(const ConnectorInfoReader&);
+      void addConnectorInfoLater(const ConnectorInfoReader&); // add connector info to be checked after calling checkConnectors()
+      void checkConnectors();
+      void reconnectBrokenConnectors();
+      void removeConnectorInfo(const ConnectorInfoReader&);
+      void removeConnector(const ConnectorInfoReader&); // Removes the whole ConnectorInfo chain from the connectors list.
+
       QList<StaffType>& staffType()     { return _staffTypes; }
       Interval transpose() const        { return _transpose; }
       void setTransposeChromatic(int v) { _transpose.chromatic = v; }

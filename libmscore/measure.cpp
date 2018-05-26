@@ -2291,6 +2291,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   e.unknown();
             }
       e.checkTuplets();
+      e.checkConnectors();
       e.setCurrentMeasure(nullptr);
       }
 

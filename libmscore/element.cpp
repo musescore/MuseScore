@@ -30,6 +30,7 @@
 #include "chordline.h"
 #include "chordrest.h"
 #include "clef.h"
+#include "connector.h"
 #include "dynamic.h"
 #include "figuredbass.h"
 #include "fingering.h"

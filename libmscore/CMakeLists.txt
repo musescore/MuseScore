@@ -84,7 +84,7 @@ add_library (
       bracketItem.cpp
       lyricsline.cpp
       layoutlinear.cpp
-      location.cpp
+      connector.cpp location.cpp
       )
 
 ##

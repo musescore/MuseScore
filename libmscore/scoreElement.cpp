@@ -435,6 +435,16 @@ void ScoreElement::reset()
       }
 
 //---------------------------------------------------------
+//   readAddConnector
+//---------------------------------------------------------
+
+void ScoreElement::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
+      {
+      Q_UNUSED(pasteMode);
+      qDebug("Cannot add connector %s to %s", info->connector()->name(), name());
+      }
+
+//---------------------------------------------------------
 //   linkTo
 //    link this to element
 //---------------------------------------------------------
