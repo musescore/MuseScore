@@ -421,6 +421,49 @@ int XmlReader::spannerId(const Spanner* s)
       return -1;
       }
 
+//---------------------------------------------------------
+//   addConnectorInfo
+//---------------------------------------------------------
+
+void XmlReader::addConnectorInfo(const ConnectorInfoReader& c)
+      {
+      _connectors.push_back(c);
+      ConnectorInfoReader& c1 = _connectors.back();
+      for (ConnectorInfoReader& c2 : _connectors) {
+            if (c2.connect(&c1)) {
+                  if (c2.finished()) {
+                        c2.addToScore(pasteMode());
+                        removeConnector(c2);
+                        }
+                  break;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   removeConnectorInfo
+//---------------------------------------------------------
+
+void XmlReader::removeConnectorInfo(const ConnectorInfoReader& c)
+      {
+      _connectors.removeOne(c);
+      }
+
+//---------------------------------------------------------
+//   removeConnector
+//---------------------------------------------------------
+
+void XmlReader::removeConnector(const ConnectorInfoReader& cref)
+      {
+      const ConnectorInfoReader* c = &cref;
+      while (c->prev())
+            c = c->prev();
+      while (c) {
+            removeConnectorInfo(*c);
+            c = c->next();
+            }
+      }
+
 }
 
 

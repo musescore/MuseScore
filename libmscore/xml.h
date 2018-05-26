@@ -13,6 +13,7 @@
 #ifndef __XML_H__
 #define __XML_H__
 
+#include "connector.h"
 #include "stafftype.h"
 #include "interval.h"
 #include "element.h"
@@ -58,6 +59,8 @@ class XmlReader : public QXmlStreamReader {
       QList<SpannerValues> _spannerValues;
       QList<std::pair<int,Spanner*>> _spanner;
       QList<StaffType> _staffTypes;
+
+      QList<ConnectorInfoReader> _connectors;
 
       void htmlToString(int level, QString*);
       Interval _transpose;
@@ -123,10 +126,16 @@ class XmlReader : public QXmlStreamReader {
       void removeSpanner(const Spanner*);
       void addSpanner(int id, Spanner*);
       Spanner* findSpanner(int id);
+
       int spannerId(const Spanner*);      // returns spanner id, allocates new one if none exists
 
       void addSpannerValues(const SpannerValues& sv) { _spannerValues.append(sv); }
       const SpannerValues* spannerValues(int id) const;
+
+      void addConnectorInfo(const ConnectorInfoReader&);
+      void removeConnectorInfo(const ConnectorInfoReader&);
+      void removeConnector(const ConnectorInfoReader&); // Removes the whole ConnectorInfo chain from the connectors list.
+
       QList<StaffType>& staffType()     { return _staffTypes; }
       Interval transpose() const        { return _transpose; }
       void setTransposeChromatic(int v) { _transpose.chromatic = v; }

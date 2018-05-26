@@ -30,6 +30,7 @@
 #include "chordline.h"
 #include "chordrest.h"
 #include "clef.h"
+#include "connector.h"
 #include "dynamic.h"
 #include "figuredbass.h"
 #include "fingering.h"
@@ -592,6 +593,16 @@ void Element::read(XmlReader& e)
             if (!readProperties(e))
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   readAddConnector
+//---------------------------------------------------------
+
+void Element::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
+      {
+      Q_UNUSED(pasteMode);
+      qDebug("Cannot add connector %s to %s", info->connector()->name(), name());
       }
 
 //---------------------------------------------------------

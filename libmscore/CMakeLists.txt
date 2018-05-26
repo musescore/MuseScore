@@ -73,6 +73,7 @@ add_library (
       read300.cpp stafftypelist.cpp stafftypechange.cpp
       bracketItem.cpp
       read300old.cpp write300old.cpp
+      connector.cpp
       )
 
 ##
