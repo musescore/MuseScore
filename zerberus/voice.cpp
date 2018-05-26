@@ -108,7 +108,7 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
       audioChan = s->channel();
       data      = s->data() + z->offset * audioChan;
       //avoid processing sample if offset is bigger than sample length
-      eidx      = std::max((s->frames() - long(z->offset) - 1) * audioChan, long(0));
+      eidx      = std::max((s->frames() - z->offset - 1) * audioChan, 0ll);
       _loopMode = z->loopMode;
       _loopStart = z->loopStart;
       _loopEnd   = z->loopEnd;
@@ -335,7 +335,7 @@ void Voice::process(int frames, float* p)
 
                   updateLoop();
 
-                  int idx = phase.index();
+                  long long idx = phase.index();
 
                   if (idx >= eidx) {
                         off();
@@ -383,7 +383,7 @@ void Voice::process(int frames, float* p)
 
                   updateLoop();
 
-                  int idx = phase.index() * 2;
+                  long long idx = phase.index() * 2;
                   if (idx >= eidx) {
                         off();
                         // printf("end of sample\n");
@@ -447,7 +447,7 @@ void Voice::process(int frames, float* p)
 
 void Voice::updateLoop()
       {
-      int idx = phase.index();
+      long long idx = phase.index();
       int loopOffset = (audioChan * 3) - 1; // offset due to interpolation
       bool validLoop = _loopEnd > 0 && _loopStart >= 0 && (_loopEnd <= (eidx/audioChan));
       bool shallLoop = loopMode() == LoopMode::CONTINUOUS || (loopMode() == LoopMode::SUSTAIN && (_state < VoiceState::STOP));
@@ -463,15 +463,15 @@ void Voice::updateLoop()
             phase.setIndex(_loopStart+(idx-_loopEnd-1));
       }
 
-short Voice::getData(int pos) {
+short Voice::getData(long long pos) {
       if (pos < 0 && !_looping)
             return 0;
 
       if (!_looping)
             return data[pos];
 
-      int loopEnd = _loopEnd * audioChan;
-      int loopStart = _loopStart * audioChan;
+      long long loopEnd = _loopEnd * audioChan;
+      long long loopStart = _loopStart * audioChan;
 
       if (pos < loopStart)
             return data[loopEnd + (pos - loopStart) + audioChan];
