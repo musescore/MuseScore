@@ -67,7 +67,7 @@ Sample* ZInstrument::readSample(const QString& s, MQZipReader* uz)
             }
 
       int channel = a.channels();
-      int frames  = a.frames();
+      sf_count_t frames  = a.frames();
       int sr      = a.samplerate();
 
       short* data = new short[(frames + 3) * channel];
@@ -76,7 +76,7 @@ Sample* ZInstrument::readSample(const QString& s, MQZipReader* uz)
       sa->setLoopEnd(a.loopEnd());
       sa->setLoopMode(a.loopMode());
 
-      if (frames != a.read(data + channel, frames)) {
+      if (frames != a.readData(data + channel, frames)) {
             qDebug("Sample read failed: %s\n", a.error());
             delete sa;
             sa = 0;
