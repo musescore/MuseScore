@@ -16,11 +16,18 @@
 #include "bend.h"
 #include "config.h"
 #include "fingering.h"
+#include "glissando.h"
+#include "hairpin.h"
 #include "hook.h"
+#include "letring.h"
 #include "lyrics.h"
+#include "palmmute.h"
+#include "pedal.h"
 #include "score.h"
 #include "stem.h"
 #include "stemslash.h"
+#include "trill.h"
+#include "vibrato.h"
 #include "xml.h"
 #include "element.h"
 #include "measure.h"
@@ -706,6 +713,198 @@ void DurationElement::writeProperties300old(XmlWriter& xml) const
       Element::writeProperties(xml);
       if (tuplet())
             xml.tag("Tuplet", tuplet()->id());
+      }
+
+//---------------------------------------------------------
+//   Glissando::write300old
+//---------------------------------------------------------
+
+void Glissando::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      if (_showText && !_text.isEmpty())
+            xml.tag("text", _text);
+
+      for (auto id : { Pid::GLISS_TYPE, Pid::PLAY, Pid::GLISSANDO_STYLE } )
+            writeProperty(xml, id);
+
+      SLine::writeProperties(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Hairpin::write300old
+//---------------------------------------------------------
+
+void Hairpin::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      int id = xml.spannerId(this);
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
+      xml.tag("subtype", int(_hairpinType));
+      writeProperty(xml, Pid::VELO_CHANGE);
+      writeProperty(xml, Pid::HAIRPIN_CIRCLEDTIP);
+      writeProperty(xml, Pid::DYNAMIC_RANGE);
+      writeProperty(xml, Pid::BEGIN_TEXT);
+      writeProperty(xml, Pid::CONTINUE_TEXT);
+
+      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
+            writeProperty(xml, spp->pid);
+
+      Element::writeProperties(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   LetRing::write300old
+//---------------------------------------------------------
+
+void LetRing::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+
+      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
+            writeProperty(xml, spp->pid);
+
+      Element::writeProperties(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   SLine::write300old
+//---------------------------------------------------------
+
+void SLine::write300old(XmlWriter& xml) const
+      {
+      int id = xml.spannerId(this);
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
+      SLine::writeProperties(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   PalmMute::write300old
+//---------------------------------------------------------
+
+void PalmMute::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+
+      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
+            writeProperty(xml, spp->pid);
+
+      Element::writeProperties(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Pedal::write300old
+//---------------------------------------------------------
+
+void Pedal::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      int id = xml.spannerId(this);
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
+
+      for (auto i : {
+         Pid::END_HOOK_TYPE,
+         Pid::BEGIN_TEXT,
+         Pid::END_TEXT,
+         Pid::LINE_WIDTH,
+         Pid::LINE_STYLE,
+         Pid::BEGIN_HOOK_TYPE
+         }) {
+            writeProperty(xml, i);
+            }
+      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
+            writeProperty(xml, spp->pid);
+
+      Element::writeProperties(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   TextLineBase::write300old
+//---------------------------------------------------------
+
+void TextLineBase::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      writeProperties300old(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Tie::write300old
+//---------------------------------------------------------
+
+void Tie::write300old(XmlWriter& xml) const
+      {
+      xml.stag(QString("Tie id=\"%1\"").arg(xml.spannerId(this)));
+      SlurTie::writeProperties(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Trill::write300old
+//---------------------------------------------------------
+
+void Trill::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      xml.tag("subtype", trillTypeName());
+      writeProperty(xml, Pid::PLAY);
+      writeProperty(xml, Pid::ORNAMENT_STYLE);
+      SLine::writeProperties(xml);
+      if (_accidental)
+            _accidental->write300old(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Vibrato::write
+//---------------------------------------------------------
+
+void Vibrato::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      xml.tag("subtype", vibratoTypeName());
+      writeProperty(xml, Pid::PLAY);
+      SLine::writeProperties(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Volta::write300old
+//---------------------------------------------------------
+
+void Volta::write300old(XmlWriter& xml) const
+      {
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      TextLineBase::writeProperties(xml);
+      QString s;
+      for (int i : _endings) {
+            if (!s.isEmpty())
+                  s += ", ";
+            s += QString("%1").arg(i);
+            }
+      xml.tag("endings", s);
+      xml.etag();
       }
 
 }

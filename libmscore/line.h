@@ -93,7 +93,9 @@ class SLine : public Spanner {
       virtual const QRectF& bbox() const override;
 
       virtual void write(XmlWriter&) const override;
+      virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
+      virtual void read300old(XmlReader&) override;
 
       bool diagonal() const               { return _diagonal; }
       void setDiagonal(bool v)            { _diagonal = v;    }

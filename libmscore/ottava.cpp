@@ -203,6 +203,25 @@ void Ottava::write(XmlWriter& xml) const
       }
 
 //---------------------------------------------------------
+//   Ottava::write300old
+//---------------------------------------------------------
+
+void Ottava::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+//      writeProperty(xml, Pid::NUMBERS_ONLY);
+      xml.tag("subtype", ottavaDefault[int(ottavaType())].name);
+
+      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
+            writeProperty(xml, spp->pid);
+
+      Element::writeProperties(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
@@ -216,10 +235,59 @@ void Ottava::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   Ottava::read300old
+//---------------------------------------------------------
+
+void Ottava::read300old(XmlReader& e)
+      {
+      qDeleteAll(spannerSegments());
+      spannerSegments().clear();
+      e.addSpanner(e.intAttribute("id", -1), this);
+      while (e.readNextStartElement())
+            readProperties300old(e);
+      }
+
+//---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------
 
 bool Ottava::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "subtype") {
+            QString s = e.readElementText();
+            bool ok;
+            int idx = s.toInt(&ok);
+            if (!ok) {
+                  idx = int(OttavaType::OTTAVA_8VA);
+                  for (unsigned i = 0; i < sizeof(ottavaDefault)/sizeof(*ottavaDefault); ++i) {
+                        if (s == ottavaDefault[i].name) {
+                              idx = i;
+                              break;
+                              }
+                        }
+                  }
+            else if (score()->mscVersion() <= 114) {
+                  //subtype are now in a different order...
+                  if (idx == 1)
+                        idx = 2;
+                  else if (idx == 2)
+                        idx = 1;
+                  }
+            setOttavaType(OttavaType(idx));
+            }
+      else if (!TextLineBase::readProperties(e)) {
+            e.unknown();
+            return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   Ottava::readProperties300old
+//---------------------------------------------------------
+
+bool Ottava::readProperties300old(XmlReader& e)
       {
       const QStringRef& tag(e.name());
       if (tag == "subtype") {

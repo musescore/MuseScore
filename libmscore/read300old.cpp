@@ -18,14 +18,22 @@
 #include "chordline.h"
 #include "fingering.h"
 #include "glissando.h"
+#include "hairpin.h"
 #include "hook.h"
 #include "image.h"
+#include "letring.h"
 #include "measure.h"
 #include "notedot.h"
+#include "palmmute.h"
+#include "pedal.h"
 #include "rest.h"
+#include "slur.h"
 #include "textline.h"
 #include "tie.h"
+#include "trill.h"
 #include "utils.h"
+#include "vibrato.h"
+#include "volta.h"
 #include "stem.h"
 #include "stemslash.h"
 #include "timesig.h"
@@ -51,6 +59,271 @@
 
 namespace Ms {
 
+//---------------------------------------------------------
+//   Glissando::read300old
+//---------------------------------------------------------
+
+void Glissando::read300old(XmlReader& e)
+      {
+      qDeleteAll(spannerSegments());
+      spannerSegments().clear();
+      e.addSpanner(e.intAttribute("id", -1), this);
+
+      _showText = false;
+      while (e.readNextStartElement()) {
+            const QStringRef& tag = e.name();
+            if (tag == "text") {
+                  _showText = true;
+                  _text = e.readElementText();
+                  }
+            else if (tag == "subtype")
+                  _glissandoType = GlissandoType(e.readInt());
+            else if (tag == "glissandoStyle")
+                  setProperty(Pid::GLISSANDO_STYLE, Ms::getProperty(Pid::GLISSANDO_STYLE, e));
+            else if (tag == "play")
+                  setPlayGlissando(e.readBool());
+            else if (readStyledProperty(e, tag))
+                  ;
+            else if (!SLine::readProperties(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   HairPin::read300old
+//---------------------------------------------------------
+
+void Hairpin::read300old(XmlReader& e)
+      {
+      foreach(SpannerSegment* seg, spannerSegments())
+            delete seg;
+      spannerSegments().clear();
+
+      int id = e.intAttribute("id", -1);
+      e.addSpanner(id, this);
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "subtype")
+                  setHairpinType(HairpinType(e.readInt()));
+            else if (readStyledProperty(e, tag))
+                  ;
+            else if (tag == "hairpinCircledTip")
+                  _hairpinCircledTip = e.readInt();
+            else if (tag == "veloChange")
+                  _veloChange = e.readInt();
+            else if (tag == "dynType")
+                  _dynRange = Dynamic::Range(e.readInt());
+            else if (tag == "useTextLine") {      // obsolete
+                  e.readInt();
+                  if (hairpinType() == HairpinType::CRESC_HAIRPIN)
+                        setHairpinType(HairpinType::CRESC_LINE);
+                  else if (hairpinType() == HairpinType::DECRESC_HAIRPIN)
+                        setHairpinType(HairpinType::DECRESC_LINE);
+                  }
+            else if (!TextLineBase::readProperties(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   LetRing::read300old
+//---------------------------------------------------------
+
+void LetRing::read300old(XmlReader& e)
+      {
+      int id = e.intAttribute("id", -1);
+      e.addSpanner(id, this);
+      while (e.readNextStartElement()) {
+            if (!TextLineBase::readProperties(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   SLine::read300old
+//---------------------------------------------------------
+
+void SLine::read300old(XmlReader& e)
+      {
+      foreach(SpannerSegment* seg, spannerSegments())
+            delete seg;
+      spannerSegments().clear();
+      e.addSpanner(e.intAttribute("id", -1), this);
+
+      while (e.readNextStartElement()) {
+            if (!SLine::readProperties(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   PalmMute::read300old
+//---------------------------------------------------------
+
+void PalmMute::read300old(XmlReader& e)
+      {
+      int id = e.intAttribute("id", -1);
+      e.addSpanner(id, this);
+      while (e.readNextStartElement()) {
+            if (!TextLineBase::readProperties(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   Pedal::read300old
+//---------------------------------------------------------
+
+void Pedal::read300old(XmlReader& e)
+      {
+      int id = e.intAttribute("id", -1);
+      e.addSpanner(id, this);
+      while (e.readNextStartElement()) {
+            if (!TextLineBase::readProperties(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   Slur::read300old
+//---------------------------------------------------------
+
+void Slur::read300old(XmlReader& e)
+      {
+      setTrack(e.track());      // set staff
+      e.addSpanner(e.intAttribute("id"), this);
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "track2")
+                  setTrack2(e.readInt());
+            else if (tag == "startTrack")       // obsolete
+                  setTrack(e.readInt());
+            else if (tag == "endTrack")         // obsolete
+                  e.readInt();
+            else if (!SlurTie::readProperties(e))
+                  e.unknown();
+            }
+      if (track2() == -1)
+            setTrack2(track());
+      }
+
+//---------------------------------------------------------
+//   TextLineBase::read300old
+//---------------------------------------------------------
+
+void TextLineBase::read300old(XmlReader& e)
+      {
+      qDeleteAll(spannerSegments());
+      spannerSegments().clear();
+      e.addSpanner(e.intAttribute("id", -1), this);
+
+      while (e.readNextStartElement()) {
+            if (!readProperties300old(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   Tie::read300old
+//---------------------------------------------------------
+
+void Tie::read300old(XmlReader& e)
+      {
+      e.addSpanner(e.intAttribute("id"), this);
+      while (e.readNextStartElement()) {
+            if (SlurTie::readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      if (score()->mscVersion() <= 114 && spannerSegments().size() == 1) {
+            // ignore manual adjustments to single-segment ties in older scores
+            TieSegment* ss = frontSegment();
+            QPointF zeroP;
+            ss->ups(Grip::START).off     = zeroP;
+            ss->ups(Grip::BEZIER1).off   = zeroP;
+            ss->ups(Grip::BEZIER2).off   = zeroP;
+            ss->ups(Grip::END).off       = zeroP;
+            ss->setUserOff(zeroP);
+            ss->setUserOff2(zeroP);
+            }
+      }
+
+//---------------------------------------------------------
+//   Trill::read300old
+//---------------------------------------------------------
+
+void Trill::read300old(XmlReader& e)
+      {
+      qDeleteAll(spannerSegments());
+      spannerSegments().clear();
+
+      e.addSpanner(e.intAttribute("id", -1), this);
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "subtype")
+                  setTrillType(e.readElementText());
+            else if (tag == "Accidental") {
+                  _accidental = new Accidental(score());
+                  _accidental->read300old(e);
+                  _accidental->setParent(this);
+                  }
+            else if ( tag == "ornamentStyle")
+                  setProperty(Pid::ORNAMENT_STYLE, Ms::getProperty(Pid::ORNAMENT_STYLE, e));
+            else if ( tag == "play")
+                  setPlayArticulation(e.readBool());
+            else if (!SLine::readProperties(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   Vibrato::read300old
+//---------------------------------------------------------
+
+void Vibrato::read300old(XmlReader& e)
+      {
+      qDeleteAll(spannerSegments());
+      spannerSegments().clear();
+
+      e.addSpanner(e.intAttribute("id", -1), this);
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "subtype")
+                  setVibratoType(e.readElementText());
+            else if ( tag == "play")
+                  setPlayArticulation(e.readBool());
+            else if (!SLine::readProperties(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   Volta::read300old
+//---------------------------------------------------------
+
+void Volta::read300old(XmlReader& e)
+      {
+      qDeleteAll(spannerSegments());
+      spannerSegments().clear();
+
+      e.addSpanner(e.intAttribute("id", -1), this);
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "endings") {
+                  QString s = e.readElementText();
+                  QStringList sl = s.split(",", QString::SkipEmptyParts);
+                  _endings.clear();
+                  for (const QString& l : sl) {
+                        int i = l.simplified().toInt();
+                        _endings.append(i);
+                        }
+                  }
+            else if (!TextLineBase::readProperties(e))
+                  e.unknown();
+            }
+      }
 
 //---------------------------------------------------------
 //   Note::read300old

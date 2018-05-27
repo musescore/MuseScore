@@ -90,8 +90,11 @@ class Ottava final : public TextLineBase {
       int pitchShift() const                    { return _pitchShift; }
 
       virtual void write(XmlWriter& xml) const override;
+      virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader& de) override;
+      virtual void read300old(XmlReader&) override;
       bool readProperties(XmlReader& e);
+      bool readProperties300old(XmlReader& e);
 
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;

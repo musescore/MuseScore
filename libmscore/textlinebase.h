@@ -113,7 +113,9 @@ class TextLineBase : public SLine {
       TextLineBase(Score* s, ElementFlags = ElementFlag::NOTHING);
 
       virtual void write(XmlWriter& xml) const override;
+      virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
+      virtual void read300old(XmlReader&) override;
 
       virtual void writeProperties(XmlWriter& xml) const override;
       virtual bool readProperties(XmlReader& node) override;
