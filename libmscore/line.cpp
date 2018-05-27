@@ -1142,8 +1142,7 @@ const QRectF& SLine::bbox() const
 
 void SLine::write(XmlWriter& xml) const
       {
-      int id = xml.spannerId(this);
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
+      xml.stag(name());
       SLine::writeProperties(xml);
       xml.etag();
       }
@@ -1157,7 +1156,6 @@ void SLine::read(XmlReader& e)
       foreach(SpannerSegment* seg, spannerSegments())
             delete seg;
       spannerSegments().clear();
-      e.addSpanner(e.intAttribute("id", -1), this);
 
       while (e.readNextStartElement()) {
             if (!SLine::readProperties(e))

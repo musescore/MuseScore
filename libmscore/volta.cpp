@@ -154,7 +154,6 @@ void Volta::read(XmlReader& e)
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
 
-      e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "endings") {
@@ -177,7 +176,7 @@ void Volta::read(XmlReader& e)
 
 void Volta::write(XmlWriter& xml) const
       {
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      xml.stag(name());
       TextLineBase::writeProperties(xml);
       QString s;
       for (int i : _endings) {

@@ -67,8 +67,6 @@ PalmMute::PalmMute(Score* s)
 
 void PalmMute::read(XmlReader& e)
       {
-      int id = e.intAttribute("id", -1);
-      e.addSpanner(id, this);
       while (e.readNextStartElement()) {
             if (!TextLineBase::readProperties(e))
                   e.unknown();
@@ -83,7 +81,7 @@ void PalmMute::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      xml.stag(name());
 
       for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
             writeProperty(xml, spp->pid);

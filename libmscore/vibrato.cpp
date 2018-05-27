@@ -252,7 +252,7 @@ void Vibrato::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      xml.stag(name());
       xml.tag("subtype", vibratoTypeName());
       writeProperty(xml, Pid::PLAY);
       SLine::writeProperties(xml);
@@ -268,7 +268,6 @@ void Vibrato::read(XmlReader& e)
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
 
-      e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
