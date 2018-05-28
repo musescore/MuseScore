@@ -169,6 +169,7 @@ void Drumset::clear()
             _drum[i].name = "";
             _drum[i].notehead = NoteHead::Group::HEAD_INVALID;
             _drum[i].shortcut = 0;
+            _drum[i].variants.clear();
             }
       }
 
