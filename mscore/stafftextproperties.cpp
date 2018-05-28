@@ -34,7 +34,7 @@ namespace Ms {
 // initChannelCombo
 //---------------------------------------------------------
 
-static void initChannelCombo(QComboBox* cb, StaffText* st)
+static void initChannelCombo(QComboBox* cb, StaffTextBase* st)
       {
       Part* part = st->staff()->part();
       int tick = static_cast<Segment*>(st->parent())->tick();
@@ -50,7 +50,7 @@ static void initChannelCombo(QComboBox* cb, StaffText* st)
 //   StaffTextProperties
 //---------------------------------------------------------
 
-StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
+StaffTextProperties::StaffTextProperties(const StaffTextBase* st, QWidget* parent)
    : QDialog(parent)
       {
       setObjectName("StaffTextProperties");
@@ -70,7 +70,7 @@ StaffTextProperties::StaffTextProperties(const StaffText* st, QWidget* parent)
             //if (!enableExperimental) tabWidget->removeTab(tabWidget->indexOf(tabMIDIAction));
             }
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      _staffText = static_cast<StaffText*>(st->clone());
+      _staffText = static_cast<StaffTextBase*>(st->clone());
 
       vb[0][0] = voice1_1;
       vb[0][1] = voice1_2;

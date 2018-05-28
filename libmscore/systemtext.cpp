@@ -19,13 +19,13 @@ namespace Ms {
 //---------------------------------------------------------
 
 SystemText::SystemText(Score* s)
-   : TextBase(s, ElementFlag::SYSTEM)
+   : StaffTextBase(s, ElementFlag::SYSTEM)
       {
       initSubStyle(SubStyleId::SYSTEM);
       }
 
-SystemText::SystemText(SubStyleId ss, Score* s)
-   : TextBase(s, ElementFlag::SYSTEM)
+SystemText::SystemText(SubStyleId ss, Score* s, ElementFlags flags)
+   : StaffTextBase(s, flags)
       {
       initSubStyle(ss);
       }
