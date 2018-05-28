@@ -29,10 +29,10 @@ struct ChannelActions {
       };
 
 //---------------------------------------------------------
-//   @@ StaffText
+//   StaffTextBase
 //---------------------------------------------------------
 
-class StaffText final : public TextBase  {
+class StaffTextBase : public TextBase  {
       QString _channelNames[4];
       QList<ChannelActions> _channelActions;
       SwingParameters _swingParameters;
@@ -41,10 +41,7 @@ class StaffText final : public TextBase  {
       bool _swing          { false };
 
    public:
-      StaffText(Score* = 0);
-      StaffText(SubStyleId, Score* = 0);
-      virtual StaffText* clone() const                    { return new StaffText(*this);    }
-      virtual ElementType type() const                    { return ElementType::STAFF_TEXT; }
+      StaffTextBase(Score* = 0, ElementFlags = ElementFlag::NOTHING);
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
@@ -69,6 +66,19 @@ class StaffText final : public TextBase  {
       bool setAeolusStops() const                         { return _setAeolusStops; }
       bool swing() const                                  { return _swing; }
       };
+
+//---------------------------------------------------------
+//   SystemText
+//---------------------------------------------------------
+
+class StaffText final : public StaffTextBase  {
+   public:
+      StaffText(Score* score);
+      StaffText(SubStyleId, Score* = 0);
+      virtual StaffText* clone() const override       { return new StaffText(*this); }
+      virtual ElementType type() const override       { return ElementType::STAFF_TEXT; }
+      };
+
 
 }     // namespace Ms
 #endif

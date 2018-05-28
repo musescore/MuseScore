@@ -400,8 +400,8 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                         }
                   else {
                         if (!editData.element->canvasBoundingRect().contains(editData.startMove)) {
-                              editData.element = e;
                               changeState(ViewState::NORMAL);
+                              editData.element = e;
                               mousePressEventNormal(ev);
                               }
                         else {

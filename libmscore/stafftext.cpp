@@ -20,20 +20,15 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   StaffText
+//   StaffTextBase
 //---------------------------------------------------------
 
-StaffText::StaffText(Score* s)
-   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
-      {
-      initSubStyle(SubStyleId::STAFF);
-      setSwingParameters(MScore::division / 2, 60);
-      }
+//   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
 
-StaffText::StaffText(SubStyleId ss, Score* s)
-   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
+StaffTextBase::StaffTextBase(Score* s, ElementFlags flags)
+   : TextBase(s, flags)
       {
-      initSubStyle(ss);
+//      initSubStyle(ss);
       setPlacement(Placement::ABOVE);     // default
       setSwingParameters(MScore::division / 2, 60);
       }
@@ -42,7 +37,7 @@ StaffText::StaffText(SubStyleId ss, Score* s)
 //   write
 //---------------------------------------------------------
 
-void StaffText::write(XmlWriter& xml) const
+void StaffTextBase::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
@@ -81,7 +76,7 @@ void StaffText::write(XmlWriter& xml) const
 //   read
 //---------------------------------------------------------
 
-void StaffText::read(XmlReader& e)
+void StaffTextBase::read(XmlReader& e)
       {
       for (int voice = 0; voice < VOICES; ++voice)
             _channelNames[voice].clear();
@@ -96,7 +91,7 @@ void StaffText::read(XmlReader& e)
 //   readProperties
 //---------------------------------------------------------
 
-bool StaffText::readProperties(XmlReader& e)
+bool StaffTextBase::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
@@ -164,7 +159,7 @@ bool StaffText::readProperties(XmlReader& e)
 //   clearAeolusStops
 //---------------------------------------------------------
 
-void StaffText::clearAeolusStops()
+void StaffTextBase::clearAeolusStops()
       {
       for (int i = 0; i < 4; ++i)
             aeolusStops[i] = 0;
@@ -174,7 +169,7 @@ void StaffText::clearAeolusStops()
 //   setAeolusStop
 //---------------------------------------------------------
 
-void StaffText::setAeolusStop(int group, int idx, bool val)
+void StaffTextBase::setAeolusStop(int group, int idx, bool val)
       {
       if (val)
             aeolusStops[group] |= (1 << idx);
@@ -186,7 +181,7 @@ void StaffText::setAeolusStop(int group, int idx, bool val)
 //   getAeolusStop
 //---------------------------------------------------------
 
-bool StaffText::getAeolusStop(int group, int idx) const
+bool StaffTextBase::getAeolusStop(int group, int idx) const
       {
       return aeolusStops[group] & (1 << idx);
       }
@@ -195,7 +190,7 @@ bool StaffText::getAeolusStop(int group, int idx) const
 //   layout
 //---------------------------------------------------------
 
-void StaffText::layout()
+void StaffTextBase::layout()
       {
       Staff* s = staff();
       qreal y = placeAbove() ? styleP(Sid::staffTextPosAbove) : styleP(Sid::staffTextPosBelow) + (s ? s->height() : 0.0);
@@ -208,10 +203,10 @@ void StaffText::layout()
 //   segment
 //---------------------------------------------------------
 
-Segment* StaffText::segment() const
+Segment* StaffTextBase::segment() const
       {
       if (!parent()->isSegment()) {
-            qDebug("StaffText parent %s\n", parent()->name());
+            qDebug("parent %s", parent()->name());
             return 0;
             }
       Segment* s = toSegment(parent());
@@ -222,7 +217,7 @@ Segment* StaffText::segment() const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant StaffText::propertyDefault(Pid id) const
+QVariant StaffTextBase::propertyDefault(Pid id) const
       {
       switch(id) {
             case Pid::SUB_STYLE:
@@ -236,5 +231,20 @@ QVariant StaffText::propertyDefault(Pid id) const
             }
       }
 
+//---------------------------------------------------------
+//   StaffText
+//---------------------------------------------------------
+
+StaffText::StaffText(Score* s)
+   : StaffTextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
+      {
+      initSubStyle(SubStyleId::STAFF);
+      }
+
+StaffText::StaffText(SubStyleId ss, Score* s)
+   : StaffTextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
+      {
+      initSubStyle(ss);
+      }
 }
 
