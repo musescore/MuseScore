@@ -130,6 +130,8 @@ class VibratoSegment;
 class PalmMute;
 class PalmMuteSegment;
 
+class StaffTextBase;
+
 enum class Pid : int;
 enum class PropertyFlags : char;
 enum class Sid : int;
@@ -387,6 +389,9 @@ class ScoreElement {
          || isSLine()
          ;
          }
+      bool isStaffTextBase() const {
+            return isStaffText() || isSystemText();
+            }
       };
 
 //---------------------------------------------------
@@ -460,6 +465,10 @@ static inline TextLineBase* toTextLineBase(ScoreElement* e) {
 static inline TextBase* toTextBase(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isTextBase());
       return (TextBase*)e;
+      }
+static inline StaffTextBase* toStaffTextBase(ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isStaffTextBase());
+      return (StaffTextBase*)e;
       }
 
 #define CONVERT(a)  \
