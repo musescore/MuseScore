@@ -311,6 +311,7 @@ bool TempoText::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::TEMPO_FOLLOW_TEXT:
                   _followText = v.toBool();
+                  textChanged();
                   break;
             default:
                   if (!TextBase::setProperty(propertyId, v))
