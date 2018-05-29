@@ -655,6 +655,7 @@ bool ScoreElement::isTextBase() const
          || type() == ElementType::MARKER
          || type() == ElementType::JUMP
          || type() == ElementType::STAFF_TEXT
+         || type() == ElementType::SYSTEM_TEXT
          || type() == ElementType::REHEARSAL_MARK
          || type() == ElementType::INSTRUMENT_CHANGE
          || type() == ElementType::FIGURED_BASS

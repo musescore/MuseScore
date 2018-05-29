@@ -546,7 +546,7 @@ void InspectorBase::resetToStyle()
       Score* score = inspector->element()->score();
       score->startCmd();
       for (Element* e : *inspector->el()) {     // TODO: ??
-            Text* text = toText(e);
+            TextBase* text = toTextBase(e);
             // Preserve <sym> tags
             text->undoChangeProperty(Pid::TEXT, text->plainText().toHtmlEscaped().replace("&lt;sym&gt;","<sym>").replace("&lt;/sym&gt;","</sym>"));
             }
