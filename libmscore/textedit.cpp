@@ -272,6 +272,19 @@ bool TextBase::edit(EditData& ed)
       }
 
 //---------------------------------------------------------
+//   movePosition
+//---------------------------------------------------------
+
+void TextBase::movePosition(EditData& ed, QTextCursor::MoveOperation op)
+      {
+      TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+      TextCursor* _cursor = &ted->cursor;
+      _cursor->movePosition(op);
+      score()->addRefresh(canvasBoundingRect());
+      score()->update();
+      }
+
+//---------------------------------------------------------
 //  ChangeText::insertText
 //---------------------------------------------------------
 
