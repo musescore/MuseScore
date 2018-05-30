@@ -95,8 +95,8 @@ int TextCursor::columns() const
 
 QChar TextCursor::currentCharacter() const
       {
-      const TextBlock& t = _text->_layout[_row];
-      QString s = t.text(column(), column());
+      const TextBlock& t = _text->_layout[row()];
+      QString s = t.text(column(), 1);
       if (s.isEmpty())
             return QChar();
       return s[0];
