@@ -3092,7 +3092,7 @@ ScoreState ScoreView::mscoreState() const
                   }
             }
       if (state == ViewState::EDIT || state == ViewState::DRAG_EDIT) {
-            if (editData.element && (editData.element->isLyrics()))
+            if (editData.element && editData.element->isLyrics())
                   return STATE_LYRICS_EDIT;
             else if (editData.element &&
                   ( (editData.element->isHarmony()) || editData.element->isFiguredBass()) )
