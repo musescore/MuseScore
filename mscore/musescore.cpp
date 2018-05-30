@@ -3340,7 +3340,7 @@ void MuseScore::changeState(ScoreState val)
                   textTools()->kbAction()->setChecked(false);
             }
       else {
-            if (e->isText()) {
+            if (e->isTextBase()) {
                   textTools()->updateTools(cv->getEditData());
                   if (!(e->isFiguredBass() || e->isHarmony())) {  // do not show text tools for f.b.
                         if (timelineScrollArea() && timelineScrollArea()->isVisible()) {

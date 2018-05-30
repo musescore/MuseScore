@@ -153,10 +153,10 @@ void ScoreView::endEdit()
             harmonyEndEdit();
       else if (tp == ElementType::FIGURED_BASS)
             figuredBassEndEdit();
-      else if (editData.element->isText()) {
+      else if (editData.element->isTextBase()) {
             // remove text if empty
             // dont do this for TBOX
-            Text* text = toText(editData.element);
+            TextBase* text = toTextBase(editData.element);
             if (text->empty() && text->parent() && !text->parent()->isTBox())
                   _score->undoRemoveElement(text);
             }
