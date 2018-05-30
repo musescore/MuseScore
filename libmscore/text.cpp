@@ -2049,42 +2049,6 @@ bool TextBase::acceptDrop(EditData& data) const
       }
 
 //---------------------------------------------------------
-//   drop
-//---------------------------------------------------------
-
-Element* TextBase::drop(EditData& ed)
-      {
-      TextCursor* _cursor = cursor(ed);
-
-      Element* e = ed.element;
-      switch (e->type()) {
-            case ElementType::SYMBOL:
-                  {
-                  SymId id = toSymbol(e)->sym();
-                  delete e;
-
-                  deleteSelectedText(ed);
-                  insertSym(ed, id);
-                  }
-                  break;
-
-            case ElementType::FSYMBOL:
-                  {
-                  int code = toFSymbol(e)->code();
-                  delete e;
-
-                  deleteSelectedText(ed);
-                  insert(_cursor, code);
-                  }
-                  break;
-
-            default:
-                  break;
-            }
-      return 0;
-      }
-
-//---------------------------------------------------------
 //   setPlainText
 //---------------------------------------------------------
 

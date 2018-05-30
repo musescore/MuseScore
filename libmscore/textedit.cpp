@@ -363,5 +363,43 @@ void SplitJoinText::split(EditData* ed)
             *t->cursor(*ed) = c;
       }
 
+//---------------------------------------------------------
+//   drop
+//---------------------------------------------------------
+
+Element* TextBase::drop(EditData& ed)
+      {
+      TextCursor* _cursor = cursor(ed);
+
+      Element* e = ed.element;
+      switch (e->type()) {
+            case ElementType::SYMBOL:
+                  {
+                  SymId id = toSymbol(e)->sym();
+                  delete e;
+
+                  deleteSelectedText(ed);
+                  insertSym(ed, id);
+                  }
+                  break;
+
+            case ElementType::FSYMBOL:
+                  {
+                  uint code = toFSymbol(e)->code();
+                  delete e;
+
+                  QString s = QString::fromUcs4(&code, 1);
+
+                  deleteSelectedText(ed);
+                  score()->undo(new InsertText(_cursor, s), &ed);
+                  }
+                  break;
+
+            default:
+                  break;
+            }
+      return 0;
+      }
+
 }  // namespace Ms
 
