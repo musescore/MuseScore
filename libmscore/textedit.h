@@ -80,19 +80,47 @@ class RemoveText : public ChangeText {
       };
 
 //---------------------------------------------------------
+//   SplitJoinText
+//---------------------------------------------------------
+
+class SplitJoinText : public UndoCommand {
+   protected:
+      TextCursor c;
+      virtual void split(EditData*);
+      virtual void join(EditData*);
+
+   public:
+      SplitJoinText(const TextCursor* tc) : c(*tc) {}
+      };
+
+//---------------------------------------------------------
 //   SplitText
 //---------------------------------------------------------
 
-class SplitText : public UndoCommand {
-      TextCursor c;
+class SplitText : public SplitJoinText {
 
-      virtual void undo(EditData*) override;
-      virtual void redo(EditData*) override;
+      virtual void undo(EditData* data) override { join(data); }
+      virtual void redo(EditData* data) override { split(data); }
 
    public:
-      SplitText(const TextCursor* tc) : c(*tc) {}
+      SplitText(const TextCursor* tc) : SplitJoinText(tc) {}
       UNDO_NAME("SplitText");
       };
+
+//---------------------------------------------------------
+//   JoinText
+//---------------------------------------------------------
+
+class JoinText : public SplitJoinText {
+
+      virtual void undo(EditData* data) override { split(data); }
+      virtual void redo(EditData* data) override { join(data);  }
+
+   public:
+      JoinText(const TextCursor* tc) : SplitJoinText(tc) {}
+      UNDO_NAME("JoinText");
+      };
+
 
 }     // namespace Ms
 

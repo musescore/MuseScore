@@ -1252,21 +1252,5 @@ class ChangeGap : public UndoCommand {
       UNDO_NAME("ChangeGap")
       };
 
-//---------------------------------------------------------
-//   JoinText
-//---------------------------------------------------------
-
-class JoinText : public UndoCommand {
-      TextCursor c;
-
-      virtual void undo(EditData*) override;
-      virtual void redo(EditData*) override;
-
-   public:
-      JoinText(const TextCursor* tc) : c(*tc) {}
-      UNDO_NAME("JoinText");
-      };
-
-
 }     // namespace Ms
 #endif

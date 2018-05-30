@@ -304,45 +304,50 @@ void ChangeText::removeText(EditData* ed)
       }
 
 //---------------------------------------------------------
-//   SplitText - undo
+//   SplitJoinText
 //---------------------------------------------------------
 
-void SplitText::undo(EditData* ed)
+void SplitJoinText::join(EditData* ed)
       {
-      TextCursor tc = c;
-      tc.deleteChar();
-      c.text()->triggerLayout();
+      TextBase* t   = c.text();
+      int line      = c.row();
+      t->setTextInvalid();
+      t->triggerLayout();
+
+      CharFormat* charFmt = c.format();         // take current format
+      int col             = t->textBlock(line-1).columns();
+      int eol             = t->textBlock(line).eol();
+      t->textBlock(line-1).fragments().append(t->textBlock(line).fragments());
+      int lines = t->rows();
+      if (line < lines)
+            t->textBlock(line).setEol(eol);
+      t->textBlockList().removeAt(line);
+      c.setRow(line-1);
+      c.setColumn(col);
+      c.setFormat(*charFmt);             // restore orig. format at new line
+      c.clearSelection();
       if (ed)
-            *c.text()->cursor(*ed) = tc;
+            *t->cursor(*ed) = c;
       }
 
-//---------------------------------------------------------
-//   SplitText - redo
-//---------------------------------------------------------
-
-void SplitText::redo(EditData* ed)
+void SplitJoinText::split(EditData* ed)
       {
-      TextCursor tc       = c;
-      TextBase* t         = c.text();
-      int line            = c.row();
-      CharFormat* charFmt = c.format();         // take current format
-
-      t->textBlockList().insert(line + 1, tc.curLine().split(tc.column()));
-
-      t->textBlock(line).setEol(true);
+      TextBase* t   = c.text();
+      int line      = c.row();
       t->setTextInvalid();
-      if (t->textBlockList().last() != t->textBlock(line+1))
-            t->textBlock(line+1).setEol(true);
+      t->triggerLayout();
 
-      c.text()->triggerLayout();
-      if (ed) {
-            tc.setRow(line+1);
-            tc.setColumn(0);
-            tc.setFormat(*charFmt);             // restore orig. format at new line
-            tc.clearSelection();
-            TextEditData* ted = static_cast<TextEditData*>(ed->getData(t));
-            ted->cursor = tc;
-            }
+      CharFormat* charFmt = c.format();         // take current format
+      t->textBlockList().insert(line + 1, c.curLine().split(c.column()));
+      c.curLine().setEol(true);
+
+      c.setRow(line+1);
+      c.setColumn(0);
+      c.setFormat(*charFmt);             // restore orig. format at new line
+      c.clearSelection();
+
+      if (ed)
+            *t->cursor(*ed) = c;
       }
 
 }  // namespace Ms
