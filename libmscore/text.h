@@ -97,7 +97,6 @@ class TextCursor {
       void setColumn(int val)       { _column = val; }
       void setSelectLine(int val)   { _selectLine = val; }
       void setSelectColumn(int val) { _selectColumn = val; }
-//      void setText(TextBase* t)     { _text = t; }
       int columns() const;
       void init();
 
@@ -267,6 +266,7 @@ class TextBase : public Element {
       virtual void editCut(EditData&) override;
       virtual void editCopy(EditData&) override;
       virtual void endEdit(EditData&) override;
+      void movePosition(EditData&, QTextCursor::MoveOperation);
 
       bool deleteSelectedText(EditData&);
 

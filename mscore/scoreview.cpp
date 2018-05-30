@@ -2257,12 +2257,10 @@ void ScoreView::cmd(const char* s)
                   moveCursor();
                   }
             }
-#if 0       // TODO
       else if (cmd == "text-word-left")
-            static_cast<Text*>(editData.element)->movePosition(QTextCursor::WordLeft);
+            toTextBase(editData.element)->movePosition(editData, QTextCursor::WordLeft);
       else if (cmd == "text-word-right")
-            static_cast<Text*>(editData.element)->movePosition(QTextCursor::NextWord);
-#endif
+            toTextBase(editData.element)->movePosition(editData, QTextCursor::NextWord);
       else if (cmd == "concert-pitch") {
             QAction* a = getAction(cmd);
             if (_score->styleB(Sid::concertPitch) != a->isChecked()) {
