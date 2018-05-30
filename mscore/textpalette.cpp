@@ -846,7 +846,7 @@ void TextPalette::populateUnicode()
 //   setText
 //---------------------------------------------------------
 
-void TextPalette::setText(Text* te)
+void TextPalette::setText(TextBase* te)
       {
       _textElement = te;
       }
