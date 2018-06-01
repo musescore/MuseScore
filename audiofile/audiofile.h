@@ -20,12 +20,18 @@
 //---------------------------------------------------------
 
 class AudioFile {
+      enum FormatType
+            {
+            s16p,
+            fltp
+            };
       SF_INFO info;
       SNDFILE* sf;
       SF_INSTRUMENT inst;
       bool hasInstrument;
       QByteArray buf;  // used during read of Sample
       int idx;
+      FormatType _type;
 
    public:
       AudioFile();
