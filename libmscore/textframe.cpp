@@ -63,6 +63,12 @@ void TBox::layout()
       _text->layout();
 
       qreal h = _text->height();
+      if (_text->empty()) {
+            QFontMetricsF fm = QFontMetricsF(_text->font(), MScore::paintDevice());
+            h = fm.ascent();
+            }
+      else
+            h = _text->height();
       qreal y = topMargin() * DPMM;
 #if 0
       if (_text->align() & Align::BOTTOM)
