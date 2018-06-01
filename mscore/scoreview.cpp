@@ -3809,7 +3809,6 @@ void ScoreView::cmdAddText(TEXT type)
                   s = new StaffText(SubStyleId::STAFF, _score);
                   Segment* parent = 0;
                   if (cr->segment()->measure()->isMMRest()) {     // mm hack
-printf("add to mmrest\n");
                         Measure* m = cr->segment()->measure()->mmRestFirst();
                         parent = m->findSegmentR(SegmentType::ChordRest, 0);
                         es = new StaffText(SubStyleId::STAFF, _score);
@@ -3872,7 +3871,6 @@ printf("add to mmrest\n");
             _score->undoAddElement(s);
             _score->select(s, SelectType::SINGLE, 0);
             _score->endCmd();
-            s->layout();
             startEditMode(es ? es : s);
             }
       else

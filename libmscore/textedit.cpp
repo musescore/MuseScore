@@ -55,6 +55,7 @@ void TextBase::endEdit(EditData& ed)
       score()->startCmd();
       undoChangeProperty(Pid::TEXT, actualText);      // change property to set text to actual value again
                                                       // this also changes text of linked elements
+      layout1();
       score()->endCmd();
 
       static const qreal w = 2.0;
@@ -297,6 +298,7 @@ void ChangeText::insertText(EditData* ed)
             TextCursor* ttc = c.text()->cursor(*ed);
             *ttc = tc;
             }
+      c.text()->setTextInvalid();
       }
 
 //---------------------------------------------------------
@@ -314,6 +316,7 @@ void ChangeText::removeText(EditData* ed)
       c.text()->triggerLayout();
       if (ed)
             *c.text()->cursor(*ed) = tc;
+      c.text()->setTextInvalid();
       }
 
 //---------------------------------------------------------
@@ -341,6 +344,7 @@ void SplitJoinText::join(EditData* ed)
       c.clearSelection();
       if (ed)
             *t->cursor(*ed) = c;
+      c.text()->setTextInvalid();
       }
 
 void SplitJoinText::split(EditData* ed)
@@ -361,6 +365,7 @@ void SplitJoinText::split(EditData* ed)
 
       if (ed)
             *t->cursor(*ed) = c;
+      c.text()->setTextInvalid();
       }
 
 //---------------------------------------------------------

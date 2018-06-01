@@ -141,6 +141,7 @@ QRectF TextCursor::cursorRect() const
 
 TextBlock& TextCursor::curLine() const
       {
+      Q_ASSERT(!_text->_layout.empty());
       return _text->_layout[_row];
       }
 
@@ -183,7 +184,6 @@ void TextCursor::changeSelectionFormat(FormatId id, QVariant val)
                   t.changeFormat(id, val, 0, t.columns());
             }
       _text->layout1();
-      _text->score()->addRefresh(_text->canvasBoundingRect());
       }
 
 //---------------------------------------------------------
@@ -344,6 +344,8 @@ bool TextCursor::set(const QPointF& p, QTextCursor::MoveMode mode)
       int oldRow    = _row;
       int oldColumn = _column;
 
+//      if (_text->_layout.empty())
+//            _text->_layout.append(TextBlock());
       _row = 0;
       for (int row = 0; row < _text->rows(); ++row) {
             const TextBlock& l = _text->_layout.at(row);
@@ -1340,10 +1342,8 @@ void TextBase::layout1()
       {
       if (layoutInvalid)
             createLayout();
-
       if (_layout.empty())
             _layout.append(TextBlock());
-
       QRectF bb;
       qreal y = 0;
       for (int i = 0; i < rows(); ++i) {
@@ -1407,6 +1407,7 @@ void TextBase::layout1()
       setbbox(bb);
       if (hasFrame())
             layoutFrame();
+      score()->addRefresh(canvasBoundingRect());
       }
 
 //---------------------------------------------------------
@@ -1415,7 +1416,15 @@ void TextBase::layout1()
 
 void TextBase::layoutFrame()
       {
-      frame = bbox();
+      if (empty()) {    // or bbox.width() <= 1.0
+            QFontMetricsF fm = QFontMetricsF(font(), MScore::paintDevice());
+            qreal ch = fm.ascent();
+            qreal cw = fm.width('n');
+            frame = QRectF(0.0, -ch, cw, ch);
+            }
+      else
+            frame = bbox();
+
       if (square()) {
 #if 0
             // "real" square
@@ -2598,9 +2607,9 @@ bool TextBase::setProperty(Pid propertyId, const QVariant& v)
                   rv = Element::setProperty(propertyId, v);
                   break;
             }
-      if (textInvalid)
-            genText();
-      layoutInvalid = true;
+//      if (textInvalid)
+//            genText();
+//      layoutInvalid = true;
       triggerLayout();
       return rv;
       }
@@ -2691,7 +2700,7 @@ void TextBase::draw(QPainter* p) const
       {
       if (hasFrame()) {
             if (frameWidth().val() != 0.0) {
-                  QColor fColor = frameColor();
+                  QColor fColor = curColor(visible(), frameColor());
                   QPen pen(fColor, frameWidth().val() * spatium(), Qt::SolidLine,
                      Qt::SquareCap, Qt::MiterJoin);
                   p->setPen(pen);
