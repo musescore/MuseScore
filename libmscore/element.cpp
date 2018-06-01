@@ -285,10 +285,15 @@ QColor Element::curColor() const
 
 QColor Element::curColor(bool isVisible) const
       {
+      return curColor(isVisible, color());
+      }
+
+QColor Element::curColor(bool isVisible, QColor normalColor) const
+      {
       // the default element color is always interpreted as black in
       // printing
       if (score() && score()->printing())
-            return (color() == MScore::defaultColor) ? Qt::black : color();
+            return (normalColor == MScore::defaultColor) ? Qt::black : normalColor;
 
       if (flag(ElementFlag::DROP_TARGET))
             return MScore::dropColor;
@@ -315,7 +320,7 @@ QColor Element::curColor(bool isVisible) const
             }
       if (!isVisible)
             return Qt::gray;
-      return color();
+      return normalColor;
       }
 
 //---------------------------------------------------------

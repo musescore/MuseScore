@@ -157,8 +157,13 @@ void ScoreView::endEdit()
             // remove text if empty
             // dont do this for TBOX
             TextBase* text = toTextBase(editData.element);
-            if (text->empty() && text->parent() && !text->parent()->isTBox())
+            if (text->empty() && text->parent() && !text->parent()->isTBox()) {
+                  qDebug("remove empty text");
+                  _score->startCmd();
                   _score->undoRemoveElement(text);
+                  _score->endCmd();
+                  editData.element = 0;
+                  }
             }
 #if 0
       if (dragElement && (dragElement != editData.element)) {

@@ -324,6 +324,7 @@ class Element : public ScoreElement {
       virtual QColor color() const             { return _color; }
       QColor curColor() const;
       QColor curColor(bool isVisible) const;
+      QColor curColor(bool isVisible, QColor normalColor) const;
       virtual void setColor(const QColor& c)     { _color = c;    }
       void undoSetColor(const QColor& c);
       void undoSetVisible(bool v);
