@@ -205,7 +205,7 @@ DrumInstrumentVariant Drumset::findVariant(int p, const QList<Articulation*> art
       DrumInstrumentVariant div;
       auto vs = variants(p);
       for (auto v : vs) {
-            bool matchTremolo = (!tremolo && v.tremolo == TremoloType::INVALID_TREMOLO) || v.tremolo == tremolo->tremoloType();
+            bool matchTremolo = (!tremolo && v.tremolo == TremoloType::INVALID_TREMOLO) || (tremolo && v.tremolo == tremolo->tremoloType());
             bool matchArticulation = v.articulationName.isEmpty() && articulations.isEmpty();
             for (auto a : articulations) {
                   matchArticulation = a->subtypeName() == v.articulationName;
