@@ -108,7 +108,7 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
       audioChan = s->channel();
       data      = s->data() + z->offset * audioChan;
       //avoid processing sample if offset is bigger than sample length
-      eidx      = std::max((s->frames() - long(z->offset) - 1) * audioChan, long(0));
+      eidx      = std::max((s->frames() - z->offset - 1) * audioChan, 0ll);
       _loopMode = z->loopMode;
       _loopStart = z->loopStart;
       _loopEnd   = z->loopEnd;
@@ -187,9 +187,11 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
       envelopes[V1Envelopes::SUSTAIN].setTable(Envelope::egLin);
       if (trigger == Trigger::RELEASE || trigger == Trigger::CC) {
             // Sample is played on noteoff. We need to stop the voice when it's done. Set the sustain duration accordingly.
-            double sampleDur = ((z->sample->frames()/z->sample->channel()) / z->sample->sampleRate()) * 1000; // in ms
+            //in ZInstrument::readSample we create sample data array using frames*channels
+            //so no need to devide by number of channels here, otherwise it reduces duration of samples by (Number of Channels)
+            double sampleDur = ((double) z->sample->frames() / z->sample->sampleRate()) * 1000; // in ms
             double scaledSampleDur = sampleDur / (phaseIncr.data / 256.0);
-            double sustainDur   = scaledSampleDur - (z->ampegDelay + z->ampegAttack + z->ampegHold + z->ampegDecay + z->ampegRelease);
+            double sustainDur   = scaledSampleDur - (z->ampegDelay + z->ampegAttack + z->ampegHold + z->ampegDecay + z->ampegRelease + z->delay);
             envelopes[V1Envelopes::SUSTAIN].setTime(sustainDur, _zerberus->sampleRate());
             }
       else
@@ -333,7 +335,7 @@ void Voice::process(int frames, float* p)
 
                   updateLoop();
 
-                  int idx = phase.index();
+                  long long idx = phase.index();
 
                   if (idx >= eidx) {
                         off();
@@ -362,6 +364,7 @@ void Voice::process(int frames, float* p)
                   updateEnvelopes();
                   if (_state == VoiceState::OFF)
                         break;
+
                   v *= envelopes[currentEnvelope].val * z->ccGain;
 
                   *p++  += v * _channel->panLeftGain() * opcodePanLeftGain;
@@ -380,7 +383,7 @@ void Voice::process(int frames, float* p)
 
                   updateLoop();
 
-                  int idx = phase.index() * 2;
+                  long long idx = phase.index() * 2;
                   if (idx >= eidx) {
                         off();
                         // printf("end of sample\n");
@@ -444,7 +447,7 @@ void Voice::process(int frames, float* p)
 
 void Voice::updateLoop()
       {
-      int idx = phase.index();
+      long long idx = phase.index();
       int loopOffset = (audioChan * 3) - 1; // offset due to interpolation
       bool validLoop = _loopEnd > 0 && _loopStart >= 0 && (_loopEnd <= (eidx/audioChan));
       bool shallLoop = loopMode() == LoopMode::CONTINUOUS || (loopMode() == LoopMode::SUSTAIN && (_state < VoiceState::STOP));
@@ -460,15 +463,15 @@ void Voice::updateLoop()
             phase.setIndex(_loopStart+(idx-_loopEnd-1));
       }
 
-short Voice::getData(int pos) {
+short Voice::getData(long long pos) {
       if (pos < 0 && !_looping)
             return 0;
 
       if (!_looping)
             return data[pos];
 
-      int loopEnd = _loopEnd * audioChan;
-      int loopStart = _loopStart * audioChan;
+      long long loopEnd = _loopEnd * audioChan;
+      long long loopStart = _loopStart * audioChan;
 
       if (pos < loopStart)
             return data[loopEnd + (pos - loopStart) + audioChan];
