@@ -327,7 +327,7 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 
                   if (info->isStart()) {
                         spanner->setTrack(pi.track);
-                        spanner->setTick(pi.tick);
+                        spanner->setTick(tick());
                         spanner->setStartElement(this);
                         if (pasteMode) {
                               score()->undoAddElement(spanner);
@@ -353,7 +353,7 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                         }
                   else if (info->isEnd()) {
                         spanner->setTrack2(pi.track);
-                        spanner->setTick2(pi.tick);
+                        spanner->setTick2(tick());
                         spanner->setEndElement(this);
                         if (pasteMode) {
                               for (ScoreElement* e : spanner->linkList()) {

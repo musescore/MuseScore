@@ -1409,7 +1409,7 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                   Spanner* sp = toSpanner(info->connector());
                   if (info->isStart()) {
                         sp->setTrack(ci.track);
-                        sp->setTick(ci.tick);
+                        sp->setTick(tick());
                         if (sp->isTie()) {
                               Tie* tie = toTie(sp);
                               tie->setParent(this);
@@ -1433,7 +1433,7 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                         }
                   else if (info->isEnd()) {
                         sp->setTrack2(ci.track);
-                        sp->setTick2(ci.tick);
+                        sp->setTick2(tick());
                         sp->setEndElement(this);
                         if (sp->isTie())
                               _tieBack = toTie(sp);

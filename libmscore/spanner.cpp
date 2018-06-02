@@ -31,7 +31,9 @@ class SpannerWriter : public ConnectorInfoWriter {
    protected:
       const char* tagName() const override { return "Spanner"; }
    public:
-      SpannerWriter(const Element* current, const Spanner* spanner, int track, int tick = -1);
+      SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* spanner, int track, Fraction fpos = -1);
+
+      static void fillSpannerPosition(ConnectorPointInfo& info, const Element* endpoint, int tick, bool clipboardmode);
       };
 
 //---------------------------------------------------------
@@ -941,10 +943,24 @@ SpannerSegment* Spanner::layoutSystem(System*)
 //   Spanner::writeSpanner
 //---------------------------------------------------------
 
+void Spanner::writeSpanner(XmlWriter& xml, const Element* current, int track, Fraction fpos) const
+      {
+      SpannerWriter w(xml, current, this, track, fpos);
+      w.write();
+      }
+
+//--------------------------------------------------
+//   Spanner::writeSpanner
+//---------------------------------------------------------
+
 void Spanner::writeSpanner(XmlWriter& xml, const Element* current, int track, int tick) const
       {
-      SpannerWriter w(current, this, track, tick);
-      w.write(xml);
+      if (!xml.clipboardmode()) {
+            const Measure* m = toMeasure(current->findMeasure());
+            if (m)
+                  tick -= m->tick();
+            }
+      writeSpanner(xml, current, track, Fraction::fromTicks(tick));
       }
 
 //--------------------------------------------------
@@ -953,42 +969,78 @@ void Spanner::writeSpanner(XmlWriter& xml, const Element* current, int track, in
 
 void Spanner::readSpanner(XmlReader& e, Element* current, int track)
       {
-      ConnectorInfoReader info(track, current);
-      if (!info.read(e)) {
-            e.skipCurrentElement();
-            return;
+      ConnectorInfoReader info(e, current, track);
+      ConnectorInfoReader::readConnector(info, e);
+      }
+
+//--------------------------------------------------
+//   Spanner::readSpanner
+//---------------------------------------------------------
+
+void Spanner::readSpanner(XmlReader& e, Score* current, int track)
+      {
+      ConnectorInfoReader info(e, current, track);
+      ConnectorInfoReader::readConnector(info, e);
+      }
+
+//---------------------------------------------------------
+//   SpannerWriter::fillSpannerPosition
+//---------------------------------------------------------
+
+void SpannerWriter::fillSpannerPosition(ConnectorPointInfo& info, const Element* endpoint, int tick, bool clipboardmode)
+      {
+      if (clipboardmode) {
+            info.measure = 0;
+            info.fpos = Fraction::fromTicks(tick);
             }
-      e.addConnectorInfo(info);
+      else {
+            const Measure* m = toMeasure(endpoint->findMeasure());
+            if (!m) {
+                qWarning("fillSpannerPosition: couldn't find spanner's endpoint's measure");
+                info.measure = 0;
+                info.fpos = Fraction::fromTicks(tick);
+                return;
+                }
+            // It may happen (hairpins!) that the spanner's end element is
+            // situated in the end of one measure but its end tick is in the
+            // beginning of the next measure. So we are to correct the found
+            // measure a bit.
+            while (tick >= m->endTick()) {
+                const MeasureBase* mb = m->next();
+                if (mb && mb->isMeasure())
+                    m = toMeasure(mb);
+                else
+                    break;
+                }
+            info.measure = m->index();
+            info.fpos = Fraction::fromTicks(tick - m->tick());
+            }
       }
 
 //---------------------------------------------------------
 //   SpannerWriter::SpannerWriter
 //---------------------------------------------------------
 
-SpannerWriter::SpannerWriter(const Element* current, const Spanner* sp, int track, int tick)
-   : ConnectorInfoWriter(track, current, sp)
+SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* sp, int track, Fraction fpos)
+   : ConnectorInfoWriter(xml, current, sp, track, fpos)
       {
-      if (tick != -1) {
-            // Override the current element's tick (e.g. to write to the last
-            // score's tick).
-            _currentInfo.tick = tick;
-            }
-      const bool needNote = (sp->anchor() == Spanner::Anchor::NOTE);
-      Q_ASSERT(!needNote || current->isNote());
+      const bool clipboardmode = xml.clipboardmode();
       if (current->isMeasure() || current->isSegment() || (sp->startElement()->type() != current->type())) {
             // (The latter is the hairpins' case, for example, though they are
             // covered by the other checks too.)
             // We cannot determine position of the spanner from its start/end
             // elements and will try to obtain this info from the spanner itself.
-            Q_ASSERT(!needNote);
-            if ((sp->track() != _currentInfo.track) || (sp->tick() != _currentInfo.tick)) {
-                  _prevInfo.track = sp->track();
-                  _prevInfo.tick = sp->tick();
-                  }
-            const int track2 = (sp->track2() != -1) ? sp->track2() : sp->track();
-            if ((track2 != _currentInfo.track) || (sp->tick2() != _currentInfo.tick)) {
-                  _nextInfo.track = track2;
-                  _nextInfo.tick = sp->tick2();
+            ConnectorPointInfo info;
+            info.track = sp->track();
+            fillSpannerPosition(info, sp->startElement(), sp->tick(), clipboardmode);
+            if (info != _currentInfo)
+                  _prevInfo = info;
+            else {
+                  const int track2 = (sp->track2() != -1) ? sp->track2() : sp->track();
+                  info.track = track2;
+                  fillSpannerPosition(info, sp->endElement(), sp->tick2(), clipboardmode);
+                  if (info != _currentInfo)
+                        _nextInfo = info;
                   }
             }
       else {
@@ -996,9 +1048,9 @@ SpannerWriter::SpannerWriter(const Element* current, const Spanner* sp, int trac
             // elements and will prefer this source of information.
             // Reason: some spanners contain no or wrong information (e.g. Ties).
             if (sp->startElement() != current)
-                  updatePointInfo(sp->startElement(), _prevInfo, needNote);
+                  updatePointInfo(sp->startElement(), _prevInfo, clipboardmode);
             if (sp->endElement() != current)
-                  updatePointInfo(sp->endElement(), _nextInfo, needNote);
+                  updatePointInfo(sp->endElement(), _nextInfo, clipboardmode);
             }
       }
 

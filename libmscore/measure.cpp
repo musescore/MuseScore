@@ -2274,7 +2274,6 @@ void Measure::read(XmlReader& e, int staffIdx)
 
 void Measure::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
       {
-      Q_UNUSED(pasteMode);
       const ElementType type = info->type();
       switch(type) {
             case ElementType::HAIRPIN:
@@ -2289,14 +2288,16 @@ void Measure::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                   {
                   Spanner* sp = toSpanner(info->connector());
                   const ConnectorPointInfo& pi = info->info();
+                  const int piTick = pi.fpos.ticks();
+                  const int spTick = pasteMode ? piTick : (tick() + piTick);
                   if (info->isStart()) {
                         sp->setTrack(pi.track);
-                        sp->setTick(pi.tick);
+                        sp->setTick(spTick);
                         score()->addSpanner(sp);
                         }
                   else if (info->isEnd()) {
                         sp->setTrack2(pi.track);
-                        sp->setTick2(pi.tick);
+                        sp->setTick2(spTick);
                         }
                   }
                   break;
