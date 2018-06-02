@@ -26,5 +26,7 @@ update \
     tuplets \
     hairpin \
     barlines \
+    slurs-grace \
+    irregular \
     moonlight \
 
