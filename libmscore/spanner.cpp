@@ -914,6 +914,27 @@ void Spanner::setTicks(int v)
       }
 
 //---------------------------------------------------------
+//   afrac
+//---------------------------------------------------------
+
+Fraction Spanner::afrac() const
+      {
+      return Fraction::fromTicks(_tick);
+      }
+
+//---------------------------------------------------------
+//   rfrac
+//---------------------------------------------------------
+
+Fraction Spanner::rfrac() const
+      {
+      const Measure* m = toMeasure(findMeasure());
+      if (m)
+            return Fraction::fromTicks(_tick - m->tick());
+      return afrac();
+      }
+
+//---------------------------------------------------------
 //   triggerLayout
 //---------------------------------------------------------
 

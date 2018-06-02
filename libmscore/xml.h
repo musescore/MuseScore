@@ -61,6 +61,7 @@ class XmlReader : public QXmlStreamReader {
       int _trackOffset      { 0       };
       bool _pasteMode       { false   };        // modifies read behaviour on paste operation
       Measure* _lastMeasure { 0       };
+      Measure* _currMeasure { 0       };
       QHash<int, Beam*>    _beams;
       QHash<int, Tuplet*>  _tuplets;
 
@@ -114,6 +115,8 @@ class XmlReader : public QXmlStreamReader {
       void initTick(int val)       { _tick = val;       }
       void incTick(int val)        { _tick += val;      }
       void setTickOffset(int val)  { _tickOffset = val; }
+      Fraction rfrac() const;
+      Fraction afrac() const;
       int track() const            { return _track + _trackOffset;     }
       void setTrackOffset(int val) { _trackOffset = val;   }
       int trackOffset() const      { return _trackOffset;   }
@@ -130,6 +133,8 @@ class XmlReader : public QXmlStreamReader {
 
       void setLastMeasure(Measure* m) { _lastMeasure = m;    }
       Measure* lastMeasure() const    { return _lastMeasure; }
+      void setCurrentMeasure(Measure* m) { _currMeasure = m; }
+      Measure* currentMeasure() const { return _currMeasure; }
 
       void removeSpanner(const Spanner*);
       void addSpanner(int id, Spanner*);
@@ -183,6 +188,7 @@ class XmlWriter : public QTextStream {
 
       int spannerId() const         { return _spannerId; }
       int curTick() const           { return _curTick; }
+      Fraction afrac() const        { return Fraction::fromTicks(_curTick); }
       int curTrack() const          { return _curTrack; }
       int tickDiff() const          { return _tickDiff; }
       int trackDiff() const         { return _trackDiff; }

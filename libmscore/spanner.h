@@ -160,6 +160,9 @@ class Spanner : public Element {
       int track2() const       { return _track2;   }
       void setTrack2(int v)    { _track2 = v;      }
 
+      Fraction rfrac() const override;
+      Fraction afrac() const override;
+
       bool broken() const      { return _broken;   }
       void setBroken(bool v)   { _broken = v;      }
 

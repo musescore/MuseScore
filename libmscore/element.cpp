@@ -1577,15 +1577,41 @@ int Element::rtick() const
       }
 
 //---------------------------------------------------------
-//   ftick
-//    fractional tick
+//   rfrac
+//    Position of element in fractions relative to a
+//    measure start.
 //---------------------------------------------------------
 
-Fraction Element::ftick() const
+Fraction Element::rfrac() const
       {
-      return Fraction::fromTicks(tick());
+      const Element* e = this;
+      while (e) {
+            if (e->isSegment())
+                  return toSegment(e)->rfrac();
+            else if (e->isMeasureBase())
+                  return toMeasureBase(e)->rfrac();
+            e = e->parent();
+            }
+      return -1;
       }
 
+//---------------------------------------------------------
+//   afrac
+//    Absolute position of element in fractions.
+//---------------------------------------------------------
+
+Fraction Element::afrac() const
+      {
+      const Element* e = this;
+      while (e) {
+            if (e->isSegment())
+                  return toSegment(e)->afrac();
+            else if (e->isMeasureBase())
+                  return toMeasureBase(e)->afrac();
+            e = e->parent();
+            }
+      return -1;
+      }
 
 //---------------------------------------------------------
 //   triggerLayout
