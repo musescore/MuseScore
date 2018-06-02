@@ -136,9 +136,8 @@ void Zerberus::processNoteOff(Channel* cp, int key)
                && (v->key() == key)
                && (v->loopMode() != LoopMode::ONE_SHOT)
                ) {
-                  if (cp->sustain() < 0x40) {
-                        if (!v->isStopped())
-                              v->stop();
+                  if (cp->sustain() < 0x40 && !v->isStopped()) {
+                        v->stop();
                         double durSinceNoteOn = v->getSamplesSinceStart() / sampleRate();
                         trigger(cp, key, v->velocity(), Trigger::RELEASE, -1, -1, durSinceNoteOn);
                         }
