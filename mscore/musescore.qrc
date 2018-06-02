@@ -138,6 +138,7 @@
         <file>data/icons/media-playback-countin.svg</file>
         <file>data/icons/midi-input.svg</file>
         <file>data/icons/media-playback-pan.svg</file>
+        <file>data/icons/media-playback-highlight.svg</file>
         <file>data/icons/media-playback-repeats.svg</file>
         <file>data/icons/sound-while-editing.svg</file>
         <file>data/icons/parentheses.svg</file>

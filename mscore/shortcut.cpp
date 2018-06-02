@@ -2121,6 +2121,17 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
+         "highlight-playback",
+         QT_TRANSLATE_NOOP("action","Highlight Playback"),
+         QT_TRANSLATE_NOOP("action","Toggle 'Highlight Playback'"),
+         QT_TRANSLATE_NOOP("action","Highlight played notes during playback"),
+         Icons::highlight_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_SCORE | ShortcutFlags::A_CHECKABLE | ShortcutFlags::A_CHECKED
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY,
          "load-style",
          QT_TRANSLATE_NOOP("action","Load Style..."),
          QT_TRANSLATE_NOOP("action","Load style"),

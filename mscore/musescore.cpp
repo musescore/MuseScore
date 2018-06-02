@@ -281,6 +281,7 @@ const std::list<const char*> MuseScore::_allPlaybackControlEntries {
             "loop",
             "repeat",
             "pan",
+            "highlight-playback",
             "metronome"
             };
 
@@ -441,6 +442,7 @@ void updateExternalValuesFromPreferences() {
       MScore::defaultColor = preferences.getColor(PREF_UI_SCORE_DEFAULTCOLOR);
       MScore::defaultPlayDuration = preferences.getInt(PREF_SCORE_NOTE_DEFAULTPLAYDURATION);
       MScore::panPlayback = preferences.getBool(PREF_APP_PLAYBACK_PANPLAYBACK);
+      MScore::highlightPlayback = preferences.getBool(PREF_APP_PLAYBACK_HIGHLIGHTPLAYBACK);
       MScore::playRepeats = preferences.getBool(PREF_APP_PLAYBACK_PLAYREPEATS);
       MScore::warnPitchRange = preferences.getBool(PREF_SCORE_NOTE_WARNPITCHRANGE);
       MScore::layoutBreakColor = preferences.getColor(PREF_UI_SCORE_LAYOUTBREAKCOLOR);
@@ -688,6 +690,7 @@ MuseScore::MuseScore()
       metronomeAction = getAction("metronome");
       countInAction   = getAction("countin");
       panAction       = getAction("pan");
+      highlightAction = getAction("highlight-playback");
 
       _statusBar = new QStatusBar;
       _statusBar->addPermanentWidget(new QWidget(this), 2);
@@ -865,7 +868,8 @@ MuseScore::MuseScore()
       QAction* repeatAction = getAction("repeat");
       repeatAction->setChecked(preferences.getBool(PREF_APP_PLAYBACK_PLAYREPEATS));
       transportTools->addWidget(new AccessibleToolButton(transportTools, repeatAction));
-      transportTools->addWidget(new AccessibleToolButton(transportTools, getAction("pan")));
+      transportTools->addWidget(new AccessibleToolButton(transportTools, panAction));
+      transportTools->addWidget(new AccessibleToolButton(transportTools, highlightAction));
       transportTools->addWidget(new AccessibleToolButton(transportTools, metronomeAction));
 
       //-------------------------------
@@ -5115,6 +5119,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             setPlayRepeats(a->isChecked());
       else if (cmd == "pan")
             MScore::panPlayback = !MScore::panPlayback;
+      else if (cmd == "highlight-playback")
+            MScore::highlightPlayback = !MScore::highlightPlayback;
       else if (cmd == "show-invisible")
             cs->setShowInvisible(a->isChecked());
       else if (cmd == "show-unprintable")

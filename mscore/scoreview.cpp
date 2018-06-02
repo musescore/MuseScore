@@ -590,6 +590,7 @@ void ScoreView::moveCursor(int tick)
       y -= 3 * _spatium;
 
       _cursor->setRect(QRectF(x, y, w, h));
+      _cursor->setVisible(mscore->highlightDuringPlayback());
       update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
       if (mscore->state() == ScoreState::STATE_PLAY && mscore->panDuringPlayback())
             adjustCanvasPosition(measure, true);
@@ -721,7 +722,8 @@ int ScoreView::cursorTick() const
 
 void ScoreView::setCursorOn(bool val)
       {
-      if (_cursor && (_cursor->visible() != val)) {
+      if (mscore->highlightDuringPlayback() &&
+          _cursor && (_cursor->visible() != val)) {
             _cursor->setVisible(val);
             update(_matrix.mapRect(_cursor->rect()).toRect().adjusted(-1,-1,1,1));
             }
