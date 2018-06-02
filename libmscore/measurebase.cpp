@@ -542,23 +542,6 @@ bool MeasureBase::readProperties(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   index
-//    for debugging only
-//---------------------------------------------------------
-
-int MeasureBase::index() const
-      {
-      int idx = 0;
-      MeasureBase* m = score()->first();
-      while (m) {
-            if (m == this)
-                  return idx;
-            m = m->next();
-            }
-      return  -1;
-      }
-
-//---------------------------------------------------------
 //   sectionBreakElement
 //---------------------------------------------------------
 

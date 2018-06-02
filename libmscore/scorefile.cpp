@@ -103,6 +103,8 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
                   p->setShow(false);
             }
 
+      updateMeasuresIndices();
+
       xml.stag("Score");
       if (excerpt()) {
             Excerpt* e = excerpt();
@@ -274,6 +276,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly)
 void Score::readStaff(XmlReader& e)
       {
       int staff = e.intAttribute("id", 1) - 1;
+      int measureIdx = 0;
       e.initTick(0);
       e.setTrack(staff * VOICES);
 
@@ -285,6 +288,7 @@ void Score::readStaff(XmlReader& e)
                         Measure* measure = 0;
                         measure = new Measure(this);
                         measure->setTick(e.tick());
+                        measure->setIndex(measureIdx++);
                         //
                         // inherit timesig from previous measure
                         //
@@ -333,11 +337,13 @@ void Score::readStaff(XmlReader& e)
                               qDebug("Score::readStaff(): missing measure!");
                               measure = new Measure(this);
                               measure->setTick(e.tick());
+                              measure->setIndex(measureIdx);
                               measures()->add(measure);
                               }
                         e.initTick(measure->tick());
                         measure->read(e, staff);
                         measure->checkMeasure(staff);
+                        measureIdx = measure->index() + 1;
                         if (measure->isMMRest())
                               measure = e.lastMeasure()->nextMeasure();
                         else {
