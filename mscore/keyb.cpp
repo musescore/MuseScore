@@ -316,6 +316,8 @@ void MuseScore::updateInputState(Score* score)
       {
       InputState& is = score->inputState();
       if (is.noteEntryMode()) {
+            if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH))
+                  is.setDuration(is.cr()->durationType());
             Staff* staff = score->staff(is.track() / VOICES);
             switch (staff->staffType()->group()) {
                   case StaffGroup::STANDARD:
