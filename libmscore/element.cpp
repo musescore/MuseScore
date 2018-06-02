@@ -1137,6 +1137,16 @@ Element* Element::findMeasure()
       }
 
 //---------------------------------------------------------
+//   findMeasure
+//---------------------------------------------------------
+
+const Element* Element::findMeasure() const
+      {
+      Element* e = const_cast<Element*>(this);
+      return e->findMeasure();
+      }
+
+//---------------------------------------------------------
 //   undoSetColor
 //---------------------------------------------------------
 

@@ -180,6 +180,7 @@ class Element : public ScoreElement {
       Element* parent() const                 { return _parent;     }
       void setParent(Element* e)              { _parent = e;        }
       Element* findMeasure();
+      const Element* findMeasure() const;
 
       qreal spatium() const;
 
