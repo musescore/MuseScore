@@ -2869,7 +2869,7 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
                                     ChordRest* cr = toChordRest(s->element(track));
                                     Tuplet* t = cr->tuplet();
                                     DurationElement* de = t ? toDurationElement(t) : toDurationElement(cr);
-                                    Fraction f = de->ftick() + de->actualFraction();
+                                    Fraction f = de->afrac() + de->actualFraction();
                                     int cetick = f.ticks();
                                     if (cetick <= tick)
                                           continue;
@@ -2998,8 +2998,8 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                   for (Segment* s = fs; s; s = s->next(CR_TYPE)) {
                         if (s->element(track)) {
                               ChordRest* cr  = toChordRest(s->element(track));
-                              Fraction ftick = cr->ftick() + cr->actualFraction();
-                              int cetick     = ftick.ticks() - m->tick();
+                              Fraction afrac = cr->afrac() + cr->actualFraction();
+                              int cetick     = afrac.ticks() - m->tick();
 
                               if (cetick <= tick) {
                                     continue;

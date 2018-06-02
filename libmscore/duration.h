@@ -59,7 +59,8 @@ class DurationElement : public Element {
       virtual Beam* beam() const          { return 0;         }
       int actualTicks() const;
       Fraction actualFraction() const;
-      Fraction ftick() const override;
+      Fraction afrac() const override;
+      Fraction rfrac() const override;
 
       virtual Fraction duration() const   { return _duration; }
       Fraction globalDuration() const;

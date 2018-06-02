@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "duration.h"
+#include "measure.h"
 #include "tuplet.h"
 #include "score.h"
 #include "undo.h"
@@ -94,15 +95,15 @@ Fraction DurationElement::actualFraction() const
       }
 
 //---------------------------------------------------------
-//   ftick
-//    fractional tick
+//   afrac
+//    Absolute position of element in fractions.
 //---------------------------------------------------------
 
-Fraction DurationElement::ftick() const
+Fraction DurationElement::afrac() const
       {
       Tuplet* t = tuplet();
       if (t) {
-            Fraction f = t->ftick();
+            Fraction f = t->afrac();
             for (DurationElement* de : t->elements()) {
                   if (de == this)
                         break;
@@ -111,7 +112,20 @@ Fraction DurationElement::ftick() const
             return f.reduced();
             }
       else
-            return Fraction::fromTicks(tick());
+            return Element::afrac();
+      }
+
+//---------------------------------------------------------
+//   rfrac
+//---------------------------------------------------------
+
+Fraction DurationElement::rfrac() const
+      {
+      if (tuplet()) {
+            if (Measure* m = measure())
+                  return afrac() - m->afrac();
+            }
+      return Element::rfrac();
       }
 
 //---------------------------------------------------------
