@@ -769,6 +769,16 @@ Fraction Segment::fpos() const
       }
 
 //---------------------------------------------------------
+//   absfpos
+//    return absolute position of segment
+//---------------------------------------------------------
+
+Fraction Segment::absfpos() const
+      {
+      return Fraction::fromTicks(tick());
+      }
+
+//---------------------------------------------------------
 //   swapElements
 //---------------------------------------------------------
 

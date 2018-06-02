@@ -1597,6 +1597,38 @@ int Element::rtick() const
       }
 
 //---------------------------------------------------------
+//   fpos
+//    utility, searches for segment
+//---------------------------------------------------------
+
+Fraction Element::fpos() const
+      {
+      const Element* e = this;
+      while (e) {
+            if (e->isSegment())
+                  return toSegment(e)->fpos();
+            e = e->parent();
+            }
+      return -1;
+      }
+
+//---------------------------------------------------------
+//   absfpos
+//    utility, searches for segment
+//---------------------------------------------------------
+
+Fraction Element::absfpos() const
+      {
+      const Element* e = this;
+      while (e) {
+            if (e->isSegment())
+                  return toSegment(e)->absfpos();
+            e = e->parent();
+            }
+      return -1;
+      }
+
+//---------------------------------------------------------
 //   triggerLayout
 //---------------------------------------------------------
 

@@ -188,6 +188,7 @@ class Segment final : public Element {
       virtual int tick() const override          { return _tick + parent()->tick(); }
       virtual int rtick() const override         { return _tick;  } // tickposition relative to measure start
       Fraction fpos() const;
+      Fraction absfpos() const;
       void setRtick(int val)                     { _tick = val;   }
       int ticks() const                          { return _ticks; }
       void setTicks(int val)                     { _ticks = val;  }

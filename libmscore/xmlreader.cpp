@@ -12,6 +12,7 @@
 
 #include "xml.h"
 #include "layoutbreak.h"
+#include "measure.h"
 #include "spanner.h"
 #include "beam.h"
 #include "tuplet.h"
@@ -192,6 +193,28 @@ void XmlReader::unknown()
       else
             qDebug("line %lld col %lld: %s", lineNumber(), columnNumber(), name().toUtf8().data());
       skipCurrentElement();
+      }
+
+//---------------------------------------------------------
+//   fpos
+//    return relative position in measure
+//---------------------------------------------------------
+
+Fraction XmlReader::fpos() const
+      {
+      if (_currMeasure)
+            return Fraction::fromTicks(tick() - _currMeasure->tick());
+      return absfpos();
+      }
+
+//---------------------------------------------------------
+//   absfpos
+//    return absolute position
+//---------------------------------------------------------
+
+Fraction XmlReader::absfpos() const
+      {
+      return Fraction::fromTicks(tick());
       }
 
 //---------------------------------------------------------

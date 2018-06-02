@@ -1886,6 +1886,7 @@ void Measure::read(XmlReader& e, int staffIdx)
       QList<Chord*> graceNotes;
       e.tuplets().clear();
       e.setTrack(staffIdx * VOICES);
+      e.setCurrentMeasure(this);
 
       for (int n = _mstaves.size(); n <= staffIdx; ++n) {
             Staff* staff = score()->staff(n);
