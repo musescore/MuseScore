@@ -597,16 +597,6 @@ void Element::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   readAddConnector
-//---------------------------------------------------------
-
-void Element::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
-      {
-      Q_UNUSED(pasteMode);
-      qDebug("Cannot add connector %s to %s", info->connector()->name(), name());
-      }
-
-//---------------------------------------------------------
 //   remove
 ///   Remove \a el from the list. Return true on success.
 //---------------------------------------------------------

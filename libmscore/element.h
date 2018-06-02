@@ -274,7 +274,6 @@ class Element : public ScoreElement {
       virtual void write300old(XmlWriter& xml) const { write(xml); }
       virtual void read(XmlReader&);
       virtual void read300old(XmlReader& xml) { read(xml); }
-      virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode);
 
       virtual void startDrag(EditData&);
       virtual QRectF drag(EditData&);

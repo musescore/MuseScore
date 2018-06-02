@@ -1155,6 +1155,7 @@ class Score : public QObject, ScoreElement {
 
       friend class ChangeSynthesizerState;
       friend class Chord;
+      friend class ConnectorInfoReader;
       };
 
 //---------------------------------------------------------

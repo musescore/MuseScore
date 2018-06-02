@@ -452,6 +452,7 @@ void XmlReader::addConnectorInfo(const ConnectorInfoReader& c)
       {
       _connectors.push_back(c);
       ConnectorInfoReader& c1 = _connectors.back();
+      c1.update();
       for (ConnectorInfoReader& c2 : _connectors) {
             if (c2.connect(&c1)) {
                   if (c2.finished()) {
@@ -485,6 +486,27 @@ void XmlReader::removeConnector(const ConnectorInfoReader& cref)
             removeConnectorInfo(*c);
             c = c->next();
             }
+      }
+
+//---------------------------------------------------------
+//   addConnectorInfoLater
+//---------------------------------------------------------
+
+void XmlReader::addConnectorInfoLater(const ConnectorInfoReader& c)
+      {
+      _pendingConnectors.push_back(c);
+      }
+
+//---------------------------------------------------------
+//   checkConnectors
+//---------------------------------------------------------
+
+void XmlReader::checkConnectors()
+      {
+      for (ConnectorInfoReader& c : _pendingConnectors) {
+            addConnectorInfo(c);
+            }
+      _pendingConnectors.clear();
       }
 
 }

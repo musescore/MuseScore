@@ -62,6 +62,7 @@ class XmlReader : public QXmlStreamReader {
       QList<StaffType> _staffTypes;
 
       QList<ConnectorInfoReader> _connectors;
+      QList<ConnectorInfoReader> _pendingConnectors; // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
 
       void htmlToString(int level, QString*);
       Interval _transpose;
@@ -138,6 +139,8 @@ class XmlReader : public QXmlStreamReader {
       const SpannerValues* spannerValues(int id) const;
 
       void addConnectorInfo(const ConnectorInfoReader&);
+      void addConnectorInfoLater(const ConnectorInfoReader&); // add connector info to be checked after calling checkConnectors()
+      void checkConnectors();
       void removeConnectorInfo(const ConnectorInfoReader&);
       void removeConnector(const ConnectorInfoReader&); // Removes the whole ConnectorInfo chain from the connectors list.
 
