@@ -31,6 +31,7 @@
 #include "textline.h"
 #include "tie.h"
 #include "trill.h"
+#include "undo.h"
 #include "utils.h"
 #include "vibrato.h"
 #include "volta.h"
@@ -578,6 +579,93 @@ bool Note::readProperties300old(XmlReader& e)
       else if (Element::readProperties(e))
             ;
       else
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   DurationElement::readProperties300old
+//---------------------------------------------------------
+
+bool DurationElement::readProperties300old(XmlReader& e)
+      {
+      if (e.name() == "Tuplet") {
+            int i = e.readInt();
+            Tuplet* t = e.findTuplet(i);
+            if (!t) {
+                  qDebug("DurationElement:read300old(): Tuplet id %d not found", i);
+                  t = score()->searchTuplet(e, i);
+                  if (t) {
+                        qDebug("   ...found outside measure, input file corrupted?");
+                        e.addTuplet(t);
+                        }
+                  }
+            if (t) {
+                  setTuplet(t);
+                  if (!score()->undoStack()->active())     // HACK, also added in Undo::AddElement()
+                        t->add(this);
+                  }
+            return true;
+            }
+      else if (Element::readProperties(e))
+            return true;
+      return false;
+      }
+
+
+//---------------------------------------------------------
+//   Tuplet::read300old
+//---------------------------------------------------------
+
+void Tuplet::read300old(XmlReader& e)
+      {
+      _id    = e.intAttribute("id", 0);
+      while (e.readNextStartElement()) {
+            if (readProperties300old(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      Fraction f(_ratio.denominator(), _baseLen.fraction().denominator());
+      setDuration(f.reduced());
+      }
+
+//---------------------------------------------------------
+//   Tuplet::readProperties300old
+//---------------------------------------------------------
+
+bool Tuplet::readProperties300old(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (readStyledProperty(e, tag))
+            ;
+      else if (tag == "normalNotes")
+            _ratio.setDenominator(e.readInt());
+      else if (tag == "actualNotes")
+            _ratio.setNumerator(e.readInt());
+      else if (tag == "p1")
+            _p1 = e.readPoint();
+      else if (tag == "p2")
+            _p2 = e.readPoint();
+      else if (tag == "baseNote")
+            _baseLen = TDuration(e.readElementText());
+      else if (tag == "Number") {
+            _number = new Text(score());
+            _number->setComposition(true);
+            _number->setParent(this);
+//            _number->setSubStyleId(SubStyleId::TUPLET);
+//            initSubStyle(SubStyleId::TUPLET);   // hack: initialize number
+            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
+                  _number->resetProperty(p);
+            _number->read300old(e);
+            _number->setVisible(visible());     //?? override saved property
+            _number->setTrack(track());
+            // move property flags from _number
+            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
+                  setPropertyFlags(p, _number->propertyFlags(p));
+            }
+      else if (!DurationElement::readProperties300old(e))
             return false;
       return true;
       }

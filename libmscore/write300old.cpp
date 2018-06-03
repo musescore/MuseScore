@@ -457,7 +457,7 @@ void Score::writeSegments300old(XmlWriter& xml, int strack, int etrack,
                   if (e->isChordRest()) {
                         ChordRest* cr = toChordRest(e);
                         cr->writeBeam300old(xml);
-                        cr->writeTuplet(xml);
+                        cr->writeTuplet300old(xml);
                         }
 //                  if (segment->isEndBarLine() && (m->mmRestCount() < 0 || m->mmRest())) {
 //                        BarLine* bl = toBarLine(e);
@@ -713,6 +713,49 @@ void DurationElement::writeProperties300old(XmlWriter& xml) const
       Element::writeProperties(xml);
       if (tuplet())
             xml.tag("Tuplet", tuplet()->id());
+      }
+
+//---------------------------------------------------------
+//   DurationElement::writeTuplet300old
+//---------------------------------------------------------
+
+void DurationElement::writeTuplet300old(XmlWriter& xml)
+      {
+      if (tuplet() && tuplet()->elements().front() == this) {
+            tuplet()->writeTuplet300old(xml);           // recursion
+            tuplet()->setId(xml.nextTupletId());
+            tuplet()->write300old(xml);
+            }
+      }
+
+//---------------------------------------------------------
+//   Tuplet::write300old
+//---------------------------------------------------------
+
+void Tuplet::write300old(XmlWriter& xml) const
+      {
+      xml.stag(QString("Tuplet id=\"%1\"").arg(_id));
+      if (tuplet())
+            xml.tag("Tuplet", tuplet()->id());
+      Element::writeProperties(xml);
+
+      writeProperty(xml, Pid::DIRECTION);
+      writeProperty(xml, Pid::NUMBER_TYPE);
+      writeProperty(xml, Pid::BRACKET_TYPE);
+      writeProperty(xml, Pid::LINE_WIDTH);
+      writeProperty(xml, Pid::NORMAL_NOTES);
+      writeProperty(xml, Pid::ACTUAL_NOTES);
+      writeProperty(xml, Pid::P1);
+      writeProperty(xml, Pid::P2);
+
+      xml.tag("baseNote", _baseLen.name());
+
+      if (_number) {
+            xml.stag("Number");
+            _number->writeProperties300old(xml);
+            xml.etag();
+            }
+      xml.etag();
       }
 
 //---------------------------------------------------------
