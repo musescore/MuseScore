@@ -165,6 +165,7 @@ class ChordRest : public DurationElement {
       bool isGraceBefore() const;
       bool isGraceAfter() const;
       void writeBeam(XmlWriter& xml);
+      void writeBeam300old(XmlWriter& xml);
       Segment* nextSegmentAfterCR(SegmentType types) const;
 
       virtual void setScore(Score* s) override;

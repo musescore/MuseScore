@@ -456,7 +456,7 @@ void Score::writeSegments300old(XmlWriter& xml, int strack, int etrack,
                         }
                   if (e->isChordRest()) {
                         ChordRest* cr = toChordRest(e);
-                        cr->writeBeam(xml);
+                        cr->writeBeam300old(xml);
                         cr->writeTuplet(xml);
                         }
 //                  if (segment->isEndBarLine() && (m->mmRestCount() < 0 || m->mmRest())) {
@@ -570,7 +570,7 @@ void ChordRest::writeProperties300old(XmlWriter& xml) const
 void Chord::write300old(XmlWriter& xml) const
       {
       for (Chord* c : _graceNotes) {
-            c->writeBeam(xml);
+            c->writeBeam300old(xml);
             c->write300old(xml);
             }
       xml.stag("Chord");
@@ -905,6 +905,19 @@ void Volta::write300old(XmlWriter& xml) const
             }
       xml.tag("endings", s);
       xml.etag();
+      }
+
+//---------------------------------------------------------
+//   ChordRest::writeBeam300old
+//---------------------------------------------------------
+
+void ChordRest::writeBeam300old(XmlWriter& xml)
+      {
+      Beam* b = beam();
+      if (b && b->elements().front() == this && (MScore::testMode || !b->generated())) {
+            b->setId(xml.nextBeamId());
+            b->write300old(xml);
+            }
       }
 
 }

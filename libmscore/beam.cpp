@@ -2077,6 +2077,112 @@ void Beam::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   Beam::write300old
+//---------------------------------------------------------
+
+void Beam::write300old(XmlWriter& xml) const
+      {
+      if (_elements.empty())
+            return;
+      xml.stag(QString("Beam id=\"%1\"").arg(_id));
+      Element::writeProperties300old(xml);
+
+      writeProperty(xml, Pid::STEM_DIRECTION);
+      writeProperty(xml, Pid::DISTRIBUTE);
+      writeProperty(xml, Pid::BEAM_NO_SLOPE);
+      writeProperty(xml, Pid::GROW_LEFT);
+      writeProperty(xml, Pid::GROW_RIGHT);
+
+      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+      if (_userModified[idx]) {
+            qreal _spatium = spatium();
+            for (BeamFragment* f : fragments) {
+                  xml.stag("Fragment");
+                  xml.tag("y1", f->py1[idx] / _spatium);
+                  xml.tag("y2", f->py2[idx] / _spatium);
+                  xml.etag();
+                  }
+            }
+
+      // this info is used for regression testing
+      // l1/l2 is the beam position of the layout engine
+      if (MScore::testMode) {
+            qreal _spatium4 = spatium() * .25;
+            for (BeamFragment* f : fragments) {
+                  xml.tag("l1", int(lrint(f->py1[idx] / _spatium4)));
+                  xml.tag("l2", int(lrint(f->py2[idx] / _spatium4)));
+                  }
+            }
+
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Beam::read300old
+//---------------------------------------------------------
+
+void Beam::read300old(XmlReader& e)
+      {
+      QPointF p1, p2;
+      qreal _spatium = spatium();
+      _id = e.intAttribute("id");
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "StemDirection") {
+                  setProperty(Pid::STEM_DIRECTION, Ms::getProperty(Pid::STEM_DIRECTION, e));
+                  e.readNext();
+                  }
+            else if (tag == "distribute")
+                  setDistribute(e.readInt());
+            else if (readStyledProperty(e, tag))
+                  ;
+            else if (tag == "growLeft")
+                  setGrowLeft(e.readDouble());
+            else if (tag == "growRight")
+                  setGrowRight(e.readDouble());
+            else if (tag == "y1") {
+                  if (fragments.empty())
+                        fragments.append(new BeamFragment);
+                  BeamFragment* f = fragments.back();
+                  int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+                  _userModified[idx] = true;
+                  f->py1[idx] = e.readDouble() * _spatium;
+                  }
+            else if (tag == "y2") {
+                  if (fragments.empty())
+                        fragments.append(new BeamFragment);
+                  BeamFragment* f = fragments.back();
+                  int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+                  _userModified[idx] = true;
+                  f->py2[idx] = e.readDouble() * _spatium;
+                  }
+            else if (tag == "Fragment") {
+                  BeamFragment* f = new BeamFragment;
+                  int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+                  _userModified[idx] = true;
+                  qreal _spatium = spatium();
+
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "y1")
+                              f->py1[idx] = e.readDouble() * _spatium;
+                        else if (tag == "y2")
+                              f->py2[idx] = e.readDouble() * _spatium;
+                        else
+                              e.unknown();
+                        }
+                  fragments.append(f);
+                  }
+            else if (tag == "l1" || tag == "l2")      // ignore
+                  e.skipCurrentElement();
+            else if (tag == "subtype")          // obsolete
+                  e.skipCurrentElement();
+            else if (!Element::readProperties300old(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
 //   BeamEditData
 //---------------------------------------------------------
 
