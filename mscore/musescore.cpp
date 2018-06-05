@@ -109,6 +109,7 @@
 #include "startcenter.h"
 #include "help.h"
 #include "awl/aslider.h"
+#include "extension.h"
 
 #ifdef USE_LAME
 #include "exportmp3.h"
@@ -368,7 +369,9 @@ void MuseScore::preferencesChanged()
       getAction("midi-on")->setEnabled(preferences.enableMidiInput);
       _statusBar->setVisible(preferences.showStatusBar);
 
+      reloadInstrumentTemplates();
       updateNewWizard();
+      updateInstrumentDialog();
       }
 
 //---------------------------------------------------------
@@ -1086,10 +1089,7 @@ MuseScore::MuseScore()
 
       setCentralWidget(envelope);
 
-      // load cascading instrument templates
-      loadInstrumentTemplates(preferences.instrumentList1);
-      if (!preferences.instrumentList2.isEmpty())
-            loadInstrumentTemplates(preferences.instrumentList2);
+      reloadInstrumentTemplates();
 
       preferencesChanged();
       if (seq) {
@@ -1428,6 +1428,30 @@ void MuseScore::openRecentMenu()
             openRecent->addSeparator();
             QAction* action = openRecent->addAction(tr("Clear Recent Files"));
             action->setData("clear-recent");
+            }
+      }
+
+//---------------------------------------------------------
+//   reloadInstrumentTemplates
+//---------------------------------------------------------
+
+void MuseScore::reloadInstrumentTemplates()
+      {
+      clearInstrumentTemplates();
+      // load cascading instrument templates
+      loadInstrumentTemplates(preferences.instrumentList1);
+      if (!preferences.instrumentList2.isEmpty())
+            loadInstrumentTemplates(preferences.instrumentList2);
+
+      // load instrument templates from extension
+      QStringList extensionDir = Extension::getDirectoriesByType("instruments");
+      QStringList filter("*.xml");
+      for (QString s : extensionDir) {
+            QDir extDir(s);
+            extDir.setNameFilters(filter);
+            auto instFiles = extDir.entryInfoList(QDir::Files | QDir::NoSymLinks | QDir::Readable);
+            for (auto instFile : instFiles)
+                  loadInstrumentTemplates(instFile.absoluteFilePath());
             }
       }
 

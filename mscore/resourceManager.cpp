@@ -165,7 +165,7 @@ void ResourceManager::download()
             MQZipReader zipFile(localPath);
             QFileInfo zfi(localPath);
             QString destinationDir(zfi.absolutePath());
-            QList<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
+            QVector<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
             bool result = true;
             foreach (MQZipReader::FileInfo fi, allFiles) {
                   const QString absPath = destinationDir + QDir::separator() + fi.filePath;
