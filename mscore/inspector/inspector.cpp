@@ -107,6 +107,7 @@ Inspector::Inspector(QWidget* parent)
       _inspectorEdit = false;
       ie             = 0;
       oe             = 0;
+      oSameTypes     = true;
       _score         = 0;
 //      retranslate();
       setWindowTitle(tr("Inspector"));
@@ -161,31 +162,30 @@ void Inspector::update(Score* s)
       if (_inspectorEdit)     // if within an inspector-originated edit
             return;
       _score = s;
-      if (oe != element()) {
+      bool sameTypes = true;
+      for (Element* ee : *el()) {
+            if (((element()->type() != ee->type()) && // different and
+                (!element()->isSystemText()     || !ee->isStaffText())  && // neither system text nor
+                (!element()->isStaffText()      || !ee->isSystemText()) && // staff text either side and
+                (!element()->isPedalSegment()   || !ee->isTextLineSegment()) && // neither pedal nor
+                (!element()->isTextLineSegment()|| !ee->isPedalSegment())    && // text line either side and
+                (!element()->isSlurTieSegment() || !ee->isSlurTieSegment())) || // neither Slur nor Tie either side, or
+                (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(element())->chord()->isGrace())) // HACK
+                  {
+                  sameTypes = false;
+                  break;
+                  }
+            }
+      if (oe != element() || oSameTypes != sameTypes) {
             delete ie;
             ie  = 0;
             oe  = element();
-            bool sameTypes = true;
+            oSameTypes = sameTypes;
             if (!element())
                   ie = new InspectorEmpty(this);
-            else {
-                  for (Element* ee : *el()) {
-                        if (((element()->type() != ee->type()) && // different and
-                            (!element()->isSystemText()     || !ee->isStaffText())  && // neither system text nor
-                            (!element()->isStaffText()      || !ee->isSystemText()) && // staff text either side and
-                            (!element()->isPedalSegment()   || !ee->isTextLineSegment()) && // neither pedal nor
-                            (!element()->isTextLineSegment()|| !ee->isPedalSegment())    && // text line either side and
-                            (!element()->isSlurTieSegment() || !ee->isSlurTieSegment())) || // neither Slur nor Tie either side, or
-                            (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(element())->chord()->isGrace())) // HACK
-                              {
-                              sameTypes = false;
-                              break;
-                              }
-                        }
-                  }
-            if (!sameTypes)
+            else if (!sameTypes)
                   ie = new InspectorGroupElement(this);
-            else if (element()) {
+            else {
                   switch(element()->type()) {
                         case ElementType::FBOX:
                         case ElementType::VBOX:
