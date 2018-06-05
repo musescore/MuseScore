@@ -363,6 +363,7 @@ class Inspector : public QDockWidget {
       bool _inspectorEdit;    // set to true when an edit originates from
                               // within the inspector itself
       Element* oe;
+      bool oSameTypes;
 
    public slots:
       void update();
