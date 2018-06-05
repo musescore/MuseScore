@@ -80,6 +80,7 @@ enum class MusicxmlExportBreaks : char {
 //
 #define PREF_APP_AUTOSAVE_AUTOSAVETIME                      "application/autosave/autosaveTime"
 #define PREF_APP_AUTOSAVE_USEAUTOSAVE                       "application/autosave/useAutosave"
+#define PREF_APP_KEYBOARDLAYOUT                             "application/keyboardLayout"
 // file path of instrument templates
 #define PREF_APP_PATHS_INSTRUMENTLIST1                      "application/paths/instrumentList1"
 #define PREF_APP_PATHS_INSTRUMENTLIST2                      "application/paths/instrumentList2"
@@ -94,6 +95,7 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_APP_PLAYBACK_PANPLAYBACK                       "application/playback/panPlayback"
 #define PREF_APP_PLAYBACK_PLAYREPEATS                       "application/playback/playRepeats"
 #define PREF_APP_USESINGLEPALETTE                           "application/useSinglePalette"
+#define PREF_APP_STARTUP_FIRSTSTART                         "application/startup/firstStart"
 #define PREF_APP_STARTUP_SESSIONSTART                       "application/startup/sessionStart"
 #define PREF_APP_STARTUP_STARTSCORE                         "application/startup/startScore"
 #define PREF_APP_WORKSPACE                                  "application/workspace"
