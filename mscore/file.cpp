@@ -74,6 +74,7 @@
 #include "synthesizer/msynthesizer.h"
 #include "svggenerator.h"
 #include "scorePreview.h"
+#include "extension.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -90,6 +91,8 @@
 namespace Ms {
 
 extern void importSoundfont(QString name);
+extern void importExtension(QString name);
+
 extern bool savePositions(Score*, const QString& name, bool segments);
 extern MasterSynthesizer* synti;
 
@@ -469,6 +472,13 @@ QString MuseScore::createDefaultName() const
                   }
             }
       return name;
+      }
+
+void MuseScore::updateNewWizard()
+      {
+      if (newWizard == nullptr)
+            newWizard = new NewWizard(this);
+      newWizard->updateValues();
       }
 
 //---------------------------------------------------------
@@ -2121,6 +2131,15 @@ void importSoundfont(QString name)
       }
 
 //---------------------------------------------------------
+//   importExtension
+//---------------------------------------------------------
+
+void importExtension(QString name)
+      {
+      mscore->importExtension(name);
+      }
+
+//---------------------------------------------------------
 //   readScore
 ///   Import file \a name
 //---------------------------------------------------------
@@ -2143,6 +2162,10 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
             importSoundfont(name);
             return Score::FileError::FILE_IGNORE_ERROR;
             }
+      else if (suffix == "muxt") {
+           importExtension(name);
+           return Score::FileError::FILE_IGNORE_ERROR;
+           }
       else {
             // typedef Score::FileError (*ImportFunction)(MasterScore*, const QString&);
             struct ImportDef {

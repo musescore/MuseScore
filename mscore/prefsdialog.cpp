@@ -153,6 +153,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
       connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
       connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
+       connect(myExtensionsButton, SIGNAL(clicked()), SLOT(selectExtensionsDirectory()));
+      
 
       connect(updateTranslation, SIGNAL(clicked()), SLOT(updateTranslationClicked()));
 
@@ -532,6 +534,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       myTemplates->setText(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
       myPlugins->setText(preferences.getString(PREF_APP_PATHS_MYPLUGINS));
       mySoundfonts->setText(preferences.getString(PREF_APP_PATHS_MYSOUNDFONTS));
+      myExtensions->setText(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
 
       index = exportAudioSampleRate->findData(preferences.getInt(PREF_EXPORT_AUDIO_SAMPLERATE));
       exportAudioSampleRate->setCurrentIndex(index);
@@ -898,6 +901,7 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_APP_PATHS_MYSOUNDFONTS, mySoundfonts->text());
       preferences.setPreference(PREF_APP_PATHS_MYSTYLES, myStyles->text());
       preferences.setPreference(PREF_APP_PATHS_MYTEMPLATES, myTemplates->text());
+      preferences.setPreference(PREF_APP_PATHS_MYEXTENSIONS, myExtensions->text());
       preferences.setPreference(PREF_APP_STARTUP_STARTSCORE, sessionScore->text());
       preferences.setPreference(PREF_EXPORT_AUDIO_SAMPLERATE, exportAudioSampleRate->currentData().toInt());
       preferences.setPreference(PREF_EXPORT_MP3_BITRATE, exportMp3BitRate->currentData().toInt());
@@ -1301,12 +1305,29 @@ void PreferenceDialog::changeSoundfontPaths()
       }
 
 //---------------------------------------------------------
+//   selectExtensionsDirectory
+//---------------------------------------------------------
+
+void PreferenceDialog::selectExtensionsDirectory()
+      {
+      QString s = QFileDialog::getExistingDirectory(
+         this,
+         tr("Choose Extensions Folder"),
+         myExtensions->text(),
+         QFileDialog::ShowDirsOnly | (preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS) ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
+         );
+      if (!s.isNull())
+            myExtensions->setText(s);
+      }
+
+//---------------------------------------------------------
 //   updateLanguagesClicked
 //---------------------------------------------------------
 
 void PreferenceDialog::updateTranslationClicked()
       {
       ResourceManager r(0);
+      r.selectLanguagesTab();
       r.exec();
       }
 

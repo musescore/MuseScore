@@ -177,8 +177,13 @@ void ScoreBrowser::setScores(QFileInfoList& s)
       scoreLists.clear();
 
       QVBoxLayout* l = static_cast<QVBoxLayout*>(scoreList->layout());
-      while (l->count())
-            l->removeItem(l->itemAt(0));
+      QLayoutItem* child;
+      while (l->count()) {
+            child = l->takeAt(0);
+            if(child->widget() != 0)
+                  delete child->widget();
+            delete child;
+            }
 
       ScoreListWidget* sl = 0;
 

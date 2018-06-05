@@ -413,7 +413,7 @@ void populateGenreCombo(QComboBox* combo)
 void populateInstrumentList(QTreeWidget* instrumentList)
       {
       instrumentList->clear();
-      // TODO: memory leak
+      // TODO: memory leak?
       foreach(InstrumentGroup* g, instrumentGroups) {
             InstrumentTemplateListItem* group = new InstrumentTemplateListItem(g->name, instrumentList);
             group->setFlags(Qt::ItemIsEnabled);

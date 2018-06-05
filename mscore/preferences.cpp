@@ -84,6 +84,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_APP_PATHS_MYSHORTCUTS,                           new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("shortcuts_directory", "Shortcuts"))).absoluteFilePath(), false)},
             {PREF_APP_PATHS_MYSTYLES,                              new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("styles_directory", "Styles"))).absoluteFilePath(), false)},
             {PREF_APP_PATHS_MYTEMPLATES,                           new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("templates_directory", "Templates"))).absoluteFilePath(), false)},
+            {PREF_APP_PATHS_MYEXTENSIONS,                           new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("extensions_directory", "Extensions"))).absoluteFilePath(), false)},
             {PREF_APP_PLAYBACK_FOLLOWSONG,                         new BoolPreference(true)},
             {PREF_APP_PLAYBACK_PANPLAYBACK,                        new BoolPreference(true)},
             {PREF_APP_PLAYBACK_PLAYREPEATS,                        new BoolPreference(true)},
@@ -403,7 +404,6 @@ void Preferences::clearMidiRemote(int recordId)
       QString baseKey = QString(PREF_IO_MIDI_REMOTE) + QString("%1%2").arg("/").arg(recordId);
       remove(baseKey);
       }
-
 
 Preference::Preference(QVariant defaultValue, QMetaType::Type type, bool showInAdvancedList)
       : _defaultValue(defaultValue),

@@ -19,6 +19,66 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
+     <widget class="QWidget" name="extensions">
+      <attribute name="title">
+       <string>Extensions</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QTableWidget" name="extensionsTable">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::NoSelection</enum>
+         </property>
+         <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="rowCount">
+          <number>10</number>
+         </property>
+         <property name="columnCount">
+          <number>4</number>
+         </property>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
+         <row/>
+         <row/>
+         <column>
+          <property name="text">
+           <string>Extension</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Version</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>File Size</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Install/Update</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="languages">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -67,14 +127,6 @@
          </attribute>
          <row/>
          <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
          <column>
           <property name="text">
            <string>Language</string>
@@ -98,21 +150,6 @@
         </widget>
        </item>
       </layout>
-     </widget>
-     <widget class="QWidget" name="plugins">
-      <attribute name="title">
-       <string>Plugins</string>
-      </attribute>
-      <widget class="QTextBrowser" name="textBrowser">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>251</width>
-         <height>341</height>
-        </rect>
-       </property>
-      </widget>
      </widget>
     </widget>
    </item>
