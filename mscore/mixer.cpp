@@ -390,6 +390,9 @@ void Mixer::midiPrefsChanged(bool showMidiControls)
 
 void MuseScore::showMixer(bool val)
       {
+      if (!cs)
+            return;
+
       QAction* a = getAction("toggle-mixer");
       if (mixer == 0) {
             mixer = new Mixer(this);
