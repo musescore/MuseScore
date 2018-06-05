@@ -113,6 +113,7 @@
 #include <QProgressBar>
 #include <QProgressDialog>
 #include <QRadioButton>
+#include <QButtonGroup>
 #include <QSplashScreen>
 #include <QFontComboBox>
 #include <QApplication>
