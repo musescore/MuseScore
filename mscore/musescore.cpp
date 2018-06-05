@@ -1401,7 +1401,8 @@ MuseScore::MuseScore()
       if (!instrList2.isEmpty())
             loadInstrumentTemplates(instrList2);
 
-      preferencesChanged();
+      if (!MScore::noGui)
+            preferencesChanged();
       if (seq) {
             connect(seq, SIGNAL(started()), SLOT(seqStarted()));
             connect(seq, SIGNAL(stopped()), SLOT(seqStopped()));
@@ -6293,9 +6294,8 @@ int main(int argc, char* av[])
             qApp->processEvents();
             }
 
-      if (!converterMode && !pluginMode) {
+      if (!MScore::noGui)
             MuseScore::updateUiStyleAndTheme();
-            }
       else
             noSeq = true;
 
