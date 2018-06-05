@@ -100,6 +100,7 @@ add_library(
       ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/BeatTracker.cpp     # required by importmidi.cpp
       ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Induction.cpp       # required by importmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/stringutils.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/extension.cpp # required by zerberus tests
       ${OMR_SRC}
       omr
       )
