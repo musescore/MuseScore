@@ -752,6 +752,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QHelpEngine*  helpEngine() const { return _helpEngine;   }
 
       virtual void updateInspector() override;
+      void updateNewWizard();
+      void updateInstrumentDialog();
+      void reloadInstrumentTemplates();
       void showSynthControl(bool);
       void showMixer(bool);
 
@@ -777,6 +780,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static void restoreGeometry(QWidget*const qw);
 
       void updateWindowTitle(Score* score);
+
+      bool importExtension(QString path);
       };
 
 extern MuseScore* mscore;

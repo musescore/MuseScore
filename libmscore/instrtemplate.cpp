@@ -53,6 +53,19 @@ static InstrumentGroup* searchInstrumentGroup(const QString& name)
       }
 
 //---------------------------------------------------------
+//   searchArticulation
+//---------------------------------------------------------
+
+static MidiArticulation searchArticulation(const QString& name)
+      {
+      foreach(MidiArticulation a, articulation) {
+            if (a.name == name)
+                  return a;
+            }
+      return MidiArticulation();
+      }
+
+//---------------------------------------------------------
 //   readStaffIdx
 //---------------------------------------------------------
 
@@ -67,7 +80,7 @@ static int readStaffIdx(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   readInstrumentGroup
+//   read InstrumentGroup
 //---------------------------------------------------------
 
 void InstrumentGroup::read(XmlReader& e)
@@ -106,6 +119,16 @@ void InstrumentGroup::read(XmlReader& e)
             }
       if (id.isEmpty())
             id = name.toLower().replace(" ", "-");
+      }
+
+//---------------------------------------------------------
+//   clear InstrumentGroup
+//---------------------------------------------------------
+
+void InstrumentGroup::clear()
+      {
+      qDeleteAll(instrumentTemplates);
+      instrumentTemplates.clear();
       }
 
 //---------------------------------------------------------
@@ -587,6 +610,21 @@ bool saveInstrumentTemplates1(const QString& instrTemplates)
       }
 
 //---------------------------------------------------------
+//   clearInstrumentTemplates
+//---------------------------------------------------------
+
+void clearInstrumentTemplates()
+      {
+      for (InstrumentGroup* g : instrumentGroups)
+            g->clear();
+      qDeleteAll(instrumentGroups);
+      instrumentGroups.clear();
+      qDeleteAll(instrumentGenres);
+      instrumentGenres.clear();
+      articulation.clear();
+      }
+
+//---------------------------------------------------------
 //   loadInstrumentTemplates
 //---------------------------------------------------------
 
@@ -614,7 +652,8 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                               }
                         else if (tag == "Articulation") {
                               // read global articulation
-                              MidiArticulation a;
+                              QString name(e.attribute("name"));
+                              MidiArticulation a = searchArticulation(name);
                               a.read(e);
                               articulation.append(a);
                               }

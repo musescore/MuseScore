@@ -91,6 +91,7 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_APP_PATHS_MYSOUNDFONTS                         "application/paths/mySoundfonts"
 #define PREF_APP_PATHS_MYSTYLES                             "application/paths/myStyles"
 #define PREF_APP_PATHS_MYTEMPLATES                          "application/paths/myTemplates"
+#define PREF_APP_PATHS_MYEXTENSIONS                         "application/paths/myExtensions"
 #define PREF_APP_PLAYBACK_FOLLOWSONG                        "application/playback/followSong"
 #define PREF_APP_PLAYBACK_PANPLAYBACK                       "application/playback/panPlayback"
 #define PREF_APP_PLAYBACK_PLAYREPEATS                       "application/playback/playRepeats"
