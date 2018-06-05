@@ -74,6 +74,7 @@ void Preferences::init(bool storeInMemoryOnly)
       {
             {PREF_APP_AUTOSAVE_AUTOSAVETIME,                       new IntPreference(2 /* minutes */, false)},
             {PREF_APP_AUTOSAVE_USEAUTOSAVE,                        new BoolPreference(true, false)},
+            {PREF_APP_KEYBOARDLAYOUT,                              new StringPreference("US - International")},
             {PREF_APP_PATHS_INSTRUMENTLIST1,                       new StringPreference(":/data/instruments.xml", false)},
             {PREF_APP_PATHS_INSTRUMENTLIST2,                       new StringPreference("", false)},
             {PREF_APP_PATHS_MYIMAGES,                              new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("images_directory", "Images"))).absoluteFilePath(), false)},
@@ -87,6 +88,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_APP_PLAYBACK_PANPLAYBACK,                        new BoolPreference(true)},
             {PREF_APP_PLAYBACK_PLAYREPEATS,                        new BoolPreference(true)},
             {PREF_APP_USESINGLEPALETTE,                            new BoolPreference(false)},
+            {PREF_APP_STARTUP_FIRSTSTART,                          new BoolPreference(true)},
             {PREF_APP_STARTUP_SESSIONSTART,                        new EnumPreference(QVariant::fromValue(SessionStart::SCORE), false)},
             {PREF_APP_STARTUP_STARTSCORE,                          new StringPreference(":/data/My_First_Score.mscz", false)},
             {PREF_APP_WORKSPACE,                                   new StringPreference("Basic", false)},
