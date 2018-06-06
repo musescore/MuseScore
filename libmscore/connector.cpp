@@ -268,13 +268,16 @@ bool ConnectorInfoReader::read()
             else if (tag == "next")
                   readDestinationInfo(e, _nextInfo);
             else {
-                  _connector = Element::name2Element(tag, _connectorReceiver->score());
+                  if (tag == name)
+                        _connector = Element::name2Element(tag, _connectorReceiver->score());
+                  else
+                        qWarning("ConnectorInfoReader::read: element tag (%s) does not match connector type (%s). Is the file corrupted?", tag.toLatin1().constData(), name.toLatin1().constData());
+
                   if (!_connector) {
                         e.unknown();
                         return false;
                         }
-                  const int track = (_currentInfo.track < 0) ? e.track() : _currentInfo.track;
-                  _connector->setTrack(track);
+                  _connector->setTrack(_currentInfo.track);
                   _connector->read(e);
                   }
             }
