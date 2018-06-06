@@ -250,6 +250,8 @@ void Score::update()
                   }
             cs.reset();
             }
+      if (_selection.isRange())
+            _selection.updateSelectedElements();
       }
 
 //---------------------------------------------------------
