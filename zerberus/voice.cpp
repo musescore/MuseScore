@@ -145,7 +145,16 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
             targetcents = z->keyBase * 100;
       phaseIncr.set(_zerberus->ct2hz(targetcents) * sr/_zerberus->ct2hz(z->keyBase * 100.0));
 
-      fres        = 13500.0;
+      fres = _zerberus->ct2hz(13500.0);
+      if (z->isCutoffDefined) {
+            //calculate current cutoff value
+            float cutoffHz = z->cutoff;
+            //Formula for converting the interval frequency ratio f2 / f1 to cents (c or ¢).
+            //¢ or c = 1200 × log2 (f2 / f1)
+            cutoffHz *= pow(2.0, _velocity / 127.0f * z->fil_veltrack / 1200.0);
+            fres = cutoffHz;
+            }
+
       last_fres   = -1.0;
       qreal GEN_FILTERQ = 100.0;  // 0 - 960
       qreal q_db  = GEN_FILTERQ / 10.0f - 3.01f;
@@ -243,11 +252,30 @@ void Voice::updateFilter(float _fres)
        *  b1=(1.-cos_coeff)*a0_inv*voice->filter_gain;
        *  b2=(1.-cos_coeff)*a0_inv*0.5*voice->filter_gain; */
 
-      float a1_temp = -2.0f * cos_coeff * a0_inv;
-      float a2_temp = (1.0f - alpha_coeff) * a0_inv;
-      float b1_temp = (1.0f - cos_coeff) * a0_inv * filter_gain;
-      // both b0 -and- b2
-      float b02_temp = b1_temp * 0.5f;
+      float a1_temp = 0.f;
+      float a2_temp = 0.f;
+      float b1_temp = 0.f;
+      float b02_temp = 0.f;
+      switch (z->fil_type) {
+            case FilterType::lpf_2p: {
+                  a1_temp = -2.0f * cos_coeff * a0_inv;
+                  a2_temp = (1.0f - alpha_coeff) * a0_inv;
+                  b1_temp = (1.0f - cos_coeff) * a0_inv * filter_gain;
+                  // both b0 -and- b2
+                  b02_temp = b1_temp * 0.5f;
+                  break;
+                  }
+            case FilterType::hpf_2p: {
+                  a1_temp = -2.0f * cos_coeff * a0_inv;
+                  a2_temp = (1.0f - alpha_coeff) * a0_inv;
+                  b1_temp = -(1.0f + cos_coeff) * a0_inv * filter_gain;
+                  // both b0 -and- b2
+                  b02_temp = -b1_temp * 0.5f;
+                  break;
+                  }
+            default:
+                  qWarning() << "fil_type is not implemented: " << (int)z->fil_type;
+            }
 
       if (filter_startup) {
             /* The filter is calculated, because the voice was started up.
@@ -310,22 +338,17 @@ void Voice::updateEnvelopes() {
 
 void Voice::process(int frames, float* p)
       {
-      float modlfo_to_fc = 0.0;
-      float modenv_to_fc = 0.0;
-
-      float _fres = _zerberus->ct2hz(fres
-              + modlfo_val * modlfo_to_fc
-              + modenv_val * modenv_to_fc);
-
+      float adaptedFrequency = fres;
       int sr = _zerberus->sampleRate();
-      if (_fres > 0.45f * sr)
-            _fres = 0.45f * sr;
-      else if (_fres < 5.f)
-            _fres = 5.f;
+      if (adaptedFrequency > 0.45f * sr)
+            adaptedFrequency = 0.45f * sr;
+      else if (adaptedFrequency < 5.f)
+            adaptedFrequency = 5.f;
 
-      if ((fabs(_fres - last_fres) > 0.01f)) {
-            updateFilter(_fres);
-            last_fres = _fres;
+      bool freqWasUpdated = fabs(adaptedFrequency - last_fres) > 0.01f;
+      if (freqWasUpdated) {
+            updateFilter(adaptedFrequency);
+            last_fres = adaptedFrequency;
             }
 
       const float opcodePanLeftGain = 1.f - std::fmax(0.0f, z->pan / 100.0); //[0, 1]

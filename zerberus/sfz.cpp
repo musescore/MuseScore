@@ -94,6 +94,14 @@ struct SfzRegion {
       long long offset; // [0, 4Gb) or [0, 4294967295]
       float group_volume; // [-144 to 6] (dB)
 
+      //filters
+      bool isCutoffDefined;
+      float cutoff; //[0, sampleRate / 2] Hz
+      int fil_keytrack; //[0, 1200] cents
+      int fil_keycenter; //[0, 127]
+      int fil_veltrack; //[-9600, 9600] cents
+      FilterType fil_type;
+
       void init(const QString&);
       bool isEmpty() const { return sample.isEmpty(); }
       int readKey(const QString&, SfzControl c) const;
@@ -158,6 +166,12 @@ void SfzRegion::init(const QString& _path)
       pan = 0;
       offset = 0;
       group_volume = 0.0f;
+      isCutoffDefined = false;
+      cutoff = 0;
+      fil_keytrack = 0;
+      fil_keycenter = 60;
+      fil_veltrack = 0;
+      fil_type = FilterType::lpf_2p;
       }
 
 //---------------------------------------------------------
@@ -215,6 +229,13 @@ void SfzRegion::setZone(Zone* z) const
       z->delay        = delay * 1000; //convert seconds from sfz to ms for computations
       z->pan          = pan;
       z->group_volume = pow(10.0, group_volume / 20.0); //dB -> volume multiplier
+
+      z->isCutoffDefined = isCutoffDefined;
+      z->cutoff = cutoff;
+      z->fil_keycenter = fil_keycenter;
+      z->fil_keytrack = fil_keytrack;
+      z->fil_veltrack = fil_veltrack;
+      z->fil_type = fil_type;
       }
 
 //---------------------------------------------------------
@@ -322,6 +343,20 @@ static void readDouble(const QString& data, double* val)
       double d = data.toDouble(&ok);
       if (ok)
             *val = d;
+      }
+
+static void readFilterType(const QString& data, FilterType& filType)
+      {
+      if (data == "lpf_1p")
+            filType = FilterType::lpf_1p;
+      else if (data == "lpf_2p")
+            filType = FilterType::lpf_2p;
+      else if (data == "hpf_1p")
+            filType = FilterType::hpf_1p;
+      else if (data == "hpf_2p")
+            filType = FilterType::hpf_2p;
+      else
+            qDebug("SfzRegion: not supported fil_type value: %s", qPrintable(data));
       }
 
 //---------------------------------------------------------
@@ -510,6 +545,18 @@ void SfzRegion::readOp(const QString& b, const QString& data, SfzControl &c)
             readLongLong(opcode_data, offset);
       else if (opcode == "group_volume")
             readFloat(opcode_data, group_volume);
+      else if (opcode == "cutoff") {
+            isCutoffDefined = true;
+            readFloat(opcode_data, cutoff);
+            }
+      else if (opcode == "fil_keycenter")
+            fil_keycenter = i;
+      else if (opcode == "fil_keytrack")
+            fil_keytrack = i;
+      else if (opcode == "fil_veltrack")
+            fil_veltrack = i;
+      else if (opcode == "fil_type")
+            readFilterType(opcode_data, fil_type);
       else
             qDebug("SfzRegion: unknown opcode <%s>", qPrintable(opcode));
       }
