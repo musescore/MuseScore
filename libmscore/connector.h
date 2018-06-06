@@ -113,6 +113,8 @@ class ConnectorInfoReader final : public ConnectorInfo {
 
       Element* connector();
       const Element* connector() const;
+      Element* releaseConnector(); // returns connector and "forgets" it by
+                                   // setting an internal pointer to it to zero
 
       bool read();
       void update();

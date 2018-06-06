@@ -413,6 +413,19 @@ const Element* ConnectorInfoReader::connector() const
       }
 
 //---------------------------------------------------------
+//   ConnectorInfoReader::releaseConnector
+//---------------------------------------------------------
+
+Element* ConnectorInfoReader::releaseConnector()
+      {
+      Element* c = _connector;
+      _connector = nullptr;
+      if (prev())
+            return prev()->releaseConnector();
+      return c;
+      }
+
+//---------------------------------------------------------
 //   ConnectorInfoReader::operator==
 //---------------------------------------------------------
 

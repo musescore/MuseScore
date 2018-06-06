@@ -23,6 +23,24 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   ~XmlReader
+//---------------------------------------------------------
+
+XmlReader::~XmlReader()
+      {
+      if (!_connectors.isEmpty() || !_pendingConnectors.isEmpty()) {
+            qDebug("XmlReader::~XmlReader: there are unpaired connectors left");
+            for (ConnectorInfoReader& c : _connectors) {
+                  Element* conn = c.releaseConnector();
+                  if (conn && !conn->isTuplet()) // tuplets are added to score even when not finished
+                        delete conn;
+                  }
+            for (ConnectorInfoReader& c : _pendingConnectors)
+                  delete c.releaseConnector();
+            }
+      }
+
+//---------------------------------------------------------
 //   intAttribute
 //---------------------------------------------------------
 

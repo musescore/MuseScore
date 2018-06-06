@@ -74,6 +74,8 @@ class XmlReader : public QXmlStreamReader {
       XmlReader(const QByteArray& d, const QString& st = QString()) : QXmlStreamReader(d), docName(st)  {}
       XmlReader(QIODevice* d, const QString& st = QString()) : QXmlStreamReader(d), docName(st) {}
       XmlReader(const QString& d, const QString& st = QString()) : QXmlStreamReader(d), docName(st) {}
+      XmlReader(const XmlReader&) = delete;
+      ~XmlReader();
 
       bool hasAccidental;                     // used for userAccidental backward compatibility
       void unknown();
