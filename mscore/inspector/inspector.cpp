@@ -163,6 +163,9 @@ void Inspector::update(Score* s)
             return;
       _score = s;
       bool sameTypes = true;
+      if (!el())
+            return;
+
       for (Element* ee : *el()) {
             if (((element()->type() != ee->type()) && // different and
                 (!element()->isSystemText()     || !ee->isStaffText())  && // neither system text nor
