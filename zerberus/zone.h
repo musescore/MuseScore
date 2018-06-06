@@ -44,7 +44,9 @@ enum class FilterType {
       lpf_2p, //default, double-pole low-pass filter
       lpf_1p, //single-pole low-pass filter
       hpf_2p, //double-pole high-pass filter
-      hpf_1p  //single-pole high-pass filter
+      hpf_1p, //single-pole high-pass filter
+      bpf_2p, //double-pole band-pass filter
+      brf_2p //double-pole band-reject filter
       };
 
 //---------------------------------------------------------

@@ -17,6 +17,7 @@ QT5_WRAP_UI (zerberusUi zerberus_gui.ui)
 add_library (zerberus STATIC
       ${zerberusUi}
       channel.cpp
+      filter.cpp
       instrument.cpp
       sfz.cpp
       voice.cpp

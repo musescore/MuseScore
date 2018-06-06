@@ -20,7 +20,6 @@
 #include "sample.h"
 #include "synthesizer/msynthesizer.h"
 
-float Voice::interpCoeff[INTERP_MAX][4];
 float Envelope::egPow[EG_SIZE];
 float Envelope::egLin[EG_SIZE];
 
@@ -74,14 +73,6 @@ void Voice::init()
       // list (I found it in the music-dsp archives
       // http://www.smartelectronix.com/musicdsp/).
 
-      double ff = 1.0 / 32768.0;
-      for (int i = 0; i < INTERP_MAX; i++) {
-            double x = (double) i / (double) INTERP_MAX;
-            interpCoeff[i][0] = (x * (-0.5 + x * (1 - 0.5 * x)))  * ff;
-            interpCoeff[i][1] = (1.0 + x * x * (1.5 * x - 2.5))   * ff;
-            interpCoeff[i][2] = (x * (0.5 + x * (2.0 - 1.5 * x))) * ff;
-            interpCoeff[i][3] = (0.5 * x * x * (x - 1.0))         * ff;
-            }
       static const float MIN_GAIN = -80.0;
       static const float dbStep = MIN_GAIN / float(EG_SIZE);
 
@@ -145,31 +136,7 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
             targetcents = z->keyBase * 100;
       phaseIncr.set(_zerberus->ct2hz(targetcents) * sr/_zerberus->ct2hz(z->keyBase * 100.0));
 
-      fres = _zerberus->ct2hz(13500.0);
-      if (z->isCutoffDefined) {
-            //calculate current cutoff value
-            float cutoffHz = z->cutoff;
-            //Formula for converting the interval frequency ratio f2 / f1 to cents (c or ¢).
-            //¢ or c = 1200 × log2 (f2 / f1)
-            cutoffHz *= pow(2.0, _velocity / 127.0f * z->fil_veltrack / 1200.0);
-            fres = cutoffHz;
-            }
-
-      last_fres   = -1.0;
-      qreal GEN_FILTERQ = 100.0;  // 0 - 960
-      qreal q_db  = GEN_FILTERQ / 10.0f - 3.01f;
-      q_lin       = pow(10.0f, q_db / 20.0f);
-      filter_gain = 1.0 / sqrt(q_lin);
-
-      hist1r = 0;
-      hist2r = 0;
-      hist1l = 0;
-      hist2l = 0;
-
-      filter_startup = true;
-
-      modenv_val = 0.0;
-      modlfo_val = 0.0;
+      filter.initialize(_zerberus, z, _velocity);
 
       currentEnvelope = V1Envelopes::DELAY;
 
@@ -216,95 +183,6 @@ void Voice::start(Channel* c, int key, int v, const Zone* zone, double durSinceN
       }
 
 //---------------------------------------------------------
-//   updateFilter
-//---------------------------------------------------------
-
-void Voice::updateFilter(float _fres)
-      {
-      // The filter coefficients have to be recalculated (filter
-      // parameters have changed). Recalculation for various reasons is
-      // forced by setting last_fres to -1.  The flag filter_startup
-      // indicates, that the DSP loop runs for the first time, in this
-      // case, the filter is set directly, instead of smoothly fading
-      // between old and new settings.
-      //
-      // Those equations from Robert Bristow-Johnson's `Cookbook
-      // formulae for audio EQ biquad filter coefficients', obtained
-      // from Harmony-central.com / Computer / Programming. They are
-      // the result of the bilinear transform on an analogue filter
-      // prototype. To quote, `BLT frequency warping has been taken
-      // into account for both significant frequency relocation and for
-      // bandwidth readjustment'.
-
-      float sr          = _zerberus->sampleRate();
-      float omega       = (float) 2.0f * M_PI * (_fres / sr);
-      float sin_coeff   = sin(omega);
-      float cos_coeff   = cos(omega);
-      float alpha_coeff = sin_coeff / (2.0f * q_lin);
-      float a0_inv      = 1.0f / (1.0f + alpha_coeff);
-
-      /* Calculate the filter coefficients. All coefficients are
-       * normalized by a0. Think of `a1' as `a1/a0'.
-       *
-       * Here a couple of multiplications are saved by reusing common expressions.
-       * The original equations should be:
-       *  b0=(1.-cos_coeff)*a0_inv*0.5*voice->filter_gain;
-       *  b1=(1.-cos_coeff)*a0_inv*voice->filter_gain;
-       *  b2=(1.-cos_coeff)*a0_inv*0.5*voice->filter_gain; */
-
-      float a1_temp = 0.f;
-      float a2_temp = 0.f;
-      float b1_temp = 0.f;
-      float b02_temp = 0.f;
-      switch (z->fil_type) {
-            case FilterType::lpf_2p: {
-                  a1_temp = -2.0f * cos_coeff * a0_inv;
-                  a2_temp = (1.0f - alpha_coeff) * a0_inv;
-                  b1_temp = (1.0f - cos_coeff) * a0_inv * filter_gain;
-                  // both b0 -and- b2
-                  b02_temp = b1_temp * 0.5f;
-                  break;
-                  }
-            case FilterType::hpf_2p: {
-                  a1_temp = -2.0f * cos_coeff * a0_inv;
-                  a2_temp = (1.0f - alpha_coeff) * a0_inv;
-                  b1_temp = -(1.0f + cos_coeff) * a0_inv * filter_gain;
-                  // both b0 -and- b2
-                  b02_temp = -b1_temp * 0.5f;
-                  break;
-                  }
-            default:
-                  qWarning() << "fil_type is not implemented: " << (int)z->fil_type;
-            }
-
-      if (filter_startup) {
-            /* The filter is calculated, because the voice was started up.
-             * In this case set the filter coefficients without delay.
-             */
-            a1  = a1_temp;
-            a2  = a2_temp;
-            b02 = b02_temp;
-            b1  = b1_temp;
-            filter_coeff_incr_count = 0;
-            filter_startup = false;
-            }
-      else {
-            /* The filter frequency is changed.  Calculate an increment
-            * factor, so that the new setting is reached after some time.
-            */
-
-            static const int FILTER_TRANSITION_SAMPLES = 64;
-
-            a1_incr  = (a1_temp - a1) / FILTER_TRANSITION_SAMPLES;
-            a2_incr  = (a2_temp - a2) / FILTER_TRANSITION_SAMPLES;
-            b02_incr = (b02_temp - b02) / FILTER_TRANSITION_SAMPLES;
-            b1_incr  = (b1_temp - b1) / FILTER_TRANSITION_SAMPLES;
-            /* Have to add the increments filter_coeff_incr_count times. */
-            filter_coeff_incr_count = FILTER_TRANSITION_SAMPLES;
-            }
-      }
-
-//---------------------------------------------------------
 //   updateEnvelopes
 //---------------------------------------------------------
 
@@ -338,21 +216,12 @@ void Voice::updateEnvelopes() {
 
 void Voice::process(int frames, float* p)
       {
-      float adaptedFrequency = fres;
-      int sr = _zerberus->sampleRate();
-      if (adaptedFrequency > 0.45f * sr)
-            adaptedFrequency = 0.45f * sr;
-      else if (adaptedFrequency < 5.f)
-            adaptedFrequency = 5.f;
-
-      bool freqWasUpdated = fabs(adaptedFrequency - last_fres) > 0.01f;
-      if (freqWasUpdated) {
-            updateFilter(adaptedFrequency);
-            last_fres = adaptedFrequency;
-            }
+      filter.update();
 
       const float opcodePanLeftGain = 1.f - std::fmax(0.0f, z->pan / 100.0); //[0, 1]
       const float opcodePanRightGain = 1.f + std::fmin(0.0f, z->pan / 100.0); //[0, 1]
+      const float leftChannelVol = gain * z->ccGain * _channel->panLeftGain() * opcodePanLeftGain;
+      const float rightChannelVol = gain * z->ccGain * _channel->panRightGain() * opcodePanRightGain;
       if (audioChan == 1) {
             while (frames--) {
 
@@ -364,34 +233,18 @@ void Voice::process(int frames, float* p)
                         off();
                         break;
                         }
-                  const float* coeffs = interpCoeff[phase.fract()];
-                  float f;
-                  f =  (coeffs[0] * getData(idx-1)
-                      + coeffs[1] * getData(idx+0)
-                      + coeffs[2] * getData(idx+1)
-                      + coeffs[3] * getData(idx+2)) * gain
-                      - a1 * hist1l
-                      - a2 * hist2l;
-                  float v = b02 * (f + hist2l) + b1 * hist1l;
-                  hist2l  = hist1l;
-                  hist1l  = f;
 
-                  if (filter_coeff_incr_count) {
-                        --filter_coeff_incr_count;
-                        a1  += a1_incr;
-                        a2  += a2_incr;
-                        b02 += b02_incr;
-                        b1  += b1_incr;
-                        }
+                  float interpVal = filter.interpolate(phase.fract(),
+                                                       getData(idx-1), getData(idx), getData(idx+1), getData(idx+2));
+                  float v = filter.apply(interpVal, true);
 
                   updateEnvelopes();
                   if (_state == VoiceState::OFF)
                         break;
 
-                  v *= envelopes[currentEnvelope].val * z->ccGain;
+                  *p++  += v * envelopes[currentEnvelope].val * leftChannelVol;
+                  *p++  += v * envelopes[currentEnvelope].val * rightChannelVol;
 
-                  *p++  += v * _channel->panLeftGain() * opcodePanLeftGain;
-                  *p++  += v * _channel->panRightGain() * opcodePanRightGain;
                   if (V1Envelopes::DELAY != currentEnvelope)
                         phase += phaseIncr;
 
@@ -413,48 +266,20 @@ void Voice::process(int frames, float* p)
                         break;
                         }
 
-                  const float* coeffs = interpCoeff[phase.fract()];
-                  float f1, f2;
+                  float interpValL = filter.interpolate(phase.fract(),
+                                                       getData(idx-2), getData(idx), getData(idx+2), getData(idx+4));
+                  float interpValR = filter.interpolate(phase.fract(),
+                                                       getData(idx-1), getData(idx+1), getData(idx+3), getData(idx+5));
+                  float valueL = filter.apply(interpValL, true);
+                  float valueR = filter.apply(interpValR, false);
 
-                  f1 = (coeffs[0] * getData(idx-2)
-                      + coeffs[1] * getData(idx)
-                      + coeffs[2] * getData(idx+2)
-                      + coeffs[3] * getData(idx+4))
-                      * gain * _channel->panLeftGain() * z->ccGain;
-
-                  f2 = (coeffs[0] * getData(idx-1)
-                      + coeffs[1] * getData(idx+1)
-                      + coeffs[2] * getData(idx+3)
-                      + coeffs[3] * getData(idx+5))
-                      * gain * _channel->panRightGain() * z->ccGain;
-
+                  //apply volume
                   updateEnvelopes();
                   if (_state == VoiceState::OFF)
                         break;
 
-                  f1 *= envelopes[currentEnvelope].val;
-                  f2 *= envelopes[currentEnvelope].val;
-
-                  f1      += -a1 * hist1l - a2 * hist2l;
-                  float vl = b02 * (f1 + hist2l) + b1 * hist1l;
-                  hist2l   = hist1l;
-                  hist1l   = f1;
-
-                  f2      +=  -a1 * hist1r - a2 * hist2r;
-                  float vr = b02 * (f2 + hist2r) + b1 * hist1r;
-                  hist2r   = hist1r;
-                  hist1r   = f2;
-
-                  if (filter_coeff_incr_count) {
-                        --filter_coeff_incr_count;
-                        a1  += a1_incr;
-                        a2  += a2_incr;
-                        b02 += b02_incr;
-                        b1  += b1_incr;
-                        }
-
-                  *p++  += vl * opcodePanLeftGain;
-                  *p++  += vr * opcodePanRightGain;
+                  *p++  += valueL * envelopes[currentEnvelope].val * leftChannelVol;
+                  *p++  += valueR * envelopes[currentEnvelope].val * rightChannelVol;
 
                   if (V1Envelopes::DELAY != currentEnvelope)
                         phase += phaseIncr;

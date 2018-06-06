@@ -108,7 +108,7 @@ class Zerberus : public Ms::Synthesizer {
       virtual void setMasterTuning(double val) { _masterTuning = val;  }
       virtual double masterTuning() const      { return _masterTuning; }
 
-      double ct2hz(double c) { return pow(2.0, (c-6900.0) / 1200.0) * _masterTuning; }
+      double ct2hz(double c) const { return pow(2.0, (c-6900.0) / 1200.0) * masterTuning(); }
 
       virtual const char* name() const;
       virtual const QList<Ms::MidiPatch*>& getPatchInfo() const;
