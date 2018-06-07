@@ -16,6 +16,8 @@ Instrument definition
 Sample Definition
       sample
 Input controls
+      loccN
+      hiccN
       lochan
       hichan
       key
@@ -41,11 +43,15 @@ Input controls
       on_loccN
       on_hiccN
 Sample Player
+      delay
+      offset
       loop_mode
            no_loop
            one_shot
            loop_continuous
            loop_sustain
+      loop_start
+      loop_end
 Performance Parameters
 Pitch
       transpose
@@ -55,13 +61,29 @@ Pitch
 Pitch EG
 Pitch LFO
 Filter
+      fil_type
+      cutoff
+      fil_veltrack
 Filter EG
 Filter LFO
 Amplifier
+      pan
       volume
       amp_veltrack
       rt_decay
 Amplifier EG
+      ampeg_delay
+      ampeg_start
+      ampeg_attack
+      ampeg_hold
+      ampeg_decay
+      ampeg_sustain
+      ampeg_vel2delay
+      ampeg_vel2attack
+      ampeg_vel2hold
+      ampeg_vel2decay
+      ampeg_vel2sustain
+      ampeg_vel2release
       ampeg_release
 Amplifier LFO
 Equalizer
@@ -75,8 +97,6 @@ Unsupported
 --
 
 Input Controls
-      loccN
-      hiccN
       lobend
       hibend
       lochanaft
@@ -94,16 +114,12 @@ Input Controls
       sw_vel
 Performance Parameters
 Sample Player
-      delay
       delay_random
       delay_ccN
-      offset
       offset_random
       offset_ccN
       end
       count
-      loop_start
-      loop_end
       sync_beats
       sync_offset
 Pitch
@@ -139,15 +155,12 @@ Pitch LFO
       pitchlfo_freqccN
       pitchlfo_freqpolyaft
 Filter
-      fil_type
-      cutoff
       cutoff_ccN
       cutoff_chanaft
       cutoff_polyaft
       resonance
       fil_keytrack
       fil_keycenter
-      fil_veltrack
       fil_random
 Filter EG
       fileg_delay
@@ -177,7 +190,6 @@ Filter LFO
       fillfo_freqchanaft
       fillfo_freqpolyaft
 Amplifier
-      pan
       width
       position
       amp_keytrack
@@ -203,18 +215,6 @@ Amplifier
       xfout_hiccN
       xf)cccurve
 Amplifier EG
-      ampeg_delay
-      ampeg_start
-      ampeg_attack
-      ampeg_hold
-      ampeg_decay
-      ampeg_sustain
-      ampeg_vel2delay
-      ampeg_vel2attack
-      ampeg_vel2hold
-      ampeg_vel2decay
-      ampeg_vel2sustain
-      ampeg_vel2release
       ampeg_delayccN
       ampeg_startccN
       ampeg_attackccN
