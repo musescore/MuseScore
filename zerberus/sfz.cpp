@@ -355,6 +355,10 @@ static void readFilterType(const QString& data, FilterType& filType)
             filType = FilterType::hpf_1p;
       else if (data == "hpf_2p")
             filType = FilterType::hpf_2p;
+      else if (data == "bpf_2p")
+            filType = FilterType::bpf_2p;
+      else if (data == "brf_2p")
+            filType = FilterType::brf_2p;
       else
             qDebug("SfzRegion: not supported fil_type value: %s", qPrintable(data));
       }
