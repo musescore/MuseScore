@@ -1597,6 +1597,26 @@ const char* AddElement::name() const
 #endif
 
 //---------------------------------------------------------
+//   removeNote
+//    Helper function for RemoveElement class
+//---------------------------------------------------------
+
+static void removeNote(const Note* note)
+      {
+      Score* score = note->score();
+      if (note->tieFor() && note->tieFor()->endNote())
+            score->undo(new RemoveElement(note->tieFor()));
+      if (note->tieBack())
+            score->undo(new RemoveElement(note->tieBack()));
+      for (Spanner* s : note->spannerBack()) {
+            score->undo(new RemoveElement(s));
+            }
+      for (Spanner* s : note->spannerFor()) {
+            score->undo(new RemoveElement(s));
+            }
+      }
+
+//---------------------------------------------------------
 //   RemoveElement
 //---------------------------------------------------------
 
@@ -1647,18 +1667,14 @@ RemoveElement::RemoveElement(Element* e)
                               score->undo(new RemoveElement(tremolo));
                         }
                   for (const Note* note : chord->notes()) {
-                        if (note->tieFor() && note->tieFor()->endNote())
-                              score->undo(new RemoveElement(note->tieFor()));
-                        if (note->tieBack())
-                              score->undo(new RemoveElement(note->tieBack()));
-                        for (Spanner* s : note->spannerBack()) {
-                              score->undo(new RemoveElement(s));
-                              }
-                        for (Spanner* s : note->spannerFor()) {
-                              score->undo(new RemoveElement(s));
-                              }
+                        removeNote(note);
                         }
                   }
+            }
+      else if (e->type() == Element::Type::NOTE) {
+            // Removing an individual note within a chord
+            const Note* note = static_cast<const Note*>(e);
+            removeNote(note);
             }
       }
 
@@ -1687,10 +1703,7 @@ void RemoveElement::undo()
             if (element->type() == Element::Type::CHORD) {
                   Chord* chord = static_cast<Chord*>(element);
                   foreach(Note* note, chord->notes()) {
-                        if (note->tieBack())
-                              note->tieBack()->setEndNote(note);
-                        if (note->tieFor() && note->tieFor()->endNote())
-                              note->tieFor()->endNote()->setTieBack(note->tieFor());
+                        note->connectTiedNotes();
                         }
                   }
             undoAddTuplet(static_cast<ChordRest*>(element));
@@ -1710,9 +1723,7 @@ void RemoveElement::redo()
             if (element->type() == Element::Type::CHORD) {
                   Chord* chord = static_cast<Chord*>(element);
                   foreach(Note* note, chord->notes()) {
-                        if (note->tieFor() && note->tieFor()->endNote()) {
-                              note->tieFor()->endNote()->setTieBack(0);
-                              }
+                        note->disconnectTiedNotes();
                         }
                   }
             }

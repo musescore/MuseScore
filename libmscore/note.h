@@ -359,6 +359,8 @@ class Note : public Element {
       Note* firstTiedNote() const;
       Note* lastTiedNote() const;
       QList<Note*> tiedNotes() const;
+      void disconnectTiedNotes();
+      void connectTiedNotes();
 
       Chord* chord() const            { return (Chord*)parent(); }
       void setChord(Chord* a)         { setParent((Element*)a);  }
