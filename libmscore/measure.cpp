@@ -800,6 +800,10 @@ void Measure::add(Element* e)
                   for (s = first(); s && s->rtick() < t; s = s->next())
                         ;
                   while (s && s->rtick() == t) {
+                        if (!seg->isChordRestType() && (seg->segmentType() == s->segmentType())) {
+                              qDebug("there is already a <%s> segment", seg->subTypeName());
+                              return;
+                              }
                         if (s->segmentType() > st)
                               break;
                         s = s->next();
