@@ -1055,7 +1055,7 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
                   return false;
             }
       triggerLayout();
-      setGenerated(false);
+//      setGenerated(false);
       return true;
       }
 
@@ -1709,7 +1709,7 @@ QRectF Element::drag(EditData& ed)
             }
 
       setUserOff(QPointF(x, y));
-      setGenerated(false);
+//      setGenerated(false);
 
       if (isTextBase()) {         // TODO: check for other types
             //
@@ -1825,8 +1825,10 @@ void Element::endEditDrag(EditData& ed)
                   }
             eed->propertyData.clear();
             }
-      if (changed)
+      if (changed) {
             undoChangeProperty(Pid::AUTOPLACE, false);
+            undoChangeProperty(Pid::GENERATED, false);
+            }
       }
 
 //---------------------------------------------------------

@@ -2434,7 +2434,7 @@ void Note::updateRelLine(int relLine, bool undoable)
       ClefType clef = staff->clef(chord()->tick());
       int line      = relStep(relLine, clef);
 
-      if (undoable && _line != INVALID_LINE)
+      if (undoable && (_line != INVALID_LINE) && (line != _line))
             undoChangeProperty(Pid::LINE, line);
       else
             setLine(line);

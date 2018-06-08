@@ -1447,6 +1447,8 @@ void Score::deleteItem(Element* el)
       {
       if (!el)
             return;
+      if (el->generated())          // cannot remove generated elements
+            return;
 //      qDebug("%s", el->name());
 
       switch (el->type()) {
@@ -4406,8 +4408,12 @@ void Score::undoRemoveElement(Element* element)
                   }
             }
       for (Segment* s : segments) {
-            if (s->empty())
-                  undo(new RemoveElement(s));
+            if (s->empty()) {
+                  if (s->isHeaderClefType())    // probably more segment types (system header)
+                        s->setEnabled(false);
+                  else
+                        undo(new RemoveElement(s));
+                  }
             }
       }
 
