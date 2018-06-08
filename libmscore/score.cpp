@@ -1568,17 +1568,6 @@ MeasureBase* Score::measure(int idx) const
       }
 
 //---------------------------------------------------------
-//   updateMeasuresIndices
-//---------------------------------------------------------
-
-void Score::updateMeasuresIndices()
-      {
-      int idx = 0;
-      for (MeasureBase* m = _measures.first(); m; m = m->next())
-            m->setIndex(idx++);
-      }
-
-//---------------------------------------------------------
 //   lastMeasure
 //---------------------------------------------------------
 

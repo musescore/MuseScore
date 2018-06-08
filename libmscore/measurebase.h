@@ -67,7 +67,6 @@ class MeasureBase : public Element {
       int _tick              { 0 };
       int _no                { 0 };       ///< Measure number, counting from zero
       int _noOffset          { 0 };       ///< Offset to measure number
-      int _idx               { 0 };       ///< Measure index which, unlike measure number, is guaranteed to be monotonic. Call Score::updateMeasuresIndices() to update this value.
 
    protected:
       void cleanupLayoutBreaks(bool undo);
@@ -139,8 +138,6 @@ class MeasureBase : public Element {
       void setNo(int n)                { _no = n;                        }
       int noOffset() const             { return _noOffset;               }
       void setNoOffset(int n)          { _noOffset = n;                  }
-      int index() const                { return _idx;                    }
-      void setIndex(int i)             { _idx = i;                       }
 
       bool repeatEnd() const           { return flag(ElementFlag::REPEAT_END);    }
       void setRepeatEnd(bool v)        { setFlag(ElementFlag::REPEAT_END, v);     }
@@ -170,6 +167,8 @@ class MeasureBase : public Element {
       void setHasCourtesyKeySig(int v) { setFlag(ElementFlag::KEYSIG, v);         }
 
       virtual void computeMinWidth() { };
+
+      int index() const;
       };
 
 

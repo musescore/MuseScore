@@ -938,7 +938,6 @@ class Score : public QObject, ScoreElement {
       Ms::Measure* lastMeasure() const;
       Ms::Measure* lastMeasureMM() const;
       MeasureBase* measure(int idx) const;
-      void updateMeasuresIndices();
 
       int endTick() const;
 
