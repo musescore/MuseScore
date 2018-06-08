@@ -315,6 +315,8 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
                   }
             }
       changeProperties(this, id, v, ps);
+      if (id != Pid::GENERATED)
+            changeProperties(this, Pid::GENERATED, QVariant(false), PropertyFlags::NOSTYLE);
       }
 
 //---------------------------------------------------------

@@ -177,7 +177,6 @@ void Inspector::update(Score* s)
                   {
                   sameTypes = false;
                   break;
-                  }
             }
       if (oe != element() || oSameTypes != sameTypes) {
             delete ie;
