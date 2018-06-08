@@ -82,17 +82,18 @@ sf_count_t AudioFile::readData(short* data, sf_count_t frames)
             resFrames = sf_readf_short(sf, data, frames);
       else {
             //read native float values
-            float* dataF = new float[frames * channels()];
+            int totalFrames = frames * channels();
+            float* dataF = new float[totalFrames];
             resFrames = sf_readf_float(sf, dataF, frames);
             //find the maximum signal value
             float maxSignal = 0.f;
-            for (int i = 0; i < resFrames; ++i) {
+            for (int i = 0; i < totalFrames; ++i) {
                   if (fabs(dataF[i]) > maxSignal)
                         maxSignal = dataF[i] > 0 ? dataF[i] : -dataF[i];
                   }
             //convert normilized floats to signed short values
             float adjScale = 1.f/maxSignal;
-            for (int i = 0; i < resFrames; ++i)
+            for (int i = 0; i < totalFrames; ++i)
                   data[i] = adjScale * lrintf(dataF[i] * (dataF[i] > 0 ? SHRT_MAX : -SHRT_MIN));
             }
 
