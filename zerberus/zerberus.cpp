@@ -98,16 +98,6 @@ void Zerberus::trigger(Channel* channel, int key, int velo, Trigger trigger, int
       double random = (double) rand() / (double) RAND_MAX;
       for (Zone* z : i->zones()) {
             if (z->match(channel, key, velo, trigger, random, cc, ccVal)) {
-                  if (freeVoices.empty()) {
-                        qDebug("Zerberus: out of voices...");
-                        return;
-                        }
-                  Voice* voice = freeVoices.pop();
-                  Q_ASSERT(voice->isOff());
-                  voice->start(channel, key, velo, z, durSinceNoteOn);
-                  voice->setNext(activeVoices);
-                  activeVoices = voice;
-
                   //
                   // handle offBy voices
                   //
@@ -121,6 +111,17 @@ void Zerberus::trigger(Channel* channel, int key, int velo, Trigger trigger, int
                                     }
                               }
                         }
+
+                  if (freeVoices.empty()) {
+                        qDebug("Zerberus: out of voices...");
+                        return;
+                        }
+
+                  Voice* voice = freeVoices.pop();
+                  Q_ASSERT(voice->isOff());
+                  voice->start(channel, key, velo, z, durSinceNoteOn);
+                  voice->setNext(activeVoices);
+                  activeVoices = voice;
                   }
             }
       }
