@@ -687,9 +687,7 @@ void Tuplet::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 void Tuplet::write(XmlWriter& xml) const
       {
-      xml.stag(QString("Tuplet id=\"%1\"").arg(_id));
-      if (tuplet())
-            xml.tag("Tuplet", tuplet()->id());
+      xml.stag(name());
       Element::writeProperties(xml);
 
       writeProperty(xml, Pid::DIRECTION);

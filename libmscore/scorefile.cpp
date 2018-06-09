@@ -1242,7 +1242,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                         }
                   if (e->isChordRest()) {
                         ChordRest* cr = toChordRest(e);
-                        cr->writeTuplet(xml);
+                        cr->writeTupletStart(xml);
                         }
 //                  if (segment->isEndBarLine() && (m->mmRestCount() < 0 || m->mmRest())) {
 //                        BarLine* bl = toBarLine(e);
@@ -1250,6 +1250,12 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
 //                        bl->setVisible(m->endBarLineVisible());
 //                        }
                   e->write(xml);
+
+                  if (e->isChordRest()) {
+                        ChordRest* cr = toChordRest(e);
+                        cr->writeTupletEnd(xml);
+                        }
+
                   segment->write(xml);    // write only once
                   if (forceTimeSig) {
                         if (segment->segmentType() == SegmentType::KeySig)

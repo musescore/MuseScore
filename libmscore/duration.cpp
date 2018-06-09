@@ -129,55 +129,39 @@ Fraction DurationElement::rfrac() const
       }
 
 //---------------------------------------------------------
-//   readProperties
+//   readAddTuplet
 //---------------------------------------------------------
 
-bool DurationElement::readProperties(XmlReader& e)
+void DurationElement::readAddTuplet(Tuplet* t)
       {
-      if (e.name() == "Tuplet") {
-            int i = e.readInt();
-            Tuplet* t = e.findTuplet(i);
-            if (!t) {
-                  qDebug("DurationElement:read(): Tuplet id %d not found", i);
-                  t = score()->searchTuplet(e, i);
-                  if (t) {
-                        qDebug("   ...found outside measure, input file corrupted?");
-                        e.addTuplet(t);
-                        }
-                  }
-            if (t) {
-                  setTuplet(t);
-                  if (!score()->undoStack()->active())     // HACK, also added in Undo::AddElement()
-                        t->add(this);
-                  }
-            return true;
+      if (t) {
+            setTuplet(t);
+            if (!score()->undoStack()->active())     // HACK, also added in Undo::AddElement()
+                  t->add(this);
             }
-      else if (Element::readProperties(e))
-            return true;
-      return false;
       }
 
 //---------------------------------------------------------
-//   writeProperties
+//   writeTupletStart
 //---------------------------------------------------------
 
-void DurationElement::writeProperties(XmlWriter& xml) const
-      {
-      Element::writeProperties(xml);
-      if (tuplet())
-            xml.tag("Tuplet", tuplet()->id());
-      }
-
-//---------------------------------------------------------
-//   writeTuplet
-//---------------------------------------------------------
-
-void DurationElement::writeTuplet(XmlWriter& xml)
+void DurationElement::writeTupletStart(XmlWriter& xml) const
       {
       if (tuplet() && tuplet()->elements().front() == this) {
-            tuplet()->writeTuplet(xml);           // recursion
-            tuplet()->setId(xml.nextTupletId());
+            tuplet()->writeTupletStart(xml);           // recursion
             tuplet()->write(xml);
+            }
+      }
+
+//---------------------------------------------------------
+//   writeTupletEnd
+//---------------------------------------------------------
+
+void DurationElement::writeTupletEnd(XmlWriter& xml) const
+      {
+      if (tuplet() && tuplet()->elements().back() == this) {
+            xml.tagE("endTuplet");
+            tuplet()->writeTupletEnd(xml);           // recursion
             }
       }
 
