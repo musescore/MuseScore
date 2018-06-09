@@ -191,7 +191,7 @@ ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Element* current, int tra
 static ConnectorPointInfo readPositionInfo(const XmlReader& e, int track) {
       ConnectorPointInfo info;
       info.track = track;
-      info.measure = e.pasteMode() ? 0 : e.currentMeasure()->index();
+      info.measure = e.pasteMode() ? 0 : e.currentMeasureIndex();
       info.fpos = e.pasteMode() ? Fraction::fromTicks(e.tick()) : Fraction::fromTicks(e.tick() - e.currentMeasure()->tick());
       return info;
       }
@@ -258,7 +258,7 @@ bool ConnectorInfoReader::read()
             _currentInfo.track = e.track();
       if (_currentInfo.fpos == pointDefaults.fpos)
             _currentInfo.fpos = e.pasteMode() ? e.absfpos() : e.fpos();
-      _currentInfo.measure = e.pasteMode() ? 0 : e.currentMeasure()->index();
+      _currentInfo.measure = e.pasteMode() ? 0 : e.currentMeasureIndex();
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
