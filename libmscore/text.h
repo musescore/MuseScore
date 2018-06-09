@@ -111,7 +111,6 @@ class TextCursor {
       void updateCursorFormat();
       void setFormat(FormatId, QVariant);
       void changeSelectionFormat(FormatId id, QVariant val);
-//      bool deleteChar() const;
       };
 
 //---------------------------------------------------------
@@ -311,8 +310,8 @@ class TextBase : public Element {
 
       static bool validateText(QString& s);
       bool inHexState() const { return hexState >= 0; }
-      void endHexState();
-      void inputTransition(QInputMethodEvent*);
+      void endHexState(EditData&);
+      void inputTransition(EditData&, QInputMethodEvent*);
 
       QFont font() const;
       QFontMetricsF fontMetrics() const;

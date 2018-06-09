@@ -546,8 +546,8 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
             }
 
 #ifdef Q_OS_WIN // Japenese IME on Windows needs to know when Contrl/Alt/Shift/CapsLock is pressed while in predit
-      if (editData.element->isText()) {
-            Text* text = toText(editData.element);
+      if (editData.element->isTextBase()) {
+            TextBase* text = toTextBase(editData.element);
             if (text->cursor(editData)->format()->preedit() && QGuiApplication::inputMethod()->locale().script() == QLocale::JapaneseScript &&
                 ((editData.key == Qt::Key_Control || (editData.modifiers & Qt::ControlModifier)) ||
                  (editData.key == Qt::Key_Alt     || (editData.modifiers & Qt::AltModifier)) ||
@@ -636,9 +636,9 @@ void ScoreView::keyReleaseEvent(QKeyEvent* ev)
       {
       if (state == ViewState::EDIT) {
             auto modifiers = Qt::ControlModifier | Qt::ShiftModifier;
-            if (editData.element->isText() && ((ev->modifiers() & modifiers) == 0)) {
-                  Text* text = toText(editData.element);
-                  text->endHexState();
+            if (editData.element->isTextBase() && ((ev->modifiers() & modifiers) == 0)) {
+                  TextBase* text = toTextBase(editData.element);
+                  text->endHexState(editData);
                   ev->accept();
                   update();
                   }
@@ -852,6 +852,17 @@ void ScoreView::changeState(ViewState s)
       mscore->changeState(mscoreState());
       }
 
+//---------------------------------------------------------
+//   inputMethodEvent
+//---------------------------------------------------------
+
+void ScoreView::inputMethodEvent(QInputMethodEvent* event)
+      {
+      if (state != ViewState::EDIT)
+            return;
+      if (editData.element->isTextBase())
+            toTextBase(editData.element)->inputTransition(editData, event);
+      }
 
 }    // namespace Ms
 
