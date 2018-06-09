@@ -15,36 +15,6 @@
 
 namespace Ms {
 
-#if 0
-//---------------------------------------------------------
-//   deleteChar
-//---------------------------------------------------------
-
-bool TextCursor::deleteChar() const
-      {
-      TextBlock& l1 = curLine();
-      if (_column == l1.columns()) {
-            if (_row + 1 < _text->rows()) {
-                  const TextBlock& l2 = _text->_layout[_row + 1];
-                  for (const TextFragment& f : l2.fragments())
-                        l1.fragments().append(f);
-                  _text->_layout.removeAt(_row + 1);
-                  if (_text->_layout.last() == l1)
-                        l1.setEol(false);
-                  }
-            else
-                  return false;
-            }
-      else {
-            QString s = l1.remove(_column);
-            _text->score()->undoStack()->push1(new RemoveText(this, s));
-            }
-//TODO      clearSelection();
-      _text->triggerLayout();
-      return true;
-      }
-#endif
-
 //---------------------------------------------------------
 //   editInsertText
 //---------------------------------------------------------
@@ -575,26 +545,36 @@ void TextBase::paste(EditData& ed)
 
 //---------------------------------------------------------
 //   inputTransition
+//    - preedit string should not influence then undo/redo stack
+//    - commit string goes onto the undo/redo stack
 //---------------------------------------------------------
 
-void TextBase::inputTransition(QInputMethodEvent* /* ie */)
+void TextBase::inputTransition(EditData& ed, QInputMethodEvent* ie)
       {
-#if 0
+      TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+      TextCursor* _cursor = &ted->cursor;
+
       // remove preedit string
       int n = preEdit.size();
       while (n--) {
-            if (movePosition(QTextCursor::Left))
-                  _cursor->deleteChar();
+            if (_cursor->movePosition(QTextCursor::Left)) {
+                  TextBlock& l  = _cursor->curLine();
+                   l.remove(_cursor->column());
+                  _cursor->text()->triggerLayout();
+                  _cursor->text()->setTextInvalid();
+                  }
             }
 
-      qDebug("TextBase::inputTransition <%s><%s> len %d start %d, preEdit size %d",
+      qDebug("<%s><%s> len %d start %d, preEdit size %d",
          qPrintable(ie->commitString()),
          qPrintable(ie->preeditString()),
          ie->replacementLength(), ie->replacementStart(), preEdit.size());
 
       if (!ie->commitString().isEmpty()) {
             _cursor->format()->setPreedit(false);
-            editInsertText(_cursor, ie->commitString());
+            score()->startCmd();
+            insertText(ed, ie->commitString());
+            score()->endCmd();
             preEdit.clear();
             }
       else  {
@@ -618,21 +598,25 @@ void TextBase::inputTransition(QInputMethodEvent* /* ie */)
                         }
 #endif
                   _cursor->format()->setPreedit(true);
+                  _cursor->updateCursorFormat();
                   editInsertText(_cursor, preEdit);
-                  ie->accept();
-                  score()->update();
+//                  ie->accept();
+                  setTextInvalid();
+                  layout1();
                   }
             }
-#endif
+      ie->accept();
       }
 
 //---------------------------------------------------------
 //   endHexState
 //---------------------------------------------------------
 
-void TextBase::endHexState()
+void TextBase::endHexState(EditData& ed)
       {
-#if 0
+      TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+      TextCursor* _cursor = &ted->cursor;
+
       if (hexState >= 0) {
             if (hexState > 0) {
                   int c2 = _cursor->column();
@@ -652,7 +636,6 @@ void TextBase::endHexState()
                   }
             hexState = -1;
             }
-#endif
       }
 
 //---------------------------------------------------------
@@ -687,7 +670,6 @@ bool TextBase::deleteSelectedText(EditData& ed)
                   // move cursor left:
                   if (!_cursor->movePosition(QTextCursor::Left))
                         break;
-//                  _cursor->clearSelection();
                   score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())), &ed);
                   }
             }
