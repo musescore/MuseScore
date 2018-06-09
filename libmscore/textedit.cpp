@@ -15,6 +15,52 @@
 
 namespace Ms {
 
+#if 0
+//---------------------------------------------------------
+//   deleteChar
+//---------------------------------------------------------
+
+bool TextCursor::deleteChar() const
+      {
+      TextBlock& l1 = curLine();
+      if (_column == l1.columns()) {
+            if (_row + 1 < _text->rows()) {
+                  const TextBlock& l2 = _text->_layout[_row + 1];
+                  for (const TextFragment& f : l2.fragments())
+                        l1.fragments().append(f);
+                  _text->_layout.removeAt(_row + 1);
+                  if (_text->_layout.last() == l1)
+                        l1.setEol(false);
+                  }
+            else
+                  return false;
+            }
+      else {
+            QString s = l1.remove(_column);
+            _text->score()->undoStack()->push1(new RemoveText(this, s));
+            }
+//TODO      clearSelection();
+      _text->triggerLayout();
+      return true;
+      }
+#endif
+
+//---------------------------------------------------------
+//   editInsertText
+//---------------------------------------------------------
+
+void TextBase::editInsertText(TextCursor* cursor, const QString& s)
+      {
+      Q_ASSERT(!layoutInvalid);
+      textInvalid = true;
+
+      cursor->curLine().insert(cursor, s);
+      cursor->setColumn(cursor->column() + s.size());
+      cursor->clearSelection();
+
+      triggerLayout();
+      }
+
 //---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------
@@ -163,7 +209,7 @@ bool TextBase::edit(EditData& ed)
                               else {
                                     if (!_cursor->movePosition(QTextCursor::Left))
                                           return false;
-                                    score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())));
+                                    score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())), &ed);
                                     }
                               }
                         return true;
@@ -325,14 +371,11 @@ void ChangeText::insertText(EditData* ed)
       {
       TextCursor tc = c;
       c.text()->editInsertText(&tc, s);
-      c.text()->triggerLayout();
       if (ed) {
             TextCursor* ttc = c.text()->cursor(*ed);
             *ttc = tc;
             }
-      c.text()->setTextInvalid();
       }
-
 
 //---------------------------------------------------------
 //  ChangeText::removeText
@@ -528,6 +571,127 @@ void TextBase::paste(EditData& ed)
             insertText(ed, token);
             }
       score()->endCmd();
+      }
+
+//---------------------------------------------------------
+//   inputTransition
+//---------------------------------------------------------
+
+void TextBase::inputTransition(QInputMethodEvent* /* ie */)
+      {
+#if 0
+      // remove preedit string
+      int n = preEdit.size();
+      while (n--) {
+            if (movePosition(QTextCursor::Left))
+                  _cursor->deleteChar();
+            }
+
+      qDebug("TextBase::inputTransition <%s><%s> len %d start %d, preEdit size %d",
+         qPrintable(ie->commitString()),
+         qPrintable(ie->preeditString()),
+         ie->replacementLength(), ie->replacementStart(), preEdit.size());
+
+      if (!ie->commitString().isEmpty()) {
+            _cursor->format()->setPreedit(false);
+            editInsertText(_cursor, ie->commitString());
+            preEdit.clear();
+            }
+      else  {
+            preEdit = ie->preeditString();
+            if (!preEdit.isEmpty()) {
+#if 0
+                  for (auto a : ie->attributes()) {
+                        switch(a.type) {
+                              case QInputMethodEvent::TextFormat:
+                                    {
+                                    printf("attribute TextFormat: %d-%d\n", a.start, a.length);
+                                    QTextFormat tf = a.value.value<QTextFormat>();
+                                    }
+                                    break;
+                              case QInputMethodEvent::Cursor:
+                                    printf("attribute Cursor at %d\n", a.start);
+                                    break;
+                              default:
+                                    printf("attribute %d\n", a.type);
+                              }
+                        }
+#endif
+                  _cursor->format()->setPreedit(true);
+                  editInsertText(_cursor, preEdit);
+                  ie->accept();
+                  score()->update();
+                  }
+            }
+#endif
+      }
+
+//---------------------------------------------------------
+//   endHexState
+//---------------------------------------------------------
+
+void TextBase::endHexState()
+      {
+#if 0
+      if (hexState >= 0) {
+            if (hexState > 0) {
+                  int c2 = _cursor->column();
+                  int c1 = c2 - (hexState + 1);
+
+                  TextBlock& t = _layout[_cursor->row()];
+                  QString ss   = t.remove(c1, hexState + 1);
+                  bool ok;
+                  int code     = ss.mid(1).toInt(&ok, 16);
+                  _cursor->setColumn(c1);
+                  _cursor->clearSelection();
+                  if (ok)
+                        editInsertText(_cursor, QString(code));
+                  else
+                        qDebug("cannot convert hex string <%s>, state %d (%d-%d)",
+                           qPrintable(ss.mid(1)), hexState, c1, c2);
+                  }
+            hexState = -1;
+            }
+#endif
+      }
+
+//---------------------------------------------------------
+//   deleteSelectedText
+//---------------------------------------------------------
+
+bool TextBase::deleteSelectedText(EditData& ed)
+      {
+      TextCursor* _cursor = cursor(ed);
+
+      if (!_cursor->hasSelection())
+            return false;
+
+      int r1 = _cursor->selectLine();
+      int c1 = _cursor->selectColumn();
+
+      if (r1 > _cursor->row() || (r1 == _cursor->row() && c1 > _cursor->column())) {
+            // swap start end of selection
+            r1 = _cursor->row();
+            c1 = _cursor->column();
+            _cursor->setRow(_cursor->selectLine());
+            _cursor->setColumn(_cursor->selectColumn());
+            }
+
+      _cursor->clearSelection();
+      for (;;) {
+            if (r1 == _cursor->row() && c1 == _cursor->column())
+                  break;
+            if (_cursor->column() == 0 && _cursor->row() != 0)
+                  score()->undo(new JoinText(_cursor), &ed);
+            else {
+                  // move cursor left:
+                  if (!_cursor->movePosition(QTextCursor::Left))
+                        break;
+//                  _cursor->clearSelection();
+                  score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())), &ed);
+                  }
+            }
+      return true;
       }
 
 }  // namespace Ms

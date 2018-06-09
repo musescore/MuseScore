@@ -111,7 +111,7 @@ class TextCursor {
       void updateCursorFormat();
       void setFormat(FormatId, QVariant);
       void changeSelectionFormat(FormatId id, QVariant val);
-      bool deleteChar() const;
+//      bool deleteChar() const;
       };
 
 //---------------------------------------------------------
