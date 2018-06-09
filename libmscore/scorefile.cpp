@@ -1220,7 +1220,6 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                         }
                   if (e->isChordRest()) {
                         ChordRest* cr = toChordRest(e);
-                        cr->writeBeam(xml);
                         cr->writeTuplet(xml);
                         }
 //                  if (segment->isEndBarLine() && (m->mmRestCount() < 0 || m->mmRest())) {

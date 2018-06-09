@@ -1978,7 +1978,7 @@ void Beam::write(XmlWriter& xml) const
       {
       if (_elements.empty())
             return;
-      xml.stag(QString("Beam id=\"%1\"").arg(_id));
+      xml.stag(name());
       Element::writeProperties(xml);
 
       writeProperty(xml, Pid::STEM_DIRECTION);
@@ -2019,7 +2019,6 @@ void Beam::read(XmlReader& e)
       {
       QPointF p1, p2;
       qreal _spatium = spatium();
-      _id = e.intAttribute("id");
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "StemDirection") {
