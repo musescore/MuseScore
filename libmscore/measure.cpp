@@ -1849,6 +1849,7 @@ void Measure::read(XmlReader& e, int staffIdx)
 
       QList<Chord*> graceNotes;
       Beam* startingBeam = nullptr;
+      Tuplet* tuplet = nullptr;
       e.tuplets().clear();
       e.setTrack(staffIdx * VOICES);
       e.setCurrentMeasure(this);
@@ -1934,6 +1935,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                         startingBeam->add(chord); // also calls chord->setBeam(startingBeam)
                         startingBeam = nullptr;
                         }
+                  if (tuplet)
+                        chord->readAddTuplet(tuplet);
                   segment = getSegment(SegmentType::ChordRest, e.tick());
                   if (chord->noteType() != NoteType::NORMAL)
                         graceNotes.push_back(chord);
@@ -1959,6 +1962,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                         startingBeam->add(rest); // also calls rest->setBeam(startingBeam)
                         startingBeam = nullptr;
                         }
+                  if (tuplet)
+                        rest->readAddTuplet(tuplet);
                   segment = getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(rest);
 
@@ -2153,12 +2158,31 @@ void Measure::read(XmlReader& e, int staffIdx)
                   segment->add(barLine);
                   }
             else if (tag == "Tuplet") {
-                  Tuplet* tuplet = new Tuplet(score());
+                  Tuplet* oldTuplet = tuplet;
+                  tuplet = new Tuplet(score());
                   tuplet->setTrack(e.track());
                   tuplet->setTick(e.tick());
                   tuplet->setParent(this);
                   tuplet->read(e);
-                  e.addTuplet(tuplet);
+                  if (oldTuplet)
+                        tuplet->readAddTuplet(oldTuplet);
+                  }
+            else if (tag == "endTuplet") {
+                  if (!tuplet) {
+                        qDebug("Measure::read: encountered <endTuplet/> when no tuplet was started");
+                        e.skipCurrentElement();
+                        continue;
+                        }
+                  Tuplet* oldTuplet = tuplet;
+                  tuplet = tuplet->tuplet();
+                  if (oldTuplet->elements().empty()) {
+                        // this should not happen and is a sign of input file corruption
+                        qDebug("Measure:read: empty tuplet in measure index=%d, input file corrupted?", e.currentMeasureIndex());
+                        if (tuplet)
+                              tuplet->remove(oldTuplet);
+                        delete oldTuplet;
+                        }
+                  e.readNext();
                   }
             else if (tag == "startRepeat") {
                   setRepeatStart(true);
@@ -2244,11 +2268,18 @@ void Measure::read(XmlReader& e, int staffIdx)
             else
                   e.unknown();
             }
-      e.checkTuplets();
       e.checkConnectors();
       if (startingBeam) {
             qDebug("The read beam was not used");
             delete startingBeam;
+            }
+      if (tuplet) {
+            qDebug("Measure:read: measure index=%d, <endTuplet/> not found", e.currentMeasureIndex());
+            if (tuplet->elements().empty()) {
+                  if (tuplet->tuplet())
+                        tuplet->tuplet()->remove(tuplet);
+                  delete tuplet;
+                  }
             }
       e.setCurrentMeasure(nullptr);
       }

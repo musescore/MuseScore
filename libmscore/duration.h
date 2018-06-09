@@ -48,10 +48,10 @@ class DurationElement : public Element {
 
       virtual Measure* measure() const    { return (Measure*)(parent()); }
 
-      virtual bool readProperties(XmlReader& e);
+      void readAddTuplet(Tuplet* t);
       virtual bool readProperties300(XmlReader&);
-      virtual void writeProperties(XmlWriter& xml) const;
-      void writeTuplet(XmlWriter& xml);
+      void writeTupletStart(XmlWriter& xml) const;
+      void writeTupletEnd(XmlWriter& xml) const;
 
       void setTuplet(Tuplet* t)           { _tuplet = t;      }
       Tuplet* tuplet() const              { return _tuplet;   }
