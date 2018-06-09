@@ -354,8 +354,11 @@ QVariant Ottava::propertyDefault(Pid propertyId) const
                   }
             default:
                   for (const StyledProperty& p : subStyle(subStyleId())) {
-                        if (p.pid == propertyId)
+                        if (p.pid == propertyId) {
+                              if (propertyType(propertyId) == P_TYPE::SP_REAL)
+                                    return score()->styleP(p.sid);
                               return score()->styleV(p.sid);
+                              }
                         }
                   return getProperty(propertyId);
             }
