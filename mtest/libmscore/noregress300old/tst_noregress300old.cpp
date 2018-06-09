@@ -42,7 +42,7 @@ class TestNoRegress300old : public QObject, public MTest
       void tuplets()          { noregress("tuplets");          }
       void hairpin()          { noregress("hairpin");          }
       void brlines()          { noregress("barlines");         }
-      void slursGrace()       { noregress("slurs-grace");      }
+      void grace()            { noregress("grace");            }
       void irregular()        { noregress("irregular");        }
       void moonlight()        { noregress("moonlight");        }
       };
