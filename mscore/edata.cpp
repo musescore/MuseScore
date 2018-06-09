@@ -120,6 +120,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                   case Element::Type::NOTEDOT:
                         writeData(xml, mag, e->mag(), "augmentationDot", e);
                         break;
+
                   case Element::Type::STEM:
                         writeData(xml, mag, e->mag() / smag, "stem", e);
                         break;
@@ -131,7 +132,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                   case Element::Type::ARTICULATION: {
                         const Articulation* a = static_cast<const Articulation*>(e);
                         SymId symId = a->sym();
-                        QString symName = Sym::id2userName(symId);
+                        QString symName = Sym::id2name(symId);
                         writeData(xml, mag, a->mag(), symName, a);
                         }
                         break;
@@ -139,7 +140,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                   case Element::Type::CLEF: {
                         const Clef* c = static_cast<const Clef*>(e);
                         SymId symId = c->sym();
-                        QString symName = Sym::id2userName(symId);
+                        QString symName = Sym::id2name(symId);
                         writeData(xml, mag, c->symMag(), symName, c);   // hack symMag
                         }
                         break;
@@ -147,7 +148,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                   case Element::Type::NOTE: {
                         const Note* n = static_cast<const Note*>(e);
                         SymId symId = n->noteHead();
-                        QString symName = Sym::id2userName(symId);
+                        QString symName = Sym::id2name(symId);
                         writeData(xml, mag, n->mag(), symName, n);
                         }
                         break;
