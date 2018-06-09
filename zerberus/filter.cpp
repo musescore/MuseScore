@@ -56,8 +56,7 @@ void ZFilter::initialize(const Zerberus* zerberus, const Zone* z, int velocity)
             }
 
       last_resonanceF   = -1.0;
-      float GEN_FILTERQ = 100.0;  // 0 - 960
-      float q_db  = GEN_FILTERQ / 10.0f - 3.01f;
+      float q_db  = 0; //no resonance by default
       q_lin       = pow(10.0f, q_db / 20.0f);
       gain = 1.0 / sqrt(q_lin);
       }
@@ -112,14 +111,14 @@ void ZFilter::update()
             case FilterType::lpf_2p: {
                   a1_temp = 2.0f * cos_coeff * a0_inv;
                   a2_temp = (alpha_coeff - 1.f) * a0_inv;
-                  b1_temp = (1.0f - cos_coeff) * a0_inv * gain;
+                  b1_temp = (1.0f - cos_coeff) * a0_inv;
                   b0_temp = b2_temp = b1_temp * 0.5f;
                   break;
                   }
             case FilterType::hpf_2p: {
                   a1_temp = 2.0f * cos_coeff * a0_inv;
                   a2_temp = (alpha_coeff - 1.f) * a0_inv;
-                  b1_temp = -(1.0f + cos_coeff) * a0_inv * gain;
+                  b1_temp = -(1.0f + cos_coeff) * a0_inv;
                   b0_temp = b2_temp = -b1_temp * 0.5f;
                   break;
                   }

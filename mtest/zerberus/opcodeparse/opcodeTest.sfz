@@ -6,3 +6,9 @@ sample=../sample.wav
 <region> trigger=attack loop_mode=loop_continuous
 <region> trigger=first
 <region> trigger=legato
+<region> fil_type=lpf_1p cutoff=200 fil_veltrack=4000
+<region> fil_type=hpf_1p fil_keycenter=60 fil_keytrack=400
+<region> fil_type=hpf_2p pan=100 offset=16178
+<region> fil_type=lpf_2p delay=2
+<region> fil_type=bpf_2p
+<region> fil_type=brf_2p
