@@ -905,9 +905,9 @@ Note* Chord::selectedNote() const
 void Chord::write(XmlWriter& xml) const
       {
       for (Chord* c : _graceNotes) {
-            c->writeBeam(xml);
             c->write(xml);
             }
+      writeBeam(xml);
       xml.stag("Chord");
       ChordRest::writeProperties(xml);
       for (const Articulation* a : _articulations)
