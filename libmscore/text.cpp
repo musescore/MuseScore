@@ -1822,31 +1822,6 @@ bool TextBase::readProperties(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   insertText
-//    insert text at cursor position and move cursor
-//---------------------------------------------------------
-
-void TextBase::insertText(EditData& ed, const QString& s)
-      {
-      TextCursor* _cursor = cursor(ed);
-      deleteSelectedText(ed);
-      _cursor->curLine().insert(_cursor, s);
-      _cursor->setColumn(_cursor->column() + s.size());
-      _cursor->clearSelection();
-      }
-
-//---------------------------------------------------------
-//   insertSym
-//---------------------------------------------------------
-
-void TextBase::insertSym(EditData& ed, SymId id)
-      {
-      deleteSelectedText(ed);
-      QString s = score()->scoreFont()->toString(id);
-      score()->undo(new InsertText(cursor(ed), s), &ed);
-      }
-
-//---------------------------------------------------------
 //   pageRectangle
 //---------------------------------------------------------
 
@@ -1911,103 +1886,6 @@ QLineF TextBase::dragAnchor() const
       if (layoutToParentWidth())
             p2 += bbox().topLeft();
       return QLineF(p1, p2);
-      }
-
-//---------------------------------------------------------
-//   paste
-//---------------------------------------------------------
-
-void TextBase::paste(EditData& ed)
-      {
-      TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-      TextCursor* _cursor = &ted->cursor;
-
-      QString txt = QApplication::clipboard()->text(QClipboard::Clipboard);
-      if (MScore::debugMode)
-            qDebug("<%s>", qPrintable(txt));
-
-      int state = 0;
-      QString token;
-      QString sym;
-      bool symState = false;
-
-      for (int i = 0; i < txt.length(); i++ ) {
-            QChar c = txt[i];
-            if (state == 0) {
-                  if (c == '<') {
-                        state = 1;
-                        token.clear();
-                        }
-                  else if (c == '&') {
-                        state = 2;
-                        token.clear();
-                        }
-                  else {
-                        if (symState)
-                              sym += c;
-                        else {
-                              deleteSelectedText(ed);
-                              if (c.isHighSurrogate()) {
-                                    QChar highSurrogate = c;
-                                    Q_ASSERT(i + 1 < txt.length());
-                                    i++;
-                                    QChar lowSurrogate = txt[i];
-                                    insert(_cursor, QChar::surrogateToUcs4(highSurrogate, lowSurrogate));
-                                    }
-                              else {
-                                    insert(_cursor, c.unicode());
-                                    }
-                              }
-                        }
-                  }
-            else if (state == 1) {
-                  if (c == '>') {
-                        state = 0;
-                        if (token == "sym") {
-                              symState = true;
-                              sym.clear();
-                              }
-                        else if (token == "/sym") {
-                              symState = false;
-                              insertSym(ed, Sym::name2id(sym));
-                              }
-                        }
-                  else
-                        token += c;
-                  }
-            else if (state == 2) {
-                  if (c == ';') {
-                        state = 0;
-                        if (token == "lt")
-                              insertText(ed, "<");
-                        else if (token == "gt")
-                              insertText(ed, ">");
-                        else if (token == "amp")
-                              insertText(ed, "&");
-                        else if (token == "quot")
-                              insertText(ed, "\"");
-                        else
-                              insertSym(ed, Sym::name2id(token));
-                        }
-                  else if (!c.isLetter()) {
-                        state = 0;
-                        insertText(ed, "&");
-                        insertText(ed, token);
-                        insertText(ed, c);
-                        }
-                  else
-                        token += c;
-                  }
-            }
-      if (state == 2) {
-          insertText(ed, "&");
-          insertText(ed, token);
-          }
-      layoutEdit();
-      score()->setUpdateAll();
-      if (type() == ElementType::INSTRUMENT_NAME)
-            score()->setLayoutAll();
-      triggerLayout();
       }
 
 //---------------------------------------------------------
