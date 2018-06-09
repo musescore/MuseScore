@@ -1848,6 +1848,7 @@ void Measure::read(XmlReader& e, int staffIdx)
       qreal _spatium = spatium();
 
       QList<Chord*> graceNotes;
+      Beam* startingBeam = nullptr;
       e.tuplets().clear();
       e.setTrack(staffIdx * VOICES);
       e.setCurrentMeasure(this);
@@ -1929,6 +1930,10 @@ void Measure::read(XmlReader& e, int staffIdx)
                   Chord* chord = new Chord(score());
                   chord->setTrack(e.track());
                   chord->read(e);
+                  if (startingBeam) {
+                        startingBeam->add(chord); // also calls chord->setBeam(startingBeam)
+                        startingBeam = nullptr;
+                        }
                   segment = getSegment(SegmentType::ChordRest, e.tick());
                   if (chord->noteType() != NoteType::NORMAL)
                         graceNotes.push_back(chord);
@@ -1950,6 +1955,10 @@ void Measure::read(XmlReader& e, int staffIdx)
                   rest->setDuration(timesig()/timeStretch);
                   rest->setTrack(e.track());
                   rest->read(e);
+                  if (startingBeam) {
+                        startingBeam->add(rest); // also calls rest->setBeam(startingBeam)
+                        startingBeam = nullptr;
+                        }
                   segment = getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(rest);
 
@@ -2195,7 +2204,11 @@ void Measure::read(XmlReader& e, int staffIdx)
                   beam->setTrack(e.track());
                   beam->read(e);
                   beam->setParent(0);
-                  e.addBeam(beam);
+                  if (startingBeam) {
+                        qDebug("The read beam was not used");
+                        delete startingBeam;
+                        }
+                  startingBeam = beam;
                   }
             else if (tag == "Segment")
                   segment->read(e);
@@ -2233,6 +2246,10 @@ void Measure::read(XmlReader& e, int staffIdx)
             }
       e.checkTuplets();
       e.checkConnectors();
+      if (startingBeam) {
+            qDebug("The read beam was not used");
+            delete startingBeam;
+            }
       e.setCurrentMeasure(nullptr);
       }
 

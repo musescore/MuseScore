@@ -171,13 +171,6 @@ void ChordRest::writeProperties(XmlWriter& xml) const
             //xml.tagE("duration z=\"%d\" n=\"%d\"", duration().numerator(), duration().denominator());
             }
 
-#ifndef NDEBUG
-      if (_beam && (MScore::testMode || !_beam->generated()))
-            xml.tag("Beam", _beam->id());
-#else
-      if (_beam && !_beam->generated())
-            xml.tag("Beam", _beam->id());
-#endif
       for (Lyrics* lyrics : _lyrics)
             lyrics->write(xml);
       if (!isGrace()) {
@@ -263,14 +256,6 @@ bool ChordRest::readProperties(XmlReader& e)
       else if (tag == "leadingSpace" || tag == "trailingSpace") {
             qDebug("ChordRest: %s obsolete", tag.toLocal8Bit().data());
             e.skipCurrentElement();
-            }
-      else if (tag == "Beam") {
-            int id = e.readInt();
-            Beam* beam = e.findBeam(id);
-            if (beam)
-                  beam->add(this);        // also calls this->setBeam(beam)
-            else
-                  qDebug("Beam id %d not found", id);
             }
       else if (tag == "small")
             _small = e.readInt();
@@ -889,11 +874,10 @@ bool ChordRest::isGraceAfter() const
 //   writeBeam
 //---------------------------------------------------------
 
-void ChordRest::writeBeam(XmlWriter& xml)
+void ChordRest::writeBeam(XmlWriter& xml) const
       {
       Beam* b = beam();
       if (b && b->elements().front() == this && (MScore::testMode || !b->generated())) {
-            b->setId(xml.nextBeamId());
             b->write(xml);
             }
       }
