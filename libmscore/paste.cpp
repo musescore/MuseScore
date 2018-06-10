@@ -80,6 +80,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
       {
       Q_ASSERT(dst->segmentType() == SegmentType::ChordRest);
       QList<Chord*> graceNotes;
+      Beam* startingBeam = nullptr;
+      Tuplet* tuplet = nullptr;
       int dstTick = dst->tick();
       bool pasted = false;
       int tickLen = 0;
@@ -103,8 +105,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                 tickLen       = e.intAttribute("len", 0);
             int staffStart    = e.intAttribute("staff", 0);
                 staves        = e.intAttribute("staves", 0);
-            int voiceOffset[VOICES];
-            std::fill(voiceOffset,voiceOffset+VOICES,-1);
 
             e.setTickOffset(dstTick - tickStart);
             e.initTick(0);
@@ -129,7 +129,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                         break;
                         }
 
-                  bool makeGap  = true;
                   while (e.readNextStartElement()) {
                         pasted = true;
                         const QStringRef& tag(e.name());
@@ -138,32 +137,41 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               e.setTransposeChromatic(e.readInt());
                         else if (tag == "transposeDiatonic")
                               e.setTransposeDiatonic(e.readInt());
-                        else if (tag == "voice") {
-                              int voiceId = e.attribute("id", "-1").toInt();
-                              Q_ASSERT(voiceId >= 0 && voiceId < VOICES);
-                              voiceOffset[voiceId] = e.readInt();
-                              }
-                        else if (tag == "move" || tag == "tick") {
-                              int tick = tag == "move" ? e.readFraction().ticks() : e.readInt();
-                              e.initTick(tick);
-                              int shift = tick - tickStart;
-                              if (makeGap && !makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen), voiceOffset)) {
-                                    qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick + shift);
+                        else if (tag == "voiceOffset") {
+                              int voiceOffset[VOICES];
+                              std::fill(voiceOffset, voiceOffset+VOICES, -1);
+                              while (e.readNextStartElement()) {
+                                    if (e.name() != "voice")
+                                          e.unknown();
+                                    int voiceId = e.attribute("id", "-1").toInt();
+                                    Q_ASSERT(voiceId >= 0 && voiceId < VOICES);
+                                    voiceOffset[voiceId] = e.readInt();
+                                    }
+                              e.readNext();
+                              if (!makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen), voiceOffset)) {
+                                    qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick);
                                     done = true; // break main loop, cannot make gap
                                     break;
                                     }
-                              makeGap = false; // create gap only once per staff
+                              }
+                        else if (tag == "location") {
+                              Location loc = Location::relative();
+                              loc.read(e);
+                              e.setLocation(loc);
                               }
                         else if (tag == "Tuplet") {
-                              Tuplet* tuplet = new Tuplet(this);
-                              tuplet->setTrack(e.track());
-                              tuplet->read(e);
+                              Tuplet* oldTuplet = tuplet;
                               int tick = e.tick();
                               // no paste into local time signature
                               if (staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
                                     MScore::setError(DEST_LOCAL_TIME_SIGNATURE);
+                                    if (oldTuplet->elements().empty())
+                                          delete oldTuplet;
                                     return false;
                                     }
+                              tuplet = new Tuplet(this);
+                              tuplet->setTrack(e.track());
+                              tuplet->read(e);
                               Measure* measure = tick2measure(tick);
                               tuplet->setParent(measure);
                               tuplet->setTick(tick);
@@ -171,10 +179,31 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               int rticks = measure->endTick() - tick;
                               if (rticks < ticks) {
                                     delete tuplet;
+                                    if (oldTuplet->elements().empty())
+                                          delete oldTuplet;
                                     MScore::setError(TUPLET_CROSSES_BAR);
                                     return false;
                                     }
-                              e.addTuplet(tuplet);
+                              if (oldTuplet)
+                                    tuplet->readAddTuplet(oldTuplet);
+                              }
+                        else if (tag == "endTuplet") {
+                              if (!tuplet) {
+                                    qDebug("Score::pasteStaff: encountered <endTuplet/> when no tuplet was started");
+                                    e.skipCurrentElement();
+                                    continue;
+                                    }
+                              Tuplet* oldTuplet = tuplet;
+                              tuplet = tuplet->tuplet();
+                              if (oldTuplet->elements().empty()) {
+                                    qDebug("Score::pasteStaff: ended tuplet is empty");
+                                    if (tuplet)
+                                          tuplet->remove(oldTuplet);
+                                    delete oldTuplet;
+                                    }
+                              else
+                                    oldTuplet->sortElements();
+                              e.readNext();
                               }
                         else if (tag == "Chord" || tag == "Rest" || tag == "RepeatMeasure") {
                               ChordRest* cr = toChordRest(Element::name2Element(tag, this));
@@ -187,6 +216,12 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                     MScore::setError(DEST_LOCAL_TIME_SIGNATURE);
                                     return false;
                                     }
+                              if (startingBeam) {
+                                    startingBeam->add(cr); // also calls cr->setBeam(startingBeam)
+                                    startingBeam = nullptr;
+                                    }
+                              if (tuplet)
+                                    cr->readAddTuplet(tuplet);
                               if (cr->isGrace())
                                     graceNotes.push_back(toChord(cr));
                               else {
@@ -259,33 +294,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                     pasteChordRest(cr, tick, e.transpose());
                                     }
                               }
-                        else if (tag == "HairPin"
-                           || tag == "Pedal"
-                           || tag == "Ottava"
-                           || tag == "Trill"
-                           || tag == "TextLine"
-                           || tag == "Volta") {
-                              Spanner* sp = toSpanner(Element::name2Element(tag, this));
-                              sp->setAnchor(Spanner::Anchor::SEGMENT);
-                              sp->read(e);
-                              sp->setTrack(e.track());
-                              sp->setTrack2(e.track());
-                              sp->setTick(e.tick());
-                              addSpanner(sp);
-                              }
-                        else if (tag == "endSpanner") {
-                              int id = e.intAttribute("id");
-                              Spanner* spanner = e.findSpanner(id);
-                              if (spanner) {
-                                    // e.spanner().removeOne(spanner);
-                                    spanner->setTick2(e.tick());
-                                    removeSpanner(spanner);
-                                    undoAddElement(spanner);
-                                    if (spanner->isOttava())
-                                          spanner->staff()->updateOttava();
-                                    }
-                              e.readNext();
-                              }
+                        else if (tag == "Spanner")
+                              Spanner::readSpanner(e, this, e.track());
                         else if (tag == "Harmony") {
                               Harmony* harmony = new Harmony(this);
                               harmony->setTrack(e.track());
@@ -371,7 +381,11 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               beam->setTrack(e.track());
                               beam->read(e);
                               beam->setParent(0);
-                              e.addBeam(beam);
+                              if (startingBeam) {
+                                    qDebug("The read beam was not used");
+                                    delete startingBeam;
+                                    }
+                              startingBeam = beam;
                               }
                         else if (tag == "BarLine") {
                               e.skipCurrentElement();    // ignore bar line
@@ -382,11 +396,18 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               }
                         }
 
-                  for (Tuplet* tuplet : e.tuplets()) {
-                        Q_ASSERT(!tuplet->elements().empty());
-                        Measure* measure = tick2measure(tuplet->tick());
-                        tuplet->setParent(measure);
-                        tuplet->sortElements();
+                  e.checkConnectors();
+                  if (startingBeam) {
+                        qDebug("The read beam was not used");
+                        delete startingBeam;
+                        }
+                  if (tuplet) {
+                        qDebug("<endTuplet/> not found");
+                        if (tuplet->elements().empty()) {
+                              if (tuplet->tuplet())
+                                    tuplet->tuplet()->remove(tuplet);
+                              delete tuplet;
+                              }
                         }
                   }
             }
@@ -436,6 +457,47 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                   _selection.setState(SelState::RANGE);
             }
       return true;
+      }
+
+//---------------------------------------------------------
+//   Score::readAddConnector
+//---------------------------------------------------------
+
+void Score::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
+      {
+      if (!pasteMode) {
+            // How did we get there?
+            qDebug("Score::readAddConnector is called not in paste mode.");
+            return;
+            }
+      const ElementType type = info->type();
+      switch(type) {
+            case ElementType::HAIRPIN:
+            case ElementType::PEDAL:
+            case ElementType::OTTAVA:
+            case ElementType::TRILL:
+            case ElementType::TEXTLINE:
+            case ElementType::VOLTA:
+                  {
+                  Spanner* sp = toSpanner(info->connector());
+                  const Location& l = info->location();
+                  if (info->isStart()) {
+                        sp->setAnchor(Spanner::Anchor::SEGMENT);
+                        sp->setTrack(l.track());
+                        sp->setTrack2(l.track());
+                        sp->setTick(l.frac().ticks());
+                        }
+                  else if (info->isEnd()) {
+                        sp->setTick2(l.frac().ticks());
+                        undoAddElement(sp);
+                        if (sp->isOttava())
+                              sp->staff()->updateOttava();
+                        }
+                  }
+                  break;
+            default:
+                  break;
+            }
       }
 
 //---------------------------------------------------------

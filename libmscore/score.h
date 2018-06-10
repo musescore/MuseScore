@@ -855,6 +855,7 @@ class Score : public QObject, public ScoreElement {
 
       void cmdPaste(const QMimeData* ms, MuseScoreView* view);
       bool pasteStaff(XmlReader&, Segment* dst, int staffIdx);
+      void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
