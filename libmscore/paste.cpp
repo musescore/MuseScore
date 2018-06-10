@@ -149,12 +149,9 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                         else if (tag == "move") {
                               PointInfo move = PointInfo::relative();
                               move.read(e);
-                              const int tick = move.fpos().ticks();
-                              e.initTick(tick);
-                              e.setTrack(e.track() + move.track() - e.trackOffset());
+                              e.setPoint(move);
                               if (makeGap && !makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen), voiceOffset)) {
-                                    const int shift = tick - tickStart;
-                                    qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick + shift);
+                                    qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, e.tick());
                                     done = true; // break main loop, cannot make gap
                                     break;
                                     }

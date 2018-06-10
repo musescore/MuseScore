@@ -236,6 +236,57 @@ Fraction XmlReader::absfpos() const
       }
 
 //---------------------------------------------------------
+//   point
+//---------------------------------------------------------
+
+PointInfo XmlReader::point() const
+      {
+      PointInfo info = PointInfo::absolute();
+      fillPoint(info);
+      return info;
+      }
+
+//---------------------------------------------------------
+//   fillPoint
+//    fills point fields which have default values with
+//    values relevant for the current reader's position.
+//---------------------------------------------------------
+
+void XmlReader::fillPoint(PointInfo& p) const
+      {
+      constexpr PointInfo defaults = PointInfo::absolute();
+      if (p.track() == defaults.track())
+            p.setTrack(track());
+      if (p.fpos() == defaults.fpos())
+            p.setFpos(pasteMode() ? absfpos() : fpos());
+      if (p.measure() == defaults.measure())
+            p.setMeasure(pasteMode() ? 0 : currentMeasureIndex());
+      }
+
+//---------------------------------------------------------
+//   fillPoint
+//    sets a new reading point, taking into account its
+//    type (absolute or relative).
+//---------------------------------------------------------
+
+void XmlReader::setPoint(const PointInfo& p)
+      {
+      if (p.isRelative()) {
+            PointInfo info = p;
+            info.toAbsolute(point());
+            setPoint(info); // recursion
+            return;
+            }
+      setTrack(p.track() - _trackOffset);
+      int tick = p.fpos().ticks() - _tickOffset;
+      if (!pasteMode()) {
+            Q_ASSERT(p.measure() == currentMeasureIndex());
+            tick += currentMeasure()->tick();
+            }
+      initTick(tick);
+      }
+
+//---------------------------------------------------------
 //   addBeam
 //---------------------------------------------------------
 

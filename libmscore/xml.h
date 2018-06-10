@@ -120,6 +120,13 @@ class XmlReader : public QXmlStreamReader {
       bool pasteMode() const       { return _pasteMode; }
       void setPasteMode(bool v)    { _pasteMode = v;    }
 
+      PointInfo point() const;
+      void fillPoint(PointInfo&) const; // fills point fields which have default
+                                        // values with values relevant for the
+                                        // current reader's position.
+      void setPoint(const PointInfo&); // sets a new reading point, taking into
+                                       // account its type (absolute or relative).
+
       void addBeam(Beam* s);
       Beam* findBeam(int id) const { return _beams.value(id);   }
 

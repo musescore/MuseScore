@@ -186,13 +186,8 @@ ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Element* current, int tra
 //---------------------------------------------------------
 
 static PointInfo readPositionInfo(const XmlReader& e, int track) {
-      PointInfo info = PointInfo::absolute();
+      PointInfo info = e.point();
       info.setTrack(track);
-      info.setMeasure(e.pasteMode() ? 0 : e.currentMeasureIndex());
-      if (e.pasteMode())
-            info.setFpos(Fraction::fromTicks(e.tick()));
-      else
-            info.setFpos(Fraction::fromTicks(e.tick() - e.currentMeasure()->tick()));
       return info;
       }
 
@@ -256,11 +251,7 @@ bool ConnectorInfoReader::read()
       const QString name(e.attribute("type"));
       _type = ScoreElement::name2type(&name);
 
-      if (_currentInfo.track() == pointDefaults.track())
-            _currentInfo.setTrack(e.track());
-      if (_currentInfo.fpos() == pointDefaults.fpos())
-            _currentInfo.setFpos(e.pasteMode() ? e.absfpos() : e.fpos());
-      _currentInfo.setMeasure(e.pasteMode() ? 0 : e.currentMeasureIndex());
+      e.fillPoint(_currentInfo);
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());

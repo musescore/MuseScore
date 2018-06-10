@@ -1928,9 +1928,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             if (tag == "move") {
                   PointInfo move = PointInfo::relative();
                   move.read(e);
-                  Fraction absfpos = move.fpos() + e.absfpos();
-                  e.initTick(absfpos.ticks());
-                  e.setTrack(e.track() + move.track() - e.trackOffset());
+                  e.setPoint(move);
                   }
             else if (tag == "tick") {
                   e.initTick(score()->fileDivision(e.readInt()));
