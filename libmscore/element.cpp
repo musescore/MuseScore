@@ -478,7 +478,9 @@ void Element::writeProperties(XmlWriter& xml) const
             else
                   xml.tag("offset", userOff() / score()->spatium());
             }
-      if (((track() != xml.curTrack()) || isSlur()) && (track() != -1)) {
+      if ((track() != xml.curTrack()) && (track() != -1) && !isBeam()) {
+            // Writing track number for beams is redundant as it is calculated
+            // during layout.
             int t;
             t = track() + xml.trackDiff();
             xml.tag("track", t);
