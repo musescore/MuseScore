@@ -1060,6 +1060,27 @@ qDebug("createRevision");
       }
 
 //---------------------------------------------------------
+//   writeMove
+//    write <move> tag to denote change in position, track etc.
+//---------------------------------------------------------
+
+static void writeMove(XmlWriter& xml, Segment* seg, int track)
+      {
+      PointInfo curr = PointInfo::absolute();
+      PointInfo dest = PointInfo::absolute();
+      curr.setFpos(xml.absfpos());
+      dest.setFpos(seg->absfpos());
+      curr.setTrack(xml.curTrack());
+      dest.setTrack(track);
+
+      dest.toRelative(curr);
+      dest.write(xml);
+
+      xml.setCurTick(seg->tick());
+      xml.setCurTrack(track);
+      }
+
+//---------------------------------------------------------
 //   writeSegments
 //    ls  - write upto this segment (excluding)
 //          can be zero
@@ -1142,10 +1163,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                         if (e->track() != track || e->generated() || (e->systemFlag() && !writeSystemElements))
                               continue;
                         if (needTick) {
-                              // xml.tag("tick", segment->tick() - xml.tickDiff);
-                              int tick = xml.clipboardmode() ? segment->tick() : segment->rtick();
-                              xml.tag("move", Fraction::fromTicks(tick + xml.tickDiff()));
-                              xml.setCurTick(segment->tick());
+                              writeMove(xml, segment, track);
                               needTick = false;
                               }
                         e->write(xml);
@@ -1163,10 +1181,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                                           end = s->tick2() <= endTick;
                                     if (s->tick() == segment->tick() && (!clip || end) && !s->isSlur()) {
                                           if (needTick) {
-                                                // xml.tag("tick", segment->tick() - xml.tickDiff);
-                                                int tick = xml.clipboardmode() ? segment->tick() : segment->rtick();
-                                                xml.tag("move", Fraction::fromTicks(tick + xml.tickDiff()));
-                                                xml.setCurTick(segment->tick());
+                                                writeMove(xml, segment, track);
                                                 needTick = false;
                                                 }
                                           s->writeSpanner(xml, segment, track);
@@ -1178,10 +1193,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                                  && (!clip || s->tick() >= fs->tick())
                                  ) {
                                     if (needTick) {
-                                          // xml.tag("tick", segment->tick() - xml.tickDiff);
-                                          int tick = xml.clipboardmode() ? segment->tick() : segment->rtick();
-                                          xml.tag("move", Fraction::fromTicks(tick + xml.tickDiff()));
-                                          xml.setCurTick(segment->tick());
+                                          writeMove(xml, segment, track);
                                           needTick = false;
                                           }
                                     s->writeSpanner(xml, segment, track);
@@ -1212,10 +1224,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                         timeSigWritten = true;
                         }
                   if (needTick) {
-                        // xml.tag("tick", segment->tick() - xml.tickDiff);
-                        int tick = xml.clipboardmode() ? segment->tick() : segment->rtick();
-                        xml.tag("move", Fraction::fromTicks(tick + xml.tickDiff()));
-                        xml.setCurTick(segment->tick());
+                        writeMove(xml, segment, track);
                         needTick = false;
                         }
                   if (e->isChordRest()) {

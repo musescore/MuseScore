@@ -192,6 +192,7 @@ class XmlWriter : public QTextStream {
 
       int spannerId() const         { return _spannerId; }
       int curTick() const           { return _curTick; }
+      Fraction absfpos() const      { return Fraction::fromTicks(_curTick); }
       int curTrack() const          { return _curTrack; }
       int tickDiff() const          { return _tickDiff; }
       int trackDiff() const         { return _trackDiff; }

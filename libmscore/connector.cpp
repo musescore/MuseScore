@@ -15,22 +15,20 @@
 #include "chord.h"
 #include "element.h"
 #include "measure.h"
-#include "mscore.h"
 #include "score.h"
 #include "scoreElement.h"
 #include "xml.h"
 
 namespace Ms {
 
-static constexpr ConnectorPointInfo pointDefaults;
-static constexpr ConnectorPointInfo writeDefaults(0, 0, 0, INT_MIN, 0);
+static constexpr PointInfo pointDefaults = PointInfo::absolute();
 
 //---------------------------------------------------------
 //   ConnectorInfo
 //---------------------------------------------------------
 
 ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction fpos)
-   : _current(current)
+   : _current(current), _currentInfo(PointInfo::absolute())
       {
       if (!current)
             qFatal("ConnectorInfo::ConnectorInfo(): invalid argument: %p", current);
@@ -39,44 +37,43 @@ ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction fpos)
       // If the caller does not know the track number and passes -1
       // it may be corrected later.
       if (track >= 0)
-            _currentInfo.track = track;
+            _currentInfo.setTrack(track);
       if (fpos >= 0)
-            _currentInfo.fpos = fpos;
+            _currentInfo.setFpos(fpos);
       }
 
 //---------------------------------------------------------
 //   ConnectorInfo
 //---------------------------------------------------------
 
-ConnectorInfo::ConnectorInfo(const ConnectorPointInfo& currentInfo)
-      {
-      _currentInfo = currentInfo;
-      }
+ConnectorInfo::ConnectorInfo(const PointInfo& currentInfo)
+   : _currentInfo(currentInfo)
+      {}
 
 //---------------------------------------------------------
 //   ConnectorInfo::updatePointInfo
 //---------------------------------------------------------
 
-void ConnectorInfo::updatePointInfo(const Element* e, ConnectorPointInfo& i, bool clipboardmode)
+void ConnectorInfo::updatePointInfo(const Element* e, PointInfo& i, bool clipboardmode)
       {
       if (!e) {
             qWarning("ConnectorInfo::updatePointInfo: element is nullptr");
             return;
       }
-      if (i.track == pointDefaults.track)
-            i.track = e->track();
-      if (i.fpos == pointDefaults.fpos)
-            i.fpos = clipboardmode ? e->absfpos() : e->fpos();
-      if (i.measure == pointDefaults.measure) {
+      if (i.track() == pointDefaults.track())
+            i.setTrack(e->track());
+      if (i.fpos() == pointDefaults.fpos())
+            i.setFpos(clipboardmode ? e->absfpos() : e->fpos());
+      if (i.measure() == pointDefaults.measure()) {
             if (clipboardmode)
-                  i.measure = 0;
+                  i.setMeasure(0);
             else {
                   const Measure* m = toMeasure(e->findMeasure());
                   if (m)
-                        i.measure = m->index();
+                        i.setMeasure(m->index());
                   else {
                         qWarning("ConnectorInfo:updatePointInfo: cannot find element's measure (%s)", e->name());
-                        i.measure = 0;
+                        i.setMeasure(0);
                         }
                   }
             }
@@ -84,20 +81,20 @@ void ConnectorInfo::updatePointInfo(const Element* e, ConnectorPointInfo& i, boo
       if (e->isChord() || (e->parent() && e->parent()->isChord())) {
             const Chord* ch = e->isChord() ? toChord(e) : toChord(e->parent());
             if (ch->isGrace())
-                  i.graceIndex = ch->graceIndex();
+                  i.setGraceIndex(ch->graceIndex());
             }
       if (e->isNote()) {
             const Note* n = toNote(e);
             const std::vector<Note*>& notes = n->chord()->notes();
             if (notes.size() == 1)
-                  i.note = 0;
+                  i.setNote(0);
             else {
                   int noteIdx;
                   for (noteIdx = 0; noteIdx < int(notes.size()); ++noteIdx) {
                         if (n == notes.at(noteIdx))
                               break;
                         }
-                  i.note = noteIdx;
+                  i.setNote(noteIdx);
                   }
             }
       }
@@ -188,11 +185,14 @@ ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Element* current, int tra
 //   readPositionInfo
 //---------------------------------------------------------
 
-static ConnectorPointInfo readPositionInfo(const XmlReader& e, int track) {
-      ConnectorPointInfo info;
-      info.track = track;
-      info.measure = e.pasteMode() ? 0 : e.currentMeasureIndex();
-      info.fpos = e.pasteMode() ? Fraction::fromTicks(e.tick()) : Fraction::fromTicks(e.tick() - e.currentMeasure()->tick());
+static PointInfo readPositionInfo(const XmlReader& e, int track) {
+      PointInfo info = PointInfo::absolute();
+      info.setTrack(track);
+      info.setMeasure(e.pasteMode() ? 0 : e.currentMeasureIndex());
+      if (e.pasteMode())
+            info.setFpos(Fraction::fromTicks(e.tick()));
+      else
+            info.setFpos(Fraction::fromTicks(e.tick() - e.currentMeasure()->tick()));
       return info;
       }
 
@@ -233,12 +233,14 @@ void ConnectorInfoWriter::write()
             _connector->write(xml);
       if (hasPrevious()) {
             xml.stag("prev");
-            writeDestinationInfo(xml, _prevInfo);
+            _prevInfo.toRelative(_currentInfo);
+            _prevInfo.write(xml);
             xml.etag();
             }
       if (hasNext()) {
             xml.stag("next");
-            writeDestinationInfo(xml, _nextInfo);
+            _nextInfo.toRelative(_currentInfo);
+            _nextInfo.write(xml);
             xml.etag();
             }
       xml.etag();
@@ -254,19 +256,19 @@ bool ConnectorInfoReader::read()
       const QString name(e.attribute("type"));
       _type = ScoreElement::name2type(&name);
 
-      if (_currentInfo.track == pointDefaults.track)
-            _currentInfo.track = e.track();
-      if (_currentInfo.fpos == pointDefaults.fpos)
-            _currentInfo.fpos = e.pasteMode() ? e.absfpos() : e.fpos();
-      _currentInfo.measure = e.pasteMode() ? 0 : e.currentMeasureIndex();
+      if (_currentInfo.track() == pointDefaults.track())
+            _currentInfo.setTrack(e.track());
+      if (_currentInfo.fpos() == pointDefaults.fpos())
+            _currentInfo.setFpos(e.pasteMode() ? e.absfpos() : e.fpos());
+      _currentInfo.setMeasure(e.pasteMode() ? 0 : e.currentMeasureIndex());
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
             if (tag == "prev")
-                  readDestinationInfo(e, _prevInfo);
+                  readDestinationInfo(_prevInfo);
             else if (tag == "next")
-                  readDestinationInfo(e, _nextInfo);
+                  readDestinationInfo(_nextInfo);
             else {
                   if (tag == name)
                         _connector = Element::name2Element(tag, _connectorReceiver->score());
@@ -277,7 +279,7 @@ bool ConnectorInfoReader::read()
                         e.unknown();
                         return false;
                         }
-                  _connector->setTrack(_currentInfo.track);
+                  _connector->setTrack(_currentInfo.track());
                   _connector->read(e);
                   }
             }
@@ -285,66 +287,26 @@ bool ConnectorInfoReader::read()
       }
 
 //---------------------------------------------------------
-//   ConnectorInfoWriter::writeDestinationInfo
-//---------------------------------------------------------
-
-void ConnectorInfoWriter::writeDestinationInfo(XmlWriter& xml, const ConnectorPointInfo& info) const
-      {
-      if (MScore::debugMode) {
-            xml.comment(QString("current: measure=%1 fpos=%2/%3").arg(_currentInfo.measure).arg(_currentInfo.fpos.numerator()).arg(_currentInfo.fpos.denominator()));
-            xml.comment(QString("dest: measure=%1 fpos=%2/%3").arg(info.measure).arg(info.fpos.numerator()).arg(info.fpos.denominator()));
-            }
-      const int currentStaff = _currentInfo.track / VOICES;
-      const int currentVoice = _currentInfo.track % VOICES;
-      const int destStaff = info.track / VOICES;
-      const int destVoice = info.track % VOICES;
-
-      static_assert(writeDefaults.track == 0, "Defaults for dstaff and dvoice correspond to writeDefaults.track == 0");
-      xml.tag("dstaff", destStaff - currentStaff, 0);
-      xml.tag("dvoice", destVoice - currentVoice, 0);
-      xml.tag("dmeasure", info.measure - _currentInfo.measure, writeDefaults.measure);
-      xml.tag("dpos", info.fpos - _currentInfo.fpos, writeDefaults.fpos);
-      xml.tag("grace", info.graceIndex, writeDefaults.graceIndex);
-      xml.tag("dnote", info.note - _currentInfo.note, writeDefaults.note);
-      }
-
-//---------------------------------------------------------
 //   ConnectorInfoReader::readDestinationInfo
 //---------------------------------------------------------
 
-void ConnectorInfoReader::readDestinationInfo(XmlReader& e, ConnectorPointInfo& info)
+void ConnectorInfoReader::readDestinationInfo(PointInfo& info)
       {
-      info = writeDefaults;
-      static_assert(writeDefaults.track == 0, "writeDefaults.track == 0 is assumed when reading the staff and voices info");
-
+      XmlReader& e = *_reader;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-            if (tag == "dstaff")
-                  info.track += e.readInt() * VOICES;
-            else if (tag == "dvoice")
-                  info.track += e.readInt();
-            else if (tag == "dmeasure")
-                  info.measure = e.readInt();
-            else if (tag == "dpos")
-                  info.fpos = e.readFraction();
-            else if (tag == "grace")
-                  info.graceIndex = e.readInt();
-            else if (tag == "dnote")
-                  info.note = e.readInt();
+            if (tag == "move") {
+                  info = PointInfo::relative();
+                  info.read(e);
+                  }
+            else if (tag == "move_abs") {
+                  info = PointInfo::absolute();
+                  info.read(e);
+                  }
+            else
+                  e.unknown();
             }
-      }
-
-//---------------------------------------------------------
-//   ConnectorInfoReader::convertRelToAbs
-//---------------------------------------------------------
-
-void ConnectorInfoReader::convertRelToAbs(ConnectorPointInfo& info)
-      {
-      info.track += _currentInfo.track;
-      info.measure += _currentInfo.measure;
-      info.fpos += _currentInfo.fpos;
-      info.note += _currentInfo.note;
       }
 
 //---------------------------------------------------------
@@ -357,9 +319,9 @@ void ConnectorInfoReader::update()
             return;
       updateCurrentInfo(_reader->pasteMode());
       if (hasPrevious())
-            convertRelToAbs(_prevInfo);
+            _prevInfo.toAbsolute(_currentInfo);
       if (hasNext())
-            convertRelToAbs(_nextInfo);
+            _nextInfo.toAbsolute(_currentInfo);
       }
 
 //---------------------------------------------------------
@@ -439,19 +401,6 @@ bool ConnectorInfoReader::operator==(const ConnectorInfoReader& other) const {
          )
             return false;
       return true;
-      }
-
-//---------------------------------------------------------
-//   operator==
-//---------------------------------------------------------
-
-bool operator==(const ConnectorPointInfo& cpi1, const ConnectorPointInfo& cpi2) {
-      return ((cpi1.fpos == cpi2.fpos)
-             && (cpi1.measure == cpi2.measure)
-             && (cpi1.track == cpi2.track)
-             && (cpi1.graceIndex == cpi2.graceIndex)
-             && (cpi1.note == cpi2.note)
-             );
       }
 
 }

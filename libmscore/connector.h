@@ -13,10 +13,8 @@
 #ifndef __CONNECTOR_H__
 #define __CONNECTOR_H__
 
-#include "fraction.h"
+#include "point.h"
 #include "types.h"
-
-#include <climits>
 
 namespace Ms {
 
@@ -25,20 +23,6 @@ class Score;
 class ScoreElement;
 class XmlReader;
 class XmlWriter;
-
-struct ConnectorPointInfo {
-      int track         = INT_MIN;
-      int measure       = INT_MIN;
-      Fraction fpos     = INT_MIN;
-      int graceIndex    = INT_MIN;
-      int note          = 0;
-
-      constexpr ConnectorPointInfo() = default;
-      constexpr ConnectorPointInfo(int track, int measure, Fraction fpos, int graceIndex, int note) : track(track), measure(measure), fpos(fpos), graceIndex(graceIndex), note(note) {}
-      };
-
-bool operator==(const ConnectorPointInfo& cpi1, const ConnectorPointInfo& cpi2);
-inline bool operator!=(const ConnectorPointInfo& cpi1, const ConnectorPointInfo& cpi2) { return !(cpi1 == cpi2); }
 
 //---------------------------------------------------------
 //   @@ ConnectorInfo
@@ -58,33 +42,33 @@ class ConnectorInfo {
 
    protected:
       ElementType _type       { ElementType::INVALID };
-      ConnectorPointInfo _prevInfo;
-      ConnectorPointInfo _nextInfo;
-      ConnectorPointInfo _currentInfo;
+      PointInfo _currentInfo;
+      PointInfo _prevInfo     { PointInfo::absolute()   };
+      PointInfo _nextInfo     { PointInfo::absolute()   };
 
       ConnectorInfo* _prev    { 0 };
       ConnectorInfo* _next    { 0 };
 
-      void updatePointInfo(const Element* e, ConnectorPointInfo& i, bool clipboardmode);
+      void updatePointInfo(const Element* e, PointInfo& i, bool clipboardmode);
       void updateCurrentInfo(bool clipboardmode);
       bool currentUpdated() const         { return _currentUpdated; }
       void setCurrentUpdated(bool v)      { _currentUpdated = v;    }
 
    public:
       ConnectorInfo(const Element* current, int track = -1, Fraction fpos = -1);
-      ConnectorInfo(const ConnectorPointInfo& currentInfo);
+      ConnectorInfo(const PointInfo& currentInfo);
 
       ConnectorInfo* prev() const   { return _prev; }
       ConnectorInfo* next() const   { return _next; }
 
       ElementType type() const { return _type; }
-      const ConnectorPointInfo& info() const { return _currentInfo; }
+      const PointInfo& info() const { return _currentInfo; }
 
       bool connect(ConnectorInfo* other);
       bool finished() const;
 
-      bool hasPrevious() const      { return (_prevInfo.measure != INT_MIN); }
-      bool hasNext() const          { return (_nextInfo.measure != INT_MIN); }
+      bool hasPrevious() const      { return (_prevInfo.measure() != INT_MIN); }
+      bool hasNext() const          { return (_nextInfo.measure() != INT_MIN); }
       bool isStart() const          { return (!hasPrevious() && hasNext()); }
       bool isMiddle() const         { return (hasPrevious() && hasNext());  }
       bool isEnd() const            { return (hasPrevious() && !hasNext()); }
@@ -101,8 +85,7 @@ class ConnectorInfoReader final : public ConnectorInfo {
       Element* _currentElement;
       ScoreElement* _connectorReceiver;
 
-      void readDestinationInfo(XmlReader& e, ConnectorPointInfo& info);
-      void convertRelToAbs(ConnectorPointInfo& info);
+      void readDestinationInfo(PointInfo& info);
 
    public:
       ConnectorInfoReader(XmlReader& e, Element* current, int track = -1);
@@ -134,8 +117,6 @@ class ConnectorInfoReader final : public ConnectorInfo {
 
 class ConnectorInfoWriter : public ConnectorInfo {
       XmlWriter* _xml;
-
-      void writeDestinationInfo(XmlWriter& xml, const ConnectorPointInfo& info) const;
 
    protected:
       const Element* _connector;

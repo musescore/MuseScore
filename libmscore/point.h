@@ -1,0 +1,70 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2018 Werner Schweer
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2
+//  as published by the Free Software Foundation and appearing in
+//  the file LICENCE.GPL
+//=============================================================================
+
+#ifndef __POINT_H__
+#define __POINT_H__
+
+#include "fraction.h"
+
+#include <climits>
+
+namespace Ms {
+
+class XmlReader;
+class XmlWriter;
+
+class PointInfo {
+      int _staff;
+      int _voice;
+      int _measure;
+      Fraction _fpos;
+      int _graceIndex;
+      int _note;
+      bool _rel;
+
+   public:
+      constexpr PointInfo(int staff, int voice, int measure, Fraction fpos, int graceIndex, int note, bool rel)
+         : _staff(staff), _voice(voice), _measure(measure), _fpos(fpos), _graceIndex(graceIndex), _note(note), _rel(rel) {}
+
+      static constexpr PointInfo absolute() { return PointInfo(INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, 0, false); }
+      static constexpr PointInfo relative() { return PointInfo(0, 0, 0, 0, INT_MIN, 0, true); }
+
+      void toAbsolute(const PointInfo& ref);
+      void toRelative(const PointInfo& ref);
+
+      void write(XmlWriter& xml) const;
+      void read(XmlReader& e);
+
+      bool isAbsolute() const       { return !_rel;         }
+      bool isRelative() const       { return _rel;          }
+
+      int staff() const             { return _staff;        }
+      void setStaff(int staff)      { _staff = staff;       }
+      int voice() const             { return _voice;        }
+      void setVoice(int voice)      { _voice = voice;       }
+      int track() const;
+      void setTrack(int track);
+      int measure() const           { return _measure;      }
+      void setMeasure(int measure)  { _measure = measure;   }
+      Fraction fpos() const         { return _fpos;         }
+      void setFpos(Fraction fpos)   { _fpos = fpos;         }
+      int graceIndex() const        { return _graceIndex;   }
+      void setGraceIndex(int index) { _graceIndex = index;  }
+      int note() const              { return _note;         }
+      void setNote(int note)        { _note = note;         }
+
+      bool operator==(const PointInfo& other) const;
+      bool operator!=(const PointInfo& other) const { return !(*this == other); }
+      };
+
+}     // namespace Ms
+#endif

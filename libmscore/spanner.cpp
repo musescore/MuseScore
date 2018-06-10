@@ -33,7 +33,7 @@ class SpannerWriter : public ConnectorInfoWriter {
    public:
       SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* spanner, int track, Fraction fpos = -1);
 
-      static void fillSpannerPosition(ConnectorPointInfo& info, const Element* endpoint, int tick, bool clipboardmode);
+      static void fillSpannerPosition(PointInfo& info, const Element* endpoint, int tick, bool clipboardmode);
       };
 
 //---------------------------------------------------------
@@ -987,18 +987,18 @@ void Spanner::readSpanner(XmlReader& e, Score* current, int track)
 //   SpannerWriter::fillSpannerPosition
 //---------------------------------------------------------
 
-void SpannerWriter::fillSpannerPosition(ConnectorPointInfo& info, const Element* endpoint, int tick, bool clipboardmode)
+void SpannerWriter::fillSpannerPosition(PointInfo& info, const Element* endpoint, int tick, bool clipboardmode)
       {
       if (clipboardmode) {
-            info.measure = 0;
-            info.fpos = Fraction::fromTicks(tick);
+            info.setMeasure(0);
+            info.setFpos(Fraction::fromTicks(tick));
             }
       else {
             const Measure* m = toMeasure(endpoint->findMeasure());
             if (!m) {
                 qWarning("fillSpannerPosition: couldn't find spanner's endpoint's measure");
-                info.measure = 0;
-                info.fpos = Fraction::fromTicks(tick);
+                info.setMeasure(0);
+                info.setFpos(Fraction::fromTicks(tick));
                 return;
                 }
             // It may happen (hairpins!) that the spanner's end element is
@@ -1012,8 +1012,8 @@ void SpannerWriter::fillSpannerPosition(ConnectorPointInfo& info, const Element*
                 else
                     break;
                 }
-            info.measure = m->index();
-            info.fpos = Fraction::fromTicks(tick - m->tick());
+            info.setMeasure(m->index());
+            info.setFpos(Fraction::fromTicks(tick - m->tick()));
             }
       }
 
@@ -1030,14 +1030,14 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
             // covered by the other checks too.)
             // We cannot determine position of the spanner from its start/end
             // elements and will try to obtain this info from the spanner itself.
-            ConnectorPointInfo info;
-            info.track = sp->track();
+            PointInfo info = PointInfo::absolute();
+            info.setTrack(sp->track());
             fillSpannerPosition(info, sp->startElement(), sp->tick(), clipboardmode);
             if (info != _currentInfo)
                   _prevInfo = info;
             else {
                   const int track2 = (sp->track2() != -1) ? sp->track2() : sp->track();
-                  info.track = track2;
+                  info.setTrack(track2);
                   fillSpannerPosition(info, sp->endElement(), sp->tick2(), clipboardmode);
                   if (info != _currentInfo)
                         _nextInfo = info;

@@ -1818,6 +1818,7 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
             xml.stag("Measure");
 
       xml.setCurTick(tick());
+      xml.setCurTrack(staff * VOICES);
 
       if (_mmRestCount > 0)
             xml.tag("multiMeasureRest", _mmRestCount);
@@ -1924,8 +1925,13 @@ void Measure::read(XmlReader& e, int staffIdx)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-            if (tag == "move")
-                  e.initTick(e.readFraction().ticks() + tick());
+            if (tag == "move") {
+                  PointInfo move = PointInfo::relative();
+                  move.read(e);
+                  Fraction absfpos = move.fpos() + e.absfpos();
+                  e.initTick(absfpos.ticks());
+                  e.setTrack(e.track() + move.track() - e.trackOffset());
+                  }
             else if (tag == "tick") {
                   e.initTick(score()->fileDivision(e.readInt()));
                   }
@@ -2330,16 +2336,16 @@ void Measure::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
             case ElementType::VOLTA:
                   {
                   Spanner* sp = toSpanner(info->connector());
-                  const ConnectorPointInfo& pi = info->info();
-                  const int piTick = pi.fpos.ticks();
+                  const PointInfo& pi = info->info();
+                  const int piTick = pi.fpos().ticks();
                   const int spTick = pasteMode ? piTick : (tick() + piTick);
                   if (info->isStart()) {
-                        sp->setTrack(pi.track);
+                        sp->setTrack(pi.track());
                         sp->setTick(spTick);
                         score()->addSpanner(sp);
                         }
                   else if (info->isEnd()) {
-                        sp->setTrack2(pi.track);
+                        sp->setTrack2(pi.track());
                         sp->setTick2(spTick);
                         }
                   }
