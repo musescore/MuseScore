@@ -102,6 +102,45 @@ void ElementList::write300old(XmlWriter& xml) const
       }
 
 //---------------------------------------------------------
+//   Element::writeProperties300old
+//---------------------------------------------------------
+
+void Element::writeProperties300old(XmlWriter& xml) const
+      {
+      // copy paste should not keep links
+      if (_links && (_links->size() > 1) && !xml.clipboardmode())
+            xml.tag("lid", _links->lid());
+      if (!autoplace() && !userOff().isNull()) {      // TODO: remove pos of offset
+            if (isFingering() || isHarmony() || isTuplet() || isStaffText()) {
+                  QPointF p = userOff() / score()->spatium();
+                  if (isStaffText())
+                        xml.tag("pos", p + QPointF(0.0, -2.0));
+                  else
+                        xml.tag("pos", p);
+                  }
+            else
+                  xml.tag("offset", userOff() / score()->spatium());
+            }
+      if (((track() != xml.curTrack()) || isSlur()) && (track() != -1)) {
+            int t;
+            t = track() + xml.trackDiff();
+            xml.tag("track", t);
+            }
+      if (_tag != 0x1) {
+            for (int i = 1; i < MAX_TAGS; i++) {
+                  if (_tag == ((unsigned)1 << i)) {
+                        xml.tag("tag", score()->layerTags()[i]);
+                        break;
+                        }
+                  }
+            }
+      writeProperty(xml, Pid::COLOR);
+      writeProperty(xml, Pid::VISIBLE);
+      writeProperty(xml, Pid::Z);
+      writeProperty(xml, Pid::PLACEMENT);
+      }
+
+//---------------------------------------------------------
 //   writeMovement300old
 //---------------------------------------------------------
 
@@ -649,7 +688,7 @@ void Rest::write300old(XmlWriter& xml) const
 void Note::write300old(XmlWriter& xml) const
       {
       xml.stag("Note");
-      Element::writeProperties(xml);
+      Element::writeProperties300old(xml);
 
       if (_accidental)
             _accidental->write300old(xml);
@@ -705,12 +744,28 @@ void Slur::write300old(XmlWriter& xml) const
       }
 
 //---------------------------------------------------------
+//   SlurTie::writeProperties300old
+//---------------------------------------------------------
+
+void SlurTie::writeProperties300old(XmlWriter& xml) const
+      {
+      Element::writeProperties300old(xml);
+      if (track() != track2() && track2() != -1)
+            xml.tag("track2", track2());
+      int idx = 0;
+      for (const SpannerSegment* ss : spannerSegments())
+            ((SlurTieSegment*)ss)->writeSlur(xml, idx++);
+      writeProperty(xml, Pid::SLUR_DIRECTION);
+      writeProperty(xml, Pid::LINE_TYPE);
+      }
+
+//---------------------------------------------------------
 //   DurationElement::writeProperties300old
 //---------------------------------------------------------
 
 void DurationElement::writeProperties300old(XmlWriter& xml) const
       {
-      Element::writeProperties(xml);
+      Element::writeProperties300old(xml);
       if (tuplet())
             xml.tag("Tuplet", tuplet()->id());
       }
@@ -737,7 +792,7 @@ void Tuplet::write300old(XmlWriter& xml) const
       xml.stag(QString("Tuplet id=\"%1\"").arg(_id));
       if (tuplet())
             xml.tag("Tuplet", tuplet()->id());
-      Element::writeProperties(xml);
+      Element::writeProperties300old(xml);
 
       writeProperty(xml, Pid::DIRECTION);
       writeProperty(xml, Pid::NUMBER_TYPE);
@@ -756,6 +811,77 @@ void Tuplet::write300old(XmlWriter& xml) const
             xml.etag();
             }
       xml.etag();
+      }
+
+//---------------------------------------------------------
+//   TextBase::writeProperties300old
+//---------------------------------------------------------
+
+void TextBase::writeProperties300old(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
+      {
+      Element::writeProperties300old(xml);
+      writeProperty(xml, Pid::SUB_STYLE);
+
+      writeStyledProperties(xml);
+      if (writeText)
+            xml.writeXml("text", xmlText());
+      }
+
+//---------------------------------------------------------
+//   SLine::writeProperties300old
+//    write properties different from prototype
+//---------------------------------------------------------
+
+void SLine::writeProperties300old(XmlWriter& xml) const
+      {
+      if (!endElement()) {
+            ((Spanner*)this)->computeEndElement();                // HACK
+            if (!endElement())
+                  xml.tag("ticks", ticks());
+            }
+      Spanner::writeProperties300old(xml);
+      if (_diagonal)
+            xml.tag("diagonal", _diagonal);
+      writeProperty(xml, Pid::LINE_WIDTH);
+      writeProperty(xml, Pid::LINE_STYLE);
+      writeProperty(xml, Pid::LINE_COLOR);
+      writeProperty(xml, Pid::ANCHOR);
+      writeProperty(xml, Pid::DASH_LINE_LEN);
+      writeProperty(xml, Pid::DASH_GAP_LEN);
+      if (score() == gscore) {
+            // when used as icon
+            if (!spannerSegments().empty()) {
+                  LineSegment* s = frontSegment();
+                  xml.tag("length", s->pos2().x());
+                  }
+            else
+                  xml.tag("length", spatium() * 4);
+            return;
+            }
+      //
+      // check if user has modified the default layout
+      //
+      bool modified = false;
+      for (const SpannerSegment* seg : spannerSegments()) {
+            if (!seg->autoplace() || !seg->visible()) {
+                  modified = true;
+                  break;
+                  }
+            }
+      if (!modified)
+            return;
+
+      //
+      // write user modified layout
+      //
+      qreal _spatium = spatium();
+      for (const SpannerSegment* seg : spannerSegments()) {
+            xml.stag("Segment");
+            xml.tag("subtype", int(seg->spannerSegmentType()));
+            xml.tag("off2", seg->userOff2() / _spatium);
+            seg->Element::writeProperties300old(xml);
+            xml.etag();
+            }
       }
 
 //---------------------------------------------------------
@@ -797,7 +923,7 @@ void Hairpin::write300old(XmlWriter& xml) const
       for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
             writeProperty(xml, spp->pid);
 
-      Element::writeProperties(xml);
+      Element::writeProperties300old(xml);
       xml.etag();
       }
 
@@ -814,7 +940,7 @@ void LetRing::write300old(XmlWriter& xml) const
       for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
             writeProperty(xml, spp->pid);
 
-      Element::writeProperties(xml);
+      Element::writeProperties300old(xml);
       xml.etag();
       }
 
@@ -843,7 +969,7 @@ void PalmMute::write300old(XmlWriter& xml) const
       for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
             writeProperty(xml, spp->pid);
 
-      Element::writeProperties(xml);
+      Element::writeProperties300old(xml);
       xml.etag();
       }
 
@@ -871,7 +997,7 @@ void Pedal::write300old(XmlWriter& xml) const
       for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
             writeProperty(xml, spp->pid);
 
-      Element::writeProperties(xml);
+      Element::writeProperties300old(xml);
       xml.etag();
       }
 

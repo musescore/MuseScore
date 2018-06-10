@@ -130,6 +130,7 @@ class SlurTie : public Spanner {
       virtual bool contains(const QPointF&) const { return false; }  // not selectable
 
       void writeProperties(XmlWriter& xml) const;
+      void writeProperties300old(XmlWriter& xml) const;
       bool readProperties(XmlReader&);
 
       int lineType() const                { return _lineType; }

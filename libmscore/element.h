@@ -267,7 +267,7 @@ class Element : public ScoreElement {
       void drawAt(QPainter*p, const QPointF& pt) const { p->translate(pt); draw(p); p->translate(-pt);}
 
       virtual void writeProperties(XmlWriter& xml) const;
-      virtual void writeProperties300old(XmlWriter& xml) const { writeProperties(xml); }
+      virtual void writeProperties300old(XmlWriter& xml) const;
       virtual bool readProperties(XmlReader&);
       virtual bool readProperties300old(XmlReader& xml) { return readProperties(xml); }
 

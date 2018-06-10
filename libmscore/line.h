@@ -87,6 +87,7 @@ class SLine : public Spanner {
 
       bool readProperties(XmlReader& node);
       void writeProperties(XmlWriter& xml) const;
+      void writeProperties300old(XmlWriter& xml) const;
       virtual LineSegment* createLineSegment() = 0;
       void setLen(qreal l);
       using Element::bbox;
