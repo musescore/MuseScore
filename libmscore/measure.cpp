@@ -2351,7 +2351,6 @@ void Measure::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                   }
                   break;
             default:
-                  // TODO add handling for beams and tuplets
                   break;
             }
       }

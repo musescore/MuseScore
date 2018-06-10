@@ -1445,7 +1445,6 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                         }
                   }
             default:
-                  // TODO add handling for beams and tuplets
                   break;
             }
       }
