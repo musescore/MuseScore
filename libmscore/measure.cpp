@@ -2217,6 +2217,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   if (oldTuplet->elements().empty()) {
                         // this should not happen and is a sign of input file corruption
                         qDebug("Measure:read: empty tuplet in measure index=%d, input file corrupted?", e.currentMeasureIndex());
+                        if (tuplet)
+                              tuplet->remove(oldTuplet);
                         delete oldTuplet;
                         }
                   e.readNext();
@@ -2312,8 +2314,11 @@ void Measure::read(XmlReader& e, int staffIdx)
             }
       if (tuplet) {
             qDebug("Measure:read: measure index=%d, <endTuplet/> not found", e.currentMeasureIndex());
-            if (tuplet->elements().empty())
+            if (tuplet->elements().empty()) {
+                  if (tuplet->tuplet())
+                        tuplet->tuplet()->remove(tuplet);
                   delete tuplet;
+                  }
             }
       }
 
