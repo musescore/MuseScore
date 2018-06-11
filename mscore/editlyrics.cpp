@@ -26,9 +26,7 @@ namespace Ms {
 
 bool ScoreView::editKeyLyrics(QKeyEvent* ev)
       {
-      editData.key       = ev->key();
-      editData.modifiers = ev->modifiers();
-      editData.s         = ev->text();
+      Q_ASSERT(editData.element->isLyrics());
 
       switch (editData.key) {
             case Qt::Key_Space:
@@ -157,7 +155,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             // search next chord
             while ((nextSegment = nextSegment->next1(SegmentType::ChordRest))) {
                   Element* el = nextSegment->element(track);
-                  if (el &&  el->type() == ElementType::CHORD)
+                  if (el &&  el->isChord())
                         break;
                   }
             }

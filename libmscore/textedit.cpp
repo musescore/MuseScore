@@ -39,7 +39,7 @@ void TextBase::startEdit(EditData& ed)
       {
       ed.grips = 0;
       TextEditData* ted = new TextEditData(this);
-      ted->e      = this;
+      ted->e = this;
       ted->cursor.setRow(0);
       ted->cursor.setColumn(0);
       ted->cursor.clearSelection();

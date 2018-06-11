@@ -1773,7 +1773,9 @@ void ScoreView::cmd(const char* s)
                   editSwap();
             }
       else if (cmd == "lyrics") {
+            _score->startCmd();
             Lyrics* lyrics = _score->addLyrics();
+            _score->endCmd();
             if (lyrics) {
                   startEditMode(lyrics);
                   return;
@@ -2598,7 +2600,7 @@ void ScoreView::deselectAll()
 void ScoreView::editInputTransition(QInputMethodEvent* ie)
       {
       if (editData.element->isText()) {
-            toText(editData.element)->inputTransition(ie);
+            toText(editData.element)->inputTransition(editData, ie);
             QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
             }
       }
@@ -2610,12 +2612,12 @@ void ScoreView::editInputTransition(QInputMethodEvent* ie)
 
 QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
       {
-#if 0       // TODO
       // if editing a text object, place the InputMethod popup window just below the text
-      if ((query & Qt::ImCursorRectangle) && editData.element && editData.element->isText()) {
+      if ((query & Qt::ImCursorRectangle) && editData.element && editData.element->isTextBase()) {
             Text* text = toText(editData.element);
-            if (text->cursor()) {
-                  QRectF cursorRect = toPhysical(text->cursorRect().translated(text->canvasPos()));
+            if (editMode()) {
+                  TextCursor* cursor = text->cursor(editData);
+                  QRectF cursorRect = toPhysical(cursor->cursorRect().translated(text->canvasPos()));
                   cursorRect.setWidth(1.0); // InputMethod doesn't display properly if width left at 0
                   cursorRect.setHeight(cursorRect.height() + 5.0); // add a little margin under the cursor
                   qDebug("cursorRect: [%3f,%3f,%3f,%3f]", cursorRect.x(), cursorRect.y(), cursorRect.width(), cursorRect.height());
@@ -2624,7 +2626,6 @@ QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
             else
                   return QVariant(toPhysical(text->canvasBoundingRect()));
             }
-#endif
       return QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
       }
 
