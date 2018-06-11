@@ -197,6 +197,8 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
       score()->addRefresh(editData.element->canvasBoundingRect());
 
       if (editData.element->isTextBase()) {
+            toTextBase(editData.element)->dragTo(editData);
+#if 0
             if (editData.element->shape().translated(editData.element->pagePos()).contains(editData.pos)) {
                   qDebug("in");
                   toTextBase(editData.element)->dragTo(editData);
@@ -208,6 +210,7 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
                   editData.element->editDrag(editData);
                   updateGrips();
                   }
+#endif
             }
       else {
             editData.hRaster = false;
