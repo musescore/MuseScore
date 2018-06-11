@@ -708,12 +708,54 @@ static const StyleType styleTypes[] {
       { Sid::user1FontBold,                 "user1FontBold",                false },
       { Sid::user1FontItalic,               "user1FontItalic",              false },
       { Sid::user1FontUnderline,            "user1FontUnderline",           false },
+      { Sid::user1Align,                    "user1Align",                   QVariant::fromValue(Align::LEFT | Align::TOP) },
+      { Sid::user1Offset,                   "user1Offset",                  0.0 },
+      { Sid::user1OffsetType,               "user1OffsetType",              int(OffsetType::SPATIUM)    },
 
       { Sid::user2FontFace,                 "user2FontFace",                "FreeSerif" },
       { Sid::user2FontSize,                 "user2FontSize",                10.0 },
       { Sid::user2FontBold,                 "user2FontBold",                false },
       { Sid::user2FontItalic,               "user2FontItalic",              false },
       { Sid::user2FontUnderline,            "user2FontUnderline",           false },
+      { Sid::user2Align,                    "user2Align",                   QVariant::fromValue(Align::LEFT | Align::TOP) },
+      { Sid::user2Offset,                   "user2Offset",                  0.0 },
+      { Sid::user2OffsetType,               "user2OffsetType",              int(OffsetType::SPATIUM)    },
+
+      { Sid::user3FontFace,                 "user3FontFace",                "FreeSerif" },
+      { Sid::user3FontSize,                 "user3FontSize",                10.0 },
+      { Sid::user3FontBold,                 "user3FontBold",                false },
+      { Sid::user3FontItalic,               "user3FontItalic",              false },
+      { Sid::user3FontUnderline,            "user3FontUnderline",           false },
+      { Sid::user3Align,                    "user3Align",                   QVariant::fromValue(Align::LEFT | Align::TOP) },
+      { Sid::user3Offset,                   "user3Offset",                  0.0 },
+      { Sid::user3OffsetType,               "user3OffsetType",              int(OffsetType::SPATIUM)    },
+
+      { Sid::user4FontFace,                 "user4FontFace",                "FreeSerif" },
+      { Sid::user4FontSize,                 "user4FontSize",                10.0 },
+      { Sid::user4FontBold,                 "user4FontBold",                false },
+      { Sid::user4FontItalic,               "user4FontItalic",              false },
+      { Sid::user4FontUnderline,            "user4FontUnderline",           false },
+      { Sid::user4Align,                    "user4Align",                   QVariant::fromValue(Align::LEFT | Align::TOP) },
+      { Sid::user4Offset,                   "user4Offset",                  0.0 },
+      { Sid::user4OffsetType,               "user4OffsetType",              int(OffsetType::SPATIUM)    },
+
+      { Sid::user5FontFace,                 "user5FontFace",                "FreeSerif" },
+      { Sid::user5FontSize,                 "user5FontSize",                10.0 },
+      { Sid::user5FontBold,                 "user5FontBold",                false },
+      { Sid::user5FontItalic,               "user5FontItalic",              false },
+      { Sid::user5FontUnderline,            "user5FontUnderline",           false },
+      { Sid::user5Align,                    "user5Align",                   QVariant::fromValue(Align::LEFT | Align::TOP) },
+      { Sid::user5Offset,                   "user5Offset",                  0.0 },
+      { Sid::user5OffsetType,               "user5OffsetType",              int(OffsetType::SPATIUM)    },
+
+      { Sid::user6FontFace,                 "user6FontFace",                "FreeSerif" },
+      { Sid::user6FontSize,                 "user6FontSize",                10.0 },
+      { Sid::user6FontBold,                 "user6FontBold",                false },
+      { Sid::user6FontItalic,               "user6FontItalic",              false },
+      { Sid::user6FontUnderline,            "user6FontUnderline",           false },
+      { Sid::user6Align,                    "user6Align",                   QVariant::fromValue(Align::LEFT | Align::TOP) },
+      { Sid::user6Offset,                   "user6Offset",                  0.0 },
+      { Sid::user6OffsetType,               "user6OffsetType",              int(OffsetType::SPATIUM)    },
 
       { Sid::letRingFontFace,               "letRingFontFace",              "FreeSerif" },
       { Sid::letRingFontSize,               "letRingFontSize",              10.0 },
@@ -1395,6 +1437,9 @@ const std::vector<StyledProperty> user1Style {
       { Sid::user1FontBold,                      Pid::FONT_BOLD              },
       { Sid::user1FontItalic,                    Pid::FONT_ITALIC            },
       { Sid::user1FontUnderline,                 Pid::FONT_UNDERLINE         },
+      { Sid::user1Align,                         Pid::ALIGN                  },
+      { Sid::user1Offset,                        Pid::OFFSET                 },
+      { Sid::user1OffsetType,                    Pid::OFFSET_TYPE            },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
 
@@ -1404,6 +1449,57 @@ const std::vector<StyledProperty> user2Style {
       { Sid::user2FontBold,                      Pid::FONT_BOLD              },
       { Sid::user2FontItalic,                    Pid::FONT_ITALIC            },
       { Sid::user2FontUnderline,                 Pid::FONT_UNDERLINE         },
+      { Sid::user2Align,                         Pid::ALIGN                  },
+      { Sid::user2Offset,                        Pid::OFFSET                 },
+      { Sid::user2OffsetType,                    Pid::OFFSET_TYPE            },
+      { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
+      };
+
+const std::vector<StyledProperty> user3Style {
+      { Sid::user3FontFace,                      Pid::FONT_FACE              },
+      { Sid::user3FontSize,                      Pid::FONT_SIZE              },
+      { Sid::user3FontBold,                      Pid::FONT_BOLD              },
+      { Sid::user3FontItalic,                    Pid::FONT_ITALIC            },
+      { Sid::user3FontUnderline,                 Pid::FONT_UNDERLINE         },
+      { Sid::user3Align,                         Pid::ALIGN                  },
+      { Sid::user3Offset,                        Pid::OFFSET                 },
+      { Sid::user3OffsetType,                    Pid::OFFSET_TYPE            },
+      { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
+      };
+
+const std::vector<StyledProperty> user4Style {
+      { Sid::user4FontFace,                      Pid::FONT_FACE              },
+      { Sid::user4FontSize,                      Pid::FONT_SIZE              },
+      { Sid::user4FontBold,                      Pid::FONT_BOLD              },
+      { Sid::user4FontItalic,                    Pid::FONT_ITALIC            },
+      { Sid::user4FontUnderline,                 Pid::FONT_UNDERLINE         },
+      { Sid::user4Align,                         Pid::ALIGN                  },
+      { Sid::user4Offset,                        Pid::OFFSET                 },
+      { Sid::user4OffsetType,                    Pid::OFFSET_TYPE            },
+      { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
+      };
+
+const std::vector<StyledProperty> user5Style {
+      { Sid::user5FontFace,                      Pid::FONT_FACE              },
+      { Sid::user5FontSize,                      Pid::FONT_SIZE              },
+      { Sid::user5FontBold,                      Pid::FONT_BOLD              },
+      { Sid::user5FontItalic,                    Pid::FONT_ITALIC            },
+      { Sid::user5FontUnderline,                 Pid::FONT_UNDERLINE         },
+      { Sid::user5Align,                         Pid::ALIGN                  },
+      { Sid::user5Offset,                        Pid::OFFSET                 },
+      { Sid::user5OffsetType,                    Pid::OFFSET_TYPE            },
+      { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
+      };
+
+const std::vector<StyledProperty> user6Style {
+      { Sid::user6FontFace,                      Pid::FONT_FACE              },
+      { Sid::user6FontSize,                      Pid::FONT_SIZE              },
+      { Sid::user6FontBold,                      Pid::FONT_BOLD              },
+      { Sid::user6FontItalic,                    Pid::FONT_ITALIC            },
+      { Sid::user6FontUnderline,                 Pid::FONT_UNDERLINE         },
+      { Sid::user6Align,                         Pid::ALIGN                  },
+      { Sid::user6Offset,                        Pid::OFFSET                 },
+      { Sid::user6OffsetType,                    Pid::OFFSET_TYPE            },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
 
@@ -1473,6 +1569,10 @@ static constexpr std::array<StyledPropertyListName, int(SubStyleId::SUBSTYLES)> 
       { "Stem",                                                    &stemStyle,                      SubStyleId::STEM },
       { QT_TRANSLATE_NOOP("TextStyle", "User-1"),                  &user1Style,                     SubStyleId::USER1 },
       { QT_TRANSLATE_NOOP("TextStyle", "User-2"),                  &user2Style,                     SubStyleId::USER2 },
+      { QT_TRANSLATE_NOOP("TextStyle", "User-3"),                  &user3Style,                     SubStyleId::USER3 },
+      { QT_TRANSLATE_NOOP("TextStyle", "User-4"),                  &user4Style,                     SubStyleId::USER4 },
+      { QT_TRANSLATE_NOOP("TextStyle", "User-5"),                  &user5Style,                     SubStyleId::USER5 },
+      { QT_TRANSLATE_NOOP("TextStyle", "User-6"),                  &user6Style,                     SubStyleId::USER6 },
       } };
 
 //---------------------------------------------------------

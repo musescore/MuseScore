@@ -325,8 +325,6 @@ void readTextStyle206(MStyle* style, XmlReader& e)
       Align align = Align::LEFT;
       bool sizeIsSpatiumDependent = true;
       bool hasFrame = false;
-//      double frameWidthMM = 0.0;
-//      double paddingWidthMM = 0.0;
       Spatium paddingWidth(0.0);
       int frameRound = 0;
       QColor frameColor = QColor(0, 0, 0, 255);
@@ -336,6 +334,7 @@ void readTextStyle206(MStyle* style, XmlReader& e)
       bool systemFlag = false;
       QPointF offset;
       OffsetType offsetType = OffsetType::SPATIUM;
+      Placement placement = Placement::ABOVE;
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -436,6 +435,13 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                   circle = e.readInt();
             else if (tag == "systemFlag")
                   systemFlag = e.readInt();
+            else if (tag == "placement") {
+                  QString value(e.readElementText());
+                  if (value == "above")
+                        placement = Placement::ABOVE;
+                  else if (value == "below")
+                        placement = Placement::BELOW;
+                  }
             else
                   e.unknown();
             }
@@ -471,6 +477,7 @@ void readTextStyle206(MStyle* style, XmlReader& e)
             { "Staff",                   SubStyleId::STAFF },
             { "Chord Symbol",            SubStyleId::HARMONY },
             { "Rehearsal Mark",          SubStyleId::REHEARSAL_MARK },
+            { "Repeat Text",             SubStyleId::REPEAT_LEFT },
             { "Repeat Text Left",        SubStyleId::REPEAT_LEFT },
             { "Repeat Text Right",       SubStyleId::REPEAT_RIGHT },
             { "Frame",                   SubStyleId::FRAME },
@@ -484,6 +491,7 @@ void readTextStyle206(MStyle* style, XmlReader& e)
             { "Footer",                  SubStyleId::FOOTER },
             { "Instrument Change",       SubStyleId::INSTRUMENT_CHANGE },
             { "Figured Bass",            SubStyleId::FIGURED_BASS },
+            { "Volta",                   SubStyleId::VOLTA },
             };
       SubStyleId ss = SubStyleId::SUBSTYLES;
       for (const auto& i : styleTable) {
@@ -492,99 +500,110 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                   break;
                   }
             }
-      if (ss != SubStyleId::SUBSTYLES) {
-            const std::vector<StyledProperty>& spl = subStyle(ss);
-            for (const auto& i : spl) {
-                  QVariant value;
-                  if (i.sid == Sid::NOSTYLE)
-                        break;
-                  switch (i.pid) {
-                        case Pid::SUB_STYLE:
-                              value = int(ss);
-                              break;
-                        case Pid::BEGIN_FONT_FACE:
-                        case Pid::CONTINUE_FONT_FACE:
-                        case Pid::END_FONT_FACE:
-                        case Pid::FONT_FACE:
-                              value = family;
-                              break;
-                        case Pid::BEGIN_FONT_SIZE:
-                        case Pid::CONTINUE_FONT_SIZE:
-                        case Pid::END_FONT_SIZE:
-                        case Pid::FONT_SIZE:
-                              value = size;
-                              break;
-                        case Pid::BEGIN_FONT_BOLD:
-                        case Pid::CONTINUE_FONT_BOLD:
-                        case Pid::END_FONT_BOLD:
-                        case Pid::FONT_BOLD:
-                              value = bold;
-                              break;
-                        case Pid::BEGIN_FONT_ITALIC:
-                        case Pid::CONTINUE_FONT_ITALIC:
-                        case Pid::END_FONT_ITALIC:
-                        case Pid::FONT_ITALIC:
-                              value = italic;
-                              break;
-                        case Pid::BEGIN_FONT_UNDERLINE:
-                        case Pid::CONTINUE_FONT_UNDERLINE:
-                        case Pid::END_FONT_UNDERLINE:
-                        case Pid::FONT_UNDERLINE:
-                              value = underline;
-                              break;
-                        case Pid::FRAME:
-                              value = hasFrame;
-                              break;
-                        case Pid::FRAME_SQUARE:
-                              value = false;
-                              break;
-                        case Pid::FRAME_CIRCLE:
-                              value = circle;
-                              break;
-                        case Pid::FRAME_WIDTH:
-                              value = frameWidth;
-                              break;
-                        case Pid::FRAME_PADDING:
-                              value = paddingWidth;
-                              break;
-                        case Pid::FRAME_ROUND:
-                              value = frameRound;
-                              break;
-                        case Pid::FRAME_FG_COLOR:
-                              value = frameColor;
-                              break;
-                        case Pid::FRAME_BG_COLOR:
-                              value = backgroundColor;
-                              break;
-                        case Pid::FONT_SPATIUM_DEPENDENT:
-                              value = sizeIsSpatiumDependent;
-                              break;
-                        case Pid::BEGIN_TEXT_ALIGN:
-                        case Pid::CONTINUE_TEXT_ALIGN:
-                        case Pid::END_TEXT_ALIGN:
-                        case Pid::ALIGN:
-                              value = QVariant::fromValue(align);
-                              break;
-                        case Pid::OFFSET:
-                              value = offset;
-                              break;
-                        case Pid::OFFSET_TYPE:
-                              value = int(offsetType);
-                              break;
-                        case Pid::SYSTEM_FLAG:
-                              value = systemFlag;
-                              break;
-                        case Pid::BEGIN_HOOK_HEIGHT:
-                        case Pid::END_HOOK_HEIGHT:
-                              value = QVariant();
-                              break;
-                        default:
-                              qDebug("unhandled property <%s>%d", propertyName(i.pid), int (i.pid));
-                              break;
-                        }
-                  if (value.isValid())
-                        style->set(i.sid, value);
+      if (ss == SubStyleId::SUBSTYLES) {
+            ss = e.addUserTextStyle(name);
+            if (ss == SubStyleId::SUBSTYLES) {
+                  qDebug("unhandled substyle <%s>", qPrintable(name));
+                  return;
                   }
+            }
+
+      const std::vector<StyledProperty>& spl = subStyle(ss);
+      for (const auto& i : spl) {
+            QVariant value;
+            if (i.sid == Sid::NOSTYLE)
+                  break;
+            switch (i.pid) {
+                  case Pid::SUB_STYLE:
+                        value = int(ss);
+                        break;
+                  case Pid::BEGIN_FONT_FACE:
+                  case Pid::CONTINUE_FONT_FACE:
+                  case Pid::END_FONT_FACE:
+                  case Pid::FONT_FACE:
+                        value = family;
+                        break;
+                  case Pid::BEGIN_FONT_SIZE:
+                  case Pid::CONTINUE_FONT_SIZE:
+                  case Pid::END_FONT_SIZE:
+                  case Pid::FONT_SIZE:
+                        value = size;
+                        break;
+                  case Pid::BEGIN_FONT_BOLD:
+                  case Pid::CONTINUE_FONT_BOLD:
+                  case Pid::END_FONT_BOLD:
+                  case Pid::FONT_BOLD:
+                        value = bold;
+                        break;
+                  case Pid::BEGIN_FONT_ITALIC:
+                  case Pid::CONTINUE_FONT_ITALIC:
+                  case Pid::END_FONT_ITALIC:
+                  case Pid::FONT_ITALIC:
+                        value = italic;
+                        break;
+                  case Pid::BEGIN_FONT_UNDERLINE:
+                  case Pid::CONTINUE_FONT_UNDERLINE:
+                  case Pid::END_FONT_UNDERLINE:
+                  case Pid::FONT_UNDERLINE:
+                        value = underline;
+                        break;
+                  case Pid::FRAME:
+                        value = hasFrame;
+                        break;
+                  case Pid::FRAME_SQUARE:
+                        value = false;
+                        break;
+                  case Pid::FRAME_CIRCLE:
+                        value = circle;
+                        break;
+                  case Pid::FRAME_WIDTH:
+                        value = frameWidth;
+                        break;
+                  case Pid::FRAME_PADDING:
+                        value = paddingWidth;
+                        break;
+                  case Pid::FRAME_ROUND:
+                        value = frameRound;
+                        break;
+                  case Pid::FRAME_FG_COLOR:
+                        value = frameColor;
+                        break;
+                  case Pid::FRAME_BG_COLOR:
+                        value = backgroundColor;
+                        break;
+                  case Pid::FONT_SPATIUM_DEPENDENT:
+                        value = sizeIsSpatiumDependent;
+                        break;
+                  case Pid::BEGIN_TEXT_ALIGN:
+                  case Pid::CONTINUE_TEXT_ALIGN:
+                  case Pid::END_TEXT_ALIGN:
+                  case Pid::ALIGN:
+                        value = QVariant::fromValue(align);
+                        break;
+                  case Pid::OFFSET:
+                        value = offset;
+                        break;
+                  case Pid::OFFSET_TYPE:
+                        value = int(offsetType);
+                        break;
+                  case Pid::SYSTEM_FLAG:
+                        value = systemFlag;
+                        break;
+                  case Pid::BEGIN_HOOK_HEIGHT:
+                  case Pid::END_HOOK_HEIGHT:
+                        value = QVariant();
+                        break;
+                  case Pid::PLACEMENT:
+                        value = int(placement);
+                        break;
+                  default:
+                        qDebug("unhandled property <%s>%d", propertyName(i.pid), int (i.pid));
+                        break;
+                  }
+            if (value.isValid())
+                  style->set(i.sid, value);
+            else
+                  qDebug("invalid style value <%s>", MStyle::valueName(i.sid));
             }
       }
 
@@ -1063,8 +1082,12 @@ static void readText206(XmlReader& e, TextBase* t, Element* be)
             if (tag == "style") {
                   QString s = e.readElementText();
                   if (!be->isTuplet()) {      // Hack
-                        SubStyleId ss = subStyleFromName(s);
-                        be->initSubStyle(ss);
+                        SubStyleId ss;
+                        ss = e.lookupUserTextStyle(s);
+                        if (ss == SubStyleId::SUBSTYLES)
+                              ss = subStyleFromName(s);
+                        if (ss != SubStyleId::SUBSTYLES)
+                              be->initSubStyle(ss);
                         }
                   }
             else if (tag == "foregroundColor")  // same as "color" ?

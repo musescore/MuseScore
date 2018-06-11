@@ -17,6 +17,7 @@
       <staffUpperBorder>6</staffUpperBorder>
       <staffLowerBorder>4</staffLowerBorder>
       <minSystemDistance>9</minSystemDistance>
+      <lyricsPlacement>0</lyricsPlacement>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
       <repeatBarTips>1</repeatBarTips>
       <clefLeftMargin>0.64</clefLeftMargin>
@@ -24,7 +25,9 @@
       <stemWidth>0.16</stemWidth>
       <barNoteDistance>1.2</barNoteDistance>
       <lastSystemFillLimit>0.25</lastSystemFillLimit>
+      <hairpinPlacement>0</hairpinPlacement>
       <hairpinFontFace>MuseJazz Text</hairpinFontFace>
+      <pedalPlacement>0</pedalPlacement>
       <pedalPosBelow>0</pedalPosBelow>
       <pedalFontFace>MuseJazz Text</pedalFontFace>
       <trillPosAbove>0</trillPosAbove>
@@ -37,6 +40,9 @@
       <oddFooterC>$C$p</oddFooterC>
       <oddFooterR></oddFooterR>
       <voltaY>-6</voltaY>
+      <voltaFontFace>MuseJazz Text</voltaFontFace>
+      <voltaFontSize>8</voltaFontSize>
+      <voltaFontBold>0</voltaFontBold>
       <ottavaFontFace>MuseJazz Text</ottavaFontFace>
       <ottavaFontSize>10</ottavaFontSize>
       <ottavaFontItalic>1</ottavaFontItalic>
@@ -88,6 +94,8 @@
       <rehearsalMarkAlign>right,baseline</rehearsalMarkAlign>
       <rehearsalMarkFramePadding>0.2</rehearsalMarkFramePadding>
       <repeatLeftFontFace>MuseJazz Text</repeatLeftFontFace>
+      <repeatLeftFontSize>12</repeatLeftFontSize>
+      <repeatLeftAlign>right,baseline</repeatLeftAlign>
       <repeatRightFontFace>MuseJazz Text</repeatRightFontFace>
       <repeatRightAlign>right,top</repeatRightAlign>
       <frameFontFace>MuseJazz Text</frameFontFace>

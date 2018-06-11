@@ -686,12 +686,54 @@ enum class Sid {
       user1FontBold,
       user1FontItalic,
       user1FontUnderline,
+      user1Align,
+      user1Offset,
+      user1OffsetType,
 
       user2FontFace,
       user2FontSize,
       user2FontBold,
       user2FontItalic,
       user2FontUnderline,
+      user2Align,
+      user2Offset,
+      user2OffsetType,
+
+      user3FontFace,
+      user3FontSize,
+      user3FontBold,
+      user3FontItalic,
+      user3FontUnderline,
+      user3Align,
+      user3Offset,
+      user3OffsetType,
+
+      user4FontFace,
+      user4FontSize,
+      user4FontBold,
+      user4FontItalic,
+      user4FontUnderline,
+      user4Align,
+      user4Offset,
+      user4OffsetType,
+
+      user5FontFace,
+      user5FontSize,
+      user5FontBold,
+      user5FontItalic,
+      user5FontUnderline,
+      user5Align,
+      user5Offset,
+      user5OffsetType,
+
+      user6FontFace,
+      user6FontSize,
+      user6FontBold,
+      user6FontItalic,
+      user6FontUnderline,
+      user6Align,
+      user6Offset,
+      user6OffsetType,
 
       letRingFontFace,
       letRingFontSize,
@@ -796,9 +838,12 @@ enum class SubStyleId {
       STEM,
       USER1,
       USER2,
+      USER3,
+      USER4,
+      USER5,
+      USER6,
       SUBSTYLES
       };
-
 
 //---------------------------------------------------------
 //   MStyle
