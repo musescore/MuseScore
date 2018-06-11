@@ -413,6 +413,7 @@ void SfzRegion::readOp(const QString& b, const QString& data, SfzControl &c)
       else if (opcode == "sample") {
             sample = path + "/" + c.defaultPath + "/" + opcode_data_full; // spaces are allowed
             sample.replace("\\", "/");
+            sample = sample.trimmed();
             }
       else if (opcode == "default_path") {
             c.defaultPath = opcode_data_full;
