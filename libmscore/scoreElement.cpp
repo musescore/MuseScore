@@ -368,6 +368,16 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid id) const
             QVariant defaultValue = QVariant(f2/_spatium);
             xml.tag(id, val, defaultValue);
             }
+      else if (propertyType(id) == P_TYPE::POINT_SP) {
+            qreal _spatium = score()->spatium();
+            QPointF p1       = getProperty(id).toPoint();
+            QPointF p2       = propertyDefault(id).toPoint();
+            if ( (qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001))
+                  return;
+            QVariant val          = QVariant(p1/_spatium);
+            QVariant defaultValue = QVariant(p2/_spatium);
+            xml.tag(id, val, defaultValue);
+            }
       else {
             if (getProperty(id).isValid())
                   xml.tag(id, getProperty(id), propertyDefault(id));

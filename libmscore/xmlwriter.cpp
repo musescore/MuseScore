@@ -175,6 +175,7 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
             case P_TYPE::REAL:
             case P_TYPE::SCALE:
             case P_TYPE::POINT:
+            case P_TYPE::POINT_SP:
             case P_TYPE::SIZE:
             case P_TYPE::COLOR:
             case P_TYPE::DIRECTION:
@@ -274,8 +275,6 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
                   break;
             case P_TYPE::FRACTION:
                   qFatal("unknown: FRACTION");
-            case P_TYPE::POINT_SP:
-                  qFatal("unknown: POINT_SP");
             case P_TYPE::POINT_MM:
                   qFatal("unknown: POINT_MM");
             case P_TYPE::SIZE_MM:
