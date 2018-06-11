@@ -730,9 +730,9 @@ bool Tuplet::readProperties(XmlReader& e)
       else if (tag == "actualNotes")
             _ratio.setNumerator(e.readInt());
       else if (tag == "p1")
-            _p1 = e.readPoint();
+            _p1 = e.readPoint() * score()->spatium();
       else if (tag == "p2")
-            _p2 = e.readPoint();
+            _p2 = e.readPoint() * score()->spatium();
       else if (tag == "baseNote")
             _baseLen = TDuration(e.readElementText());
       else if (tag == "Number") {
