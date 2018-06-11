@@ -2403,7 +2403,7 @@ void TextBase::editCopy(EditData& ed)
 //   cursor
 //---------------------------------------------------------
 
-TextCursor* TextBase::cursor(EditData& ed)
+TextCursor* TextBase::cursor(const EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
       return &ted->cursor;
