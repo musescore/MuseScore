@@ -434,7 +434,7 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
             case ViewState::NORMAL:
                   if (!editData.element && (me->modifiers() & Qt::ShiftModifier))
                         changeState(ViewState::LASSO);
-                  else if (editData.element && !(me->modifiers())) {
+                  else if (editData.element && !(me->modifiers()) && editData.element->isMovable()) {
                         if (!drag)
                               return;
                         changeState(ViewState::DRAG_OBJECT);
