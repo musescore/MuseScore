@@ -1907,8 +1907,8 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Add lyrics"),
          0,
          Icons::Invalid_ICON,
-         Qt::WindowShortcut,
-         ShortcutFlags::A_CMD
+         Qt::WindowShortcut
+//         ,ShortcutFlags::A_CMD
          },
       {
          MsWidget::SCORE_TAB,

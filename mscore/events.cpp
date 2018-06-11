@@ -37,7 +37,7 @@ bool ScoreView::event(QEvent* event)
       if (event->type() == QEvent::KeyPress && editData.element) {
             QKeyEvent* ke = static_cast<QKeyEvent*>(event);
             if (ke->key() == Qt::Key_Tab || ke->key() == Qt::Key_Backtab) {
-                  if (editData.element->isText())
+                  if (editData.element->isTextBase())
                         return true;
                   bool rv = true;
                   if (ke->key() == Qt::Key_Tab) {
@@ -494,10 +494,8 @@ void ScoreView::mouseDoubleClickEvent(QMouseEvent* me)
       if (state == ViewState::NORMAL) {
             QPointF p = toLogical(me->pos());
             Element* e = elementNear(p);
-            if (e && e->isEditable()) {
+            if (e && e->isEditable())
                   startEditMode(e);
-                  changeState(ViewState::EDIT);
-                  }
             }
       }
 

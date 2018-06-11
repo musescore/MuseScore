@@ -322,7 +322,7 @@ class TextBase : public Element {
 
       void editInsertText(TextCursor*, const QString&);
 
-      TextCursor* cursor(EditData&);
+      TextCursor* cursor(const EditData&);
       const TextBlock& textBlock(int line) const { return _layout[line]; }
       TextBlock& textBlock(int line)             { return _layout[line]; }
       QList<TextBlock>& textBlockList()          { return _layout; }
