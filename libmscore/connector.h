@@ -40,6 +40,8 @@ class ConnectorInfo {
       bool finishedLeft() const;
       bool finishedRight() const;
 
+      static int orderedConnectionDistance(const ConnectorInfo& c1, const ConnectorInfo& c2);
+
    protected:
       ElementType _type       { ElementType::INVALID };
       PointInfo _currentInfo;
@@ -60,12 +62,18 @@ class ConnectorInfo {
 
       ConnectorInfo* prev() const   { return _prev; }
       ConnectorInfo* next() const   { return _next; }
+      ConnectorInfo* start();
+      ConnectorInfo* end();
 
       ElementType type() const { return _type; }
       const PointInfo& info() const { return _currentInfo; }
 
       bool connect(ConnectorInfo* other);
       bool finished() const;
+
+      // for reconnection of broken connectors
+      int connectionDistance(const ConnectorInfo& c2) const;
+      void forceConnect(ConnectorInfo* c2);
 
       bool hasPrevious() const      { return (_prevInfo.measure() != INT_MIN); }
       bool hasNext() const          { return (_nextInfo.measure() != INT_MIN); }

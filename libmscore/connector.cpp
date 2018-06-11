@@ -141,6 +141,66 @@ bool ConnectorInfo::connect(ConnectorInfo* other)
       }
 
 //---------------------------------------------------------
+//   ConnectorInfo::forceConnect
+//---------------------------------------------------------
+
+void ConnectorInfo::forceConnect(ConnectorInfo* other)
+      {
+      if (!other || (this == other))
+            return;
+      _next = other;
+      other->_prev = this;
+      }
+
+//---------------------------------------------------------
+//   distance
+//---------------------------------------------------------
+
+static int distance(const PointInfo& p1, const PointInfo& p2)
+      {
+      return 10000000 * (p2.measure() - p1.measure()) + 10000 * (p2.fpos().ticks() - p1.fpos().ticks()) + 100 * (p2.track() - p1.track()) + 10 * (p2.note() - p1.note()) + (p2.graceIndex() - p1.graceIndex());
+      }
+
+//---------------------------------------------------------
+//   ConnectorInfo::orderedConnectionDistance
+//---------------------------------------------------------
+
+int ConnectorInfo::orderedConnectionDistance(const ConnectorInfo& c1, const ConnectorInfo& c2)
+      {
+      PointInfo c1Next = c1._nextInfo;
+      c1Next.toRelative(c1._currentInfo);
+      PointInfo c2Prev = c2._currentInfo; // inversed order to get equal signs
+      c2Prev.toRelative(c2._prevInfo);
+      if (c1Next == c2Prev)
+            return distance(c1._nextInfo, c2._currentInfo);
+      return INT_MAX;
+      }
+
+//---------------------------------------------------------
+//   ConnectorInfo::connectionDistance
+//    Returns a "distance" representing a likelihood of
+//    that the checked connectors should be connected.
+//    Returns 0 if can be readily connected via connect(),
+//    < 0 if other is likely to be the first,
+//    INT_MAX if cannot be connected
+//---------------------------------------------------------
+
+int ConnectorInfo::connectionDistance(const ConnectorInfo& other) const
+      {
+      if (_type != other._type)
+            return INT_MAX;
+      int distThisOther = INT_MAX;
+      int distOtherThis = INT_MAX;
+      if (!_next && hasNext() && !other._prev && other.hasPrevious())
+            distThisOther = orderedConnectionDistance(*this, other);
+      if (!_prev && hasPrevious() && !other._next && other.hasNext())
+            distOtherThis = orderedConnectionDistance(other, *this);
+      if (distOtherThis < distThisOther)
+            return -distOtherThis;
+      return distThisOther;
+      }
+
+//---------------------------------------------------------
 //   ConnectorInfo::finished
 //---------------------------------------------------------
 
@@ -171,6 +231,34 @@ bool ConnectorInfo::finishedRight() const
       while (i->_next)
             i = i->_next;
       return (!i->hasNext());
+      }
+
+//---------------------------------------------------------
+//   ConnectorInfo::start
+//---------------------------------------------------------
+
+ConnectorInfo* ConnectorInfo::start()
+      {
+      ConnectorInfo* i = this;
+      while (i->_prev)
+            i = i->_prev;
+      if (i->hasPrevious())
+            return nullptr;
+      return i;
+      }
+
+//---------------------------------------------------------
+//   ConnectorInfo::end
+//---------------------------------------------------------
+
+ConnectorInfo* ConnectorInfo::end()
+      {
+      ConnectorInfo* i = this;
+      while (i->_next)
+            i = i->_next;
+      if (i->hasNext())
+            return nullptr;
+      return i;
       }
 
 //---------------------------------------------------------

@@ -153,6 +153,7 @@ class XmlReader : public QXmlStreamReader {
       void addConnectorInfo(const ConnectorInfoReader&);
       void addConnectorInfoLater(const ConnectorInfoReader&); // add connector info to be checked after calling checkConnectors()
       void checkConnectors();
+      void reconnectBrokenConnectors();
       void removeConnectorInfo(const ConnectorInfoReader&);
       void removeConnector(const ConnectorInfoReader&); // Removes the whole ConnectorInfo chain from the connectors list.
 

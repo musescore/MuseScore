@@ -191,6 +191,7 @@ bool Score::read(XmlReader& e)
             else
                   e.unknown();
             }
+      e.reconnectBrokenConnectors();
       if (e.error() != QXmlStreamReader::NoError) {
             qDebug("%s: xml read error at line %lld col %lld: %s",
                qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),

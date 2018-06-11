@@ -578,6 +578,56 @@ void XmlReader::checkConnectors()
       _pendingConnectors.clear();
       }
 
+//---------------------------------------------------------
+//   distanceSort
+//---------------------------------------------------------
+
+static bool distanceSort(const QPair<int, QPair<ConnectorInfoReader*, ConnectorInfoReader*>>& p1, const QPair<int, QPair<ConnectorInfoReader*, ConnectorInfoReader*>>& p2)
+      {
+      return p1.first < p2.first;
+      }
+
+//---------------------------------------------------------
+//   reconnectBrokenConnectors
+//---------------------------------------------------------
+
+void XmlReader::reconnectBrokenConnectors()
+      {
+      if (_connectors.isEmpty())
+            return;
+      qDebug("Reconnecting broken connectors (%d nodes)", _connectors.size());
+      QList<QPair<int, QPair<ConnectorInfoReader*, ConnectorInfoReader*>>> brokenPairs;
+      for (int i = 1; i < _connectors.size(); ++i) {
+            for (int j = 0; j < i; ++j) {
+                  ConnectorInfoReader& c1 = _connectors[i];
+                  ConnectorInfoReader& c2 = _connectors[j];
+                  int d = c1.connectionDistance(c2);
+                  if (d >= 0)
+                        brokenPairs.append(qMakePair(d, qMakePair(&c1, &c2)));
+                  else
+                        brokenPairs.append(qMakePair(-d, qMakePair(&c2, &c1)));
+                  }
+            }
+      std::sort(brokenPairs.begin(), brokenPairs.end(), distanceSort);
+      for (auto& distPair : brokenPairs) {
+            if (distPair.first == INT_MAX)
+                  continue;
+            auto& pair = distPair.second;
+            if (pair.first->next() || pair.second->prev())
+                  continue;
+            pair.first->forceConnect(pair.second);
+            }
+      QSet<ConnectorInfoReader*> reconnected;
+      for (ConnectorInfoReader& c : _connectors) {
+            if (c.finished())
+                  reconnected.insert(static_cast<ConnectorInfoReader*>(c.start()));
+            }
+      for (ConnectorInfoReader* cptr : reconnected) {
+            cptr->addToScore(pasteMode());
+            removeConnector(*cptr);
+            }
+      qDebug("reconnected %d broken connectors", reconnected.count());
+      }
 }
 
 
