@@ -4406,6 +4406,9 @@ void Score::undoRemoveElement(Element* element)
                   if (!segments.contains(s))
                         segments.append(s);
                   }
+            if (e->parent() && e->parent()->isSystem()) {
+                  e->setParent(0); // systems will be regenerated upon redo, so detach
+                  }
             }
       for (Segment* s : segments) {
             if (s->empty()) {
