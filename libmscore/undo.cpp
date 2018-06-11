@@ -1685,7 +1685,7 @@ RemoveElement::RemoveElement(Element* e)
 void RemoveElement::cleanup(bool undo)
       {
       if (undo) {
-            qDebug("RemoveElement::cleanup: delete %d %s", undo, element->name());
+            //qDebug("RemoveElement::cleanup: delete %d %s", undo, element->name());
             delete element;
             element = 0;
             }

@@ -44,16 +44,11 @@ static void saveMeasureEvents(Xml& xml, Measure* m, int offset)
 //   savePositions
 //    output in 100 dpi
 //---------------------------------------------------------
-
-bool savePositions(Score* score, const QString& name, bool segments)
+      
+bool savePositions(Score* score, QIODevice* device, bool segments)
       {
       segs.clear();
-      QFile fp(name);
-      if (!fp.open(QIODevice::WriteOnly)) {
-            qDebug("Open <%s> failed", qPrintable(name));
-            return false;
-            }
-      Xml xml(&fp);
+      Xml xml(device);
       xml.header();
       xml.stag("score");
       xml.stag("elements");
@@ -143,5 +138,14 @@ bool savePositions(Score* score, const QString& name, bool segments)
       xml.etag(); // score
       return true;
       }
-}
 
+bool savePositions(Score* score, const QString& name, bool segments)
+      {
+      QFile fp(name);
+      if (!fp.open(QIODevice::WriteOnly)) {
+            qDebug("Open <%s> failed", qPrintable(name));
+            return false;
+            }
+      return savePositions(score, &fp, segments);
+      }
+}

@@ -152,7 +152,9 @@ int trimMargin = -1;
 bool noWebView = false;
 bool exportScoreParts = false;
 bool ignoreWarnings = false;
-
+bool experimentalPrintParts = false;
+bool experimentalMediaParts = false;
+      
 QString mscoreGlobalShare;
 
 static QString outFileName;
@@ -172,6 +174,7 @@ QErrorMessage* errorMessage;
 const char* voiceActions[] = { "voice-1", "voice-2", "voice-3", "voice-4" };
 
 extern bool savePositions(Score*, const QString& name, bool segments );
+extern bool savePositions(Score*, QIODevice* device, bool segments );
 extern TextPalette* textPalette;
 
 static constexpr double SCALE_MAX  = 16.0;
@@ -2601,36 +2604,7 @@ static bool doConvert(Score* cs, QString fn, QString plugin = "")
             }
       else if (fn.endsWith(".png")) {
             cs->switchToPageMode();
-            if (!exportScoreParts)
-                  return mscore->savePng(cs, fn);
-            else {
-                  if (cs->excerpts().size() == 0) {
-                        auto excerpts = Excerpt::createAllExcerpt(cs);
-
-                        for (Excerpt* e: excerpts) {
-                              Score* nscore = new Score(e->oscore());
-                              e->setPartScore(nscore);
-                              nscore->setName(e->title()); // needed before AddExcerpt
-                              nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
-                              cs->startCmd();
-                              cs->undo(new AddExcerpt(nscore));
-                              createExcerpt(e);
-                              cs->endCmd();
-                              }
-                        }
-                  if (!mscore->savePng(cs, fn))
-                        return false;
-                  int idx = 0;
-                  int padding = QString("%1").arg(cs->excerpts().size()).size();
-                  for (Excerpt* e: cs->excerpts()) {
-                        QString suffix = QString("__excerpt__%1.png").arg(idx, padding, 10, QLatin1Char('0'));
-                        QString excerptFn = fn.left(fn.size() - 4) + suffix;
-                        if (!mscore->savePng(e->partScore(), excerptFn))
-                              return false;
-                        idx++;
-                        }
-                  return true;
-                  }
+            return true;
             }
       else if (fn.endsWith(".svg")) {
             cs->switchToPageMode();
@@ -2740,8 +2714,184 @@ static bool doProcessJob(QString jsonFile)
 //   processNonGui
 //---------------------------------------------------------
 
+static bool experimentalPartsPrint(const QString& inFilePath)
+      {
+      Score* score = mscore->readScore(inFilePath);
+      QString outPath = QFileInfo(inFilePath).path() + "/";
+
+      QJsonObject jsonForPdfs;
+      QString outName = outPath + QFileInfo(inFilePath).baseName() + ".pdf";
+      jsonForPdfs["score"] = outName;
+      //save score pdf
+      if (!styleFile.isEmpty()) {
+            QFile f(styleFile);
+            if (f.open(QIODevice::ReadOnly))
+                  score->style()->load(&f);
+            }
+      score->switchToPageMode();
+
+      QByteArray pdfData;
+      QBuffer scoreDevice(&pdfData);
+      scoreDevice.open(QIODevice::ReadWrite);
+      QPdfWriter writer(&scoreDevice);
+      bool res = mscore->savePdf(score, writer);
+      jsonForPdfs["scoreBin"] = QString::fromLatin1(pdfData.toBase64());
+
+      //save extended score+parts and separate parts pdfs
+      //if no parts, generate parts from existing instruments
+      if (score->excerpts().size() == 0) {
+            auto excerpts = Excerpt::createAllExcerpt(score);
+            for (Excerpt* e : excerpts) {
+                  Score* nscore = new Score(e->oscore());
+                  e->setPartScore(nscore);
+                  nscore->setName(e->title()); // needed before AddExcerpt
+                  nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
+                  score->startCmd();
+                  score->undo(new AddExcerpt(nscore));
+                  createExcerpt(e);
+                  score->endCmd();
+                  }
+            }
+      
+      QList<Score*> scores;
+      scores.append(score);
+      QJsonArray partsArray;
+      QJsonArray partsNamesArray;
+      for (Excerpt* e : score->excerpts()) {
+            scores.append(e->partScore());
+            QJsonValue partNameVal(e->title());
+            partsNamesArray.append(partNameVal);
+            QByteArray partData;
+            QBuffer partDevice(&partData);
+            partDevice.open(QIODevice::ReadWrite);
+            QPdfWriter partWriter(&partDevice);
+            res &= mscore->savePdf(e->partScore(), partWriter);
+            QJsonValue partVal(QString::fromLatin1(partData.toBase64()));
+            partsArray.append(partVal);
+            }
+      jsonForPdfs["parts"] = partsNamesArray;
+      jsonForPdfs["partsBin"] = partsArray;
+
+      jsonForPdfs["scoreFullPostfix"] = QString("-Score_and_parts") + ".pdf";
+
+      QString tempFileName = outPath + "tempPdf.pdf";
+      res &= mscore->savePdf(scores, tempFileName);
+      QFile tempPdf(tempFileName);
+      tempPdf.open(QIODevice::ReadWrite);
+      QByteArray fullScoreData = tempPdf.readAll();
+      tempPdf.remove();
+      jsonForPdfs["scoreFullBin"] = QString::fromLatin1(fullScoreData.toBase64());
+            
+      QJsonDocument jsonDoc(jsonForPdfs);
+      const QString& jsonPath{"/dev/stdout"};
+      QFile file(jsonPath);
+      file.open(QIODevice::WriteOnly);
+      file.write(jsonDoc.toJson(QJsonDocument::Compact));
+      file.close();
+
+      delete score;
+      return res;
+      }
+
+static bool experimentalPartsMedia(const QString& inFilePath)
+      {
+      Score* score = mscore->readScore(inFilePath);
+      QString outPath = QFileInfo(inFilePath).path() + "/";
+      
+      //save extended score+parts and separate parts pdfs
+      //if no parts, generate parts from existing instruments
+      if (score->excerpts().size() == 0) {
+            auto excerpts = Excerpt::createAllExcerpt(score);
+            for (Excerpt* e : excerpts) {
+                  Score* nscore = new Score(e->oscore());
+                  e->setPartScore(nscore);
+                  nscore->setName(e->title()); // needed before AddExcerpt
+                  nscore->style()->set(StyleIdx::createMultiMeasureRests, true);
+                  score->startCmd();
+                  score->undo(new AddExcerpt(nscore));
+                  createExcerpt(e);
+                  score->endCmd();
+            }
+      }
+      
+      QJsonObject jsonForMedia;
+      QJsonArray partsArray;
+      QJsonArray partsNamesArray;
+      QJsonArray partsPngsArray;
+      QJsonArray partsSposArray;
+      QJsonArray partsMposArray;
+      bool res = true;
+      for (Excerpt* e : score->excerpts()) {
+            Score* partScore = e->partScore();
+            //get part name
+            QJsonValue partNameVal(e->title());
+            partsNamesArray.append(partNameVal);
+            
+            //export part audio
+            QByteArray partData;
+            QBuffer partDevice(&partData);
+            partDevice.open(QIODevice::ReadWrite);
+            bool dummy = false;
+            //QString fileName = QString("/Users/admin/123") + e->title() + ".mp3";
+            res &= mscore->saveMp3(partScore, &partDevice, dummy);// || mscore->saveAudio(partScore, &partDevice);
+            QJsonValue partVal(QString::fromLatin1(partData.toBase64()));
+            partsArray.append(partVal);
+            
+            //export part pngs
+            QJsonArray onePartPngsArray;
+            for (int i = 0; i < partScore->pages().size(); ++i) {
+                  QByteArray partDataPng;
+                  QBuffer partPngDevice(&partDataPng);
+                  partPngDevice.open(QIODevice::ReadWrite);
+                  //QString fileName = QString("/Users/admin/123") + e->title() + ".png";
+                  res &= mscore->savePng(partScore, &partPngDevice, i);
+                  QJsonValue partPngVal(QString::fromLatin1(partDataPng.toBase64()));
+                  onePartPngsArray.append(partPngVal);
+                  }
+            
+            partsPngsArray.append(onePartPngsArray);
+            
+            //export .spos
+            QByteArray partDataPos;
+            QBuffer partPosDevice(&partDataPos);
+            partPosDevice.open(QIODevice::ReadWrite);
+            savePositions(partScore, &partPosDevice, true);
+            QJsonValue partSposVal(QString::fromLatin1(partDataPos.toBase64()));
+            partsSposArray.append(partSposVal);
+            partPosDevice.close();
+            partDataPos.clear();
+            
+            //export .mpos
+            partPosDevice.open(QIODevice::ReadWrite);
+            savePositions(partScore, &partPosDevice, false);
+            QJsonValue partMposVal(QString::fromLatin1(partDataPos.toBase64()));
+            partsMposArray.append(partMposVal);
+      }
+      jsonForMedia["parts"] = partsNamesArray;
+      jsonForMedia["partsMp3"] = partsArray;
+      jsonForMedia["partsPngs"] = partsPngsArray;
+      jsonForMedia["partsMposXML"] = partsMposArray;
+      jsonForMedia["partsSposXML"] = partsSposArray;
+
+      QJsonDocument jsonDoc(jsonForMedia);
+      const QString& jsonPath{"/dev/stdout"};
+      QFile file(jsonPath);
+      file.open(QIODevice::WriteOnly);
+      file.write(jsonDoc.toJson(QJsonDocument::Compact));
+      file.close();
+
+      delete score;
+      return true;
+      }
+      
 static bool processNonGui(const QStringList& argv)
       {
+      if (experimentalPrintParts)
+            return experimentalPartsPrint(argv[0]);
+      
+      if (experimentalMediaParts)
+            return experimentalPartsMedia(argv[0]);
+            
       if (pluginMode) {
             loadScores(argv);
             QString pn(pluginName);
@@ -5461,6 +5611,26 @@ bool MuseScore::canSaveMp3()
 
 bool MuseScore::saveMp3(Score* score, const QString& name)
       {
+      QFile file(name);
+      if (!file.open(QIODevice::WriteOnly)) {
+            if (!MScore::noGui) {
+                  QMessageBox::warning(0,
+                                       tr("Encoding Error"),
+                                       tr("Unable to open target file for writing"),
+                                       QString::null, QString::null);
+                  }
+            return false;
+            }
+      bool wasCanceled = false;
+      bool res = saveMp3(score, &file, wasCanceled);
+      file.close();
+      if (wasCanceled || !res)
+            file.remove();
+      return res;
+      }
+      
+bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
+      {
 #ifndef USE_LAME
       return false;
 #else
@@ -5517,18 +5687,6 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                      QString::null, QString::null);
                   }
             qDebug("Unable to initialize MP3 stream");
-            MScore::sampleRate = oldSampleRate;
-            return false;
-            }
-
-      QFile file(name);
-      if (!file.open(QIODevice::WriteOnly)) {
-            if (!MScore::noGui) {
-                  QMessageBox::warning(0,
-                     tr("Encoding Error"),
-                     tr("Unable to open target file for writing"),
-                     QString::null, QString::null);
-                  }
             MScore::sampleRate = oldSampleRate;
             return false;
             }
@@ -5695,7 +5853,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               break;
                               }
                         else
-                              file.write((char*)bufferOut, bytes);
+                              device->write((char*)bufferOut, bytes);
                         }
                   else {
                         for (int i = 0; i < FRAMES; ++i) {
@@ -5732,15 +5890,12 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       long bytes = exporter.finishStream(bufferOut);
       if (bytes > 0L)
-            file.write((char*)bufferOut, bytes);
+            device->write((char*)bufferOut, bytes);
 
-      bool wasCanceled = progress.wasCanceled();
+      wasCanceled = progress.wasCanceled();
       progress.close();
       delete synti;
       delete[] bufferOut;
-      file.close();
-      if (wasCanceled)
-            file.remove();
       MScore::sampleRate = oldSampleRate;
       return true;
 #endif
@@ -5822,9 +5977,10 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"w", "no-webview"}, "No web view in start center"));
       parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Used with '-o <file>.pdf', export score and parts"));
       parser.addOption(QCommandLineOption({"f", "force"}, "Used with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
-      parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
       parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless if -e is passed too", "extension file"));
-
+      parser.addOption(QCommandLineOption("parts-pdf", "Experimental export of score and parts as separate files"));
+      parser.addOption(QCommandLineOption("parts-media", "Experimental export of media for parts"));
+            
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
       parser.process(QCoreApplication::arguments());
@@ -5961,12 +6117,24 @@ int main(int argc, char* av[])
                   }
            }
 
+      if (parser.isSet("parts-pdf")) {
+            experimentalPrintParts = true;
+            MScore::noGui = true;
+            converterMode = true;
+            }
+            
+      if (parser.isSet("parts-media")) {
+            experimentalMediaParts = true;
+            MScore::noGui = true;
+            converterMode = true;
+            }
+
       QStringList argv = parser.positionalArguments();
 
       mscoreGlobalShare = getSharePath();
       iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
 
-      if (!converterMode && !pluginMode) {
+      if (!converterMode && !pluginMode && !experimentalPrintParts && !experimentalMediaParts) {
             if (!argv.isEmpty()) {
                   int ok = true;
                   for (const QString& message : argv) {
@@ -6078,7 +6246,7 @@ int main(int argc, char* av[])
             qApp->processEvents();
             }
 
-      if (!converterMode && !pluginMode) {
+      if (!converterMode && !pluginMode && !experimentalPrintParts && !experimentalMediaParts) {
             struct PaletteItem {
                   QPalette::ColorRole role;
                   const char* name;

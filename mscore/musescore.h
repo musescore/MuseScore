@@ -601,7 +601,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool savePdf(const QString& saveName);
       bool savePdf(Score* cs, const QString& saveName);
       bool savePdf(QList<Score*> cs, const QString& saveName);
-
+      bool savePdf(Score* cs, QPdfWriter& printer);
 
       Score* readScore(const QString& name);
 
@@ -609,13 +609,14 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveSelection(Score*);
       void addImage(Score*, Element*);
 
-      bool savePng(Score*, const QString& name, bool screenshot, bool transparent, double convDpi, int trimMargin, QImage::Format format);
+      bool savePng(Score*, QIODevice*, int pageNum, bool screenshot, bool transparent, double convDpi, int trimMargin, QImage::Format format);
       bool saveAudio(Score*, QIODevice *device, std::function<bool(float)> updateProgress = nullptr);
       bool saveAudio(Score*, const QString& name);
       bool canSaveMp3();
       bool saveMp3(Score*, const QString& name);
+      bool saveMp3(Score*, QIODevice* device, bool& wasCanceled);
       bool saveSvg(Score*, const QString& name);
-      bool savePng(Score*, const QString& name);
+      bool savePng(Score*, QIODevice*, int pageNum = 0);
 //      bool saveLilypond(Score*, const QString& name);
       bool saveMidi(Score* score, const QString& name);
 

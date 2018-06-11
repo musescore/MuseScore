@@ -5452,7 +5452,7 @@ void initScoreFonts()
       int error = FT_Init_FreeType(&ftlib);
       if (!ftlib || error)
             qFatal("init freetype library failed");
-      qDebug("initScoreFonts %p", ftlib);
+      //qDebug("initScoreFonts %p", ftlib);
       int index = 0;
       for (auto i : Sym::symNames)
             Sym::lnhash.insert(i, SymId(index++));
