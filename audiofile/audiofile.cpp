@@ -91,8 +91,10 @@ sf_count_t AudioFile::readData(short* data, sf_count_t frames)
                   if (fabs(dataF[i]) > maxSignal)
                         maxSignal = dataF[i] > 0 ? dataF[i] : -dataF[i];
                   }
-            //convert normilized floats to signed short values
-            float adjScale = 1.f/maxSignal;
+            //normalize values if and only if sample values range is incorrect
+            //which means having at least one sample value more than 1.0
+            float adjScale = maxSignal > 1.f ? 1.f/maxSignal : 1.f;
+            //convert normalized floats to signed short values
             for (int i = 0; i < totalFrames; ++i)
                   data[i] = adjScale * lrintf(dataF[i] * (dataF[i] > 0 ? SHRT_MAX : -SHRT_MIN));
             }
