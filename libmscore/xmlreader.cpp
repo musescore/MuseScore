@@ -18,6 +18,7 @@
 #include "sym.h"
 #include "note.h"
 #include "barline.h"
+#include "style.h"
 
 namespace Ms {
 
@@ -421,6 +422,47 @@ int XmlReader::spannerId(const Spanner* s)
       return -1;
       }
 
+//---------------------------------------------------------
+//   addUserTextStyle
+//    return false if mapping is not possible
+//      (too many user text styles)
+//---------------------------------------------------------
+
+SubStyleId XmlReader::addUserTextStyle(const QString& name)
+      {
+      qDebug("%s", qPrintable(name));
+      SubStyleId id = SubStyleId::SUBSTYLES;
+      if (userTextStyles.size() == 0)
+            id = SubStyleId::USER1;
+      else if (userTextStyles.size() == 1)
+            id = SubStyleId::USER2;
+      else if (userTextStyles.size() == 2)
+            id = SubStyleId::USER3;
+      else if (userTextStyles.size() == 3)
+            id = SubStyleId::USER4;
+      else if (userTextStyles.size() == 4)
+            id = SubStyleId::USER5;
+      else if (userTextStyles.size() == 5)
+            id = SubStyleId::USER6;
+      else
+            qDebug("too many user defined textstyles");
+      if (id != SubStyleId::SUBSTYLES)
+            userTextStyles.push_back({name, id});
+      return id;
+      }
+
+//---------------------------------------------------------
+//   lookupUserTextStyle
+//---------------------------------------------------------
+
+SubStyleId XmlReader::lookupUserTextStyle(const QString& name)
+      {
+      for (const auto& i : userTextStyles) {
+            if (i.name == name)
+                  return i.ss;
+            }
+      return SubStyleId::SUBSTYLES;       // not found
+      }
 }
 
 
