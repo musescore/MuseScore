@@ -99,7 +99,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
             }
 
       changeState(ViewState::NORMAL);
-      _score->startCmd();
+//      _score->startCmd();
       lyrics = cr->lyrics(verse, placement);
       if (!lyrics) {
             lyrics = new Lyrics(_score);
@@ -288,7 +288,7 @@ void ScoreView::lyricsMinus()
             segment = segment->prev1(SegmentType::ChordRest);
             }
 
-      _score->startCmd();
+//      _score->startCmd();
 
       ChordRest* cr = toChordRest(nextSegment->element(track));
       Lyrics* toLyrics           = cr->lyrics(verse, placement);
@@ -379,7 +379,7 @@ void ScoreView::lyricsUnderscore()
                   break;
             }
 
-      _score->startCmd();
+//      _score->startCmd();
 
       // one-chord melisma?
       // if still at melisma initial chord and there is a valid next chord (if not,
