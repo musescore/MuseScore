@@ -162,6 +162,7 @@ class Clef final : public Element {
       bool showCourtesy() const        { return _showCourtesy; }
       void setShowCourtesy(bool v)     { _showCourtesy = v; }
       void undoSetShowCourtesy(bool v);
+      Clef* otherClef();
 
       static ClefType clefType(const QString& s);
       const char* clefTypeName();
