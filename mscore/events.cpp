@@ -517,7 +517,7 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
       {
       if (state != ViewState::EDIT)
             return;
-      CmdContext cmdContext(_score);
+//      CmdContext cmdContext(_score);
       editData.key       = ev->key();
       editData.modifiers = ev->modifiers();
       editData.s         = ev->text();
