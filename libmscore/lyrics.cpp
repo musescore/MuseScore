@@ -194,14 +194,14 @@ void Lyrics::remove(Element* el)
       {
       if (el->isLyricsLine()) {
             // only if separator still exists and is the right one
-            if (_separator != nullptr && el == _separator) {
+            if (_separator && el == _separator) {
                   // Lyrics::remove() and LyricsLine::removeUnmanaged() call each other;
                   // be sure each finds a clean context
                   LyricsLine* separ = _separator;
                   _separator = 0;
                   separ->setParent(0);
                   separ->removeUnmanaged();
-                  delete separ;
+//done in undo/redo?                  delete separ;
                   }
             }
       else

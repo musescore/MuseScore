@@ -1508,7 +1508,6 @@ void Score::removeElement(Element* element)
             default:
                   break;
             }
-      setLayout(element->tick());
       }
 
 //---------------------------------------------------------
@@ -2399,6 +2398,7 @@ void Score::cmdRemoveStaff(int staffIdx)
                   sl.append(s);
             }
       for (auto i : sl) {
+printf("remove %p <%s>\n", i, i->name());
             i->undoUnlink();
             undo(new RemoveElement(i));
             }
