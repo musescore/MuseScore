@@ -1881,7 +1881,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
       else if (ext == "png") {
             // save as png file *.png
             cs->switchToPageMode();
-            //rv = savePng(cs, fn);
+            rv = savePng(cs, fn);
             }
       else if (ext == "svg") {
             // save as svg file *.svg
@@ -1929,6 +1929,12 @@ bool MuseScore::saveMidi(Score* score, const QString& name)
       {
       ExportMidi em(score);
       return em.write(name, preferences.midiExpandRepeats);
+      }
+
+bool MuseScore::saveMidi(Score* score, QIODevice* device)
+      {
+      ExportMidi em(score);
+      return em.write(device, preferences.midiExpandRepeats);
       }
 
 //---------------------------------------------------------
@@ -2394,21 +2400,17 @@ static QRect trim(QImage source, int margin)
 
 //---------------------------------------------------------
 //   savePng
-//    return true on success
+//    return true on success. Works with editor, shows additional windows.
 //---------------------------------------------------------
-
-bool MuseScore::savePng(Score* score, QIODevice* deviceForPngs, int pageNum)
+bool MuseScore::savePng(Score* score, const QString& name)
       {
-      return savePng(score, deviceForPngs, pageNum, false, preferences.pngTransparent, converterDpi, trimMargin, QImage::Format_ARGB32_Premultiplied);
-      }
+      //TODO! Make refactoring using savePng(Score*, QIODevice*, int)
+      const bool screenshot = false;
+      const bool transparent = preferences.pngTransparent;
+      const double convDpi = converterDpi;
+      const int localTrimMargin = trimMargin;
+      const QImage::Format format = QImage::Format_ARGB32_Premultiplied;
 
-//---------------------------------------------------------
-//   savePng with options
-//    return true on success
-//---------------------------------------------------------
-
-bool MuseScore::savePng(Score* score, QIODevice* deviceForPngs, int pageNumber, bool screenshot, bool transparent, double convDpi, int trimMargin, QImage::Format format)
-      {
       bool rv = true;
       score->setPrinting(!screenshot);    // dont print page break symbols etc.
 
@@ -2421,11 +2423,119 @@ bool MuseScore::savePng(Score* score, QIODevice* deviceForPngs, int pageNumber, 
       const QList<Page*>& pl = score->pages();
       int pages = pl.size();
 
+      int padding = QString("%1").arg(pages).size();
+      bool overwrite = false;
+      bool noToAll = false;
+      for (int pageNumber = 0; pageNumber < pages; ++pageNumber) {
+            Page* page = pl.at(pageNumber);
+
+            QRectF r;
+            if (localTrimMargin >= 0) {
+                  QMarginsF margins(localTrimMargin, localTrimMargin, localTrimMargin, localTrimMargin);
+                  r = page->tbbox() + margins;
+                  }
+            else
+                  r = page->abbox();
+            int w = lrint(r.width()  * convDpi / DPI);
+            int h = lrint(r.height() * convDpi / DPI);
+
+            QImage printer(w, h, f);
+            printer.setDotsPerMeterX(lrint((convDpi * 1000) / INCH));
+            printer.setDotsPerMeterY(lrint((convDpi * 1000) / INCH));
+
+            printer.fill(transparent ? 0 : 0xffffffff);
+
+            double mag = convDpi / DPI;
+            QPainter p(&printer);
+            p.setRenderHint(QPainter::Antialiasing, true);
+            p.setRenderHint(QPainter::TextAntialiasing, true);
+            p.scale(mag, mag);
+            if (localTrimMargin >= 0)
+                  p.translate(-r.topLeft());
+
+            QList<const Element*> pel = page->elements();
+            qStableSort(pel.begin(), pel.end(), elementLessThan);
+            paintElements(p, pel);
+
+            if (format == QImage::Format_Indexed8) {
+                  //convert to grayscale & respect alpha
+                  QVector<QRgb> colorTable;
+                  colorTable.push_back(QColor(0, 0, 0, 0).rgba());
+                  if (!transparent) {
+                        for (int i = 1; i < 256; i++)
+                              colorTable.push_back(QColor(i, i, i).rgb());
+                        }
+                  else {
+                        for (int i = 1; i < 256; i++)
+                              colorTable.push_back(QColor(0, 0, 0, i).rgba());
+                        }
+                  printer = printer.convertToFormat(QImage::Format_Indexed8, colorTable);
+                  }
+
+            QString fileName(name);
+            if (fileName.endsWith(".png"))
+                  fileName = fileName.left(fileName.size() - 4);
+            fileName += QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+            if (!converterMode) {
+                  QFileInfo fip(fileName);
+                  if(fip.exists() && !overwrite) {
+                        if(noToAll)
+                              continue;
+                        QMessageBox msgBox( QMessageBox::Question, tr("Confirm Replace"),
+                              tr("\"%1\" already exists.\nDo you want to replace it?\n").arg(QDir::toNativeSeparators(fileName)),
+                              QMessageBox::Yes |  QMessageBox::YesToAll | QMessageBox::No |  QMessageBox::NoToAll);
+                        msgBox.setButtonText(QMessageBox::Yes, tr("Replace"));
+                        msgBox.setButtonText(QMessageBox::No, tr("Skip"));
+                        msgBox.setButtonText(QMessageBox::YesToAll, tr("Replace All"));
+                        msgBox.setButtonText(QMessageBox::NoToAll, tr("Skip All"));
+                        int sb = msgBox.exec();
+                        if(sb == QMessageBox::YesToAll) {
+                              overwrite = true;
+                              }
+                        else if (sb == QMessageBox::NoToAll) {
+                              noToAll = true;
+                              continue;
+                              }
+                        else if (sb == QMessageBox::No)
+                              continue;
+                        }
+                  }
+            rv = printer.save(fileName, "png");
+            if (!rv)
+                  break;
+            }
+      score->setPrinting(false);
+      return rv;
+      }
+
+//---------------------------------------------------------
+//   savePng with options
+//    return true on success
+//---------------------------------------------------------
+
+bool MuseScore::savePng(Score* score, QIODevice* deviceForPngs, int pageNumber)
+      {
+      const bool screenshot = false;
+      const bool transparent = preferences.pngTransparent;
+      const double convDpi = converterDpi;
+      const int localTrimMargin = trimMargin;
+      const QImage::Format format = QImage::Format_ARGB32_Premultiplied;
+
+      bool rv = true;
+      score->setPrinting(!screenshot);    // dont print page break symbols etc.
+
+      QImage::Format f;
+      if (format != QImage::Format_Indexed8)
+          f = format;
+      else
+          f = QImage::Format_ARGB32_Premultiplied;
+
+      const QList<Page*>& pl = score->pages();
       Page* page = pl.at(pageNumber);
 
       QRectF r;
-      if (trimMargin >= 0) {
-            QMarginsF margins(trimMargin, trimMargin, trimMargin, trimMargin);
+      if (localTrimMargin >= 0) {
+            QMarginsF margins(localTrimMargin, localTrimMargin, localTrimMargin, localTrimMargin);
             r = page->tbbox() + margins;
             }
       else
@@ -2444,7 +2554,7 @@ bool MuseScore::savePng(Score* score, QIODevice* deviceForPngs, int pageNumber, 
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
       p.scale(mag, mag);
-      if (trimMargin >= 0)
+      if (localTrimMargin >= 0)
             p.translate(-r.topLeft());
 
       QList<const Element*> pel = page->elements();
@@ -2730,6 +2840,134 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
             }
             p.end(); // Writes MuseScore SVG file to disk, finally
       }
+
+      // Clean up and return
+      score->setPrinting(false);
+      MScore::pdfPrinting = false;
+      MScore::svgPrinting = false;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   MuseScore::saveSvg
+//---------------------------------------------------------
+bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber)
+      {
+      QString title(score->title());
+      score->setPrinting(true);
+      MScore::pdfPrinting = true;
+      MScore::svgPrinting = true;
+      const auto& pages = score->pages();
+      Page* page = pages.at(pageNumber);
+      SvgGenerator printer;
+      printer.setTitle(pages.size() > 1 ? QString("%1 (%2)").arg(title).arg(pageNumber + 1) : title);
+      printer.setOutputDevice(device);
+      QRectF r;
+      if (trimMargin >= 0) {
+            QMarginsF margins(trimMargin, trimMargin, trimMargin, trimMargin);
+            r = page->tbbox() + margins;
+            }
+      else
+            r = page->abbox();
+      qreal w = r.width();
+      qreal h = r.height();
+
+      printer.setSize(QSize(w, h));
+      printer.setViewBox(QRectF(0, 0, w, h));
+      QPainter p(&printer);
+      p.setRenderHint(QPainter::Antialiasing, true);
+      p.setRenderHint(QPainter::TextAntialiasing, true);
+      if (trimMargin >= 0)
+            p.translate(-r.topLeft());
+      // 1st pass: StaffLines
+      for  (System* s : *page->systems()) {
+            for (int i = 0, n = s->staves()->size(); i < n; i++) {
+                  if (score->staff(i)->invisible() || !score->staff(i)->show())
+                        continue;  // ignore invisible staves
+                  if (s->staves()->isEmpty() || !s->staff(i)->show())
+                        continue;
+                  if (!s->firstMeasure())
+                        continue;
+
+                  // The goal here is to draw SVG staff lines more efficiently.
+                  // MuseScore draws staff lines by measure, but for SVG they can
+                  // generally be drawn once for each system. This makes a big
+                  // difference for scores that scroll horizontally on a single
+                  // page. But there are exceptions to this rule:
+                  //
+                  //   ~ One (or more) invisible measure(s) in a system/staff ~
+                  //   ~ One (or more) elements of type HBOX or VBOX          ~
+                  //
+                  // In these cases the SVG staff lines for the system/staff
+                  // are drawn by measure.
+                  //
+                  bool byMeasure = false;
+                  MeasureBase* mb = nullptr;
+                  for (mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
+                        if (mb->type() == Element::Type::HBOX
+                         || mb->type() == Element::Type::VBOX
+                         || (!static_cast<Measure*>(mb)->visible(i) && mb->system() == s)) {
+                              byMeasure = true;
+                              break;
+                              }
+                        }
+                  if (mb && mb->type() == Element::Type::VBOX) // no need for staff lines
+                        byMeasure = false;
+                  if (!byMeasure && (!s->lastMeasure() || !s->lastMeasure()->system()))
+                        byMeasure = true;
+                  if (byMeasure) { // Draw visible staff lines by measure
+                        for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
+                              if (mb->type() != Element::Type::HBOX
+                               && mb->type() != Element::Type::VBOX
+                               && static_cast<Measure*>(mb)->visible(i)) {
+                                    Measure* m = static_cast<Measure*>(mb);
+                                    if (score->styleB(StyleIdx::createMultiMeasureRests) && m->hasMMRest())
+                                          m = m->mmRest();
+                                    StaffLines* sl = m->staffLines(i);
+                                    if (sl->measure()->system()) {
+                                          printer.setElement(sl);
+                                          paintElement(p, sl);
+                                          }
+                                    }
+                              }
+                        }
+                  else { // Draw staff lines once per system
+                        StaffLines* firstSL = s->firstMeasure()->staffLines(i)->clone();
+                        StaffLines*  lastSL =  s->lastMeasure()->staffLines(i);
+                        firstSL->bbox().setRight(lastSL->bbox().right()
+                                              + lastSL->pagePos().x()
+                                              - firstSL->pagePos().x());
+                        printer.setElement(firstSL);
+                        paintElement(p, firstSL);
+                  }
+            }
+      }
+      // 2nd pass: the rest of the elements
+      QList<const Element*> pel = page->elements();
+      qStableSort(pel.begin(), pel.end(), elementLessThan);
+      Element::Type eType;
+      for (const Element* e : pel) {
+            // Always exclude invisible elements
+            if (!e->visible())
+                  continue;
+
+            eType = e->type();
+            switch (eType) { // In future sub-type code, this switch() grows, and eType gets used
+            case Element::Type::STAFF_LINES : // Handled in the 1st pass above
+                  continue; // Exclude from 2nd pass
+                  break;
+            default:
+                  break;
+            } // switch(eType)
+
+            // Set the Element pointer inside SvgGenerator/SvgPaintEngine
+            printer.setElement(e);
+
+            // Paint it
+            paintElement(p, e);
+      }
+      p.end(); // Writes MuseScore SVG file to disk, finally
+
 
       // Clean up and return
       score->setPrinting(false);

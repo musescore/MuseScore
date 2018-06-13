@@ -609,16 +609,18 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveSelection(Score*);
       void addImage(Score*, Element*);
 
-      bool savePng(Score*, QIODevice*, int pageNum, bool screenshot, bool transparent, double convDpi, int trimMargin, QImage::Format format);
       bool saveAudio(Score*, QIODevice *device, std::function<bool(float)> updateProgress = nullptr);
       bool saveAudio(Score*, const QString& name);
       bool canSaveMp3();
       bool saveMp3(Score*, const QString& name);
       bool saveMp3(Score*, QIODevice* device, bool& wasCanceled);
       bool saveSvg(Score*, const QString& name);
+      bool saveSvg(Score*, QIODevice*, int pageNum = 0);
       bool savePng(Score*, QIODevice*, int pageNum = 0);
+      bool savePng(Score*, const QString& name);
 //      bool saveLilypond(Score*, const QString& name);
       bool saveMidi(Score* score, const QString& name);
+      bool saveMidi(Score* score, QIODevice* device);
 
       virtual void closeScore(Score* score);
 
@@ -726,6 +728,7 @@ extern Shortcut* midiActionMap[128];
 extern void loadTranslation(QString fileName, QString localeName);
 extern void setMscoreLocale(QString localeName);
 extern bool saveMxl(Score*, const QString& name);
+extern bool saveMxl(Score*, QIODevice*);
 extern bool saveXml(Score*, const QString& name);
 
 struct PluginDescription;

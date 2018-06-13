@@ -53,6 +53,7 @@ class ExportMidi {
 
       ExportMidi(Score* s) { cs = s; }
       bool write(const QString& name, bool midiExpandRepeats);
+      bool write(QIODevice* device, bool midiExpandRepeats);
       };
 
 } // namespace Ms

@@ -154,6 +154,7 @@ bool exportScoreParts = false;
 bool ignoreWarnings = false;
 bool experimentalPrintParts = false;
 bool experimentalMediaParts = false;
+bool experimentalScoreMedia = false;
       
 QString mscoreGlobalShare;
 
@@ -2796,9 +2797,8 @@ static bool experimentalPartsPrint(const QString& inFilePath)
 static bool experimentalPartsMedia(const QString& inFilePath)
       {
       Score* score = mscore->readScore(inFilePath);
-      QString outPath = QFileInfo(inFilePath).path() + "/";
-      
-      //save extended score+parts and separate parts pdfs
+      //QString outPath = QFileInfo(inFilePath).path() + "/";
+
       //if no parts, generate parts from existing instruments
       if (score->excerpts().size() == 0) {
             auto excerpts = Excerpt::createAllExcerpt(score);
@@ -2883,7 +2883,107 @@ static bool experimentalPartsMedia(const QString& inFilePath)
       delete score;
       return true;
       }
-      
+
+static bool experimentalMediaScore(const QString& inFilePath)
+      {
+      Score* score = mscore->readScore(inFilePath);
+      QJsonObject jsonForMedia;
+      bool res = true;
+
+      //export score audio
+      QByteArray mp3Data;
+      QBuffer mp3Device(&mp3Data);
+      mp3Device.open(QIODevice::ReadWrite);
+      bool dummy = false;
+      //QString fileName1 = QString("D:\\123\\score.mp3");
+      res &= mscore->saveMp3(score, &mp3Device, dummy);//mscore->saveMp3(score, fileName1);
+      QJsonValue mp3Json(QString::fromLatin1(mp3Data.toBase64()));
+
+      //export score pngs and svgs
+      QJsonArray pngsJsonArray;
+      QJsonArray svgsJsonArray;
+      for (int i = 0; i < score->pages().size(); ++i) {
+            QByteArray pngData;
+            QBuffer pngDevice(&pngData);
+            pngDevice.open(QIODevice::ReadWrite);
+            //QString fileName2 = QString("D:\\123") + QString(i) + ".png";
+            res &= mscore->savePng(score, &pngDevice, i);
+            QJsonValue pngJson(QString::fromLatin1(pngData.toBase64()));
+            pngsJsonArray.append(pngJson);
+
+            QByteArray svgData;
+            QBuffer svgDevice(&svgData);
+            pngDevice.open(QIODevice::ReadWrite);
+            //QString fileName2 = QString("D:\\123") + QString(i) + ".svg";
+            res &= mscore->saveSvg(score, &svgDevice, i);
+            QJsonValue svgJson(QString::fromLatin1(svgData.toBase64()));
+            svgsJsonArray.append(svgJson);
+            }
+
+      //export score .spos
+      QByteArray partDataPos;
+      QBuffer partPosDevice(&partDataPos);
+      partPosDevice.open(QIODevice::ReadWrite);
+      //QString fileName3 = QString("D:\\123\\sposfile.spos");
+      savePositions(score, &partPosDevice, true);
+      QJsonValue sposJson(QString::fromLatin1(partDataPos.toBase64()));
+      partPosDevice.close();
+      partDataPos.clear();
+
+      //export score .mpos
+      partPosDevice.open(QIODevice::ReadWrite);
+      //QString fileName4 = QString("D:\\123\\mposfile.mpos");
+      savePositions(score, &partPosDevice, false);
+      QJsonValue mposJson(QString::fromLatin1(partDataPos.toBase64()));
+
+      //export score pdf
+      score->switchToPageMode();
+      QByteArray pdfData;
+      QBuffer pdfDevice(&pdfData);
+      pdfDevice.open(QIODevice::ReadWrite);
+      QPdfWriter writer(&pdfDevice);
+      //QString fileName5 = QString("D:\\123\\score.pdf");
+      res &= mscore->savePdf(score, writer);
+      QJsonValue pdfJson(QString::fromLatin1(pdfData.toBase64()));
+
+      //export score midi
+      QByteArray midiData;
+      QBuffer midiDevice(&midiData);
+      midiDevice.open(QIODevice::ReadWrite);
+      //QString fileName5 = QString("D:\\123\\score.pdf");
+      res &= mscore->saveMidi(score, &midiDevice);
+      QJsonValue midiJson(QString::fromLatin1(midiData.toBase64()));
+
+      //export musicxml
+      QByteArray mxmlData;
+      QBuffer mxmlDevice(&mxmlData);
+      mxmlDevice.open(QIODevice::ReadWrite);
+      //QString fileName5 = QString("D:\\123\\score.pdf");
+      res &= saveMxl(score, &mxmlDevice);
+      QJsonValue mxmlJson(QString::fromLatin1(mxmlData.toBase64()));
+
+      //// JSON specification ///////////////////////////
+      jsonForMedia["mp3"] = mp3Json;
+      jsonForMedia["pngs"] = pngsJsonArray;
+      jsonForMedia["mposXML"] = mposJson;
+      jsonForMedia["sposXML"] = sposJson;
+      jsonForMedia["pdf"] = pdfJson;
+      jsonForMedia["svgs"] = svgsJsonArray;
+      jsonForMedia["midi"] = midiJson;
+      jsonForMedia["mxml"] = mxmlJson;
+      ///////////////////////////////////////////////////
+
+      QJsonDocument jsonDoc(jsonForMedia);
+      const QString& jsonPath{"/dev/stdout"}; //{"D:\\123\\score.json"};
+      QFile file(jsonPath);
+      file.open(QIODevice::WriteOnly);
+      file.write(jsonDoc.toJson(QJsonDocument::Compact));
+      file.close();
+
+      delete score;
+      return true;
+      }
+
 static bool processNonGui(const QStringList& argv)
       {
       if (experimentalPrintParts)
@@ -2891,6 +2991,9 @@ static bool processNonGui(const QStringList& argv)
       
       if (experimentalMediaParts)
             return experimentalPartsMedia(argv[0]);
+
+      if (experimentalScoreMedia)
+            return experimentalMediaScore(argv[0]);
             
       if (pluginMode) {
             loadScores(argv);
@@ -5980,6 +6083,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless if -e is passed too", "extension file"));
       parser.addOption(QCommandLineOption("parts-pdf", "Experimental export of score and parts as separate files"));
       parser.addOption(QCommandLineOption("parts-media", "Experimental export of media for parts"));
+      parser.addOption(QCommandLineOption("score-media", "Experimental exporting media of whole score"));
             
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -6129,12 +6233,18 @@ int main(int argc, char* av[])
             converterMode = true;
             }
 
+      if (parser.isSet("score-media")) {
+            experimentalScoreMedia = true;
+            MScore::noGui = true;
+            converterMode = true;
+            }
+
       QStringList argv = parser.positionalArguments();
 
       mscoreGlobalShare = getSharePath();
       iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
 
-      if (!converterMode && !pluginMode && !experimentalPrintParts && !experimentalMediaParts) {
+      if (!converterMode && !pluginMode) {
             if (!argv.isEmpty()) {
                   int ok = true;
                   for (const QString& message : argv) {
@@ -6246,7 +6356,7 @@ int main(int argc, char* av[])
             qApp->processEvents();
             }
 
-      if (!converterMode && !pluginMode && !experimentalPrintParts && !experimentalMediaParts) {
+      if (!converterMode && !pluginMode) {
             struct PaletteItem {
                   QPalette::ColorRole role;
                   const char* name;
