@@ -699,6 +699,7 @@ int updateVersion()
 //   updateVersion
 ///  Up to 4 digits X.X.X.X
 ///  Each digit can be double XX.XX.XX.XX
+///  return true if v1 < v2
 //---------------------------------------------------------
 
 bool compareVersion(QString v1, QString v2)

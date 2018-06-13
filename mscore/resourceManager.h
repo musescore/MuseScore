@@ -23,21 +23,26 @@ class ResourceManager : public QDialog, public Ui::Resource
     Q_OBJECT
 
     virtual void hideEvent(QHideEvent*);
-public:
-    explicit ResourceManager(QWidget *parent = 0);
     QByteArray txt;
     void displayLanguages();
-    void displayPlugins();
+    void displayExtensions();
     bool verifyFile(QString path, QString hash);
     bool verifyLanguageFile(QString filename, QString hash);
 
+public:
+    explicit ResourceManager(QWidget *parent = 0);
+    void selectLanguagesTab();
+
 private:
-    QMap <QPushButton *, QString> buttonMap; 	// QPushButton -> filename
-    QMap <QPushButton *, QString> buttonHashMap;// QPushButton -> hash of the file
+    QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename
+    QMap <QPushButton *, QString> languageButtonHashMap;// QPushButton -> hash of the file
+    QMap <QPushButton *, QString> extensionButtonMap;       // QPushButton -> filename
+    QMap <QPushButton *, QString> extensionButtonHashMap;// QPushButton -> hash of the file
     QString baseAddr;
 
-public slots:
-    void download();
+private slots:
+    void downloadLanguage();
+    void downloadExtension();
    };
 
 }

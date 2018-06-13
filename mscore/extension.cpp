@@ -20,8 +20,13 @@
 
 #include "extension.h"
 #include "preferences.h"
+#include "libmscore/utils.h"
 
 namespace Ms {
+
+//---------------------------------------------------------
+//   getDirectoriesByType
+//---------------------------------------------------------
 
 QStringList Extension::getDirectoriesByType(const char* type)
       {
@@ -39,5 +44,28 @@ QStringList Extension::getDirectoriesByType(const char* type)
             }
       return result;
       }
-}
 
+//---------------------------------------------------------
+//   isInstalled
+//---------------------------------------------------------
+
+bool Extension::isInstalled(QString extensionId)
+      {
+      QDir extensionDir(QString("%1/%2").arg(preferences.myExtensionsPath).arg(extensionId));
+      return extensionDir.exists();
+      }
+
+//---------------------------------------------------------
+//   getLatestVersion
+//---------------------------------------------------------
+
+QString Extension::getLatestVersion(QString extensionId)
+      {
+      QString result = "0.0";
+      QDir extensionDir(QString("%1/%2").arg(preferences.myExtensionsPath).arg(extensionId));
+      auto extDir = extensionDir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot| QDir::Readable | QDir::NoSymLinks, QDir::Name);
+      if (!extDir.isEmpty())
+            result = extDir.last().fileName();
+      return result;
+      }
+}

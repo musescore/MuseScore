@@ -1854,6 +1854,7 @@ void PreferenceDialog::changeSoundfontPaths()
 void PreferenceDialog::updateTranslationClicked()
       {
       ResourceManager r(0);
+      r.selectLanguagesTab();
       r.exec();
       }
 
