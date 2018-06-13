@@ -1417,7 +1417,7 @@ bool Note::readProperties(XmlReader& e)
                   if (id != -1 &&
                               // DISABLE if pasting into a staff with linked staves
                               // because the glissando is not properly cloned into the linked staves
-                              (!e.pasteMode() || !staff()->links() || staff()->links()->empty())) {
+                              staff() && (!e.pasteMode() || !staff()->links() || staff()->links()->empty())) {
                         Spanner* placeholder = new TextLine(score());
                         placeholder->setAnchor(Spanner::Anchor::NOTE);
                         placeholder->setEndElement(this);
@@ -1453,7 +1453,7 @@ bool Note::readProperties(XmlReader& e)
             sp->read(e);
             // DISABLE pasting of glissandi into staves with other lionked staves
             // because the glissando is not properly cloned into the linked staves
-            if (e.pasteMode() && staff()->links() && !staff()->links()->empty()) {
+            if (e.pasteMode() && staff() && staff()->links() && !staff()->links()->empty()) {
                   e.removeSpanner(sp);    // read() added the element to the XMLReader: remove it
                   delete sp;
                   }
