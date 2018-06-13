@@ -26,6 +26,7 @@ namespace Ms {
 
 bool ScoreView::editKeyLyrics(QKeyEvent* ev)
       {
+      Q_UNUSED(ev);
       Q_ASSERT(editData.element->isLyrics());
 
       switch (editData.key) {
