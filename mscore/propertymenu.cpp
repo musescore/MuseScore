@@ -459,8 +459,12 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
       else if (cmd == "smallNote")
             score()->undoChangeProperty(e, P_ID::SMALL, !static_cast<Note*>(e)->small());
       else if (cmd == "clef-courtesy") {
-            bool show = !static_cast<Clef*>(e)->showCourtesy();
-            score()->undoChangeProperty(e, P_ID::SHOW_COURTESY, show);
+            Clef* clef = static_cast<Clef*>(e);
+            bool show = !clef->showCourtesy();
+            clef->undoChangeProperty(P_ID::SHOW_COURTESY, show);
+            Clef* otherClef = clef->otherClef();
+            if (otherClef)
+                  otherClef->undoChangeProperty(P_ID::SHOW_COURTESY, show);
             }
       else if (cmd == "st-props") {
             StaffTextProperties rp(static_cast<StaffText*>(e));
