@@ -517,17 +517,17 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
       {
       if (state != ViewState::EDIT)
             return;
-//      CmdContext cmdContext(_score);
       editData.key       = ev->key();
       editData.modifiers = ev->modifiers();
       editData.s         = ev->text();
+
 
       if (MScore::debugMode)
             qDebug("keyPressEvent key 0x%02x(%c) mod 0x%04x <%s> nativeKey 0x%02x scancode %d",
                editData.key, editData.key, int(editData.modifiers), qPrintable(editData.s), ev->nativeVirtualKey(), ev->nativeScanCode());
 
       if (editData.element->isLyrics()) {
-            if (editKeyLyrics(ev))
+            if (editKeyLyrics())
                   return;
             }
       else if (editData.element->isHarmony()) {
@@ -542,6 +542,8 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
                   return;
                   }
             }
+
+      CmdContext cc(_score);
 
 #ifdef Q_OS_WIN // Japenese IME on Windows needs to know when Contrl/Alt/Shift/CapsLock is pressed while in predit
       if (editData.element->isTextBase()) {
