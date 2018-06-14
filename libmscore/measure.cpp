@@ -1850,7 +1850,6 @@ void Measure::read(XmlReader& e, int staffIdx)
       QList<Chord*> graceNotes;
       Beam* startingBeam = nullptr;
       Tuplet* tuplet = nullptr;
-      e.tuplets().clear();
       e.setTrack(staffIdx * VOICES);
       e.setCurrentMeasure(this);
 
@@ -1863,10 +1862,6 @@ void Measure::read(XmlReader& e, int staffIdx)
             s->lines()->setVisible(!staff->invisible());
             _mstaves.push_back(s);
             }
-
-      // tick is obsolete
-      if (e.hasAttribute("tick"))
-            e.initTick(score()->fileDivision(e.intAttribute("tick")));
 
       bool irregular;
       if (e.hasAttribute("len")) {
@@ -2149,14 +2144,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   setIrregular(e.readBool());
             else if (tag == "breakMultiMeasureRest")
                   _breakMultiMeasureRest = e.readBool();
-            else if (tag == "sysInitBarLineType") {
-                  const QString& val(e.readElementText());
-                  BarLine* barLine = new BarLine(score());
-                  barLine->setTrack(e.track());
-                  barLine->setBarLineType(val);
-                  segment = getSegmentR(SegmentType::BeginBarLine, 0);
-                  segment->add(barLine);
-                  }
             else if (tag == "Tuplet") {
                   Tuplet* oldTuplet = tuplet;
                   tuplet = new Tuplet(score());

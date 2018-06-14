@@ -129,7 +129,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                         break;
                         }
 
-                  e.tuplets().clear();
                   bool makeGap  = true;
                   while (e.readNextStartElement()) {
                         pasted = true;
