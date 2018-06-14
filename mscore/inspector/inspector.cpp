@@ -851,32 +851,8 @@ InspectorClef::InspectorClef(QWidget* parent)
 
 void InspectorClef::setElement()
       {
-      otherClef = nullptr;                      // no 'other clef' yet
+      otherClef = toClef(inspector->element())->otherClef();
       InspectorElementBase::setElement();
-
-      // try to locate the 'other clef' of a courtesy / main pair
-      Clef* clef = toClef(inspector->element());
-      // if not in a clef-segment-measure hierarchy, do nothing
-      if (!clef->parent() || clef->parent()->type() != ElementType::SEGMENT)
-            return;
-      Segment*    segm = toSegment(clef->parent());
-      int         segmTick = segm->tick();
-      if (!segm->parent() || segm->parent()->type() != ElementType::MEASURE)
-            return;
-
-      Measure* meas = toMeasure(segm->parent());
-      Measure* otherMeas = nullptr;
-      Segment* otherSegm = nullptr;
-      if (segmTick == meas->tick())                         // if clef segm is measure-initial
-            otherMeas = meas->prevMeasure();                // look for a previous measure
-      else if (segmTick == meas->tick()+meas->ticks())      // if clef segm is measure-final
-            otherMeas = meas->nextMeasure();                // look for a next measure
-      // look for a clef segment in the 'other' measure at the same tick of this clef segment
-      if (otherMeas)
-            otherSegm = otherMeas->findSegment(SegmentType::Clef | SegmentType::HeaderClef, segmTick);
-      // if any 'other' segment found, look for a clef in the same track as this
-      if (otherSegm)
-            otherClef = toClef(otherSegm->element(clef->track()));
       }
 
 void InspectorClef::valueChanged(int idx)
