@@ -17,6 +17,7 @@
 #include "libmscore/lyrics.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
+#include "libmscore/undo.h"
 
 namespace Ms {
 
@@ -24,9 +25,8 @@ namespace Ms {
 //   editKeyLyrics
 //---------------------------------------------------------
 
-bool ScoreView::editKeyLyrics(QKeyEvent* ev)
+bool ScoreView::editKeyLyrics()
       {
-      Q_UNUSED(ev);
       Q_ASSERT(editData.element->isLyrics());
 
       switch (editData.key) {
@@ -100,7 +100,6 @@ void ScoreView::lyricsUpDown(bool up, bool end)
             }
 
       changeState(ViewState::NORMAL);
-//      _score->startCmd();
       lyrics = cr->lyrics(verse, placement);
       if (!lyrics) {
             lyrics = new Lyrics(_score);
@@ -108,7 +107,9 @@ void ScoreView::lyricsUpDown(bool up, bool end)
             lyrics->setParent(cr);
             lyrics->setNo(verse);
             lyrics->setPlacement(placement);
+            _score->startCmd();
             _score->undoAddElement(lyrics);
+            _score->endCmd();
             }
 
       _score->select(lyrics, SelectType::SINGLE, 0);
@@ -148,7 +149,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             // search prev chord
             while ((nextSegment = nextSegment->prev1(SegmentType::ChordRest))) {
                   Element* el = nextSegment->element(track);
-                  if (el &&  el->type() == ElementType::CHORD)
+                  if (el &&  el->isChord())
                         break;
                   }
             }
@@ -199,6 +200,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             newLyrics = true;
             }
 
+      _score->startCmd();
       if (fromLyrics && !moveOnly) {
             switch (_toLyrics->syllabic()) {
                   // as we arrived at toLyrics by a [Space], it can be the beginning
@@ -231,7 +233,8 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             }
 
       if (newLyrics)
-          _score->undoAddElement(_toLyrics);
+            _score->undoAddElement(_toLyrics);
+      _score->endCmd();
 
       _score->select(_toLyrics, SelectType::SINGLE, 0);
       startEdit(_toLyrics, Grip::NO_GRIP);
@@ -268,7 +271,7 @@ void ScoreView::lyricsMinus()
       Segment* nextSegment = segment;
       while ((nextSegment = nextSegment->next1(SegmentType::ChordRest))) {
             Element* el = nextSegment->element(track);
-            if (el &&  el->type() == ElementType::CHORD)
+            if (el &&  el->isChord())
                   break;
             }
       if (nextSegment == 0)
@@ -289,8 +292,7 @@ void ScoreView::lyricsMinus()
             segment = segment->prev1(SegmentType::ChordRest);
             }
 
-//      _score->startCmd();
-
+      _score->startCmd();
       ChordRest* cr = toChordRest(nextSegment->element(track));
       Lyrics* toLyrics           = cr->lyrics(verse, placement);
       bool newLyrics = (toLyrics == 0);
@@ -329,7 +331,8 @@ void ScoreView::lyricsMinus()
             }
 
       if (newLyrics)
-          _score->undoAddElement(toLyrics);
+            _score->undoAddElement(toLyrics);
+      _score->endCmd();
 
       _score->select(toLyrics, SelectType::SINGLE, 0);
       startEdit(toLyrics, Grip::NO_GRIP);
@@ -359,7 +362,7 @@ void ScoreView::lyricsUnderscore()
       Segment* nextSegment = segment;
       while ((nextSegment = nextSegment->next1(SegmentType::ChordRest))) {
             Element* el = nextSegment->element(track);
-            if (el &&  el->type() == ElementType::CHORD)
+            if (el &&  el->isChord())
                   break;
             }
 
@@ -376,12 +379,11 @@ void ScoreView::lyricsUnderscore()
             segment = segment->prev1(SegmentType::ChordRest);
             // if the segment has a rest in this track, stop going back
             Element* e = segment ? segment->element(track) : 0;
-            if (e && e->type() != ElementType::CHORD)
+            if (e && !e->isChord())
                   break;
             }
 
-//      _score->startCmd();
-
+      _score->startCmd();
       // one-chord melisma?
       // if still at melisma initial chord and there is a valid next chord (if not,
       // there will be no melisma anyway), set a temporary melisma duration
@@ -406,6 +408,7 @@ void ScoreView::lyricsUnderscore()
             if (fromLyrics)
                   _score->select(fromLyrics, SelectType::SINGLE, 0);
             _score->setLayoutAll();
+            _score->endCmd();
             return;
             }
 
@@ -445,6 +448,7 @@ void ScoreView::lyricsUnderscore()
             }
       if (newLyrics)
             _score->undoAddElement(toLyrics);
+      _score->endCmd();
 
       _score->select(toLyrics, SelectType::SINGLE, 0);
       startEdit(toLyrics, Grip::NO_GRIP);
@@ -452,8 +456,6 @@ void ScoreView::lyricsUnderscore()
       adjustCanvasPosition(toLyrics, false);
       TextCursor* cursor = Ms::toLyrics(editData.element)->cursor(editData);
       Ms::toLyrics(editData.element)->selectAll(cursor);
-
-      _score->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -469,6 +471,7 @@ void ScoreView::lyricsReturn()
 
       Lyrics* oldLyrics = lyrics;
 
+      _score->startCmd();
       int newVerse;
       if (lyrics->placeAbove()) {
             newVerse = oldLyrics->no() - 1;
@@ -496,6 +499,8 @@ void ScoreView::lyricsReturn()
       lyrics->setNo(newVerse);
 
       _score->undoAddElement(lyrics);
+      _score->endCmd();
+
       _score->select(lyrics, SelectType::SINGLE, 0);
       startEdit(lyrics, Grip::NO_GRIP);
 
@@ -511,36 +516,29 @@ void ScoreView::lyricsEndEdit()
       {
       Lyrics* lyrics = toLyrics(editData.element);
 
-      // if no text, just remove this lyrics
-      if (lyrics->empty()) {
-            qDebug("lyrics empty: remove");
-            lyrics->parent()->remove(lyrics);
-            }
       // if not empty, make sure this new lyrics does not fall in the middle
       // of an existing melisma from a previous lyrics; in case, shorten it
-      else {
-            int verse   = lyrics->no();
-            Placement placement = lyrics->placement();
-            int track   = lyrics->track();
+      int verse   = lyrics->no();
+      Placement placement = lyrics->placement();
+      int track   = lyrics->track();
 
-            // search previous lyric
-            Lyrics*  prevLyrics  = 0;
-            Segment* prevSegment = lyrics->segment()->prev1(SegmentType::ChordRest);
-            Segment* segment     = prevSegment;
-            while (segment) {
-                  ChordRest* cr = toChordRest(segment->element(track));
-                  if (cr) {
-                        prevLyrics = cr->lyrics(verse, placement);
-                        if (prevLyrics)
-                              break;
-                        }
-                  segment = segment->prev1(SegmentType::ChordRest);
+      // search previous lyric
+      Lyrics*  prevLyrics  = 0;
+      Segment* prevSegment = lyrics->segment()->prev1(SegmentType::ChordRest);
+      Segment* segment     = prevSegment;
+      while (segment) {
+            ChordRest* cr = toChordRest(segment->element(track));
+            if (cr) {
+                  prevLyrics = cr->lyrics(verse, placement);
+                  if (prevLyrics)
+                        break;
                   }
-            if (prevLyrics && prevLyrics->syllabic() == Lyrics::Syllabic::END) {
-                  int endTick = prevSegment->tick();      // a prev. melisma should not go beyond this segment
-                  if (prevLyrics->endTick() >= endTick)
-                        prevLyrics->undoChangeProperty(Pid::LYRIC_TICKS, endTick - prevLyrics->segment()->tick());
-                  }
+            segment = segment->prev1(SegmentType::ChordRest);
+            }
+      if (prevLyrics && prevLyrics->syllabic() == Lyrics::Syllabic::END) {
+            int endTick = prevSegment->tick();      // a prev. melisma should not go beyond this segment
+            if (prevLyrics->endTick() >= endTick)
+                  prevLyrics->undoChangeProperty(Pid::LYRIC_TICKS, endTick - prevLyrics->segment()->tick());
             }
       }
 

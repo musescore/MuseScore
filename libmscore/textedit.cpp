@@ -44,6 +44,8 @@ void TextBase::startEdit(EditData& ed)
       ted->cursor.setColumn(0);
       ted->cursor.clearSelection();
 
+      Q_ASSERT(!score()->undoStack()->active());      // make sure we are not in a Cmd
+
       ted->oldXmlText = xmlText();
       ted->startUndoIdx = score()->undoStack()->getCurIdx();
 
@@ -67,6 +69,42 @@ void TextBase::endEdit(EditData& ed)
       // one property change
 
       QString actualText = xmlText();
+      if (ted->oldXmlText.isEmpty()) {
+            UndoStack* us = score()->undoStack();
+            UndoCommand* ucmd = us->last();
+            if (ucmd) {
+                  const QList<UndoCommand*>& cl = ucmd->commands();
+                  const UndoCommand* cmd = cl.back();
+                  if (strncmp(cmd->name(), "Add:", 4) == 0) {
+                        const AddElement* ae = static_cast<const AddElement*>(cmd);
+                        if (ae->getElement() == this) {
+                              if (actualText.isEmpty()) {
+                                    // we just created this empty text, rollback that operation
+                                    us->rollback();
+                                    score()->update();
+                                    ed.element = 0;
+                                    }
+                              else {
+                                    setXmlText(ted->oldXmlText);  // reset text to value before editing
+                                    us->reopen();
+                                    // combine undo records of text creation with text editing
+                                    undoChangeProperty(Pid::TEXT, actualText);
+                                    layout1();
+                                    score()->endCmd();
+                                    }
+                              return;
+                              }
+                        }
+                  }
+            }
+      if (actualText.isEmpty()) {
+            qDebug("actual text is empty\n");
+            score()->startCmd();
+            score()->undoRemoveElement(this);
+            ed.element = 0;
+            score()->endCmd();
+            return;
+            }
       setXmlText(ted->oldXmlText);                    // reset text to value before editing
       score()->startCmd();
       undoChangeProperty(Pid::TEXT, actualText);      // change property to set text to actual value again

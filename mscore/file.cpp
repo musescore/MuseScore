@@ -742,7 +742,13 @@ MasterScore* MuseScore::getNewFile()
             score->setMetaTag("copyright", copyright);
 
       score->rebuildMidiMapping();
-      score->doLayout();
+
+      {
+            extern bool __loadScore;
+            __loadScore = true;
+            score->doLayout();
+            __loadScore = false;
+            }
 
       for (Excerpt* x : excerpts) {
             Score* xs = new Score(static_cast<MasterScore*>(score));
@@ -2201,6 +2207,9 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
             score->setCreated(true); // force save as for imported files
             }
 
+      {
+      extern bool __loadScore;
+      __loadScore = true;
       score->rebuildMidiMapping();
       score->setSoloMute();
       for (Score* s : score->scoreList()) {
@@ -2211,6 +2220,8 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
       score->updateChannel();
       score->setSaved(false);
       score->update();
+      __loadScore = false;
+      }
 
       if (!ignoreVersionError && !MScore::noGui)
             if (!score->sanityCheck(QString()))

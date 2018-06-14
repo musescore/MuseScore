@@ -697,7 +697,6 @@ void Harmony::startEdit(EditData& ed)
       if (!textList.empty())
             setXmlText(harmonyName());
       TextBase::startEdit(ed);
-      layout();
       }
 
 //---------------------------------------------------------

@@ -170,6 +170,7 @@ void UndoCommand::unwind()
       {
       while (!childList.empty()) {
             UndoCommand* c = childList.takeLast();
+            qDebug("unwind <%s>", c->name());
             c->undo(0);
             delete c;
             }
@@ -205,35 +206,10 @@ UndoStack::~UndoStack()
 void UndoStack::beginMacro()
       {
       if (curCmd) {
-            qWarning("UndoStack:beginMacro(): already active");
+            qWarning("already active");
             return;
             }
       curCmd = new UndoCommand();
-      }
-
-//---------------------------------------------------------
-//   endMacro
-//---------------------------------------------------------
-
-void UndoStack::endMacro(bool rollback)
-      {
-      if (curCmd == 0) {
-            qWarning("UndoStack:endMacro(): not active");
-            return;
-            }
-      if (rollback)
-            delete curCmd;
-      else {
-            // remove redo stack
-            while (list.size() > curIdx) {
-                  UndoCommand* cmd = list.takeLast();
-                  cmd->cleanup(false);  // delete elements for which UndoCommand() holds ownership
-                  delete cmd;
-                  }
-            list.append(curCmd);
-            ++curIdx;
-            }
-      curCmd = 0;
       }
 
 //---------------------------------------------------------
@@ -244,7 +220,10 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
       {
       if (!curCmd) {
             // this can happen for layout() outside of a command (load)
-            // qWarning("UndoStack:push(): no active command, UndoStack %p", this);
+            extern bool __loadScore;
+
+            if (!__loadScore)
+                  qWarning("UndoStack:push(): no active command, UndoStack");
 
             cmd->redo(ed);
             delete cmd;
@@ -270,7 +249,7 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
 void UndoStack::push1(UndoCommand* cmd)
       {
       if (!curCmd) {
-            qWarning("UndoStack:push1(): no active command, UndoStack %p", this);
+            qWarning("no active command, UndoStack %p", this);
             return;
             }
       curCmd->appendChild(cmd);
@@ -300,11 +279,66 @@ void UndoStack::remove(int idx)
 void UndoStack::pop()
       {
       if (!curCmd) {
-            qWarning("UndoStack:pop(): no active command");
+            qWarning("no active command");
             return;
             }
       UndoCommand* cmd = curCmd->removeChild();
       cmd->undo(0);
+      }
+
+//---------------------------------------------------------
+//   rollback
+//---------------------------------------------------------
+
+void UndoStack::rollback()
+      {
+      qDebug("==");
+      Q_ASSERT(curCmd == 0);
+      Q_ASSERT(curIdx > 0);
+      int idx = curIdx - 1;
+      list[idx]->unwind();
+      remove(idx);
+      }
+
+//---------------------------------------------------------
+//   endMacro
+//---------------------------------------------------------
+
+void UndoStack::endMacro(bool rollback)
+      {
+      if (curCmd == 0) {
+            qWarning("not active");
+            return;
+            }
+      if (rollback)
+            delete curCmd;
+      else {
+            // remove redo stack
+            while (list.size() > curIdx) {
+                  UndoCommand* cmd = list.takeLast();
+                  cmd->cleanup(false);  // delete elements for which UndoCommand() holds ownership
+                  delete cmd;
+                  }
+            list.append(curCmd);
+            ++curIdx;
+            }
+      curCmd = 0;
+      }
+
+//---------------------------------------------------------
+//   reopen
+//---------------------------------------------------------
+
+void UndoStack::reopen()
+      {
+      qDebug("curIdx %d size %d", curIdx, list.size());
+      Q_ASSERT(curCmd == 0);
+      Q_ASSERT(curIdx > 0);
+      --curIdx;
+      curCmd = list.takeAt(curIdx);
+      for (auto i : curCmd->commands()) {
+            qDebug("   <%s>", i->name());
+            }
       }
 
 //---------------------------------------------------------
@@ -1228,7 +1262,7 @@ void ChangePatch::flip(EditData*)
       patch            = op;
 
       if (MScore::seq == 0) {
-            qWarning("ChangePatch: no seq");
+            qWarning("no seq");
             return;
             }
 
@@ -1483,8 +1517,8 @@ void InsertRemoveMeasures::insertMeasures()
       Score* score = fm->score();
       QList<Clef*> clefs;
       QList<KeySig*> keys;
-      Segment* fs = nullptr;
-      Segment* ls = nullptr;
+      Segment* fs = 0;
+      Segment* ls = 0;
       if (fm->isMeasure()) {
             score->setPlaylistDirty();
             fs = toMeasure(fm)->first();
@@ -1573,15 +1607,16 @@ void InsertRemoveMeasures::removeMeasures()
                         systemList.push_back(system);
                         }
                   auto i = std::find(system->measures().begin(), system->measures().end(), mb);
-                  if (i != system->measures().end())
+                  if (i != system->measures().end()) {
                         system->measures().erase(i);
+                        (*i)->setParent(0);
+                        }
                   }
             if (mb == fm)
                   break;
             }
       score->measures()->remove(fm, lm);
 
-      //      if (score->firstMeasure())    // any measures left?
       score->fixTicks();
       if (fm->isMeasure()) {
             score->setPlaylistDirty();
@@ -1613,7 +1648,6 @@ void InsertRemoveMeasures::removeMeasures()
 
       for (System* s : systemList) {
             if (s->measures().empty()) {
-qDebug("remove system");
                   Page* page = s->page();
                   if (page) {
                         // erase system from page
