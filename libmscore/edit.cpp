@@ -4412,7 +4412,7 @@ void Score::undoRemoveElement(Element* element)
             }
       for (Segment* s : segments) {
             if (s->empty()) {
-                  if (s->isHeaderClefType())    // probably more segment types (system header)
+                  if (s->header() || s->trailer())    // probably more segment types (system header)
                         s->setEnabled(false);
                   else
                         undo(new RemoveElement(s));
