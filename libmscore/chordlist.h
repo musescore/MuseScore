@@ -98,6 +98,7 @@ struct RenderAction {
 
       RenderAction() {}
       RenderAction(RenderActionType t) : type(t) {}
+      void print() const;
       };
 
 //---------------------------------------------------------

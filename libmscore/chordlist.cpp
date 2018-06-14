@@ -1796,5 +1796,19 @@ void ChordList::unload()
       chordTokenList.clear();
       }
 
+//---------------------------------------------------------
+//   print
+//    only for debugging
+//---------------------------------------------------------
+
+void RenderAction::print() const
+      {
+      static const char* names[] = {
+            "SET", "MOVE", "PUSH", "POP",
+            "NOTE", "ACCIDENTAL"
+            };
+      qDebug("%10s <%s> %f %f", names[int(type)], qPrintable(text), movex, movey);
+      }
+
 
 }

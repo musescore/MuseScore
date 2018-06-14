@@ -1191,7 +1191,7 @@ void TextSegment::set(const QString& s, const QFont& f, qreal _x, qreal _y)
 void Harmony::render(const QString& s, qreal& x, qreal& y)
       {
       int fontIdx = 0;
-      if(!s.isEmpty()) {
+      if (!s.isEmpty()) {
             TextSegment* ts = new TextSegment(s, fontList[fontIdx], x, y);
             textList.append(ts);
             x += ts->width();
@@ -1208,9 +1208,11 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
       QStack<QPointF> stack;
       int fontIdx    = 0;
       qreal _spatium = spatium();
-      qreal mag      = _spatium / SPATIUM20;
+      qreal mag      = magS();
 
+// qDebug("===");
       for (const RenderAction& a : renderList) {
+// a.print();
             if (a.type == RenderAction::RenderActionType::SET) {
                   TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
                   ChordSymbol cs = chordList->symbol(a.text);
@@ -1224,8 +1226,8 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                   x += ts->width();
                   }
             else if (a.type == RenderAction::RenderActionType::MOVE) {
-                  x += a.movex * mag;
-                  y += a.movey * mag;
+                  x += a.movex * mag * _spatium * .2;
+                  y += a.movey * mag * _spatium * .2;
                   }
             else if (a.type == RenderAction::RenderActionType::PUSH)
                   stack.push(QPointF(x,y));
@@ -1251,8 +1253,9 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                         ts->font = fontList[cs.fontIdx];
                         ts->setText(cs.value);
                         }
-                  else
+                  else {
                         ts->setText(c);
+                        }
                   textList.append(ts);
                   x += ts->width();
                   }
@@ -1282,7 +1285,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                         }
                   }
             else
-                  qDebug("Harmony::render(): unknown render action %d", static_cast<int>(a.type));
+                  qDebug("unknown render action %d", static_cast<int>(a.type));
             }
       }
 
