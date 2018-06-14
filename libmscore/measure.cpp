@@ -3362,7 +3362,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                         bl->setSpanFrom(staff->barLineFrom());
                         bl->setSpanTo(staff->barLineTo());
                         bl->setBarLineType(t);
-                        score()->addElement(bl);
+                        score()->undoAddElement(bl);
                         }
                   else {
                         // do not change bar line type if bar line is user modified
@@ -3482,7 +3482,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                   if (!kSegment) {
                         kSegment = new Segment(this, SegmentType::KeySig, 0);
                         kSegment->setHeader(true);
-                        add(kSegment);
+                        score()->undoAddElement(kSegment);
                         keysig = 0;
                         }
                   else
@@ -3495,7 +3495,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         keysig->setTrack(track);
                         keysig->setGenerated(true);
                         keysig->setParent(kSegment);
-                        kSegment->add(keysig);
+                        score()->undoAddElement(keysig);
                         }
                   keysig->setKeySigEvent(keyIdx);
                   keysig->layout();
@@ -3531,7 +3531,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                   if (!cSegment) {
                         cSegment = new Segment(this, SegmentType::HeaderClef, 0);
                         cSegment->setHeader(true);
-                        add(cSegment);
+                        score()->undoAddElement(cSegment);
                         clef = 0;
                         }
                   else
@@ -3545,7 +3545,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                               clef->setTrack(track);
                               clef->setGenerated(true);
                               clef->setParent(cSegment);
-                              cSegment->add(clef);
+                              score()->undoAddElement(clef);
                               }
                         if (clef->generated())
                               clef->setClefType(cl);
@@ -3573,7 +3573,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
       if ((n > 1 && score()->styleB(Sid::startBarlineMultiple)) || (n == 1 && score()->styleB(Sid::startBarlineSingle))) {
             if (!s) {
                   s = new Segment(this, SegmentType::BeginBarLine, 0);
-                  add(s);
+                  score()->undoAddElement(s);
                   }
             for (int track = 0; track < score()->ntracks(); track += VOICES) {
                   BarLine* bl = toBarLine(s->element(track));
@@ -3585,7 +3585,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         bl->setBarLineType(BarLineType::NORMAL);
                         bl->setSpanStaff(true);
                         bl->layout();
-                        s->add(bl);
+                        score()->undoAddElement(bl);
                         s->createShapes();
                         }
                   }
@@ -3622,7 +3622,7 @@ void Measure::addSystemTrailer(Measure* nm)
                         if (!s) {
                               s  = new Segment(this, SegmentType::TimeSigAnnounce, _rtick);
                               s->setTrailer(true);
-                              add(s);
+                              score()->undoAddElement(s);
                               }
                         s->setEnabled(true);
                         int nstaves = score()->nstaves();
@@ -3666,7 +3666,7 @@ void Measure::addSystemTrailer(Measure* nm)
                   if (!s) {
                         s = new Segment(this, SegmentType::KeySigAnnounce, _rtick);
                         s->setTrailer(true);
-                        add(s);
+                        score()->undoAddElement(s);
                         }
                   KeySig* ks = toKeySig(s->element(track));
                   KeySigEvent key2 = staff->keySigEvent(endTick());
@@ -3676,7 +3676,7 @@ void Measure::addSystemTrailer(Measure* nm)
                         ks->setTrack(track);
                         ks->setGenerated(true);
                         ks->setParent(s);
-                        s->add(ks);
+                        score()->undoAddElement(ks);
                         }
                   //else if (!(ks->keySigEvent() == key2)) {
                   //      score()->undo(new ChangeKeySig(ks, key2, ks->showCourtesy()));
