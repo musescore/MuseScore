@@ -1887,7 +1887,6 @@ void Measure::read(XmlReader& e, int staffIdx)
       QList<Chord*> graceNotes;
       Beam* startingBeam = nullptr;
       Tuplet* tuplet = nullptr;
-      e.tuplets().clear();
       e.setTrack(staffIdx * VOICES);
       e.setCurrentMeasure(this);
 
@@ -1900,10 +1899,6 @@ void Measure::read(XmlReader& e, int staffIdx)
             s->lines()->setVisible(!staff->invisible());
             _mstaves.push_back(s);
             }
-
-      // tick is obsolete
-      if (e.hasAttribute("tick"))
-            e.initTick(score()->fileDivision(e.intAttribute("tick")));
 
       bool irregular;
       if (e.hasAttribute("len")) {
