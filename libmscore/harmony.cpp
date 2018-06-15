@@ -982,6 +982,10 @@ const ChordDescription* Harmony::generateDescription()
 
 void Harmony::layout()
       {
+      if (isLayoutInvalid())
+            createLayout();
+      if (textBlockList().empty())
+            textBlockList().append(TextBlock());
       calculateBoundingRect();    // for normal symbols this is called in layout: computeMinWidth()
 
       if (!parent()) {
@@ -1119,6 +1123,20 @@ void Harmony::draw(QPainter* painter) const
             painter->setFont(f);
             painter->drawText(QPointF(ts->x, ts->y), ts->text);
             }
+      }
+
+//---------------------------------------------------------
+//   drawEditMode
+//---------------------------------------------------------
+
+void Harmony::drawEditMode(QPainter* p, EditData& ed)
+      {
+      TextBase::drawEditMode(p, ed);
+
+      QPointF pos(pagePos());
+      p->translate(pos);
+      TextBase::draw(p);
+      p->translate(-pos);
       }
 
 //---------------------------------------------------------

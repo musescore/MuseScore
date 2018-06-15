@@ -961,6 +961,88 @@ void ScoreView::paintPageBorder(QPainter& p, Page* page)
             }
       }
 
+#ifndef NDEBUG
+//---------------------------------------------------------
+//   drawDebugInfo
+//---------------------------------------------------------
+
+static void drawDebugInfo(QPainter& p, const Element* _e)
+      {
+      if (!MScore::showBoundingRect)
+            return;
+      const Element* e = _e;
+      //
+      //  draw bounding box rectangle for all
+      //  selected Elements
+      //
+      QPointF pos(e->pagePos());
+      p.translate(pos);
+      p.setBrush(Qt::NoBrush);
+
+      p.setPen(QPen(Qt::red, 0.0));
+//      p.drawRect(e->bbox());
+      e->shape().paint(p);
+
+      p.setPen(QPen(Qt::red, 0.0));             // red x at 0,0 of bbox
+      qreal w = 5.0 / p.matrix().m11();
+      qreal h = w;
+      qreal x = 0; // e->bbox().x();
+      qreal y = 0; // e->bbox().y();
+      p.drawLine(QLineF(x-w, y-h, x+w, y+h));
+      p.drawLine(QLineF(x+w, y-h, x-w, y+h));
+
+      p.translate(-pos);
+      if (e->parent()) {
+            const Element* ee = e->parent();
+            if (e->isNote())
+                  ee = toNote(e)->chord()->segment();
+            else if (e->isClef())
+                  ee = toClef(e)->segment();
+
+            p.setPen(QPen(Qt::green, 0.0));
+
+            p.drawRect(ee->pageBoundingRect());
+
+            if (ee->isSegment()) {
+                  QPointF pt = ee->pagePos();
+                  p.setPen(QPen(Qt::blue, 0.0));
+                  p.drawLine(QLineF(pt.x()-w, pt.y()-h, pt.x()+w, pt.y()+h));
+                  p.drawLine(QLineF(pt.x()+w, pt.y()-h, pt.x()-w, pt.y()+h));
+                  }
+            }
+      }
+#endif
+
+//---------------------------------------------------------
+//   drawElements
+//---------------------------------------------------------
+
+void ScoreView::drawElements(QPainter& painter, QList<Element*>& el, bool isEditMode)
+      {
+      qStableSort(el.begin(), el.end(), elementLessThan);
+      for (const Element* e : el) {
+            e->itemDiscovered = 0;
+
+            // harmony element representation is different in edit mode, so don't
+            // call normal draw(). Complete drawing is done in drawEditMode()
+            if (isEditMode && e->isHarmony())
+                  continue;
+
+            if (!e->visible() && (score()->printing() || !score()->showInvisible()))
+                  continue;
+            if (e->isRest() && toRest(e)->isGap())
+                  continue;
+            QPointF pos(e->pagePos());
+            painter.translate(pos);
+            e->draw(&painter);
+            painter.translate(-pos);
+#ifndef NDEBUG
+            if (e->selected())
+                  drawDebugInfo(painter, e);
+#endif
+            }
+      }
+
 //---------------------------------------------------------
 //   paint
 //---------------------------------------------------------
@@ -978,25 +1060,28 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       p.setTransform(_matrix);
       QRectF fr = imatrix.mapRect(QRectF(r));
 
-      switch (state) {
-            case ViewState::NORMAL:
-            case ViewState::DRAG:
-            case ViewState::DRAG_OBJECT:
-            case ViewState::LASSO:
-            case ViewState::NOTE_ENTRY:
-            case ViewState::PLAY:
-            case ViewState::ENTRY_PLAY:
-                  break;
-            case ViewState::EDIT:
-            case ViewState::DRAG_EDIT:
-            case ViewState::FOTO:
-            case ViewState::FOTO_DRAG:
-            case ViewState::FOTO_DRAG_EDIT:
-            case ViewState::FOTO_DRAG_OBJECT:
-            case ViewState::FOTO_LASSO:
-                  if (editData.element)
+      bool isEditMode = false;
+      if (editData.element) {
+            switch (state) {
+                  case ViewState::NORMAL:
+                  case ViewState::DRAG:
+                  case ViewState::DRAG_OBJECT:
+                  case ViewState::LASSO:
+                  case ViewState::NOTE_ENTRY:
+                  case ViewState::PLAY:
+                  case ViewState::ENTRY_PLAY:
+                        break;
+                  case ViewState::EDIT:
+                  case ViewState::DRAG_EDIT:
+                  case ViewState::FOTO:
+                  case ViewState::FOTO_DRAG:
+                  case ViewState::FOTO_DRAG_EDIT:
+                  case ViewState::FOTO_DRAG_OBJECT:
+                  case ViewState::FOTO_LASSO:
                         editData.element->drawEditMode(&p, editData);
-                  break;
+                        isEditMode = true;
+                        break;
+                  }
             }
 
       QRegion r1(r);
@@ -1004,8 +1089,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             if (_score->pages().size() > 0) {
                   Page* page = _score->pages().front();
                   QList<Element*> ell = page->items(fr);
-                  qStableSort(ell.begin(), ell.end(), elementLessThan);
-                  drawElements(p, ell);
+                  drawElements(p, ell, isEditMode);
                   }
             }
       else {
@@ -1019,10 +1103,9 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   if (!score()->printing())
                         paintPageBorder(p, page);
                   QList<Element*> ell = page->items(fr.translated(-page->pos()));
-                  qStableSort(ell.begin(), ell.end(), elementLessThan);
                   QPointF pos(page->pos());
                   p.translate(pos);
-                  drawElements(p, ell);
+                  drawElements(p, ell, isEditMode);
 
 #ifndef NDEBUG
                   if (!score()->printing()) {
@@ -1383,81 +1466,6 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
             }
       *dxx = dx;
       *dyy = dy;
-      }
-
-#ifndef NDEBUG
-//---------------------------------------------------------
-//   drawDebugInfo
-//---------------------------------------------------------
-
-static void drawDebugInfo(QPainter& p, const Element* _e)
-      {
-      if (!MScore::showBoundingRect)
-            return;
-      const Element* e = _e;
-      //
-      //  draw bounding box rectangle for all
-      //  selected Elements
-      //
-      QPointF pos(e->pagePos());
-      p.translate(pos);
-      p.setBrush(Qt::NoBrush);
-
-      p.setPen(QPen(Qt::red, 0.0));
-//      p.drawRect(e->bbox());
-      e->shape().paint(p);
-
-      p.setPen(QPen(Qt::red, 0.0));             // red x at 0,0 of bbox
-      qreal w = 5.0 / p.matrix().m11();
-      qreal h = w;
-      qreal x = 0; // e->bbox().x();
-      qreal y = 0; // e->bbox().y();
-      p.drawLine(QLineF(x-w, y-h, x+w, y+h));
-      p.drawLine(QLineF(x+w, y-h, x-w, y+h));
-
-      p.translate(-pos);
-      if (e->parent()) {
-            const Element* ee = e->parent();
-            if (e->isNote())
-                  ee = toNote(e)->chord()->segment();
-            else if (e->isClef())
-                  ee = toClef(e)->segment();
-
-            p.setPen(QPen(Qt::green, 0.0));
-
-            p.drawRect(ee->pageBoundingRect());
-
-            if (ee->isSegment()) {
-                  QPointF pt = ee->pagePos();
-                  p.setPen(QPen(Qt::blue, 0.0));
-                  p.drawLine(QLineF(pt.x()-w, pt.y()-h, pt.x()+w, pt.y()+h));
-                  p.drawLine(QLineF(pt.x()+w, pt.y()-h, pt.x()-w, pt.y()+h));
-                  }
-            }
-      }
-#endif
-
-//---------------------------------------------------------
-//   drawElements
-//---------------------------------------------------------
-
-void ScoreView::drawElements(QPainter& painter, const QList<Element*>& el)
-      {
-      for (const Element* e : el) {
-            e->itemDiscovered = 0;
-            if (!e->visible() && (score()->printing() || !score()->showInvisible()))
-                  continue;
-            if (e->isRest() && toRest(e)->isGap())
-                  continue;
-            QPointF pos(e->pagePos());
-            painter.translate(pos);
-            e->draw(&painter);
-            painter.translate(-pos);
-#ifndef NDEBUG
-            if (e->selected())
-                  drawDebugInfo(painter, e);
-#endif
-            }
       }
 
 //---------------------------------------------------------
