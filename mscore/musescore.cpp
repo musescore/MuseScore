@@ -629,7 +629,7 @@ bool MuseScore::importExtension(QString path)
             totalZipSize += fi.size;
 
       // check if extension path is writable and has enough space
-      QStorageInfo storage = QStorageInfo(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
+      QStorageInfo storage = QStorageInfo(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
       if (storage.isReadOnly()) {
             if (!MScore::noGui)
                   QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Cannot import extension on read-only storage:%1").arg(storage.displayName()));
@@ -697,11 +697,11 @@ bool MuseScore::importExtension(QString path)
             }
 
       // Check if extension is already installed, ask for uninstall
-      QDir dir(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
+      QDir dir(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
       auto dirList = dir.entryList(QStringList(extensionId), QDir::Dirs | QDir::NoDotAndDotDot);
       bool newerVersion = false;
       if (dirList.contains(extensionId)) {
-            QString extDirName = QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYTEMPLATES)).arg(extensionId);
+            QString extDirName = QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId);
             QDir extDir(extDirName);
             auto versionDirList = extDir.entryList(QDir::Dirs);
             if (versionDirList.size() > 0) {
@@ -719,7 +719,7 @@ bool MuseScore::importExtension(QString path)
                   }
             if (!newerVersion) {
                   qDebug() << "found already install extension without newer version: deleting it";
-                  QDir d(QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYTEMPLATES)).arg(extensionId));
+                  QDir d(QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId));
                   if (!d.removeRecursively()) {
                         if (!MScore::noGui)
                               QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Error while deleting previous version of the extension: %1").arg(extensionId));
@@ -729,13 +729,49 @@ bool MuseScore::importExtension(QString path)
             }
       // Unzip the extension
       MQZipReader zipFile3(path);
-      zipFile3.extractAll(QString("%1/%2/%3").arg(preferences.getString(PREF_APP_PATHS_MYTEMPLATES)).arg(extensionId).arg(version));
+      zipFile3.extractAll(QString("%1/%2/%3").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version));
       zipFile3.close();
 
       mscore->reloadInstrumentTemplates();
       mscore->updateNewWizard();
       mscore->updateInstrumentDialog();
-      //TODO After install: add soundfont to synth ?
+
+      // After install: add sfz to zerberus
+      QDir sfzDir(QString("%1/%2/%3/sfzs").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version));
+      if (sfzDir.exists()) {
+            // get all sfz files
+            QDirIterator it(sfzDir.absolutePath(), QStringList("*.sfz"), QDir::Files, QDirIterator::Subdirectories);
+            Synthesizer* s = synti->synthesizer("Zerberus");
+            QStringList sfzs;
+            while (it.hasNext()) {
+                  it.next();
+                  sfzs.append(it.fileName());
+                  }
+            sfzs.sort();
+            for (auto sfz : sfzs)
+                  s->addSoundFont(sfz);
+            if (!sfzs.isEmpty())
+                  synti->storeState();
+            }
+      // After install: add soundfont to fluid
+      QDir sfDir(QString("%1/%2/%3/soundfonts").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version));
+      if (sfDir.exists()) {
+            // get all soundfont files
+            QStringList filters("*.sf2");
+            filters.append("*.sf3");
+            QDirIterator it(sfzDir.absolutePath(), filters, QDir::Files, QDirIterator::Subdirectories);
+            Synthesizer* s = synti->synthesizer("Fluid");
+            QStringList sfs;
+            while (it.hasNext()) {
+                  it.next();
+                  sfs.append(it.fileName());
+                  }
+            sfs.sort();
+            for (auto sf : sfs)
+                  s->addSoundFont(sf);
+            if (!sfs.isEmpty())
+                  synti->storeState();
+            }
       return true;
       }
 
@@ -1525,10 +1561,9 @@ MuseScore::MuseScore()
 
       setCentralWidget(envelope);
 
-      reloadInstrumentTemplates();
-
       if (!MScore::noGui)
             preferencesChanged();
+
       if (seq) {
             connect(seq, SIGNAL(started()), SLOT(seqStarted()));
             connect(seq, SIGNAL(stopped()), SLOT(seqStopped()));
