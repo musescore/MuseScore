@@ -1247,7 +1247,7 @@ class MasterScore : public Score {
       FileError read114(XmlReader&);
       FileError read206(XmlReader&);
       FileError read300old1(XmlReader&);
-      FileError read300(XmlReader&);
+      FileError read301(XmlReader&);
       QByteArray readToBuffer();
       QByteArray readCompressedToBuffer();
 

@@ -691,9 +691,8 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection, bool old
       XmlWriter xml(this, f);
       xml.setWriteOmr(msczFormat);
       xml.header();
-      if (!oldFormat) {
-            // Temporarily denote the new format flavor by a large version number.
-            xml.stag("museScore version=\"123.45\"");
+      if (oldFormat) {
+            xml.stag("museScore version=\"3.00\"");
             if (!MScore::testMode) {
                   xml.tag("programVersion", VERSION);
                   xml.tag("programRevision", revision);
@@ -705,7 +704,7 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection, bool old
             xml.tag("programRevision", revision);
             }
       else
-            xml.stag("museScore version=\"3.00\"");
+            xml.stag("museScore version=\"3.01\"");
       if (oldFormat)
             write300old(xml, onlySelection);
       else
@@ -930,9 +929,7 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                   if (!ignoreVersionError) {
                         QString message;
                         if (mscVersion() > MSCVERSION)
-                              // WARNING: temporary check on a new format flavor
-                              if (mscVersion() != 12345)
-                                    return FileError::FILE_TOO_NEW;
+                              return FileError::FILE_TOO_NEW;
                         if (mscVersion() < 114)
                               return FileError::FILE_TOO_OLD;
                         }
@@ -941,10 +938,10 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                         error = read114(e);
                   else if (mscVersion() <= 207)
                         error = read206(e);
-                  else if (mscVersion() == 12345)
-                        error = read300(e);
-                  else
+                  else if (mscVersion() < 301)
                         error = read300old1(e);
+                  else
+                        error = read301(e);
                   setExcerptsChanged(false);
                   return error;
                   }

@@ -303,7 +303,7 @@ void MasterScore::addMovement(MasterScore* score)
 //   read300
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read300(XmlReader& e)
+Score::FileError MasterScore::read301(XmlReader& e)
       {
       bool top = true;
       while (e.readNextStartElement()) {
