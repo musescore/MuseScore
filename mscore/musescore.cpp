@@ -495,7 +495,43 @@ bool MuseScore::importExtension(QString path)
       mscore->reloadInstrumentTemplates();
       mscore->updateNewWizard();
       mscore->updateInstrumentDialog();
-      //TODO After install: add soundfont to synth ?
+
+      // After install: add sfz to zerberus
+      QDir sfzDir(QString("%1/%2/%3/sfzs").arg(preferences.myExtensionsPath).arg(extensionId).arg(version));
+      if (sfzDir.exists()) {
+            // get all sfz files
+            QDirIterator it(sfzDir.absolutePath(), QStringList("*.sfz"), QDir::Files, QDirIterator::Subdirectories);
+            Synthesizer* s = synti->synthesizer("Zerberus");
+            QStringList sfzs;
+            while (it.hasNext()) {
+                  it.next();
+                  sfzs.append(it.fileName());
+                  }
+            sfzs.sort();
+            for (auto sfz : sfzs)
+                  s->addSoundFont(sfz);
+            if (!sfzs.isEmpty())
+                  synti->storeState();
+            }
+      // After install: add soundfont to fluid
+      QDir sfDir(QString("%1/%2/%3/soundfonts").arg(preferences.myExtensionsPath).arg(extensionId).arg(version));
+      if (sfDir.exists()) {
+            // get all soundfont files
+            QStringList filters("*.sf2");
+            filters.append("*.sf3");
+            QDirIterator it(sfzDir.absolutePath(), filters, QDir::Files, QDirIterator::Subdirectories);
+            Synthesizer* s = synti->synthesizer("Fluid");
+            QStringList sfs;
+            while (it.hasNext()) {
+                  it.next();
+                  sfs.append(it.fileName());
+                  }
+            sfs.sort();
+            for (auto sf : sfs)
+                  s->addSoundFont(sf);
+            if (!sfs.isEmpty())
+                  synti->storeState();
+            }
       return true;
       }
 
@@ -1213,8 +1249,6 @@ MuseScore::MuseScore()
             }
 
       setCentralWidget(envelope);
-
-      reloadInstrumentTemplates();
 
       preferencesChanged();
       if (seq) {

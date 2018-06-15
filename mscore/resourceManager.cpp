@@ -92,13 +92,13 @@ void ResourceManager::displayExtensions()
 
             QString filename = value.value("file_name").toString();
             QString name = value.value("name").toString();
-            QString fileSize = value.value("file_size").toString();
+            int fileSize = value.value("file_size").toInt();
             QString hashValue = value.value("hash").toString();
             QString version = value.value("version").toString();
 
             extensionsTable->setItem(row, col++, new QTableWidgetItem(name));
             extensionsTable->setItem(row, col++, new QTableWidgetItem(version));
-            extensionsTable->setItem(row, col++, new QTableWidgetItem(stringutils::convertFileSizeToHumanReadable(fileSize.toLongLong())));
+            extensionsTable->setItem(row, col++, new QTableWidgetItem(stringutils::convertFileSizeToHumanReadable(fileSize)));
             updateButtons[row] = new QPushButton(tr("Install"));
 
             temp = updateButtons[row];
