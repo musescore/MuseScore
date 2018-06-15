@@ -332,6 +332,9 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
+        <Segment>
+          <leadingSpace>0.3</leadingSpace>
+          </Segment>
         </Measure>
       <Measure number="10">
         <Chord>
