@@ -710,7 +710,7 @@ QByteArray Selection::staffMimeData() const
                   if (hasElementInTrack(seg1, seg2, startTrack + voice)
                      && xml.canWriteVoice(voice)) {
                         int offset = firstElementInTrack(seg1, seg2, startTrack+voice) - tickStart();
-                        xml.tag(QString("voice id=\"%1\"").arg(voice), offset);
+                        xml.tag(QString("voiceOffset id=\"%1\"").arg(voice), offset);
                         }
                   }
             xml.setCurTrack(startTrack);

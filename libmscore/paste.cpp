@@ -140,7 +140,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               e.setTransposeChromatic(e.readInt());
                         else if (tag == "transposeDiatonic")
                               e.setTransposeDiatonic(e.readInt());
-                        else if (tag == "voice") {
+                        else if (tag == "voiceOffset") {
                               int voiceId = e.attribute("id", "-1").toInt();
                               Q_ASSERT(voiceId >= 0 && voiceId < VOICES);
                               voiceOffset[voiceId] = e.readInt();
