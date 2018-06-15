@@ -52,7 +52,7 @@ void PointInfo::write(XmlWriter& xml) const
             xml.tag("staves", _staff, relDefaults._staff);
             xml.tag("voices", _voice, relDefaults._voice);
             xml.tag("measures", _measure, relDefaults._measure);
-            xml.tag("fractions", _fpos, relDefaults._fpos);
+            xml.tag("fractions", _fpos.reduced(), relDefaults._fpos);
             xml.tag("grace", _graceIndex, relDefaults._graceIndex);
             xml.tag("notes", _note, relDefaults._note);
             xml.etag();
@@ -62,7 +62,7 @@ void PointInfo::write(XmlWriter& xml) const
             xml.tag("staff", _staff, absDefaults._staff);
             xml.tag("voice", _voice, absDefaults._voice);
             xml.tag("measure", _measure, absDefaults._measure);
-            xml.tag("fraction", _fpos, absDefaults._fpos);
+            xml.tag("fraction", _fpos.reduced(), absDefaults._fpos);
             xml.tag("grace", _graceIndex, absDefaults._graceIndex);
             xml.tag("note", _note, absDefaults._note);
             xml.etag();
