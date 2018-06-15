@@ -2261,14 +2261,6 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                         }
                   }
             //----------------------------------------------------
-            else if (tag == "sysInitBarLineType") {
-                  const QString& val(e.readElementText());
-                  BarLine* barLine = new BarLine(score());
-                  barLine->setTrack(e.track());
-                  barLine->setBarLineType(val);
-                  segment = getSegmentR(SegmentType::BeginBarLine, 0);
-                  segment->add(barLine);
-                  }
             else if (tag == "Tuplet") {
                   Tuplet* oldTuplet = tuplet;
                   tuplet = new Tuplet(score());
