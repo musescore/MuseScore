@@ -88,6 +88,7 @@ class Harmony final : public TextBase {
 
       void determineRootBaseSpelling();
       virtual void draw(QPainter*) const override;
+      virtual void drawEditMode(QPainter* p, EditData& ed) override;
       void render(const QString&, qreal&, qreal&);
       void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
       virtual void styleChanged() override     { render(); }

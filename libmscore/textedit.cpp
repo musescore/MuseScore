@@ -49,11 +49,11 @@ void TextBase::startEdit(EditData& ed)
       ted->oldXmlText = xmlText();
       ted->startUndoIdx = score()->undoStack()->getCurIdx();
 
+      if (layoutInvalid)
+            layout();
       if (!ted->cursor.set(ed.startMove))
             ted->cursor.init();
       ed.addData(ted);
-      if (layoutInvalid)
-            layout();
       }
 
 //---------------------------------------------------------
