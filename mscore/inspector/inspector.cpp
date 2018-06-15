@@ -754,32 +754,8 @@ InspectorClef::InspectorClef(QWidget* parent)
 
 void InspectorClef::setElement()
       {
-      otherClef = nullptr;                      // no 'other clef' yet
+      otherClef = static_cast<Clef*>(inspector->element())->otherClef();
       InspectorBase::setElement();
-
-      // try to locate the 'other clef' of a courtesy / main pair
-      Clef* clef = static_cast<Clef*>(inspector->element());
-      // if not in a clef-segment-measure hierachy, do nothing
-      if (!clef->parent() || clef->parent()->type() != Element::Type::SEGMENT)
-            return;
-      Segment*    segm = static_cast<Segment*>(clef->parent());
-      int         segmTick = segm->tick();
-      if (!segm->parent() || segm->parent()->type() != Element::Type::MEASURE)
-            return;
-
-      Measure* meas = static_cast<Measure*>(segm->parent());
-      Measure* otherMeas = nullptr;
-      Segment* otherSegm = nullptr;
-      if (segmTick == meas->tick())                         // if clef segm is measure-initial
-            otherMeas = meas->prevMeasure();                // look for a previous measure
-      else if (segmTick == meas->tick()+meas->ticks())      // if clef segm is measure-final
-            otherMeas = meas->nextMeasure();                // look for a next measure
-      // look for a clef segment in the 'other' measure at the same tick of this clef segment
-      if (otherMeas)
-            otherSegm = otherMeas->findSegment(Segment::Type::Clef, segmTick);
-      // if any 'other' segment found, look for a clef in the same track as this
-      if (otherSegm)
-            otherClef = static_cast<Clef*>(otherSegm->element(clef->track()));
       }
 
 //   InspectorClef::valueChanged

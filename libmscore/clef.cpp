@@ -598,6 +598,37 @@ void Clef::undoSetShowCourtesy(bool v)
       }
 
 //---------------------------------------------------------
+//   otherClef
+//    try to locate the 'other clef' of a courtesy / main pair
+//---------------------------------------------------------
+
+Clef* Clef::otherClef()
+      {
+      // if not in a clef-segment-measure hierarchy, do nothing
+      if (!parent() || parent()->type() != Element::Type::SEGMENT)
+            return nullptr;
+      Segment* segm = static_cast<Segment*>(parent());
+      int segmTick = segm->tick();
+      if (!segm->parent() || !segm->parent()->isMeasure())
+            return nullptr;
+      Measure* meas = static_cast<Measure*>(segm->parent());
+      Measure* otherMeas = nullptr;
+      Segment* otherSegm = nullptr;
+      if (segmTick == meas->tick())                         // if clef segm is measure-initial
+            otherMeas = meas->prevMeasure();                // look for a previous measure
+      else if (segmTick == meas->tick() + meas->ticks())    // if clef segm is measure-final
+            otherMeas = meas->nextMeasure();                // look for a next measure
+      if (!otherMeas)
+            return nullptr;
+      // look for a clef segment in the 'other' measure at the same tick of this clef segment
+      otherSegm = otherMeas->findSegment(Segment::Type::Clef, segmTick);
+      if (!otherSegm)
+            return nullptr;
+      // if any 'other' segment found, look for a clef in the same track as this
+      return static_cast<Clef*>(otherSegm->element(track()));
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
