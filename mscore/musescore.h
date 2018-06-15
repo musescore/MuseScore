@@ -405,7 +405,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showModeText(const QString&);
       void addRecentScore(const QString& scorePath);
 
-      void updateNewWizard();
       virtual QMenu* createPopupMenu() override;
 
    private slots:
@@ -691,6 +690,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QHelpEngine*  helpEngine() const { return _helpEngine;   }
 
       void updateInspector();
+      void updateNewWizard();
+      void updateInstrumentDialog();
+      void reloadInstrumentTemplates();
       void showSynthControl(bool);
       void showMixer(bool);
 
@@ -701,6 +703,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void updateWindowTitle(Score* score);
       static QMap<QString, QStringList>* bravuraRanges();
+      bool importExtension(QString path);
       };
 
 extern MuseScore* mscore;

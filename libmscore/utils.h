@@ -65,6 +65,7 @@ extern int version();
 extern int majorVersion();
 extern int minorVersion();
 extern int updateVersion();
+extern bool compareVersion(QString v1, QString v2);
 
 extern Note* nextChordNote(Note* note);
 extern Note* prevChordNote(Note* note);
