@@ -214,23 +214,23 @@ void XmlReader::unknown()
       }
 
 //---------------------------------------------------------
-//   fpos
+//   rfrac
 //    return relative position in measure
 //---------------------------------------------------------
 
-Fraction XmlReader::fpos() const
+Fraction XmlReader::rfrac() const
       {
       if (_currMeasure)
             return Fraction::fromTicks(tick() - _currMeasure->tick());
-      return absfpos();
+      return afrac();
       }
 
 //---------------------------------------------------------
-//   absfpos
+//   afrac
 //    return absolute position
 //---------------------------------------------------------
 
-Fraction XmlReader::absfpos() const
+Fraction XmlReader::afrac() const
       {
       return Fraction::fromTicks(tick());
       }
@@ -257,8 +257,8 @@ void XmlReader::fillPoint(PointInfo& p) const
       constexpr PointInfo defaults = PointInfo::absolute();
       if (p.track() == defaults.track())
             p.setTrack(track());
-      if (p.fpos() == defaults.fpos())
-            p.setFpos(pasteMode() ? absfpos() : fpos());
+      if (p.frac() == defaults.frac())
+            p.setFrac(pasteMode() ? afrac() : rfrac());
       if (p.measure() == defaults.measure())
             p.setMeasure(pasteMode() ? 0 : currentMeasureIndex());
       }
@@ -278,7 +278,7 @@ void XmlReader::setPoint(const PointInfo& p)
             return;
             }
       setTrack(p.track() - _trackOffset);
-      int tick = p.fpos().ticks() - _tickOffset;
+      int tick = p.frac().ticks() - _tickOffset;
       if (!pasteMode()) {
             Q_ASSERT(p.measure() == currentMeasureIndex());
             tick += currentMeasure()->tick();

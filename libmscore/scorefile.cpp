@@ -1080,11 +1080,11 @@ static bool writeVoiceMove(XmlWriter& xml, Segment* seg, int startTick, int trac
             voiceTagWritten = true;
             }
 
-      if ((xml.absfpos() != seg->absfpos()) || (track != xml.curTrack())) {
+      if ((xml.afrac() != seg->afrac()) || (track != xml.curTrack())) {
             PointInfo curr = PointInfo::absolute();
             PointInfo dest = PointInfo::absolute();
-            curr.setFpos(xml.absfpos());
-            dest.setFpos(seg->absfpos());
+            curr.setFrac(xml.afrac());
+            dest.setFrac(seg->afrac());
             curr.setTrack(xml.curTrack());
             dest.setTrack(track);
 

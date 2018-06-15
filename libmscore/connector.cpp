@@ -27,7 +27,7 @@ static constexpr PointInfo pointDefaults = PointInfo::absolute();
 //   ConnectorInfo
 //---------------------------------------------------------
 
-ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction fpos)
+ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction frac)
    : _current(current), _currentInfo(PointInfo::absolute())
       {
       if (!current)
@@ -38,8 +38,8 @@ ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction fpos)
       // it may be corrected later.
       if (track >= 0)
             _currentInfo.setTrack(track);
-      if (fpos >= 0)
-            _currentInfo.setFpos(fpos);
+      if (frac >= 0)
+            _currentInfo.setFrac(frac);
       }
 
 //---------------------------------------------------------
@@ -62,8 +62,8 @@ void ConnectorInfo::updatePointInfo(const Element* e, PointInfo& i, bool clipboa
       }
       if (i.track() == pointDefaults.track())
             i.setTrack(e->track());
-      if (i.fpos() == pointDefaults.fpos())
-            i.setFpos(clipboardmode ? e->absfpos() : e->fpos());
+      if (i.frac() == pointDefaults.frac())
+            i.setFrac(clipboardmode ? e->afrac() : e->rfrac());
       if (i.measure() == pointDefaults.measure()) {
             if (clipboardmode)
                   i.setMeasure(0);
@@ -158,7 +158,7 @@ void ConnectorInfo::forceConnect(ConnectorInfo* other)
 
 static int distance(const PointInfo& p1, const PointInfo& p2)
       {
-      return 10000000 * (p2.measure() - p1.measure()) + 10000 * (p2.fpos().ticks() - p1.fpos().ticks()) + 100 * (p2.track() - p1.track()) + 10 * (p2.note() - p1.note()) + (p2.graceIndex() - p1.graceIndex());
+      return 10000000 * (p2.measure() - p1.measure()) + 10000 * (p2.frac().ticks() - p1.frac().ticks()) + 100 * (p2.track() - p1.track()) + 10 * (p2.note() - p1.note()) + (p2.graceIndex() - p1.graceIndex());
       }
 
 //---------------------------------------------------------
@@ -293,8 +293,8 @@ ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Score* current, int track
 //   ConnectorInfoWriter
 //---------------------------------------------------------
 
-ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const Element* current, const Element* connector, int track, Fraction fpos)
-   : ConnectorInfo(current, track, fpos), _xml(&xml), _connector(connector)
+ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const Element* current, const Element* connector, int track, Fraction frac)
+   : ConnectorInfo(current, track, frac), _xml(&xml), _connector(connector)
       {
       if (!connector) {
             qFatal("ConnectorInfoWriter::ConnectorInfoWriter(): invalid arguments: %p, %p", connector, current);

@@ -1599,32 +1599,32 @@ int Element::rtick() const
       }
 
 //---------------------------------------------------------
-//   fpos
+//   rfrac
 //    utility, searches for segment
 //---------------------------------------------------------
 
-Fraction Element::fpos() const
+Fraction Element::rfrac() const
       {
       const Element* e = this;
       while (e) {
             if (e->isSegment())
-                  return toSegment(e)->fpos();
+                  return toSegment(e)->rfrac();
             e = e->parent();
             }
       return -1;
       }
 
 //---------------------------------------------------------
-//   absfpos
+//   afrac
 //    utility, searches for segment
 //---------------------------------------------------------
 
-Fraction Element::absfpos() const
+Fraction Element::afrac() const
       {
       const Element* e = this;
       while (e) {
             if (e->isSegment())
-                  return toSegment(e)->absfpos();
+                  return toSegment(e)->afrac();
             e = e->parent();
             }
       return -1;

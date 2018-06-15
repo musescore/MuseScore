@@ -31,7 +31,7 @@ class SpannerWriter : public ConnectorInfoWriter {
    protected:
       const char* tagName() const override { return "Spanner"; }
    public:
-      SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* spanner, int track, Fraction fpos = -1);
+      SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* spanner, int track, Fraction frac = -1);
 
       static void fillSpannerPosition(PointInfo& info, const Element* endpoint, int tick, bool clipboardmode);
       };
@@ -943,9 +943,9 @@ SpannerSegment* Spanner::layoutSystem(System*)
 //   Spanner::writeSpanner
 //---------------------------------------------------------
 
-void Spanner::writeSpanner(XmlWriter& xml, const Element* current, int track, Fraction fpos) const
+void Spanner::writeSpanner(XmlWriter& xml, const Element* current, int track, Fraction frac) const
       {
-      SpannerWriter w(xml, current, this, track, fpos);
+      SpannerWriter w(xml, current, this, track, frac);
       w.write();
       }
 
@@ -991,14 +991,14 @@ void SpannerWriter::fillSpannerPosition(PointInfo& info, const Element* endpoint
       {
       if (clipboardmode) {
             info.setMeasure(0);
-            info.setFpos(Fraction::fromTicks(tick));
+            info.setFrac(Fraction::fromTicks(tick));
             }
       else {
             const Measure* m = toMeasure(endpoint->findMeasure());
             if (!m) {
                 qWarning("fillSpannerPosition: couldn't find spanner's endpoint's measure");
                 info.setMeasure(0);
-                info.setFpos(Fraction::fromTicks(tick));
+                info.setFrac(Fraction::fromTicks(tick));
                 return;
                 }
             // It may happen (hairpins!) that the spanner's end element is
@@ -1013,7 +1013,7 @@ void SpannerWriter::fillSpannerPosition(PointInfo& info, const Element* endpoint
                     break;
                 }
             info.setMeasure(m->index());
-            info.setFpos(Fraction::fromTicks(tick - m->tick()));
+            info.setFrac(Fraction::fromTicks(tick - m->tick()));
             }
       }
 
@@ -1021,8 +1021,8 @@ void SpannerWriter::fillSpannerPosition(PointInfo& info, const Element* endpoint
 //   SpannerWriter::SpannerWriter
 //---------------------------------------------------------
 
-SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* sp, int track, Fraction fpos)
-   : ConnectorInfoWriter(xml, current, sp, track, fpos)
+SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* sp, int track, Fraction frac)
+   : ConnectorInfoWriter(xml, current, sp, track, frac)
       {
       const bool clipboardmode = xml.clipboardmode();
       if (current->isMeasure() || current->isSegment() || (sp->startElement()->type() != current->type())) {

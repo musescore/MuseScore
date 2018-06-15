@@ -57,7 +57,7 @@ class ConnectorInfo {
       void setCurrentUpdated(bool v)      { _currentUpdated = v;    }
 
    public:
-      ConnectorInfo(const Element* current, int track = -1, Fraction fpos = -1);
+      ConnectorInfo(const Element* current, int track = -1, Fraction frac = -1);
       ConnectorInfo(const PointInfo& currentInfo);
 
       ConnectorInfo* prev() const   { return _prev; }
@@ -132,7 +132,7 @@ class ConnectorInfoWriter : public ConnectorInfo {
       virtual const char* tagName() const = 0;
 
    public:
-      ConnectorInfoWriter(XmlWriter& xml, const Element* current, const Element* connector, int track = -1, Fraction fpos = -1);
+      ConnectorInfoWriter(XmlWriter& xml, const Element* current, const Element* connector, int track = -1, Fraction frac = -1);
 
       ConnectorInfoWriter* prev() const   { return static_cast<ConnectorInfoWriter*>(_prev); }
       ConnectorInfoWriter* next() const   { return static_cast<ConnectorInfoWriter*>(_next); }

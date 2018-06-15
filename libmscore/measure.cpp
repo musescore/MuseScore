@@ -2346,7 +2346,7 @@ void Measure::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                   {
                   Spanner* sp = toSpanner(info->connector());
                   const PointInfo& pi = info->info();
-                  const int piTick = pi.fpos().ticks();
+                  const int piTick = pi.frac().ticks();
                   const int spTick = pasteMode ? piTick : (tick() + piTick);
                   if (info->isStart()) {
                         sp->setTrack(pi.track());

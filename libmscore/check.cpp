@@ -362,7 +362,7 @@ void Measure::checkMeasure(int staffIdx)
                         continue;
 
                   ChordRest* cr = toChordRest(e);
-                  currentPos    = seg->fpos() * stretch;
+                  currentPos    = seg->rfrac() * stretch;
 
                   if (currentPos < expectedPos)
                         qDebug("overlap measure %6d at %d-%d track %d", tick(), (currentPos/stretch).ticks(), (expectedPos/stretch).ticks(), track);

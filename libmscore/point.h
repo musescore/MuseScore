@@ -26,14 +26,14 @@ class PointInfo {
       int _staff;
       int _voice;
       int _measure;
-      Fraction _fpos;
+      Fraction _frac;
       int _graceIndex;
       int _note;
       bool _rel;
 
    public:
-      constexpr PointInfo(int staff, int voice, int measure, Fraction fpos, int graceIndex, int note, bool rel)
-         : _staff(staff), _voice(voice), _measure(measure), _fpos(fpos), _graceIndex(graceIndex), _note(note), _rel(rel) {}
+      constexpr PointInfo(int staff, int voice, int measure, Fraction frac, int graceIndex, int note, bool rel)
+         : _staff(staff), _voice(voice), _measure(measure), _frac(frac), _graceIndex(graceIndex), _note(note), _rel(rel) {}
 
       static constexpr PointInfo absolute() { return PointInfo(INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, 0, false); }
       static constexpr PointInfo relative() { return PointInfo(0, 0, 0, 0, INT_MIN, 0, true); }
@@ -55,8 +55,8 @@ class PointInfo {
       void setTrack(int track);
       int measure() const           { return _measure;      }
       void setMeasure(int measure)  { _measure = measure;   }
-      Fraction fpos() const         { return _fpos;         }
-      void setFpos(Fraction fpos)   { _fpos = fpos;         }
+      Fraction frac() const         { return _frac;         }
+      void setFrac(Fraction frac)   { _frac = frac;         }
       int graceIndex() const        { return _graceIndex;   }
       void setGraceIndex(int index) { _graceIndex = index;  }
       int note() const              { return _note;         }

@@ -482,10 +482,10 @@ void Score::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                         sp->setAnchor(Spanner::Anchor::SEGMENT);
                         sp->setTrack(pi.track());
                         sp->setTrack2(pi.track());
-                        sp->setTick(pi.fpos().ticks());
+                        sp->setTick(pi.frac().ticks());
                         }
                   else if (info->isEnd()) {
-                        sp->setTick2(pi.fpos().ticks());
+                        sp->setTick2(pi.frac().ticks());
                         undoAddElement(sp);
                         if (sp->isOttava())
                               sp->staff()->updateOttava();

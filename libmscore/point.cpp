@@ -52,7 +52,7 @@ void PointInfo::write(XmlWriter& xml) const
             xml.tag("staves", _staff, relDefaults._staff);
             xml.tag("voices", _voice, relDefaults._voice);
             xml.tag("measures", _measure, relDefaults._measure);
-            xml.tag("fractions", _fpos.reduced(), relDefaults._fpos);
+            xml.tag("fractions", _frac.reduced(), relDefaults._frac);
             xml.tag("grace", _graceIndex, relDefaults._graceIndex);
             xml.tag("notes", _note, relDefaults._note);
             xml.etag();
@@ -62,7 +62,7 @@ void PointInfo::write(XmlWriter& xml) const
             xml.tag("staff", _staff, absDefaults._staff);
             xml.tag("voice", _voice, absDefaults._voice);
             xml.tag("measure", _measure, absDefaults._measure);
-            xml.tag("fraction", _fpos.reduced(), absDefaults._fpos);
+            xml.tag("fraction", _frac.reduced(), absDefaults._frac);
             xml.tag("grace", _graceIndex, absDefaults._graceIndex);
             xml.tag("note", _note, absDefaults._note);
             xml.etag();
@@ -85,7 +85,7 @@ void PointInfo::read(XmlReader& e)
             else if ((tag == "measures") || (tag == "measure"))
                   _measure = e.readInt();
             else if ((tag == "fractions") || (tag == "fraction"))
-                  _fpos = e.readFraction();
+                  _frac = e.readFraction();
             else if (tag == "grace")
                   _graceIndex = e.readInt();
             else if ((tag == "notes") || (tag == "note"))
@@ -104,7 +104,7 @@ void PointInfo::toAbsolute(const PointInfo& ref)
       _staff += ref._staff;
       _voice += ref._voice;
       _measure += ref._measure;
-      _fpos += ref._fpos;
+      _frac += ref._frac;
       _note += ref._note;
       _rel = false;
       }
@@ -120,7 +120,7 @@ void PointInfo::toRelative(const PointInfo& ref)
       _staff -= ref._staff;
       _voice -= ref._voice;
       _measure -= ref._measure;
-      _fpos -= ref._fpos;
+      _frac -= ref._frac;
       _note -= ref._note;
       _rel = true;
       }
@@ -131,7 +131,7 @@ void PointInfo::toRelative(const PointInfo& ref)
 
 bool PointInfo::operator==(const PointInfo& pi2) const {
       const PointInfo& pi1 = *this;
-      return ((pi1._fpos == pi2._fpos)
+      return ((pi1._frac == pi2._frac)
              && (pi1._measure == pi2._measure)
              && (pi1._voice == pi2._voice)
              && (pi1._staff == pi2._staff)

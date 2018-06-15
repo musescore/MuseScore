@@ -111,8 +111,8 @@ class XmlReader : public QXmlStreamReader {
       void initTick(int val)       { _tick = val;       }
       void incTick(int val)        { _tick += val;      }
       void setTickOffset(int val)  { _tickOffset = val; }
-      Fraction fpos() const;
-      Fraction absfpos() const;
+      Fraction rfrac() const;
+      Fraction afrac() const;
       int track() const            { return _track + _trackOffset;     }
       void setTrackOffset(int val) { _trackOffset = val;   }
       int trackOffset() const      { return _trackOffset;   }
@@ -200,7 +200,7 @@ class XmlWriter : public QTextStream {
 
       int spannerId() const         { return _spannerId; }
       int curTick() const           { return _curTick; }
-      Fraction absfpos() const      { return Fraction::fromTicks(_curTick); }
+      Fraction afrac() const        { return Fraction::fromTicks(_curTick); }
       int curTrack() const          { return _curTrack; }
       int tickDiff() const          { return _tickDiff; }
       int trackDiff() const         { return _trackDiff; }
