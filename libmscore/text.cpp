@@ -1294,7 +1294,8 @@ void TextBase::createLayout()
                                     cursor.format()->setFontFamily(face);
                                     }
                               else
-                                    qDebug("cannot parse html property <%s>", qPrintable(token));
+                                    qDebug("cannot parse html property <%s> in text <%s>",
+                                       qPrintable(token), qPrintable(_text));
                               }
                         }
                   else

@@ -278,8 +278,6 @@ class TextBase : public Element {
       void writeProperties(XmlWriter&, bool, bool) const;
       bool readProperties(XmlReader&);
 
-      void spellCheckUnderline(bool) {}
-
       virtual void paste(EditData&);
 
       QRectF pageRectangle() const;

@@ -1017,15 +1017,15 @@ static void drawDebugInfo(QPainter& p, const Element* _e)
 //   drawElements
 //---------------------------------------------------------
 
-void ScoreView::drawElements(QPainter& painter, QList<Element*>& el, bool isEditMode)
+void ScoreView::drawElements(QPainter& painter, QList<Element*>& el, Element* editElement)
       {
       qStableSort(el.begin(), el.end(), elementLessThan);
       for (const Element* e : el) {
             e->itemDiscovered = 0;
 
             // harmony element representation is different in edit mode, so don't
-            // call normal draw(). Complete drawing is done in drawEditMode()
-            if (isEditMode && e->isHarmony())
+            // all normal draw(). Complete drawing is done in drawEditMode()
+            if (e == editElement)
                   continue;
 
             if (!e->visible() && (score()->printing() || !score()->showInvisible()))
@@ -1060,7 +1060,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       p.setTransform(_matrix);
       QRectF fr = imatrix.mapRect(QRectF(r));
 
-      bool isEditMode = false;
+      Element* editElement = 0;
       if (editData.element) {
             switch (state) {
                   case ViewState::NORMAL:
@@ -1079,7 +1079,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   case ViewState::FOTO_DRAG_OBJECT:
                   case ViewState::FOTO_LASSO:
                         editData.element->drawEditMode(&p, editData);
-                        isEditMode = true;
+                        if (editData.element->isHarmony())
+                              editElement = editData.element;     // do not call paint() method
                         break;
                   }
             }
@@ -1089,7 +1090,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             if (_score->pages().size() > 0) {
                   Page* page = _score->pages().front();
                   QList<Element*> ell = page->items(fr);
-                  drawElements(p, ell, isEditMode);
+                  drawElements(p, ell, editElement);
                   }
             }
       else {
@@ -1105,7 +1106,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   QList<Element*> ell = page->items(fr.translated(-page->pos()));
                   QPointF pos(page->pos());
                   p.translate(pos);
-                  drawElements(p, ell, isEditMode);
+                  drawElements(p, ell, editElement);
 
 #ifndef NDEBUG
                   if (!score()->printing()) {
