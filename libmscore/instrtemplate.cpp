@@ -642,8 +642,8 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "instrument-group" || tag == "InstrumentGroup") {
-                              QString id(e.attribute("id"));
-                              InstrumentGroup* group = searchInstrumentGroup(id);
+                              QString idGroup(e.attribute("id"));
+                              InstrumentGroup* group = searchInstrumentGroup(idGroup);
                               if (group == 0) {
                                     group = new InstrumentGroup;
                                     instrumentGroups.append(group);
@@ -658,8 +658,8 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                               articulation.append(a);
                               }
                         else if (tag == "Genre") {
-                              QString id(e.attribute("id"));
-                              InstrumentGenre* genre = searchInstrumentGenre(id);
+                              QString idGenre(e.attribute("id"));
+                              InstrumentGenre* genre = searchInstrumentGenre(idGenre);
                               if (!genre) {
                                     genre = new InstrumentGenre;
                                     instrumentGenres.append(genre);
