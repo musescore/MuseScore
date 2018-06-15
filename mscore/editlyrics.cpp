@@ -23,6 +23,7 @@ namespace Ms {
 
 //---------------------------------------------------------
 //   editKeyLyrics
+//    return true if key is handled
 //---------------------------------------------------------
 
 bool ScoreView::editKeyLyrics()
@@ -60,16 +61,28 @@ bool ScoreView::editKeyLyrics()
                   lyricsReturn();
                   break;
 
-            default:
-                  if (!editData.control()) {
-                        if (editData.s == "-")
-                              lyricsMinus();
-                        else if (editData.s == "_")
-                              lyricsUnderscore();
-                        else
-                              return false;
+            case Qt::Key_Minus:
+                  if (editData.control()) {
+                        // change into normal minus
+                        editData.modifiers &= ~CONTROL_MODIFIER;
+                        return false;
                         }
+                  else
+                        lyricsMinus();
                   break;
+
+            case Qt::Key_Underscore:
+                  if (editData.control()) {
+                        // change into normal underscore
+                        editData.modifiers = 0; // &= ~CONTROL_MODIFIER;
+                        return false;
+                        }
+                  else
+                        lyricsUnderscore();
+                  break;
+
+            default:
+                  return false;
             }
       return true;
       }

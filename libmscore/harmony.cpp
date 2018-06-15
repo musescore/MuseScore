@@ -712,7 +712,10 @@ bool Harmony::edit(EditData& ed)
       int root, base;
       QString str = xmlText();
       bool badSpell = !str.isEmpty() && !parseHarmony(str, &root, &base, true);
-      spellCheckUnderline(badSpell);
+      setProperty(Pid::COLOR, badSpell ? QColor(Qt::red) : QColor(Qt::black));
+
+      if (badSpell)
+            qDebug("bad spell");
       return rv;
       }
 

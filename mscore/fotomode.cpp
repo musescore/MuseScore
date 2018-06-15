@@ -579,7 +579,7 @@ void ScoreView::paintRect(bool printMode, QPainter& p, const QRectF& r, double m
                   break;
             p.translate(page->pos());
             QList<Element*> ell = page->items(r.translated(-page->pos()));
-            drawElements(p, ell, false);
+            drawElements(p, ell, nullptr);
             p.translate(-page->pos());
             }
 

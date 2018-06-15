@@ -187,7 +187,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void lassoSelect();
 
       void setShadowNote(const QPointF&);
-      void drawElements(QPainter& p,QList<Element*>& el, bool editMode);
+      void drawElements(QPainter& p,QList<Element*>& el, Element* editElement);
       bool dragTimeAnchorElement(const QPointF& pos);
       bool dragMeasureAnchorElement(const QPointF& pos);
       void updateGrips();
