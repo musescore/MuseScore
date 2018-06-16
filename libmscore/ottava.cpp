@@ -217,7 +217,7 @@ void Ottava::write300old(XmlWriter& xml) const
       for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
             writeProperty(xml, spp->pid);
 
-      Element::writeProperties(xml);
+      Element::writeProperties300old(xml);
       xml.etag();
       }
 
@@ -311,7 +311,7 @@ bool Ottava::readProperties300old(XmlReader& e)
                   }
             setOttavaType(OttavaType(idx));
             }
-      else if (!TextLineBase::readProperties(e)) {
+      else if (!TextLineBase::readProperties300old(e)) {
             e.unknown();
             return false;
             }

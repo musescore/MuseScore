@@ -58,7 +58,9 @@ class Marker final : public TextBase {
 
       virtual void layout() override;
       virtual void read(XmlReader&) override;
+      virtual void read300old(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
+      virtual void write300old(XmlWriter& xml) const override;
 
       QString label() const            { return _label; }
       void setLabel(const QString& s)  { _label = s; }

@@ -1859,6 +1859,24 @@ bool TextBase::readProperties(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   readProperties300old
+//---------------------------------------------------------
+
+bool TextBase::readProperties300old(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      for (Pid i :pids) {
+            if (readProperty(tag, e, i))
+                  return true;
+            }
+      if (tag == "text")
+            setXmlText(e.readXml());
+      else if (!Element::readProperties300old(e))
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
 //   insertText
 //    insert text at cursor position and move cursor
 //---------------------------------------------------------

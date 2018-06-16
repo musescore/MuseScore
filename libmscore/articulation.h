@@ -87,6 +87,7 @@ class Articulation final : public Element {
 
       virtual void read(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
+      virtual void write300old(XmlWriter& xml) const override;
       virtual bool readProperties(XmlReader&) override;
 
       virtual void reset() override;

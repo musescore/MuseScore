@@ -14,19 +14,28 @@
 #include "arpeggio.h"
 #include "articulation.h"
 #include "bend.h"
+#include "box.h"
 #include "config.h"
+#include "figuredbass.h"
 #include "fingering.h"
 #include "glissando.h"
 #include "hairpin.h"
+#include "harmony.h"
 #include "hook.h"
+#include "instrchange.h"
+#include "jump.h"
 #include "letring.h"
+#include "marker.h"
 #include "lyrics.h"
 #include "palmmute.h"
 #include "pedal.h"
 #include "score.h"
+#include "stafftext.h"
 #include "stem.h"
 #include "stemslash.h"
+#include "tempotext.h"
 #include "trill.h"
+#include "utils.h"
 #include "vibrato.h"
 #include "xml.h"
 #include "element.h"
@@ -531,6 +540,62 @@ void Score::writeSegments300old(XmlWriter& xml, int strack, int etrack,
       }
 
 //---------------------------------------------------------
+//   MeasureBase::writeProperties300old
+//---------------------------------------------------------
+
+void MeasureBase::writeProperties300old(XmlWriter& xml) const
+      {
+      Element::writeProperties300old(xml);
+      for (const Element* e : el())
+            e->write300old(xml);
+      }
+
+//---------------------------------------------------------
+//   BarLine::write300old
+//---------------------------------------------------------
+
+void BarLine::write300old(XmlWriter& xml) const
+      {
+      xml.stag("BarLine");
+      writeProperty(xml, Pid::BARLINE_TYPE);
+      writeProperty(xml, Pid::BARLINE_SPAN);
+      writeProperty(xml, Pid::BARLINE_SPAN_FROM);
+      writeProperty(xml, Pid::BARLINE_SPAN_TO);
+
+      for (const Element* e : _el)
+            e->write300old(xml);
+      Element::writeProperties300old(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Box::write300old
+//---------------------------------------------------------
+
+void Box::write300old(XmlWriter& xml) const
+      {
+      xml.stag(name());
+      writeProperties300old(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Box::writeProperties300old
+//---------------------------------------------------------
+
+void Box::writeProperties300old(XmlWriter& xml) const
+      {
+      for (Pid id : {
+         Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
+         Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN }) {
+            writeProperty(xml, id);
+            }
+      Element::writeProperties300old(xml);
+      for (const Element* e : el())
+            e->write300old(xml);
+      }
+
+//---------------------------------------------------------
 //   ChordRest::writeProperties300old
 //---------------------------------------------------------
 
@@ -814,20 +879,6 @@ void Tuplet::write300old(XmlWriter& xml) const
       }
 
 //---------------------------------------------------------
-//   TextBase::writeProperties300old
-//---------------------------------------------------------
-
-void TextBase::writeProperties300old(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
-      {
-      Element::writeProperties300old(xml);
-      writeProperty(xml, Pid::SUB_STYLE);
-
-      writeStyledProperties(xml);
-      if (writeText)
-            xml.writeXml("text", xmlText());
-      }
-
-//---------------------------------------------------------
 //   SLine::writeProperties300old
 //    write properties different from prototype
 //---------------------------------------------------------
@@ -899,7 +950,7 @@ void Glissando::write300old(XmlWriter& xml) const
       for (auto id : { Pid::GLISS_TYPE, Pid::PLAY, Pid::GLISSANDO_STYLE } )
             writeProperty(xml, id);
 
-      SLine::writeProperties(xml);
+      SLine::writeProperties300old(xml);
       xml.etag();
       }
 
@@ -952,7 +1003,7 @@ void SLine::write300old(XmlWriter& xml) const
       {
       int id = xml.spannerId(this);
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
-      SLine::writeProperties(xml);
+      SLine::writeProperties300old(xml);
       xml.etag();
       }
 
@@ -1021,7 +1072,7 @@ void TextLineBase::write300old(XmlWriter& xml) const
 void Tie::write300old(XmlWriter& xml) const
       {
       xml.stag(QString("Tie id=\"%1\"").arg(xml.spannerId(this)));
-      SlurTie::writeProperties(xml);
+      SlurTie::writeProperties300old(xml);
       xml.etag();
       }
 
@@ -1037,7 +1088,7 @@ void Trill::write300old(XmlWriter& xml) const
       xml.tag("subtype", trillTypeName());
       writeProperty(xml, Pid::PLAY);
       writeProperty(xml, Pid::ORNAMENT_STYLE);
-      SLine::writeProperties(xml);
+      SLine::writeProperties300old(xml);
       if (_accidental)
             _accidental->write300old(xml);
       xml.etag();
@@ -1054,7 +1105,7 @@ void Vibrato::write300old(XmlWriter& xml) const
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
       xml.tag("subtype", vibratoTypeName());
       writeProperty(xml, Pid::PLAY);
-      SLine::writeProperties(xml);
+      SLine::writeProperties300old(xml);
       xml.etag();
       }
 
@@ -1065,7 +1116,7 @@ void Vibrato::write300old(XmlWriter& xml) const
 void Volta::write300old(XmlWriter& xml) const
       {
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
-      TextLineBase::writeProperties(xml);
+      TextLineBase::writeProperties300old(xml);
       QString s;
       for (int i : _endings) {
             if (!s.isEmpty())
@@ -1087,6 +1138,305 @@ void ChordRest::writeBeam300old(XmlWriter& xml)
             b->setId(xml.nextBeamId());
             b->write300old(xml);
             }
+      }
+
+//---------------------------------------------------------
+//   TimeSig::write300old
+//---------------------------------------------------------
+
+void TimeSig::write300old(XmlWriter& xml) const
+      {
+      xml.stag("TimeSig");
+      writeProperty(xml, Pid::TIMESIG_TYPE);
+      Element::writeProperties300old(xml);
+
+      xml.tag("sigN",  _sig.numerator());
+      xml.tag("sigD",  _sig.denominator());
+      if (stretch() != Fraction(1,1)) {
+            xml.tag("stretchN", stretch().numerator());
+            xml.tag("stretchD", stretch().denominator());
+            }
+      writeProperty(xml, Pid::NUMERATOR_STRING);
+      writeProperty(xml, Pid::DENOMINATOR_STRING);
+      if (!_groups.empty())
+            _groups.write(xml);
+      writeProperty(xml, Pid::SHOW_COURTESY);
+      writeProperty(xml, Pid::SCALE);
+
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Articulation::write300old
+//---------------------------------------------------------
+
+void Articulation::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag("Articulation");
+      if (!_channelName.isEmpty())
+            xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
+      writeProperty(xml, Pid::DIRECTION);
+      xml.tag("subtype", Sym::id2name(_symId));
+      writeProperty(xml, Pid::PLAY);
+      writeProperty(xml, Pid::ORNAMENT_STYLE);
+      Element::writeProperties300old(xml);
+      writeProperty(xml, Pid::ARTICULATION_ANCHOR);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Clef::write300old
+//---------------------------------------------------------
+
+void Clef::write300old(XmlWriter& xml) const
+      {
+      xml.stag(name());
+      if (_clefTypes._concertClef != ClefType::INVALID)
+            xml.tag("concertClefType", ClefInfo::tag(_clefTypes._concertClef));
+      if (_clefTypes._transposingClef != ClefType::INVALID)
+            xml.tag("transposingClefType", ClefInfo::tag(_clefTypes._transposingClef));
+      if (!_showCourtesy)
+            xml.tag("showCourtesyClef", _showCourtesy);
+      Element::writeProperties300old(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Harmony::write300old
+//---------------------------------------------------------
+
+void Harmony::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag("Harmony");
+      if (_leftParen)
+            xml.tagE("leftParen");
+      if (_rootTpc != Tpc::TPC_INVALID || _baseTpc != Tpc::TPC_INVALID) {
+            int rRootTpc = _rootTpc;
+            int rBaseTpc = _baseTpc;
+            if (staff()) {
+                  Segment* segment = toSegment(parent());
+                  int tick = segment ? segment->tick() : -1;
+                  const Interval& interval = part()->instrument(tick)->transpose();
+                  if (xml.clipboardmode() && !score()->styleB(Sid::concertPitch) && interval.chromatic) {
+                        rRootTpc = transposeTpc(_rootTpc, interval, true);
+                        rBaseTpc = transposeTpc(_baseTpc, interval, true);
+                        }
+                  }
+            if (rRootTpc != Tpc::TPC_INVALID) {
+                  xml.tag("root", rRootTpc);
+                  if (_rootCase != NoteCaseType::CAPITAL)
+                        xml.tag("rootCase", static_cast<int>(_rootCase));
+                  }
+            if (_id > 0)
+                  xml.tag("extension", _id);
+            // parser uses leading "=" as a hidden specifier for minor
+            // this may or may not currently be incorporated into _textName
+            QString writeName = _textName;
+            if (_parsedForm && _parsedForm->name().startsWith("=") && !writeName.startsWith("="))
+                  writeName = "=" + writeName;
+            if (!writeName.isEmpty())
+                  xml.tag("name", writeName);
+
+            if (rBaseTpc != Tpc::TPC_INVALID) {
+                  xml.tag("base", rBaseTpc);
+                  if (_baseCase != NoteCaseType::CAPITAL)
+                        xml.tag("baseCase", static_cast<int>(_baseCase));
+                  }
+            for (const HDegree& hd : _degreeList) {
+                  HDegreeType tp = hd.type();
+                  if (tp == HDegreeType::ADD || tp == HDegreeType::ALTER || tp == HDegreeType::SUBTRACT) {
+                        xml.stag("degree");
+                        xml.tag("degree-value", hd.value());
+                        xml.tag("degree-alter", hd.alter());
+                        switch (tp) {
+                              case HDegreeType::ADD:
+                                    xml.tag("degree-type", "add");
+                                    break;
+                              case HDegreeType::ALTER:
+                                    xml.tag("degree-type", "alter");
+                                    break;
+                              case HDegreeType::SUBTRACT:
+                                    xml.tag("degree-type", "subtract");
+                                    break;
+                              default:
+                                    break;
+                              }
+                        xml.etag();
+                        }
+                  }
+            }
+      else
+            xml.tag("name", _textName);
+      TextBase::writeProperties300old(xml, false, true);
+      if (_rightParen)
+            xml.tagE("rightParen");
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   TextBase::write300old
+//---------------------------------------------------------
+
+void TextBase::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag(name());
+      writeProperties300old(xml, true, true);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   TextBase::writeProperties300old
+//---------------------------------------------------------
+
+void TextBase::writeProperties300old(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
+      {
+      Element::writeProperties300old(xml);
+      writeProperty(xml, Pid::SUB_STYLE);
+
+      writeStyledProperties(xml);
+      if (writeText)
+            xml.writeXml("text", xmlText());
+      }
+
+//---------------------------------------------------------
+//   Dynamic::write300old
+//---------------------------------------------------------
+
+void Dynamic::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag("Dynamic");
+      xml.tag("subtype", dynamicTypeName());
+      writeProperty(xml, Pid::VELOCITY);
+      writeProperty(xml, Pid::DYNAMIC_RANGE);
+      TextBase::writeProperties300old(xml, dynamicType() == Type::OTHER);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   FiguredBass::write300old
+//---------------------------------------------------------
+
+void FiguredBass::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag("FiguredBass");
+      if(!onNote())
+            xml.tag("onNote", onNote());
+      if (ticks() > 0)
+            xml.tag("ticks", ticks());
+      // if unparseable items, write full text data
+      if (items.size() < 1)
+            TextBase::writeProperties300old(xml, true);
+      else {
+//            if (textStyleType() != StyledPropertyListIdx::FIGURED_BASS)
+//                  // if all items parsed and not unstiled, we simply have a special style: write it
+//                  xml.tag("style", textStyle().name());
+            for(FiguredBassItem* item : items)
+                  item->write300old(xml);
+            Element::writeProperties300old(xml);
+            }
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   InstrumentChange::write300old
+//---------------------------------------------------------
+
+void InstrumentChange::write300old(XmlWriter& xml) const
+      {
+      xml.stag(name());
+      _instrument->write(xml, part());
+      TextBase::writeProperties300old(xml);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Jump::write300old
+//---------------------------------------------------------
+
+void Jump::write300old(XmlWriter& xml) const
+      {
+      xml.stag(name());
+      TextBase::writeProperties300old(xml);
+      xml.tag("jumpTo", _jumpTo);
+      xml.tag("playUntil", _playUntil);
+      xml.tag("continueAt", _continueAt);
+      writeProperty(xml, Pid::PLAY_REPEATS);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   Marker::write300old
+//---------------------------------------------------------
+
+void Marker::write300old(XmlWriter& xml) const
+      {
+      xml.stag(name());
+      TextBase::writeProperties300old(xml);
+      xml.tag("label", _label);
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   StaffText::write300old
+//---------------------------------------------------------
+
+void StaffText::write300old(XmlWriter& xml) const
+      {
+      if (!xml.canWrite(this))
+            return;
+      xml.stag("StaffText");
+
+      for (ChannelActions s : _channelActions) {
+            int channel = s.channel;
+            for (QString name : s.midiActionNames)
+                  xml.tagE(QString("MidiAction channel=\"%1\" name=\"%2\"").arg(channel).arg(name));
+            }
+      for (int voice = 0; voice < VOICES; ++voice) {
+            if (!_channelNames[voice].isEmpty())
+                  xml.tagE(QString("channelSwitch voice=\"%1\" name=\"%2\"").arg(voice).arg(_channelNames[voice]));
+            }
+      if (_setAeolusStops) {
+            for (int i = 0; i < 4; ++i)
+                  xml.tag(QString("aeolus group=\"%1\"").arg(i), aeolusStops[i]);
+            }
+      if (swing()) {
+            QString swingUnit;
+            if (swingParameters()->swingUnit == MScore::division / 2)
+                  swingUnit = TDuration(TDuration::DurationType::V_EIGHTH).name();
+            else if (swingParameters()->swingUnit == MScore::division / 4)
+                  swingUnit = TDuration(TDuration::DurationType::V_16TH).name();
+            else
+                  swingUnit = TDuration(TDuration::DurationType::V_ZERO).name();
+            int swingRatio = swingParameters()->swingRatio;
+            xml.tagE(QString("swing unit=\"%1\" ratio= \"%2\"").arg(swingUnit).arg(swingRatio));
+            }
+      TextBase::writeProperties300old(xml);
+
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   TempoText::write300old
+//---------------------------------------------------------
+
+void TempoText::write300old(XmlWriter& xml) const
+      {
+      xml.stag(name());
+      xml.tag("tempo", _tempo);
+      if (_followText)
+            xml.tag("followText", _followText);
+      TextBase::writeProperties300old(xml);
+      xml.etag();
       }
 
 }

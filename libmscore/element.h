@@ -269,7 +269,7 @@ class Element : public ScoreElement {
       virtual void writeProperties(XmlWriter& xml) const;
       virtual void writeProperties300old(XmlWriter& xml) const;
       virtual bool readProperties(XmlReader&);
-      virtual bool readProperties300old(XmlReader& xml) { return readProperties(xml); }
+      virtual bool readProperties300old(XmlReader& xml) { return Element::readProperties(xml); }
 
       virtual void write(XmlWriter&) const;
       virtual void write300old(XmlWriter& xml) const { write(xml); }

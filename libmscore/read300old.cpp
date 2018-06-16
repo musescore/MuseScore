@@ -16,18 +16,26 @@
 #include "bend.h"
 #include "chord.h"
 #include "chordline.h"
+#include "figuredbass.h"
 #include "fingering.h"
 #include "glissando.h"
 #include "hairpin.h"
+#include "harmony.h"
 #include "hook.h"
 #include "image.h"
+#include "instrchange.h"
+#include "jump.h"
 #include "letring.h"
+#include "marker.h"
 #include "measure.h"
 #include "notedot.h"
 #include "palmmute.h"
 #include "pedal.h"
 #include "rest.h"
 #include "slur.h"
+#include "stafftext.h"
+#include "stafftypechange.h"
+#include "tempotext.h"
 #include "textline.h"
 #include "tie.h"
 #include "trill.h"
@@ -61,6 +69,440 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   Clef::read300old
+//---------------------------------------------------------
+
+void Clef::read300old(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "concertClefType")
+                  _clefTypes._concertClef = Clef::clefType(e.readElementText());
+            else if (tag == "transposingClefType")
+                  _clefTypes._transposingClef = Clef::clefType(e.readElementText());
+            else if (tag == "showCourtesyClef")
+                  _showCourtesy = e.readInt();
+            else if (!Element::readProperties300old(e))
+                  e.unknown();
+            }
+      if (clefType() == ClefType::INVALID)
+            setClefType(ClefType::G);
+      }
+
+//---------------------------------------------------------
+//   Harmony::read300old
+//---------------------------------------------------------
+
+void Harmony::read300old(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "base")
+                  setBaseTpc(e.readInt());
+            else if (tag == "baseCase")
+                  _baseCase = static_cast<NoteCaseType>(e.readInt());
+            else if (tag == "extension")
+                  setId(e.readInt());
+            else if (tag == "name")
+                  _textName = e.readElementText();
+            else if (tag == "root")
+                  setRootTpc(e.readInt());
+            else if (tag == "rootCase")
+                  _rootCase = static_cast<NoteCaseType>(e.readInt());
+            else if (tag == "degree") {
+                  int degreeValue = 0;
+                  int degreeAlter = 0;
+                  QString degreeType = "";
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "degree-value")
+                              degreeValue = e.readInt();
+                        else if (tag == "degree-alter")
+                              degreeAlter = e.readInt();
+                        else if (tag == "degree-type")
+                              degreeType = e.readElementText();
+                        else
+                              e.unknown();
+                        }
+                  if (degreeValue <= 0 || degreeValue > 13
+                      || degreeAlter < -2 || degreeAlter > 2
+                      || (degreeType != "add" && degreeType != "alter" && degreeType != "subtract")) {
+                        qDebug("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
+                               degreeValue, degreeAlter, qPrintable(degreeType));
+                        }
+                  else {
+                        if (degreeType == "add")
+                              addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
+                        else if (degreeType == "alter")
+                              addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ALTER));
+                        else if (degreeType == "subtract")
+                              addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT));
+                        }
+                  }
+            else if (tag == "leftParen") {
+                  _leftParen = true;
+                  e.readNext();
+                  }
+            else if (tag == "rightParen") {
+                  _rightParen = true;
+                  e.readNext();
+                  }
+            else if (!TextBase::readProperties300old(e))
+                  e.unknown();
+            }
+
+      // TODO: now that we can render arbitrary chords,
+      // we could try to construct a full representation from a degree list.
+      // These will typically only exist for chords imported from MusicXML prior to MuseScore 2.0
+      // or constructed in the Chord Symbol Properties dialog.
+
+      if (_rootTpc != Tpc::TPC_INVALID) {
+            if (_id > 0) {
+                  // positive id will happen only for scores that were created with explicit chord lists
+                  // lookup id in chord list and generate new description if necessary
+                  getDescription();
+                  }
+            else
+                  {
+                  // default case: look up by name
+                  // description will be found for any chord already read in this score
+                  // and we will generate a new one if necessary
+                  getDescription(_textName);
+                  }
+            }
+      else if (_textName == "") {
+            // unrecognized chords prior to 2.0 were stored as text with markup
+            // we need to strip away the markup
+            // this removes any user-applied formatting,
+            // but we no longer support user-applied formatting for chord symbols anyhow
+            // with any luck, the resulting text will be parseable now, so give it a shot
+            createLayout();
+            QString s = plainText();
+            if (!s.isEmpty()) {
+                  setHarmony(s);
+                  return;
+                  }
+            // empty text could also indicate a root-less slash chord ("/E")
+            // we'll fall through and render it normally
+            }
+
+      // render chord from description (or _textName)
+      render();
+      }
+
+//---------------------------------------------------------
+//   TextBase::read300old
+//---------------------------------------------------------
+
+void TextBase::read300old(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            if (!readProperties300old(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   Text::read300old
+//---------------------------------------------------------
+
+void Text::read300old(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "style") {
+                  QString sn = e.readElementText();
+                  if (sn == "Tuplet")          // ugly hack for compatibility
+                        continue;
+                  SubStyleId s = subStyleFromName(sn);
+                  initSubStyle(s);
+                  }
+            else if (!readProperties300old(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   Dynamic::read300old
+//---------------------------------------------------------
+
+void Dynamic::read300old(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag = e.name();
+            if (tag == "subtype")
+                  setDynamicType(e.readElementText());
+            else if (tag == "velocity")
+                  _velocity = e.readInt();
+            else if (tag == "dynType")
+                  _dynRange = Range(e.readInt());
+            else if (!TextBase::readProperties300old(e))
+                  e.unknown();
+            }
+      if (subStyleId() == SubStyleId::DEFAULT)
+            initSubStyle(SubStyleId::DYNAMICS);
+      }
+
+//---------------------------------------------------------
+//   FiguredBass::read300old
+//---------------------------------------------------------
+
+void FiguredBass::read300old(XmlReader& e)
+      {
+      QString normalizedText;
+      int idx = 0;
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "ticks")
+                  setTicks(e.readInt());
+            else if (tag == "onNote")
+                  setOnNote(e.readInt() != 0l);
+            else if (tag == "FiguredBassItem") {
+                  FiguredBassItem * pItem = new FiguredBassItem(score(), idx++);
+                  pItem->setTrack(track());
+                  pItem->setParent(this);
+                  pItem->read300old(e);
+                  items.push_back(pItem);
+                  // add item normalized text
+                  if(!normalizedText.isEmpty())
+                        normalizedText.append('\n');
+                  normalizedText.append(pItem->normalizedText());
+                  }
+//            else if (tag == "style")
+//                  setStyledPropertyListIdx(e.readElementText());
+            else if (!TextBase::readProperties300old(e))
+                  e.unknown();
+            }
+      // if items could be parsed set normalized text
+      if (items.size() > 0)
+            setXmlText(normalizedText);      // this is the text to show while editing
+      }
+
+//---------------------------------------------------------
+//   InstrumentChange::read300old
+//---------------------------------------------------------
+
+void InstrumentChange::read300old(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Instrument")
+                  _instrument->read(e, part());
+            else if (!TextBase::readProperties300old(e))
+                  e.unknown();
+            }
+      if (score()->mscVersion() <= 206) {
+            // previous versions did not honor transposition of instrument change
+            // except in ways that it should not have
+            // notes entered before the instrument change was added would not be altered,
+            // so original transposition remained in effect
+            // notes added afterwards would be transposed by both intervals, resulting in tpc corruption
+            // here we set the instrument change to inherit the staff transposition to emulate previous versions
+            // in Note::read(), we attempt to fix the tpc corruption
+
+            Interval v = staff() ? staff()->part()->instrument()->transpose() : 0;
+            _instrument->setTranspose(v);
+            }
+      }
+
+//---------------------------------------------------------
+//   Jump::read300old
+//---------------------------------------------------------
+
+void Jump::read300old(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "jumpTo")
+                  _jumpTo = e.readElementText();
+            else if (tag == "playUntil")
+                  _playUntil = e.readElementText();
+            else if (tag == "continueAt")
+                  _continueAt = e.readElementText();
+            else if (tag == "playRepeats")
+                  _playRepeats = e.readBool();
+            else if (!TextBase::readProperties300old(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   Marker::read300old
+//---------------------------------------------------------
+
+void Marker::read300old(XmlReader& e)
+      {
+      Type mt = Type::SEGNO;
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "label") {
+                  QString s(e.readElementText());
+                  setLabel(s);
+                  mt = markerType(s);
+                  }
+            else if (!TextBase::readProperties300old(e))
+                  e.unknown();
+            }
+      setMarkerType(mt);
+      }
+
+//---------------------------------------------------------
+//   StaffText::read300old
+//---------------------------------------------------------
+
+void StaffText::read300old(XmlReader& e)
+      {
+      for (int voice = 0; voice < VOICES; ++voice)
+            _channelNames[voice].clear();
+      clearAeolusStops();
+      while (e.readNextStartElement()) {
+            if (!readProperties300old(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   StaffText::readProperties300old
+//---------------------------------------------------------
+
+bool StaffText::readProperties300old(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "MidiAction") {
+            int channel = e.intAttribute("channel", 0);
+            QString name = e.attribute("name");
+            bool found = false;
+            int n = _channelActions.size();
+            for (int i = 0; i < n; ++i) {
+                  ChannelActions* a = &_channelActions[i];
+                  if (a->channel == channel) {
+                        a->midiActionNames.append(name);
+                        found = true;
+                        break;
+                        }
+                  }
+            if (!found) {
+                  ChannelActions a;
+                  a.channel = channel;
+                  a.midiActionNames.append(name);
+                  _channelActions.append(a);
+                  }
+            e.readNext();
+            }
+      else if (tag == "channelSwitch" || tag == "articulationChange") {
+            int voice = e.intAttribute("voice", -1);
+            if (voice >= 0 && voice < VOICES)
+                  _channelNames[voice] = e.attribute("name");
+            else if (voice == -1) {
+                  // no voice applies channel to all voices for
+                  // compatibility
+                  for (int i = 0; i < VOICES; ++i)
+                        _channelNames[i] = e.attribute("name");
+                  }
+            e.readNext();
+            }
+      else if (tag == "aeolus") {
+            int group = e.intAttribute("group", -1);
+            if (group >= 0 && group < 4)
+                  aeolusStops[group] = e.readInt();
+            else
+                  e.readNext();
+            _setAeolusStops = true;
+            }
+      else if (tag == "swing") {
+            QString swingUnit = e.attribute("unit","");
+            int unit = 0;
+            if (swingUnit == TDuration(TDuration::DurationType::V_EIGHTH).name())
+                  unit = MScore::division / 2;
+            else if (swingUnit == TDuration(TDuration::DurationType::V_16TH).name())
+                  unit = MScore:: division / 4;
+            else if (swingUnit == TDuration(TDuration::DurationType::V_ZERO).name())
+                  unit = 0;
+            int ratio = e.intAttribute("ratio", 60);
+            setSwing(true);
+            setSwingParameters(unit, ratio);
+            e.readNext();
+            }
+      else if (!TextBase::readProperties300old(e))
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   TempoText::read300old
+//---------------------------------------------------------
+
+void TempoText::read300old(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "tempo")
+                  setTempo(e.readDouble());
+            else if (tag == "followText")
+                  _followText = e.readInt();
+            else if (!TextBase::readProperties300old(e))
+                  e.unknown();
+            }
+      // check sanity
+      if (xmlText().isEmpty()) {
+            setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(lrint(60 * _tempo)));
+            setVisible(false);
+            }
+      }
+
+//---------------------------------------------------------
+//   MeasureBase::readProperties300old
+//---------------------------------------------------------
+
+bool MeasureBase::readProperties300old(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "LayoutBreak") {
+            LayoutBreak* lb = new LayoutBreak(score());
+            lb->read(e);
+            bool doAdd = true;
+            switch (lb->layoutBreakType()) {
+                  case LayoutBreak::LINE:
+                        if (lineBreak())
+                              doAdd = false;
+                        break;
+                  case LayoutBreak::PAGE:
+                        if (pageBreak())
+                              doAdd = false;
+                        break;
+                  case LayoutBreak::SECTION:
+                        if (sectionBreak())
+                              doAdd = false;
+                        break;
+                  case LayoutBreak::NOBREAK:
+                        if (noBreak())
+                              doAdd = false;
+                        break;
+                  }
+            if (doAdd) {
+                  add(lb);
+                  cleanupLayoutBreaks(false);
+                  }
+            else
+                  delete lb;
+            }
+      else if (tag == "StaffTypeChange") {
+            StaffTypeChange* stc = new StaffTypeChange(score());
+            stc->setTrack(e.track());
+            stc->setParent(this);
+            stc->read(e);
+            add(stc);
+            }
+      else if (Element::readProperties300old(e))
+            ;
+      else
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
 //   Glissando::read300old
 //---------------------------------------------------------
 
@@ -85,7 +527,7 @@ void Glissando::read300old(XmlReader& e)
                   setPlayGlissando(e.readBool());
             else if (readStyledProperty(e, tag))
                   ;
-            else if (!SLine::readProperties(e))
+            else if (!SLine::readProperties300old(e))
                   e.unknown();
             }
       }
@@ -122,7 +564,7 @@ void Hairpin::read300old(XmlReader& e)
                   else if (hairpinType() == HairpinType::DECRESC_HAIRPIN)
                         setHairpinType(HairpinType::DECRESC_LINE);
                   }
-            else if (!TextLineBase::readProperties(e))
+            else if (!TextLineBase::readProperties300old(e))
                   e.unknown();
             }
       }
@@ -136,7 +578,7 @@ void LetRing::read300old(XmlReader& e)
       int id = e.intAttribute("id", -1);
       e.addSpanner(id, this);
       while (e.readNextStartElement()) {
-            if (!TextLineBase::readProperties(e))
+            if (!TextLineBase::readProperties300old(e))
                   e.unknown();
             }
       }
@@ -153,7 +595,7 @@ void SLine::read300old(XmlReader& e)
       e.addSpanner(e.intAttribute("id", -1), this);
 
       while (e.readNextStartElement()) {
-            if (!SLine::readProperties(e))
+            if (!SLine::readProperties300old(e))
                   e.unknown();
             }
       }
@@ -167,7 +609,7 @@ void PalmMute::read300old(XmlReader& e)
       int id = e.intAttribute("id", -1);
       e.addSpanner(id, this);
       while (e.readNextStartElement()) {
-            if (!TextLineBase::readProperties(e))
+            if (!TextLineBase::readProperties300old(e))
                   e.unknown();
             }
       }
@@ -181,9 +623,31 @@ void Pedal::read300old(XmlReader& e)
       int id = e.intAttribute("id", -1);
       e.addSpanner(id, this);
       while (e.readNextStartElement()) {
-            if (!TextLineBase::readProperties(e))
+            if (!TextLineBase::readProperties300old(e))
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   SlurTie::readProperties300old
+//---------------------------------------------------------
+
+bool SlurTie::readProperties300old(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (readProperty(tag, e, Pid::SLUR_DIRECTION))
+            ;
+      else if (tag == "lineType")
+            _lineType = e.readInt();
+      else if (tag == "SlurSegment") {
+            SlurTieSegment* s = newSlurTieSegment();
+            s->read(e);
+            add(s);
+            }
+      else if (!Element::readProperties300old(e))
+            return false;
+      return true;
       }
 
 //---------------------------------------------------------
@@ -202,7 +666,7 @@ void Slur::read300old(XmlReader& e)
                   setTrack(e.readInt());
             else if (tag == "endTrack")         // obsolete
                   e.readInt();
-            else if (!SlurTie::readProperties(e))
+            else if (!SlurTie::readProperties300old(e))
                   e.unknown();
             }
       if (track2() == -1)
@@ -233,7 +697,7 @@ void Tie::read300old(XmlReader& e)
       {
       e.addSpanner(e.intAttribute("id"), this);
       while (e.readNextStartElement()) {
-            if (SlurTie::readProperties(e))
+            if (SlurTie::readProperties300old(e))
                   ;
             else
                   e.unknown();
@@ -274,7 +738,7 @@ void Trill::read300old(XmlReader& e)
                   setProperty(Pid::ORNAMENT_STYLE, Ms::getProperty(Pid::ORNAMENT_STYLE, e));
             else if ( tag == "play")
                   setPlayArticulation(e.readBool());
-            else if (!SLine::readProperties(e))
+            else if (!SLine::readProperties300old(e))
                   e.unknown();
             }
       }
@@ -295,7 +759,7 @@ void Vibrato::read300old(XmlReader& e)
                   setVibratoType(e.readElementText());
             else if ( tag == "play")
                   setPlayArticulation(e.readBool());
-            else if (!SLine::readProperties(e))
+            else if (!SLine::readProperties300old(e))
                   e.unknown();
             }
       }
@@ -321,7 +785,7 @@ void Volta::read300old(XmlReader& e)
                         _endings.append(i);
                         }
                   }
-            else if (!TextLineBase::readProperties(e))
+            else if (!TextLineBase::readProperties300old(e))
                   e.unknown();
             }
       }
@@ -575,8 +1039,8 @@ bool Note::readProperties300old(XmlReader& e)
                   }
             }
       else if (tag == "offset")
-            Element::readProperties(e);
-      else if (Element::readProperties(e))
+            Element::readProperties300old(e);
+      else if (Element::readProperties300old(e))
             ;
       else
             return false;
@@ -607,7 +1071,7 @@ bool DurationElement::readProperties300old(XmlReader& e)
                   }
             return true;
             }
-      else if (Element::readProperties(e))
+      else if (Element::readProperties300old(e))
             return true;
       return false;
       }

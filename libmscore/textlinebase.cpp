@@ -489,6 +489,22 @@ bool TextLineBase::readProperties(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   TextLineBase::readProperties300old
+//---------------------------------------------------------
+
+bool TextLineBase::readProperties300old(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      for (Pid i :pids) {
+            if (readProperty(tag, e, i)) {
+                  setPropertyFlags(i, PropertyFlags::UNSTYLED);
+                  return true;
+                  }
+            }
+      return SLine::readProperties300old(e);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

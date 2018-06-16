@@ -92,7 +92,9 @@ class Dynamic final : public TextBase {
 
       virtual void layout() override;
       virtual void write(XmlWriter& xml) const override;
+      virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
+      virtual void read300old(XmlReader&) override;
 
       virtual bool isEditable() const override { return true; }
       virtual void startEdit(EditData&) override;

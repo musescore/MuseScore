@@ -273,7 +273,9 @@ class TextBase : public Element {
       void selectAll(TextCursor*);
 
       virtual void write(XmlWriter& xml) const override;
+      virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
+      virtual void read300old(XmlReader&) override;
       virtual void writeProperties(XmlWriter& xml) const { writeProperties(xml, true, true); }
       virtual void writeProperties300old(XmlWriter& xml) const override { writeProperties300old(xml, true, true); }
       void writeProperties(XmlWriter& xml, bool writeText) const { writeProperties(xml, writeText, true); }
@@ -281,6 +283,7 @@ class TextBase : public Element {
       void writeProperties(XmlWriter&, bool, bool) const;
       void writeProperties300old(XmlWriter&, bool, bool) const;
       bool readProperties(XmlReader&);
+      bool readProperties300old(XmlReader&);
 
       void spellCheckUnderline(bool) {}
 
@@ -352,6 +355,7 @@ class Text final : public TextBase {
       virtual ElementType type() const override    { return ElementType::TEXT; }
       virtual Text* clone() const override         { return new Text(*this); }
       virtual void read(XmlReader&) override;
+      virtual void read300old(XmlReader&) override;
       };
 
 }     // namespace Ms

@@ -34,7 +34,9 @@ class InstrumentChange final : public TextBase  {
       virtual InstrumentChange* clone() const override { return new InstrumentChange(*this); }
       virtual ElementType type() const override        { return ElementType::INSTRUMENT_CHANGE; }
       virtual void write(XmlWriter& xml) const override;
+      virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
+      virtual void read300old(XmlReader&) override;
 
       Instrument* instrument() const        { return _instrument;  }
       void setInstrument(Instrument* i)     { _instrument = i;     }
