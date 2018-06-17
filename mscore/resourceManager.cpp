@@ -302,8 +302,8 @@ void ResourceManager::downloadExtension()
       QString localPath = QDir::tempPath() + data.split('/')[1];
       QFile::remove(localPath);
       dl.setLocalFile(localPath);
-      dl.download();
-      if( !dl.saveFile() || !verifyFile(localPath, hash)) {
+      dl->download(true);
+      if( !dl->saveFile() || !verifyFile(localPath, hash)) {
             QFile::remove(localPath);
             button->setText(tr("Failed, try again"));
             button->setEnabled(true);

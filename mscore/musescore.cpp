@@ -489,7 +489,12 @@ bool MuseScore::importExtension(QString path)
             }
       // Unzip the extension
       MQZipReader zipFile3(path);
-      zipFile3.extractAll(QString("%1/%2/%3").arg(preferences.myExtensionsPath).arg(extensionId).arg(version));
+      bool res = zipFile3.extractAll(QString("%1/%2/%3").arg(preferences.myExtensionsPath).arg(extensionId).arg(version));
+      if (!res) {
+            if (!MScore::noGui)
+                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Unable to extract files from the package"));
+            return false;
+            }
       zipFile3.close();
 
       mscore->reloadInstrumentTemplates();
