@@ -23,7 +23,7 @@
       <attribute name="title">
        <string>Extensions</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_1">
        <item>
         <widget class="QTableWidget" name="extensionsTable">
          <property name="sizePolicy">
@@ -45,7 +45,7 @@
           <bool>true</bool>
          </property>
          <property name="rowCount">
-          <number>10</number>
+          <number>2</number>
          </property>
          <property name="columnCount">
           <number>4</number>
@@ -117,7 +117,7 @@
           <bool>true</bool>
          </property>
          <property name="rowCount">
-          <number>10</number>
+          <number>2</number>
          </property>
          <property name="columnCount">
           <number>4</number>

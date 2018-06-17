@@ -32,13 +32,15 @@ class ResourceManager : public QDialog, public Ui::Resource
 public:
     explicit ResourceManager(QWidget *parent = 0);
     void selectLanguagesTab();
+    void selectExtensionsTab();
+
+    static inline QString baseAddr() { return "http://extensions.musescore.org/2.3/"; }
 
 private:
     QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename
     QMap <QPushButton *, QString> languageButtonHashMap;// QPushButton -> hash of the file
     QMap <QPushButton *, QString> extensionButtonMap;       // QPushButton -> filename
     QMap <QPushButton *, QString> extensionButtonHashMap;// QPushButton -> hash of the file
-    QString baseAddr;
 
 private slots:
     void downloadLanguage();
