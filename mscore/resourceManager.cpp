@@ -33,10 +33,14 @@ ResourceManager::ResourceManager(QWidget *parent) :
       dir.mkpath(dataPath + "/locale");
       displayExtensions();
       displayLanguages();
-      languagesTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+      languagesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
       languagesTable->verticalHeader()->hide();
-      extensionsTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+      extensionsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+      extensionsTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+      extensionsTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
       extensionsTable->verticalHeader()->hide();
+      extensionsTable->setColumnWidth(1, 50);
+      extensionsTable->setColumnWidth(1, 100);
       MuseScore::restoreGeometry(this);
       }
 
@@ -123,7 +127,7 @@ void ResourceManager::displayExtensions()
                         temp->setText(tr("Update"));
                         }
                   else {
-                        temp->setText(tr("No update"));
+                        temp->setText(tr("Updated"));
                         temp->setDisabled(true);
                         }
                   }
@@ -212,7 +216,7 @@ void ResourceManager::displayLanguages()
             bool verifyInstruments = verifyLanguageFile(filenameInstruments, hashInstruments);
 
             if (verifyMScore && verifyInstruments) { // compare local file with distant hash
-                  temp->setText(tr("No update"));
+                  temp->setText(tr("Updated"));
                   temp->setDisabled(1);
                   }
             else {
