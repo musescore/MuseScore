@@ -2002,6 +2002,10 @@ void Measure::read(XmlReader& e, int staffIdx)
                   e.unknown();
             }
       e.checkConnectors();
+      if (isMMRest()) {
+            Measure* lm = e.lastMeasure();
+            e.initTick(lm->tick() + lm->ticks());
+            }
       }
 
 //---------------------------------------------------------
