@@ -1355,6 +1355,7 @@ bool Note::readProperties(XmlReader& e)
             setLine(e.readInt());
       else if (tag == "Fingering") {
             Fingering* f = new Fingering(score());
+            f->setTrack(track());
             f->read(e);
             add(f);
             }

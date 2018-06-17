@@ -13,7 +13,9 @@
 #include "xml.h"
 #include "layoutbreak.h"
 #include "measure.h"
+#include "score.h"
 #include "spanner.h"
+#include "staff.h"
 #include "beam.h"
 #include "tuplet.h"
 #include "sym.h"
@@ -251,6 +253,9 @@ Location XmlReader::location(bool forceAbsFrac) const
 //   fillLocation
 //    fills location fields which have default values with
 //    values relevant for the current reader's position.
+//    When in paste mode (or forceAbsFrac is true) absolute
+//    fraction values are used and measure number is set to
+//    zero.
 //---------------------------------------------------------
 
 void XmlReader::fillLocation(Location& l, bool forceAbsFrac) const
@@ -670,6 +675,69 @@ void XmlReader::reconnectBrokenConnectors()
             removeConnector(*cptr);
             }
       qDebug("reconnected %d broken connectors", reconnected.count());
+      }
+
+//---------------------------------------------------------
+//   addLink
+//---------------------------------------------------------
+
+void XmlReader::addLink(Staff* s, LinkedElements* link)
+      {
+      int staff = s->idx();
+      const bool masterScore = s->score()->isMaster();
+      if (!masterScore)
+            staff *= -1;
+
+      QList<QPair<LinkedElements*, Location>>& staffLinks = _staffLinkedElements[staff];
+      if (!masterScore) {
+            if (!staffLinks.empty()
+               && (link->mainElement()->score() != staffLinks.front().first->mainElement()->score())
+               )
+                  staffLinks.clear();
+            }
+
+      Location l = location(true);
+      _linksIndexer.assignLocalIndex(l);
+      staffLinks.push_back(qMakePair(link, l));
+      }
+
+//---------------------------------------------------------
+//   getLink
+//---------------------------------------------------------
+
+LinkedElements* XmlReader::getLink(bool masterScore, const Location& l, int localIndexDiff)
+      {
+      int staff = l.staff();
+      if (!masterScore)
+            staff *= -1;
+      const int localIndex = _linksIndexer.assignLocalIndex(l) + localIndexDiff;
+      QList<QPair<LinkedElements*, Location>>& staffLinks = _staffLinkedElements[staff];
+      for (int i = 0; i < staffLinks.size(); ++i) {
+            if (staffLinks[i].second == l) {
+                  if (localIndex == 0)
+                        return staffLinks[i].first;
+                  i += localIndex;
+                  if ((i < 0) || (i >= staffLinks.size()))
+                        return nullptr;
+                  if (staffLinks[i].second == l)
+                        return staffLinks[i].first;
+                  return nullptr;
+                  }
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   assignLocalIndex
+//---------------------------------------------------------
+
+int LinksIndexer::assignLocalIndex(const Location& mainElementLocation)
+      {
+      if (_lastLinkedElementLoc == mainElementLocation)
+            return (++_lastLocalIndex);
+      _lastLocalIndex = 0;
+      _lastLinkedElementLoc = mainElementLocation;
+      return 0;
       }
 }
 

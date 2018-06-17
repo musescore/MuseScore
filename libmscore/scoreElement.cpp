@@ -551,6 +551,22 @@ void LinkedElements::setLid(Score* score, int id)
       }
 
 //---------------------------------------------------------
+//   mainElement
+//---------------------------------------------------------
+
+ScoreElement* LinkedElements::mainElement()
+      {
+      if (isEmpty())
+            return nullptr;
+      MasterScore* ms = at(0)->masterScore();
+      for (ScoreElement* se : *this) {
+            if (se->score() == ms)
+                  return se;
+            }
+      return front();
+      }
+
+//---------------------------------------------------------
 //   masterScore
 //---------------------------------------------------------
 

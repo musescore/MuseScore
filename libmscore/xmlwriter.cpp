@@ -538,6 +538,15 @@ int XmlWriter::spannerId(const Spanner* s)
       }
 
 //---------------------------------------------------------
+//   assignLocalIndex
+//---------------------------------------------------------
+
+int XmlWriter::assignLocalIndex(const Location& mainElementLocation)
+      {
+      return _linksIndexer.assignLocalIndex(mainElementLocation);
+      }
+
+//---------------------------------------------------------
 //   canWrite
 //---------------------------------------------------------
 
