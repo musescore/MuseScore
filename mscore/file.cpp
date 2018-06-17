@@ -91,7 +91,6 @@
 namespace Ms {
 
 extern void importSoundfont(QString name);
-extern void importExtension(QString name);
 
 extern bool savePositions(Score*, const QString& name, bool segments);
 extern MasterSynthesizer* synti;

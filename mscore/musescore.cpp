@@ -703,7 +703,7 @@ bool MuseScore::importExtension(QString path)
       if (dirList.contains(extensionId)) {
             QString extDirName = QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId);
             QDir extDir(extDirName);
-            auto versionDirList = extDir.entryList(QDir::Dirs);
+            auto versionDirList = extDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
             if (versionDirList.size() > 0) {
                   // potentially other versions
                   // is there a more recent version?
@@ -729,7 +729,12 @@ bool MuseScore::importExtension(QString path)
             }
       // Unzip the extension
       MQZipReader zipFile3(path);
-      zipFile3.extractAll(QString("%1/%2/%3").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version));
+      bool res = zipFile3.extractAll(QString("%1/%2/%3").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version));
+      if (!res) {
+            if (!MScore::noGui)
+                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Unable to extract files from the extension"));
+            return false;
+            }
       zipFile3.close();
 
       mscore->reloadInstrumentTemplates();
@@ -812,7 +817,8 @@ MuseScore::MuseScore()
       setWindowTitle(QString(MUSESCORE_NAME_VERSION));
       setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling, preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
 
-      ucheck = new UpdateChecker();
+      ucheck = new UpdateChecker(this);
+      packUChecker = new ExtensionsUpdateChecker(this);
 
       setAcceptDrops(true);
       setFocusPolicy(Qt::NoFocus);
@@ -3254,7 +3260,16 @@ bool MuseScore::hasToCheckForUpdate()
       if (ucheck)
             return ucheck->hasToCheck();
       else
-          return false;
+            return false;
+      }
+
+//---------------------------------------------------------
+//   hasToCheckForExtensionsUpdate
+//---------------------------------------------------------
+
+bool MuseScore::hasToCheckForExtensionsUpdate()
+      {
+      return packUChecker ? packUChecker->hasToCheck() : false;
       }
 
 //---------------------------------------------------------
@@ -3265,6 +3280,16 @@ void MuseScore::checkForUpdate()
       {
       if (ucheck)
             ucheck->check(version(), sender() != 0);
+      }
+
+//---------------------------------------------------------
+//   checkForExtensionsUpdate
+//---------------------------------------------------------
+
+void MuseScore::checkForExtensionsUpdate()
+      {
+      if (packUChecker)
+            packUChecker->check();
       }
 
 //---------------------------------------------------------
@@ -6645,6 +6670,9 @@ int main(int argc, char* av[])
       if (mscore->hasToCheckForUpdate())
             mscore->checkForUpdate();
 #endif
+
+      if (mscore->hasToCheckForExtensionsUpdate())
+            mscore->checkForExtensionsUpdate();
 
       if (!scoresOnCommandline && preferences.getBool(PREF_UI_APP_STARTUP_SHOWSTARTCENTER) && (!restoredSession || mscore->scores().size() == 0)) {
 #ifdef Q_OS_MAC

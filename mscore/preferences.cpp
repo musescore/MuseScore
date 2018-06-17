@@ -32,7 +32,6 @@ void Preferences::init(bool storeInMemoryOnly)
       if (!storeInMemoryOnly) {
             if (_settings)
                   delete _settings;
-
             _settings = new QSettings();
             }
 
@@ -40,8 +39,10 @@ void Preferences::init(bool storeInMemoryOnly)
 
 #if defined(Q_OS_MAC) || (defined(Q_OS_WIN) && !defined(FOR_WINSTORE))
       bool checkUpdateStartup = true;
+      bool checkExtensionsUpdateStartup = true;
 #else
       bool checkUpdateStartup = false;
+      bool checkExtensionsUpdateStartup = false;
 #endif
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
@@ -51,7 +52,6 @@ void Preferences::init(bool storeInMemoryOnly)
 #else
       bool nativeDialogs           = false;    // don't use system native file dialogs
 #endif
-
       bool defaultUsePortAudio = false;
       bool defaultUsePulseAudio = false;
       bool defaultUseJackAudio = false;
@@ -151,6 +151,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA,                new BoolPreference(false, false)},
             {PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION,            new BoolPreference(false, false)},
             {PREF_UI_APP_STARTUP_CHECKUPDATE,                      new BoolPreference(checkUpdateStartup, false)},
+            {PREF_UI_APP_STARTUP_CHECK_EXTENSIONS_UPDATE,          new BoolPreference(checkExtensionsUpdateStartup, false)},
             {PREF_UI_APP_STARTUP_SHOWNAVIGATOR,                    new BoolPreference(false, false)},
             {PREF_UI_APP_STARTUP_SHOWPLAYPANEL,                    new BoolPreference(false, false)},
             {PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN,                 new BoolPreference(true, false)},

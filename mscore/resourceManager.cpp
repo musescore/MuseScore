@@ -37,7 +37,11 @@ ResourceManager::ResourceManager(QWidget *parent) :
       languagesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
       languagesTable->verticalHeader()->hide();
       extensionsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+      extensionsTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+      extensionsTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
       extensionsTable->verticalHeader()->hide();
+      extensionsTable->setColumnWidth(1, 50);
+      extensionsTable->setColumnWidth(1, 100);
       MuseScore::restoreGeometry(this);
       }
 
@@ -51,6 +55,15 @@ void ResourceManager::selectLanguagesTab()
       tabs->setCurrentIndex(tabs->indexOf(languages));
       }
 
+//---------------------------------------------------------
+//   selectExtensionsTab
+//---------------------------------------------------------
+
+void ResourceManager::selectExtensionsTab()
+      {
+      tabs->setCurrentIndex(tabs->indexOf(extensions));
+      }
+
 
 //---------------------------------------------------------
 //   displayExtensions
@@ -59,7 +72,7 @@ void ResourceManager::selectLanguagesTab()
 void ResourceManager::displayExtensions()
       {
       DownloadUtils js(this);
-      js.setTarget(baseAddr + "extensions/details.json");
+      js.setTarget(baseAddr() + "extensions/details.json");
       js.download();
       QByteArray json = js.returnData();
 
@@ -115,7 +128,7 @@ void ResourceManager::displayExtensions()
                         temp->setText(tr("Update"));
                         }
                   else {
-                        temp->setText(tr("No update"));
+                        temp->setText(tr("Updated"));
                         temp->setDisabled(true);
                         }
                   }
@@ -131,8 +144,8 @@ void ResourceManager::displayLanguages()
       {
       // Download details.json
       DownloadUtils js(this);
-      js.setTarget(baseAddr + "languages/details.json");
       js.download();
+      js.setTarget(baseAddr() + "languages/details.json");
       QByteArray json = js.returnData();
 
       // parse the json file
@@ -153,7 +166,7 @@ void ResourceManager::displayLanguages()
       languagesTable->verticalHeader()->show();
 
       // move current language to first row
-	QStringList languages = result.object().keys();
+      QStringList languages = result.object().keys();
       QString lang = mscore->getLocaleISOCode();
       int index = languages.indexOf(lang);
       if (index < 0 &&  lang.size() > 2) {
@@ -204,7 +217,7 @@ void ResourceManager::displayLanguages()
             bool verifyInstruments = verifyLanguageFile(filenameInstruments, hashInstruments);
 
             if (verifyMScore && verifyInstruments) { // compare local file with distant hash
-                  temp->setText(tr("No update"));
+                  temp->setText(tr("Updated"));
                   temp->setDisabled(1);
                   }
             else {
@@ -242,7 +255,7 @@ void ResourceManager::downloadLanguage()
       QString hash = languageButtonHashMap[button];
       button->setText(tr("Updating"));
       button->setDisabled(true);
-      QString baseAddress = baseAddr + data;
+      QString baseAddress = baseAddr() + data;
       DownloadUtils dl(this);
       dl.setTarget(baseAddress);
       QString localPath = dataPath + "/locale/" + data.split('/')[1];
@@ -298,14 +311,14 @@ void ResourceManager::downloadExtension()
       QString hash = extensionButtonHashMap[button];
       button->setText(tr("Updating"));
       button->setDisabled(true);
-      QString baseAddress = baseAddr + data;
+      QString baseAddress = baseAddr() + data;
       DownloadUtils dl(this);
       dl.setTarget(baseAddress);
 
       QString localPath = QDir::tempPath() + data.split('/')[1];
       QFile::remove(localPath);
       dl.setLocalFile(localPath);
-      dl.download();
+      dl.download(true);
       if( !dl.saveFile() || !verifyFile(localPath, hash)) {
             QFile::remove(localPath);
             button->setText(tr("Failed, try again"));
