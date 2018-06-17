@@ -211,6 +211,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreView* cv                        { 0 };
       ScoreState _sstate;
       UpdateChecker* ucheck;
+      ExtensionsUpdateChecker* packUChecker = nullptr;
 
       QVBoxLayout* layout;    // main window layout
       QSplitter* splitter;
@@ -470,6 +471,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setPlayState()      { changeState(STATE_PLAY); }
       void setNoteEntryState() { changeState(STATE_NOTE_ENTRY); }
       void checkForUpdate();
+      void checkForExtensionsUpdate();
       QMenu* fileMenu() const  { return _fileMenu; }
       void midiNoteReceived(int channel, int pitch, int velo);
       void midiNoteReceived(int pitch, bool ctrl, int velo);
@@ -549,6 +551,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QNetworkAccessManager* networkManager();
       virtual Score* openScore(const QString& fn);
       bool hasToCheckForUpdate();
+      bool hasToCheckForExtensionsUpdate();
       static bool unstable();
       bool eventFilter(QObject *, QEvent *);
       void setMidiRecordId(int id) { _midiRecordId = id; }

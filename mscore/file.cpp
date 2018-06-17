@@ -104,7 +104,6 @@ extern Score::FileError importCapXml(Score*, const QString& name);
 extern Score::FileError readScore(Score* score, QString name, bool ignoreVersionError);
 
 extern void importSoundfont(QString name);
-extern void importExtension(QString name);
 
 extern bool savePositions(Score*, const QString& name, bool segments);
 extern MasterSynthesizer* synti;

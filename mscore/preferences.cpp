@@ -160,8 +160,10 @@ void Preferences::init()
 
 #if defined(Q_OS_MAC) || (defined(Q_OS_WIN) && !defined(FOR_WINSTORE))
       checkUpdateStartup      = true;
+      checkExtensionsUpdateStartup = true;
 #else
       checkUpdateStartup      = false;
+      checkExtensionsUpdateStartup = false;
 #endif
 
       followSong              = true;
@@ -347,6 +349,7 @@ void Preferences::write()
 
       //update
       s.setValue("checkUpdateStartup", checkUpdateStartup);
+      s.setValue("checkExtensionsUpdateStartup", checkExtensionsUpdateStartup);
 
       s.setValue("useMidiRemote", useMidiRemote);
       for (int i = 0; i < MIDI_REMOTES; ++i) {
@@ -524,6 +527,7 @@ void Preferences::read()
       MScore::setVerticalOrientation(s.value("verticalPageOrientation", MScore::verticalOrientation()).toBool());
 
       checkUpdateStartup = s.value("checkUpdateStartup", checkUpdateStartup).toBool();
+      checkExtensionsUpdateStartup = s.value("checkExtensionsUpdateStartup", checkExtensionsUpdateStartup).toBool();
 
       QString ss(s.value("sessionStart", "score").toString());
       if (ss == "last")
@@ -895,6 +899,7 @@ void PreferenceDialog::updateValues()
 
       //Update
       checkUpdateStartup->setChecked(prefs.checkUpdateStartup);
+      checkExtensionsUpdateStartup->setChecked(prefs.checkExtensionsUpdateStartup);
 
       navigatorShow->setChecked(prefs.showNavigator);
       playPanelShow->setChecked(prefs.showPlayPanel);
@@ -1560,6 +1565,7 @@ void PreferenceDialog::apply()
 
       //update
       prefs.checkUpdateStartup = checkUpdateStartup->isChecked();
+      prefs.checkExtensionsUpdateStartup = checkExtensionsUpdateStartup->isChecked();
 
       prefs.mag         = scale->value()/100.0;
 
