@@ -31,7 +31,6 @@ ResourceManager::ResourceManager(QWidget *parent) :
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QDir dir;
       dir.mkpath(dataPath + "/locale");
-      baseAddr = "http://extensions.musescore.org/2.3/";
       displayExtensions();
       displayLanguages();
       languagesTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
@@ -59,7 +58,7 @@ void ResourceManager::selectLanguagesTab()
 void ResourceManager::displayExtensions()
       {
       DownloadUtils js(this);
-      js.setTarget(baseAddr + "extensions/details.json");
+      js.setTarget(baseAddr() + "extensions/details.json");
       js.download();
       QByteArray json = js.returnData();
 
@@ -131,8 +130,8 @@ void ResourceManager::displayLanguages()
       {
       // Download details.json
       DownloadUtils js(this);
-      js.setTarget(baseAddr + "languages/details.json");
       js.download();
+      js.setTarget(baseAddr() + "languages/details.json");
       QByteArray json = js.returnData();
 
       // parse the json file
@@ -153,7 +152,7 @@ void ResourceManager::displayLanguages()
       languagesTable->verticalHeader()->show();
 
       // move current language to first row
-	QStringList languages = result.object().keys();
+      QStringList languages = result.object().keys();
       QString lang = mscore->getLocaleISOCode();
       int index = languages.indexOf(lang);
       if (index < 0 &&  lang.size() > 2) {
@@ -242,7 +241,7 @@ void ResourceManager::downloadLanguage()
       QString hash = languageButtonHashMap[button];
       button->setText(tr("Updating"));
       button->setDisabled(true);
-      QString baseAddress = baseAddr + data;
+      QString baseAddress = baseAddr() + data;
       DownloadUtils dl(this);
       dl.setTarget(baseAddress);
       QString localPath = dataPath + "/locale/" + data.split('/')[1];
@@ -295,15 +294,15 @@ void ResourceManager::downloadExtension()
       QString hash = extensionButtonHashMap[button];
       button->setText(tr("Updating"));
       button->setDisabled(true);
-      QString baseAddress = baseAddr + data;
+      QString baseAddress = baseAddr() + data;
       DownloadUtils dl(this);
       dl.setTarget(baseAddress);
 
       QString localPath = QDir::tempPath() + data.split('/')[1];
       QFile::remove(localPath);
       dl.setLocalFile(localPath);
-      dl->download(true);
-      if( !dl->saveFile() || !verifyFile(localPath, hash)) {
+      dl.download(true);
+      if( !dl.saveFile() || !verifyFile(localPath, hash)) {
             QFile::remove(localPath);
             button->setText(tr("Failed, try again"));
             button->setEnabled(true);

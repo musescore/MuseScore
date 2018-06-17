@@ -575,7 +575,8 @@ MuseScore::MuseScore()
       setWindowTitle(QString(MUSESCORE_NAME_VERSION));
       setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
 
-      ucheck = new UpdateChecker();
+      ucheck = new UpdateChecker(this);
+      packUChecker = new PackagesUpdateChecker(this);
 
       setAcceptDrops(true);
       setFocusPolicy(Qt::NoFocus);
@@ -2816,7 +2817,16 @@ bool MuseScore::hasToCheckForUpdate()
       if (ucheck)
             return ucheck->hasToCheck();
       else
-          return false;
+            return false;
+      }
+
+//---------------------------------------------------------
+//   hasToCheckForPackagesUpdate
+//---------------------------------------------------------
+
+bool MuseScore::hasToCheckForPackagesUpdate()
+      {
+      return packUChecker ? packUChecker->hasToCheck() : false;
       }
 
 //---------------------------------------------------------
@@ -2827,6 +2837,16 @@ void MuseScore::checkForUpdate()
       {
       if (ucheck)
             ucheck->check(version(), sender() != 0);
+      }
+
+//---------------------------------------------------------
+//   checkForPackagesUpdate
+//---------------------------------------------------------
+
+void MuseScore::checkForPackagesUpdate()
+      {
+      if (packUChecker)
+            packUChecker->check();
       }
 
 //---------------------------------------------------------
@@ -6129,6 +6149,9 @@ int main(int argc, char* av[])
 
       if (mscore->hasToCheckForUpdate())
             mscore->checkForUpdate();
+
+      if (mscore->hasToCheckForPackagesUpdate())
+            mscore->checkForPackagesUpdate();
 
       if (!scoresOnCommandline && preferences.showStartcenter && (!restoredSession || mscore->scores().size() == 0)) {
 #ifdef Q_OS_MAC
