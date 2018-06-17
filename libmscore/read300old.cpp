@@ -920,6 +920,7 @@ bool Note::readProperties300old(XmlReader& e)
             setLine(e.readInt());
       else if (tag == "Fingering") {
             Fingering* f = new Fingering(score());
+            f->setTrack(track());
             f->read300old(e);
             add(f);
             }
