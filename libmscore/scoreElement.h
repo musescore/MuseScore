@@ -149,6 +149,8 @@ class LinkedElements : public QList<ScoreElement*> {
 
       void setLid(Score*, int val);
       int lid() const   { return _lid;    }
+
+      ScoreElement* mainElement();
       };
 
 //---------------------------------------------------------

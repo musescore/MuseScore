@@ -1965,6 +1965,10 @@ void Measure::read(XmlReader& e, int staffIdx)
                   e.unknown();
             }
       e.checkConnectors();
+      if (isMMRest()) {
+            Measure* lm = e.lastMeasure();
+            e.initTick(lm->tick() + lm->ticks());
+            }
       e.setCurrentMeasure(nullptr);
       }
 
@@ -2153,10 +2157,6 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                   if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick == 0) {
                         // ignore empty key signature
                         qDebug("remove keysig c at tick 0");
-                        if (ks->links()) {
-                              if (ks->links()->size() == 1)
-                                    e.linkIds().remove(ks->links()->lid());
-                              }
                         }
                   else {
                         // if key sig not at beginning of measure => courtesy key sig

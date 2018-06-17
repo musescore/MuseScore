@@ -49,6 +49,18 @@ struct TextStyleMap {
       };
 
 //---------------------------------------------------------
+//   LinksIndexer
+//---------------------------------------------------------
+
+class LinksIndexer {
+      int _lastLocalIndex              { -1                    };
+      Location _lastLinkedElementLoc   { Location::absolute()  };
+
+   public:
+      int assignLocalIndex(const Location& mainElementInfo);
+      };
+
+//---------------------------------------------------------
 //   XmlReader
 //---------------------------------------------------------
 
@@ -76,7 +88,9 @@ class XmlReader : public QXmlStreamReader {
 
       void htmlToString(int level, QString*);
       Interval _transpose;
-      QMap<int, LinkedElements*> _elinks;
+      QMap<int, LinkedElements*> _elinks; // for reading old files (< 3.01)
+      QMap<int, QList<QPair<LinkedElements*, Location>>> _staffLinkedElements; // one list per staff
+      LinksIndexer _linksIndexer;
       QMultiMap<int, int> _tracks;
 
       QList<TextStyleMap> userTextStyles;
@@ -171,6 +185,8 @@ class XmlReader : public QXmlStreamReader {
       void setTransposeChromatic(int v) { _transpose.chromatic = v; }
       void setTransposeDiatonic(int v)  { _transpose.diatonic = v; }
 
+      LinkedElements* getLink(bool masterScore, const Location& l, int localIndexDiff);
+      void addLink(Staff* staff, LinkedElements* link);
       QMap<int, LinkedElements*>& linkIds() { return _elinks;     }
       QMultiMap<int, int>& tracks()         { return _tracks;     }
 
@@ -202,6 +218,9 @@ class XmlWriter : public QTextStream {
       bool _writeOmr      = { true };    // false if writing into *.msc file
       int _tupletId       = { 1 };
       int _beamId         = { 1 };
+
+      LinksIndexer _linksIndexer;
+      QMap<int, int> _lidLocalIndices;
 
       void putLevel();
 
@@ -238,6 +257,10 @@ class XmlWriter : public QTextStream {
       int addSpanner(const Spanner*);     // returns allocated id
       const Spanner* findSpanner(int id);
       int spannerId(const Spanner*);      // returns spanner id, allocates new one if none exists
+
+      int assignLocalIndex(const Location& mainElementLocation);
+      void setLidLocalIndex(int lid, int localIndex) { _lidLocalIndices.insert(lid, localIndex); }
+      int lidLocalIndex(int lid) const { return _lidLocalIndices[lid]; }
 
       void sTag(const char* name, Spatium sp) { XmlWriter::tag(name, QVariant(sp.val())); }
       void pTag(const char* name, PlaceText);
