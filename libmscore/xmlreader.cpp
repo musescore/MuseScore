@@ -13,7 +13,9 @@
 #include "xml.h"
 #include "layoutbreak.h"
 #include "measure.h"
+#include "score.h"
 #include "spanner.h"
+#include "staff.h"
 #include "beam.h"
 #include "tuplet.h"
 #include "sym.h"
@@ -239,10 +241,10 @@ Fraction XmlReader::afrac() const
 //   point
 //---------------------------------------------------------
 
-PointInfo XmlReader::point() const
+PointInfo XmlReader::point(bool forceAbsFrac) const
       {
       PointInfo info = PointInfo::absolute();
-      fillPoint(info);
+      fillPoint(info, forceAbsFrac);
       return info;
       }
 
@@ -250,17 +252,21 @@ PointInfo XmlReader::point() const
 //   fillPoint
 //    fills point fields which have default values with
 //    values relevant for the current reader's position.
+//    When in paste mode (or forceAbsFrac is true) absolute
+//    fraction values are used and measure number is set to
+//    zero.
 //---------------------------------------------------------
 
-void XmlReader::fillPoint(PointInfo& p) const
+void XmlReader::fillPoint(PointInfo& p, bool forceAbsFrac) const
       {
       constexpr PointInfo defaults = PointInfo::absolute();
+      const bool absFrac = (pasteMode() || forceAbsFrac);
       if (p.track() == defaults.track())
             p.setTrack(track());
       if (p.frac() == defaults.frac())
-            p.setFrac(pasteMode() ? afrac() : rfrac());
+            p.setFrac(absFrac ? afrac() : rfrac());
       if (p.measure() == defaults.measure())
-            p.setMeasure(pasteMode() ? 0 : currentMeasureIndex());
+            p.setMeasure(absFrac ? 0 : currentMeasureIndex());
       }
 
 //---------------------------------------------------------
@@ -627,6 +633,72 @@ void XmlReader::reconnectBrokenConnectors()
             removeConnector(*cptr);
             }
       qDebug("reconnected %d broken connectors", reconnected.count());
+      }
+
+//---------------------------------------------------------
+//   addLink
+//---------------------------------------------------------
+
+void XmlReader::addLink(Staff* s, LinkedElements* link)
+      {
+//       Element* e = static_cast<Element*>(link->mainElement());
+//       int staff = e->staff() ? e->staffIdx() : (track() / VOICES);
+//       const bool masterScore = e->score()->isMaster();
+      int staff = s->idx();
+      const bool masterScore = s->score()->isMaster();
+      if (!masterScore)
+            staff *= -1;
+
+      QList<QPair<LinkedElements*, PointInfo>>& staffLinks = _staffLinkedElements[staff];
+      if (!masterScore) {
+            if (!staffLinks.empty()
+               && (link->mainElement()->score() != staffLinks.front().first->mainElement()->score())
+               )
+                  staffLinks.clear();
+            }
+
+      PointInfo p = point(true);
+      _linksIndexer.assignLocalIndex(p);
+      staffLinks.push_back(qMakePair(link, p));
+      }
+
+//---------------------------------------------------------
+//   getLink
+//---------------------------------------------------------
+
+LinkedElements* XmlReader::getLink(bool masterScore, const PointInfo& p, int localIndexDiff)
+      {
+      int staff = p.staff();
+      if (!masterScore)
+            staff *= -1;
+      const int localIndex = _linksIndexer.assignLocalIndex(p) + localIndexDiff;
+      QList<QPair<LinkedElements*, PointInfo>>& staffLinks = _staffLinkedElements[staff];
+      for (int i = 0; i < staffLinks.size(); ++i) {
+            if (staffLinks[i].second == p) {
+                  if (localIndex == 0)
+                        return staffLinks[i].first;
+                  i += localIndex;
+                  if ((i < 0) || (i >= staffLinks.size()))
+                        return nullptr;
+                  if (staffLinks[i].second == p)
+                        return staffLinks[i].first;
+                  return nullptr;
+                  }
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   assignLocalIndex
+//---------------------------------------------------------
+
+int LinksIndexer::assignLocalIndex(const PointInfo& mainElementInfo)
+      {
+      if (_lastLinkedElementInfo == mainElementInfo)
+            return (++_lastLocalIndex);
+      _lastLocalIndex = 0;
+      _lastLinkedElementInfo = mainElementInfo;
+      return 0;
       }
 }
 

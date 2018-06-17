@@ -40,6 +40,18 @@ struct SpannerValues {
       };
 
 //---------------------------------------------------------
+//   LinksIndexer
+//---------------------------------------------------------
+
+class LinksIndexer {
+      int _lastLocalIndex              { -1                    };
+      PointInfo _lastLinkedElementInfo { PointInfo::absolute() };
+
+   public:
+      int assignLocalIndex(const PointInfo& mainElementInfo);
+      };
+
+//---------------------------------------------------------
 //   XmlReader
 //---------------------------------------------------------
 
@@ -67,7 +79,9 @@ class XmlReader : public QXmlStreamReader {
 
       void htmlToString(int level, QString*);
       Interval _transpose;
-      QMap<int, LinkedElements*> _elinks;
+      QMap<int, LinkedElements*> _elinks; // for reading old files (< 3.01)
+      QMap<int, QList<QPair<LinkedElements*, PointInfo>>> _staffLinkedElements; // one list per staff
+      LinksIndexer _linksIndexer;
       QMultiMap<int, int> _tracks;
 
    public:
@@ -120,10 +134,8 @@ class XmlReader : public QXmlStreamReader {
       bool pasteMode() const       { return _pasteMode; }
       void setPasteMode(bool v)    { _pasteMode = v;    }
 
-      PointInfo point() const;
-      void fillPoint(PointInfo&) const; // fills point fields which have default
-                                        // values with values relevant for the
-                                        // current reader's position.
+      PointInfo point(bool forceAbsFrac = false) const;
+      void fillPoint(PointInfo&, bool forceAbsFrac = false) const;
       void setPoint(const PointInfo&); // sets a new reading point, taking into
                                        // account its type (absolute or relative).
 
@@ -162,6 +174,8 @@ class XmlReader : public QXmlStreamReader {
       void setTransposeChromatic(int v) { _transpose.chromatic = v; }
       void setTransposeDiatonic(int v)  { _transpose.diatonic = v; }
 
+      LinkedElements* getLink(bool masterScore, const PointInfo& p, int localIndexDiff);
+      void addLink(Staff* staff, LinkedElements* link);
       QMap<int, LinkedElements*>& linkIds() { return _elinks;     }
       QMultiMap<int, int>& tracks()         { return _tracks;     }
 
@@ -191,6 +205,9 @@ class XmlWriter : public QTextStream {
       bool _writeOmr      = { true };    // false if writing into *.msc file
       int _tupletId       = { 1 };
       int _beamId         = { 1 };
+
+      LinksIndexer _linksIndexer;
+      QMap<int, int> _lidLocalIndices;
 
       void putLevel();
 
@@ -227,6 +244,10 @@ class XmlWriter : public QTextStream {
       int addSpanner(const Spanner*);     // returns allocated id
       const Spanner* findSpanner(int id);
       int spannerId(const Spanner*);      // returns spanner id, allocates new one if none exists
+
+      int assignLocalIndex(const PointInfo& mainElementInfo);
+      void setLidLocalIndex(int lid, int localIndex) { _lidLocalIndices.insert(lid, localIndex); }
+      int lidLocalIndex(int lid) const { return _lidLocalIndices[lid]; }
 
       void sTag(const char* name, Spatium sp) { XmlWriter::tag(name, QVariant(sp.val())); }
       void pTag(const char* name, PlaceText);

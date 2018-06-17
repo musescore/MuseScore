@@ -272,9 +272,6 @@ bool MasterScore::read(XmlReader& e)
       {
       if (!Score::read(e))
             return false;
-      int id = 1;
-      for (LinkedElements* le : e.linkIds())
-            le->setLid(this, id++);
       for (Staff* s : staves())
             s->updateOttava();
       setCreated(false);
