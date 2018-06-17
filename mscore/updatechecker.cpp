@@ -227,9 +227,24 @@ void PackagesUpdateChecker::check()
                         msgBox.setWindowTitle(tr("Packages Updates Available"));
                         msgBox.setText(tr("Updates for the installed packages are available. Check the resource manager"));
                         msgBox.setTextFormat(Qt::RichText);
-                        msgBox.addButton(tr("OK"), QMessageBox::AcceptRole);
-                        msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
-                        msgBox.exec();
+                        msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+                        msgBox.setDefaultButton(QMessageBox::Ok);
+                        msgBox.setEscapeButton(QMessageBox::Cancel);
+                        int ret = msgBox.exec();
+                        switch (ret) {
+                              case QMessageBox::Ok: {
+                                    ResourceManager r(0);
+                                    r.selectExtensionsTab();
+                                    r.exec();
+                                    break;
+                                    }
+                              case QMessageBox::Cancel: {
+                                    break;
+                                    }
+                              default:
+                                    qWarning() << "undefined action in PackagesUpdateChecker::check" << ret;
+                              }
+                        break;
                         }
                   }
             }

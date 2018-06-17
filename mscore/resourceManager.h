@@ -32,6 +32,7 @@ class ResourceManager : public QDialog, public Ui::Resource
 public:
     explicit ResourceManager(QWidget *parent = 0);
     void selectLanguagesTab();
+    void selectExtensionsTab();
 
     static inline QString baseAddr() { return "http://extensions.musescore.org/2.3/"; }
 

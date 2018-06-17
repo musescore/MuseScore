@@ -50,6 +50,15 @@ void ResourceManager::selectLanguagesTab()
       tabs->setCurrentIndex(tabs->indexOf(languages));
       }
 
+//---------------------------------------------------------
+//   selectExtensionsTab
+//---------------------------------------------------------
+
+void ResourceManager::selectExtensionsTab()
+      {
+      tabs->setCurrentIndex(tabs->indexOf(extensions));
+      }
+
 
 //---------------------------------------------------------
 //   displayExtensions
