@@ -295,6 +295,7 @@ Score::Score(MasterScore* parent)
             style().set(Sid::dividerRight, false);
             }
       _synthesizerState = parent->_synthesizerState;
+      _mscVersion = parent->_mscVersion;
       }
 
 Score::Score(MasterScore* parent, const MStyle& s)
