@@ -122,6 +122,9 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
       int tickInBar = tick - measure->tick();
       int newTick   = measure->tick() + ((tickInBar + (back?-1:ticksPerBeat)) / ticksPerBeat) * ticksPerBeat;
 
+      changeState(ViewState::NORMAL);
+
+      _score->startCmd();
       // look for next/prev beat, note, rest or chord
       for (;;) {
             segment = back ? segment->prev1(SegmentType::ChordRest) : segment->next1(SegmentType::ChordRest);
@@ -141,9 +144,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
                         qDebug("no prev segment");
                         return;
                         }
-                  _score->startCmd();
                   _score->undoAddElement(segment);
-                  _score->endCmd();
                   break;
                   }
 
@@ -157,8 +158,6 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
                         break;
                   }
             }
-
-      changeState(ViewState::NORMAL);
 
       // search for next chord name
       harmony = 0;
@@ -174,10 +173,9 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
             harmony = new Harmony(_score);
             harmony->setTrack(track);
             harmony->setParent(segment);
-            _score->startCmd();
             _score->undoAddElement(harmony);
-            _score->endCmd();
             }
+      _score->endCmd();
 
       _score->select(harmony, SelectType::SINGLE, 0);
       startEdit(harmony, Grip::NO_GRIP);

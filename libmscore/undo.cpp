@@ -261,11 +261,17 @@ void UndoStack::push1(UndoCommand* cmd)
 
 void UndoStack::remove(int idx)
       {
-      printf("UndoStack::remove(%d) curCmd %p\n", idx, curCmd);
+      Q_ASSERT(idx <= curIdx);
       // remove redo stack
-      while (list.size() > idx) {
+      while (list.size() > curIdx) {
             UndoCommand* cmd = list.takeLast();
             cmd->cleanup(false);  // delete elements for which UndoCommand() holds ownership
+            delete cmd;
+            --curIdx;
+            }
+      while (list.size() > idx) {
+            UndoCommand* cmd = list.takeLast();
+            cmd->cleanup(true);
             delete cmd;
             }
       curIdx = idx;
