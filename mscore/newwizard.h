@@ -106,7 +106,6 @@ class NewWizardPage2 : public QWizardPage {
       virtual bool isComplete() const override;
       void createInstruments(Score* s);
       virtual void initializePage() override;
-      void buildInstrumentsList();
       };
 
 //---------------------------------------------------------

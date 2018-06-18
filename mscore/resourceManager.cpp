@@ -147,6 +147,7 @@ void ResourceManager::displayLanguages()
       js.download();
       js.setTarget(baseAddr() + "languages/details.json");
       QByteArray json = js.returnData();
+      qDebug() << json;
 
       // parse the json file
       QJsonParseError err;

@@ -755,7 +755,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QHelpEngine*  helpEngine() const { return _helpEngine;   }
 
       virtual void updateInspector() override;
-      void updateNewWizard();
       void updateInstrumentDialog();
       void reloadInstrumentTemplates();
       void showSynthControl(bool);

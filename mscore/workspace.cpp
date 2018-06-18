@@ -27,6 +27,7 @@
 #include "preferences.h"
 #include "palette.h"
 #include "palettebox.h"
+#include "extension.h"
 
 namespace Ms {
 
@@ -461,6 +462,10 @@ QList<Workspace*>& Workspace::workspaces()
             QStringList path;
             path << mscoreGlobalShare + "workspaces";
             path << dataPath + "/workspaces";
+
+            QStringList extensionsDir = Extension::getDirectoriesByType(Extension::workspacesDir);
+            path.append(extensionsDir);
+
             QStringList nameFilters;
             nameFilters << "*.workspace";
 
@@ -489,6 +494,16 @@ QList<Workspace*>& Workspace::workspaces()
             workspacesRead = true;
             }
       return _workspaces;
+      }
+
+//---------------------------------------------------------
+//   refreshWorkspaces
+//---------------------------------------------------------
+
+QList<Workspace*>& Workspace::refreshWorkspaces()
+      {
+      workspacesRead = false;
+      return workspaces();
       }
 
 //---------------------------------------------------------
