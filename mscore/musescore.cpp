@@ -556,7 +556,6 @@ void MuseScore::preferencesChanged()
       delete newWizard;
       newWizard = 0;
       reloadInstrumentTemplates();
-      updateNewWizard();
       updateInstrumentDialog();
       }
 
@@ -644,7 +643,7 @@ bool MuseScore::importExtension(QString path)
       bool hasMetadata = false;
       bool hasAlienDirectory = false;
       bool hasAlienFiles = false;
-      QSet<QString> acceptableFolders = { "sfzs", "soundfonts", "templates", "instruments" };
+      QSet<QString> acceptableFolders = { Extension::sfzsDir, Extension::soundfontsDir, Extension::templatesDir, Extension::instrumentsDir, Extension::workspacesDir };
       for (auto fi : zipFile.fileInfoList()) {
             if (fi.filePath == "metadata.json")
                   hasMetadata = true;
@@ -736,13 +735,14 @@ bool MuseScore::importExtension(QString path)
             return false;
             }
       zipFile3.close();
-
+      
+      delete newWizard;
+      newWizard = 0;
       mscore->reloadInstrumentTemplates();
-      mscore->updateNewWizard();
       mscore->updateInstrumentDialog();
 
       // After install: add sfz to zerberus
-      QDir sfzDir(QString("%1/%2/%3/sfzs").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version));
+      QDir sfzDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::sfzsDir));
       if (sfzDir.exists()) {
             // get all sfz files
             QDirIterator it(sfzDir.absolutePath(), QStringList("*.sfz"), QDir::Files, QDirIterator::Subdirectories);
@@ -759,7 +759,7 @@ bool MuseScore::importExtension(QString path)
                   synti->storeState();
             }
       // After install: add soundfont to fluid
-      QDir sfDir(QString("%1/%2/%3/soundfonts").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version));
+      QDir sfDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::soundfontsDir));
       if (sfDir.exists()) {
             // get all soundfont files
             QStringList filters("*.sf2");
@@ -776,6 +776,16 @@ bool MuseScore::importExtension(QString path)
                   s->addSoundFont(sf);
             if (!sfs.isEmpty())
                   synti->storeState();
+            }
+      // after install: refresh workspaces if needed
+      QDir workspacesDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::workspacesDir));
+      if (workspacesDir.exists()) {
+            auto wsList = workspacesDir.entryInfoList(QStringList("*.workspace"), QDir::Files);
+            if (!wsList.isEmpty()) {
+                  Workspace::refreshWorkspaces();
+                  paletteBox->updateWorkspaces();
+                  paletteBox->selectWorkspace(wsList.last().absoluteFilePath());
+                  }
             }
       return true;
       }
@@ -1999,7 +2009,7 @@ void MuseScore::reloadInstrumentTemplates()
             loadInstrumentTemplates(list2);
 
       // load instrument templates from extension
-      QStringList extensionDir = Extension::getDirectoriesByType("instruments");
+      QStringList extensionDir = Extension::getDirectoriesByType(Extension::instrumentsDir);
       QStringList filter("*.xml");
       for (QString s : extensionDir) {
             QDir extDir(s);
