@@ -233,7 +233,7 @@ void ExtensionsUpdateChecker::check()
                         int ret = msgBox.exec();
                         switch (ret) {
                               case QMessageBox::Ok: {
-                                    ResourceManager r(0);
+                                    ResourceManager r(static_cast<QWidget*>(this->parent()));
                                     r.selectExtensionsTab();
                                     r.exec();
                                     break;

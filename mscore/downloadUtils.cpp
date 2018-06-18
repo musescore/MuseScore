@@ -60,14 +60,15 @@ void DownloadUtils::download(bool showProgress)
             progressDialog = new QProgressDialog(static_cast<QWidget*>(parent()));
             progressDialog->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
             progressDialog->setWindowModality(Qt::ApplicationModal);
-            progressDialog->setCancelButton(0);
-            //progress.setCancelButtonText(tr("Cancel"));
+            progressDialog->setCancelButtonText(tr("Cancel"));
+            connect(progressDialog, SLOT(canceled()), this, SIGNAL(cancel()));
             progressDialog->setLabelText(tr("Downloading..."));
             progressDialog->setAutoClose(true);
             progressDialog->setAutoReset(true);
             progressDialog->show();
             }
 
+      QObject::connect(progressDialog, SIGNAL(canceled()), &loop, SLOT(quit()));
       loop.exec();
 
       QObject::disconnect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));

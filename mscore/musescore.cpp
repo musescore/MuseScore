@@ -463,7 +463,7 @@ bool MuseScore::importExtension(QString path)
       if (dirList.contains(extensionId)) {
             QString extDirName = QString("%1/%2").arg(preferences.myExtensionsPath).arg(extensionId);
             QDir extDir(extDirName);
-            auto versionDirList = extDir.entryList(QDir::Dirs);
+            auto versionDirList = extDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
             if (versionDirList.size() > 0) {
                   // potentially other versions
                   // is there a more recent version?
