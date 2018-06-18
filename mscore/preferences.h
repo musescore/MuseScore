@@ -154,7 +154,7 @@ struct Preferences {
 
       //update
       bool checkUpdateStartup;
-      bool checkPackagesUpdateStartup;
+      bool checkExtensionsUpdateStartup;
 
       bool followSong;
       QString importCharsetOve;

@@ -492,7 +492,7 @@ bool MuseScore::importExtension(QString path)
       bool res = zipFile3.extractAll(QString("%1/%2/%3").arg(preferences.myExtensionsPath).arg(extensionId).arg(version));
       if (!res) {
             if (!MScore::noGui)
-                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Unable to extract files from the package"));
+                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Unable to extract files from the extension"));
             return false;
             }
       zipFile3.close();
@@ -576,7 +576,7 @@ MuseScore::MuseScore()
       setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
 
       ucheck = new UpdateChecker(this);
-      packUChecker = new PackagesUpdateChecker(this);
+      packUChecker = new ExtensionsUpdateChecker(this);
 
       setAcceptDrops(true);
       setFocusPolicy(Qt::NoFocus);
@@ -2821,10 +2821,10 @@ bool MuseScore::hasToCheckForUpdate()
       }
 
 //---------------------------------------------------------
-//   hasToCheckForPackagesUpdate
+//   hasToCheckForExtensionsUpdate
 //---------------------------------------------------------
 
-bool MuseScore::hasToCheckForPackagesUpdate()
+bool MuseScore::hasToCheckForExtensionsUpdate()
       {
       return packUChecker ? packUChecker->hasToCheck() : false;
       }
@@ -2840,10 +2840,10 @@ void MuseScore::checkForUpdate()
       }
 
 //---------------------------------------------------------
-//   checkForPackagesUpdate
+//   checkForExtensionsUpdate
 //---------------------------------------------------------
 
-void MuseScore::checkForPackagesUpdate()
+void MuseScore::checkForExtensionsUpdate()
       {
       if (packUChecker)
             packUChecker->check();
@@ -6150,8 +6150,8 @@ int main(int argc, char* av[])
       if (mscore->hasToCheckForUpdate())
             mscore->checkForUpdate();
 
-      if (mscore->hasToCheckForPackagesUpdate())
-            mscore->checkForPackagesUpdate();
+      if (mscore->hasToCheckForExtensionsUpdate())
+            mscore->checkForExtensionsUpdate();
 
       if (!scoresOnCommandline && preferences.showStartcenter && (!restoredSession || mscore->scores().size() == 0)) {
 #ifdef Q_OS_MAC

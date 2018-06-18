@@ -62,10 +62,10 @@ class UpdateChecker : public UpdateCheckerBase {
       UpdateChecker(QObject* parent);
       };
 
-class PackagesUpdateChecker : public UpdateCheckerBase {
+class ExtensionsUpdateChecker : public UpdateCheckerBase {
       Q_OBJECT
 public:
-      PackagesUpdateChecker(QObject* parent);
+      ExtensionsUpdateChecker(QObject* parent);
 
       void check();
 private:

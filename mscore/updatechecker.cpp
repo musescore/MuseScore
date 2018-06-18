@@ -191,13 +191,13 @@ bool UpdateCheckerBase::hasToCheck()
       return now == lastUpdate || now > lastUpdate.addSecs(3600 * defaultPeriod()) ;
       }
 
-PackagesUpdateChecker::PackagesUpdateChecker(QObject* parent)
+ExtensionsUpdateChecker::ExtensionsUpdateChecker(QObject* parent)
       : UpdateCheckerBase(parent)
       {
 
       }
 
-void PackagesUpdateChecker::check()
+void ExtensionsUpdateChecker::check()
       {
       DownloadUtils *js = new DownloadUtils();
       js->setTarget(ResourceManager::baseAddr() + "extensions/details.json");
@@ -224,8 +224,8 @@ void PackagesUpdateChecker::check()
                   QString installedVersion = Extension::getLatestVersion(key);
                   if (compareVersion(installedVersion, version)) {
                         QMessageBox msgBox;
-                        msgBox.setWindowTitle(tr("Packages Updates Available"));
-                        msgBox.setText(tr("Updates for the installed packages are available. Check the resource manager"));
+                        msgBox.setWindowTitle(tr("Extensions Updates Available"));
+                        msgBox.setText(tr("Updates for the installed extensions are available. Check the resource manager"));
                         msgBox.setTextFormat(Qt::RichText);
                         msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
                         msgBox.setDefaultButton(QMessageBox::Ok);
@@ -242,7 +242,7 @@ void PackagesUpdateChecker::check()
                                     break;
                                     }
                               default:
-                                    qWarning() << "undefined action in PackagesUpdateChecker::check" << ret;
+                                    qWarning() << "undefined action in ExtensionsUpdateChecker::check" << ret;
                               }
                         break;
                         }
@@ -250,14 +250,14 @@ void PackagesUpdateChecker::check()
             }
       }
 
-bool PackagesUpdateChecker::getUpdatePrefValue()
+bool ExtensionsUpdateChecker::getUpdatePrefValue()
       {
-      return preferences.checkPackagesUpdateStartup;
+      return preferences.checkExtensionsUpdateStartup;
       }
 
-QString PackagesUpdateChecker::getUpdatePrefString()
+QString ExtensionsUpdateChecker::getUpdatePrefString()
       {
-      return "lastPackagesUpdateDate";
+      return "lastExtensionsUpdateDate";
       }
 
 }

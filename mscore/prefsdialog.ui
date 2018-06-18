@@ -4196,9 +4196,9 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QCheckBox" name="checkPackagesUpdateStartup">
+           <widget class="QCheckBox" name="checkExtensionsUpdateStartup">
             <property name="text">
-             <string>Check for new version of MuseScore packages on startup</string>
+             <string>Check for new version of MuseScore extensions on startup</string>
             </property>
            </widget>
           </item>
