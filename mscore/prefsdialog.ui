@@ -122,6 +122,26 @@
             </property>
            </widget>
           </item>
+          <item row="4" column="1">
+           <widget class="QCheckBox" name="showStartcenter">
+            <property name="text">
+             <string>Show start center</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="lastSession">
+            <property name="accessibleName">
+             <string>Continue last session</string>
+            </property>
+            <property name="text">
+             <string>Continue last session</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
           <item row="3" column="0" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <property name="spacing">
@@ -179,26 +199,6 @@
             </property>
             <property name="text">
              <string>Show splash screen</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QCheckBox" name="showStartcenter">
-            <property name="text">
-             <string>Show start center</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QRadioButton" name="lastSession">
-            <property name="accessibleName">
-             <string>Continue last session</string>
-            </property>
-            <property name="text">
-             <string>Continue last session</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -700,23 +700,6 @@
           <string>Theme</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_9">
-          <item row="0" column="0" colspan="2">
-           <widget class="QComboBox" name="styleName">
-            <property name="accessibleName">
-             <string>Select style</string>
-            </property>
-            <item>
-             <property name="text">
-              <string>Dark</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Light</string>
-             </property>
-            </item>
-           </widget>
-          </item>
           <item row="1" column="1">
            <widget class="QSpinBox" name="iconWidth">
             <property name="accessibleName">
@@ -760,6 +743,43 @@
             </property>
             <property name="value">
              <number>20</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QComboBox" name="styleName">
+            <property name="accessibleName">
+             <string>Select style</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Dark</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Light</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QSpinBox" name="fontSize"/>
+          </item>
+          <item row="2" column="1">
+           <widget class="QFontComboBox" name="fontFamily"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="fontFamilyLabel">
+            <property name="text">
+             <string>Font:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="fontSizeLabel">
+            <property name="text">
+             <string>Font size:</string>
             </property>
            </widget>
           </item>
@@ -4326,6 +4346,8 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>styleName</tabstop>
   <tabstop>iconWidth</tabstop>
   <tabstop>iconHeight</tabstop>
+  <tabstop>fontFamily</tabstop>
+  <tabstop>fontSize</tabstop>
   <tabstop>autoSave</tabstop>
   <tabstop>autoSaveTime</tabstop>
   <tabstop>oscServer</tabstop>
@@ -4438,6 +4460,19 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>limitScrollArea</tabstop>
   <tabstop>drawAntialiased</tabstop>
   <tabstop>proximity</tabstop>
+  <tabstop>pageHorizontal</tabstop>
+  <tabstop>pageVertical</tabstop>
+  <tabstop>realtimeDelay</tabstop>
+  <tabstop>playNotes</tabstop>
+  <tabstop>showMidiControls</tabstop>
+  <tabstop>expandRepeats</tabstop>
+  <tabstop>exportRPNs</tabstop>
+  <tabstop>exportPdfDpi</tabstop>
+  <tabstop>exportMp3BitRate</tabstop>
+  <tabstop>filterShortcuts</tabstop>
+  <tabstop>checkUpdateStartup</tabstop>
+  <tabstop>resetPreference</tabstop>
+  <tabstop>advancedSearch</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>

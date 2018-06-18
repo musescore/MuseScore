@@ -391,7 +391,7 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
       QGroupBox* b1 = new QGroupBox;
       b1->setTitle(tr("Key Signature"));
       b1->setAccessibleName(title());
-      sp = MuseScore::newKeySigPalette(PaletteType::ADVANCED);
+      sp = MuseScore::newKeySigPalette();
       sp->setMoreElements(false);
       sp->setShowContextMenu(false);
       sp->setSelectable(true);

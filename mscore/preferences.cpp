@@ -173,10 +173,13 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_SCORE_VOICE3_COLOR,                           new ColorPreference(QColor("#c04400"))},    // orange
             {PREF_UI_SCORE_VOICE4_COLOR,                           new ColorPreference(QColor("#70167a"))},    // purple
             {PREF_UI_THEME_ICONWIDTH,                              new IntPreference(28, false)},
-            {PREF_UI_THEME_ICONHEIGHT,                             new IntPreference(24, false)}
+            {PREF_UI_THEME_ICONHEIGHT,                             new IntPreference(24, false)},
+            {PREF_UI_THEME_FONTFAMILY,                             new StringPreference(QApplication::font().family(), false)},
+            {PREF_UI_THEME_FONTSIZE,                               new IntPreference(QApplication::font().pointSize(), false)}
       });
 
       _initialized = true;
+      updateLocalPreferences();
       }
 
 void Preferences::save()
@@ -209,6 +212,8 @@ QVariant Preferences::get(const QString key) const
             return (_inMemorySettings.contains(key)) ? pref : QVariant(); // invalid QVariant returned when not found
       else if (_inMemorySettings.contains(key)) // if there exists a temporary value stored "in memory" return this value
             return pref;
+      else if (useLocalPrefs && localPreferences.contains(key))
+            return localPreferences.value(key);
       else
             return settings()->value(key);
       }
@@ -217,6 +222,8 @@ void Preferences::set(const QString key, QVariant value, bool temporary)
       {
       if (_storeInMemoryOnly || temporary)
             _inMemorySettings[key] = value;
+      else if (useLocalPrefs && localPreferences.contains(key))
+            localPreferences[key] = value;
       else
             settings()->setValue(key, value);
       }
@@ -405,6 +412,44 @@ void Preferences::clearMidiRemote(int recordId)
       {
       QString baseKey = QString(PREF_IO_MIDI_REMOTE) + QString("%1%2").arg("/").arg(recordId);
       remove(baseKey);
+      }
+
+QHash<QString, QVariant> Preferences::getDefaultLocalPreferences() {
+      bool tmp = useLocalPrefs;
+      useLocalPrefs = false;
+      QHash<QString, QVariant> defaultLocalPreferences;
+      for (QString s : {PREF_UI_CANVAS_BG_USECOLOR,
+                        PREF_UI_CANVAS_FG_USECOLOR,
+                        PREF_UI_CANVAS_BG_COLOR,
+                        PREF_UI_CANVAS_FG_COLOR,
+                        PREF_UI_CANVAS_BG_WALLPAPER,
+                        PREF_UI_CANVAS_FG_WALLPAPER,
+                        PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING,
+                        PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY,
+                        PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA,
+                        PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION,
+                        PREF_UI_APP_SHOWSTATUSBAR,
+                        PREF_UI_APP_USENATIVEDIALOGS,
+                        PREF_UI_PIANO_HIGHLIGHTCOLOR,
+                        PREF_UI_SCORE_NOTE_DROPCOLOR,
+                        PREF_UI_SCORE_DEFAULTCOLOR,
+                        PREF_UI_SCORE_FRAMEMARGINCOLOR,
+                        PREF_UI_SCORE_LAYOUTBREAKCOLOR,
+                        PREF_UI_SCORE_VOICE1_COLOR,
+                        PREF_UI_SCORE_VOICE2_COLOR,
+                        PREF_UI_SCORE_VOICE3_COLOR,
+                        PREF_UI_SCORE_VOICE4_COLOR,
+                        PREF_UI_THEME_ICONWIDTH,
+                        PREF_UI_THEME_ICONHEIGHT,
+                        PREF_UI_THEME_FONTFAMILY,
+                        PREF_UI_THEME_FONTSIZE}) {
+            QVariant value = get(s);
+            if (!value.isValid())
+                  value = _allPreferences.value(s)->defaultValue();
+            defaultLocalPreferences.insert(s, value);
+            }
+      useLocalPrefs = tmp;
+      return defaultLocalPreferences;
       }
 
 Preference::Preference(QVariant defaultValue, QMetaType::Type type, bool showInAdvancedList)
