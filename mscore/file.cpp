@@ -678,10 +678,17 @@ MasterScore* MuseScore::getNewFile()
                   }
             }
 
-      QString title     = newWizard->title();
-      QString subtitle  = newWizard->subtitle();
-      QString composer  = newWizard->composer();
-      QString poet      = newWizard->poet();
+      score->setMetaTag("movementTitle", newWizard->movementTitle());
+      score->setMetaTag("movementNumber", newWizard->movementNumber());
+      score->setMetaTag("arranger", newWizard->arranger());
+      score->setMetaTag("lyricist", newWizard->lyricist());
+      score->setMetaTag("workNumber", newWizard->workNumber());
+      score->setMetaTag("translator", newWizard->translator());
+      score->setMetaTag("source", newWizard->source());
+      QString title = newWizard->title();
+      QString subtitle = newWizard->subtitle();
+      QString composer = newWizard->composer();
+      QString poet = newWizard->poet();
       QString copyright = newWizard->copyright();
 
       if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !poet.isEmpty()) {
@@ -717,8 +724,7 @@ MasterScore* MuseScore::getNewFile()
                   Text* s = new Text(SubStyleId::POET, score);
                   s->setPlainText(poet);
                   measure->add(s);
-                  // the poet() functions returns data called lyricist in the dialog
-                  score->setMetaTag("lyricist", poet);
+                  score->setMetaTag("poet", poet);
                   }
             }
       else if (nvb) {

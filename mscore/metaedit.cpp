@@ -24,10 +24,6 @@
 #include "libmscore/undo.h"
 #include "musescore.h"
 
-#include <QKeyEvent>
-#include <QMessageBox>
-#include <QScrollBar>
-
 namespace Ms {
 
 //---------------------------------------------------------
@@ -93,7 +89,7 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
                   else if (s ==  "source")         tag->setText(tr("Source"));
                   else if (s ==  "copyright")      tag->setText(tr("Copyright"));
                   else if (s ==  "creationDate")   tag->setText(tr("Creation date"));
-                  else                             tag->setText(s); // just in case
+                  else                             tag->setText(s); // For all other cases.
 
                   QLineEdit *value = new QLineEdit(i.value());
                   connect(value, SIGNAL(textChanged(const QString&)), SLOT(setDirty()));
@@ -205,6 +201,8 @@ void MetaEditDialog::newClicked()
       // scroll down to see the newly created tag.
       // the following line doesn't work for some reason.
       //scrollArea->verticalScrollBar()->triggerAction(QAbstractSlider::SliderToMaximum);
+      // and this one too:
+      //scrollArea->ensureWidgetVisible(tag);
       QScrollBar* scrbar = scrollArea->verticalScrollBar();
       int max = 100000;
       scrbar->setMaximum(max);
@@ -293,8 +291,9 @@ bool MetaEditDialog::save()
             m_score->undo(new ChangeMetaTags(m_score, map));
             setDirty(false);
             }
-//      QAction* act = getAction("file-save");
-//      mscore->cmd(act);
+      // should the file be saved (to file, not to the internal copy)
+      // automatically when save is clicked? For now it's not.
+//             mscore->cmd(getAction("file-save"));
       return true;
       }
 

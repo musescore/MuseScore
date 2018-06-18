@@ -147,9 +147,45 @@ void TimesigWizard::fractionToggled(bool val)
 //---------------------------------------------------------
 
 TitleWizard::TitleWizard(QWidget* parent)
-   : QWidget(parent)
+   : QWidget(parent),
+     moreOptionsVisible(true) // because they are visible in the .ui files.
       {
       setupUi(this);
+
+      setMoreOptionsVisible(false);
+      connect(buttonMore, SIGNAL(toggled(bool)), SLOT(setMoreOptionsVisible(bool)));
+      }
+
+//---------------------------------------------------------
+//   setMoreOptionsVisible
+//---------------------------------------------------------
+
+void TitleWizard::setMoreOptionsVisible(bool visible)
+      {
+      if (visible == moreOptionsVisible)
+            return;
+
+      lineEditArranger->setVisible(visible);
+      labelArranger->setVisible(visible);
+      lineEditMovementNumber->setVisible(visible);
+      labelMovementNumber->setVisible(visible);
+      lineEditMovementTitle->setVisible(visible);
+      labelMovementTitle->setVisible(visible);
+      lineEditSource->setVisible(visible);
+      labelSource->setVisible(visible);
+      lineEditPoet->setVisible(visible);
+      labelPoet->setVisible(visible);
+      lineEditTranslator->setVisible(visible);
+      labelTranslator->setVisible(visible);
+      lineEditWorkNumber->setVisible(visible);
+      labelWorkNumber->setVisible(visible);
+
+      if (visible)
+            buttonMore->setText(tr("Less"));
+      else
+            buttonMore->setText(tr("More"));
+
+      moreOptionsVisible = visible;
       }
 
 //---------------------------------------------------------
@@ -177,8 +213,8 @@ NewWizardPage1::NewWizardPage1(QWidget* parent)
 
 void NewWizardPage1::initializePage()
       {
-      w->title->setText("");
-      w->subtitle->setText("");
+      w->lineEditTitle->setText("");
+      w->lineEditSubtitle->setText("");
       }
 
 //---------------------------------------------------------
@@ -455,7 +491,7 @@ NewWizard::NewWizard(QWidget* parent)
 
       resize(QSize(840, 560)); //ensure default size if no geometry in settings
       MuseScore::restoreGeometry(this);
-      connect(this, SIGNAL(currentIdChanged(int)), SLOT(idChanged(int)));
+      //connect(this, SIGNAL(currentIdChanged(int)), SLOT(idChanged(int)));
       }
 
 //---------------------------------------------------------

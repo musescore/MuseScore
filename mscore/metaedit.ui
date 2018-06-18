@@ -227,7 +227,7 @@
         <string>Add a tag to this score.</string>
        </property>
        <property name="text">
-        <string notr="true">New...</string>
+        <string>New...</string>
        </property>
        <property name="autoRepeat">
         <bool>true</bool>

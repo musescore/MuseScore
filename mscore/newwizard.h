@@ -65,6 +65,12 @@ class TimesigWizard : public QWidget, private Ui::TimesigWizard {
 class TitleWizard : public QWidget, public Ui::NewWizard {
       Q_OBJECT
 
+   private:
+      bool moreOptionsVisible;
+
+   private slots:
+      void setMoreOptionsVisible(bool visible = true);
+
    public:
       TitleWizard(QWidget* parent = 0);
       };
@@ -79,12 +85,19 @@ class NewWizardPage1 : public QWizardPage {
       TitleWizard* w;
 
    public:
-      NewWizardPage1(QWidget* parent = 0);
-      QString title() const              { return w->title->text();      }
-      QString subtitle() const           { return w->subtitle->text();   }
-      QString composer() const           { return w->composer->text();   }
-      QString poet() const               { return w->poet->text();       }
-      QString copyright() const          { return w->copyright->text();  }
+      NewWizardPage1(QWidget* parent = nullptr);
+      QString title() const              { return w->lineEditTitle->text(); }
+      QString movementTitle() const      { return w->lineEditMovementTitle->text(); }
+      QString movementNumber() const     { return w->lineEditMovementNumber->text(); }
+      QString subtitle() const           { return w->lineEditSubtitle->text(); }
+      QString composer() const           { return w->lineEditComposer->text(); }
+      QString arranger() const           { return w->lineEditArranger->text(); }
+      QString lyricist() const           { return w->lineEditLyricist->text(); }
+      QString poet() const               { return w->lineEditPoet->text(); }
+      QString workNumber() const         { return w->lineEditWorkNumber->text(); }
+      QString translator() const         { return w->lineEditTranslator->text(); }
+      QString source() const             { return w->lineEditSource->text(); }
+      QString copyright() const          { return w->lineEditCopyright->text(); }
       virtual void initializePage() override;
       };
 
@@ -196,11 +209,18 @@ class NewWizard : public QWizard {
       int measures() const               { return p3->measures();    }
       Fraction timesig() const           { return p3->timesig();     }
       void createInstruments(Score* s)   { p2->createInstruments(s); }
-      QString title() const              { return p1->title();       }
-      QString subtitle() const           { return p1->subtitle();    }
-      QString composer() const           { return p1->composer();    }
-      QString poet() const               { return p1->poet();        }
-      QString copyright() const          { return p1->copyright();   }
+      QString title() const              { return p1->title(); }
+      QString movementTitle() const      { return p1->movementTitle(); }
+      QString movementNumber() const     { return p1->movementNumber(); }
+      QString subtitle() const           { return p1->subtitle(); }
+      QString composer() const           { return p1->composer(); }
+      QString arranger() const           { return p1->arranger(); }
+      QString lyricist() const           { return p1->lyricist(); }
+      QString poet() const               { return p1->poet(); }
+      QString workNumber() const         { return p1->workNumber(); }
+      QString translator() const         { return p1->translator(); }
+      QString source() const             { return p1->source(); }
+      QString copyright() const          { return p1->copyright(); }
       KeySigEvent keysig() const         { return p5->keysig();      }
       bool pickupMeasure(int* z, int* n) const { return p3->pickupMeasure(z, n); }
       TimeSigType timesigType() const     { return p3->timesigType();       }

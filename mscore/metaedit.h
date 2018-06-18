@@ -54,7 +54,7 @@ private slots:
       virtual void accept();
 
    public:
-      MetaEditDialog(Score*, QWidget* parent = nullptr);
+      MetaEditDialog(Score*, QWidget *parent = nullptr);
       };
 
 
