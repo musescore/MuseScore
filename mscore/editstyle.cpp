@@ -271,6 +271,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       { Sid::showMeasureNumber,          false, showMeasureNumber,            0 },
       { Sid::showMeasureNumberOne,       false, showFirstMeasureNumber,       0 },
+      { Sid::showMeasureNumberRange,     false, showMeasureNumberRange,       0 },
       { Sid::measureNumberInterval,      false, intervalMeasureNumber,        0 },
       { Sid::measureNumberSystem,        false, showEverySystemMeasureNumber, 0 },
       { Sid::measureNumberAllStaffs,     false, showAllStaffsMeasureNumber,   0 },
@@ -868,6 +869,8 @@ void EditStyle::setValues()
 
       toggleHeaderOddEven(lstyle.value(Sid::headerOddEven).toBool());
       toggleFooterOddEven(lstyle.value(Sid::footerOddEven).toBool());
+
+      showMeasureNumberRange->setChecked(lstyle.value(Sid::showMeasureNumberRange).toBool());
       }
 
 //---------------------------------------------------------
@@ -1090,4 +1093,3 @@ void EditStyle::resetStyleValue(int i)
       }
 
 }
-

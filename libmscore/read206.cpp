@@ -154,7 +154,7 @@ struct StyleVal2 {
       { Sid::pageNumberOddEven,           QVariant(true) },
       { Sid::showMeasureNumber,           QVariant(true) },
       { Sid::showMeasureNumberOne,        QVariant(false) },
-      { Sid::measureNumberInterval,       QVariant(5) },
+      { Sid::showMeasureNumberRange,      QVariant(false) },
       { Sid::measureNumberSystem,         QVariant(true) },
       { Sid::measureNumberAllStaffs,      QVariant(false) },
       { Sid::smallNoteMag,                QVariant(.7) },
@@ -2733,4 +2733,3 @@ Score::FileError MasterScore::read206(XmlReader& e)
       }
 
 }
-

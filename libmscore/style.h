@@ -195,6 +195,7 @@ enum class Sid {
       pageNumberOddEven,
       showMeasureNumber,
       showMeasureNumberOne,
+      showMeasureNumberRange,
       measureNumberInterval,
       measureNumberSystem,
 

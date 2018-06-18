@@ -124,6 +124,7 @@ static const StyleVal2 style114[] = {
       { Sid::showMeasureNumber,            QVariant(true) },
       { Sid::showMeasureNumberOne,         QVariant(false) },
       { Sid::measureNumberInterval,        QVariant(5) },
+      { Sid::showMeasureNumberRange,       QVariant(false) },
       { Sid::measureNumberSystem,          QVariant(true) },
       { Sid::measureNumberAllStaffs,       QVariant(false) },
       { Sid::smallNoteMag,                 QVariant(qreal(0.7)) },
@@ -3014,4 +3015,3 @@ Score::FileError MasterScore::read114(XmlReader& e)
       }
 
 }
-

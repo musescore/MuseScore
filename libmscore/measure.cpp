@@ -518,14 +518,27 @@ void Measure::layout2()
                   if (score()->styleB(Sid::measureNumberSystem))
                         smn = system()->firstMeasure() == this;
                   else {
+                        int interval = score()->styleI(Sid::measureNumberInterval);
                         smn = (no() == 0 && score()->styleB(Sid::showMeasureNumberOne)) ||
-                              ( ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0) );
+                              ((no()+1) % interval == 0 ) ||
+                              // We're in a multimeasure rest, and we want to show the range
+                              (_mmRestCount > 0 && score()->styleB(Sid::showMeasureNumberRange) &&
+                                    // And the rest encompasses a measure we would normally display a number for
+                                    // Either the rest is longer than the measureNumberInterval...
+                                    (_mmRestCount >= interval ||
+                                          // ...or one is inside it (the modulo of the final measure is less than the modulo of the current)
+                                          (no()+1) % interval > (no() + _mmRestCount) % interval));
                         }
                   }
             }
       QString s;
-      if (smn)
-            s = QString("%1").arg(no() + 1);
+      if (smn) {
+            if (_mmRestCount && score()->styleB(Sid::createMultiMeasureRests) && score()->styleB(Sid::showMeasureNumberRange))
+                   s = QString("%1 - %2").arg(no() + 1).arg(no() + _mmRestCount);
+            else
+                   s = QString("%1").arg(no() + 1);
+            }
+
       int nn = 1;
       bool nas = score()->styleB(Sid::measureNumberAllStaffs);
 
@@ -3956,4 +3969,3 @@ void Measure::computeMinWidth()
       }
 
 }
-
