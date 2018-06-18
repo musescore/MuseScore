@@ -28,9 +28,14 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Extension {
-
    public:
       Extension() {}
+      static constexpr const char* workspacesDir = "workspaces";
+      static constexpr const char* sfzsDir       = "sfzs";
+      static constexpr const char* soundfontsDir = "soundfonts";
+      static constexpr const char* templatesDir  = "templates";
+      static constexpr const char* instrumentsDir = "instruments";
+
       static QStringList getDirectoriesByType(const char* type);
       static bool isInstalled(QString extensionId);
       static QString getLatestVersion(QString extensionId);

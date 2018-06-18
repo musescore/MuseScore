@@ -36,7 +36,6 @@ bool DownloadUtils::saveFile()
 void DownloadUtils::downloadFinished(QNetworkReply *data)
       {
       sdata = data->readAll();
-      qDebug() << "size" << sdata.size();
       emit done();
       }
 
@@ -65,10 +64,10 @@ void DownloadUtils::download(bool showProgress)
             progressDialog->setLabelText(tr("Downloading..."));
             progressDialog->setAutoClose(true);
             progressDialog->setAutoReset(true);
+            QObject::connect(progressDialog, SIGNAL(canceled()), &loop, SLOT(quit()));
             progressDialog->show();
             }
 
-      QObject::connect(progressDialog, SIGNAL(canceled()), &loop, SLOT(quit()));
       loop.exec();
 
       QObject::disconnect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
@@ -79,7 +78,6 @@ void DownloadUtils::download(bool showProgress)
 void DownloadUtils::downloadProgress(qint64 received, qint64 total)
       {
       double curVal = (double(received)/total)*100;
-      qDebug() << curVal << "%";
       if (progressDialog && progressDialog->isVisible())
             progressDialog->setValue(curVal);
       }
