@@ -73,6 +73,7 @@
 #include "synthesizer/msynthesizer.h"
 #include "svggenerator.h"
 #include "scorePreview.h"
+#include "extension.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -480,8 +481,9 @@ QString MuseScore::createDefaultName() const
 
 void MuseScore::updateNewWizard()
       {
-      if (newWizard != 0)
+      if (newWizard == nullptr)
             newWizard = new NewWizard(this);
+      newWizard->updateValues();
       }
 
 //---------------------------------------------------------
@@ -2088,6 +2090,15 @@ void importSoundfont(QString name)
       }
 
 //---------------------------------------------------------
+//   importExtension
+//---------------------------------------------------------
+
+void importExtension(QString name)
+      {
+      mscore->importExtension(name);
+      }
+
+//---------------------------------------------------------
 //   readScore
 ///   Import file \a name
 //---------------------------------------------------------
@@ -2110,6 +2121,10 @@ Score::FileError readScore(Score* score, QString name, bool ignoreVersionError)
             importSoundfont(name);
             return Score::FileError::FILE_IGNORE_ERROR;
             }
+      else if (suffix == "muxt") {
+           importExtension(name);
+           return Score::FileError::FILE_IGNORE_ERROR;
+           }
       else {
             // typedef Score::FileError (*ImportFunction)(Score*, const QString&);
             struct ImportDef {

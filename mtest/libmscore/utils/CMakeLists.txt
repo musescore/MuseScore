@@ -11,12 +11,7 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-set(TARGET tst_sfzopcodes)
+set(TARGET tst_utils)
 
 include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 
-include_directories(
-      ${SNDFILE_INCDIR}
-      )
-
-target_link_libraries(tst_sfzopcodes zerberus synthesizer audiofile ${SNDFILE_LIB} testutils)

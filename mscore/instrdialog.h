@@ -38,6 +38,7 @@ class InstrumentsDialog : public QDialog, public Ui::InstrumentsDialog {
       void writeSettings();
       void genPartList(Score*);
       QTreeWidget* partiturList();
+      void buildInstrumentsList();
       };
 
 } // namespace Ms

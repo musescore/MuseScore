@@ -769,7 +769,7 @@ Score::FileError Score::loadCompressedMsc(QIODevice* io, bool ignoreVersionError
       QByteArray dbuf = uz.fileData(rootfile);
       if (dbuf.isEmpty()) {
 //            qDebug("root file <%s> is empty", qPrintable(rootfile));
-            QList<MQZipReader::FileInfo> fil = uz.fileInfoList();
+            QVector<MQZipReader::FileInfo> fil = uz.fileInfoList();
             foreach(const MQZipReader::FileInfo& fi, fil) {
                   if (fi.filePath.endsWith(".mscx")) {
                         dbuf = uz.fileData(fi.filePath);
