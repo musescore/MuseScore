@@ -322,7 +322,7 @@ void NewWizardPage4::buildTemplatesList()
       fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
 
       // append templates directories from extensions
-      QStringList extensionsDir = Extension::getDirectoriesByType("templates");
+      QStringList extensionsDir = Extension::getDirectoriesByType(Extension::templatesDir);
       for (QString extDir : extensionsDir) {
             QDir extTemplateDir(extDir);
             fil.append(extTemplateDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));

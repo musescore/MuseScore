@@ -139,7 +139,7 @@ QFileInfoList Zerberus::sfzFiles()
       pl.prepend(QFileInfo(QString("%1%2").arg(Ms::mscoreGlobalShare).arg("sound")).absoluteFilePath());
 
       // append extensions directory
-      QStringList extensionsDir = Ms::Extension::getDirectoriesByType("sfzs");
+      QStringList extensionsDir = Ms::Extension::getDirectoriesByType(Ms::Extension::sfzsDir);
       pl.append(extensionsDir);
 
       foreach (const QString& s, pl) {

@@ -446,8 +446,8 @@ void SfzRegion::readOp(const QString& b, const QString& data, SfzControl &c)
                   loop_mode = LoopMode::CONTINUOUS;
             else if (opcode_data == "loop_sustain")
                   loop_mode = LoopMode::SUSTAIN;
-            if (loop_mode != LoopMode::ONE_SHOT)
-                  qDebug("SfzRegion: loop_mode <%s>", qPrintable(opcode_data));
+            //if (loop_mode != LoopMode::ONE_SHOT)
+            //      qDebug("SfzRegion: loop_mode <%s>", qPrintable(opcode_data));
             }
       else if(opcode == "loop_start")
             readLongLong(opcode_data, loopStart);
