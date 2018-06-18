@@ -216,63 +216,6 @@ const std::list<const char*> MuseScore::_allNoteInputMenuEntries {
             "voice-4"
             };
 
-const std::list<const char*> MuseScore::_advancedNoteInputMenuEntries {
-            "note-input",
-            "pad-note-128",
-            "pad-note-64",
-            "pad-note-32",
-            "pad-note-16",
-            "pad-note-8",
-            "pad-note-4",
-            "pad-note-2",
-            "pad-note-1",
-            "note-breve",
-            "note-longa",
-            "pad-dot",
-            "pad-dotdot",
-            "pad-dot3",
-            "pad-dot4",
-            "tie",
-            "",
-            "pad-rest",
-            "",
-            "sharp2",
-            "sharp",
-            "nat",
-            "flat",
-            "flat2",
-            "flip",
-            "",
-            "voice-1",
-            "voice-2",
-            "voice-3",
-            "voice-4"
-            };
-
-const std::list<const char*> MuseScore::_basicNoteInputMenuEntries {
-            "note-input",
-            "pad-note-32",
-            "pad-note-16",
-            "pad-note-8",
-            "pad-note-4",
-            "pad-note-2",
-            "pad-note-1",
-            "pad-dot",
-            "tie",
-            "",
-            "pad-rest",
-            "",
-            "sharp",
-            "nat",
-            "flat",
-            "flip",
-            "",
-            "voice-1",
-            "voice-2",
-            "voice-3",
-            "voice-4"
-            };
-
 const std::list<const char*> MuseScore::_allFileOperationEntries {
             "file-new",
             "file-open",
@@ -490,7 +433,7 @@ void updateExternalValuesFromPreferences() {
 //   preferencesChanged
 //---------------------------------------------------------
 
-void MuseScore::preferencesChanged()
+void MuseScore::preferencesChanged(bool fromWorkspace)
       {
       updateExternalValuesFromPreferences();
 
@@ -549,7 +492,7 @@ void MuseScore::preferencesChanged()
       playId->setEnabled(!noSeq && seq && seq->isRunning());
 
       // change workspace
-      if (preferences.getString(PREF_APP_WORKSPACE) != Workspace::currentWorkspace->name()) {
+      if (!fromWorkspace && preferences.getString(PREF_APP_WORKSPACE) != Workspace::currentWorkspace->name()) {
             Workspace* workspace = 0;
             for (Workspace* w: Workspace::workspaces()) {
                   if (w->name() == preferences.getString(PREF_APP_WORKSPACE)) {
@@ -1368,8 +1311,11 @@ MuseScore::MuseScore()
 #endif
 
       menuEdit->addSeparator();
-      pref = menuEdit->addAction("", this, SLOT(startPreferenceDialog()));
+      pref = new QAction("", 0);
+      connect(pref, SIGNAL(triggered()), this, SLOT(startPreferenceDialog()));
+      menuEdit->addAction(pref);
       pref->setMenuRole(QAction::PreferencesRole);
+      Workspace::addActionAndString(pref, "preference-dialog");
 
       //---------------------
       //    Menu View
@@ -1623,6 +1569,7 @@ MuseScore::MuseScore()
       QMenu* menuStretch = new QMenu(tr("&Stretch"));
       for (auto i : { "stretch+", "stretch-", "reset-stretch" })
             menuStretch->addAction(getAction(i));
+      Workspace::addMenuAndString(menuStretch, "menu-stretch");
       menuFormat->addMenu(menuStretch);
       menuFormat->addSeparator();
 
@@ -1719,6 +1666,7 @@ MuseScore::MuseScore()
       a->setCheckable(true);
       a->setChecked(MScore::autoplaceSlurs);
       menuDebug->addAction(a);
+      Workspace::addMenuAndString(menuDebug, "menu-debug");
 #endif
 
       //---------------------
@@ -1737,7 +1685,10 @@ MuseScore::MuseScore()
             }
 #endif
       //menuHelp->addAction(getAction("help"));
-      onlineHandbookAction = menuHelp->addAction("", this, SLOT(helpBrowser1()));
+      onlineHandbookAction = new QAction("", 0);
+      connect(onlineHandbookAction, SIGNAL(triggered()), this, SLOT(helpBrowser1()));
+      menuHelp->addAction(onlineHandbookAction);
+      Workspace::addActionAndString(onlineHandbookAction, "online-handbook");
 
       menuHelp->addSeparator();
 
@@ -1746,34 +1697,81 @@ MuseScore::MuseScore()
       aboutAction->setMenuRole(QAction::AboutRole);
       connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
       menuHelp->addAction(aboutAction);
+      Workspace::addActionAndString(aboutAction, "about");
 
       aboutQtAction = new QAction("", 0);
       aboutQtAction->setMenuRole(QAction::AboutQtRole);
       connect(aboutQtAction, SIGNAL(triggered()), this, SLOT(aboutQt()));
       menuHelp->addAction(aboutQtAction);
+      Workspace::addActionAndString(aboutQtAction, "about-qt");
 
       aboutMusicXMLAction = new QAction("", 0);
       aboutMusicXMLAction->setMenuRole(QAction::ApplicationSpecificRole);
       connect(aboutMusicXMLAction, SIGNAL(triggered()), this, SLOT(aboutMusicXML()));
       menuHelp->addAction(aboutMusicXMLAction);
+      Workspace::addActionAndString(aboutMusicXMLAction, "about-musicxml");
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
 #if !defined(FOR_WINSTORE)
-      checkForUpdateAction = menuHelp->addAction("", this, SLOT(checkForUpdate()));
+      checkForUpdateAction = new QAction("", 0);
+      connect(checkForUpdateAction, SIGNAL(triggered()), this, SLOT(checkForUpdate()));
+      menuHelp->addAction(checkForUpdateAction);
+      Workspace::addActionAndString(checkForUpdateAction, "check-update");
 #endif
 #endif
       menuHelp->addSeparator();
-      askForHelpAction = menuHelp->addAction("", this, SLOT(askForHelp()));
-      reportBugAction = menuHelp->addAction("", this, [this]{ reportBug("menu"); });
-      leaveFeedbackAction = menuHelp->addAction("", this, [this]{ leaveFeedback("menu"); });
+
+      askForHelpAction = new QAction("", 0);
+      connect(askForHelpAction, SIGNAL(triggered()), this, SLOT(askForHelp()));
+      menuHelp->addAction(askForHelpAction);
+      Workspace::addActionAndString(askForHelpAction, "ask-help");
+
+      reportBugAction = new QAction("", 0);
+      connect(reportBugAction, SIGNAL(triggered()), this, SLOT(reportBug("menu")));
+      menuHelp->addAction(reportBugAction);
+      Workspace::addActionAndString(reportBugAction, "report-bug");
+
+      leaveFeedbackAction = new QAction("", 0);
+      connect(leaveFeedbackAction, SIGNAL(triggered()), this, SLOT(leaveFeedback("menu")));
+      menuHelp->addAction(leaveFeedbackAction);
+      Workspace::addActionAndString(leaveFeedbackAction, "leave-feedback");
 
       menuHelp->addSeparator();
       menuHelp->addAction(getAction("resource-manager"));
       menuHelp->addSeparator();
-      revertToFactoryAction = menuHelp->addAction("", this, SLOT(resetAndRestart()));
+
+      revertToFactoryAction = new QAction("", 0);
+      connect(revertToFactoryAction, SIGNAL(triggered()), this, SLOT(resetAndRestart()));
+      menuHelp->addAction(revertToFactoryAction);
+      Workspace::addActionAndString(revertToFactoryAction, "revert-factory");
+
+      Workspace::addRemainingFromMenuBar(mb);
+
+      // Add all menus to workspace for loading
+      Workspace::addMenuAndString(menuFile, "menu-file");
+      Workspace::addMenuAndString(openRecent, "menu-open-recent");
+      Workspace::addMenuAndString(menuEdit, "menu-edit");
+      Workspace::addMenuAndString(menuView, "menu-view");
+      Workspace::addMenuAndString(menuToolbars, "menu-toolbars");
+      Workspace::addMenuAndString(menuWorkspaces, "menu-workspaces");
+      Workspace::addMenuAndString(menuAdd, "menu-add");
+      Workspace::addMenuAndString(menuAddMeasures, "menu-add-measures");
+      Workspace::addMenuAndString(menuAddFrames, "menu-add-frames");
+      Workspace::addMenuAndString(menuAddText, "menu-add-text");
+      Workspace::addMenuAndString(menuAddLines, "menu-add-lines");
+      Workspace::addMenuAndString(menuAddPitch, "menu-add-pitch");
+      Workspace::addMenuAndString(menuAddInterval, "menu-add-interval");
+      Workspace::addMenuAndString(menuTuplet, "menu-tuplet");
+      Workspace::addMenuAndString(menuFormat, "menu-format");
+      Workspace::addMenuAndString(menuTools, "menu-tools");
+      Workspace::addMenuAndString(menuVoices, "menu-voices");
+      Workspace::addMenuAndString(menuPlugins, "menu-plugins");
+      Workspace::addMenuAndString(menuHelp, "menu-help");
+
+      Workspace::writeGlobalMenuBar(mb);
 
       if (!MScore::noGui) {
-            retranslate(true);
+            retranslate();
             //accessibility for menus
             for (QMenu* menu : mb->findChildren<QMenu*>()) {
                   menu->setAccessibleName(menu->objectName());
@@ -1835,7 +1833,7 @@ void MuseScore::showError()
 //   retranslate
 //---------------------------------------------------------
 
-void MuseScore::retranslate(bool firstStart)
+void MuseScore::retranslate()
       {
       _positionLabel->setToolTip(tr("Measure:Beat:Tick"));
 
@@ -1887,9 +1885,7 @@ void MuseScore::retranslate(bool firstStart)
       showMidiImportButton->setText(tr("Show MIDI import panel"));
 
       Shortcut::retranslate();
-      if (!firstStart && Workspace::currentWorkspace->readOnly()) {
-            changeWorkspace(Workspace::currentWorkspace);
-            }
+      Workspace::retranslate();
       }
 
 //---------------------------------------------------------
@@ -6488,6 +6484,11 @@ void MuseScore::updateUiStyleAndTheme()
       css.replace("$voice4-bgcolor", MScore::selectColor[3].name(QColor::HexRgb));
       qApp->setStyleSheet(css);
 
+      QString style = QString("*, QSpinBox { font: %1pt \"%2\" } ")
+                  .arg(QString::number(preferences.getInt(PREF_UI_THEME_FONTSIZE)), preferences.getString(PREF_UI_THEME_FONTFAMILY))
+                  + qApp->styleSheet();
+      qApp->setStyleSheet(style);
+
       genIcons();
       Shortcut::refreshIcons();
       }
@@ -6932,9 +6933,11 @@ int main(int argc, char* av[])
                   preferences.setPreference(PREF_APP_KEYBOARDLAYOUT, sw->keyboardLayout());
                   preferences.setPreference(PREF_UI_APP_LANGUAGE, sw->language());
                   setMscoreLocale(sw->language());
+                  Workspace::writeGlobalToolBar();
+                  Workspace::writeGlobalGUIState();
                   for (auto ws : Workspace::workspaces()) {
                         if (ws->name().compare(sw->workspace()) == 0) {
-                              mscore->changeWorkspace(ws);
+                              mscore->changeWorkspace(ws, true);
                               preferences.setPreference(PREF_APP_WORKSPACE, ws->name());
                               mscore->getPaletteBox()->updateWorkspaces();
                               }

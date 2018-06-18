@@ -25,6 +25,7 @@
 #include "scoreview.h"
 #include "pa.h"
 #include "shortcut.h"
+#include "workspace.h"
 
 #ifdef USE_PORTMIDI
 #include "pm.h"
@@ -331,6 +332,8 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
 
       iconWidth->setValue(preferences.getInt(PREF_UI_THEME_ICONWIDTH));
       iconHeight->setValue(preferences.getInt(PREF_UI_THEME_ICONHEIGHT));
+      fontFamily->setCurrentFont(QFont(preferences.getString(PREF_UI_THEME_FONTFAMILY)));
+      fontSize->setValue(preferences.getInt(PREF_UI_THEME_FONTSIZE));
 
       enableMidiInput->setChecked(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
       realtimeDelay->setValue(preferences.getInt(PREF_IO_MIDI_REALTIMEDELAY));
@@ -947,6 +950,8 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA, limitScrollArea->isChecked());
       preferences.setPreference(PREF_UI_THEME_ICONWIDTH, iconWidth->value());
       preferences.setPreference(PREF_UI_THEME_ICONHEIGHT, iconHeight->value());
+      preferences.setPreference(PREF_UI_THEME_FONTFAMILY, fontFamily->currentFont().family());
+      preferences.setPreference(PREF_UI_THEME_FONTSIZE, fontSize->value());
 
       bool wasJack = (preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_JACK_USEJACKAUDIO));
       bool wasJackAudio = preferences.getBool(PREF_IO_JACK_USEJACKAUDIO);
@@ -1113,6 +1118,11 @@ void PreferenceDialog::apply()
       genIcons();
 
       mscore->setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling, preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
+      QString style = QString("*, QSpinBox { font: %1pt \"%2\" } ")
+                  .arg(QString::number(preferences.getInt(PREF_UI_THEME_FONTSIZE)), preferences.getString(PREF_UI_THEME_FONTFAMILY))
+                  + qApp->styleSheet();
+      qApp->setStyleSheet(style);
+      mscore->updateIcons();
 
       emit preferencesChanged();
       preferences.save();

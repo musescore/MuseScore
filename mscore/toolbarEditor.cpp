@@ -79,7 +79,7 @@ void ToolbarEditor::init()
       remove->setEnabled(writable);
       up->setEnabled(writable);
       down->setEnabled(writable);
-      workspace->setText(name);
+      workspaceName->setText(name);
 
       // Syncs the editor with the current toolbars
       new_toolbars->at(0) = mscore->noteInputMenuEntries();
@@ -117,10 +117,13 @@ void ToolbarEditor::populateLists(const std::list<const char*>& all, std::list<c
       for (auto i : *current) {
             QAction* a = getAction(i);
             QListWidgetItem* item;
+            QString actionName = QString(i);
             if (a)
-                  item = new QListWidgetItem(a->icon(), QString(i));
+                  item = new QListWidgetItem(a->icon(), actionName);
+            else if (actionName.isEmpty())
+                  item = new QListWidgetItem(tr("spacer"));
             else
-                  item = new QListWidgetItem(QString(i));
+                  item = new QListWidgetItem(actionName);
             item->setData(Qt::UserRole, QVariant::fromValue((void*)i));
             actionList->addItem(item);
             }
@@ -134,13 +137,16 @@ void ToolbarEditor::populateLists(const std::list<const char*>& all, std::list<c
                   }
             if (!found) {
                   QAction* a = getAction(i);
-                  QListWidgetItem* item;
+                  QListWidgetItem* item = 0;
+                  QString actionName = QString(i);
                   if (a)
-                        item = new QListWidgetItem(a->icon(), QString(i));
-                  else
+                        item = new QListWidgetItem(a->icon(), actionName);
+                  else if (!actionName.isEmpty())
                         item = new QListWidgetItem(QString(i));
-                  item->setData(Qt::UserRole, QVariant::fromValue((void*)i));
-                  availableList->addItem(item);
+				  if (item) {
+                        item->setData(Qt::UserRole, QVariant::fromValue((void*)i));
+                        availableList->addItem(item);
+                        }
                   }
             }
       QListWidgetItem* item = new QListWidgetItem(tr("spacer"));
