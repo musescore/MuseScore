@@ -143,8 +143,8 @@ void ResourceManager::displayLanguages()
       {
       // Download details.json
       DownloadUtils js(this);
-      js.download();
       js.setTarget(baseAddr() + "languages/details.json");
+      js.download();
       QByteArray json = js.returnData();
 
       // parse the json file
