@@ -2828,11 +2828,12 @@ void Score::layoutLyrics(System* system)
 
       // align lyrics line segments
 
-      std::vector<LyricsLineSegment*> ll;
+//      std::vector<LyricsLineSegment*> ll;
       for (SpannerSegment* ss : system->spannerSegments()) {
             if (ss->isLyricsLineSegment()) {
                   LyricsLineSegment* lls = toLyricsLineSegment(ss);
-                  lls->rUserYoffset() = lls->lyricsLine()->lyrics()->rUserYoffset();
+                  lls->rUserYoffset() = lls->lyrics()->rUserYoffset();
+                  lls->layout();
                   }
             }
       }

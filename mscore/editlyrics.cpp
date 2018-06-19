@@ -396,14 +396,18 @@ void ScoreView::lyricsUnderscore()
                   break;
             }
 
-      _score->startCmd();
       // one-chord melisma?
       // if still at melisma initial chord and there is a valid next chord (if not,
       // there will be no melisma anyway), set a temporary melisma duration
-      if (fromLyrics == lyrics && nextSegment)
+      if (fromLyrics == lyrics && nextSegment) {
+            _score->startCmd();
             lyrics->undoChangeProperty(Pid::LYRIC_TICKS, Lyrics::TEMP_MELISMA_TICKS);
+            _score->setLayoutAll();
+            _score->endCmd();
+            }
 
       if (nextSegment == 0) {
+            _score->startCmd();
             if (fromLyrics) {
                   switch(fromLyrics->syllabic()) {
                         case Lyrics::Syllabic::SINGLE:

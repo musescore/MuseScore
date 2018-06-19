@@ -51,6 +51,7 @@
 #include "textframe.h"
 #include "fermata.h"
 #include "stem.h"
+#include "lyrics.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -1156,6 +1157,40 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   readLyrics
+//---------------------------------------------------------
+
+static void readLyrics(Lyrics* lyrics, XmlReader& e)
+      {
+      int   iEndTick = 0;           // used for backward compatibility
+      Text* _verseNumber = 0;
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "endTick") {
+                  // store <endTick> tag value until a <ticks> tag has been read
+                  // which positions this lyrics element in the score
+                  iEndTick = e.readInt();
+                  }
+            else if (tag == "Number") {
+                  _verseNumber = new Text(lyrics->score());
+                  _verseNumber->read(e);
+                  _verseNumber->setParent(lyrics);
+                  }
+            else if (!lyrics->readProperties(e))
+                  e.unknown();
+            }
+
+      // if any endTick, make it relative to current tick
+      if (iEndTick)
+            lyrics->setTicks(iEndTick - e.tick());
+      if (_verseNumber) {
+            // TODO: add text to main text
+            delete _verseNumber;
+            }
+      }
+
+//---------------------------------------------------------
 //   readChord
 //---------------------------------------------------------
 
@@ -1189,7 +1224,37 @@ static void readChord(Chord* chord, XmlReader& e)
                         }
                   chord->add(stem);
                   }
+            else if (tag == "Lyrics") {
+                  Lyrics* lyrics = new Lyrics(chord->score());
+                  lyrics->setTrack(e.track());
+                  readLyrics(lyrics, e);
+                  chord->add(lyrics);
+                  }
             else if (chord->readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   readRest
+//---------------------------------------------------------
+
+static void readRest(Rest* rest, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Articulation") {
+                  Articulation* atr = new Articulation(rest->score());
+                  atr->setTrack(rest->track());
+                  Element* el = readArticulation(rest, e);
+                  if (el->isFermata())
+                        rest->segment()->add(el);
+                  else
+                        rest->add(el);
+                  }
+            else if (rest->readProperties(e))
                   ;
             else
                   e.unknown();
@@ -1545,30 +1610,6 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
             }
       el->setTrack(cr->staffIdx() * VOICES);
       return el;
-      }
-
-//---------------------------------------------------------
-//   readRest
-//---------------------------------------------------------
-
-static void readRest(Rest* rest, XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "Articulation") {
-                  Articulation* atr = new Articulation(rest->score());
-                  atr->setTrack(rest->track());
-                  Element* el = readArticulation(rest, e);
-                  if (el->isFermata())
-                        rest->segment()->add(el);
-                  else
-                        rest->add(el);
-                  }
-            else if (rest->readProperties(e))
-                  ;
-            else
-                  e.unknown();
-            }
       }
 
 //---------------------------------------------------------

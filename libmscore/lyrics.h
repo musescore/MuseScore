@@ -48,9 +48,9 @@ class Lyrics final : public TextBase {
       // it should be cleared to 0 at some point, so that it will not be carried over
       // if the melisma is not extended beyond a single chord, but no suitable place to do this
       // has been identified yet.
-      static const int  TEMP_MELISMA_TICKS      = 1;
 
       // metrics for dashes and melisma; all in sp. units:
+      static const int  TEMP_MELISMA_TICKS      = 1;
       static constexpr qreal  MELISMA_DEFAULT_PAD                 = 0.10;     // the empty space before a melisma line
       static constexpr qreal  LYRICS_DASH_DEFAULT_PAD             = 0.05;     // the min. empty space before and after a dash
 // WORD_MIN_DISTANCE has never been implemented
@@ -97,6 +97,7 @@ class Lyrics final : public TextBase {
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
+      virtual bool readProperties(XmlReader&);
       virtual int subtype() const override            { return _no; }
       virtual QString subtypeName() const override    { return QObject::tr("Verse %1").arg(_no + 1); }
       void setNo(int n);
@@ -169,7 +170,9 @@ class LyricsLineSegment final : public LineSegment {
       virtual ElementType type() const override             { return ElementType::LYRICSLINE_SEGMENT; }
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
+      // helper functions
       LyricsLine* lyricsLine() const                        { return toLyricsLine(spanner()); }
+      Lyrics* lyrics() const                                { return lyricsLine()->lyrics(); }
       };
 
 }     // namespace Ms

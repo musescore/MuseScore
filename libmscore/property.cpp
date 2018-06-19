@@ -76,7 +76,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::BARLINE_SPAN,            "barline_span",            false, "span",                  P_TYPE::BOOL            },
       { Pid::BARLINE_SPAN_FROM,       "barline_span_from",       false, "spanFromOffset",        P_TYPE::INT             },
       { Pid::BARLINE_SPAN_TO,         "barline_span_to",         false, "spanToOffset",          P_TYPE::INT             },
-      { Pid::USER_OFF,                "user_off",                false, "userOff",               P_TYPE::POINT_SP         },
+      { Pid::USER_OFF,                "offset",                  false, "offset",                P_TYPE::POINT_SP         },
       { Pid::FRET,                    "fret",                    true,  "fret",                  P_TYPE::INT             },
       { Pid::STRING,                  "string",                  true,  "string",                P_TYPE::INT             },
       { Pid::GHOST,                   "ghost",                   true,  "ghost",                 P_TYPE::BOOL            },
@@ -268,9 +268,9 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::FRAME_BG_COLOR,          "frame_bg_color",          false, "frameBgColor",          P_TYPE::COLOR           },
       { Pid::FONT_SPATIUM_DEPENDENT,  "font_spatium_dependent",  false, "sizeIsSpatiumDependent", P_TYPE::BOOL           },
       { Pid::ALIGN,                   "align",                   false, "align",                 P_TYPE::ALIGN           },
-      { Pid::OFFSET,                  "offset",                  false, "offset",                P_TYPE::POINT           },
-
+      { Pid::OFFSET,                  "layoutOffset",            false, "layoutOffset",          P_TYPE::POINT           },
       { Pid::OFFSET_TYPE,             "offset_type",             false, "offsetType",            P_TYPE::INT             },
+
       { Pid::SYSTEM_FLAG,             "system_flag",             false, "systemFlag",            P_TYPE::BOOL            },
       { Pid::BEGIN_TEXT,              "begin_text",              false, "beginText",             P_TYPE::STRING          },
       { Pid::BEGIN_TEXT_ALIGN,        "begin_text_align",        false, "beginTextAlign",        P_TYPE::ALIGN           },
