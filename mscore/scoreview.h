@@ -233,7 +233,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdMoveCR(bool left);
       void cmdGotoElement(Element*);
       bool checkCopyOrCut();
-      QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+      QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
       void startFotomode();
       void stopFotomode();
       void startFotoDrag();
@@ -328,8 +328,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void doDragEdit(QMouseEvent* ev);
       bool testElementDragTransition(QMouseEvent* ev);
       bool fotoEditElementDragTransition(QMouseEvent* ev);
-      bool editScoreViewDragTransition(QMouseEvent* e);
-      bool editSelectTransition(QMouseEvent* me);
       void addSlur();
       virtual void cmdAddSlur(ChordRest*, ChordRest*) override;
       virtual void cmdAddHairpin(HairpinType) override;

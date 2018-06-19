@@ -2507,6 +2507,8 @@ void TextBase::drawEditMode(QPainter* p, EditData& ed)
 
       qreal m = spatium();
       QRectF r = canvasBoundingRect().adjusted(-m, -m, m, m);
+//      qDebug("%f %f %f %f\n", r.x(), r.y(), r.width(), r.height());
+
       p->drawRect(r);
       pen = QPen(MScore::defaultColor, 0.0);
       }
