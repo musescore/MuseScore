@@ -2505,58 +2505,6 @@ void ScoreView::dragScoreView(QMouseEvent* ev)
       emit viewRectChanged();
       }
 
-#if 0
-//---------------------------------------------------------
-//   onEditPasteTransition
-//---------------------------------------------------------
-
-void ScoreView::onEditPasteTransition(QMouseEvent* ev)
-      {
-      editData.startMove = imatrix.map(QPointF(ev->pos()));
-      Element* e = elementNear(editData.startMove);
-      if (e == editData.element && editData.element->mousePress(editData)) {
-            _score->addRefresh(editData.element->canvasBoundingRect());
-            _score->update();
-            }
-      }
-#endif
-
-//---------------------------------------------------------
-//   editScoreViewDragTransition
-//    Check for mouse click outside of editData.element.
-//---------------------------------------------------------
-
-bool ScoreView::editScoreViewDragTransition(QMouseEvent* ev)
-      {
-      QPointF p = toLogical(ev->pos());
-      Element* e = elementNear(p);
-
-      if (e == 0 || e->type() == ElementType::MEASURE) {
-            editData.startMove   = p;
-//TODOxxx            dragElement = e;
-            return true;
-            }
-      return false;
-      }
-
-//---------------------------------------------------------
-//   editSelectTransition
-//    Check for mouse click outside of editData.element.
-//---------------------------------------------------------
-
-bool ScoreView::editSelectTransition(QMouseEvent* ev)
-      {
-      QPointF p = toLogical(ev->pos());
-      Element* e = elementNear(p);
-
-      if (e != editData.element) {
-            editData.startMove   = p;
-//TODOxxx            dragElement = e;
-            return true;
-            }
-      return false;
-      }
-
 //---------------------------------------------------------
 //   doDragLasso
 //---------------------------------------------------------
@@ -2602,38 +2550,29 @@ void ScoreView::deselectAll()
       }
 
 //---------------------------------------------------------
-//   editInputTransition
-//---------------------------------------------------------
-
-#if 0
-void ScoreView::editInputTransition(QInputMethodEvent* ie)
-      {
-      if (editData.element->isText()) {
-            toText(editData.element)->inputTransition(editData, ie);
-            QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
-            }
-      }
-#endif
-
-//---------------------------------------------------------
 //   inputMethodQuery
 //---------------------------------------------------------
 
 QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
       {
+//      qDebug("%d", int(query));
       // if editing a text object, place the InputMethod popup window just below the text
-      if ((query & Qt::ImCursorRectangle) && editData.element && editData.element->isTextBase()) {
-            Text* text = toText(editData.element);
-            if (editMode()) {
-                  TextCursor* cursor = text->cursor(editData);
-                  QRectF cursorRect = toPhysical(cursor->cursorRect().translated(text->canvasPos()));
-                  cursorRect.setWidth(1.0); // InputMethod doesn't display properly if width left at 0
-                  cursorRect.setHeight(cursorRect.height() + 5.0); // add a little margin under the cursor
-                  qDebug("cursorRect: [%3f,%3f,%3f,%3f]", cursorRect.x(), cursorRect.y(), cursorRect.width(), cursorRect.height());
-                  return QVariant(cursorRect);
+      if (editData.element && editData.element->isTextBase()) {
+            if (query & Qt::ImCursorRectangle) {
+                  TextBase* text = toText(editData.element);
+                  if (editMode()) {
+                        TextCursor* cursor = text->cursor(editData);
+                        QRectF cursorRect = toPhysical(cursor->cursorRect().translated(text->canvasPos()));
+                        cursorRect.setWidth(1.0); // InputMethod doesn't display properly if width left at 0
+                        cursorRect.setHeight(cursorRect.height() + 5.0); // add a little margin under the cursor
+                        qDebug("cursorRect: [%3f,%3f,%3f,%3f]", cursorRect.x(), cursorRect.y(), cursorRect.width(), cursorRect.height());
+                        return QVariant(cursorRect);
+                        }
+                  else
+                        return QVariant(toPhysical(text->canvasBoundingRect()));
                   }
-            else
-                  return QVariant(toPhysical(text->canvasBoundingRect()));
+            else  if (query & Qt::ImEnabled)
+                  return QVariant(true);
             }
       return QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
       }

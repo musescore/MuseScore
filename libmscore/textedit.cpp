@@ -53,6 +53,9 @@ void TextBase::startEdit(EditData& ed)
             layout();
       if (!ted->cursor.set(ed.startMove))
             ted->cursor.init();
+      qreal _spatium = spatium();
+      // refresh edit bounding box
+      score()->addRefresh(canvasBoundingRect().adjusted(-_spatium, -_spatium, _spatium, _spatium));
       ed.addData(ted);
       }
 
