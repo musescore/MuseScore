@@ -125,51 +125,40 @@ void Lyrics::write(XmlWriter& xml) const
 
 void Lyrics::read(XmlReader& e)
       {
-      int   iEndTick = 0;           // used for backward compatibility
-      Text* _verseNumber = 0;
-
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "no")
-                  _no = e.readInt();
-            else if (tag == "syllabic") {
-                  QString val(e.readElementText());
-                  if (val == "single")
-                        _syllabic = Syllabic::SINGLE;
-                  else if (val == "begin")
-                        _syllabic = Syllabic::BEGIN;
-                  else if (val == "end")
-                        _syllabic = Syllabic::END;
-                  else if (val == "middle")
-                        _syllabic = Syllabic::MIDDLE;
-                  else
-                        qDebug("bad syllabic property");
-                  }
-            else if (tag == "endTick") {          // obsolete
-                  // store <endTick> tag value until a <ticks> tag has been read
-                  // which positions this lyrics element in the score
-                  iEndTick = e.readInt();
-                  }
-            else if (tag == "ticks")
-                  _ticks = e.readInt();
-            else if (tag == "Number") {                           // obsolete
-                  _verseNumber = new Text(score());
-                  _verseNumber->read(e);
-                  _verseNumber->setParent(this);
-                  }
-            else if (!TextBase::readProperties(e))
+            if (!readProperties(e))
                   e.unknown();
             }
-      // if any endTick, make it relative to current tick
-      if (iEndTick) {
-            _ticks = iEndTick - e.tick();
-            // qDebug("Lyrics::endTick: %d  ticks %d", iEndTick, _ticks);
-            }
-      if (_verseNumber) {
-            // TODO: add text to main text
-            }
+      }
 
-      delete _verseNumber;
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Lyrics::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "no")
+            _no = e.readInt();
+      else if (tag == "syllabic") {
+            QString val(e.readElementText());
+            if (val == "single")
+                  _syllabic = Syllabic::SINGLE;
+            else if (val == "begin")
+                  _syllabic = Syllabic::BEGIN;
+            else if (val == "end")
+                  _syllabic = Syllabic::END;
+            else if (val == "middle")
+                  _syllabic = Syllabic::MIDDLE;
+            else
+                  qDebug("bad syllabic property");
+            }
+      else if (tag == "ticks")
+            _ticks = e.readInt();
+      else if (!TextBase::readProperties(e))
+            return false;
+      return true;
       }
 
 //---------------------------------------------------------
@@ -335,7 +324,7 @@ void Lyrics::layout1()
       rypos() += y;
 
       if (_ticks > 0 || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
-            if (_separator == nullptr) {
+            if (!_separator) {
                   _separator = new LyricsLine(score());
                   _separator->setTick(cr->tick());
                   score()->addUnmanagedSpanner(_separator);
@@ -366,12 +355,13 @@ void Lyrics::layout1()
    #endif
                   }
 #endif
+            bbox().setWidth(bbox().width());
             }
       else {
             if (_separator) {
                   _separator->removeUnmanaged();
                   delete _separator;
-                  _separator = nullptr;
+                  _separator = 0;
                   }
             }
       }
@@ -764,7 +754,6 @@ bool LyricsLine::setProperty(Pid propertyId, const QVariant& v)
 LyricsLineSegment::LyricsLineSegment(Score* s)
       : LineSegment(s)
       {
-//      setFlags(ElementFlag::SEGMENT | ElementFlag::ON_STAFF);
       setFlags(ElementFlag::ON_STAFF);
       clearFlags(ElementFlag::SELECTABLE | ElementFlag::MOVABLE);
       setGenerated(true);
@@ -828,8 +817,8 @@ void LyricsLineSegment::layout()
             }
 
       // VERTICAL POSITION: at the base line of the syllable text
-      if (spannerSegmentType() != SpannerSegmentType::END)
-            rypos() = lyr->y();
+      if (!isEndType())
+            rypos() = lyr->ipos().y();
       else {
             // use Y position of *next* syllable if there is one on same system
             Lyrics* nextLyr = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());

@@ -540,20 +540,8 @@ bool Element::readProperties(XmlReader& e)
             if (val >= 0)
                   e.initTick(score()->fileDivision(val));
             }
-#if 0
-      else if (tag == "userOff") {
-            _userOff = e.readPoint();
-            setAutoplace(false);
-            }
-#endif
-      else if (tag == "offset") {
+      else if (tag == "offset" || tag == "pos") {
             setUserOff(e.readPoint() * score()->spatium());
-            setAutoplace(false);
-            }
-      else if (tag == "pos") {
-            QPointF pt = e.readPoint();
-//            _readPos = pt * score()->spatium();
-            _userOff = pt * score()->spatium();
             setAutoplace(false);
             }
       else if (tag == "voice")
