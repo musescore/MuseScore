@@ -30,6 +30,7 @@ class stringutils : public QObject
    public:
       static QString removeLigatures(const QString& pre);
       static QString removeDiacritics(const QString& pre);
+      static QString convertFileSizeToHumanReadable(const qlonglong & bytes);
 };
 
 } // namespace Ms

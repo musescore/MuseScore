@@ -12,6 +12,9 @@
 
 #include "resourceManager.h"
 #include "musescore.h"
+#include "extension.h"
+#include "libmscore/utils.h"
+#include "stringutils.h"
 #include "ui_resourceManager.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 
@@ -28,28 +31,121 @@ ResourceManager::ResourceManager(QWidget *parent) :
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QDir dir;
       dir.mkpath(dataPath + "/locale");
-      baseAddr = "http://extensions.musescore.org/2.3/";
-      displayPlugins();
+      displayExtensions();
       displayLanguages();
-      languagesTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+      languagesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
       languagesTable->verticalHeader()->hide();
-      tabs->removeTab(tabs->indexOf(plugins));
-      tabs->setCurrentIndex(tabs->indexOf(languages));
+      extensionsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+      extensionsTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+      extensionsTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
+      extensionsTable->verticalHeader()->hide();
+      extensionsTable->setColumnWidth(1, 50);
+      extensionsTable->setColumnWidth(1, 100);
       MuseScore::restoreGeometry(this);
       }
 
-void ResourceManager::displayPlugins()
+
+//---------------------------------------------------------
+//   selectLanguagesTab
+//---------------------------------------------------------
+
+void ResourceManager::selectLanguagesTab()
       {
-      textBrowser->setText("hello");
+      tabs->setCurrentIndex(tabs->indexOf(languages));
       }
+
+//---------------------------------------------------------
+//   selectExtensionsTab
+//---------------------------------------------------------
+
+void ResourceManager::selectExtensionsTab()
+      {
+      tabs->setCurrentIndex(tabs->indexOf(extensions));
+      }
+
+
+//---------------------------------------------------------
+//   displayExtensions
+//---------------------------------------------------------
+
+void ResourceManager::displayExtensions()
+      {
+      DownloadUtils js(this);
+      js.setTarget(baseAddr() + "extensions/details.json");
+      js.download();
+      QByteArray json = js.returnData();
+
+      // parse the json file
+      QJsonParseError err;
+      QJsonDocument result = QJsonDocument::fromJson(json, &err);
+      if (err.error != QJsonParseError::NoError || !result.isObject()) {
+            qDebug("An error occurred during parsing");
+            return;
+            }
+      int rowCount = result.object().keys().size();
+      rowCount -= 2; //version and type
+      extensionsTable->setRowCount(rowCount);
+
+      int row = 0;
+      int col = 0;
+      QPushButton* updateButtons[rowCount];
+      QPushButton* temp;
+      extensionsTable->verticalHeader()->show();
+
+      QStringList extensions = result.object().keys();
+      for (QString key : extensions) {
+            if (!result.object().value(key).isObject())
+                  continue;
+            QJsonObject value = result.object().value(key).toObject();
+            col = 0;
+            QString test = value.value("file_name").toString();
+            if (test.length() == 0)
+                  continue;
+
+            QString filename = value.value("file_name").toString();
+            QString name = value.value("name").toString();
+            int fileSize = value.value("file_size").toInt();
+            QString hashValue = value.value("hash").toString();
+            QString version = value.value("version").toString();
+
+            extensionsTable->setItem(row, col++, new QTableWidgetItem(name));
+            extensionsTable->setItem(row, col++, new QTableWidgetItem(version));
+            extensionsTable->setItem(row, col++, new QTableWidgetItem(stringutils::convertFileSizeToHumanReadable(fileSize)));
+            updateButtons[row] = new QPushButton(tr("Install"));
+
+            temp = updateButtons[row];
+            connect(temp, SIGNAL(clicked()), this, SLOT(downloadExtension()));
+            extensionButtonMap[temp] = "extensions/" + filename;
+            extensionButtonHashMap[temp] = hashValue;
+
+            extensionsTable->setIndexWidget(extensionsTable->model()->index(row, col++), temp);
+
+            // get the installed version of the extension if any
+            if (Extension::isInstalled(key)) {
+                  QString installedVersion = Extension::getLatestVersion(key);
+                  if (compareVersion(installedVersion, version)) {
+                        temp->setText(tr("Update"));
+                        }
+                  else {
+                        temp->setText(tr("Updated"));
+                        temp->setDisabled(true);
+                        }
+                  }
+            row++;
+            }
+      }
+
+//---------------------------------------------------------
+//   displayLanguages
+//---------------------------------------------------------
 
 void ResourceManager::displayLanguages()
       {
       // Download details.json
-      DownloadUtils *js = new DownloadUtils(this);
-      js->setTarget(baseAddr + "languages/details.json");
-      js->download();
-      QByteArray json = js->returnData();
+      DownloadUtils js(this);
+      js.download();
+      js.setTarget(baseAddr() + "languages/details.json");
+      QByteArray json = js.returnData();
 
       // parse the json file
       QJsonParseError err;
@@ -69,7 +165,7 @@ void ResourceManager::displayLanguages()
       languagesTable->verticalHeader()->show();
 
       // move current language to first row
-	QStringList languages = result.object().keys();
+      QStringList languages = result.object().keys();
       QString lang = mscore->getLocaleISOCode();
       int index = languages.indexOf(lang);
       if (index < 0 &&  lang.size() > 2) {
@@ -97,12 +193,12 @@ void ResourceManager::displayLanguages()
 
             languagesTable->setItem(row, col++, new QTableWidgetItem(name));
             languagesTable->setItem(row, col++, new QTableWidgetItem(filename));
-            languagesTable->setItem(row, col++, new QTableWidgetItem(tr("%1 KB").arg(fileSize)));
+            languagesTable->setItem(row, col++, new QTableWidgetItem(tr("%1 kB").arg(fileSize)));
             updateButtons[row] = new QPushButton(tr("Update"));
 
             temp = updateButtons[row];
-            buttonMap[temp] = "languages/" + filename;
-            buttonHashMap[temp] = hashValue;
+            languageButtonMap[temp] = "languages/" + filename;
+            languageButtonHashMap[temp] = hashValue;
             
             languagesTable->setIndexWidget(languagesTable->model()->index(row, col++), temp);
             
@@ -120,15 +216,19 @@ void ResourceManager::displayLanguages()
             bool verifyInstruments = verifyLanguageFile(filenameInstruments, hashInstruments);
 
             if (verifyMScore && verifyInstruments) { // compare local file with distant hash
-                  temp->setText(tr("No update"));
+                  temp->setText(tr("Updated"));
                   temp->setDisabled(1);
                   }
             else {
-                  connect(temp, SIGNAL(clicked()), this, SLOT(download()));
+                  connect(temp, SIGNAL(clicked()), this, SLOT(downloadLanguage()));
                   }
             row++;
             }
       }
+
+//---------------------------------------------------------
+//   verifyLanguageFile
+//---------------------------------------------------------
 
 bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
       {
@@ -142,21 +242,25 @@ bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
       return verifyFile(local, hash);
       }
 
-void ResourceManager::download()
+
+//---------------------------------------------------------
+//   downloadLanguage
+//---------------------------------------------------------
+
+void ResourceManager::downloadLanguage()
       {
-      QPushButton *button = dynamic_cast<QPushButton*>( sender() );
-      QString data = buttonMap[button];
-      QString hash = buttonHashMap[button];
+      QPushButton *button = static_cast<QPushButton*>( sender() );
+      QString data = languageButtonMap[button];
+      QString hash = languageButtonHashMap[button];
       button->setText(tr("Updating"));
-      button->setDisabled(1);
-      QString baseAddress = baseAddr + data;
-      DownloadUtils *dl = new DownloadUtils(this);
-      dl->setTarget(baseAddress);
-      qDebug() << baseAddress;
+      button->setDisabled(true);
+      QString baseAddress = baseAddr() + data;
+      DownloadUtils dl(this);
+      dl.setTarget(baseAddress);
       QString localPath = dataPath + "/locale/" + data.split('/')[1];
-      dl->setLocalFile(localPath);
-      dl->download();
-      if( !dl->saveFile() || !verifyFile(localPath, hash)) {
+      dl.setLocalFile(localPath);
+      dl.download();
+      if (!dl.saveFile() || !verifyFile(localPath, hash)) {
             button->setText(tr("Failed, try again"));
             button->setEnabled(1);
             }
@@ -165,7 +269,7 @@ void ResourceManager::download()
             MQZipReader zipFile(localPath);
             QFileInfo zfi(localPath);
             QString destinationDir(zfi.absolutePath());
-            QList<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
+            QVector<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
             bool result = true;
             foreach (MQZipReader::FileInfo fi, allFiles) {
                   const QString absPath = destinationDir + QDir::separator() + fi.filePath;
@@ -192,6 +296,46 @@ void ResourceManager::download()
             }
       }
 
+//---------------------------------------------------------
+//   downloadExtension
+//---------------------------------------------------------
+
+void ResourceManager::downloadExtension()
+      {
+      QPushButton *button = dynamic_cast<QPushButton*>( sender() );
+      QString data = extensionButtonMap[button];
+      QString hash = extensionButtonHashMap[button];
+      button->setText(tr("Updating"));
+      button->setDisabled(true);
+      QString baseAddress = baseAddr() + data;
+      DownloadUtils dl(this);
+      dl.setTarget(baseAddress);
+
+      QString localPath = QDir::tempPath() + data.split('/')[1];
+      QFile::remove(localPath);
+      dl.setLocalFile(localPath);
+      dl.download(true);
+      if( !dl.saveFile() || !verifyFile(localPath, hash)) {
+            QFile::remove(localPath);
+            button->setText(tr("Failed, try again"));
+            button->setEnabled(true);
+            }
+      else {
+            bool result = mscore->importExtension(localPath);
+            if (result) {
+                  QFile::remove(localPath);
+                  button->setText(tr("Updated"));
+                  }
+            else {
+                  button->setText(tr("Failed, try again"));
+                  button->setEnabled(1);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   verifyFile
+//---------------------------------------------------------
 
 bool ResourceManager::verifyFile(QString path, QString hash)
       {

@@ -106,6 +106,7 @@ class NewWizardPage2 : public QWizardPage {
       virtual bool isComplete() const  { return complete; }
       void createInstruments(Score* s);
       virtual void initializePage();
+      void buildInstrumentsList();
       };
 
 //---------------------------------------------------------
@@ -145,6 +146,7 @@ class NewWizardPage4 : public QWizardPage {
       virtual bool isComplete() const;
       QString templatePath() const;
       virtual void initializePage();
+      void buildTemplatesList();
       };
 
 //---------------------------------------------------------
@@ -204,6 +206,7 @@ class NewWizard : public QWizard {
       double tempo() const                { return p5->tempo();       }
       bool createTempo() const            { return p5->createTempo(); }
       bool emptyScore() const;
+      void updateValues() const;
       };
 
 

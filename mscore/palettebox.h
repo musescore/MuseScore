@@ -53,6 +53,7 @@ class PaletteBox : public QDockWidget {
       void clear();
       QList<Palette*> palettes() const;
       void updateWorkspaces();
+      void selectWorkspace(QString path);
       };
 
 //---------------------------------------------------------
