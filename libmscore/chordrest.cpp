@@ -542,9 +542,24 @@ Element* ChordRest::drop(EditData& data)
                         return 0;
                         }
                   // fall through
+
             case ElementType::REHEARSAL_MARK:
                   e->setParent(segment());
                   e->setTrack((track() / VOICES) * VOICES);
+                  {
+                  TextBase* t = toTextBase(e);
+#if 0
+                  SubStyleId st = t->subStyleId();           { SubStyleId::EMPTY };
+                  // for palette items, we want to use current score text style settings
+                  // except where the source element had explicitly overridden these via text properties
+                  // palette text style will be relative to baseStyle, so rebase this to score
+                  if (st >= SubStyleId::DEFAULT && fromPalette)
+                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
+#endif
+                  if (fromPalette)
+                        t->setXmlText(score()->createRehearsalMarkText(toRehearsalMark(e)));
+                  }
+
                   score()->undoAddElement(e);
                   return e;
 
