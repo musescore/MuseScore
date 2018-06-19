@@ -614,9 +614,60 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
 
                   case ElementType::CLEF: {
                         const Clef* c = toClef(e);
-                        SymId symId = c->sym();
-                        QString symName = Sym::id2name(symId);
-                        writeData(xml, mag, c->symMag(), symName, c);   // hack symMag
+                        switch (c->clefType()) {
+                              case ClefType::C1:
+                              case ClefType::C2:
+                              case ClefType::C3:
+                              case ClefType::C4:
+                              case ClefType::C5:
+                                    writeData(xml, mag, c->mag(), "cClef", c);
+                                    break;
+                              case ClefType::C_19C:
+                                    writeData(xml, mag, c->mag(), "cClefSquare", c);
+                                    break;
+                              case ClefType::C3_F18C:
+                              case ClefType::C4_F18C:
+                                    writeData(xml, mag, c->mag(), "cClefFrench", c);
+                                    break;
+                              case ClefType::G:
+                              case ClefType::G_1:
+                                    writeData(xml, mag, c->mag(), "gClef", c);
+                                    break;
+                              case ClefType::G8_VA:
+                                    writeData(xml, mag, c->mag(), "gClef8va", c);
+                                    break;
+                              case ClefType::G8_VB:
+                                    writeData(xml, mag, c->mag(), "gClef8vb", c);
+                                    break;
+                              case ClefType::G15_MA:
+                                    writeData(xml, mag, c->mag(), "gClef15ma", c);
+                                    break;
+                              case ClefType::G15_MB:
+                                    writeData(xml, mag, c->mag(), "gClef15mb", c);
+                                    break;
+                              case ClefType::F:
+                              case ClefType::F_B:
+                              case ClefType::F_C:
+                                    writeData(xml, mag, c->mag(), "fClef", c);
+                                    break;
+                              case ClefType::F_8VA:
+                                    writeData(xml, mag, c->mag(), "fClef8va", c);
+                                    break;
+                              case ClefType::F8_VB:
+                                    writeData(xml, mag, c->mag(), "fClef8vb", c);
+                                    break;
+                              case ClefType::F_15MA:
+                                    writeData(xml, mag, c->mag(), "fClef15ma", c);
+                                    break;
+                              case ClefType::F15_MB:
+                                    writeData(xml, mag, c->mag(), "fClef15mb", c);
+                                    break;
+                              case ClefType::PERC:
+                                    writeData(xml, mag, c->mag(), "unpitchedPercussionClef1", c);
+                                    break;
+                              default:
+                                    break;
+                              }
                         }
                         break;
 
