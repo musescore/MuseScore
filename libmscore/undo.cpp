@@ -1923,6 +1923,17 @@ void ChangeProperty::flip(EditData*)
       }
 
 //---------------------------------------------------------
+//   ChangeBracketProperty::flip
+//---------------------------------------------------------
+
+void ChangeBracketProperty::flip(EditData* ed)
+      {
+      element = staff->brackets()[level];
+      ChangeProperty::flip(ed);
+      level = toBracketItem(element)->column();
+      }
+
+//---------------------------------------------------------
 //   ChangeMetaText::flip
 //---------------------------------------------------------
 
