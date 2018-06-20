@@ -366,7 +366,7 @@ Element* Bracket::drop(EditData& data)
             undoChangeProperty(Pid::SYSTEM_BRACKET, int(b->bracketType()));
             }
       delete e;
-      return b;
+      return this;
       }
 
 //---------------------------------------------------------
