@@ -952,6 +952,8 @@ class ChangeProperty : public UndoCommand {
       ChangeProperty(ScoreElement* e, Pid i, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
          : element(e), id(i), property(v), flags(ps) {}
       Pid getId() const  { return id; }
+      ScoreElement* getElement() const { return element; }
+      QVariant data() const { return property; }
       UNDO_NAME("ChangeProperty")
       };
 

@@ -2555,26 +2555,33 @@ void ScoreView::deselectAll()
 
 QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
       {
-//      qDebug("%d", int(query));
+      qDebug("0x%x  %s", int(query), editData.element ? editData.element->name() : "-no element-");
       // if editing a text object, place the InputMethod popup window just below the text
       if (editData.element && editData.element->isTextBase()) {
-            if (query & Qt::ImCursorRectangle) {
-                  TextBase* text = toText(editData.element);
-                  if (editMode()) {
-                        TextCursor* cursor = text->cursor(editData);
-                        QRectF cursorRect = toPhysical(cursor->cursorRect().translated(text->canvasPos()));
-                        cursorRect.setWidth(1.0); // InputMethod doesn't display properly if width left at 0
-                        cursorRect.setHeight(cursorRect.height() + 5.0); // add a little margin under the cursor
-                        qDebug("cursorRect: [%3f,%3f,%3f,%3f]", cursorRect.x(), cursorRect.y(), cursorRect.width(), cursorRect.height());
-                        return QVariant(cursorRect);
+            TextBase* text = toTextBase(editData.element);
+            switch (query) {
+                  case Qt::ImCursorRectangle: {
+                        QRectF r;
+                        if (editMode()) {
+                              TextCursor* cursor = text->cursor(editData);
+                              r = toPhysical(cursor->cursorRect().translated(text->canvasPos()));
+                              r.setWidth(1); // InputMethod doesn't display properly if width left at 0
+                              }
+                        else
+                              r = toPhysical(text->canvasBoundingRect());
+                        r.setHeight(r.height() + 10); // add a little margin under the cursor
+                        qDebug("   cursorRect: [%3f,%3f,%3f,%3f]", r.x(), r.y(), r.width(), r.height());
+                        return QVariant(r);
                         }
-                  else
-                        return QVariant(toPhysical(text->canvasBoundingRect()));
+                  case Qt::ImEnabled:
+                        return editMode();
+                  default:
+                        return QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
                   }
-            else  if (query & Qt::ImEnabled)
-                  return QVariant(true);
             }
-      return QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
+      QVariant data = QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
+      qDebug() << "   " << data;
+      return data;
       }
 
 //---------------------------------------------------------

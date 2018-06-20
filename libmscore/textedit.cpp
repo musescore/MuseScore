@@ -626,22 +626,21 @@ void TextBase::inputTransition(EditData& ed, QInputMethodEvent* ie)
                         switch(a.type) {
                               case QInputMethodEvent::TextFormat:
                                     {
-                                    printf("attribute TextFormat: %d-%d\n", a.start, a.length);
+                                    qDebug("   attribute TextFormat: %d-%d", a.start, a.length);
                                     QTextFormat tf = a.value.value<QTextFormat>();
                                     }
                                     break;
                               case QInputMethodEvent::Cursor:
-                                    printf("attribute Cursor at %d\n", a.start);
+                                    qDebug("   attribute Cursor at %d", a.start);
                                     break;
                               default:
-                                    printf("attribute %d\n", a.type);
+                                    qDebug("   attribute %d", a.type);
                               }
                         }
 #endif
                   _cursor->format()->setPreedit(true);
                   _cursor->updateCursorFormat();
                   editInsertText(_cursor, preEdit);
-//                  ie->accept();
                   setTextInvalid();
                   layout1();
                   }

@@ -33,7 +33,9 @@ class TempoText final : public TextBase  {
       bool _isRelative;
 
       void updateScore();
-      void textChanged();
+      void updateTempo();
+      virtual void endEdit(EditData&) override;
+      virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
 
    public:
       TempoText(Score*);
