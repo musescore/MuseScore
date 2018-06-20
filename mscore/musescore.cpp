@@ -380,7 +380,7 @@ void MuseScore::preferencesChanged()
 //   importExtension
 //---------------------------------------------------------
 
-bool MuseScore::importExtension(QString path)
+bool MuseScore::importExtension(QString path, QWidget* parent)
       {
       MQZipReader zipFile(path);
       // compute total unzipped size
@@ -392,7 +392,7 @@ bool MuseScore::importExtension(QString path)
       QStorageInfo storage = QStorageInfo(preferences.myExtensionsPath);
       if (storage.isReadOnly()) {
             if (!MScore::noGui)
-                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Cannot import extension on read-only storage:%1").arg(storage.displayName()));
+                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Cannot import extension on read-only storage: %1").arg(storage.displayName()));
             return false;
             }
       if (totalZipSize >= storage.bytesAvailable()) {
@@ -487,6 +487,17 @@ bool MuseScore::importExtension(QString path)
                         }
                   }
             }
+
+      QMessageBox* msgBox = new QMessageBox(parent);
+      msgBox->setWindowModality(Qt::ApplicationModal);
+      msgBox->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
+      msgBox->setTextFormat(Qt::RichText);
+      msgBox->setMinimumSize(300, 100);
+      msgBox->setMaximumSize(300, 100);
+      msgBox->setStandardButtons(0);
+      msgBox->setText(QString("<p align='center'>") + tr("Please wait, unpacking extension...") + QString("</p>"));
+      msgBox->show();
+      qApp->processEvents();
       // Unzip the extension
       MQZipReader zipFile3(path);
       bool res = zipFile3.extractAll(QString("%1/%2/%3").arg(preferences.myExtensionsPath).arg(extensionId).arg(version));
@@ -496,11 +507,15 @@ bool MuseScore::importExtension(QString path)
             return false;
             }
       zipFile3.close();
+      msgBox->hide();
 
       mscore->reloadInstrumentTemplates();
       mscore->updateNewWizard();
       mscore->updateInstrumentDialog();
 
+      msgBox->setText(QString("<p align='center'>") + tr("Please wait, loading soundfonts...") + QString("</p>"));
+      msgBox->show();
+      qApp->processEvents();
       // After install: add sfz to zerberus
       QDir sfzDir(QString("%1/%2/%3/%4").arg(preferences.myExtensionsPath).arg(extensionId).arg(version).arg(Extension::sfzsDir));
       if (sfzDir.exists()) {
@@ -513,8 +528,10 @@ bool MuseScore::importExtension(QString path)
                   sfzs.append(it.fileName());
                   }
             sfzs.sort();
-            for (auto sfz : sfzs)
-                  s->addSoundFont(sfz);
+            for (int sfzNum = 0; sfzNum < sfzs.size(); ++sfzNum)
+                  s->addSoundFont(sfzs[sfzNum]);
+
+            msgBox->hide();
             if (!sfzs.isEmpty())
                   synti->storeState();
             }
