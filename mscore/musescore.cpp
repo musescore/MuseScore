@@ -6082,14 +6082,14 @@ int main(int argc, char* av[])
             Workspace::initWorkspace();
             }
 
-      mscore = new MuseScore();
-
       // create a score for internal use
       gscore = new Score(MScore::baseStyle());
       gscore->style()->set(StyleIdx::MusicalTextFont, QString("Bravura Text"));
       ScoreFont* scoreFont = ScoreFont::fontFactory("Bravura");
       gscore->setScoreFont(scoreFont);
       gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / SPATIUM20);
+
+      mscore = new MuseScore();
 
       if (!noSeq) {
             if (!seq->init())
