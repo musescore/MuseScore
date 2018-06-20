@@ -817,7 +817,7 @@ bool TDuration::isValid(Fraction f)
      t.setType(DurationType::V_LONG);
      t.setDots(MAX_DOTS);
      t.truncateToFraction(f, 4);
-     return ((t.fraction() - f).numerator() == 0);
+     return (t.isValid() && (t.fraction() - f).numerator() == 0);
      }
 }
 
