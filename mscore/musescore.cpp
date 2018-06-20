@@ -646,7 +646,9 @@ MuseScore::MuseScore()
       setWindowTitle(QString(MUSESCORE_NAME_VERSION));
       setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling, preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
 
+#ifndef MSCORE_NO_UPDATE_CHECKER
       ucheck = new UpdateChecker();
+#endif
 
       setAcceptDrops(true);
       setFocusPolicy(Qt::NoFocus);
