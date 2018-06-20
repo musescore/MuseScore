@@ -773,11 +773,13 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
 
       // check if tremolo was rendered before for drum staff
       if (chord->staff() && chord->staff()->isDrumStaff()) {
-            Drumset* ds = chord->staff()->part()->instrument(chord->tick())->drumset();
-            for (Note* n : chord->notes()) {
-                  DrumInstrumentVariant div = ds->findVariant(n->pitch(), chord->articulations(), chord->tremolo());
-                  if (div.pitch != INVALID_PITCH && div.tremolo == tremolo->tremoloType())
-                        return; // already rendered
+            const Drumset* ds = chord->staff()->part()->instrument(chord->tick())->drumset();
+            if (ds) {
+                  for (Note* n : chord->notes()) {
+                        DrumInstrumentVariant div = ds->findVariant(n->pitch(), chord->articulations(), chord->tremolo());
+                        if (div.pitch != INVALID_PITCH && div.tremolo == tremolo->tremoloType())
+                              return; // already rendered
+                        }
                   }
             }
 
