@@ -61,6 +61,7 @@ void Staff::fillBrackets(int idx)
       for (int i = _brackets.size(); i <= idx; ++i) {
             BracketItem* bi = new BracketItem(score());
             bi->setStaff(this);
+            bi->setColumn(i);
             _brackets.append(bi);
             }
       }
@@ -117,7 +118,28 @@ void Staff::swapBracket(int oldIdx, int newIdx)
       {
       int idx = qMax(oldIdx, newIdx);
       fillBrackets(idx);
+      _brackets[oldIdx]->setColumn(newIdx);
+      _brackets[newIdx]->setColumn(oldIdx);
       _brackets.swap(oldIdx, newIdx);
+      cleanBrackets();
+      }
+
+//---------------------------------------------------------
+//   changeBracketColumn
+//---------------------------------------------------------
+
+void Staff::changeBracketColumn(int oldColumn, int newColumn)
+      {
+      int idx = qMax(oldColumn, newColumn);
+      fillBrackets(idx);
+      int step = newColumn > oldColumn ? 1 : -1;
+      for (int i = oldColumn; i != newColumn; i += step) {
+            int oldIdx = i;
+            int newIdx = i + step;
+            _brackets[oldIdx]->setColumn(newIdx);
+            _brackets[newIdx]->setColumn(oldIdx);
+            _brackets.swap(oldIdx, newIdx);
+            }
       cleanBrackets();
       }
 

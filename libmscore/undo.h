@@ -940,6 +940,7 @@ class ChangeStaffUserDist : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeProperty : public UndoCommand {
+   protected:
       ScoreElement* element;
       Pid id;
       QVariant property;
@@ -952,6 +953,22 @@ class ChangeProperty : public UndoCommand {
          : element(e), id(i), property(v), flags(ps) {}
       Pid getId() const  { return id; }
       UNDO_NAME("ChangeProperty")
+      };
+
+//---------------------------------------------------------
+//   ChangeBracketProperty
+//---------------------------------------------------------
+
+class ChangeBracketProperty : public ChangeProperty {
+      Staff* staff;
+      int level;
+
+      void flip(EditData*) override;
+
+   public:
+      ChangeBracketProperty(Staff* s, int l, Pid i, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
+         : ChangeProperty(nullptr, i, v, ps), staff(s), level(l) {}
+      UNDO_NAME("ChangeBracketProperty")
       };
 
 //---------------------------------------------------------
