@@ -751,7 +751,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       LoginManager* loginManager()     { return _loginManager; }
       QHelpEngine*  helpEngine() const { return _helpEngine;   }
 
-      void updateInspector();
+      virtual void updateInspector() override;
       void showSynthControl(bool);
       void showMixer(bool);
 
