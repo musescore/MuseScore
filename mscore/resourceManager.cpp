@@ -307,7 +307,7 @@ void ResourceManager::downloadLanguage()
 
 void ResourceManager::downloadExtension()
       {
-      QPushButton *button = dynamic_cast<QPushButton*>( sender() );
+      QPushButton *button = static_cast<QPushButton*>( sender() );
       QString data = extensionButtonMap[button];
       QString hash = extensionButtonHashMap[button];
       button->setText(tr("Updating"));
@@ -315,18 +315,29 @@ void ResourceManager::downloadExtension()
       QString baseAddress = baseAddr() + data;
       DownloadUtils dl(this);
       dl.setTarget(baseAddress);
-
       QString localPath = QDir::tempPath() + data.split('/')[1];
       QFile::remove(localPath);
       dl.setLocalFile(localPath);
       dl.download(true);
-      if( !dl.saveFile() || !verifyFile(localPath, hash)) {
+      bool saveFileRes = dl.saveFile();
+      bool verifyFileRes = saveFileRes && verifyFile(localPath, hash);
+      if(!verifyFileRes) {
             QFile::remove(localPath);
             button->setText(tr("Failed, try again"));
             button->setEnabled(true);
+
+            QMessageBox msgBox;
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setTextFormat(Qt::RichText);
+            msgBox.setWindowTitle(tr("Extensions Installation Failed"));
+            if (!saveFileRes) //failed to save file on disk
+                  msgBox.setText(tr("Unable to save the extension file on disk"));
+            else //failed to verify package, so size or hash sum is incorrect
+                  msgBox.setText(tr("Unable to download, save and verify the package.\nCheck your internet connection."));
+            msgBox.exec();
             }
       else {
-            bool result = mscore->importExtension(localPath);
+            bool result = mscore->importExtension(localPath, this);
             if (result) {
                   QFile::remove(localPath);
                   button->setText(tr("Updated"));
