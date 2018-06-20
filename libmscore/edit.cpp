@@ -1447,7 +1447,7 @@ void Score::deleteItem(Element* el)
       {
       if (!el)
             return;
-      if (el->generated())          // cannot remove generated elements
+      if (el->generated() && !el->isBracket())          // cannot remove generated elements
             return;
 //      qDebug("%s", el->name());
 

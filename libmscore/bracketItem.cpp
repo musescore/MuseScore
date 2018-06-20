@@ -44,10 +44,10 @@ bool BracketItem::setProperty(Pid id, const QVariant& v)
       {
       switch (id) {
             case Pid::SYSTEM_BRACKET:
-                  // staff()->setBracketType(level(), BracketType(v.toInt()));   // change bracket type global
+                  staff()->setBracketType(column(), BracketType(v.toInt()));   // change bracket type global
                   break;
             case Pid::BRACKET_COLUMN:
-                  _column = v.toInt();
+                  staff()->changeBracketColumn(column(), v.toInt());
                   break;
             case Pid::BRACKET_SPAN:
                   _bracketSpan = v.toInt();
