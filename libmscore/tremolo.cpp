@@ -71,12 +71,15 @@ qreal Tremolo::mag() const
 
 void Tremolo::draw(QPainter* painter) const
       {
-      painter->setBrush(QBrush(curColor()));
-      painter->setPen(Qt::NoPen);
-      if (tremoloType() == TremoloType::BUZZ_ROLL)
+      if (tremoloType() == TremoloType::BUZZ_ROLL) {
+            painter->setPen(curColor());
             drawSymbol(SymId::buzzRoll, painter);
-      else
+            }
+      else {
+            painter->setBrush(QBrush(curColor()));
+            painter->setPen(Qt::NoPen);
             painter->drawPath(path);
+            }
       if ((parent() == 0) && !twoNotes()) {
             qreal x = 0.0; // bbox().width() * .25;
             QPen pen(curColor(), point(score()->styleS(StyleIdx::stemWidth)));
