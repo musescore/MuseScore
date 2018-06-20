@@ -782,8 +782,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static void restoreGeometry(QWidget*const qw);
 
       void updateWindowTitle(Score* score);
-
-      bool importExtension(QString path);
+      bool importExtension(QString path, QWidget* parent = nullptr);
       };
 
 extern MuseScore* mscore;
