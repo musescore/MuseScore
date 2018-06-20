@@ -60,7 +60,6 @@ void DownloadUtils::download(bool showProgress)
             progressDialog->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
             progressDialog->setWindowModality(Qt::ApplicationModal);
             progressDialog->setCancelButtonText(tr("Cancel"));
-            connect(progressDialog, SLOT(canceled()), this, SIGNAL(cancel()));
             progressDialog->setLabelText(tr("Downloading..."));
             progressDialog->setAutoClose(true);
             progressDialog->setAutoReset(true);
