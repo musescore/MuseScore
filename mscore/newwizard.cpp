@@ -39,6 +39,8 @@
 
 namespace Ms {
 
+extern bool useFactorySettings;
+
 extern Palette* newKeySigPalette();
 extern void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString(""));
 
@@ -209,6 +211,12 @@ NewWizardPage1::NewWizardPage1(QWidget* parent)
 
 //---------------------------------------------------------
 //   initializePage
+//   This needs to be done because since the newWizard is
+//   only deleted when musescore is closed, the editLines
+//   are not reset if you use 2 times the newwizard on the
+//   same session. But since (quite often) you don't want
+//   to create two scores with the same title, it needs to
+//   be reset.
 //---------------------------------------------------------
 
 void NewWizardPage1::initializePage()
@@ -490,8 +498,8 @@ NewWizard::NewWizard(QWidget* parent)
       setPage(Page::Timesig,     p3);
 
       resize(QSize(840, 560)); //ensure default size if no geometry in settings
-      MuseScore::restoreGeometry(this);
       //connect(this, SIGNAL(currentIdChanged(int)), SLOT(idChanged(int)));
+      readSettings();
       }
 
 //---------------------------------------------------------
@@ -542,6 +550,45 @@ bool NewWizard::emptyScore() const
       bool val = fi.completeBaseName() == "00-Blank";
       return val;
       }
+//---------------------------------------------------------
+//   writeSettings
+//---------------------------------------------------------
+
+void NewWizard::writeSettings()
+      {
+      QSettings settings;
+      settings.beginGroup(objectName());
+      settings.setValue("composer", p1->composer());
+      settings.setValue("lyricist", p1->lyricist());
+      settings.setValue("copyright", p1->copyright());
+      settings.setValue("numberOfMeasures", p3->measures());
+      settings.setValue("tempo", p5->tempo());
+      settings.setValue("createTempo", p5->createTempo());
+      settings.endGroup();
+
+      MuseScore::saveGeometry(this);
+      }
+
+//---------------------------------------------------------
+//   readSettings
+//---------------------------------------------------------
+
+void NewWizard::readSettings()
+      {
+      if (!useFactorySettings) {
+            QSettings settings;
+            settings.beginGroup(objectName());
+            p1->setComposer(settings.value("composer").toString());
+            p1->setLyricist(settings.value("lyricist").toString());
+            p1->setCopyright(settings.value("copyright").toString());
+            p3->setMeasures(settings.value("numberOfMeasures").toInt());
+            p5->setTempo(settings.value("tempo").toDouble());
+            p5->setCreateTempo(settings.value("createTempo").toBool());
+            settings.endGroup();
+            }
+
+      MuseScore::restoreGeometry(this);
+      }
 
 //---------------------------------------------------------
 //   hideEvent
@@ -549,9 +596,9 @@ bool NewWizard::emptyScore() const
 
 void NewWizard::hideEvent(QHideEvent* event)
       {
-      MuseScore::saveGeometry(this);
+      writeSettings();
       QWidget::hideEvent(event);
       }
 
-}
+} // namesace Ms
 

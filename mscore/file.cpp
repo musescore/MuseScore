@@ -567,8 +567,6 @@ MasterScore* MuseScore::getNewFile()
                   score->style().chordList()->read("chords.xml");
             score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
             }
-      if (!newWizard->title().isEmpty())
-            score->fileInfo()->setFile(newWizard->title());
 
       score->sigmap()->add(0, timesig);
 
@@ -678,18 +676,21 @@ MasterScore* MuseScore::getNewFile()
                   }
             }
 
-      score->setMetaTag("movementTitle", newWizard->movementTitle());
-      score->setMetaTag("movementNumber", newWizard->movementNumber());
-      score->setMetaTag("arranger", newWizard->arranger());
-      score->setMetaTag("lyricist", newWizard->lyricist());
-      score->setMetaTag("workNumber", newWizard->workNumber());
-      score->setMetaTag("translator", newWizard->translator());
-      score->setMetaTag("source", newWizard->source());
-      QString title = newWizard->title();
-      QString subtitle = newWizard->subtitle();
-      QString composer = newWizard->composer();
-      QString poet = newWizard->poet();
-      QString copyright = newWizard->copyright();
+      NewWizardPage1* metaTagsPage = newWizard->metaTagsPage();
+      score->setMetaTag("movementTitle", metaTagsPage->movementTitle());
+      score->setMetaTag("movementNumber", metaTagsPage->movementNumber());
+      score->setMetaTag("arranger", metaTagsPage->arranger());
+      score->setMetaTag("lyricist", metaTagsPage->lyricist());
+      score->setMetaTag("workNumber", metaTagsPage->workNumber());
+      score->setMetaTag("translator", metaTagsPage->translator());
+      score->setMetaTag("source", metaTagsPage->source());
+      QString title = metaTagsPage->title();
+      if (!title.isEmpty())
+            score->fileInfo()->setFile(title);
+      QString subtitle = metaTagsPage->subtitle();
+      QString composer = metaTagsPage->composer();
+      QString poet = metaTagsPage->poet();
+      QString copyright = metaTagsPage->copyright();
 
       if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !poet.isEmpty()) {
             MeasureBase* measure = score->measures()->first();

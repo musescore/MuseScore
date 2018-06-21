@@ -232,7 +232,10 @@
  </widget>
  <tabstops>
   <tabstop>lineEditTitle</tabstop>
-  <tabstop>buttonMore</tabstop>
+  <tabstop>lineEditSubtitle</tabstop>
+  <tabstop>lineEditComposer</tabstop>
+  <tabstop>lineEditLyricist</tabstop>
+  <tabstop>lineEditCopyright</tabstop>
   <tabstop>lineEditMovementTitle</tabstop>
   <tabstop>lineEditMovementNumber</tabstop>
   <tabstop>lineEditArranger</tabstop>
@@ -240,6 +243,7 @@
   <tabstop>lineEditWorkNumber</tabstop>
   <tabstop>lineEditTranslator</tabstop>
   <tabstop>lineEditSource</tabstop>
+  <tabstop>buttonMore</tabstop>
  </tabstops>
  <resources/>
  <connections/>
