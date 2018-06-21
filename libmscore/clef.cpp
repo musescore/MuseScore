@@ -191,8 +191,8 @@ void Clef::layout()
                         !courtesy
                         // or, if courtesy clef: show if score has courtesy clefs on
                         || ( score()->styleB(StyleIdx::genCourtesyClef)
-                              // AND measure is not at the end of a repeat or of a section
-                              && !( (meas->repeatFlags() & Repeat::END) || meas->isFinalMeasureOfSection() )
+                              // AND measure is not at the end of a section
+                              && !meas->isFinalMeasureOfSection()
                               // AND this clef has courtesy clef turned on
                               && showCourtesy() );
                   bHide |= !showClef;
