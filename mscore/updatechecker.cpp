@@ -244,6 +244,10 @@ void ExtensionsUpdateChecker::check()
                               default:
                                     qWarning() << "undefined action in ExtensionsUpdateChecker::check" << ret;
                               }
+                        QSettings s;
+                        s.beginGroup("Update");
+                        s.setValue(getUpdatePrefString(), QDateTime::currentDateTime());
+                        s.endGroup();
                         break;
                         }
                   }
