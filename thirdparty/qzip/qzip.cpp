@@ -931,7 +931,7 @@ QByteArray MQZipReader::fileData(const QString &fileName) const
     d->scanFiles();
     int i;
     for (i = 0; i < d->fileHeaders.size(); ++i) {
-        if (QString::fromLocal8Bit(d->fileHeaders.at(i).file_name) == fileName)
+        if (QString::fromUtf8(d->fileHeaders.at(i).file_name) == fileName)
             break;
     }
     if (i == d->fileHeaders.size())
