@@ -44,6 +44,8 @@ class TestNoRegress300old : public QObject, public MTest
       void brlines()          { noregress("barlines");         }
       void grace()            { noregress("grace");            }
       void irregular()        { noregress("irregular");        }
+      void parts()            { noregress("parts");            }
+      void linkNotMaster()    { noregress("link-not-master");  }
       void moonlight()        { noregress("moonlight");        }
       };
 

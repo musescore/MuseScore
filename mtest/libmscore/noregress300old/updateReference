@@ -28,5 +28,7 @@ update \
     barlines \
     grace \
     irregular \
+    parts \
+    link-not-master \
     moonlight \
 
