@@ -63,4 +63,4 @@ esac
 scp -C -i $SSH_INDENTITY $FILE musescore-nightlies@ftp-osl.osuosl.org:ftp/linux/$ARCH_NAME/$FILE_UPLOAD_PATH
 
 # delete old files
-ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/linux/$ARCH_NAME; ls MuseScoreNightly* -t | tail -n +41 | xargs rm"
+ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/linux/$ARCH_NAME; ls MuseScoreNightly* -t | tail -n +41 | xargs -r rm"
