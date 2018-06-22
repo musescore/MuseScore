@@ -176,6 +176,16 @@
     </layout>
    </item>
    <item>
+    <widget class="QCheckBox" name="checkBoxRelativePath">
+     <property name="text">
+      <string>Store relative paths</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="groupBoxJoinScores">
      <property name="minimumSize">
       <size>

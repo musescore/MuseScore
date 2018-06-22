@@ -50,6 +50,7 @@ class AlbumManager : public QDialog, public Ui::AlbumManager {
       void currentScoreChanged(int);
       void itemChanged(QListWidgetItem*);   // score name in list is edited
       void buttonBoxClicked(QAbstractButton*);
+      void relativePathChanged();
    private:
       void writeAlbum();
 
