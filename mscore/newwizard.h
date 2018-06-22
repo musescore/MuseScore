@@ -69,16 +69,17 @@ class TitleWizard : public QWidget, public Ui::NewWizard {
       };
 
 //---------------------------------------------------------
-//   NewWizardPage1
+//   NewWizardInfoPage
+//    Enter score information such as title and composer
 //---------------------------------------------------------
 
-class NewWizardPage1 : public QWizardPage {
+class NewWizardInfoPage : public QWizardPage {
       Q_OBJECT
 
       TitleWizard* w;
 
    public:
-      NewWizardPage1(QWidget* parent = 0);
+      NewWizardInfoPage(QWidget* parent = 0);
       QString title() const              { return w->title->text();      }
       QString subtitle() const           { return w->subtitle->text();   }
       QString composer() const           { return w->composer->text();   }
@@ -88,36 +89,38 @@ class NewWizardPage1 : public QWizardPage {
       };
 
 //---------------------------------------------------------
-//   NewWizardPage2
+//   NewWizardInstrumentsPage
+//    Choose instruments to appear in the score
 //---------------------------------------------------------
 
-class NewWizardPage2 : public QWizardPage {
+class NewWizardInstrumentsPage : public QWizardPage {
       Q_OBJECT
 
       bool complete;
-      InstrumentsWidget* w;
+      InstrumentsWidget* instrumentsWidget;
 
    public slots:
       void setComplete(bool);
 
    public:
-      NewWizardPage2(QWidget* parent = 0);
+      NewWizardInstrumentsPage(QWidget* parent = 0);
       virtual bool isComplete() const override;
       void createInstruments(Score* s);
       virtual void initializePage() override;
       };
 
 //---------------------------------------------------------
-//   NewWizardPage3
+//   NewWizardTimesigPage
+//    Choose time signature for the score
 //---------------------------------------------------------
 
-class NewWizardPage3 : public QWizardPage {
+class NewWizardTimesigPage : public QWizardPage {
       Q_OBJECT
 
       TimesigWizard* w;
 
    public:
-      NewWizardPage3(QWidget* parent = 0);
+      NewWizardTimesigPage(QWidget* parent = 0);
       int measures() const                     { return w->measures();   }
       Fraction timesig() const                 { return w->timesig();    }
       bool pickupMeasure(int* z, int* n) const { return w->pickup(z, n); }
@@ -125,11 +128,11 @@ class NewWizardPage3 : public QWizardPage {
       };
 
 //---------------------------------------------------------
-//   NewWizardPage4
-//    request template file
+//   NewWizardTemplatePage
+//    Choose a template on which to base the score
 //---------------------------------------------------------
 
-class NewWizardPage4 : public QWizardPage {
+class NewWizardTemplatePage : public QWizardPage {
       Q_OBJECT
 
       ScoreBrowser* templateFileBrowser;
@@ -140,7 +143,7 @@ class NewWizardPage4 : public QWizardPage {
       void fileAccepted(const QString&);
 
    public:
-      NewWizardPage4(QWidget* parent = 0);
+      NewWizardTemplatePage(QWidget* parent = 0);
       virtual bool isComplete() const override;
       QString templatePath() const;
       virtual void initializePage();
@@ -148,10 +151,11 @@ class NewWizardPage4 : public QWizardPage {
       };
 
 //---------------------------------------------------------
-//   NewWizardPage5
+//   NewWizardKeysigPage
+//    Choose key signature for the score
 //---------------------------------------------------------
 
-class NewWizardPage5 : public QWizardPage {
+class NewWizardKeysigPage : public QWizardPage {
       Q_OBJECT
 
       Palette* sp;
@@ -159,7 +163,7 @@ class NewWizardPage5 : public QWizardPage {
       QGroupBox* tempoGroup;
 
    public:
-      NewWizardPage5(QWidget* parent = 0);
+      NewWizardKeysigPage(QWidget* parent = 0);
       virtual bool isComplete() const override { return true; }
       KeySigEvent keysig() const;
       double tempo() const            { return _tempo->value(); }
@@ -169,16 +173,17 @@ class NewWizardPage5 : public QWizardPage {
 
 //---------------------------------------------------------
 //   NewWizard
+//    New Score Wizard - create a new score
 //---------------------------------------------------------
 
 class NewWizard : public QWizard {
       Q_OBJECT
 
-      NewWizardPage1* p1;
-      NewWizardPage2* p2;
-      NewWizardPage3* p3;
-      NewWizardPage4* p4;
-      NewWizardPage5* p5;
+      NewWizardInfoPage* infoPage;
+      NewWizardInstrumentsPage* instrumentsPage;
+      NewWizardTimesigPage* timesigPage;
+      NewWizardTemplatePage* templatePage;
+      NewWizardKeysigPage* keysigPage;
 
       virtual void hideEvent(QHideEvent*);
 
@@ -192,20 +197,20 @@ class NewWizard : public QWizard {
 
       enum Page { Invalid = -1, Type, Instruments, Template, Keysig, Timesig};
 
-      QString templatePath() const       { return p4->templatePath(); }
-      int measures() const               { return p3->measures();    }
-      Fraction timesig() const           { return p3->timesig();     }
-      void createInstruments(Score* s)   { p2->createInstruments(s); }
-      QString title() const              { return p1->title();       }
-      QString subtitle() const           { return p1->subtitle();    }
-      QString composer() const           { return p1->composer();    }
-      QString poet() const               { return p1->poet();        }
-      QString copyright() const          { return p1->copyright();   }
-      KeySigEvent keysig() const         { return p5->keysig();      }
-      bool pickupMeasure(int* z, int* n) const { return p3->pickupMeasure(z, n); }
-      TimeSigType timesigType() const     { return p3->timesigType();       }
-      double tempo() const                { return p5->tempo();       }
-      bool createTempo() const            { return p5->createTempo(); }
+      QString templatePath() const       { return templatePage->templatePath(); }
+      int measures() const               { return timesigPage->measures();    }
+      Fraction timesig() const           { return timesigPage->timesig();     }
+      void createInstruments(Score* s)   { instrumentsPage->createInstruments(s); }
+      QString title() const              { return infoPage->title();       }
+      QString subtitle() const           { return infoPage->subtitle();    }
+      QString composer() const           { return infoPage->composer();    }
+      QString poet() const               { return infoPage->poet();        }
+      QString copyright() const          { return infoPage->copyright();   }
+      KeySigEvent keysig() const         { return keysigPage->keysig();      }
+      bool pickupMeasure(int* z, int* n) const { return timesigPage->pickupMeasure(z, n); }
+      TimeSigType timesigType() const     { return timesigPage->timesigType();       }
+      double tempo() const                { return keysigPage->tempo();       }
+      bool createTempo() const            { return keysigPage->createTempo(); }
       bool emptyScore() const;
       void updateValues() const;
       };
