@@ -140,7 +140,7 @@ void KeySig::layout()
       // OR key sig is CMaj/Amin (in which case they are always shown)
 
       Measure* m           = measure();
-      Measure* prevMeasure = m ? m->prevMeasure() : nullptr;
+      Measure* prevMeasure = m ? m->prevMeasureMM() : nullptr;
 
       // display of naturals defaults according to style
       bool naturalsOn = score()->styleI(StyleIdx::keySigNaturals) != int(KeySigNatural::NONE) || t1 == 0;
