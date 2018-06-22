@@ -237,8 +237,14 @@ class Note : public Element {
       QList<NoteDot*> _dots { 0, 0, 0 };
 
       NoteEventList _playEvents;
+#if (QT_VERSION < QT_VERSION_CHECK(5, 4, 0))
+#warning using QList
+      QList<Spanner*> _spannerFor;
+      QList<Spanner*> _spannerBack;
+#else
       QVector<Spanner*> _spannerFor;
       QVector<Spanner*> _spannerBack;
+#endif
       
       SymId _cachedNoteheadSym; // use in draw to avoid recomputing at every update
       
@@ -418,8 +424,13 @@ class Note : public Element {
       NoteEvent* noteEvent(int idx)              { return &_playEvents[idx]; }
       void setPlayEvents(const NoteEventList& l) { _playEvents = l;    }
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 4, 0))
+      QList<Spanner*> spannerFor() const         { return _spannerFor;         }
+      QList<Spanner*> spannerBack() const        { return _spannerBack;        }
+#else
       QVector<Spanner*> spannerFor() const         { return _spannerFor;         }
       QVector<Spanner*> spannerBack() const        { return _spannerBack;        }
+#endif
 
       void addSpannerBack(Spanner* e)            { if (!_spannerBack.contains(e)) _spannerBack.push_back(e); }
       bool removeSpannerBack(Spanner* e)         { return _spannerBack.removeOne(e); }
