@@ -93,6 +93,8 @@ void PointInfo::read(XmlReader& e)
                   _graceIndex = e.readInt();
             else if ((tag == "notes") || (tag == "note"))
                   _note = e.readInt();
+            else
+                  e.unknown();
             }
       }
 
