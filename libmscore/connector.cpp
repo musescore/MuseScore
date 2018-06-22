@@ -114,7 +114,11 @@ void ConnectorInfo::forceConnect(ConnectorInfo* other)
 
 static int distance(const PointInfo& p1, const PointInfo& p2)
       {
-      return 10000000 * (p2.measure() - p1.measure()) + 10000 * (p2.frac().ticks() - p1.frac().ticks()) + 100 * (p2.track() - p1.track()) + 10 * (p2.note() - p1.note()) + (p2.graceIndex() - p1.graceIndex());
+      constexpr int commonDenominator = 1000;
+      Fraction dfrac = (p2.frac() - p1.frac()).absValue();
+      int dpos = dfrac.numerator() * commonDenominator / dfrac.denominator();
+      dpos += 10000 * qAbs(p2.measure() - p1.measure());
+      return 1000 * dpos + 100 * qAbs(p2.track() - p1.track()) + 10 * qAbs(p2.note() - p1.note()) + qAbs(p2.graceIndex() - p1.graceIndex());
       }
 
 //---------------------------------------------------------
