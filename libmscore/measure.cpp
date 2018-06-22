@@ -578,7 +578,8 @@ void Measure::layout2()
                         smn = system()->firstMeasure() == this;
                   else {
                         smn = (_no == 0 && score()->styleB(StyleIdx::showMeasureNumberOne)) ||
-                              ( ((_no + 1) % score()->style(StyleIdx::measureNumberInterval).toInt()) == (score()->styleB(StyleIdx::showMeasureNumberOne) ? 1 : 0) );
+                              ( ((_no + 1) % score()->style(StyleIdx::measureNumberInterval).toInt()) == (score()->styleB(StyleIdx::showMeasureNumberOne) ? 1 : 0) ) ||
+                              (score()->style(StyleIdx::measureNumberInterval).toInt() == 1);
                         }
                   }
             }
