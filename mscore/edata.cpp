@@ -28,6 +28,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/bracket.h"
 #include "libmscore/barline.h"
+#include "libmscore/stem.h"
 
 //##  write out extended metadata about every painted symbol
 
@@ -148,9 +149,9 @@ static void writeTimeSigData(Xml& xml, qreal spatium, qreal scale, int num, int 
 
       name = QString("timeSig%1").arg(num);
       if (scale == 1.0)
-            xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(num));
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(name));
       else
-            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(num));
+            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(name));
       QRectF numInfo((midHorizontal * spatium - (numRect.width() / 2)), rr.y() * spatium, numRect.width(), numRect.height());
       xml.putLevel();
       xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
@@ -164,9 +165,9 @@ static void writeTimeSigData(Xml& xml, qreal spatium, qreal scale, int num, int 
 
       name = QString("timeSig%1").arg(denom);
       if (scale == 1.0)
-             xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(denom));
+             xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(name));
       else
-             xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(denom));
+             xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(name));
       QRectF denomInfo((midHorizontal * spatium - (denomRect.width() / 2)), midVertical * spatium, denomRect.width(), denomRect.height());
       xml.putLevel();
       xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
@@ -314,6 +315,223 @@ static void writeRepeatDotData(Xml& xml, qreal spatium, qreal scale, QString nam
       }
 
 //---------------------------------------------------------
+//   writeGraceData
+//---------------------------------------------------------
+
+static void writeGraceData(Xml& xml, qreal spatium, qreal scale, const QString& name, const Element* e, qreal smag)
+      {
+      const Note* n = static_cast<const Note*>(e);
+      const Chord* ch = n->chord();
+      const Hook* h = ch->hook();
+      const Stem* s = ch->stem();
+
+      if(ch->hook() == NULL)
+          return;
+
+      QString addString;
+      bool stemFlag = false;   // false if Stem is Up
+
+      if (s->up()) {
+            addString = "StemUp";
+            }
+      else {
+            addString = "StemDown";
+            stemFlag = true;
+            }
+
+      qreal interline = 20.0;
+      if (e->staff()) {
+            interline *= (e->staff()->spatium() / e->score()->spatium());
+            scale     *= (e->score()->spatium() / e->staff()->spatium());
+      }
+      if (scale == 1.0)
+            xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(name + addString));
+      else
+            xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(name + addString));
+
+      QRectF stemEl(e->symBbox(SymId::stem));
+      QRectF hookEl(h->pageBoundingRect());
+      QRectF noteEl(e->pageBoundingRect());
+
+      QRectF nEl(noteEl.x() * spatium, noteEl.y() * spatium, noteEl.width() * spatium, noteEl.height() * spatium);
+      QRectF hEl(hookEl.x() * spatium, hookEl.y() * spatium, hookEl.width() * spatium, hookEl.height() * spatium);
+
+      QRectF outerElement = QRectF();
+      if (!stemFlag) {
+            outerElement.setX(nEl.x());
+            outerElement.setY(hEl.y());
+            if (name == "graceNoteAcciaccatura") {
+                  outerElement.setWidth(nEl.width() + hEl.width() + (stemEl.width() * spatium));
+                  }
+            else {
+                  outerElement.setWidth(nEl.width() + hEl.width() - (stemEl.width() * spatium));
+                  }
+            outerElement.setHeight(nEl.y() + nEl.height() - hEl.y());
+            }
+      else {
+            if (name == "graceNoteAcciaccatura")
+                outerElement.setX(nEl.x() - (nEl.width() / 2));
+            else
+                outerElement.setX(nEl.x());
+            outerElement.setY(nEl.y());
+            if (name == "graceNoteAcciaccatura")
+                outerElement.setWidth(nEl.width() + nEl.width() / 2);
+            else
+                outerElement.setWidth(nEl.width());
+            outerElement.setHeight(nEl.height() + hEl.height());
+      }
+
+      xml.putLevel();
+      xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+         .arg(outerElement.x(),      0, 'f', 3)
+         .arg(outerElement.y(),      0, 'f', 3)
+         .arg(outerElement.width(),  0, 'f', 3)
+         .arg(outerElement.height(), 0, 'f', 3);
+
+      if (!stemFlag) {
+            QString str;
+
+            // Note Element
+
+            SymId sym = n->noteHead();
+            str = Sym::id2name(sym);
+            if (scale == 1.0)
+                  xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(str));
+            else
+                  xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(str));
+            xml.putLevel();
+            xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+            .arg(nEl.x(),      0, 'f', 3)
+            .arg(nEl.y(),      0, 'f', 3)
+            .arg(nEl.width(),  0, 'f', 3)
+            .arg(nEl.height(), 0, 'f', 3);
+            xml.etag();
+
+            // Stem
+
+            str = "stem";
+            if ((scale / smag) == 1.0)
+                  xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(str));
+            else
+                  xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale / smag).arg(str));
+            xml.putLevel();
+            QRectF sEl(hEl.x(), outerElement.y(), nEl.x() + nEl.width() - hEl.x(), stemEl.height() * spatium);
+            xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+               .arg(sEl.x(),      0, 'f', 3)
+               .arg(sEl.y(),      0, 'f', 3)
+               .arg(sEl.width(),  0, 'f', 3)
+               .arg(sEl.height(), 0, 'f', 3);
+            xml.etag();
+
+            // Hook
+
+            sym = h->sym();
+            str = Sym::id2name(sym);
+            if (scale == 1.0)
+                  xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(str));
+            else
+                  xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(str));
+            xml.putLevel();
+            xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+               .arg(hEl.x(),      0, 'f', 3)
+               .arg(hEl.y(),      0, 'f', 3)
+               .arg(hEl.width(),  0, 'f', 3)
+               .arg(hEl.height(), 0, 'f', 3);
+            xml.etag();
+
+            // Check for Slash
+
+            if (name == "graceNoteAcciaccatura") {
+                  str = "graceNoteSlashStemUp";
+                  QRectF slashEl(e->symBbox(SymId::graceNoteSlashStemUp));
+                  if (scale == 1.0)
+                        xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(str));
+                  else
+                        xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(str));
+                  xml.putLevel();
+                  QRectF stemUpEl(hEl.x() - (nEl.width() / 2), hEl.y() + (0.25 * outerElement.height()), outerElement.x() + outerElement. width() - hEl.x() + (nEl.width() / 2), slashEl.height() * spatium);
+                  xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+                     .arg(stemUpEl.x(),      0, 'f', 3)
+                     .arg(stemUpEl.y(),      0, 'f', 3)
+                     .arg(stemUpEl.width(),  0, 'f', 3)
+                     .arg(stemUpEl.height(), 0, 'f', 3);
+                  xml.etag();
+                  }
+              }
+        else {
+              QString str;
+
+              // Stem
+
+              str = "stem";
+              if ((scale / smag) == 1.0)
+                    xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(str));
+              else
+                    xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale / smag).arg(str));
+              xml.putLevel();
+              QRectF sEl(hEl.x(), nEl.y() + (nEl.height() / 2), stemEl.width() * spatium, stemEl.height() * spatium);
+              xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+                 .arg(sEl.x(),      0, 'f', 3)
+                 .arg(sEl.y(),      0, 'f', 3)
+                 .arg(sEl.width(),  0, 'f', 3)
+                 .arg(sEl.height(), 0, 'f', 3);
+              xml.etag();
+
+              // Note Element
+
+              SymId sym = n->noteHead();
+              str = Sym::id2name(sym);
+              if (scale == 1.0)
+                    xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(str));
+              else
+                    xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(str));
+              xml.putLevel();
+              xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+                 .arg(nEl.x(),      0, 'f', 3)
+                 .arg(nEl.y(),      0, 'f', 3)
+                 .arg(nEl.width(),  0, 'f', 3)
+                 .arg(nEl.height(), 0, 'f', 3);
+              xml.etag();
+
+              // Hook
+
+              sym = h->sym();
+              str = Sym::id2name(sym);
+              if (scale == 1.0)
+                    xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(str));
+              else
+                    xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(str));
+              xml.putLevel();
+              xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+                 .arg(hEl.x(),      0, 'f', 3)
+                 .arg(hEl.y(),      0, 'f', 3)
+                 .arg(hEl.width(),  0, 'f', 3)
+                 .arg(hEl.height(), 0, 'f', 3);
+              xml.etag();
+
+              // Check for Slash
+
+              if (name == "graceNoteAcciaccatura") {
+                    str = "graceNoteSlashStemUp";
+                    QRectF slashEl(e->symBbox(SymId::graceNoteSlashStemUp));
+                    if (scale == 1.0)
+                          xml.stag(QString("Symbol interline=\"%1\" shape=\"%2\"").arg(interline).arg(str));
+                    else
+                          xml.stag(QString("Symbol interline=\"%1\" scale=\"%2\" shape=\"%3\"").arg(interline).arg(scale).arg(str));
+                    xml.putLevel();
+                    QRectF stemUpEl(hEl.x() - (nEl.width() / 2), nEl.y() + (0.4 * outerElement.height()), outerElement.x() + outerElement. width() - hEl.x() + (nEl.width() / 2), slashEl.height() * spatium);
+                    xml << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg("Bounds")
+                       .arg(stemUpEl.x(),      0, 'f', 3)
+                       .arg(stemUpEl.y(),      0, 'f', 3)
+                       .arg(stemUpEl.width(),  0, 'f', 3)
+                       .arg(stemUpEl.height(), 0, 'f', 3);
+                    xml.etag();
+                    }
+               }
+               xml.etag();
+       }
+
+//---------------------------------------------------------
 //   writeSymbol
 //---------------------------------------------------------
 
@@ -374,8 +592,13 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                         writeData(xml, mag, e->mag(), "augmentationDot", e);
                         break;
 
-                  case Element::Type::STEM:
+                  case Element::Type::STEM: {
+                        const Stem* s = static_cast<const Stem*>(e);
+                        Chord* ch = s->chord();
+                        if (ch->isGrace())
+                              break;
                         writeData(xml, mag, e->mag() / smag, "stem", e);
+                        }
                         break;
 #if 0
                   case Element::Type::HAIRPIN_SEGMENT:
@@ -453,7 +676,37 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                         const Note* n = static_cast<const Note*>(e);
                         SymId symId = n->noteHead();
                         QString symName = Sym::id2name(symId);
-                        writeData(xml, mag, n->mag(), symName, n);
+                        switch (n->noteType()) {
+                              case NoteType::NORMAL:
+                                    writeData(xml, mag, n->mag(), symName , n);
+                                    break;
+                              case NoteType::ACCIACCATURA:
+                                    writeGraceData(xml, mag, n->mag(), "graceNoteAcciaccatura", n, smag);
+                                    break;
+                              case NoteType::APPOGGIATURA:
+                                    writeGraceData(xml, mag, n->mag(), "graceNoteAppoggiatura", n, smag);
+                                    break;
+                              case NoteType::GRACE4:
+                                    writeData(xml, mag, n->mag(), "graceNote4", n);
+                                    break;
+                              case NoteType::GRACE16:
+                                    writeData(xml, mag, n->mag(), "graceNote16", n);
+                                    break;
+                              case NoteType::GRACE32:
+                                    writeData(xml, mag, n->mag(), "graceNote32", n);
+                                    break;
+                              case NoteType::GRACE8_AFTER:
+                                    writeData(xml, mag, n->mag(), "graceNote8_After", n);
+                                    break;
+                              case NoteType::GRACE16_AFTER:
+                                    writeData(xml, mag, n->mag(), "graceNote16_After", n);
+                                    break;
+                              case NoteType::GRACE32_AFTER:
+                                    writeData(xml, mag, n->mag(), "graceNote32_After", n);
+                                    break;
+                              case NoteType::INVALID:
+                                    break;
+                              }
                         }
                         break;
 
@@ -508,16 +761,8 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                   case Element::Type::HOOK: {
                         const Hook* h = static_cast<const Hook*>(e);
                         const Chord* c = h->chord();
-
-                        if (c->isGrace()) {
-                              if (h->hookType() == 1) {
-                                    if (c->slash())
-                                          writeData(xml, mag, c->mag(), "Flag1UpSmallSlash", h);
-                                    else
-                                          writeData(xml, mag, c->mag(), "Flag1UpSmall", h);
-                                    }
+                        if (c->isGrace())
                               break;
-                              }
                         switch (h->hookType()) {
                               default:
                               case 0:
@@ -636,7 +881,7 @@ void MuseScore::writeEdata(const QString& edataName, const QString& imageName, S
                                     writeData(xml, mag, ts->mag(), "timeSigCommon", ts);
                                     break;
                               case TimeSigType::ALLA_BREVE:
-                                    writeData(xml, mag, ts->mag(), "timesigCut", ts);
+                                    writeData(xml, mag, ts->mag(), "timeSigCutCommon", ts);
                                     break;
                               }
                         }
