@@ -44,6 +44,7 @@ AlbumItem::~AlbumItem()
 
 Album::Album()
       {
+      _relativePath = true;
       _dirty = false;
       }
 
@@ -278,6 +279,7 @@ bool Album::read(const QString& p)
 
 void Album::load(XmlReader& e)
       {
+      QDir albumDir = QDir(QFileInfo(QFile(_path)).path());
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Score") {
@@ -287,7 +289,7 @@ void Album::load(XmlReader& e)
                         if (tag == "name")
                               i->name = e.readElementText();
                         else if (tag == "path")
-                              i->path = e.readElementText();
+                              i->path = albumDir.filePath(e.readElementText());
                         else
                               e.unknown();
                         }
@@ -328,12 +330,13 @@ void Album::loadScores()
 
 void Album::save(Xml& xml)
       {
+      QDir albumDir = QDir(QFileInfo(QFile(_path)).path());
       xml.stag("Album");
       xml.tag("name", _name);
       for (AlbumItem* item : _scores) {
             xml.stag("Score");
             xml.tag("name", item->name);
-            xml.tag("path", item->path);
+            xml.tag("path", _relativePath ? albumDir.relativeFilePath(item->path) : item->path);
             xml.etag();
             }
       xml.etag();
@@ -402,6 +405,19 @@ void Album::setPath(const QString& s)
       {
       if (_path != s) {
             _path = s;
+            _dirty = true;
+            }
+      }
+
+//---------------------------------------------------------
+//   setRelativePath
+//---------------------------------------------------------
+
+void Album::setRelativePath(bool relativePath)
+      {
+      if (_relativePath != relativePath)
+            {
+            _relativePath = relativePath;
             _dirty = true;
             }
       }
