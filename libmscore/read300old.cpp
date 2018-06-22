@@ -14,10 +14,12 @@
 #include "arpeggio.h"
 #include "articulation.h"
 #include "bend.h"
+#include "box.h"
 #include "chord.h"
 #include "chordline.h"
 #include "figuredbass.h"
 #include "fingering.h"
+#include "fret.h"
 #include "glissando.h"
 #include "hairpin.h"
 #include "harmony.h"
@@ -26,6 +28,7 @@
 #include "instrchange.h"
 #include "jump.h"
 #include "letring.h"
+#include "lyrics.h"
 #include "marker.h"
 #include "measure.h"
 #include "notedot.h"
@@ -36,6 +39,7 @@
 #include "stafftext.h"
 #include "stafftypechange.h"
 #include "tempotext.h"
+#include "textframe.h"
 #include "textline.h"
 #include "tie.h"
 #include "trill.h"
@@ -503,6 +507,136 @@ bool MeasureBase::readProperties300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   Box::read300old
+//---------------------------------------------------------
+
+void Box::read300old(XmlReader& e)
+      {
+      _leftMargin      = 0.0;
+      _rightMargin     = 0.0;
+      _topMargin       = 0.0;
+      _bottomMargin    = 0.0;
+      _boxHeight       = Spatium(0);     // override default set in constructor
+      _boxWidth        = Spatium(0);
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "HBox") {
+                  HBox* hb = new HBox(score());
+                  hb->read300old(e);
+                  add(hb);
+                  }
+            else if (tag == "VBox") {
+                  VBox* vb = new VBox(score());
+                  vb->read300old(e);
+                  add(vb);
+                  }
+            else if (!Box::readProperties300old(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   Box::readProperties300old
+//---------------------------------------------------------
+
+bool Box::readProperties300old(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "height")
+            _boxHeight = Spatium(e.readDouble());
+      else if (tag == "width")
+            _boxWidth = Spatium(e.readDouble());
+      else if (tag == "topGap") {
+            _topGap = e.readDouble();
+            if (score()->mscVersion() >= 206)
+                  _topGap *= score()->spatium();
+            setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "bottomGap") {
+            _bottomGap = e.readDouble();
+             if (score()->mscVersion() >= 206)
+                  _bottomGap *= score()->spatium();
+            setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "leftMargin")
+            _leftMargin = e.readDouble();
+      else if (tag == "rightMargin")
+            _rightMargin = e.readDouble();
+      else if (tag == "topMargin")
+            _topMargin = e.readDouble();
+      else if (tag == "bottomMargin")
+            _bottomMargin = e.readDouble();
+      else if (tag == "Text") {
+            Text* t;
+            if (isTBox()) {
+                  t = toTBox(this)->text();
+                  t->read300old(e);
+                  }
+            else {
+                  t = new Text(score());
+                  t->read300old(e);
+                  if (t->empty())
+                        qDebug("read empty text");
+                  else
+                        add(t);
+                  }
+            }
+      else if (tag == "Symbol") {
+            Symbol* s = new Symbol(score());
+            s->read300old(e);
+            add(s);
+            }
+      else if (tag == "Image") {
+            if (MScore::noImages)
+                  e.skipCurrentElement();
+            else {
+                  Image* image = new Image(score());
+                  image->setTrack(e.track());
+                  image->read300old(e);
+                  add(image);
+                  }
+            }
+      else if (tag == "FretDiagram") {
+            FretDiagram* f = new FretDiagram(score());
+            f->read300old(e);
+            add(f);
+            }
+      else if (tag == "HBox") {
+            HBox* hb = new HBox(score());
+            hb->read300old(e);
+            add(hb);
+            }
+      else if (tag == "VBox") {
+            VBox* vb = new VBox(score());
+            vb->read300old(e);
+            add(vb);
+            }
+      else if (MeasureBase::readProperties300old(e))
+            ;
+      else
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   TBox::read300old
+//---------------------------------------------------------
+
+void TBox::read300old(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "Text")
+                  _text->read300old(e);
+            else if (Box::readProperties300old(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
 //   Glissando::read300old
 //---------------------------------------------------------
 
@@ -601,6 +735,87 @@ void SLine::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   SLine::readProperties300old
+//---------------------------------------------------------
+
+bool SLine::readProperties300old(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "tick2") {                // obsolete
+            if (tick() == -1) // not necessarily set (for first note of score?) #30151
+                  setTick(e.tick());
+            setTick2(e.readInt());
+            }
+      else if (tag == "tick")             // obsolete
+            setTick(e.readInt());
+      else if (tag == "ticks")
+            setTicks(e.readInt());
+      else if (tag == "Segment") {
+            LineSegment* ls = createLineSegment();
+            ls->setTrack(track()); // needed in read to get the right staff mag
+            ls->read300old(e);
+            add(ls);
+            ls->setVisible(visible());
+            }
+      else if (tag == "length")
+            setLen(e.readDouble());
+      else if (tag == "diagonal")
+            setDiagonal(e.readInt());
+      else if (tag == "anchor")
+            setAnchor(Anchor(e.readInt()));
+      else if (tag == "lineWidth")
+            _lineWidth = e.readDouble() * spatium();
+      else if (tag == "lineStyle")
+            _lineStyle = Qt::PenStyle(e.readInt());
+      else if (tag == "dashLineLength")
+            _dashLineLen = e.readDouble();
+      else if (tag == "dashGapLength")
+            _dashGapLen = e.readDouble();
+      else if (tag == "lineColor")
+            _lineColor = e.readColor();
+      else if (!Element::readProperties300old(e))
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   LineSegment::readProperties300old
+//---------------------------------------------------------
+
+bool LineSegment::readProperties300old(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "subtype")
+            setSpannerSegmentType(SpannerSegmentType(e.readInt()));
+      else if (tag == "off2") {
+            setUserOff2(e.readPoint() * spatium());
+            if (!userOff2().isNull())
+                  setAutoplace(false);
+            }
+      else if (tag == "pos") {
+            setUserOff(QPointF());
+            setAutoplace(false);
+            e.readNext();
+            }
+      else if (!SpannerSegment::readProperties300old(e)) {
+            e.unknown();
+            return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   LineSegment::read300old
+//---------------------------------------------------------
+
+void LineSegment::read300old(XmlReader& e)
+      {
+      while (e.readNextStartElement())
+            readProperties300old(e);
+      }
+
+//---------------------------------------------------------
 //   PalmMute::read300old
 //---------------------------------------------------------
 
@@ -674,6 +889,29 @@ void Slur::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   Slur::readProperties300old
+//---------------------------------------------------------
+
+bool Slur::readProperties300old(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "SlurSegment") {
+            int idx = e.intAttribute("no", 0);
+            int n = spannerSegments().size();
+            for (int i = n; i < idx; ++i)
+                  add(new SlurSegment(score()));
+            SlurSegment* segment = new SlurSegment(score());
+            segment->setAutoplace(false);
+            segment->read300old(e);
+            add(segment);
+            }
+      else if (!SlurTie::readProperties300old(e))
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
 //   TextLineBase::read300old
 //---------------------------------------------------------
 
@@ -687,6 +925,59 @@ void TextLineBase::read300old(XmlReader& e)
             if (!readProperties300old(e))
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   Lyrics::read300old
+//---------------------------------------------------------
+
+void Lyrics::read300old(XmlReader& e)
+      {
+      int   iEndTick = 0;           // used for backward compatibility
+      Text* _verseNumber = 0;
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "no")
+                  _no = e.readInt();
+            else if (tag == "syllabic") {
+                  QString val(e.readElementText());
+                  if (val == "single")
+                        _syllabic = Syllabic::SINGLE;
+                  else if (val == "begin")
+                        _syllabic = Syllabic::BEGIN;
+                  else if (val == "end")
+                        _syllabic = Syllabic::END;
+                  else if (val == "middle")
+                        _syllabic = Syllabic::MIDDLE;
+                  else
+                        qDebug("bad syllabic property");
+                  }
+            else if (tag == "endTick") {          // obsolete
+                  // store <endTick> tag value until a <ticks> tag has been read
+                  // which positions this lyrics element in the score
+                  iEndTick = e.readInt();
+                  }
+            else if (tag == "ticks")
+                  _ticks = e.readInt();
+            else if (tag == "Number") {                           // obsolete
+                  _verseNumber = new Text(score());
+                  _verseNumber->read(e);
+                  _verseNumber->setParent(this);
+                  }
+            else if (!TextBase::readProperties(e))
+                  e.unknown();
+            }
+      // if any endTick, make it relative to current tick
+      if (iEndTick) {
+            _ticks = iEndTick - e.tick();
+            // qDebug("Lyrics::endTick: %d  ticks %d", iEndTick, _ticks);
+            }
+      if (_verseNumber) {
+            // TODO: add text to main text
+            }
+
+      delete _verseNumber;
       }
 
 //---------------------------------------------------------
@@ -713,6 +1004,29 @@ void Tie::read300old(XmlReader& e)
             ss->setUserOff(zeroP);
             ss->setUserOff2(zeroP);
             }
+      }
+
+//---------------------------------------------------------
+//   Tie::readProperties300old
+//---------------------------------------------------------
+
+bool Tie::readProperties300old(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "SlurSegment") {
+            int idx = e.intAttribute("no", 0);
+            int n = spannerSegments().size();
+            for (int i = n; i < idx; ++i)
+                  add(new TieSegment(score()));
+            TieSegment* segment = new TieSegment(score());
+            segment->setAutoplace(false);
+            segment->read300old(e);
+            add(segment);
+            }
+      else if (!SlurTie::readProperties300old(e))
+            return false;
+      return true;
       }
 
 //---------------------------------------------------------

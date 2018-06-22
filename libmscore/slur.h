@@ -71,6 +71,7 @@ class Slur final : public SlurTie {
       virtual void slurPos(SlurPos*) override;
 
       bool readProperties(XmlReader&);
+      bool readProperties300old(XmlReader&);
 
       SlurSegment* frontSegment() const   { return (SlurSegment*)spannerSegments().front(); }
       SlurSegment* backSegment() const    { return (SlurSegment*)spannerSegments().back();  }
