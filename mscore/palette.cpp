@@ -646,6 +646,7 @@ void Palette::applyPaletteElement(PaletteCell* cell)
                   for (int i = sel.staffStart(); i < endStaff; ++i) {
                         Spanner* spanner = static_cast<Spanner*>(element->clone());
                         spanner->setScore(score);
+                        spanner->initSubStyle(element->subStyleId());
                         score->cmdAddSpanner(spanner, i, startSegment, endSegment);
                         }
                   }
