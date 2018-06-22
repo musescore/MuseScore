@@ -31,26 +31,6 @@ endif (CI)
 # Libraries linked via full path no longer produce linker search paths.
 cmake_policy(SET CMP0003 NEW)
 
-# Don't to link executables to qtmain.lib automatically when they link to the QtCore IMPORTED target
-#if(POLICY CMP0020)
-#      cmake_policy(SET CMP0020 OLD)
-#endif(POLICY CMP0020)
-
-# Issue no warning non-existent target argument to get_targer_property() and set the result variable to a -NOTFOUND value rather than issuing a FATAL_ERROR
-if(POLICY CMP0045)
-      cmake_policy(SET CMP0045 OLD)
-endif(POLICY CMP0045)
-
-# Silently ignore non-existent dependencies (mops1, mops2)
-if(POLICY CMP0046)
-      cmake_policy(SET CMP0046 OLD)
-endif(POLICY CMP0046)
-
-# Honor the legacy behavior for variable references and escape sequences
-if(POLICY CMP0053)
-      cmake_policy(SET CMP0053 OLD)
-endif(POLICY CMP0053)
-
 # RPATH settings on macOS do not affect install_name
 if(POLICY CMP0068)
       cmake_policy(SET CMP0068 NEW)
@@ -363,23 +343,22 @@ IF(BUILD_JACK)
            IF("$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "")
               IF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
                  # "pure" 32-bit environment
-                 set (JACK_INCDIR "$ENV{PROGRAMFILES}/Jack/includes")
-                 set (JACK_LIB "$ENV{PROGRAMFILES}/Jack/lib/libjack.a")
+                 set (progenv "PROGRAMFILES")
               ELSE("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
                  # "pure" 64-bit environment
-                 set (JACK_INCDIR "$ENV{PROGRAMFILES(x86)}/Jack/includes")
-                 set (JACK_LIB "$ENV{PROGRAMFILES(x86)}/Jack/lib/libjack.a")
+                 set (progenv "PROGRAMFILES(x86)")
               ENDIF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
            ELSE("$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "")
               IF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
                  # 32-bit program running with an underlying 64-bit environment
-                 set (JACK_INCDIR "$ENV{PROGRAMFILES(x86)}/Jack/includes")
-                 set (JACK_LIB "$ENV{PROGRAMFILES(x86)}/Jack/lib/libjack.a")
+                 set (progenv "PROGRAMFILES(x86)")
               ELSE("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
                  # Theoretically impossible case...
                  MESSAGE(SEND_ERROR "Error: Impossible program/environment bitness combination deduced: 64-bit program running in 32-bit environment. This is a programming error. PROCESSOR_ARCHITEW6432=$ENV{PROCESSOR_ARCHITEW6432}. PROCESSOR_ARCHITECTURE=$ENV{PROCESSOR_ARCHITECTURE}")
               ENDIF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
            ENDIF("$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "")
+           set (JACK_INCDIR "$ENV{${progenv}}/Jack/includes")
+           set (JACK_LIB "$ENV{${progenv}}/Jack/lib/libjack.a")
            MESSAGE("JACK support enabled.")
      ELSE(MINGW)
            PKGCONFIG1 (jack ${JACK_MIN_VERSION} JACK_INCDIR JACK_LIBDIR JACK_LIB JACK_CPP)
