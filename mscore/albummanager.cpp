@@ -54,6 +54,7 @@ AlbumManager::AlbumManager(QWidget* parent)
       connect(albumName,   SIGNAL(textChanged(const QString&)), SLOT(albumNameChanged(const QString&)));
       connect(scoreList,   SIGNAL(currentRowChanged(int)), SLOT(currentScoreChanged(int)));
       connect(scoreList,   SIGNAL(itemChanged(QListWidgetItem*)), SLOT(itemChanged(QListWidgetItem*)));
+      connect(checkBoxRelativePath,   SIGNAL(toggled(bool)), SLOT(relativePathChanged()));
       connect(buttonBox,   SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
       currentScoreChanged(-1);
       add->setEnabled(false);
@@ -77,7 +78,7 @@ void AlbumManager::addClicked()
          );
       if (files.isEmpty())
             return;
-      foreach(QString fn, files) {
+      for (QString fn : files) {
             if (fn.isEmpty())
                   continue;
             if(fn.endsWith (".mscz") || fn.endsWith (".mscx")) {
@@ -121,7 +122,7 @@ void AlbumManager::printClicked()
       }
 
 //---------------------------------------------------------
-//   createScore
+//   createScoreClicked
 //---------------------------------------------------------
 
 void AlbumManager::createScoreClicked()
@@ -207,12 +208,16 @@ void AlbumManager::setAlbum(Album* a)
       album = a;
       scoreList->clear();
       albumName->setText(album->name().isEmpty() ? QWidget::tr("Untitled") : album->name());
-      foreach(AlbumItem* a, album->scores()) {
+      for (AlbumItem* a : album->scores()) {
             QListWidgetItem* li = new QListWidgetItem(a->name, scoreList);
             li->setToolTip(a->path);
             li->setFlags(Qt::ItemFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled));
+
+            if (album->relativePath() && QFileInfo(a->path).isAbsolute())
+                  album->setRelativePath(false);
             }
       albumName->setEnabled(true);
+      checkBoxRelativePath->setChecked(album->relativePath());
       add->setEnabled(true);
       print->setEnabled(true);
       createScore->setEnabled(true);
@@ -293,7 +298,7 @@ void AlbumManager::buttonBoxClicked(QAbstractButton* button)
       }
 
 //---------------------------------------------------------
-//   buttonBoxClicked
+//   writeAlbum
 //---------------------------------------------------------
 
 void AlbumManager::writeAlbum()
@@ -324,6 +329,7 @@ void AlbumManager::writeAlbum()
             return;
             }
       Xml xml(&f);
+      album->setRelativePath(checkBoxRelativePath->isChecked());
       album->write(xml);
       if (f.error() != QFile::NoError) {
             QString s = QWidget::tr("Write Album failed: ") + f.errorString();
@@ -353,6 +359,18 @@ void AlbumManager::hideEvent(QHideEvent* event)
       {
       MuseScore::saveGeometry(this);
       QDialog::hideEvent(event);
+      }
+
+//---------------------------------------------------------
+//   relativePathChanged
+//---------------------------------------------------------
+
+void AlbumManager::relativePathChanged()
+      {
+      if (album) {
+            album->setRelativePath(checkBoxRelativePath->isChecked());
+            album->setDirty(true);
+            }
       }
 }
 

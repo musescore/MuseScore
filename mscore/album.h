@@ -47,6 +47,7 @@ struct AlbumItem {
 
 class Album {
       bool _dirty;
+      bool _relativePath;
       QString _path;
       QString _name;
       QList<AlbumItem*> _scores;
@@ -66,8 +67,10 @@ class Album {
       bool dirty() const             { return _dirty; }
       QString name() const           { return _name;  }
       QString path() const           { return _path;  }
+      bool relativePath()            { return _relativePath; }
       void setName(const QString&);
       void setPath(const QString&);
+      void setRelativePath(bool);
       QList<AlbumItem*>& scores()    { return _scores; }
       void append(AlbumItem* item);
       void remove(int);
