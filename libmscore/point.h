@@ -19,6 +19,7 @@
 
 namespace Ms {
 
+class Element;
 class XmlReader;
 class XmlWriter;
 
@@ -61,6 +62,11 @@ class PointInfo {
       void setGraceIndex(int index) { _graceIndex = index;  }
       int note() const              { return _note;         }
       void setNote(int note)        { _note = note;         }
+
+      void fillForElement(const Element* e, bool absfrac = true);
+      void fillPositionForElement(const Element* e, bool absfrac = true);
+      static PointInfo forElement(const Element* e, bool absfrac = true);
+      static PointInfo positionForElement(const Element* e, bool absfrac = true);
 
       bool operator==(const PointInfo& other) const;
       bool operator!=(const PointInfo& other) const { return !(*this == other); }

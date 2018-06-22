@@ -12,16 +12,12 @@
 
 #include "connector.h"
 
-#include "chord.h"
 #include "element.h"
-#include "measure.h"
 #include "score.h"
 #include "scoreElement.h"
 #include "xml.h"
 
 namespace Ms {
-
-static constexpr PointInfo pointDefaults = PointInfo::absolute();
 
 //---------------------------------------------------------
 //   ConnectorInfo
@@ -56,47 +52,7 @@ ConnectorInfo::ConnectorInfo(const PointInfo& currentInfo)
 
 void ConnectorInfo::updatePointInfo(const Element* e, PointInfo& i, bool clipboardmode)
       {
-      if (!e) {
-            qWarning("ConnectorInfo::updatePointInfo: element is nullptr");
-            return;
-      }
-      if (i.track() == pointDefaults.track())
-            i.setTrack(e->track());
-      if (i.frac() == pointDefaults.frac())
-            i.setFrac(clipboardmode ? e->afrac() : e->rfrac());
-      if (i.measure() == pointDefaults.measure()) {
-            if (clipboardmode)
-                  i.setMeasure(0);
-            else {
-                  const Measure* m = toMeasure(e->findMeasure());
-                  if (m)
-                        i.setMeasure(m->index());
-                  else {
-                        qWarning("ConnectorInfo:updatePointInfo: cannot find element's measure (%s)", e->name());
-                        i.setMeasure(0);
-                        }
-                  }
-            }
-
-      if (e->isChord() || (e->parent() && e->parent()->isChord())) {
-            const Chord* ch = e->isChord() ? toChord(e) : toChord(e->parent());
-            if (ch->isGrace())
-                  i.setGraceIndex(ch->graceIndex());
-            }
-      if (e->isNote()) {
-            const Note* n = toNote(e);
-            const std::vector<Note*>& notes = n->chord()->notes();
-            if (notes.size() == 1)
-                  i.setNote(0);
-            else {
-                  int noteIdx;
-                  for (noteIdx = 0; noteIdx < int(notes.size()); ++noteIdx) {
-                        if (n == notes.at(noteIdx))
-                              break;
-                        }
-                  i.setNote(noteIdx);
-                  }
-            }
+      i.fillForElement(e, clipboardmode);
       }
 
 //---------------------------------------------------------

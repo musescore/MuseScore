@@ -12,6 +12,9 @@
 
 #include "point.h"
 
+#include "chord.h"
+#include "element.h"
+#include "measure.h"
 #include "mscore.h"
 #include "xml.h"
 
@@ -123,6 +126,110 @@ void PointInfo::toRelative(const PointInfo& ref)
       _frac -= ref._frac;
       _note -= ref._note;
       _rel = true;
+      }
+
+//---------------------------------------------------------
+//   PointInfo::fillPositionForElement
+//    Fills default fields of PointInfo by values relevant
+//    for the given Element. This function fills only
+//    position values, not dealing with parameters specific
+//    for Chords and Notes, like grace index.
+//---------------------------------------------------------
+
+void PointInfo::fillPositionForElement(const Element* e, bool absfrac)
+      {
+      Q_ASSERT(isAbsolute());
+      if (!e) {
+            qWarning("PointInfo::fillPositionForElement: element is nullptr");
+            return;
+            }
+      if (track() == absDefaults.track()) {
+            const int track = e->track();
+            setTrack(track);
+            if (track < 0) {
+                  const MeasureBase* mb = e->findMeasureBase();
+                  if (mb && !mb->isMeasure()) {
+                        // Such elements are written in the first staff,
+                        // see writeMeasure() in scorefile.cpp
+                        setTrack(0);
+                        }
+                  }
+            }
+      if (frac() == absDefaults.frac())
+            setFrac(absfrac ? e->afrac() : e->rfrac());
+      if (measure() == absDefaults.measure()) {
+            if (absfrac)
+                  setMeasure(0);
+            else {
+                  const Measure* m = toMeasure(e->findMeasure());
+                  if (m)
+                        setMeasure(m->index());
+                  else {
+                        qWarning("PointInfo::fillFor: cannot find element's measure (%s)", e->name());
+                        setMeasure(0);
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   PointInfo::fillForElement
+//    Fills default fields of PointInfo by values relevant
+//    for the given Element, including parameters specific
+//    for Chords and Notes.
+//---------------------------------------------------------
+
+void PointInfo::fillForElement(const Element* e, bool absfrac)
+      {
+      Q_ASSERT(isAbsolute());
+      if (!e) {
+            qWarning("PointInfo::fillForElement: element is nullptr");
+            return;
+            }
+
+      fillPositionForElement(e, absfrac);
+
+      if (e->isChord() || (e->parent() && e->parent()->isChord())) {
+            const Chord* ch = e->isChord() ? toChord(e) : toChord(e->parent());
+            if (ch->isGrace())
+                  setGraceIndex(ch->graceIndex());
+            }
+      if (e->isNote()) {
+            const Note* n = toNote(e);
+            const std::vector<Note*>& notes = n->chord()->notes();
+            if (notes.size() == 1)
+                  setNote(0);
+            else {
+                  int noteIdx;
+                  for (noteIdx = 0; noteIdx < int(notes.size()); ++noteIdx) {
+                        if (n == notes.at(noteIdx))
+                              break;
+                        }
+                  setNote(noteIdx);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   PointInfo::forElement
+//---------------------------------------------------------
+
+PointInfo PointInfo::forElement(const Element* e, bool absfrac)
+      {
+      PointInfo i = PointInfo::absolute();
+      i.fillForElement(e, absfrac);
+      return i;
+      }
+
+//---------------------------------------------------------
+//   PointInfo::positionForElement
+//---------------------------------------------------------
+
+PointInfo PointInfo::positionForElement(const Element* e, bool absfrac)
+      {
+      PointInfo i = PointInfo::absolute();
+      i.fillPositionForElement(e, absfrac);
+      return i;
       }
 
 //---------------------------------------------------------
