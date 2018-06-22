@@ -275,6 +275,7 @@ void Score::readStaff(XmlReader& e)
       {
       int staff = e.intAttribute("id", 1) - 1;
       int measureIdx = 0;
+      e.setCurrentMeasureIndex(0);
       e.initTick(0);
       e.setTrack(staff * VOICES);
 

@@ -2006,6 +2006,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             Measure* lm = e.lastMeasure();
             e.initTick(lm->tick() + lm->ticks());
             }
+      e.setCurrentMeasure(nullptr);
       }
 
 //---------------------------------------------------------
