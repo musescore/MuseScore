@@ -1249,6 +1249,30 @@ const Element* Element::findMeasure() const
       }
 
 //---------------------------------------------------------
+//   findMeasureBase
+//---------------------------------------------------------
+
+MeasureBase* Element::findMeasureBase()
+      {
+      if (isMeasureBase())
+            return toMeasureBase(this);
+      else if (_parent)
+            return _parent->findMeasureBase();
+      else
+            return 0;
+      }
+
+//---------------------------------------------------------
+//   findMeasureBase
+//---------------------------------------------------------
+
+const MeasureBase* Element::findMeasureBase() const
+      {
+      Element* e = const_cast<Element*>(this);
+      return e->findMeasureBase();
+      }
+
+//---------------------------------------------------------
 //   undoSetColor
 //---------------------------------------------------------
 

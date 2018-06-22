@@ -181,6 +181,8 @@ class Element : public ScoreElement {
       void setParent(Element* e)              { _parent = e;        }
       Element* findMeasure();
       const Element* findMeasure() const;
+      MeasureBase* findMeasureBase();
+      const MeasureBase* findMeasureBase() const;
 
       qreal spatium() const;
 
