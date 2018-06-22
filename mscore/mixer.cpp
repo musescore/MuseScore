@@ -205,7 +205,7 @@ void Mixer::patchListChanged()
       {
       if (!cs)
             return;
-      QString s;
+
       int idx = 0;
       QList<MidiMapping>* mm = cs->midiMapping();
       const QList<MidiPatch*> pl = synti->getPatchInfo();

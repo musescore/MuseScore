@@ -525,7 +525,7 @@ void InstrumentTemplate::read(XmlReader& e)
             channel.append(a);
             }
       if (useDrumset) {
-            if (channel[0].bank == 0)
+            if (channel[0].bank == 0 && channel[0].name == "Fluid")
                   channel[0].bank = 128;
             channel[0].updateInitList();
             }
