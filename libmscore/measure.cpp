@@ -519,7 +519,8 @@ void Measure::layout2()
                         smn = system()->firstMeasure() == this;
                   else {
                         smn = (no() == 0 && score()->styleB(Sid::showMeasureNumberOne)) ||
-                              ( ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0) );
+                              ( ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0) ) ||
+                              (score()->styleI(Sid::measureNumberInterval) == 1);
                         }
                   }
             }
