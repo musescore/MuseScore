@@ -36,7 +36,7 @@ class PointInfo {
       constexpr PointInfo(int staff, int voice, int measure, Fraction frac, int graceIndex, int note, bool rel)
          : _staff(staff), _voice(voice), _measure(measure), _frac(frac), _graceIndex(graceIndex), _note(note), _rel(rel) {}
 
-      static constexpr PointInfo absolute() { return PointInfo(INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, 0, false); }
+      static constexpr PointInfo absolute() { return PointInfo(INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, false); }
       static constexpr PointInfo relative() { return PointInfo(0, 0, 0, 0, INT_MIN, 0, true); }
 
       void toAbsolute(const PointInfo& ref);
