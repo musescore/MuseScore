@@ -1046,6 +1046,10 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
    : ConnectorInfoWriter(xml, current, sp, track, frac)
       {
       const bool clipboardmode = xml.clipboardmode();
+      if (!sp->startElement() || !sp->endElement()) {
+            qWarning("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->name());
+            return;
+            }
       if (current->isMeasure() || current->isSegment() || (sp->startElement()->type() != current->type())) {
             // (The latter is the hairpins' case, for example, though they are
             // covered by the other checks too.)
