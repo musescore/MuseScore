@@ -22,7 +22,7 @@ namespace Ms {
 class Chord;
 
 // Tremolo subtypes:
-enum class TremoloType : char {
+enum class TremoloType : signed char {
       INVALID_TREMOLO = -1,
       OLD_R8 = 0,
       OLD_R16,
