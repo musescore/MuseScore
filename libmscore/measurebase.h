@@ -174,6 +174,7 @@ class MeasureBase : public Element {
       virtual void computeMinWidth() { };
 
       int index() const;
+      int measureIndex() const;
       };
 
 

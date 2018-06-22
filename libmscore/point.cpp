@@ -165,7 +165,7 @@ void PointInfo::fillPositionForElement(const Element* e, bool absfrac)
             else {
                   const Measure* m = toMeasure(e->findMeasure());
                   if (m)
-                        setMeasure(m->index());
+                        setMeasure(m->measureIndex());
                   else {
                         qWarning("PointInfo::fillFor: cannot find element's measure (%s)", e->name());
                         setMeasure(0);

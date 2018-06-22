@@ -1015,25 +1015,25 @@ void SpannerWriter::fillSpannerPosition(PointInfo& info, const Element* endpoint
             info.setFrac(Fraction::fromTicks(tick));
             }
       else {
-            const Measure* m = toMeasure(endpoint->findMeasure());
+            const MeasureBase* m = toMeasureBase(endpoint->findMeasure());
             if (!m) {
-                qWarning("fillSpannerPosition: couldn't find spanner's endpoint's measure");
-                info.setMeasure(0);
-                info.setFrac(Fraction::fromTicks(tick));
-                return;
-                }
+                  qWarning("fillSpannerPosition: couldn't find spanner's endpoint's measure");
+                  info.setMeasure(0);
+                  info.setFrac(Fraction::fromTicks(tick));
+                  return;
+                  }
             // It may happen (hairpins!) that the spanner's end element is
             // situated in the end of one measure but its end tick is in the
             // beginning of the next measure. So we are to correct the found
             // measure a bit.
             while (tick >= m->endTick()) {
-                const MeasureBase* mb = m->next();
-                if (mb && mb->isMeasure())
-                    m = toMeasure(mb);
-                else
-                    break;
-                }
-            info.setMeasure(m->index());
+                  const MeasureBase* next = m->next();
+                  if (next)
+                        m = next;
+                  else
+                        break;
+                  }
+            info.setMeasure(m->measureIndex());
             info.setFrac(Fraction::fromTicks(tick - m->tick()));
             }
       }
