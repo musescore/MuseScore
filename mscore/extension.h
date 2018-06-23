@@ -39,7 +39,6 @@ class Extension {
       static QStringList getDirectoriesByType(const char* type);
       static bool isInstalled(QString extensionId);
       static QString getLatestVersion(QString extensionId);
-      static bool importExtension(QString path);
       };
 
 

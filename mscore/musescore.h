@@ -783,6 +783,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void updateWindowTitle(Score* score);
       bool importExtension(QString path, QWidget* parent = nullptr);
+      bool uninstallExtension(QString extensionId);
       };
 
 extern MuseScore* mscore;

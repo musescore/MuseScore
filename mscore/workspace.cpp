@@ -459,6 +459,17 @@ void Workspace::save()
 QList<Workspace*>& Workspace::workspaces()
       {
       if (!workspacesRead) {
+            // Remove all workspaces but Basic and Advanced
+            QMutableListIterator<Workspace*> i(_workspaces);
+            int index = 0;
+            while (i.hasNext()) {
+                  Workspace* w = i.next();
+                  if (index >= 2) {
+                        delete w;
+                        i.remove();
+                        }
+                  index++;
+                  }
             QStringList path;
             path << mscoreGlobalShare + "workspaces";
             path << dataPath + "/workspaces";
