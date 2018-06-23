@@ -550,6 +550,9 @@ void Channel::read(XmlReader& e)
             else
                   e.unknown();
             }
+      if (128 == bank && "Zerberus" == synti)
+            bank = 0;
+
       updateInitList();
       }
 
