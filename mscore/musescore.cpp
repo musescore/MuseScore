@@ -1708,7 +1708,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             synthControl->setScore(cs);
       if (selectionWindow)
             selectionWindow->setScore(cs);
-      if (mixer)
+      if (mixer && mixer->isVisible())
             mixer->updateAll(cs);
 #ifdef OMR
       if (omrPanel) {
@@ -4693,7 +4693,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       {
       if (cmd == "instruments") {
             editInstrList();
-            if (mixer)
+            if (mixer && mixer->isVisible())
                   mixer->updateAll(cs);
             }
       else if (cmd == "rewind") {
@@ -5079,7 +5079,7 @@ void MuseScore::noteTooShortForTupletDialog()
 
 void MuseScore::instrumentChanged()
       {
-      if (mixer)
+      if (mixer && mixer->isVisible())
             mixer->updateAll(cs);
       }
 
