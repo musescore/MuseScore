@@ -150,7 +150,7 @@ class Clef final : public Element {
       virtual void layout();
       virtual void draw(QPainter*) const;
       virtual void read(XmlReader&);
-      virtual void read300old(XmlReader&);
+      virtual void read300(XmlReader&);
       virtual void write(XmlWriter&) const;
       virtual void write300old(XmlWriter&) const;
 

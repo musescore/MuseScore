@@ -132,7 +132,7 @@ class SlurTie : public Spanner {
       void writeProperties(XmlWriter& xml) const;
       void writeProperties300old(XmlWriter& xml) const;
       bool readProperties(XmlReader&);
-      bool readProperties300old(XmlReader&);
+      bool readProperties300(XmlReader&);
 
       int lineType() const                { return _lineType; }
       void setLineType(int val)           { _lineType = val;  }

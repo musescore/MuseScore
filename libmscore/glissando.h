@@ -79,7 +79,7 @@ class Glissando final : public SLine {
       virtual void write(XmlWriter&) const override;
       virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
-      virtual void read300old(XmlReader&) override;
+      virtual void read300(XmlReader&) override;
 
       // property/style methods
       virtual QVariant getProperty(Pid propertyId) const override;

@@ -234,16 +234,16 @@ void Ottava::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   Ottava::read300old
+//   Ottava::read300
 //---------------------------------------------------------
 
-void Ottava::read300old(XmlReader& e)
+void Ottava::read300(XmlReader& e)
       {
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
       e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement())
-            readProperties300old(e);
+            readProperties300(e);
       }
 
 //---------------------------------------------------------
@@ -283,10 +283,10 @@ bool Ottava::readProperties(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   Ottava::readProperties300old
+//   Ottava::readProperties300
 //---------------------------------------------------------
 
-bool Ottava::readProperties300old(XmlReader& e)
+bool Ottava::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
       if (tag == "subtype") {
@@ -311,7 +311,7 @@ bool Ottava::readProperties300old(XmlReader& e)
                   }
             setOttavaType(OttavaType(idx));
             }
-      else if (!TextLineBase::readProperties300old(e)) {
+      else if (!TextLineBase::readProperties300(e)) {
             e.unknown();
             return false;
             }

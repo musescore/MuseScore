@@ -85,7 +85,7 @@ class ChordRest : public DurationElement {
       virtual void writeProperties(XmlWriter& xml) const;
       virtual void writeProperties300old(XmlWriter&) const;
       virtual bool readProperties(XmlReader&);
-      virtual bool readProperties300old(XmlReader&);
+      virtual bool readProperties300(XmlReader&);
       virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
 

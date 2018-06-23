@@ -2117,10 +2117,10 @@ void Beam::write300old(XmlWriter& xml) const
       }
 
 //---------------------------------------------------------
-//   Beam::read300old
+//   Beam::read300
 //---------------------------------------------------------
 
-void Beam::read300old(XmlReader& e)
+void Beam::read300(XmlReader& e)
       {
       QPointF p1, p2;
       qreal _spatium = spatium();
@@ -2176,7 +2176,7 @@ void Beam::read300old(XmlReader& e)
                   e.skipCurrentElement();
             else if (tag == "subtype")          // obsolete
                   e.skipCurrentElement();
-            else if (!Element::readProperties300old(e))
+            else if (!Element::readProperties300(e))
                   e.unknown();
             }
       }

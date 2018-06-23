@@ -49,9 +49,9 @@ class StaffText final : public TextBase  {
       virtual void write(XmlWriter& xml) const override;
       virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
-      virtual void read300old(XmlReader&) override;
+      virtual void read300(XmlReader&) override;
       virtual bool readProperties(XmlReader&) override;
-      virtual bool readProperties300old(XmlReader&) override;
+      virtual bool readProperties300(XmlReader&) override;
       virtual int subtype() const                         { return (int) subStyleId(); }
       virtual void layout() override;
       virtual QString subtypeName() const                 { return "??"; }

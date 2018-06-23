@@ -73,10 +73,10 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   Clef::read300old
+//   Clef::read300
 //---------------------------------------------------------
 
-void Clef::read300old(XmlReader& e)
+void Clef::read300(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -86,7 +86,7 @@ void Clef::read300old(XmlReader& e)
                   _clefTypes._transposingClef = Clef::clefType(e.readElementText());
             else if (tag == "showCourtesyClef")
                   _showCourtesy = e.readInt();
-            else if (!Element::readProperties300old(e))
+            else if (!Element::readProperties300(e))
                   e.unknown();
             }
       if (clefType() == ClefType::INVALID)
@@ -94,10 +94,10 @@ void Clef::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   Harmony::read300old
+//   Harmony::read300
 //---------------------------------------------------------
 
-void Harmony::read300old(XmlReader& e)
+void Harmony::read300(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -151,7 +151,7 @@ void Harmony::read300old(XmlReader& e)
                   _rightParen = true;
                   e.readNext();
                   }
-            else if (!TextBase::readProperties300old(e))
+            else if (!TextBase::readProperties300(e))
                   e.unknown();
             }
 
@@ -195,22 +195,22 @@ void Harmony::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   TextBase::read300old
+//   TextBase::read300
 //---------------------------------------------------------
 
-void TextBase::read300old(XmlReader& e)
+void TextBase::read300(XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            if (!readProperties300old(e))
+            if (!readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   Text::read300old
+//   Text::read300
 //---------------------------------------------------------
 
-void Text::read300old(XmlReader& e)
+void Text::read300(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -221,16 +221,16 @@ void Text::read300old(XmlReader& e)
                   SubStyleId s = subStyleFromName(sn);
                   initSubStyle(s);
                   }
-            else if (!readProperties300old(e))
+            else if (!readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   Dynamic::read300old
+//   Dynamic::read300
 //---------------------------------------------------------
 
-void Dynamic::read300old(XmlReader& e)
+void Dynamic::read300(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag = e.name();
@@ -240,7 +240,7 @@ void Dynamic::read300old(XmlReader& e)
                   _velocity = e.readInt();
             else if (tag == "dynType")
                   _dynRange = Range(e.readInt());
-            else if (!TextBase::readProperties300old(e))
+            else if (!TextBase::readProperties300(e))
                   e.unknown();
             }
       if (subStyleId() == SubStyleId::DEFAULT)
@@ -248,10 +248,10 @@ void Dynamic::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   FiguredBass::read300old
+//   FiguredBass::read300
 //---------------------------------------------------------
 
-void FiguredBass::read300old(XmlReader& e)
+void FiguredBass::read300(XmlReader& e)
       {
       QString normalizedText;
       int idx = 0;
@@ -265,7 +265,7 @@ void FiguredBass::read300old(XmlReader& e)
                   FiguredBassItem * pItem = new FiguredBassItem(score(), idx++);
                   pItem->setTrack(track());
                   pItem->setParent(this);
-                  pItem->read300old(e);
+                  pItem->read300(e);
                   items.push_back(pItem);
                   // add item normalized text
                   if(!normalizedText.isEmpty())
@@ -274,7 +274,7 @@ void FiguredBass::read300old(XmlReader& e)
                   }
 //            else if (tag == "style")
 //                  setStyledPropertyListIdx(e.readElementText());
-            else if (!TextBase::readProperties300old(e))
+            else if (!TextBase::readProperties300(e))
                   e.unknown();
             }
       // if items could be parsed set normalized text
@@ -283,16 +283,16 @@ void FiguredBass::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   InstrumentChange::read300old
+//   InstrumentChange::read300
 //---------------------------------------------------------
 
-void InstrumentChange::read300old(XmlReader& e)
+void InstrumentChange::read300(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Instrument")
                   _instrument->read(e, part());
-            else if (!TextBase::readProperties300old(e))
+            else if (!TextBase::readProperties300(e))
                   e.unknown();
             }
       if (score()->mscVersion() <= 206) {
@@ -310,10 +310,10 @@ void InstrumentChange::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   Jump::read300old
+//   Jump::read300
 //---------------------------------------------------------
 
-void Jump::read300old(XmlReader& e)
+void Jump::read300(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -325,16 +325,16 @@ void Jump::read300old(XmlReader& e)
                   _continueAt = e.readElementText();
             else if (tag == "playRepeats")
                   _playRepeats = e.readBool();
-            else if (!TextBase::readProperties300old(e))
+            else if (!TextBase::readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   Marker::read300old
+//   Marker::read300
 //---------------------------------------------------------
 
-void Marker::read300old(XmlReader& e)
+void Marker::read300(XmlReader& e)
       {
       Type mt = Type::SEGNO;
 
@@ -345,32 +345,32 @@ void Marker::read300old(XmlReader& e)
                   setLabel(s);
                   mt = markerType(s);
                   }
-            else if (!TextBase::readProperties300old(e))
+            else if (!TextBase::readProperties300(e))
                   e.unknown();
             }
       setMarkerType(mt);
       }
 
 //---------------------------------------------------------
-//   StaffText::read300old
+//   StaffText::read300
 //---------------------------------------------------------
 
-void StaffText::read300old(XmlReader& e)
+void StaffText::read300(XmlReader& e)
       {
       for (int voice = 0; voice < VOICES; ++voice)
             _channelNames[voice].clear();
       clearAeolusStops();
       while (e.readNextStartElement()) {
-            if (!readProperties300old(e))
+            if (!readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   StaffText::readProperties300old
+//   StaffText::readProperties300
 //---------------------------------------------------------
 
-bool StaffText::readProperties300old(XmlReader& e)
+bool StaffText::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
@@ -429,16 +429,16 @@ bool StaffText::readProperties300old(XmlReader& e)
             setSwingParameters(unit, ratio);
             e.readNext();
             }
-      else if (!TextBase::readProperties300old(e))
+      else if (!TextBase::readProperties300(e))
             return false;
       return true;
       }
 
 //---------------------------------------------------------
-//   TempoText::read300old
+//   TempoText::read300
 //---------------------------------------------------------
 
-void TempoText::read300old(XmlReader& e)
+void TempoText::read300(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -446,7 +446,7 @@ void TempoText::read300old(XmlReader& e)
                   setTempo(e.readDouble());
             else if (tag == "followText")
                   _followText = e.readInt();
-            else if (!TextBase::readProperties300old(e))
+            else if (!TextBase::readProperties300(e))
                   e.unknown();
             }
       // check sanity
@@ -457,10 +457,10 @@ void TempoText::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   MeasureBase::readProperties300old
+//   MeasureBase::readProperties300
 //---------------------------------------------------------
 
-bool MeasureBase::readProperties300old(XmlReader& e)
+bool MeasureBase::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
       if (tag == "LayoutBreak") {
@@ -499,7 +499,7 @@ bool MeasureBase::readProperties300old(XmlReader& e)
             stc->read(e);
             add(stc);
             }
-      else if (Element::readProperties300old(e))
+      else if (Element::readProperties300(e))
             ;
       else
             return false;
@@ -507,10 +507,10 @@ bool MeasureBase::readProperties300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   Box::read300old
+//   Box::read300
 //---------------------------------------------------------
 
-void Box::read300old(XmlReader& e)
+void Box::read300(XmlReader& e)
       {
       _leftMargin      = 0.0;
       _rightMargin     = 0.0;
@@ -523,24 +523,24 @@ void Box::read300old(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "HBox") {
                   HBox* hb = new HBox(score());
-                  hb->read300old(e);
+                  hb->read300(e);
                   add(hb);
                   }
             else if (tag == "VBox") {
                   VBox* vb = new VBox(score());
-                  vb->read300old(e);
+                  vb->read300(e);
                   add(vb);
                   }
-            else if (!Box::readProperties300old(e))
+            else if (!Box::readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   Box::readProperties300old
+//   Box::readProperties300
 //---------------------------------------------------------
 
-bool Box::readProperties300old(XmlReader& e)
+bool Box::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
       if (tag == "height")
@@ -571,11 +571,11 @@ bool Box::readProperties300old(XmlReader& e)
             Text* t;
             if (isTBox()) {
                   t = toTBox(this)->text();
-                  t->read300old(e);
+                  t->read300(e);
                   }
             else {
                   t = new Text(score());
-                  t->read300old(e);
+                  t->read300(e);
                   if (t->empty())
                         qDebug("read empty text");
                   else
@@ -584,7 +584,7 @@ bool Box::readProperties300old(XmlReader& e)
             }
       else if (tag == "Symbol") {
             Symbol* s = new Symbol(score());
-            s->read300old(e);
+            s->read300(e);
             add(s);
             }
       else if (tag == "Image") {
@@ -593,26 +593,26 @@ bool Box::readProperties300old(XmlReader& e)
             else {
                   Image* image = new Image(score());
                   image->setTrack(e.track());
-                  image->read300old(e);
+                  image->read300(e);
                   add(image);
                   }
             }
       else if (tag == "FretDiagram") {
             FretDiagram* f = new FretDiagram(score());
-            f->read300old(e);
+            f->read300(e);
             add(f);
             }
       else if (tag == "HBox") {
             HBox* hb = new HBox(score());
-            hb->read300old(e);
+            hb->read300(e);
             add(hb);
             }
       else if (tag == "VBox") {
             VBox* vb = new VBox(score());
-            vb->read300old(e);
+            vb->read300(e);
             add(vb);
             }
-      else if (MeasureBase::readProperties300old(e))
+      else if (MeasureBase::readProperties300(e))
             ;
       else
             return false;
@@ -620,16 +620,16 @@ bool Box::readProperties300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   TBox::read300old
+//   TBox::read300
 //---------------------------------------------------------
 
-void TBox::read300old(XmlReader& e)
+void TBox::read300(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Text")
-                  _text->read300old(e);
-            else if (Box::readProperties300old(e))
+                  _text->read300(e);
+            else if (Box::readProperties300(e))
                   ;
             else
                   e.unknown();
@@ -637,10 +637,10 @@ void TBox::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   Glissando::read300old
+//   Glissando::read300
 //---------------------------------------------------------
 
-void Glissando::read300old(XmlReader& e)
+void Glissando::read300(XmlReader& e)
       {
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
@@ -661,16 +661,16 @@ void Glissando::read300old(XmlReader& e)
                   setPlayGlissando(e.readBool());
             else if (readStyledProperty(e, tag))
                   ;
-            else if (!SLine::readProperties300old(e))
+            else if (!SLine::readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   HairPin::read300old
+//   HairPin::read300
 //---------------------------------------------------------
 
-void Hairpin::read300old(XmlReader& e)
+void Hairpin::read300(XmlReader& e)
       {
       foreach(SpannerSegment* seg, spannerSegments())
             delete seg;
@@ -698,30 +698,30 @@ void Hairpin::read300old(XmlReader& e)
                   else if (hairpinType() == HairpinType::DECRESC_HAIRPIN)
                         setHairpinType(HairpinType::DECRESC_LINE);
                   }
-            else if (!TextLineBase::readProperties300old(e))
+            else if (!TextLineBase::readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   LetRing::read300old
+//   LetRing::read300
 //---------------------------------------------------------
 
-void LetRing::read300old(XmlReader& e)
+void LetRing::read300(XmlReader& e)
       {
       int id = e.intAttribute("id", -1);
       e.addSpanner(id, this);
       while (e.readNextStartElement()) {
-            if (!TextLineBase::readProperties300old(e))
+            if (!TextLineBase::readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   SLine::read300old
+//   SLine::read300
 //---------------------------------------------------------
 
-void SLine::read300old(XmlReader& e)
+void SLine::read300(XmlReader& e)
       {
       foreach(SpannerSegment* seg, spannerSegments())
             delete seg;
@@ -729,16 +729,16 @@ void SLine::read300old(XmlReader& e)
       e.addSpanner(e.intAttribute("id", -1), this);
 
       while (e.readNextStartElement()) {
-            if (!SLine::readProperties300old(e))
+            if (!SLine::readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   SLine::readProperties300old
+//   SLine::readProperties300
 //---------------------------------------------------------
 
-bool SLine::readProperties300old(XmlReader& e)
+bool SLine::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
@@ -754,7 +754,7 @@ bool SLine::readProperties300old(XmlReader& e)
       else if (tag == "Segment") {
             LineSegment* ls = createLineSegment();
             ls->setTrack(track()); // needed in read to get the right staff mag
-            ls->read300old(e);
+            ls->read300(e);
             add(ls);
             ls->setVisible(visible());
             }
@@ -774,16 +774,16 @@ bool SLine::readProperties300old(XmlReader& e)
             _dashGapLen = e.readDouble();
       else if (tag == "lineColor")
             _lineColor = e.readColor();
-      else if (!Element::readProperties300old(e))
+      else if (!Element::readProperties300(e))
             return false;
       return true;
       }
 
 //---------------------------------------------------------
-//   LineSegment::readProperties300old
+//   LineSegment::readProperties300
 //---------------------------------------------------------
 
-bool LineSegment::readProperties300old(XmlReader& e)
+bool LineSegment::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
       if (tag == "subtype")
@@ -798,7 +798,7 @@ bool LineSegment::readProperties300old(XmlReader& e)
             setAutoplace(false);
             e.readNext();
             }
-      else if (!SpannerSegment::readProperties300old(e)) {
+      else if (!SpannerSegment::readProperties300(e)) {
             e.unknown();
             return false;
             }
@@ -806,48 +806,48 @@ bool LineSegment::readProperties300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   LineSegment::read300old
+//   LineSegment::read300
 //---------------------------------------------------------
 
-void LineSegment::read300old(XmlReader& e)
+void LineSegment::read300(XmlReader& e)
       {
       while (e.readNextStartElement())
-            readProperties300old(e);
+            readProperties300(e);
       }
 
 //---------------------------------------------------------
-//   PalmMute::read300old
+//   PalmMute::read300
 //---------------------------------------------------------
 
-void PalmMute::read300old(XmlReader& e)
+void PalmMute::read300(XmlReader& e)
       {
       int id = e.intAttribute("id", -1);
       e.addSpanner(id, this);
       while (e.readNextStartElement()) {
-            if (!TextLineBase::readProperties300old(e))
+            if (!TextLineBase::readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   Pedal::read300old
+//   Pedal::read300
 //---------------------------------------------------------
 
-void Pedal::read300old(XmlReader& e)
+void Pedal::read300(XmlReader& e)
       {
       int id = e.intAttribute("id", -1);
       e.addSpanner(id, this);
       while (e.readNextStartElement()) {
-            if (!TextLineBase::readProperties300old(e))
+            if (!TextLineBase::readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   SlurTie::readProperties300old
+//   SlurTie::readProperties300
 //---------------------------------------------------------
 
-bool SlurTie::readProperties300old(XmlReader& e)
+bool SlurTie::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
@@ -860,16 +860,16 @@ bool SlurTie::readProperties300old(XmlReader& e)
             s->read(e);
             add(s);
             }
-      else if (!Element::readProperties300old(e))
+      else if (!Element::readProperties300(e))
             return false;
       return true;
       }
 
 //---------------------------------------------------------
-//   Slur::read300old
+//   Slur::read300
 //---------------------------------------------------------
 
-void Slur::read300old(XmlReader& e)
+void Slur::read300(XmlReader& e)
       {
       setTrack(e.track());      // set staff
       e.addSpanner(e.intAttribute("id"), this);
@@ -881,7 +881,7 @@ void Slur::read300old(XmlReader& e)
                   setTrack(e.readInt());
             else if (tag == "endTrack")         // obsolete
                   e.readInt();
-            else if (!SlurTie::readProperties300old(e))
+            else if (!SlurTie::readProperties300(e))
                   e.unknown();
             }
       if (track2() == -1)
@@ -889,10 +889,10 @@ void Slur::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   Slur::readProperties300old
+//   Slur::readProperties300
 //---------------------------------------------------------
 
-bool Slur::readProperties300old(XmlReader& e)
+bool Slur::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
@@ -903,35 +903,35 @@ bool Slur::readProperties300old(XmlReader& e)
                   add(new SlurSegment(score()));
             SlurSegment* segment = new SlurSegment(score());
             segment->setAutoplace(false);
-            segment->read300old(e);
+            segment->read300(e);
             add(segment);
             }
-      else if (!SlurTie::readProperties300old(e))
+      else if (!SlurTie::readProperties300(e))
             return false;
       return true;
       }
 
 //---------------------------------------------------------
-//   TextLineBase::read300old
+//   TextLineBase::read300
 //---------------------------------------------------------
 
-void TextLineBase::read300old(XmlReader& e)
+void TextLineBase::read300(XmlReader& e)
       {
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
       e.addSpanner(e.intAttribute("id", -1), this);
 
       while (e.readNextStartElement()) {
-            if (!readProperties300old(e))
+            if (!readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   Lyrics::read300old
+//   Lyrics::read300
 //---------------------------------------------------------
 
-void Lyrics::read300old(XmlReader& e)
+void Lyrics::read300(XmlReader& e)
       {
       int   iEndTick = 0;           // used for backward compatibility
       Text* _verseNumber = 0;
@@ -981,14 +981,14 @@ void Lyrics::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   Tie::read300old
+//   Tie::read300
 //---------------------------------------------------------
 
-void Tie::read300old(XmlReader& e)
+void Tie::read300(XmlReader& e)
       {
       e.addSpanner(e.intAttribute("id"), this);
       while (e.readNextStartElement()) {
-            if (SlurTie::readProperties300old(e))
+            if (SlurTie::readProperties300(e))
                   ;
             else
                   e.unknown();
@@ -1007,10 +1007,10 @@ void Tie::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   Tie::readProperties300old
+//   Tie::readProperties300
 //---------------------------------------------------------
 
-bool Tie::readProperties300old(XmlReader& e)
+bool Tie::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
@@ -1021,19 +1021,19 @@ bool Tie::readProperties300old(XmlReader& e)
                   add(new TieSegment(score()));
             TieSegment* segment = new TieSegment(score());
             segment->setAutoplace(false);
-            segment->read300old(e);
+            segment->read300(e);
             add(segment);
             }
-      else if (!SlurTie::readProperties300old(e))
+      else if (!SlurTie::readProperties300(e))
             return false;
       return true;
       }
 
 //---------------------------------------------------------
-//   Trill::read300old
+//   Trill::read300
 //---------------------------------------------------------
 
-void Trill::read300old(XmlReader& e)
+void Trill::read300(XmlReader& e)
       {
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
@@ -1045,23 +1045,23 @@ void Trill::read300old(XmlReader& e)
                   setTrillType(e.readElementText());
             else if (tag == "Accidental") {
                   _accidental = new Accidental(score());
-                  _accidental->read300old(e);
+                  _accidental->read300(e);
                   _accidental->setParent(this);
                   }
             else if ( tag == "ornamentStyle")
                   setProperty(Pid::ORNAMENT_STYLE, Ms::getProperty(Pid::ORNAMENT_STYLE, e));
             else if ( tag == "play")
                   setPlayArticulation(e.readBool());
-            else if (!SLine::readProperties300old(e))
+            else if (!SLine::readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   Vibrato::read300old
+//   Vibrato::read300
 //---------------------------------------------------------
 
-void Vibrato::read300old(XmlReader& e)
+void Vibrato::read300(XmlReader& e)
       {
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
@@ -1073,16 +1073,16 @@ void Vibrato::read300old(XmlReader& e)
                   setVibratoType(e.readElementText());
             else if ( tag == "play")
                   setPlayArticulation(e.readBool());
-            else if (!SLine::readProperties300old(e))
+            else if (!SLine::readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   Volta::read300old
+//   Volta::read300
 //---------------------------------------------------------
 
-void Volta::read300old(XmlReader& e)
+void Volta::read300(XmlReader& e)
       {
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
@@ -1099,22 +1099,22 @@ void Volta::read300old(XmlReader& e)
                         _endings.append(i);
                         }
                   }
-            else if (!TextLineBase::readProperties300old(e))
+            else if (!TextLineBase::readProperties300(e))
                   e.unknown();
             }
       }
 
 //---------------------------------------------------------
-//   Note::read300old
+//   Note::read300
 //---------------------------------------------------------
 
-void Note::read300old(XmlReader& e)
+void Note::read300(XmlReader& e)
       {
       setTpc1(Tpc::TPC_INVALID);
       setTpc2(Tpc::TPC_INVALID);
 
       while (e.readNextStartElement()) {
-            if (readProperties300old(e))
+            if (readProperties300(e))
                   ;
             else
                   e.unknown();
@@ -1149,7 +1149,7 @@ void Note::read300old(XmlReader& e)
             }
 
       // check consistency of pitch, tpc1, tpc2, and transposition
-      // see note in InstrumentChange::read300old() about a known case of tpc corruption produced in 2.0.x
+      // see note in InstrumentChange::read300() about a known case of tpc corruption produced in 2.0.x
       // but since there are other causes of tpc corruption (eg, https://musescore.org/en/node/74746)
       // including perhaps some we don't know about yet,
       // we will attempt to fix some problems here regardless of version
@@ -1174,7 +1174,7 @@ void Note::read300old(XmlReader& e)
 //   readProperties
 //---------------------------------------------------------
 
-bool Note::readProperties300old(XmlReader& e)
+bool Note::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
@@ -1189,14 +1189,14 @@ bool Note::readProperties300old(XmlReader& e)
       else if (tag == "Accidental") {
             Accidental* a = new Accidental(score());
             a->setTrack(track());
-            a->read300old(e);
+            a->read300(e);
             add(a);
             }
       else if (tag == "Tie") {
             Tie* tie = new Tie(score());
             tie->setParent(this);
             tie->setTrack(track());
-            tie->read300old(e);
+            tie->read300(e);
             tie->setStartNote(this);
             _tieFor = tie;
             }
@@ -1235,13 +1235,13 @@ bool Note::readProperties300old(XmlReader& e)
       else if (tag == "Fingering") {
             Fingering* f = new Fingering(score());
             f->setTrack(track());
-            f->read300old(e);
+            f->read300(e);
             add(f);
             }
       else if (tag == "Symbol") {
             Symbol* s = new Symbol(score());
             s->setTrack(track());
-            s->read300old(e);
+            s->read300(e);
             add(s);
             }
       else if (tag == "Image") {
@@ -1250,19 +1250,19 @@ bool Note::readProperties300old(XmlReader& e)
             else {
                   Image* image = new Image(score());
                   image->setTrack(track());
-                  image->read300old(e);
+                  image->read300(e);
                   add(image);
                   }
             }
       else if (tag == "Bend") {
             Bend* b = new Bend(score());
             b->setTrack(track());
-            b->read300old(e);
+            b->read300(e);
             add(b);
             }
       else if (tag == "NoteDot") {
             NoteDot* dot = new NoteDot(score());
-            dot->read300old(e);
+            dot->read300(e);
             add(dot);
             }
       else if (tag == "Events") {
@@ -1338,11 +1338,11 @@ bool Note::readProperties300old(XmlReader& e)
                   delete placeholder;
                   }
             sp->setTrack(track());
-            sp->read300old(e);
+            sp->read300(e);
             // DISABLE pasting of glissandi into staves with other lionked staves
             // because the glissando is not properly cloned into the linked staves
             if (e.pasteMode() && staff()->links() && !staff()->links()->empty()) {
-                  e.removeSpanner(sp);    // read300old() added the element to the XMLReader: remove it
+                  e.removeSpanner(sp);    // read300() added the element to the XMLReader: remove it
                   delete sp;
                   }
             else {
@@ -1354,8 +1354,8 @@ bool Note::readProperties300old(XmlReader& e)
                   }
             }
       else if (tag == "offset")
-            Element::readProperties300old(e);
-      else if (Element::readProperties300old(e))
+            Element::readProperties300(e);
+      else if (Element::readProperties300(e))
             ;
       else
             return false;
@@ -1363,16 +1363,16 @@ bool Note::readProperties300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   DurationElement::readProperties300old
+//   DurationElement::readProperties300
 //---------------------------------------------------------
 
-bool DurationElement::readProperties300old(XmlReader& e)
+bool DurationElement::readProperties300(XmlReader& e)
       {
       if (e.name() == "Tuplet") {
             int i = e.readInt();
             Tuplet* t = e.findTuplet(i);
             if (!t) {
-                  qDebug("DurationElement:read300old(): Tuplet id %d not found", i);
+                  qDebug("DurationElement:read300(): Tuplet id %d not found", i);
                   t = score()->searchTuplet(e, i);
                   if (t) {
                         qDebug("   ...found outside measure, input file corrupted?");
@@ -1386,21 +1386,21 @@ bool DurationElement::readProperties300old(XmlReader& e)
                   }
             return true;
             }
-      else if (Element::readProperties300old(e))
+      else if (Element::readProperties300(e))
             return true;
       return false;
       }
 
 
 //---------------------------------------------------------
-//   Tuplet::read300old
+//   Tuplet::read300
 //---------------------------------------------------------
 
-void Tuplet::read300old(XmlReader& e)
+void Tuplet::read300(XmlReader& e)
       {
       _id    = e.intAttribute("id", 0);
       while (e.readNextStartElement()) {
-            if (readProperties300old(e))
+            if (readProperties300(e))
                   ;
             else
                   e.unknown();
@@ -1410,10 +1410,10 @@ void Tuplet::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   Tuplet::readProperties300old
+//   Tuplet::readProperties300
 //---------------------------------------------------------
 
-bool Tuplet::readProperties300old(XmlReader& e)
+bool Tuplet::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
@@ -1437,23 +1437,23 @@ bool Tuplet::readProperties300old(XmlReader& e)
 //            initSubStyle(SubStyleId::TUPLET);   // hack: initialize number
             for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
                   _number->resetProperty(p);
-            _number->read300old(e);
+            _number->read300(e);
             _number->setVisible(visible());     //?? override saved property
             _number->setTrack(track());
             // move property flags from _number
             for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
                   setPropertyFlags(p, _number->propertyFlags(p));
             }
-      else if (!DurationElement::readProperties300old(e))
+      else if (!DurationElement::readProperties300(e))
             return false;
       return true;
       }
 
 //---------------------------------------------------------
-//   ChordRest::readProperties300old
+//   ChordRest::readProperties300
 //---------------------------------------------------------
 
-bool ChordRest::readProperties300old(XmlReader& e)
+bool ChordRest::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
@@ -1468,7 +1468,7 @@ bool ChordRest::readProperties300old(XmlReader& e)
                               // when pasting selection from clipboard): they should not be converted
                               duration().numerator() != 0 &&
                               // rest durations are initialized to full measure duration when
-                              // created upon reading the <Rest> tag (see Measure::read300old() )
+                              // created upon reading the <Rest> tag (see Measure::read300() )
                               // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
                               (actualDurationType()==TDuration::DurationType::V_WHOLE && duration() <= Fraction(4, 4)) ) {
                         // old pre 2.0 scores: convert
@@ -1508,7 +1508,7 @@ bool ChordRest::readProperties300old(XmlReader& e)
       else if (tag == "Articulation") {
             Articulation* atr = new Articulation(score());
             atr->setTrack(track());
-            atr->read300old(e);
+            atr->read300(e);
             add(atr);
             }
       else if (tag == "leadingSpace" || tag == "trailingSpace") {
@@ -1617,14 +1617,14 @@ bool ChordRest::readProperties300old(XmlReader& e)
                               }
                         }
                   else
-                        qDebug("ChordRest::read300old(): unknown Slur type <%s>", qPrintable(atype));
+                        qDebug("ChordRest::read300(): unknown Slur type <%s>", qPrintable(atype));
                   }
             e.readNext();
             }
       else if (tag == "Lyrics" /*|| tag == "FiguredBass"*/) {
             Element* element = Element::name2Element(tag, score());
             element->setTrack(e.track());
-            element->read300old(e);
+            element->read300(e);
             add(element);
             }
       else if (tag == "pos") {
@@ -1632,24 +1632,24 @@ bool ChordRest::readProperties300old(XmlReader& e)
             setUserOff(pt * spatium());
             }
       else if (tag == "offset")
-            DurationElement::readProperties300old(e);
-      else if (!DurationElement::readProperties300old(e))
+            DurationElement::readProperties300(e);
+      else if (!DurationElement::readProperties300(e))
             return false;
       return true;
       }
 
 //---------------------------------------------------------
-//   Rest::read300old
+//   Rest::read300
 //---------------------------------------------------------
 
-void Rest::read300old(XmlReader& e)
+void Rest::read300(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Symbol") {
                   Symbol* s = new Symbol(score());
                   s->setTrack(track());
-                  s->read300old(e);
+                  s->read300(e);
                   add(s);
                   }
             else if (tag == "Image") {
@@ -1658,11 +1658,11 @@ void Rest::read300old(XmlReader& e)
                   else {
                         Image* image = new Image(score());
                         image->setTrack(track());
-                        image->read300old(e);
+                        image->read300(e);
                         add(image);
                         }
                   }
-            else if (ChordRest::readProperties300old(e))
+            else if (ChordRest::readProperties300(e))
                   ;
             else
                   e.unknown();
@@ -1670,13 +1670,13 @@ void Rest::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   Chord::read300old
+//   Chord::read300
 //---------------------------------------------------------
 
-void Chord::read300old(XmlReader& e)
+void Chord::read300(XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            if (readProperties300old(e))
+            if (readProperties300(e))
                   ;
             else
                   e.unknown();
@@ -1684,10 +1684,10 @@ void Chord::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   Chord::readProperties300old
+//   Chord::readProperties300
 //---------------------------------------------------------
 
-bool Chord::readProperties300old(XmlReader& e)
+bool Chord::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
@@ -1696,19 +1696,19 @@ bool Chord::readProperties300old(XmlReader& e)
             // the note needs to know the properties of the track it belongs to
             note->setTrack(track());
             note->setChord(this);
-            note->read300old(e);
+            note->read300(e);
             add(note);
             }
-      else if (ChordRest::readProperties300old(e))
+      else if (ChordRest::readProperties300(e))
             ;
       else if (tag == "Stem") {
             Stem* s = new Stem(score());
-            s->read300old(e);
+            s->read300(e);
             add(s);
             }
       else if (tag == "Hook") {
             _hook = new Hook(score());
-            _hook->read300old(e);
+            _hook->read300(e);
             add(_hook);
             }
       else if (tag == "appoggiatura") {
@@ -1745,7 +1745,7 @@ bool Chord::readProperties300old(XmlReader& e)
             }
       else if (tag == "StemSlash") {
             StemSlash* ss = new StemSlash(score());
-            ss->read300old(e);
+            ss->read300(e);
             add(ss);
             }
       else if (readProperty(tag, e, Pid::STEM_DIRECTION))
@@ -1755,7 +1755,7 @@ bool Chord::readProperties300old(XmlReader& e)
       else if (tag == "Arpeggio") {
             _arpeggio = new Arpeggio(score());
             _arpeggio->setTrack(track());
-            _arpeggio->read300old(e);
+            _arpeggio->read300(e);
             _arpeggio->setParent(this);
             }
       // old glissando format, chord-to-chord, attached to its final chord
@@ -1768,7 +1768,7 @@ bool Chord::readProperties300old(XmlReader& e)
             // the suitable initial note
             Note* finalNote = upNote();
             Glissando* gliss = new Glissando(score());
-            gliss->read300old(e);
+            gliss->read300(e);
             gliss->setAnchor(Spanner::Anchor::NOTE);
             gliss->setStartElement(nullptr);
             gliss->setEndElement(nullptr);
@@ -1782,14 +1782,14 @@ bool Chord::readProperties300old(XmlReader& e)
       else if (tag == "Tremolo") {
             _tremolo = new Tremolo(score());
             _tremolo->setTrack(track());
-            _tremolo->read300old(e);
+            _tremolo->read300(e);
             _tremolo->setParent(this);
             }
       else if (tag == "tickOffset")       // obsolete
             ;
       else if (tag == "ChordLine") {
             ChordLine* cl = new ChordLine(score());
-            cl->read300old(e);
+            cl->read300(e);
             add(cl);
             }
       else
@@ -1798,10 +1798,10 @@ bool Chord::readProperties300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   Score::readStaff300old
+//   Score::readStaff300
 //---------------------------------------------------------
 
-void Score::readStaff300old(XmlReader& e)
+void Score::readStaff300(XmlReader& e)
       {
       int staff = e.intAttribute("id", 1) - 1;
       e.initTick(0);
@@ -1823,7 +1823,7 @@ void Score::readStaff300old(XmlReader& e)
                         measure->setLen(f);
                         measure->setTimesig(f);
 
-                        measure->read300old(e, staff);
+                        measure->read300(e, staff);
                         measure->checkMeasure(staff);
                         if (!measure->isMMRest()) {
                               measures()->add(measure);
@@ -1843,7 +1843,7 @@ void Score::readStaff300old(XmlReader& e)
                         }
                   else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
                         MeasureBase* mb = toMeasureBase(Element::name2Element(tag, this));
-                        mb->read300old(e);
+                        mb->read300(e);
                         mb->setTick(e.tick());
                         measures()->add(mb);
                         }
@@ -1860,13 +1860,13 @@ void Score::readStaff300old(XmlReader& e)
 
                   if (tag == "Measure") {
                         if (measure == 0) {
-                              qDebug("Score::readStaff300old(): missing measure!");
+                              qDebug("Score::readStaff300(): missing measure!");
                               measure = new Measure(this);
                               measure->setTick(e.tick());
                               measures()->add(measure);
                               }
                         e.initTick(measure->tick());
-                        measure->read300old(e, staff);
+                        measure->read300(e, staff);
                         measure->checkMeasure(staff);
                         if (measure->isMMRest())
                               measure = e.lastMeasure()->nextMeasure();
@@ -1887,17 +1887,17 @@ void Score::readStaff300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   read300old
+//   read300
 //    return false on error
 //---------------------------------------------------------
 
-bool Score::read300old(XmlReader& e)
+bool Score::read300(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             e.setTrack(-1);
             const QStringRef& tag(e.name());
             if (tag == "Staff")
-                  readStaff300old(e);
+                  readStaff300(e);
             else if (tag == "Omr") {
 #ifdef OMR
                   masterScore()->setOmr(new Omr(this));
@@ -1957,7 +1957,7 @@ bool Score::read300old(XmlReader& e)
                   }
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);
-                  text->read300old(e);
+                  text->read300(e);
                   setMetaTag("copyright", text->xmlText());
                   delete text;
                   }
@@ -1988,7 +1988,7 @@ bool Score::read300old(XmlReader& e)
                 || (tag == "Slur")
                 || (tag == "Pedal")) {
                   Spanner* s = toSpanner(Element::name2Element(tag, this));
-                  s->read300old(e);
+                  s->read300(e);
                   addSpanner(s);
                   }
             else if (tag == "Excerpt") {
@@ -2025,7 +2025,7 @@ bool Score::read300old(XmlReader& e)
                         ex->setPartScore(s);
                         ex->setTracks(e.tracks());
                         e.setLastMeasure(nullptr);
-                        s->read300old(e);
+                        s->read300(e);
                         m->addExcerpt(ex);
                         }
                   }
@@ -2119,12 +2119,12 @@ bool Score::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   read300old
+//   read300
 //---------------------------------------------------------
 
-bool MasterScore::read300old(XmlReader& e)
+bool MasterScore::read300(XmlReader& e)
       {
-      if (!Score::read300old(e))
+      if (!Score::read300(e))
             return false;
       int id = 1;
       for (LinkedElements* le : e.linkIds())
@@ -2136,10 +2136,10 @@ bool MasterScore::read300old(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   read300old1
+//   readScore300
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read300old1(XmlReader& e)
+Score::FileError MasterScore::readScore300(XmlReader& e)
       {
       bool top = true;
       while (e.readNextStartElement()) {
@@ -2160,7 +2160,7 @@ Score::FileError MasterScore::read300old1(XmlReader& e)
                         score = new MasterScore();
                         addMovement(score);
                         }
-                  if (!score->read300old(e))
+                  if (!score->read300(e))
                         return FileError::FILE_BAD_FORMAT;
                   }
             else if (tag == "Revision") {

@@ -43,7 +43,7 @@ class TempoText final : public TextBase  {
       virtual void write(XmlWriter& xml) const override;
       virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
-      virtual void read300old(XmlReader&) override;
+      virtual void read300(XmlReader&) override;
 
       Segment* segment() const   { return toSegment(parent()); }
       Measure* measure() const   { return toMeasure(parent()->parent()); }

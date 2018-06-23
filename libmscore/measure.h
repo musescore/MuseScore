@@ -104,8 +104,8 @@ class Measure final : public MeasureBase {
       void read(XmlReader&, int idx);
       void read(XmlReader& d) { read(d, 0); }
       virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
-      void read300old(XmlReader&, int idx);
-      void read300old(XmlReader& d) { read300old(d, 0); }
+      void read300(XmlReader&, int idx);
+      void read300(XmlReader& d) { read300(d, 0); }
       virtual void write(XmlWriter& xml) const override { Element::write(xml); }
       void write(XmlWriter&, int, bool writeSystemElements, bool forceTimeSig) const;
       virtual void write300old(XmlWriter& xml) const override { Element::write300old(xml); }

@@ -1859,10 +1859,10 @@ bool TextBase::readProperties(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   readProperties300old
+//   readProperties300
 //---------------------------------------------------------
 
-bool TextBase::readProperties300old(XmlReader& e)
+bool TextBase::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
       for (Pid i :pids) {
@@ -1871,7 +1871,7 @@ bool TextBase::readProperties300old(XmlReader& e)
             }
       if (tag == "text")
             setXmlText(e.readXml());
-      else if (!Element::readProperties300old(e))
+      else if (!Element::readProperties300(e))
             return false;
       return true;
       }

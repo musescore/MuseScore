@@ -76,7 +76,7 @@ class Tie final : public SlurTie {
       virtual void write(XmlWriter& xml) const override;
       virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
-      virtual void read300old(XmlReader&) override;
+      virtual void read300(XmlReader&) override;
 //      virtual void layout() override;
       virtual void slurPos(SlurPos*) override;
 
@@ -84,7 +84,7 @@ class Tie final : public SlurTie {
       void layoutBack(System*);
 
       bool readProperties(XmlReader&);
-      bool readProperties300old(XmlReader&);
+      bool readProperties300(XmlReader&);
 
       TieSegment* frontSegment() const   { return (TieSegment*)spannerSegments().front();    }
       TieSegment* backSegment() const    { return (TieSegment*)spannerSegments().back();     }

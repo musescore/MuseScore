@@ -489,10 +489,10 @@ bool TextLineBase::readProperties(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   TextLineBase::readProperties300old
+//   TextLineBase::readProperties300
 //---------------------------------------------------------
 
-bool TextLineBase::readProperties300old(XmlReader& e)
+bool TextLineBase::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
       for (Pid i :pids) {
@@ -501,7 +501,7 @@ bool TextLineBase::readProperties300old(XmlReader& e)
                   return true;
                   }
             }
-      return SLine::readProperties300old(e);
+      return SLine::readProperties300(e);
       }
 
 //---------------------------------------------------------
