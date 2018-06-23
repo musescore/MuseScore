@@ -780,42 +780,6 @@ bool SLine::readProperties300(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   LineSegment::readProperties300
-//---------------------------------------------------------
-
-bool LineSegment::readProperties300(XmlReader& e)
-      {
-      const QStringRef& tag(e.name());
-      if (tag == "subtype")
-            setSpannerSegmentType(SpannerSegmentType(e.readInt()));
-      else if (tag == "off2") {
-            setUserOff2(e.readPoint() * spatium());
-            if (!userOff2().isNull())
-                  setAutoplace(false);
-            }
-      else if (tag == "pos") {
-            setUserOff(QPointF());
-            setAutoplace(false);
-            e.readNext();
-            }
-      else if (!SpannerSegment::readProperties300(e)) {
-            e.unknown();
-            return false;
-            }
-      return true;
-      }
-
-//---------------------------------------------------------
-//   LineSegment::read300
-//---------------------------------------------------------
-
-void LineSegment::read300(XmlReader& e)
-      {
-      while (e.readNextStartElement())
-            readProperties300(e);
-      }
-
-//---------------------------------------------------------
 //   PalmMute::read300
 //---------------------------------------------------------
 
