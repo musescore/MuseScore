@@ -89,8 +89,8 @@ void ResourceManager::displayExtensions()
 
       int row = 0;
       int col = 0;
-      QPushButton* updateButtons[rowCount];
-      QPushButton* temp;
+      QPushButton* buttonInstall;
+      QPushButton* buttonUninstall;
       extensionsTable->verticalHeader()->show();
 
       QStringList extensions = result.object().keys();
@@ -112,26 +112,34 @@ void ResourceManager::displayExtensions()
             extensionsTable->setItem(row, col++, new QTableWidgetItem(name));
             extensionsTable->setItem(row, col++, new QTableWidgetItem(version));
             extensionsTable->setItem(row, col++, new QTableWidgetItem(stringutils::convertFileSizeToHumanReadable(fileSize)));
-            updateButtons[row] = new QPushButton(tr("Install"));
+            buttonInstall = new QPushButton(tr("Install"));
+            buttonUninstall = new QPushButton(tr("Uninstall"));
 
-            temp = updateButtons[row];
-            connect(temp, SIGNAL(clicked()), this, SLOT(downloadExtension()));
-            extensionButtonMap[temp] = "extensions/" + filename;
-            extensionButtonHashMap[temp] = hashValue;
-
-            extensionsTable->setIndexWidget(extensionsTable->model()->index(row, col++), temp);
+            connect(buttonInstall, SIGNAL(clicked()), this, SLOT(downloadExtension()));
+            connect(buttonUninstall, SIGNAL(clicked()), this, SLOT(uninstallExtension()));
+            buttonInstall->setProperty("path", "extensions/" + filename);
+            buttonInstall->setProperty("hash", hashValue);
+            buttonInstall->setProperty("rowId", row);
+            buttonUninstall->setProperty("extensionId", key);
+            buttonUninstall->setProperty("rowId", row);
 
             // get the installed version of the extension if any
             if (Extension::isInstalled(key)) {
+                  buttonUninstall->setDisabled(false);
                   QString installedVersion = Extension::getLatestVersion(key);
                   if (compareVersion(installedVersion, version)) {
-                        temp->setText(tr("Update"));
+                        buttonInstall->setText(tr("Update"));
                         }
                   else {
-                        temp->setText(tr("Updated"));
-                        temp->setDisabled(true);
+                        buttonInstall->setText(tr("Updated"));
+                        buttonInstall->setDisabled(true);
                         }
                   }
+            else {
+                  buttonUninstall->setDisabled(true);
+                  }
+            extensionsTable->setIndexWidget(extensionsTable->model()->index(row, col++), buttonInstall);
+            extensionsTable->setIndexWidget(extensionsTable->model()->index(row, col++), buttonUninstall);
             row++;
             }
       }
@@ -307,9 +315,9 @@ void ResourceManager::downloadLanguage()
 
 void ResourceManager::downloadExtension()
       {
-      QPushButton *button = static_cast<QPushButton*>( sender() );
-      QString data = extensionButtonMap[button];
-      QString hash = extensionButtonHashMap[button];
+      QPushButton* button = static_cast<QPushButton*>(sender());
+      QString data = button->property("path").toString();
+      QString hash = button->property("hash").toString();
       button->setText(tr("Updating"));
       button->setDisabled(true);
       QString baseAddress = baseAddr() + data;
@@ -341,11 +349,33 @@ void ResourceManager::downloadExtension()
             if (result) {
                   QFile::remove(localPath);
                   button->setText(tr("Updated"));
+                  // find uninstall button and make it visible
+                  int rowId = button->property("rowId").toInt();
+                  QPushButton* uninstallButton = static_cast<QPushButton*>(extensionsTable->indexWidget(extensionsTable->model()->index(rowId, 4)));
+                  uninstallButton->setDisabled(false);
                   }
             else {
                   button->setText(tr("Failed, try again"));
                   button->setEnabled(1);
                   }
+            }
+      }
+
+//---------------------------------------------------------
+//   uninstallExtension
+//---------------------------------------------------------
+
+void ResourceManager::uninstallExtension()
+      {
+      QPushButton* uninstallButton = static_cast<QPushButton*>(sender());
+      QString extensionId = uninstallButton->property("extensionId").toString();
+      if (mscore->uninstallExtension(extensionId)) {
+            // find uninstall button and make it visible
+            int rowId = uninstallButton->property("rowId").toInt();
+            QPushButton* installButton = static_cast<QPushButton*>(extensionsTable->indexWidget(extensionsTable->model()->index(rowId, 3)));
+            installButton->setText("Install");
+            installButton->setDisabled(false);
+            uninstallButton->setDisabled(true);
             }
       }
 
