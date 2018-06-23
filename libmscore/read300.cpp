@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "accidental.h"
+#include "ambitus.h"
 #include "arpeggio.h"
 #include "articulation.h"
 #include "bend.h"
@@ -71,6 +72,120 @@
 #endif
 
 namespace Ms {
+
+//---------------------------------------------------------
+//   Ambitus::read300
+//---------------------------------------------------------
+
+void Ambitus::read300(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            if (!readProperties300(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   Ambitus::readProperties300
+//---------------------------------------------------------
+
+bool Ambitus::readProperties300(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "head")
+            setProperty(Pid::HEAD_GROUP, Ms::getProperty(Pid::HEAD_GROUP, e));
+      else if (tag == "headType")
+            setProperty(Pid::HEAD_TYPE, Ms::getProperty(Pid::HEAD_TYPE, e));
+      else if (tag == "mirror")
+            setProperty(Pid::MIRROR_HEAD, Ms::getProperty(Pid::MIRROR_HEAD, e).toInt());
+      else if (tag == "hasLine")
+            setHasLine(e.readInt());
+      else if (tag == "lineWidth")
+            setProperty(Pid::LINE_WIDTH, Ms::getProperty(Pid::LINE_WIDTH, e));
+      else if (tag == "topPitch")
+            _topPitch = e.readInt();
+      else if (tag == "bottomPitch")
+            _bottomPitch = e.readInt();
+      else if (tag == "topTpc")
+            _topTpc = e.readInt();
+      else if (tag == "bottomTpc")
+            _bottomTpc = e.readInt();
+      else if (tag == "topAccidental") {
+            while (e.readNextStartElement()) {
+                  if (e.name() == "Accidental")
+                        _topAccid.read300(e);
+                  else
+                        e.skipCurrentElement();
+                  }
+            }
+      else if (tag == "bottomAccidental") {
+            while (e.readNextStartElement()) {
+                  if (e.name() == "Accidental")
+                        _bottomAccid.read300(e);
+                  else
+                        e.skipCurrentElement();
+                  }
+            }
+      else if (Element::readProperties300(e))
+            ;
+      else
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   Articulation::read300
+//---------------------------------------------------------
+
+void Articulation::read300(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            if (!readProperties300(e))
+                  e.unknown();
+            }
+      }
+
+extern SymId oldArticulationNames2SymId(const QString&);
+
+//---------------------------------------------------------
+//   Articulation::readProperties300
+//---------------------------------------------------------
+
+bool Articulation::readProperties300(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (tag == "subtype") {
+            QString s = e.readElementText();
+            SymId id = Sym::name2id(s);
+            if (id == SymId::noSym)
+                  id = oldArticulationNames2SymId(s);       // compatibility hack for "old" 3.0 scores
+            setSymId(id);
+            }
+      else if (tag == "channel") {
+            _channelName = e.attribute("name");
+            e.readNext();
+            }
+      else if (tag == "anchor")
+            _anchor = ArticulationAnchor(e.readInt());
+      else if (readProperty(tag, e, Pid::DIRECTION))
+            ;
+      else if ( tag == "ornamentStyle")
+            setProperty(Pid::ORNAMENT_STYLE, Ms::getProperty(Pid::ORNAMENT_STYLE, e));
+      else if ( tag == "play")
+            setPlayArticulation(e.readBool());
+      else if (tag == "offset") {
+            if (score()->mscVersion() > 114)
+                  Element::readProperties300(e);
+            else
+                  e.skipCurrentElement(); // ignore manual layout in older scores
+            }
+      else if (Element::readProperties300(e))
+            ;
+      else
+            return false;
+      return true;
+      }
 
 //---------------------------------------------------------
 //   Clef::read300
@@ -192,6 +307,37 @@ void Harmony::read300(XmlReader& e)
 
       // render chord from description (or _textName)
       render();
+      }
+
+//---------------------------------------------------------
+//   Stem::read300
+//---------------------------------------------------------
+
+void Stem::read300(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            if (!readProperties300(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
+//   Stem::readProperties300
+//---------------------------------------------------------
+
+bool Stem::readProperties300(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+
+      if (readProperty(tag, e, Pid::USER_LEN))
+            ;
+      else if (readStyledProperty(e, tag))
+            ;
+      else if (Element::readProperties300(e))
+            ;
+      else
+            return false;
+      return true;
       }
 
 //---------------------------------------------------------
@@ -812,6 +958,42 @@ bool SLine::readProperties300(XmlReader& e)
       else if (!Element::readProperties300(e))
             return false;
       return true;
+      }
+
+//---------------------------------------------------------
+//   LineSegment::readProperties300
+//---------------------------------------------------------
+
+bool LineSegment::readProperties300(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "subtype")
+            setSpannerSegmentType(SpannerSegmentType(e.readInt()));
+      else if (tag == "off2") {
+            setUserOff2(e.readPoint() * spatium());
+            if (!userOff2().isNull())
+                  setAutoplace(false);
+            }
+      else if (tag == "pos") {
+            setUserOff(QPointF());
+            setAutoplace(false);
+            e.readNext();
+            }
+      else if (!SpannerSegment::readProperties300(e)) {
+            e.unknown();
+            return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   LineSegment::read300
+//---------------------------------------------------------
+
+void LineSegment::read300(XmlReader& e)
+      {
+      while (e.readNextStartElement())
+            readProperties300(e);
       }
 
 //---------------------------------------------------------

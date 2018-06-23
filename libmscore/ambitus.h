@@ -81,10 +81,12 @@ class Ambitus final : public Element {
       virtual void      layout() override;
       virtual QPointF   pagePos() const override;      ///< position in page coordinates
       virtual void      read(XmlReader&) override;
+      virtual void      read300(XmlReader&) override;
       virtual void      scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual void      setTrack(int val) override;
       virtual void      write(XmlWriter&) const override;
       virtual bool      readProperties(XmlReader&) override;
+      virtual bool      readProperties300(XmlReader&) override;
       virtual QString   accessibleInfo() const override;
 
       // properties

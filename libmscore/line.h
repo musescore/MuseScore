@@ -51,6 +51,8 @@ class LineSegment : public SpannerSegment {
       friend class SLine;
       virtual void read(XmlReader&) override;
       bool readProperties(XmlReader&);
+      virtual void read300(XmlReader&) override;
+      virtual bool readProperties300(XmlReader&) override;
 
       virtual Element* propertyDelegate(Pid) override;
 
