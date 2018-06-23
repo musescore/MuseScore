@@ -39,12 +39,11 @@ public:
 private:
     QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename
     QMap <QPushButton *, QString> languageButtonHashMap;// QPushButton -> hash of the file
-    QMap <QPushButton *, QString> extensionButtonMap;       // QPushButton -> filename
-    QMap <QPushButton *, QString> extensionButtonHashMap;// QPushButton -> hash of the file
 
 private slots:
     void downloadLanguage();
     void downloadExtension();
+    void uninstallExtension();
    };
 
 }

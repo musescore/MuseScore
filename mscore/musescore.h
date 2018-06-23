@@ -707,6 +707,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updateWindowTitle(Score* score);
       static QMap<QString, QStringList>* bravuraRanges();
       bool importExtension(QString path, QWidget* parent = nullptr);
+      bool uninstallExtension(QString extensionId);
       };
 
 extern MuseScore* mscore;

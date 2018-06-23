@@ -48,7 +48,7 @@
           <number>2</number>
          </property>
          <property name="columnCount">
-          <number>4</number>
+          <number>5</number>
          </property>
          <attribute name="verticalHeaderVisible">
           <bool>false</bool>
@@ -73,6 +73,11 @@
          <column>
           <property name="text">
            <string>Install/Update</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Uninstall</string>
           </property>
          </column>
         </widget>
