@@ -647,7 +647,8 @@ class Score : public QObject, ScoreElement {
       ChordRest* addClone(ChordRest* cr, int tick, const TDuration& d);
       Rest* setRest(int tick,  int track, Fraction, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
 
-      void upDown(bool up, UpDownMode);
+      void upDown(bool up, UpDownMode, bool updateSelection = true);
+      void upDownDelta(int pitchDelta, bool updateSelection = true);
       ChordRest* searchNote(int tick, int track) const;
 
       // undo/redo ops
@@ -687,7 +688,7 @@ class Score : public QObject, ScoreElement {
       void startCmd();                          // start undoable command
       void endCmd(bool rollback = false);       // end undoable command
       void update();
-      void undoRedo(bool undo, EditData*);
+      void undoRedo(bool undo, EditData*, bool updateSelect = true);
 
       void cmdRemoveTimeSig(TimeSig*);
       void cmdAddTimeSig(Measure*, int staffIdx, TimeSig*, bool local);

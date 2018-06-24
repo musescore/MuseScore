@@ -717,7 +717,7 @@ add_custom_target(lrelease
 ##  Create and install the plugin framework manual
 ##
 
-add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
-   COMMAND genManual ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}
-   DEPENDS genManual
-   )
+#add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
+#   COMMAND genManual ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}
+#   DEPENDS genManual
+#   )

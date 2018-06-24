@@ -355,12 +355,14 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
 //   measurePopup
 //---------------------------------------------------------
 
-void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
+void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       {
       int staffIdx;
       int pitch;
       Segment* seg;
 
+      QPoint gpos = ev->globalPos();
+      
       if (!_score->pos2measure(editData.startMove, &staffIdx, &pitch, &seg, 0))
             return;
       if (staffIdx == -1) {
@@ -447,7 +449,8 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
             }
       else if (cmd == "pianoroll") {
             _score->endCmd();
-            mscore->editInPianoroll(staff);
+            QPointF p = toLogical(ev->pos());
+            mscore->editInPianoroll(staff, nearestTickElement(p));
             }
       else if (cmd == "staff-properties") {
             int tick = obj ? obj->tick() : -1;
@@ -4224,6 +4227,42 @@ static bool elementLower(const Element* e1, const Element* e2)
                   }
             }
       return e1->z() < e2->z();
+      }
+
+
+
+//---------------------------------------------------------
+//   bestTick
+//---------------------------------------------------------
+
+Element* ScoreView::nearestTickElement(QPointF p)
+      {
+      //Look through the score to find an element near the mouse click pos
+      // that can be used to determine the tick closest to the mouse position
+      
+      Page* page = point2page(p);
+      if (!page)
+            return 0;
+
+      p       -= page->pos();
+      int bestTick = 0;
+      Element* bestEle = 0;
+//      printf("bestTick page:%d\n", page->no());
+      
+      double w = (preferences.getInt(PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY) * .5) / matrix().m11();
+      QRectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
+
+      QList<Element*> el = page->items(r);
+      for (Element* e : el) {
+//            printf("examining type:%d tick:%d\n",  (int)e->type(), (int)e->tick());
+            if (e->tick() > bestTick)
+                  {
+                  bestTick = e->tick();
+                  bestEle = e;
+                  }
+            }
+      
+      return bestEle;
       }
 
 //---------------------------------------------------------
