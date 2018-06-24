@@ -2629,6 +2629,11 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
 
             mb->setNext(im);
             mb->setPrev(im ? im->prev() : score->last());
+            if (mb->isMeasure()) {
+                  Measure* m = toMeasure(mb);
+                  m->setTimesig(f);
+                  m->setLen(f);
+                  }
             undo(new InsertMeasures(mb, mb));
 
             if (type == ElementType::MEASURE) {
@@ -2638,9 +2643,6 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
 
                   if (score->isMaster())
                         om = m;
-
-                  m->setTimesig(f);
-                  m->setLen(f);
 
                   QList<TimeSig*> tsl;
                   QList<KeySig*>  ksl;
