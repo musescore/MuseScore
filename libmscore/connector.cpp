@@ -354,9 +354,8 @@ void ConnectorInfoReader::readDestinationInfo(PointInfo& info)
 
 void ConnectorInfoReader::update()
       {
-      if (currentUpdated())
-            return;
-      updateCurrentInfo(_reader->pasteMode());
+      if (!currentUpdated())
+            updateCurrentInfo(_reader->pasteMode());
       if (hasPrevious())
             _prevInfo.toAbsolute(_currentInfo);
       if (hasNext())
