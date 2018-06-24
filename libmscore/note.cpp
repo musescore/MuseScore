@@ -1190,9 +1190,9 @@ void Note::write(XmlWriter& xml) const
                   }
             }
       if (_tieFor)
-            _tieFor->writeSpanner(xml, this, track());
+            _tieFor->writeSpannerStart(xml, this, track());
       if (_tieBack)
-            _tieBack->writeSpanner(xml, this, track());
+            _tieBack->writeSpannerEnd(xml, this, track());
       if ((chord() == 0 || chord()->playEventType() != PlayEventType::Auto) && !_playEvents.empty()) {
             xml.stag("Events");
             for (const NoteEvent& e : _playEvents)
@@ -1207,9 +1207,9 @@ void Note::write(XmlWriter& xml) const
             }
 
       for (Spanner* e : _spannerFor)
-            e->writeSpanner(xml, this, track());
+            e->writeSpannerStart(xml, this, track());
       for (Spanner* e : _spannerBack)
-            e->writeSpanner(xml, this, track());
+            e->writeSpannerEnd(xml, this, track());
 
       xml.etag();
       }

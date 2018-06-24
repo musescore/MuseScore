@@ -31,7 +31,7 @@ class SpannerWriter : public ConnectorInfoWriter {
    protected:
       const char* tagName() const override { return "Spanner"; }
    public:
-      SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* spanner, int track, Fraction frac = -1);
+      SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* spanner, int track, Fraction frac, bool start);
 
       static void fillSpannerPosition(PointInfo& info, const Element* endpoint, int tick, bool clipboardmode);
       };
@@ -969,27 +969,54 @@ SpannerSegment* Spanner::layoutSystem(System*)
       }
 
 //--------------------------------------------------
-//   Spanner::writeSpanner
+//   Spanner::writeSpannerStart
 //---------------------------------------------------------
 
-void Spanner::writeSpanner(XmlWriter& xml, const Element* current, int track, Fraction frac) const
+void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction frac) const
       {
-      SpannerWriter w(xml, current, this, track, frac);
+      SpannerWriter w(xml, current, this, track, frac, true);
       w.write();
       }
 
 //--------------------------------------------------
-//   Spanner::writeSpanner
+//   Spanner::writeSpannerEnd
 //---------------------------------------------------------
 
-void Spanner::writeSpanner(XmlWriter& xml, const Element* current, int track, int tick) const
+void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track, Fraction frac) const
       {
+      SpannerWriter w(xml, current, this, track, frac, false);
+      w.write();
+      }
+
+//--------------------------------------------------
+//   fraction
+//---------------------------------------------------------
+
+static Fraction fraction(const XmlWriter& xml, const Element* current, int tick) {
       if (!xml.clipboardmode()) {
             const Measure* m = toMeasure(current->findMeasure());
             if (m)
                   tick -= m->tick();
             }
-      writeSpanner(xml, current, track, Fraction::fromTicks(tick));
+      return Fraction::fromTicks(tick);
+      }
+
+//--------------------------------------------------
+//   Spanner::writeSpannerStart
+//---------------------------------------------------------
+
+void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int track, int tick) const
+      {
+      writeSpannerStart(xml, current, track, fraction(xml, current, tick));
+      }
+
+//--------------------------------------------------
+//   Spanner::writeSpannerEnd
+//---------------------------------------------------------
+
+void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track, int tick) const
+      {
+      writeSpannerEnd(xml, current, track, fraction(xml, current, tick));
       }
 
 //--------------------------------------------------
@@ -1050,7 +1077,7 @@ void SpannerWriter::fillSpannerPosition(PointInfo& info, const Element* endpoint
 //   SpannerWriter::SpannerWriter
 //---------------------------------------------------------
 
-SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* sp, int track, Fraction frac)
+SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* sp, int track, Fraction frac, bool start)
    : ConnectorInfoWriter(xml, current, sp, track, frac)
       {
       const bool clipboardmode = xml.clipboardmode();
@@ -1063,26 +1090,23 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
             // covered by the other checks too.)
             // We cannot determine position of the spanner from its start/end
             // elements and will try to obtain this info from the spanner itself.
-            PointInfo info = PointInfo::absolute();
-            info.setTrack(sp->track());
-            fillSpannerPosition(info, sp->startElement(), sp->tick(), clipboardmode);
-            if (info != _currentInfo)
-                  _prevInfo = info;
+            if (!start) {
+                  _prevInfo.setTrack(sp->track());
+                  fillSpannerPosition(_prevInfo, sp->startElement(), sp->tick(), clipboardmode);
+                  }
             else {
                   const int track2 = (sp->track2() != -1) ? sp->track2() : sp->track();
-                  info.setTrack(track2);
-                  fillSpannerPosition(info, sp->endElement(), sp->tick2(), clipboardmode);
-                  if (info != _currentInfo)
-                        _nextInfo = info;
+                  _nextInfo.setTrack(track2);
+                  fillSpannerPosition(_nextInfo, sp->endElement(), sp->tick2(), clipboardmode);
                   }
             }
       else {
             // We can obtain the spanner position info from its start/end
             // elements and will prefer this source of information.
             // Reason: some spanners contain no or wrong information (e.g. Ties).
-            if (sp->startElement() != current)
+            if (!start)
                   updatePointInfo(sp->startElement(), _prevInfo, clipboardmode);
-            if (sp->endElement() != current)
+            else
                   updatePointInfo(sp->endElement(), _nextInfo, clipboardmode);
             }
       }

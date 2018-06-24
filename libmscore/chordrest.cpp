@@ -190,8 +190,10 @@ void ChordRest::writeProperties(XmlWriter& xml) const
             if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !xml.canWrite(s))
                   continue;
 
-            if ((s->startElement() == this) || (s->endElement() == this))
-                  s->writeSpanner(xml, this, track());
+            if (s->startElement() == this)
+                  s->writeSpannerStart(xml, this, track());
+            else if (s->endElement() == this)
+                  s->writeSpannerEnd(xml, this, track());
             }
       }
 

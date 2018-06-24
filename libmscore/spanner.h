@@ -149,8 +149,10 @@ class Spanner : public Element {
       virtual ElementType type() const = 0;
       virtual void setScore(Score* s) override;
 
-      void writeSpanner(XmlWriter& xml, const Element* current, int track, Fraction frac = -1) const;
-      void writeSpanner(XmlWriter& xml, const Element* current, int track, int tick) const;
+      void writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction frac = -1) const;
+      void writeSpannerEnd(XmlWriter& xml, const Element* current, int track, Fraction frac = -1) const;
+      void writeSpannerStart(XmlWriter& xml, const Element* current, int track, int tick) const;
+      void writeSpannerEnd(XmlWriter& xml, const Element* current, int track, int tick) const;
       static void readSpanner(XmlReader& e, Element* current, int track);
       static void readSpanner(XmlReader& e, Score* current, int track);
 
