@@ -145,7 +145,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       piano->setFixedWidth(pianoWidth);
 
       gv  = new PianoView;
-      gv->scale(xmag, 1.0);
+//      gv->scale(xmag, 1.0);
       gv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
       gv->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 

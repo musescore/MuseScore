@@ -1,0 +1,5622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df root="." name="0">
+      <df name=".tx">
+      </df>
+      <df name="aeolus">
+        <df name="stops">
+          <df name="Aeolus">
+          </df>
+          <df name="Aeolus1">
+          </df>
+          <df name="Aeolus2">
+          </df>
+        </df>
+        <in>addsynth.cpp</in>
+        <in>addsynth.h</in>
+        <in>aeolus.cpp</in>
+        <in>aeolus.h</in>
+        <in>aeolusgui.cpp</in>
+        <in>aeolusgui.h</in>
+        <in>asection.cpp</in>
+        <in>asection.h</in>
+        <in>audio.cpp</in>
+        <in>callbacks.h</in>
+        <in>division.cpp</in>
+        <in>division.h</in>
+        <in>exp2ap.cpp</in>
+        <in>global.h</in>
+        <in>messages.h</in>
+        <in>model.cpp</in>
+        <in>model.h</in>
+        <in>prbsgen.h</in>
+        <in>rankwave.cpp</in>
+        <in>rankwave.h</in>
+        <in>rngen.cpp</in>
+        <in>rngen.h</in>
+        <in>scales.cpp</in>
+        <in>scales.h</in>
+        <in>sparm.cpp</in>
+        <in>sparm.h</in>
+        <in>sparm_p.h</in>
+      </df>
+      <df name="assets">
+      </df>
+      <df name="audiofile">
+        <in>audiofile.cpp</in>
+        <in>audiofile.h</in>
+      </df>
+      <df name="awl">
+        <in>aslider.cpp</in>
+        <in>aslider.h</in>
+        <in>awlplugin.cpp</in>
+        <in>awlplugin.h</in>
+        <in>colorlabel.cpp</in>
+        <in>colorlabel.h</in>
+        <in>denomspinbox.cpp</in>
+        <in>denomspinbox.h</in>
+        <in>fastlog.h</in>
+        <in>knob.cpp</in>
+        <in>knob.h</in>
+        <in>ltest.cpp</in>
+        <in>midipanknob.cpp</in>
+        <in>midipanknob.h</in>
+        <in>mslider.cpp</in>
+        <in>mslider.h</in>
+        <in>panknob.cpp</in>
+        <in>panknob.h</in>
+        <in>pitchedit.cpp</in>
+        <in>pitchedit.h</in>
+        <in>pitchlabel.cpp</in>
+        <in>pitchlabel.h</in>
+        <in>posedit.cpp</in>
+        <in>posedit.h</in>
+        <in>poslabel.cpp</in>
+        <in>poslabel.h</in>
+        <in>slider.cpp</in>
+        <in>slider.h</in>
+        <in>utils.cpp</in>
+        <in>utils.h</in>
+        <in>volknob.cpp</in>
+        <in>volknob.h</in>
+        <in>volslider.cpp</in>
+        <in>volslider.h</in>
+      </df>
+      <df name="build">
+        <df name="appveyor">
+          <df name="resources">
+          </df>
+          <df name="special">
+          </df>
+          <df name="support">
+          </df>
+          <df name="web">
+          </df>
+        </df>
+        <df name="git">
+          <df name="hooks">
+          </df>
+        </df>
+        <df name="Linux+BSD">
+          <df name="portable">
+            <df name="ARM">
+            </df>
+            <df name="x86_32">
+            </df>
+            <df name="x86_64">
+            </df>
+          </df>
+        </df>
+        <df name="packaging">
+        </df>
+        <df name="travis">
+          <df name="job1_Tests">
+          </df>
+          <df name="job2_AppImage">
+          </df>
+          <df name="job_macos">
+            <df name="web">
+            </df>
+          </df>
+          <df name="resources">
+          </df>
+        </df>
+      </df>
+      <df name="build.debug">
+        <df name="audiofile">
+          <df name="audiofile_autogen">
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+          <df name="CMakeFiles">
+            <df name="audiofile.dir">
+              <df name="audiofile_autogen">
+              </df>
+            </df>
+            <df name="audiofile_autogen.dir">
+            </df>
+          </df>
+        </df>
+        <df name="awl">
+          <df name="awl_autogen">
+            <df name="EWIEGA46WW">
+              <in>moc_aslider.cpp</in>
+              <in>moc_colorlabel.cpp</in>
+              <in>moc_denomspinbox.cpp</in>
+              <in>moc_knob.cpp</in>
+              <in>moc_midipanknob.cpp</in>
+              <in>moc_mslider.cpp</in>
+              <in>moc_panknob.cpp</in>
+              <in>moc_pitchedit.cpp</in>
+              <in>moc_pitchlabel.cpp</in>
+              <in>moc_poslabel.cpp</in>
+              <in>moc_slider.cpp</in>
+              <in>moc_volknob.cpp</in>
+              <in>moc_volslider.cpp</in>
+            </df>
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+          <df name="CMakeFiles">
+            <df name="awl.dir">
+              <df name="awl_autogen">
+              </df>
+            </df>
+            <df name="awl_autogen.dir">
+            </df>
+            <df name="awlplugin.dir">
+              <df name="awlplugin_autogen">
+              </df>
+            </df>
+            <df name="awlplugin_autogen.dir">
+            </df>
+          </df>
+        </df>
+        <df name="bww2mxml">
+          <df name="bww_autogen">
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+          <df name="CMakeFiles">
+            <df name="bww.dir">
+              <df name="bww_autogen">
+              </df>
+            </df>
+            <df name="bww_autogen.dir">
+            </df>
+          </df>
+        </df>
+        <df name="CMakeFiles">
+          <df name="3.11.3">
+            <df name="CompilerIdC">
+              <df name="tmp">
+              </df>
+              <in>CMakeCCompilerId.c</in>
+            </df>
+            <df name="CompilerIdCXX">
+              <df name="tmp">
+              </df>
+              <in>CMakeCXXCompilerId.cpp</in>
+            </df>
+          </df>
+          <df name="CMakeTmp">
+          </df>
+          <df name="lrelease.dir">
+          </df>
+          <df name="lupdate.dir">
+          </df>
+          <df name="mops1.dir">
+          </df>
+          <df name="mops2.dir">
+          </df>
+          <in>feature_tests.c</in>
+          <in>feature_tests.cxx</in>
+        </df>
+        <df name="demos">
+          <df name="CMakeFiles">
+          </df>
+        </df>
+        <df name="effects">
+          <df name="CMakeFiles">
+            <df name="effects.dir">
+              <df name="compressor">
+              </df>
+              <df name="effects_autogen">
+              </df>
+              <df name="noeffect">
+              </df>
+              <df name="zita1">
+              </df>
+            </df>
+            <df name="effects_autogen.dir">
+            </df>
+          </df>
+          <df name="effects_autogen">
+            <df name="4IIPVNU5RA">
+              <in>moc_zita.cpp</in>
+              <in>moc_zitagui.cpp</in>
+            </df>
+            <df name="EWIEGA46WW">
+              <in>moc_effect.cpp</in>
+              <in>moc_effectgui.cpp</in>
+            </df>
+            <df name="include">
+              <in>compressorgui.moc</in>
+            </df>
+            <df name="JNTDVNR4OP">
+              <in>moc_compressor.cpp</in>
+            </df>
+            <df name="VMHUOYGFMC">
+              <in>moc_noeffect.cpp</in>
+              <in>moc_noeffectgui.cpp</in>
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+          <df name="zita1">
+          </df>
+          <in>qrc_zita.cpp</in>
+          <in>ui_compressor_gui.h</in>
+        </df>
+        <df name="fluid">
+          <df name="CMakeFiles">
+            <df name="fluid.dir">
+              <df name="fluid_autogen">
+              </df>
+            </df>
+            <df name="fluid_autogen.dir">
+            </df>
+          </df>
+          <df name="fluid_autogen">
+            <df name="EWIEGA46WW">
+              <in>moc_fluidgui.cpp</in>
+            </df>
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+          <in>ui_fluid_gui.h</in>
+        </df>
+        <df name="fonttools">
+          <df name="CMakeFiles">
+            <df name="genft.dir">
+              <df name="genft_autogen">
+              </df>
+            </df>
+            <df name="genft_autogen.dir">
+            </df>
+          </df>
+        </df>
+        <df name="include">
+          <df name="freetype">
+            <df name="config">
+              <in>ftconfig.h</in>
+              <in>ftoption.h</in>
+            </df>
+          </df>
+        </df>
+        <df name="libmscore">
+          <df name="CMakeFiles">
+            <df name="libmscore.dir">
+              <df name="libmscore_autogen">
+              </df>
+            </df>
+            <df name="libmscore_autogen.dir">
+            </df>
+          </df>
+          <df name="libmscore_autogen">
+            <df name="EWIEGA46WW">
+              <in>moc_cursor.cpp</in>
+              <in>moc_fraction.cpp</in>
+              <in>moc_plugins.cpp</in>
+              <in>moc_score.cpp</in>
+              <in>moc_types.cpp</in>
+            </df>
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+        </df>
+        <df name="midi">
+          <df name="CMakeFiles">
+            <df name="midi.dir">
+              <df name="midi_autogen">
+              </df>
+            </df>
+            <df name="midi_autogen.dir">
+            </df>
+          </df>
+          <df name="midi_autogen">
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+        </df>
+        <df name="miditools">
+          <df name="CMakeFiles">
+            <df name="smf2xml.dir">
+              <df name="smf2xml_autogen">
+              </df>
+            </df>
+            <df name="smf2xml_autogen.dir">
+            </df>
+            <df name="xml2smf.dir">
+              <df name="xml2smf_autogen">
+              </df>
+            </df>
+            <df name="xml2smf_autogen.dir">
+            </df>
+          </df>
+        </df>
+        <df name="mscore">
+          <df name="CMakeFiles">
+            <df name="mscore.dir">
+              <df name="debugger">
+              </df>
+              <df name="importmidi">
+              </df>
+              <df name="inspector">
+              </df>
+              <df name="mscore_autogen">
+              </df>
+            </df>
+            <df name="mscore_autogen.dir">
+            </df>
+          </df>
+          <df name="mscore_autogen">
+            <df name="EWIEGA46WW">
+              <in>moc_abstractdialog.cpp</in>
+              <in>moc_accessibletoolbutton.cpp</in>
+              <in>moc_albummanager.cpp</in>
+              <in>moc_articulationprop.cpp</in>
+              <in>moc_bendcanvas.cpp</in>
+              <in>moc_bendproperties.cpp</in>
+              <in>moc_breaksdialog.cpp</in>
+              <in>moc_chordview.cpp</in>
+              <in>moc_downloadUtils.cpp</in>
+              <in>moc_drumroll.cpp</in>
+              <in>moc_drumtools.cpp</in>
+              <in>moc_drumview.cpp</in>
+              <in>moc_editdrumset.cpp</in>
+              <in>moc_editinstrument.cpp</in>
+              <in>moc_editpitch.cpp</in>
+              <in>moc_editraster.cpp</in>
+              <in>moc_editstaff.cpp</in>
+              <in>moc_editstafftype.cpp</in>
+              <in>moc_editstringdata.cpp</in>
+              <in>moc_editstyle.cpp</in>
+              <in>moc_exampleview.cpp</in>
+              <in>moc_excerptsdialog.cpp</in>
+              <in>moc_file.cpp</in>
+              <in>moc_fretcanvas.cpp</in>
+              <in>moc_fretproperties.cpp</in>
+              <in>moc_greendotbutton.cpp</in>
+              <in>moc_harmonycanvas.cpp</in>
+              <in>moc_harmonyedit.cpp</in>
+              <in>moc_help.cpp</in>
+              <in>moc_helpBrowser.cpp</in>
+              <in>moc_instrdialog.cpp</in>
+              <in>moc_instrwidget.cpp</in>
+              <in>moc_keycanvas.cpp</in>
+              <in>moc_keyedit.cpp</in>
+              <in>moc_layer.cpp</in>
+              <in>moc_logindialog.cpp</in>
+              <in>moc_loginmanager.cpp</in>
+              <in>moc_magbox.cpp</in>
+              <in>moc_masterpalette.cpp</in>
+              <in>moc_measureproperties.cpp</in>
+              <in>moc_mediadialog.cpp</in>
+              <in>moc_metaedit.cpp</in>
+              <in>moc_mixer.cpp</in>
+              <in>moc_musescore.cpp</in>
+              <in>moc_navigator.cpp</in>
+              <in>moc_newwizard.cpp</in>
+              <in>moc_noteGroups.cpp</in>
+              <in>moc_omrpanel.cpp</in>
+              <in>moc_pagesettings.cpp</in>
+              <in>moc_palette.cpp</in>
+              <in>moc_paletteBoxButton.cpp</in>
+              <in>moc_palettebox.cpp</in>
+              <in>moc_pathlistdialog.cpp</in>
+              <in>moc_piano.cpp</in>
+              <in>moc_pianoroll.cpp</in>
+              <in>moc_pianotools.cpp</in>
+              <in>moc_pianoview.cpp</in>
+              <in>moc_playpanel.cpp</in>
+              <in>moc_pluginCreator.cpp</in>
+              <in>moc_pluginManager.cpp</in>
+              <in>moc_prefsdialog.cpp</in>
+              <in>moc_qmledit.cpp</in>
+              <in>moc_qmlplugin.cpp</in>
+              <in>moc_recordbutton.cpp</in>
+              <in>moc_resourceManager.cpp</in>
+              <in>moc_ruler.cpp</in>
+              <in>moc_scoreBrowser.cpp</in>
+              <in>moc_scorePreview.cpp</in>
+              <in>moc_scoreaccessibility.cpp</in>
+              <in>moc_scoretab.cpp</in>
+              <in>moc_scoreview.cpp</in>
+              <in>moc_searchComboBox.cpp</in>
+              <in>moc_sectionbreakprop.cpp</in>
+              <in>moc_selectdialog.cpp</in>
+              <in>moc_selectionwindow.cpp</in>
+              <in>moc_selectnotedialog.cpp</in>
+              <in>moc_selinstrument.cpp</in>
+              <in>moc_seq.cpp</in>
+              <in>moc_shortcutcapturedialog.cpp</in>
+              <in>moc_simplebutton.cpp</in>
+              <in>moc_splitstaff.cpp</in>
+              <in>moc_stafftextproperties.cpp</in>
+              <in>moc_startcenter.cpp</in>
+              <in>moc_startupWizard.cpp</in>
+              <in>moc_stringutils.cpp</in>
+              <in>moc_symboldialog.cpp</in>
+              <in>moc_synthcontrol.cpp</in>
+              <in>moc_textpalette.cpp</in>
+              <in>moc_texttools.cpp</in>
+              <in>moc_timedialog.cpp</in>
+              <in>moc_timeline.cpp</in>
+              <in>moc_timesigproperties.cpp</in>
+              <in>moc_toolbarEditor.cpp</in>
+              <in>moc_toolbuttonmenu.cpp</in>
+              <in>moc_transposedialog.cpp</in>
+              <in>moc_tremolobarcanvas.cpp</in>
+              <in>moc_tremolobarprop.cpp</in>
+              <in>moc_tupletdialog.cpp</in>
+              <in>moc_updatechecker.cpp</in>
+              <in>moc_uploadscoredialog.cpp</in>
+              <in>moc_waveview.cpp</in>
+              <in>moc_workspace.cpp</in>
+            </df>
+            <df name="FGLUUE7X6T">
+              <in>moc_importmidi_delegate.cpp</in>
+              <in>moc_importmidi_panel.cpp</in>
+              <in>moc_importmidi_view.cpp</in>
+            </df>
+            <df name="include">
+            </df>
+            <df name="L7N3VMFSKL">
+              <in>moc_alignSelect.cpp</in>
+              <in>moc_inspector.cpp</in>
+              <in>moc_inspectorAmbitus.cpp</in>
+              <in>moc_inspectorArpeggio.cpp</in>
+              <in>moc_inspectorBarline.cpp</in>
+              <in>moc_inspectorBase.cpp</in>
+              <in>moc_inspectorBeam.cpp</in>
+              <in>moc_inspectorDynamic.cpp</in>
+              <in>moc_inspectorElementBase.cpp</in>
+              <in>moc_inspectorFingering.cpp</in>
+              <in>moc_inspectorFret.cpp</in>
+              <in>moc_inspectorGlissando.cpp</in>
+              <in>moc_inspectorGroupElement.cpp</in>
+              <in>moc_inspectorHairpin.cpp</in>
+              <in>moc_inspectorImage.cpp</in>
+              <in>moc_inspectorJump.cpp</in>
+              <in>moc_inspectorLasso.cpp</in>
+              <in>moc_inspectorMarker.cpp</in>
+              <in>moc_inspectorNote.cpp</in>
+              <in>moc_inspectorOttava.cpp</in>
+              <in>moc_inspectorText.cpp</in>
+              <in>moc_inspectorTextBase.cpp</in>
+              <in>moc_inspectorTextLine.cpp</in>
+              <in>moc_inspectorTrill.cpp</in>
+              <in>moc_inspectorVolta.cpp</in>
+              <in>moc_offsetSelect.cpp</in>
+              <in>moc_scaleSelect.cpp</in>
+              <in>moc_sizeSelect.cpp</in>
+            </df>
+            <df name="TBDDORYXJM">
+              <in>moc_debugger.cpp</in>
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+          <in>qrc_musescore.cpp</in>
+          <in>qrc_musescorefonts-Bravura.cpp</in>
+          <in>qrc_musescorefonts-Free.cpp</in>
+          <in>qrc_musescorefonts-FreeSerif.cpp</in>
+          <in>qrc_musescorefonts-Gootville.cpp</in>
+          <in>qrc_musescorefonts-MScore.cpp</in>
+          <in>qrc_musescorefonts-MuseJazz.cpp</in>
+          <in>qrc_shortcut.cpp</in>
+          <in>ui_aboutbox.h</in>
+          <in>ui_aboutmusicxmlbox.h</in>
+          <in>ui_accidental.h</in>
+          <in>ui_albummanager.h</in>
+          <in>ui_align_select.h</in>
+          <in>ui_articulation.h</in>
+          <in>ui_articulationbase.h</in>
+          <in>ui_barline.h</in>
+          <in>ui_beam.h</in>
+          <in>ui_bend.h</in>
+          <in>ui_box.h</in>
+          <in>ui_bracket.h</in>
+          <in>ui_breaksdialog.h</in>
+          <in>ui_cellproperties.h</in>
+          <in>ui_chord.h</in>
+          <in>ui_chordrest.h</in>
+          <in>ui_clef.h</in>
+          <in>ui_debugger.h</in>
+          <in>ui_dynamic.h</in>
+          <in>ui_editdrumset.h</in>
+          <in>ui_editinstrument.h</in>
+          <in>ui_editpitch.h</in>
+          <in>ui_editraster.h</in>
+          <in>ui_editstaff.h</in>
+          <in>ui_editstafftype.h</in>
+          <in>ui_editstringdata.h</in>
+          <in>ui_editstyle.h</in>
+          <in>ui_element.h</in>
+          <in>ui_excerptsdialog.h</in>
+          <in>ui_fretdprops.h</in>
+          <in>ui_hairpin.h</in>
+          <in>ui_harmony.h</in>
+          <in>ui_harmonyedit.h</in>
+          <in>ui_importmidi_panel.h</in>
+          <in>ui_insertmeasuresdialog.h</in>
+          <in>ui_inspector_accidental.h</in>
+          <in>ui_inspector_ambitus.h</in>
+          <in>ui_inspector_arpeggio.h</in>
+          <in>ui_inspector_articulation.h</in>
+          <in>ui_inspector_barline.h</in>
+          <in>ui_inspector_beam.h</in>
+          <in>ui_inspector_bend.h</in>
+          <in>ui_inspector_bracket.h</in>
+          <in>ui_inspector_break.h</in>
+          <in>ui_inspector_caesura.h</in>
+          <in>ui_inspector_chord.h</in>
+          <in>ui_inspector_clef.h</in>
+          <in>ui_inspector_dynamic.h</in>
+          <in>ui_inspector_element.h</in>
+          <in>ui_inspector_empty.h</in>
+          <in>ui_inspector_fermata.h</in>
+          <in>ui_inspector_fingering.h</in>
+          <in>ui_inspector_frametext.h</in>
+          <in>ui_inspector_fret.h</in>
+          <in>ui_inspector_glissando.h</in>
+          <in>ui_inspector_group_element.h</in>
+          <in>ui_inspector_hairpin.h</in>
+          <in>ui_inspector_hbox.h</in>
+          <in>ui_inspector_image.h</in>
+          <in>ui_inspector_iname.h</in>
+          <in>ui_inspector_jump.h</in>
+          <in>ui_inspector_keysig.h</in>
+          <in>ui_inspector_lasso.h</in>
+          <in>ui_inspector_line.h</in>
+          <in>ui_inspector_lyric.h</in>
+          <in>ui_inspector_marker.h</in>
+          <in>ui_inspector_note.h</in>
+          <in>ui_inspector_ottava.h</in>
+          <in>ui_inspector_rest.h</in>
+          <in>ui_inspector_segment.h</in>
+          <in>ui_inspector_slur.h</in>
+          <in>ui_inspector_spacer.h</in>
+          <in>ui_inspector_stafftext.h</in>
+          <in>ui_inspector_stafftypechange.h</in>
+          <in>ui_inspector_stem.h</in>
+          <in>ui_inspector_tbox.h</in>
+          <in>ui_inspector_tempotext.h</in>
+          <in>ui_inspector_text.h</in>
+          <in>ui_inspector_textline.h</in>
+          <in>ui_inspector_timesig.h</in>
+          <in>ui_inspector_tremolo.h</in>
+          <in>ui_inspector_trill.h</in>
+          <in>ui_inspector_tuplet.h</in>
+          <in>ui_inspector_vbox.h</in>
+          <in>ui_inspector_volta.h</in>
+          <in>ui_instrdialog.h</in>
+          <in>ui_instrwidget.h</in>
+          <in>ui_instrwizard.h</in>
+          <in>ui_keyedit.h</in>
+          <in>ui_keysig.h</in>
+          <in>ui_layer.h</in>
+          <in>ui_line.h</in>
+          <in>ui_linesegment.h</in>
+          <in>ui_logindialog.h</in>
+          <in>ui_lyrics.h</in>
+          <in>ui_masterpalette.h</in>
+          <in>ui_measure.h</in>
+          <in>ui_measureproperties.h</in>
+          <in>ui_measuresdialog.h</in>
+          <in>ui_mediadialog.h</in>
+          <in>ui_metaedit.h</in>
+          <in>ui_mixer.h</in>
+          <in>ui_newwizard.h</in>
+          <in>ui_note.h</in>
+          <in>ui_note_groups.h</in>
+          <in>ui_offset_select.h</in>
+          <in>ui_omrpanel.h</in>
+          <in>ui_page.h</in>
+          <in>ui_pagesettings.h</in>
+          <in>ui_palette.h</in>
+          <in>ui_pathlistdialog.h</in>
+          <in>ui_playpanel.h</in>
+          <in>ui_pluginCreator.h</in>
+          <in>ui_pluginManager.h</in>
+          <in>ui_prefsdialog.h</in>
+          <in>ui_resourceManager.h</in>
+          <in>ui_rest.h</in>
+          <in>ui_scale_select.h</in>
+          <in>ui_scoreBrowser.h</in>
+          <in>ui_scorePreview.h</in>
+          <in>ui_sectionbreak.h</in>
+          <in>ui_segment.h</in>
+          <in>ui_selectdialog.h</in>
+          <in>ui_selectinstr.h</in>
+          <in>ui_selectnotedialog.h</in>
+          <in>ui_shortcutcapturedialog.h</in>
+          <in>ui_size_select.h</in>
+          <in>ui_slursegment.h</in>
+          <in>ui_slurtie.h</in>
+          <in>ui_spanner.h</in>
+          <in>ui_splitstaff.h</in>
+          <in>ui_stafftext.h</in>
+          <in>ui_stafftypetemplates.h</in>
+          <in>ui_startcenter.h</in>
+          <in>ui_stem.h</in>
+          <in>ui_symboldialog.h</in>
+          <in>ui_synthcontrol.h</in>
+          <in>ui_system.h</in>
+          <in>ui_text.h</in>
+          <in>ui_textline.h</in>
+          <in>ui_textpalette.h</in>
+          <in>ui_tie.h</in>
+          <in>ui_tiesegment.h</in>
+          <in>ui_timedialog.h</in>
+          <in>ui_timesig.h</in>
+          <in>ui_timesigproperties.h</in>
+          <in>ui_timesigwizard.h</in>
+          <in>ui_toolbarEditor.h</in>
+          <in>ui_transposedialog.h</in>
+          <in>ui_tremolo.h</in>
+          <in>ui_tremolobar.h</in>
+          <in>ui_tuplet.h</in>
+          <in>ui_tupletdialog.h</in>
+          <in>ui_uploadscoredialog.h</in>
+        </df>
+        <df name="mtest">
+          <df name="__">
+            <df name="mscore">
+            </df>
+          </df>
+          <df name="biab">
+            <df name="CMakeFiles">
+              <df name="tst_biab.dir">
+                <df name="tst_biab_autogen">
+                </df>
+              </df>
+              <df name="tst_biab_autogen.dir">
+              </df>
+            </df>
+          </df>
+          <df name="capella">
+            <df name="CMakeFiles">
+            </df>
+            <df name="io">
+              <df name="CMakeFiles">
+                <df name="tst_capella_io.dir">
+                  <df name="tst_capella_io_autogen">
+                  </df>
+                </df>
+                <df name="tst_capella_io_autogen.dir">
+                </df>
+              </df>
+            </df>
+          </df>
+          <df name="CMakeFiles">
+            <df name="mtest.dir">
+              <df name="mtest_autogen">
+              </df>
+            </df>
+            <df name="mtest_autogen.dir">
+            </df>
+            <df name="report.dir">
+            </df>
+            <df name="reporthtml.dir">
+            </df>
+            <df name="testResources.dir">
+              <df name="testResources_autogen">
+              </df>
+            </df>
+            <df name="testResources_autogen.dir">
+            </df>
+            <df name="testutils.dir">
+              <df name="__">
+                <df name="libmscore">
+                </df>
+                <df name="mscore">
+                  <df name="importmidi">
+                  </df>
+                </df>
+                <df name="omr">
+                </df>
+                <df name="thirdparty">
+                  <df name="beatroot">
+                  </df>
+                  <df name="rtf2html">
+                  </df>
+                </df>
+              </df>
+              <df name="testutils_autogen">
+              </df>
+            </df>
+            <df name="testutils_autogen.dir">
+            </df>
+          </df>
+          <df name="guitarpro">
+            <df name="CMakeFiles">
+              <df name="tst_guitarpro.dir">
+                <df name="tst_guitarpro_autogen">
+                </df>
+              </df>
+              <df name="tst_guitarpro_autogen.dir">
+              </df>
+            </df>
+          </df>
+          <df name="importmidi">
+            <df name="CMakeFiles">
+              <df name="tst_importmidi.dir">
+                <df name="tst_importmidi_autogen">
+                </df>
+              </df>
+              <df name="tst_importmidi_autogen.dir">
+              </df>
+            </df>
+          </df>
+          <df name="libmscore">
+            <df name="barline">
+              <df name="CMakeFiles">
+                <df name="tst_barline.dir">
+                  <df name="tst_barline_autogen">
+                  </df>
+                </df>
+                <df name="tst_barline_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="beam">
+              <df name="CMakeFiles">
+                <df name="tst_beam.dir">
+                  <df name="tst_beam_autogen">
+                  </df>
+                </df>
+                <df name="tst_beam_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="breath">
+              <df name="CMakeFiles">
+                <df name="tst_breath.dir">
+                  <df name="tst_breath_autogen">
+                  </df>
+                </df>
+                <df name="tst_breath_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="chordsymbol">
+              <df name="CMakeFiles">
+                <df name="tst_chordsymbol.dir">
+                  <df name="tst_chordsymbol_autogen">
+                  </df>
+                </df>
+                <df name="tst_chordsymbol_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="clef">
+              <df name="CMakeFiles">
+                <df name="tst_clef.dir">
+                  <df name="tst_clef_autogen">
+                  </df>
+                </df>
+                <df name="tst_clef_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="clef_courtesy">
+              <df name="CMakeFiles">
+                <df name="tst_clef_courtesy.dir">
+                  <df name="tst_clef_courtesy_autogen">
+                  </df>
+                </df>
+                <df name="tst_clef_courtesy_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="compat206">
+              <df name="CMakeFiles">
+                <df name="tst_compat206.dir">
+                  <df name="tst_compat206_autogen">
+                  </df>
+                </df>
+                <df name="tst_compat206_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="concertpitch">
+              <df name="CMakeFiles">
+                <df name="tst_concertpitchbenchmark.dir">
+                  <df name="tst_concertpitchbenchmark_autogen">
+                  </df>
+                </df>
+                <df name="tst_concertpitchbenchmark_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="copypaste">
+              <df name="CMakeFiles">
+                <df name="tst_copypaste.dir">
+                  <df name="tst_copypaste_autogen">
+                  </df>
+                </df>
+                <df name="tst_copypaste_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="copypastesymbollist">
+              <df name="CMakeFiles">
+                <df name="tst_copypastesymbollist.dir">
+                  <df name="tst_copypastesymbollist_autogen">
+                  </df>
+                </df>
+                <df name="tst_copypastesymbollist_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="durationtype">
+              <df name="CMakeFiles">
+                <df name="tst_durationtype.dir">
+                  <df name="tst_durationtype_autogen">
+                  </df>
+                </df>
+                <df name="tst_durationtype_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="dynamic">
+              <df name="CMakeFiles">
+                <df name="tst_dynamic.dir">
+                  <df name="tst_dynamic_autogen">
+                  </df>
+                </df>
+                <df name="tst_dynamic_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="earlymusic">
+              <df name="CMakeFiles">
+                <df name="tst_earlymusic.dir">
+                  <df name="tst_earlymusic_autogen">
+                  </df>
+                </df>
+                <df name="tst_earlymusic_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="element">
+              <df name="CMakeFiles">
+                <df name="tst_element.dir">
+                  <df name="tst_element_autogen">
+                  </df>
+                </df>
+                <df name="tst_element_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="exchangevoices">
+              <df name="CMakeFiles">
+                <df name="tst_exchangevoices.dir">
+                  <df name="tst_exchangevoices_autogen">
+                  </df>
+                </df>
+                <df name="tst_exchangevoices_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="hairpin">
+              <df name="CMakeFiles">
+                <df name="tst_hairpin.dir">
+                  <df name="tst_hairpin_autogen">
+                  </df>
+                </df>
+                <df name="tst_hairpin_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="implode_explode">
+              <df name="CMakeFiles">
+                <df name="tst_implodeExplode.dir">
+                  <df name="tst_implodeExplode_autogen">
+                  </df>
+                </df>
+                <df name="tst_implodeExplode_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="instrumentchange">
+              <df name="CMakeFiles">
+                <df name="tst_instrumentchange.dir">
+                  <df name="tst_instrumentchange_autogen">
+                  </df>
+                </df>
+                <df name="tst_instrumentchange_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="join">
+              <df name="CMakeFiles">
+                <df name="tst_join.dir">
+                  <df name="tst_join_autogen">
+                  </df>
+                </df>
+                <df name="tst_join_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="keysig">
+              <df name="CMakeFiles">
+                <df name="tst_keysig.dir">
+                  <df name="tst_keysig_autogen">
+                  </df>
+                </df>
+                <df name="tst_keysig_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="layout">
+              <df name="CMakeFiles">
+                <df name="tst_benchmark.dir">
+                  <df name="tst_benchmark_autogen">
+                  </df>
+                </df>
+                <df name="tst_benchmark_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="links">
+              <df name="CMakeFiles">
+                <df name="tst_links.dir">
+                  <df name="tst_links_autogen">
+                  </df>
+                </df>
+                <df name="tst_links_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="measure">
+              <df name="CMakeFiles">
+                <df name="tst_measure.dir">
+                  <df name="tst_measure_autogen">
+                  </df>
+                </df>
+                <df name="tst_measure_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="midi">
+              <df name="CMakeFiles">
+                <df name="tst_midi.dir">
+                  <df name="tst_midi_autogen">
+                  </df>
+                </df>
+                <df name="tst_midi_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="note">
+              <df name="CMakeFiles">
+                <df name="tst_note.dir">
+                  <df name="tst_note_autogen">
+                  </df>
+                </df>
+                <df name="tst_note_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="parts">
+              <df name="CMakeFiles">
+                <df name="tst_parts.dir">
+                  <df name="tst_parts_autogen">
+                  </df>
+                </df>
+                <df name="tst_parts_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="repeat">
+              <df name="CMakeFiles">
+                <df name="tst_repeat.dir">
+                  <df name="tst_repeat_autogen">
+                  </df>
+                </df>
+                <df name="tst_repeat_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="rhythmicGrouping">
+              <df name="CMakeFiles">
+                <df name="tst_rhythmicGrouping.dir">
+                  <df name="tst_rhythmicGrouping_autogen">
+                  </df>
+                </df>
+                <df name="tst_rhythmicGrouping_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="selectionfilter">
+              <df name="CMakeFiles">
+                <df name="tst_selectionfilter.dir">
+                  <df name="tst_selectionfilter_autogen">
+                  </df>
+                </df>
+                <df name="tst_selectionfilter_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="selectionrangedelete">
+              <df name="CMakeFiles">
+                <df name="tst_selectionrangedelete.dir">
+                  <df name="tst_selectionrangedelete_autogen">
+                  </df>
+                </df>
+                <df name="tst_selectionrangedelete_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="spanners">
+              <df name="CMakeFiles">
+                <df name="tst_spanners.dir">
+                  <df name="tst_spanners_autogen">
+                  </df>
+                </df>
+                <df name="tst_spanners_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="split">
+              <df name="CMakeFiles">
+                <df name="tst_split.dir">
+                  <df name="tst_split_autogen">
+                  </df>
+                </df>
+                <df name="tst_split_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="splitstaff">
+              <df name="CMakeFiles">
+                <df name="tst_splitstaff.dir">
+                  <df name="tst_splitstaff_autogen">
+                  </df>
+                </df>
+                <df name="tst_splitstaff_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="timesig">
+              <df name="CMakeFiles">
+                <df name="tst_timesig.dir">
+                  <df name="tst_timesig_autogen">
+                  </df>
+                </df>
+                <df name="tst_timesig_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="tools">
+              <df name="CMakeFiles">
+                <df name="tst_tools.dir">
+                  <df name="tst_tools_autogen">
+                  </df>
+                </df>
+                <df name="tst_tools_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="transpose">
+              <df name="CMakeFiles">
+                <df name="tst_transpose.dir">
+                  <df name="tst_transpose_autogen">
+                  </df>
+                </df>
+                <df name="tst_transpose_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="tuplet">
+              <df name="CMakeFiles">
+                <df name="tst_tuplet.dir">
+                  <df name="tst_tuplet_autogen">
+                  </df>
+                </df>
+                <df name="tst_tuplet_autogen.dir">
+                </df>
+              </df>
+            </df>
+          </df>
+          <df name="musicxml">
+            <df name="CMakeFiles">
+            </df>
+            <df name="io">
+              <df name="CMakeFiles">
+                <df name="tst_mxml_io.dir">
+                  <df name="tst_mxml_io_autogen">
+                  </df>
+                </df>
+                <df name="tst_mxml_io_autogen.dir">
+                </df>
+              </df>
+            </df>
+          </df>
+          <df name="omr">
+            <df name="CMakeFiles">
+            </df>
+            <df name="notes">
+              <df name="CMakeFiles">
+                <df name="tst_notes.dir">
+                  <df name="tst_notes_autogen">
+                  </df>
+                </df>
+                <df name="tst_notes_autogen.dir">
+                </df>
+              </df>
+            </df>
+          </df>
+          <df name="scripting">
+            <df name="CMakeFiles">
+              <df name="tst_scripting.dir">
+                <df name="tst_scripting_autogen">
+                </df>
+              </df>
+              <df name="tst_scripting_autogen.dir">
+              </df>
+            </df>
+          </df>
+          <df name="stringutils">
+            <df name="CMakeFiles">
+              <df name="tst_stringutils.dir">
+                <df name="tst_stringutils_autogen">
+                </df>
+              </df>
+              <df name="tst_stringutils_autogen.dir">
+              </df>
+            </df>
+          </df>
+          <df name="zerberus">
+            <df name="comments">
+              <df name="CMakeFiles">
+                <df name="tst_sfzcomments.dir">
+                  <df name="tst_sfzcomments_autogen">
+                  </df>
+                </df>
+                <df name="tst_sfzcomments_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="envelopes">
+              <df name="CMakeFiles">
+                <df name="tst_sfzenvelopes.dir">
+                  <df name="tst_sfzenvelopes_autogen">
+                  </df>
+                </df>
+                <df name="tst_sfzenvelopes_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="global">
+              <df name="CMakeFiles">
+                <df name="tst_sfzglobal.dir">
+                  <df name="tst_sfzglobal_autogen">
+                  </df>
+                </df>
+                <df name="tst_sfzglobal_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="includes">
+              <df name="CMakeFiles">
+                <df name="tst_sfzincludes.dir">
+                  <df name="tst_sfzincludes_autogen">
+                  </df>
+                </df>
+                <df name="tst_sfzincludes_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="inputControls">
+              <df name="CMakeFiles">
+                <df name="tst_sfzinputcontrols.dir">
+                  <df name="tst_sfzinputcontrols_autogen">
+                  </df>
+                </df>
+                <df name="tst_sfzinputcontrols_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="loop">
+              <df name="CMakeFiles">
+                <df name="tst_sfzloop.dir">
+                  <df name="tst_sfzloop_autogen">
+                  </df>
+                </df>
+                <df name="tst_sfzloop_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="opcodeparse">
+              <df name="CMakeFiles">
+                <df name="tst_sfzopcodes.dir">
+                  <df name="tst_sfzopcodes_autogen">
+                  </df>
+                </df>
+                <df name="tst_sfzopcodes_autogen.dir">
+                </df>
+              </df>
+            </df>
+          </df>
+        </df>
+        <df name="omr">
+          <df name="CMakeFiles">
+            <df name="omr.dir">
+              <df name="omr_autogen">
+              </df>
+            </df>
+            <df name="omr_autogen.dir">
+            </df>
+          </df>
+          <df name="omr_autogen">
+            <df name="EWIEGA46WW">
+              <in>moc_omrview.cpp</in>
+            </df>
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+        </df>
+        <df name="rdoc">
+          <df name="CMakeFiles">
+            <df name="referenceDocumentation.dir">
+            </df>
+          </df>
+        </df>
+        <df name="share">
+          <df name="CMakeFiles">
+          </df>
+          <df name="instruments">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+          <df name="locale">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+          <df name="manual">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+          <df name="sound">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+          <df name="styles">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+          <df name="templates">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+          <df name="wallpaper">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+          <df name="workspaces">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+        </df>
+        <df name="synthesizer">
+          <df name="CMakeFiles">
+            <df name="synthesizer.dir">
+              <df name="synthesizer_autogen">
+              </df>
+            </df>
+            <df name="synthesizer_autogen.dir">
+            </df>
+          </df>
+          <df name="synthesizer_autogen">
+            <df name="EWIEGA46WW">
+              <in>moc_msynthesizer.cpp</in>
+              <in>moc_synthesizergui.cpp</in>
+            </df>
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+        </df>
+        <df name="thirdparty">
+          <df name="beatroot">
+            <df name="beatroot_autogen">
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+            <df name="CMakeFiles">
+              <df name="beatroot.dir">
+                <df name="beatroot_autogen">
+                </df>
+              </df>
+              <df name="beatroot_autogen.dir">
+              </df>
+            </df>
+          </df>
+          <df name="diff">
+            <df name="CMakeFiles">
+              <df name="diff_match_patch.dir">
+                <df name="diff_match_patch_autogen">
+                </df>
+              </df>
+              <df name="diff_match_patch_autogen.dir">
+              </df>
+            </df>
+            <df name="diff_match_patch_autogen">
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="freetype">
+            <df name="CMakeFiles">
+              <df name="mscore_freetype.dir">
+                <df name="builds">
+                  <df name="windows">
+                  </df>
+                </df>
+                <df name="mscore_freetype_autogen">
+                </df>
+                <df name="src">
+                  <df name="autofit">
+                  </df>
+                  <df name="base">
+                  </df>
+                  <df name="bdf">
+                  </df>
+                  <df name="bzip2">
+                  </df>
+                  <df name="cache">
+                  </df>
+                  <df name="cff">
+                  </df>
+                  <df name="cid">
+                  </df>
+                  <df name="gzip">
+                  </df>
+                  <df name="lzw">
+                  </df>
+                  <df name="pcf">
+                  </df>
+                  <df name="pfr">
+                  </df>
+                  <df name="psaux">
+                  </df>
+                  <df name="pshinter">
+                  </df>
+                  <df name="psnames">
+                  </df>
+                  <df name="raster">
+                  </df>
+                  <df name="sfnt">
+                  </df>
+                  <df name="smooth">
+                  </df>
+                  <df name="truetype">
+                  </df>
+                  <df name="type1">
+                  </df>
+                  <df name="type42">
+                  </df>
+                  <df name="winfonts">
+                  </df>
+                </df>
+              </df>
+              <df name="mscore_freetype_autogen.dir">
+              </df>
+            </df>
+            <df name="mscore_freetype_autogen">
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="kQOAuth">
+            <df name="CMakeFiles">
+              <df name="kqoauth.dir">
+                <df name="kqoauth_autogen">
+                </df>
+              </df>
+              <df name="kqoauth_autogen.dir">
+              </df>
+            </df>
+            <df name="kqoauth_autogen">
+              <df name="EWIEGA46WW">
+                <in>moc_kqoauthauthreplyserver.cpp</in>
+                <in>moc_kqoauthauthreplyserver_p.cpp</in>
+                <in>moc_kqoauthmanager.cpp</in>
+                <in>moc_kqoauthrequest.cpp</in>
+                <in>moc_kqoauthrequest_xauth.cpp</in>
+              </df>
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="ofqf">
+            <df name="CMakeFiles">
+              <df name="ofqf.dir">
+                <df name="ofqf_autogen">
+                </df>
+              </df>
+              <df name="ofqf_autogen.dir">
+              </df>
+            </df>
+            <df name="ofqf_autogen">
+              <df name="EWIEGA46WW">
+                <in>moc_qoscclient.cpp</in>
+                <in>moc_qoscserver.cpp</in>
+                <in>moc_qosctypes.cpp</in>
+              </df>
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="poppler">
+            <df name="CMakeFiles">
+              <df name="poppler.dir">
+                <df name="fofi">
+                </df>
+                <df name="goo">
+                </df>
+                <df name="poppler">
+                </df>
+                <df name="poppler_autogen">
+                </df>
+                <df name="qt5">
+                </df>
+                <df name="splash">
+                </df>
+              </df>
+              <df name="poppler_autogen.dir">
+              </df>
+            </df>
+            <df name="poppler_autogen">
+              <df name="include">
+                <in>poppler-optcontent.moc</in>
+              </df>
+              <df name="OXRBQHTNNB">
+                <in>moc_poppler-optcontent.cpp</in>
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="portmidi">
+            <df name="CMakeFiles">
+              <df name="portmidi.dir">
+                <df name="pm_common">
+                </df>
+                <df name="pm_win">
+                </df>
+                <df name="portmidi_autogen">
+                </df>
+                <df name="porttime">
+                </df>
+              </df>
+              <df name="portmidi_autogen.dir">
+              </df>
+            </df>
+            <df name="portmidi_autogen">
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="qzip">
+            <df name="CMakeFiles">
+              <df name="qzip.dir">
+                <df name="qzip_autogen">
+                </df>
+              </df>
+              <df name="qzip_autogen.dir">
+              </df>
+            </df>
+            <df name="qzip_autogen">
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="rtf2html">
+            <df name="CMakeFiles">
+              <df name="rtf2html.dir">
+                <df name="rtf2html_autogen">
+                </df>
+              </df>
+              <df name="rtf2html_autogen.dir">
+              </df>
+            </df>
+            <df name="rtf2html_autogen">
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="singleapp">
+            <df name="CMakeFiles">
+            </df>
+            <df name="src">
+              <df name="CMakeFiles">
+                <df name="qtsingleapp.dir">
+                  <df name="qtsingleapp_autogen">
+                  </df>
+                </df>
+                <df name="qtsingleapp_autogen.dir">
+                </df>
+              </df>
+              <df name="qtsingleapp_autogen">
+                <df name="EWIEGA46WW">
+                  <in>moc_qtlocalpeer.cpp</in>
+                  <in>moc_qtsingleapplication.cpp</in>
+                </df>
+                <df name="include">
+                </df>
+                <in>mocs_compilation.cpp</in>
+              </df>
+            </df>
+          </df>
+        </df>
+        <df name="zerberus">
+          <df name="CMakeFiles">
+            <df name="zerberus.dir">
+              <df name="zerberus_autogen">
+              </df>
+            </df>
+            <df name="zerberus_autogen.dir">
+            </df>
+          </df>
+          <df name="zerberus_autogen">
+            <df name="EWIEGA46WW">
+              <in>moc_zerberusgui.cpp</in>
+            </df>
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+          <in>ui_zerberus_gui.h</in>
+        </df>
+        <in>all.h</in>
+        <in>config.h</in>
+      </df>
+      <df name="build.qtc">
+      </df>
+      <df name="build.release">
+        <df name="audiofile">
+          <df name="audiofile_autogen">
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+          <df name="CMakeFiles">
+            <df name="audiofile.dir">
+              <df name="audiofile_autogen">
+              </df>
+            </df>
+            <df name="audiofile_autogen.dir">
+            </df>
+          </df>
+        </df>
+        <df name="awl">
+          <df name="awl_autogen">
+            <df name="EWIEGA46WW">
+              <in>moc_aslider.cpp</in>
+              <in>moc_colorlabel.cpp</in>
+              <in>moc_denomspinbox.cpp</in>
+              <in>moc_knob.cpp</in>
+              <in>moc_midipanknob.cpp</in>
+              <in>moc_mslider.cpp</in>
+              <in>moc_panknob.cpp</in>
+              <in>moc_pitchedit.cpp</in>
+              <in>moc_pitchlabel.cpp</in>
+              <in>moc_poslabel.cpp</in>
+              <in>moc_slider.cpp</in>
+              <in>moc_volknob.cpp</in>
+              <in>moc_volslider.cpp</in>
+            </df>
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+          <df name="CMakeFiles">
+            <df name="awl.dir">
+              <df name="awl_autogen">
+              </df>
+            </df>
+            <df name="awl_autogen.dir">
+            </df>
+            <df name="awlplugin.dir">
+              <df name="awlplugin_autogen">
+              </df>
+            </df>
+            <df name="awlplugin_autogen.dir">
+            </df>
+          </df>
+        </df>
+        <df name="bww2mxml">
+          <df name="bww_autogen">
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+          <df name="CMakeFiles">
+            <df name="bww.dir">
+              <df name="bww_autogen">
+              </df>
+            </df>
+            <df name="bww_autogen.dir">
+            </df>
+          </df>
+        </df>
+        <df name="CMakeFiles">
+          <df name="3.11.3">
+            <df name="CompilerIdC">
+              <df name="tmp">
+              </df>
+              <in>CMakeCCompilerId.c</in>
+            </df>
+            <df name="CompilerIdCXX">
+              <df name="tmp">
+              </df>
+              <in>CMakeCXXCompilerId.cpp</in>
+            </df>
+          </df>
+          <df name="CMakeTmp">
+          </df>
+          <df name="lrelease.dir">
+          </df>
+          <df name="lupdate.dir">
+          </df>
+          <df name="mops1.dir">
+          </df>
+          <df name="mops2.dir">
+          </df>
+          <in>feature_tests.c</in>
+          <in>feature_tests.cxx</in>
+        </df>
+        <df name="demos">
+          <df name="CMakeFiles">
+          </df>
+        </df>
+        <df name="effects">
+          <df name="CMakeFiles">
+            <df name="effects.dir">
+              <df name="compressor">
+              </df>
+              <df name="effects_autogen">
+              </df>
+              <df name="noeffect">
+              </df>
+              <df name="zita1">
+              </df>
+            </df>
+            <df name="effects_autogen.dir">
+            </df>
+          </df>
+          <df name="effects_autogen">
+            <df name="4IIPVNU5RA">
+              <in>moc_zita.cpp</in>
+              <in>moc_zitagui.cpp</in>
+            </df>
+            <df name="EWIEGA46WW">
+              <in>moc_effect.cpp</in>
+              <in>moc_effectgui.cpp</in>
+            </df>
+            <df name="include">
+              <in>compressorgui.moc</in>
+            </df>
+            <df name="JNTDVNR4OP">
+              <in>moc_compressor.cpp</in>
+            </df>
+            <df name="VMHUOYGFMC">
+              <in>moc_noeffect.cpp</in>
+              <in>moc_noeffectgui.cpp</in>
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+          <df name="zita1">
+          </df>
+          <in>qrc_zita.cpp</in>
+          <in>ui_compressor_gui.h</in>
+        </df>
+        <df name="fluid">
+          <df name="CMakeFiles">
+            <df name="fluid.dir">
+              <df name="fluid_autogen">
+              </df>
+            </df>
+            <df name="fluid_autogen.dir">
+            </df>
+          </df>
+          <df name="fluid_autogen">
+            <df name="EWIEGA46WW">
+              <in>moc_fluidgui.cpp</in>
+            </df>
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+          <in>ui_fluid_gui.h</in>
+        </df>
+        <df name="fonttools">
+          <df name="CMakeFiles">
+            <df name="genft.dir">
+              <df name="genft_autogen">
+              </df>
+            </df>
+            <df name="genft_autogen.dir">
+            </df>
+          </df>
+        </df>
+        <df name="include">
+          <df name="freetype">
+            <df name="config">
+              <in>ftconfig.h</in>
+              <in>ftoption.h</in>
+            </df>
+          </df>
+        </df>
+        <df name="libmscore">
+          <df name="CMakeFiles">
+            <df name="libmscore.dir">
+              <df name="libmscore_autogen">
+              </df>
+            </df>
+            <df name="libmscore_autogen.dir">
+            </df>
+          </df>
+          <df name="libmscore_autogen">
+            <df name="EWIEGA46WW">
+              <in>moc_cursor.cpp</in>
+              <in>moc_fraction.cpp</in>
+              <in>moc_plugins.cpp</in>
+              <in>moc_score.cpp</in>
+              <in>moc_types.cpp</in>
+            </df>
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+        </df>
+        <df name="midi">
+          <df name="CMakeFiles">
+            <df name="midi.dir">
+              <df name="midi_autogen">
+              </df>
+            </df>
+            <df name="midi_autogen.dir">
+            </df>
+          </df>
+          <df name="midi_autogen">
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+        </df>
+        <df name="miditools">
+          <df name="CMakeFiles">
+            <df name="smf2xml.dir">
+              <df name="smf2xml_autogen">
+              </df>
+            </df>
+            <df name="smf2xml_autogen.dir">
+            </df>
+            <df name="xml2smf.dir">
+              <df name="xml2smf_autogen">
+              </df>
+            </df>
+            <df name="xml2smf_autogen.dir">
+            </df>
+          </df>
+        </df>
+        <df name="mscore">
+          <df name="CMakeFiles">
+            <df name="mscore.dir">
+              <df name="debugger">
+              </df>
+              <df name="importmidi">
+              </df>
+              <df name="inspector">
+              </df>
+              <df name="mscore_autogen">
+              </df>
+            </df>
+            <df name="mscore_autogen.dir">
+            </df>
+          </df>
+          <df name="mscore_autogen">
+            <df name="EWIEGA46WW">
+              <in>moc_abstractdialog.cpp</in>
+              <in>moc_accessibletoolbutton.cpp</in>
+              <in>moc_albummanager.cpp</in>
+              <in>moc_articulationprop.cpp</in>
+              <in>moc_bendcanvas.cpp</in>
+              <in>moc_bendproperties.cpp</in>
+              <in>moc_breaksdialog.cpp</in>
+              <in>moc_chordview.cpp</in>
+              <in>moc_downloadUtils.cpp</in>
+              <in>moc_drumroll.cpp</in>
+              <in>moc_drumtools.cpp</in>
+              <in>moc_drumview.cpp</in>
+              <in>moc_editdrumset.cpp</in>
+              <in>moc_editinstrument.cpp</in>
+              <in>moc_editpitch.cpp</in>
+              <in>moc_editraster.cpp</in>
+              <in>moc_editstaff.cpp</in>
+              <in>moc_editstafftype.cpp</in>
+              <in>moc_editstringdata.cpp</in>
+              <in>moc_editstyle.cpp</in>
+              <in>moc_exampleview.cpp</in>
+              <in>moc_excerptsdialog.cpp</in>
+              <in>moc_file.cpp</in>
+              <in>moc_fretcanvas.cpp</in>
+              <in>moc_fretproperties.cpp</in>
+              <in>moc_greendotbutton.cpp</in>
+              <in>moc_harmonycanvas.cpp</in>
+              <in>moc_harmonyedit.cpp</in>
+              <in>moc_help.cpp</in>
+              <in>moc_helpBrowser.cpp</in>
+              <in>moc_instrdialog.cpp</in>
+              <in>moc_instrwidget.cpp</in>
+              <in>moc_keycanvas.cpp</in>
+              <in>moc_keyedit.cpp</in>
+              <in>moc_layer.cpp</in>
+              <in>moc_logindialog.cpp</in>
+              <in>moc_loginmanager.cpp</in>
+              <in>moc_magbox.cpp</in>
+              <in>moc_masterpalette.cpp</in>
+              <in>moc_measureproperties.cpp</in>
+              <in>moc_mediadialog.cpp</in>
+              <in>moc_metaedit.cpp</in>
+              <in>moc_mixer.cpp</in>
+              <in>moc_musescore.cpp</in>
+              <in>moc_navigator.cpp</in>
+              <in>moc_newwizard.cpp</in>
+              <in>moc_noteGroups.cpp</in>
+              <in>moc_omrpanel.cpp</in>
+              <in>moc_pagesettings.cpp</in>
+              <in>moc_palette.cpp</in>
+              <in>moc_paletteBoxButton.cpp</in>
+              <in>moc_palettebox.cpp</in>
+              <in>moc_pathlistdialog.cpp</in>
+              <in>moc_piano.cpp</in>
+              <in>moc_pianoroll.cpp</in>
+              <in>moc_pianotools.cpp</in>
+              <in>moc_pianoview.cpp</in>
+              <in>moc_playpanel.cpp</in>
+              <in>moc_pluginCreator.cpp</in>
+              <in>moc_pluginManager.cpp</in>
+              <in>moc_prefsdialog.cpp</in>
+              <in>moc_qmledit.cpp</in>
+              <in>moc_qmlplugin.cpp</in>
+              <in>moc_recordbutton.cpp</in>
+              <in>moc_resourceManager.cpp</in>
+              <in>moc_ruler.cpp</in>
+              <in>moc_scoreBrowser.cpp</in>
+              <in>moc_scorePreview.cpp</in>
+              <in>moc_scoreaccessibility.cpp</in>
+              <in>moc_scoretab.cpp</in>
+              <in>moc_scoreview.cpp</in>
+              <in>moc_searchComboBox.cpp</in>
+              <in>moc_sectionbreakprop.cpp</in>
+              <in>moc_selectdialog.cpp</in>
+              <in>moc_selectionwindow.cpp</in>
+              <in>moc_selectnotedialog.cpp</in>
+              <in>moc_selinstrument.cpp</in>
+              <in>moc_seq.cpp</in>
+              <in>moc_shortcutcapturedialog.cpp</in>
+              <in>moc_simplebutton.cpp</in>
+              <in>moc_splitstaff.cpp</in>
+              <in>moc_stafftextproperties.cpp</in>
+              <in>moc_startcenter.cpp</in>
+              <in>moc_startupWizard.cpp</in>
+              <in>moc_stringutils.cpp</in>
+              <in>moc_symboldialog.cpp</in>
+              <in>moc_synthcontrol.cpp</in>
+              <in>moc_textpalette.cpp</in>
+              <in>moc_texttools.cpp</in>
+              <in>moc_timedialog.cpp</in>
+              <in>moc_timeline.cpp</in>
+              <in>moc_timesigproperties.cpp</in>
+              <in>moc_toolbarEditor.cpp</in>
+              <in>moc_toolbuttonmenu.cpp</in>
+              <in>moc_transposedialog.cpp</in>
+              <in>moc_tremolobarcanvas.cpp</in>
+              <in>moc_tremolobarprop.cpp</in>
+              <in>moc_tupletdialog.cpp</in>
+              <in>moc_updatechecker.cpp</in>
+              <in>moc_uploadscoredialog.cpp</in>
+              <in>moc_waveview.cpp</in>
+              <in>moc_workspace.cpp</in>
+            </df>
+            <df name="FGLUUE7X6T">
+              <in>moc_importmidi_delegate.cpp</in>
+              <in>moc_importmidi_panel.cpp</in>
+              <in>moc_importmidi_view.cpp</in>
+            </df>
+            <df name="include">
+            </df>
+            <df name="L7N3VMFSKL">
+              <in>moc_alignSelect.cpp</in>
+              <in>moc_inspector.cpp</in>
+              <in>moc_inspectorAmbitus.cpp</in>
+              <in>moc_inspectorArpeggio.cpp</in>
+              <in>moc_inspectorBarline.cpp</in>
+              <in>moc_inspectorBase.cpp</in>
+              <in>moc_inspectorBeam.cpp</in>
+              <in>moc_inspectorDynamic.cpp</in>
+              <in>moc_inspectorElementBase.cpp</in>
+              <in>moc_inspectorFingering.cpp</in>
+              <in>moc_inspectorFret.cpp</in>
+              <in>moc_inspectorGlissando.cpp</in>
+              <in>moc_inspectorGroupElement.cpp</in>
+              <in>moc_inspectorHairpin.cpp</in>
+              <in>moc_inspectorImage.cpp</in>
+              <in>moc_inspectorJump.cpp</in>
+              <in>moc_inspectorLasso.cpp</in>
+              <in>moc_inspectorMarker.cpp</in>
+              <in>moc_inspectorNote.cpp</in>
+              <in>moc_inspectorOttava.cpp</in>
+              <in>moc_inspectorText.cpp</in>
+              <in>moc_inspectorTextBase.cpp</in>
+              <in>moc_inspectorTextLine.cpp</in>
+              <in>moc_inspectorTrill.cpp</in>
+              <in>moc_inspectorVolta.cpp</in>
+              <in>moc_offsetSelect.cpp</in>
+              <in>moc_scaleSelect.cpp</in>
+              <in>moc_sizeSelect.cpp</in>
+            </df>
+            <df name="TBDDORYXJM">
+              <in>moc_debugger.cpp</in>
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+          <in>qrc_musescore.cpp</in>
+          <in>qrc_musescorefonts-Bravura.cpp</in>
+          <in>qrc_musescorefonts-Free.cpp</in>
+          <in>qrc_musescorefonts-FreeSerif.cpp</in>
+          <in>qrc_musescorefonts-Gootville.cpp</in>
+          <in>qrc_musescorefonts-MScore.cpp</in>
+          <in>qrc_musescorefonts-MuseJazz.cpp</in>
+          <in>qrc_shortcut.cpp</in>
+          <in>ui_aboutbox.h</in>
+          <in>ui_aboutmusicxmlbox.h</in>
+          <in>ui_accidental.h</in>
+          <in>ui_albummanager.h</in>
+          <in>ui_align_select.h</in>
+          <in>ui_articulation.h</in>
+          <in>ui_articulationbase.h</in>
+          <in>ui_barline.h</in>
+          <in>ui_beam.h</in>
+          <in>ui_bend.h</in>
+          <in>ui_box.h</in>
+          <in>ui_bracket.h</in>
+          <in>ui_breaksdialog.h</in>
+          <in>ui_cellproperties.h</in>
+          <in>ui_chord.h</in>
+          <in>ui_chordrest.h</in>
+          <in>ui_clef.h</in>
+          <in>ui_debugger.h</in>
+          <in>ui_dynamic.h</in>
+          <in>ui_editdrumset.h</in>
+          <in>ui_editinstrument.h</in>
+          <in>ui_editpitch.h</in>
+          <in>ui_editraster.h</in>
+          <in>ui_editstaff.h</in>
+          <in>ui_editstafftype.h</in>
+          <in>ui_editstringdata.h</in>
+          <in>ui_editstyle.h</in>
+          <in>ui_element.h</in>
+          <in>ui_excerptsdialog.h</in>
+          <in>ui_fretdprops.h</in>
+          <in>ui_hairpin.h</in>
+          <in>ui_harmony.h</in>
+          <in>ui_harmonyedit.h</in>
+          <in>ui_importmidi_panel.h</in>
+          <in>ui_insertmeasuresdialog.h</in>
+          <in>ui_inspector_accidental.h</in>
+          <in>ui_inspector_ambitus.h</in>
+          <in>ui_inspector_arpeggio.h</in>
+          <in>ui_inspector_articulation.h</in>
+          <in>ui_inspector_barline.h</in>
+          <in>ui_inspector_beam.h</in>
+          <in>ui_inspector_bend.h</in>
+          <in>ui_inspector_bracket.h</in>
+          <in>ui_inspector_break.h</in>
+          <in>ui_inspector_caesura.h</in>
+          <in>ui_inspector_chord.h</in>
+          <in>ui_inspector_clef.h</in>
+          <in>ui_inspector_dynamic.h</in>
+          <in>ui_inspector_element.h</in>
+          <in>ui_inspector_empty.h</in>
+          <in>ui_inspector_fermata.h</in>
+          <in>ui_inspector_fingering.h</in>
+          <in>ui_inspector_frametext.h</in>
+          <in>ui_inspector_fret.h</in>
+          <in>ui_inspector_glissando.h</in>
+          <in>ui_inspector_group_element.h</in>
+          <in>ui_inspector_hairpin.h</in>
+          <in>ui_inspector_hbox.h</in>
+          <in>ui_inspector_image.h</in>
+          <in>ui_inspector_iname.h</in>
+          <in>ui_inspector_jump.h</in>
+          <in>ui_inspector_keysig.h</in>
+          <in>ui_inspector_lasso.h</in>
+          <in>ui_inspector_line.h</in>
+          <in>ui_inspector_lyric.h</in>
+          <in>ui_inspector_marker.h</in>
+          <in>ui_inspector_note.h</in>
+          <in>ui_inspector_ottava.h</in>
+          <in>ui_inspector_rest.h</in>
+          <in>ui_inspector_segment.h</in>
+          <in>ui_inspector_slur.h</in>
+          <in>ui_inspector_spacer.h</in>
+          <in>ui_inspector_stafftext.h</in>
+          <in>ui_inspector_stafftypechange.h</in>
+          <in>ui_inspector_stem.h</in>
+          <in>ui_inspector_tbox.h</in>
+          <in>ui_inspector_tempotext.h</in>
+          <in>ui_inspector_text.h</in>
+          <in>ui_inspector_textline.h</in>
+          <in>ui_inspector_timesig.h</in>
+          <in>ui_inspector_tremolo.h</in>
+          <in>ui_inspector_trill.h</in>
+          <in>ui_inspector_tuplet.h</in>
+          <in>ui_inspector_vbox.h</in>
+          <in>ui_inspector_volta.h</in>
+          <in>ui_instrdialog.h</in>
+          <in>ui_instrwidget.h</in>
+          <in>ui_instrwizard.h</in>
+          <in>ui_keyedit.h</in>
+          <in>ui_keysig.h</in>
+          <in>ui_layer.h</in>
+          <in>ui_line.h</in>
+          <in>ui_linesegment.h</in>
+          <in>ui_logindialog.h</in>
+          <in>ui_lyrics.h</in>
+          <in>ui_masterpalette.h</in>
+          <in>ui_measure.h</in>
+          <in>ui_measureproperties.h</in>
+          <in>ui_measuresdialog.h</in>
+          <in>ui_mediadialog.h</in>
+          <in>ui_metaedit.h</in>
+          <in>ui_mixer.h</in>
+          <in>ui_newwizard.h</in>
+          <in>ui_note.h</in>
+          <in>ui_note_groups.h</in>
+          <in>ui_offset_select.h</in>
+          <in>ui_omrpanel.h</in>
+          <in>ui_page.h</in>
+          <in>ui_pagesettings.h</in>
+          <in>ui_palette.h</in>
+          <in>ui_pathlistdialog.h</in>
+          <in>ui_playpanel.h</in>
+          <in>ui_pluginCreator.h</in>
+          <in>ui_pluginManager.h</in>
+          <in>ui_prefsdialog.h</in>
+          <in>ui_resourceManager.h</in>
+          <in>ui_rest.h</in>
+          <in>ui_scale_select.h</in>
+          <in>ui_scoreBrowser.h</in>
+          <in>ui_scorePreview.h</in>
+          <in>ui_sectionbreak.h</in>
+          <in>ui_segment.h</in>
+          <in>ui_selectdialog.h</in>
+          <in>ui_selectinstr.h</in>
+          <in>ui_selectnotedialog.h</in>
+          <in>ui_shortcutcapturedialog.h</in>
+          <in>ui_size_select.h</in>
+          <in>ui_slursegment.h</in>
+          <in>ui_slurtie.h</in>
+          <in>ui_spanner.h</in>
+          <in>ui_splitstaff.h</in>
+          <in>ui_stafftext.h</in>
+          <in>ui_stafftypetemplates.h</in>
+          <in>ui_startcenter.h</in>
+          <in>ui_stem.h</in>
+          <in>ui_symboldialog.h</in>
+          <in>ui_synthcontrol.h</in>
+          <in>ui_system.h</in>
+          <in>ui_text.h</in>
+          <in>ui_textline.h</in>
+          <in>ui_textpalette.h</in>
+          <in>ui_tie.h</in>
+          <in>ui_tiesegment.h</in>
+          <in>ui_timedialog.h</in>
+          <in>ui_timesig.h</in>
+          <in>ui_timesigproperties.h</in>
+          <in>ui_timesigwizard.h</in>
+          <in>ui_toolbarEditor.h</in>
+          <in>ui_transposedialog.h</in>
+          <in>ui_tremolo.h</in>
+          <in>ui_tremolobar.h</in>
+          <in>ui_tuplet.h</in>
+          <in>ui_tupletdialog.h</in>
+          <in>ui_uploadscoredialog.h</in>
+        </df>
+        <df name="mtest">
+          <df name="__">
+            <df name="mscore">
+            </df>
+          </df>
+          <df name="biab">
+            <df name="CMakeFiles">
+              <df name="tst_biab.dir">
+                <df name="tst_biab_autogen">
+                </df>
+              </df>
+              <df name="tst_biab_autogen.dir">
+              </df>
+            </df>
+          </df>
+          <df name="capella">
+            <df name="CMakeFiles">
+            </df>
+            <df name="io">
+              <df name="CMakeFiles">
+                <df name="tst_capella_io.dir">
+                  <df name="tst_capella_io_autogen">
+                  </df>
+                </df>
+                <df name="tst_capella_io_autogen.dir">
+                </df>
+              </df>
+            </df>
+          </df>
+          <df name="CMakeFiles">
+            <df name="mtest.dir">
+              <df name="mtest_autogen">
+              </df>
+            </df>
+            <df name="mtest_autogen.dir">
+            </df>
+            <df name="report.dir">
+            </df>
+            <df name="reporthtml.dir">
+            </df>
+            <df name="testResources.dir">
+              <df name="testResources_autogen">
+              </df>
+            </df>
+            <df name="testResources_autogen.dir">
+            </df>
+            <df name="testutils.dir">
+              <df name="__">
+                <df name="libmscore">
+                </df>
+                <df name="mscore">
+                  <df name="importmidi">
+                  </df>
+                </df>
+                <df name="omr">
+                </df>
+                <df name="thirdparty">
+                  <df name="beatroot">
+                  </df>
+                  <df name="rtf2html">
+                  </df>
+                </df>
+              </df>
+              <df name="testutils_autogen">
+              </df>
+            </df>
+            <df name="testutils_autogen.dir">
+            </df>
+          </df>
+          <df name="guitarpro">
+            <df name="CMakeFiles">
+              <df name="tst_guitarpro.dir">
+                <df name="tst_guitarpro_autogen">
+                </df>
+              </df>
+              <df name="tst_guitarpro_autogen.dir">
+              </df>
+            </df>
+          </df>
+          <df name="importmidi">
+            <df name="CMakeFiles">
+              <df name="tst_importmidi.dir">
+                <df name="tst_importmidi_autogen">
+                </df>
+              </df>
+              <df name="tst_importmidi_autogen.dir">
+              </df>
+            </df>
+          </df>
+          <df name="libmscore">
+            <df name="barline">
+              <df name="CMakeFiles">
+                <df name="tst_barline.dir">
+                  <df name="tst_barline_autogen">
+                  </df>
+                </df>
+                <df name="tst_barline_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="beam">
+              <df name="CMakeFiles">
+                <df name="tst_beam.dir">
+                  <df name="tst_beam_autogen">
+                  </df>
+                </df>
+                <df name="tst_beam_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="breath">
+              <df name="CMakeFiles">
+                <df name="tst_breath.dir">
+                  <df name="tst_breath_autogen">
+                  </df>
+                </df>
+                <df name="tst_breath_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="chordsymbol">
+              <df name="CMakeFiles">
+                <df name="tst_chordsymbol.dir">
+                  <df name="tst_chordsymbol_autogen">
+                  </df>
+                </df>
+                <df name="tst_chordsymbol_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="clef">
+              <df name="CMakeFiles">
+                <df name="tst_clef.dir">
+                  <df name="tst_clef_autogen">
+                  </df>
+                </df>
+                <df name="tst_clef_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="clef_courtesy">
+              <df name="CMakeFiles">
+                <df name="tst_clef_courtesy.dir">
+                  <df name="tst_clef_courtesy_autogen">
+                  </df>
+                </df>
+                <df name="tst_clef_courtesy_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="compat206">
+              <df name="CMakeFiles">
+                <df name="tst_compat206.dir">
+                  <df name="tst_compat206_autogen">
+                  </df>
+                </df>
+                <df name="tst_compat206_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="concertpitch">
+              <df name="CMakeFiles">
+                <df name="tst_concertpitchbenchmark.dir">
+                  <df name="tst_concertpitchbenchmark_autogen">
+                  </df>
+                </df>
+                <df name="tst_concertpitchbenchmark_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="copypaste">
+              <df name="CMakeFiles">
+                <df name="tst_copypaste.dir">
+                  <df name="tst_copypaste_autogen">
+                  </df>
+                </df>
+                <df name="tst_copypaste_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="copypastesymbollist">
+              <df name="CMakeFiles">
+                <df name="tst_copypastesymbollist.dir">
+                  <df name="tst_copypastesymbollist_autogen">
+                  </df>
+                </df>
+                <df name="tst_copypastesymbollist_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="durationtype">
+              <df name="CMakeFiles">
+                <df name="tst_durationtype.dir">
+                  <df name="tst_durationtype_autogen">
+                  </df>
+                </df>
+                <df name="tst_durationtype_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="dynamic">
+              <df name="CMakeFiles">
+                <df name="tst_dynamic.dir">
+                  <df name="tst_dynamic_autogen">
+                  </df>
+                </df>
+                <df name="tst_dynamic_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="earlymusic">
+              <df name="CMakeFiles">
+                <df name="tst_earlymusic.dir">
+                  <df name="tst_earlymusic_autogen">
+                  </df>
+                </df>
+                <df name="tst_earlymusic_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="element">
+              <df name="CMakeFiles">
+                <df name="tst_element.dir">
+                  <df name="tst_element_autogen">
+                  </df>
+                </df>
+                <df name="tst_element_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="exchangevoices">
+              <df name="CMakeFiles">
+                <df name="tst_exchangevoices.dir">
+                  <df name="tst_exchangevoices_autogen">
+                  </df>
+                </df>
+                <df name="tst_exchangevoices_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="hairpin">
+              <df name="CMakeFiles">
+                <df name="tst_hairpin.dir">
+                  <df name="tst_hairpin_autogen">
+                  </df>
+                </df>
+                <df name="tst_hairpin_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="implode_explode">
+              <df name="CMakeFiles">
+                <df name="tst_implodeExplode.dir">
+                  <df name="tst_implodeExplode_autogen">
+                  </df>
+                </df>
+                <df name="tst_implodeExplode_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="instrumentchange">
+              <df name="CMakeFiles">
+                <df name="tst_instrumentchange.dir">
+                  <df name="tst_instrumentchange_autogen">
+                  </df>
+                </df>
+                <df name="tst_instrumentchange_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="join">
+              <df name="CMakeFiles">
+                <df name="tst_join.dir">
+                  <df name="tst_join_autogen">
+                  </df>
+                </df>
+                <df name="tst_join_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="keysig">
+              <df name="CMakeFiles">
+                <df name="tst_keysig.dir">
+                  <df name="tst_keysig_autogen">
+                  </df>
+                </df>
+                <df name="tst_keysig_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="layout">
+              <df name="CMakeFiles">
+                <df name="tst_benchmark.dir">
+                  <df name="tst_benchmark_autogen">
+                  </df>
+                </df>
+                <df name="tst_benchmark_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="links">
+              <df name="CMakeFiles">
+                <df name="tst_links.dir">
+                  <df name="tst_links_autogen">
+                  </df>
+                </df>
+                <df name="tst_links_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="measure">
+              <df name="CMakeFiles">
+                <df name="tst_measure.dir">
+                  <df name="tst_measure_autogen">
+                  </df>
+                </df>
+                <df name="tst_measure_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="midi">
+              <df name="CMakeFiles">
+                <df name="tst_midi.dir">
+                  <df name="tst_midi_autogen">
+                  </df>
+                </df>
+                <df name="tst_midi_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="note">
+              <df name="CMakeFiles">
+                <df name="tst_note.dir">
+                  <df name="tst_note_autogen">
+                  </df>
+                </df>
+                <df name="tst_note_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="parts">
+              <df name="CMakeFiles">
+                <df name="tst_parts.dir">
+                  <df name="tst_parts_autogen">
+                  </df>
+                </df>
+                <df name="tst_parts_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="repeat">
+              <df name="CMakeFiles">
+                <df name="tst_repeat.dir">
+                  <df name="tst_repeat_autogen">
+                  </df>
+                </df>
+                <df name="tst_repeat_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="rhythmicGrouping">
+              <df name="CMakeFiles">
+                <df name="tst_rhythmicGrouping.dir">
+                  <df name="tst_rhythmicGrouping_autogen">
+                  </df>
+                </df>
+                <df name="tst_rhythmicGrouping_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="selectionfilter">
+              <df name="CMakeFiles">
+                <df name="tst_selectionfilter.dir">
+                  <df name="tst_selectionfilter_autogen">
+                  </df>
+                </df>
+                <df name="tst_selectionfilter_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="selectionrangedelete">
+              <df name="CMakeFiles">
+                <df name="tst_selectionrangedelete.dir">
+                  <df name="tst_selectionrangedelete_autogen">
+                  </df>
+                </df>
+                <df name="tst_selectionrangedelete_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="spanners">
+              <df name="CMakeFiles">
+                <df name="tst_spanners.dir">
+                  <df name="tst_spanners_autogen">
+                  </df>
+                </df>
+                <df name="tst_spanners_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="split">
+              <df name="CMakeFiles">
+                <df name="tst_split.dir">
+                  <df name="tst_split_autogen">
+                  </df>
+                </df>
+                <df name="tst_split_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="splitstaff">
+              <df name="CMakeFiles">
+                <df name="tst_splitstaff.dir">
+                  <df name="tst_splitstaff_autogen">
+                  </df>
+                </df>
+                <df name="tst_splitstaff_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="timesig">
+              <df name="CMakeFiles">
+                <df name="tst_timesig.dir">
+                  <df name="tst_timesig_autogen">
+                  </df>
+                </df>
+                <df name="tst_timesig_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="tools">
+              <df name="CMakeFiles">
+                <df name="tst_tools.dir">
+                  <df name="tst_tools_autogen">
+                  </df>
+                </df>
+                <df name="tst_tools_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="transpose">
+              <df name="CMakeFiles">
+                <df name="tst_transpose.dir">
+                  <df name="tst_transpose_autogen">
+                  </df>
+                </df>
+                <df name="tst_transpose_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="tuplet">
+              <df name="CMakeFiles">
+                <df name="tst_tuplet.dir">
+                  <df name="tst_tuplet_autogen">
+                  </df>
+                </df>
+                <df name="tst_tuplet_autogen.dir">
+                </df>
+              </df>
+            </df>
+          </df>
+          <df name="musicxml">
+            <df name="CMakeFiles">
+            </df>
+            <df name="io">
+              <df name="CMakeFiles">
+                <df name="tst_mxml_io.dir">
+                  <df name="tst_mxml_io_autogen">
+                  </df>
+                </df>
+                <df name="tst_mxml_io_autogen.dir">
+                </df>
+              </df>
+            </df>
+          </df>
+          <df name="omr">
+            <df name="CMakeFiles">
+            </df>
+            <df name="notes">
+              <df name="CMakeFiles">
+                <df name="tst_notes.dir">
+                  <df name="tst_notes_autogen">
+                  </df>
+                </df>
+                <df name="tst_notes_autogen.dir">
+                </df>
+              </df>
+            </df>
+          </df>
+          <df name="scripting">
+            <df name="CMakeFiles">
+              <df name="tst_scripting.dir">
+                <df name="tst_scripting_autogen">
+                </df>
+              </df>
+              <df name="tst_scripting_autogen.dir">
+              </df>
+            </df>
+          </df>
+          <df name="stringutils">
+            <df name="CMakeFiles">
+              <df name="tst_stringutils.dir">
+                <df name="tst_stringutils_autogen">
+                </df>
+              </df>
+              <df name="tst_stringutils_autogen.dir">
+              </df>
+            </df>
+          </df>
+          <df name="zerberus">
+            <df name="comments">
+              <df name="CMakeFiles">
+                <df name="tst_sfzcomments.dir">
+                  <df name="tst_sfzcomments_autogen">
+                  </df>
+                </df>
+                <df name="tst_sfzcomments_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="envelopes">
+              <df name="CMakeFiles">
+                <df name="tst_sfzenvelopes.dir">
+                  <df name="tst_sfzenvelopes_autogen">
+                  </df>
+                </df>
+                <df name="tst_sfzenvelopes_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="global">
+              <df name="CMakeFiles">
+                <df name="tst_sfzglobal.dir">
+                  <df name="tst_sfzglobal_autogen">
+                  </df>
+                </df>
+                <df name="tst_sfzglobal_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="includes">
+              <df name="CMakeFiles">
+                <df name="tst_sfzincludes.dir">
+                  <df name="tst_sfzincludes_autogen">
+                  </df>
+                </df>
+                <df name="tst_sfzincludes_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="inputControls">
+              <df name="CMakeFiles">
+                <df name="tst_sfzinputcontrols.dir">
+                  <df name="tst_sfzinputcontrols_autogen">
+                  </df>
+                </df>
+                <df name="tst_sfzinputcontrols_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="loop">
+              <df name="CMakeFiles">
+                <df name="tst_sfzloop.dir">
+                  <df name="tst_sfzloop_autogen">
+                  </df>
+                </df>
+                <df name="tst_sfzloop_autogen.dir">
+                </df>
+              </df>
+            </df>
+            <df name="opcodeparse">
+              <df name="CMakeFiles">
+                <df name="tst_sfzopcodes.dir">
+                  <df name="tst_sfzopcodes_autogen">
+                  </df>
+                </df>
+                <df name="tst_sfzopcodes_autogen.dir">
+                </df>
+              </df>
+            </df>
+          </df>
+        </df>
+        <df name="omr">
+          <df name="CMakeFiles">
+            <df name="omr.dir">
+              <df name="omr_autogen">
+              </df>
+            </df>
+            <df name="omr_autogen.dir">
+            </df>
+          </df>
+          <df name="omr_autogen">
+            <df name="EWIEGA46WW">
+              <in>moc_omrview.cpp</in>
+            </df>
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+        </df>
+        <df name="rdoc">
+          <df name="CMakeFiles">
+            <df name="referenceDocumentation.dir">
+            </df>
+          </df>
+        </df>
+        <df name="share">
+          <df name="CMakeFiles">
+          </df>
+          <df name="instruments">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+          <df name="locale">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+          <df name="manual">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+          <df name="sound">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+          <df name="styles">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+          <df name="templates">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+          <df name="wallpaper">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+          <df name="workspaces">
+            <df name="CMakeFiles">
+            </df>
+          </df>
+        </df>
+        <df name="synthesizer">
+          <df name="CMakeFiles">
+            <df name="synthesizer.dir">
+              <df name="synthesizer_autogen">
+              </df>
+            </df>
+            <df name="synthesizer_autogen.dir">
+            </df>
+          </df>
+          <df name="synthesizer_autogen">
+            <df name="EWIEGA46WW">
+              <in>moc_msynthesizer.cpp</in>
+              <in>moc_synthesizergui.cpp</in>
+            </df>
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+        </df>
+        <df name="thirdparty">
+          <df name="beatroot">
+            <df name="beatroot_autogen">
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+            <df name="CMakeFiles">
+              <df name="beatroot.dir">
+                <df name="beatroot_autogen">
+                </df>
+              </df>
+              <df name="beatroot_autogen.dir">
+              </df>
+            </df>
+          </df>
+          <df name="diff">
+            <df name="CMakeFiles">
+              <df name="diff_match_patch.dir">
+                <df name="diff_match_patch_autogen">
+                </df>
+              </df>
+              <df name="diff_match_patch_autogen.dir">
+              </df>
+            </df>
+            <df name="diff_match_patch_autogen">
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="freetype">
+            <df name="CMakeFiles">
+              <df name="mscore_freetype.dir">
+                <df name="builds">
+                  <df name="windows">
+                  </df>
+                </df>
+                <df name="mscore_freetype_autogen">
+                </df>
+                <df name="src">
+                  <df name="autofit">
+                  </df>
+                  <df name="base">
+                  </df>
+                  <df name="bdf">
+                  </df>
+                  <df name="bzip2">
+                  </df>
+                  <df name="cache">
+                  </df>
+                  <df name="cff">
+                  </df>
+                  <df name="cid">
+                  </df>
+                  <df name="gzip">
+                  </df>
+                  <df name="lzw">
+                  </df>
+                  <df name="pcf">
+                  </df>
+                  <df name="pfr">
+                  </df>
+                  <df name="psaux">
+                  </df>
+                  <df name="pshinter">
+                  </df>
+                  <df name="psnames">
+                  </df>
+                  <df name="raster">
+                  </df>
+                  <df name="sfnt">
+                  </df>
+                  <df name="smooth">
+                  </df>
+                  <df name="truetype">
+                  </df>
+                  <df name="type1">
+                  </df>
+                  <df name="type42">
+                  </df>
+                  <df name="winfonts">
+                  </df>
+                </df>
+              </df>
+              <df name="mscore_freetype_autogen.dir">
+              </df>
+            </df>
+            <df name="mscore_freetype_autogen">
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="kQOAuth">
+            <df name="CMakeFiles">
+              <df name="kqoauth.dir">
+                <df name="kqoauth_autogen">
+                </df>
+              </df>
+              <df name="kqoauth_autogen.dir">
+              </df>
+            </df>
+            <df name="kqoauth_autogen">
+              <df name="EWIEGA46WW">
+                <in>moc_kqoauthauthreplyserver.cpp</in>
+                <in>moc_kqoauthauthreplyserver_p.cpp</in>
+                <in>moc_kqoauthmanager.cpp</in>
+                <in>moc_kqoauthrequest.cpp</in>
+                <in>moc_kqoauthrequest_xauth.cpp</in>
+              </df>
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="ofqf">
+            <df name="CMakeFiles">
+              <df name="ofqf.dir">
+                <df name="ofqf_autogen">
+                </df>
+              </df>
+              <df name="ofqf_autogen.dir">
+              </df>
+            </df>
+            <df name="ofqf_autogen">
+              <df name="EWIEGA46WW">
+                <in>moc_qoscclient.cpp</in>
+                <in>moc_qoscserver.cpp</in>
+                <in>moc_qosctypes.cpp</in>
+              </df>
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="poppler">
+            <df name="CMakeFiles">
+              <df name="poppler.dir">
+                <df name="fofi">
+                </df>
+                <df name="goo">
+                </df>
+                <df name="poppler">
+                </df>
+                <df name="poppler_autogen">
+                </df>
+                <df name="qt5">
+                </df>
+                <df name="splash">
+                </df>
+              </df>
+              <df name="poppler_autogen.dir">
+              </df>
+            </df>
+            <df name="poppler_autogen">
+              <df name="include">
+                <in>poppler-optcontent.moc</in>
+              </df>
+              <df name="OXRBQHTNNB">
+                <in>moc_poppler-optcontent.cpp</in>
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="portmidi">
+            <df name="CMakeFiles">
+              <df name="portmidi.dir">
+                <df name="pm_common">
+                </df>
+                <df name="pm_win">
+                </df>
+                <df name="portmidi_autogen">
+                </df>
+                <df name="porttime">
+                </df>
+              </df>
+              <df name="portmidi_autogen.dir">
+              </df>
+            </df>
+            <df name="portmidi_autogen">
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="qzip">
+            <df name="CMakeFiles">
+              <df name="qzip.dir">
+                <df name="qzip_autogen">
+                </df>
+              </df>
+              <df name="qzip_autogen.dir">
+              </df>
+            </df>
+            <df name="qzip_autogen">
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="rtf2html">
+            <df name="CMakeFiles">
+              <df name="rtf2html.dir">
+                <df name="rtf2html_autogen">
+                </df>
+              </df>
+              <df name="rtf2html_autogen.dir">
+              </df>
+            </df>
+            <df name="rtf2html_autogen">
+              <df name="include">
+              </df>
+              <in>mocs_compilation.cpp</in>
+            </df>
+          </df>
+          <df name="singleapp">
+            <df name="CMakeFiles">
+            </df>
+            <df name="src">
+              <df name="CMakeFiles">
+                <df name="qtsingleapp.dir">
+                  <df name="qtsingleapp_autogen">
+                  </df>
+                </df>
+                <df name="qtsingleapp_autogen.dir">
+                </df>
+              </df>
+              <df name="qtsingleapp_autogen">
+                <df name="EWIEGA46WW">
+                  <in>moc_qtlocalpeer.cpp</in>
+                  <in>moc_qtsingleapplication.cpp</in>
+                </df>
+                <df name="include">
+                </df>
+                <in>mocs_compilation.cpp</in>
+              </df>
+            </df>
+          </df>
+        </df>
+        <df name="zerberus">
+          <df name="CMakeFiles">
+            <df name="zerberus.dir">
+              <df name="zerberus_autogen">
+              </df>
+            </df>
+            <df name="zerberus_autogen.dir">
+            </df>
+          </df>
+          <df name="zerberus_autogen">
+            <df name="EWIEGA46WW">
+              <in>moc_zerberusgui.cpp</in>
+            </df>
+            <df name="include">
+            </df>
+            <in>mocs_compilation.cpp</in>
+          </df>
+          <in>ui_zerberus_gui.h</in>
+        </df>
+        <in>all.h</in>
+        <in>config.h</in>
+      </df>
+      <df name="bww2mxml">
+        <df name="test">
+        </df>
+        <in>lexer.cpp</in>
+        <in>lexer.h</in>
+        <in>main.cpp</in>
+        <in>mxmlwriter.cpp</in>
+        <in>mxmlwriter.h</in>
+        <in>parser.cpp</in>
+        <in>parser.h</in>
+        <in>symbols.cpp</in>
+        <in>symbols.h</in>
+        <in>writer.cpp</in>
+        <in>writer.h</in>
+      </df>
+      <df name="CMakeFiles">
+        <df name="3.11.3">
+        </df>
+      </df>
+      <df name="demos">
+      </df>
+      <df name="effects">
+        <df name="chorus">
+          <in>cs_chorus.cc</in>
+          <in>cs_chorus.h</in>
+          <in>cs_chorus_if.cc</in>
+        </df>
+        <df name="compressor">
+          <in>compressor.cpp</in>
+          <in>compressor.h</in>
+          <in>compressorgui.cpp</in>
+        </df>
+        <df name="freeverb">
+          <in>freeverb.cpp</in>
+          <in>freeverb.h</in>
+          <in>freeverbgui.cpp</in>
+        </df>
+        <df name="noeffect">
+          <in>noeffect.cpp</in>
+          <in>noeffect.h</in>
+          <in>noeffectgui.h</in>
+        </df>
+        <df name="zita1">
+          <in>zita.cpp</in>
+          <in>zita.h</in>
+          <in>zitagui.cpp</in>
+          <in>zitagui.h</in>
+        </df>
+        <in>effect.cpp</in>
+        <in>effect.h</in>
+        <in>effectgui.cpp</in>
+        <in>effectgui.h</in>
+      </df>
+      <df name="fluid">
+        <in>chan.cpp</in>
+        <in>conv.cpp</in>
+        <in>conv.h</in>
+        <in>dsp.cpp</in>
+        <in>fluid.cpp</in>
+        <in>fluid.h</in>
+        <in>fluidgui.cpp</in>
+        <in>fluidgui.h</in>
+        <in>gen.cpp</in>
+        <in>gen.h</in>
+        <in>mod.cpp</in>
+        <in>sfont.cpp</in>
+        <in>sfont.h</in>
+        <in>sfont3.cpp</in>
+        <in>tuning.cpp</in>
+        <in>tuning.h</in>
+        <in>voice.cpp</in>
+        <in>voice.h</in>
+      </df>
+      <df name="fonts">
+        <df name="bravura">
+        </df>
+        <df name="gootville">
+        </df>
+        <df name="mscore">
+        </df>
+        <df name="musejazz">
+        </df>
+        <df name="smufl">
+        </df>
+      </df>
+      <df name="fonttools">
+        <in>genft.cpp</in>
+      </df>
+      <df name="libmscore">
+        <in>accidental.cpp</in>
+        <in>accidental.h</in>
+        <in>ambitus.cpp</in>
+        <in>ambitus.h</in>
+        <in>arpeggio.cpp</in>
+        <in>arpeggio.h</in>
+        <in>articulation.cpp</in>
+        <in>articulation.h</in>
+        <in>audio.cpp</in>
+        <in>audio.h</in>
+        <in>bagpembell.cpp</in>
+        <in>bagpembell.h</in>
+        <in>barline.cpp</in>
+        <in>barline.h</in>
+        <in>beam.cpp</in>
+        <in>beam.h</in>
+        <in>bend.cpp</in>
+        <in>bend.h</in>
+        <in>box.cpp</in>
+        <in>box.h</in>
+        <in>bracket.cpp</in>
+        <in>bracket.h</in>
+        <in>bracketItem.cpp</in>
+        <in>bracketItem.h</in>
+        <in>breath.cpp</in>
+        <in>breath.h</in>
+        <in>bsp.cpp</in>
+        <in>bsp.h</in>
+        <in>bsymbol.cpp</in>
+        <in>bsymbol.h</in>
+        <in>check.cpp</in>
+        <in>chord.cpp</in>
+        <in>chord.h</in>
+        <in>chordline.cpp</in>
+        <in>chordline.h</in>
+        <in>chordlist.cpp</in>
+        <in>chordlist.h</in>
+        <in>chordrest.cpp</in>
+        <in>chordrest.h</in>
+        <in>clef.cpp</in>
+        <in>clef.h</in>
+        <in>cleflist.cpp</in>
+        <in>cleflist.h</in>
+        <in>cmd.cpp</in>
+        <in>cursor.cpp</in>
+        <in>cursor.h</in>
+        <in>drumset.cpp</in>
+        <in>drumset.h</in>
+        <in>dsp.cpp</in>
+        <in>dsp.h</in>
+        <in>duration.cpp</in>
+        <in>duration.h</in>
+        <in>durationtype.cpp</in>
+        <in>durationtype.h</in>
+        <in>dynamic.cpp</in>
+        <in>dynamic.h</in>
+        <in>edit.cpp</in>
+        <in>element.cpp</in>
+        <in>element.h</in>
+        <in>elementlayout.cpp</in>
+        <in>elementlayout.h</in>
+        <in>elementmap.cpp</in>
+        <in>elementmap.h</in>
+        <in>excerpt.cpp</in>
+        <in>excerpt.h</in>
+        <in>fermata.cpp</in>
+        <in>fermata.h</in>
+        <in>fifo.cpp</in>
+        <in>fifo.h</in>
+        <in>figuredbass.cpp</in>
+        <in>figuredbass.h</in>
+        <in>fingering.cpp</in>
+        <in>fingering.h</in>
+        <in>fraction.cpp</in>
+        <in>fraction.h</in>
+        <in>fret.cpp</in>
+        <in>fret.h</in>
+        <in>glissando.cpp</in>
+        <in>glissando.h</in>
+        <in>groups.cpp</in>
+        <in>groups.h</in>
+        <in>hairpin.cpp</in>
+        <in>hairpin.h</in>
+        <in>harmony.cpp</in>
+        <in>harmony.h</in>
+        <in>hook.cpp</in>
+        <in>hook.h</in>
+        <in>icon.cpp</in>
+        <in>icon.h</in>
+        <in>image.cpp</in>
+        <in>image.h</in>
+        <in>imageStore.cpp</in>
+        <in>imageStore.h</in>
+        <in>iname.cpp</in>
+        <in>iname.h</in>
+        <in>input.cpp</in>
+        <in>input.h</in>
+        <in>instrchange.cpp</in>
+        <in>instrchange.h</in>
+        <in>instrtemplate.cpp</in>
+        <in>instrtemplate.h</in>
+        <in>instrument.cpp</in>
+        <in>instrument.h</in>
+        <in>interval.cpp</in>
+        <in>interval.h</in>
+        <in>joinMeasure.cpp</in>
+        <in>jump.cpp</in>
+        <in>jump.h</in>
+        <in>key.cpp</in>
+        <in>key.h</in>
+        <in>keyfinder.cpp</in>
+        <in>keyfinder.h</in>
+        <in>keylist.cpp</in>
+        <in>keylist.h</in>
+        <in>keysig.cpp</in>
+        <in>keysig.h</in>
+        <in>lasso.cpp</in>
+        <in>lasso.h</in>
+        <in>layout.cpp</in>
+        <in>layout.h</in>
+        <in>layoutbreak.cpp</in>
+        <in>layoutbreak.h</in>
+        <in>ledgerline.cpp</in>
+        <in>ledgerline.h</in>
+        <in>letring.cpp</in>
+        <in>letring.h</in>
+        <in>line.cpp</in>
+        <in>line.h</in>
+        <in>lyrics.cpp</in>
+        <in>lyrics.h</in>
+        <in>marker.cpp</in>
+        <in>marker.h</in>
+        <in>mcursor.cpp</in>
+        <in>mcursor.h</in>
+        <in>measure.cpp</in>
+        <in>measure.h</in>
+        <in>measurebase.cpp</in>
+        <in>measurebase.h</in>
+        <in>midimapping.cpp</in>
+        <in>mscore.cpp</in>
+        <in>mscore.h</in>
+        <in>mscoreview.cpp</in>
+        <in>mscoreview.h</in>
+        <in>musescoreCore.h</in>
+        <in>navigate.cpp</in>
+        <in>navigate.h</in>
+        <in>note.cpp</in>
+        <in>note.h</in>
+        <in>notedot.cpp</in>
+        <in>notedot.h</in>
+        <in>noteentry.cpp</in>
+        <in>noteevent.cpp</in>
+        <in>noteevent.h</in>
+        <in>noteline.cpp</in>
+        <in>noteline.h</in>
+        <in>ossia.cpp</in>
+        <in>ossia.h</in>
+        <in>ottava.cpp</in>
+        <in>ottava.h</in>
+        <in>page.cpp</in>
+        <in>page.h</in>
+        <in>palmmute.cpp</in>
+        <in>palmmute.h</in>
+        <in>part.cpp</in>
+        <in>part.h</in>
+        <in>paste.cpp</in>
+        <in>pedal.cpp</in>
+        <in>pedal.h</in>
+        <in>pitch.cpp</in>
+        <in>pitch.h</in>
+        <in>pitchspelling.cpp</in>
+        <in>pitchspelling.h</in>
+        <in>pitchvalue.h</in>
+        <in>plugins.cpp</in>
+        <in>plugins.h</in>
+        <in>pos.cpp</in>
+        <in>pos.h</in>
+        <in>property.cpp</in>
+        <in>property.h</in>
+        <in>range.cpp</in>
+        <in>range.h</in>
+        <in>read114.cpp</in>
+        <in>read206.cpp</in>
+        <in>read206.h</in>
+        <in>read300.cpp</in>
+        <in>rehearsalmark.cpp</in>
+        <in>rehearsalmark.h</in>
+        <in>rendermidi.cpp</in>
+        <in>repeat.cpp</in>
+        <in>repeat.h</in>
+        <in>repeatlist.cpp</in>
+        <in>repeatlist.h</in>
+        <in>rest.cpp</in>
+        <in>rest.h</in>
+        <in>revisions.cpp</in>
+        <in>revisions.h</in>
+        <in>score.cpp</in>
+        <in>score.h</in>
+        <in>scoreElement.cpp</in>
+        <in>scoreElement.h</in>
+        <in>scorefile.cpp</in>
+        <in>segment.cpp</in>
+        <in>segment.h</in>
+        <in>segmentlist.cpp</in>
+        <in>segmentlist.h</in>
+        <in>select.cpp</in>
+        <in>select.h</in>
+        <in>sequencer.h</in>
+        <in>shadownote.cpp</in>
+        <in>shadownote.h</in>
+        <in>shape.cpp</in>
+        <in>shape.h</in>
+        <in>sig.cpp</in>
+        <in>sig.h</in>
+        <in>slur.cpp</in>
+        <in>slur.h</in>
+        <in>slurtie.cpp</in>
+        <in>slurtie.h</in>
+        <in>spacer.cpp</in>
+        <in>spacer.h</in>
+        <in>spanner.cpp</in>
+        <in>spanner.h</in>
+        <in>spannermap.cpp</in>
+        <in>spannermap.h</in>
+        <in>spatium.h</in>
+        <in>splitMeasure.cpp</in>
+        <in>staff.cpp</in>
+        <in>staff.h</in>
+        <in>stafflines.cpp</in>
+        <in>stafflines.h</in>
+        <in>staffstate.cpp</in>
+        <in>staffstate.h</in>
+        <in>stafftext.cpp</in>
+        <in>stafftext.h</in>
+        <in>stafftype.cpp</in>
+        <in>stafftype.h</in>
+        <in>stafftypechange.cpp</in>
+        <in>stafftypechange.h</in>
+        <in>stafftypelist.cpp</in>
+        <in>stafftypelist.h</in>
+        <in>stem.cpp</in>
+        <in>stem.h</in>
+        <in>stemslash.cpp</in>
+        <in>stemslash.h</in>
+        <in>stringdata.cpp</in>
+        <in>stringdata.h</in>
+        <in>style.cpp</in>
+        <in>style.h</in>
+        <in>sym.cpp</in>
+        <in>sym.h</in>
+        <in>symbol.cpp</in>
+        <in>symbol.h</in>
+        <in>synthesizerstate.cpp</in>
+        <in>synthesizerstate.h</in>
+        <in>system.cpp</in>
+        <in>system.h</in>
+        <in>systemdivider.cpp</in>
+        <in>systemdivider.h</in>
+        <in>systemtext.cpp</in>
+        <in>systemtext.h</in>
+        <in>tempo.cpp</in>
+        <in>tempo.h</in>
+        <in>tempotext.cpp</in>
+        <in>tempotext.h</in>
+        <in>text.cpp</in>
+        <in>text.h</in>
+        <in>textedit.cpp</in>
+        <in>textedit.h</in>
+        <in>textframe.cpp</in>
+        <in>textframe.h</in>
+        <in>textline.cpp</in>
+        <in>textline.h</in>
+        <in>textlinebase.cpp</in>
+        <in>textlinebase.h</in>
+        <in>tie.cpp</in>
+        <in>tie.h</in>
+        <in>tiemap.h</in>
+        <in>timesig.cpp</in>
+        <in>timesig.h</in>
+        <in>transpose.cpp</in>
+        <in>tremolo.cpp</in>
+        <in>tremolo.h</in>
+        <in>tremolobar.cpp</in>
+        <in>tremolobar.h</in>
+        <in>trill.cpp</in>
+        <in>trill.h</in>
+        <in>tuplet.cpp</in>
+        <in>tuplet.h</in>
+        <in>tupletmap.h</in>
+        <in>types.h</in>
+        <in>undo.cpp</in>
+        <in>undo.h</in>
+        <in>utils.cpp</in>
+        <in>utils.h</in>
+        <in>velo.cpp</in>
+        <in>velo.h</in>
+        <in>vibrato.cpp</in>
+        <in>vibrato.h</in>
+        <in>volta.cpp</in>
+        <in>volta.h</in>
+        <in>xml.h</in>
+        <in>xmlreader.cpp</in>
+        <in>xmlwriter.cpp</in>
+      </df>
+      <df name="manual">
+        <in>genManual.cpp</in>
+      </df>
+      <df name="midi">
+        <in>midifile.cpp</in>
+        <in>midifile.h</in>
+        <in>midiinstrument.cpp</in>
+        <in>midiinstrument.h</in>
+      </df>
+      <df name="miditools">
+        <in>midievent.h</in>
+        <in>midifile.cpp</in>
+        <in>midifile.h</in>
+        <in>smf2xml.cpp</in>
+        <in>tempomap.cpp</in>
+        <in>tempomap.h</in>
+        <in>xml2smf.cpp</in>
+        <in>xmlreader.cpp</in>
+        <in>xmlreader.h</in>
+        <in>xmlwriter.cpp</in>
+        <in>xmlwriter.h</in>
+      </df>
+      <df name="mscore">
+        <df name="data">
+          <df name="icons">
+            <df name="png">
+            </df>
+          </df>
+        </df>
+        <df name="debugger">
+          <in>debugger.cpp</in>
+          <in>debugger.h</in>
+        </df>
+        <df name="importmidi">
+          <in>importmidi.cpp</in>
+          <in>importmidi_beat.cpp</in>
+          <in>importmidi_beat.h</in>
+          <in>importmidi_chord.cpp</in>
+          <in>importmidi_chord.h</in>
+          <in>importmidi_chordname.cpp</in>
+          <in>importmidi_chordname.h</in>
+          <in>importmidi_clef.cpp</in>
+          <in>importmidi_clef.h</in>
+          <in>importmidi_delegate.cpp</in>
+          <in>importmidi_delegate.h</in>
+          <in>importmidi_drum.cpp</in>
+          <in>importmidi_drum.h</in>
+          <in>importmidi_fraction.cpp</in>
+          <in>importmidi_fraction.h</in>
+          <in>importmidi_inner.cpp</in>
+          <in>importmidi_inner.h</in>
+          <in>importmidi_instrument.cpp</in>
+          <in>importmidi_instrument.h</in>
+          <in>importmidi_key.cpp</in>
+          <in>importmidi_key.h</in>
+          <in>importmidi_lrhand.cpp</in>
+          <in>importmidi_lrhand.h</in>
+          <in>importmidi_lyrics.cpp</in>
+          <in>importmidi_lyrics.h</in>
+          <in>importmidi_meter.cpp</in>
+          <in>importmidi_meter.h</in>
+          <in>importmidi_model.cpp</in>
+          <in>importmidi_model.h</in>
+          <in>importmidi_operation.h</in>
+          <in>importmidi_operations.cpp</in>
+          <in>importmidi_operations.h</in>
+          <in>importmidi_panel.cpp</in>
+          <in>importmidi_panel.h</in>
+          <in>importmidi_quant.cpp</in>
+          <in>importmidi_quant.h</in>
+          <in>importmidi_simplify.cpp</in>
+          <in>importmidi_simplify.h</in>
+          <in>importmidi_swing.cpp</in>
+          <in>importmidi_swing.h</in>
+          <in>importmidi_tempo.cpp</in>
+          <in>importmidi_tempo.h</in>
+          <in>importmidi_tie.cpp</in>
+          <in>importmidi_tie.h</in>
+          <in>importmidi_tuplet.cpp</in>
+          <in>importmidi_tuplet.h</in>
+          <in>importmidi_tuplet_detect.cpp</in>
+          <in>importmidi_tuplet_detect.h</in>
+          <in>importmidi_tuplet_filter.cpp</in>
+          <in>importmidi_tuplet_filter.h</in>
+          <in>importmidi_tuplet_tonotes.cpp</in>
+          <in>importmidi_tuplet_tonotes.h</in>
+          <in>importmidi_tuplet_voice.cpp</in>
+          <in>importmidi_tuplet_voice.h</in>
+          <in>importmidi_view.cpp</in>
+          <in>importmidi_view.h</in>
+          <in>importmidi_voice.cpp</in>
+          <in>importmidi_voice.h</in>
+        </df>
+        <df name="inspector">
+          <in>alignSelect.cpp</in>
+          <in>alignSelect.h</in>
+          <in>inspector.cpp</in>
+          <in>inspector.h</in>
+          <in>inspectorAmbitus.cpp</in>
+          <in>inspectorAmbitus.h</in>
+          <in>inspectorArpeggio.cpp</in>
+          <in>inspectorArpeggio.h</in>
+          <in>inspectorBarline.cpp</in>
+          <in>inspectorBarline.h</in>
+          <in>inspectorBase.cpp</in>
+          <in>inspectorBase.h</in>
+          <in>inspectorBeam.cpp</in>
+          <in>inspectorBeam.h</in>
+          <in>inspectorDynamic.cpp</in>
+          <in>inspectorDynamic.h</in>
+          <in>inspectorElementBase.cpp</in>
+          <in>inspectorElementBase.h</in>
+          <in>inspectorFingering.cpp</in>
+          <in>inspectorFingering.h</in>
+          <in>inspectorFret.cpp</in>
+          <in>inspectorFret.h</in>
+          <in>inspectorGlissando.cpp</in>
+          <in>inspectorGlissando.h</in>
+          <in>inspectorGroupElement.cpp</in>
+          <in>inspectorGroupElement.h</in>
+          <in>inspectorHairpin.cpp</in>
+          <in>inspectorHairpin.h</in>
+          <in>inspectorImage.cpp</in>
+          <in>inspectorImage.h</in>
+          <in>inspectorJump.cpp</in>
+          <in>inspectorJump.h</in>
+          <in>inspectorLasso.cpp</in>
+          <in>inspectorLasso.h</in>
+          <in>inspectorMarker.cpp</in>
+          <in>inspectorMarker.h</in>
+          <in>inspectorNote.cpp</in>
+          <in>inspectorNote.h</in>
+          <in>inspectorOttava.cpp</in>
+          <in>inspectorOttava.h</in>
+          <in>inspectorText.cpp</in>
+          <in>inspectorText.h</in>
+          <in>inspectorTextBase.cpp</in>
+          <in>inspectorTextBase.h</in>
+          <in>inspectorTextLine.cpp</in>
+          <in>inspectorTextLine.h</in>
+          <in>inspectorTrill.cpp</in>
+          <in>inspectorTrill.h</in>
+          <in>inspectorVolta.cpp</in>
+          <in>inspectorVolta.h</in>
+          <in>offsetSelect.cpp</in>
+          <in>offsetSelect.h</in>
+          <in>scaleSelect.cpp</in>
+          <in>scaleSelect.h</in>
+          <in>sizeSelect.cpp</in>
+          <in>sizeSelect.h</in>
+        </df>
+        <df name="macos">
+          <in>cocoabridge.h</in>
+          <in>cocoabridge.mm</in>
+        </df>
+        <df name="schema">
+        </df>
+        <in>abstractdialog.cpp</in>
+        <in>abstractdialog.h</in>
+        <in>accessibletoolbutton.cpp</in>
+        <in>accessibletoolbutton.h</in>
+        <in>albummanager.cpp</in>
+        <in>albummanager.h</in>
+        <in>alsa.cpp</in>
+        <in>alsa.h</in>
+        <in>alsamidi.h</in>
+        <in>analyse.h</in>
+        <in>articulationprop.cpp</in>
+        <in>articulationprop.h</in>
+        <in>bb.cpp</in>
+        <in>bb.h</in>
+        <in>bendcanvas.h</in>
+        <in>bendproperties.cpp</in>
+        <in>bendproperties.h</in>
+        <in>breaksdialog.cpp</in>
+        <in>breaksdialog.h</in>
+        <in>capella.cpp</in>
+        <in>capella.h</in>
+        <in>capxml.cpp</in>
+        <in>chordview.cpp</in>
+        <in>chordview.h</in>
+        <in>click.h</in>
+        <in>continuouspanel.cpp</in>
+        <in>continuouspanel.h</in>
+        <in>downloadUtils.cpp</in>
+        <in>downloadUtils.h</in>
+        <in>dragdrop.cpp</in>
+        <in>dragelement.cpp</in>
+        <in>driver.cpp</in>
+        <in>driver.h</in>
+        <in>drumroll.cpp</in>
+        <in>drumroll.h</in>
+        <in>drumtools.cpp</in>
+        <in>drumtools.h</in>
+        <in>drumview.cpp</in>
+        <in>drumview.h</in>
+        <in>editdrumset.cpp</in>
+        <in>editdrumset.h</in>
+        <in>editelement.cpp</in>
+        <in>editfiguredbass.cpp</in>
+        <in>editharmony.cpp</in>
+        <in>editinstrument.cpp</in>
+        <in>editinstrument.h</in>
+        <in>editlyrics.cpp</in>
+        <in>editpitch.cpp</in>
+        <in>editpitch.h</in>
+        <in>editraster.cpp</in>
+        <in>editraster.h</in>
+        <in>editstaff.cpp</in>
+        <in>editstaff.h</in>
+        <in>editstafftype.cpp</in>
+        <in>editstafftype.h</in>
+        <in>editstringdata.cpp</in>
+        <in>editstringdata.h</in>
+        <in>editstyle.cpp</in>
+        <in>editstyle.h</in>
+        <in>enableplayforwidget.cpp</in>
+        <in>enableplayforwidget.h</in>
+        <in>events.cpp</in>
+        <in>exampleview.cpp</in>
+        <in>exampleview.h</in>
+        <in>excerptsdialog.cpp</in>
+        <in>excerptsdialog.h</in>
+        <in>exportaudio.cpp</in>
+        <in>exportly.cpp</in>
+        <in>exportmidi.cpp</in>
+        <in>exportmidi.h</in>
+        <in>exportmp3.cpp</in>
+        <in>exportmp3.h</in>
+        <in>exportxml.cpp</in>
+        <in>file.cpp</in>
+        <in>file.h</in>
+        <in>fotomode.cpp</in>
+        <in>fotomode.h</in>
+        <in>fretcanvas.h</in>
+        <in>fretproperties.cpp</in>
+        <in>fretproperties.h</in>
+        <in>globals.h</in>
+        <in>greendotbutton.h</in>
+        <in>harmonycanvas.h</in>
+        <in>harmonyedit.cpp</in>
+        <in>harmonyedit.h</in>
+        <in>help.cpp</in>
+        <in>help.h</in>
+        <in>helpBrowser.cpp</in>
+        <in>helpBrowser.h</in>
+        <in>icons.cpp</in>
+        <in>icons.h</in>
+        <in>importbww.cpp</in>
+        <in>importgtp-gp4.cpp</in>
+        <in>importgtp-gp5.cpp</in>
+        <in>importgtp-gp6.cpp</in>
+        <in>importgtp.cpp</in>
+        <in>importgtp.h</in>
+        <in>importmxml.cpp</in>
+        <in>importmxml.h</in>
+        <in>importmxmllogger.cpp</in>
+        <in>importmxmllogger.h</in>
+        <in>importmxmlnoteduration.cpp</in>
+        <in>importmxmlnoteduration.h</in>
+        <in>importmxmlnotepitch.cpp</in>
+        <in>importmxmlnotepitch.h</in>
+        <in>importmxmlpass1.cpp</in>
+        <in>importmxmlpass1.h</in>
+        <in>importmxmlpass2.cpp</in>
+        <in>importmxmlpass2.h</in>
+        <in>importove.cpp</in>
+        <in>importptb.cpp</in>
+        <in>importptb.h</in>
+        <in>importxml.cpp</in>
+        <in>importxmlfirstpass.cpp</in>
+        <in>importxmlfirstpass.h</in>
+        <in>instrdialog.cpp</in>
+        <in>instrdialog.h</in>
+        <in>instrwidget.cpp</in>
+        <in>instrwidget.h</in>
+        <in>jackaudio.cpp</in>
+        <in>jackaudio.h</in>
+        <in>jackweakapi.cpp</in>
+        <in>keyb.cpp</in>
+        <in>keycanvas.h</in>
+        <in>keyedit.cpp</in>
+        <in>keyedit.h</in>
+        <in>layer.cpp</in>
+        <in>layer.h</in>
+        <in>licence.h</in>
+        <in>logindialog.cpp</in>
+        <in>logindialog.h</in>
+        <in>loginmanager.cpp</in>
+        <in>loginmanager.h</in>
+        <in>magbox.cpp</in>
+        <in>magbox.h</in>
+        <in>masterpalette.cpp</in>
+        <in>masterpalette.h</in>
+        <in>measureproperties.cpp</in>
+        <in>measureproperties.h</in>
+        <in>mediadialog.cpp</in>
+        <in>mediadialog.h</in>
+        <in>menus.cpp</in>
+        <in>metaedit.cpp</in>
+        <in>metaedit.h</in>
+        <in>miconengine.cpp</in>
+        <in>miconengine.h</in>
+        <in>mididriver.cpp</in>
+        <in>mididriver.h</in>
+        <in>mixer.cpp</in>
+        <in>mixer.h</in>
+        <in>mscorePlugins.cpp</in>
+        <in>musedata.cpp</in>
+        <in>musedata.h</in>
+        <in>musescore.cpp</in>
+        <in>musescore.h</in>
+        <in>musicxml.h</in>
+        <in>musicxmlfonthandler.cpp</in>
+        <in>musicxmlfonthandler.h</in>
+        <in>musicxmlsupport.cpp</in>
+        <in>musicxmlsupport.h</in>
+        <in>navigator.cpp</in>
+        <in>navigator.h</in>
+        <in>newwizard.cpp</in>
+        <in>newwizard.h</in>
+        <in>noteGroups.cpp</in>
+        <in>noteGroups.h</in>
+        <in>omrpanel.cpp</in>
+        <in>omrpanel.h</in>
+        <in>osc.cpp</in>
+        <in>ove.cpp</in>
+        <in>ove.h</in>
+        <in>pa.cpp</in>
+        <in>pa.h</in>
+        <in>pagesettings.cpp</in>
+        <in>pagesettings.h</in>
+        <in>palette.cpp</in>
+        <in>palette.h</in>
+        <in>paletteBoxButton.cpp</in>
+        <in>paletteBoxButton.h</in>
+        <in>palettebox.cpp</in>
+        <in>palettebox.h</in>
+        <in>partedit.h</in>
+        <in>pathlistdialog.cpp</in>
+        <in>pathlistdialog.h</in>
+        <in>piano.cpp</in>
+        <in>piano.h</in>
+        <in>pianoroll.cpp</in>
+        <in>pianoroll.h</in>
+        <in>pianotools.cpp</in>
+        <in>pianotools.h</in>
+        <in>pianoview.cpp</in>
+        <in>pianoview.h</in>
+        <in>playpanel.cpp</in>
+        <in>playpanel.h</in>
+        <in>pluginCreator.cpp</in>
+        <in>pluginCreator.h</in>
+        <in>pluginManager.cpp</in>
+        <in>pluginManager.h</in>
+        <in>pm.cpp</in>
+        <in>pm.h</in>
+        <in>preferences.cpp</in>
+        <in>preferences.h</in>
+        <in>preferenceslistwidget.cpp</in>
+        <in>preferenceslistwidget.h</in>
+        <in>prefsdialog.cpp</in>
+        <in>prefsdialog.h</in>
+        <in>propertymenu.cpp</in>
+        <in>pulseaudio.cpp</in>
+        <in>qmledit.cpp</in>
+        <in>qmledit.h</in>
+        <in>qmlplugin.cpp</in>
+        <in>qmlplugin.h</in>
+        <in>recordbutton.h</in>
+        <in>resourceManager.cpp</in>
+        <in>resourceManager.h</in>
+        <in>revision.h</in>
+        <in>ruler.cpp</in>
+        <in>ruler.h</in>
+        <in>savePositions.cpp</in>
+        <in>scoreBrowser.cpp</in>
+        <in>scoreBrowser.h</in>
+        <in>scoreInfo.cpp</in>
+        <in>scoreInfo.h</in>
+        <in>scorePreview.cpp</in>
+        <in>scorePreview.h</in>
+        <in>scoreaccessibility.cpp</in>
+        <in>scoreaccessibility.h</in>
+        <in>scoretab.cpp</in>
+        <in>scoretab.h</in>
+        <in>scoreview.cpp</in>
+        <in>scoreview.h</in>
+        <in>searchComboBox.cpp</in>
+        <in>searchComboBox.h</in>
+        <in>sectionbreakprop.cpp</in>
+        <in>sectionbreakprop.h</in>
+        <in>selectdialog.cpp</in>
+        <in>selectdialog.h</in>
+        <in>selectionwindow.cpp</in>
+        <in>selectionwindow.h</in>
+        <in>selectnotedialog.cpp</in>
+        <in>selectnotedialog.h</in>
+        <in>selinstrument.cpp</in>
+        <in>selinstrument.h</in>
+        <in>seq.cpp</in>
+        <in>seq.h</in>
+        <in>shortcut.cpp</in>
+        <in>shortcut.h</in>
+        <in>shortcutcapturedialog.cpp</in>
+        <in>shortcutcapturedialog.h</in>
+        <in>simplebutton.cpp</in>
+        <in>simplebutton.h</in>
+        <in>splitstaff.cpp</in>
+        <in>splitstaff.h</in>
+        <in>stafftextproperties.cpp</in>
+        <in>stafftextproperties.h</in>
+        <in>startcenter.cpp</in>
+        <in>startcenter.h</in>
+        <in>startupWizard.cpp</in>
+        <in>startupWizard.h</in>
+        <in>stringutils.cpp</in>
+        <in>stringutils.h</in>
+        <in>svggenerator.cpp</in>
+        <in>svggenerator.h</in>
+        <in>symboldialog.cpp</in>
+        <in>symboldialog.h</in>
+        <in>synthcontrol.cpp</in>
+        <in>synthcontrol.h</in>
+        <in>textcursor.cpp</in>
+        <in>textcursor.h</in>
+        <in>textpalette.cpp</in>
+        <in>textpalette.h</in>
+        <in>texttools.cpp</in>
+        <in>texttools.h</in>
+        <in>timedialog.cpp</in>
+        <in>timedialog.h</in>
+        <in>timeline.cpp</in>
+        <in>timeline.h</in>
+        <in>timesigproperties.cpp</in>
+        <in>timesigproperties.h</in>
+        <in>toolbarEditor.cpp</in>
+        <in>toolbarEditor.h</in>
+        <in>toolbuttonmenu.cpp</in>
+        <in>toolbuttonmenu.h</in>
+        <in>transposedialog.cpp</in>
+        <in>transposedialog.h</in>
+        <in>tremolobarcanvas.h</in>
+        <in>tremolobarprop.cpp</in>
+        <in>tremolobarprop.h</in>
+        <in>tupletdialog.cpp</in>
+        <in>tupletdialog.h</in>
+        <in>updatechecker.cpp</in>
+        <in>updatechecker.h</in>
+        <in>uploadscoredialog.cpp</in>
+        <in>uploadscoredialog.h</in>
+        <in>waveview.cpp</in>
+        <in>waveview.h</in>
+        <in>webpage.cpp</in>
+        <in>webpage.h</in>
+        <in>workspace.cpp</in>
+        <in>workspace.h</in>
+      </df>
+      <df name="mtest">
+        <df name="biab">
+          <in>tst_biab.cpp</in>
+        </df>
+        <df name="bww">
+          <df name="io">
+            <in>tst_bww_io.cpp</in>
+          </df>
+        </df>
+        <df name="capella">
+          <df name="io">
+            <in>tst_capella_io.cpp</in>
+          </df>
+        </df>
+        <df name="guitarpro">
+          <in>tst_guitarpro.cpp</in>
+        </df>
+        <df name="importmidi">
+          <in>inner_func_decl.h</in>
+          <in>tst_importmidi.cpp</in>
+        </df>
+        <df name="libmscore">
+          <df name="album">
+            <in>tst_album.cpp</in>
+          </df>
+          <df name="barline">
+            <in>tst_barline.cpp</in>
+          </df>
+          <df name="beam">
+            <in>tst_beam.cpp</in>
+          </df>
+          <df name="breath">
+            <in>tst_breath.cpp</in>
+          </df>
+          <df name="chordsymbol">
+            <in>tst_chordsymbol.cpp</in>
+          </df>
+          <df name="clef">
+            <in>tst_clef.cpp</in>
+          </df>
+          <df name="clef_courtesy">
+            <in>tst_clef_courtesy.cpp</in>
+          </df>
+          <df name="compat114">
+            <in>tst_compat114.cpp</in>
+          </df>
+          <df name="compat206">
+            <in>tst_compat206.cpp</in>
+          </df>
+          <df name="concertpitch">
+            <in>tst_concertpitchbenchmark.cpp</in>
+          </df>
+          <df name="copypaste">
+            <in>tst_copypaste.cpp</in>
+          </df>
+          <df name="copypastesymbollist">
+            <in>tst_copypastesymbollist.cpp</in>
+          </df>
+          <df name="cursor">
+            <in>tst_cursor.cpp</in>
+          </df>
+          <df name="durationtype">
+            <in>tst_durationtype.cpp</in>
+          </df>
+          <df name="dynamic">
+            <in>tst_dynamic.cpp</in>
+          </df>
+          <df name="earlymusic">
+            <in>tst_earlymusic.cpp</in>
+          </df>
+          <df name="element">
+            <in>tst_element.cpp</in>
+          </df>
+          <df name="exchangevoices">
+            <in>tst_exchangevoices.cpp</in>
+          </df>
+          <df name="hairpin">
+            <in>tst_hairpin.cpp</in>
+          </df>
+          <df name="implode_explode">
+            <in>tst_implodeExplode.cpp</in>
+          </df>
+          <df name="instrumentchange">
+            <in>tst_instrumentchange.cpp</in>
+          </df>
+          <df name="join">
+            <in>tst_join.cpp</in>
+          </df>
+          <df name="keysig">
+            <in>tst_keysig.cpp</in>
+          </df>
+          <df name="layout">
+            <in>tst_benchmark.cpp</in>
+          </df>
+          <df name="links">
+            <in>tst_links.cpp</in>
+          </df>
+          <df name="measure">
+            <in>tst_measure.cpp</in>
+          </df>
+          <df name="midi">
+            <in>tst_midi.cpp</in>
+          </df>
+          <df name="midimapping">
+            <in>tst_midimapping.cpp</in>
+          </df>
+          <df name="note">
+            <in>tst_note.cpp</in>
+          </df>
+          <df name="parts">
+            <in>tst_parts.cpp</in>
+          </df>
+          <df name="repeat">
+            <in>tst_repeat.cpp</in>
+          </df>
+          <df name="rhythmicGrouping">
+            <in>tst_rhythmicGrouping.cpp</in>
+          </df>
+          <df name="selectionfilter">
+            <in>tst_selectionfilter.cpp</in>
+          </df>
+          <df name="selectionrangedelete">
+            <in>tst_selectionrangedelete.cpp</in>
+          </df>
+          <df name="spanners">
+            <in>tst_spanners.cpp</in>
+          </df>
+          <df name="split">
+            <in>tst_split.cpp</in>
+          </df>
+          <df name="splitstaff">
+            <in>tst_splitstaff.cpp</in>
+          </df>
+          <df name="text">
+            <in>tst_text.cpp</in>
+          </df>
+          <df name="timesig">
+            <in>tst_timesig.cpp</in>
+          </df>
+          <df name="tools">
+            <in>tst_tools.cpp</in>
+          </df>
+          <df name="transpose">
+            <in>tst_transpose.cpp</in>
+          </df>
+          <df name="tuplet">
+            <in>tst_tuplet.cpp</in>
+          </df>
+        </df>
+        <df name="musicxml">
+          <df name="font">
+          </df>
+          <df name="io">
+            <in>tst_mxml_io.cpp</in>
+          </df>
+        </df>
+        <df name="omr">
+          <df name="notes">
+            <in>tst_notes.cpp</in>
+          </df>
+        </df>
+        <df name="scripting">
+          <in>tst_scripting.cpp</in>
+        </df>
+        <df name="stringutils">
+          <in>tst_stringutils.cpp</in>
+        </df>
+        <df name="testoves">
+          <df name="bdat">
+            <in>tst_ove_bdat.cpp</in>
+          </df>
+          <df name="ove3">
+            <in>tst_ove_ove3.cpp</in>
+          </df>
+          <df name="structure">
+            <in>tst_ove_structure.cpp</in>
+          </df>
+        </df>
+        <df name="zerberus">
+          <df name="comments">
+            <in>tst_sfzcomments.cpp</in>
+          </df>
+          <df name="envelopes">
+            <in>tst_sfzenvelopes.cpp</in>
+          </df>
+          <df name="global">
+            <in>tst_sfzglobal.cpp</in>
+          </df>
+          <df name="includes">
+            <in>tst_sfzincludes.cpp</in>
+          </df>
+          <df name="inputControls">
+            <in>tst_sfzinputcontrols.cpp</in>
+          </df>
+          <df name="loop">
+            <in>tst_sfzloop.cpp</in>
+          </df>
+          <df name="opcodeparse">
+            <in>tst_sfzopcodes.cpp</in>
+          </df>
+        </df>
+        <in>config.h</in>
+        <in>mscoreapi.h</in>
+        <in>mtest.cpp</in>
+        <in>openscore.h</in>
+        <in>testutils.cpp</in>
+        <in>testutils.h</in>
+      </df>
+      <df name="omr">
+        <in>image.h</in>
+        <in>importpdf.cpp</in>
+        <in>importpdf.h</in>
+        <in>ocr.cpp</in>
+        <in>ocr.h</in>
+        <in>omr.cpp</in>
+        <in>omr.h</in>
+        <in>omrpage.cpp</in>
+        <in>omrpage.h</in>
+        <in>omrview.cpp</in>
+        <in>omrview.h</in>
+        <in>pattern.cpp</in>
+        <in>pattern.h</in>
+        <in>pdf.cpp</in>
+        <in>pdf.h</in>
+        <in>skew.cpp</in>
+        <in>utils.cpp</in>
+        <in>utils.h</in>
+      </df>
+      <df name="rdoc">
+        <df name="de">
+        </df>
+        <df name="en">
+        </df>
+      </df>
+      <df name="share">
+        <df name="instruments">
+          <in>instrumentsxml.h</in>
+        </df>
+        <df name="locale">
+        </df>
+        <df name="manual">
+          <df name="plugins">
+          </df>
+        </df>
+        <df name="plugins">
+          <df name="helloqml">
+            <df name="translations">
+            </df>
+          </df>
+        </df>
+        <df name="sound">
+        </df>
+        <df name="styles">
+        </df>
+        <df name="templates">
+          <df name="01-General">
+          </df>
+          <df name="02-Choral">
+          </df>
+          <df name="03-Chamber_Music">
+          </df>
+          <df name="04-Solo">
+          </df>
+          <df name="05-Jazz">
+          </df>
+          <df name="06-Popular">
+          </df>
+          <df name="07-Band_and_Percussion">
+          </df>
+          <df name="08-Orchestral">
+          </df>
+        </df>
+        <df name="themes">
+        </df>
+        <df name="wallpaper">
+        </df>
+        <df name="workspaces">
+        </df>
+      </df>
+      <df name="synthesizer">
+        <in>event.cpp</in>
+        <in>event.h</in>
+        <in>midipatch.h</in>
+        <in>msynthesizer.cpp</in>
+        <in>msynthesizer.h</in>
+        <in>synthesizer.h</in>
+        <in>synthesizergui.cpp</in>
+        <in>synthesizergui.h</in>
+      </df>
+      <df name="test">
+        <df name="bwwrefs">
+        </df>
+        <df name="cap">
+        </df>
+        <df name="capx">
+        </df>
+        <df name="lilyXml">
+          <df name="html">
+            <df name="lilypond">
+            </df>
+            <df name="mscore">
+            </df>
+          </df>
+        </df>
+        <df name="md">
+        </df>
+        <df name="META-INF">
+        </df>
+        <df name="midi">
+        </df>
+        <df name="msc">
+        </df>
+        <df name="musicxml">
+        </df>
+        <df name="ntest">
+        </df>
+        <df name="testoves">
+          <df name="bdat">
+          </df>
+          <df name="ove3">
+          </df>
+          <df name="structure">
+          </df>
+        </df>
+        <df name="testswc">
+          <df name="bdat">
+          </df>
+          <df name="structure">
+          </df>
+        </df>
+      </df>
+      <df name="thirdparty">
+        <df name="beatroot">
+          <in>Agent.cpp</in>
+          <in>Agent.h</in>
+          <in>AgentList.cpp</in>
+          <in>AgentList.h</in>
+          <in>BeatTracker.cpp</in>
+          <in>BeatTracker.h</in>
+          <in>Event.h</in>
+          <in>Induction.cpp</in>
+          <in>Induction.h</in>
+        </df>
+        <df name="diff">
+          <in>diff_match_patch.cpp</in>
+          <in>diff_match_patch.h</in>
+          <in>diff_match_patch_test.cpp</in>
+          <in>diff_match_patch_test.h</in>
+        </df>
+        <df name="freetype">
+          <df name="builds">
+            <df name="amiga">
+              <df name="include">
+                <df name="config">
+                  <in>ftconfig.h</in>
+                  <in>ftmodule.h</in>
+                </df>
+              </df>
+              <df name="src">
+                <df name="base">
+                  <in>ftdebug.c</in>
+                  <in>ftsystem.c</in>
+                </df>
+              </df>
+            </df>
+            <df name="ansi">
+            </df>
+            <df name="atari">
+              <in>ATARI.H</in>
+            </df>
+            <df name="beos">
+            </df>
+            <df name="cmake">
+            </df>
+            <df name="compiler">
+            </df>
+            <df name="dos">
+            </df>
+            <df name="mac">
+              <in>ftmac.c</in>
+            </df>
+            <df name="os2">
+            </df>
+            <df name="symbian">
+            </df>
+            <df name="unix">
+              <in>ftsystem.c</in>
+            </df>
+            <df name="vms">
+              <in>ftconfig.h</in>
+              <in>ftsystem.c</in>
+            </df>
+            <df name="wince">
+              <df name="vc2005-ce">
+              </df>
+              <df name="vc2008-ce">
+              </df>
+              <in>ftdebug.c</in>
+            </df>
+            <df name="windows">
+              <df name="vc2005">
+              </df>
+              <df name="vc2008">
+              </df>
+              <df name="vc2010">
+              </df>
+              <df name="visualc">
+              </df>
+              <df name="visualce">
+              </df>
+              <in>ftdebug.c</in>
+            </df>
+          </df>
+          <df name="devel">
+            <in>ft2build.h</in>
+            <in>ftoption.h</in>
+          </df>
+          <df name="docs">
+            <df name="reference">
+            </df>
+          </df>
+          <df name="include">
+            <df name="freetype">
+              <df name="config">
+                <in>ftconfig.h</in>
+                <in>ftheader.h</in>
+                <in>ftmodule.h</in>
+                <in>ftoption.h</in>
+                <in>ftstdlib.h</in>
+              </df>
+              <df name="internal">
+                <df name="services">
+                  <in>svbdf.h</in>
+                  <in>svcid.h</in>
+                  <in>svfntfmt.h</in>
+                  <in>svgldict.h</in>
+                  <in>svgxval.h</in>
+                  <in>svkern.h</in>
+                  <in>svmm.h</in>
+                  <in>svotval.h</in>
+                  <in>svpfr.h</in>
+                  <in>svpostnm.h</in>
+                  <in>svprop.h</in>
+                  <in>svpscmap.h</in>
+                  <in>svpsinfo.h</in>
+                  <in>svsfnt.h</in>
+                  <in>svttcmap.h</in>
+                  <in>svtteng.h</in>
+                  <in>svttglyf.h</in>
+                  <in>svwinfnt.h</in>
+                </df>
+                <in>autohint.h</in>
+                <in>ftcalc.h</in>
+                <in>ftdebug.h</in>
+                <in>ftdriver.h</in>
+                <in>ftgloadr.h</in>
+                <in>ftmemory.h</in>
+                <in>ftobjs.h</in>
+                <in>ftpic.h</in>
+                <in>ftrfork.h</in>
+                <in>ftserv.h</in>
+                <in>ftstream.h</in>
+                <in>fttrace.h</in>
+                <in>ftvalid.h</in>
+                <in>internal.h</in>
+                <in>psaux.h</in>
+                <in>pshints.h</in>
+                <in>sfnt.h</in>
+                <in>t1types.h</in>
+                <in>tttypes.h</in>
+              </df>
+              <in>freetype.h</in>
+              <in>ftadvanc.h</in>
+              <in>ftautoh.h</in>
+              <in>ftbbox.h</in>
+              <in>ftbdf.h</in>
+              <in>ftbitmap.h</in>
+              <in>ftbzip2.h</in>
+              <in>ftcache.h</in>
+              <in>ftcffdrv.h</in>
+              <in>ftchapters.h</in>
+              <in>ftcid.h</in>
+              <in>fterrdef.h</in>
+              <in>fterrors.h</in>
+              <in>ftfntfmt.h</in>
+              <in>ftgasp.h</in>
+              <in>ftglyph.h</in>
+              <in>ftgxval.h</in>
+              <in>ftgzip.h</in>
+              <in>ftimage.h</in>
+              <in>ftincrem.h</in>
+              <in>ftlcdfil.h</in>
+              <in>ftlist.h</in>
+              <in>ftlzw.h</in>
+              <in>ftmac.h</in>
+              <in>ftmm.h</in>
+              <in>ftmodapi.h</in>
+              <in>ftmoderr.h</in>
+              <in>ftotval.h</in>
+              <in>ftoutln.h</in>
+              <in>ftpfr.h</in>
+              <in>ftrender.h</in>
+              <in>ftsizes.h</in>
+              <in>ftsnames.h</in>
+              <in>ftstroke.h</in>
+              <in>ftsynth.h</in>
+              <in>ftsystem.h</in>
+              <in>fttrigon.h</in>
+              <in>ftttdrv.h</in>
+              <in>fttypes.h</in>
+              <in>ftwinfnt.h</in>
+              <in>t1tables.h</in>
+              <in>ttnameid.h</in>
+              <in>tttables.h</in>
+              <in>tttags.h</in>
+              <in>ttunpat.h</in>
+            </df>
+            <in>ft2build.h</in>
+          </df>
+          <df name="objs">
+          </df>
+          <df name="src">
+            <df name="autofit">
+              <in>afangles.c</in>
+              <in>afangles.h</in>
+              <in>afblue.c</in>
+              <in>afblue.h</in>
+              <in>afcjk.c</in>
+              <in>afcjk.h</in>
+              <in>afcover.h</in>
+              <in>afdummy.c</in>
+              <in>afdummy.h</in>
+              <in>aferrors.h</in>
+              <in>afglobal.c</in>
+              <in>afglobal.h</in>
+              <in>afhints.c</in>
+              <in>afhints.h</in>
+              <in>afindic.c</in>
+              <in>afindic.h</in>
+              <in>aflatin.c</in>
+              <in>aflatin.h</in>
+              <in>aflatin2.c</in>
+              <in>aflatin2.h</in>
+              <in>afloader.c</in>
+              <in>afloader.h</in>
+              <in>afmodule.c</in>
+              <in>afmodule.h</in>
+              <in>afpic.c</in>
+              <in>afpic.h</in>
+              <in>afranges.c</in>
+              <in>afranges.h</in>
+              <in>afscript.h</in>
+              <in>afstyles.h</in>
+              <in>aftypes.h</in>
+              <in>afwarp.c</in>
+              <in>afwarp.h</in>
+              <in>afwrtsys.h</in>
+              <in>autofit.c</in>
+              <in>hbshim.c</in>
+              <in>hbshim.h</in>
+            </df>
+            <df name="base">
+              <in>basepic.c</in>
+              <in>basepic.h</in>
+              <in>ftadvanc.c</in>
+              <in>ftapi.c</in>
+              <in>ftbase.c</in>
+              <in>ftbase.h</in>
+              <in>ftbbox.c</in>
+              <in>ftbdf.c</in>
+              <in>ftbitmap.c</in>
+              <in>ftcalc.c</in>
+              <in>ftcid.c</in>
+              <in>ftdbgmem.c</in>
+              <in>ftdebug.c</in>
+              <in>ftfntfmt.c</in>
+              <in>ftfstype.c</in>
+              <in>ftgasp.c</in>
+              <in>ftgloadr.c</in>
+              <in>ftglyph.c</in>
+              <in>ftgxval.c</in>
+              <in>ftinit.c</in>
+              <in>ftlcdfil.c</in>
+              <in>ftmac.c</in>
+              <in>ftmm.c</in>
+              <in>ftobjs.c</in>
+              <in>ftotval.c</in>
+              <in>ftoutln.c</in>
+              <in>ftpatent.c</in>
+              <in>ftpfr.c</in>
+              <in>ftpic.c</in>
+              <in>ftrfork.c</in>
+              <in>ftsnames.c</in>
+              <in>ftstream.c</in>
+              <in>ftstroke.c</in>
+              <in>ftsynth.c</in>
+              <in>ftsystem.c</in>
+              <in>fttrigon.c</in>
+              <in>fttype1.c</in>
+              <in>ftutil.c</in>
+              <in>ftwinfnt.c</in>
+              <in>md5.c</in>
+              <in>md5.h</in>
+            </df>
+            <df name="bdf">
+              <in>bdf.c</in>
+              <in>bdf.h</in>
+              <in>bdfdrivr.c</in>
+              <in>bdfdrivr.h</in>
+              <in>bdferror.h</in>
+              <in>bdflib.c</in>
+            </df>
+            <df name="bzip2">
+              <in>ftbzip2.c</in>
+            </df>
+            <df name="cache">
+              <in>ftcache.c</in>
+              <in>ftcbasic.c</in>
+              <in>ftccache.c</in>
+              <in>ftccache.h</in>
+              <in>ftccback.h</in>
+              <in>ftccmap.c</in>
+              <in>ftcerror.h</in>
+              <in>ftcglyph.c</in>
+              <in>ftcglyph.h</in>
+              <in>ftcimage.c</in>
+              <in>ftcimage.h</in>
+              <in>ftcmanag.c</in>
+              <in>ftcmanag.h</in>
+              <in>ftcmru.c</in>
+              <in>ftcmru.h</in>
+              <in>ftcsbits.c</in>
+              <in>ftcsbits.h</in>
+            </df>
+            <df name="cff">
+              <in>cf2arrst.c</in>
+              <in>cf2arrst.h</in>
+              <in>cf2blues.c</in>
+              <in>cf2blues.h</in>
+              <in>cf2error.c</in>
+              <in>cf2error.h</in>
+              <in>cf2fixed.h</in>
+              <in>cf2font.c</in>
+              <in>cf2font.h</in>
+              <in>cf2ft.c</in>
+              <in>cf2ft.h</in>
+              <in>cf2glue.h</in>
+              <in>cf2hints.c</in>
+              <in>cf2hints.h</in>
+              <in>cf2intrp.c</in>
+              <in>cf2intrp.h</in>
+              <in>cf2read.c</in>
+              <in>cf2read.h</in>
+              <in>cf2stack.c</in>
+              <in>cf2stack.h</in>
+              <in>cf2types.h</in>
+              <in>cff.c</in>
+              <in>cffcmap.c</in>
+              <in>cffcmap.h</in>
+              <in>cffdrivr.c</in>
+              <in>cffdrivr.h</in>
+              <in>cfferrs.h</in>
+              <in>cffgload.c</in>
+              <in>cffgload.h</in>
+              <in>cffload.c</in>
+              <in>cffload.h</in>
+              <in>cffobjs.c</in>
+              <in>cffobjs.h</in>
+              <in>cffparse.c</in>
+              <in>cffparse.h</in>
+              <in>cffpic.c</in>
+              <in>cffpic.h</in>
+              <in>cfftoken.h</in>
+              <in>cfftypes.h</in>
+            </df>
+            <df name="cid">
+              <in>ciderrs.h</in>
+              <in>cidgload.c</in>
+              <in>cidgload.h</in>
+              <in>cidload.c</in>
+              <in>cidload.h</in>
+              <in>cidobjs.c</in>
+              <in>cidobjs.h</in>
+              <in>cidparse.c</in>
+              <in>cidparse.h</in>
+              <in>cidriver.c</in>
+              <in>cidriver.h</in>
+              <in>cidtoken.h</in>
+              <in>type1cid.c</in>
+            </df>
+            <df name="gxvalid">
+              <in>gxvalid.c</in>
+              <in>gxvalid.h</in>
+              <in>gxvbsln.c</in>
+              <in>gxvcommn.c</in>
+              <in>gxvcommn.h</in>
+              <in>gxverror.h</in>
+              <in>gxvfeat.c</in>
+              <in>gxvfeat.h</in>
+              <in>gxvfgen.c</in>
+              <in>gxvjust.c</in>
+              <in>gxvkern.c</in>
+              <in>gxvlcar.c</in>
+              <in>gxvmod.c</in>
+              <in>gxvmod.h</in>
+              <in>gxvmort.c</in>
+              <in>gxvmort.h</in>
+              <in>gxvmort0.c</in>
+              <in>gxvmort1.c</in>
+              <in>gxvmort2.c</in>
+              <in>gxvmort4.c</in>
+              <in>gxvmort5.c</in>
+              <in>gxvmorx.c</in>
+              <in>gxvmorx.h</in>
+              <in>gxvmorx0.c</in>
+              <in>gxvmorx1.c</in>
+              <in>gxvmorx2.c</in>
+              <in>gxvmorx4.c</in>
+              <in>gxvmorx5.c</in>
+              <in>gxvopbd.c</in>
+              <in>gxvprop.c</in>
+              <in>gxvtrak.c</in>
+            </df>
+            <df name="gzip">
+              <in>adler32.c</in>
+              <in>ftgzip.c</in>
+              <in>infblock.c</in>
+              <in>infblock.h</in>
+              <in>infcodes.c</in>
+              <in>infcodes.h</in>
+              <in>inffixed.h</in>
+              <in>inflate.c</in>
+              <in>inftrees.c</in>
+              <in>inftrees.h</in>
+              <in>infutil.c</in>
+              <in>infutil.h</in>
+              <in>zconf.h</in>
+              <in>zlib.h</in>
+              <in>zutil.c</in>
+              <in>zutil.h</in>
+            </df>
+            <df name="lzw">
+              <in>ftlzw.c</in>
+              <in>ftzopen.c</in>
+              <in>ftzopen.h</in>
+            </df>
+            <df name="otvalid">
+              <in>otvalid.c</in>
+              <in>otvalid.h</in>
+              <in>otvbase.c</in>
+              <in>otvcommn.c</in>
+              <in>otvcommn.h</in>
+              <in>otverror.h</in>
+              <in>otvgdef.c</in>
+              <in>otvgpos.c</in>
+              <in>otvgpos.h</in>
+              <in>otvgsub.c</in>
+              <in>otvjstf.c</in>
+              <in>otvmath.c</in>
+              <in>otvmod.c</in>
+              <in>otvmod.h</in>
+            </df>
+            <df name="pcf">
+              <in>pcf.c</in>
+              <in>pcf.h</in>
+              <in>pcfdrivr.c</in>
+              <in>pcfdrivr.h</in>
+              <in>pcferror.h</in>
+              <in>pcfread.c</in>
+              <in>pcfread.h</in>
+              <in>pcfutil.c</in>
+              <in>pcfutil.h</in>
+            </df>
+            <df name="pfr">
+              <in>pfr.c</in>
+              <in>pfrcmap.c</in>
+              <in>pfrcmap.h</in>
+              <in>pfrdrivr.c</in>
+              <in>pfrdrivr.h</in>
+              <in>pfrerror.h</in>
+              <in>pfrgload.c</in>
+              <in>pfrgload.h</in>
+              <in>pfrload.c</in>
+              <in>pfrload.h</in>
+              <in>pfrobjs.c</in>
+              <in>pfrobjs.h</in>
+              <in>pfrsbit.c</in>
+              <in>pfrsbit.h</in>
+              <in>pfrtypes.h</in>
+            </df>
+            <df name="psaux">
+              <in>afmparse.c</in>
+              <in>afmparse.h</in>
+              <in>psaux.c</in>
+              <in>psauxerr.h</in>
+              <in>psauxmod.c</in>
+              <in>psauxmod.h</in>
+              <in>psconv.c</in>
+              <in>psconv.h</in>
+              <in>psobjs.c</in>
+              <in>psobjs.h</in>
+              <in>t1cmap.c</in>
+              <in>t1cmap.h</in>
+              <in>t1decode.c</in>
+              <in>t1decode.h</in>
+            </df>
+            <df name="pshinter">
+              <in>pshalgo.c</in>
+              <in>pshalgo.h</in>
+              <in>pshglob.c</in>
+              <in>pshglob.h</in>
+              <in>pshinter.c</in>
+              <in>pshmod.c</in>
+              <in>pshmod.h</in>
+              <in>pshnterr.h</in>
+              <in>pshpic.c</in>
+              <in>pshpic.h</in>
+              <in>pshrec.c</in>
+              <in>pshrec.h</in>
+            </df>
+            <df name="psnames">
+              <in>psmodule.c</in>
+              <in>psmodule.h</in>
+              <in>psnamerr.h</in>
+              <in>psnames.c</in>
+              <in>pspic.c</in>
+              <in>pspic.h</in>
+              <in>pstables.h</in>
+            </df>
+            <df name="raster">
+              <in>ftmisc.h</in>
+              <in>ftraster.c</in>
+              <in>ftraster.h</in>
+              <in>ftrend1.c</in>
+              <in>ftrend1.h</in>
+              <in>raster.c</in>
+              <in>rasterrs.h</in>
+              <in>rastpic.c</in>
+              <in>rastpic.h</in>
+            </df>
+            <df name="sfnt">
+              <in>pngshim.c</in>
+              <in>pngshim.h</in>
+              <in>sfdriver.c</in>
+              <in>sfdriver.h</in>
+              <in>sferrors.h</in>
+              <in>sfnt.c</in>
+              <in>sfntpic.c</in>
+              <in>sfntpic.h</in>
+              <in>sfobjs.c</in>
+              <in>sfobjs.h</in>
+              <in>ttbdf.c</in>
+              <in>ttbdf.h</in>
+              <in>ttcmap.c</in>
+              <in>ttcmap.h</in>
+              <in>ttcmapc.h</in>
+              <in>ttkern.c</in>
+              <in>ttkern.h</in>
+              <in>ttload.c</in>
+              <in>ttload.h</in>
+              <in>ttmtx.c</in>
+              <in>ttmtx.h</in>
+              <in>ttpost.c</in>
+              <in>ttpost.h</in>
+              <in>ttsbit.c</in>
+              <in>ttsbit.h</in>
+            </df>
+            <df name="smooth">
+              <in>ftgrays.c</in>
+              <in>ftgrays.h</in>
+              <in>ftsmerrs.h</in>
+              <in>ftsmooth.c</in>
+              <in>ftsmooth.h</in>
+              <in>ftspic.c</in>
+              <in>ftspic.h</in>
+              <in>smooth.c</in>
+            </df>
+            <df name="tools">
+              <df name="docmaker">
+              </df>
+              <df name="ftrandom">
+                <in>ftrandom.c</in>
+              </df>
+              <in>apinames.c</in>
+              <in>test_afm.c</in>
+              <in>test_bbox.c</in>
+              <in>test_trig.c</in>
+            </df>
+            <df name="truetype">
+              <in>truetype.c</in>
+              <in>ttdriver.c</in>
+              <in>ttdriver.h</in>
+              <in>tterrors.h</in>
+              <in>ttgload.c</in>
+              <in>ttgload.h</in>
+              <in>ttgxvar.c</in>
+              <in>ttgxvar.h</in>
+              <in>ttinterp.c</in>
+              <in>ttinterp.h</in>
+              <in>ttobjs.c</in>
+              <in>ttobjs.h</in>
+              <in>ttpic.c</in>
+              <in>ttpic.h</in>
+              <in>ttpload.c</in>
+              <in>ttpload.h</in>
+              <in>ttsubpix.c</in>
+              <in>ttsubpix.h</in>
+            </df>
+            <df name="type1">
+              <in>t1afm.c</in>
+              <in>t1afm.h</in>
+              <in>t1driver.c</in>
+              <in>t1driver.h</in>
+              <in>t1errors.h</in>
+              <in>t1gload.c</in>
+              <in>t1gload.h</in>
+              <in>t1load.c</in>
+              <in>t1load.h</in>
+              <in>t1objs.c</in>
+              <in>t1objs.h</in>
+              <in>t1parse.c</in>
+              <in>t1parse.h</in>
+              <in>t1tokens.h</in>
+              <in>type1.c</in>
+            </df>
+            <df name="type42">
+              <in>t42drivr.c</in>
+              <in>t42drivr.h</in>
+              <in>t42error.h</in>
+              <in>t42objs.c</in>
+              <in>t42objs.h</in>
+              <in>t42parse.c</in>
+              <in>t42parse.h</in>
+              <in>t42types.h</in>
+              <in>type42.c</in>
+            </df>
+            <df name="winfonts">
+              <in>fnterrs.h</in>
+              <in>winfnt.c</in>
+              <in>winfnt.h</in>
+            </df>
+          </df>
+        </df>
+        <df name="intervaltree">
+          <in>IntervalTree.h</in>
+          <in>interval_tree_test.cpp</in>
+        </df>
+        <df name="kQOAuth">
+          <in>kqoauthauthreplyserver.cpp</in>
+          <in>kqoauthauthreplyserver.h</in>
+          <in>kqoauthauthreplyserver_p.h</in>
+          <in>kqoauthglobals.h</in>
+          <in>kqoauthmanager.cpp</in>
+          <in>kqoauthmanager.h</in>
+          <in>kqoauthmanager_p.h</in>
+          <in>kqoauthrequest.cpp</in>
+          <in>kqoauthrequest.h</in>
+          <in>kqoauthrequest_p.h</in>
+          <in>kqoauthrequest_xauth.cpp</in>
+          <in>kqoauthrequest_xauth.h</in>
+          <in>kqoauthrequest_xauth_p.h</in>
+          <in>kqoauthutils.cpp</in>
+          <in>kqoauthutils.h</in>
+        </df>
+        <df name="ofqf">
+          <in>qoscclient.cpp</in>
+          <in>qoscclient.h</in>
+          <in>qoscserver.cpp</in>
+          <in>qoscserver.h</in>
+          <in>qosctypes.cpp</in>
+          <in>qosctypes.h</in>
+        </df>
+        <df name="openssl">
+          <df name="include">
+            <df name="openssl">
+              <in>aes.h</in>
+              <in>asn1.h</in>
+              <in>asn1_mac.h</in>
+              <in>asn1t.h</in>
+              <in>bio.h</in>
+              <in>blowfish.h</in>
+              <in>bn.h</in>
+              <in>buffer.h</in>
+              <in>camellia.h</in>
+              <in>cast.h</in>
+              <in>cmac.h</in>
+              <in>cms.h</in>
+              <in>comp.h</in>
+              <in>conf.h</in>
+              <in>conf_api.h</in>
+              <in>crypto.h</in>
+              <in>des.h</in>
+              <in>des_old.h</in>
+              <in>dh.h</in>
+              <in>dsa.h</in>
+              <in>dso.h</in>
+              <in>dtls1.h</in>
+              <in>e_os2.h</in>
+              <in>ebcdic.h</in>
+              <in>ec.h</in>
+              <in>ecdh.h</in>
+              <in>ecdsa.h</in>
+              <in>engine.h</in>
+              <in>err.h</in>
+              <in>evp.h</in>
+              <in>hmac.h</in>
+              <in>krb5_asn.h</in>
+              <in>kssl.h</in>
+              <in>lhash.h</in>
+              <in>md4.h</in>
+              <in>md5.h</in>
+              <in>modes.h</in>
+              <in>obj_mac.h</in>
+              <in>objects.h</in>
+              <in>ocsp.h</in>
+              <in>opensslconf.h</in>
+              <in>opensslv.h</in>
+              <in>ossl_typ.h</in>
+              <in>pem.h</in>
+              <in>pem2.h</in>
+              <in>pkcs12.h</in>
+              <in>pkcs7.h</in>
+              <in>pqueue.h</in>
+              <in>rand.h</in>
+              <in>rc2.h</in>
+              <in>rc4.h</in>
+              <in>ripemd.h</in>
+              <in>rsa.h</in>
+              <in>safestack.h</in>
+              <in>seed.h</in>
+              <in>sha.h</in>
+              <in>srp.h</in>
+              <in>srtp.h</in>
+              <in>ssl.h</in>
+              <in>ssl2.h</in>
+              <in>ssl23.h</in>
+              <in>ssl3.h</in>
+              <in>stack.h</in>
+              <in>symhacks.h</in>
+              <in>tls1.h</in>
+              <in>ts.h</in>
+              <in>txt_db.h</in>
+              <in>ui.h</in>
+              <in>ui_compat.h</in>
+              <in>whrlpool.h</in>
+              <in>x509.h</in>
+              <in>x509_vfy.h</in>
+              <in>x509v3.h</in>
+            </df>
+          </df>
+        </df>
+        <df name="poppler">
+          <df name="fofi">
+            <in>FoFiBase.cc</in>
+            <in>FoFiBase.h</in>
+            <in>FoFiEncodings.cc</in>
+            <in>FoFiEncodings.h</in>
+            <in>FoFiIdentifier.cc</in>
+            <in>FoFiIdentifier.h</in>
+            <in>FoFiTrueType.cc</in>
+            <in>FoFiTrueType.h</in>
+            <in>FoFiType1.cc</in>
+            <in>FoFiType1.h</in>
+            <in>FoFiType1C.cc</in>
+            <in>FoFiType1C.h</in>
+          </df>
+          <df name="goo">
+            <in>FixedPoint.cc</in>
+            <in>FixedPoint.h</in>
+            <in>GooHash.cc</in>
+            <in>GooHash.h</in>
+            <in>GooLikely.h</in>
+            <in>GooList.cc</in>
+            <in>GooList.h</in>
+            <in>GooMutex.h</in>
+            <in>GooString.cc</in>
+            <in>GooString.h</in>
+            <in>GooTimer.cc</in>
+            <in>GooTimer.h</in>
+            <in>ImgWriter.cc</in>
+            <in>ImgWriter.h</in>
+            <in>JpegWriter.cc</in>
+            <in>JpegWriter.h</in>
+            <in>NetPBMWriter.cc</in>
+            <in>NetPBMWriter.h</in>
+            <in>PNGWriter.cc</in>
+            <in>PNGWriter.h</in>
+            <in>TiffWriter.cc</in>
+            <in>TiffWriter.h</in>
+            <in>gfile.cc</in>
+            <in>gfile.h</in>
+            <in>glibc.cc</in>
+            <in>glibc.h</in>
+            <in>gmem.cc</in>
+            <in>gmem.h</in>
+            <in>gmempp.cc</in>
+            <in>grandom.cc</in>
+            <in>grandom.h</in>
+            <in>gstrtod.cc</in>
+            <in>gstrtod.h</in>
+            <in>gtypes.h</in>
+            <in>gtypes_p.h</in>
+          </df>
+          <df name="poppler">
+            <in>Annot.cc</in>
+            <in>Annot.h</in>
+            <in>Array.cc</in>
+            <in>Array.h</in>
+            <in>BuiltinFont.cc</in>
+            <in>BuiltinFont.h</in>
+            <in>BuiltinFontTables.cc</in>
+            <in>BuiltinFontTables.h</in>
+            <in>CMap.cc</in>
+            <in>CMap.h</in>
+            <in>CachedFile.cc</in>
+            <in>CachedFile.h</in>
+            <in>CairoFontEngine.cc</in>
+            <in>CairoFontEngine.h</in>
+            <in>CairoOutputDev.cc</in>
+            <in>CairoOutputDev.h</in>
+            <in>CairoRescaleBox.cc</in>
+            <in>CairoRescaleBox.h</in>
+            <in>Catalog.cc</in>
+            <in>Catalog.h</in>
+            <in>CharCodeToUnicode.cc</in>
+            <in>CharCodeToUnicode.h</in>
+            <in>CharTypes.h</in>
+            <in>CompactFontTables.h</in>
+            <in>CurlCachedFile.cc</in>
+            <in>CurlCachedFile.h</in>
+            <in>CurlPDFDocBuilder.cc</in>
+            <in>CurlPDFDocBuilder.h</in>
+            <in>DCTStream.cc</in>
+            <in>DCTStream.h</in>
+            <in>DateInfo.cc</in>
+            <in>DateInfo.h</in>
+            <in>Decrypt.cc</in>
+            <in>Decrypt.h</in>
+            <in>Dict.cc</in>
+            <in>Dict.h</in>
+            <in>Error.cc</in>
+            <in>Error.h</in>
+            <in>ErrorCodes.h</in>
+            <in>FileSpec.cc</in>
+            <in>FileSpec.h</in>
+            <in>FlateEncoder.cc</in>
+            <in>FlateEncoder.h</in>
+            <in>FlateStream.cc</in>
+            <in>FlateStream.h</in>
+            <in>FontEncodingTables.cc</in>
+            <in>FontEncodingTables.h</in>
+            <in>FontInfo.cc</in>
+            <in>FontInfo.h</in>
+            <in>Form.cc</in>
+            <in>Form.h</in>
+            <in>Function.cc</in>
+            <in>Function.h</in>
+            <in>Gfx.cc</in>
+            <in>Gfx.h</in>
+            <in>GfxFont.cc</in>
+            <in>GfxFont.h</in>
+            <in>GfxState.cc</in>
+            <in>GfxState.h</in>
+            <in>GfxState_helpers.h</in>
+            <in>GlobalParams.cc</in>
+            <in>GlobalParams.h</in>
+            <in>GlobalParamsWin.cc</in>
+            <in>Hints.cc</in>
+            <in>Hints.h</in>
+            <in>JArithmeticDecoder.cc</in>
+            <in>JArithmeticDecoder.h</in>
+            <in>JBIG2Stream.cc</in>
+            <in>JBIG2Stream.h</in>
+            <in>JPEG2000Stream.cc</in>
+            <in>JPEG2000Stream.h</in>
+            <in>JPXStream.cc</in>
+            <in>JPXStream.h</in>
+            <in>Lexer.cc</in>
+            <in>Lexer.h</in>
+            <in>Linearization.cc</in>
+            <in>Linearization.h</in>
+            <in>Link.cc</in>
+            <in>Link.h</in>
+            <in>LocalPDFDocBuilder.cc</in>
+            <in>LocalPDFDocBuilder.h</in>
+            <in>MarkedContentOutputDev.cc</in>
+            <in>MarkedContentOutputDev.h</in>
+            <in>Movie.cc</in>
+            <in>Movie.h</in>
+            <in>NameToCharCode.cc</in>
+            <in>NameToCharCode.h</in>
+            <in>NameToUnicodeTable.h</in>
+            <in>Object.cc</in>
+            <in>Object.h</in>
+            <in>OptionalContent.cc</in>
+            <in>OptionalContent.h</in>
+            <in>Outline.cc</in>
+            <in>Outline.h</in>
+            <in>OutputDev.cc</in>
+            <in>OutputDev.h</in>
+            <in>PDFDoc.cc</in>
+            <in>PDFDoc.h</in>
+            <in>PDFDocBuilder.h</in>
+            <in>PDFDocEncoding.cc</in>
+            <in>PDFDocEncoding.h</in>
+            <in>PDFDocFactory.cc</in>
+            <in>PDFDocFactory.h</in>
+            <in>PSOutputDev.cc</in>
+            <in>PSOutputDev.h</in>
+            <in>PSTokenizer.cc</in>
+            <in>PSTokenizer.h</in>
+            <in>Page.cc</in>
+            <in>Page.h</in>
+            <in>PageLabelInfo.cc</in>
+            <in>PageLabelInfo.h</in>
+            <in>PageLabelInfo_p.h</in>
+            <in>PageTransition.cc</in>
+            <in>PageTransition.h</in>
+            <in>Parser.cc</in>
+            <in>Parser.h</in>
+            <in>PopplerCache.cc</in>
+            <in>PopplerCache.h</in>
+            <in>PreScanOutputDev.cc</in>
+            <in>PreScanOutputDev.h</in>
+            <in>ProfileData.cc</in>
+            <in>ProfileData.h</in>
+            <in>Rendition.cc</in>
+            <in>Rendition.h</in>
+            <in>SecurityHandler.cc</in>
+            <in>SecurityHandler.h</in>
+            <in>SignatureHandler.cc</in>
+            <in>SignatureHandler.h</in>
+            <in>SignatureInfo.cc</in>
+            <in>SignatureInfo.h</in>
+            <in>Sound.cc</in>
+            <in>Sound.h</in>
+            <in>SplashOutputDev.cc</in>
+            <in>SplashOutputDev.h</in>
+            <in>StdinCachedFile.cc</in>
+            <in>StdinCachedFile.h</in>
+            <in>StdinPDFDocBuilder.cc</in>
+            <in>StdinPDFDocBuilder.h</in>
+            <in>Stream-CCITT.h</in>
+            <in>Stream.cc</in>
+            <in>Stream.h</in>
+            <in>StructElement.cc</in>
+            <in>StructElement.h</in>
+            <in>StructTreeRoot.cc</in>
+            <in>StructTreeRoot.h</in>
+            <in>TextOutputDev.cc</in>
+            <in>TextOutputDev.h</in>
+            <in>UTF.cc</in>
+            <in>UTF.h</in>
+            <in>UTF8.h</in>
+            <in>UnicodeCClassTables.h</in>
+            <in>UnicodeCompTables.h</in>
+            <in>UnicodeDecompTables.h</in>
+            <in>UnicodeMap.cc</in>
+            <in>UnicodeMap.h</in>
+            <in>UnicodeMapTables.h</in>
+            <in>UnicodeTypeTable.cc</in>
+            <in>UnicodeTypeTable.h</in>
+            <in>ViewerPreferences.cc</in>
+            <in>ViewerPreferences.h</in>
+            <in>XRef.cc</in>
+            <in>XRef.h</in>
+            <in>XpdfPluginAPI.cc</in>
+            <in>XpdfPluginAPI.h</in>
+            <in>poppler-config.h</in>
+            <in>strtok_r.cpp</in>
+          </df>
+          <df name="qt5">
+            <in>ArthurOutputDev.cc</in>
+            <in>ArthurOutputDev.h</in>
+            <in>poppler-annotation-helper.h</in>
+            <in>poppler-annotation-private.h</in>
+            <in>poppler-annotation.cc</in>
+            <in>poppler-annotation.h</in>
+            <in>poppler-base-converter.cc</in>
+            <in>poppler-converter-private.h</in>
+            <in>poppler-document.cc</in>
+            <in>poppler-embeddedfile-private.h</in>
+            <in>poppler-embeddedfile.cc</in>
+            <in>poppler-export.h</in>
+            <in>poppler-fontinfo.cc</in>
+            <in>poppler-form.cc</in>
+            <in>poppler-form.h</in>
+            <in>poppler-link-extractor-private.h</in>
+            <in>poppler-link-extractor.cc</in>
+            <in>poppler-link.cc</in>
+            <in>poppler-link.h</in>
+            <in>poppler-media.cc</in>
+            <in>poppler-media.h</in>
+            <in>poppler-movie.cc</in>
+            <in>poppler-optcontent-private.h</in>
+            <in>poppler-optcontent.cc</in>
+            <in>poppler-optcontent.h</in>
+            <in>poppler-page-private.h</in>
+            <in>poppler-page-transition-private.h</in>
+            <in>poppler-page-transition.cc</in>
+            <in>poppler-page-transition.h</in>
+            <in>poppler-page.cc</in>
+            <in>poppler-pdf-converter.cc</in>
+            <in>poppler-private.cc</in>
+            <in>poppler-private.h</in>
+            <in>poppler-ps-converter.cc</in>
+            <in>poppler-qiodeviceoutstream-private.h</in>
+            <in>poppler-qiodeviceoutstream.cc</in>
+            <in>poppler-qt5.h</in>
+            <in>poppler-sound.cc</in>
+            <in>poppler-textbox.cc</in>
+          </df>
+          <df name="splash">
+            <in>Splash.cc</in>
+            <in>Splash.h</in>
+            <in>SplashBitmap.cc</in>
+            <in>SplashBitmap.h</in>
+            <in>SplashClip.cc</in>
+            <in>SplashClip.h</in>
+            <in>SplashErrorCodes.h</in>
+            <in>SplashFTFont.cc</in>
+            <in>SplashFTFont.h</in>
+            <in>SplashFTFontEngine.cc</in>
+            <in>SplashFTFontEngine.h</in>
+            <in>SplashFTFontFile.cc</in>
+            <in>SplashFTFontFile.h</in>
+            <in>SplashFont.cc</in>
+            <in>SplashFont.h</in>
+            <in>SplashFontEngine.cc</in>
+            <in>SplashFontEngine.h</in>
+            <in>SplashFontFile.cc</in>
+            <in>SplashFontFile.h</in>
+            <in>SplashFontFileID.cc</in>
+            <in>SplashFontFileID.h</in>
+            <in>SplashGlyphBitmap.h</in>
+            <in>SplashMath.h</in>
+            <in>SplashPath.cc</in>
+            <in>SplashPath.h</in>
+            <in>SplashPattern.cc</in>
+            <in>SplashPattern.h</in>
+            <in>SplashScreen.cc</in>
+            <in>SplashScreen.h</in>
+            <in>SplashState.cc</in>
+            <in>SplashState.h</in>
+            <in>SplashT1Font.cc</in>
+            <in>SplashT1Font.h</in>
+            <in>SplashT1FontEngine.cc</in>
+            <in>SplashT1FontEngine.h</in>
+            <in>SplashT1FontFile.cc</in>
+            <in>SplashT1FontFile.h</in>
+            <in>SplashTypes.h</in>
+            <in>SplashXPath.cc</in>
+            <in>SplashXPath.h</in>
+            <in>SplashXPathScanner.cc</in>
+            <in>SplashXPathScanner.h</in>
+          </df>
+          <in>config.h</in>
+        </df>
+        <df name="portmidi">
+          <df name="pm_common">
+            <in>pminternal.h</in>
+            <in>pmutil.c</in>
+            <in>pmutil.h</in>
+            <in>portmidi.c</in>
+            <in>portmidi.h</in>
+          </df>
+          <df name="pm_mac">
+            <df name="pm_mac.xcodeproj">
+            </df>
+            <in>finddefault.c</in>
+            <in>pmmac.c</in>
+            <in>pmmac.h</in>
+            <in>pmmacosxcm.c</in>
+            <in>pmmacosxcm.h</in>
+            <in>readbinaryplist.c</in>
+            <in>readbinaryplist.h</in>
+          </df>
+          <df name="pm_test">
+            <in>latency.c</in>
+            <in>midithread.c</in>
+            <in>midithru.c</in>
+            <in>mm.c</in>
+            <in>qtest.c</in>
+            <in>sysex.c</in>
+            <in>test.c</in>
+          </df>
+          <df name="pm_win">
+            <in>pmwin.c</in>
+            <in>pmwinmm.c</in>
+            <in>pmwinmm.h</in>
+          </df>
+          <df name="porttime">
+            <in>porttime.c</in>
+            <in>porttime.h</in>
+            <in>ptlinux.c</in>
+            <in>ptmacosx_cf.c</in>
+            <in>ptmacosx_mach.c</in>
+            <in>ptwinmm.c</in>
+          </df>
+        </df>
+        <df name="qzip">
+          <in>qzip.cpp</in>
+          <in>qzipreader_p.h</in>
+          <in>qzipwriter_p.h</in>
+        </df>
+        <df name="rtf2html">
+          <in>common.h</in>
+          <in>config.h</in>
+          <in>dbg_iter.h</in>
+          <in>fmt_opts.cpp</in>
+          <in>fmt_opts.h</in>
+          <in>rtf2html.cpp</in>
+          <in>rtf_keyword.cpp</in>
+          <in>rtf_keyword.h</in>
+          <in>rtf_table.cpp</in>
+          <in>rtf_table.h</in>
+          <in>rtf_tools.h</in>
+        </df>
+        <df name="singleapp">
+          <df name="doc">
+            <df name="html">
+              <df name="images">
+              </df>
+            </df>
+            <df name="images">
+            </df>
+          </df>
+          <df name="src">
+            <in>QtLockedFile</in>
+            <in>QtSingleApplication</in>
+            <in>qtlocalpeer.cpp</in>
+            <in>qtlocalpeer.h</in>
+            <in>qtlockedfile.cpp</in>
+            <in>qtlockedfile.h</in>
+            <in>qtlockedfile_unix.cpp</in>
+            <in>qtlockedfile_win.cpp</in>
+            <in>qtsingleapplication.cpp</in>
+            <in>qtsingleapplication.h</in>
+            <in>qtsinglecoreapplication.cpp</in>
+            <in>qtsinglecoreapplication.h</in>
+          </df>
+        </df>
+        <df name="xmlstream">
+          <in>xmlstream.cpp</in>
+          <in>xmlstream.h</in>
+          <in>xmlstream_p.h</in>
+          <in>xmlutils.cpp</in>
+          <in>xmlutils_p.h</in>
+        </df>
+      </df>
+      <df name="vtest">
+      </df>
+      <df name="win32install">
+        <df name="bin">
+          <df name="iconengines">
+          </df>
+          <df name="imageformats">
+          </df>
+          <df name="platforms">
+          </df>
+          <df name="printsupport">
+          </df>
+          <df name="sqldrivers">
+          </df>
+        </df>
+        <df name="locale">
+        </df>
+        <df name="manual">
+          <df name="plugins">
+          </df>
+        </df>
+        <df name="plugins">
+          <df name="helloqml">
+            <df name="translations">
+            </df>
+          </df>
+        </df>
+        <df name="qml">
+          <df name="Qt">
+            <df name="labs">
+              <df name="calendar">
+              </df>
+              <df name="folderlistmodel">
+              </df>
+              <df name="platform">
+              </df>
+              <df name="settings">
+              </df>
+              <df name="sharedimage">
+              </df>
+            </df>
+            <df name="WebSockets">
+            </df>
+          </df>
+          <df name="Qt3D">
+            <df name="Animation">
+            </df>
+            <df name="Core">
+            </df>
+            <df name="Extras">
+            </df>
+            <df name="Input">
+            </df>
+            <df name="Logic">
+            </df>
+            <df name="Render">
+            </df>
+          </df>
+          <df name="QtBluetooth">
+          </df>
+          <df name="QtCanvas3D">
+          </df>
+          <df name="QtGamepad">
+          </df>
+          <df name="QtLocation">
+          </df>
+          <df name="QtNfc">
+          </df>
+          <df name="QtPositioning">
+          </df>
+          <df name="QtQml">
+            <df name="Models.2">
+            </df>
+            <df name="StateMachine">
+            </df>
+          </df>
+          <df name="QtQuick">
+            <df name="Controls">
+              <df name="Private">
+              </df>
+              <df name="Styles">
+                <df name="Base">
+                  <df name="images">
+                  </df>
+                </df>
+                <df name="Desktop">
+                </df>
+                <df name="Flat">
+                </df>
+              </df>
+            </df>
+            <df name="Controls.2">
+              <df name="designer">
+                <df name="images">
+                </df>
+              </df>
+              <df name="Material">
+              </df>
+              <df name="Universal">
+              </df>
+            </df>
+            <df name="Dialogs">
+              <df name="images">
+              </df>
+              <df name="Private">
+              </df>
+              <df name="qml">
+              </df>
+            </df>
+            <df name="Extras">
+              <df name="designer">
+                <df name="images">
+                </df>
+              </df>
+              <df name="Private">
+              </df>
+            </df>
+            <df name="Layouts">
+            </df>
+            <df name="LocalStorage">
+            </df>
+            <df name="Particles.2">
+            </df>
+            <df name="PrivateWidgets">
+            </df>
+            <df name="Scene2D">
+            </df>
+            <df name="Scene3D">
+            </df>
+            <df name="Templates.2">
+            </df>
+            <df name="Window.2">
+            </df>
+            <df name="XmlListModel">
+            </df>
+          </df>
+          <df name="QtQuick.2">
+          </df>
+          <df name="QtScxml">
+          </df>
+          <df name="QtWebChannel">
+          </df>
+          <df name="QtWebSockets">
+          </df>
+          <df name="QtWinExtras">
+          </df>
+        </df>
+        <df name="sound">
+        </df>
+        <df name="styles">
+        </df>
+        <df name="templates">
+          <df name="01-General">
+          </df>
+          <df name="02-Choral">
+          </df>
+          <df name="03-Chamber_Music">
+          </df>
+          <df name="04-Solo">
+          </df>
+          <df name="05-Jazz">
+          </df>
+          <df name="06-Popular">
+          </df>
+          <df name="07-Band_and_Percussion">
+          </df>
+          <df name="08-Orchestral">
+          </df>
+        </df>
+        <df name="wallpaper">
+        </df>
+      </df>
+      <df name="zerberus">
+        <in>channel.cpp</in>
+        <in>channel.h</in>
+        <in>filter.cpp</in>
+        <in>filter.h</in>
+        <in>instrument.cpp</in>
+        <in>instrument.h</in>
+        <in>sample.h</in>
+        <in>sfz.cpp</in>
+        <in>voice.cpp</in>
+        <in>voice.h</in>
+        <in>zerberus.cpp</in>
+        <in>zerberus.h</in>
+        <in>zerberusgui.cpp</in>
+        <in>zerberusgui.h</in>
+        <in>zone.cpp</in>
+        <in>zone.h</in>
+      </df>
+      <in>all.h</in>
+    </df>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <platform>3</platform>
+      </toolsSet>
+      <compile>
+        <compiledirpicklist>
+          <compiledirpicklistitem>.</compiledirpicklistitem>
+          <compiledirpicklistitem>${AUTO_FOLDER}</compiledirpicklistitem>
+        </compiledirpicklist>
+        <compiledir>${AUTO_FOLDER}</compiledir>
+        <compilecommandpicklist>
+          <compilecommandpicklistitem>${MAKE} ${ITEM_NAME}.o</compilecommandpicklistitem>
+          <compilecommandpicklistitem>${AUTO_COMPILE}</compilecommandpicklistitem>
+        </compilecommandpicklist>
+        <compilecommand>${AUTO_COMPILE}</compilecommand>
+      </compile>
+      <dbx_gdbdebugger version="1">
+        <gdb_pathmaps>
+        </gdb_pathmaps>
+        <gdb_interceptlist>
+          <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
+        </gdb_interceptlist>
+        <gdb_options>
+          <DebugOptions>
+          </DebugOptions>
+        </gdb_options>
+        <gdb_buildfirst gdb_buildfirst_overriden="false" gdb_buildfirst_old="false"/>
+      </dbx_gdbdebugger>
+      <nativedebugger version="1">
+        <engine>gdb</engine>
+      </nativedebugger>
+      <runprofile version="9">
+        <runcommandpicklist>
+          <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
+        </runcommandpicklist>
+        <runcommand>"${OUTPUT_PATH}"</runcommand>
+        <rundir>.</rundir>
+        <buildfirst>false</buildfirst>
+        <terminal-type>0</terminal-type>
+        <remove-instrumentation>0</remove-instrumentation>
+        <environment>
+        </environment>
+      </runprofile>
+    </conf>
+  </confs>
+</configurationDescriptor>

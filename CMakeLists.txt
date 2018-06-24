@@ -632,7 +632,7 @@ endif(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 add_subdirectory(rdoc EXCLUDE_FROM_ALL)
 add_subdirectory(miditools EXCLUDE_FROM_ALL)
 add_subdirectory(fonttools EXCLUDE_FROM_ALL)
-add_subdirectory(manual)
+#add_subdirectory(manual)
 add_subdirectory(demos)
 
 if (USE_PORTMIDI AND (MINGW OR APPLE))
@@ -717,7 +717,7 @@ add_custom_target(lrelease
 ##  Create and install the plugin framework manual
 ##
 
-add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
-   COMMAND genManual ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}
-   DEPENDS genManual
-   )
+#add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
+#   COMMAND genManual ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}
+#   DEPENDS genManual
+#   )

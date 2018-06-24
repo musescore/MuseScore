@@ -26,6 +26,12 @@ namespace Ms {
 static const int pianoWidth = 40;
 static const int keyHeight = 13;
 
+const int MAX_KEY_HEIGHT = 20;
+const int MIN_KEY_HEIGHT = 8;
+const int DEFAULT_KEY_HEIGHT = 12;
+const int BEAT_WIDTH_IN_PIXELS = 50;
+const double X_ZOOM_RATIO = 1.1;
+
 enum class PianoOrientation : char { HORIZONTAL, VERTICAL };
 
 //---------------------------------------------------------
