@@ -4233,13 +4233,14 @@ void MuseScore::handleMessage(const QString& message)
 //   editInPianoroll
 //---------------------------------------------------------
 
-void MuseScore::editInPianoroll(Staff* staff)
+void MuseScore::editInPianoroll(Staff* staff, Position *p)
       {
       if (pianorollEditor == 0)
             pianorollEditor = new PianorollEditor;
       pianorollEditor->setScore(staff->score());
       pianorollEditor->setStaff(staff);
       pianorollEditor->show();
+      pianorollEditor->focusOnPosition(p);
       }
 
 //---------------------------------------------------------
