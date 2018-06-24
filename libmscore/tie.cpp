@@ -525,31 +525,6 @@ void Tie::write(XmlWriter& xml) const
       }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Tie::read(XmlReader& e)
-      {
-      while (e.readNextStartElement()) {
-            if (SlurTie::readProperties(e))
-                  ;
-            else
-                  e.unknown();
-            }
-      if (score()->mscVersion() <= 114 && spannerSegments().size() == 1) {
-            // ignore manual adjustments to single-segment ties in older scores
-            TieSegment* ss = frontSegment();
-            QPointF zeroP;
-            ss->ups(Grip::START).off     = zeroP;
-            ss->ups(Grip::BEZIER1).off   = zeroP;
-            ss->ups(Grip::BEZIER2).off   = zeroP;
-            ss->ups(Grip::END).off       = zeroP;
-            ss->setUserOff(zeroP);
-            ss->setUserOff2(zeroP);
-            }
-      }
-
-//---------------------------------------------------------
 //   calculateDirection
 //---------------------------------------------------------
 

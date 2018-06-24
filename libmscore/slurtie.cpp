@@ -377,8 +377,6 @@ SlurTie::~SlurTie()
 void SlurTie::writeProperties(XmlWriter& xml) const
       {
       Element::writeProperties(xml);
-      if (track() != track2() && track2() != -1)
-            xml.tag("track2", track2());
       int idx = 0;
       for (const SpannerSegment* ss : spannerSegments())
             ((SlurTieSegment*)ss)->writeSlur(xml, idx++);
@@ -406,6 +404,18 @@ bool SlurTie::readProperties(XmlReader& e)
       else if (!Element::readProperties(e))
             return false;
       return true;
+      }
+
+//---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
+void SlurTie::read(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            if (!SlurTie::readProperties(e))
+                  e.unknown();
+            }
       }
 
 //---------------------------------------------------------
