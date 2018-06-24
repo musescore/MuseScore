@@ -153,7 +153,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void paint(const QRect&, QPainter&);
 
       void objectPopup(const QPoint&, Element*);
-      void measurePopup(const QPoint&, Measure*);
+      void measurePopup(QContextMenuEvent* ev, Measure*);
 
       void saveChord(XmlWriter&);
 
