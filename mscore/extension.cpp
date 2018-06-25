@@ -37,9 +37,9 @@ QStringList Extension::getDirectoriesByType(const char* type)
             auto extDir = extensionsDir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot| QDir::Readable | QDir::NoSymLinks, QDir::Name);
             // take the most recent version only
             if (!extDir.isEmpty()) {
-                  QString sfzDir = QString("%1/%2").arg(extDir.last().absoluteFilePath()).arg(type);
-                  if (QFileInfo(sfzDir).exists())
-                        result.append(sfzDir);
+                  QString typeDir = QString("%1/%2").arg(extDir.last().absoluteFilePath()).arg(type);
+                  if (QFileInfo(typeDir).exists())
+                        result.append(typeDir);
                   }
             }
       return result;
