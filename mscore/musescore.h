@@ -410,6 +410,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       qreal _physicalDotsPerInch;
 
+      QMessageBox* infoMsgBox;
       //---------------------
 
       virtual void closeEvent(QCloseEvent*);
@@ -512,6 +513,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void switchLayoutMode(int);
       void showMidiImportPanel();
       void changeWorkspace(QAction*);
+      void onLongOperationFinished();
 
       virtual QMenu* createPopupMenu() override;
 
@@ -782,7 +784,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static void restoreGeometry(QWidget*const qw);
 
       void updateWindowTitle(Score* score);
-      bool importExtension(QString path, QWidget* parent = nullptr);
+      bool importExtension(QString path);
       bool uninstallExtension(QString extensionId);
       };
 
