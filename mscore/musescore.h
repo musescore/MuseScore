@@ -210,7 +210,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QSettings settings;
       ScoreView* cv                        { 0 };
       ScoreState _sstate;
-      UpdateChecker* ucheck;
+      UpdateChecker* ucheck = nullptr;
       ExtensionsUpdateChecker* packUChecker = nullptr;
 
       QVBoxLayout* layout;    // main window layout

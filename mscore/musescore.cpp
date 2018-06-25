@@ -689,7 +689,9 @@ MuseScore::MuseScore()
       setWindowTitle(QString(MUSESCORE_NAME_VERSION));
       setIconSize(QSize(preferences.iconWidth * guiScaling, preferences.iconHeight * guiScaling));
 
+#ifndef MSCORE_NO_UPDATE_CHECKER
       ucheck = new UpdateChecker(this);
+#endif
       packUChecker = new ExtensionsUpdateChecker(this);
 
       setAcceptDrops(true);
