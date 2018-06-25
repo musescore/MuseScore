@@ -994,7 +994,7 @@ class Score : public QObject, public ScoreElement {
       MasterScore* masterScore() const    { return _masterScore; }
       void setMasterScore(MasterScore* s) { _masterScore = s;    }
       void createRevision();
-      void writeSegments(XmlWriter& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool, bool);
+      void writeSegments(XmlWriter& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool);
       void writeSegments300old(XmlWriter& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool, bool);
 
       const QMap<QString, QString>& metaTags() const   { return _metaTags; }

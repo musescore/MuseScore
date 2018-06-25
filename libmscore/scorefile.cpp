@@ -1116,10 +1116,11 @@ static bool writeVoiceMove(XmlWriter& xml, Segment* seg, int startTick, int trac
 //---------------------------------------------------------
 
 void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
-   Segment* fs, Segment* ls, bool writeSystemElements, bool clip, bool needFirstTick, bool forceTimeSig)
+   Segment* fs, Segment* ls, bool writeSystemElements, bool forceTimeSig)
       {
       const int startTick = xml.curTick();
       const int endTick = ls ? ls->tick() : lastMeasure()->endTick();
+      const bool clip = xml.clipboardmode();
       // in clipboard mode, ls might be in an mmrest
       // since we are traversing regular measures,
       // force them out of mmRest
@@ -1180,7 +1181,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                   // special case: - barline span > 1
                   //               - part (excerpt) staff starts after
                   //                 barline element
-                  bool needMove = (needFirstTick && segment == fs) || (segment->tick() != xml.curTick() || (track > lastTrackWritten));
+                  bool needMove = (segment->tick() != xml.curTick() || (track > lastTrackWritten));
                   if ((segment->isEndBarLineType()) && !e && writeSystemElements && ((track % VOICES) == 0)) {
                         // search barline:
                         for (int idx = track - VOICES; idx >= 0; idx -= VOICES) {
