@@ -1,15 +1,15 @@
 #!/bin/sh
 
 if [ "`uname`" = 'Darwin' ]; then
-   S=../../../build.xcode/mtest/libmscore/noregress300old/Debug
+   S=../../../build.xcode/mtest/libmscore/compat300/Debug
 else
-   S=../../../build.debug/mtest/libmscore/noregress300old
+   S=../../../build.debug/mtest/libmscore/compat300
 fi
 
 update() {
     for SCORE in $@
     do
-        cp -v $S/$SCORE-test-old.mscx $SCORE-ref.mscx
+        cp -v $S/$SCORE-test.mscx $SCORE-ref.mscx
     done
 }
 

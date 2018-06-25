@@ -11,7 +11,7 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-set(TARGET tst_noregress300old)
+set(TARGET tst_compat300)
 
 include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
 
