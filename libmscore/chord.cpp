@@ -1811,8 +1811,10 @@ void Chord::layoutPitched()
                   }
             computeUp();
             layoutStem();
-            qreal stemWidth5 = _stem->lineWidth() * .5;
-            _stem->rxpos()   = up() ? (upNote()->headBodyWidth() - stemWidth5) : stemWidth5;
+            if (_stem) { //false when dragging notes from drum palette
+                  qreal stemWidth5 = _stem->lineWidth() * .5;
+                  _stem->rxpos()   = up() ? (upNote()->headBodyWidth() - stemWidth5) : stemWidth5;
+                  }
             addLedgerLines();
             for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
                   ll->layout();
