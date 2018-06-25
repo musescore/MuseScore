@@ -28,6 +28,8 @@ QPixmap* Piano::mk2;
 QPixmap* Piano::mk3;
 QPixmap* Piano::mk4;
 
+
+
 //---------------------------------------------------------
 //   Piano
 //---------------------------------------------------------
@@ -370,6 +372,7 @@ void Piano::paintEvent(QPaintEvent* event)
             }
       }
 
+
 //---------------------------------------------------------
 //   setYpos
 //---------------------------------------------------------
@@ -467,5 +470,320 @@ void Piano::setOrientation(PianoOrientation o)
       _orientation = o;
       update();
       }
-}
 
+
+//---------------------------------------------------------
+//---------------------------------------------------------
+//---------------------------------------------------------
+//---------------------------------------------------------
+//---------------------------------------------------------
+//---------------------------------------------------------
+//---------------------------------------------------------
+//----------------------------------------------------------
+
+//FooPizza::FooPizza(QWidget* parent)
+//   : QWidget(parent)
+//      {
+//      }
+
+
+PianoKeyboard::PianoKeyboard(QWidget* parent)
+   : QWidget(parent)
+      {
+      setMouseTracking(true);
+//      _ymag = 1.0;
+      setAttribute(Qt::WA_NoSystemBackground);
+      setAttribute(Qt::WA_StaticContents);
+      setMouseTracking(true);
+      yRange   = noteHeight * 128;
+      curPitch = -1;
+      _ypos    = 0;
+      curKeyPressed = -1;
+      noteHeight = DEFAULT_KEY_HEIGHT;
+      _orientation = PianoOrientation::VERTICAL;
+      }
+
+
+
+//---------------------------------------------------------
+//   paint
+//---------------------------------------------------------
+
+void PianoKeyboard::paintEvent(QPaintEvent* /*event*/)
+      {
+      QPainter p(this);
+      p.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
+      
+      const int fontSize = 8;
+      QFont f("FreeSans", fontSize);
+      p.setFont(f);
+
+      
+      //Orange
+      QColor colSelect = QColor(224, 170, 20);
+              
+      p.setPen(QPen(Qt::black, 2));
+      
+      int keyboardLen = 128 * noteHeight;
+      const int blackKeyLen = pianoKeyboardWidth * 9 / 14;
+
+      p.setPen(QPen(Qt::red));
+      p.drawEllipse(0, 0, pianoWidth, keyboardLen);
+      
+      
+      const qreal whiteKeyOffset[] = {0, 1.5, 3.5, 5, 6.5, 8.5, 10.5, 12};
+      const int whiteKeyDegree[] = {0, 2, 4, 5, 7, 9, 11};
+      const qreal blackKeyOffset[] = {1.5, 3.5, 6.5, 8.5, 10.5};
+      const int blackKeyDegree[] = {1, 3, 6, 8, 10};
+      const QString pitchNames[] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+      
+      int pitch = -1;
+      for (int octave = 0; octave < 11; ++octave)
+            {
+            for (int key = 0; key < 7; ++key) 
+                  {
+                  int degree = whiteKeyDegree[key];
+                  QString noteName = pitchNames[degree]  % QString::number(octave - 1) % " ";
+                  
+                  pitch = degree + octave * 12;
+                  if (pitch >= 128)
+                        {
+                        //goto breakKeyDrawLoop;
+                        //return;
+                        break;
+                        }
+                  
+                  p.setPen(QPen(Qt::black));
+                  p.setBrush(curPitch == pitch ? colSelect : Qt::white);
+
+                  qreal off1 = whiteKeyOffset[key] * noteHeight + octave * 12 * noteHeight;
+                  qreal off2 = whiteKeyOffset[key + 1] * noteHeight + octave * 12 * noteHeight;
+                  if (_orientation == PianoOrientation::HORIZONTAL) {
+                        p.drawRect(off1, 0, off2 - off1, pianoKeyboardWidth);
+                        }
+                  else
+                        {
+                        QRectF rect(0, -_ypos + keyboardLen - off2, pianoKeyboardWidth, off2 - off1);
+                        
+                        p.drawRect(rect);
+//                        printf("Drawing WHITE key #%d: (%f %f %f %f)\n", pitch,
+//                                rect.x(), rect.y(), rect.width(), rect.height());
+                        
+                        if (degree == 0 && noteHeight > fontSize + 2)
+                              {
+                              p.setPen(QPen(Qt::black));
+//                            QRectF rectText(rect.x(), rect.y(), rect.width(), noteHeight - 2);
+                              p.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, noteName);
+                              }
+                        }
+                  }
+            
+            for (int key = 0; key < 5; ++key) 
+                  {
+                  QString noteName = pitchNames[blackKeyDegree[key]]  % QString::number(octave) + " ";
+                  
+                  pitch = blackKeyDegree[key] + octave * 12;
+                  if (pitch >= 128)
+                        {
+                        //goto breakKeyDrawLoop;
+                        //return;
+                        break;
+                        }
+                  
+                  qreal center = blackKeyOffset[key] * noteHeight;
+                  qreal offset = center - noteHeight / 2.0 + octave * 12 * noteHeight;
+                  
+                  p.setPen(QPen(Qt::black));
+                  p.setBrush(curPitch == pitch ? colSelect : Qt::black);
+                  
+                  if (_orientation == PianoOrientation::HORIZONTAL) {
+                        p.drawRect(offset, 0, noteHeight, blackKeyLen);
+                        }
+                  else
+                        {
+                        QRectF rect(0, -_ypos + keyboardLen - offset - noteHeight, blackKeyLen, noteHeight);
+                        
+                        p.drawRect(rect);
+//                        printf("Drawing black key #%d: (%f %f %f %f)\n", pitch, 
+//                                rect.x(), rect.y(), rect.width(), rect.height());
+
+//                        if (noteHeight > fontSize + 2)
+//                              {
+//                              p.setPen(QPen(Qt::white));
+//                              p.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, noteName);
+//                              }
+                        }
+                  }
+            }
+      
+      //break out of key drawing loop
+      //breakKeyDrawLoop:
+      
+      
+      
+/*      
+      
+      const QRect& rr = event->rect();
+      QRect r;
+      if (_orientation == PianoOrientation::HORIZONTAL) {
+            int w = keyHeight * 52;
+            p.translate(w, 0);
+            p.rotate(90.0);
+            r.setWidth(rr.height());
+            r.setHeight(rr.width());
+            r.setX(0);
+            r.setY(0);
+            }
+      else
+            r = rr;
+      p.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
+      int   d = int(_ymag)+1;
+      qreal x = qreal(r.x());
+      qreal y = 0.0;
+      qreal h = (r.height()+d) / _ymag;
+      QPointF offset(x, _ypos / _ymag + keyHeight * 2 + y);
+
+      p.scale(1.0, _ymag);
+      p.drawTiledPixmap(QRectF(x, y, qreal(r.width()), h), *octave, offset);
+
+      if (curPitch != -1) {
+            int y = pitch2y(curPitch);
+            QPixmap* pm;
+            switch(curPitch % 12) {
+                  case 0:
+                  case 5:
+                        pm = mk3;
+                        break;
+                  case 2:
+                  case 7:
+                  case 9:
+                        pm = mk2;
+                        break;
+                  case 4:
+                  case 11:
+                        pm = mk1;
+                        break;
+                  default:
+                        pm = mk4;
+                        break;
+                  }
+            p.drawPixmap(0, y, *pm);
+            }
+ */
+      }
+
+//---------------------------------------------------------
+//   setYpos
+//---------------------------------------------------------
+
+void PianoKeyboard::setYpos(int val)
+      {
+      if (_ypos != val) {
+            _ypos = val;
+            update();
+            }
+      }
+
+//---------------------------------------------------------
+//   setNoteHeight
+//---------------------------------------------------------
+
+void PianoKeyboard::setNoteHeight(int nh)
+      {
+      if (noteHeight != nh) {
+            noteHeight = nh;
+            update();
+            }
+      }
+
+//---------------------------------------------------------
+//   setPitch
+//---------------------------------------------------------
+
+void PianoKeyboard::setPitch(int val)
+      {
+      if (curPitch != val) {
+            curPitch = val;
+            update();
+            }
+      }
+
+//---------------------------------------------------------
+//   mousePressEvent
+//---------------------------------------------------------
+
+void PianoKeyboard::mousePressEvent(QMouseEvent* event)
+      {
+      int offset = _orientation == PianoOrientation::HORIZONTAL
+            ? event->pos().x()
+            : 128 * noteHeight - (event->y() + _ypos);
+      
+      curKeyPressed = offset / noteHeight;
+      if (curKeyPressed < 0 || curKeyPressed > 127)
+      {
+            curKeyPressed = -1;
+      }
+      
+      //curKeyPressed = y2pitch(event->pos().y());
+      emit keyPressed(curKeyPressed);
+      }
+
+//---------------------------------------------------------
+//   mouseReleaseEvent
+//---------------------------------------------------------
+
+void PianoKeyboard::mouseReleaseEvent(QMouseEvent*)
+      {
+      emit keyReleased(curKeyPressed);
+      curKeyPressed = -1;
+      }
+
+//---------------------------------------------------------
+//   mouseMoveEvent
+//---------------------------------------------------------
+
+void PianoKeyboard::mouseMoveEvent(QMouseEvent* event)
+      {
+      
+      int offset = _orientation == PianoOrientation::HORIZONTAL
+            ? event->pos().x()
+            : 128 * noteHeight - (event->y() + _ypos);
+      int pitch = offset / noteHeight;
+
+//      printf("MouseMoveEvent (%d %d) off:%d pitch:%d\n", event->x(), event->y(), offset, pitch);
+      
+      if (pitch != curPitch) {
+            curPitch = pitch;
+            emit pitchChanged(curPitch);
+            if ((curKeyPressed != -1) && (curKeyPressed != pitch)) {
+                  emit keyReleased(curKeyPressed);
+                  curKeyPressed = pitch;
+                  emit keyPressed(curKeyPressed);
+                  }
+            update();
+            }
+      }
+
+//---------------------------------------------------------
+//   leaveEvent
+//---------------------------------------------------------
+
+void PianoKeyboard::leaveEvent(QEvent*)
+      {
+      if (curPitch != -1) {
+            curPitch = -1;
+            emit pitchChanged(-1);
+            update();
+            }
+      }
+
+//---------------------------------------------------------
+//   setOrientation
+//---------------------------------------------------------
+
+void PianoKeyboard::setOrientation(PianoOrientation o)
+      {
+      _orientation = o;
+      update();
+      }
+}

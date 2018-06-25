@@ -605,7 +605,7 @@ int PianoView::y2pitch(int y) const
 void PianoView::mouseMoveEvent(QMouseEvent* event)
       {
       QPointF p(mapToScene(event->pos()));
-      int pitch = y2pitch(int(p.y()));
+      int pitch = (_noteHeight * 128 - p.y()) / _noteHeight;
       emit pitchChanged(pitch);
       int tick = int(p.x()) -480;
       if (tick < 0) {

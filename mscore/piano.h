@@ -26,6 +26,7 @@ namespace Ms {
 static const int pianoWidth = 40;
 static const int keyHeight = 13;
 
+static const int pianoKeyboardWidth = 40;
 const int MAX_KEY_HEIGHT = 20;
 const int MIN_KEY_HEIGHT = 8;
 const int DEFAULT_KEY_HEIGHT = 12;
@@ -33,6 +34,13 @@ const int BEAT_WIDTH_IN_PIXELS = 50;
 const double X_ZOOM_RATIO = 1.1;
 
 enum class PianoOrientation : char { HORIZONTAL, VERTICAL };
+
+//class FooPizza : public QWidget {
+//      Q_OBJECT
+//
+//    public:              
+//      FooPizza(QWidget* parent = 0);
+//    };
 
 //---------------------------------------------------------
 //   Piano
@@ -76,6 +84,47 @@ class Piano : public QWidget {
 
    public:
       Piano(QWidget* parent = 0);
+      void setOrientation(PianoOrientation);
+      };
+
+      
+      
+//Alternative implementation with evenly spaced notes
+class PianoKeyboard : public QWidget {
+      Q_OBJECT
+
+      PianoOrientation _orientation;
+//      double _ymag;
+      int _ypos;
+
+      int noteHeight;
+      int yRange;
+      int curPitch;
+      int curKeyPressed;
+
+      virtual void paintEvent(QPaintEvent*);
+      virtual void mousePressEvent(QMouseEvent*);
+      virtual void mouseReleaseEvent(QMouseEvent*);
+      virtual void mouseMoveEvent(QMouseEvent* event);
+      virtual void leaveEvent(QEvent*);
+
+      //int pitch2offset(int pitch) const;
+      //int offset2pitch(int pos) const;
+      //int mouse2pitch(QMouseEvent* event) const;
+
+   signals:
+      void pitchChanged(int);
+      void keyPressed(int pitch);
+      void keyReleased(int pitch);
+
+   public slots:
+      void setYpos(int val);
+      //void setMag(double, double);
+      void setNoteHeight(int);
+      void setPitch(int);
+
+   public:
+      PianoKeyboard(QWidget* parent = 0);
       void setOrientation(PianoOrientation);
       };
 

@@ -140,9 +140,9 @@ PianorollEditor::PianorollEditor(QWidget* parent)
 
       ruler->setMag(xmag, 1.0);
 
-      Piano* piano = new Piano;
+      PianoKeyboard* piano = new PianoKeyboard;
       piano->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-      piano->setFixedWidth(pianoWidth);
+      piano->setFixedWidth(pianoKeyboardWidth);
 
       gv  = new PianoView;
 //      gv->scale(xmag, 1.0);
@@ -169,7 +169,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       QGridLayout* layout = new QGridLayout;
       layout->setContentsMargins(0, 0, 0, 0);
       layout->setSpacing(0);
-      layout->setColumnMinimumWidth(0, pianoWidth + 5);
+      layout->setColumnMinimumWidth(0, pianoKeyboardWidth + 5);
       layout->addWidget(tb,    0, 0, 1, 2);
       layout->addWidget(ruler, 1, 1);
       layout->addWidget(split, 2, 0, 1, 2);
@@ -181,7 +181,8 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       connect(gv->verticalScrollBar(), SIGNAL(valueChanged(int)), piano, SLOT(setYpos(int)));
 
       connect(gv,          SIGNAL(magChanged(double,double)),  ruler, SLOT(setMag(double,double)));
-      connect(gv,          SIGNAL(magChanged(double,double)),  piano, SLOT(setMag(double,double)));
+//      connect(gv,          SIGNAL(magChanged(double,double)),  piano, SLOT(setMag(double,double)));
+      connect(gv,          SIGNAL(noteHeightChanged(int)),  piano, SLOT(setNoteHeight(int)));
       connect(gv,          SIGNAL(pitchChanged(int)),          pl,    SLOT(setPitch(int)));
       connect(gv,          SIGNAL(pitchChanged(int)),          piano, SLOT(setPitch(int)));
       connect(piano,       SIGNAL(pitchChanged(int)),          pl,    SLOT(setPitch(int)));
