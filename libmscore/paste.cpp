@@ -105,8 +105,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                 tickLen       = e.intAttribute("len", 0);
             int staffStart    = e.intAttribute("staff", 0);
                 staves        = e.intAttribute("staves", 0);
-            int voiceOffset[VOICES];
-            std::fill(voiceOffset,voiceOffset+VOICES,-1);
 
             e.setTickOffset(dstTick - tickStart);
             e.initTick(0);
@@ -131,7 +129,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                         break;
                         }
 
-                  bool makeGap  = true;
                   while (e.readNextStartElement()) {
                         pasted = true;
                         const QStringRef& tag(e.name());
@@ -141,20 +138,26 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                         else if (tag == "transposeDiatonic")
                               e.setTransposeDiatonic(e.readInt());
                         else if (tag == "voiceOffset") {
-                              int voiceId = e.attribute("id", "-1").toInt();
-                              Q_ASSERT(voiceId >= 0 && voiceId < VOICES);
-                              voiceOffset[voiceId] = e.readInt();
+                              int voiceOffset[VOICES];
+                              std::fill(voiceOffset, voiceOffset+VOICES, -1);
+                              while (e.readNextStartElement()) {
+                                    if (e.name() != "voice")
+                                          e.unknown();
+                                    int voiceId = e.attribute("id", "-1").toInt();
+                                    Q_ASSERT(voiceId >= 0 && voiceId < VOICES);
+                                    voiceOffset[voiceId] = e.readInt();
+                                    }
+                              e.readNext();
+                              if (!makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen), voiceOffset)) {
+                                    qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick);
+                                    done = true; // break main loop, cannot make gap
+                                    break;
+                                    }
                               }
                         else if (tag == "move") {
                               PointInfo move = PointInfo::relative();
                               move.read(e);
                               e.setPoint(move);
-                              if (makeGap && !makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen), voiceOffset)) {
-                                    qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, e.tick());
-                                    done = true; // break main loop, cannot make gap
-                                    break;
-                                    }
-                              makeGap = false; // create gap only once per staff
                               }
                         else if (tag == "Tuplet") {
                               Tuplet* oldTuplet = tuplet;

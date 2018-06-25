@@ -704,13 +704,15 @@ QByteArray Selection::staffMimeData() const
                   xml.tag("transposeChromatic", interval.chromatic);
             if (interval.diatonic)
                   xml.tag("transposeDiatonic", interval.diatonic);
+            xml.stag("voiceOffset");
             for (int voice = 0; voice < VOICES; voice++) {
                   if (hasElementInTrack(seg1, seg2, startTrack + voice)
                      && xml.canWriteVoice(voice)) {
                         int offset = firstElementInTrack(seg1, seg2, startTrack+voice) - tickStart();
-                        xml.tag(QString("voiceOffset id=\"%1\"").arg(voice), offset);
+                        xml.tag(QString("voice id=\"%1\"").arg(voice), offset);
                         }
                   }
+            xml.etag(); // </voiceOffset>
             xml.setCurTrack(startTrack);
             _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true, false);
             xml.etag();
