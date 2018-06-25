@@ -39,6 +39,8 @@ struct DrumInstrumentVariant {
 
 struct DrumInstrument {
       QString name;
+      int index = 0;
+      int pitch = -1;
       
       // if @notehead == HEAD_CUSTOM, use @noteheads to extract custom noteheads
       NoteHead::Group notehead; ///< notehead symbol set
@@ -55,6 +57,7 @@ struct DrumInstrument {
          int v = 0, char sc = 0)
          : name(s), notehead(nh), line(l), stemDirection(d), voice(v), shortcut(sc) {}
       void addVariant(DrumInstrumentVariant v) { variants.append(v); }
+      bool operator<(const DrumInstrument& other) const { return (index != other.index ? index < other.index : pitch < other.pitch); };
       };
 
 static const int DRUM_INSTRUMENTS = 128;
@@ -66,10 +69,11 @@ static const int DRUM_INSTRUMENTS = 128;
 //---------------------------------------------------------
 
 class Drumset {
-      DrumInstrument _drum[DRUM_INSTRUMENTS];
+      std::vector<DrumInstrument> _drum;
       
    public:
-      bool isValid(int pitch) const             { return !_drum[pitch].name.isEmpty(); }
+      Drumset();
+      bool isValid(int pitch) const             { return pitch > -1 && pitch < DRUM_INSTRUMENTS && !_drum[pitch].name.isEmpty(); }
       NoteHead::Group noteHead(int pitch) const { return _drum[pitch].notehead;       }
       SymId noteHeads(int pitch, NoteHead::Type t) const  { return _drum[pitch].noteheads[int(t)];      }
       
@@ -80,13 +84,15 @@ class Drumset {
       int shortcut(int pitch) const             { return _drum[pitch].shortcut;       }
       QList<DrumInstrumentVariant> variants(int pitch) const   { return _drum[pitch].variants; }
 
+      std::vector<DrumInstrument> drumsByIndex() const;
       void save(Xml&) const;
-      void load(XmlReader&);
+      void load(XmlReader&, int index);
       void clear();
       int nextPitch(int) const;
       int prevPitch(int) const;
       DrumInstrument& drum(int i) { return _drum[i]; }
       const DrumInstrument& drum(int i) const { return _drum[i]; }
+      void addDrumInstrument(int pitch, DrumInstrument d) { d.pitch = pitch; _drum[pitch] = d; };
       DrumInstrumentVariant findVariant(int pitch, const QList<Articulation*> articulations, Tremolo* tremolo) const;
       };
 

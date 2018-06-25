@@ -332,7 +332,7 @@ void InstrumentTemplate::write1(Xml& xml) const
 void InstrumentTemplate::read(XmlReader& e)
       {
       id = e.attribute("id");
-
+      int drumsetIndex = 0;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
@@ -432,7 +432,8 @@ void InstrumentTemplate::read(XmlReader& e)
                         drumset = new Drumset(*smDrumset);
                         drumset->clear();
                         }
-                  drumset->load(e);
+                  drumset->load(e, drumsetIndex);
+                  drumsetIndex++;
                   }
             else if (tag == "MidiAction") {
                   NamedEventList a;

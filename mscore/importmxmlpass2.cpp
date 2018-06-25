@@ -388,9 +388,8 @@ static void initDrumset(Drumset* drumset, const MusicXMLDrumset& mxmlDrumset)
             //qDebug("initDrumset: instrument: %s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
             int pitch = ii.value().pitch;
             if (0 <= pitch && pitch <= 127) {
-                  drumset->drum(ii.value().pitch)
-                        = DrumInstrument(ii.value().name.toLatin1().constData(),
-                                         ii.value().notehead, ii.value().line, ii.value().stemDirection);
+                  drumset->addDrumInstrument(ii.value().pitch, DrumInstrument(ii.value().name.toLatin1().constData(),
+                                         ii.value().notehead, ii.value().line, ii.value().stemDirection));
                   }
             }
       }

@@ -592,9 +592,12 @@ void EditDrumset::load()
       nDrumset.clear();
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
+                  int drumInstrumentIndex = 0;
                   while (e.readNextStartElement()) {
-                        if (e.name() == "Drum")
-                              nDrumset.load(e);
+                        if (e.name() == "Drum") {
+                              nDrumset.load(e, drumInstrumentIndex);
+                              drumInstrumentIndex++;
+                              }
                         else
                               e.unknown();
                         }
