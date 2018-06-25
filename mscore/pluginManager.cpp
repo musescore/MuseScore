@@ -62,9 +62,9 @@ void PluginManager::init()
 void PluginManager::loadList(bool forceRefresh)
       {
       QStringList saveLoaded; // If forcing a refresh, the load flags are lost. Keep a copy and reapply.
-      int n = preferences.pluginList.size();
-      if (forceRefresh && n > 0) {
-            for (int i = 0; i < n; i++) {
+      const int sizeBeforeReloading = preferences.pluginList.size();
+      if (forceRefresh && sizeBeforeReloading > 0) {
+            for (int i = 0; i < sizeBeforeReloading; i++) {
                   PluginDescription& d = preferences.pluginList[i];
                   if (d.load) {
                         saveLoaded.append(d.path);
@@ -73,9 +73,13 @@ void PluginManager::loadList(bool forceRefresh)
                   }
             }
       preferences.updatePluginList(forceRefresh);
-      n = preferences.pluginList.size();
+      //we need to assign updated preferences before for() loop
+      //because setData() in the loop silently calls pluginLoadToggled() which uses local prefs variable
+      prefs = preferences;
+
+      const int sizeAfterUpdate = preferences.pluginList.size();
       pluginList->clear();
-      for (int i = 0; i < n; ++i) {
+      for (int i = 0; i < sizeAfterUpdate; ++i) {
             PluginDescription& d = preferences.pluginList[i];
             Shortcut* s = &d.shortcut;
             localShortcuts[s->key()] = new Shortcut(*s);
@@ -85,8 +89,8 @@ void PluginManager::loadList(bool forceRefresh)
             item->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
             item->setData(Qt::UserRole, i);
             }
-      prefs = preferences;
-      if (n) {
+
+      if (sizeAfterUpdate) {
             pluginList->setCurrentRow(0);
             pluginListItemChanged(pluginList->item(0), 0);
             }
