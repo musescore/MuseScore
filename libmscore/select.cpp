@@ -719,7 +719,7 @@ QByteArray Selection::staffMimeData() const
                   }
             xml.etag(); // </voiceOffset>
             xml.setCurTrack(startTrack);
-            _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true, false);
+            _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, false);
             xml.etag();
             }
 
