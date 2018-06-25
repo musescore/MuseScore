@@ -616,10 +616,19 @@ void MuseScore::populateNoteInputMenu()
       }
 
 //---------------------------------------------------------
+//   onLongOperationFinished
+//---------------------------------------------------------
+
+void MuseScore::onLongOperationFinished()
+      {
+      infoMsgBox->accept();
+      }
+
+//---------------------------------------------------------
 //   importExtension
 //---------------------------------------------------------
 
-bool MuseScore::importExtension(QString path, QWidget* parent)
+bool MuseScore::importExtension(QString path)
       {
       MQZipReader zipFile(path);
       // compute total unzipped size
@@ -727,74 +736,89 @@ bool MuseScore::importExtension(QString path, QWidget* parent)
                   }
             }
 
-      QMessageBox* msgBox = new QMessageBox(parent);
-      msgBox->setWindowModality(Qt::ApplicationModal);
-      msgBox->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
-      msgBox->setTextFormat(Qt::RichText);
-      msgBox->setMinimumSize(300, 100);
-      msgBox->setMaximumSize(300, 100);
-      msgBox->setStandardButtons(0);
-      msgBox->setText(QString("<p align='center'>") + tr("Please wait, unpacking extension...") + QString("</p>"));
-      msgBox->show();
-      qApp->processEvents();
-      // Unzip the extension
-      MQZipReader zipFile3(path);
-      bool res = zipFile3.extractAll(QString("%1/%2/%3").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version));
-      if (!res) {
+      //setup the message box
+      infoMsgBox = new QMessageBox();
+      infoMsgBox->setWindowModality(Qt::ApplicationModal);
+      infoMsgBox->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
+      infoMsgBox->setTextFormat(Qt::RichText);
+      infoMsgBox->setMinimumSize(300, 100);
+      infoMsgBox->setMaximumSize(300, 100);
+      infoMsgBox->setStandardButtons(0);
+      infoMsgBox->setText(QString("<p align='center'>") + tr("Please wait, unpacking extension...") + QString("</p>"));
+
+      //setup async run of long operations
+      QFutureWatcher<bool> futureWatcherUnzip;
+      connect(&futureWatcherUnzip, SIGNAL(finished()), this, SLOT(onLongOperationFinished()));
+
+      MQZipReader* zipFile3 = new MQZipReader(path);
+      // Unzip the extension asynchronously
+      QFuture<bool> futureUnzip = QtConcurrent::run(zipFile3, &MQZipReader::extractAll, QString("%1/%2/%3").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version));
+      futureWatcherUnzip.setFuture(futureUnzip);
+      infoMsgBox->exec();
+      zipFile3->close();
+      delete zipFile3;
+      zipFile3 = nullptr;
+
+      if (!futureUnzip.result()) {
             if (!MScore::noGui)
                   QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Unable to extract files from the extension"));
             return false;
             }
-      zipFile3.close();
-
-      msgBox->hide();
 
       delete newWizard;
       newWizard = 0;
       mscore->reloadInstrumentTemplates();
       mscore->updateInstrumentDialog();
 
-      msgBox->setText(QString("<p align='center'>") + tr("Please wait, loading soundfonts...") + QString("</p>"));
-      msgBox->show();
-      qApp->processEvents();
-      // After install: add sfz to zerberus
-      QDir sfzDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::sfzsDir));
-      if (sfzDir.exists()) {
-            // get all sfz files
-            QDirIterator it(sfzDir.absolutePath(), QStringList("*.sfz"), QDir::Files, QDirIterator::Subdirectories);
-            Synthesizer* s = synti->synthesizer("Zerberus");
-            QStringList sfzs;
-            while (it.hasNext()) {
-                  it.next();
-                  sfzs.append(it.fileName());
-                  }
-            sfzs.sort();
-            for (int sfzNum = 0; sfzNum < sfzs.size(); ++sfzNum)
-                  s->addSoundFont(sfzs[sfzNum]);
+      auto loadSoundFontAsync = [&]() {
+            // After install: add sfz to zerberus
+            QDir sfzDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::sfzsDir));
+            if (sfzDir.exists()) {
+                  // get all sfz files
+                  QDirIterator it(sfzDir.absolutePath(), QStringList("*.sfz"), QDir::Files, QDirIterator::Subdirectories);
+                  Synthesizer* s = synti->synthesizer("Zerberus");
+                  QStringList sfzs;
+                  while (it.hasNext()) {
+                        it.next();
+                        sfzs.append(it.fileName());
+                        }
+                  sfzs.sort();
+                  for (int sfzNum = 0; sfzNum < sfzs.size(); ++sfzNum)
+                        s->addSoundFont(sfzs[sfzNum]);
 
-            msgBox->hide();
-            if (!sfzs.isEmpty())
-                  synti->storeState();
-            }
-      // After install: add soundfont to fluid
-      QDir sfDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::soundfontsDir));
-      if (sfDir.exists()) {
-            // get all soundfont files
-            QStringList filters("*.sf2");
-            filters.append("*.sf3");
-            QDirIterator it(sfzDir.absolutePath(), filters, QDir::Files, QDirIterator::Subdirectories);
-            Synthesizer* s = synti->synthesizer("Fluid");
-            QStringList sfs;
-            while (it.hasNext()) {
-                  it.next();
-                  sfs.append(it.fileName());
+                  if (!sfzs.isEmpty())
+                        synti->storeState();
                   }
-            sfs.sort();
-            for (auto sf : sfs)
-                  s->addSoundFont(sf);
-            if (!sfs.isEmpty())
-                  synti->storeState();
-            }
+
+            // After install: add soundfont to fluid
+            QDir sfDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::soundfontsDir));
+            if (sfDir.exists()) {
+                  // get all soundfont files
+                  QStringList filters("*.sf2");
+                  filters.append("*.sf3");
+                  QDirIterator it(sfzDir.absolutePath(), filters, QDir::Files, QDirIterator::Subdirectories);
+                  Synthesizer* s = synti->synthesizer("Fluid");
+                  QStringList sfs;
+                  while (it.hasNext()) {
+                        it.next();
+                        sfs.append(it.fileName());
+                        }
+                  sfs.sort();
+                  for (auto sf : sfs)
+                        s->addSoundFont(sf);
+                  if (!sfs.isEmpty())
+                        synti->storeState();
+                  }
+            };
+
+      //load soundfonts async
+      QFuture<void> futureLoadSFs = QtConcurrent::run(loadSoundFontAsync);
+      QFutureWatcher<void> futureWatcherLoadSFs;
+      futureWatcherLoadSFs.setFuture(futureLoadSFs);
+      connect(&futureWatcherLoadSFs, SIGNAL(finished()), this, SLOT(onLongOperationFinished()));
+      infoMsgBox->setText(QString("<p align='center'>") + tr("Please wait, loading soundfonts...") + QString("</p>"));
+      infoMsgBox->exec();
+
       // after install: refresh workspaces if needed
       QDir workspacesDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::workspacesDir));
       if (workspacesDir.exists()) {
@@ -6580,7 +6604,6 @@ int main(int argc, char* av[])
             MScore::readDefaultStyle(preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE));
 
       QSplashScreen* sc = 0;
-      QTimer* stimer = 0;
       if (!MScore::noGui && preferences.getBool(PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN)) {
             QPixmap pm(":/data/splash.png");
             sc = new QSplashScreen(pm);
@@ -6588,10 +6611,6 @@ int main(int argc, char* av[])
 #ifdef Q_OS_MAC // to have session dialog on top of splashscreen on mac
             sc->setWindowFlags(Qt::FramelessWindowHint);
 #endif
-            // show splash screen for 5 sec
-            stimer = new QTimer(0);
-            qApp->connect(stimer, SIGNAL(timeout()), sc, SLOT(close()));
-            stimer->start(5000);
             sc->show();
             qApp->processEvents();
             }
@@ -6786,6 +6805,7 @@ int main(int argc, char* av[])
 #endif
             }
 
+      sc->close();
       mscore->showPlayPanel(preferences.getBool(PREF_UI_APP_STARTUP_SHOWPLAYPANEL));
       QSettings settings;
       if (settings.value("synthControlVisible", false).toBool())
