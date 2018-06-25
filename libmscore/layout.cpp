@@ -2167,6 +2167,7 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
             for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                   int track = staffIdx * VOICES;
 
+                  // the real key signature in the next measure, if present
                   KeySig* nks = static_cast<KeySig*>(ns->element(track));
 
                   if (nks && nks->showCourtesy() && !nks->generated()) {
@@ -2185,14 +2186,23 @@ qreal Score::cautionaryWidth(Measure* m, bool& hasCourtesy)
                                      }
                                }
 
+                        // the courtesy key signature in this measure, if present
                         Segment* s  = m->findSegment(Segment::Type::KeySigAnnounce, tick);
 
                         if (s && s->element(track)) {
+                              // use width of existing courtesy key signature
                               wwMax = qMax(wwMax, s->element(track)->width() + leftMargin);
                               hasCourtesy = true;
                               }
                         else {
+                              // no courtesy key sig present
+                              // use width of real key signature in next measure
+                              // but make sure naturals are generated for us if appropriate
+                              // just as if this were a courtesy key signature
+                              bool saveCourtesy = nks->showCourtesy();
+                              nks->setShowCourtesy(false);
                               nks->layout();
+                              nks->setShowCourtesy(saveCourtesy);
                               wwMax = qMax(wwMax, nks->width() + leftMargin);
                               //hasCourtesy = false;
                               }

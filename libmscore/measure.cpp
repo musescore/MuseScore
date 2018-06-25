@@ -3130,7 +3130,7 @@ qreal Measure::minWidth1() const
                   }
             _minWidth1 = score()->computeMinWidth(s, false);
             if (MScore::debugMode)
-                  qDebug("Measure::minWidth1: %d %f", no(), _minWidth1 / DPMM);
+                  qDebug("Measure::minWidth1: %d %f", no(), _minWidth1);
             }
       return _minWidth1;
       }
