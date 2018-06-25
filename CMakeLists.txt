@@ -686,10 +686,8 @@ string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 # With xcode, we need to have all the targets in the same project
 add_subdirectory(mtest)
-add_subdirectory(difftest)
 else(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 add_subdirectory(mtest EXCLUDE_FROM_ALL)
-add_subdirectory(difftest EXCLUDE_FROM_ALL)
 endif(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
 add_subdirectory(rdoc EXCLUDE_FROM_ALL)
