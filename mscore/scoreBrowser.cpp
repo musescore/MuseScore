@@ -220,6 +220,9 @@ void ScoreBrowser::setScores(QFileInfoList& s)
                         entries.insert(fi.filePath());
                         }
                   if (count == 0) {
+                        l->removeWidget(label);
+                        l->removeWidget(sl);
+                        scoreLists.removeOne(sl);
                         delete label;
                         delete sl;
                         }
