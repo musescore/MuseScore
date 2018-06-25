@@ -222,7 +222,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QSettings settings;
       ScoreView* cv                        { 0 };
       ScoreState _sstate;
-      UpdateChecker* ucheck;
+      UpdateChecker* ucheck = nullptr;
 
       static const std::list<const char*> _allNoteInputMenuEntries;
       static const std::list<const char*> _basicNoteInputMenuEntries;
