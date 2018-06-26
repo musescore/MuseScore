@@ -33,7 +33,7 @@ BUILD_LAME="ON" # Non-free, required for MP3 support. Override with "OFF" to dis
 BUILD_PULSEAUDIO="ON" # Override with "OFF" to disable.
 BUILD_JACK="ON"       # Override with "OFF" to disable.
 BUILD_PORTAUDIO="ON"  # Override with "OFF" to disable.
-BUILD_WEBKIT="ON"     # Override with "OFF" to disable.
+BUILD_WEBKIT="OFF"     # Override with "ON” to enable.
 USE_SYSTEM_FREETYPE="OFF" # Override with "ON" to enable. Requires freetype >= 2.5.2.
 DOWNLOAD_SOUNDFONT="ON"   # Override with "OFF" to disable latest soundfont download.
 
