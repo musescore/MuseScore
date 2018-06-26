@@ -160,6 +160,7 @@ static QString jsonFileName;
 static QString audioDriver;
 static QString pluginName;
 static QString styleFile;
+static QString extensionName;
 static bool scoresOnCommandline { false };
 
 QString localeName;
@@ -516,12 +517,14 @@ bool MuseScore::importExtension(QString path)
       // Unzip the extension asynchronously
       QFuture<bool> futureUnzip = QtConcurrent::run(zipFile3, &MQZipReader::extractAll, QString("%1/%2/%3").arg(preferences.myExtensionsPath).arg(extensionId).arg(version));
       futureWatcherUnzip.setFuture(futureUnzip);
-      infoMsgBox->exec();
+      if (!MScore::noGui)
+            infoMsgBox->exec();
+      bool unzipResult = futureUnzip.result();
       zipFile3->close();
       delete zipFile3;
       zipFile3 = nullptr;
 
-      if (!futureUnzip.result()) {
+      if (!unzipResult) {
             if (!MScore::noGui)
                   QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Unable to extract files from the extension"));
             return false;
@@ -578,11 +581,14 @@ bool MuseScore::importExtension(QString path)
       futureWatcherLoadSFs.setFuture(futureLoadSFs);
       connect(&futureWatcherLoadSFs, SIGNAL(finished()), this, SLOT(onLongOperationFinished()));
       infoMsgBox->setText(QString("<p align='center'>") + tr("Please wait, loading soundfonts...") + QString("</p>"));
-      infoMsgBox->exec();
+      if (!MScore::noGui)
+            infoMsgBox->exec();
+      else
+            futureLoadSFs.waitForFinished();
 
       // after install: refresh workspaces if needed
       QDir workspacesDir(QString("%1/%2/%3/%4").arg(preferences.myExtensionsPath).arg(extensionId).arg(version).arg(Extension::workspacesDir));
-      if (workspacesDir.exists()) {
+      if (workspacesDir.exists() && !MScore::noGui) {
             auto wsList = workspacesDir.entryInfoList(QStringList("*.workspace"), QDir::Files);
             if (!wsList.isEmpty()) {
                   Workspace::refreshWorkspaces();
@@ -2763,14 +2769,23 @@ static bool processNonGui(const QStringList& argv)
             if (!converterMode)
                   return res;
             }
-      bool rv = true;
       if (converterMode) {
             if (processJob)
                   return doProcessJob(jsonFileName);
             else
                   return convert(argv[0], outFileName);
             }
-      return rv;
+      if (!extensionName.isEmpty()) {
+            QFileInfo fi(extensionName);
+            QString suffix = fi.suffix().toLower();
+            if (suffix == "muxt")
+                  return mscore->importExtension(extensionName);
+            else {
+                  fprintf(stderr, "cannot install extension: <%s>\n", qPrintable(extensionName));
+                  return false;
+                  }
+            }
+      return true;
       }
 
 //---------------------------------------------------------
@@ -5788,6 +5803,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Used with '-o <file>.pdf', export score and parts"));
       parser.addOption(QCommandLineOption({"f", "force"}, "Used with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
       parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
+      parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension", "extension file"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -5832,6 +5848,10 @@ int main(int argc, char* av[])
             pluginName = parser.value("p");
             if (pluginName.isEmpty())
                   parser.showHelp(EXIT_FAILURE);
+            }
+      if (parser.isSet("E")) {
+            MScore::noGui = true;
+            extensionName = parser.value("E");
             }
       MScore::saveTemplateMode = parser.isSet("template-mode");
       if (parser.isSet("r")) {
