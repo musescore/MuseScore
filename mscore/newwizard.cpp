@@ -276,16 +276,16 @@ NewWizardTemplatePage::NewWizardTemplatePage(QWidget* parent)
 
       templateFileBrowser = new ScoreBrowser;
       templateFileBrowser->setStripNumbers(true);
-      templateFileBrowser->setShowCustomCategory(true);
-      templateFileBrowser->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
       buildTemplatesList();
+      // templateFileBrowser->setShowCustomCategory(true);
+      // templateFileBrowser->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
 
       QVBoxLayout* layout = new QVBoxLayout;
       QHBoxLayout* searchLayout = new QHBoxLayout;
       QLineEdit* searchBox = new QLineEdit;
       searchBox->setPlaceholderText(tr("Search"));
-      searchBox->setAccessibleName(searchBox->placeholderText());
-      searchBox->setAccessibleDescription(tr("Filter templates by name"));
+      searchBox->setAccessibleName(tr("Template search"));
+      searchBox->setAccessibleDescription(tr("Filter template scores by name or category"));
       searchBox->setClearButtonEnabled(true);
       searchBox->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
       searchLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Maximum));
@@ -296,7 +296,6 @@ NewWizardTemplatePage::NewWizardTemplatePage(QWidget* parent)
       setLayout(layout);
 
       connect(templateFileBrowser, SIGNAL(scoreSelected(const QString&)), SLOT(templateChanged(const QString&)));
-      connect(templateFileBrowser, SIGNAL(scoreActivated(const QString&)), SLOT(fileAccepted(const QString&)));
       connect(searchBox, &QLineEdit::textChanged, [this] (const QString& searchString) {
             this->templateFileBrowser->filter(searchString);
             });
@@ -399,8 +398,14 @@ NewWizardKeysigPage::NewWizardKeysigPage(QWidget* parent)
       sp->setShowContextMenu(false);
       sp->setSelectable(true);
       sp->setDisableDoubleClick(true);
-      sp->setSelected(14);
+      int keysigCMajorIdx = 14;
+      sp->setSelected(keysigCMajorIdx);
       PaletteScrollArea* sa = new PaletteScrollArea(sp);
+      // set widget name to include name of selected key signature
+      // we could set the description, but some screen readers ignore it
+      sa->setAccessibleName(tr("Key Signature: %1").arg(qApp->translate("Palette", sp->cellAt(keysigCMajorIdx)->name.toUtf8())));
+      QAccessibleEvent event(sa, QAccessible::NameChanged);
+      QAccessible::updateAccessibility(&event);
       QVBoxLayout* l1 = new QVBoxLayout;
       l1->addWidget(sa);
       b1->setLayout(l1);
