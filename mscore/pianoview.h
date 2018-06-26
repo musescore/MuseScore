@@ -30,7 +30,8 @@ const QColor noteDeselected = QColor(27, 198, 156);
 const QColor noteSelected = Qt::yellow;
 
 //const QColor colPianoBg(0x71, 0x8d, 0xbe);
-const QColor colPianoBg(85, 106, 143);
+//const QColor colPianoBg(85, 106, 143);
+const QColor colPianoBg(54, 54, 54);
 
 const QColor noteDeselectedBlack = noteDeselected.darker(150);
 const QColor noteSelectedBlack = noteSelected.darker(150);

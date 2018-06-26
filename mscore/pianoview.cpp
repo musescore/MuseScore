@@ -13,7 +13,7 @@
 
 #include "pianoview.h"
 #include "libmscore/staff.h"
-#include "piano.h"
+#include "pianokeyboard.h"
 #include "libmscore/measure.h"
 #include "libmscore/chord.h"
 #include "libmscore/score.h"
@@ -30,16 +30,16 @@ static const int MAP_OFFSET = 480;
 //   pitch2y
 //---------------------------------------------------------
 
-static int pitch2y(int pitch)
-      {
-      static int tt[] = {
-            12, 19, 25, 32, 38, 51, 58, 64, 71, 77, 84, 90
-            };
-      int y = (75 * keyHeight) - (tt[pitch % 12] + (7 * keyHeight) * (pitch / 12));
-      if (y < 0)
-            y = 0;
-      return y;
-      }
+//static int pitch2y(int pitch)
+//      {
+//      static int tt[] = {
+//            12, 19, 25, 32, 38, 51, 58, 64, 71, 77, 84, 90
+//            };
+//      int y = (75 * keyHeight) - (tt[pitch % 12] + (7 * keyHeight) * (pitch / 12));
+//      if (y < 0)
+//            y = 0;
+//      return y;
+//      }
 
 //---------------------------------------------------------
 //   PianoItem
@@ -171,9 +171,9 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
       setFrameShape(QFrame::NoFrame);
 
       QColor colGutter = colPianoBg.darker(150);
-      QColor colBlackKey = colPianoBg.darker(112);
-      QColor colGridLineMajor = colPianoBg.darker(150);
-      QColor colGridLineMinor = colPianoBg.darker(130);
+      QColor colBlackKeyBg = colPianoBg.darker(120);
+      QColor colGridLineMajor = colPianoBg.darker(170);
+      QColor colGridLineMinor = colPianoBg.darker(150);
       QPen penLineMajor = QPen(colGridLineMajor, 2.0, Qt::SolidLine);
       QPen penLineMinor = QPen(colGridLineMinor, 1.0, Qt::SolidLine);
 
@@ -229,7 +229,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
 //                          y, 
 //                          qMin(r.width(), ticks + MAP_OFFSET),
 //                          noteHeight);
-                  p->fillRect(hbar, colBlackKey);
+                  p->fillRect(hbar, colBlackKeyBg);
             }
             
 

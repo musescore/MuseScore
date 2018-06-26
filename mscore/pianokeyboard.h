@@ -18,36 +18,38 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __PIANO_H__
-#define __PIANO_H__
+#ifndef __PIANO_KEYBOARD_H__
+#define __PIANO_KEYBOARD_H__
+
+#include "piano.h"
 
 namespace Ms {
 
-static const int pianoWidth = 40;
-static const int keyHeight = 13;
+//static const int pianoWidth = 40;
+//static const int keyHeight = 13;
 
-enum class PianoOrientation : char { HORIZONTAL, VERTICAL };
+static const int PIANO_KEYBOARD_HEIGHT = 40;
+const int MAX_KEY_HEIGHT = 20;
+const int MIN_KEY_HEIGHT = 8;
+const int DEFAULT_KEY_HEIGHT = 12;
+const int BEAT_WIDTH_IN_PIXELS = 50;
+const double X_ZOOM_RATIO = 1.1;
 
-//---------------------------------------------------------
-//   Piano
-//---------------------------------------------------------
-
-class Piano : public QWidget {
+//enum class PianoOrientation : char { HORIZONTAL, VERTICAL };
+      
+      
+//Alternative implementation with evenly spaced notes
+class PianoKeyboard : public QWidget {
       Q_OBJECT
 
       PianoOrientation _orientation;
-      double _ymag;
+//      double _ymag;
       int _ypos;
 
+      int noteHeight;
       int yRange;
       int curPitch;
       int curKeyPressed;
-
-      static QPixmap* octave;
-      static QPixmap* mk1;
-      static QPixmap* mk2;
-      static QPixmap* mk3;
-      static QPixmap* mk4;
 
       virtual void paintEvent(QPaintEvent*);
       virtual void mousePressEvent(QMouseEvent*);
@@ -55,8 +57,9 @@ class Piano : public QWidget {
       virtual void mouseMoveEvent(QMouseEvent* event);
       virtual void leaveEvent(QEvent*);
 
-      int pitch2y(int pitch) const;
-      int y2pitch(int y) const;
+      //int pitch2offset(int pitch) const;
+      //int offset2pitch(int pos) const;
+      //int mouse2pitch(QMouseEvent* event) const;
 
    signals:
       void pitchChanged(int);
@@ -65,11 +68,12 @@ class Piano : public QWidget {
 
    public slots:
       void setYpos(int val);
-      void setMag(double, double);
+      //void setMag(double, double);
+      void setNoteHeight(int);
       void setPitch(int);
 
    public:
-      Piano(QWidget* parent = 0);
+      PianoKeyboard(QWidget* parent = 0);
       void setOrientation(PianoOrientation);
       };
 

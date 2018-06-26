@@ -12,7 +12,7 @@
 
 #include "pianoroll.h"
 #include "config.h"
-#include "piano.h"
+#include "pianokeyboard.h"
 #include "ruler.h"
 #include "pianoview.h"
 #include "musescore.h"
@@ -142,7 +142,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
 
       PianoKeyboard* piano = new PianoKeyboard;
       piano->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-      piano->setFixedWidth(pianoKeyboardWidth);
+      piano->setFixedWidth(PIANO_KEYBOARD_HEIGHT);
 
       gv  = new PianoView;
 //      gv->scale(xmag, 1.0);
@@ -169,7 +169,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       QGridLayout* layout = new QGridLayout;
       layout->setContentsMargins(0, 0, 0, 0);
       layout->setSpacing(0);
-      layout->setColumnMinimumWidth(0, pianoKeyboardWidth + 5);
+      layout->setColumnMinimumWidth(0, PIANO_KEYBOARD_HEIGHT + 5);
       layout->addWidget(tb,    0, 0, 1, 2);
       layout->addWidget(ruler, 1, 1);
       layout->addWidget(split, 2, 0, 1, 2);
