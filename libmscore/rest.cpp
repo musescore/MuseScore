@@ -417,20 +417,17 @@ void Rest::layout()
       layoutArticulations();
       rypos() = (qreal(yo) + qreal(lineOffset + stepOffset) * .5) * lineDist * _spatium;
 
-      Spatium rs;
-      if (dots()) {
-            rs = Spatium(score()->styleS(StyleIdx::dotNoteDistance)
-               + dots() * score()->styleS(StyleIdx::dotDotDistance));
-            }
-      if (dots()) {
-            rs = Spatium(score()->styleS(StyleIdx::dotNoteDistance)
-               + dots() * score()->styleS(StyleIdx::dotDotDistance));
-            }
       setbbox(symBbox(_sym));
+      if (dots()) {
+            qreal w = width() + score()->styleP(StyleIdx::dotNoteDistance)
+               + (dots() - 1) * score()->styleP(StyleIdx::dotDotDistance)
+               + symWidth(SymId::augmentationDot);
+            setWidth(w);
+            }
       qreal symOffset = bbox().x();
       if (symOffset < 0.0)
             _space.setLw(-symOffset);
-      _space.setRw(width() + point(rs) + symOffset);
+      _space.setRw(width() + symOffset);
       }
 
 //---------------------------------------------------------
