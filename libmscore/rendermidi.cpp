@@ -1441,14 +1441,15 @@ void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord
       {
       int n = gnb.size();
       int graceDuration = 0;
-      auto drumset = getDrumset(chord);
+      bool drumset = (getDrumset(chord) != nullptr);
+      const qreal ticksPerSecond = tempo(tick) * MScore::division;
+      const qreal chordTimeMS = (chord->actualTicks() / ticksPerSecond) * 1000;
       if (drumset) {
-            graceDuration = 50;
+            int flamDuration = 15; //ms
+            graceDuration = flamDuration / chordTimeMS * 1000; //ratio 1/1000 from the main note length
             ontime = graceDuration * n;
-            return;
             }
-
-      if (n) {
+      else if (n) {
             //
             //  render grace notes:
             //  simplified implementation:
@@ -1460,11 +1461,8 @@ void Score::createGraceNotesPlayEvents(QList<Chord*> gnb, int tick, Chord* chord
             //
             Chord* graceChord = gnb[0];
             if (graceChord->noteType() ==  NoteType::ACCIACCATURA) {
-                  qreal ticksPerSecond = tempo(tick) * MScore::division;
                   int graceTimeMS = 65 * n;     // value determined empirically (TODO: make instrument-specific, like articulations)
-                  // 1000 occurs below for two different reasons:
-                  // number of milliseconds per second, also unit for ontime
-                  qreal chordTimeMS = (chord->actualTicks() / ticksPerSecond) * 1000;
+                  // 1000 occurs below as a unit for ontime
                   ontime = qMin(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
                   }
             else if (chord->dots() == 1)
