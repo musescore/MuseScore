@@ -64,7 +64,6 @@ void TestCompat206::compat(const QString& file)
       QString reference(DIR  + file + "-ref.mscx");
 
       MasterScore* score = readScore(readFile);
-      score->doLayout();
       QVERIFY(score);
       QVERIFY(saveCompareScore(score, writeFile, reference));
       }

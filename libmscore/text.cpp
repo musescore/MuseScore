@@ -627,7 +627,6 @@ void TextBlock::layout(TextBase* t)
                   qreal w  = fm.width(f.text);
                   _bbox   |= fm.tightBoundingRect(f.text).translated(f.pos);
                   x += w;
-                  // _lineSpacing = (_lineSpacing == 0 || fm.lineSpacing() == 0) ? qMax(_lineSpacing, fm.lineSpacing()) : qMin(_lineSpacing, fm.lineSpacing());
                   _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
                   }
             }
@@ -1401,10 +1400,6 @@ void TextBase::layout1()
 
       bb.translate(0.0, yoff);
 
-#if 0
-      if (_editMode)
-            bb |= cursorRect();
-#endif
       setbbox(bb);
       if (hasFrame())
             layoutFrame();
