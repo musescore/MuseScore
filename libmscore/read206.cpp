@@ -1204,7 +1204,11 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
             if (tag == "Number") {
                   Text* _number = new Text(tuplet->score());
                   _number->setParent(tuplet);
+                  _number->setComposition(true);
                   tuplet->setNumber(_number);
+                  // _number reads property defaults from parent tuplet as "composition" is set:
+                  for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
+                        _number->resetProperty(p);
                   readText206(e, _number, tuplet);
                   _number->setVisible(tuplet->visible());     //?? override saved property
                   _number->setTrack(tuplet->track());
