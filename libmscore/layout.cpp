@@ -3545,7 +3545,7 @@ void LayoutContext::collectPage()
 
             if (!breakPage) {
                   qreal dist = prevSystem->minDistance(curSystem) + curSystem->height();
-                  VBox* vbox = curSystem->vbox();
+                  Box* vbox = curSystem->vbox();
                   if (vbox)
                         dist += vbox->bottomGap();
                   else if (!prevSystem->hasFixedDownDistance())
@@ -3553,7 +3553,7 @@ void LayoutContext::collectPage()
                   breakPage  = (y + dist) >= ey && breakPages;
                   }
             if (breakPage) {
-                  VBox* vbox = prevSystem->vbox();
+                  Box* vbox = prevSystem->vbox();
                   qreal dist = vbox ? vbox->bottomGap() : qMax(prevSystem->minBottom(), slb);
                   layoutPage(page, ey - (y + dist));
                   break;

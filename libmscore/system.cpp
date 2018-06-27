@@ -108,12 +108,11 @@ void System::appendMeasure(MeasureBase* mb)
 //    a system can only contain one vertical frame
 //---------------------------------------------------------
 
-VBox* System::vbox() const
+Box* System::vbox() const
       {
       if (!ml.empty()) {
             if (ml[0]->isVBox() || ml[0]->isTBox())
-                  // return toVBox(ml[0]);
-                  return static_cast<VBox*>(ml[0]);   // TODO
+                  return static_cast<Box*>(ml[0]);
             }
       return 0;
       }
@@ -350,7 +349,7 @@ int System::firstVisibleStaff() const
 
 void System::layout2()
       {
-      VBox* b = vbox();
+      Box* b = vbox();
       if (b) {
             b->layout();
             setbbox(b->bbox());
@@ -1022,7 +1021,7 @@ Element* System::prevSegmentElement()
 qreal System::minDistance(System* s2) const
       {
       if (vbox() && !s2->vbox())
-            return qMax(vbox()->bottomGap(), -s2->minTop());
+            return qMax(vbox()->bottomGap(), s2->minTop());
       else if (!vbox() && s2->vbox())
             return qMax(s2->vbox()->topGap(), -minBottom());
       else if (vbox() && s2->vbox())
@@ -1132,7 +1131,7 @@ qreal System::minTop() const
       for (MeasureBase* mb : ml) {
             if (!mb->isMeasure())
                   continue;
-            dist = qMax(dist, toMeasure(mb)->staffShape(0).top() + mb->pos().y());
+            dist = qMax(dist, -toMeasure(mb)->staffShape(0).top());
             }
       return dist;
       }
