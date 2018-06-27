@@ -104,14 +104,16 @@ void DrumTools::updateDrumset(const Drumset* ds)
       if (!drumset)
             return;
       double _spatium = gscore->spatium();
-      for (int pitch = 0; pitch < 128; ++pitch) {
-            if (!drumset->isValid(pitch))
+      const auto d = ds->drumsByIndex();
+      for (int n = 0; n < DRUM_INSTRUMENTS; ++n) {
+            DrumInstrument di = d[n];
+            if (!drumset->isValid(di.pitch))
                   continue;
             bool up;
-            int line      = drumset->line(pitch);
-            NoteHead::Group noteHead  = drumset->noteHead(pitch);
-            int voice     = drumset->voice(pitch);
-            MScore::Direction dir = drumset->stemDirection(pitch);
+            int line      = di.line;
+            NoteHead::Group noteHead  = di.notehead;
+            int voice     = di.voice;
+            MScore::Direction dir = di.stemDirection;
             if (dir == MScore::Direction::UP)
                   up = true;
             else if (dir == MScore::Direction::DOWN)
@@ -127,16 +129,16 @@ void DrumTools::updateDrumset(const Drumset* ds)
             Note* note = new Note(gscore);
             note->setParent(chord);
             note->setTrack(voice);
-            note->setPitch(pitch);
+            note->setPitch(di.pitch);
             note->setTpcFromPitch();
             note->setLine(line);
             note->setPos(0.0, _spatium * .5 * line);
             note->setHeadGroup(noteHead);
             SymId noteheadSym = SymId::noteheadBlack;
             if (noteHead == NoteHead::Group::HEAD_CUSTOM)
-                  noteheadSym = drumset->noteHeads(pitch, NoteHead::Type::HEAD_QUARTER);
+                  noteheadSym = drumset->noteHeads(di.pitch, NoteHead::Type::HEAD_QUARTER);
             else
-                  noteheadSym = note->noteHead(true, noteHead, NoteHead::Type::HEAD_QUARTER);
+                  noteheadSym = note->noteHead(true, di.notehead, NoteHead::Type::HEAD_QUARTER);
 
             note->setCachedNoteheadSym(noteheadSym); // we use the cached notehead so we don't recompute it at each layout
             chord->add(note);
@@ -144,11 +146,11 @@ void DrumTools::updateDrumset(const Drumset* ds)
             stem->setLen((up ? -3.0 : 3.0) * _spatium);
             chord->add(stem);
             stem->setPos(chord->stemPos());
-            int sc = drumset->shortcut(pitch);
+            int sc = di.shortcut;
             QString shortcut;
             if (sc)
                   shortcut = QChar(sc);
-            drumPalette->append(chord, qApp->translate("drumset", drumset->name(pitch).toUtf8().data()), shortcut);
+            drumPalette->append(chord, qApp->translate("drumset", drumset->name(di.pitch).toUtf8().data()), shortcut);
             }
       }
 
