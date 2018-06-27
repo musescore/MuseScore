@@ -304,9 +304,9 @@ bool MasterSynthesizer::setState(const SynthesizerState& ss)
       {
       bool result = true;
       for (const SynthesizerGroup& g : ss) {
-            _observer();
             if (g.name() == "master") {
                   for (const IdValue& v : g) {
+                        _observer();
                         switch (v.id) {
                               case 0:
                                     setEffect(0, indexOfEffect(0, v.data));
