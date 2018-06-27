@@ -6047,6 +6047,7 @@ int main(int argc, char* av[])
             mp3BitRate = preferences.exportMp3BitRate;
 
       QSplashScreen* sc = 0;
+      QTimer* stimer = 0;
       if (!MScore::noGui && preferences.showSplashScreen) {
             QPixmap pm(":/data/splash.png");
             sc = new QSplashScreen(pm);
@@ -6054,6 +6055,8 @@ int main(int argc, char* av[])
 #ifdef Q_OS_MAC // to have session dialog on top of splashscreen on mac
             sc->setWindowFlags(Qt::FramelessWindowHint);
 #endif
+            // show splash screen for 5 sec
+            stimer = new QTimer(0);
             sc->show();
             qApp->processEvents();
             }
@@ -6148,6 +6151,7 @@ int main(int argc, char* av[])
       genIcons();
 
       // Do not create sequencer and audio drivers if run with '-s'
+      //sc->showMessage("Loading soundfonts...");
       if (!noSeq) {
             seq            = new Seq();
             MScore::seq    = seq;
@@ -6156,7 +6160,10 @@ int main(int argc, char* av[])
             if (driver) {
                   MScore::sampleRate = driver->sampleRate();
                   synti->setSampleRate(MScore::sampleRate);
-                  synti->init();
+                  auto updateSplashScreenCb = [&]() {
+                        qApp->processEvents();
+                        };
+                  synti->init(updateSplashScreenCb);
 
                   seq->setDriver(driver);
                   }
@@ -6173,7 +6180,14 @@ int main(int argc, char* av[])
             seq         = 0;
             MScore::seq = 0;
             }
+      //sc->clearMessage();
+      qApp->processEvents();
+      if (!MScore::noGui && preferences.showSplashScreen) {
+            stimer->start(5000);
+            qApp->connect(stimer, SIGNAL(timeout()), sc, SLOT(close()));
+            }
 
+      qApp->connect(stimer, SIGNAL(timeout()), sc, SLOT(close()));
       //
       // avoid font problems by overriding the environment
       //    fall back to "C" locale
@@ -6306,7 +6320,6 @@ int main(int argc, char* av[])
 #endif
             }
 
-      sc->close();
       mscore->showPlayPanel(preferences.showPlayPanel);
       QSettings settings;
       if (settings.value("synthControlVisible", false).toBool())

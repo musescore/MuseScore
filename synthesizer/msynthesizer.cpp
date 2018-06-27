@@ -35,7 +35,7 @@ MasterSynthesizer::MasterSynthesizer()
 //   init
 //---------------------------------------------------------
 
-void MasterSynthesizer::init()
+void MasterSynthesizer::init(std::function<void(void)> longOperationCb)
       {
       SynthesizerState state;
       QString s(dataPath + "/synthesizer.xml");
@@ -52,6 +52,7 @@ void MasterSynthesizer::init()
             else
                   e.unknown();
             }
+      _observer = longOperationCb;
       if (!setState(state)) {
             f.remove();
             setState(defaultState);
@@ -303,6 +304,7 @@ bool MasterSynthesizer::setState(const SynthesizerState& ss)
       {
       bool result = true;
       for (const SynthesizerGroup& g : ss) {
+            _observer();
             if (g.name() == "master") {
                   for (const IdValue& v : g) {
                         switch (v.id) {
