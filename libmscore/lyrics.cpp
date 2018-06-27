@@ -66,7 +66,7 @@ Lyrics::Lyrics(Score* s)
       _ticks      = 0;
       _syllabic   = Syllabic::SINGLE;
       _separator  = 0;
-      setPlacement(Placement(s->styleI(Sid::lyricsPlacement)));
+//      setPlacement(Placement(s->styleI(Sid::lyricsPlacement)));
       }
 
 Lyrics::Lyrics(const Lyrics& l)
@@ -256,7 +256,7 @@ void Lyrics::layout1()
       qreal y = 0;
 
       if (placeBelow())
-//            y  = lh * (_no+1) + score()->styleP(Sid::lyricsPosBelow) + staff()->height();
+//          y  = lh * (_no+1) + score()->styleP(Sid::lyricsPosBelow) + staff()->height();
             y  = lh * _no + score()->styleP(Sid::lyricsPosBelow) + staff()->height();
       else {
             // we are counting _no from bottom to top for verses above

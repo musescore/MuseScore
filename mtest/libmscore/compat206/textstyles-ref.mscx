@@ -17,7 +17,6 @@
       <staffUpperBorder>6</staffUpperBorder>
       <staffLowerBorder>4</staffLowerBorder>
       <minSystemDistance>9</minSystemDistance>
-      <lyricsPlacement>0</lyricsPlacement>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
       <repeatBarTips>1</repeatBarTips>
       <clefLeftMargin>0.64</clefLeftMargin>
@@ -25,9 +24,7 @@
       <stemWidth>0.16</stemWidth>
       <barNoteDistance>1.2</barNoteDistance>
       <lastSystemFillLimit>0.25</lastSystemFillLimit>
-      <hairpinPlacement>0</hairpinPlacement>
       <hairpinFontFace>MuseJazz Text</hairpinFontFace>
-      <pedalPlacement>0</pedalPlacement>
       <pedalPosBelow>0</pedalPosBelow>
       <pedalFontFace>MuseJazz Text</pedalFontFace>
       <trillPosAbove>0</trillPosAbove>
@@ -77,6 +74,7 @@
       <expressionFontSize>12</expressionFontSize>
       <tempoFontFace>MuseJazz Text</tempoFontFace>
       <tempoFontBold>0</tempoFontBold>
+      <tempoPosAbove>-4</tempoPosAbove>
       <metronomeFontFace>MuseJazz Text</metronomeFontFace>
       <measureNumberFontFace>MuseJazz Text</measureNumberFontFace>
       <translatorFontFace>MuseJazz Text</translatorFontFace>
@@ -86,7 +84,7 @@
       <staffFontFace>MuseJazz Text</staffFontFace>
       <staffFontSize>11</staffFontSize>
       <staffAlign>left,top</staffAlign>
-      <staffOffset x="0" y="5.5"/>
+      <staffTextPosAbove>5.5</staffTextPosAbove>
       <chordSymbolFontFace>MuseJazz Text</chordSymbolFontFace>
       <chordSymbolFontSize>15</chordSymbolFontSize>
       <rehearsalMarkFontFace>MuseJazz Text</rehearsalMarkFontFace>
@@ -206,10 +204,6 @@
           </TimeSig>
         <StaffText>
           <text>staff</text>
-          </StaffText>
-        <StaffText>
-          <style>System</style>
-          <text></text>
           </StaffText>
         <Tempo>
           <tempo>1.33333</tempo>

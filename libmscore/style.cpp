@@ -557,7 +557,7 @@ static const StyleType styleTypes[] {
       { Sid::tempoFontItalic,               "tempoFontItalic",              false },
       { Sid::tempoFontUnderline,            "tempoFontUnderline",           false },
       { Sid::tempoAlign,                    "tempoAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
-      { Sid::tempoOffset,                   "tempoOffset",                  QPointF(0.0, -4.0) },
+      { Sid::tempoOffset,                   "tempoOffset",                  QPointF(0.0, 0.0) },   // not used
       { Sid::tempoSystemFlag,               "tempoSystemFlag",              true },
       { Sid::tempoPlacement,                "tempoPlacement",               int(Placement::ABOVE)  },
       { Sid::tempoPosAbove,                 "tempoPosAbove",                Spatium(-2.0) },
@@ -599,7 +599,7 @@ static const StyleType styleTypes[] {
       { Sid::staffTextFontItalic,           "staffFontItalic",              false },
       { Sid::staffTextFontUnderline,        "staffFontUnderline",           false },
       { Sid::staffTextAlign,                "staffAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
-      { Sid::staffTextOffset,               "staffOffset",                  QPointF(0.0, -4.0) },
+      { Sid::staffTextOffset,               "staffOffset",                  QPointF(0.0, 0.0) },      // not used
       { Sid::staffTextOffsetType,           "systemOffsetType",             int(OffsetType::SPATIUM)   },
       { Sid::staffTextPlacement,            "staffTextPlacement",           int(Placement::ABOVE) },
       { Sid::staffTextPosAbove,             "staffTextPosAbove",            Spatium(-2.0) },
@@ -877,7 +877,7 @@ const std::vector<StyledProperty> lyricistStyle {
       { Sid::lyricistAlign,                      Pid::ALIGN                  },
       { Sid::lyricistOffset,                     Pid::OFFSET                 },
       { Sid::lyricistOffsetType,                 Pid::OFFSET_TYPE            },
-      { Sid::lyricsPlacement,                    Pid::PLACEMENT              },
+//      { Sid::lyricistPlacement,                  Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
 
@@ -888,6 +888,7 @@ const std::vector<StyledProperty> lyricsOddStyle {
       { Sid::lyricsOddFontItalic,                Pid::FONT_ITALIC            },
       { Sid::lyricsOddFontUnderline,             Pid::FONT_UNDERLINE         },
       { Sid::lyricsOddAlign,                     Pid::ALIGN                  },
+      { Sid::lyricsPlacement,                    Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
 
@@ -898,6 +899,7 @@ const std::vector<StyledProperty> lyricsEvenStyle {
       { Sid::lyricsEvenFontItalic,               Pid::FONT_ITALIC            },
       { Sid::lyricsEvenFontUnderline,            Pid::FONT_UNDERLINE         },
       { Sid::lyricsEvenAlign,                    Pid::ALIGN                  },
+      { Sid::lyricsPlacement,                    Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
 
