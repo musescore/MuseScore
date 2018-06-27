@@ -14,7 +14,6 @@
 #define __MSYNTHESIZER_H__
 
 #include <atomic>
-#include <functional>
 #include "effects/effect.h"
 #include "libmscore/synthesizerstate.h"
 
@@ -55,8 +54,6 @@ class MasterSynthesizer : public QObject {
       float effect2Buffer[MAX_BUFFERSIZE];
       int indexOfEffect(int ab, const QString& name);
 
-      std::function<void(void)> _observer;
-
    public slots:
       void sfChanged() { emit soundFontChanged(); }
       void setGain(float f);
@@ -70,7 +67,7 @@ class MasterSynthesizer : public QObject {
       ~MasterSynthesizer();
       void registerSynthesizer(Synthesizer*);
 
-      void init(std::function<void(void)> longOperationCb = std::function<void(void)>());
+      void init();
 
       float sampleRate()            { return _sampleRate; }
       void setSampleRate(float val);

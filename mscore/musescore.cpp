@@ -6057,6 +6057,8 @@ int main(int argc, char* av[])
 #endif
             // show splash screen for 5 sec
             stimer = new QTimer(0);
+            stimer->start(5000);
+            qApp->connect(stimer, SIGNAL(timeout()), sc, SLOT(close()));
             sc->show();
             qApp->processEvents();
             }
@@ -6150,8 +6152,15 @@ int main(int argc, char* av[])
 
       genIcons();
 
+      auto runSynthInitAsync = []() {
+            QFuture<void> initFuture = QtConcurrent::run(synti, &MasterSynthesizer::init);
+            QFutureWatcher<void> initFutureWatcher;
+            initFutureWatcher.setFuture(initFuture);
+            while(!initFutureWatcher.isFinished())
+                  qApp->processEvents();
+            };
+
       // Do not create sequencer and audio drivers if run with '-s'
-      //sc->showMessage("Loading soundfonts...");
       if (!noSeq) {
             seq            = new Seq();
             MScore::seq    = seq;
@@ -6160,10 +6169,7 @@ int main(int argc, char* av[])
             if (driver) {
                   MScore::sampleRate = driver->sampleRate();
                   synti->setSampleRate(MScore::sampleRate);
-                  auto updateSplashScreenCb = [&]() {
-                        qApp->processEvents();
-                        };
-                  synti->init(updateSplashScreenCb);
+                  runSynthInitAsync();
 
                   seq->setDriver(driver);
                   }
@@ -6172,7 +6178,7 @@ int main(int argc, char* av[])
                   // Allow user to select the working driver later.
                   MScore::sampleRate = 44100;  // Would be changed when user changes driver
                   synti->setSampleRate(MScore::sampleRate);
-                  synti->init();
+                  runSynthInitAsync();
                   }
             seq->setMasterSynthesizer(synti);
             }
@@ -6180,14 +6186,7 @@ int main(int argc, char* av[])
             seq         = 0;
             MScore::seq = 0;
             }
-      //sc->clearMessage();
-      qApp->processEvents();
-      if (!MScore::noGui && preferences.showSplashScreen) {
-            stimer->start(5000);
-            qApp->connect(stimer, SIGNAL(timeout()), sc, SLOT(close()));
-            }
 
-      qApp->connect(stimer, SIGNAL(timeout()), sc, SLOT(close()));
       //
       // avoid font problems by overriding the environment
       //    fall back to "C" locale
@@ -6320,6 +6319,7 @@ int main(int argc, char* av[])
 #endif
             }
 
+      sc->close();
       mscore->showPlayPanel(preferences.showPlayPanel);
       QSettings settings;
       if (settings.value("synthControlVisible", false).toBool())
