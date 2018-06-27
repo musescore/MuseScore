@@ -3893,13 +3893,18 @@ void MuseScore::handleMessage(const QString& message)
 //   editInPianoroll
 //---------------------------------------------------------
 
-void MuseScore::editInPianoroll(Staff* staff)
+void MuseScore::editInPianoroll(Staff* staff, Element* focus)
       {
       if (pianorollEditor == 0)
             pianorollEditor = new PianorollEditor;
       pianorollEditor->setScore(staff->score());
       pianorollEditor->setStaff(staff);
       pianorollEditor->show();
+      
+      //vbox 98
+//            printf("editInPianoroll type:%d\n", focus == 0 ? -1 : (int)focus->type());
+      
+      pianorollEditor->focusOnElement(focus);
       }
 
 //---------------------------------------------------------

@@ -85,6 +85,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       virtual ~PianorollEditor();
 
       void setStaff(Staff* staff);
+      void focusOnElement(Element* focus);
       void heartBeat(Seq*);
 
       virtual void dataChanged(const QRectF&);

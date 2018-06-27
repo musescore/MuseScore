@@ -72,7 +72,7 @@ void PianoItem::updateValues()
       
       setSelected(_note->selected());
       
-      qreal tix2pix = _pianoView->ticksToPixels();
+      qreal tix2pix = _pianoView->ticksToPixelsRatio();
       int noteHeight = _pianoView->noteHeight();
       
       qreal x1 = (_note->chord()->tick() + _event->ontime() * ticks / 1000 + MAP_OFFSET) * tix2pix;
@@ -142,22 +142,30 @@ void PianoItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidge
 //   pix2pos
 //---------------------------------------------------------
 
-Pos PianoView::pix2pos(int x) const
-      {
-      x -= MAP_OFFSET;
-      if (x < 0)
-            x = 0;
-      return Pos(staff->score()->tempomap(), staff->score()->sigmap(), x, _timeType);
-      }
+//Pos PianoView::pix2pos(int x) const
+//      {
+//      int ticks = (int)(x / ticksToPixelsRatio()) - MAP_OFFSET;
+//      if (ticks < 0)
+//            ticks = 0;
+//      return Pos(staff->score()->tempomap(), staff->score()->sigmap(), ticks, TType::TICKS);
+//      
+//      
+////      x -= MAP_OFFSET;
+////      if (x < 0)
+////            x = 0;
+////      return Pos(staff->score()->tempomap(), staff->score()->sigmap(), x, _timeType);
+//      }
 
 //---------------------------------------------------------
 //   pos2pix
 //---------------------------------------------------------
 
-int PianoView::pos2pix(const Pos& p) const
-      {
-      return p.time(_timeType) + MAP_OFFSET;
-      }
+//int PianoView::pos2pix(const Pos& p) const
+//      {
+//      return (int)((p.time(TType::TICKS) + MAP_OFFSET) * ticksToPixelsRatio());
+//      
+////      return p.time(_timeType) + MAP_OFFSET;
+//      }
 
 //---------------------------------------------------------
 //   drawBackground
@@ -178,7 +186,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
       QPen penLineMinor = QPen(colGridLineMinor, 1.0, Qt::SolidLine);
 
       //Ticks to pixels
-      qreal ticks2Pix = ticksToPixels();
+      qreal ticks2Pix = ticksToPixelsRatio();
       
       QRectF r1;
       r1.setCoords(-1000000.0, 0.0, MAP_OFFSET * ticks2Pix, 1000000.0);
@@ -297,7 +305,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
                   p->drawLine(x, y1, x, y2);
                   }
             else {
-                  p->setPen(QPen(Qt::black, 0.0));
+                  p->setPen(QPen(Qt::black, 2.0));
                   p->drawLine(x, y1, x, y1);
                   }
             }
@@ -431,7 +439,7 @@ void PianoView::createLocators()
       {
       static const QColor lcColors[3] = { Qt::red, Qt::blue, Qt::blue };
       for (int i = 0; i < 3; ++i) {
-            locatorLines[i] = new QGraphicsLineItem(QLineF(0.0, 0.0, 0.0, keyHeight * 75.0 * 5));
+            locatorLines[i] = new QGraphicsLineItem(QLineF(0.0, 0.0, 0.0, _noteHeight * 128));
             QPen pen(lcColors[i]);
             pen.setWidth(2);
             locatorLines[i]->setPen(pen);
@@ -447,9 +455,10 @@ void PianoView::createLocators()
 
 void PianoView::moveLocator(int i)
       {
+      
       if (_locator[i].valid()) {
             locatorLines[i]->setVisible(true);
-            qreal x = qreal(pos2pix(_locator[i]));
+            qreal x = (_locator[i].time(TType::TICKS) + MAP_OFFSET) * ticksToPixelsRatio();
             locatorLines[i]->setPos(QPointF(x, 0.0));
             }
       else
@@ -572,31 +581,31 @@ void PianoView::wheelEvent(QWheelEvent* event)
 //   y2pitch
 //---------------------------------------------------------
 
-int PianoView::y2pitch(int y) const
-      {
-      int pitch;
-      const int total = (10 * 7 + 5) * keyHeight;       // 75 Ganztonschritte
-      y = total - y;
-      int oct = (y / (7 * keyHeight)) * 12;
-      static const char kt[] = {
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            1, 1, 1, 1, 1, 1, 1,
-            2, 2, 2, 2, 2, 2,
-            3, 3, 3, 3, 3, 3, 3,
-            4, 4, 4, 4, 4, 4, 4, 4, 4,
-            5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-            6, 6, 6, 6, 6, 6, 6,
-            7, 7, 7, 7, 7, 7,
-            8, 8, 8, 8, 8, 8, 8,
-            9, 9, 9, 9, 9, 9,
-            10, 10, 10, 10, 10, 10, 10,
-            11, 11, 11, 11, 11, 11, 11, 11, 11, 11
-            };
-      pitch = kt[y % 91] + oct;
-      if (pitch < 0 || pitch > 127)
-            pitch = -1;
-      return pitch;
-      }
+//int PianoView::y2pitch(int y) const
+//      {
+//      int pitch;
+//      const int total = (10 * 7 + 5) * keyHeight;       // 75 Ganztonschritte
+//      y = total - y;
+//      int oct = (y / (7 * keyHeight)) * 12;
+//      static const char kt[] = {
+//            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+//            1, 1, 1, 1, 1, 1, 1,
+//            2, 2, 2, 2, 2, 2,
+//            3, 3, 3, 3, 3, 3, 3,
+//            4, 4, 4, 4, 4, 4, 4, 4, 4,
+//            5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+//            6, 6, 6, 6, 6, 6, 6,
+//            7, 7, 7, 7, 7, 7,
+//            8, 8, 8, 8, 8, 8, 8,
+//            9, 9, 9, 9, 9, 9,
+//            10, 10, 10, 10, 10, 10, 10,
+//            11, 11, 11, 11, 11, 11, 11, 11, 11, 11
+//            };
+//      pitch = kt[y % 91] + oct;
+//      if (pitch < 0 || pitch > 127)
+//            pitch = -1;
+//      return pitch;
+//      }
 
 //---------------------------------------------------------
 //   mouseMoveEvent
@@ -605,9 +614,12 @@ int PianoView::y2pitch(int y) const
 void PianoView::mouseMoveEvent(QMouseEvent* event)
       {
       QPointF p(mapToScene(event->pos()));
-      int pitch = (_noteHeight * 128 - p.y()) / _noteHeight;
+      int pitch = (int)((_noteHeight * 128 - p.y()) / _noteHeight);
+//      int pitch = (_noteHeight * 128 - event->y()) / _noteHeight;
       emit pitchChanged(pitch);
-      int tick = int(p.x()) -480;
+      
+      int tick = event->x() / ticksToPixelsRatio() - MAP_OFFSET;
+//      int tick = int(p.x()) -480;
       if (tick < 0) {
             tick = 0;
             pos.setTick(tick);
@@ -635,20 +647,54 @@ void PianoView::leaveEvent(QEvent* event)
 //   ensureVisible
 //---------------------------------------------------------
 
-void PianoView::ensureVisible(int tick)
+void PianoView::scrollToTick(int tick)
       {
-      tick += MAP_OFFSET;
-      QPointF pt = mapToScene(0, height() / 2);
-      QGraphicsView::ensureVisible(qreal(tick), pt.y(), 240.0, 1.0);
+      QRectF rect = mapToScene(viewport()->geometry()).boundingRect();
+      printf("scrollToTick x:%f y:%f width:%f height:%f \n", rect.x(), rect.y(), rect.width(), rect.height());
+      
+//      int ypos = verticalScrollBar()->value();
+//      printf("ensureVisible tick:%d ypos:%d \n", tick, ypos);
+      //QRectF rect = sceneRect();
+      //QRectF rect = mapToScene(viewport()->geometry()).boundingRect();
+//      printf("ensureVisible x:%f y:%f width:%f height:%f \n", rect.x(), rect.y(), rect.width(), rect.height());
+      
+      //QPointF pt = mapToScene(0, height() / 2);
+      qreal xpos = (tick + MAP_OFFSET) * ticksToPixelsRatio();
+//      qreal ypos = matrix().dy();
+//      QGraphicsView::ensureVisible(xpos, ypos, 240.0, 1.0);
+
+//      horizontalScrollBar()->setValue(qMax(xpos - rect.width() / 2, 0.0));
+      
+      
+      qreal margin = rect.width() / 2;
+      if (xpos < rect.x() + margin)
+            horizontalScrollBar()->setValue(qMax(xpos - margin, 0.0));
+      else if (xpos >= rect.x() + rect.width() - margin)
+            horizontalScrollBar()->setValue(qMax(xpos - rect.width() + margin, 0.0));
+            
+      
+//      horizontalScrollBar()->setValue(qMax(xpos - margin, 0.0));
+//      tick += MAP_OFFSET;
+//      QPointF pt = mapToScene(0, height() / 2);
+//      QGraphicsView::ensureVisible(qreal(tick), pt.y(), 240.0, 1.0);
+//      verticalScrollBar()->setValue(ypos);
       }
 
 
 //---------------------------------------------------------
-//   updateBoundingSize
+//   ticksToPixels
 //---------------------------------------------------------
-qreal PianoView::ticksToPixels() 
+qreal PianoView::ticksToPixelsRatio() 
       { 
       return pow(X_ZOOM_RATIO, (double)xZoom); 
+      }
+
+//---------------------------------------------------------
+//   ticksToPixels
+//---------------------------------------------------------
+qreal PianoView::ticksToPixels(int ticks) 
+      { 
+      return pow(X_ZOOM_RATIO, (double)xZoom) * (ticks + MAP_OFFSET); 
       }
 
 //---------------------------------------------------------
@@ -659,8 +705,8 @@ void PianoView::updateBoundingSize()
       Measure* lm = staff->score()->lastMeasure();
       ticks       = lm->tick() + lm->ticks();
       scene()->setSceneRect(0.0, 0.0, 
-              double((ticks + MAP_OFFSET * 2) * ticksToPixels()),
-              _noteHeight * 127);
+              double((ticks + MAP_OFFSET * 2) * ticksToPixelsRatio()),
+              _noteHeight * 128);
       }
 
 //---------------------------------------------------------

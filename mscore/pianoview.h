@@ -77,9 +77,9 @@ class PianoView : public QGraphicsView {
 
       virtual void drawBackground(QPainter* painter, const QRectF& rect);
 
-      int y2pitch(int y) const;
-      Pos pix2pos(int x) const;
-      int pos2pix(const Pos& p) const;
+//      int y2pitch(int y) const;
+//      Pos pix2pos(int x) const;
+//      int pos2pix(const Pos& p) const;
       void createLocators();
       void addChord(Chord* chord);
       void updateBoundingSize();
@@ -104,8 +104,9 @@ class PianoView : public QGraphicsView {
    public:
       PianoView();
       void setStaff(Staff*, Pos* locator);
-      void ensureVisible(int tick);
-      qreal ticksToPixels();
+      void scrollToTick(int tick);
+      qreal ticksToPixelsRatio();
+      qreal ticksToPixels(int ticks);
       int noteHeight() { return _noteHeight; }
       QList<QGraphicsItem*> items() { return scene()->selectedItems(); }
       };

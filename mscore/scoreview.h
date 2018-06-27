@@ -153,7 +153,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void paint(const QRect&, QPainter&);
 
       void objectPopup(const QPoint&, Element*);
-      void measurePopup(const QPoint&, Measure*);
+//      void measurePopup(const QPoint&, Measure*);
+      void measurePopup(QContextMenuEvent* ev, Measure*);
 
       void saveChord(XmlWriter&);
 
@@ -405,6 +406,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       FotoLasso* fotoLasso() const    { return _foto;    }
       Element* getEditElement();
 
+      Element* nearestTickElement(QPointF);
       virtual Element* elementNear(QPointF);
       void editFretDiagram(FretDiagram*);
       void editBendProperties(Bend*);

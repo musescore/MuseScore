@@ -179,6 +179,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       setCentralWidget(mainWidget);
 
       connect(gv->verticalScrollBar(), SIGNAL(valueChanged(int)), piano, SLOT(setYpos(int)));
+      connect(gv->horizontalScrollBar(), SIGNAL(valueChanged(int)), hsb, SLOT(setValue(int)));
 
       connect(gv,          SIGNAL(magChanged(double,double)),  ruler, SLOT(setMag(double,double)));
 //      connect(gv,          SIGNAL(magChanged(double,double)),  piano, SLOT(setMag(double,double)));
@@ -230,11 +231,30 @@ PianorollEditor::~PianorollEditor()
       }
 
 //---------------------------------------------------------
+//   focucOnElement
+//---------------------------------------------------------
+
+void PianorollEditor::focusOnElement(Element* focus)
+      {
+      if (focus == 0)
+            return;
+      
+      //Move view so that view is centered on this element
+      int tick = focus->tick();
+      gv->scrollToTick(tick);
+//      printf("FocusOnElement type:%d, tick:%d\n", (int)focus->type(), tick);
+      }
+
+//---------------------------------------------------------
 //   setStaff
 //---------------------------------------------------------
 
 void PianorollEditor::setStaff(Staff* st)
       {
+      if (staff == st)
+            return;
+      
+      
       if ((st && st->score() != _score) || (!st && _score)) {
             if (_score) {
                   _score->removeViewer(this);
@@ -499,7 +519,7 @@ void PianorollEditor::heartBeat(Seq* seq)
       if (locator[0].tick() != tick) {
             posChanged(POS::CURRENT, tick);
             if (preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG))
-                  gv->ensureVisible(tick);
+                  gv->scrollToTick(tick);
             }
       }
 

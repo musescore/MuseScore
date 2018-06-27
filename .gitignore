@@ -46,3 +46,4 @@ VERSION
 /buildInstallLog.txt
 /buildReleaseLog.txt
 /nbproject
+/*.stackdump
