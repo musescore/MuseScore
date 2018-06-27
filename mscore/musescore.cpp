@@ -6047,7 +6047,6 @@ int main(int argc, char* av[])
             mp3BitRate = preferences.exportMp3BitRate;
 
       QSplashScreen* sc = 0;
-      QTimer* stimer = 0;
       if (!MScore::noGui && preferences.showSplashScreen) {
             QPixmap pm(":/data/splash.png");
             sc = new QSplashScreen(pm);
@@ -6055,10 +6054,6 @@ int main(int argc, char* av[])
 #ifdef Q_OS_MAC // to have session dialog on top of splashscreen on mac
             sc->setWindowFlags(Qt::FramelessWindowHint);
 #endif
-            // show splash screen for 5 sec
-            stimer = new QTimer(0);
-            stimer->start(5000);
-            qApp->connect(stimer, SIGNAL(timeout()), sc, SLOT(close()));
             sc->show();
             qApp->processEvents();
             }
@@ -6222,6 +6217,8 @@ int main(int argc, char* av[])
       gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / SPATIUM20);
 
       mscore = new MuseScore();
+      if (sc)
+            sc->close();
 
       if (!noSeq) {
             if (!seq->init())
