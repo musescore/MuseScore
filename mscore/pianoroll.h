@@ -29,7 +29,7 @@ class Score;
 class Staff;
 class PianoView;
 class Note;
-class Ruler;
+class PianoRuler;
 class Seq;
 class WaveView;
 
@@ -51,7 +51,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       Pos locator[3];
       QComboBox* veloType;
       Awl::PosLabel* pos;
-      Ruler* ruler;
+      PianoRuler* ruler;
       QAction* showWave;
       WaveView* waveView;
       QSplitter* split;

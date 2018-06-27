@@ -13,7 +13,7 @@
 #include "pianoroll.h"
 #include "config.h"
 #include "pianokeyboard.h"
-#include "ruler.h"
+#include "pianoruler.h"
 #include "pianoview.h"
 #include "musescore.h"
 #include "seq.h"
@@ -133,12 +133,9 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tickLen->setRange(-2000, 2000);
 
       //-------------
-      qreal xmag = .1;
-      ruler = new Ruler;
-      ruler->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-      ruler->setFixedHeight(rulerHeight);
+//      qreal xmag = .1;
 
-      ruler->setMag(xmag, 1.0);
+//      ruler->setMag(xmag, 1.0);
 
       PianoKeyboard* piano = new PianoKeyboard;
       piano->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
@@ -149,6 +146,11 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       gv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
       gv->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
+      ruler = new PianoRuler;
+      ruler->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+      ruler->setFixedHeight(pianoRulerHeight);
+      ruler->setXZoom(gv->xZoom());
+      
       hsb = new QScrollBar(Qt::Horizontal);
       connect(gv->horizontalScrollBar(), SIGNAL(rangeChanged(int,int)),
          SLOT(rangeChanged(int,int)));
@@ -181,7 +183,8 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       connect(gv->verticalScrollBar(), SIGNAL(valueChanged(int)), piano, SLOT(setYpos(int)));
       connect(gv->horizontalScrollBar(), SIGNAL(valueChanged(int)), hsb, SLOT(setValue(int)));
 
-      connect(gv,          SIGNAL(magChanged(double,double)),  ruler, SLOT(setMag(double,double)));
+//      connect(gv,          SIGNAL(magChanged(double,double)),  ruler, SLOT(setMag(double,double)));
+      connect(gv,          SIGNAL(xZoomChanged(qreal)),  ruler, SLOT(setXZoom(qreal)));
 //      connect(gv,          SIGNAL(magChanged(double,double)),  piano, SLOT(setMag(double,double)));
       connect(gv,          SIGNAL(noteHeightChanged(int)),  piano, SLOT(setNoteHeight(int)));
       connect(gv,          SIGNAL(pitchChanged(int)),          pl,    SLOT(setPitch(int)));
