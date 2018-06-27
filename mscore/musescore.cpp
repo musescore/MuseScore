@@ -390,7 +390,7 @@ void MuseScore::onLongOperationFinished()
 //   importExtension
 //---------------------------------------------------------
 
-bool MuseScore::importExtension(QString path)
+bool MuseScore::importExtension(QString path, QWidget* parent)
       {
       MQZipReader zipFile(path);
       // compute total unzipped size
@@ -500,7 +500,7 @@ bool MuseScore::importExtension(QString path)
 
 
       //setup the message box
-      infoMsgBox = new QMessageBox();
+      infoMsgBox = new QMessageBox(parent);
       infoMsgBox->setWindowModality(Qt::ApplicationModal);
       infoMsgBox->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
       infoMsgBox->setTextFormat(Qt::RichText);

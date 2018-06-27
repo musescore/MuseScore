@@ -340,7 +340,7 @@ void ResourceManager::downloadExtension()
             msgBox.exec();
             }
       else {
-            bool result = mscore->importExtension(localPath);
+            bool result = mscore->importExtension(localPath, this);
             if (result) {
                   QFile::remove(localPath);
                   button->setText(tr("Updated"));
