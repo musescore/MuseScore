@@ -42,7 +42,6 @@ class SynthControl : public QWidget, Ui::SynthControl {
       virtual void showEvent(QShowEvent*);
       virtual bool eventFilter(QObject*, QEvent*);
       virtual void keyPressEvent(QKeyEvent*) override;
-      void updateGui();
       void readSettings();
 
    private slots:
@@ -73,6 +72,7 @@ class SynthControl : public QWidget, Ui::SynthControl {
       void stop();
       void setScore(Score* s) { _score = s; }
       void writeSettings();
+      void updateGui();
       };
 }
 

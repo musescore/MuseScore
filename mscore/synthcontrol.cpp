@@ -169,6 +169,7 @@ void MuseScore::showSynthControl(bool val)
                   connect(synthControl, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
             connect(synthControl, SIGNAL(metronomeGainChanged(float)), seq, SLOT(setMetronomeGain(float)));
             }
+      synthControl->updateGui();
       synthControl->setVisible(val);
       }
 
