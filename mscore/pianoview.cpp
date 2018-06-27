@@ -132,10 +132,11 @@ void PianoItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidge
       QRectF bounds = boundingRect();
       painter->drawRoundedRect(bounds, roundRadius, roundRadius);
       
-      const QString pitchNames[] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+//      const QString pitchNames[] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+      const QString pitchNames[] = {"c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b"};
 
       //Pitch name
-      if (bounds.width() >= 10 && bounds.height() >= 11)
+      if (bounds.width() >= 20 && bounds.height() >= 11)
             {
             QFont f("FreeSans",  8);
             painter->setFont(f);
@@ -152,7 +153,8 @@ void PianoItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidge
 //            QRectF rectText(bounds.x() + 2, bounds.y(), bounds.width(), bounds.height());
 //            painter->drawText(rectText, Qt::AlignLeft | Qt::AlignTop, pitchNames[pitch % 12]);
             
-            if (isBlack)
+            //Black key hint
+            if (isBlack && bounds.width() >= 30)
                   painter->drawText(bounds.x() + 2, bounds.y(), bounds.width(), bounds.height(),
                           Qt::AlignRight | Qt::AlignVCenter, QString("#  "));
             }
@@ -243,12 +245,12 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
       QPen penLineMinor = QPen(colGridLineMinor, 1.0, Qt::SolidLine);
 
       //Ticks to pixels
-      qreal ticks2Pix = _xZoom;
+      //qreal ticks2Pix = _xZoom;
       
       QRectF r1;
-      r1.setCoords(-1000000.0, 0.0, MAP_OFFSET * ticks2Pix, 1000000.0);
+      r1.setCoords(-1000000.0, 0.0, tickToPixelX(0), 1000000.0);
       QRectF r2;
-      r2.setCoords((ticks + MAP_OFFSET) * ticks2Pix, 0.0, 1000000.0, 1000000.0);
+      r2.setCoords(tickToPixelX(ticks), 0.0, 1000000.0, 1000000.0);
       
       p->fillRect(r, colPianoBg);
       if (r.intersects(r1))
@@ -275,8 +277,8 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
             int degree = pitch % 12;
             if (degree == 1 || degree == 3 || degree == 6 || degree == 8 || degree == 10)
             {
-                  qreal px0 = qMax(r.x(), (qreal)MAP_OFFSET * ticks2Pix);
-                  qreal px1 = qMin(r.x() + r.width(), (qreal)(ticks + MAP_OFFSET) * ticks2Pix);
+                  qreal px0 = qMax(r.x(), (qreal)tickToPixelX(0));
+                  qreal px1 = qMin(r.x() + r.width(), (qreal)tickToPixelX(ticks));
                   QRectF hbar;
                   
                   hbar.setCoords(px0, y, px1, y + _noteHeight);
@@ -319,8 +321,10 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
 //      int tick1 = (int)(x1 * xScaleInv - MAP_OFFSET);
 //      int tick2 = (int)(x2 * xScaleInv - MAP_OFFSET);
       
-      Pos pos1(_score->tempomap(), _score->sigmap(), qMax((int)(x1 / ticks2Pix) - MAP_OFFSET, 0), TType::TICKS);
-      Pos pos2(_score->tempomap(), _score->sigmap(), qMax((int)(x2 / ticks2Pix) - MAP_OFFSET, 0), TType::TICKS);
+//      Pos pos1(_score->tempomap(), _score->sigmap(), qMax((int)(x1 / ticks2Pix) - MAP_OFFSET, 0), TType::TICKS);
+//      Pos pos2(_score->tempomap(), _score->sigmap(), qMax((int)(x2 / ticks2Pix) - MAP_OFFSET, 0), TType::TICKS);
+      Pos pos1(_score->tempomap(), _score->sigmap(), qMax(pixelXToTick(x1), 0), TType::TICKS);
+      Pos pos2(_score->tempomap(), _score->sigmap(), qMax(pixelXToTick(x2), 0), TType::TICKS);
       
 //      Pos pos1 = pix2pos(x1 / xScale);
 //      Pos pos2 = pix2pos(x2 / xScale);
@@ -349,14 +353,14 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
             for (int beat = 0; beat < beatsInBar; beat += beatSkip)
                   {
                   Pos beatPos(_score->tempomap(), _score->sigmap(), bar, beat, 0);
-                  double x = (beatPos.time(TType::TICKS) + MAP_OFFSET) * ticks2Pix;
+                  double x = tickToPixelX(beatPos.time(TType::TICKS));
                   p->setPen(penLineMinor);
                   p->drawLine(x, y1, x, y2);
                   }
             
             
             //Bar line
-            double x = (barPos.time(TType::TICKS) + MAP_OFFSET) * ticks2Pix;
+            double x = tickToPixelX(barPos.time(TType::TICKS));
             p->setPen(x > 0 ? penLineMajor : QPen(Qt::black, 2.0));
             p->drawLine(x, y1, x, y2);
             }
@@ -484,11 +488,31 @@ void PianoView::moveLocator(int i)
       
       if (_locator[i].valid()) {
             locatorLines[i]->setVisible(true);
-            qreal x = (_locator[i].time(TType::TICKS) + MAP_OFFSET) * _xZoom;
+//            qreal x = (_locator[i].time(TType::TICKS) + MAP_OFFSET) * _xZoom;
+            qreal x = tickToPixelX(_locator[i].time(TType::TICKS));
             locatorLines[i]->setPos(QPointF(x, 0.0));
             }
       else
             locatorLines[i]->setVisible(false);
+      }
+
+
+
+//---------------------------------------------------------
+//   pixelXToTick
+//---------------------------------------------------------
+
+int PianoView::pixelXToTick(int pixX) {
+      return (int)(pixX / _xZoom) - MAP_OFFSET; 
+      }
+
+
+//---------------------------------------------------------
+//   tickToPixelX
+//---------------------------------------------------------
+
+int PianoView::tickToPixelX(int tick) { 
+      return (int)(tick + MAP_OFFSET) *  _xZoom; 
       }
 
 //---------------------------------------------------------
@@ -498,142 +522,66 @@ void PianoView::moveLocator(int i)
 void PianoView::wheelEvent(QWheelEvent* event)
       {
       int step = event->delta() / 120;
-//      double xmag = transform().m11();
-//      double ymag = transform().m22();
 
-      if (event->modifiers() == Qt::ControlModifier) {
+      if (event->modifiers() == Qt::ControlModifier) 
+            {
+            //Horizontal zoom
+            
+            //QPointF mouseScene = mapToScene(event->pos());
+            QRectF viewRect = mapToScene(viewport()->geometry()).boundingRect();
+//            printf("wheelEvent viewRect %f %f %f %f\n", viewRect.x(), viewRect.y(), viewRect.width(), viewRect.height());
+//            printf("mousePos:%d %d\n", event->x(), event->y());
+            
+//            qreal mouseXTick = event->x() / _xZoom - MAP_OFFSET;
+            int mouseXTick = pixelXToTick(event->x() + (int)viewRect.x());
+            //int viewportX = event->x() - viewRect.x();
+//            printf("mouseTick:%d viewportX:%d\n", mouseXTick, viewportX);
+//            printf("mouseTick:%d\n", mouseXTick);
             
             _xZoom *= pow(X_ZOOM_RATIO, step);
-//            _xZoom += step;
             emit xZoomChanged(_xZoom);
             
             updateBoundingSize();
             updateNotes();
+            
+            int mousePixX = tickToPixelX(mouseXTick);
+  //          printf("mousePixX:%d \n", mousePixX);
+            horizontalScrollBar()->setValue(mousePixX - event->x());
+
             scene()->update();
-            
-//            event->posF();
-            
-/*            
-            if (step > 0) {
-                  for (int i = 0; i < step; ++i) {
-                        if (xmag > 10.0)
-                              break;
-                        scale(1.1, 1.0);
-                        xmag *= 1.1;
-                        }
-                  }
-            else {
-                  for (int i = 0; i < -step; ++i) {
-                        if (xmag < 0.001)
-                              break;
-                        scale(.9, 1.0);
-                        xmag *= .9;
-                        }
-                  }
-            emit magChanged(xmag, ymag);
-
-            int tpix  = (480 * 4) * xmag;
-            magStep = -5;
-            if (tpix <= 4000)
-                  magStep = -4;
-            if (tpix <= 2000)
-                  magStep = -3;
-            if (tpix <= 1000)
-                  magStep = -2;
-            if (tpix <= 500)
-                  magStep = -1;
-            if (tpix <= 128)
-                  magStep = 0;
-            if (tpix <= 64)
-                  magStep = 1;
-            if (tpix <= 32)
-                  magStep = 2;
-            if (tpix <= 16)
-                  magStep = 3;
-            if (tpix <= 8)
-                  magStep = 4;
-            if (tpix <= 4)
-                  magStep = 5;
-            if (tpix <= 2)
-                  magStep = 6;
-
-            //
-            // if xpos <= 0, then the scene is centered
-            // there is no scroll bar anymore sending
-            // change signals, so we have to do it here:
-            //
-            double xpos = -(mapFromScene(QPointF()).x());
-            if (xpos <= 0)
-                  emit xposChanged(xpos);
- */
             }
-      else if (event->modifiers() == Qt::ShiftModifier) {
+      else if (event->modifiers() == Qt::ShiftModifier) 
+            {
+            //Horizontal scroll
             QWheelEvent we(event->pos(), event->delta(), event->buttons(), 0, Qt::Horizontal);
             QGraphicsView::wheelEvent(&we);
             }
-      else if (event->modifiers() == 0) {
+      else if (event->modifiers() == 0)
+            {
+            //Vertical scroll
             QGraphicsView::wheelEvent(event);
             }
-      else if (event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) {
+      else if (event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier))
+            {
+            //Vertical zoom
+            QRectF viewRect = mapToScene(viewport()->geometry()).boundingRect();
+            //QPointF mouseScenePos = mapToScene(event->pos());
+            qreal mouseYNote = (event->y() + (int)viewRect.y()) / (qreal)_noteHeight;
+            
             _noteHeight = qMax(qMin(_noteHeight + step, MAX_KEY_HEIGHT), MIN_KEY_HEIGHT);
             emit noteHeightChanged(_noteHeight);
             
             updateBoundingSize();
             updateNotes();
+            
+            int mousePixY = (int)(mouseYNote * _noteHeight);
+  //          printf("mousePixX:%d \n", mousePixX);
+            verticalScrollBar()->setValue(mousePixY - event->y());
+            
+            
             scene()->update();
-            
-            
-/*            
-            if (step > 0) {
-                  for (int i = 0; i < step; ++i) {
-                        if (ymag > 3.0)
-                              break;
-                        scale(1.0, 1.1);
-                        ymag *= 1.1;
-                        }
-                  }
-            else {
-                  for (int i = 0; i < -step; ++i) {
-                        if (ymag < 0.4)
-                              break;
-                        scale(1.0, .9);
-                        ymag *= .9;
-                        }
-                  }
-            emit magChanged(xmag, ymag);
- */
             }
       }
-
-//---------------------------------------------------------
-//   y2pitch
-//---------------------------------------------------------
-
-//int PianoView::y2pitch(int y) const
-//      {
-//      int pitch;
-//      const int total = (10 * 7 + 5) * keyHeight;       // 75 Ganztonschritte
-//      y = total - y;
-//      int oct = (y / (7 * keyHeight)) * 12;
-//      static const char kt[] = {
-//            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-//            1, 1, 1, 1, 1, 1, 1,
-//            2, 2, 2, 2, 2, 2,
-//            3, 3, 3, 3, 3, 3, 3,
-//            4, 4, 4, 4, 4, 4, 4, 4, 4,
-//            5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-//            6, 6, 6, 6, 6, 6, 6,
-//            7, 7, 7, 7, 7, 7,
-//            8, 8, 8, 8, 8, 8, 8,
-//            9, 9, 9, 9, 9, 9,
-//            10, 10, 10, 10, 10, 10, 10,
-//            11, 11, 11, 11, 11, 11, 11, 11, 11, 11
-//            };
-//      pitch = kt[y % 91] + oct;
-//      if (pitch < 0 || pitch > 127)
-//            pitch = -1;
-//      return pitch;
-//      }
 
 //---------------------------------------------------------
 //   mouseMoveEvent
@@ -646,7 +594,8 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
 //      int pitch = (_noteHeight * 128 - event->y()) / _noteHeight;
       emit pitchChanged(pitch);
       
-      int tick = event->x() / _xZoom - MAP_OFFSET;
+      //int tick = event->x() / _xZoom - MAP_OFFSET;
+      int tick = pixelXToTick(p.x());
 //      int tick = int(p.x()) -480;
       if (tick < 0) {
             tick = 0;
@@ -687,7 +636,8 @@ void PianoView::scrollToTick(int tick)
 //      printf("ensureVisible x:%f y:%f width:%f height:%f \n", rect.x(), rect.y(), rect.width(), rect.height());
       
       //QPointF pt = mapToScene(0, height() / 2);
-      qreal xpos = (tick + MAP_OFFSET) * _xZoom;
+      //qreal xpos = (tick + MAP_OFFSET) * _xZoom;
+      qreal xpos = tickToPixelX(tick);
 //      qreal ypos = matrix().dy();
 //      QGraphicsView::ensureVisible(xpos, ypos, 240.0, 1.0);
 
@@ -707,23 +657,6 @@ void PianoView::scrollToTick(int tick)
 //      QGraphicsView::ensureVisible(qreal(tick), pt.y(), 240.0, 1.0);
 //      verticalScrollBar()->setValue(ypos);
       }
-
-
-////---------------------------------------------------------
-////   ticksToPixels
-////---------------------------------------------------------
-//qreal PianoView::ticksToPixelsRatio() 
-//      { 
-//      return pow(X_ZOOM_RATIO, (double)_xZoom); 
-//      }
-//
-////---------------------------------------------------------
-////   ticksToPixels
-////---------------------------------------------------------
-//qreal PianoView::ticksToPixels(int ticks) 
-//      { 
-//      return pow(X_ZOOM_RATIO, (double)_xZoom) * (ticks + MAP_OFFSET); 
-//      }
 
 //---------------------------------------------------------
 //   updateBoundingSize
@@ -764,15 +697,70 @@ void PianoView::setStaff(Staff* s, Pos* l)
       //
       // move to something interesting
       //
-      QList<QGraphicsItem*> items = scene()->selectedItems();
+      QList<QGraphicsItem*> items = scene()->items();
+//      QList<QGraphicsItem*> items = scene()->selectedItems();
+//      if (!items.empty())
+//            {
+//            items = scene()->items();
+//            }
+      
       QRectF boundingRect;
+      bool brInit = false;
+      QRectF boundingRectSel;
+      bool brsInit = false;
+      
       foreach (QGraphicsItem* item, items) {
             if (item->type() == PianoItemType)
-                  boundingRect |= item->mapToScene(item->boundingRect()).boundingRect();
+                  {
+                  if (!brInit)
+                        {
+                        boundingRect = item->boundingRect();
+                        brInit = true;
+                        }
+                  else
+                        {
+                        boundingRect |= item->mapToScene(item->boundingRect()).boundingRect();
+                        }
+                  
+                  if (item->isSelected())
+                        {
+                        if (!brsInit)
+                              {
+                              boundingRectSel = item->boundingRect();
+                              brsInit = true;
+                              }
+                        else
+                              {
+                              boundingRectSel |= item->mapToScene(item->boundingRect()).boundingRect();
+                              }
+                        }
+                  
+                  //PianoItem *pi = (PianoItem)item;
+//                  item->isSelected();
+//                  boundingRect |= item->mapToScene(item->boundingRect()).boundingRect();
+                  }
+            }
+      
+      if (brsInit)
+            {
+            horizontalScrollBar()->setValue(boundingRectSel.x());
+            verticalScrollBar()->setValue(qMax(boundingRectSel.y() - boundingRectSel.height() / 2, 0.0));
+            }
+      else if (brInit)
+            {
+            horizontalScrollBar()->setValue(boundingRect.x());
+            verticalScrollBar()->setValue(qMax(boundingRect.y() - boundingRect.height() / 2, 0.0));
+            }
+      else
+            {
+            QRectF rect = mapToScene(viewport()->geometry()).boundingRect();
+            
+            horizontalScrollBar()->setValue(0);
+            verticalScrollBar()->setValue(qMax(rect.y() - rect.height() / 2, 0.0));
             }
       //centerOn(boundingRect.center());
-      horizontalScrollBar()->setValue(0);
-      verticalScrollBar()->setValue(qMax(boundingRect.y() - boundingRect.height() / 2, 0.0));
+//      horizontalScrollBar()->setValue(0);
+//      verticalScrollBar()->setValue(qMax(boundingRect.y() - boundingRect.height() / 2, 0.0));
       }
 
 //---------------------------------------------------------

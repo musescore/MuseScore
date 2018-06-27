@@ -83,7 +83,7 @@ class PianoView : public QGraphicsView {
       void createLocators();
       void addChord(Chord* chord);
       void updateBoundingSize();
-
+      
    protected:
       virtual void wheelEvent(QWheelEvent* event);
       virtual void mouseMoveEvent(QMouseEvent* event);
@@ -110,6 +110,10 @@ class PianoView : public QGraphicsView {
       int noteHeight() { return _noteHeight; }
       qreal xZoom() { return _xZoom; }
       QList<QGraphicsItem*> items() { return scene()->selectedItems(); }
+
+      int pixelXToTick(int pixX);
+      int tickToPixelX(int tick);
+
       };
 
 
