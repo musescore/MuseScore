@@ -56,7 +56,7 @@ ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescor
 # update translation on transifex
 make -f Makefile.osx lupdate
 
-sudo pip install transifex-client
+#sudo pip install transifex-client
 
 cat > ~/.transifexrc <<EOL
 [https://www.transifex.com]
@@ -66,7 +66,7 @@ token =
 username = $TRANSIFEX_USER
 EOL
 
-tx push -s
+#tx push -s
 
 
 
