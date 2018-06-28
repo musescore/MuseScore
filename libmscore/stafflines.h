@@ -29,6 +29,7 @@ class StaffLines final : public Element {
       virtual StaffLines* clone() const override    { return new StaffLines(*this); }
       virtual ElementType type() const override     { return ElementType::STAFF_LINES; }
       virtual void layout() override;
+      virtual void layoutWithoutMeasureWidth();
       virtual void draw(QPainter*) const override;
       virtual QPointF pagePos() const override;    ///< position in page coordinates
       virtual QPointF canvasPos() const override;  ///< position in page coordinates

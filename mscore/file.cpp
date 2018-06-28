@@ -2748,6 +2748,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                               firstSL->bbox().setRight(lastSL->bbox().right()
                                                     +  lastSL->pagePos().x()
                                                     - firstSL->pagePos().x());
+                              firstSL->layoutWithoutMeasureWidth();
                               printer.setElement(firstSL);
                               paintElement(p, firstSL);
                               }
