@@ -495,6 +495,8 @@ void MuseScore::newFile()
       {
       if (newWizard == 0)
             newWizard = new NewWizard(this);
+      else
+            newWizard->updateTemplate();
       newWizard->restart();
       if (newWizard->exec() != QDialog::Accepted)
             return;
