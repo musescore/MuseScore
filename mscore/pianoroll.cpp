@@ -209,6 +209,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
 
       readSettings();
 
+      actions.append(getAction("play"));
       actions.append(getAction("delete"));
       actions.append(getAction("pitch-up"));
       actions.append(getAction("pitch-down"));
@@ -686,7 +687,7 @@ void PianorollEditor::showWaveView(bool val)
                   waveView->setAudio(_score->audio());
                   waveView->setScore(_score, locator);
                   split->addWidget(waveView);
-                  waveView->setMag(ruler->xmag(), 1.0);
+//                  waveView->setMag(ruler->xmag(), 1.0);
                   waveView->setXpos(ruler->xpos());
                   }
             waveView->setVisible(true);

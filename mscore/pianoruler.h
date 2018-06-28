@@ -28,6 +28,7 @@ namespace Ms {
 class Score;
 
 static const int pianoRulerHeight = 28;
+static const int MAP_OFFSET = 480;
 
 //---------------------------------------------------------
 //   Ruler
@@ -40,8 +41,8 @@ class PianoRuler : public QWidget {
       Pos _cursor;
       Pos* _locator;
 
-      int magStep;
-      double _xmag;
+//      int magStep;
+//      double _xmag;
       qreal _xZoom;
       int _xpos;
       TType _timeType;
@@ -65,13 +66,13 @@ class PianoRuler : public QWidget {
    public slots:
       void setXpos(int);
       void setXZoom(qreal);
-      void setMag(double xmag, double ymag);
+//      void setMag(double xmag, double ymag);
       void setPos(const Pos&);
 
    public:
       PianoRuler(QWidget* parent = 0);
       void setScore(Score*, Pos* locator);
-      double xmag() const { return _xmag; }
+//      double xmag() const { return _xmag; }
       int xpos() const { return _xpos; }
       qreal xZoom() const { return _xZoom; }
       };

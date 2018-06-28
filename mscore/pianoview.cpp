@@ -12,6 +12,7 @@
 
 
 #include "pianoview.h"
+#include "pianoruler.h"
 #include "libmscore/staff.h"
 #include "pianokeyboard.h"
 #include "libmscore/measure.h"
@@ -24,7 +25,7 @@
 
 namespace Ms {
 
-static const int MAP_OFFSET = 480;
+//static const int MAP_OFFSET = 480;
 
 //---------------------------------------------------------
 //   pitch2y
@@ -99,7 +100,8 @@ void PianoItem::updateValues()
 
 void PianoItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
       {
-      painter->setRenderHint(QPainter::Antialiasing);
+      painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
+//      painter->setRenderHint(QPainter::Antialiasing);
       
       int pitch    = _note->pitch() + _event->pitch();
       int degree = pitch % 12;

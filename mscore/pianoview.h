@@ -105,8 +105,6 @@ class PianoView : public QGraphicsView {
       PianoView();
       void setStaff(Staff*, Pos* locator);
       void scrollToTick(int tick);
-//      qreal ticksToPixelsRatio();
-//      qreal ticksToPixels(int ticks);
       int noteHeight() { return _noteHeight; }
       qreal xZoom() { return _xZoom; }
       QList<QGraphicsItem*> items() { return scene()->selectedItems(); }
