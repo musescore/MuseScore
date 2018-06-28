@@ -2208,7 +2208,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
 
       QWidget* w = QApplication::activeModalWidget();
       if (!cv || w) {
-            active = 1;
+            active = 0;
             return;
             }
       if (velo) {
