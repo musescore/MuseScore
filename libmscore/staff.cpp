@@ -1020,7 +1020,7 @@ StaffType* Staff::setStaffType(int tick, const StaffType* nst)
       {
       auto i = _staffTypeList.find(tick);
       if (i != _staffTypeList.end()) {
-            qDebug("there is alread a type at %d", tick);
+            qDebug("there is already a type at %d", tick);
             }
       return _staffTypeList.setStaffType(tick, nst);
       }
