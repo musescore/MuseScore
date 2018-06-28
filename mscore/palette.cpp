@@ -289,6 +289,8 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
       if (target->acceptDrop(dropData)) {
             Element* ne = e->clone();
             ne->setScore(score);
+            ne->reset();
+            ne->layout();
 
             dropData.element    = ne;
             ne = target->drop(dropData);
