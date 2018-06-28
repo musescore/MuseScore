@@ -195,7 +195,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       connect(ruler,       SIGNAL(posChanged(const Pos&)),     pos,   SLOT(setValue(const Pos&)));
 
       connect(hsb,         SIGNAL(valueChanged(int)),  SLOT(setXpos(int)));
-      connect(gv,          SIGNAL(xposChanged(int)),   SLOT(setXpos(int)));
+//      connect(gv,          SIGNAL(xposChanged(int)),   SLOT(setXpos(int)));
       connect(gv->horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(setXpos(int)));
 
       connect(ruler,       SIGNAL(locatorMoved(int, const Pos&)), SLOT(moveLocator(int, const Pos&)));
@@ -242,11 +242,12 @@ void PianorollEditor::focusOnElement(Element* focus)
       {
       if (focus == 0)
             return;
+
       
       //Move view so that view is centered on this element
       int tick = focus->tick();
+      //printf("FocusOnElement type:%d, tick:%d\n", (int)focus->type(), tick);
       gv->scrollToTick(tick);
-//      printf("FocusOnElement type:%d, tick:%d\n", (int)focus->type(), tick);
       }
 
 //---------------------------------------------------------
@@ -316,6 +317,8 @@ void PianorollEditor::readSettings()
 
 void PianorollEditor::setXpos(int x)
       {
+      //printf("PianorollEditor::setXpos x:%d\n", x);
+      
       gv->horizontalScrollBar()->setValue(x);
       ruler->setXpos(x);
       if (waveView && showWave->isChecked())
@@ -523,7 +526,10 @@ void PianorollEditor::heartBeat(Seq* seq)
       if (locator[0].tick() != tick) {
             posChanged(POS::CURRENT, tick);
             if (preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG))
+                  {
+      printf("heartbeat Tick:%d  \n", tick);
                   gv->scrollToTick(tick);
+                  }
             }
       }
 

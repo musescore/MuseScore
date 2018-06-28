@@ -251,7 +251,7 @@ void PianoRuler::paintEvent(QPaintEvent* e)
 //            bar1 -= 1;
 //      bar2 = ((bar2 + n - 1) / n) * n; // round up
 
-      printf("bar1 %d bar2 %d\n", bar1, bar2);
+//      printf("bar1 %d bar2 %d\n", bar1, bar2);
 
       const int minBarGapSize = 48;
       const int minBeatGapSize = 30;
@@ -277,7 +277,7 @@ void PianoRuler::paintEvent(QPaintEvent* e)
       //Round down to first bar to be a multiple of barSkip
       bar1 = (bar1 / barSkip) * barSkip;
       //int period = pow(2, barSkip - 1);
-      printf("bar1 %d bar2: %d\n", bar1, bar2);
+//      printf("bar1 %d bar2: %d\n", bar1, bar2);
       
       for (int bar = bar1; bar <= bar2; bar += barSkip) {
             Pos stick(_score->tempomap(), _score->sigmap(), bar, 0, 0);

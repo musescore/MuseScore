@@ -190,7 +190,7 @@ PianoView::PianoView()
       setRubberBandSelectionMode(Qt::IntersectsItemBoundingRect);
       setDragMode(QGraphicsView::RubberBandDrag);
       _timeType = TType::TICKS;
-      magStep   = 0;
+//      magStep   = 0;
       staff     = 0;
       chord     = 0;
       _noteHeight = DEFAULT_KEY_HEIGHT;
@@ -629,6 +629,7 @@ void PianoView::leaveEvent(QEvent* event)
 void PianoView::scrollToTick(int tick)
       {
       QRectF rect = mapToScene(viewport()->geometry()).boundingRect();
+      printf("scrollToTick tick:%d \n", tick);
 //      printf("scrollToTick x:%f y:%f width:%f height:%f \n", rect.x(), rect.y(), rect.width(), rect.height());
       
 //      int ypos = verticalScrollBar()->value();
@@ -652,6 +653,7 @@ void PianoView::scrollToTick(int tick)
       else if (xpos >= rect.x() + rect.width() - margin)
             horizontalScrollBar()->setValue(qMax(xpos - rect.width() + margin, 0.0));
             
+//      emit xposChanged(xpos);
       
 //      horizontalScrollBar()->setValue(qMax(xpos - margin, 0.0));
 //      tick += MAP_OFFSET;
@@ -665,11 +667,25 @@ void PianoView::scrollToTick(int tick)
 //---------------------------------------------------------
 void PianoView::updateBoundingSize()
       {
+//      printf("PianoView::updateBoundingSize\n");
+//      
+//      qreal hbarPos = horizontalScrollBar()->value();
+//      qreal vbarPos = verticalScrollBar()->value();
+//
+//      printf("hbarPos %f vbarPos%f\n", hbarPos, vbarPos);
+      
       Measure* lm = staff->score()->lastMeasure();
       ticks       = lm->tick() + lm->ticks();
       scene()->setSceneRect(0.0, 0.0, 
               double((ticks + MAP_OFFSET * 2) * _xZoom),
               _noteHeight * 128);
+      
+//      qreal hbarPosP = horizontalScrollBar()->value();
+//      qreal vbarPosP = verticalScrollBar()->value();
+//      printf("post hbarPos %f vbarPos%f\n", hbarPosP, vbarPosP);
+//      
+//      horizontalScrollBar()->setValue(hbarPos);
+//      verticalScrollBar()->setValue(vbarPos);
       }
 
 //---------------------------------------------------------
@@ -678,8 +694,17 @@ void PianoView::updateBoundingSize()
 
 void PianoView::setStaff(Staff* s, Pos* l)
       {
-      staff    = s;
+      printf("PianoView::setStaff\n");
       _locator = l;
+      
+      //bool reentry = false;
+      if (staff == s)
+            {
+            //reentry = true;
+            return;
+            }
+      
+      staff    = s;
       setEnabled(staff != nullptr);
       if (!staff) {
             scene()->blockSignals(true);  // block changeSelection()
@@ -696,6 +721,9 @@ void PianoView::setStaff(Staff* s, Pos* l)
 
       updateNotes();
 
+//      if (reentry)
+//            return;
+      
       //
       // move to something interesting
       //

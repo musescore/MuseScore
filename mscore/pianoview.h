@@ -66,12 +66,13 @@ class PianoView : public QGraphicsView {
 
       Staff* staff;
       Chord* chord;
-      Pos pos;
+      
+      Pos pos;  //Track mouse position
       Pos* _locator;
       QGraphicsLineItem* locatorLines[3];
       int ticks;
       TType _timeType;
-      int magStep;
+      //int magStep;
       int _noteHeight;
       qreal _xZoom;
 
@@ -90,10 +91,10 @@ class PianoView : public QGraphicsView {
       virtual void leaveEvent(QEvent*);
 
    signals:
-      void magChanged(double, double);
+//      void magChanged(double, double);
       void xZoomChanged(qreal);
       void noteHeightChanged(int);
-      void xposChanged(int);
+//      void xposChanged(int);
       void pitchChanged(int);
       void posChanged(const Pos&);
 

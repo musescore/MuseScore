@@ -795,15 +795,25 @@ void ScoreView::changeState(ViewState s)
             default:
                   break;
             }
+      
+      //qDebug("starting %s", stateName(s));
+      
       //
       //    start new state
       //
       switch (s) {
             case ViewState::NORMAL:
+                  {
                   if (state == ViewState::EDIT)
+                        {
+//                        printf("before endEdit\n");
                         endEdit();
+//                        printf("after endEdit\n");
+                        }
                   setCursor(QCursor(Qt::ArrowCursor));
+//                        printf("after setCursor\n");
                   break;
+                  }
             case ViewState::DRAG:
                   setCursor(QCursor(Qt::SizeAllCursor));
                   break;
@@ -847,7 +857,9 @@ void ScoreView::changeState(ViewState s)
             }
 
       state = s;
+                        //printf("before changeState\n");
       mscore->changeState(mscoreState());
+                        //printf("after changeState\n");
       }
 
 //---------------------------------------------------------
