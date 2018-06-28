@@ -147,6 +147,7 @@ class NewWizardPage4 : public QWizardPage {
       QString templatePath() const;
       virtual void initializePage();
       void buildTemplatesList();
+      void setTemplateLayout();
       };
 
 //---------------------------------------------------------
@@ -192,6 +193,7 @@ class NewWizard : public QWizard {
       enum class Page : signed char      { Invalid = -1, Type, Instruments, Template, Keysig, Timesig};
 
       QString templatePath() const       { return p4->templatePath(); }
+      void updateTemplate()              { p4->setTemplateLayout();  }
       int measures() const               { return p3->measures();    }
       Fraction timesig() const           { return p3->timesig();     }
       void createInstruments(Score* s)   { p2->createInstruments(s); }

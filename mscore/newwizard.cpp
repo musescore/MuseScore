@@ -373,6 +373,23 @@ QString NewWizardPage4::templatePath() const
 //   NewWizardPage5
 //---------------------------------------------------------
 
+void NewWizardPage4::setTemplateLayout()
+      {
+      QDir dir(mscoreGlobalShare + "/templates");
+      QFileInfoList fil = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name);
+      if (fil.isEmpty())
+            fil.append(QFileInfo(QFile(":data/Empty_Score.mscz")));
+
+      QDir myTemplatesDir(preferences.myTemplatesPath);
+      fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
+
+      templateFileBrowser->setScores(fil);
+      }
+
+//---------------------------------------------------------
+//   NewWizardPage5
+//---------------------------------------------------------
+
 NewWizardPage5::NewWizardPage5(QWidget* parent)
    : QWizardPage(parent)
       {
