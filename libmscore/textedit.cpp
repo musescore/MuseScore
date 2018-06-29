@@ -101,7 +101,7 @@ void TextBase::endEdit(EditData& ed)
                   }
             }
       if (actualText.isEmpty()) {
-            qDebug("actual text is empty\n");
+            qDebug("actual text is empty");
             score()->startCmd();
             score()->undoRemoveElement(this);
             ed.element = 0;

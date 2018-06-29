@@ -62,6 +62,23 @@ enum class Sid {
       lyricsDashForce,
       lyricsAlignVerseNumber,
       lyricsLineThickness,
+      lyricsMelismaAlign,
+
+      lyricsOddFontFace,
+      lyricsOddFontSize,
+      lyricsOddFontBold,
+      lyricsOddFontItalic,
+      lyricsOddFontUnderline,
+      lyricsOddAlign,
+      lyricsOddOffset,
+
+      lyricsEvenFontFace,
+      lyricsEvenFontSize,
+      lyricsEvenFontBold,
+      lyricsEvenFontItalic,
+      lyricsEvenFontUnderline,
+      lyricsEvenAlign,
+      lyricsEvenOffset,
 
       figuredBassFontFamily,
 //      figuredBassFontSize,
@@ -414,22 +431,6 @@ enum class Sid {
       lyricistAlign,
       lyricistOffset,
       lyricistOffsetType,
-
-      lyricsOddFontFace,
-      lyricsOddFontSize,
-      lyricsOddFontBold,
-      lyricsOddFontItalic,
-      lyricsOddFontUnderline,
-      lyricsOddAlign,
-      lyricsOddOffset,
-
-      lyricsEvenFontFace,
-      lyricsEvenFontSize,
-      lyricsEvenFontBold,
-      lyricsEvenFontItalic,
-      lyricsEvenFontUnderline,
-      lyricsEvenAlign,
-      lyricsEvenOffset,
 
       fingeringFontFace,
       fingeringFontSize,
@@ -886,6 +887,8 @@ typedef std::vector<StyledProperty> SubStyle;
 extern const SubStyle emptyStyle;
 extern const SubStyle defaultStyle;
 extern const SubStyle fingeringStyle;
+extern const SubStyle lyricsOddStyle;
+extern const SubStyle lyricsEvenStyle;
 
 const SubStyle& subStyle(SubStyleId);
 const SubStyle& subStyle(const char*);

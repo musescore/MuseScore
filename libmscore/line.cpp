@@ -531,7 +531,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                         }
                   else {
                         cr = toChordRest(endElement());
-                        if (type() == ElementType::OTTAVA) {
+                        if (isOttava()) {
                               if (cr && cr->durationType() == TDuration::DurationType::V_MEASURE) {
                                     x = cr->x() + cr->width() + sp;
                                     }
@@ -578,9 +578,11 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                           cr = toChordRest(e);
                                     }
                               // layout to right edge of CR
-                              if (cr) {
+                              // if next segment is a chord with lyrics which spans to the left this
+                              // does not work:
+                              if (cr && cr->lyrics().empty()) {
                                     qreal maxRight = 0.0;
-                                    if (cr->type() == ElementType::CHORD) {
+                                    if (cr->isChord()) {
                                           // chord bbox() is unreliable, look at notes
                                           // this also allows us to more easily ignore ledger lines
                                           for (Note* n : toChord(cr)->notes())
@@ -593,8 +595,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     x = maxRight; // cr->width()
                                     }
                              }
-                        else if (type() == ElementType::HAIRPIN || type() == ElementType::TRILL || type() == ElementType::VIBRATO
-                                    || type() == ElementType::TEXTLINE || type() == ElementType::LYRICSLINE) {
+                        else if (isHairpin() || isTrill() || isVibrato() || isTextLine() || isLyricsLine()) {
                               // (for LYRICSLINE, this is hyphen; melisma line is handled above)
                               // lay out to just before next chordrest on this staff, or barline
                               // tick2 actually tells us the right chordrest to look for

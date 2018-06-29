@@ -18,6 +18,8 @@
       <staffLowerBorder>4</staffLowerBorder>
       <minSystemDistance>9</minSystemDistance>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
+      <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
       <repeatBarTips>1</repeatBarTips>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
@@ -52,8 +54,6 @@
       <composerFontFace>MuseJazz Text</composerFontFace>
       <composerFontSpatiumDependent>1</composerFontSpatiumDependent>
       <lyricistFontFace>MuseJazz Text</lyricistFontFace>
-      <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
-      <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
       <fingeringFontFace>MuseJazz Text</fingeringFontFace>
       <fingeringFramePadding>0</fingeringFramePadding>
       <fingeringFrameWidth>0</fingeringFrameWidth>
