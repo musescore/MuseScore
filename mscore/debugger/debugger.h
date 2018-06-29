@@ -262,6 +262,7 @@ class ShowNoteWidget : public ShowElementBase {
       void dot1Clicked();
       void dot2Clicked();
       void dot3Clicked();
+      void dot4Clicked();
 
    signals:
       void scoreChanged();
@@ -282,6 +283,10 @@ class RestView : public ShowElementBase {
       Ui::Rest rb;
 
    private slots:
+      void dot1Clicked();
+      void dot2Clicked();
+      void dot3Clicked();
+      void dot4Clicked();
       void tupletClicked();
       void beamClicked();
 

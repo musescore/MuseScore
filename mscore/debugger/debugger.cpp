@@ -393,7 +393,10 @@ void Debugger::addMeasure(ElementItem* mi, Measure* measure)
                   ElementItem* sei = new ElementItem(segItem, e);
                   if (e->isChord())
                         addChord(sei, toChord(e));
-                  else if (e->isChordRest()) {
+                  else if (e->isRest()) {
+                        Rest* rest = toRest(e);
+                        for (int i = 0; i < rest->dots(); ++i)
+                              new ElementItem(sei, rest->dot(i));
                         ChordRest* cr = toChordRest(e);
                         if (cr->beam() && cr->beam()->elements().front() == cr)
                               new ElementItem(sei, cr->beam());
@@ -1123,6 +1126,7 @@ ShowNoteWidget::ShowNoteWidget()
       connect(nb.dot1,       SIGNAL(clicked()), SLOT(dot1Clicked()));
       connect(nb.dot2,       SIGNAL(clicked()), SLOT(dot2Clicked()));
       connect(nb.dot3,       SIGNAL(clicked()), SLOT(dot3Clicked()));
+      connect(nb.dot4,       SIGNAL(clicked()), SLOT(dot4Clicked()));
       }
 
 //---------------------------------------------------------
@@ -1153,6 +1157,7 @@ void ShowNoteWidget::setElement(Element* e)
       nb.dot1->setEnabled(note->dots().size() > 0);
       nb.dot2->setEnabled(note->dots().size() > 1);
       nb.dot3->setEnabled(note->dots().size() > 2);
+      nb.dot4->setEnabled(note->dots().size() > 3);
 
       nb.fingering->clear();
       for (Element* text : note->el()) {
@@ -1195,6 +1200,15 @@ void ShowNoteWidget::dot2Clicked()
 void ShowNoteWidget::dot3Clicked()
       {
       emit elementChanged(((Note*)element())->dot(2));
+      }
+
+//---------------------------------------------------------
+//   dot4Clicked
+//---------------------------------------------------------
+
+void ShowNoteWidget::dot4Clicked()
+      {
+      emit elementChanged(((Note*)element())->dot(3));
       }
 
 //---------------------------------------------------------
@@ -1246,6 +1260,11 @@ RestView::RestView()
       connect(crb.tupletButton, SIGNAL(clicked()), SLOT(tupletClicked()));
       connect(crb.attributes,   SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
       connect(crb.lyrics,       SIGNAL(itemClicked(QListWidgetItem*)), SLOT(gotoElement(QListWidgetItem*)));
+
+      connect(rb.dot1,          SIGNAL(clicked()), SLOT(dot1Clicked()));
+      connect(rb.dot2,          SIGNAL(clicked()), SLOT(dot2Clicked()));
+      connect(rb.dot3,          SIGNAL(clicked()), SLOT(dot3Clicked()));
+      connect(rb.dot4,          SIGNAL(clicked()), SLOT(dot4Clicked()));
       }
 
 //---------------------------------------------------------
@@ -1282,6 +1301,47 @@ void RestView::setElement(Element* e)
       rb.dotline->setValue(rest->getDotline());
       rb.mmWidth->setValue((rest->measure() && rest->measure()->isMMRest()) ? rest->mmWidth() : 0.0);
       rb.gap->setChecked(rest->isGap());
+      int dots = rest->dots();
+      rb.dot1->setEnabled(dots > 0);
+      rb.dot2->setEnabled(dots > 1);
+      rb.dot3->setEnabled(dots > 2);
+      rb.dot4->setEnabled(dots > 3);
+      }
+
+//---------------------------------------------------------
+//   dot1Clicked
+//---------------------------------------------------------
+
+void RestView::dot1Clicked()
+      {
+      emit elementChanged(toRest(element())->dot(0));
+      }
+
+//---------------------------------------------------------
+//   dot2Clicked
+//---------------------------------------------------------
+
+void RestView::dot2Clicked()
+      {
+      emit elementChanged(toRest(element())->dot(1));
+      }
+
+//---------------------------------------------------------
+//   dot3Clicked
+//---------------------------------------------------------
+
+void RestView::dot3Clicked()
+      {
+      emit elementChanged(toRest(element())->dot(2));
+      }
+
+//---------------------------------------------------------
+//   dot4Clicked
+//---------------------------------------------------------
+
+void RestView::dot4Clicked()
+      {
+      emit elementChanged(toRest(element())->dot(3));
       }
 
 //---------------------------------------------------------

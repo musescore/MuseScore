@@ -18,6 +18,7 @@
 namespace Ms {
 
 class Note;
+class Rest;
 
 //---------------------------------------------------------
 //   @@ NoteDot
@@ -35,7 +36,8 @@ class NoteDot final : public Element {
       virtual void read(XmlReader&) override;
       virtual void layout() override;
 
-      Note* note() const { return (Note*)parent(); }
+      Note* note() const { return parent()->isNote() ? toNote(parent()) : 0; }
+      Rest* rest() const { return parent()->isRest() ? toRest(parent()) : 0; }
       };
 
 
