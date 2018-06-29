@@ -24906,7 +24906,7 @@ la battuta non è vuota</translation>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="397"/>
         <source>CJK Strokes</source>
-        <translation>CJK Strokes</translation>
+        <translation>CJK Ictus</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="398"/>

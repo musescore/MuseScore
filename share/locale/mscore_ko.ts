@@ -4343,37 +4343,37 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="124"/>
         <source>Span from:</source>
-        <translation type="unfinished"/>
+        <translation>떨어져 있다:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="137"/>
         <source>Spanned staves:</source>
-        <translation type="unfinished"/>
+        <translation>떨어진 보표들:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="150"/>
         <source>Span from</source>
-        <translation type="unfinished"/>
+        <translation>떨어져 있다</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="163"/>
         <source>Span</source>
-        <translation type="unfinished"/>
+        <translation>간격</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="173"/>
         <source>Span to:</source>
-        <translation type="unfinished"/>
+        <translation>떨어뜨리다:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="186"/>
         <source>Span to</source>
-        <translation type="unfinished"/>
+        <translation>떨어뜨리다</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="196"/>
         <source>Reset &apos;Spanned staves&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;떨어진 보표들&apos; 값 초기화</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="213"/>
@@ -4493,7 +4493,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="221"/>
         <source>Vertical position offset right</source>
-        <translation type="unfinished"/>
+        <translation>오른쪽 수평 오프셋 위치</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="246"/>
@@ -4592,7 +4592,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_break.ui" line="53"/>
         <source>Layout Break</source>
-        <translation type="unfinished"/>
+        <translation>레이아웃 나누기</translation>
     </message>
 </context>
 <context>
@@ -4600,12 +4600,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="17"/>
         <source>Caesura Inspector</source>
-        <translation type="unfinished"/>
+        <translation>행간 휴식 Inspector</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="44"/>
         <source>Breath/Caesura</source>
-        <translation type="unfinished"/>
+        <translation>휴식 / 행간 휴식</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="87"/>
@@ -7975,12 +7975,12 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="352"/>
         <source>Layout stretch factor</source>
-        <translation type="unfinished"/>
+        <translation>레이아웃 범위 요소</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="355"/>
         <source>Layout stretch:</source>
-        <translation type="unfinished"/>
+        <translation>레이아웃 범위</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="387"/>
@@ -8187,7 +8187,15 @@ Group under the W3C Community Contributor License Agreement
 %1
 A human-readable summary is available:
 %2</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML은 디지털 악보를 교환하기위한 개방형 파일 형식이며,
+많은 응용 프로그램에서 지원됩니다.
+저작권 © 2004-2017 the MusicXML 기여자들
+명세, W3C Music Notation Community 발행
+W3C 커뮤니티 기여자 라이선스 계약에 따른 그룹
+(CLA) :
+%1
+읽기 가능한 요약을 사용할 수 있습니다.
+% 2</translation>
     </message>
 </context>
 <context>
@@ -8613,12 +8621,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="253"/>
         <source>meta data tag, see below</source>
-        <translation type="unfinished"/>
+        <translation>meta data tag는 아래를 보세요</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="255"/>
         <source>Available meta data tags and their current values:</source>
-        <translation type="unfinished"/>
+        <translation>meta data tags 와 그 현재 값들을 사용 가능합니다:</translation>
     </message>
 </context>
 <context>
@@ -8626,12 +8634,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="227"/>
         <source>Extension Updates Available</source>
-        <translation type="unfinished"/>
+        <translation>확장 갱신이 있습니다</translation>
     </message>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="228"/>
         <source>One or more installed extensions have updates available in Help / Resource Manager...</source>
-        <translation type="unfinished"/>
+        <translation>하나 이상의 설치된 확장에 도움말 / 리소스 관리자에서 사용할 수있는 업데이트가 있습니다.</translation>
     </message>
 </context>
 <context>
@@ -8641,7 +8649,9 @@ failed: </source>
         <source>Cannot open figured bass description:
 %1
 %2</source>
-        <translation type="unfinished"/>
+        <translation>지정된 베이스의 설명을 열 수 없습니다:
+%1
+%2</translation>
     </message>
 </context>
 <context>
@@ -8649,7 +8659,7 @@ failed: </source>
     <message>
         <location filename="../../libmscore/fingering.cpp" line="106"/>
         <source>String number</source>
-        <translation type="unfinished"/>
+        <translation>현 번호</translation>
     </message>
 </context>
 <context>
@@ -8888,7 +8898,7 @@ failed: </source>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="612"/>
         <source>%1: Custom</source>
-        <translation type="unfinished"/>
+        <translation>%1: 맞춤형</translation>
     </message>
 </context>
 <context>
@@ -9070,7 +9080,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/mediadialog.cpp" line="42"/>
         <source>Additional Media</source>
-        <translation type="unfinished"/>
+        <translation>추가적인 미디어</translation>
     </message>
 </context>
 <context>
@@ -9078,7 +9088,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/metaedit.cpp" line="78"/>
         <source>Input Tag Name</source>
-        <translation type="unfinished"/>
+        <translation>태그 이름 입력</translation>
     </message>
     <message>
         <location filename="../../mscore/metaedit.cpp" line="79"/>
@@ -9146,12 +9156,12 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="294"/>
         <source>MuseData Files</source>
-        <translation type="unfinished"/>
+        <translation>MuseData 파일</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="295"/>
         <source>Capella Files</source>
-        <translation type="unfinished"/>
+        <translation>Capella 파일</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="296"/>
@@ -9631,7 +9641,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/menus.cpp" line="639"/>
         <source>Breath</source>
-        <translation>숨표</translation>
+        <translation>쉼표</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="642"/>
@@ -10055,7 +10065,7 @@ Are you sure you want to proceed?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="3234"/>
         <source>Chord symbol/figured bass edit mode</source>
-        <translation type="unfinished"/>
+        <translation>코드 심볼/화음을 나타내는 숫자 베이스 편집모드</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="3237"/>
@@ -10570,12 +10580,12 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="127"/>
         <source>OnTime:</source>
-        <translation type="unfinished"/>
+        <translation>OnTime:</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="131"/>
         <source>Len:</source>
-        <translation type="unfinished"/>
+        <translation>Len:</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="255"/>
@@ -10627,17 +10637,17 @@ Save before closing?</source>
         <location filename="../../mscore/pluginCreator.cpp" line="305"/>
         <source>creating component failed
 </source>
-        <translation type="unfinished"/>
+        <translation>컴포넨트 만들기 실패</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="316"/>
         <source>Plugin Details:</source>
-        <translation type="unfinished"/>
+        <translation>프러그인 상세내용:</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="317"/>
         <source>Menu Path:</source>
-        <translation type="unfinished"/>
+        <translation>메뉴 경로:</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="318"/>
@@ -10685,7 +10695,7 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/pluginManager.cpp" line="208"/>
         <source>Plugins reloaded.</source>
-        <translation type="unfinished"/>
+        <translation>프러그인 다시 로드</translation>
     </message>
 </context>
 <context>
@@ -10886,7 +10896,7 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1486"/>
         <source>Possible MIDI Loopback</source>
-        <translation type="unfinished"/>
+        <translation>가능한 MIDI 루프 백</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1488"/>
@@ -11879,7 +11889,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/uploadscoredialog.cpp" line="65"/>
         <source>Creative Commons Copyright Waiver</source>
-        <translation type="unfinished"/>
+        <translation>크리에이티브 커먼즈 저작원 포기</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.cpp" line="67"/>
@@ -12130,7 +12140,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/note_groups.ui" line="23"/>
         <source>Also change shorter notes</source>
-        <translation type="unfinished"/>
+        <translation>짧은 음표도 함께 변경</translation>
     </message>
     <message>
         <location filename="../../mscore/note_groups.ui" line="44"/>
@@ -12150,7 +12160,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/note_groups.ui" line="376"/>
         <source>Reset note grouping</source>
-        <translation type="unfinished"/>
+        <translation>음표 그룹 묶기 초기화</translation>
     </message>
     <message>
         <location filename="../../mscore/note_groups.ui" line="379"/>
@@ -12614,12 +12624,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="36"/>
         <source>Content offset</source>
-        <translation type="unfinished"/>
+        <translation>콘텐츠 오프셋</translation>
     </message>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="56"/>
         <source>Content scale:</source>
-        <translation type="unfinished"/>
+        <translation>콘텐츠 스케일:</translation>
     </message>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="63"/>
@@ -12640,7 +12650,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="103"/>
         <source>Draw staff</source>
-        <translation type="unfinished"/>
+        <translation>보표 그리기</translation>
     </message>
 </context>
 <context>
@@ -13051,7 +13061,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="96"/>
         <source>Preferences Tab Manager</source>
-        <translation type="unfinished"/>
+        <translation>탭 관리자 참조</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="103"/>
@@ -13178,7 +13188,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="350"/>
         <source>Extensions:</source>
-        <translation type="unfinished"/>
+        <translation>확장:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="363"/>
@@ -13291,12 +13301,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="538"/>
         <location filename="../../mscore/prefsdialog.ui" line="591"/>
         <source>Extensions folder</source>
-        <translation type="unfinished"/>
+        <translation>확장 폴더</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="541"/>
         <source>Insert path to extensions folder</source>
-        <translation type="unfinished"/>
+        <translation>확장 폴더의 경로 삽입</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="551"/>
@@ -13316,12 +13326,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="594"/>
         <source>Opens a folder dialog for selecting the extensions folder</source>
-        <translation type="unfinished"/>
+        <translation>확장 폴더를 선택하기 위해 폴더 다이아로그를 열기</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="614"/>
         <source>Opens a dialog for configuring the SoundFont folders</source>
-        <translation type="unfinished"/>
+        <translation>사운드 폰트 폴더의 구성을 위해 다이아로그를 열기</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="631"/>
@@ -13343,7 +13353,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="671"/>
         <source>min</source>
         <extracomment>minutes</extracomment>
-        <translation type="unfinished"/>
+        <translation>분</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="700"/>
@@ -13523,12 +13533,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1136"/>
         <source>Paper wallpaper path</source>
-        <translation type="unfinished"/>
+        <translation>벽지 종이 경로</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1139"/>
         <source>Insert path to paper wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>벽지 종이 파일로 가는 경로 삽입</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1149"/>
@@ -13548,19 +13558,19 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1185"/>
         <source>Limit the scroll area to the edges of the score</source>
-        <translation type="unfinished"/>
+        <translation>스크롤 영역을 악보의 경계로 제한하기</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1188"/>
         <location filename="../../mscore/prefsdialog.ui" line="1194"/>
         <source>If this is checked, scrolling will stop at the edge of the score.</source>
-        <translation type="unfinished"/>
+        <translation>이것을 클릭 하면 악보의 경계로 스크롤이 제한 됩니다</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1191"/>
         <location filename="../../mscore/prefsdialog.ui" line="1197"/>
         <source>Limit scroll area to page borders</source>
-        <translation type="unfinished"/>
+        <translation>스크롤 영역을 페이지 경계로 제한하기</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1223"/>
@@ -13620,12 +13630,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1329"/>
         <source>Delay between notes in automatic Real-time mode:</source>
-        <translation type="unfinished"/>
+        <translation>자동 실시간 모드에서 음표 간 지연 :</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1336"/>
         <source>Delay between notes in automatic Real-time mode</source>
-        <translation type="unfinished"/>
+        <translation>자동 실시간 모드에서 음표 간 지연</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1339"/>
@@ -13689,7 +13699,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1493"/>
         <source>Rewind is active</source>
-        <translation type="unfinished"/>
+        <translation>되감기 실행</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1511"/>
@@ -13703,7 +13713,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1514"/>
         <source>Rewind record</source>
-        <translation type="unfinished"/>
+        <translation>녹음 되감기</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1529"/>
@@ -13713,7 +13723,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1563"/>
         <source>Toggle play record</source>
-        <translation type="unfinished"/>
+        <translation>재생 기록 토글</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1591"/>
@@ -13728,22 +13738,22 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1614"/>
         <source>Whole note is active</source>
-        <translation type="unfinished"/>
+        <translation>온 음표 활성화</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1632"/>
         <source>Half note is active</source>
-        <translation type="unfinished"/>
+        <translation>반 음표 활성화</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1650"/>
         <source>Whole note record</source>
-        <translation type="unfinished"/>
+        <translation>온 음표 기록</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1668"/>
         <source>Half note record</source>
-        <translation type="unfinished"/>
+        <translation>반 음표 기록</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1683"/>
@@ -13763,27 +13773,27 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1716"/>
         <source>Rest is active</source>
-        <translation type="unfinished"/>
+        <translation>쉼표 활성화</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1734"/>
         <source>Quarter note is active</source>
-        <translation type="unfinished"/>
+        <translation>4분 음표 활성화</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1752"/>
         <source>Quarter note record</source>
-        <translation type="unfinished"/>
+        <translation>4분 음표 기록</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1770"/>
         <source>Eighth note is active</source>
-        <translation type="unfinished"/>
+        <translation>8분 음표 활성화</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1788"/>
         <source>Eighth note record</source>
-        <translation type="unfinished"/>
+        <translation>8분 음표 기록</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1803"/>
@@ -13803,52 +13813,52 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1833"/>
         <source>Real-time Advance</source>
-        <translation type="unfinished"/>
+        <translation>실시간 진행</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1846"/>
         <source>Augmentation dot is active</source>
-        <translation type="unfinished"/>
+        <translation>증가 점의 활성화</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1864"/>
         <source>Augmentation dot record</source>
-        <translation type="unfinished"/>
+        <translation>증가 점의 기록</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1882"/>
         <source>Double augmentation dot is active</source>
-        <translation type="unfinished"/>
+        <translation>겹 증가 점의 활성화</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1900"/>
         <source>Double augmentation dot record</source>
-        <translation type="unfinished"/>
+        <translation>겹 증가 점의 기록</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1918"/>
         <source>Tie is active</source>
-        <translation type="unfinished"/>
+        <translation>타이의 활성화</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1936"/>
         <source>Tie record</source>
-        <translation type="unfinished"/>
+        <translation>타이의 기록</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1954"/>
         <source>Real-time Advance is active</source>
-        <translation type="unfinished"/>
+        <translation>실시간 진행의 활성화</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1972"/>
         <source>Real-time Advance record</source>
-        <translation type="unfinished"/>
+        <translation>실시간 진행의 기록</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1990"/>
         <source>Rest record</source>
-        <translation type="unfinished"/>
+        <translation>쉼표 기록</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2044"/>
@@ -13908,7 +13918,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2231"/>
         <source>16th note record</source>
-        <translation type="unfinished"/>
+        <translation>16분 음표 녹음</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2249"/>
@@ -13918,7 +13928,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2267"/>
         <source>32nd note record</source>
-        <translation type="unfinished"/>
+        <translation>32분 음표 녹음</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2282"/>
@@ -13938,7 +13948,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2323"/>
         <source>64th note record</source>
-        <translation type="unfinished"/>
+        <translation>64분 음표 녹음</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2341"/>
@@ -13988,22 +13998,22 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="2446"/>
         <location filename="../../mscore/prefsdialog.ui" line="2452"/>
         <source>Default scale for new score views</source>
-        <translation type="unfinished"/>
+        <translation>새로운 악보 보기의 디폴트 스케일</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2449"/>
         <source>Default zoom</source>
-        <translation type="unfinished"/>
+        <translation>Default zoom</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2477"/>
         <source>Default zoom:</source>
-        <translation type="unfinished"/>
+        <translation>Default zoom:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2500"/>
         <source>Default Files</source>
-        <translation type="unfinished"/>
+        <translation>Default Files</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2527"/>
@@ -14019,7 +14029,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="2543"/>
         <location filename="../../mscore/prefsdialog.ui" line="2673"/>
         <source>Opens a file dialog for selecting an instrument list file</source>
-        <translation type="unfinished"/>
+        <translation>악기 일람 파일을 선택하기 위해 파일 다이아로그 열기</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2557"/>
@@ -14035,7 +14045,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="2570"/>
         <location filename="../../mscore/prefsdialog.ui" line="2660"/>
         <source>Insert path to an instrument list file</source>
-        <translation type="unfinished"/>
+        <translation>악기 일람 파일의 경로 삽입</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2577"/>
@@ -14180,22 +14190,22 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2856"/>
         <source>MIDI Output:</source>
-        <translation type="unfinished"/>
+        <translation>MIDI 출력:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2875"/>
         <source>MIDI Output</source>
-        <translation type="unfinished"/>
+        <translation>MIDI 출력</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2878"/>
         <source>Choose MIDI Output</source>
-        <translation type="unfinished"/>
+        <translation>MIDI 출력 선택</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2887"/>
         <source>MIDI Output Latency:</source>
-        <translation type="unfinished"/>
+        <translation>MIDI 출력 대기 시간:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2894"/>
@@ -14206,17 +14216,23 @@ If latency is zero, MIDI messages are delivered as fast as possible, but may con
 Setting latency greater than zero may help the driver alleviate any jitter.
 
 Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s internal audio synthesizer, so that they both sound notes at the same time.</source>
-        <translation type="unfinished"/>
+        <translation>대기 시간은 타임 스탬프에 적용되는 밀리 초 단위의 지연 시간으로, 출력이 실제로 발생하는시기를 알려줍니다.
+
+대기 시간이 0이면 MIDI 메시지는 가능한 빨리 전달되지만 지터가 포함될 수 있습니다.
+
+대기 시간을 0보다 크게 설정하면 지터를 완화하는 데 도움이 될 수 있습니다.
+
+대기 시간을 조정하면 MIDI 하드웨어를 MuseScore의 내부 오디오 신디사이저와 동기화하여 두 가지 사운드를 동시에 들을 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2903"/>
         <source>MIDI Output Latency</source>
-        <translation type="unfinished"/>
+        <translation>MIDI 출력 대기 시간</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2906"/>
         <source>Choose MIDI Output Latency</source>
-        <translation type="unfinished"/>
+        <translation>MIDI 출력 대기 시간의 선택</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2933"/>
@@ -14227,12 +14243,12 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2951"/>
         <source>Fragments</source>
-        <translation type="unfinished"/>
+        <translation>단편화</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2954"/>
         <source>Choose number of fragments</source>
-        <translation type="unfinished"/>
+        <translation>단편화 수 의 선택</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2980"/>
@@ -14318,7 +14334,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3309"/>
         <source>Attention: Any changes on this page require a restart of MuseScore.  Precise MIDI output timing is only possible via JACK.</source>
-        <translation type="unfinished"/>
+        <translation>주의 :이 페이지에서 변경된 사항은 MuseScore를 다시 시작해야 반영 됩니다. 정확한 MIDI 출력 타이밍은 JACK을 통해서만 가능합니다.</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3330"/>
@@ -14339,7 +14355,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <location filename="../../mscore/prefsdialog.ui" line="3348"/>
         <location filename="../../mscore/prefsdialog.ui" line="3351"/>
         <source>Built-in style</source>
-        <translation type="unfinished"/>
+        <translation>내장된 스타일</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3360"/>
@@ -14671,7 +14687,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4204"/>
         <source>Check for new version of MuseScore extensions</source>
-        <translation type="unfinished"/>
+        <translation>새로운 버전의 MuseScore 확장 확인</translation>
     </message>
 </context>
 <context>
@@ -14726,13 +14742,15 @@ Please select a single note or rest and retry operation
         <location filename="../../libmscore/utils.cpp" line="479"/>
         <source>Please select a single note or slur and retry operation
 </source>
-        <translation>음표나 이음줄 하나를 선택하고 다시 해보세요</translation>
+        <translation>음표나 이음줄 하나를 선택하고 다시 해보세요
+</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="488"/>
         <source>Please select one or more staves and retry operation
 </source>
-        <translation>하나 이상의 보표를 선택하고 다시 해보세요</translation>
+        <translation>하나 이상의 보표를 선택하고 다시 해보세요
+</translation>
     </message>
 </context>
 <context>
@@ -14831,7 +14849,7 @@ failed: %2</source>
     <message>
         <location filename="../../libmscore/durationtype.cpp" line="792"/>
         <source>Zero</source>
-        <translation type="unfinished"/>
+        <translation>제로</translation>
     </message>
     <message>
         <location filename="../../libmscore/durationtype.cpp" line="793"/>
@@ -15003,12 +15021,12 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/file.cpp" line="199"/>
         <source>File &quot;%1&quot; not found.</source>
-        <translation type="unfinished"/>
+        <translation>파일 &quot;%1&quot; 은 없습니다.</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="202"/>
         <source>File &quot;%1&quot; corrupted.</source>
-        <translation type="unfinished"/>
+        <translation>파일 &quot;%1&quot; 은 손상되었습니다.</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="221"/>
@@ -15038,7 +15056,8 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <location filename="../../mscore/importxml.cpp" line="136"/>
         <source>Error reading container.xml at line %1 column %2: %3
 </source>
-        <translation type="unfinished"/>
+        <translation>container.xml 읽기 에러, 라인 %1 컬럼 %2: %3
+</translation>
     </message>
     <message>
         <location filename="../../mscore/importxml.cpp" line="165"/>
@@ -15082,7 +15101,7 @@ MusicXML 파일을 열 수 없습니다.</translation>
     <message>
         <location filename="../../mscore/album.cpp" line="250"/>
         <source>Open Album failed</source>
-        <translation type="unfinished"/>
+        <translation>앨범 읽기 실패</translation>
     </message>
     <message>
         <location filename="../../mscore/album.cpp" line="252"/>
@@ -15102,7 +15121,7 @@ MusicXML 파일을 열 수 없습니다.</translation>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="143"/>
         <source>Save Album into Score</source>
-        <translation type="unfinished"/>
+        <translation>악보에 앨범을 저장</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.cpp" line="150"/>
@@ -15151,7 +15170,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/capella.cpp" line="2686"/>
         <source>Import Capella</source>
-        <translation type="unfinished"/>
+        <translation>카펠라 불러오기</translation>
     </message>
     <message>
         <location filename="../../mscore/capella.cpp" line="2687"/>
@@ -15195,7 +15214,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="2382"/>
         <source>Import Guitar Pro</source>
-        <translation type="unfinished"/>
+        <translation>Guitar Pro 불러오기</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi.cpp" line="1199"/>
@@ -15205,7 +15224,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="131"/>
         <source>Load Style Failed</source>
-        <translation type="unfinished"/>
+        <translation>스타일 로드하기 실패</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="405"/>
@@ -15218,52 +15237,52 @@ Do you want to overwrite it?</source>
         <location filename="../../mscore/musescore.cpp" line="495"/>
         <location filename="../../mscore/musescore.cpp" line="529"/>
         <source>Import Extension File</source>
-        <translation type="unfinished"/>
+        <translation>확장파일 불러오기</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="405"/>
         <source>Cannot import extension on read-only storage: %1</source>
-        <translation type="unfinished"/>
+        <translation>읽기 전용 저장소에 확장을 가져올 수 없습니다 : %1</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="410"/>
         <source>Cannot import extension: storage %1 is full</source>
-        <translation type="unfinished"/>
+        <translation>확장을 가져올 수 없습니다: 저장소 %1 는 공간이 없습니다</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="440"/>
         <source>Corrupted extension: no metadata.json</source>
-        <translation type="unfinished"/>
+        <translation>손상된 확장:  metadata.json 이 없습니다</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="445"/>
         <source>Corrupted extension: unsupported directories in root directory</source>
-        <translation type="unfinished"/>
+        <translation>손상된 확장 : 루트 디렉토리에서 지원되지 않는 디렉토리</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="450"/>
         <source>Corrupted extension: unsupported files in root directory</source>
-        <translation type="unfinished"/>
+        <translation>손상된 확장 : 루트 디렉토리에서 지원되지 않는 파일</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="465"/>
         <source>Corrupted extension: corrupted metadata.json</source>
-        <translation type="unfinished"/>
+        <translation>손상된 확장 : 손상된 metadata.json</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="484"/>
         <source>A newer version is already installed</source>
-        <translation type="unfinished"/>
+        <translation>최신 버젼이 이미 설치되었습니다</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="495"/>
         <source>Error while deleting previous version of the extension: %1</source>
-        <translation type="unfinished"/>
+        <translation>이전 버젼의 확장:  %1 을 삭제하는 동안 에러가 발생했습니다</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="529"/>
         <source>Unable to extract files from the extension</source>
-        <translation type="unfinished"/>
+        <translation>확장에서  파일을 추출 할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2999"/>
@@ -15310,17 +15329,17 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="24"/>
         <source>Extensions</source>
-        <translation type="unfinished"/>
+        <translation>확장</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="60"/>
         <source>Extension</source>
-        <translation>종류</translation>
+        <translation>확장</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="65"/>
         <source>Version</source>
-        <translation type="unfinished"/>
+        <translation>버젼</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="80"/>
@@ -15383,7 +15402,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="14"/>
         <source>Section Break Properties</source>
-        <translation type="unfinished"/>
+        <translation>섹션 나누기 속성</translation>
     </message>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="20"/>
@@ -15422,17 +15441,17 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="50"/>
         <source>Same staff</source>
-        <translation type="unfinished"/>
+        <translation>같은 보표</translation>
     </message>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="57"/>
         <source>Same voice</source>
-        <translation type="unfinished"/>
+        <translation>같은 성부</translation>
     </message>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="64"/>
         <source>Same subtype:</source>
-        <translation type="unfinished"/>
+        <translation>같은 서브 타입</translation>
     </message>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="85"/>
@@ -15475,7 +15494,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectinstr.ui" line="14"/>
         <source>Select Instrument</source>
-        <translation type="unfinished"/>
+        <translation>악기 선택</translation>
     </message>
     <message>
         <location filename="../../mscore/selectinstr.ui" line="28"/>
@@ -15508,7 +15527,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="47"/>
         <source>Same notehead:</source>
-        <translation type="unfinished"/>
+        <translation>같은 음표머리:</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="54"/>
@@ -15518,17 +15537,17 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="61"/>
         <source>Same voice</source>
-        <translation type="unfinished"/>
+        <translation>같은 성부</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="75"/>
         <source>Same duration:</source>
-        <translation type="unfinished"/>
+        <translation>같은 속도</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="82"/>
         <source>Same pitch:</source>
-        <translation type="unfinished"/>
+        <translation>같은 음정</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="89"/>
@@ -15538,22 +15557,22 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="103"/>
         <source>Same staff</source>
-        <translation type="unfinished"/>
+        <translation>같은 보표</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="110"/>
         <source>Same type:</source>
-        <translation type="unfinished"/>
+        <translation>같은 타입</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="124"/>
         <source>Same note name:</source>
-        <translation type="unfinished"/>
+        <translation>같은 음표 이름:</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="138"/>
         <source>Same string:</source>
-        <translation type="unfinished"/>
+        <translation>같은 현:</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="155"/>
@@ -15721,7 +15740,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/stafftext.ui" line="56"/>
         <source>Switch one or more voices to a specified channel:</source>
-        <translation type="unfinished"/>
+        <translation>하나 이상의 성부를 지정된 채널로 전환:</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftext.ui" line="65"/>
@@ -15791,7 +15810,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/stafftext.ui" line="351"/>
         <source>Aeolus Stops</source>
-        <translation type="unfinished"/>
+        <translation>Aeolus Stops</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftext.ui" line="4003"/>
@@ -15946,17 +15965,17 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="143"/>
         <source>Metronome gain</source>
-        <translation type="unfinished"/>
+        <translation>메트로놈 게인</translation>
     </message>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="166"/>
         <source>Master Effects</source>
-        <translation type="unfinished"/>
+        <translation>마스터 효과</translation>
     </message>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="182"/>
         <source>Effect B:</source>
-        <translation>Effect B:</translation>
+        <translation>효과 B:</translation>
     </message>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="195"/>
@@ -15986,7 +16005,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="265"/>
         <source>Master tuning</source>
-        <translation type="unfinished"/>
+        <translation>마스터 튜닝</translation>
     </message>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="268"/>
@@ -16010,7 +16029,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textpalette.ui" line="14"/>
         <source>Special Characters</source>
-        <translation type="unfinished"/>
+        <translation>특수 문자</translation>
     </message>
 </context>
 <context>
@@ -16024,7 +16043,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="50"/>
         <source>Reset to Style</source>
-        <translation type="unfinished"/>
+        <translation>스타일 초기화</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="65"/>
@@ -16107,7 +16126,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="434"/>
         <source>Horizontal offset to reference point</source>
-        <translation type="unfinished"/>
+        <translation>기준점에 대한 수평 오프셋</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="466"/>
@@ -16119,7 +16138,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="485"/>
         <source>Vertical offset to reference point</source>
-        <translation type="unfinished"/>
+        <translation>기준점에 대한 수직 오프셋</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="509"/>
@@ -16129,7 +16148,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="522"/>
         <source>Offset is absolute</source>
-        <translation type="unfinished"/>
+        <translation>오프셋은 절대적이다</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="525"/>
@@ -16155,37 +16174,37 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="582"/>
         <source>Align left edge of text to reference point</source>
-        <translation type="unfinished"/>
+        <translation>텍스트의 왼쪽 가장자리를 기준점에 맞추기</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="605"/>
         <source>Center text on reference point</source>
-        <translation type="unfinished"/>
+        <translation>텍스트를 기준점의 가운데에 맞추기</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="628"/>
         <source>Align top edge of text to reference point</source>
-        <translation type="unfinished"/>
+        <translation>텍스트의 위쪽 가장자리를 기준점에 맞추기</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="651"/>
         <source>Align right edge of text to reference point</source>
-        <translation type="unfinished"/>
+        <translation>텍스트의 오른쪽 가장자리를 기준점에 맞추기</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="684"/>
         <source>Align baseline of text to reference point</source>
-        <translation type="unfinished"/>
+        <translation>텍스트의 아래쪽 라인을 기준점에 맞추기</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="707"/>
         <source>Center text vertical to reference point</source>
-        <translation type="unfinished"/>
+        <translation>텍스트를 기준점의 수평 가운데에 맞추기</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="730"/>
         <source>Align bottom edge of text to reference point</source>
-        <translation type="unfinished"/>
+        <translation>텍스트의 아래쪽 가장자리를 기준점에 맞추기</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="776"/>
@@ -16210,7 +16229,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="809"/>
         <source>Draw boxed frame</source>
-        <translation type="unfinished"/>
+        <translation>사각형 프레임 그리기</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="812"/>
@@ -16220,7 +16239,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="842"/>
         <source>Border thickness:</source>
-        <translation type="unfinished"/>
+        <translation>테두리 두께</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="855"/>
@@ -16246,12 +16265,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="918"/>
         <source>Border radius:</source>
-        <translation type="unfinished"/>
+        <translation>테두리 반경:</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="931"/>
         <source>Corner round</source>
-        <translation type="unfinished"/>
+        <translation>둥근 모서리 </translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="944"/>
@@ -16324,7 +16343,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../libmscore/style.cpp" line="292"/>
         <source>String Number</source>
-        <translation type="unfinished"/>
+        <translation>현 번호</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="296"/>
@@ -16399,17 +16418,17 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../libmscore/style.cpp" line="335"/>
         <source>Repeat Text Left</source>
-        <translation type="unfinished"/>
+        <translation>왼쪽 텍스트 반복</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="339"/>
         <source>Repeat Text Right</source>
-        <translation type="unfinished"/>
+        <translation>오른쪽 텍스트 반복</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="344"/>
         <source>Repeat Text</source>
-        <translation type="unfinished"/>
+        <translation>텍스트 반복</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="349"/>
@@ -16477,7 +16496,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textstyle.ui" line="14"/>
         <source>Edit Text Styles</source>
-        <translation type="unfinished"/>
+        <translation>텍스트 스타일 편집</translation>
     </message>
     <message>
         <location filename="../../mscore/textstyle.ui" line="45"/>
@@ -16592,12 +16611,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/timesigproperties.ui" line="132"/>
         <source>Global value:</source>
-        <translation type="unfinished"/>
+        <translation>전체 값 :</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigproperties.ui" line="145"/>
         <source>Actual value:</source>
-        <translation type="unfinished"/>
+        <translation>실제 값:</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigproperties.ui" line="204"/>
@@ -16620,7 +16639,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="17"/>
         <source>Time Signature Wizard</source>
-        <translation type="unfinished"/>
+        <translation>박자 기호 마법사</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="29"/>
@@ -16631,7 +16650,7 @@ Do you want to overwrite it?</source>
         <location filename="../../mscore/timesigwizard.ui" line="53"/>
         <location filename="../../mscore/timesigwizard.ui" line="207"/>
         <source>Beats in a measure</source>
-        <translation type="unfinished"/>
+        <translation>마디의 비트</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="75"/>
@@ -16643,7 +16662,7 @@ Do you want to overwrite it?</source>
         <location filename="../../mscore/timesigwizard.ui" line="85"/>
         <location filename="../../mscore/timesigwizard.ui" line="239"/>
         <source>Beat unit</source>
-        <translation type="unfinished"/>
+        <translation>비트 단위</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="92"/>
@@ -16695,7 +16714,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="148"/>
         <source>Cut Time</source>
-        <translation type="unfinished"/>
+        <translation>잘린 박자</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="162"/>
@@ -16705,7 +16724,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="165"/>
         <source>Common Time</source>
-        <translation type="unfinished"/>
+        <translation>일반적인 박자</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="182"/>
@@ -16716,7 +16735,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="200"/>
         <source>Duration:</source>
-        <translation type="unfinished"/>
+        <translation>시간:</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="300"/>
@@ -17004,32 +17023,32 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="385"/>
         <source>Second</source>
-        <translation type="unfinished"/>
+        <translation>두 번째</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="390"/>
         <source>Third</source>
-        <translation type="unfinished"/>
+        <translation>세 번째</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="395"/>
         <source>Fourth</source>
-        <translation type="unfinished"/>
+        <translation>네 번째</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="400"/>
         <source>Fifth</source>
-        <translation type="unfinished"/>
+        <translation>다섯 번째</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="405"/>
         <source>Sixth</source>
-        <translation type="unfinished"/>
+        <translation>여섯 번째</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="410"/>
         <source>Seventh</source>
-        <translation type="unfinished"/>
+        <translation>일곱 번째</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="425"/>
@@ -17044,7 +17063,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="453"/>
         <source>Transpose chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>코드 기호 바꾸기</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="467"/>
@@ -17110,7 +17129,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/tremolobar.ui" line="14"/>
         <source>Tremolo Bar Properties</source>
-        <translation type="unfinished"/>
+        <translation>트레몰로 바 속성</translation>
     </message>
     <message>
         <location filename="../../mscore/tremolobar.ui" line="23"/>
@@ -17145,7 +17164,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/tremolobar.ui" line="145"/>
         <source>Return</source>
-        <translation type="unfinished"/>
+        <translation>리턴</translation>
     </message>
     <message>
         <location filename="../../mscore/tremolobar.ui" line="193"/>
@@ -17158,7 +17177,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="14"/>
         <source>Create Tuplet</source>
-        <translation type="unfinished"/>
+        <translation>잇단음표 만들기</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="34"/>
@@ -17168,7 +17187,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="45"/>
         <source>Ratio:</source>
-        <translation type="unfinished"/>
+        <translation>비율:</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.ui" line="71"/>
@@ -17214,7 +17233,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="14"/>
         <source>Score Information</source>
-        <translation type="unfinished"/>
+        <translation>악보의 정보</translation>
     </message>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="31"/>
@@ -17269,7 +17288,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/uploadscoredialog.ui" line="316"/>
         <source>Changes:</source>
-        <translation type="unfinished"/>
+        <translation>변경:</translation>
     </message>
 </context>
 <context>
@@ -17419,7 +17438,7 @@ failed: </source>
     <message>
         <location filename="../../thirdparty/xmlstream/xmlstream.cpp" line="2124"/>
         <source>Expected character data.</source>
-        <translation type="unfinished"/>
+        <translation>예상된 문자 데이터</translation>
     </message>
 </context>
 <context>
@@ -17604,17 +17623,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="35"/>
         <source>Online Handbook...</source>
-        <translation type="unfinished"/>
+        <translation>온라인 핸드북...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="36"/>
         <source>Online handbook</source>
-        <translation type="unfinished"/>
+        <translation>온라인 핸드북</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="37"/>
         <source>Show online handbook</source>
-        <translation type="unfinished"/>
+        <translation>온라인 핸드북 보기</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="47"/>
@@ -17867,7 +17886,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="251"/>
         <source>Enter notes with a mouse or keyboard</source>
-        <translation type="unfinished"/>
+        <translation>마우스나 키보드로 음표 입력</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="261"/>
@@ -17887,27 +17906,27 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="273"/>
         <source>Enter durations with a single click or keypress</source>
-        <translation type="unfinished"/>
+        <translation>한번의 클릭 또는 키를 눌러 지속 시간을 입력하세요.</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="283"/>
         <source>Real-time (automatic)</source>
-        <translation type="unfinished"/>
+        <translation>실시간 (자동)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="284"/>
         <source>Perform the piece at a fixed tempo indicated by a metronome beat</source>
-        <translation type="unfinished"/>
+        <translation>메트로놈 박자로 표시된, 정해진 템포로 곡을 연주하세요.</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="294"/>
         <source>Real-time (manual)</source>
-        <translation type="unfinished"/>
+        <translation>실시간 (수동)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="295"/>
         <source>Perform the piece while tapping a key or pedal to set the tempo</source>
-        <translation type="unfinished"/>
+        <translation>템포를 설정하려면 건반이나 페달을 두드려 연주하세요.</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="305"/>
@@ -18319,7 +18338,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="592"/>
         <source>Move the cursor forward in real-time input mode</source>
-        <translation type="unfinished"/>
+        <translation>실시간 입력 모드에서 커서를 앞으로 이동하세요.</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="599"/>
@@ -18329,7 +18348,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="600"/>
         <source>Toggle staccato</source>
-        <translation type="unfinished"/>
+        <translation>스타카토 토글</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="610"/>
@@ -18339,7 +18358,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="611"/>
         <source>Toggle tenuto</source>
-        <translation type="unfinished"/>
+        <translation>테누토 토글</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="621"/>
@@ -18349,7 +18368,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="622"/>
         <source>Toggle trill</source>
-        <translation type="unfinished"/>
+        <translation>트릴 토글</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="632"/>
@@ -18359,17 +18378,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="633"/>
         <source>Toggle marcato</source>
-        <translation type="unfinished"/>
+        <translation>마르카토 토글</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="643"/>
         <source>Sforzato</source>
-        <translation type="unfinished"/>
+        <translation>스포르자토</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="644"/>
         <source>Toggle sforzato</source>
-        <translation type="unfinished"/>
+        <translation>스포르자토 토글</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="654"/>
@@ -18519,12 +18538,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="786"/>
         <source>Move Up</source>
-        <translation type="unfinished"/>
+        <translation>위로 이동</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="787"/>
         <source>Move up</source>
-        <translation>위로 이종</translation>
+        <translation>위로 이동</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="797"/>
@@ -18549,7 +18568,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="819"/>
         <source>Down Octave</source>
-        <translation type="unfinished"/>
+        <translation>한 옥타브 내리기</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="820"/>
@@ -18629,7 +18648,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="896"/>
         <source>Move Down</source>
-        <translation type="unfinished"/>
+        <translation>아래로 이동</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="897"/>
@@ -18639,22 +18658,22 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="907"/>
         <source>Previous Chord</source>
-        <translation type="unfinished"/>
+        <translation>이전 코드</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="908"/>
         <source>Go to previous chord or move text left</source>
-        <translation type="unfinished"/>
+        <translation>이전 코드로 이동하거나 텍스트를 왼쪽으로 이동하세요.</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="914"/>
         <source>Previous Measure</source>
-        <translation type="unfinished"/>
+        <translation>이전 마디</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="915"/>
         <source>Go to previous measure or move text left</source>
-        <translation type="unfinished"/>
+        <translation>이전 마디로 이동하거나 텍스트를 왼쪽으로 이동하세요.</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="921"/>
@@ -18674,17 +18693,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="929"/>
         <source>Go to next chord or move text right</source>
-        <translation type="unfinished"/>
+        <translation>다음 코드로 이동하거나 텍스트를 오른쪽으로 이동 하세요.</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="935"/>
         <source>Next Measure</source>
-        <translation type="unfinished"/>
+        <translation>다음 마디</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="936"/>
         <source>Go to next measure or move text right</source>
-        <translation type="unfinished"/>
+        <translation>다음 마디로 이동하거나 텍스트를 오른쪽으로 이동 하세요.</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="942"/>
@@ -18874,22 +18893,22 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1092"/>
         <source>Ottava 8va</source>
-        <translation type="unfinished"/>
+        <translation>옥타브 8va</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1093"/>
         <source>Add ottava 8va</source>
-        <translation type="unfinished"/>
+        <translation>옥타브 8va 추가</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1103"/>
         <source>Ottava 8vb</source>
-        <translation type="unfinished"/>
+        <translation>옥타브 8vb</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1104"/>
         <source>Add ottava 8vb</source>
-        <translation type="unfinished"/>
+        <translation>옥타브 8vb 추가</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1115"/>
@@ -18930,7 +18949,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1144"/>
         <source>Timewise delete</source>
-        <translation type="unfinished"/>
+        <translation>반복기호 삭제</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1145"/>
@@ -19415,7 +19434,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1540"/>
         <source>Add acciaccatura</source>
-        <translation type="unfinished"/>
+        <translation>짧은 전타음 추가</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1550"/>
@@ -19426,7 +19445,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1551"/>
         <source>Add appoggiatura</source>
-        <translation type="unfinished"/>
+        <translation>앞꾸밈음 추가</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1562"/>
@@ -19554,7 +19573,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1666"/>
         <source>Toggle &apos;MIDI Input&apos;</source>
-        <translation type="unfinished"/>
+        <translation>&apos;MIDI Input&apos; 토글</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1676"/>
@@ -19765,12 +19784,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1873"/>
         <source>Zoom Canvas</source>
-        <translation type="unfinished"/>
+        <translation>캔버스 줌</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1874"/>
         <source>Zoom canvas</source>
-        <translation type="unfinished"/>
+        <translation>캔버스 줌</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1880"/>
@@ -19865,7 +19884,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1951"/>
         <source>Part Name</source>
-        <translation type="unfinished"/>
+        <translation>파트 이름</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1952"/>
@@ -19900,17 +19919,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1973"/>
         <source>Add instrument change</source>
-        <translation type="unfinished"/>
+        <translation>악기 변경 추가</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1979"/>
         <source>Fingering</source>
-        <translation>손가락 번호</translation>
+        <translation>운지법</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1980"/>
         <source>Add fingering</source>
-        <translation type="unfinished"/>
+        <translation>운지법 추가</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1986"/>
@@ -19950,12 +19969,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2014"/>
         <source>Play Previous Measure</source>
-        <translation type="unfinished"/>
+        <translation>이전 마디 재생</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2015"/>
         <source>Play previous measure</source>
-        <translation type="unfinished"/>
+        <translation>이전 마디 재생</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2024"/>
@@ -19970,12 +19989,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2034"/>
         <source>Play Next Measure</source>
-        <translation type="unfinished"/>
+        <translation>다음 마디 재생</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2035"/>
         <source>Play next measure</source>
-        <translation type="unfinished"/>
+        <translation>다음 마디 재생</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2044"/>
@@ -20115,7 +20134,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2170"/>
         <source>Exchange voice 1-3</source>
-        <translation type="unfinished"/>
+        <translation>성부 1과 성부 3 교환</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2180"/>
@@ -20125,7 +20144,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2181"/>
         <source>Exchange voice 1-4</source>
-        <translation type="unfinished"/>
+        <translation>성부 1과 성부 4 교환</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2191"/>
@@ -20135,7 +20154,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2192"/>
         <source>Exchange voice 2-3</source>
-        <translation type="unfinished"/>
+        <translation>성부 2와 성부 3 교환</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2202"/>
@@ -20145,7 +20164,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2203"/>
         <source>Exchange voice 2-4</source>
-        <translation type="unfinished"/>
+        <translation>성부 2와 성부 4 교환</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2213"/>
@@ -20155,7 +20174,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2214"/>
         <source>Exchange voice 3-4</source>
-        <translation type="unfinished"/>
+        <translation>성부 3과 성부 4 교환</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2225"/>
@@ -20270,7 +20289,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2331"/>
         <source>Show unprintable</source>
-        <translation type="unfinished"/>
+        <translation>인쇄 불가 개체 보이기</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2341"/>
@@ -21643,7 +21662,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/articulation.cpp" line="50"/>
         <source>Sforzato</source>
-        <translation type="unfinished"/>
+        <translation>스포르자토</translation>
     </message>
     <message>
         <location filename="../../libmscore/articulation.cpp" line="59"/>
@@ -23679,7 +23698,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/element.cpp" line="147"/>
         <source>Layout Break</source>
-        <translation type="unfinished"/>
+        <translation>레이아웃 나누기</translation>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="148"/>
@@ -23877,7 +23896,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="195"/>
         <source>Extensions</source>
-        <translation type="unfinished"/>
+        <translation>확장</translation>
     </message>
 </context>
 <context>

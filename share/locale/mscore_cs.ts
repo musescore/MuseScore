@@ -1773,7 +1773,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="678"/>
         <source>Show clef</source>
-        <translation>Kreslit klíče</translation>
+        <translation>Zobrazit klíče</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="685"/>
@@ -1793,7 +1793,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="712"/>
         <source>Show barlines</source>
-        <translation>Kreslit taktové čáry</translation>
+        <translation>Zobrazit taktové čáry</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="719"/>
@@ -1808,7 +1808,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="750"/>
         <source>Show time signature</source>
-        <translation>Kreslit taktová označení</translation>
+        <translation>Zobrazit taktová označení</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="757"/>
@@ -1884,28 +1884,28 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="195"/>
         <source>Show clef</source>
-        <translation>Kreslit klíče</translation>
+        <translation>Zobrazit klíče</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="202"/>
         <source>Show time signature</source>
-        <translation>Kreslit taktová označení</translation>
+        <translation>Zobrazit taktová označení</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="209"/>
         <source>Show barlines</source>
-        <translation>Kreslit taktové čáry</translation>
+        <translation>Zobrazit taktové čáry</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="251"/>
         <source>Show key signature</source>
-        <translation>Kreslit předznamenání</translation>
+        <translation>Zobrazit předznamenání</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="258"/>
         <location filename="../../mscore/editstafftype.ui" line="322"/>
         <source>Show ledger lines</source>
-        <translation>Kreslit pomocné linky</translation>
+        <translation>Zobrazit pomocné linky</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="265"/>
@@ -1916,7 +1916,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="308"/>
         <source>Show Key signature</source>
-        <translation>Kreslit předznamenání</translation>
+        <translation>Zobrazit předznamenání</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="353"/>
@@ -2000,12 +2000,12 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="649"/>
         <source>Show back-tied fret marks</source>
-        <translation>Kreslit nazpět svázané značky pražců</translation>
+        <translation>Zobrazit nazpět svázané značky pražců</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="656"/>
         <source>Show fingerings</source>
-        <translation>Kreslit prstoklady</translation>
+        <translation>Zobrazit prstoklady</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="679"/>
@@ -2015,7 +2015,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="796"/>
         <source>Shown as:</source>
-        <translation>Kreslit jako:</translation>
+        <translation>Zobrazit jako:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="815"/>
@@ -2106,7 +2106,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1215"/>
         <source>Show rests</source>
-        <translation>Kreslit pomlky</translation>
+        <translation>Zobrazit pomlky</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1256"/>
@@ -2332,7 +2332,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="211"/>
         <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation>Vykreslit noty s délkou přesahující hranice taktu (POKUSNÉ, jen pro starou hudbu!)</translation>
+        <translation>Zobrazit noty s délkou přesahující hranice taktu (POKUSNÉ, jen pro starou hudbu!)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="218"/>
@@ -2390,7 +2390,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="439"/>
         <source>Create clef for all systems</source>
-        <translation>Vykreslit klíč ve všech notových systémech</translation>
+        <translation>Zobrazit klíč ve všech notových systémech</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="452"/>
@@ -2460,22 +2460,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="906"/>
         <source>Create key signature for all systems</source>
-        <translation>Vykreslit předznamenání ve všech notových systémech</translation>
+        <translation>Zobrazit předznamenání ve všech notových systémech</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="913"/>
         <source>Create courtesy clefs</source>
-        <translation>Vykreslit upozornění na změnu klíče</translation>
+        <translation>Zobrazit upozornění na změnu klíče</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="926"/>
         <source>Create courtesy time signatures</source>
-        <translation>Vykreslit upozornění na změnu taktového označení</translation>
+        <translation>Zobrazit upozornění na změnu taktového označení</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="933"/>
         <source>Create courtesy key signatures</source>
-        <translation>Vykreslit upozornění na změnu předznamenání</translation>
+        <translation>Zobrazit upozornění na změnu předznamenání</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="968"/>
@@ -2485,14 +2485,14 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="985"/>
         <source>Show header also on first page</source>
-        <translation>Vykreslit záhlaví i na první straně</translation>
+        <translation>Zobrazit záhlaví i na první straně</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="988"/>
         <location filename="../../mscore/editstyle.ui" line="1218"/>
         <location filename="../../mscore/editstyle.ui" line="1392"/>
         <source>Show first</source>
-        <translation>Vykreslit první číslo</translation>
+        <translation>Zobrazit první číslo</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="995"/>
@@ -2545,7 +2545,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1215"/>
         <source>Show footer also on first page</source>
-        <translation>Vykreslit zápatí i na první straně</translation>
+        <translation>Zobrazit zápatí i na první straně</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1225"/>
@@ -2684,7 +2684,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2211"/>
         <source>Show repeat barline tips (&quot;winged&quot; repeats)</source>
-        <translation>Kreslit křidélka u repetičních taktových čar</translation>
+        <translation>Zobrazit křidélka u repetičních taktových čar</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2218"/>
@@ -3543,7 +3543,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/glissandoprop.ui" line="34"/>
         <source>Show Text</source>
-        <translation>Vykreslit text</translation>
+        <translation>Zobrazit text</translation>
     </message>
     <message>
         <location filename="../../mscore/glissandoprop.ui" line="46"/>
@@ -4760,7 +4760,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_clef.ui" line="93"/>
         <location filename="../../mscore/inspector/inspector_clef.ui" line="96"/>
         <source>Show courtesy</source>
-        <translation>Kreslit upozornění na změnu</translation>
+        <translation>Zobrazit upozornění na změnu</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_clef.ui" line="103"/>
@@ -4770,7 +4770,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_clef.ui" line="106"/>
         <source>Reset &apos;Show courtesy&apos; value</source>
-        <translation>Obnovit výchozí hodnotu pro ukázání upozornění</translation>
+        <translation>Obnovit výchozí zobrazení upozornění</translation>
     </message>
 </context>
 <context>
@@ -5066,13 +5066,13 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="210"/>
         <source>Reset &apos;Show text&apos; value</source>
-        <translation>Obnovit výchozí hodnotu ukázání textu</translation>
+        <translation>Obnovit výchozí zobrazení textu</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="227"/>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="230"/>
         <source>Show text</source>
-        <translation>Vykreslit text</translation>
+        <translation>Zobrazit text</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="240"/>
@@ -5520,7 +5520,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="84"/>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="87"/>
         <source>Show courtesy</source>
-        <translation>Kreslit upozornění na změnu</translation>
+        <translation>Zobrazit upozornění na změnu</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="94"/>
@@ -5530,7 +5530,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="97"/>
         <source>Reset &apos;Show courtesy&apos; value</source>
-        <translation>Obnovit výchozí hodnotu pro ukázání upozornění</translation>
+        <translation>Obnovit výchozí zobrazení upozornění na změnu</translation>
     </message>
 </context>
 <context>
@@ -6578,13 +6578,13 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="93"/>
         <source>Reset &apos;Show courtesy&apos; value</source>
-        <translation>Obnovit výchozí hodnotu pro ukázání upozornění</translation>
+        <translation>Obnovit výchozí zobrazení upozornění na změnu</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="116"/>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="119"/>
         <source>Show courtesy</source>
-        <translation>Kreslit upozornění na změnu</translation>
+        <translation>Zobrazit upozornění na změnu</translation>
     </message>
 </context>
 <context>
@@ -7704,8 +7704,8 @@ předtaktí</translation>
 You only need to do this once.
 
 Would you like to locate %2 now?</source>
-        <translation>MuseScore nepodporuje soubory MP3 přímo, ale namísto toho používá volně dostupnou knihovnu LAME.  Musíte %1 získat samostatně (podrobnosti najdete v příručce), a potom najít soubor pro MuseScore.
-Musíte to udělat jen jednou.
+        <translation>MuseScore nepodporuje vyvedení do MP3 přímo, ale používá volně dostupnou knihovnu LAME. Musíte samostatně získat %1 (podrobnosti najdete v příručce) a poté zadat umístění souboru pro MuseScore.
+Tento krok stačí provést jen jednou.
 
 Chcete %2 najít nyní?</translation>
     </message>
@@ -7994,7 +7994,7 @@ Nepravidelná rytmická skupina by přesáhla takt</translation>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="410"/>
         <source>Measure number mode:</source>
-        <translation>Vykreslování čísel taktů:</translation>
+        <translation>Zobrazení čísel taktů:</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="418"/>
@@ -8638,12 +8638,12 @@ se nezdařilo:</translation>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="227"/>
         <source>Extension Updates Available</source>
-        <translation>Jsou k dispozici aktualizace rozšíření</translation>
+        <translation>Jsou dostupné aktualizace rozšíření</translation>
     </message>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="228"/>
         <source>One or more installed extensions have updates available in Help / Resource Manager...</source>
-        <translation>Jedno nebo více nainstalovaných rozšíření lze aktualizovat přes Nápovědu / Správce zdrojů...</translation>
+        <translation>Jedno nebo více nainstalovaných rozšíření má dostupné aktualizace přes Nápověda / Správce zdrojů...</translation>
     </message>
 </context>
 <context>
@@ -8980,8 +8980,8 @@ se nezdařilo:</translation>
     <message>
         <location filename="../../mscore/loginmanager.cpp" line="217"/>
         <source>Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?</source>
-        <translation>Bohužel, adresa elektronické pošty, uživatelské jméno nebo heslo je nesprávné. Proveďte, prosím, znovu ověření.
-%1Zapomněl jste své heslo%2?</translation>
+        <translation>Adresa elektronické pošty, uživatelské jméno nebo heslo je bohužel nesprávné. Zadejte prosím správné údaje.
+%1Zapomněli jste své heslo%2?</translation>
     </message>
     <message>
         <location filename="../../mscore/loginmanager.cpp" line="222"/>
@@ -9964,7 +9964,7 @@ Vyberte, prosím, takt a zkuste to znovu</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1358"/>
         <source>Check for &amp;Update</source>
-        <translation>Získat &amp;aktualizaci</translation>
+        <translation>Hledat &amp;aktualizaci</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1363"/>
@@ -11345,7 +11345,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="189"/>
         <source>Show Courtesy Time Signature</source>
-        <translation>Kreslit upozornění na změnu  taktového označení</translation>
+        <translation>Zobrazit upozornění na změnu  taktového označení</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="194"/>
@@ -11360,7 +11360,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="204"/>
         <source>Show Courtesy Clef</source>
-        <translation>Kreslit upozornění na změnu klíče</translation>
+        <translation>Zobrazit upozornění na změnu klíče</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="223"/>
@@ -11380,7 +11380,7 @@ se nezdařilo: %2</translation>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="251"/>
         <source>Show Courtesy Key Signature</source>
-        <translation>Kreslit upozornění na změnu předznamenání</translation>
+        <translation>Zobrazit upozornění na změnu předznamenání</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="258"/>
@@ -14692,12 +14692,12 @@ Nastavení latence na hodnotu větší než nula může ovladači pomoci nepřes
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4197"/>
         <source>Check for new version of MuseScore</source>
-        <translation>Podívat se po nové verzi MuseScore</translation>
+        <translation>Hledat novou verzi MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4204"/>
         <source>Check for new version of MuseScore extensions</source>
-        <translation>Podívat se po nových verzích rozšíření MuseScore</translation>
+        <translation>Hledat nové verze rozšíření MuseScore</translation>
     </message>
 </context>
 <context>
@@ -20297,12 +20297,12 @@ se nezdařil:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2330"/>
         <source>Show Unprintable</source>
-        <translation>Ukázat netisknutelné</translation>
+        <translation>Zobrazit netisknutelné</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2331"/>
         <source>Show unprintable</source>
-        <translation>Ukázat netisknutelné</translation>
+        <translation>Zobrazit netisknutelné</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2341"/>
