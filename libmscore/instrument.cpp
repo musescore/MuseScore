@@ -382,7 +382,7 @@ void Instrument::read(XmlReader& e)
             _channel.append(a);
             }
       if (_useDrumset) {
-            if (_channel[0]->bank == 0 && _channel[0]->name == "Fluid")
+            if (_channel[0]->bank == 0 && _channel[0]->name != "Zerberus")
                   _channel[0]->bank = 128;
             _channel[0]->updateInitList();
             }
