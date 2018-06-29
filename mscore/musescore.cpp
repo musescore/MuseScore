@@ -6218,8 +6218,10 @@ int main(int argc, char* av[])
       gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / SPATIUM20);
 
       mscore = new MuseScore();
-      if (sc)
+      if (sc) {
             sc->close();
+            qApp->processEvents();
+            }
 
       if (!noSeq) {
             if (!seq->init())
@@ -6317,7 +6319,6 @@ int main(int argc, char* av[])
 #endif
             }
 
-      sc->close();
       mscore->showPlayPanel(preferences.showPlayPanel);
       QSettings settings;
       if (settings.value("synthControlVisible", false).toBool())
