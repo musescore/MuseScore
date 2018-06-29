@@ -83,6 +83,23 @@ static const StyleType styleTypes[] {
       { Sid::lyricsDashForce,         "lyricsDashForce",         QVariant(true) },
       { Sid::lyricsAlignVerseNumber,  "lyricsAlignVerseNumber",  true },
       { Sid::lyricsLineThickness,     "lyricsLineThickness",     Spatium(0.1) },
+      { Sid::lyricsMelismaAlign,      "lyricsMelismaAlign",      QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+
+      { Sid::lyricsOddFontFace,       "lyricsOddFontFace",       "FreeSerif" },
+      { Sid::lyricsOddFontSize,       "lyricsOddFontSize",       11.0 },
+      { Sid::lyricsOddFontBold,       "lyricsOddFontBold",       false },
+      { Sid::lyricsOddFontItalic,     "lyricsOddFontItalic",     false },
+      { Sid::lyricsOddFontUnderline,  "lyricsOddFontUnderline",  false },
+      { Sid::lyricsOddAlign,          "lyricsOddAlign",          QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
+      { Sid::lyricsOddOffset,         "lyricsOddOffset",         QPointF(0.0, 6.0) },
+
+      { Sid::lyricsEvenFontFace,      "lyricsEvenFontFace",      "FreeSerif" },
+      { Sid::lyricsEvenFontSize,      "lyricsEvenFontSize",      11.0 },
+      { Sid::lyricsEvenFontBold,      "lyricsEvenFontBold",      false },
+      { Sid::lyricsEvenFontItalic,    "lyricsEvenFontItalic",    false },
+      { Sid::lyricsEvenFontUnderline, "lyricsEventFontUnderline",false },
+      { Sid::lyricsEvenAlign,         "lyricistEvenAlign",       QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
+      { Sid::lyricsEvenOffset,        "lyricistEvenOffset",      QPointF(0.0, 6.0) },
 
       { Sid::figuredBassFontFamily,   "figuredBassFontFamily",   QString("MScoreBC") },
 
@@ -436,22 +453,6 @@ static const StyleType styleTypes[] {
       { Sid::lyricistAlign,                 "lyricistAlign",                 QVariant::fromValue(Align::LEFT | Align::BOTTOM) },
       { Sid::lyricistOffset,                "lyricistOffset",                QPointF() },
       { Sid::lyricistOffsetType,            "lyricistOffsetType",            int(OffsetType::ABS)   },
-
-      { Sid::lyricsOddFontFace,             "lyricsOddFontFace",             "FreeSerif" },
-      { Sid::lyricsOddFontSize,             "lyricsOddFontSize",             11.0 },
-      { Sid::lyricsOddFontBold,             "lyricsOddFontBold",             false },
-      { Sid::lyricsOddFontItalic,           "lyricsOddFontItalic",           false },
-      { Sid::lyricsOddFontUnderline,        "lyricsOddFontUnderline",        false },
-      { Sid::lyricsOddAlign,                "lyricistOddAlign",              QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
-      { Sid::lyricsOddOffset,               "lyricistOddOffset",             QPointF(0.0, 6.0) },
-
-      { Sid::lyricsEvenFontFace,            "lyricsEvenFontFace",            "FreeSerif" },
-      { Sid::lyricsEvenFontSize,            "lyricsEvenFontSize",            11.0 },
-      { Sid::lyricsEvenFontBold,            "lyricsEvenFontBold",            false },
-      { Sid::lyricsEvenFontItalic,          "lyricsEvenFontItalic",          false },
-      { Sid::lyricsEvenFontUnderline,       "lyricsEventFontUnderline",      false },
-      { Sid::lyricsEvenAlign,               "lyricistEvenAlign",             QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
-      { Sid::lyricsEvenOffset,              "lyricistEvenOffset",            QPointF(0.0, 6.0) },
 
       { Sid::fingeringFontFace,             "fingeringFontFace",             "FreeSerif" },
       { Sid::fingeringFontSize,             "fingeringFontSize",             8.0 },

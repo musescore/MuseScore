@@ -67,6 +67,9 @@ class Lyrics final : public TextBase {
                               ///< (melisma)
       Syllabic _syllabic;
       LyricsLine* _separator;
+      std::vector<StyledProperty> _styledProperties;
+
+      bool isMelisma() const;
 
    protected:
       int _no;                ///< row index
@@ -88,6 +91,8 @@ class Lyrics final : public TextBase {
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
 
+      virtual const StyledProperty* styledProperties() const override { return _styledProperties.data(); }
+
       Segment* segment() const                        { return toSegment(parent()->parent()); }
       Measure* measure() const                        { return toMeasure(parent()->parent()->parent()); }
       ChordRest* chordRest() const                    { return toChordRest(parent()); }
@@ -100,7 +105,7 @@ class Lyrics final : public TextBase {
       virtual bool readProperties(XmlReader&);
       virtual int subtype() const override            { return _no; }
       virtual QString subtypeName() const override    { return QObject::tr("Verse %1").arg(_no + 1); }
-      void setNo(int n);
+      void setNo(int n)                               { _no = n; }
       int no() const                                  { return _no; }
       bool isEven() const                             { return _no % 1; }
       void setSyllabic(Syllabic s)                    { _syllabic = s; }
@@ -112,7 +117,6 @@ class Lyrics final : public TextBase {
       int ticks() const                               { return _ticks;    }
       void setTicks(int tick)                         { _ticks = tick;    }
       int endTick() const;
-      bool isMelisma() const;
       void removeFromScore();
 
 #if defined(USE_FONT_DASH_METRIC)
