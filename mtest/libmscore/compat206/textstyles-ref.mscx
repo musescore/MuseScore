@@ -19,7 +19,6 @@
       <minSystemDistance>9</minSystemDistance>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
       <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
-      <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
       <repeatBarTips>1</repeatBarTips>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>

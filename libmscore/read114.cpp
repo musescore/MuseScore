@@ -313,8 +313,12 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element* be)
                   case 3:  ss = SubStyleId::SUBTITLE;  break;
                   case 4:  ss = SubStyleId::COMPOSER;  break;
                   case 5:  ss = SubStyleId::POET;      break;
-                  case 6:  ss = SubStyleId::LYRIC_ODD;    break;
-                  case 7:  ss = SubStyleId::LYRIC_EVEN;    break;
+
+//                  case 6:  ss = SubStyleId::LYRIC_ODD;    break;
+//                  case 7:  ss = SubStyleId::LYRIC_EVEN;    break;
+                  case 6:  ss = SubStyleId::LYRIC;    break;
+                  case 7:  ss = SubStyleId::LYRIC;    break;
+
                   case 8:  ss = SubStyleId::FINGERING; break;
                   case 9:  ss = SubStyleId::INSTRUMENT_LONG;    break;
                   case 10: ss = SubStyleId::INSTRUMENT_SHORT;   break;

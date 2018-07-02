@@ -61,8 +61,9 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Placement p
 Lyrics::Lyrics(Score* s)
    : TextBase(s)
       {
-      _styledProperties = lyricsOddStyle;       // make copy
-      initSubStyle(SubStyleId::LYRIC_ODD);
+      _even = false;
+      _styledProperties = lyricsStyle;       // make copy
+      initSubStyle(SubStyleId::LYRIC);
       _no         = 0;
       _ticks      = 0;
       _syllabic   = Syllabic::SINGLE;
@@ -73,6 +74,7 @@ Lyrics::Lyrics(const Lyrics& l)
    : TextBase(l)
       {
       _styledProperties = l._styledProperties;
+      _even      = l._even;
       _no        = l._no;
       _ticks     = l._ticks;
       _syllabic  = l._syllabic;
@@ -254,7 +256,6 @@ void Lyrics::layout1()
             return;
             }
 
-
       qreal lh = lineSpacing() * score()->styleD(Sid::lyricsLineHeight);
       qreal y = 0;
 
@@ -306,19 +307,25 @@ void Lyrics::layout1()
                   }
             }
 
-      // adjust between LYRICS_EVEN and LYRICS_ODD only; keep other styles as they are
-      // (_no is 0-based, so odd _no means even line and viceversa)
-
       bool styleDidChange = false;
-      if ((_no & 1) && subStyleId() == SubStyleId::LYRIC_ODD) {
-            _styledProperties = lyricsEvenStyle;
-            styleDidChange = true;
+      if ((_no & 1) && !_even) {
+            _styledProperties[0].sid = Sid::lyricsEvenFontFace;
+            _styledProperties[1].sid = Sid::lyricsEvenFontSize;
+            _styledProperties[2].sid = Sid::lyricsEvenFontBold;
+            _styledProperties[3].sid = Sid::lyricsEvenFontItalic;
+            _styledProperties[4].sid = Sid::lyricsEvenFontUnderline;
+            _even             = true;
+            styleDidChange    = true;
             }
-      if (!(_no & 1) && subStyleId() == SubStyleId::LYRIC_EVEN) {
-            _styledProperties = lyricsOddStyle;
-            styleDidChange = true;
+      if (!(_no & 1) && _even) {
+            _styledProperties[0].sid = Sid::lyricsOddFontFace;
+            _styledProperties[1].sid = Sid::lyricsOddFontSize;
+            _styledProperties[2].sid = Sid::lyricsOddFontBold;
+            _styledProperties[3].sid = Sid::lyricsOddFontItalic;
+            _styledProperties[4].sid = Sid::lyricsOddFontUnderline;
+            _even             = false;
+            styleDidChange    = true;
             }
-      Q_ASSERT(_styledProperties[5].pid == Pid::ALIGN);
       if (isMelisma() || hasNumber) {
             if (_styledProperties[5].sid != Sid::lyricsMelismaAlign) {
                   _styledProperties[5].sid = Sid::lyricsMelismaAlign;
@@ -326,8 +333,8 @@ void Lyrics::layout1()
                   }
             }
       else {
-            if (_styledProperties[5].sid != ((subStyleId() == SubStyleId::LYRIC_ODD) ? Sid::lyricsOddAlign : Sid::lyricsEvenAlign)) {
-                  _styledProperties[5].sid = (subStyleId() == SubStyleId::LYRIC_ODD) ? Sid::lyricsOddAlign : Sid::lyricsEvenAlign;
+            if (_styledProperties[5].sid != (_even ? Sid::lyricsEvenAlign : Sid::lyricsOddAlign)) {
+                  _styledProperties[5].sid = _even ? Sid::lyricsEvenAlign : Sid::lyricsOddAlign;
                   styleDidChange = true;
                   }
             }
@@ -586,7 +593,7 @@ QVariant Lyrics::propertyDefault(Pid id) const
       {
       switch (id) {
             case Pid::SUB_STYLE:
-                  return int(SubStyleId::LYRIC_ODD);
+                  return int(SubStyleId::LYRIC);
             case Pid::PLACEMENT:
                   return score()->styleI(Sid::lyricsPlacement);
             case Pid::SYLLABIC:
@@ -817,8 +824,8 @@ void LyricsLineSegment::layout()
                   }
             }
       // B) if line follows a syllable, advance line start to after the syllable text
-      lyr   = lyricsLine()->lyrics();
-      sys   = lyr->segment()->system();
+      lyr  = lyricsLine()->lyrics();
+      sys  = lyr->segment()->system();
       if (sys && isSingleBeginType()) {
             qreal lyrX        = lyr->bbox().x();
             qreal lyrXp       = lyr->pagePos().x();
