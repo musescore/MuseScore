@@ -101,6 +101,7 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_APP_WORKSPACE                                  "application/workspace"
 #define PREF_EXPORT_AUDIO_SAMPLERATE                        "export/audio/sampleRate"
 #define PREF_EXPORT_MP3_BITRATE                             "export/mp3/bitRate"
+#define PREF_EXPORT_MP3_MODE                                "export/mp3/mode"
 #define PREF_EXPORT_MUSICXML_EXPORTLAYOUT                   "export/musicXML/exportLayout"
 #define PREF_EXPORT_MUSICXML_EXPORTBREAKS                   "export/musicXML/exportBreaks"
 #define PREF_EXPORT_PDF_DPI                                 "export/pdf/dpi"
