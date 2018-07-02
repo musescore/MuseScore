@@ -795,8 +795,7 @@ enum class SubStyleId {
       SUBTITLE,
       COMPOSER,
       POET,
-      LYRIC_ODD,
-      LYRIC_EVEN,
+      LYRIC,
       FINGERING,
       LH_GUITAR_FINGERING,
       RH_GUITAR_FINGERING,
@@ -887,8 +886,7 @@ typedef std::vector<StyledProperty> SubStyle;
 extern const SubStyle emptyStyle;
 extern const SubStyle defaultStyle;
 extern const SubStyle fingeringStyle;
-extern const SubStyle lyricsOddStyle;
-extern const SubStyle lyricsEvenStyle;
+extern const SubStyle lyricsStyle;
 
 const SubStyle& subStyle(SubStyleId);
 const SubStyle& subStyle(const char*);

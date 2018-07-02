@@ -73,6 +73,7 @@ class Lyrics final : public TextBase {
 
    protected:
       int _no;                ///< row index
+      bool _even;
 #if defined(USE_FONT_DASH_METRIC)
       qreal _dashY;           // dash dimensions for lyrics line dashes
       qreal _dashLength;

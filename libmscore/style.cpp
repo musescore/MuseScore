@@ -882,7 +882,7 @@ const std::vector<StyledProperty> lyricistStyle {
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
 
-const std::vector<StyledProperty> lyricsOddStyle {
+const std::vector<StyledProperty> lyricsStyle {
       { Sid::lyricsOddFontFace,                  Pid::FONT_FACE              },
       { Sid::lyricsOddFontSize,                  Pid::FONT_SIZE              },
       { Sid::lyricsOddFontBold,                  Pid::FONT_BOLD              },
@@ -892,7 +892,7 @@ const std::vector<StyledProperty> lyricsOddStyle {
       { Sid::lyricsPlacement,                    Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
-
+#if 0
 const std::vector<StyledProperty> lyricsEvenStyle {
       { Sid::lyricsEvenFontFace,                 Pid::FONT_FACE              },
       { Sid::lyricsEvenFontSize,                 Pid::FONT_SIZE              },
@@ -903,6 +903,7 @@ const std::vector<StyledProperty> lyricsEvenStyle {
       { Sid::lyricsPlacement,                    Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
+#endif
 
 const std::vector<StyledProperty> fingeringStyle {
       { Sid::fingeringFontFace,                  Pid::FONT_FACE              },
@@ -1528,8 +1529,7 @@ static constexpr std::array<StyledPropertyListName, int(SubStyleId::SUBSTYLES)> 
       { QT_TRANSLATE_NOOP("TextStyle", "Subtitle"),                &subTitleStyle,                  SubStyleId::SUBTITLE },
       { QT_TRANSLATE_NOOP("TextStyle", "Composer"),                &composerStyle,                  SubStyleId::COMPOSER },
       { QT_TRANSLATE_NOOP("TextStyle", "Lyricist"),                &lyricistStyle,                  SubStyleId::POET },
-      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Odd Lines"),        &lyricsOddStyle,                 SubStyleId::LYRIC_ODD },
-      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Even Lines"),       &lyricsEvenStyle,                SubStyleId::LYRIC_EVEN },
+      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics"),                  &lyricsStyle,                    SubStyleId::LYRIC },
       { QT_TRANSLATE_NOOP("TextStyle", "Fingering"),               &fingeringStyle,                 SubStyleId::FINGERING },
       { QT_TRANSLATE_NOOP("TextStyle", "LH Guitar Fingering"),     &lhGuitarFingeringStyle,         SubStyleId::LH_GUITAR_FINGERING },
       { QT_TRANSLATE_NOOP("TextStyle", "RH Guitar Fingering"),     &rhGuitarFingeringStyle,         SubStyleId::RH_GUITAR_FINGERING },
