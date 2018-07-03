@@ -250,6 +250,7 @@ PianoView::PianoView()
       _xZoom = 0.1;
       dragStarted = false;
       mouseDown = false;
+      dragStyle = DragStyle::NONE;
 
       }
 
@@ -376,8 +377,8 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
       }
 
       
-      //Draw drag box
-      if (dragStarted)
+      //Draw drag selection box
+      if (dragStarted && dragStyle == DragStyle::SELECTION_RECT)
             {
             int minX = qMin(mouseDownPos.x(), lastMousePos.x());
             int minY = qMin(mouseDownPos.y(), lastMousePos.y());
@@ -550,40 +551,173 @@ void PianoView::mouseReleaseEvent(QMouseEvent* /*event*/)
 
       if (dragStarted)
             {
-            //Update selection
-            qreal minX = qMin(mouseDownPos.x(), lastMousePos.x());
-            qreal minY = qMin(mouseDownPos.y(), lastMousePos.y());
-            qreal maxX = qMax(mouseDownPos.x(), lastMousePos.x());
-            qreal maxY = qMax(mouseDownPos.y(), lastMousePos.y());
+            if (dragStyle == DragStyle::SELECTION_RECT)
+                  {
+                  //Update selection
+                  qreal minX = qMin(mouseDownPos.x(), lastMousePos.x());
+                  qreal minY = qMin(mouseDownPos.y(), lastMousePos.y());
+                  qreal maxX = qMax(mouseDownPos.x(), lastMousePos.x());
+                  qreal maxY = qMax(mouseDownPos.y(), lastMousePos.y());
 
-            int startTick = pixelXToTick((int)minX);
-            int endTick = pixelXToTick((int)maxX);
-            int lowPitch = (int)floor(128 - maxY / noteHeight());
-            int highPitch = (int)ceil(128 - minY / noteHeight());
+                  int startTick = pixelXToTick((int)minX);
+                  int endTick = pixelXToTick((int)maxX);
+                  int lowPitch = (int)floor(128 - maxY / noteHeight());
+                  int highPitch = (int)ceil(128 - minY / noteHeight());
 
-            selectNotes(startTick, endTick, lowPitch, highPitch, selType);
-            
+                  selectNotes(startTick, endTick, lowPitch, highPitch, selType);
+                  }
+            else if (dragStyle == DragStyle::MOVE_NOTES)
+                  {
+                  }
+
             dragStarted = false;
             }
       else
             {
             int startTick = pixelXToTick((int)mouseDownPos.x());
-            int lowPitch = (int)floor(128 - mouseDownPos.y() / noteHeight());
+//            int lowPitch = (int)floor(128 - mouseDownPos.y() / noteHeight());
+            int lowPitch = pixelYToPitch(mouseDownPos.y());
             
             selectNotes(startTick, startTick + 1, lowPitch, lowPitch, selType);
             }
       
       
+      dragStyle = DragStyle::NONE;
       mouseDown = false;
       }
+
+
+//---------------------------------------------------------
+//   mouseMoveEvent
+//---------------------------------------------------------
+
+void PianoView::mouseMoveEvent(QMouseEvent* event)
+      {
+      lastMousePos = mapToScene(event->pos());
+
+      
+//      int tt = pixelXToTick(lastMousePos.x());
+//      int pp = pixelYToPitch(lastMousePos.y());
+//      printf("picking mouseMoveEvent.  tick:%d pitch:%d\n", tt, pp);
+//      PianoItem* pi = pickNote(lastMousePos.x(), lastMousePos.y());
+//      if (pi)
+//            {
+//            printf("Note hit on mouseMoveEvent.  pitch%d\n", pi->note()->pitch());
+//            }
+      
+            
+      //qDebug("mouseMoveEvent %d %d", event->x(), event->y());
+      if (mouseDown && !dragStarted)
+            {
+            qreal dx = lastMousePos.x() - mouseDownPos.x();
+            qreal dy = lastMousePos.y() - mouseDownPos.y();
+
+            printf("dx:%f dy:%f dist:%f minDist%f\n", dx, dy, dx * dx + dy * dy, MIN_DRAG_DIST_SQ);
+
+            if (dx * dx + dy * dy >= MIN_DRAG_DIST_SQ)
+                  {
+                  printf("drag started!\n");
+                  
+                  //Start dragging
+                  dragStarted = true;
+                  
+                  //Check for move note
+                  int tick = pixelXToTick(mouseDownPos.x());
+                  int mouseDownPitch = pixelYToPitch(mouseDownPos.y());
+//                  PianoItem* pi = pickNote(mouseDownPos.x(), mouseDownPos.y());
+                  PianoItem* pi = pickNote(tick, mouseDownPitch);
+                  if (pi)
+                        {
+                        printf("start DragStyle::MOVE_NOTES\n");
+                        if (!pi->note()->selected())
+                              {
+                              selectNotes(tick, tick, mouseDownPitch, mouseDownPitch, NoteSelectType::REPLACE);
+                              }
+                        dragStyle = DragStyle::MOVE_NOTES;
+                        lastDragPitch = mouseDownPitch;
+                        }
+                  else
+                        {
+                        printf("start DragStyle::SELECTION_RECT\n");
+                        dragStyle = DragStyle::SELECTION_RECT;
+                        }
+                  }
+            }
+
+      if (dragStarted)
+            {
+            if (dragStyle == DragStyle::MOVE_NOTES)
+                  {
+                  int mouseDownPitch = pixelYToPitch(mouseDownPos.y());
+                  int curPitch = pixelYToPitch(lastMousePos.y());
+                  if (curPitch != lastDragPitch)
+                        {
+                        printf("Dragging pitch from %d to %d\n", mouseDownPitch, curPitch);
+                        lastDragPitch = curPitch;
+                        }
+                  }
+            
+            scene()->update();
+            }
+      
+
+      //Update mouse tracker      
+      QPointF p(mapToScene(event->pos()));
+      int pitch = (int)((_noteHeight * 128 - p.y()) / _noteHeight);
+//      int pitch = (_noteHeight * 128 - event->y()) / _noteHeight;
+      emit pitchChanged(pitch);
+
+      //int tick = event->x() / _xZoom - MAP_OFFSET;
+      int tick = pixelXToTick(p.x());
+//      int tick = int(p.x()) -480;
+      if (tick < 0) {
+            tick = 0;
+            trackingPos.setTick(tick);
+            trackingPos.setInvalid();
+            }
+      else
+            trackingPos.setTick(tick);
+      emit trackingPosChanged(trackingPos);
+      }
+      
+//      QGraphicsView::mouseMoveEvent(event);
+
+//---------------------------------------------------------
+//   selectNotes
+//---------------------------------------------------------
+
+//PianoItem* PianoView::pickNote(int pixX, int pixY)
+PianoItem* PianoView::pickNote(int tick, int pitch)
+      {
+      for (int i = 0; i < noteList.size(); ++i)
+            {
+            PianoItem* pi = noteList[i];
+            
+            if (tick >= pi->startTick() && tick <= pi->startTick() + pi->tickLength()
+                    && pitch == pi->pitch())
+                  {
+                  return pi;
+                  }
+                    
+//            QRect bounds = pi->boundingRect();
+//            if (bounds.contains(pixX, pixY))
+//                  return pi;
+            }
+      
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   selectNotes
+//---------------------------------------------------------
 
 void PianoView::selectNotes(int startTick, int endTick, int lowPitch, int highPitch, NoteSelectType selType)
       {
 
-      qDebug("Selection bounds t0:%d t1:%d lo:%d hi:%d", startTick, endTick, lowPitch, highPitch);
+//      qDebug("Selection bounds t0:%d t1:%d lo:%d hi:%d", startTick, endTick, lowPitch, highPitch);
 
 
-      qDebug("SelectNoteType type %d", (int)selType);
+//      qDebug("SelectNoteType type %d", (int)selType);
 
       Score* score = staff->score();
       Selection selection(score);
@@ -618,7 +752,7 @@ void PianoView::selectNotes(int startTick, int endTick, int lowPitch, int highPi
                         break;
                   }
 
-            printf("Note t0:%d t1:%d pitch:%d inBounds:%d sel:%d\n", ts, ts + tLen, pitch, inBounds, sel);
+//            printf("Note t0:%d t1:%d pitch:%d inBounds:%d sel:%d\n", ts, ts + tLen, pitch, inBounds, sel);
 
 //                  item->setSelected(pi->note()->selected());
             //item->setSelected(sel);
@@ -650,54 +784,6 @@ void PianoView::selectNotes(int startTick, int endTick, int lowPitch, int highPi
       //updateNotes();
       scene()->update();
       }
-
-
-//---------------------------------------------------------
-//   mouseMoveEvent
-//---------------------------------------------------------
-
-void PianoView::mouseMoveEvent(QMouseEvent* event)
-      {
-      lastMousePos = mapToScene(event->pos());
-            
-      //qDebug("mouseMoveEvent %d %d", event->x(), event->y());
-      if (mouseDown && !dragStarted)
-            {
-            qreal dx = lastMousePos.x() - mouseDownPos.x();
-            qreal dy = lastMousePos.y() - mouseDownPos.y();
-            if (dx * dx + dy * dy >= MIN_DRAG_DIST_SQ)
-                  {
-                  dragStarted = true;
-                  }
-            }
-
-      if (dragStarted)
-            {
-            
-            scene()->update();
-            }
-      
-
-      //Update mouse tracker      
-      QPointF p(mapToScene(event->pos()));
-      int pitch = (int)((_noteHeight * 128 - p.y()) / _noteHeight);
-//      int pitch = (_noteHeight * 128 - event->y()) / _noteHeight;
-      emit pitchChanged(pitch);
-
-      //int tick = event->x() / _xZoom - MAP_OFFSET;
-      int tick = pixelXToTick(p.x());
-//      int tick = int(p.x()) -480;
-      if (tick < 0) {
-            tick = 0;
-            trackingPos.setTick(tick);
-            trackingPos.setInvalid();
-            }
-      else
-            trackingPos.setTick(tick);
-      emit trackingPosChanged(trackingPos);
-      }
-      
-//      QGraphicsView::mouseMoveEvent(event);
 
 //---------------------------------------------------------
 //   leaveEvent

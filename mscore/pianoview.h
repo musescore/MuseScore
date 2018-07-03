@@ -32,6 +32,12 @@ enum class NoteSelectType {
       SUBTRACT
       };
 
+enum class DragStyle {
+    NONE = 0,
+    SELECTION_RECT,
+    MOVE_NOTES
+};
+      
 //---------------------------------------------------------
 //   PianoItem
 //---------------------------------------------------------
@@ -84,6 +90,9 @@ class PianoView : public QGraphicsView {
       bool dragStarted;
       QPointF mouseDownPos;
       QPointF lastMousePos;
+      DragStyle dragStyle;
+      int lastDragPitch;
+      //int mouseDownPitch;
       
       QList<PianoItem*> noteList;
 
@@ -127,6 +136,10 @@ class PianoView : public QGraphicsView {
 
       int pixelXToTick(int pixX);
       int tickToPixelX(int tick);
+      int pixelYToPitch(int pixY) { return (int)floor(128 - pixY / (qreal)_noteHeight); }
+      
+//      PianoItem* pickNote(int pixX, int pixY);
+      PianoItem* pickNote(int tick, int pitch);
 
       QList<PianoItem*> getSelectedItems();
       QList<PianoItem*> getItems();
