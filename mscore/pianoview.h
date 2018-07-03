@@ -23,34 +23,31 @@ class Note;
 class NoteEvent;
 class PianoView;
 
-const int PianoItemType = QGraphicsItem::UserType + 1;
+//const int PianoItemType = QGraphicsItem::UserType + 1;
 
-//const QColor noteDeselected = Qt::blue;
-const QColor noteDeselected = QColor(27, 198, 156);
-const QColor noteSelected = Qt::yellow;
-
-//const QColor colPianoBg(0x71, 0x8d, 0xbe);
-//const QColor colPianoBg(85, 106, 143);
-const QColor colPianoBg(54, 54, 54);
-
-const QColor noteDeselectedBlack = noteDeselected.darker(150);
-const QColor noteSelectedBlack = noteSelected.darker(150);
+enum class NoteSelectType {
+      REPLACE = 0,
+      XOR,
+      ADD,
+      SUBTRACT
+      };
 
 //---------------------------------------------------------
 //   PianoItem
 //---------------------------------------------------------
 
-class PianoItem : public QGraphicsRectItem {
+//class PianoItem : public QGraphicsRectItem {
+class PianoItem {
       Note*      _note;
       NoteEvent* _event;
       PianoView* _pianoView;
       bool isBlack;
-      virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+      QRect rect;
 
    public:
       PianoItem(Note*, NoteEvent*, PianoView*);
-      virtual ~PianoItem() {}
-      virtual int type() const { return PianoItemType; }
+      ~PianoItem() {}
+      //virtual int type() const { return PianoItemType; }
       Note* note()       { return _note; }
       NoteEvent* event() { return _event; }
 //      QRect getNoteBounds();
@@ -59,6 +56,9 @@ class PianoItem : public QGraphicsRectItem {
       int pitch();
 //      QRectF updateValues();
       void updateValues();
+      void paint(QPainter* painter);
+      
+      QRect boundingRect() { return rect; }
       };
 
 //---------------------------------------------------------
@@ -80,9 +80,12 @@ class PianoView : public QGraphicsView {
       int _noteHeight;
       qreal _xZoom;
       
-      bool mouseDragging;
+      bool mouseDown;
+      bool dragStarted;
       QPointF mouseDownPos;
-      QPointF mouseDragPos;
+      QPointF lastMousePos;
+      
+      QList<PianoItem*> noteList;
 
       virtual void drawBackground(QPainter* painter, const QRectF& rect);
 
@@ -92,6 +95,9 @@ class PianoView : public QGraphicsView {
       void createLocators();
       void addChord(Chord* chord);
       void updateBoundingSize();
+      void clearNoteData();
+      void selectNotes(int startTick, int endTick, int lowPitch, int highPitch, NoteSelectType selType);
+
       
    protected:
       virtual void wheelEvent(QWheelEvent* event);
@@ -112,6 +118,7 @@ class PianoView : public QGraphicsView {
 
    public:
       PianoView();
+      ~PianoView();
       void setStaff(Staff*, Pos* locator);
       void scrollToTick(int tick);
       int noteHeight() { return _noteHeight; }
@@ -120,6 +127,9 @@ class PianoView : public QGraphicsView {
 
       int pixelXToTick(int pixX);
       int tickToPixelX(int tick);
+
+      QList<PianoItem*> getSelectedItems();
+      QList<PianoItem*> getItems();
 
       };
 

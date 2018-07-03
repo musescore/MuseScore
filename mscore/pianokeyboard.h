@@ -31,7 +31,7 @@ namespace Ms {
 static const int PIANO_KEYBOARD_HEIGHT = 40;
 const int MAX_KEY_HEIGHT = 20;
 const int MIN_KEY_HEIGHT = 8;
-const int DEFAULT_KEY_HEIGHT = 12;
+const int DEFAULT_KEY_HEIGHT = 14;
 const int BEAT_WIDTH_IN_PIXELS = 50;
 const double X_ZOOM_RATIO = 1.1;
 
