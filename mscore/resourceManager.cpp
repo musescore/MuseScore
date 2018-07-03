@@ -323,7 +323,7 @@ void ResourceManager::downloadExtension()
       QString baseAddress = baseAddr() + data;
       DownloadUtils dl(this);
       dl.setTarget(baseAddress);
-      QString localPath = QDir::tempPath() + data.split('/')[1];
+      QString localPath = QDir::tempPath() + QDir::separator() + data.split('/')[1];
       QFile::remove(localPath);
       dl.setLocalFile(localPath);
       dl.download(true);
