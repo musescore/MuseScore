@@ -164,12 +164,16 @@ set(_qt_modules
   Qml
   Quick
   QuickWidgets
-  WebKit
-  WebKitWidgets
   Sql
   OpenGL
   Help
 )
+if (USE_WEBKIT)
+  set(_qt_modules ${_qt_modules}
+    Qt5WebKit
+    Qt5WebKitWidgets
+  )
+endif (USE_WEBKIT)
 
 foreach(_module ${_qt_modules})
     string(TOUPPER ${_module} _module_upper)
@@ -182,8 +186,10 @@ endforeach()
 list(APPEND QT_QTCORE_LIBRARIES ${Qt5Concurrent_LIBRARIES})
 list(APPEND QT_QTCORE_LIBRARY ${Qt5Concurrent_LIBRARIES})
 
-list(APPEND QT_QTWEBKIT_LIBRARIES ${Qt5WebKitWidgets_LIBRARIES})
-list(APPEND QT_QTWEBKIT_LIBRARY ${Qt5WebKitWidgets_LIBRARIES})
+if (USE_WEBKIT)
+    list(APPEND QT_QTWEBKIT_LIBRARIES ${Qt5WebKitWidgets_LIBRARIES})
+    list(APPEND QT_QTWEBKIT_LIBRARY ${Qt5WebKitWidgets_LIBRARIES})
+endif (USE_WEBKIT)
 
 set(QT_QTDECLARATIVE_LIBRARIES ${Qt5Quick1_LIBRARIES})
 set(QT_QTDECLARATIVE_LIBRARY ${Qt5Quick1_LIBRARIES})

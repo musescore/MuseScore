@@ -19,12 +19,16 @@ if (Qt5Core_FOUND)
         Widgets
         PrintSupport
         Concurrent
-        WebKit
-        WebKitWidgets
         OpenGL
         LinguistTools
         Help
       )
+    if (USE_WEBKIT)
+      set(_components ${_components}
+        WebKit
+        WebKitWidgets
+        )
+    endif (USE_WEBKIT)
     foreach(_component ${_components})
       find_package(Qt5${_component})
 

@@ -46,8 +46,6 @@ set (QT_mingw_LIBRARIES
     Qt5Xml
     Qt5Network
     Qt5WebChannel
-    Qt5WebKitWidgets
-    Qt5WebKit
     Qt5XmlPatterns
     Qt5PrintSupport
     Qt5Quick
@@ -55,6 +53,12 @@ set (QT_mingw_LIBRARIES
     Qt5Qml
     Qt5Help
     )
+if (USE_WEBKIT)
+    set (QT_mingw_LIBRARIES ${QT_mingw_LIBRARIES}
+        Qt5WebKitWidgets
+        Qt5WebKit
+        )
+endif (USE_WEBKIT)
 
 #    Qt3Support4
 
