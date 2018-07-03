@@ -1060,6 +1060,7 @@ void Staff::init(const Staff* s)
       for (BracketItem* i : s->_brackets){
             BracketItem* ni = new BracketItem(*i);
             ni->setScore(score());
+            ni->setStaff(this);
             _brackets.push_back(ni);
             }
       _barLineSpan       = s->_barLineSpan;
