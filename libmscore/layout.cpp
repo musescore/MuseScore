@@ -853,15 +853,14 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
             else if (sx < lx)
                   lx = sx;
 
-            qreal xx = x + chord->stemPosX() + chord->pos().x();
+            qreal xx = x + note->headBodyWidth() + chord->pos().x();
 
             Direction dotPosition = note->userDotPosition();
             if (chord->dots()) {
                   if (chord->up())
                         upDotPosX = qMax(upDotPosX, xx);
                   else {
-                        qreal noteheadShift = note->headBodyWidth();
-                        downDotPosX = qMax(downDotPosX, xx + noteheadShift);
+                        downDotPosX = qMax(downDotPosX, xx);
                         }
 
                   if (dotPosition == Direction::AUTO && nNotes > 1 && note->visible() && !note->dotsHidden()) {
