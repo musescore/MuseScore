@@ -47,3 +47,4 @@ VERSION
 /buildReleaseLog.txt
 /nbproject
 /*.stackdump
+/CMakeLists.txt
