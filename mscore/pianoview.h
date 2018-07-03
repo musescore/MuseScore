@@ -93,6 +93,7 @@ class PianoView : public QGraphicsView {
       DragStyle dragStyle;
       int lastDragPitch;
       //int mouseDownPitch;
+      bool tempUndoEvent;
       
       QList<PianoItem*> noteList;
 

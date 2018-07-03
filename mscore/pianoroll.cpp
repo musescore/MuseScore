@@ -548,7 +548,6 @@ void PianorollEditor::heartBeat(Seq* seq)
             posChanged(POS::CURRENT, tick);
             if (preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG))
                   {
-      printf("heartbeat Tick:%d  \n", tick);
                   gv->scrollToTick(tick);
                   }
             }

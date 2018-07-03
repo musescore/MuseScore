@@ -251,6 +251,8 @@ PianoView::PianoView()
       dragStarted = false;
       mouseDown = false;
       dragStyle = DragStyle::NONE;
+      tempUndoEvent = false;
+
 
       }
 
@@ -378,6 +380,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
 
       
       //Draw drag selection box
+//      printf("draw sel dragStarted:%d dragStyle:%d \n", dragStarted, (int)dragStyle);
       if (dragStarted && dragStyle == DragStyle::SELECTION_RECT)
             {
             int minX = qMin(mouseDownPos.x(), lastMousePos.x());
@@ -385,6 +388,8 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
             int maxX = qMax(mouseDownPos.x(), lastMousePos.x());
             int maxY = qMax(mouseDownPos.y(), lastMousePos.y());
             QRectF rect(minX, minY, maxX - minX + 1, maxY - minY + 1);
+            
+            printf("Drawing selection rect %d %d %d %d\n", minX, minY, maxX, maxY);
             
             p->setPen(QPen(selBoxColor, 2));
             p->setBrush(QBrush(selBoxColorAlpha, Qt::SolidPattern));
@@ -533,8 +538,10 @@ void PianoView::mousePressEvent(QMouseEvent* event)
 //   mouseReleaseEvent
 //---------------------------------------------------------
 
-void PianoView::mouseReleaseEvent(QMouseEvent* /*event*/)
+void PianoView::mouseReleaseEvent(QMouseEvent* event)
       {
+      QPointF mouseUpPos = mapToScene(event->pos());
+      
 //      qDebug("mouseReleaseEvent %d %d", event->x(), event->y());
       //QGraphicsView::mouseReleaseEvent(event);
 //      bool bnLeft = event->buttons() & Qt::LeftButton;
@@ -568,6 +575,27 @@ void PianoView::mouseReleaseEvent(QMouseEvent* /*event*/)
                   }
             else if (dragStyle == DragStyle::MOVE_NOTES)
                   {
+                  Score* score = staff->score();
+                  if (tempUndoEvent)
+                        {
+                        score->undoRedo(true, 0, false);
+                        tempUndoEvent = false;
+                        }
+                  
+                  //Final note move action
+                  int mouseDownPitch = pixelYToPitch(mouseDownPos.y());
+                  int curPitch = pixelYToPitch(mouseUpPos.y());
+                  int pitchDelta = curPitch - mouseDownPitch;
+                  score->startCmd();
+                  //foreach (PianoItem* pi, getSelectedItems())
+//                        {
+//                        Note *note = pi->note();
+//                        score->undoChangePitch(note, note->pitch() + pi->event()->pitch() + pitchDelta, note->tpc1(), note->tpc2());
+//                        score->upDown(pitchDelta > 0, UpDownMode::CHROMATIC);
+                        score->upDownDelta(pitchDelta, false);
+                        
+//                        }
+                  score->endCmd();
                   }
 
             dragStarted = false;
@@ -584,6 +612,7 @@ void PianoView::mouseReleaseEvent(QMouseEvent* /*event*/)
       
       dragStyle = DragStyle::NONE;
       mouseDown = false;
+      scene()->update();
       }
 
 
@@ -612,7 +641,7 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
             qreal dx = lastMousePos.x() - mouseDownPos.x();
             qreal dy = lastMousePos.y() - mouseDownPos.y();
 
-            printf("dx:%f dy:%f dist:%f minDist%f\n", dx, dy, dx * dx + dy * dy, MIN_DRAG_DIST_SQ);
+//            printf("dx:%f dy:%f dist:%f minDist%f\n", dx, dy, dx * dx + dy * dy, MIN_DRAG_DIST_SQ);
 
             if (dx * dx + dy * dy >= MIN_DRAG_DIST_SQ)
                   {
@@ -628,7 +657,7 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
                   PianoItem* pi = pickNote(tick, mouseDownPitch);
                   if (pi)
                         {
-                        printf("start DragStyle::MOVE_NOTES\n");
+//                        printf("start DragStyle::MOVE_NOTES\n");
                         if (!pi->note()->selected())
                               {
                               selectNotes(tick, tick, mouseDownPitch, mouseDownPitch, NoteSelectType::REPLACE);
@@ -638,7 +667,7 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
                         }
                   else
                         {
-                        printf("start DragStyle::SELECTION_RECT\n");
+//                        printf("start DragStyle::SELECTION_RECT\n");
                         dragStyle = DragStyle::SELECTION_RECT;
                         }
                   }
@@ -652,12 +681,34 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
                   int curPitch = pixelYToPitch(lastMousePos.y());
                   if (curPitch != lastDragPitch)
                         {
-                        printf("Dragging pitch from %d to %d\n", mouseDownPitch, curPitch);
+//                        printf("Dragging pitch from %d to %d\n", mouseDownPitch, curPitch);
+                        int pitchDelta = curPitch - mouseDownPitch;
+                        
+                        Score* score = staff->score();
+                        if (tempUndoEvent)
+                              {
+                              score->undoRedo(true, 0, false);
+                              tempUndoEvent = false;
+                              }
+                        
+                        score->startCmd();
+//                        foreach (PianoItem* pi, getSelectedItems())
+//                              {
+//                              Note *note = pi->note();
+                              //score->undoChangePitch(note, note->pitch() + pi->event()->pitch() + pitchDelta, note->tpc1(), note->tpc2());
+//                              score->upDown(pitchDelta > 0, UpDownMode::CHROMATIC);
+                              score->upDownDelta(pitchDelta, false);
+//                              }
+                        //score->undo(new ChangeNoteEvent(note, event, ne));
+                        score->endCmd();
+                        
+                        tempUndoEvent = true;
                         lastDragPitch = curPitch;
                         }
                   }
             
             scene()->update();
+            //update();
             }
       
 

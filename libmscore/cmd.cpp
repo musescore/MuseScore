@@ -145,16 +145,20 @@ void Score::startCmd()
 //   undoRedo
 //---------------------------------------------------------
 
-void Score::undoRedo(bool undo, EditData* ed)
+void Score::undoRedo(bool undo, EditData* ed, bool updateSelect)
       {
-      deselectAll();
+      if (updateSelect)
+            deselectAll();
+      
       cmdState().reset();
       if (undo)
             undoStack()->undo(ed);
       else
             undoStack()->redo(ed);
       update();
-      updateSelection();
+      
+      if (updateSelect)
+            updateSelection();
       }
 
 //---------------------------------------------------------
@@ -1318,7 +1322,7 @@ static void setTpc(Note* oNote, int tpc, int& newTpc1, int& newTpc2)
 ///   Increment/decrement pitch of note by one or by an octave.
 //---------------------------------------------------------
 
-void Score::upDown(bool up, UpDownMode mode)
+void Score::upDown(bool up, UpDownMode mode, bool updateSelection)
       {
       QList<Note*> el = selection().uniqueNotes();
 
@@ -1487,9 +1491,42 @@ void Score::upDown(bool up, UpDownMode mode)
             setPlayNote(true);
             }
 
-      _selection.clear();
-      for (Note* note : el)
-            _selection.add(note);
+      if (updateSelection)
+            {
+            _selection.clear();
+            for (Note* note : el)
+                  _selection.add(note);
+            }
+      }
+
+//---------------------------------------------------------
+//   upDownDelta
+///   Add the delta to the pitch of note.
+//---------------------------------------------------------
+
+void Score::upDownDelta(int pitchDelta, bool updateSelection)
+      {
+      while (pitchDelta >= 12)
+            {
+            upDown(true, UpDownMode::OCTAVE, updateSelection);
+            pitchDelta -= 12;
+            }
+      while (pitchDelta > 0)
+            {
+            upDown(true, UpDownMode::CHROMATIC, updateSelection);
+            pitchDelta--;
+            }
+
+      while (pitchDelta <= -12)
+            {
+            upDown(false, UpDownMode::OCTAVE, updateSelection);
+            pitchDelta += 12;
+            }
+      while (pitchDelta < 0)
+            {
+            upDown(false, UpDownMode::CHROMATIC, updateSelection);
+            pitchDelta++;
+            }
       }
 
 //---------------------------------------------------------
