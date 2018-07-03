@@ -23,8 +23,6 @@ class Note;
 class NoteEvent;
 class PianoView;
 
-//const int PianoItemType = QGraphicsItem::UserType + 1;
-
 enum class NoteSelectType {
       REPLACE = 0,
       XOR,
@@ -42,7 +40,6 @@ enum class DragStyle {
 //   PianoItem
 //---------------------------------------------------------
 
-//class PianoItem : public QGraphicsRectItem {
 class PianoItem {
       Note*      _note;
       NoteEvent* _event;
@@ -53,14 +50,11 @@ class PianoItem {
    public:
       PianoItem(Note*, NoteEvent*, PianoView*);
       ~PianoItem() {}
-      //virtual int type() const { return PianoItemType; }
       Note* note()       { return _note; }
       NoteEvent* event() { return _event; }
-//      QRect getNoteBounds();
       int startTick();
       int tickLength();
       int pitch();
-//      QRectF updateValues();
       void updateValues();
       void paint(QPainter* painter);
       
@@ -82,7 +76,6 @@ class PianoView : public QGraphicsView {
       QGraphicsLineItem* locatorLines[3];
       int ticks;
       TType _timeType;
-      //int magStep;
       int _noteHeight;
       qreal _xZoom;
       
@@ -92,16 +85,12 @@ class PianoView : public QGraphicsView {
       QPointF lastMousePos;
       DragStyle dragStyle;
       int lastDragPitch;
-      //int mouseDownPitch;
       bool tempUndoEvent;
       
       QList<PianoItem*> noteList;
 
       virtual void drawBackground(QPainter* painter, const QRectF& rect);
 
-//      int y2pitch(int y) const;
-//      Pos pix2pos(int x) const;
-//      int pos2pix(const Pos& p) const;
       void createLocators();
       void addChord(Chord* chord);
       void updateBoundingSize();
@@ -139,7 +128,6 @@ class PianoView : public QGraphicsView {
       int tickToPixelX(int tick);
       int pixelYToPitch(int pixY) { return (int)floor(128 - pixY / (qreal)_noteHeight); }
       
-//      PianoItem* pickNote(int pixX, int pixY);
       PianoItem* pickNote(int tick, int pitch);
 
       QList<PianoItem*> getSelectedItems();

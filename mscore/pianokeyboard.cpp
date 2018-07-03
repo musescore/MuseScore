@@ -113,7 +113,6 @@ void PianoKeyboard::paintEvent(QPaintEvent* /*event*/)
                         if (degree == 0 && noteHeight > fontSize + 2)
                               {
                               QRectF rectText(rect.x(), rect.y(), rect.width() - 4, rect.height() - 1);
-//                              p.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, noteName);
                               p.drawText(rectText, Qt::AlignRight | Qt::AlignBottom, noteName);
                               }
                         }
@@ -235,8 +234,6 @@ void PianoKeyboard::mouseMoveEvent(QMouseEvent* event)
             : 128 * noteHeight - (event->y() + _ypos);
       int pitch = offset / noteHeight;
 
-//      printf("MouseMoveEvent (%d %d) off:%d pitch:%d\n", event->x(), event->y(), offset, pitch);
-      
       if (pitch != curPitch) {
             curPitch = pitch;
             emit pitchChanged(curPitch);

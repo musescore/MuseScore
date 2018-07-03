@@ -110,10 +110,8 @@ PianoRuler::PianoRuler(QWidget* parent)
             markIcon[2] = new QPixmap(rmark_xpm);
             }
       setMouseTracking(true);
-//      magStep = 0;
       _xpos   = 0;
       _xZoom = .1;
-//      _xmag   = 0.1;
       _timeType = TType::TICKS;
       _font2.setPixelSize(14);
       _font2.setBold(true);
@@ -134,33 +132,6 @@ void PianoRuler::setScore(Score* s, Pos* lc)
       }
 
 //---------------------------------------------------------
-//   setXmag
-//---------------------------------------------------------
-
-//void PianoRuler::setMag(double x, double /*y*/)
-//      {
-//      if (_xmag != x) {
-//            _xmag = x;
-//
-//            int tpix  = (480 * 4) * _xmag;
-//            magStep = 0;
-//            if (tpix < 64)
-//                  magStep = 1;
-//            if (tpix < 32)
-//                  magStep = 2;
-//            if (tpix <= 16)
-//                  magStep = 3;
-//            if (tpix < 8)
-//                  magStep = 4;
-//            if (tpix <= 4)
-//                  magStep = 5;
-//            if (tpix <= 2)
-//                  magStep = 6;
-//            update();
-//            }
-//      }
-
-//---------------------------------------------------------
 //   setXpos
 //---------------------------------------------------------
 
@@ -176,11 +147,6 @@ void PianoRuler::setXpos(int val)
 
 Pos PianoRuler::pix2pos(int x) const
       {
-//      int val = lrint((x + 5 + _xpos)/_xmag - 480);
-//      if (val < 0)
-//            val = 0;
-//      return Pos(_score->tempomap(), _score->sigmap(), val, _timeType);
-      
       int val = (x + _xpos - 5) / _xZoom - MAP_OFFSET;
       
       if (val < 0)
@@ -195,7 +161,6 @@ Pos PianoRuler::pix2pos(int x) const
 
 int PianoRuler::pos2pix(const Pos& p) const
       {
-//      return lrint((p.time(_timeType) + 480) * _xmag) - _xpos - 1;
       return (p.time(TType::TICKS) + MAP_OFFSET) * _xZoom - _xpos + 5;
       }
 
@@ -207,12 +172,6 @@ void PianoRuler::paintEvent(QPaintEvent* e)
       {
       QPainter p(this);
       const QRect& r = e->rect();
-            
-      //QRectF viewRect = mapToScene(viewport()->geometry()).boundingRect();
-
-//      static const int mag[7] = {
-//            1, 1, 2, 5, 10, 20, 50
-//            };
 
       int x  = r.x();
       int w  = r.width();
@@ -244,15 +203,6 @@ void PianoRuler::paintEvent(QPaintEvent* e)
       pos1.mbt(&bar1, &beat, &tick);
       pos2.mbt(&bar2, &beat, &tick);
 
-      //int n = mag[magStep];
-//      int n = 1;
-//      bar1 = (bar1 / n) * n;        // round down
-//      if (bar1 && n >= 2)
-//            bar1 -= 1;
-//      bar2 = ((bar2 + n - 1) / n) * n; // round up
-
-//      printf("bar1 %d bar2 %d\n", bar1, bar2);
-
       const int minBarGapSize = 48;
       const int minBeatGapSize = 30;
       
@@ -261,23 +211,14 @@ void PianoRuler::paintEvent(QPaintEvent* e)
       qreal pixPerBar = MScore::division * 4 * _xZoom;
       qreal pixPerBeat = MScore::division * _xZoom;
       
-      //printf("pixPerBar %f\n", pixPerBar);
-      
       int barSkip = ceil(minBarGapSize / pixPerBar);
       barSkip = (int)pow(2, ceil(log(barSkip)/log(2)));
 
       int beatSkip = ceil(minBeatGapSize / pixPerBeat);
       beatSkip = (int)pow(2, ceil(log(beatSkip)/log(2)));
       
-      //printf("barSkip %d\n", barSkip);
-
-//      if (barSkip <= 0)
-//            return;
-      
       //Round down to first bar to be a multiple of barSkip
       bar1 = (bar1 / barSkip) * barSkip;
-      //int period = pow(2, barSkip - 1);
-//      printf("bar1 %d bar2: %d\n", bar1, bar2);
       
       for (int bar = bar1; bar <= bar2; bar += barSkip) {
             Pos stick(_score->tempomap(), _score->sigmap(), bar, 0, 0);
@@ -300,13 +241,6 @@ void PianoRuler::paintEvent(QPaintEvent* e)
                         p.setFont(_font2);
                         }
                   else {
-//                        if (barSkip > 1)
-//                              {
-//                              //Do not draw beat markings if we are zoomed out
-//                              // enough to be dropping bars
-//                              continue;
-//                              }
-                        
                         num = beat + 1;
                         y3  = y + 8;
                         p.setFont(_font1);
@@ -338,7 +272,6 @@ void PianoRuler::paintEvent(QPaintEvent* e)
             p.setPen(lcColors[i]);
             int xp      = pos2pix(_locator[i]);
             QPixmap* pm = markIcon[i];
-            // int pw = (pm->width() + 1) / 2;
             int pw = pm->width() / 2;
             int x1 = x - pw;
             int x2 = x + w + pw;
