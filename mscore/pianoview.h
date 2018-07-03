@@ -53,6 +53,10 @@ class PianoItem : public QGraphicsRectItem {
       virtual int type() const { return PianoItemType; }
       Note* note()       { return _note; }
       NoteEvent* event() { return _event; }
+//      QRect getNoteBounds();
+      int startTick();
+      int tickLength();
+      int pitch();
 //      QRectF updateValues();
       void updateValues();
       };
@@ -67,7 +71,7 @@ class PianoView : public QGraphicsView {
       Staff* staff;
       Chord* chord;
       
-      Pos pos;  //Track mouse position
+      Pos trackingPos;  //Track mouse position
       Pos* _locator;
       QGraphicsLineItem* locatorLines[3];
       int ticks;
@@ -75,6 +79,10 @@ class PianoView : public QGraphicsView {
       //int magStep;
       int _noteHeight;
       qreal _xZoom;
+      
+      bool mouseDragging;
+      QPointF mouseDownPos;
+      QPointF mouseDragPos;
 
       virtual void drawBackground(QPainter* painter, const QRectF& rect);
 
@@ -87,16 +95,16 @@ class PianoView : public QGraphicsView {
       
    protected:
       virtual void wheelEvent(QWheelEvent* event);
+      virtual void mousePressEvent(QMouseEvent* event);
+      virtual void mouseReleaseEvent(QMouseEvent* event);
       virtual void mouseMoveEvent(QMouseEvent* event);
       virtual void leaveEvent(QEvent*);
 
    signals:
-//      void magChanged(double, double);
       void xZoomChanged(qreal);
       void noteHeightChanged(int);
-//      void xposChanged(int);
       void pitchChanged(int);
-      void posChanged(const Pos&);
+      void trackingPosChanged(const Pos&);
 
    public slots:
       void moveLocator(int);

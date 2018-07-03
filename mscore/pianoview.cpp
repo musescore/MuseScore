@@ -27,20 +27,15 @@ namespace Ms {
 
 //static const int MAP_OFFSET = 480;
 
-//---------------------------------------------------------
-//   pitch2y
-//---------------------------------------------------------
+static const QColor selBoxColor = QColor(255, 128, 0);
+static const QColor selBoxColorAlpha = QColor(255, 128, 0, 128);
 
-//static int pitch2y(int pitch)
-//      {
-//      static int tt[] = {
-//            12, 19, 25, 32, 38, 51, 58, 64, 71, 77, 84, 90
-//            };
-//      int y = (75 * keyHeight) - (tt[pitch % 12] + (7 * keyHeight) * (pitch / 12));
-//      if (y < 0)
-//            y = 0;
-//      return y;
-//      }
+enum class SelectNoteType {
+      REPLACE = 0,
+      XOR,
+      ADD,
+      SUBTRACT
+      };
 
 //---------------------------------------------------------
 //   PianoItem
@@ -60,8 +55,6 @@ PianoItem::PianoItem(Note* n, NoteEvent* e, PianoView* pianoView)
 
 void PianoItem::updateValues()
       {
-//      QRectF r(rect().translated(pos()));
-      
       Chord* chord = _note->chord();
       int ticks    = chord->duration().ticks();
       int tieLen   = _note->playTicks() - ticks;
@@ -76,6 +69,7 @@ void PianoItem::updateValues()
       qreal tix2pix = _pianoView->xZoom();
       int noteHeight = _pianoView->noteHeight();
       
+//      qreal x1 = _pianoView->tickToPixelX(_note->chord()->tick() + _event->ontime() * ticks);
       qreal x1 = (_note->chord()->tick() + _event->ontime() * ticks / 1000 + MAP_OFFSET) * tix2pix;
       qreal y1 = (127 - pitch) * noteHeight;
       
@@ -92,6 +86,27 @@ void PianoItem::updateValues()
 //         pitch2y(pitch) + keyHeight / 4);
 //
 //      return r | rect().translated(pos());
+      }
+
+
+int PianoItem::startTick()
+      {
+      Chord* chord = _note->chord();
+      int ticks    = chord->duration().ticks();
+      return _note->chord()->tick() + _event->ontime() * ticks / 1000;
+      }
+
+int PianoItem::tickLength()
+      {
+      Chord* chord = _note->chord();
+      int ticks    = chord->duration().ticks();
+      int tieLen   = _note->playTicks() - ticks;
+      return ticks * _event->len() / 1000 + tieLen;
+      }
+
+int PianoItem::pitch()
+      {
+      return _note->pitch() + _event->pitch();
       }
 
 //---------------------------------------------------------
@@ -140,25 +155,34 @@ void PianoItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidge
       //Pitch name
       if (bounds.width() >= 20 && bounds.height() >= 11)
             {
+            QRectF textRect(bounds.x() + 2, bounds.y() - 1, bounds.width() - 6, bounds.height() - 1);
+            QRectF textHiliteRect(bounds.x() + 3, bounds.y(), bounds.width() - 6, bounds.height() - 1);
+            
             QFont f("FreeSans",  8);
             painter->setFont(f);
-            
-            painter->setPen(QPen(noteColor.lighter(130)));
-            painter->drawText(bounds.x() + 3, bounds.y()+1, bounds.width(), bounds.height(),
-                    Qt::AlignLeft | Qt::AlignTop, pitchNames[pitch % 12]);
-            
-            painter->setPen(QPen(noteColor.darker(180)));
-            painter->drawText(bounds.x() + 2, bounds.y(), bounds.width(), bounds.height(),
-                    Qt::AlignLeft | Qt::AlignTop, pitchNames[pitch % 12]);
-            
 
-//            QRectF rectText(bounds.x() + 2, bounds.y(), bounds.width(), bounds.height());
-//            painter->drawText(rectText, Qt::AlignLeft | Qt::AlignTop, pitchNames[pitch % 12]);
+            //Note name
+            painter->setPen(QPen(noteColor.lighter(130)));
+//            painter->drawText(bounds.x() + 3, bounds.y()+1, bounds.width(), bounds.height(),
+            painter->drawText(textHiliteRect,
+                    Qt::AlignLeft | Qt::AlignTop, pitchNames[pitch % 12]);
+
+            painter->setPen(QPen(noteColor.darker(180)));
+            painter->drawText(textRect,
+                    Qt::AlignLeft | Qt::AlignTop, pitchNames[pitch % 12]);
+            
             
             //Black key hint
             if (isBlack && bounds.width() >= 30)
-                  painter->drawText(bounds.x() + 2, bounds.y(), bounds.width(), bounds.height(),
-                          Qt::AlignRight | Qt::AlignVCenter, QString("#  "));
+                  {
+                  painter->setPen(QPen(noteColor.lighter(130)));
+                  painter->drawText(textHiliteRect,
+                          Qt::AlignRight | Qt::AlignTop, QString("#"));
+                  
+                  painter->setPen(QPen(noteColor.darker(180)));
+                  painter->drawText(textRect,
+                          Qt::AlignRight | Qt::AlignTop, QString("#"));
+                  }
             }
       
 //      if (isBlack) {
@@ -187,8 +211,8 @@ PianoView::PianoView()
       setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
       setResizeAnchor(QGraphicsView::AnchorUnderMouse);
       setMouseTracking(true);
-      setRubberBandSelectionMode(Qt::IntersectsItemBoundingRect);
-      setDragMode(QGraphicsView::RubberBandDrag);
+//      setRubberBandSelectionMode(Qt::IntersectsItemBoundingRect);
+//      setDragMode(QGraphicsView::RubberBandDrag);
       _timeType = TType::TICKS;
 //      magStep   = 0;
       staff     = 0;
@@ -197,36 +221,9 @@ PianoView::PianoView()
       //Initialize to something that will give us a zoom of around .1
 //      _xZoom = (int)(log2(0.1) / log2(X_ZOOM_RATIO));  
       _xZoom = 0.1;
+      mouseDragging = false;
+
       }
-
-//---------------------------------------------------------
-//   pix2pos
-//---------------------------------------------------------
-
-//Pos PianoView::pix2pos(int x) const
-//      {
-//      int ticks = (int)(x / ticksToPixelsRatio()) - MAP_OFFSET;
-//      if (ticks < 0)
-//            ticks = 0;
-//      return Pos(staff->score()->tempomap(), staff->score()->sigmap(), ticks, TType::TICKS);
-//      
-//      
-////      x -= MAP_OFFSET;
-////      if (x < 0)
-////            x = 0;
-////      return Pos(staff->score()->tempomap(), staff->score()->sigmap(), x, _timeType);
-//      }
-
-//---------------------------------------------------------
-//   pos2pix
-//---------------------------------------------------------
-
-//int PianoView::pos2pix(const Pos& p) const
-//      {
-//      return (int)((p.time(TType::TICKS) + MAP_OFFSET) * ticksToPixelsRatio());
-//      
-////      return p.time(_timeType) + MAP_OFFSET;
-//      }
 
 //---------------------------------------------------------
 //   drawBackground
@@ -293,46 +290,12 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
             p->drawLine(QLineF(x1, y + _noteHeight, x2, y + _noteHeight));
       
             }
-      
-      /*
-      int key = floor(y1 / kh);
-      qreal y = key * kh;
-
-      for (; key < 75; ++key, y += kh) {
-            if (y < y1)
-                  continue;
-            if (y > y2)
-                  break;
-            p->setPen(QPen((key % 7) == 5 ? Qt::lightGray : Qt::gray));
-            p->drawLine(QLineF(x1, y, x2, y));
-            }
-       */
 
       //
       // draw vertical grid lines
       //
-      
-
-//      printf("xScale: %f, xZoom: %d, zoomRatio:%f\n", ticks2Pix, xZoom, X_ZOOM_RATIO);
-      
-//      xScale = .1;
-      
-//      qreal xScaleInv = 1 / xScale;
-//      qreal beatWidth = BEAT_WIDTH_IN_PIXELS * xScale;
-      
-//      int tick1 = (int)(x1 * xScaleInv - MAP_OFFSET);
-//      int tick2 = (int)(x2 * xScaleInv - MAP_OFFSET);
-      
-//      Pos pos1(_score->tempomap(), _score->sigmap(), qMax((int)(x1 / ticks2Pix) - MAP_OFFSET, 0), TType::TICKS);
-//      Pos pos2(_score->tempomap(), _score->sigmap(), qMax((int)(x2 / ticks2Pix) - MAP_OFFSET, 0), TType::TICKS);
       Pos pos1(_score->tempomap(), _score->sigmap(), qMax(pixelXToTick(x1), 0), TType::TICKS);
       Pos pos2(_score->tempomap(), _score->sigmap(), qMax(pixelXToTick(x2), 0), TType::TICKS);
-      
-//      Pos pos1 = pix2pos(x1 / xScale);
-//      Pos pos2 = pix2pos(x2 / xScale);
-//      Pos pos1 = pix2pos(x1);
-//      Pos pos2 = pix2pos(x2);
-
       
       int bar1, bar2, beat, tick;
       pos1.mbt(&bar1, &beat, &tick);
@@ -368,99 +331,19 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
             }
       
       
-      
-      //---------------------------------------------------
-      //    draw raster
-      //---------------------------------------------------
-/*
-      static const int mag[7] = {
-            1, 1, 2, 5, 10, 20, 50
-            };
-      
-      int n = mag[magStep < 0 ? 0 : magStep];
-
-      bar1 = (bar1 / n) * n;           // round down
-      if (bar1 && n >= 2)
-            bar1 -= 1;
-      bar2 = ((bar2 + n - 1) / n) * n; // round up
-
-      for (int bar = bar1; bar <= bar2;) {
-            Pos stick(_score->tempomap(), _score->sigmap(), bar, 0, 0);
-            if (magStep > 0) {
-                  double x = double(pos2pix(stick));
-                  if (x > 0) {
-                        p->setPen(QPen(colGridLineMajor, 0.0));
-                        p->drawLine(x, y1, x, y2);
-                        }
-                  else {
-                        p->setPen(QPen(Qt::black, 0.0));
-                        p->drawLine(x, y1, x, y1);
-                        }
-                  }
-            else {
-                  int z = stick.timesig().timesig().numerator();
-                  for (int beat = 0; beat < z; beat++) {
-                        if (magStep == 0) {
-                              Pos xx(_score->tempomap(), _score->sigmap(), bar, beat, 0);
-                              int xp = pos2pix(xx);
-                              if (xp < 0)
-                                    continue;
-                              if (xp > 0) {
-//                                    p->setPen(QPen(beat == 0 ? colGridLineMajor : colGridLineMinor, 0.0));
-//                                    p->setPen(QPen(beat == 0 ? colGridLineMajor : colGridLineMinor, 5.0));
-                                    p->setPen(beat == 0 ? penLineMajor : penLineMinor);
-                                    p->drawLine(xp, y1, xp, y2);
-//                                    p->drawLine(xp, y1, xp + 100, y1 + 100);
-                                    }
-                              else {
-                                    p->setPen(QPen(Qt::black, 0.0));
-                                    p->drawLine(xp, y1, xp, y2);
-                                    }
-                              }
-                        else {
-                              int k;
-                              if (magStep == -1)
-                                    k = 2;
-                              else if (magStep == -2)
-                                    k = 4;
-                              else if (magStep == -3)
-                                    k = 8;
-                              else if (magStep == -4)
-                                    k = 16;
-                              else
-                                    k = 32;
-
-                              int n = (MScore::division * 4) / stick.timesig().timesig().denominator();
-                              for (int i = 0; i < k; ++i) {
-                                    Pos xx(_score->tempomap(), _score->sigmap(), bar, beat, (n * i)/ k);
-                                    int xp = pos2pix(xx);
-                                    if (xp < 0)
-                                          continue;
-                                    if (xp > 0) {
-                                          p->setPen(QPen(i == 0 && beat == 0 ? colGridLineMajor : colGridLineMinor, 0.0));
-                                          p->drawLine(xp, y1, xp, y2);
-                                          }
-                                    else {
-                                          p->setPen(QPen(Qt::black, 0.0));
-                                          p->drawLine(xp, y1, xp, y2);
-                                          }
-                                    }
-                              }
-                        }
-                  }
-            if (bar == 0 && n >= 2)
-                  bar += (n-1);
-            else
-                  bar += n;
+      //Draw drag box
+      if (mouseDragging)
+            {
+            int minX = qMin(mouseDownPos.x(), mouseDragPos.x());
+            int minY = qMin(mouseDownPos.y(), mouseDragPos.y());
+            int maxX = qMax(mouseDownPos.x(), mouseDragPos.x());
+            int maxY = qMax(mouseDownPos.y(), mouseDragPos.y());
+            QRectF rect(minX, minY, maxX - minX + 1, maxY - minY + 1);
+            
+            p->setPen(QPen(selBoxColor, 2));
+            p->setBrush(QBrush(selBoxColorAlpha, Qt::SolidPattern));
+            p->drawRect(rect);
             }
-      */
-      
-//      colGutter = Qt::green;
-//      if (r.intersects(r1))
-//            p->fillRect(r.intersected(r1), colGutter);
-//      if (r.intersects(r2))
-//            p->fillRect(r.intersected(r2), colGutter);
-      
       }
 
 //---------------------------------------------------------
@@ -585,29 +468,139 @@ void PianoView::wheelEvent(QWheelEvent* event)
             }
       }
 
+
+//---------------------------------------------------------
+//   mousePressEvent
+//---------------------------------------------------------
+
+void PianoView::mousePressEvent(QMouseEvent* event)
+      {
+//      qDebug("mousePressEvent %d %d", event->x(), event->y());
+      //QGraphicsView::mousePressEvent(event);
+      
+      mouseDragging = true;
+      mouseDownPos = mapToScene(event->pos());
+      mouseDragPos = mouseDownPos;
+      }
+
+//---------------------------------------------------------
+//   mouseReleaseEvent
+//---------------------------------------------------------
+
+void PianoView::mouseReleaseEvent(QMouseEvent* /*event*/)
+      {
+//      qDebug("mouseReleaseEvent %d %d", event->x(), event->y());
+      //QGraphicsView::mouseReleaseEvent(event);
+
+
+      //Update selection
+      qreal minX = qMin(mouseDownPos.x(), mouseDragPos.x());
+      qreal minY = qMin(mouseDownPos.y(), mouseDragPos.y());
+      qreal maxX = qMax(mouseDownPos.x(), mouseDragPos.x());
+      qreal maxY = qMax(mouseDownPos.y(), mouseDragPos.y());
+      
+      int startTick = pixelXToTick((int)minX);
+      int endTick = pixelXToTick((int)maxX);
+      int lowPitch = (int)floor(128 - maxY / noteHeight());
+      int highPitch = (int)ceil(128 - minY / noteHeight());
+      
+      //qDebug("Selection bounds t0:%d t1:%d lo:%d hi:%d", startTick, endTick, lowPitch, highPitch);
+//      bool bnLeft = event->buttons() & Qt::LeftButton;
+//      bool bnMid = event->buttons() & Qt::MidButton;
+//      bool bnRight = event->buttons() & Qt::RightButton;
+      
+      int modifiers = QGuiApplication::keyboardModifiers();
+      bool bnShift = modifiers & Qt::ShiftModifier;
+      bool bnCtrl = modifiers & Qt::ControlModifier;
+//      bool bnAlt = modifiers & Qt::AltModifier;
+
+      SelectNoteType selType = bnShift ? (bnCtrl ? SelectNoteType::SUBTRACT : SelectNoteType::XOR)
+              : (bnCtrl ? SelectNoteType::ADD : SelectNoteType::REPLACE);
+
+//      qDebug("SelectNoteType type %d", (int)selType);
+      
+      for (QGraphicsItem* item : scene()->items())
+            if (item->type() == PianoItemType)
+                  {
+                  PianoItem* pi = static_cast<PianoItem*>(item);
+                  int ts = pi->startTick();
+                  int tLen = pi->tickLength();
+                  
+                  int pitch = pi->note()->pitch();
+                  
+                  bool inBounds = ts + tLen >= startTick && ts <= endTick 
+                        && pitch >= lowPitch && pitch <= highPitch;
+                  
+                  bool sel;
+                  switch (selType)
+                        {
+                        default:
+                        case SelectNoteType::REPLACE:
+                              sel = inBounds;
+                              break;
+                        case SelectNoteType::XOR:
+                              sel = inBounds != item->isSelected();
+                              break;
+                        case SelectNoteType::ADD:
+                              sel = inBounds || item->isSelected();
+                              break;
+                        case SelectNoteType::SUBTRACT:
+                              sel = !inBounds && item->isSelected();
+                              break;
+                        }
+                  
+//                  printf("Note t0:%d t1:%d pitch:%d inBounds:%d sel:%d\n", ts, ts + tLen, pitch, inBounds, sel);
+                  
+//                  item->setSelected(pi->note()->selected());
+                  item->setSelected(sel);
+                  pi->note()->setSelected(sel);
+                  }
+//      scene()->items()
+      
+      
+//      qreal tix2pix = _pianoView->xZoom();
+//      int noteHeight = _pianoView->noteHeight();
+      
+      mouseDragging = false;
+      
+      scene()->update();
+      }
+
 //---------------------------------------------------------
 //   mouseMoveEvent
 //---------------------------------------------------------
 
 void PianoView::mouseMoveEvent(QMouseEvent* event)
       {
-      QPointF p(mapToScene(event->pos()));
-      int pitch = (int)((_noteHeight * 128 - p.y()) / _noteHeight);
-//      int pitch = (_noteHeight * 128 - event->y()) / _noteHeight;
-      emit pitchChanged(pitch);
-      
-      //int tick = event->x() / _xZoom - MAP_OFFSET;
-      int tick = pixelXToTick(p.x());
-//      int tick = int(p.x()) -480;
-      if (tick < 0) {
-            tick = 0;
-            pos.setTick(tick);
-            pos.setInvalid();
+      //qDebug("mouseMoveEvent %d %d", event->x(), event->y());
+      if (mouseDragging)
+            {
+            
+            mouseDragPos = mapToScene(event->pos());
+            scene()->update();
             }
       else
-            pos.setTick(tick);
-      emit posChanged(pos);
-      QGraphicsView::mouseMoveEvent(event);
+            {
+      
+            QPointF p(mapToScene(event->pos()));
+            int pitch = (int)((_noteHeight * 128 - p.y()) / _noteHeight);
+      //      int pitch = (_noteHeight * 128 - event->y()) / _noteHeight;
+            emit pitchChanged(pitch);
+
+            //int tick = event->x() / _xZoom - MAP_OFFSET;
+            int tick = pixelXToTick(p.x());
+      //      int tick = int(p.x()) -480;
+            if (tick < 0) {
+                  tick = 0;
+                  trackingPos.setTick(tick);
+                  trackingPos.setInvalid();
+                  }
+            else
+                  trackingPos.setTick(tick);
+            emit trackingPosChanged(trackingPos);
+            }
+      
+//      QGraphicsView::mouseMoveEvent(event);
       }
 
 //---------------------------------------------------------
@@ -617,8 +610,8 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
 void PianoView::leaveEvent(QEvent* event)
       {
       emit pitchChanged(-1);
-      pos.setInvalid();
-      emit posChanged(pos);
+      trackingPos.setInvalid();
+      emit trackingPosChanged(trackingPos);
       QGraphicsView::leaveEvent(event);
       }
 
@@ -713,7 +706,7 @@ void PianoView::setStaff(Staff* s, Pos* l)
             return;
             }
 
-      pos.setContext(staff->score()->tempomap(), staff->score()->sigmap());
+      trackingPos.setContext(staff->score()->tempomap(), staff->score()->sigmap());
 //      Measure* lm = staff->score()->lastMeasure();
 //      ticks       = lm->tick() + lm->ticks();
 //      scene()->setSceneRect(0.0, 0.0, double(ticks + MAP_OFFSET * 2), keyHeight * 75);
@@ -815,6 +808,8 @@ void PianoView::addChord(Chord* chord)
 
 void PianoView::updateNotes()
       {
+//      printf("PianoView::updateNotes()\n");
+      
       scene()->blockSignals(true);  // block changeSelection()
       scene()->clearFocus();
       scene()->clear();
