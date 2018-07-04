@@ -28,14 +28,12 @@ namespace Ms {
 BSymbol::BSymbol(Score* s, ElementFlags f)
    : Element(s, f)
       {
-      _systemFlag = false;
       }
 
 BSymbol::BSymbol(const BSymbol& s)
    : Element(s), ElementLayout(s)
       {
-      _systemFlag = s._systemFlag;
-      foreach(Element* e, s._leafs) {
+      for (Element* e : s._leafs) {
             Element* ee = e->clone();
             ee->setParent(this);
             _leafs.append(ee);
@@ -48,9 +46,9 @@ BSymbol::BSymbol(const BSymbol& s)
 
 void BSymbol::writeProperties(XmlWriter& xml) const
       {
-      if (_systemFlag)
-            xml.tag("systemFlag", _systemFlag);
-      foreach(const Element* e, leafs())
+      if (systemFlag())
+            xml.tag("systemFlag", systemFlag());
+      for (const Element* e : leafs())
             e->write(xml);
       Element::writeProperties(xml);
       }
@@ -66,7 +64,7 @@ bool BSymbol::readProperties(XmlReader& e)
       if (Element::readProperties(e))
             return true;
       else if (tag == "systemFlag")
-            _systemFlag = e.readInt();
+            setSystemFlag(e.readInt());
       else if (tag == "Symbol" || tag == "FSymbol") {
             Element* element = name2Element(tag, score());
             element->read(e);
