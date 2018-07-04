@@ -1029,14 +1029,24 @@ qreal System::minDistance(System* s2) const
 
       qreal minVerticalDistance = score()->styleP(Sid::minVerticalDistance);
       qreal dist                = score()->styleP(Sid::minSystemDistance);
-      int lastStaff             = _staves.size() - 1;
+      int firstStaff;
+      int lastStaff;
+
+      for (firstStaff = 0; firstStaff < _staves.size()-1; ++firstStaff) {
+            if (s2->staff(firstStaff)->show())
+                  break;
+            }
+      for (lastStaff = _staves.size() -1; lastStaff > 0; --lastStaff) {
+            if (staff(lastStaff)->show())
+                  break;
+            }
 
       fixedDownDistance = false;
 
       for (MeasureBase* mb1 : ml) {
             if (mb1->isMeasure()) {
                   Measure* m = toMeasure(mb1);
-                  Spacer* sp = m->vspacerDown(m->score()->nstaves()-1);
+                  Spacer* sp = m->vspacerDown(lastStaff);
                   if (sp) {
                         if (sp->spacerType() == SpacerType::FIXED) {
                               dist = sp->gap();
@@ -1052,7 +1062,7 @@ qreal System::minDistance(System* s2) const
             for (MeasureBase* mb2 : s2->ml) {
                   if (mb2->isMeasure()) {
                         Measure* m = toMeasure(mb2);
-                        Spacer* sp = m->vspacerUp(0);
+                        Spacer* sp = m->vspacerUp(firstStaff);
                         if (sp)
                               dist = qMax(dist, sp->gap());
                         }
@@ -1076,7 +1086,7 @@ qreal System::minDistance(System* s2) const
                         if (ax2 < bx1)
                               continue;
                         Shape s1 = m1->staffShape(lastStaff).translated(m1->pos());
-                        Shape s2 = m2->staffShape(0).translated(m2->pos());
+                        Shape s2 = m2->staffShape(firstStaff).translated(m2->pos());
                         qreal d  = s1.minVerticalDistance(s2) + minVerticalDistance;
                         dist = qMax(dist, d - m1->staffLines(lastStaff)->height());
                         }
