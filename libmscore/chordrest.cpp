@@ -374,8 +374,8 @@ bool ChordRest::readProperties(XmlReader& e)
                   }
             e.readNext();
             }
-      else if (tag == "Lyrics" /*|| tag == "FiguredBass"*/) {
-            Element* element = Element::name2Element(tag, score());
+      else if (tag == "Lyrics") {
+            Element* element = new Lyrics(score());
             element->setTrack(e.track());
             element->read(e);
             add(element);
@@ -542,9 +542,24 @@ Element* ChordRest::drop(EditData& data)
                         return 0;
                         }
                   // fall through
+
             case ElementType::REHEARSAL_MARK:
                   e->setParent(segment());
                   e->setTrack((track() / VOICES) * VOICES);
+                  {
+                  TextBase* t = toTextBase(e);
+#if 0
+                  SubStyleId st = t->subStyleId();           { SubStyleId::EMPTY };
+                  // for palette items, we want to use current score text style settings
+                  // except where the source element had explicitly overridden these via text properties
+                  // palette text style will be relative to baseStyle, so rebase this to score
+                  if (st >= SubStyleId::DEFAULT && fromPalette)
+                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
+#endif
+                  if (e->isRehearsalMark() && fromPalette)
+                        t->setXmlText(score()->createRehearsalMarkText(toRehearsalMark(e)));
+                  }
+
                   score()->undoAddElement(e);
                   return e;
 
@@ -1171,6 +1186,8 @@ Shape ChordRest::shape() const
             // for horizontal spacing we only need the lyrics width:
             x1 = qMin(x1, l->bbox().x() - margin + l->pos().x());
             x2 = qMax(x2, x1 + l->bbox().width() + margin);
+            if (l->ticks() == Lyrics::TEMP_MELISMA_TICKS)
+                  x2 += spatium();
             }
       if (x2 > x1)
             shape.add(QRectF(x1, 1.0, x2-x1, 0.0));

@@ -1417,7 +1417,7 @@ bool Note::readProperties(XmlReader& e)
                   if (id != -1 &&
                               // DISABLE if pasting into a staff with linked staves
                               // because the glissando is not properly cloned into the linked staves
-                              (!e.pasteMode() || !staff()->links() || staff()->links()->empty())) {
+                              staff() && (!e.pasteMode() || !staff()->links() || staff()->links()->empty())) {
                         Spanner* placeholder = new TextLine(score());
                         placeholder->setAnchor(Spanner::Anchor::NOTE);
                         placeholder->setEndElement(this);
@@ -1453,7 +1453,7 @@ bool Note::readProperties(XmlReader& e)
             sp->read(e);
             // DISABLE pasting of glissandi into staves with other lionked staves
             // because the glissando is not properly cloned into the linked staves
-            if (e.pasteMode() && staff()->links() && !staff()->links()->empty()) {
+            if (e.pasteMode() && staff() && staff()->links() && !staff()->links()->empty()) {
                   e.removeSpanner(sp);    // read() added the element to the XMLReader: remove it
                   delete sp;
                   }
@@ -2353,10 +2353,12 @@ int Note::ppitch() const
       // if staff is drum
       // match tremolo and articulation between variants and chord
       if (play() && ch && ch->staff() && ch->staff()->isDrumStaff(ch->tick())) {
-            Drumset* ds = ch->staff()->part()->instrument(ch->tick())->drumset();
-            DrumInstrumentVariant div = ds->findVariant(_pitch, ch->articulations(), ch->tremolo());
-            if (div.pitch != INVALID_PITCH)
-                  return div.pitch;
+            const Drumset* ds = ch->staff()->part()->instrument(ch->tick())->drumset();
+            if (ds) {
+                  DrumInstrumentVariant div = ds->findVariant(_pitch, ch->articulations(), ch->tremolo());
+                  if (div.pitch != INVALID_PITCH)
+                        return div.pitch;
+                  }
             }
       return _pitch + staff()->pitchOffset(ch->segment()->tick());;
       }

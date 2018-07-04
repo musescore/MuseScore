@@ -147,18 +147,21 @@ struct TablatureDurationFont {
       bool read(XmlReader&);
       };
 
-// ready-made staff types:
+// ready-made staff types
+// keep in sync with the _presets initialization in StaffType::initStaffTypes()
 
 enum class StaffTypes : signed char {
       STANDARD,
       PERC_1LINE, PERC_3LINE, PERC_5LINE,
       TAB_6SIMPLE, TAB_6COMMON, TAB_6FULL,
-            TAB_4SIMPLE, TAB_4COMMON, TAB_4FULL,
-            TAB_UKULELE, TAB_BALALAJKA, TAB_ITALIAN, TAB_FRENCH,
+      TAB_4SIMPLE, TAB_4COMMON, TAB_4FULL,
+      TAB_5SIMPLE, TAB_5COMMON, TAB_5FULL,
+      TAB_UKULELE, TAB_BALALAJKA, TAB_ITALIAN, TAB_FRENCH,
+      TAB_7COMMON, TAB_8COMMON,
       STAFF_TYPES,
       // some useful shorthands:
-            PERC_DEFAULT = StaffTypes::PERC_5LINE,
-            TAB_DEFAULT = StaffTypes::TAB_6COMMON
+      PERC_DEFAULT = StaffTypes::PERC_5LINE,
+      TAB_DEFAULT = StaffTypes::TAB_6COMMON,
       };
 
 static const int  STAFF_GROUP_NAME_MAX_LENGTH   = 32;

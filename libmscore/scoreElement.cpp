@@ -262,13 +262,25 @@ static void changeProperties(ScoreElement* e, Pid t, const QVariant& st, Propert
       {
       if (propertyLink(t)) {
             for (ScoreElement* ee : e->linkList()) {
-                  if (ee->getProperty(t) != st || ee->propertyFlags(t) != ps)
-                        ee->score()->undo(new ChangeProperty(ee, t, st, ps));
+                  if (ee->getProperty(t) != st || ee->propertyFlags(t) != ps) {
+                        if (ee->isBracketItem()) {
+                              BracketItem* bi = toBracketItem(ee);
+                              ee->score()->undo(new ChangeBracketProperty(bi->staff(), bi->column(), t, st, ps));
+                              }
+                        else
+                              ee->score()->undo(new ChangeProperty(ee, t, st, ps));
+                        }
                   }
             }
       else {
-            if (e->getProperty(t) != st || e->propertyFlags(t) != ps)
-                  e->score()->undo(new ChangeProperty(e, t, st, ps));
+            if (e->getProperty(t) != st || e->propertyFlags(t) != ps) {
+                  if (e->isBracketItem()) {
+                        BracketItem* bi = toBracketItem(e);
+                        e->score()->undo(new ChangeBracketProperty(bi->staff(), bi->column(), t, st, ps));
+                        }
+                  else
+                        e->score()->undo(new ChangeProperty(e, t, st, ps));
+                  }
             }
       }
 

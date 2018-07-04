@@ -83,6 +83,23 @@ static const StyleType styleTypes[] {
       { Sid::lyricsDashForce,         "lyricsDashForce",         QVariant(true) },
       { Sid::lyricsAlignVerseNumber,  "lyricsAlignVerseNumber",  true },
       { Sid::lyricsLineThickness,     "lyricsLineThickness",     Spatium(0.1) },
+      { Sid::lyricsMelismaAlign,      "lyricsMelismaAlign",      QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+
+      { Sid::lyricsOddFontFace,       "lyricsOddFontFace",       "FreeSerif" },
+      { Sid::lyricsOddFontSize,       "lyricsOddFontSize",       11.0 },
+      { Sid::lyricsOddFontBold,       "lyricsOddFontBold",       false },
+      { Sid::lyricsOddFontItalic,     "lyricsOddFontItalic",     false },
+      { Sid::lyricsOddFontUnderline,  "lyricsOddFontUnderline",  false },
+      { Sid::lyricsOddAlign,          "lyricsOddAlign",          QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
+      { Sid::lyricsOddOffset,         "lyricsOddOffset",         QPointF(0.0, 6.0) },
+
+      { Sid::lyricsEvenFontFace,      "lyricsEvenFontFace",      "FreeSerif" },
+      { Sid::lyricsEvenFontSize,      "lyricsEvenFontSize",      11.0 },
+      { Sid::lyricsEvenFontBold,      "lyricsEvenFontBold",      false },
+      { Sid::lyricsEvenFontItalic,    "lyricsEvenFontItalic",    false },
+      { Sid::lyricsEvenFontUnderline, "lyricsEventFontUnderline",false },
+      { Sid::lyricsEvenAlign,         "lyricistEvenAlign",       QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
+      { Sid::lyricsEvenOffset,        "lyricistEvenOffset",      QPointF(0.0, 6.0) },
 
       { Sid::figuredBassFontFamily,   "figuredBassFontFamily",   QString("MScoreBC") },
 
@@ -437,22 +454,6 @@ static const StyleType styleTypes[] {
       { Sid::lyricistOffset,                "lyricistOffset",                QPointF() },
       { Sid::lyricistOffsetType,            "lyricistOffsetType",            int(OffsetType::ABS)   },
 
-      { Sid::lyricsOddFontFace,             "lyricsOddFontFace",             "FreeSerif" },
-      { Sid::lyricsOddFontSize,             "lyricsOddFontSize",             11.0 },
-      { Sid::lyricsOddFontBold,             "lyricsOddFontBold",             false },
-      { Sid::lyricsOddFontItalic,           "lyricsOddFontItalic",           false },
-      { Sid::lyricsOddFontUnderline,        "lyricsOddFontUnderline",        false },
-      { Sid::lyricsOddAlign,                "lyricistOddAlign",              QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
-      { Sid::lyricsOddOffset,               "lyricistOddOffset",             QPointF(0.0, 6.0) },
-
-      { Sid::lyricsEvenFontFace,            "lyricsEvenFontFace",            "FreeSerif" },
-      { Sid::lyricsEvenFontSize,            "lyricsEvenFontSize",            11.0 },
-      { Sid::lyricsEvenFontBold,            "lyricsEvenFontBold",            false },
-      { Sid::lyricsEvenFontItalic,          "lyricsEvenFontItalic",          false },
-      { Sid::lyricsEvenFontUnderline,       "lyricsEventFontUnderline",      false },
-      { Sid::lyricsEvenAlign,               "lyricistEvenAlign",             QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
-      { Sid::lyricsEvenOffset,              "lyricistEvenOffset",            QPointF(0.0, 6.0) },
-
       { Sid::fingeringFontFace,             "fingeringFontFace",             "FreeSerif" },
       { Sid::fingeringFontSize,             "fingeringFontSize",             8.0 },
       { Sid::fingeringFontBold,             "fingeringFontBold",             false },
@@ -557,7 +558,7 @@ static const StyleType styleTypes[] {
       { Sid::tempoFontItalic,               "tempoFontItalic",              false },
       { Sid::tempoFontUnderline,            "tempoFontUnderline",           false },
       { Sid::tempoAlign,                    "tempoAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
-      { Sid::tempoOffset,                   "tempoOffset",                  QPointF(0.0, -4.0) },
+      { Sid::tempoOffset,                   "tempoOffset",                  QPointF(0.0, 0.0) },   // not used
       { Sid::tempoSystemFlag,               "tempoSystemFlag",              true },
       { Sid::tempoPlacement,                "tempoPlacement",               int(Placement::ABOVE)  },
       { Sid::tempoPosAbove,                 "tempoPosAbove",                Spatium(-2.0) },
@@ -599,7 +600,7 @@ static const StyleType styleTypes[] {
       { Sid::staffTextFontItalic,           "staffFontItalic",              false },
       { Sid::staffTextFontUnderline,        "staffFontUnderline",           false },
       { Sid::staffTextAlign,                "staffAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
-      { Sid::staffTextOffset,               "staffOffset",                  QPointF(0.0, -4.0) },
+      { Sid::staffTextOffset,               "staffOffset",                  QPointF(0.0, 0.0) },      // not used
       { Sid::staffTextOffsetType,           "systemOffsetType",             int(OffsetType::SPATIUM)   },
       { Sid::staffTextPlacement,            "staffTextPlacement",           int(Placement::ABOVE) },
       { Sid::staffTextPosAbove,             "staffTextPosAbove",            Spatium(-2.0) },
@@ -877,20 +878,21 @@ const std::vector<StyledProperty> lyricistStyle {
       { Sid::lyricistAlign,                      Pid::ALIGN                  },
       { Sid::lyricistOffset,                     Pid::OFFSET                 },
       { Sid::lyricistOffsetType,                 Pid::OFFSET_TYPE            },
-      { Sid::lyricsPlacement,                    Pid::PLACEMENT              },
+//      { Sid::lyricistPlacement,                  Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
 
-const std::vector<StyledProperty> lyricsOddStyle {
+const std::vector<StyledProperty> lyricsStyle {
       { Sid::lyricsOddFontFace,                  Pid::FONT_FACE              },
       { Sid::lyricsOddFontSize,                  Pid::FONT_SIZE              },
       { Sid::lyricsOddFontBold,                  Pid::FONT_BOLD              },
       { Sid::lyricsOddFontItalic,                Pid::FONT_ITALIC            },
       { Sid::lyricsOddFontUnderline,             Pid::FONT_UNDERLINE         },
       { Sid::lyricsOddAlign,                     Pid::ALIGN                  },
+      { Sid::lyricsPlacement,                    Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
-
+#if 0
 const std::vector<StyledProperty> lyricsEvenStyle {
       { Sid::lyricsEvenFontFace,                 Pid::FONT_FACE              },
       { Sid::lyricsEvenFontSize,                 Pid::FONT_SIZE              },
@@ -898,8 +900,10 @@ const std::vector<StyledProperty> lyricsEvenStyle {
       { Sid::lyricsEvenFontItalic,               Pid::FONT_ITALIC            },
       { Sid::lyricsEvenFontUnderline,            Pid::FONT_UNDERLINE         },
       { Sid::lyricsEvenAlign,                    Pid::ALIGN                  },
+      { Sid::lyricsPlacement,                    Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
+#endif
 
 const std::vector<StyledProperty> fingeringStyle {
       { Sid::fingeringFontFace,                  Pid::FONT_FACE              },
@@ -1525,8 +1529,7 @@ static constexpr std::array<StyledPropertyListName, int(SubStyleId::SUBSTYLES)> 
       { QT_TRANSLATE_NOOP("TextStyle", "Subtitle"),                &subTitleStyle,                  SubStyleId::SUBTITLE },
       { QT_TRANSLATE_NOOP("TextStyle", "Composer"),                &composerStyle,                  SubStyleId::COMPOSER },
       { QT_TRANSLATE_NOOP("TextStyle", "Lyricist"),                &lyricistStyle,                  SubStyleId::POET },
-      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Odd Lines"),        &lyricsOddStyle,                 SubStyleId::LYRIC_ODD },
-      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Even Lines"),       &lyricsEvenStyle,                SubStyleId::LYRIC_EVEN },
+      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics"),                  &lyricsStyle,                    SubStyleId::LYRIC },
       { QT_TRANSLATE_NOOP("TextStyle", "Fingering"),               &fingeringStyle,                 SubStyleId::FINGERING },
       { QT_TRANSLATE_NOOP("TextStyle", "LH Guitar Fingering"),     &lhGuitarFingeringStyle,         SubStyleId::LH_GUITAR_FINGERING },
       { QT_TRANSLATE_NOOP("TextStyle", "RH Guitar Fingering"),     &rhGuitarFingeringStyle,         SubStyleId::RH_GUITAR_FINGERING },

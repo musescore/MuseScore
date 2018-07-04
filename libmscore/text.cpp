@@ -627,7 +627,6 @@ void TextBlock::layout(TextBase* t)
                   qreal w  = fm.width(f.text);
                   _bbox   |= fm.tightBoundingRect(f.text).translated(f.pos);
                   x += w;
-                  // _lineSpacing = (_lineSpacing == 0 || fm.lineSpacing() == 0) ? qMax(_lineSpacing, fm.lineSpacing()) : qMin(_lineSpacing, fm.lineSpacing());
                   _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
                   }
             }
@@ -1294,7 +1293,8 @@ void TextBase::createLayout()
                                     cursor.format()->setFontFamily(face);
                                     }
                               else
-                                    qDebug("cannot parse html property <%s>", qPrintable(token));
+                                    qDebug("cannot parse html property <%s> in text <%s>",
+                                       qPrintable(token), qPrintable(_text));
                               }
                         }
                   else
@@ -1400,10 +1400,6 @@ void TextBase::layout1()
 
       bb.translate(0.0, yoff);
 
-#if 0
-      if (_editMode)
-            bb |= cursorRect();
-#endif
       setbbox(bb);
       if (hasFrame())
             layoutFrame();
@@ -2506,6 +2502,8 @@ void TextBase::drawEditMode(QPainter* p, EditData& ed)
 
       qreal m = spatium();
       QRectF r = canvasBoundingRect().adjusted(-m, -m, m, m);
+//      qDebug("%f %f %f %f\n", r.x(), r.y(), r.width(), r.height());
+
       p->drawRect(r);
       pen = QPen(MScore::defaultColor, 0.0);
       }

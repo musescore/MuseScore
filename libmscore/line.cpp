@@ -531,7 +531,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                         }
                   else {
                         cr = toChordRest(endElement());
-                        if (type() == ElementType::OTTAVA) {
+                        if (isOttava()) {
                               if (cr && cr->durationType() == TDuration::DurationType::V_MEASURE) {
                                     x = cr->x() + cr->width() + sp;
                                     }
@@ -578,23 +578,33 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                           cr = toChordRest(e);
                                     }
                               // layout to right edge of CR
+                              // if next segment is not a chord with lyrics which spans to the left
                               if (cr) {
-                                    qreal maxRight = 0.0;
-                                    if (cr->type() == ElementType::CHORD) {
-                                          // chord bbox() is unreliable, look at notes
-                                          // this also allows us to more easily ignore ledger lines
-                                          for (Note* n : toChord(cr)->notes())
-                                                maxRight = qMax(maxRight, cr->x() + n->x() + n->bboxRightPos());
+                                    bool extendToRight = true;
+                                    Segment* seg = cr->segment();
+                                    seg = seg->next(SegmentType::ChordRest);
+                                    if (seg) {
+                                          ChordRest* cr2 = seg->cr(cr->track());
+                                          if (cr2 && !cr2->lyrics().empty())
+                                                extendToRight = false;
                                           }
-                                    else {
-                                          // rest - won't normally happen
-                                          maxRight = cr->x() + cr->width();
+                                    if (extendToRight) {
+                                          qreal maxRight = 0.0;
+                                          if (cr->isChord()) {
+                                                // chord bbox() is unreliable, look at notes
+                                                // this also allows us to more easily ignore ledger lines
+                                                for (Note* n : toChord(cr)->notes())
+                                                      maxRight = qMax(maxRight, cr->x() + n->x() + n->bboxRightPos());
+                                                }
+                                          else {
+                                                // rest - won't normally happen
+                                                maxRight = cr->x() + cr->width();
+                                                }
+                                          x = maxRight; // cr->width()
                                           }
-                                    x = maxRight; // cr->width()
                                     }
                              }
-                        else if (type() == ElementType::HAIRPIN || type() == ElementType::TRILL || type() == ElementType::VIBRATO
-                                    || type() == ElementType::TEXTLINE || type() == ElementType::LYRICSLINE) {
+                        else if (isHairpin() || isTrill() || isVibrato() || isTextLine() || isLyricsLine()) {
                               // (for LYRICSLINE, this is hyphen; melisma line is handled above)
                               // lay out to just before next chordrest on this staff, or barline
                               // tick2 actually tells us the right chordrest to look for

@@ -853,15 +853,14 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
             else if (sx < lx)
                   lx = sx;
 
-            qreal xx = x + chord->stemPosX() + chord->pos().x();
+            qreal xx = x + note->headBodyWidth() + chord->pos().x();
 
             Direction dotPosition = note->userDotPosition();
             if (chord->dots()) {
                   if (chord->up())
                         upDotPosX = qMax(upDotPosX, xx);
                   else {
-                        qreal noteheadShift = note->headBodyWidth();
-                        downDotPosX = qMax(downDotPosX, xx + noteheadShift);
+                        downDotPosX = qMax(downDotPosX, xx);
                         }
 
                   if (dotPosition == Direction::AUTO && nNotes > 1 && note->visible() && !note->dotsHidden()) {
@@ -2828,11 +2827,12 @@ void Score::layoutLyrics(System* system)
 
       // align lyrics line segments
 
-      std::vector<LyricsLineSegment*> ll;
+//      std::vector<LyricsLineSegment*> ll;
       for (SpannerSegment* ss : system->spannerSegments()) {
             if (ss->isLyricsLineSegment()) {
                   LyricsLineSegment* lls = toLyricsLineSegment(ss);
-                  lls->rUserYoffset() = lls->lyricsLine()->lyrics()->rUserYoffset();
+                  lls->rUserYoffset() = lls->lyrics()->rUserYoffset();
+                  lls->layout();
                   }
             }
       }
@@ -3544,7 +3544,7 @@ void LayoutContext::collectPage()
 
             if (!breakPage) {
                   qreal dist = prevSystem->minDistance(curSystem) + curSystem->height();
-                  VBox* vbox = curSystem->vbox();
+                  Box* vbox = curSystem->vbox();
                   if (vbox)
                         dist += vbox->bottomGap();
                   else if (!prevSystem->hasFixedDownDistance())
@@ -3552,7 +3552,7 @@ void LayoutContext::collectPage()
                   breakPage  = (y + dist) >= ey && breakPages;
                   }
             if (breakPage) {
-                  VBox* vbox = prevSystem->vbox();
+                  Box* vbox = prevSystem->vbox();
                   qreal dist = vbox ? vbox->bottomGap() : qMax(prevSystem->minBottom(), slb);
                   layoutPage(page, ey - (y + dist));
                   break;
@@ -3687,6 +3687,8 @@ void Score::doLayoutRange(int stick, int etick)
 //      qDebug("start <%s> tick %d, system %p", m->name(), m->tick(), m->system());
       lc.score        = m->score();
 
+      std::vector<std::pair<int, BracketItem*>> selectedBrackets;
+
       if (!layoutAll && m->system()) {
             System* system  = m->system();
             int systemIndex = _systems.indexOf(system);
@@ -3726,6 +3728,8 @@ void Score::doLayoutRange(int stick, int etick)
             for (System* s : _systems) {
                   for (Bracket* b : s->brackets()) {
                         if (b->selected()) {
+                              auto bracket = make_pair(_systems.indexOf(s), b->bracketItem());
+                              selectedBrackets.push_back(bracket);
                               _selection.elements().removeOne(b);
                               _selection.updateState();
                               setSelectionChanged(true);
@@ -3790,6 +3794,20 @@ void Score::doLayoutRange(int stick, int etick)
 
       for (MuseScoreView* v : viewer)
             v->layoutChanged();
+
+      for (auto bracket : selectedBrackets) {
+            int systemIndex = bracket.first;
+            BracketItem* bi = bracket.second;
+            if (systemIndex < _systems.size()) {
+                  System* system = _systems[systemIndex];
+                  for (Bracket* b : system->brackets()) {
+                        if (b->bracketItem() == bi) {
+                              selectAdd(b);
+                              break;
+                              }
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------

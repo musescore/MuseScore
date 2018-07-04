@@ -61,6 +61,7 @@ void Staff::fillBrackets(int idx)
       for (int i = _brackets.size(); i <= idx; ++i) {
             BracketItem* bi = new BracketItem(score());
             bi->setStaff(this);
+            bi->setColumn(i);
             _brackets.append(bi);
             }
       }
@@ -117,7 +118,28 @@ void Staff::swapBracket(int oldIdx, int newIdx)
       {
       int idx = qMax(oldIdx, newIdx);
       fillBrackets(idx);
+      _brackets[oldIdx]->setColumn(newIdx);
+      _brackets[newIdx]->setColumn(oldIdx);
       _brackets.swap(oldIdx, newIdx);
+      cleanBrackets();
+      }
+
+//---------------------------------------------------------
+//   changeBracketColumn
+//---------------------------------------------------------
+
+void Staff::changeBracketColumn(int oldColumn, int newColumn)
+      {
+      int idx = qMax(oldColumn, newColumn);
+      fillBrackets(idx);
+      int step = newColumn > oldColumn ? 1 : -1;
+      for (int i = oldColumn; i != newColumn; i += step) {
+            int oldIdx = i;
+            int newIdx = i + step;
+            _brackets[oldIdx]->setColumn(newIdx);
+            _brackets[newIdx]->setColumn(oldIdx);
+            _brackets.swap(oldIdx, newIdx);
+            }
       cleanBrackets();
       }
 
@@ -998,7 +1020,7 @@ StaffType* Staff::setStaffType(int tick, const StaffType* nst)
       {
       auto i = _staffTypeList.find(tick);
       if (i != _staffTypeList.end()) {
-            qDebug("there is alread a type at %d", tick);
+            qDebug("there is already a type at %d", tick);
             }
       return _staffTypeList.setStaffType(tick, nst);
       }
@@ -1038,6 +1060,7 @@ void Staff::init(const Staff* s)
       for (BracketItem* i : s->_brackets){
             BracketItem* ni = new BracketItem(*i);
             ni->setScore(score());
+            ni->setStaff(this);
             _brackets.push_back(ni);
             }
       _barLineSpan       = s->_barLineSpan;

@@ -126,6 +126,11 @@ void ScoreView::startEdit()
 
       editData.element->startEdit(editData);
       updateGrips();
+
+      qDebug("reset input method");
+      QGuiApplication::inputMethod()->reset();
+      QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
+      setAttribute(Qt::WA_InputMethodEnabled, editData.element->isTextBase());
       _score->update();
       setCursor(QCursor(Qt::ArrowCursor));
       }
@@ -136,6 +141,7 @@ void ScoreView::startEdit()
 
 void ScoreView::endEdit()
       {
+      setAttribute(Qt::WA_InputMethodEnabled, false);
       setDropTarget(0);
       if (!editData.element)
             return;
@@ -144,34 +150,17 @@ void ScoreView::endEdit()
             score()->addRefresh(editData.grip[i]);
       editData.element->endEdit(editData);
 
-      _score->addRefresh(editData.element->canvasBoundingRect());
+      if (editData.element) {
+            _score->addRefresh(editData.element->canvasBoundingRect());
+            ElementType tp = editData.element->type();
+            if (tp == ElementType::LYRICS)
+                  lyricsEndEdit();
+            else if (tp == ElementType::HARMONY)
+                  harmonyEndEdit();
+            else if (tp == ElementType::FIGURED_BASS)
+                  figuredBassEndEdit();
+            }
 
-      ElementType tp = editData.element->type();
-      if (tp == ElementType::LYRICS)
-            lyricsEndEdit();
-      else if (tp == ElementType::HARMONY)
-            harmonyEndEdit();
-      else if (tp == ElementType::FIGURED_BASS)
-            figuredBassEndEdit();
-      else if (editData.element->isTextBase()) {
-            // remove text if empty
-            // dont do this for TBOX
-            TextBase* text = toTextBase(editData.element);
-            if (text->empty() && text->parent() && !text->parent()->isTBox()) {
-                  qDebug("remove empty text");
-                  _score->startCmd();
-                  _score->undoRemoveElement(text);
-                  _score->endCmd();
-                  editData.element = 0;
-                  }
-            }
-#if 0
-      if (dragElement && (dragElement != editData.element)) {
-            curElement = dragElement;
-            _score->select(curElement);
-            _score->update();
-            }
-#endif
       editData.clearData();
       mscore->updateInspector();
       }

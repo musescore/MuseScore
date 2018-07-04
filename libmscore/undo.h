@@ -106,6 +106,7 @@ class UndoCommand {
       UndoCommand* removeChild()         { return childList.takeLast(); }
       int childCount() const             { return childList.size();     }
       void unwind();
+      const QList<UndoCommand*>& commands() const { return childList; }
       virtual void cleanup(bool undo);
 // #ifndef QT_NO_DEBUG
       virtual const char* name() const { return "UndoCommand"; }
@@ -140,8 +141,11 @@ class UndoStack {
       void remove(int idx);
       bool empty() const            { return !canUndo() && !canRedo();  }
       UndoCommand* current() const  { return curCmd;               }
+      UndoCommand* last() const     { return curIdx > 0 ? list[curIdx-1] : 0; }
       void undo(EditData*);
       void redo(EditData*);
+      void rollback();
+      void reopen();
       };
 
 //---------------------------------------------------------
@@ -502,6 +506,7 @@ class AddElement : public UndoCommand {
 
    public:
       AddElement(Element*);
+      Element* getElement() const { return element; }
       virtual void cleanup(bool);
       virtual const char* name() const override;
       };
@@ -935,6 +940,7 @@ class ChangeStaffUserDist : public UndoCommand {
 //---------------------------------------------------------
 
 class ChangeProperty : public UndoCommand {
+   protected:
       ScoreElement* element;
       Pid id;
       QVariant property;
@@ -946,7 +952,25 @@ class ChangeProperty : public UndoCommand {
       ChangeProperty(ScoreElement* e, Pid i, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
          : element(e), id(i), property(v), flags(ps) {}
       Pid getId() const  { return id; }
+      ScoreElement* getElement() const { return element; }
+      QVariant data() const { return property; }
       UNDO_NAME("ChangeProperty")
+      };
+
+//---------------------------------------------------------
+//   ChangeBracketProperty
+//---------------------------------------------------------
+
+class ChangeBracketProperty : public ChangeProperty {
+      Staff* staff;
+      int level;
+
+      void flip(EditData*) override;
+
+   public:
+      ChangeBracketProperty(Staff* s, int l, Pid i, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
+         : ChangeProperty(nullptr, i, v, ps), staff(s), level(l) {}
+      UNDO_NAME("ChangeBracketProperty")
       };
 
 //---------------------------------------------------------

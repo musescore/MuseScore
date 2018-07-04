@@ -2336,7 +2336,7 @@ void MuseScore::midiNoteReceived(int channel, int pitch, int velo)
 
       QWidget* w = QApplication::activeModalWidget();
       if (!cv || w) {
-            active = 1;
+            active = 0;
             return;
             }
       if (velo) {
@@ -6459,8 +6459,10 @@ int main(int argc, char* av[])
       mscore->changeState(mscore->noScore() ? STATE_DISABLED : STATE_NORMAL);
       mscore->show();
 
+#ifndef MSCORE_NO_UPDATE_CHECKER
       if (mscore->hasToCheckForUpdate())
             mscore->checkForUpdate();
+#endif
 
       if (!scoresOnCommandline && preferences.getBool(PREF_UI_APP_STARTUP_SHOWSTARTCENTER) && (!restoredSession || mscore->scores().size() == 0)) {
 #ifdef Q_OS_MAC

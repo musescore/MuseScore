@@ -44,14 +44,19 @@ void TextBase::startEdit(EditData& ed)
       ted->cursor.setColumn(0);
       ted->cursor.clearSelection();
 
+      Q_ASSERT(!score()->undoStack()->active());      // make sure we are not in a Cmd
+
       ted->oldXmlText = xmlText();
       ted->startUndoIdx = score()->undoStack()->getCurIdx();
 
-      if (!ted->cursor.set(ed.startMove))
-            ted->cursor.init();
-      ed.addData(ted);
       if (layoutInvalid)
             layout();
+      if (!ted->cursor.set(ed.startMove))
+            ted->cursor.init();
+      qreal _spatium = spatium();
+      // refresh edit bounding box
+      score()->addRefresh(canvasBoundingRect().adjusted(-_spatium, -_spatium, _spatium, _spatium));
+      ed.addData(ted);
       }
 
 //---------------------------------------------------------
@@ -67,6 +72,42 @@ void TextBase::endEdit(EditData& ed)
       // one property change
 
       QString actualText = xmlText();
+      if (ted->oldXmlText.isEmpty()) {
+            UndoStack* us = score()->undoStack();
+            UndoCommand* ucmd = us->last();
+            if (ucmd) {
+                  const QList<UndoCommand*>& cl = ucmd->commands();
+                  const UndoCommand* cmd = cl.back();
+                  if (strncmp(cmd->name(), "Add:", 4) == 0) {
+                        const AddElement* ae = static_cast<const AddElement*>(cmd);
+                        if (ae->getElement() == this) {
+                              if (actualText.isEmpty()) {
+                                    // we just created this empty text, rollback that operation
+                                    us->rollback();
+                                    score()->update();
+                                    ed.element = 0;
+                                    }
+                              else {
+                                    setXmlText(ted->oldXmlText);  // reset text to value before editing
+                                    us->reopen();
+                                    // combine undo records of text creation with text editing
+                                    undoChangeProperty(Pid::TEXT, actualText);
+                                    layout1();
+                                    score()->endCmd();
+                                    }
+                              return;
+                              }
+                        }
+                  }
+            }
+      if (actualText.isEmpty()) {
+            qDebug("actual text is empty");
+            score()->startCmd();
+            score()->undoRemoveElement(this);
+            ed.element = 0;
+            score()->endCmd();
+            return;
+            }
       setXmlText(ted->oldXmlText);                    // reset text to value before editing
       score()->startCmd();
       undoChangeProperty(Pid::TEXT, actualText);      // change property to set text to actual value again
@@ -585,22 +626,21 @@ void TextBase::inputTransition(EditData& ed, QInputMethodEvent* ie)
                         switch(a.type) {
                               case QInputMethodEvent::TextFormat:
                                     {
-                                    printf("attribute TextFormat: %d-%d\n", a.start, a.length);
+                                    qDebug("   attribute TextFormat: %d-%d", a.start, a.length);
                                     QTextFormat tf = a.value.value<QTextFormat>();
                                     }
                                     break;
                               case QInputMethodEvent::Cursor:
-                                    printf("attribute Cursor at %d\n", a.start);
+                                    qDebug("   attribute Cursor at %d", a.start);
                                     break;
                               default:
-                                    printf("attribute %d\n", a.type);
+                                    qDebug("   attribute %d", a.type);
                               }
                         }
 #endif
                   _cursor->format()->setPreedit(true);
                   _cursor->updateCursorFormat();
                   editInsertText(_cursor, preEdit);
-//                  ie->accept();
                   setTextInvalid();
                   layout1();
                   }

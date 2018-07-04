@@ -964,6 +964,88 @@ void ScoreView::paintPageBorder(QPainter& p, Page* page)
             }
       }
 
+#ifndef NDEBUG
+//---------------------------------------------------------
+//   drawDebugInfo
+//---------------------------------------------------------
+
+static void drawDebugInfo(QPainter& p, const Element* _e)
+      {
+      if (!MScore::showBoundingRect)
+            return;
+      const Element* e = _e;
+      //
+      //  draw bounding box rectangle for all
+      //  selected Elements
+      //
+      QPointF pos(e->pagePos());
+      p.translate(pos);
+      p.setBrush(Qt::NoBrush);
+
+      p.setPen(QPen(Qt::red, 0.0));
+//      p.drawRect(e->bbox());
+      e->shape().paint(p);
+
+      p.setPen(QPen(Qt::red, 0.0));             // red x at 0,0 of bbox
+      qreal w = 5.0 / p.matrix().m11();
+      qreal h = w;
+      qreal x = 0; // e->bbox().x();
+      qreal y = 0; // e->bbox().y();
+      p.drawLine(QLineF(x-w, y-h, x+w, y+h));
+      p.drawLine(QLineF(x+w, y-h, x-w, y+h));
+
+      p.translate(-pos);
+      if (e->parent()) {
+            const Element* ee = e->parent();
+            if (e->isNote())
+                  ee = toNote(e)->chord()->segment();
+            else if (e->isClef())
+                  ee = toClef(e)->segment();
+
+            p.setPen(QPen(Qt::green, 0.0));
+
+            p.drawRect(ee->pageBoundingRect());
+
+            if (ee->isSegment()) {
+                  QPointF pt = ee->pagePos();
+                  p.setPen(QPen(Qt::blue, 0.0));
+                  p.drawLine(QLineF(pt.x()-w, pt.y()-h, pt.x()+w, pt.y()+h));
+                  p.drawLine(QLineF(pt.x()+w, pt.y()-h, pt.x()-w, pt.y()+h));
+                  }
+            }
+      }
+#endif
+
+//---------------------------------------------------------
+//   drawElements
+//---------------------------------------------------------
+
+void ScoreView::drawElements(QPainter& painter, QList<Element*>& el, Element* editElement)
+      {
+      qStableSort(el.begin(), el.end(), elementLessThan);
+      for (const Element* e : el) {
+            e->itemDiscovered = 0;
+
+            // harmony element representation is different in edit mode, so don't
+            // all normal draw(). Complete drawing is done in drawEditMode()
+            if (e == editElement)
+                  continue;
+
+            if (!e->visible() && (score()->printing() || !score()->showInvisible()))
+                  continue;
+            if (e->isRest() && toRest(e)->isGap())
+                  continue;
+            QPointF pos(e->pagePos());
+            painter.translate(pos);
+            e->draw(&painter);
+            painter.translate(-pos);
+#ifndef NDEBUG
+            if (e->selected())
+                  drawDebugInfo(painter, e);
+#endif
+            }
+      }
+
 //---------------------------------------------------------
 //   paint
 //---------------------------------------------------------
@@ -981,25 +1063,29 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       p.setTransform(_matrix);
       QRectF fr = imatrix.mapRect(QRectF(r));
 
-      switch (state) {
-            case ViewState::NORMAL:
-            case ViewState::DRAG:
-            case ViewState::DRAG_OBJECT:
-            case ViewState::LASSO:
-            case ViewState::NOTE_ENTRY:
-            case ViewState::PLAY:
-            case ViewState::ENTRY_PLAY:
-                  break;
-            case ViewState::EDIT:
-            case ViewState::DRAG_EDIT:
-            case ViewState::FOTO:
-            case ViewState::FOTO_DRAG:
-            case ViewState::FOTO_DRAG_EDIT:
-            case ViewState::FOTO_DRAG_OBJECT:
-            case ViewState::FOTO_LASSO:
-                  if (editData.element)
+      Element* editElement = 0;
+      if (editData.element) {
+            switch (state) {
+                  case ViewState::NORMAL:
+                  case ViewState::DRAG:
+                  case ViewState::DRAG_OBJECT:
+                  case ViewState::LASSO:
+                  case ViewState::NOTE_ENTRY:
+                  case ViewState::PLAY:
+                  case ViewState::ENTRY_PLAY:
+                        break;
+                  case ViewState::EDIT:
+                  case ViewState::DRAG_EDIT:
+                  case ViewState::FOTO:
+                  case ViewState::FOTO_DRAG:
+                  case ViewState::FOTO_DRAG_EDIT:
+                  case ViewState::FOTO_DRAG_OBJECT:
+                  case ViewState::FOTO_LASSO:
                         editData.element->drawEditMode(&p, editData);
-                  break;
+                        if (editData.element->isHarmony())
+                              editElement = editData.element;     // do not call paint() method
+                        break;
+                  }
             }
 
       QRegion r1(r);
@@ -1007,8 +1093,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             if (_score->pages().size() > 0) {
                   Page* page = _score->pages().front();
                   QList<Element*> ell = page->items(fr);
-                  qStableSort(ell.begin(), ell.end(), elementLessThan);
-                  drawElements(p, ell);
+                  drawElements(p, ell, editElement);
                   }
             }
       else {
@@ -1022,10 +1107,9 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   if (!score()->printing())
                         paintPageBorder(p, page);
                   QList<Element*> ell = page->items(fr.translated(-page->pos()));
-                  qStableSort(ell.begin(), ell.end(), elementLessThan);
                   QPointF pos(page->pos());
                   p.translate(pos);
-                  drawElements(p, ell);
+                  drawElements(p, ell, editElement);
 
 #ifndef NDEBUG
                   if (!score()->printing()) {
@@ -1386,81 +1470,6 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
             }
       *dxx = dx;
       *dyy = dy;
-      }
-
-#ifndef NDEBUG
-//---------------------------------------------------------
-//   drawDebugInfo
-//---------------------------------------------------------
-
-static void drawDebugInfo(QPainter& p, const Element* _e)
-      {
-      if (!MScore::showBoundingRect)
-            return;
-      const Element* e = _e;
-      //
-      //  draw bounding box rectangle for all
-      //  selected Elements
-      //
-      QPointF pos(e->pagePos());
-      p.translate(pos);
-      p.setBrush(Qt::NoBrush);
-
-      p.setPen(QPen(Qt::red, 0.0));
-//      p.drawRect(e->bbox());
-      e->shape().paint(p);
-
-      p.setPen(QPen(Qt::red, 0.0));             // red x at 0,0 of bbox
-      qreal w = 5.0 / p.matrix().m11();
-      qreal h = w;
-      qreal x = 0; // e->bbox().x();
-      qreal y = 0; // e->bbox().y();
-      p.drawLine(QLineF(x-w, y-h, x+w, y+h));
-      p.drawLine(QLineF(x+w, y-h, x-w, y+h));
-
-      p.translate(-pos);
-      if (e->parent()) {
-            const Element* ee = e->parent();
-            if (e->isNote())
-                  ee = toNote(e)->chord()->segment();
-            else if (e->isClef())
-                  ee = toClef(e)->segment();
-
-            p.setPen(QPen(Qt::green, 0.0));
-
-            p.drawRect(ee->pageBoundingRect());
-
-            if (ee->isSegment()) {
-                  QPointF pt = ee->pagePos();
-                  p.setPen(QPen(Qt::blue, 0.0));
-                  p.drawLine(QLineF(pt.x()-w, pt.y()-h, pt.x()+w, pt.y()+h));
-                  p.drawLine(QLineF(pt.x()+w, pt.y()-h, pt.x()-w, pt.y()+h));
-                  }
-            }
-      }
-#endif
-
-//---------------------------------------------------------
-//   drawElements
-//---------------------------------------------------------
-
-void ScoreView::drawElements(QPainter& painter, const QList<Element*>& el)
-      {
-      for (const Element* e : el) {
-            e->itemDiscovered = 0;
-            if (!e->visible() && (score()->printing() || !score()->showInvisible()))
-                  continue;
-            if (e->isRest() && toRest(e)->isGap())
-                  continue;
-            QPointF pos(e->pagePos());
-            painter.translate(pos);
-            e->draw(&painter);
-            painter.translate(-pos);
-#ifndef NDEBUG
-            if (e->selected())
-                  drawDebugInfo(painter, e);
-#endif
-            }
       }
 
 //---------------------------------------------------------
@@ -2499,58 +2508,6 @@ void ScoreView::dragScoreView(QMouseEvent* ev)
       emit viewRectChanged();
       }
 
-#if 0
-//---------------------------------------------------------
-//   onEditPasteTransition
-//---------------------------------------------------------
-
-void ScoreView::onEditPasteTransition(QMouseEvent* ev)
-      {
-      editData.startMove = imatrix.map(QPointF(ev->pos()));
-      Element* e = elementNear(editData.startMove);
-      if (e == editData.element && editData.element->mousePress(editData)) {
-            _score->addRefresh(editData.element->canvasBoundingRect());
-            _score->update();
-            }
-      }
-#endif
-
-//---------------------------------------------------------
-//   editScoreViewDragTransition
-//    Check for mouse click outside of editData.element.
-//---------------------------------------------------------
-
-bool ScoreView::editScoreViewDragTransition(QMouseEvent* ev)
-      {
-      QPointF p = toLogical(ev->pos());
-      Element* e = elementNear(p);
-
-      if (e == 0 || e->type() == ElementType::MEASURE) {
-            editData.startMove   = p;
-//TODOxxx            dragElement = e;
-            return true;
-            }
-      return false;
-      }
-
-//---------------------------------------------------------
-//   editSelectTransition
-//    Check for mouse click outside of editData.element.
-//---------------------------------------------------------
-
-bool ScoreView::editSelectTransition(QMouseEvent* ev)
-      {
-      QPointF p = toLogical(ev->pos());
-      Element* e = elementNear(p);
-
-      if (e != editData.element) {
-            editData.startMove   = p;
-//TODOxxx            dragElement = e;
-            return true;
-            }
-      return false;
-      }
-
 //---------------------------------------------------------
 //   doDragLasso
 //---------------------------------------------------------
@@ -2596,40 +2553,38 @@ void ScoreView::deselectAll()
       }
 
 //---------------------------------------------------------
-//   editInputTransition
-//---------------------------------------------------------
-
-#if 0
-void ScoreView::editInputTransition(QInputMethodEvent* ie)
-      {
-      if (editData.element->isText()) {
-            toText(editData.element)->inputTransition(editData, ie);
-            QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
-            }
-      }
-#endif
-
-//---------------------------------------------------------
 //   inputMethodQuery
 //---------------------------------------------------------
 
 QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
       {
+//      qDebug("0x%x  %s", int(query), editData.element ? editData.element->name() : "-no element-");
       // if editing a text object, place the InputMethod popup window just below the text
-      if ((query & Qt::ImCursorRectangle) && editData.element && editData.element->isTextBase()) {
-            Text* text = toText(editData.element);
-            if (editMode()) {
-                  TextCursor* cursor = text->cursor(editData);
-                  QRectF cursorRect = toPhysical(cursor->cursorRect().translated(text->canvasPos()));
-                  cursorRect.setWidth(1.0); // InputMethod doesn't display properly if width left at 0
-                  cursorRect.setHeight(cursorRect.height() + 5.0); // add a little margin under the cursor
-                  qDebug("cursorRect: [%3f,%3f,%3f,%3f]", cursorRect.x(), cursorRect.y(), cursorRect.width(), cursorRect.height());
-                  return QVariant(cursorRect);
+      if (editData.element && editData.element->isTextBase()) {
+            TextBase* text = toTextBase(editData.element);
+            switch (query) {
+                  case Qt::ImCursorRectangle: {
+                        QRectF r;
+                        if (editMode()) {
+                              TextCursor* cursor = text->cursor(editData);
+                              r = toPhysical(cursor->cursorRect().translated(text->canvasPos()));
+                              r.setWidth(1); // InputMethod doesn't display properly if width left at 0
+                              }
+                        else
+                              r = toPhysical(text->canvasBoundingRect());
+                        r.setHeight(r.height() + 10); // add a little margin under the cursor
+                        qDebug("   cursorRect: [%3f,%3f,%3f,%3f]", r.x(), r.y(), r.width(), r.height());
+                        return QVariant(r);
+                        }
+                  case Qt::ImEnabled:
+                        return editMode();
+                  default:
+                        return QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
                   }
-            else
-                  return QVariant(toPhysical(text->canvasBoundingRect()));
             }
-      return QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
+      QVariant data = QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
+//      qDebug() << "   " << data;
+      return data;
       }
 
 //---------------------------------------------------------

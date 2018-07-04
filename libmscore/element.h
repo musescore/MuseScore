@@ -157,7 +157,6 @@ class Element : public ScoreElement {
       qreal _mag;                 ///< standard magnification (derived value)
       QPointF _pos;               ///< Reference position, relative to _parent.
       QPointF _userOff;           ///< offset from normal layout position:
-//      QPointF _readPos;
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask

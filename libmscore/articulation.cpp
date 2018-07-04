@@ -436,6 +436,9 @@ const char* Articulation::symId2ArticulationName(SymId symId)
             case SymId::stringsHarmonic:
                   return "harmonic";
 
+            case SymId::ornamentMordentInverted:
+                  return "mordent-inverted";
+
             default:
                   return "---";
             }

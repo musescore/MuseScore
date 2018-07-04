@@ -59,6 +59,8 @@ void ZFilter::initialize(const Zerberus* zerberus, const Zone* z, int velocity)
       float q_db  = 0; //no resonance by default
       q_lin       = pow(10.0f, q_db / 20.0f);
       gain = 1.0 / sqrt(q_lin);
+
+      firstRun = true;
       }
 
 //---------------------------------------------------------
