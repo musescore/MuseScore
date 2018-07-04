@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>332</width>
-    <height>131</height>
+    <width>311</width>
+    <height>158</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,10 +20,68 @@
    <string/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="1" rowspan="2">
+   <property name="leftMargin">
+    <number>9</number>
+   </property>
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <item row="0" column="1">
     <layout class="QVBoxLayout" name="verticalLayout_6">
+	 <property name="spacing">
+      <number>0</number>
+     </property>
      <item>
-      <spacer name="verticalSpacer_4">
+      <widget class="QToolButton" name="soundFontUp">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="toolTip">
+        <string>Move SoundFont up</string>
+       </property>
+       <property name="accessibleDescription">
+        <string/>
+       </property>
+       <property name="text">
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../mscore/musescore.qrc">
+         <normaloff>:/data/icons/arrow_up.svg</normaloff>:/data/icons/arrow_up.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="soundFontDown">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="toolTip">
+        <string>Move SoundFont down</string>
+       </property>
+       <property name="text">
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../mscore/musescore.qrc">
+         <normaloff>:/data/icons/arrow_down.svg</normaloff>:/data/icons/arrow_down.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_5">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
@@ -36,7 +94,13 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="remove">
+      <widget class="QPushButton" name="soundFontDelete">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
@@ -46,7 +110,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="add">
+      <widget class="QPushButton" name="soundFontAdd">
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
@@ -57,15 +121,14 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="0" rowspan="2">
+   <item row="0" column="0">
     <widget class="QListWidget" name="files">
-     <property name="spacing">
-      <number>4</number>
-     </property>
     </widget>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../mscore/musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>
