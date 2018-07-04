@@ -182,7 +182,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       connect(gv,          SIGNAL(noteHeightChanged(int)),     pianoKbd, SLOT(setNoteHeight(int)));
       connect(gv,          SIGNAL(pitchChanged(int)),          pl,    SLOT(setPitch(int)));
       connect(gv,          SIGNAL(pitchChanged(int)),          pianoKbd, SLOT(setPitch(int)));
-      connect(pianoKbd,       SIGNAL(pitchChanged(int)),          pl,    SLOT(setPitch(int)));
+      connect(pianoKbd,    SIGNAL(pitchChanged(int)),          pl,    SLOT(setPitch(int)));
       connect(gv,          SIGNAL(posChanged(const Pos&)),     pos,   SLOT(setValue(const Pos&)));
       connect(gv,          SIGNAL(posChanged(const Pos&)),     ruler, SLOT(setPos(const Pos&)));
       connect(ruler,       SIGNAL(posChanged(const Pos&)),     pos,   SLOT(setValue(const Pos&)));
