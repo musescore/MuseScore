@@ -298,6 +298,19 @@ bool Zerberus::loadSoundFonts(const QStringList& sl)
       }
 
 //---------------------------------------------------------
+//   removeSoundFonts
+//---------------------------------------------------------
+
+bool Zerberus::removeSoundFonts(const QStringList& fileNames)
+      {
+      for (auto fileName : fileNames) {
+            if (!removeSoundFont(QFileInfo(fileName).absoluteFilePath()))
+                  return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
 //   soundFonts
 //---------------------------------------------------------
 
@@ -315,6 +328,7 @@ QStringList Zerberus::soundFonts() const
 
 bool Zerberus::addSoundFont(const QString& s)
       {
+      QMutexLocker locker(&mutex);
       return loadInstrument(s);
       }
 
