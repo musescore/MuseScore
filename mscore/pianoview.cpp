@@ -712,7 +712,7 @@ void PianoView::leaveEvent(QEvent* event)
 //   ensureVisible
 //---------------------------------------------------------
 
-void PianoView::scrollToTick(int tick)
+void PianoView::ensureVisible(int tick)
       {
       QRectF rect = mapToScene(viewport()->geometry()).boundingRect();
 

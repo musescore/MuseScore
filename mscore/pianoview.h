@@ -119,7 +119,7 @@ class PianoView : public QGraphicsView {
       PianoView();
       ~PianoView();
       void setStaff(Staff*, Pos* locator);
-      void scrollToTick(int tick);
+      void ensureVisible(int tick);
       int noteHeight() { return _noteHeight; }
       qreal xZoom() { return _xZoom; }
       QList<QGraphicsItem*> items() { return scene()->selectedItems(); }

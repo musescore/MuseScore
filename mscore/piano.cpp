@@ -28,8 +28,6 @@ QPixmap* Piano::mk2;
 QPixmap* Piano::mk3;
 QPixmap* Piano::mk4;
 
-
-
 //---------------------------------------------------------
 //   Piano
 //---------------------------------------------------------
@@ -372,7 +370,6 @@ void Piano::paintEvent(QPaintEvent* event)
             }
       }
 
-
 //---------------------------------------------------------
 //   setYpos
 //---------------------------------------------------------
@@ -470,5 +467,5 @@ void Piano::setOrientation(PianoOrientation o)
       _orientation = o;
       update();
       }
-
 }
+

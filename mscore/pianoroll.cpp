@@ -175,11 +175,11 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       mainWidget->setLayout(layout);
       setCentralWidget(mainWidget);
 
-      connect(gv->verticalScrollBar(), SIGNAL(valueChanged(int)), piano, SLOT(setYpos(int)));
-      connect(gv->horizontalScrollBar(), SIGNAL(valueChanged(int)), hsb, SLOT(setValue(int)));
+      connect(gv->verticalScrollBar(),   SIGNAL(valueChanged(int)), piano, SLOT(setYpos(int)));
+      connect(gv->horizontalScrollBar(), SIGNAL(valueChanged(int)), hsb,   SLOT(setValue(int)));
 
-      connect(gv,          SIGNAL(xZoomChanged(qreal)),  ruler, SLOT(setXZoom(qreal)));
-      connect(gv,          SIGNAL(noteHeightChanged(int)),  piano, SLOT(setNoteHeight(int)));
+      connect(gv,          SIGNAL(xZoomChanged(qreal)),        ruler, SLOT(setXZoom(qreal)));
+      connect(gv,          SIGNAL(noteHeightChanged(int)),     piano, SLOT(setNoteHeight(int)));
       connect(gv,          SIGNAL(pitchChanged(int)),          pl,    SLOT(setPitch(int)));
       connect(gv,          SIGNAL(pitchChanged(int)),          piano, SLOT(setPitch(int)));
       connect(piano,       SIGNAL(pitchChanged(int)),          pl,    SLOT(setPitch(int)));
@@ -187,8 +187,8 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       connect(gv,          SIGNAL(posChanged(const Pos&)),     ruler, SLOT(setPos(const Pos&)));
       connect(ruler,       SIGNAL(posChanged(const Pos&)),     pos,   SLOT(setValue(const Pos&)));
 
-      connect(hsb,         SIGNAL(valueChanged(int)),  SLOT(setXpos(int)));
-      connect(gv->horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(setXpos(int)));
+      connect(hsb,         SIGNAL(valueChanged(int)),                 SLOT(setXpos(int)));
+      connect(gv->horizontalScrollBar(), SIGNAL(valueChanged(int)),   SLOT(setXpos(int)));
 
       connect(ruler,       SIGNAL(locatorMoved(int, const Pos&)), SLOT(moveLocator(int, const Pos&)));
       connect(veloType,    SIGNAL(activated(int)),     SLOT(veloTypeChanged(int)));
@@ -239,7 +239,7 @@ void PianorollEditor::focusOnElement(Element* focus)
       //Move view so that view is centered on this element
       int tick = focus->tick();
       //printf("FocusOnElement type:%d, tick:%d\n", (int)focus->type(), tick);
-      gv->scrollToTick(tick);
+      gv->ensureVisible(tick);
       }
 
 //---------------------------------------------------------
@@ -309,8 +309,6 @@ void PianorollEditor::readSettings()
 
 void PianorollEditor::setXpos(int x)
       {
-      //printf("PianorollEditor::setXpos x:%d\n", x);
-      
       gv->horizontalScrollBar()->setValue(x);
       ruler->setXpos(x);
       if (waveView && showWave->isChecked())
@@ -499,7 +497,7 @@ void PianorollEditor::heartBeat(Seq* seq)
             posChanged(POS::CURRENT, tick);
             if (preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG))
                   {
-                  gv->scrollToTick(tick);
+                  gv->ensureVisible(tick);
                   }
             }
       }
