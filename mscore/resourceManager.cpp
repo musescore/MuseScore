@@ -169,7 +169,7 @@ void ResourceManager::download()
             QList<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
             bool result = true;
             foreach (MQZipReader::FileInfo fi, allFiles) {
-                  const QString absPath = destinationDir + QDir::separator() + fi.filePath;
+                  const QString absPath = destinationDir + "/" + fi.filePath;
                   if (fi.isFile) {
                         QFile f(absPath);
                         if (!f.open(QIODevice::WriteOnly)) {
