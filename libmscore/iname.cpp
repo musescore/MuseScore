@@ -23,10 +23,9 @@ namespace Ms {
 //---------------------------------------------------------
 
 InstrumentName::InstrumentName(Score* s)
-   : TextBase(s)
+   : TextBase(s, ElementFlag::NOTHING | ElementFlag::NOT_SELECTABLE)
       {
       setInstrumentNameType(InstrumentNameType::SHORT);
-      setSelectable(false);
       }
 
 //---------------------------------------------------------

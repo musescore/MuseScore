@@ -14,6 +14,10 @@
 #include "image.h"
 #include "xml.h"
 #include "staff.h"
+#include "segment.h"
+#include "page.h"
+#include "system.h"
+#include "measure.h"
 
 namespace Ms {
 
@@ -21,10 +25,9 @@ namespace Ms {
 //   BSymbol
 //---------------------------------------------------------
 
-BSymbol::BSymbol(Score* s)
-   : Element(s)
+BSymbol::BSymbol(Score* s, ElementFlags f)
+   : Element(s, f)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _systemFlag = false;
       }
 
@@ -194,6 +197,68 @@ QRectF BSymbol::drag(EditData& ed)
       foreach(const Element* e, _leafs)
             r |= e->canvasBoundingRect();
       return r;
+      }
+
+//---------------------------------------------------------
+//   dragAnchor
+//---------------------------------------------------------
+
+QLineF BSymbol::dragAnchor() const
+      {
+      if (parent() && parent()->type() == ElementType::SEGMENT) {
+            System* system = segment()->measure()->system();
+            qreal y        = system->staffCanvasYpage(staffIdx());
+//            QPointF anchor(segment()->pageX(), y);
+            QPointF anchor(segment()->canvasPos().x(), y);
+            return QLineF(canvasPos(), anchor);
+            }
+      else {
+            return QLineF(canvasPos(), parent()->canvasPos());
+            }
+      }
+
+//---------------------------------------------------------
+//   pagePos
+//---------------------------------------------------------
+
+QPointF BSymbol::pagePos() const
+      {
+      if (parent() && (parent()->type() == ElementType::SEGMENT)) {
+            QPointF p(pos());
+            System* system = segment()->measure()->system();
+            if (system) {
+                  p.ry() += system->staff(staffIdx())->y() + system->y();
+                  }
+            p.rx() = pageX();
+            return p;
+            }
+      else
+            return Element::pagePos();
+      }
+
+//---------------------------------------------------------
+//   canvasPos
+//---------------------------------------------------------
+
+QPointF BSymbol::canvasPos() const
+      {
+      if (parent() && (parent()->type() == ElementType::SEGMENT)) {
+            QPointF p(pos());
+            Segment* s = toSegment(parent());
+
+            System* system = s->measure()->system();
+            if (system) {
+                  int si = staffIdx();
+                  p.ry() += system->staff(si)->y() + system->y();
+                  Page* page = system->page();
+                  if (page)
+                        p.ry() += page->y();
+                  }
+            p.rx() = canvasX();
+            return p;
+            }
+      else
+            return Element::canvasPos();
       }
 
 

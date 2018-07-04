@@ -32,7 +32,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 TimeSig::TimeSig(Score* s)
-  : Element(s, ElementFlag::SELECTABLE | ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
+  : Element(s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
       {
       initSubStyle(SubStyleId::TIMESIG);
 

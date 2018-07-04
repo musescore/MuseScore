@@ -956,10 +956,9 @@ bool FiguredBassItem::startsWithParenthesis() const
 //---------------------------------------------------------
 
 FiguredBass::FiguredBass(Score* s)
-   : TextBase(s)
+   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       initSubStyle(SubStyleId::FIGURED_BASS);
-      setFlag(ElementFlag::ON_STAFF, true);
       setOnNote(true);
 #if 0  // TODO
       TextStyle st(

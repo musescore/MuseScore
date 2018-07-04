@@ -28,9 +28,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 Arpeggio::Arpeggio(Score* s)
-  : Element(s)
+  : Element(s, ElementFlag::MOVABLE)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _arpeggioType = ArpeggioType::NORMAL;
       setHeight(spatium() * 4);      // for use in palettes
       _span     = 1;

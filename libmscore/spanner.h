@@ -56,7 +56,7 @@ class SpannerSegment : public Element {
       QPointF _userOff2;
 
    public:
-      SpannerSegment(Score* s);
+      SpannerSegment(Score* s, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
       SpannerSegment(const SpannerSegment&);
       virtual SpannerSegment* clone() const = 0;
 

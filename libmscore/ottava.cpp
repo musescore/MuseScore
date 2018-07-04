@@ -31,22 +31,20 @@ namespace Ms {
 struct OttavaDefault {
       SymId id;
       SymId numbersOnlyId;
-      QPointF offset;
       qreal  hookDirection;
       Placement place;
       int shift;
       const char* name;
-      const char* numbersOnlyName;
       };
 
 // order is important, should be the same as OttavaType
 static const OttavaDefault ottavaDefault[] = {
-      { SymId::ottavaAlta,        SymId::ottava,       QPointF(0.0, .7),    1.0, Placement::ABOVE,  12, "8va", "8"   },
-      { SymId::ottavaBassaBa,     SymId::ottava,       QPointF(0.0, -1.0), -1.0, Placement::BELOW, -12, "8vb", "8"   },
-      { SymId::quindicesimaAlta,  SymId::quindicesima, QPointF(0.0, .7),    1.0, Placement::ABOVE,  24, "15ma", "15" },
-      { SymId::quindicesimaBassa, SymId::quindicesima, QPointF(0.0, -1.0), -1.0, Placement::BELOW, -24, "15mb", "15" },
-      { SymId::ventiduesimaAlta,  SymId::ventiduesima, QPointF(0.0, .7),    1.0, Placement::ABOVE,  36, "22ma", "22" },
-      { SymId::ventiduesimaBassa, SymId::ventiduesima, QPointF(0.0, -1.0), -1.0, Placement::BELOW, -36, "22mb", "22" }
+      { SymId::ottavaAlta,        SymId::ottava,        1.0, Placement::ABOVE,  12,  "8va"  },
+      { SymId::ottavaBassaBa,     SymId::ottava,       -1.0, Placement::BELOW, -12,  "8vb"  },
+      { SymId::quindicesimaAlta,  SymId::quindicesima,  1.0, Placement::ABOVE,  24, "15ma"  },
+      { SymId::quindicesimaBassa, SymId::quindicesima, -1.0, Placement::BELOW, -24, "15mb"  },
+      { SymId::ventiduesimaAlta,  SymId::ventiduesima,  1.0, Placement::ABOVE,  36, "22ma"  },
+      { SymId::ventiduesimaBassa, SymId::ventiduesima, -1.0, Placement::BELOW, -36, "22mb"  }
       };
 
 //---------------------------------------------------------
@@ -138,7 +136,7 @@ QVariant OttavaSegment::propertyDefault(Pid id) const
 //---------------------------------------------------------
 
 Ottava::Ottava(Score* s)
-   : TextLineBase(s, ElementFlag::ON_STAFF)
+   : TextLineBase(s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
       {
       _ottavaType = OttavaType::OTTAVA_8VA;
       setBeginTextPlace(PlaceText::LEFT);

@@ -110,14 +110,14 @@ void Segment::removeElement(int track)
 //---------------------------------------------------------
 
 Segment::Segment(Measure* m)
-   : Element(m->score())
+   : Element(m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
       {
       setParent(m);
       init();
       }
 
 Segment::Segment(Measure* m, SegmentType st, int t)
-   : Element(m->score())
+   : Element(m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
       {
       setParent(m);
       _segmentType = st;

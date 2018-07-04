@@ -215,7 +215,6 @@ Chord::Chord(Score* s)
       _playEventType    = PlayEventType::Auto;
       _crossMeasure     = CrossMeasure::UNKNOWN;
       _graceIndex   = 0;
-      setFlags(ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
       }
 
 Chord::Chord(const Chord& c, bool link)
@@ -494,7 +493,7 @@ void Chord::add(Element* e)
                   Chord* gc = toChord(e);
                   Q_ASSERT(gc->noteType() != NoteType::NORMAL);
                   int idx = gc->graceIndex();
-                  gc->setFlags(ElementFlag::MOVABLE);
+                  gc->setFlag(ElementFlag::MOVABLE, true);
                   _graceNotes.insert(_graceNotes.begin() + idx, gc);
                   }
                   break;

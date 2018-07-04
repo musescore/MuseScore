@@ -26,11 +26,9 @@ namespace Ms {
 //   SpannerSegment
 //---------------------------------------------------------
 
-SpannerSegment::SpannerSegment(Score* s)
-   : Element(s)
+SpannerSegment::SpannerSegment(Score* s, ElementFlags f)
+   : Element(s, f)
       {
-//      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::SEGMENT | ElementFlag::ON_STAFF);
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setSpannerSegmentType(SpannerSegmentType::SINGLE);
       _spanner = 0;
       }
