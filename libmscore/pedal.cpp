@@ -73,6 +73,7 @@ Pedal::Pedal(Score* s)
       resetProperty(Pid::END_HOOK_TYPE);
 
       resetProperty(Pid::BEGIN_TEXT_PLACE);
+      resetProperty(Pid::LINE_VISIBLE);
 
       initSubStyle(SubStyleId::PEDAL);
       }
@@ -146,16 +147,19 @@ QVariant Pedal::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::LINE_WIDTH:
-                  return score()->styleV(Sid::pedalLineWidth);
+                  return score()->styleP(Sid::pedalLineWidth);    // return point, not spatium
 
             case Pid::LINE_STYLE:
                   return score()->styleV(Sid::pedalLineStyle);
 
             case Pid::BEGIN_TEXT:
+            case Pid::CONTINUE_TEXT:
             case Pid::END_TEXT:
                   return "";
 
             case Pid::BEGIN_TEXT_PLACE:
+            case Pid::CONTINUE_TEXT_PLACE:
+            case Pid::END_TEXT_PLACE:
                   return int(PlaceText::LEFT);
 
             case Pid::BEGIN_HOOK_TYPE:
@@ -164,6 +168,9 @@ QVariant Pedal::propertyDefault(Pid propertyId) const
 
             case Pid::PLACEMENT:
                   return int(Placement::BELOW);
+
+            case Pid::LINE_VISIBLE:
+                  return true;
 
             default:
                   return TextLineBase::propertyDefault(propertyId);

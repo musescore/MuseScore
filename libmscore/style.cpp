@@ -1278,6 +1278,8 @@ const std::vector<StyledProperty> pedalStyle {
       { Sid::pedalHookHeight,                    Pid::BEGIN_HOOK_HEIGHT       },
       { Sid::pedalHookHeight,                    Pid::END_HOOK_HEIGHT         },
       { Sid::pedalBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET       },
+      { Sid::pedalBeginTextOffset,               Pid::CONTINUE_TEXT_OFFSET    },
+      { Sid::pedalBeginTextOffset,               Pid::END_TEXT_OFFSET         },
       { Sid::pedalPlacement,                     Pid::PLACEMENT               },
       { Sid::NOSTYLE,                            Pid::END                     }      // end of list marker
       };

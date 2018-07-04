@@ -27,8 +27,8 @@ namespace Ms {
 //   TextLineBaseSegment
 //---------------------------------------------------------
 
-TextLineBaseSegment::TextLineBaseSegment(Score* score)
-   : LineSegment(score)
+TextLineBaseSegment::TextLineBaseSegment(Score* score, ElementFlags f)
+   : LineSegment(score, f)
       {
       _text    = new Text(score);
       _endText = new Text(score);

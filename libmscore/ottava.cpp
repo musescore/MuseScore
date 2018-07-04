@@ -350,11 +350,13 @@ QVariant Ottava::propertyDefault(Pid propertyId) const
                   SymId id = _numbersOnly ? def->numbersOnlyId : def->id;
                   return QString("<sym>%1</sym>").arg(Sym::id2name(id));
                   }
+            case Pid::LINE_VISIBLE:
+                  return true;
+
             default:
-                  for (const StyledProperty& p : subStyle(subStyleId())) {
-                        if (p.pid == propertyId)
-                              return score()->styleV(p.sid);
-                        }
+                  QVariant v = ScoreElement::styledPropertyDefault(propertyId);
+                  if (v.isValid())
+                        return v;
                   return getProperty(propertyId);
             }
       }
