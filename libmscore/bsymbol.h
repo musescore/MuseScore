@@ -28,7 +28,7 @@ class BSymbol : public Element, public ElementLayout {
       bool _systemFlag;
 
    public:
-      BSymbol(Score* s);
+      BSymbol(Score* s, ElementFlags f = ElementFlag::NOTHING);
       BSymbol(const BSymbol&);
 
       BSymbol &operator=(const BSymbol&) = delete;

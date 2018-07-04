@@ -31,7 +31,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 Tuplet::Tuplet(Score* s)
-  : DurationElement(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
+  : DurationElement(s)
       {
       _tick         = 0;
       _ratio        = Fraction(1, 1);

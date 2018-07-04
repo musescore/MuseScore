@@ -31,9 +31,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 FretDiagram::FretDiagram(Score* score)
-   : Element(score)
+   : Element(score, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SELECTABLE);
       font.setFamily("FreeSans");
       font.setPointSize(4.0 * mag());
       initSubStyle(SubStyleId::FRET);

@@ -30,9 +30,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 Articulation::Articulation(Score* s)
-   : Element(s)
+   : Element(s, ElementFlag::MOVABLE)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _symId         = SymId::noSym;
       _anchor        = ArticulationAnchor::TOP_STAFF;
       _direction     = Direction::AUTO;

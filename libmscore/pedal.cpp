@@ -162,6 +162,9 @@ QVariant Pedal::propertyDefault(Pid propertyId) const
             case Pid::END_HOOK_TYPE:
                   return int(HookType::NONE);
 
+            case Pid::PLACEMENT:
+                  return int(Placement::BELOW);
+
             default:
                   return TextLineBase::propertyDefault(propertyId);
             }

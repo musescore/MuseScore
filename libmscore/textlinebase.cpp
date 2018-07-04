@@ -360,6 +360,7 @@ static constexpr std::array<Pid, 34> pids = { {
       Pid::END_FONT_ITALIC,
       Pid::END_FONT_UNDERLINE,
       Pid::END_TEXT_OFFSET,
+      Pid::PLACEMENT,
       } };
 
 //---------------------------------------------------------

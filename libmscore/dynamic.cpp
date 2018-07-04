@@ -80,13 +80,12 @@ static Dyn dynList[] = {
 //---------------------------------------------------------
 
 Dynamic::Dynamic(Score* s)
-   : TextBase(s)
+   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       initSubStyle(SubStyleId::DYNAMICS);
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _velocity = -1;
       _dynRange = Range::PART;
-      _dynamicType  = Type::OTHER;
+      _dynamicType = Type::OTHER;
       }
 
 Dynamic::Dynamic(const Dynamic& d)

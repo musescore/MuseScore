@@ -148,9 +148,8 @@ AccidentalVal sym2accidentalVal(SymId id)
 //---------------------------------------------------------
 
 Accidental::Accidental(Score* s)
-   : Element(s)
+   : Element(s, ElementFlag::MOVABLE)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
 //---------------------------------------------------------

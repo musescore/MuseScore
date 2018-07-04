@@ -39,7 +39,6 @@ namespace Ms {
 Rest::Rest(Score* s)
   : ChordRest(s)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _beamMode  = Beam::Mode::NONE;
       _sym       = SymId::restQuarter;
       }
@@ -47,7 +46,6 @@ Rest::Rest(Score* s)
 Rest::Rest(Score* s, const TDuration& d)
   : ChordRest(s)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _beamMode  = Beam::Mode::NONE;
       _sym       = SymId::restQuarter;
       setDurationType(d);

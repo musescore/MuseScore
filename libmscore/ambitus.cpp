@@ -39,7 +39,7 @@ static const qreal          LINEOFFSET_DEFAULT      = 0.8;      // the distance 
 //---------------------------------------------------------
 
 Ambitus::Ambitus(Score* s)
-: Element(s), _topAccid(s), _bottomAccid(s)
+   : Element(s, ElementFlag::MOVABLE), _topAccid(s), _bottomAccid(s)
       {
       _noteHeadGroup    = NOTEHEADGROUP_DEFAULT;
       _noteHeadType     = NOTEHEADTYPE_DEFAULT;
@@ -52,7 +52,6 @@ Ambitus::Ambitus(Score* s)
       _bottomTpc        = Tpc::TPC_INVALID;
       _topAccid.setParent(this);
       _bottomAccid.setParent(this);
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
 //---------------------------------------------------------

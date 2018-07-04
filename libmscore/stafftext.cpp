@@ -23,12 +23,9 @@ namespace Ms {
 //   StaffTextBase
 //---------------------------------------------------------
 
-//   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
-
 StaffTextBase::StaffTextBase(Score* s, ElementFlags flags)
    : TextBase(s, flags)
       {
-//      initSubStyle(ss);
       setPlacement(Placement::ABOVE);     // default
       setSwingParameters(MScore::division / 2, 60);
       }
@@ -236,13 +233,13 @@ QVariant StaffTextBase::propertyDefault(Pid id) const
 //---------------------------------------------------------
 
 StaffText::StaffText(Score* s)
-   : StaffTextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
+   : StaffTextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       initSubStyle(SubStyleId::STAFF);
       }
 
 StaffText::StaffText(SubStyleId ss, Score* s)
-   : StaffTextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
+   : StaffTextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       initSubStyle(ss);
       }

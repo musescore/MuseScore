@@ -40,20 +40,18 @@ int markerTypeTableSize()
 //---------------------------------------------------------
 
 Marker::Marker(Score* s)
-   : TextBase(s)
+   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       initSubStyle(SubStyleId::REPEAT_LEFT);
       _markerType = Type::FINE;
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setLayoutToParentWidth(true);
       }
 
 Marker::Marker(SubStyleId ssid, Score* s)
-   : TextBase(s)
+   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       initSubStyle(ssid);
       _markerType = Type::FINE;
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setLayoutToParentWidth(true);
       }
 

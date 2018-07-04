@@ -611,10 +611,8 @@ QVariant Lyrics::propertyDefault(Pid id) const
 //=========================================================
 
 LyricsLine::LyricsLine(Score* s)
-  : SLine(s)
+  : SLine(s, ElementFlag::NOT_SELECTABLE)
       {
-      setFlags(0);
-
       setGenerated(true);           // no need to save it, as it can be re-generated
       setDiagonal(false);
       setLineWidth(Lyrics::LYRICS_DASH_DEFAULT_LINE_THICKNESS * spatium());
@@ -777,10 +775,8 @@ bool LyricsLine::setProperty(Pid propertyId, const QVariant& v)
 //=========================================================
 
 LyricsLineSegment::LyricsLineSegment(Score* s)
-      : LineSegment(s)
+      : LineSegment(s, ElementFlag::ON_STAFF | ElementFlag::NOT_SELECTABLE)
       {
-      setFlags(ElementFlag::ON_STAFF);
-      clearFlags(ElementFlag::SELECTABLE | ElementFlag::MOVABLE);
       setGenerated(true);
       }
 
