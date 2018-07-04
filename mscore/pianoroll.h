@@ -28,6 +28,7 @@ namespace Ms {
 class Score;
 class Staff;
 class PianoView;
+class PianoKeyboard;
 class Note;
 class PianoRuler;
 class Seq;
@@ -41,6 +42,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       Q_OBJECT
 
       PianoView* gv;
+      PianoKeyboard* pianoKbd;
       QScrollBar* hsb;        // horizontal scroll bar for pianoView
       Score* _score;
       Staff* staff;

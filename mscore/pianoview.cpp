@@ -25,18 +25,13 @@
 
 namespace Ms {
 
-//static const int MAP_OFFSET = 480;
+static const QColor colSelectionBox = QColor(255, 128, 0);
+static const QColor colSelectionBoxFill = QColor(255, 128, 0, 128);
 
-static const QColor selBoxColor = QColor(255, 128, 0);
-static const QColor selBoxColorAlpha = QColor(255, 128, 0, 128);
-
-//const QColor noteDeselected = Qt::blue;
 const QColor noteDeselected = QColor(29, 204, 160);
 const QColor noteSelected = Qt::yellow;
 
-//const QColor colPianoBg(0x71, 0x8d, 0xbe);
-//const QColor colPianoBg(85, 106, 143);
-const QColor colPianoBg(54, 54, 54);
+const QColor colPianoBg(60, 60, 60);
 
 const QColor noteDeselectedBlack = noteDeselected.darker(150);
 const QColor noteSelectedBlack = noteSelected.darker(150);
@@ -118,7 +113,6 @@ int PianoItem::pitch()
 //   paint
 //---------------------------------------------------------
 
-//void PianoItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 void PianoItem::paint(QPainter* painter)
       {
       painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
@@ -134,7 +128,7 @@ void PianoItem::paint(QPainter* painter)
       painter->setPen(Qt::NoPen);
       QRectF bounds = rect;
       painter->drawRoundedRect(bounds, roundRadius, roundRadius);
-      
+
 //      const QString pitchNames[] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
       const QString pitchNames[] = {"c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b"};
 
@@ -197,7 +191,7 @@ PianoView::PianoView()
       setResizeAnchor(QGraphicsView::AnchorUnderMouse);
       setMouseTracking(true);
       _timeType = TType::TICKS;
-      staff     = 0;
+      _staff     = 0;
       chord     = 0;
       _noteHeight = DEFAULT_KEY_HEIGHT;
       _xZoom = 0.1;
@@ -225,9 +219,9 @@ PianoView::~PianoView()
 
 void PianoView::drawBackground(QPainter* p, const QRectF& r)
       {
-      if (staff == 0)
+      if (_staff == 0)
             return;
-      Score* _score = staff->score();
+      Score* _score = _staff->score();
       setFrameShape(QFrame::NoFrame);
 
       QColor colGutter = colPianoBg.darker(150);
@@ -336,8 +330,8 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
             int maxY = qMax(mouseDownPos.y(), lastMousePos.y());
             QRectF rect(minX, minY, maxX - minX + 1, maxY - minY + 1);
             
-            p->setPen(QPen(selBoxColor, 2));
-            p->setBrush(QBrush(selBoxColorAlpha, Qt::SolidPattern));
+            p->setPen(QPen(colSelectionBox, 2));
+            p->setBrush(QBrush(colSelectionBoxFill, Qt::SolidPattern));
             p->drawRect(rect);
             }
       }
@@ -504,7 +498,7 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
                   }
             else if (dragStyle == DragStyle::MOVE_NOTES)
                   {
-                  Score* score = staff->score();
+                  Score* score = _staff->score();
                   if (tempUndoEvent)
                         {
                         score->undoRedo(true, 0, false);
@@ -585,7 +579,7 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
                         {
                         int pitchDelta = curPitch - mouseDownPitch;
                         
-                        Score* score = staff->score();
+                        Score* score = _staff->score();
                         if (tempUndoEvent)
                               {
                               score->undoRedo(true, 0, false);
@@ -650,7 +644,7 @@ PianoItem* PianoView::pickNote(int tick, int pitch)
 void PianoView::selectNotes(int startTick, int endTick, int lowPitch, int highPitch, NoteSelectType selType)
       {
 
-      Score* score = staff->score();
+      Score* score = _staff->score();
       Selection selection(score);
 
       for (int i = 0; i < noteList.size(); ++i)
@@ -729,7 +723,7 @@ void PianoView::ensureVisible(int tick)
 //---------------------------------------------------------
 void PianoView::updateBoundingSize()
       {
-      Measure* lm = staff->score()->lastMeasure();
+      Measure* lm = _staff->score()->lastMeasure();
       ticks       = lm->tick() + lm->ticks();
       scene()->setSceneRect(0.0, 0.0, 
               double((ticks + MAP_OFFSET * 2) * _xZoom),
@@ -745,14 +739,14 @@ void PianoView::setStaff(Staff* s, Pos* l)
       {
       _locator = l;
       
-      if (staff == s)
+      if (_staff == s)
             {
             return;
             }
       
-      staff    = s;
-      setEnabled(staff != nullptr);
-      if (!staff) {
+      _staff    = s;
+      setEnabled(_staff != nullptr);
+      if (!_staff) {
             scene()->blockSignals(true);  // block changeSelection()
             scene()->clear();
             clearNoteData();
@@ -760,7 +754,7 @@ void PianoView::setStaff(Staff* s, Pos* l)
             return;
             }
 
-      trackingPos.setContext(staff->score()->tempomap(), staff->score()->sigmap());
+      trackingPos.setContext(_staff->score()->tempomap(), _staff->score()->sigmap());
       updateBoundingSize();
 
       updateNotes();
@@ -846,12 +840,12 @@ void PianoView::updateNotes()
       clearNoteData();
       createLocators();
 
-      int staffIdx   = staff->idx();
+      int staffIdx   = _staff->idx();
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
 
       SegmentType st = SegmentType::ChordRest;
-      for (Segment* s = staff->score()->firstSegment(st); s; s = s->next1(st)) {
+      for (Segment* s = _staff->score()->firstSegment(st); s; s = s->next1(st)) {
             for (int track = startTrack; track < endTrack; ++track) {
                   Element* e = s->element(track);
                   if (e && e->isChord())

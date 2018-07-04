@@ -20,9 +20,13 @@
 
 #include "pianokeyboard.h"
 
+#include "libmscore/staff.h"
+#include "libmscore/part.h"
+#include "libmscore/drumset.h"
+
 namespace Ms {
 
-
+const QColor colKeySelect = QColor(224, 170, 20);
 
 PianoKeyboard::PianoKeyboard(QWidget* parent)
    : QWidget(parent)
@@ -37,6 +41,7 @@ PianoKeyboard::PianoKeyboard(QWidget* parent)
       curKeyPressed = -1;
       noteHeight = DEFAULT_KEY_HEIGHT;
       _orientation = PianoOrientation::VERTICAL;
+      _staff = 0;
       }
 
 
@@ -54,19 +59,15 @@ void PianoKeyboard::paintEvent(QPaintEvent* /*event*/)
       QFont f("FreeSans", fontSize);
       p.setFont(f);
 
+      //Check for drumset, if any
+      Part* part = _staff->part();
+      Drumset* ds = part->instrument()->drumset();
       
-      //Orange
-      QColor colSelect = QColor(224, 170, 20);
-              
       p.setPen(QPen(Qt::black, 2));
       
       int keyboardLen = 128 * noteHeight;
       const int blackKeyLen = PIANO_KEYBOARD_HEIGHT * 9 / 14;
 
-      p.setPen(QPen(Qt::red));
-      p.drawEllipse(0, 0, pianoWidth, keyboardLen);
-      
-      
       const qreal whiteKeyOffset[] = {0, 1.5, 3.5, 5, 6.5, 8.5, 10.5, 12};
       const int whiteKeyDegree[] = {0, 2, 4, 5, 7, 9, 11};
       const qreal blackKeyOffset[] = {1.5, 3.5, 6.5, 8.5, 10.5};
@@ -76,18 +77,22 @@ void PianoKeyboard::paintEvent(QPaintEvent* /*event*/)
       int pitch = -1;
       for (int octave = 0; octave < 11; ++octave)
             {
+            //White keys
             p.setPen(QPen(Qt::black));
             
             for (int key = 0; key < 7; ++key) 
                   {
                   int degree = whiteKeyDegree[key];
-                  QString noteName = pitchNames[degree]  % QString::number(octave - 1);
                   
                   pitch = degree + octave * 12;
                   if (pitch >= 128)
                         break;
+
+                  QString noteName = pitchNames[degree]  % QString::number(octave - 1);
+                  if (ds)
+                        noteName = ds->name(pitch);
                   
-                  p.setBrush(curPitch == pitch ? colSelect : Qt::white);
+                  p.setBrush(curPitch == pitch ? colKeySelect : Qt::white);
 
                   qreal off1 = whiteKeyOffset[key] * noteHeight + octave * 12 * noteHeight;
                   qreal off2 = whiteKeyOffset[key + 1] * noteHeight + octave * 12 * noteHeight;
@@ -98,8 +103,14 @@ void PianoKeyboard::paintEvent(QPaintEvent* /*event*/)
                         
                         if (degree == 0 && noteHeight > fontSize + 2)
                               {
-                              QRectF rectText(rect.x() + 1, rect.y(), rect.width() - 2, rect.height() - 2);
-                              p.drawText(rectText, Qt::AlignLeft | Qt::AlignBottom, noteName);
+                              QRectF rectText(rect.x() + 1, rect.y(), rect.height() - 2, rect.width() - 2);
+                              QTransform xform = p.transform();
+                              p.rotate(90);
+                              p.drawText(rectText, 
+                                      ds ?  Qt::AlignLeft | Qt::AlignBottom
+                                          : Qt::AlignRight | Qt::AlignBottom,
+                                      noteName);
+                              p.setTransform(xform);
                               }
                         }
                   else
@@ -107,48 +118,73 @@ void PianoKeyboard::paintEvent(QPaintEvent* /*event*/)
                         QRectF rect(0, -_ypos + keyboardLen - off2, PIANO_KEYBOARD_HEIGHT, off2 - off1);
                         
                         p.drawRect(rect);
-//                        printf("Drawing WHITE key #%d: (%f %f %f %f)\n", pitch,
-//                                rect.x(), rect.y(), rect.width(), rect.height());
                         
-                        if (degree == 0 && noteHeight > fontSize + 2)
+                        if (noteHeight > fontSize + 2)
                               {
-                              QRectF rectText(rect.x(), rect.y(), rect.width() - 4, rect.height() - 1);
-                              p.drawText(rectText, Qt::AlignRight | Qt::AlignBottom, noteName);
+                              if (ds)
+                                    {
+                                    QRectF rectText(rect.x() + 1, -_ypos + keyboardLen - (pitch + 1) * noteHeight, rect.width() - 1, noteHeight);
+                                    
+                                    p.drawText(rectText, Qt::AlignBottom | Qt::AlignLeft, noteName);
+                                    }
+                              else if (degree == 0)
+                                    {
+                                    QRectF rectText(rect.x(), rect.y(), rect.width() - 4, rect.height() - 1);
+                                    p.drawText(rectText, Qt::AlignRight | Qt::AlignBottom, noteName);
+                                    }
                               }
                         }
                   }
             
+            //Black keys
             for (int key = 0; key < 5; ++key) 
                   {
-                  QString noteName = pitchNames[blackKeyDegree[key]]  % QString::number(octave) + " ";
-                  
                   pitch = blackKeyDegree[key] + octave * 12;
                   if (pitch >= 128)
                         break;
+
+                  QString noteName = pitchNames[blackKeyDegree[key]]  % QString::number(octave) + " ";
+                  if (ds)
+                        noteName = ds->name(pitch);
                   
                   qreal center = blackKeyOffset[key] * noteHeight;
                   qreal offset = center - noteHeight / 2.0 + octave * 12 * noteHeight;
                   
                   p.setPen(QPen(Qt::black));
-                  p.setBrush(curPitch == pitch ? colSelect : Qt::black);
+                  p.setBrush(curPitch == pitch ? colKeySelect : Qt::black);
                   
                   if (_orientation == PianoOrientation::HORIZONTAL)
                         {
-                        p.drawRect(offset, 0, noteHeight, blackKeyLen);
+                        QRectF rect(offset, 0, noteHeight, blackKeyLen);
+                        
+                        p.drawRect(rect);
+                        
+                        if (ds)
+                              {
+                              if (noteHeight > fontSize + 2)
+                                    {
+                                    rect.setWidth(blackKeyLen);
+                                    rect.setHeight(noteHeight);
+                                    
+                                    p.setPen(QPen(Qt::white));
+                                    p.drawText(rect, Qt::AlignLeft | Qt::AlignBottom, noteName);
+                                    }
+                              }
                         }
                   else
                         {
                         QRectF rect(0, -_ypos + keyboardLen - offset - noteHeight, blackKeyLen, noteHeight);
                         
                         p.drawRect(rect);
-//                        printf("Drawing black key #%d: (%f %f %f %f)\n", pitch, 
-//                                rect.x(), rect.y(), rect.width(), rect.height());
-
-//                        if (noteHeight > fontSize + 2)
-//                              {
-//                              p.setPen(QPen(Qt::white));
-//                              p.drawText(rect, Qt::AlignRight | Qt::AlignVCenter, noteName);
-//                              }
+                        
+                        if (noteHeight > fontSize + 2)
+                              {
+                              if (ds)
+                                    {
+                                    p.setPen(QPen(Qt::white));
+                                    p.drawText(rect, Qt::AlignLeft | Qt::AlignBottom, noteName);
+                                    }
+                              }
                         }
                   }
             }
@@ -257,6 +293,17 @@ void PianoKeyboard::leaveEvent(QEvent*)
             emit pitchChanged(-1);
             update();
             }
+      }
+
+
+//---------------------------------------------------------
+//   setStaff
+//---------------------------------------------------------
+
+void PianoKeyboard::setStaff(Staff* staff)
+      {
+      _staff = staff;
+      update();
       }
 
 //---------------------------------------------------------

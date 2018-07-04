@@ -25,13 +25,15 @@
 
 namespace Ms {
 
+class Staff;
+
 static const int PIANO_KEYBOARD_HEIGHT = 40;
 const int MAX_KEY_HEIGHT = 20;
 const int MIN_KEY_HEIGHT = 8;
 const int DEFAULT_KEY_HEIGHT = 14;
 const int BEAT_WIDTH_IN_PIXELS = 50;
 const double X_ZOOM_RATIO = 1.1;
-      
+
       
 //Alternative implementation with evenly spaced notes
 class PianoKeyboard : public QWidget {
@@ -44,6 +46,7 @@ class PianoKeyboard : public QWidget {
       int yRange;
       int curPitch;
       int curKeyPressed;
+      Staff* _staff;
 
       virtual void paintEvent(QPaintEvent*);
       virtual void mousePressEvent(QMouseEvent*);
@@ -63,6 +66,8 @@ class PianoKeyboard : public QWidget {
 
    public:
       PianoKeyboard(QWidget* parent = 0);
+      Staff* staff() { return _staff; }
+      void setStaff(Staff* staff);
       void setOrientation(PianoOrientation);
       };
 

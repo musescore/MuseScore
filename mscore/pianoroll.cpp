@@ -133,9 +133,9 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tickLen->setRange(-2000, 2000);
 
       //-------------
-      PianoKeyboard* piano = new PianoKeyboard;
-      piano->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-      piano->setFixedWidth(PIANO_KEYBOARD_HEIGHT);
+      pianoKbd = new PianoKeyboard;
+      pianoKbd->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+      pianoKbd->setFixedWidth(PIANO_KEYBOARD_HEIGHT);
 
       gv  = new PianoView;
       gv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -153,7 +153,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       // layout
       QHBoxLayout* hbox = new QHBoxLayout;
       hbox->setSpacing(0);
-      hbox->addWidget(piano);
+      hbox->addWidget(pianoKbd);
       hbox->addWidget(gv);
 
       split = new QSplitter(Qt::Vertical);
@@ -175,14 +175,14 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       mainWidget->setLayout(layout);
       setCentralWidget(mainWidget);
 
-      connect(gv->verticalScrollBar(),   SIGNAL(valueChanged(int)), piano, SLOT(setYpos(int)));
+      connect(gv->verticalScrollBar(),   SIGNAL(valueChanged(int)), pianoKbd, SLOT(setYpos(int)));
       connect(gv->horizontalScrollBar(), SIGNAL(valueChanged(int)), hsb,   SLOT(setValue(int)));
 
       connect(gv,          SIGNAL(xZoomChanged(qreal)),        ruler, SLOT(setXZoom(qreal)));
-      connect(gv,          SIGNAL(noteHeightChanged(int)),     piano, SLOT(setNoteHeight(int)));
+      connect(gv,          SIGNAL(noteHeightChanged(int)),     pianoKbd, SLOT(setNoteHeight(int)));
       connect(gv,          SIGNAL(pitchChanged(int)),          pl,    SLOT(setPitch(int)));
-      connect(gv,          SIGNAL(pitchChanged(int)),          piano, SLOT(setPitch(int)));
-      connect(piano,       SIGNAL(pitchChanged(int)),          pl,    SLOT(setPitch(int)));
+      connect(gv,          SIGNAL(pitchChanged(int)),          pianoKbd, SLOT(setPitch(int)));
+      connect(pianoKbd,       SIGNAL(pitchChanged(int)),          pl,    SLOT(setPitch(int)));
       connect(gv,          SIGNAL(posChanged(const Pos&)),     pos,   SLOT(setValue(const Pos&)));
       connect(gv,          SIGNAL(posChanged(const Pos&)),     ruler, SLOT(setPos(const Pos&)));
       connect(ruler,       SIGNAL(posChanged(const Pos&)),     pos,   SLOT(setValue(const Pos&)));
@@ -196,8 +196,8 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       connect(onTime,      SIGNAL(valueChanged(int)),  SLOT(onTimeChanged(int)));
       connect(tickLen,     SIGNAL(valueChanged(int)),  SLOT(tickLenChanged(int)));
       connect(gv->scene(), SIGNAL(selectionChanged()), SLOT(selectionChanged()));
-      connect(piano,       SIGNAL(keyPressed(int)),    SLOT(keyPressed(int)));
-      connect(piano,       SIGNAL(keyReleased(int)),   SLOT(keyReleased(int)));
+      connect(pianoKbd,       SIGNAL(keyPressed(int)),    SLOT(keyPressed(int)));
+      connect(pianoKbd,       SIGNAL(keyReleased(int)),   SLOT(keyReleased(int)));
 
       readSettings();
 
@@ -280,6 +280,8 @@ void PianorollEditor::setStaff(Staff* st)
             }
       ruler->setScore(_score, locator);
       gv->setStaff(staff, locator);
+      pianoKbd->setStaff(staff);
+      
       updateSelection();
       setEnabled(st != nullptr);
       }
@@ -520,6 +522,7 @@ void PianorollEditor::cmd(QAction* /*a*/)
       {
       //score()->startCmd();
       gv->setStaff(staff, locator);
+      pianoKbd->setStaff(staff);
       //score()->endCmd();
       }
 

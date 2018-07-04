@@ -68,7 +68,7 @@ class PianoItem {
 class PianoView : public QGraphicsView {
       Q_OBJECT
 
-      Staff* staff;
+      Staff* _staff;
       Chord* chord;
       
       Pos trackingPos;  //Track mouse position
@@ -118,6 +118,7 @@ class PianoView : public QGraphicsView {
    public:
       PianoView();
       ~PianoView();
+      Staff* staff() { return _staff; }
       void setStaff(Staff*, Pos* locator);
       void ensureVisible(int tick);
       int noteHeight() { return _noteHeight; }
