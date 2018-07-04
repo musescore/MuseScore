@@ -49,7 +49,7 @@ class Ottava;
 
 class OttavaSegment final : public TextLineBaseSegment {
    public:
-      OttavaSegment(Score* s) : TextLineBaseSegment(s)  { }
+      OttavaSegment(Score* s) : TextLineBaseSegment(s, ElementFlag::MOVABLE)  { }
       virtual ElementType type() const override     { return ElementType::OTTAVA_SEGMENT; }
       virtual OttavaSegment* clone() const override { return new OttavaSegment(*this); }
       Ottava* ottava() const                        { return (Ottava*)spanner(); }
