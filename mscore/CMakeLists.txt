@@ -258,8 +258,8 @@ add_executable ( ${ExecutableName}
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
       excerptsdialog.cpp metaedit.cpp magbox.cpp
       capella.cpp capxml.cpp exportaudio.cpp palettebox.cpp
-      synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
-      pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
+      synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp pianokeyboard.cpp
+      pianoruler.cpp pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
       updatechecker.cpp
       importove.cpp
       ove.cpp

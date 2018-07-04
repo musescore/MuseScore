@@ -43,3 +43,8 @@ MuseScore_General.sf3
 MuseScore_General-License.md
 MuseScore_General-changelog.txt
 VERSION
+/buildInstallLog.txt
+/buildReleaseLog.txt
+/nbproject
+/*.stackdump
+/CMakeLists.txt
