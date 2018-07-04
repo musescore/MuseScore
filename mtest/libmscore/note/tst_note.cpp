@@ -534,7 +534,7 @@ void TestNote::LongNoteAfterShort_183746() {
       std::vector<Note*> nl = static_cast<Note*>(e)->tiedNotes();
       QVERIFY(nl.size() >= 3); // the breve must be divided across at least 3 measures
       for (Note* n : nl)
-            totalTicks += static_cast<Chord*>(n->parent())->durationTypeTicks();
+            totalTicks += static_cast<Ms::Chord*>(n->parent())->durationTypeTicks();
       QVERIFY(totalTicks == TDuration(TDuration::DurationType::V_BREVE).ticks()); // total duration same as a breve
       }
 
