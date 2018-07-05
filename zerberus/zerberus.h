@@ -18,7 +18,7 @@
 // #include <mutex>
 #include <list>
 #include <memory>
-#include <stack>
+#include <queue>
 
 #include "synthesizer/synthesizer.h"
 #include "synthesizer/event.h"
@@ -38,7 +38,7 @@ static const int MAX_TRIGGER = 512;
 //---------------------------------------------------------
 
 class VoiceFifo {
-      std::stack<Voice*> buffer;
+      std::queue<Voice*> buffer;
       std::vector< std::unique_ptr<Voice> > voices;
 
    public:
@@ -59,7 +59,7 @@ class VoiceFifo {
     
       Voice* pop() {
             Q_ASSERT(!buffer.empty());
-            Voice* v = buffer.top();
+            Voice* v = buffer.front();
             buffer.pop();
             return v;
             }
