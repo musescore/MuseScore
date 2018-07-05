@@ -44,7 +44,7 @@ MP3Exporter::MP3Exporter()
       mBitrate = 128;
       mQuality = QUALITY_2;
       mChannel = CHANNEL_JOINT;
-      mMode = MODE_CBR;
+      mMode    = MODE_CBR;
       mRoutine = ROUTINE_FAST;
       }
 

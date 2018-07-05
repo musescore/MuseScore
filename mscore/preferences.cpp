@@ -21,6 +21,7 @@
 #include "libmscore/style.h"
 #include "libmscore/mscore.h"
 #include "preferences.h"
+#include "exportmp3.h"
 
 namespace Ms {
 
@@ -96,6 +97,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_EXPORT_AUDIO_NORMALIZE,                          new BoolPreference(44100, true)},
             {PREF_EXPORT_AUDIO_SAMPLERATE,                         new IntPreference(44100, false)},
             {PREF_EXPORT_MP3_BITRATE,                              new IntPreference(128, false)},
+            {PREF_EXPORT_MP3_MODE,                                 new IntPreference(MODE_CBR, false)},
             {PREF_EXPORT_MUSICXML_EXPORTBREAKS,                    new EnumPreference(QVariant::fromValue(MusicxmlExportBreaks::ALL), false)},
             {PREF_EXPORT_MUSICXML_EXPORTLAYOUT,                    new BoolPreference(true, false)},
             {PREF_EXPORT_PDF_DPI,                                  new IntPreference(300, false)},

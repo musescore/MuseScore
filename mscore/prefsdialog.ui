@@ -3798,6 +3798,12 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
          <layout class="QGridLayout" name="gridLayout_15">
           <item row="2" column="2">
            <widget class="QComboBox" name="exportMp3BitRate">
+            <property name="accessibleName">
+             <string>MP3 bitrate</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose MP3 bitrate</string>
+            </property>
             <property name="currentText">
              <string>128</string>
             </property>
@@ -3925,23 +3931,10 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             </property>
            </widget>
           </item>
-          <item row="2" column="4">
-           <spacer name="horizontalSpacer_19">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="2" column="0">
            <widget class="QLabel" name="exportMp3BitRateLabel">
             <property name="text">
-             <string>MP3 Bitrate:</string>
+             <string>MP3 bitrate:</string>
             </property>
            </widget>
           </item>
@@ -3951,6 +3944,32 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
              <string>Normalize</string>
             </property>
            </widget>
+          </item>
+          <item row="2" column="5">
+           <widget class="QCheckBox" name="exportMp3Mode">
+            <property name="accessibleName">
+             <string>MP3 average bitrate</string>
+            </property>
+            <property name="accessibleDescription">
+             <string/>
+            </property>
+            <property name="text">
+             <string>MP3 average bitrate</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="6">
+           <spacer name="horizontalSpacer_19">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>

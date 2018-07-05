@@ -25,6 +25,7 @@
 #include "scoreview.h"
 #include "pa.h"
 #include "shortcut.h"
+#include "exportmp3.h"
 
 #ifdef USE_PORTMIDI
 #include "pm.h"
@@ -542,6 +543,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
 
       index = exportMp3BitRate->findData(preferences.getInt(PREF_EXPORT_MP3_BITRATE));
       exportMp3BitRate->setCurrentIndex(index);
+      exportMp3Mode->setChecked(preferences.getInt(PREF_EXPORT_MP3_MODE) == MODE_ABR);
 
       exportPdfDpi->setValue(preferences.getInt(PREF_EXPORT_PDF_DPI));
       pageVertical->setChecked(MScore::verticalOrientation());
@@ -906,6 +908,7 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_APP_STARTUP_STARTSCORE, sessionScore->text());
       preferences.setPreference(PREF_EXPORT_AUDIO_SAMPLERATE, exportAudioSampleRate->currentData().toInt());
       preferences.setPreference(PREF_EXPORT_MP3_BITRATE, exportMp3BitRate->currentData().toInt());
+      preferences.setPreference(PREF_EXPORT_MP3_MODE, exportMp3Mode->isChecked() ? MODE_ABR : MODE_CBR);
       preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, exportLayout->isChecked());
       preferences.setPreference(PREF_EXPORT_PDF_DPI, exportPdfDpi->value());
       preferences.setPreference(PREF_EXPORT_PNG_RESOLUTION, pngResolution->value());

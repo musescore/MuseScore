@@ -17,6 +17,7 @@
 #include "preferences.h"
 #include "kQOAuth/kqoauthrequest.h"
 #include "kQOAuth/kqoauthrequest_xauth.h"
+#include "exportmp3.h"
 
 namespace Ms {
 
@@ -402,13 +403,16 @@ void LoginManager::onGetMediaUrlRequestReady(QByteArray ba)
             QString mp3Path = QDir::tempPath() + QString("/temp_%1.mp3").arg(qrand() % 100000);
             _mp3File = new QFile(mp3Path);
             Score* score = mscore->currentScore()->masterScore();
-            int br = preferences.getInt(PREF_EXPORT_MP3_BITRATE);
+            int br   = preferences.getInt(PREF_EXPORT_MP3_BITRATE);
+            int mode = preferences.getInt(PREF_EXPORT_MP3_MODE);
             preferences.setPreference(PREF_EXPORT_MP3_BITRATE, 128);
+            preferences.setPreference(PREF_EXPORT_MP3_MODE, MODE_ABR);
             if (mscore->saveMp3(score, mp3Path)) { // no else, error handling is done in saveMp3
                   _uploadTryCount = 0;
                   uploadMedia();
                   }
             preferences.setPreference(PREF_EXPORT_MP3_BITRATE, br);
+            preferences.setPreference(PREF_EXPORT_MP3_MODE, mode);
             }
       }
 
