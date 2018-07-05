@@ -98,7 +98,9 @@ void TestSfzLoop::testLoopAudio()
       synth->play(Ms::PlayEvent(ME_NOTEON, 0, 20, 127)); // play note - no_loop mode
       synth->process(50, data, nullptr, nullptr); // process - stop in middle of ones
       synth->play(Ms::PlayEvent(ME_NOTEON, 0, 20, 0)); // send note off and check whether voice is actually turned off
-      synth->process(50 , data + (50*2), nullptr, nullptr); // process until end of sustain stage
+      synth->process(50, data + (50*2), nullptr, nullptr); // process until end of sustain stage
+      synth->play(Ms::PlayEvent(ME_NOTEOFF, 0, 20, 0));
+      synth->process(50, data + (50*2) + (50*2), nullptr, nullptr);
       QCOMPARE(data[0], 0.0f);
       QCOMPARE(data[1], 0.0f);
       QCOMPARE(data[10 * 2] != 0.0f, true);
@@ -111,7 +113,9 @@ void TestSfzLoop::testLoopAudio()
       synth->play(Ms::PlayEvent(ME_NOTEON, 0, 21, 127)); // play note - one_shot
       synth->process(50, data, nullptr, nullptr); // process - stop in middle of ones
       synth->play(Ms::PlayEvent(ME_NOTEON, 0, 21, 0)); // send note off - sample should still play to end!
-      synth->process(60 , data + (50*2), nullptr, nullptr); // process until end of sample
+      synth->process(60, data + (50*2), nullptr, nullptr); // process until end of sample
+      synth->play(Ms::PlayEvent(ME_NOTEOFF, 0, 21, 0));
+      synth->process(50, data + (50*2) + (60*2), nullptr, nullptr);
       QCOMPARE(data[0], 0.0f);
       QCOMPARE(data[1], 0.0f);
       QVERIFY(data[10 * 2] != 0.0f);
@@ -128,7 +132,9 @@ void TestSfzLoop::testLoopAudio()
       synth->play(Ms::PlayEvent(ME_NOTEON, 0, 22, 127)); // play note
       synth->process(109, data, nullptr, nullptr); // process - it should loop (loop from 10 to 59)
       synth->play(Ms::PlayEvent(ME_NOTEON, 0, 22, 0)); // send note off - sample should not switch to the zero part
-      synth->process(60 , data + (109*2), nullptr, nullptr); // process until end of release
+      synth->process(60, data + (109*2), nullptr, nullptr); // process until end of release
+      synth->play(Ms::PlayEvent(ME_NOTEOFF, 0, 22, 0));
+      synth->process(50, data + (109*2) + (60*2), nullptr, nullptr);
       QCOMPARE(data[0], 0.0f);
       QCOMPARE(data[1], 0.0f);
       QVERIFY(data[10 * 2] != 0.0f);
@@ -149,7 +155,9 @@ void TestSfzLoop::testLoopAudio()
       synth->play(Ms::PlayEvent(ME_NOTEON, 0, 23, 127)); // play note
       synth->process(109, data, nullptr, nullptr); // process - it should loop (loop from 10 to 59)
       synth->play(Ms::PlayEvent(ME_NOTEON, 0, 23, 0)); // send note off - sample should not switch to the zero part
-      synth->process(60 , data + (109*2), nullptr, nullptr); // process until end of release
+      synth->process(60, data + (109*2), nullptr, nullptr); // process until end of release
+      synth->play(Ms::PlayEvent(ME_NOTEOFF, 0, 23, 0));
+      synth->process(50, data + (109*2) + (60*2), nullptr, nullptr);
       QCOMPARE(data[0], 0.0f);
       QCOMPARE(data[1], 0.0f);
       QVERIFY(data[10 * 2] != 0.0f);
