@@ -82,7 +82,7 @@ include (CreatePrecompiledHeader)
 
 set (CMAKE_AUTOMOC TRUE)
 
-set(MSCORE_UNSTABLE  TRUE)          # mark as unstable
+set(MSCORE_UNSTABLE FALSE)          # mark as unstable
 
 set(USE_SSE           TRUE)
 set(SCRIPT_INTERFACE  TRUE)
