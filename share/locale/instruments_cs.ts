@@ -2004,7 +2004,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4"/>
         <source>Choral</source>
-        <translation>Sbory</translation>
+        <translation>Sbor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5"/>
@@ -3212,7 +3212,7 @@
         <location filename="../instruments/instrumentsxml.h" line="390"/>
         <source>Br.</source>
         <comment>Brass</comment>
-        <translation>Žesť.</translation>
+        <translation>Žes.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="392"/>
@@ -3599,19 +3599,19 @@
         <location filename="../instruments/instrumentsxml.h" line="526"/>
         <source>Mello</source>
         <comment>Mellophone Bugle</comment>
-        <translation type="unfinished"/>
+        <translation>M. lov. r.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="528"/>
         <source>Contra</source>
         <comment>Contrabass Bugle</comment>
-        <translation type="unfinished"/>
+        <translation>K. lov. r.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="530"/>
         <source>Mello</source>
         <comment>Mellophone</comment>
-        <translation type="unfinished"/>
+        <translation>Mel.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="532"/>
@@ -5198,7 +5198,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1244"/>
         <source>D Vne.</source>
         <comment>D Violone</comment>
-        <translation type="unfinished"/>
+        <translation>D Vln.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="967"/>
@@ -5516,7 +5516,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1155"/>
         <source>Prim</source>
-        <translation type="unfinished"/>
+        <translation>Prim</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1156"/>
@@ -5533,7 +5533,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1158"/>
         <source>Br.</source>
         <comment>Brač</comment>
-        <translation>Žesť.</translation>
+        <translation>Br.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1159"/>
@@ -6006,13 +6006,13 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1065"/>
         <source>Oud</source>
-        <translation type="unfinished"/>
+        <translation>Úd</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1066"/>
         <source>O.</source>
         <comment>Oud</comment>
-        <translation type="unfinished"/>
+        <translation>Ú.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1068"/>
@@ -6062,7 +6062,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1101"/>
         <source>A. Mda.</source>
         <comment>Alto Mandola</comment>
-        <translation type="unfinished"/>
+        <translation>A. Mda.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1102"/>
@@ -6073,7 +6073,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1103"/>
         <source>T. Mda.</source>
         <comment>Tenor Mandola</comment>
-        <translation type="unfinished"/>
+        <translation>T. Mda.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1104"/>

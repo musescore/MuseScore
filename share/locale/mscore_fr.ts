@@ -598,7 +598,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="176"/>
         <source>Noteheads group:</source>
-        <translation>Groupe de têtes de notes :</translation>
+        <translation>Groupe de têtes de notes:</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="186"/>
@@ -16577,7 +16577,7 @@ Voulez-vous le remplacer ?</translation>
     <message>
         <location filename="../../mscore/timedialog.ui" line="154"/>
         <source>Text:</source>
-        <translation>Texte :</translation>
+        <translation>Texte:</translation>
     </message>
     <message>
         <location filename="../../mscore/timedialog.ui" line="273"/>
@@ -16638,7 +16638,7 @@ Voulez-vous le remplacer ?</translation>
     <message>
         <location filename="../../mscore/timesigproperties.ui" line="223"/>
         <source>Text:</source>
-        <translation>Texte :</translation>
+        <translation>Texte:</translation>
     </message>
 </context>
 <context>
@@ -17309,7 +17309,7 @@ Voulez-vous le remplacer ?</translation>
     <message>
         <location filename="../../mscore/voltaproperties.ui" line="33"/>
         <source>Text:</source>
-        <translation>Texte :</translation>
+        <translation>Texte:</translation>
     </message>
     <message>
         <location filename="../../mscore/voltaproperties.ui" line="43"/>

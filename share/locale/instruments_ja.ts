@@ -5771,8 +5771,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="985"/>
         <source>Strings - Plucked</source>
-        <translation>撥弦楽器
-</translation>
+        <translation>撥弦楽器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="987"/>

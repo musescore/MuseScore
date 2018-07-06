@@ -2066,7 +2066,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="17"/>
         <source>D♭ Piccolo</source>
-        <translation>D♭ Piccolo</translation>
+        <translation>Piccolo in D♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="18"/>

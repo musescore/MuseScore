@@ -5771,7 +5771,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="985"/>
         <source>Strings - Plucked</source>
-        <translation>Teudan – pizzicato</translation>
+        <translation>Teudan – gun bhogha</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="987"/>
