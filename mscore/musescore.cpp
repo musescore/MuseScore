@@ -4136,6 +4136,7 @@ void MuseScore::splitWindow(bool horizontal)
             if (_horizontalSplit == horizontal) {
                   _splitScreen = false;
                   tab2->setVisible(false);
+                  setCurrentView(0, tab1->currentIndex());
                   }
             else {
                   _horizontalSplit = horizontal;
