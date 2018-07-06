@@ -371,7 +371,10 @@ extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
 extern const char* propertyQmlName(Pid);
 extern bool propertyLink(Pid id);
-extern Pid propertyId(const QString&);
+extern Pid propertyIdQml(const QString& qmlName);
+extern Pid propertyIdQml(const QStringRef& qmlName);
+extern Pid propertyIdName(const QString& name);
+extern Pid propertyIdName(const QStringRef& name);
 
 }     // namespace Ms
 #endif
