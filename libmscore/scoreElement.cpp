@@ -689,13 +689,14 @@ QString ScoreElement::userName() const
 //   name2type
 //---------------------------------------------------------
 
-ElementType ScoreElement::name2type(const QStringRef& s)
+ElementType ScoreElement::name2type(const QStringRef& s, bool silent)
       {
       for (int i = 0; i < int(ElementType::MAXTYPE); ++i) {
             if (s == elementNames[i].name)
                   return ElementType(i);
             }
-      qDebug("unknown type <%s>", qPrintable(s.toString()));
+      if (!silent)
+            qDebug("unknown type <%s>", qPrintable(s.toString()));
       return ElementType::INVALID;
       }
 

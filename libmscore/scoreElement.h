@@ -191,7 +191,7 @@ class ScoreElement {
       virtual QString userName() const;
       virtual ElementType type() const = 0;
 
-      static ElementType name2type(const QStringRef&);
+      static ElementType name2type(const QStringRef&, bool silent = false);
       static const char* name(ElementType);
 
       virtual QVariant getProperty(Pid) const = 0;
