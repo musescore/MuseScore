@@ -307,16 +307,47 @@ static constexpr PropertyMetaData propertyList[] = {
       };
 
 //---------------------------------------------------------
-//   propertyId
+//   propertyIdQml
 //---------------------------------------------------------
 
-Pid propertyId(const QString& s)
+Pid propertyIdQml(const QStringRef& s)
       {
       for (const PropertyMetaData& pd : propertyList) {
             if (pd.qml == s)
                   return pd.id;
             }
       return Pid::END;
+      }
+
+//---------------------------------------------------------
+//   propertyIdQml
+//---------------------------------------------------------
+
+Pid propertyIdQml(const QString& s)
+      {
+      return propertyIdQml(QStringRef(&s));
+      }
+
+//---------------------------------------------------------
+//   propertyIdName
+//---------------------------------------------------------
+
+Pid propertyIdName(const QStringRef& s)
+      {
+      for (const PropertyMetaData& pd : propertyList) {
+            if (pd.name == s)
+                  return pd.id;
+            }
+      return Pid::END;
+      }
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid propertyIdName(const QString& s)
+      {
+      return propertyIdName(QStringRef(&s));
       }
 
 //---------------------------------------------------------
