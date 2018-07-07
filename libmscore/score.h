@@ -341,7 +341,7 @@ class Movements : public std::vector<MasterScore*> {
 //    a Score has always an associated MasterScore
 //---------------------------------------------------------------------------------------
 
-class Score : public QObject, ScoreElement {
+class Score : public QObject, public ScoreElement {
       Q_OBJECT
       Q_PROPERTY(int                            duration          READ duration)
 //      Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
