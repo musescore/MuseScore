@@ -158,6 +158,10 @@ Palette handling
               (see undo.h undo.cpp for example usage)
               TODO: check if they can be removed in system mode
 
+      * path separator
+            Don't use QDir::separtor(), but "/", see https://doc.qt.io/qt-5/qdir.html#separator
+            and http://agateau.com/2015/qdir-separator-considered-harmful/
+
 
 ====================================================================
       some rules
