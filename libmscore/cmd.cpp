@@ -1648,6 +1648,8 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
             if (forceRemove) {
                   if (a)
                         lns->undoRemoveElement(a);
+                  if (ln->tieBack())
+                        continue;
                   }
             else if (forceAdd) {
                   if (a)
