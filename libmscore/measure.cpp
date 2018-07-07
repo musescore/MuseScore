@@ -348,7 +348,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
                         Chord* chord = toChord(e);
                         for (Chord* chord1 : chord->graceNotes()) {
                               for (Note* note1 : chord1->notes()) {
-                                    if (note1->tieBack())
+                                    if (note1->tieBack() && note1->accidental() == 0)
                                           continue;
                                     //
                                     // compute accidental
@@ -362,7 +362,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
                                     }
                               }
                         for (Note* note1 : chord->notes()) {
-                              if (note1->tieBack())
+                              if (note1->tieBack() && note1->accidental() == 0)
                                     continue;
                               //
                               // compute accidental
@@ -409,7 +409,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line, bool &
                   Chord* chord = toChord(e);
                   for (Chord* chord1 : chord->graceNotes()) {
                         for (Note* note : chord1->notes()) {
-                              if (note->tieBack())
+                              if (note->tieBack() && note->accidental() == 0)
                                     continue;
                               int tpc  = note->tpc();
                               int l    = absStep(tpc, note->epitch());
@@ -418,7 +418,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line, bool &
                         }
 
                   for (Note* note : chord->notes()) {
-                        if (note->tieBack())
+                        if (note->tieBack() && note->accidental() == 0)
                               continue;
                         int tpc    = note->tpc();
                         int l      = absStep(tpc, note->epitch());
