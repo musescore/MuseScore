@@ -206,6 +206,16 @@ void SynthControl::setMeter(float l, float r, float left_peak, float right_peak)
       }
 
 //---------------------------------------------------------
+//   setScore
+//---------------------------------------------------------
+void SynthControl::setScore(Score* s) {
+      _score = s;
+
+      loadButton->setEnabled(true);
+      saveButton->setEnabled(true);
+      }
+
+//---------------------------------------------------------
 //   stop
 //---------------------------------------------------------
 
