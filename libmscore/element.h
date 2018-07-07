@@ -179,6 +179,8 @@ class Element : public ScoreElement {
       MeasureBase* findMeasureBase();
       const MeasureBase* findMeasureBase() const;
 
+      virtual bool isElement() const override { return true;        }
+
       qreal spatium() const;
 
       inline void setFlag(ElementFlag f, bool v)       { if (v) _flags |= f; else _flags &= ~ElementFlags(f); }
