@@ -358,6 +358,24 @@ QString NewWizardPage4::templatePath() const
       }
 
 //---------------------------------------------------------
+//   setTemplateLayout
+//---------------------------------------------------------
+
+void NewWizardPage4::setTemplateLayout()
+      {
+      QDir dir(mscoreGlobalShare + "/templates");
+      QFileInfoList fil = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name);
+      if(fil.isEmpty()){
+          fil.append(QFileInfo(QFile(":data/Empty_Score.mscz")));
+          }
+
+      QDir myTemplatesDir(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
+      fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
+
+      templateFileBrowser->setScores(fil);
+      }
+
+//---------------------------------------------------------
 //   NewWizardPage5
 //---------------------------------------------------------
 
