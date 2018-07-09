@@ -324,6 +324,13 @@ enum class Pid {
 
       POS_ABOVE,
 
+      LOCATION_STAVES,
+      LOCATION_VOICES,
+      LOCATION_MEASURES,
+      LOCATION_FRACTIONS,
+      LOCATION_GRACE,
+      LOCATION_NOTE,
+
       END
       };
 

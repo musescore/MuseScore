@@ -303,6 +303,13 @@ static constexpr PropertyMetaData propertyList[] = {
 
       { Pid::POS_ABOVE,               "pos_above",               false, "posAbove",              P_TYPE::SP_REAL         },
 
+      { Pid::LOCATION_STAVES,         0,                         false, "staves",                P_TYPE::INT             },
+      { Pid::LOCATION_VOICES,         0,                         false, "voices",                P_TYPE::INT             },
+      { Pid::LOCATION_MEASURES,       0,                         false, "measures",              P_TYPE::INT             },
+      { Pid::LOCATION_FRACTIONS,      0,                         false, "fractions",             P_TYPE::FRACTION        },
+      { Pid::LOCATION_GRACE,          0,                         false, "grace",                 P_TYPE::INT             },
+      { Pid::LOCATION_NOTE,           0,                         false, "note",                  P_TYPE::INT             },
+
       { Pid::END, "++end++", false, "++end++", P_TYPE::INT }
       };
 
