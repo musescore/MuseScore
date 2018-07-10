@@ -3656,7 +3656,7 @@
             </Instrument>
             <Instrument id="soprano-bugle">
                   <longName>Soprano Bugle</longName>
-                  <shortName>Sop.</shortName>
+                  <shortName>S. Bu.</shortName>
                   <description>Soprano Bugle</description>
                   <musicXMLid>brass.bugle.soprano</musicXMLid>
                   <clef>G</clef>
@@ -3670,7 +3670,7 @@
             </Instrument>
             <Instrument id="alto-bugle">
                   <longName>Alto Bugle</longName>
-                  <shortName>Alto</shortName>
+                  <shortName>A. Bu.</shortName>
                   <description>Alto Bugle</description>
                   <musicXMLid>brass.bugle.alto</musicXMLid>
                   <clef>G</clef>
@@ -3684,7 +3684,7 @@
             </Instrument>
             <Instrument id="baritone-bugle">
                   <longName>Baritone Bugle</longName>
-                  <shortName>Bari.</shortName>
+                  <shortName>Bar. Bu.</shortName>
                   <description>Bugle</description>
                   <musicXMLid>brass.bugle.baritone</musicXMLid>
                   <clef>G</clef>
@@ -3778,7 +3778,7 @@
             </Instrument>
             <Instrument id="contrabass-bugle">
                   <longName>Contrabass Bugle</longName>
-                  <shortName>Contra</shortName>
+                  <shortName>Cb. Bu.</shortName>
                   <description>Contrabass Bugle</description>
                   <musicXMLid>brass.bugle.contrabass</musicXMLid>
                   <clef>G</clef>
