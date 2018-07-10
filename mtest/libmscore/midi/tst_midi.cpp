@@ -378,7 +378,6 @@ void TestMidi::events()
       QTextStream out(&filehandler);
       multimap<int, NPlayEvent> ::iterator iter;
       for (auto iter = events.begin(); iter!= events.end(); ++iter){
-            if (iter->second.discard()) continue;
             out << qSetFieldWidth(5) << "Tick  =  ";
             out << qSetFieldWidth(5) << iter->first;
             out << qSetFieldWidth(5) << "   Type  = ";
