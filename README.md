@@ -135,6 +135,14 @@ To generate program documentation using DoxyGen, first do `make debug`, then typ
 
 Browse the documentation in subdirectory Doc/html/index.html using any html browser.
 
+### OMR
 
-### Export data for OMR
-mscore file.mscz -o file.png -E
+* **Export data for OMR** - mscore file.mscz -o file.png -A
+
+* **Missing Shapes in SMuFL**
+
+  bracketLine:
+  ![bracketLine](omr/reference_data/bracketLine.png)
+
+  bracketSquare:
+  ![bracketSquare](omr/reference_data/bracketSquare.png)
