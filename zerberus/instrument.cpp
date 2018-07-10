@@ -43,7 +43,7 @@ Sample::~Sample()
 Sample* ZInstrument::readSample(const QString& s, MQZipReader* uz)
       {
       if (uz) {
-            QList<MQZipReader::FileInfo> fi = uz->fileInfoList();
+            QVector<MQZipReader::FileInfo> fi = uz->fileInfoList();
 
             buf = uz->fileData(s);
             if (buf.isEmpty()) {

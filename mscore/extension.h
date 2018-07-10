@@ -1,7 +1,9 @@
 //=============================================================================
-//  MuseScore
+//  MusE Score
 //  Linux Music Score Editor
-//  Copyright (C) 2002-2018 Werner Schweer and others
+//  $Id:$
+//
+//  Copyright (C) 2018 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,23 +18,30 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef STRINGUTILS_H
-#define STRINGUTILS_H
-
-#include <QObject>
+#ifndef __EXTENSION_H__
+#define __EXTENSION_H__
 
 namespace Ms {
 
-class stringutils : public QObject
-{
-      Q_OBJECT
+//---------------------------------------------------------
+//   Extension
+//---------------------------------------------------------
 
+class Extension {
    public:
-      static QString removeLigatures(const QString& pre);
-      static QString removeDiacritics(const QString& pre);
-      static QString convertFileSizeToHumanReadable(const qlonglong & bytes);
-};
+      Extension() {}
+      static constexpr const char* workspacesDir = "workspaces";
+      static constexpr const char* sfzsDir       = "sfzs";
+      static constexpr const char* soundfontsDir = "soundfonts";
+      static constexpr const char* templatesDir  = "templates";
+      static constexpr const char* instrumentsDir = "instruments";
+
+      static QStringList getDirectoriesByType(const char* type);
+      static bool isInstalled(QString extensionId);
+      static QString getLatestVersion(QString extensionId);
+      };
+
 
 } // namespace Ms
+#endif
 
-#endif // STRINGUTILS_H

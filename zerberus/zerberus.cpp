@@ -47,8 +47,8 @@ Zerberus::Zerberus()
             initialized = true;
             Voice::init();
             }
-      for (int i = 0; i < MAX_VOICES; ++i)
-            freeVoices.push(new Voice(this));
+      
+      freeVoices.init(this);
       for (int i = 0; i < MAX_CHANNEL; ++i)
             _channel[i] = new Channel(this, i);
       busy = true;      // no sf loaded yet

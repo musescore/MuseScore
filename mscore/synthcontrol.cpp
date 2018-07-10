@@ -320,16 +320,7 @@ void SynthControl::storeButtonClicked()
             qDebug("no score");
             return;
             }
-      QString s(dataPath + "/synthesizer.xml");
-      QFile f(s);
-      if (!f.open(QIODevice::WriteOnly)) {
-            qDebug("cannot write synthesizer settings <%s>", qPrintable(s));
-            return;
-            }
-      XmlWriter xml(0, &f);
-      xml.header();
-      synti->state().write(xml);
-
+      synti->storeState();
       storeButton->setEnabled(false);
       recallButton->setEnabled(false);
       }
