@@ -2442,7 +2442,9 @@ static void readStyle(MStyle* style, XmlReader& e)
                   chordListTag = true;
                   }
             else
-                  style->readProperties(e);
+                  if (!style->readProperties(e)) {
+                        e.skipCurrentElement();
+                        }
             }
 
       // if we just specified a new chord description file
