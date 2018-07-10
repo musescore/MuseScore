@@ -176,6 +176,8 @@ void Zerberus::play(const Ms::PlayEvent& event)
       {
       if (busy)
             return;
+      if (event.channel() >= MAX_CHANNEL)
+            return;
       Channel* cp = _channel[int(event.channel())];
       if (cp->instrument() == 0) {
             // qDebug("Zerberus::play(): no instrument for channel %d", event.channel());
