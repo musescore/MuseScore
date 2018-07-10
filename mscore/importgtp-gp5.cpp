@@ -212,7 +212,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
       if (beatBits & BEAT_LYRICS) {
             //free_text = readDelphiString();
 		QString qs = readDelphiString();
-		std::string txt = qs.toStdString();
+            std::string txt = qs.toUtf8().constData();
      	      txt.erase(std::remove_if(txt.begin(), txt.end(), [](char c) {return c == '_'; }), txt.end());
 //		auto pos = txt.find('-');
 		auto buffer = txt;
@@ -243,7 +243,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             while (txt.size() && txt[txt.size() - 1] == '-')
                   txt.resize(txt.size() - 1);
 //		  gpLyrics.lyrics.append(txt);
-            gpLyrics.lyrics.append(QString::fromStdString(txt));
+            gpLyrics.lyrics.append(QString::fromUtf8(txt.data(), txt.size()));
 		gpLyrics.segments.push_back(segment);
             }
 #if 0
@@ -635,7 +635,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
       if (gpLyrics.segments.size()) {
             auto size = std::min(int(gpLyrics.segments.size()), int(gpLyrics.lyrics.size()));
 		for (int i = 0; i < size; ++i) {
-                  std::string str = gpLyrics.lyrics[i].toStdString();
+                  std::string str = gpLyrics.lyrics[i].toUtf8().constData();
 			auto seg = gpLyrics.segments[i];
 			auto mes = seg->measure();
 			while (str.size() && seg && seg->segmentType() == SegmentType::ChordRest) {
@@ -664,7 +664,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
                                           text = str;
                                     if (pos == std::string::npos)
                                           str.resize(0);
-                                    lyr->setPlainText(QString::fromStdString(text));
+                                    lyr->setPlainText(QString::fromUtf8(text.data(), text.size()));
                                     cr->add(lyr);
                                     }
                               else {

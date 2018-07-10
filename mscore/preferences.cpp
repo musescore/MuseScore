@@ -181,7 +181,7 @@ void Preferences::save()
 QVariant Preferences::defaultValue(const QString key) const
       {
       checkIfKeyExists(key);
-      auto pref = _allPreferences.find(key.toStdString());
+      auto pref = _allPreferences.find(key.toUtf8().constData());
       return pref->second.defaultValue();
       }
 
@@ -197,7 +197,7 @@ QSettings* Preferences::settings() const
 
 QVariant Preferences::get(const QString key) const
       {
-      auto pref = _inMemorySettings.find(key.toStdString());
+      auto pref = _inMemorySettings.find(key.toUtf8().constData());
 
       if (_storeInMemoryOnly)
             return (pref != _inMemorySettings.end()) ? pref->second : QVariant(); // invalid QVariant returned when not found
@@ -210,7 +210,7 @@ QVariant Preferences::get(const QString key) const
 void Preferences::set(const QString key, QVariant value, bool temporary)
       {
       if (_storeInMemoryOnly || temporary)
-            _inMemorySettings[key.toStdString()] = value;
+            _inMemorySettings[key.toUtf8().constData()] = value;
       else
             settings()->setValue(key, value);
       }
@@ -218,13 +218,13 @@ void Preferences::set(const QString key, QVariant value, bool temporary)
 void Preferences::remove(const QString key)
       {
       // remove both preference stored "in memory" and in QSettings
-      _inMemorySettings.erase(key.toStdString());
+      _inMemorySettings.erase(key.toUtf8().constData());
       settings()->remove(key);
       }
 
 bool Preferences::has(const QString key) const
       {
-      return _inMemorySettings.count(key.toStdString()) > 0 || settings()->contains(key);
+      return _inMemorySettings.count(key.toUtf8().constData()) > 0 || settings()->contains(key);
       }
 
 QVariant Preferences::preference(const QString key) const
@@ -241,9 +241,9 @@ QVariant Preferences::preference(const QString key) const
 
 void Preferences::checkIfKeyExists(const QString key) const
       {
-      auto pref = _allPreferences.find(key.toStdString());
+	  auto pref = _allPreferences.find(key.toUtf8().constData());
       if (pref == _allPreferences.end()) {
-            qWarning("Preference not found: %s", key.toStdString().c_str());
+            qWarning("Preference not found: %s", key.toUtf8().constData());
             Q_ASSERT(pref != _allPreferences.end());
             }
       }
@@ -292,7 +292,7 @@ int Preferences::getInt(const QString key) const
       bool ok;
       int pref = v.toInt(&ok);
       if (!ok) {
-            qWarning("Can not convert preference %s to int. Returning default value.", key.toStdString().c_str());
+            qWarning("Can not convert preference %s to int. Returning default value.", key.toUtf8().constData());
             return defaultValue(key).toInt();
             }
       return pref;
@@ -304,7 +304,7 @@ double Preferences::getDouble(const QString key) const
       bool ok;
       double pref = v.toDouble(&ok);
       if (!ok) {
-            qWarning("Can not convert preference %s to double. Returning default value.", key.toStdString().c_str());
+            qWarning("Can not convert preference %s to double. Returning default value.", key.toUtf8().constData());
             return defaultValue(key).toDouble();
             }
       return pref;

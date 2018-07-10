@@ -438,10 +438,6 @@ const char* Articulation::articulationName() const
 
 Sid Articulation::getPropertyStyle(Pid id) const
       {
-      switch (id) {
-            default:
-                  break;
-            }
       return Sid::NOSTYLE;
       }
 
