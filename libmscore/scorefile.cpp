@@ -54,8 +54,6 @@
 
 namespace Ms {
 
-bool __loadScore = false;
-
 //---------------------------------------------------------
 //   writeMeasure
 //---------------------------------------------------------
@@ -848,9 +846,8 @@ Score::FileError MasterScore::loadMsc(QString name, bool ignoreVersionError)
 
 Score::FileError MasterScore::loadMsc(QString name, QIODevice* io, bool ignoreVersionError)
       {
-      extern bool __loadScore;
-      bool ols = __loadScore;
-      __loadScore = true;
+      bool ols = Score::isScoreLoaded();
+      Score::isScoreLoaded() = true;
       fileInfo()->setFile(name);
 
       Score::FileError rv;
@@ -860,7 +857,7 @@ Score::FileError MasterScore::loadMsc(QString name, QIODevice* io, bool ignoreVe
             XmlReader r(io);
             return read1(r, ignoreVersionError);
             }
-      __loadScore = ols;
+      Score::isScoreLoaded() = ols;
       return rv;
       }
 

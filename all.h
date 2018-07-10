@@ -66,6 +66,8 @@
 #ifdef QT_WEBENGINE_LIB
 // no precompiled QtWebEngine in Qt 5.6 windows gcc
 #include <QWebEngineView>
+#include <QWebEngineUrlRequestInterceptor>
+#include <QWebEngineProfile>
 #endif
 
 #include <QtXml>

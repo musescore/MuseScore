@@ -221,9 +221,7 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
       {
       if (!curCmd) {
             // this can happen for layout() outside of a command (load)
-            extern bool __loadScore;
-
-            if (!__loadScore)
+            if (!Score::isScoreLoaded())
                   qWarning("no active command, UndoStack");
 
             cmd->redo(ed);
@@ -250,8 +248,7 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
 void UndoStack::push1(UndoCommand* cmd)
       {
       if (!curCmd) {
-            extern bool __loadScore;
-            if (!__loadScore)
+              if (!Score::isScoreLoaded())
                   qWarning("no active command, UndoStack %p", this);
             return;
             }
@@ -289,8 +286,7 @@ void UndoStack::remove(int idx)
 void UndoStack::pop()
       {
       if (!curCmd) {
-            extern bool __loadScore;
-            if (!__loadScore)
+              if (!Score::isScoreLoaded())
                   qWarning("no active command");
             return;
             }

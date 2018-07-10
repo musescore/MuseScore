@@ -12,17 +12,19 @@ IF "%UNSTABLE%" == "" (
 echo "Stable: Build MSI package"
 :: sign dlls and exe files
 CD C:\MuseScore
-SET dSource=win32install
+SET dSource=msvc.install
 for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') do (
     echo "Signing %%f"
     "C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe" sign /f "C:\MuseScore\build\appveyor\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p "%CERTIFICATE_PASSWORD%" "%%f"
     )
 
 :: Create msi package
-mingw32-make -f Makefile.mingw package BUILD_NUMBER=%APPVEYOR_BUILD_NUMBER%
+::mingw32-make -f Makefile.mingw package BUILD_NUMBER=%APPVEYOR_BUILD_NUMBER%
+
+C:\MuseScore\msvc_build.bat package
 
 :: find the MSI file without the hardcoded version
-for /r %%i in (build.release\*.msi) do ( SET FILEPATH=%%i )
+for /r %%i in (msvc.build.release\*.msi) do ( SET FILEPATH=%%i )
 echo on
 echo %FILEPATH%
 echo off
@@ -42,8 +44,8 @@ goto :UPLOAD
 :UNSTABLE_LABEL
 echo "Unstable: build 7z package"
 CD C:\MuseScore
-RENAME C:\MuseScore\win32install\bin\musescore.exe nightly.exe
-RENAME C:\MuseScore\win32install MuseScoreNightly
+RENAME C:\MuseScore\msvc.install\bin\musescore.exe nightly.exe
+RENAME C:\MuseScore\msvc.install MuseScoreNightly
 XCOPY C:\MuseScore\build\appveyor\special C:\MuseScore\MuseScoreNightly\special /I /E /Y /Q
 COPY C:\MuseScore\build\appveyor\support\README.txt C:\MuseScore\MuseScoreNightly\README.txt /Y
 COPY C:\MuseScore\build\appveyor\support\nightly.bat C:\MuseScore\MuseScoreNightly\nightly.bat /Y

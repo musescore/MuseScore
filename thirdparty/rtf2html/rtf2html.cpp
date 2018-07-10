@@ -52,7 +52,7 @@ QString rtf2html(const QString& iString)
       {
       QString oString;
       try {
-            std::string str_in = iString.toStdString();
+            std::string str_in = iString.toUtf8().constData();
 
             std::string::iterator buf_in=str_in.begin(), buf_in_end=str_in.end();
             colorvect colortbl;
@@ -536,8 +536,8 @@ QString rtf2html(const QString& iString)
       }
    }
 
-            QString qTitle(QString::fromStdString(title));
-            QString qHtml(QString::fromStdString(html));
+            QString qTitle(QString::fromUtf8(title.data(), title.size()));
+            QString qHtml(QString::fromUtf8(html.data(), html.size()));
 
             oString = QString("<html><head><STYLE type=\"text/css\">body {padding-left:"
                   "%1"

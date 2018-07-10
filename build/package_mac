@@ -94,7 +94,7 @@ rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtPositioning
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtPurchasing
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtQuick/Particles*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/Qt/WebSockets
-rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtWebEngine
+# rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtWebEngine
 
 find ${VOLUME}/${APPNAME}.app/Contents -type d -name "*.dSYM" -exec rm -r {} +
 

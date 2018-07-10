@@ -371,23 +371,23 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         // calculate offsets
                         if (shareHeads) {
                               for (int i = overlapNotes.size() - 1; i >= 1; i -= 2) {
-                                    Note* p = overlapNotes[i-1];
+                                    Note* previousNote = overlapNotes[i-1];
                                     Note* n = overlapNotes[i];
-                                    if (!(p->chord()->isNudged() || n->chord()->isNudged())) {
-                                          if (p->chord()->dots() == n->chord()->dots()) {
+                                    if (!(previousNote->chord()->isNudged() || n->chord()->isNudged())) {
+                                          if (previousNote->chord()->dots() == n->chord()->dots()) {
                                                 // hide one set dots
-                                                bool onLine = !(p->line() & 1);
+                                                bool onLine = !(previousNote->line() & 1);
                                                 if (onLine) {
                                                       // hide dots for lower voice
-                                                      if (p->voice() & 1)
-                                                            p->setDotsHidden(true);
+                                                      if (previousNote->voice() & 1)
+                                                            previousNote->setDotsHidden(true);
                                                       else
                                                             n->setDotsHidden(true);
                                                       }
                                                 else {
                                                       // hide dots for upper voice
-                                                      if (!(p->voice() & 1))
-                                                            p->setDotsHidden(true);
+                                                      if (!(previousNote->voice() & 1))
+                                                            previousNote->setDotsHidden(true);
                                                       else
                                                             n->setDotsHidden(true);
                                                       }
@@ -1360,13 +1360,13 @@ void Score::connectTies(bool silent)
                   Tremolo* tremolo = c->tremolo();
                   if (tremolo && tremolo->twoNotes() && !tremolo->chord2()) {
                         for (Segment* ls = s->next1(st); ls; ls = ls->next1(st)) {
-                              Element* e = ls->element(i);
-                              if (!e)
+                              Element* element = ls->element(i);
+                              if (!element)
                                     continue;
-                              if (!e->isChord())
+                              if (!element->isChord())
                                     qDebug("cannot connect tremolo");
                               else {
-                                    Chord* nc = toChord(e);
+                                    Chord* nc = toChord(element);
                                     nc->setTremolo(tremolo);
                                     tremolo->setChords(c, nc);
                                     // cross-measure tremolos are not supported
@@ -1630,9 +1630,9 @@ void Score::respace(std::vector<ChordRest*>* elements)
 void LayoutContext::getEmptyPage()
       {
       if (curPage >= score->npages()) {
-            Page* page = new Page(score);
-            page->setNo(score->pages().size());
-            score->pages().push_back(page);
+            Page* newPage = new Page(score);
+            newPage->setNo(score->pages().size());
+            score->pages().push_back(newPage);
             }
       else {
             page = score->pages()[curPage];
@@ -2793,10 +2793,11 @@ void Score::layoutLyrics(System* system)
       for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx))
             visibleStaves.push_back(staffIdx);
 
-      int nAbove[nstaves()];
-
+      //int nAbove[nstaves()];
+      std::vector<int> VnAbove(nstaves());
+      
       for (int staffIdx : visibleStaves) {
-            nAbove[staffIdx] = 0;
+            VnAbove[staffIdx] = 0;
             for (MeasureBase* mb : system->measures()) {
                   if (!mb->isMeasure())
                         continue;
@@ -2811,7 +2812,7 @@ void Score::layoutLyrics(System* system)
                                                 if (l->placeAbove())
                                                       ++nA;
                                                 }
-                                          nAbove[staffIdx] = qMax(nAbove[staffIdx], nA);
+                                          VnAbove[staffIdx] = qMax(VnAbove[staffIdx], nA);
                                           }
                                     }
                               }
@@ -2830,7 +2831,7 @@ void Score::layoutLyrics(System* system)
                                     ChordRest* cr = s.cr(staffIdx * VOICES + voice);
                                     if (cr) {
                                           for (Lyrics* l : cr->lyrics())
-                                                l->layout2(nAbove[staffIdx]);
+                                                l->layout2(VnAbove[staffIdx]);
                                           }
                                     }
                               }
@@ -2859,7 +2860,7 @@ void Score::layoutLyrics(System* system)
                         for (MeasureBase* mb : system->measures()) {
                               if (!mb->isMeasure())
                                     continue;
-                              yMax = qMax(yMax, findLyricsMaxY(toMeasure(mb), staffIdx));
+                              yMax = qMax<qreal>(yMax, findLyricsMaxY(toMeasure(mb), staffIdx));
                               yMin = qMin(yMin, findLyricsMinY(toMeasure(mb), staffIdx));
                               }
                         for (MeasureBase* mb : system->measures()) {
@@ -2958,10 +2959,10 @@ System* Score::collectSystem(LayoutContext& lc)
       {
       if (!lc.curMeasure)
             return 0;
-      Measure* m  = _systems.empty() ? 0 : _systems.back()->lastMeasure();
-      if (m) {
-            lc.firstSystem        = m->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
-            lc.startWithLongNames = lc.firstSystem && m->sectionBreakElement()->startWithLongNames();
+      Measure* measure  = _systems.empty() ? 0 : _systems.back()->lastMeasure();
+      if (measure) {
+            lc.firstSystem        = measure->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
+            lc.startWithLongNames = lc.firstSystem && measure->sectionBreakElement()->startWithLongNames();
             }
       System* system = getNextSystem(lc);
       system->setInstrumentNames(lc.startWithLongNames);
@@ -3060,13 +3061,13 @@ System* Score::collectSystem(LayoutContext& lc)
                   // and we can remove the start repeat barline of the current barline
 
                   if (lc.curMeasure->isMeasure()) {
-                        Measure* m = toMeasure(lc.curMeasure);
-                        if (m->repeatStart()) {
-                              Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, 0);
+                        Measure* m1 = toMeasure(lc.curMeasure);
+                        if (m1->repeatStart()) {
+                              Segment* s = m1->findSegmentR(SegmentType::StartRepeatBarLine, 0);
                               if (!s->enabled()) {
                                     s->setEnabled(true);
-                                    m->computeMinWidth();
-                                    ww = m->width();
+                                    m1->computeMinWidth();
+                                    ww = m1->width();
                                     }
                               }
                         }
@@ -3638,7 +3639,7 @@ void LayoutContext::collectPage()
 
       int stick = -1;
       for (System* s : page->systems()) {
-            Score* score = s->score();
+            Score* currentScore = s->score();
             for (MeasureBase* mb : s->measures()) {
                   if (!mb->isMeasure())
                         continue;
@@ -3646,13 +3647,13 @@ void LayoutContext::collectPage()
                   if (stick == -1)
                         stick = m->tick();
 
-                  for (int track = 0; track < score->ntracks(); ++track) {
+                  for (int track = 0; track < currentScore->ntracks(); ++track) {
                         for (Segment* segment = m->first(); segment; segment = segment->next()) {
                               Element* e = segment->element(track);
                               if (!e)
                                     continue;
                               if (e->isChordRest()) {
-                                    if (!score->staff(track2staff(track))->show())
+                                    if (!currentScore->staff(track2staff(track))->show())
                                           continue;
                                     ChordRest* cr = toChordRest(e);
                                     if (notTopBeam(cr))                   // layout cross staff beams
@@ -3670,9 +3671,9 @@ void LayoutContext::collectPage()
                                                       for (Spanner* sp : n->spannerFor())
                                                             sp->layout();
                                                       }
-                                                for (Element* e : cc->el()) {
-                                                      if (e->isSlur())
-                                                            e->layout();
+                                                for (Element* element : cc->el()) {
+                                                      if (element->isSlur())
+                                                            element->layout();
                                                       }
                                                 }
                                           c->layoutArpeggio2();

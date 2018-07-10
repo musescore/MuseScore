@@ -13,95 +13,82 @@
 #ifndef __STARTCENTER_H__
 #define __STARTCENTER_H__
 
-#include "ui_startcenter.h"
+#include "config.h"
 #include "abstractdialog.h"
+#include "ui_startcenter.h"
 
 namespace Ms {
 
-#if 0
-//---------------------------------------------------------
-//   MyNetworkAccessManager
-//---------------------------------------------------------
+#ifdef USE_WEBENGINE
 
-class MyNetworkAccessManager: public QNetworkAccessManager
-      {
-      Q_OBJECT
-
-   public:
-      MyNetworkAccessManager(QObject *parent) : QNetworkAccessManager(parent) {}
-
-   protected:
-      QNetworkReply * createRequest(Operation op,
-                                    const QNetworkRequest & req,
-                                    QIODevice * outgoingData = 0);
-      };
-
-//---------------------------------------------------------
-//   MyWebView
-//---------------------------------------------------------
-
-class MyWebView: public QWebEngineView
-      {
-      Q_OBJECT
-
-   public slots:
-      void link(const QUrl& url);
-      void setBusy();
-      void stopBusy(bool val);
-      void addToJavascript();
-
-#ifndef QT_NO_OPENSSL
-      void ignoreSSLErrors(QNetworkReply *reply, QList<QSslError> sslErrors);
-#endif
-
-   public:
-      MyWebView(QWidget *parent = 0);
-      ~MyWebView();
-      virtual QSize sizeHint () const;
-      };
-
-//---------------------------------------------------------
-//   CookieJar
-//---------------------------------------------------------
-
-class CookieJar : public QNetworkCookieJar
-      {
-      Q_OBJECT
+class MyWebUrlRequestInterceptor : public QWebEngineUrlRequestInterceptor {
+    Q_OBJECT
 
     public:
-      CookieJar(QString path, QObject* parent = 0);  //load cookie
+      MyWebUrlRequestInterceptor(QObject* p = Q_NULLPTR)
+            : QWebEngineUrlRequestInterceptor(p) {}
 
-      void load();
-      void save();
-
-      bool setCookiesFromUrl(const QList<QNetworkCookie>& cookieList, const QUrl& url);
-
-    private:
-      QString _file; // where to save cookies
+      void interceptRequest(QWebEngineUrlRequestInfo& info)
+            {
+            info.setHttpHeader("Accept-Language",
+                  QString("%1;q=0.8,en-US;q=0.6,en;q=0.4").arg(mscore->getLocaleISOCode()).toUtf8());
+            }
       };
-#endif
+
+//---------------------------------------------------------
+//   MyWebEnginePage
+//---------------------------------------------------------
+
+class MyWebEnginePage : public QWebEnginePage {
+    Q_OBJECT
+
+    public:
+      MyWebEnginePage(QObject* parent = Q_NULLPTR)
+            : QWebEnginePage(parent) {}
+
+      bool acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool isMainFrame);
+      };
+
+//---------------------------------------------------------
+//   MyWebEngineView
+//---------------------------------------------------------
+
+class MyWebView : public QWebEngineView {
+    Q_OBJECT
+
+   public slots:
+
+   public:
+      MyWebView(QWidget* parent = 0);
+      ~MyWebView();
+      virtual QSize sizeHint() const;
+      };
+
+#endif //USE_WEBENGINE
+
 //---------------------------------------------------------
 //   Startcenter
 //---------------------------------------------------------
 
-class Startcenter : public AbstractDialog, public Ui::Startcenter
-      {
+class Startcenter : public AbstractDialog, public Ui::Startcenter {
       Q_OBJECT
-//TODO      MyWebView* _webView;
+#ifdef USE_WEBENGINE
+      MyWebView* _webView;
+#endif
       virtual void closeEvent(QCloseEvent*);
 
-   private slots:
+    private slots:
       void loadScore(QString);
       void newScore();
       void openScoreClicked();
 
-   protected:
+    protected:
       virtual void retranslate() { retranslateUi(this); }
 
-   signals:
+    signals:
       void closed(bool);
 
-   public:
+    public:
       Startcenter();
       ~Startcenter();
       void updateRecentScores();
@@ -109,5 +96,4 @@ class Startcenter : public AbstractDialog, public Ui::Startcenter
       void readSettings();
       };
 }
-#endif
-
+#endif //__STARTCENTER_H__

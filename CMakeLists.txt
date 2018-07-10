@@ -79,16 +79,11 @@ set(USE_SSE           TRUE)
 set(SCRIPT_INTERFACE  TRUE)
 
 # Disable components not supported on Windows
-if (MSVC)
+if (MSVC OR MINGW)
       set(WIN_NOT_AVAIL "Not available on Windows")
       option(BUILD_PULSEAUDIO ${WIN_NOT_AVAIL} OFF)
       option(BUILD_ALSA ${WIN_NOT_AVAIL} OFF)
-endif (MSVC)
-if (MINGW)
-      set(WIN_NOT_AVAIL "Not available on Windows")
-      option(BUILD_PULSEAUDIO ${WIN_NOT_AVAIL} OFF)
-      option(BUILD_ALSA ${WIN_NOT_AVAIL} OFF)
-endif (MINGW)
+endif (MSVC OR MINGW)
 
 # Disable components not supported on Mac
 if (APPLE)
@@ -123,6 +118,7 @@ option(BUILD_PULSEAUDIO "Build with support for PulseAudio audio backend." ON)
 option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
 option(BUILD_PORTAUDIO "Build with support for PortAudio audio backend." ON)
 option(BUILD_PORTMIDI "Build with support for PortAudio's MIDI features." ${BUILD_PORTAUDIO}) # PortAudio required
+option(BUILD_WEBEBENGINE "Built in webkit support" ON)
 option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
@@ -218,6 +214,14 @@ SET(MUSESCORE_NAME_VERSION "${MUSESCORE_NAME} ${MUSESCORE_VERSION_MAJOR}")
 #
 SET(MUSESCORE_VERSION_FULL  "${MUSESCORE_VERSION}.${MUSESCORE_VERSION_PATCH}")
 
+if (BUILD_WEBEBENGINE)
+   if (MINGW)
+      SET (USE_WEBENGINE 0)
+   else (MINGW)
+      SET (USE_WEBENGINE 1)
+   endif(MINGW)
+endif (BUILD_WEBEBENGINE)
+
 if (MUSESCORE_LABEL)
   SET (MUSESCORE_NAME_VERSION "${MUSESCORE_NAME_VERSION} ${MUSESCORE_LABEL}")
 endif (MUSESCORE_LABEL)
@@ -227,21 +231,15 @@ if (MSCORE_UNSTABLE)
 endif (MSCORE_UNSTABLE)
 
 if (MINGW OR MSVC OR APPLE)
-  if(MINGW)
-      # Option for MINGW
+  if(MINGW OR MSVC)
+      # Option for MINGW and MSVC
       SET(Mscore_INSTALL_NAME  "")
       SET(Mscore_SHARE_NAME    "./")
-  else(MINGW)
-      if (MSVC)
-         # Option for MSVC
-         SET(Mscore_INSTALL_NAME  "")
-         SET(Mscore_SHARE_NAME    "./")
-      else (MSVC)
-         # Option for Apple
-         SET(Mscore_INSTALL_NAME  "Contents/Resources/")
-         SET(Mscore_SHARE_NAME    "mscore.app/")
-      endif (MSVC)
-  endif(MINGW)
+  else(MINGW OR MSVC)
+       # Option for Apple
+       SET(Mscore_INSTALL_NAME  "Contents/Resources/")
+       SET(Mscore_SHARE_NAME    "mscore.app/")
+  endif(MINGW OR MSVC)
 else (MINGW OR MSVC OR APPLE)
       SET(Mscore_INSTALL_NAME  "mscore${MSCORE_INSTALL_SUFFIX}-${MUSESCORE_VERSION}/")
       SET(Mscore_SHARE_NAME    "share/")
@@ -357,32 +355,34 @@ else (BUILD_PULSEAUDIO)
       message(STATUS "PulseAudio support disabled")
 endif (BUILD_PULSEAUDIO)
 
+
 ##
 ## LAME
 ##
-if (APPLE OR MINGW OR MSVC)
-      IF (BUILD_LAME)
-            include (FindLame)
-            set (USE_LAME 1)
-      ENDIF (BUILD_LAME)
-else (APPLE OR MINGW OR MSVC)
-      IF (BUILD_LAME)
-            include (FindLame)
-            IF (LAME_FOUND)
-                  set(USE_LAME 1)
-                  MESSAGE("LAME found.")
-            ELSE (LAME_FOUND)
-                  set(USE_LAME 0)
-                  MESSAGE("LAME not found.")
-            ENDIF (LAME_FOUND)
-      ELSE (BUILD_LAME)
-            MESSAGE(STATUS "LAME MP3 support disabled")
-      ENDIF (BUILD_LAME)
-endif (APPLE OR MINGW OR MSVC)
+
+
+if (BUILD_LAME)
+  if (MSVC)
+	 include (FindLameMSVC)
+  else (MSVC)
+	 include (FindLame)
+  endif (MSVC)
+  if (LAME_FOUND)
+	 set(USE_LAME 1)
+	 MESSAGE("LAME found.")
+  else (LAME_FOUND)
+	 set(USE_LAME 0)
+	 MESSAGE("LAME not found.")
+  endif (LAME_FOUND)
+else (BUILD_LAME)
+  MESSAGE(STATUS "LAME MP3 support disabled")
+endif (BUILD_LAME)
+
 
 ##
 ## Find JACK >= JACK_MIN_VERSION
 ##
+
 
 IF(BUILD_JACK)
      IF(MINGW OR MSVC)
@@ -429,6 +429,11 @@ ENDIF(BUILD_JACK)
 if (BUILD_PORTAUDIO)
     if (MINGW OR MSVC)
         set ( USE_PORTAUDIO 1 )
+        include(FindPortAudio)
+        add_library(portaudio1 SHARED IMPORTED)	
+        message(STATUS ${PORTAUDIO_LIBRARY})
+        #set_target_properties(portaudio1 PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/dependencies/libx86/libportaudio.dll)
+        set_target_properties(portaudio1 PROPERTIES IMPORTED_IMPLIB ${PROJECT_SOURCE_DIR}/dependencies/libx86/portaudio.lib)   
     else (MINGW OR MSVC)
         PKGCONFIG1 (portaudio-2.0 19 PORTAUDIO_INCDIR PORTAUDIO_LIBDIR PORTAUDIO_LIB PORTAUDIO_CPP)
         if (PORTAUDIO_INCDIR)
@@ -496,10 +501,28 @@ if (APPLE)
 else(APPLE)
    if(MINGW OR MSVC)
       set(SNDFILE_LIB sndfile-1)
+
+	  include(FindVorbis)
+	  add_library(vorbis1 SHARED IMPORTED)
+	  set_target_properties(vorbis1 PROPERTIES IMPORTED_IMPLIB ${VORBIS_LIBRARY})
+
+	  include(FindSndFile)
+	  add_library(sndfile1 SHARED IMPORTED)
+	  set_target_properties(sndfile1 PROPERTIES IMPORTED_IMPLIB ${SNDFILE_LIBRARY})
+
+	  include(FindVorbisfile)
+	  add_library(vorbisfile1 SHARED IMPORTED)
+	  set_target_properties(vorbisfile1 PROPERTIES IMPORTED_IMPLIB ${VORBISFILE_LIBRARY})
+
+	  include(FindOgg)
+	  add_library(ogg1 SHARED IMPORTED)
+	  set_target_properties(ogg1 PROPERTIES IMPORTED_IMPLIB ${OGG_LIBRARY})
+
    else(MINGW OR MSVC)
       set(SNDFILE_LIB sndfile)
    endif(MINGW OR MSVC)
    set(OGG_LIB ogg)
+
    set(VORBIS_LIB vorbis)
 endif(APPLE)
 
@@ -706,6 +729,16 @@ include_directories(
    ${LAME_INCLUDE_DIR}
 )
 
+if (MSVC)
+   include_directories(${PROJECT_SOURCE_DIR}/dependencies)
+   include_directories(${PROJECT_SOURCE_DIR}/dependencies/include)
+   include_directories(${PROJECT_SOURCE_DIR}/dependencies/include/vorbis)
+   include_directories(${SNDFILE_INCLUDE_DIR})
+   include_directories(${VORBIS_INCLUDE_DIR})
+   include_directories(${PORTAUDIO_INCLUDE_DIR})
+   include_directories(${OGG_INCLUDE_DIR})
+endif (MSVC)
+   
 if (USE_SYSTEM_FREETYPE)
       include_directories(${FREETYPE_INCLUDE_DIRS})
 else (USE_SYSTEM_FREETYPE)
@@ -761,6 +794,8 @@ add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
 ##      as it is just setting the value for a property).
 ##
 if (MSVC)
+   set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true)
+   set(CMAKE_SKIP_PACKAGE_ALL_DEPENDENCY true)
    set(VS_STARTUP_PROJECT mscore)
 endif (MSVC)
 

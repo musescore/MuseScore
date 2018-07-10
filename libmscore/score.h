@@ -584,6 +584,7 @@ class Score : public QObject, public ScoreElement {
       bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
       bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
 
+      static bool& isScoreLoaded();
       bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
       void write(XmlWriter&, bool onlySelection);

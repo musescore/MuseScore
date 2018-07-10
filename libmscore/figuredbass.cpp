@@ -1126,8 +1126,8 @@ void FiguredBass::layoutLines()
             return;
             }
 
-      ChordRest* lastCR;                                   // the last ChordRest of this
-      Segment *  nextSegm;                                 // the Segment beyond this' segment
+      ChordRest* lastCR = nullptr;                                   // the last ChordRest of this
+      Segment *  nextSegm = nullptr;                                 // the Segment beyond this' segment
       int        nextTick = segment()->tick() + _ticks;    // the tick beyond this' duration
 
       // locate the measure containing the last tick of this; it is either:

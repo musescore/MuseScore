@@ -266,8 +266,8 @@ void FluidGui::loadSf()
 
             QStringList sl;
             for (int i = 0; i < soundFonts->count(); ++i) {
-                  QListWidgetItem* item = soundFonts->item(i);
-                  sl.append(item->text());
+                  QListWidgetItem* widgetItem = soundFonts->item(i);
+                  sl.append(widgetItem->text());
                   }
 
             if (sl.contains(sfPath)) {
