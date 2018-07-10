@@ -33,9 +33,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 PlayPanel::PlayPanel(QWidget* parent)
-   : QWidget(parent, Qt::Dialog)
+    : QDockWidget("PlayPanel", parent)
       {
-      setObjectName("PlayPanel");
       cachedTickPosition = -1;
       cachedTimePosition = -1;
       cs                 = 0;
@@ -43,6 +42,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       setupUi(this);
       setWindowFlags(Qt::Tool);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
 
       MuseScore::restoreGeometry(this);
 
