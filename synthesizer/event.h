@@ -234,9 +234,7 @@ class PlayEvent : public MidiCoreEvent {
 //---------------------------------------------------------
 
 class NPlayEvent : public PlayEvent {
-      const Note* _note = 0;
       int _origin = -1;
-      int _discard = 0;
 
    public:
       NPlayEvent() : PlayEvent() {}
@@ -245,13 +243,10 @@ class NPlayEvent : public PlayEvent {
       NPlayEvent(const MidiCoreEvent& e) : PlayEvent(e) {}
       NPlayEvent(BeatType beatType);
 
-      const Note* note() const       { return _note; }
-      void setNote(const Note* v)    { _note = v; }
+      std::vector<const Note*> notes;
 
       int getOriginatingStaff() const { return _origin; }
       void setOriginatingStaff(int i) { _origin = i; }
-      void setDiscard(int d) { _discard = d; }
-      int discard() const { return _discard; }
       };
 
 //---------------------------------------------------------
