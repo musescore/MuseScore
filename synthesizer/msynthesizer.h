@@ -102,6 +102,8 @@ class MasterSynthesizer : public QObject {
       float gain() const     { return _gain; }
       float boost() const    { return _boost; }
       void setBoost(float v) { _boost = v; }
+
+      bool storeState();
       };
 
 }

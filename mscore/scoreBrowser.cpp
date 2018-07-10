@@ -64,6 +64,7 @@ ScoreBrowser::ScoreBrowser(QWidget* parent)
       scoreList->layout()->setMargin(0);
       _noMatchedScoresLabel = new QLabel(tr("There are no templates matching the current search."));
       _noMatchedScoresLabel->setHidden(true);
+      _noMatchedScoresLabel->setObjectName("noMatchedScoresLabel");
       scoreList->layout()->addWidget(_noMatchedScoresLabel);
       connect(preview, SIGNAL(doubleClicked(QString)), SIGNAL(scoreActivated(QString)));
       if (!_showPreview)
@@ -177,8 +178,16 @@ void ScoreBrowser::setScores(QFileInfoList& s)
       scoreLists.clear();
 
       QVBoxLayout* l = static_cast<QVBoxLayout*>(scoreList->layout());
-      while (l->count())
-            l->removeItem(l->itemAt(0));
+      QLayoutItem* child;
+      while (l->count()) {
+            child = l->takeAt(0);
+            if (child->widget() != 0) {
+                  if (child->widget()->objectName() == "noMatchedScoresLabel") // do not delete
+                        continue;
+                  delete child->widget();
+                  }
+            delete child;
+            }
 
       ScoreListWidget* sl = 0;
 
@@ -271,14 +280,14 @@ void ScoreBrowser::selectLast()
       ScoreItem* item = static_cast<ScoreItem*>(w->item(w->count()-1));
       w->setCurrentItem(item);
       preview->setScore(item->info());
-}
+      }
 
 //---------------------------------------------------------
 //   filter
 //      filter which scores are visible based on searchString
 //---------------------------------------------------------
 void ScoreBrowser::filter(const QString &searchString)
-{
+      {
       int numCategoriesWithMathingScores = 0;
 
       for (ScoreListWidget* list : scoreLists) {
@@ -308,7 +317,7 @@ void ScoreBrowser::filter(const QString &searchString)
             }
 
       _noMatchedScoresLabel->setHidden(numCategoriesWithMathingScores > 0);
-}
+      }
 
 //---------------------------------------------------------
 //   scoreChanged

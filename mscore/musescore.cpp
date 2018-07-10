@@ -94,6 +94,7 @@
 #include "libmscore/lasso.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/synthesizerstate.h"
+#include "libmscore/utils.h"
 
 #include "driver.h"
 
@@ -111,6 +112,8 @@
 #include "startcenter.h"
 #include "help.h"
 #include "awl/aslider.h"
+#include "extension.h"
+#include "thirdparty/qzip/qzipreader_p.h"
 
 #ifdef USE_LAME
 #include "exportmp3.h"
@@ -163,6 +166,7 @@ static QString jsonFileName;
 static QString audioDriver;
 static QString pluginName;
 static QString styleFile;
+static QString extensionName;
 static bool scoresOnCommandline { false };
 
 static QList<QTranslator*> translatorList;
@@ -465,6 +469,7 @@ void updateExternalValuesFromPreferences() {
       dir.mkpath(preferences.getString(PREF_APP_PATHS_MYSTYLES));
       dir.mkpath(preferences.getString(PREF_APP_PATHS_MYIMAGES));
       dir.mkpath(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
+      dir.mkpath(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
       dir.mkpath(preferences.getString(PREF_APP_PATHS_MYPLUGINS));
       foreach (QString path, preferences.getString(PREF_APP_PATHS_MYSOUNDFONTS).split(";"))
             dir.mkpath(path);
@@ -551,6 +556,8 @@ void MuseScore::preferencesChanged()
 
       delete newWizard;
       newWizard = 0;
+      reloadInstrumentTemplates();
+      updateInstrumentDialog();
       }
 
 //---------------------------------------------------------
@@ -610,6 +617,291 @@ void MuseScore::populateNoteInputMenu()
       }
 
 //---------------------------------------------------------
+//   onLongOperationFinished
+//---------------------------------------------------------
+
+void MuseScore::onLongOperationFinished()
+      {
+      infoMsgBox->accept();
+      }
+
+//---------------------------------------------------------
+//   importExtension
+//---------------------------------------------------------
+
+bool MuseScore::importExtension(QString path)
+      {
+      MQZipReader zipFile(path);
+      // compute total unzipped size
+      qint64 totalZipSize = 0;
+      for (auto fi : zipFile.fileInfoList())
+            totalZipSize += fi.size;
+
+      // check if extension path is writable and has enough space
+      QStorageInfo storage = QStorageInfo(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
+      if (storage.isReadOnly()) {
+            if (!MScore::noGui)
+                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Cannot import extension on read-only storage: %1").arg(storage.displayName()));
+            return false;
+            }
+      if (totalZipSize >= storage.bytesAvailable()) {
+            if (!MScore::noGui)
+                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Cannot import extension: storage %1 is full").arg(storage.displayName()));
+            return false;
+            }
+      // Check structure of the extension
+      bool hasMetadata = false;
+      bool hasAlienDirectory = false;
+      bool hasAlienFiles = false;
+      QSet<QString> acceptableFolders = { Extension::sfzsDir, Extension::soundfontsDir, Extension::templatesDir, Extension::instrumentsDir, Extension::workspacesDir };
+      for (auto fi : zipFile.fileInfoList()) {
+            if (fi.filePath == "metadata.json")
+                  hasMetadata = true;
+            else {
+                  // get folders
+                  auto path = QDir::cleanPath(fi.filePath);
+                  QStringList folders(path);
+                  while ((path = QFileInfo(path).path()).length() < folders.last().length())
+                        folders << path;
+                  if (folders.size() < 2) {
+                        hasAlienFiles = true; // in root dir
+                        break;
+                        }
+                  QString rootDir = folders.at(folders.size() - 2);
+                  if (!acceptableFolders.contains(rootDir)) {
+                        hasAlienDirectory = true; // in root dir
+                        break;
+                        }
+                  }
+            }
+      if (!hasMetadata) {
+            if (!MScore::noGui)
+                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Corrupted extension: no metadata.json"));
+            return false;
+            }
+      if (hasAlienDirectory) {
+            if (!MScore::noGui)
+                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Corrupted extension: unsupported directories in root directory"));
+            return false;
+            }
+      if (hasAlienFiles) {
+            if (!MScore::noGui)
+                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Corrupted extension: unsupported files in root directory"));
+            return false;
+            }
+      zipFile.close();
+
+      MQZipReader zipFile2(path);
+      // get extension id from metadata.json
+      QByteArray mdba = zipFile2.fileData("metadata.json");
+      zipFile2.close();
+      QJsonDocument loadDoc = QJsonDocument::fromJson(mdba);
+      QJsonObject mdObject = loadDoc.object();
+      QString extensionId = mdObject["id"].toString();
+      QString version = mdObject["version"].toString();
+      if (extensionId.isEmpty() || version.isEmpty()) {
+            if (!MScore::noGui)
+                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Corrupted extension: corrupted metadata.json"));
+            return false;
+            }
+
+      // Check if extension is already installed, ask for uninstall
+      QDir dir(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
+      auto dirList = dir.entryList(QStringList(extensionId), QDir::Dirs | QDir::NoDotAndDotDot);
+      bool newerVersion = false;
+      if (dirList.contains(extensionId)) {
+            QString extDirName = QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId);
+            QDir extDir(extDirName);
+            auto versionDirList = extDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+            if (versionDirList.size() > 0) {
+                  // potentially other versions
+                  // is there a more recent version?
+                  for (auto versionDir : versionDirList) {
+                        if (compareVersion(version, versionDir)) {
+                              qDebug() << "There is a newer version. We don't install";
+                              if (!MScore::noGui)
+                                    QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("A newer version is already installed"));
+                              newerVersion = true;
+                              return false;
+                              }
+                        }
+                  }
+            if (!newerVersion) {
+                  qDebug() << "found already install extension without newer version: deleting it";
+                  QDir d(QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId));
+                  if (!d.removeRecursively()) {
+                        if (!MScore::noGui)
+                              QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Error while deleting previous version of the extension: %1").arg(extensionId));
+                        return false;
+                        }
+                  }
+            }
+
+      //setup the message box
+      infoMsgBox = new QMessageBox();
+      infoMsgBox->setWindowModality(Qt::ApplicationModal);
+      infoMsgBox->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
+      infoMsgBox->setTextFormat(Qt::RichText);
+      infoMsgBox->setMinimumSize(300, 100);
+      infoMsgBox->setMaximumSize(300, 100);
+      infoMsgBox->setStandardButtons(0);
+      infoMsgBox->setText(QString("<p align='center'>") + tr("Please wait, unpacking extension...") + QString("</p>"));
+
+      //setup async run of long operations
+      QFutureWatcher<bool> futureWatcherUnzip;
+      connect(&futureWatcherUnzip, SIGNAL(finished()), this, SLOT(onLongOperationFinished()));
+
+      MQZipReader* zipFile3 = new MQZipReader(path);
+      // Unzip the extension asynchronously
+      QFuture<bool> futureUnzip = QtConcurrent::run(zipFile3, &MQZipReader::extractAll, QString("%1/%2/%3").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version));
+      futureWatcherUnzip.setFuture(futureUnzip);
+      if (!MScore::noGui)
+            infoMsgBox->exec();
+      bool unzipResult = futureUnzip.result();
+      zipFile3->close();
+      delete zipFile3;
+      zipFile3 = nullptr;
+
+      if (!unzipResult) {
+            if (!MScore::noGui)
+                  QMessageBox::critical(mscore, QWidget::tr("Import Extension File"), QWidget::tr("Unable to extract files from the extension"));
+            return false;
+            }
+
+      delete newWizard;
+      newWizard = 0;
+      mscore->reloadInstrumentTemplates();
+      mscore->updateInstrumentDialog();
+
+      auto loadSoundFontAsync = [&]() {
+            // After install: add sfz to zerberus
+            QDir sfzDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::sfzsDir));
+            if (sfzDir.exists()) {
+                  // get all sfz files
+                  QDirIterator it(sfzDir.absolutePath(), QStringList("*.sfz"), QDir::Files, QDirIterator::Subdirectories);
+                  Synthesizer* s = synti->synthesizer("Zerberus");
+                  QStringList sfzs;
+                  while (it.hasNext()) {
+                        it.next();
+                        sfzs.append(it.fileName());
+                        }
+                  sfzs.sort();
+                  for (int sfzNum = 0; sfzNum < sfzs.size(); ++sfzNum)
+                        s->addSoundFont(sfzs[sfzNum]);
+
+                  if (!sfzs.isEmpty())
+                        synti->storeState();
+                  }
+
+            // After install: add soundfont to fluid
+            QDir sfDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::soundfontsDir));
+            if (sfDir.exists()) {
+                  // get all soundfont files
+                  QStringList filters("*.sf2");
+                  filters.append("*.sf3");
+                  QDirIterator it(sfzDir.absolutePath(), filters, QDir::Files, QDirIterator::Subdirectories);
+                  Synthesizer* s = synti->synthesizer("Fluid");
+                  QStringList sfs;
+                  while (it.hasNext()) {
+                        it.next();
+                        sfs.append(it.fileName());
+                        }
+                  sfs.sort();
+                  for (auto sf : sfs)
+                        s->addSoundFont(sf);
+                  if (!sfs.isEmpty())
+                        synti->storeState();
+                  }
+            };
+      if (!enableExperimental) {
+            //load soundfonts async
+            QFuture<void> futureLoadSFs = QtConcurrent::run(loadSoundFontAsync);
+            QFutureWatcher<void> futureWatcherLoadSFs;
+            futureWatcherLoadSFs.setFuture(futureLoadSFs);
+            connect(&futureWatcherLoadSFs, SIGNAL(finished()), this, SLOT(onLongOperationFinished()));
+            infoMsgBox->setText(QString("<p align='center'>") + tr("Please wait, loading soundfonts...") + QString("</p>"));
+            if (!MScore::noGui)
+                  infoMsgBox->exec();
+            else
+                  futureLoadSFs.waitForFinished();
+            }
+
+      // after install: refresh workspaces if needed
+      QDir workspacesDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::workspacesDir));
+      if (workspacesDir.exists() && !MScore::noGui) {
+            auto wsList = workspacesDir.entryInfoList(QStringList("*.workspace"), QDir::Files);
+            if (!wsList.isEmpty()) {
+                  Workspace::refreshWorkspaces();
+                  paletteBox->updateWorkspaces();
+                  paletteBox->selectWorkspace(wsList.last().absoluteFilePath());
+                  }
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
+//   uninstallExtension
+//---------------------------------------------------------
+
+bool MuseScore::uninstallExtension(QString extensionId)
+      {
+      QString version = Extension::getLatestVersion(extensionId);
+      // Before install: remove sfz from zerberus
+      QDir sfzDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::sfzsDir));
+      if (sfzDir.exists()) {
+            // get all sfz files
+            QDirIterator it(sfzDir.absolutePath(), QStringList("*.sfz"), QDir::Files, QDirIterator::Subdirectories);
+            Synthesizer* s = synti->synthesizer("Zerberus");
+            bool found = it.hasNext();
+            while (it.hasNext()) {
+                  it.next();
+                  s->removeSoundFont(it.fileInfo().absoluteFilePath());
+                  }
+            if (found)
+                  synti->storeState();
+            }
+      // Before install: remove soundfont from fluid
+      QDir sfDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::soundfontsDir));
+      if (sfDir.exists()) {
+            // get all soundfont files
+            QStringList filters("*.sf2");
+            filters.append("*.sf3");
+            QDirIterator it(sfzDir.absolutePath(), filters, QDir::Files, QDirIterator::Subdirectories);
+            Synthesizer* s = synti->synthesizer("Fluid");
+            bool found = it.hasNext();
+            while (it.hasNext()) {
+                  it.next();
+                  s->removeSoundFont(it.fileInfo().absoluteFilePath());
+                  }
+            if (found)
+                  synti->storeState();
+            }
+      bool refreshWorkspaces = false;
+      QDir workspacesDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::workspacesDir));
+      if (workspacesDir.exists()) {
+            auto wsList = workspacesDir.entryInfoList(QStringList("*.workspace"), QDir::Files);
+            if (!wsList.isEmpty())
+                  refreshWorkspaces = true;
+            }
+
+      // delete directories
+      QDir extensionDir(QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId));
+      extensionDir.removeRecursively();
+
+      // update UI
+      delete newWizard;
+      newWizard = 0;
+      mscore->reloadInstrumentTemplates();
+      mscore->updateInstrumentDialog();
+      if (refreshWorkspaces) {
+            Workspace::refreshWorkspaces();
+            paletteBox->updateWorkspaces();
+            paletteBox->selectWorkspace("Basic");
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
 //   MuseScore
 //---------------------------------------------------------
 
@@ -646,7 +938,8 @@ MuseScore::MuseScore()
       setWindowTitle(QString(MUSESCORE_NAME_VERSION));
       setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling, preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
 
-      ucheck = new UpdateChecker();
+      ucheck = new UpdateChecker(this);
+      packUChecker = new ExtensionsUpdateChecker(this);
 
       setAcceptDrops(true);
       setFocusPolicy(Qt::NoFocus);
@@ -1395,14 +1688,9 @@ MuseScore::MuseScore()
 
       setCentralWidget(envelope);
 
-      // load cascading instrument templates
-      loadInstrumentTemplates(preferences.getString(PREF_APP_PATHS_INSTRUMENTLIST1));
-      QString instrList2 = preferences.getString(PREF_APP_PATHS_INSTRUMENTLIST2);
-      if (!instrList2.isEmpty())
-            loadInstrumentTemplates(instrList2);
-
       if (!MScore::noGui)
             preferencesChanged();
+
       if (seq) {
             connect(seq, SIGNAL(started()), SLOT(seqStarted()));
             connect(seq, SIGNAL(stopped()), SLOT(seqStopped()));
@@ -1815,6 +2103,31 @@ void MuseScore::openRecentMenu()
             openRecent->addSeparator();
             QAction* action = openRecent->addAction(tr("Clear Recent Files"));
             action->setData("clear-recent");
+            }
+      }
+
+//---------------------------------------------------------
+//   reloadInstrumentTemplates
+//---------------------------------------------------------
+
+void MuseScore::reloadInstrumentTemplates()
+      {
+      clearInstrumentTemplates();
+      // load cascading instrument templates
+      loadInstrumentTemplates(preferences.getString(PREF_APP_PATHS_INSTRUMENTLIST1));
+      QString list2 = preferences.getString(PREF_APP_PATHS_INSTRUMENTLIST2);
+      if (!list2.isEmpty())
+            loadInstrumentTemplates(list2);
+
+      // load instrument templates from extension
+      QStringList extensionDir = Extension::getDirectoriesByType(Extension::instrumentsDir);
+      QStringList filter("*.xml");
+      for (QString s : extensionDir) {
+            QDir extDir(s);
+            extDir.setNameFilters(filter);
+            auto instFiles = extDir.entryInfoList(QDir::Files | QDir::NoSymLinks | QDir::Readable);
+            for (auto instFile : instFiles)
+                  loadInstrumentTemplates(instFile.absoluteFilePath());
             }
       }
 
@@ -2898,14 +3211,23 @@ static bool processNonGui(const QStringList& argv)
             if (!converterMode)
                   return res;
             }
-      bool rv = true;
       if (converterMode) {
             if (processJob)
                   return doProcessJob(jsonFileName);
             else
                   return convert(argv[0], outFileName);
             }
-      return rv;
+      if (!extensionName.isEmpty()) {
+            QFileInfo fi(extensionName);
+            QString suffix = fi.suffix().toLower();
+            if (suffix == "muxt")
+                  return mscore->importExtension(extensionName);
+            else {
+                  fprintf(stderr, "cannot install extension: <%s>\n", qPrintable(extensionName));
+                  return false;
+                  }
+            }
+      return true;
       }
 
 //---------------------------------------------------------
@@ -3069,7 +3391,16 @@ bool MuseScore::hasToCheckForUpdate()
       if (ucheck)
             return ucheck->hasToCheck();
       else
-          return false;
+            return false;
+      }
+
+//---------------------------------------------------------
+//   hasToCheckForExtensionsUpdate
+//---------------------------------------------------------
+
+bool MuseScore::hasToCheckForExtensionsUpdate()
+      {
+      return packUChecker ? packUChecker->hasToCheck() : false;
       }
 
 //---------------------------------------------------------
@@ -3080,6 +3411,16 @@ void MuseScore::checkForUpdate()
       {
       if (ucheck)
             ucheck->check(version(), sender() != 0);
+      }
+
+//---------------------------------------------------------
+//   checkForExtensionsUpdate
+//---------------------------------------------------------
+
+void MuseScore::checkForExtensionsUpdate()
+      {
+      if (packUChecker)
+            packUChecker->check();
       }
 
 //---------------------------------------------------------
@@ -5501,6 +5842,8 @@ void MuseScore::showSearchDialog()
       _searchDialog->show();
       }
 
+
+
 #ifndef SCRIPT_INTERFACE
 void MuseScore::pluginTriggered(int) {}
 void MuseScore::loadPlugins() {}
@@ -6037,6 +6380,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption(      "no-fallback-font", "Don't use Bravura as fallback musical font"));
       parser.addOption(QCommandLineOption({"f", "force"}, "Used with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
       parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
+      parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless if -e is passed too", "extension file"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -6082,6 +6426,10 @@ int main(int argc, char* av[])
             pluginName = parser.value("p");
             if (pluginName.isEmpty())
                   parser.showHelp(EXIT_FAILURE);
+            }
+      if (parser.isSet("E")) {
+            MScore::noGui = true;
+            extensionName = parser.value("E");
             }
       MScore::saveTemplateMode = parser.isSet("template-mode");
       if (parser.isSet("r")) {
@@ -6278,7 +6626,6 @@ int main(int argc, char* av[])
             MScore::readDefaultStyle(preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE));
 
       QSplashScreen* sc = 0;
-      QTimer* stimer = 0;
       if (!MScore::noGui && preferences.getBool(PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN)) {
             QPixmap pm(":/data/splash.png");
             sc = new QSplashScreen(pm);
@@ -6286,10 +6633,6 @@ int main(int argc, char* av[])
 #ifdef Q_OS_MAC // to have session dialog on top of splashscreen on mac
             sc->setWindowFlags(Qt::FramelessWindowHint);
 #endif
-            // show splash screen for 5 sec
-            stimer = new QTimer(0);
-            qApp->connect(stimer, SIGNAL(timeout()), sc, SLOT(close()));
-            stimer->start(5000);
             sc->show();
             qApp->processEvents();
             }
@@ -6459,6 +6802,9 @@ int main(int argc, char* av[])
             mscore->checkForUpdate();
 #endif
 
+      if (mscore->hasToCheckForExtensionsUpdate())
+            mscore->checkForExtensionsUpdate();
+
       if (!scoresOnCommandline && preferences.getBool(PREF_UI_APP_STARTUP_SHOWSTARTCENTER) && (!restoredSession || mscore->scores().size() == 0)) {
 #ifdef Q_OS_MAC
 // ugly, but on mac we get an event when a file is open.
@@ -6481,6 +6827,7 @@ int main(int argc, char* av[])
 #endif
             }
 
+      sc->close();
       mscore->showPlayPanel(preferences.getBool(PREF_UI_APP_STARTUP_SHOWPLAYPANEL));
       QSettings settings;
       if (settings.value("synthControlVisible", false).toBool())
