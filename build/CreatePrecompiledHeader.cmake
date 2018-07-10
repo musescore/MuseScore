@@ -115,7 +115,7 @@ macro( vstudio_pch target_name )
         target_sources(
             ${target_name}
             PUBLIC ${PCH_CPP}
-            )  
+            )
         
         set_source_files_properties(
             ${PCH_CPP}

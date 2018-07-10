@@ -81,7 +81,7 @@ StartupWizardPage1::StartupWizardPage1(QWidget* parent)
       _languages = new QComboBox(this);
       int index = 0;
       for (auto language : Ms::mscore->languages()) {
-            _languages->addItem(qApp->translate("language", language.name.toStdString().c_str()));
+            _languages->addItem(qApp->translate("language", language.name.toUtf8().constData()));
             _languages->setItemData(index, language.key);
             index++;
             }
@@ -116,7 +116,7 @@ StartupWizardPage2::StartupWizardPage2(QWidget* parent)
       QStringList layoutList;
       QList<QString> keyboardLayouts = layoutToShortcut.keys();
       for (auto layout : keyboardLayouts)
-            layoutList.append(qApp->translate("keyboard-layout", layout.toStdString().c_str()));
+            layoutList.append(qApp->translate("keyboard-layout", layout.toUtf8().constData()));
       _keyLayouts = new QComboBox(this);
       _keyLayouts->addItems(layoutList);
       int targetIndex = layoutList.indexOf("US - International", 0);
@@ -135,7 +135,7 @@ void StartupWizardPage2::setCurrentLayout(QString langCode)
       QStringList layoutList;
       QList<QString> keyboardLayouts = layoutToShortcut.keys();
       for (auto layout : keyboardLayouts)
-            layoutList.append(qApp->translate("keyboard-layout", layout.toStdString().c_str()));
+            layoutList.append(qApp->translate("keyboard-layout", layout.toUtf8().constData()));
       int targetIndex = layoutList.indexOf(bestLayout);
       _keyLayouts->setCurrentIndex(targetIndex);
       }
@@ -147,7 +147,7 @@ StartupWizardPage3::StartupWizardPage3(QWidget* parent)
       QLabel* label = new QLabel(tr("Choose your workspace"), this);
       QStringList workspaceList;
       for (auto workspace : Workspace::workspaces())
-            workspaceList.append(qApp->translate("workspace", workspace->name().toStdString().c_str()));
+            workspaceList.append(qApp->translate("workspace", workspace->name().toUtf8().constData()));
       _workspaces = new QComboBox(this);
       _workspaces->addItems(workspaceList);
       QVBoxLayout* layout = new QVBoxLayout(this);

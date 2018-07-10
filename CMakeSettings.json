@@ -6,8 +6,8 @@
          "generator": "Visual Studio 15 2017",
          "configurationType": "Debug",
          "inheritEnvironments": [ "msvc_x86" ],
-         "buildRoot": "${projectDir}\\build.debug", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
-         "installRoot": "${projectDir}\\win32install", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+         "buildRoot": "${projectDir}\\msvc.build.debug", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}", 
+         "installRoot": "${projectDir}\\msvc.install", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
          "cmakeCommandArgs": "-Wno-deprecated -LA",
          "variables": [
             {
@@ -20,7 +20,7 @@
             },
             {
                "name": "CMAKE_PREFIX_PATH",
-               "value": "C:\\Qt\\5.9.4\\msvc2015;${projectDir}\\dependencies"
+               "value": "${env.PATH};${projectDir}\\dependencies"
             },
             {
                "name": "CMAKE_LIBRARY_PATH",
@@ -35,8 +35,8 @@
          "generator": "Visual Studio 15 2017",
          "configurationType": "RelWithDebInfo",
          "inheritEnvironments": [ "msvc_x86" ],
-         "buildRoot": "${projectDir}\\build.release", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
-         "installRoot": "${projectDir}\\win32install", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+         "buildRoot": "${projectDir}\\msvc.build.release", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}", 
+         "installRoot": "${projectDir}\\msvc.install", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}", 
          "cmakeCommandArgs": "-Wno-deprecated",
          "variables": [
             {
@@ -49,7 +49,7 @@
             },
             {
                "name": "CMAKE_PREFIX_PATH",
-               "value": "C:\\Qt\\5.9.4\\msvc2015;${projectDir}\\dependencies"
+               "value": "${env.PATH};${projectDir}\\dependencies"
             },
             {
                "name": "CMAKE_LIBRARY_PATH",
@@ -64,8 +64,8 @@
          "generator": "Visual Studio 15 2017 Win64",
          "configurationType": "Debug",
          "inheritEnvironments": [ "msvc_x64_x64" ],
-         "buildRoot": "${projectDir}\\build.debug64", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
-         "installRoot": "${projectDir}\\win64install", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+         "buildRoot": "${projectDir}\\msvc.build.debug64", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}", 
+         "installRoot": "${projectDir}\\msvc.install", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
          "cmakeCommandArgs": "-Wno-deprecated",
          "variables": [
             {
@@ -78,7 +78,7 @@
             },
             {
                "name": "CMAKE_PREFIX_PATH",
-               "value": "C:\\Qt\\5.9.4\\msvc2017_64;${projectDir}\\dependencies"
+               "value": "${env.PATH};${projectDir}\\dependencies"
             },
             {
                "name": "CMAKE_LIBRARY_PATH",
@@ -93,8 +93,8 @@
          "generator": "Ninja",
          "configurationType": "RelWithDebInfo",
          "inheritEnvironments": [ "msvc_x64_x64" ],
-         "buildRoot": "${projectDir}\\build.release64", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
-         "installRoot": "${projectDir}\\win64install", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+         "buildRoot": "${projectDir}\\msvc.build.release64", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}", 
+         "installRoot": "${projectDir}\\msvc.install", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
          "cmakeCommandArgs": "-Wno-deprecated",
          "variables": [
             {
@@ -107,7 +107,7 @@
             },
             {
                "name": "CMAKE_PREFIX_PATH",
-               "value": "C:\\Qt\\5.9.4\\msvc2017_64;${projectDir}\\dependencies"
+               "value": "${env.PATH};${projectDir}\\dependencies"
             },
             {
                "name": "CMAKE_LIBRARY_PATH",

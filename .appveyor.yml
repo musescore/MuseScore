@@ -4,6 +4,8 @@ clone_folder: C:\MuseScore
 # set clone depth
 clone_depth: 3                      # clone entire repository history if not defined
 
+image: Visual Studio 2017
+
 # build cache to preserve files/folders between builds
 cache:
   - dependencies.7z

@@ -255,6 +255,33 @@ add_executable ( ${ExecutableName}
       ${resource_file}
       ${INCS}
 
+      abstractdialog.h accessibletoolbutton.h albummanager.h
+      alsa.h alsamidi.h analyse.h articulationprop.h bb.h
+      bendcanvas.h bendproperties.h breaksdialog.h capella.h
+      chordview.h click.h continuouspanel.h downloadUtils.h 
+      driver.h drumroll.h drumtools.h drumview.h editdrumset.h
+      editinstrument.h editpitch.h editraster.h editstaff.h 
+      editstafftype.h editstringdata.h editstyle.h enableplayforwidget.h
+      exampleview.h excerptsdialog.h exportmidi.h exportmp3.h extension.h 
+      file.h fotomode.h fretcanvas.h fretproperties.h globals.h greendotbutton.h 
+      harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h importgtp.h importmxml.h
+      importmxmllogger.h importmxmlnoteduration.h importmxmlnotepitch.h importmxmlpass1.h
+      importmxmlpass2.h importptb.h importxmlfirstpass.h instrdialog.h instrwidget.h jackaudio.h
+      keycanvas.h keyedit.h layer.h licence.h logindialog.h loginmanager.h magbox.h masterpalette.h
+      measureproperties.h mediadialog.h metaedit.h miconengine.h mididriver.h mixer.h musedata.h
+      musescore.h musicxml.h musicxmlfonthandler.h musicxmlsupport.h navigator.h newwizard.h noteGroups.h
+      omrpanel.h ove.h pa.h pagesettings.h palette.h palettebox.h paletteBoxButton.h partedit.h
+      pathlistdialog.h piano.h pianoroll.h pianotools.h pianoview.h playpanel.h pluginCreator.h
+      pluginManager.h pm.h preferences.h preferenceslistwidget.h prefsdialog.h qmledit.h
+      qmlplugin.h recordbutton.h resourceManager.h revision.h ruler.h scoreaccessibility.h
+      scoreBrowser.h scoreInfo.h scorePreview.h scoretab.h scoreview.h searchComboBox.h
+      sectionbreakprop.h selectdialog.h selectionwindow.h selectnotedialog.h selinstrument.h 
+      seq.h shortcut.h shortcutcapturedialog.h simplebutton.h splitstaff.h stafftextproperties.h
+      startcenter.h startupWizard.h stringutils.h svggenerator.h symboldialog.h synthcontrol.h
+      textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
+      toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h tremolobarprop.h
+      tupletdialog.h updatechecker.h uploadscoredialog.h waveview.h webpage.h workspace.h
+
       recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
       stringutils.h stringutils.cpp
       scoreview.cpp editharmony.cpp editfiguredbass.cpp events.cpp
@@ -379,6 +406,12 @@ add_executable ( ${ExecutableName}
       tremolobarcanvas.h bendcanvas.h fretcanvas.h keycanvas.h harmonycanvas.h
       )
 
+if (MSVC)
+	target_link_libraries(mscore vorbisfile1)
+else (MSVC)
+	target_link_libraries(mscore vorbisfile)
+endif (MSVC)
+
 target_link_libraries(mscore
       awl
       diff_match_patch
@@ -389,7 +422,6 @@ target_link_libraries(mscore
       midi
       fluid
       effects
-      vorbisfile
       libmscore
       qzip
       beatroot
@@ -424,11 +456,19 @@ if (AEOLUS)
       target_link_libraries(mscore aeolus)
 endif (AEOLUS)
 if (SOUNDFONT3)
-      target_link_libraries(mscore ${VORBIS_LIB} ${OGG_LIB})
+      if (MSVC)
+         target_link_libraries(mscore ${VORBISFILE_LIBRARY}  ogg1)
+      else (MSVC)
+          target_link_libraries(mscore ${VORBIS_LIB} ${OGG_LIB})
+      endif (MSVC)
 endif (SOUNDFONT3)
 
 if (HAS_AUDIOFILE)
-      target_link_libraries(mscore audiofile ${SNDFILE_LIB})
+      if (MSVC)
+         target_link_libraries(mscore audiofile ${SNDFILE_LIBRARY})
+      else (MSVC)   
+         target_link_libraries(mscore audiofile ${SNDFILE_LIB})
+      endif (MSVC)
 endif (HAS_AUDIOFILE)
 
 if (APPLE)
@@ -515,10 +555,10 @@ if (MINGW)
       ${MINGW_ROOT}/bin/libwinpthread-1.dll
       ${MINGW_ROOT}/lib/libogg.dll
       ${MINGW_ROOT}/lib/libsndfile-1.dll
-      ${MINGW_ROOT}/lib/libvorbis.dll
-      ${MINGW_ROOT}/lib/libvorbisfile.dll
       ${MINGW_ROOT}/lib/portaudio.dll
       ${MINGW_ROOT}/opt/bin/libeay32.dll
+      ${MINGW_ROOT}/lib/libvorbis.dll
+      ${MINGW_ROOT}/lib/libvorbisfile.dll
       ${MINGW_ROOT}/opt/bin/ssleay32.dll
       ${QtInstallLibraries}
       ${PROJECT_SOURCE_DIR}/build/qt.conf
@@ -562,7 +602,40 @@ if (MINGW)
       REGEX ".*QtWebkit.*" EXCLUDE)
 
 else (MINGW)
+
    if ( NOT MSVC )
+## install qwebengine core
+      if(APPLE)
+         install(FILES
+            ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess
+            DESTINATION ${CMAKE_INSTALL_PREFIX}
+            )
+         install(FILES
+            ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Resources/qtwebengine_devtools_resources.pak
+            ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Resources/qtwebengine_resources.pak
+            ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Resources/qtwebengine_resources_100p.pak
+            ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Resources/qtwebengine_resources_200p.pak
+            DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}/webengineresources 
+            )
+         install(DIRECTORY
+            ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Resources/qtwebengine_locales
+            DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}/webengineresources/translations/qtwebengine_locales
+            )
+      else(APPLE)
+         install(FILES
+            ${QT_INSTALL_PREFIX}/libexec/QtWebEngineProcess
+            DESTINATION bin
+            )
+         install(DIRECTORY
+            ${QT_INSTALL_PREFIX}/resources
+            DESTINATION bin/webengineresources
+            )
+         install(DIRECTORY
+            ${QT_INSTALL_PREFIX}/translations/qtwebengine_locales
+            DESTINATION bin/webengineresources/translations/qtwebengine_locales
+            )
+      endif(APPLE)
+
       target_link_libraries(mscore
          ${ALSA_LIB}
          ${QT_LIBRARIES}
@@ -708,8 +781,10 @@ else (MINGW)
            )
       endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
+
+      include(FindStaticLibrary)
       target_link_libraries(mscore
-         portaudio
+         portaudio1
          portmidi
          winmm
          mscore_freetype
@@ -733,52 +808,31 @@ else (MINGW)
                   "${QT_INSTALL_PREFIX}/bin/Qt5Qml.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Quick.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Sql.dll"
                   "${QT_INSTALL_PREFIX}/bin/Qt5Svg.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Widgets.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Xml.dll"
                   "${QT_INSTALL_PREFIX}/bin/Qt5XmlPatterns.dll"
+                  "${QT_INSTALL_PREFIX}/bin/Qt5WebEngineWidgets.dll" "${QT_INSTALL_PREFIX}/bin/Qt5WebEngineCore.dll" "${QT_INSTALL_PREFIX}/bin/Qt5WebChannel.dll"
+                  "${QT_INSTALL_PREFIX}/bin/Qt5QuickWidgets.dll" "${QT_INSTALL_PREFIX}/bin/Qt5Positioning.dll"
                   )
       set(CMAKE_FIND_LIBRARY_PREFIX "")
       set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
-      find_library( dll_lame        NAMES "lame_enc.dll"       PATHS ${CMAKE_LIBRARY_PATH} )
-      find_library( dll_ogg         NAMES "libogg.dll"         PATHS ${CMAKE_LIBRARY_PATH} )
-      find_library( dll_sndfile     NAMES "libsndfile-1.dll"   PATHS ${CMAKE_LIBRARY_PATH} )
-      find_library( dll_vorbis      NAMES "libvorbis.dll"      PATHS ${CMAKE_LIBRARY_PATH} )
-      find_library( dll_vorbisfile  NAMES "libvorbisfile.dll"  PATHS ${CMAKE_LIBRARY_PATH} )
-      find_library( dll_portaudio   NAMES "portaudio.dll"      PATHS ${CMAKE_LIBRARY_PATH} )
+      find_library( dll_lame        NAMES "lame_enc.dll"       PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
+      find_library( dll_ogg         NAMES "libogg.dll"         PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
+      find_library( dll_sndfile     NAMES "libsndfile-1.dll"   PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
+      find_library( dll_vorbis      NAMES "libvorbis.dll"        PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
+      find_library( dll_vorbisfile  NAMES "libvorbisfile.dll"    PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
+      find_library( dll_portaudio   NAMES "portaudio.dll"      PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
 
-      list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio})
-      set( output_dir_for_dlls "$<TARGET_FILE_DIR:mscore>")
+      list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} "$<TARGET_FILE_DIR:mscore>/${MUSESCORE_NAME}.exe")
+      set( output_dir_for_dlls "${PROJECT_BINARY_DIR}/../msvc.install/bin")
 
       COPY_FILES_INTO_DIRECTORY_IF_CHANGED( "${dlls_to_copy}" ${output_dir_for_dlls}  mscore)
-      ###add_custom_command (TARGET mscore POST_BUILD
-      ###      # Copy Qt5 dependencies to .exe directory
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5Core.dll           ${PROJECT_BINARY_DIR}
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5Gui.dll            ${PROJECT_BINARY_DIR}
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5Help.dll           ${PROJECT_BINARY_DIR}
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5Network.dll        ${PROJECT_BINARY_DIR}
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5PrintSupport.dll   ${PROJECT_BINARY_DIR}
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5Qml.dll            ${PROJECT_BINARY_DIR}
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5Quick.dll          ${PROJECT_BINARY_DIR}
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5Sql.dll            ${PROJECT_BINARY_DIR}
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5Svg.dll            ${PROJECT_BINARY_DIR}
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5Widgets.dll        ${PROJECT_BINARY_DIR}
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5Xml.dll            ${PROJECT_BINARY_DIR}
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5XmlPatterns.dll    ${PROJECT_BINARY_DIR}
-      ###
-      ###      # Copy other dependencies to .EXE directory
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5Core.dll   ${PROJECT_BINARY_DIR}
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5Core.dll   ${PROJECT_BINARY_DIR}
-      ###      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${QT_INSTALL_PREFIX}/bin/Qt5Core.dll   ${PROJECT_BINARY_DIR}
-      ###
-      ###
-      ###
-      ###      COMMENT "Copying libraries to output directory" VERBATIM)
 
-
-
-
+      add_dependencies(mscore pluginDocumentation)
+      
       # Keep dependencies in alphabetical order. Changes made to this list
       # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
       get_filename_component(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
       get_filename_component (MINGW_ROOT ${COMPILER_DIR} DIRECTORY)
-      foreach (QtLibrary ${QT_LIBRARIES})
+
+	  foreach (QtLibrary ${QT_LIBRARIES})
          message("Library ${QtLibrary}")
          # always use release libs
          set_target_properties(${QtLibrary} PROPERTIES MAP_IMPORTED_CONFIG_DEBUG "RELEASE")
@@ -790,61 +844,73 @@ else (MINGW)
       list(REMOVE_DUPLICATES QtInstallLibraries)
       
       target_link_libraries(mscore ${QT_LIBRARIES})
+
+      install( FILES
+#        ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
+#		 ${MINGW_ROOT}/bin/libstdc++-6.dll
+#		 ${MINGW_ROOT}/bin/libwinpthread-1.dll
+#		 ${MINGW_ROOT}/opt/bin/libeay32.dll
+#		 ${MINGW_ROOT}/opt/bin/ssleay32.dll
+		 ${dll_ogg}
+		 ${dll_lame}
+		 ${dll_sndfile}
+		 ${dll_portaudio}
+		 ${dll_vorbis}
+		 ${dll_vorbisfile}
+		 ${QtInstallLibraries}
+		 ${PROJECT_SOURCE_DIR}/build/qt.conf
+		 DESTINATION bin)
+
+      install(FILES
+         ${QT_INSTALL_PREFIX}/plugins/iconengines/qsvgicon.dll
+         DESTINATION bin/iconengines)
+
+      install(FILES
+         ${QT_INSTALL_PREFIX}/plugins/imageformats/qjpeg.dll
+         ${QT_INSTALL_PREFIX}/plugins/imageformats/qsvg.dll
+         ${QT_INSTALL_PREFIX}/plugins/imageformats/qtiff.dll
+         DESTINATION bin/imageformats)
+
+      install(FILES
+         ${QT_INSTALL_PREFIX}/plugins/platforms/qwindows.dll
+         DESTINATION bin/platforms)
+
+      install(FILES
+         ${QT_INSTALL_PREFIX}/plugins/printsupport/windowsprintersupport.dll
+         DESTINATION bin/printsupport)
+
+      install(FILES
+         ${QT_INSTALL_PREFIX}/plugins/sqldrivers/qsqlite.dll
+         DESTINATION bin/sqldrivers)
+	  
+	  install( TARGETS mscore RUNTIME DESTINATION bin ) # this duplicate due to the correctly package step
+
+      install(FILES
+         ${QT_INSTALL_PREFIX}/bin/QtWebEngineProcess.exe
+	     DESTINATION bin
+         )
+      install(DIRECTORY
+         ${QT_INSTALL_PREFIX}/resources
+         DESTINATION bin/webengineresources
+		 )
+
+      install(FILES
+         ${QT_INSTALL_PREFIX}/bin/QtWebEngineProcess.exe
+	     DESTINATION bin
+         )
+
+      install(DIRECTORY
+         ${QT_INSTALL_PREFIX}/qml
+         DESTINATION .
+         REGEX ".*d\\.dll" EXCLUDE
+		 REGEX ".pdb" EXCLUDE
+         REGEX ".*QtGraphicalEffects.*" EXCLUDE
+         REGEX ".*QtMultimedia.*" EXCLUDE
+         REGEX ".*QtSensors.*" EXCLUDE
+         REGEX ".*QtTest.*" EXCLUDE
+		 REGEX ".*QtWebkit.*" EXCLUDE
+		 )
       
-      ### MINGW stuff that will need to be converted for MSVC...
-      #####install( TARGETS mscore RUNTIME DESTINATION bin )
-      #####
-      #####install( FILES
-      #####   ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
-      #####   ${MINGW_ROOT}/bin/libstdc++-6.dll
-      #####   ${MINGW_ROOT}/bin/libwinpthread-1.dll
-      #####   ${MINGW_ROOT}/lib/libogg.dll
-      #####   ${MINGW_ROOT}/lib/libsndfile-1.dll
-      #####   ${MINGW_ROOT}/lib/libvorbis.dll
-      #####   ${MINGW_ROOT}/lib/libvorbisfile.dll
-      #####   ${MINGW_ROOT}/lib/portaudio.dll
-      #####   ${MINGW_ROOT}/opt/bin/libeay32.dll
-      #####   ${MINGW_ROOT}/opt/bin/ssleay32.dll
-      #####   ${QtInstallLibraries}
-      #####   ${PROJECT_SOURCE_DIR}/build/qt.conf
-      #####   DESTINATION bin)
-      #####
-      #####install (FILES
-      #####   ${MINGW_ROOT}/lib/lame_enc.dll
-      #####   DESTINATION bin
-      #####   OPTIONAL)
-      #####
-      ##### install(FILES
-      #####   ${QT_INSTALL_PREFIX}/plugins/iconengines/qsvgicon.dll
-      #####   DESTINATION bin/iconengines)
-      #####
-      ##### install(FILES
-      #####   ${QT_INSTALL_PREFIX}/plugins/imageformats/qjpeg.dll
-      #####   ${QT_INSTALL_PREFIX}/plugins/imageformats/qsvg.dll
-      #####   ${QT_INSTALL_PREFIX}/plugins/imageformats/qtiff.dll
-      #####   DESTINATION bin/imageformats)
-      #####
-      ##### install(FILES
-      #####   ${QT_INSTALL_PREFIX}/plugins/platforms/qwindows.dll
-      #####   DESTINATION bin/platforms)
-      #####
-      ##### install(FILES
-      #####   ${QT_INSTALL_PREFIX}/plugins/printsupport/windowsprintersupport.dll
-      #####   DESTINATION bin/printsupport)
-      #####
-      ##### install(FILES
-      #####   ${QT_INSTALL_PREFIX}/plugins/sqldrivers/qsqlite.dll
-      #####   DESTINATION bin/sqldrivers)
-      #####
-      ##### install(DIRECTORY
-      #####   ${QT_INSTALL_PREFIX}/qml
-      #####   DESTINATION .
-      #####   REGEX ".*d\\.dll" EXCLUDE
-      #####   REGEX ".*QtGraphicalEffects.*" EXCLUDE
-      #####   REGEX ".*QtMultimedia.*" EXCLUDE
-      #####   REGEX ".*QtSensors.*" EXCLUDE
-      #####   REGEX ".*QtTest.*" EXCLUDE
-      #####   REGEX ".*QtWebkit.*" EXCLUDE)
       
    endif ( NOT MSVC )
 endif (MINGW)

@@ -320,7 +320,7 @@ void TieSegment::computeBezier(QPointF p6o)
             QPointF point = t.map(p.pointAtPercent(i/float(nbShapes)));
             QRectF re = QRectF(start, point).normalized();
             if (re.height() < minH) {
-                  qreal d = (minH - re.height()) * .5;
+                  d = (minH - re.height()) * .5;
                   re.adjust(0.0, -d, 0.0, d);
                   }
 //            re.translate(staffOffset);

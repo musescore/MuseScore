@@ -364,8 +364,8 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   newName->setPlainText(newName->plainText());
                   newName->layout();
                   if (currentStaff->part()->staff(0) == currentStaff) {
-                        double _spatium = _score->spatium();
-                        pos = QPointF (_score->styleP(Sid::clefLeftMargin) + _widthClef, -_spatium * 2);
+                        const double spatium = _score->spatium();
+                        pos = QPointF (_score->styleP(Sid::clefLeftMargin) + _widthClef, -spatium * 2);
                         painter.translate(pos);
                         newName->draw(&painter);
                         painter.translate(-pos);

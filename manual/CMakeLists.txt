@@ -62,15 +62,12 @@ else(APPLE)
          COMPILE_FLAGS "${PCH_INCLUDE} -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -DSTATIC_GETOPT"
          )
 
-      # Copy DLL dependencies to .EXE DIRECTORY
-      list(APPEND dlls_to_copy_m  "${QT_INSTALL_PREFIX}/bin/Qt5Core.dll" )
-      set( output_dir_for_dlls_m "$<TARGET_FILE_DIR:genManual>")
-      COPY_FILES_INTO_DIRECTORY_IF_CHANGED( "${dlls_to_copy_m}" ${output_dir_for_dlls_m}  genManual)
-
    endif (NOT MSVC)
 endif(APPLE)
 
-ADD_DEPENDENCIES(genManual mops1)
+if(NOT MSVC)
+	ADD_DEPENDENCIES(genManual mops1)
+endif(NOT MSVC)
 
 add_custom_target(pluginDocumentation
       ALL

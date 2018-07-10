@@ -4384,8 +4384,7 @@ void MuseScore::autoSaveTimerTimeout()
       {
       bool sessionChanged = false;
 
-      extern bool __loadScore;
-      __loadScore = true;           //disable debug message "no active command"
+      Score::isScoreLoaded() = true;           //disable debug message "no active command"
 
       for (MasterScore* s : scoreList) {
             if (s->autosaveDirty()) {
@@ -4414,7 +4413,7 @@ void MuseScore::autoSaveTimerTimeout()
                   s->setAutosaveDirty(false);
                   }
             }
-      __loadScore = false;
+      Score::isScoreLoaded() = false;
 
       if (sessionChanged)
             writeSessionFile(false);
@@ -4775,8 +4774,9 @@ void MuseScore::switchPlayMode(int mode)
 //   networkFinished
 //---------------------------------------------------------
 
-void MuseScore::networkFinished(QNetworkReply* reply)
+void MuseScore::networkFinished()
       {
+      QNetworkReply* reply = qobject_cast<QNetworkReply*>(QObject::sender());
       if (reply->error() != QNetworkReply::NoError) {
             qDebug("Error while checking update [%s]", qPrintable(reply->errorString()));
             return;
@@ -4830,9 +4830,12 @@ void MuseScore::loadFile(const QString& s)
 
 void MuseScore::loadFile(const QUrl& url)
       {
-      QNetworkReply* nr = networkManager()->get(QNetworkRequest(url));
-      connect(nr, SIGNAL(finished(QNetworkReply*)),
-               SLOT(networkFinished(QNetworkReply*)));
+      QEventLoop loop;
+      QNetworkReply* nr = mscore->networkManager()->get(QNetworkRequest(url));
+      connect(nr, SIGNAL(finished()), this,
+               SLOT(networkFinished()));
+      connect(nr, SIGNAL(finished()), &loop, SLOT(quit()));
+      loop.exec();
       }
 
 //---------------------------------------------------------
