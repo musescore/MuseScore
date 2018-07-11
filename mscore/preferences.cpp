@@ -319,7 +319,7 @@ int Preferences::getInt(const QString key) const
       bool ok;
       int pref = v.toInt(&ok);
       if (!ok) {
-            qWarning("Can not convert preference %s to int. Returning default value.", key.toStdString().c_str());
+            qWarning("Can not convert preference %s to int. Returning default value.", key.toUtf8().constData());
             return defaultValue(key).toInt();
             }
       return pref;
@@ -332,7 +332,7 @@ double Preferences::getDouble(const QString key) const
       bool ok;
       double pref = v.toDouble(&ok);
       if (!ok) {
-            qWarning("Can not convert preference %s to double. Returning default value.", key.toStdString().c_str());
+            qWarning("Can not convert preference %s to double. Returning default value.", key.toUtf8().constData());
             return defaultValue(key).toDouble();
             }
       return pref;

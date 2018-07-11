@@ -438,9 +438,11 @@ TimeSig* Staff::timeSig(int tick) const
       auto i = timesigs.upper_bound(tick);
       if (i != timesigs.begin())
             --i;
+      if (i == timesigs.end())
+            return 0;
       else if (tick < i->first)
             return 0;
-      return (i == timesigs.end()) ? 0 : i->second;
+      return i->second;
       }
 
 //---------------------------------------------------------

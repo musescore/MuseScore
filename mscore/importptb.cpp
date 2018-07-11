@@ -775,8 +775,8 @@ void PowerTab::addToScore(ptSection& sec)
                   part->insertStaff(s, -1);
                   auto info = &curTrack->infos[i];
                   std::string ss = info->name;
-                  part->setPartName(QString::fromStdString(ss));
-                  part->setPlainLongName(QString::fromStdString(ss));
+                  part->setPartName(QString::fromUtf8(ss.data(), ss.size()));
+                  part->setPlainLongName(QString::fromUtf8(ss.data(), ss.size()));
 
                   std::vector<int> reverseStr;
                   for (auto it = info->strings.rbegin(); it != info->strings.rend(); ++it)
@@ -833,7 +833,7 @@ void PowerTab::addToScore(ptSection& sec)
 
             t = new RehearsalMark(score);
             t->setHasFrame(false);
-            t->setPlainText(QString::fromStdString(sec.partName));
+            t->setPlainText(QString::fromUtf8(sec.partName.data(), sec.partName.size()));
             t->setOffset(QPointF(10.0, 0.0));
             t->setTrack(0);
             seg->add(t);
@@ -1259,7 +1259,7 @@ Score::FileError PowerTab::read()
       std::string name = song.info.name;
       if (!name.empty()) {
             Text* s = new Text(SubStyleId::TITLE, score);
-            s->setPlainText(QString::fromStdString(name));
+            s->setPlainText(QString::fromUtf8(name.data(), name.size()));
             m->add(s);
             }
 

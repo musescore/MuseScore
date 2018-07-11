@@ -241,13 +241,13 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
             h  = y1 + lrint(i * mh / range);
             s.setNum(i);
             if (i == 0) {
-                  p.drawText(QRect(0, h - 3, METER_LEFT_EDGE - 3, 9), Qt::AlignRight, QString::fromStdString("dB"));
+                  p.drawText(QRect(0, h - 3, METER_LEFT_EDGE - 3, 9), Qt::AlignRight, QString("dB"));
                   p.drawLine(METER_LEFT_EDGE - 1, h + 1, METER_LEFT_EDGE - 1, h + 1);
                   continue;
                   }
             else if (i == range)
                   h -= 2;
-            p.drawText(QRect(0, h - 3, METER_LEFT_EDGE - 3, 9), Qt::AlignRight, QString::fromStdString("-") + s);
+            p.drawText(QRect(0, h - 3, METER_LEFT_EDGE - 3, 9), Qt::AlignRight, QString("-") + s);
             p.drawLine(METER_LEFT_EDGE - 1, h + 1, METER_LEFT_EDGE - 1, h + 1);
             }
 

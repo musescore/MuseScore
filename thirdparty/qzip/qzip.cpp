@@ -45,18 +45,6 @@
 
 #include <zlib.h>
 
-#if (defined(Q_OS_WIN) || defined(Q_OS_ANDROID))
-#  undef S_IFREG
-#  define S_IFREG 0100000
-#else
-#  ifndef S_ISDIR
-#    define S_ISDIR(x) ((x) & S_IFDIR) > 0
-#  endif
-#  ifndef S_ISREG
-#    define S_ISREG(x) ((x) & 0170000) == S_IFREG
-#  endif
-#  define S_ISLNK(x) ((x) & S_IFLNK) > 0
-#endif
 // Zip standard version for archives handled by this API
 // (actually, the only basic support of this version is implemented but it is enough for now)
 #define ZIP_VERSION 20
