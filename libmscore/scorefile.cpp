@@ -50,7 +50,6 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 #ifdef Q_OS_WIN
 #include <windows.h>
-#include <stdio.h>
 #endif
 
 namespace Ms {
