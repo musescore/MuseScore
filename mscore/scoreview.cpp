@@ -3813,8 +3813,11 @@ void ScoreView::cmdAddText(TEXT type)
             case TEXT::FINGERING:
                   {
                   Element* e = _score->getSelectedElement();
-                  if (!e || !e->isNote()
-                     || !e->staff()->isPitchedStaff(e->tick()))
+                  if (!e || !e->isNote())
+                        break;
+                  bool isTablature = e->staff()->isTabStaff(e->tick());
+                  bool tabFingering = e->staff()->staffType(e->tick())->showTabFingering();
+                  if (isTablature && !tabFingering)
                         break;
                   s = new Fingering(_score);
                   s->setTrack(e->track());
