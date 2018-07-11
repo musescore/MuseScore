@@ -5633,14 +5633,36 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               playTime  += n;
                               frames    -= n;
                               }
-                        const NPlayEvent& e = playPos->second;
-                        if (e.isChannelEvent()) {
-                              int channelIdx = e.channel();
+                        const NPlayEvent& event = playPos->second;
+                        if (event.isChannelEvent()) {
+                              int channelIdx = event.channel();
                               Channel* c = score->midiMapping(channelIdx)->articulation;
-                              if (!c->mute) {
-                                    synti->play(e, synti->index(c->synti));
+                              int type = event.type();
+                              int syntiIndex = synti->index(c->synti);
+                              if (type == ME_NOTEON) {
+                                    bool mute;
+                                    const Note* note = event.note();
+                                    if (note) {
+                                          Instrument* instr = note->staff()->part()->instrument(note->chord()->tick());
+                                          const Channel* a = instr->channel(note->subchannel());
+                                          mute = a->mute || a->soloMute;
+                                          }
+                                    else
+                                          mute = false;
+
+                                    if (!mute) {
+                                          if (event.discard()) { // ignore noteoff but restrike noteon
+                                                if (event.velo() > 0)
+                                                      synti->play(NPlayEvent(ME_NOTEON, event.channel(), event.pitch(), 0), syntiIndex);
+                                                else
+                                                      continue;
+                                                }
+                                          synti->play(event, syntiIndex);
+                                          }
                                     }
-                              }
+                              else if (type == ME_CONTROLLER || type == ME_PITCHBEND)
+                                    synti->play(event, syntiIndex);
+                            }
                         }
                   if (frames) {
                         float bu[frames * 2];
