@@ -65,7 +65,7 @@
             <name>Woodwinds</name>
             <Instrument id="Winds">
                   <longName>Winds</longName>
-                  <shortName>W.</shortName>
+                  <shortName>Wi.</shortName>
                   <description>Winds Section</description>
                   <musicXMLid>wind.group</musicXMLid>
                   <staves>2</staves>
@@ -1091,7 +1091,7 @@
             </Instrument>
             <Instrument id="heckelphone-clarinet">
                   <longName>Heckelphone-clarinet</longName>
-                  <shortName>Hph.</shortName>
+                  <shortName>Hph.-cl.</shortName>
                   <description>Heckelphone</description>
                   <musicXMLid>wind.reed.heckelphone-clarinet</musicXMLid>
                   <clef>G8vb</clef>
@@ -3748,7 +3748,7 @@
             </Instrument>
             <Instrument id="euphonium-bugle">
                   <longName>Euphonium Bugle</longName>
-                  <shortName>Euph.</shortName>
+                  <shortName>Euph. Bu.</shortName>
                   <description>Euphonium Bugle</description>
                   <musicXMLid>brass.bugle.euphonium-bugle</musicXMLid>
                   <clef>G</clef>
@@ -3764,7 +3764,7 @@
             </Instrument>
             <Instrument id="mellophon-bugle">
                   <longName>Mellophone Bugle</longName>
-                  <shortName>Mello</shortName>
+                  <shortName>Mello. Bu.</shortName>
                   <description>Bugle</description>
                   <musicXMLid>brass.bugle.mellophone-bugle</musicXMLid>
                   <clef>G</clef>
@@ -3794,7 +3794,7 @@
             </Instrument>
             <Instrument id="mellophone">
                   <longName>Mellophone</longName>
-                  <shortName>Mello</shortName>
+                  <shortName>Mello.</shortName>
                   <description>Mellophone</description>
                   <musicXMLid>brass.mellophone</musicXMLid>
                   <clef>G</clef>
@@ -4187,7 +4187,7 @@
             </Instrument>
             <Instrument id="f-tuba">
                   <longName>F Tuba</longName>
-                  <shortName>F Tu.</shortName>
+                  <shortName>F Tb.</shortName>
                   <description>F Tuba</description>
                   <musicXMLid>brass.tuba</musicXMLid>
                   <clef>F</clef>
@@ -4201,7 +4201,7 @@
             </Instrument>
             <Instrument id="eb-tuba">
                   <longName>E♭ Tuba</longName>
-                  <shortName>E♭ Tu.</shortName>
+                  <shortName>E♭ Tb.</shortName>
                   <description>E♭ Tuba</description>
                   <musicXMLid>brass.tuba</musicXMLid>
                   <clef>F</clef>
@@ -4215,7 +4215,7 @@
             <Instrument id="eb-tuba-treble">
                   <trackName>E♭ Tuba (Treble Clef)</trackName>
                   <longName>E♭ Tuba</longName>
-                  <shortName>E♭ Tu.</shortName>
+                  <shortName>E♭ Tb.</shortName>
                   <description>E♭ Tuba</description>
                   <musicXMLid>brass.tuba</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -4231,7 +4231,7 @@
             </Instrument>
             <Instrument id="c-tuba">
                   <longName>C Tuba</longName>
-                  <shortName>C Tu.</shortName>
+                  <shortName>C Tb.</shortName>
                   <description>C Tuba</description>
                   <musicXMLid>brass.tuba</musicXMLid>
                   <clef>F</clef>
@@ -4244,7 +4244,7 @@
             </Instrument>
             <Instrument id="bb-tuba">
                   <longName>B♭ Tuba</longName>
-                  <shortName>B♭ Tu.</shortName>
+                  <shortName>B♭ Tb.</shortName>
                   <description>B♭ Tuba</description>
                   <musicXMLid>brass.tuba</musicXMLid>
                   <clef>F</clef>
@@ -4259,7 +4259,7 @@
             <Instrument id="bb-tuba-treble">
                   <trackName>B♭ Tuba (Treble Clef)</trackName>
                   <longName>B♭ Tuba</longName>
-                  <shortName>B♭ Tu.</shortName>
+                  <shortName>B♭ Tb.</shortName>
                   <description>B♭ Tuba</description>
                   <musicXMLid>brass.tuba</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -4275,7 +4275,7 @@
             </Instrument>
             <Instrument id="bass-f-tuba">
                   <longName>Bass Tuba in F</longName>
-                  <shortName>Ba. Tu. F</shortName>
+                  <shortName>Ba. Tb. F</shortName>
                   <description>Bass Tuba in F</description>
                   <musicXMLid>brass.tuba.bass</musicXMLid>
                   <clef>F</clef>
@@ -4288,7 +4288,7 @@
             </Instrument>
             <Instrument id="bass-eb-tuba">
                   <longName>Bass Tuba in E♭</longName>
-                  <shortName>Ba. Tu. E♭</shortName>
+                  <shortName>Ba. Tb. E♭</shortName>
                   <description>Bass Tuba in E♭</description>
                   <musicXMLid>brass.tuba.bass</musicXMLid>
                   <clef>F</clef>
@@ -4301,7 +4301,7 @@
             </Instrument>
             <Instrument id="subcontrabass-tuba">
                   <longName>Sub-Contrabass Tuba</longName>
-                  <shortName>SCB. Tu.</shortName>
+                  <shortName>SCb. Tb.</shortName>
                   <description>Sub-Contrabass Tuba</description>
                   <musicXMLid>brass.tuba.subcontrabass</musicXMLid>
                   <clef>F</clef>
@@ -4359,7 +4359,7 @@
             </Instrument>
             <Instrument id="wagner-tuba">
                   <longName>Wagner Tuba</longName>
-                  <shortName>Wag. Tu.</shortName>
+                  <shortName>Wag. Tb.</shortName>
                   <description>F Wagner Tuba (generic)</description>
                   <musicXMLid>brass.wagner-tuba</musicXMLid>
                   <clef>F</clef>
@@ -4374,7 +4374,7 @@
             </Instrument>
             <Instrument id="bb-wagner-tuba">
                   <longName>B♭ Wagner Tuba</longName>
-                  <shortName>B♭ Wag. Tu.</shortName>
+                  <shortName>B♭ Wag. Tb.</shortName>
                   <description>B♭ Wagner Tuba</description>
                   <musicXMLid>brass.wagner-tuba</musicXMLid>
                   <clef>F</clef>
@@ -4389,7 +4389,7 @@
             </Instrument>
             <Instrument id="f-wagner-tuba">
                   <longName>F Wagner Tuba</longName>
-                  <shortName>F Wag. Tu.</shortName>
+                  <shortName>F Wag. Tb.</shortName>
                   <description>F Wagner Tuba</description>
                   <musicXMLid>brass.wagner-tuba</musicXMLid>
                   <clef>F</clef>
@@ -8740,7 +8740,7 @@
             </Instrument>
             <Instrument id="balalaika-contrabass">
                   <longName>Contrabass Balalaika</longName>
-                  <shortName>CB. Bal.</shortName>
+                  <shortName>Cb. Bal.</shortName>
                   <trackName>Contrabass Balalaika</trackName>
                   <description>Contrabass Balalaika </description>
                   <musicXMLid>pluck.balalaika.contrabass</musicXMLid>
