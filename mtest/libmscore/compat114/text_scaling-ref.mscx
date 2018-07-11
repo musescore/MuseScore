@@ -137,6 +137,7 @@
         <Harmony>
           <root>14</root>
           <extension>64</extension>
+          <name>7</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
