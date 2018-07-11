@@ -101,6 +101,7 @@ add_library(
       ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/AgentList.cpp       # Required by importmidi.cpp
       ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/BeatTracker.cpp     # Required by importmidi.cpp
       ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Induction.cpp       # Required by importmidi.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/extension.cpp # required by zerberus tests
       ${OMR_SRC}
       omr
       )
@@ -147,7 +148,7 @@ add_custom_target(reporthtml
       )
 
 subdirs (
-#        libmscore/compat114
+        libmscore/compat114
         libmscore/compat206
 #        libmscore/album            # obsolete
         libmscore/barline
@@ -188,6 +189,7 @@ subdirs (
         libmscore/transpose
         libmscore/tuplet
 #        libmscore/text        work in progress...
+        libmscore/utils
         importmidi
         capella
         biab

@@ -42,7 +42,7 @@ class DurationElement : public Element {
 #endif
 
    public:
-      DurationElement(Score* = 0, ElementFlags = ElementFlag::NOTHING);
+      DurationElement(Score* = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
       DurationElement(const DurationElement& e);
       ~DurationElement();
 

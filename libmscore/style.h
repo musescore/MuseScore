@@ -62,6 +62,23 @@ enum class Sid {
       lyricsDashForce,
       lyricsAlignVerseNumber,
       lyricsLineThickness,
+      lyricsMelismaAlign,
+
+      lyricsOddFontFace,
+      lyricsOddFontSize,
+      lyricsOddFontBold,
+      lyricsOddFontItalic,
+      lyricsOddFontUnderline,
+      lyricsOddAlign,
+      lyricsOddOffset,
+
+      lyricsEvenFontFace,
+      lyricsEvenFontSize,
+      lyricsEvenFontBold,
+      lyricsEvenFontItalic,
+      lyricsEvenFontUnderline,
+      lyricsEvenAlign,
+      lyricsEvenOffset,
 
       figuredBassFontFamily,
 //      figuredBassFontSize,
@@ -283,10 +300,31 @@ enum class Sid {
       voltaAlign,
       voltaOffset,
 
-      ottavaPlacement,
+      ottava8VAPlacement,
+      ottava8VBPlacement,
+      ottava15MAPlacement,
+      ottava15MBPlacement,
+      ottava22MAPlacement,
+      ottava22MBPlacement,
+
+      ottava8VAText,
+      ottava8VBText,
+      ottava15MAText,
+      ottava15MBText,
+      ottava22MAText,
+      ottava22MBText,
+
+      ottava8VAnoText,
+      ottava8VBnoText,
+      ottava15MAnoText,
+      ottava15MBnoText,
+      ottava22MAnoText,
+      ottava22MBnoText,
+
       ottavaPosAbove,
       ottavaPosBelow,
-      ottavaHook,
+      ottavaHookAbove,
+      ottavaHookBelow,
       ottavaLineWidth,
       ottavaLineStyle,
       ottavaNumbersOnly,
@@ -414,22 +452,6 @@ enum class Sid {
       lyricistAlign,
       lyricistOffset,
       lyricistOffsetType,
-
-      lyricsOddFontFace,
-      lyricsOddFontSize,
-      lyricsOddFontBold,
-      lyricsOddFontItalic,
-      lyricsOddFontUnderline,
-      lyricsOddAlign,
-      lyricsOddOffset,
-
-      lyricsEvenFontFace,
-      lyricsEvenFontSize,
-      lyricsEvenFontBold,
-      lyricsEvenFontItalic,
-      lyricsEvenFontUnderline,
-      lyricsEvenAlign,
-      lyricsEvenOffset,
 
       fingeringFontFace,
       fingeringFontSize,
@@ -794,8 +816,7 @@ enum class SubStyleId {
       SUBTITLE,
       COMPOSER,
       POET,
-      LYRIC_ODD,
-      LYRIC_EVEN,
+      LYRIC,
       FINGERING,
       LH_GUITAR_FINGERING,
       RH_GUITAR_FINGERING,
@@ -886,6 +907,8 @@ typedef std::vector<StyledProperty> SubStyle;
 extern const SubStyle emptyStyle;
 extern const SubStyle defaultStyle;
 extern const SubStyle fingeringStyle;
+extern const SubStyle lyricsStyle;
+extern const SubStyle ottavaStyle;
 
 const SubStyle& subStyle(SubStyleId);
 const SubStyle& subStyle(const char*);

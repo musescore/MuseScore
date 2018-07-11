@@ -1484,6 +1484,7 @@ Element* Measure::drop(EditData& data)
                         spacer->setGap(gap);
                         }
                   score()->undoAddElement(spacer);
+                  score()->setLayoutAll();
                   return spacer;
                   }
 

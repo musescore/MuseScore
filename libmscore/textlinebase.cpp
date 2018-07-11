@@ -27,8 +27,8 @@ namespace Ms {
 //   TextLineBaseSegment
 //---------------------------------------------------------
 
-TextLineBaseSegment::TextLineBaseSegment(Score* score)
-   : LineSegment(score)
+TextLineBaseSegment::TextLineBaseSegment(Score* score, ElementFlags f)
+   : LineSegment(score, f)
       {
       _text    = new Text(score);
       _endText = new Text(score);
@@ -360,6 +360,7 @@ static constexpr std::array<Pid, 34> pids = { {
       Pid::END_FONT_ITALIC,
       Pid::END_FONT_UNDERLINE,
       Pid::END_TEXT_OFFSET,
+      Pid::PLACEMENT,
       } };
 
 //---------------------------------------------------------

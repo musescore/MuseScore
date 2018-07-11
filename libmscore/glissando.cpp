@@ -195,7 +195,7 @@ QVariant GlissandoSegment::propertyDefault(Pid id) const
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags& GlissandoSegment::propertyFlags(Pid id)
+PropertyFlags GlissandoSegment::propertyFlags(Pid id) const
       {
       switch (id) {
             case Pid::FONT_FACE:
@@ -258,7 +258,7 @@ Sid GlissandoSegment::getPropertyStyle(Pid id) const
 //=========================================================
 
 Glissando::Glissando(Score* s)
-  : SLine(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE)
+  : SLine(s, ElementFlag::MOVABLE)
       {
       setAnchor(Spanner::Anchor::NOTE);
       setDiagonal(true);
@@ -294,7 +294,7 @@ Glissando::Glissando(const Glissando& g)
 LineSegment* Glissando::createLineSegment()
       {
       GlissandoSegment* seg = new GlissandoSegment(score());
-      seg->setFlag(ElementFlag::ON_STAFF, false);
+//      seg->setFlag(ElementFlag::ON_STAFF, false);
       seg->setTrack(track());
       seg->setColor(color());
       return seg;

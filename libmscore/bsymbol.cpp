@@ -14,6 +14,10 @@
 #include "image.h"
 #include "xml.h"
 #include "staff.h"
+#include "segment.h"
+#include "page.h"
+#include "system.h"
+#include "measure.h"
 
 namespace Ms {
 
@@ -21,18 +25,15 @@ namespace Ms {
 //   BSymbol
 //---------------------------------------------------------
 
-BSymbol::BSymbol(Score* s)
-   : Element(s)
+BSymbol::BSymbol(Score* s, ElementFlags f)
+   : Element(s, f)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
-      _systemFlag = false;
       }
 
 BSymbol::BSymbol(const BSymbol& s)
    : Element(s), ElementLayout(s)
       {
-      _systemFlag = s._systemFlag;
-      foreach(Element* e, s._leafs) {
+      for (Element* e : s._leafs) {
             Element* ee = e->clone();
             ee->setParent(this);
             _leafs.append(ee);
@@ -45,9 +46,9 @@ BSymbol::BSymbol(const BSymbol& s)
 
 void BSymbol::writeProperties(XmlWriter& xml) const
       {
-      if (_systemFlag)
-            xml.tag("systemFlag", _systemFlag);
-      foreach(const Element* e, leafs())
+      if (systemFlag())
+            xml.tag("systemFlag", systemFlag());
+      for (const Element* e : leafs())
             e->write(xml);
       Element::writeProperties(xml);
       }
@@ -63,7 +64,7 @@ bool BSymbol::readProperties(XmlReader& e)
       if (Element::readProperties(e))
             return true;
       else if (tag == "systemFlag")
-            _systemFlag = e.readInt();
+            setSystemFlag(e.readInt());
       else if (tag == "Symbol" || tag == "FSymbol") {
             Element* element = name2Element(tag, score());
             element->read(e);
@@ -194,6 +195,68 @@ QRectF BSymbol::drag(EditData& ed)
       foreach(const Element* e, _leafs)
             r |= e->canvasBoundingRect();
       return r;
+      }
+
+//---------------------------------------------------------
+//   dragAnchor
+//---------------------------------------------------------
+
+QLineF BSymbol::dragAnchor() const
+      {
+      if (parent() && parent()->type() == ElementType::SEGMENT) {
+            System* system = segment()->measure()->system();
+            qreal y        = system->staffCanvasYpage(staffIdx());
+//            QPointF anchor(segment()->pageX(), y);
+            QPointF anchor(segment()->canvasPos().x(), y);
+            return QLineF(canvasPos(), anchor);
+            }
+      else {
+            return QLineF(canvasPos(), parent()->canvasPos());
+            }
+      }
+
+//---------------------------------------------------------
+//   pagePos
+//---------------------------------------------------------
+
+QPointF BSymbol::pagePos() const
+      {
+      if (parent() && (parent()->type() == ElementType::SEGMENT)) {
+            QPointF p(pos());
+            System* system = segment()->measure()->system();
+            if (system) {
+                  p.ry() += system->staff(staffIdx())->y() + system->y();
+                  }
+            p.rx() = pageX();
+            return p;
+            }
+      else
+            return Element::pagePos();
+      }
+
+//---------------------------------------------------------
+//   canvasPos
+//---------------------------------------------------------
+
+QPointF BSymbol::canvasPos() const
+      {
+      if (parent() && (parent()->type() == ElementType::SEGMENT)) {
+            QPointF p(pos());
+            Segment* s = toSegment(parent());
+
+            System* system = s->measure()->system();
+            if (system) {
+                  int si = staffIdx();
+                  p.ry() += system->staff(si)->y() + system->y();
+                  Page* page = system->page();
+                  if (page)
+                        p.ry() += page->y();
+                  }
+            p.rx() = canvasX();
+            return p;
+            }
+      else
+            return Element::canvasPos();
       }
 
 

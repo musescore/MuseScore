@@ -40,10 +40,9 @@ int jumpTypeTableSize()
 //---------------------------------------------------------
 
 Jump::Jump(Score* s)
-   : TextBase(s)
+   : TextBase(s, ElementFlag::MOVABLE)
       {
       initSubStyle(SubStyleId::REPEAT_RIGHT);
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       setLayoutToParentWidth(true);
       _playRepeats = false;
       }

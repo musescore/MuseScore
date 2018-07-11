@@ -21,6 +21,7 @@
 #include "synthesizer/event.h"
 #include "synthesizer/msynthesizer.h"
 #include "mscore/preferences.h"
+#include "mscore/extension.h"
 
 #include "fluid.h"
 #include "sfont.h"
@@ -623,9 +624,7 @@ bool Fluid::loadSoundFonts(const QStringList& sl)
       locker.unlock();
       bool ok = true;
 
-
       QFileInfoList l = sfFiles();
-
       for (int i = sl.size() - 1; i >= 0; --i) {
             QString s = sl[i];
             if (s.isEmpty())
@@ -895,6 +894,10 @@ QFileInfoList Fluid::sfFiles()
 
       QStringList pl = preferences.getString(PREF_APP_PATHS_MYSOUNDFONTS).split(";");
       pl.prepend(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("sound")).absoluteFilePath());
+
+      // append extensions directory
+      QStringList extensionsDir = Ms::Extension::getDirectoriesByType(Ms::Extension::soundfontsDir);
+      pl.append(extensionsDir);
 
       foreach (const QString& s, pl) {
             QString ss(s);

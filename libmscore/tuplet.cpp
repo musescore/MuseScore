@@ -31,7 +31,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 Tuplet::Tuplet(Score* s)
-  : DurationElement(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
+  : DurationElement(s)
       {
       _tick         = 0;
       _ratio        = Fraction(1, 1);
@@ -120,7 +120,6 @@ void Tuplet::layout()
                   _number->setTrack(track());
                   _number->setParent(this);
                   _number->setVisible(visible());
-                  // initSubStyle(SubStyleId::TUPLET);   // hack
                   for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
                         _number->resetProperty(p);
                   }
@@ -493,6 +492,7 @@ void Tuplet::layout()
       if (_number) {
             _number->layout();
             numberWidth = _number->bbox().width();
+
             //
             // for beamed tuplets, center number on beam
             //
@@ -704,7 +704,7 @@ void Tuplet::write(XmlWriter& xml) const
 
 void Tuplet::read(XmlReader& e)
       {
-      _id    = e.intAttribute("id", 0);
+      _id = e.intAttribute("id", 0);
       while (e.readNextStartElement()) {
             if (readProperties(e))
                   ;
@@ -739,14 +739,13 @@ bool Tuplet::readProperties(XmlReader& e)
             _number = new Text(score());
             _number->setComposition(true);
             _number->setParent(this);
-//            _number->setSubStyleId(SubStyleId::TUPLET);
-//            initSubStyle(SubStyleId::TUPLET);   // hack: initialize number
+            // _number reads property defaults from parent tuplet as "composition" is set:
             for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
                   _number->resetProperty(p);
             _number->read(e);
             _number->setVisible(visible());     //?? override saved property
             _number->setTrack(track());
-            // move property flags from _number
+            // move property flags from _number back to tuplet
             for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
                   setPropertyFlags(p, _number->propertyFlags(p));
             }

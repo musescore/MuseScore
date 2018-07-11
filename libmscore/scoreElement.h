@@ -202,8 +202,9 @@ class ScoreElement {
       void setSubStyleId(SubStyleId);
       void initSubStyle(SubStyleId);
       virtual const StyledProperty* styledProperties() const { return subStyle(_subStyleId).data(); }
-      virtual PropertyFlags* propertyFlagsList()             { return _propertyFlagsList; }
-      virtual PropertyFlags& propertyFlags(Pid);
+      virtual PropertyFlags* propertyFlagsList() const       { return _propertyFlagsList; }
+      virtual PropertyFlags propertyFlags(Pid) const;
+      bool isStyled(Pid pid) const;
 
       virtual void setPropertyFlags(Pid, PropertyFlags);
 

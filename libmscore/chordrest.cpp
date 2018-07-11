@@ -556,7 +556,7 @@ Element* ChordRest::drop(EditData& data)
                   if (st >= SubStyleId::DEFAULT && fromPalette)
                         t->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
 #endif
-                  if (fromPalette)
+                  if (e->isRehearsalMark() && fromPalette)
                         t->setXmlText(score()->createRehearsalMarkText(toRehearsalMark(e)));
                   }
 

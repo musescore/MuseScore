@@ -9,6 +9,7 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
 //=============================================================================
+
 #include "tremolo.h"
 #include "score.h"
 #include "style.h"
@@ -39,12 +40,11 @@ static const char* tremoloName[] = {
       };
 
 Tremolo::Tremolo(Score* score)
-   : Element(score)
+   : Element(score, ElementFlag::MOVABLE)
       {
       setTremoloType(TremoloType::R8);
       _chord1  = 0;
       _chord2  = 0;
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
 Tremolo::Tremolo(const Tremolo& t)
@@ -53,7 +53,6 @@ Tremolo::Tremolo(const Tremolo& t)
       setTremoloType(t.tremoloType());
       _chord1  = t.chord1();
       _chord2  = t.chord2();
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
 //---------------------------------------------------------

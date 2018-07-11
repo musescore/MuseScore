@@ -2555,7 +2555,7 @@ void ScoreView::deselectAll()
 
 QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
       {
-      qDebug("0x%x  %s", int(query), editData.element ? editData.element->name() : "-no element-");
+//      qDebug("0x%x  %s", int(query), editData.element ? editData.element->name() : "-no element-");
       // if editing a text object, place the InputMethod popup window just below the text
       if (editData.element && editData.element->isTextBase()) {
             TextBase* text = toTextBase(editData.element);
@@ -2580,7 +2580,7 @@ QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
                   }
             }
       QVariant data = QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
-      qDebug() << "   " << data;
+//      qDebug() << "   " << data;
       return data;
       }
 

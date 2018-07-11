@@ -151,7 +151,7 @@ QString Element::subtypeName() const
 Element::Element(Score* s, ElementFlags f)
    : ScoreElement(s)
       {
-      _flags         = f | ElementFlag::ENABLED | ElementFlag::EMPTY | ElementFlag::AUTOPLACE | ElementFlag::SELECTABLE | ElementFlag::VISIBLE;
+      _flags         = f;
       _placement     = Placement::BELOW;
       _track         = -1;
       _color         = MScore::defaultColor;
@@ -170,7 +170,6 @@ Element::Element(const Element& e)
       _mag        = e._mag;
       _pos        = e._pos;
       _userOff    = e._userOff;
-//      _readPos    = e._readPos;
       _bbox       = e._bbox;
       _tag        = e._tag;
       _z          = e._z;

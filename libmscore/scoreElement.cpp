@@ -16,6 +16,7 @@
 #include "xml.h"
 #include "bracket.h"
 #include "bracketItem.h"
+#include "spanner.h"
 
 namespace Ms {
 
@@ -230,14 +231,14 @@ void ScoreElement::initSubStyle(SubStyleId ssid)
 //   resetProperty
 //---------------------------------------------------------
 
-void ScoreElement::resetProperty(Pid id)
+void ScoreElement::resetProperty(Pid pid)
       {
-      QVariant v = propertyDefault(id);
+      QVariant v = propertyDefault(pid);
       if (v.isValid()) {
-            setProperty(id, v);
-            PropertyFlags& p = propertyFlags(id);
+            setProperty(pid, v);
+            PropertyFlags p = propertyFlags(pid);
             if (p != PropertyFlags::NOSTYLE)
-                  p = PropertyFlags::STYLED;
+                  setPropertyFlags(pid, PropertyFlags::STYLED);
             }
       }
 
@@ -255,33 +256,45 @@ void ScoreElement::undoResetProperty(Pid id)
       }
 
 //---------------------------------------------------------
+//   isStyled
+//---------------------------------------------------------
+
+bool ScoreElement::isStyled(Pid pid) const
+      {
+      PropertyFlags f = propertyFlags(pid);
+      return f == PropertyFlags::STYLED;
+      }
+
+//---------------------------------------------------------
+//   changeProperty
+//---------------------------------------------------------
+
+static void changeProperty(ScoreElement* e, Pid t, const QVariant& st, PropertyFlags ps)
+      {
+      if (e->isSpannerSegment())
+            e = toSpannerSegment(e)->spanner();
+      if (e->getProperty(t) != st || e->propertyFlags(t) != ps) {
+            if (e->isBracketItem()) {
+                  BracketItem* bi = toBracketItem(e);
+                  e->score()->undo(new ChangeBracketProperty(bi->staff(), bi->column(), t, st, ps));
+                  }
+            else
+                  e->score()->undo(new ChangeProperty(e, t, st, ps));
+            }
+      }
+
+//---------------------------------------------------------
 //   changeProperties
 //---------------------------------------------------------
 
 static void changeProperties(ScoreElement* e, Pid t, const QVariant& st, PropertyFlags ps)
       {
       if (propertyLink(t)) {
-            for (ScoreElement* ee : e->linkList()) {
-                  if (ee->getProperty(t) != st || ee->propertyFlags(t) != ps) {
-                        if (ee->isBracketItem()) {
-                              BracketItem* bi = toBracketItem(ee);
-                              ee->score()->undo(new ChangeBracketProperty(bi->staff(), bi->column(), t, st, ps));
-                              }
-                        else
-                              ee->score()->undo(new ChangeProperty(ee, t, st, ps));
-                        }
-                  }
+            for (ScoreElement* ee : e->linkList())
+                  changeProperty(ee, t, st, ps);
             }
-      else {
-            if (e->getProperty(t) != st || e->propertyFlags(t) != ps) {
-                  if (e->isBracketItem()) {
-                        BracketItem* bi = toBracketItem(e);
-                        e->score()->undo(new ChangeBracketProperty(bi->staff(), bi->column(), t, st, ps));
-                        }
-                  else
-                        e->score()->undo(new ChangeProperty(e, t, st, ps));
-                  }
-            }
+      else
+            changeProperty(e, t, st, ps);
       }
 
 //---------------------------------------------------------
@@ -550,7 +563,7 @@ MasterScore* ScoreElement::masterScore() const
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags& ScoreElement::propertyFlags(Pid id)
+PropertyFlags ScoreElement::propertyFlags(Pid id) const
       {
       static PropertyFlags f = PropertyFlags::NOSTYLE;
 
@@ -571,9 +584,16 @@ PropertyFlags& ScoreElement::propertyFlags(Pid id)
 
 void ScoreElement::setPropertyFlags(Pid id, PropertyFlags f)
       {
-      PropertyFlags& p = propertyFlags(id);
-      if (p != PropertyFlags::NOSTYLE)
-            p = f;
+      const StyledProperty* spl = styledProperties();
+      for (int i = 0;;++i) {
+            const StyledProperty& k = spl[i];
+            if (k.sid == Sid::NOSTYLE)
+                  break;
+            if (k.pid == id) {
+                  propertyFlagsList()[i] = f;
+                  break;
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -600,15 +620,14 @@ Sid ScoreElement::getPropertyStyle(Pid id) const
 void ScoreElement::styleChanged()
       {
       for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            PropertyFlags& f = propertyFlags(spp->pid);
+            PropertyFlags f = propertyFlags(spp->pid);
             if (f == PropertyFlags::STYLED) {
                   if (propertyType(spp->pid) == P_TYPE::SP_REAL) {
                         qreal val = score()->styleP(spp->sid);
                         setProperty(spp->pid, val);
                         }
-                  else {
+                  else
                         setProperty(spp->pid, score()->styleV(spp->sid));
-                        }
                   }
             }
       }

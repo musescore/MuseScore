@@ -83,6 +83,23 @@ static const StyleType styleTypes[] {
       { Sid::lyricsDashForce,         "lyricsDashForce",         QVariant(true) },
       { Sid::lyricsAlignVerseNumber,  "lyricsAlignVerseNumber",  true },
       { Sid::lyricsLineThickness,     "lyricsLineThickness",     Spatium(0.1) },
+      { Sid::lyricsMelismaAlign,      "lyricsMelismaAlign",      QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+
+      { Sid::lyricsOddFontFace,       "lyricsOddFontFace",       "FreeSerif" },
+      { Sid::lyricsOddFontSize,       "lyricsOddFontSize",       11.0 },
+      { Sid::lyricsOddFontBold,       "lyricsOddFontBold",       false },
+      { Sid::lyricsOddFontItalic,     "lyricsOddFontItalic",     false },
+      { Sid::lyricsOddFontUnderline,  "lyricsOddFontUnderline",  false },
+      { Sid::lyricsOddAlign,          "lyricsOddAlign",          QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
+      { Sid::lyricsOddOffset,         "lyricsOddOffset",         QPointF(0.0, 6.0) },
+
+      { Sid::lyricsEvenFontFace,      "lyricsEvenFontFace",      "FreeSerif" },
+      { Sid::lyricsEvenFontSize,      "lyricsEvenFontSize",      11.0 },
+      { Sid::lyricsEvenFontBold,      "lyricsEvenFontBold",      false },
+      { Sid::lyricsEvenFontItalic,    "lyricsEvenFontItalic",    false },
+      { Sid::lyricsEvenFontUnderline, "lyricsEventFontUnderline",false },
+      { Sid::lyricsEvenAlign,         "lyricistEvenAlign",       QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
+      { Sid::lyricsEvenOffset,        "lyricistEvenOffset",      QPointF(0.0, 6.0) },
 
       { Sid::figuredBassFontFamily,   "figuredBassFontFamily",   QString("MScoreBC") },
 
@@ -306,10 +323,31 @@ static const StyleType styleTypes[] {
       { Sid::voltaAlign,              "voltaAlign",              QVariant::fromValue(Align::LEFT | Align::BASELINE) },
       { Sid::voltaOffset,             "voltaOffset",             QPointF(0.5, 1.9) },
 
-      { Sid::ottavaPlacement,         "ottavaPlacement",         int(Placement::ABOVE)  },
+      { Sid::ottava8VAPlacement,      "ottava8VAPlacement",      int(Placement::ABOVE)  },
+      { Sid::ottava8VBPlacement,      "ottava8VBPlacement",      int(Placement::BELOW)  },
+      { Sid::ottava15MAPlacement,     "ottava15MAPlacement",     int(Placement::ABOVE)  },
+      { Sid::ottava15MBPlacement,     "ottava15MBPlacement",     int(Placement::BELOW)  },
+      { Sid::ottava22MAPlacement,     "ottava22MAPlacement",     int(Placement::ABOVE)  },
+      { Sid::ottava22MBPlacement,     "ottava22MBPlacement",     int(Placement::BELOW)  },
+
+      { Sid::ottava8VAText,           "ottava8VAText",           QString("<sym>ottavaAlta</sym>") },
+      { Sid::ottava8VBText,           "ottava8VBText",           QString("<sym>ottavaBassaBa</sym>") },
+      { Sid::ottava15MAText,          "ottava15MAText",          QString("<sym>quindicesimaAlta</sym>") },
+      { Sid::ottava15MBText,          "ottava15MBText",          QString("<sym>quindicesimaBassa</sym>") },
+      { Sid::ottava22MAText,          "ottava22MAText",          QString("<sym>ventiduesimaAlta</sym>") },
+      { Sid::ottava22MBText,          "ottava22MBText",          QString("<sym>ventiduesimaBassa</sym>") },
+
+      { Sid::ottava8VAnoText,         "ottava8VAnoText",         QString("<sym>ottava</sym>") },
+      { Sid::ottava8VBnoText,         "ottava8VBnoText",         QString("<sym>ottava</sym>") },
+      { Sid::ottava15MAnoText,        "ottava15MAnoText",        QString("<sym>quindicesima</sym>") },
+      { Sid::ottava15MBnoText,        "ottava15MBnoText",        QString("<sym>quindicesima</sym>") },
+      { Sid::ottava22MAnoText,        "ottava22MAnoText",        QString("<sym>ventiduesima</sym>") },
+      { Sid::ottava22MBnoText,        "ottava22MBnoText",        QString("<sym>ventiduesima</sym>") },
+
       { Sid::ottavaPosAbove,          "ottavaPosAbove",          Spatium(-3.0) },
       { Sid::ottavaPosBelow,          "ottavaPosBelow",          Spatium(3.0) },
-      { Sid::ottavaHook,              "ottavaHook",              Spatium(1.9) },
+      { Sid::ottavaHookAbove,         "ottavaHookAbove",         Spatium(1.9) },
+      { Sid::ottavaHookBelow,         "ottavaHookBelow",         Spatium(-1.9) },
       { Sid::ottavaLineWidth,         "ottavaLineWidth",         Spatium(.1) },
       { Sid::ottavaLineStyle,         "ottavaLineStyle",         QVariant(int(Qt::DashLine)) },
       { Sid::ottavaNumbersOnly,       "ottavaNumbersOnly",       true },
@@ -437,22 +475,6 @@ static const StyleType styleTypes[] {
       { Sid::lyricistOffset,                "lyricistOffset",                QPointF() },
       { Sid::lyricistOffsetType,            "lyricistOffsetType",            int(OffsetType::ABS)   },
 
-      { Sid::lyricsOddFontFace,             "lyricsOddFontFace",             "FreeSerif" },
-      { Sid::lyricsOddFontSize,             "lyricsOddFontSize",             11.0 },
-      { Sid::lyricsOddFontBold,             "lyricsOddFontBold",             false },
-      { Sid::lyricsOddFontItalic,           "lyricsOddFontItalic",           false },
-      { Sid::lyricsOddFontUnderline,        "lyricsOddFontUnderline",        false },
-      { Sid::lyricsOddAlign,                "lyricistOddAlign",              QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
-      { Sid::lyricsOddOffset,               "lyricistOddOffset",             QPointF(0.0, 6.0) },
-
-      { Sid::lyricsEvenFontFace,            "lyricsEvenFontFace",            "FreeSerif" },
-      { Sid::lyricsEvenFontSize,            "lyricsEvenFontSize",            11.0 },
-      { Sid::lyricsEvenFontBold,            "lyricsEvenFontBold",            false },
-      { Sid::lyricsEvenFontItalic,          "lyricsEvenFontItalic",          false },
-      { Sid::lyricsEvenFontUnderline,       "lyricsEventFontUnderline",      false },
-      { Sid::lyricsEvenAlign,               "lyricistEvenAlign",             QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
-      { Sid::lyricsEvenOffset,              "lyricistEvenOffset",            QPointF(0.0, 6.0) },
-
       { Sid::fingeringFontFace,             "fingeringFontFace",             "FreeSerif" },
       { Sid::fingeringFontSize,             "fingeringFontSize",             8.0 },
       { Sid::fingeringFontBold,             "fingeringFontBold",             false },
@@ -557,7 +579,7 @@ static const StyleType styleTypes[] {
       { Sid::tempoFontItalic,               "tempoFontItalic",              false },
       { Sid::tempoFontUnderline,            "tempoFontUnderline",           false },
       { Sid::tempoAlign,                    "tempoAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
-      { Sid::tempoOffset,                   "tempoOffset",                  QPointF(0.0, -4.0) },
+      { Sid::tempoOffset,                   "tempoOffset",                  QPointF(0.0, 0.0) },   // not used
       { Sid::tempoSystemFlag,               "tempoSystemFlag",              true },
       { Sid::tempoPlacement,                "tempoPlacement",               int(Placement::ABOVE)  },
       { Sid::tempoPosAbove,                 "tempoPosAbove",                Spatium(-2.0) },
@@ -599,7 +621,7 @@ static const StyleType styleTypes[] {
       { Sid::staffTextFontItalic,           "staffFontItalic",              false },
       { Sid::staffTextFontUnderline,        "staffFontUnderline",           false },
       { Sid::staffTextAlign,                "staffAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
-      { Sid::staffTextOffset,               "staffOffset",                  QPointF(0.0, -4.0) },
+      { Sid::staffTextOffset,               "staffOffset",                  QPointF(0.0, 0.0) },      // not used
       { Sid::staffTextOffsetType,           "systemOffsetType",             int(OffsetType::SPATIUM)   },
       { Sid::staffTextPlacement,            "staffTextPlacement",           int(Placement::ABOVE) },
       { Sid::staffTextPosAbove,             "staffTextPosAbove",            Spatium(-2.0) },
@@ -877,27 +899,17 @@ const std::vector<StyledProperty> lyricistStyle {
       { Sid::lyricistAlign,                      Pid::ALIGN                  },
       { Sid::lyricistOffset,                     Pid::OFFSET                 },
       { Sid::lyricistOffsetType,                 Pid::OFFSET_TYPE            },
-      { Sid::lyricsPlacement,                    Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
 
-const std::vector<StyledProperty> lyricsOddStyle {
+const std::vector<StyledProperty> lyricsStyle {
       { Sid::lyricsOddFontFace,                  Pid::FONT_FACE              },
       { Sid::lyricsOddFontSize,                  Pid::FONT_SIZE              },
       { Sid::lyricsOddFontBold,                  Pid::FONT_BOLD              },
       { Sid::lyricsOddFontItalic,                Pid::FONT_ITALIC            },
       { Sid::lyricsOddFontUnderline,             Pid::FONT_UNDERLINE         },
       { Sid::lyricsOddAlign,                     Pid::ALIGN                  },
-      { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
-      };
-
-const std::vector<StyledProperty> lyricsEvenStyle {
-      { Sid::lyricsEvenFontFace,                 Pid::FONT_FACE              },
-      { Sid::lyricsEvenFontSize,                 Pid::FONT_SIZE              },
-      { Sid::lyricsEvenFontBold,                 Pid::FONT_BOLD              },
-      { Sid::lyricsEvenFontItalic,               Pid::FONT_ITALIC            },
-      { Sid::lyricsEvenFontUnderline,            Pid::FONT_UNDERLINE         },
-      { Sid::lyricsEvenAlign,                    Pid::ALIGN                  },
+      { Sid::lyricsPlacement,                    Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
 
@@ -1198,7 +1210,11 @@ const std::vector<StyledProperty> glissandoStyle {
       };
 
 const std::vector<StyledProperty> ottavaStyle {
+      { Sid::ottava8VAPlacement,                 Pid::PLACEMENT               },
       { Sid::ottavaNumbersOnly,                  Pid::NUMBERS_ONLY            },
+      { Sid::ottava8VAText,                      Pid::BEGIN_TEXT              },
+      { Sid::ottava8VAText,                      Pid::CONTINUE_TEXT           },
+      { Sid::ottavaHookAbove,                    Pid::END_HOOK_HEIGHT         },
       { Sid::ottavaFontFace,                     Pid::BEGIN_FONT_FACE         },
       { Sid::ottavaFontFace,                     Pid::CONTINUE_FONT_FACE      },
       { Sid::ottavaFontFace,                     Pid::END_FONT_FACE           },
@@ -1219,7 +1235,6 @@ const std::vector<StyledProperty> ottavaStyle {
       { Sid::ottavaTextAlign,                    Pid::END_TEXT_ALIGN          },
       { Sid::ottavaLineWidth,                    Pid::LINE_WIDTH              },
       { Sid::ottavaLineStyle,                    Pid::LINE_STYLE              },
-      { Sid::ottavaPlacement,                    Pid::PLACEMENT               },
       { Sid::NOSTYLE,                            Pid::END                     }      // end of list marker
       };
 
@@ -1274,6 +1289,8 @@ const std::vector<StyledProperty> pedalStyle {
       { Sid::pedalHookHeight,                    Pid::BEGIN_HOOK_HEIGHT       },
       { Sid::pedalHookHeight,                    Pid::END_HOOK_HEIGHT         },
       { Sid::pedalBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET       },
+      { Sid::pedalBeginTextOffset,               Pid::CONTINUE_TEXT_OFFSET    },
+      { Sid::pedalBeginTextOffset,               Pid::END_TEXT_OFFSET         },
       { Sid::pedalPlacement,                     Pid::PLACEMENT               },
       { Sid::NOSTYLE,                            Pid::END                     }      // end of list marker
       };
@@ -1525,8 +1542,7 @@ static constexpr std::array<StyledPropertyListName, int(SubStyleId::SUBSTYLES)> 
       { QT_TRANSLATE_NOOP("TextStyle", "Subtitle"),                &subTitleStyle,                  SubStyleId::SUBTITLE },
       { QT_TRANSLATE_NOOP("TextStyle", "Composer"),                &composerStyle,                  SubStyleId::COMPOSER },
       { QT_TRANSLATE_NOOP("TextStyle", "Lyricist"),                &lyricistStyle,                  SubStyleId::POET },
-      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Odd Lines"),        &lyricsOddStyle,                 SubStyleId::LYRIC_ODD },
-      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Even Lines"),       &lyricsEvenStyle,                SubStyleId::LYRIC_EVEN },
+      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics"),                  &lyricsStyle,                    SubStyleId::LYRIC },
       { QT_TRANSLATE_NOOP("TextStyle", "Fingering"),               &fingeringStyle,                 SubStyleId::FINGERING },
       { QT_TRANSLATE_NOOP("TextStyle", "LH Guitar Fingering"),     &lhGuitarFingeringStyle,         SubStyleId::LH_GUITAR_FINGERING },
       { QT_TRANSLATE_NOOP("TextStyle", "RH Guitar Fingering"),     &rhGuitarFingeringStyle,         SubStyleId::RH_GUITAR_FINGERING },
@@ -1868,6 +1884,11 @@ void MStyle::load(XmlReader& e)
 
             if (tag == "TextStyle") {
                   readTextStyle206(this, e);        // obsolete
+                  }
+            else if (tag == "ottavaHook") {           // obsolete, for 3.0dev bw. compatibility, should be removed in final release
+                  qreal y = qAbs(e.readDouble());
+                  set(Sid::ottavaHookAbove, y);
+                  set(Sid::ottavaHookBelow, -y);
                   }
             else if (tag == "Spatium")
                   set(Sid::spatium, e.readDouble() * DPMM);

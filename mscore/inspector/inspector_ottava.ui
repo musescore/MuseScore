@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>150</width>
-    <height>113</height>
+    <width>183</width>
+    <height>129</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -83,23 +83,6 @@
         </property>
         <property name="buddy">
          <cstring>ottavaType</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QToolButton" name="resetOttavaType">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Type' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -222,7 +205,6 @@
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>ottavaType</tabstop>
-  <tabstop>resetOttavaType</tabstop>
   <tabstop>placement</tabstop>
   <tabstop>resetPlacement</tabstop>
   <tabstop>numbersOnly</tabstop>

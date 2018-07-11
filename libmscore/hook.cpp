@@ -23,9 +23,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 Hook::Hook(Score* s)
-  : Symbol(s)
+  : Symbol(s, ElementFlag::NOTHING)
       {
-      setFlag(ElementFlag::MOVABLE, false);
       setZ(int(type()) * 100);
       }
 

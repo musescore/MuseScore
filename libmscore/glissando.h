@@ -32,7 +32,7 @@ enum class GlissandoType;
 
 class GlissandoSegment final : public LineSegment {
    public:
-      GlissandoSegment(Score* s) : LineSegment(s)           {}
+      GlissandoSegment(Score* s) : LineSegment(s) {}
       Glissando* glissando() const                          { return toGlissando(spanner()); }
       virtual ElementType type() const override             { return ElementType::GLISSANDO_SEGMENT; }
       virtual GlissandoSegment* clone() const override      { return new GlissandoSegment(*this); }
@@ -42,7 +42,7 @@ class GlissandoSegment final : public LineSegment {
       virtual QVariant getProperty(Pid id) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid id) const override;
-      virtual PropertyFlags& propertyFlags(Pid) override;
+      virtual PropertyFlags propertyFlags(Pid) const override;
       virtual void setPropertyFlags(Pid id, PropertyFlags f) override;
       virtual Sid getPropertyStyle(Pid) const override;
       };

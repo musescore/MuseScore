@@ -90,10 +90,8 @@ ClefType ClefInfo::tag2type(const QString& s)
 //---------------------------------------------------------
 
 Clef::Clef(Score* s)
-  : Element(s)
+  : Element(s, ElementFlag::ON_STAFF)
       {
-      setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-
       _showCourtesy               = true;
       _small                      = false;
       _clefTypes._concertClef     = ClefType::INVALID;

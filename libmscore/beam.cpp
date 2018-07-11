@@ -52,7 +52,7 @@ struct BeamFragment {
 //---------------------------------------------------------
 
 Beam::Beam(Score* s)
-   : Element(s, ElementFlag::SELECTABLE)
+   : Element(s)
       {
       initSubStyle(SubStyleId::BEAM);
       _direction       = Direction::AUTO;

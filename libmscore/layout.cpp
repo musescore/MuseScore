@@ -853,15 +853,14 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
             else if (sx < lx)
                   lx = sx;
 
-            qreal xx = x + chord->stemPosX() + chord->pos().x();
+            qreal xx = x + note->headBodyWidth() + chord->pos().x();
 
             Direction dotPosition = note->userDotPosition();
             if (chord->dots()) {
                   if (chord->up())
                         upDotPosX = qMax(upDotPosX, xx);
                   else {
-                        qreal noteheadShift = note->headBodyWidth();
-                        downDotPosX = qMax(downDotPosX, xx + noteheadShift);
+                        downDotPosX = qMax(downDotPosX, xx);
                         }
 
                   if (dotPosition == Direction::AUTO && nNotes > 1 && note->visible() && !note->dotsHidden()) {
@@ -3469,7 +3468,8 @@ void LayoutContext::collectPage()
                               }
                         }
                   }
-//TODO-ws ??            distance += score->staves().front()->userDist();
+//TODO-ws ??
+//          distance += score->staves().front()->userDist();
 
             y += distance;
             curSystem->setPos(page->lm(), y);
@@ -3545,7 +3545,7 @@ void LayoutContext::collectPage()
 
             if (!breakPage) {
                   qreal dist = prevSystem->minDistance(curSystem) + curSystem->height();
-                  VBox* vbox = curSystem->vbox();
+                  Box* vbox = curSystem->vbox();
                   if (vbox)
                         dist += vbox->bottomGap();
                   else if (!prevSystem->hasFixedDownDistance())
@@ -3553,7 +3553,7 @@ void LayoutContext::collectPage()
                   breakPage  = (y + dist) >= ey && breakPages;
                   }
             if (breakPage) {
-                  VBox* vbox = prevSystem->vbox();
+                  Box* vbox = prevSystem->vbox();
                   qreal dist = vbox ? vbox->bottomGap() : qMax(prevSystem->minBottom(), slb);
                   layoutPage(page, ey - (y + dist));
                   break;

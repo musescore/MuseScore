@@ -32,7 +32,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 Stem::Stem(Score* s)
-   : Element(s, ElementFlag::SELECTABLE)
+   : Element(s)
       {
       initSubStyle(SubStyleId::STEM);
       resetProperty(Pid::USER_LEN);

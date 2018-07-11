@@ -368,6 +368,24 @@ SynthesizerState MasterSynthesizer::state() const
       }
 
 //---------------------------------------------------------
+//   storeState
+//---------------------------------------------------------
+
+bool MasterSynthesizer::storeState()
+      {
+      QString s(dataPath + "/synthesizer.xml");
+      QFile f(s);
+      if (!f.open(QIODevice::WriteOnly)) {
+            qDebug("cannot write synthesizer settings <%s>", qPrintable(s));
+            return false;
+            }
+      XmlWriter xml(0, &f);
+      xml.header();
+      state().write(xml);
+      return true;
+      }
+
+//---------------------------------------------------------
 //   setGain
 //---------------------------------------------------------
 

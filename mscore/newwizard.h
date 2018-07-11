@@ -163,6 +163,7 @@ class NewWizardPage4 : public QWizardPage {
       virtual bool isComplete() const override;
       QString templatePath() const;
       virtual void initializePage();
+      void buildTemplatesList();
       };
 
 //---------------------------------------------------------
@@ -225,6 +226,7 @@ private slots:
       double tempo() const                { return p5->tempo();       }
       bool createTempo() const            { return p5->createTempo(); }
       bool emptyScore() const;
+      void updateValues() const;
       };
 
 } // namespace Ms

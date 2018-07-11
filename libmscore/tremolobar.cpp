@@ -25,7 +25,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 TremoloBar::TremoloBar(Score* s)
-   : Element(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
+   : Element(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       initSubStyle(SubStyleId::TREMOLO_BAR);
       }

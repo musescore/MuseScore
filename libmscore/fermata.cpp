@@ -30,11 +30,9 @@ namespace Ms {
 //---------------------------------------------------------
 
 Fermata::Fermata(Score* s)
-   : Element(s)
+   : Element(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setPlacement(Placement::ABOVE);
-
       _symId         = SymId::noSym;
       _timeStretch   = 1.0;
       setPlay(true);

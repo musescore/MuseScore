@@ -52,6 +52,7 @@
 #include "fermata.h"
 #include "stem.h"
 #include "lyrics.h"
+#include "tempotext.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -225,7 +226,8 @@ struct StyleVal2 {
       { Sid::voltaLineWidth,              QVariant(.1) },
       { Sid::voltaLineStyle,              QVariant(int(Qt::SolidLine)) },
       { Sid::ottavaPosAbove,              QVariant(-3.0) },
-      { Sid::ottavaHook,                  QVariant(1.9) },
+      { Sid::ottavaHookAbove,             QVariant(1.9) },
+      { Sid::ottavaHookBelow,             QVariant(-1.9) },
       { Sid::ottavaLineWidth,             QVariant(.1) },
       { Sid::ottavaLineStyle,             QVariant(int(Qt::DashLine)) },
       { Sid::ottavaNumbersOnly,           true },
@@ -335,7 +337,10 @@ void readTextStyle206(MStyle* style, XmlReader& e)
       bool systemFlag = false;
       QPointF offset;
       OffsetType offsetType = OffsetType::SPATIUM;
+      bool offsetValid = false;
       Placement placement = Placement::ABOVE;
+      bool placementValid = false;
+      qreal lineWidth = -1.0;
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -386,12 +391,14 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                   if (offsetType == OffsetType::ABS)
                         xo /= INCH;
                   offset.setX(xo);
+                  offsetValid = true;
                   }
             else if (tag == "yoffset") {
                   qreal yo = e.readDouble();
                   if (offsetType == OffsetType::ABS)
                         yo /= INCH;
                   offset.setY(yo);
+                  offsetValid = true;
                   }
             else if (tag == "rxoffset" || tag == "ryoffset")         // obsolete
                   e.readDouble();
@@ -442,7 +449,10 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                         placement = Placement::ABOVE;
                   else if (value == "below")
                         placement = Placement::BELOW;
+                  placementValid = true;
                   }
+            else if (tag == "lineWidth")
+                  lineWidth = e.readDouble();
             else
                   e.unknown();
             }
@@ -458,8 +468,10 @@ void readTextStyle206(MStyle* style, XmlReader& e)
             { "Subtitle",                SubStyleId::SUBTITLE },
             { "Composer",                SubStyleId::COMPOSER },
             { "Lyricist",                SubStyleId::POET },
-            { "Lyrics Odd Lines",        SubStyleId::LYRIC_ODD },
-            { "Lyrics Even Lines",       SubStyleId::LYRIC_EVEN },
+//            { "Lyrics Odd Lines",        SubStyleId::LYRIC_ODD },
+//            { "Lyrics Even Lines",       SubStyleId::LYRIC_EVEN },
+            { "Lyrics Odd Lines",        SubStyleId::LYRIC },
+            { "Lyrics Even Lines",       SubStyleId::LYRIC },
             { "Fingering",               SubStyleId::FINGERING },
             { "LH Guitar Fingering",     SubStyleId::LH_GUITAR_FINGERING },
             { "RH Guitar Fingering",     SubStyleId::RH_GUITAR_FINGERING },
@@ -509,6 +521,7 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                   }
             }
 
+//      qDebug("read substyle <%s>", qPrintable(name));
       const std::vector<StyledProperty>& spl = subStyle(ss);
       for (const auto& i : spl) {
             QVariant value;
@@ -582,7 +595,21 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                         value = QVariant::fromValue(align);
                         break;
                   case Pid::OFFSET:
-                        value = offset;
+                        if (offsetValid) {
+                              if (ss == SubStyleId::TEMPO) {
+                                    style->set(Sid::tempoPosAbove, Spatium(offset.y()));
+                                    offset = QPointF();
+                                    }
+                              else if (ss == SubStyleId::STAFF) {
+                                    style->set(Sid::staffTextPosAbove, Spatium(offset.y()));
+                                    offset = QPointF();
+                                    }
+                              else if (ss == SubStyleId::REHEARSAL_MARK) {
+                                    style->set(Sid::rehearsalMarkPosAbove, Spatium(offset.y()));
+                                    offset = QPointF();
+                                    }
+                              value = offset;
+                              }
                         break;
                   case Pid::OFFSET_TYPE:
                         value = int(offsetType);
@@ -595,16 +622,21 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                         value = QVariant();
                         break;
                   case Pid::PLACEMENT:
-                        value = int(placement);
+                        if (placementValid)
+                              value = int(placement);
+                        break;
+                  case Pid::LINE_WIDTH:
+                        if (lineWidth != -1.0)
+                              value = lineWidth;
                         break;
                   default:
-                        qDebug("unhandled property <%s>%d", propertyName(i.pid), int (i.pid));
+//                        qDebug("unhandled property <%s>%d", propertyName(i.pid), int (i.pid));
                         break;
                   }
             if (value.isValid())
                   style->set(i.sid, value);
-            else
-                  qDebug("invalid style value <%s>", MStyle::valueName(i.sid));
+//            else
+//                  qDebug("invalid style value <%s> pid<%s>", MStyle::valueName(i.sid), propertyName(i.pid));
             }
       }
 
@@ -1073,59 +1105,94 @@ static void readNote(Note* note, XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   readText
+//   readTextProperties
+//---------------------------------------------------------
+
+static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "style") {
+            QString s = e.readElementText();
+            if (!be->isTuplet()) {      // Hack
+                  SubStyleId ss;
+                  ss = e.lookupUserTextStyle(s);
+                  if (ss == SubStyleId::SUBSTYLES)
+                        ss = subStyleFromName(s);
+                  if (ss != SubStyleId::SUBSTYLES)
+                        be->initSubStyle(ss);
+                  }
+            }
+      else if (tag == "foregroundColor")  // same as "color" ?
+            e.skipCurrentElement();
+      else if (tag == "frame")
+            t->setHasFrame(e.readBool());
+      else if (tag == "halign") {
+            Align align = Align(int(t->align()) & int(~Align::HMASK));
+            const QString& val(e.readElementText());
+            if (val == "center")
+                  align = align | Align::HCENTER;
+            else if (val == "right")
+                  align = align | Align::RIGHT;
+            else if (val == "left")
+                  ;
+            else
+                  qDebug("unknown alignment: <%s>", qPrintable(val));
+            t->setAlign(align);
+            }
+      else if (tag == "valign") {
+            Align align = Align(int(t->align()) & int(~Align::VMASK));
+            const QString& val(e.readElementText());
+            if (val == "center")
+                  align = align | Align::VCENTER;
+            else if (val == "bottom")
+                  align = align | Align::BOTTOM;
+            else if (val == "baseline")
+                  align = align | Align::BASELINE;
+            else if (val == "top")
+                  ;
+            else
+                  qDebug("unknown alignment: <%s>", qPrintable(val));
+            t->setAlign(align);
+            }
+      else if (!t->readProperties(e))
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   readText206
 //---------------------------------------------------------
 
 static void readText206(XmlReader& e, TextBase* t, Element* be)
       {
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "style") {
-                  QString s = e.readElementText();
-                  if (!be->isTuplet()) {      // Hack
-                        SubStyleId ss;
-                        ss = e.lookupUserTextStyle(s);
-                        if (ss == SubStyleId::SUBSTYLES)
-                              ss = subStyleFromName(s);
-                        if (ss != SubStyleId::SUBSTYLES)
-                              be->initSubStyle(ss);
-                        }
-                  }
-            else if (tag == "foregroundColor")  // same as "color" ?
-                  e.skipCurrentElement();
-            else if (tag == "frame")
-                  t->setHasFrame(e.readBool());
-            else if (tag == "halign") {
-                  Align align = Align(int(t->align()) & int(~Align::HMASK));
-                  const QString& val(e.readElementText());
-                  if (val == "center")
-                        align = align | Align::HCENTER;
-                  else if (val == "right")
-                        align = align | Align::RIGHT;
-                  else if (val == "left")
-                        ;
-                  else
-                        qDebug("unknown alignment: <%s>", qPrintable(val));
-                  t->setAlign(align);
-                  }
-            else if (tag == "valign") {
-                  Align align = Align(int(t->align()) & int(~Align::VMASK));
-                  const QString& val(e.readElementText());
-                  if (val == "center")
-                        align = align | Align::VCENTER;
-                  else if (val == "bottom")
-                        align = align | Align::BOTTOM;
-                  else if (val == "baseline")
-                        align = align | Align::BASELINE;
-                  else if (val == "top")
-                        ;
-                  else
-                        qDebug("unknown alignment: <%s>", qPrintable(val));
-                  t->setAlign(align);
-                  }
-            else if (!t->readProperties(e))
+            if (!readTextProperties206(e, t, be))
                   e.unknown();
             }
+      }
+
+//---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
+static void readTempoText(TempoText* t, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "tempo")
+                  t->setTempo(e.readDouble());
+            else if (tag == "followText")
+                  t->setFollowText(e.readInt());
+            else if (!readTextProperties206(e, t, t))
+                  e.unknown();
+            }
+      // check sanity
+      if (t->xmlText().isEmpty()) {
+            t->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(lrint(60 * t->tempo())));
+            t->setVisible(false);
+            }
+      else
+            t->setXmlText(t->xmlText().replace("<sym>unicode", "<sym>met"));
       }
 
 //---------------------------------------------------------
@@ -1140,7 +1207,11 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
             if (tag == "Number") {
                   Text* _number = new Text(tuplet->score());
                   _number->setParent(tuplet);
+                  _number->setComposition(true);
                   tuplet->setNumber(_number);
+                  // _number reads property defaults from parent tuplet as "composition" is set:
+                  for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
+                        _number->resetProperty(p);
                   readText206(e, _number, tuplet);
                   _number->setVisible(tuplet->visible());     //?? override saved property
                   _number->setTrack(tuplet->track());
@@ -1188,6 +1259,9 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e)
             // TODO: add text to main text
             delete _verseNumber;
             }
+      lyrics->setAutoplace(true);
+      lyrics->setUserOff(QPointF());
+      lyrics->setOffset(QPointF());
       }
 
 //---------------------------------------------------------
@@ -1417,6 +1491,13 @@ static void readHairpin(XmlReader& e, Hairpin* h)
             h->setContinueText("");
             h->setEndText("");
             }
+      h->spannerSegments().clear();
+#if 0
+      for (auto ss : h->spannerSegments()) {
+            ss->setUserOff(QPointF());
+            ss->setUserOff2(QPointF());
+            }
+#endif
       }
 
 //---------------------------------------------------------
@@ -1966,7 +2047,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               staff->setKey(curTick, ks->keySigEvent());
                         }
                   }
-            else if (tag == "Text") {
+            else if (tag == "Text" || tag == "StaffText") {
                   StaffText* t = new StaffText(score);
                   t->setTrack(e.track());
                   readText206(e, t, t);
@@ -1994,9 +2075,13 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   RehearsalMark* el = new RehearsalMark(score);
                   el->setTrack(e.track());
                   readText206(e, el, el);
+                  el->setUserOff(el->userOff() - QPointF(0.0, el->score()->styleP(Sid::rehearsalMarkPosAbove)));
+                  if (el->userOff().isNull())
+                        el->setAutoplace(true);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
                   }
+#if 0
             else if (tag == "StaffText") {
                   StaffText* el = new StaffText(score);
                   el->setTrack(e.track());
@@ -2013,6 +2098,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
                   }
+#endif
             else if (tag == "Harmony"
                || tag == "FretDiagram"
                || tag == "TremoloBar"
@@ -2030,15 +2116,13 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   segment->add(el);
                   }
             else if (tag == "Tempo") {
-                  Element* el = Element::name2Element(tag, score);
+                  TempoText* tt = new TempoText(score);
                   // hack - needed because tick tags are unreliable in 1.3 scores
                   // for symbols attached to anything but a measure
-                  el->setTrack(e.track());
-                  el->read(e);
-                  TextBase* tt = static_cast<TextBase*>(el);
-                  tt->setXmlText(tt->xmlText().replace("<sym>unicode", "<sym>met"));
+                  tt->setTrack(e.track());
+                  readTempoText(tt, e);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
-                  segment->add(el);
+                  segment->add(tt);
             }
             else if (tag == "Marker"
                || tag == "Jump"
@@ -2341,6 +2425,11 @@ static void readStyle(MStyle* style, XmlReader& e)
                   qreal y = e.readDouble();
                   style->set(Sid::lyricsPosBelow, QVariant(Spatium(y)));
                   }
+            else if (tag == "ottavaHook") {
+                  qreal y = qAbs(e.readDouble());
+                  style->set(Sid::ottavaHookAbove, y);
+                  style->set(Sid::ottavaHookBelow, -y);
+                  }
             else if (tag == "endBarDistance") {
                   double d = e.readDouble();
                   d += style->value(Sid::barWidth).toDouble();
@@ -2359,7 +2448,9 @@ static void readStyle(MStyle* style, XmlReader& e)
                   chordListTag = true;
                   }
             else
-                  style->readProperties(e);
+                  if (!style->readProperties(e)) {
+                        e.skipCurrentElement();
+                        }
             }
 
       // if we just specified a new chord description file

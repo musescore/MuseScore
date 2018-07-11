@@ -47,8 +47,8 @@ Zerberus::Zerberus()
             initialized = true;
             Voice::init();
             }
-      for (int i = 0; i < MAX_VOICES; ++i)
-            freeVoices.push(new Voice(this));
+      
+      freeVoices.init(this);
       for (int i = 0; i < MAX_CHANNEL; ++i)
             _channel[i] = new Channel(this, i);
       busy = true;      // no sf loaded yet
@@ -175,6 +175,8 @@ void Zerberus::processNoteOn(Channel* cp, int key, int velo)
 void Zerberus::play(const Ms::PlayEvent& event)
       {
       if (busy)
+            return;
+      if (event.channel() >= MAX_CHANNEL)
             return;
       Channel* cp = _channel[int(event.channel())];
       if (cp->instrument() == 0) {

@@ -223,7 +223,7 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
             extern bool __loadScore;
 
             if (!__loadScore)
-                  qWarning("UndoStack:push(): no active command, UndoStack");
+                  qWarning("no active command, UndoStack");
 
             cmd->redo(ed);
             delete cmd;

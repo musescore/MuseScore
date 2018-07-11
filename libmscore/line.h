@@ -41,7 +41,7 @@ class LineSegment : public SpannerSegment {
       virtual void startEditDrag(EditData&) override;
 
    public:
-      LineSegment(Score* s) : SpannerSegment(s) {}
+      LineSegment(Score* s, ElementFlags f = ElementFlag::NOTHING) : SpannerSegment(s, f) {}
       LineSegment(const LineSegment&);
       virtual void draw(QPainter*) const = 0;
       SLine* line() const                         { return (SLine*)spanner(); }

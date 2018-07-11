@@ -541,9 +541,8 @@ NoteHead::Group NoteHead::headGroup() const
 //---------------------------------------------------------
 
 Note::Note(Score* s)
-   : Element(s)
+   : Element(s, ElementFlag::MOVABLE)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _playEvents.append(NoteEvent());    // add default play event
       _cachedNoteheadSym = SymId::noSym;
       _cachedSymNull = SymId::noSym;

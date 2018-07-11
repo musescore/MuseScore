@@ -3058,9 +3058,9 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
              */
 
             if (pel && pel->type() == ElementType::SYSTEM) {
+                  /*
                   const System* sys = static_cast<const System*>(pel);
                   QRectF bb = sys->staff(el->staffIdx())->bbox();
-                  /*
                   qDebug("directionTag()  syst=%p sys x=%g y=%g cpx=%g cpy=%g",
                          sys, sys->pos().x(),  sys->pos().y(),
                          sys->pagePos().x(),
@@ -3077,15 +3077,15 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
                         // for the line type elements the reference point is vertically centered
                         // actual position info is in the segments
                         // compare the segment's canvas ypos with the staff's center height
-                        if (seg->pagePos().y() < sys->pagePos().y() + bb.y() + bb.height() / 2)
+                        // if (seg->pagePos().y() < sys->pagePos().y() + bb.y() + bb.height() / 2)
+                        if (el->placement() == Placement::ABOVE)
                               tagname += " placement=\"above\"";
                         else
                               tagname += " placement=\"below\"";
                         }
                   else if (el->isDynamic()) {
                         tagname += " placement=\"";
-                        tagname += el->placement() == Placement::ABOVE
-                              ? "above" : "below";
+                        tagname += el->placement() == Placement::ABOVE ? "above" : "below";
                         tagname += "\"";
                         }
                   else {
@@ -3094,7 +3094,8 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
                                el->y(), el->height(),
                                bb.y(), bb.height());
                          */
-                        if (el->y() + el->height() / 2 < /*bb.y() +*/ bb.height() / 2)
+                        // if (el->y() + el->height() / 2 < /*bb.y() +*/ bb.height() / 2)
+                        if (el->placement() == Placement::ABOVE)
                               tagname += " placement=\"above\"";
                         else
                               tagname += " placement=\"below\"";
@@ -3361,7 +3362,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
       qDebug("ExportMusicXml::tempoText(TempoText='%s')", qPrintable(text->xmlText()));
       */
       attr.doAttr(xml, false);
-      xml.stag(QString("direction placement=\"%1\"").arg((text->parent()->y()-text->y() < 0.0) ? "below" : "above"));
+      xml.stag(QString("direction placement=\"%1\"").arg((text->placement() ==Placement::BELOW ) ? "below" : "above"));
       wordsMetrome(xml, _score, text);
       /*
       int offs = text->mxmlOff();
@@ -3881,7 +3882,8 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
       else
             qDebug("jump type=%d not implemented", int(jtp));
       if (sound != "") {
-            xml.stag("direction placement=\"above\"");
+//            xml.stag("direction placement=\"above\"");
+            xml.stag(QString("direction placement=\"%1\"").arg((jp->placement() ==Placement::BELOW ) ? "below" : "above"));
             xml.stag("direction-type");
             QString positioning = "";
             positioning += addPositioningAttributes(jp);
@@ -3936,7 +3938,8 @@ static void directionMarker(XmlWriter& xml, const Marker* const m)
       else
             qDebug("marker type=%d not implemented", int(mtp));
       if (sound != "") {
-            xml.stag("direction placement=\"above\"");
+//            xml.stag("direction placement=\"above\"");
+            xml.stag(QString("direction placement=\"%1\"").arg((m->placement() ==Placement::BELOW ) ? "below" : "above"));
             xml.stag("direction-type");
             QString positioning = "";
             positioning += addPositioningAttributes(m);

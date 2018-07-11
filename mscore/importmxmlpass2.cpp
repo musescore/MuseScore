@@ -801,9 +801,10 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
        el, track, qPrintable(placement), tick);
        */
 
+#if 0 // ws: use placement for symbols
       // move to correct position
       // TODO: handle rx, ry
-      if (el->type() == ElementType::SYMBOL) {
+      if (el->isSymbol()) {
             qreal y = 0;
             // calc y offset assuming five line staff and default style
             // note that required y offset is element type dependent
@@ -821,9 +822,10 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
             el->setUserOff(QPoint(0, y));
             }
       else {
-            el->setPlacement(placement == "above"
-                             ? Placement::ABOVE : Placement::BELOW);
+            el->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
             }
+#endif
+      el->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
 
       el->setTrack(track);
       Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
@@ -1345,6 +1347,7 @@ static void setSLinePlacement(SLine* sli, const QString placement)
        sli, sli->type(), sli->score()->spatium(), qPrintable(placement));
        */
 
+#if 0
       // calc y offset assuming five line staff and default style
       // note that required y offset is element type dependent
       if (sli->type() == ElementType::HAIRPIN) {
@@ -1363,9 +1366,10 @@ static void setSLinePlacement(SLine* sli, const QString placement)
                   }
             }
       else {
-            sli->setPlacement(placement == "above"
-                              ? Placement::ABOVE : Placement::BELOW);
+            sli->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
             }
+#endif
+      sli->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
       }
 
 //---------------------------------------------------------

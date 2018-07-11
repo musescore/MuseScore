@@ -351,6 +351,7 @@ add_executable ( ${ExecutableName}
       abstractdialog.cpp abstractdialog.h
       toolbuttonmenu.cpp
       preferenceslistwidget.cpp preferenceslistwidget.h
+      extension.cpp extension.h
 
       ${COCOABRIDGE}
       ${OMR_FILES}

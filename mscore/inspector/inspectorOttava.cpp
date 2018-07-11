@@ -71,7 +71,7 @@ InspectorOttava::InspectorOttava(QWidget* parent)
             { Pid::END_HOOK_TYPE,           0, tl.endHookType,           tl.resetEndHookType           },
             { Pid::END_HOOK_HEIGHT,         0, tl.endHookHeight,         tl.resetEndHookHeight         },
 
-            { Pid::OTTAVA_TYPE,             0, o.ottavaType,     o.resetOttavaType     },
+            { Pid::OTTAVA_TYPE,             0, o.ottavaType,     0                     },
             { Pid::PLACEMENT,               0, o.placement,      o.resetPlacement      },
             { Pid::NUMBERS_ONLY,            0, o.numbersOnly,    o.resetNumbersOnly    }
             };

@@ -341,7 +341,7 @@ class Movements : public std::vector<MasterScore*> {
 //    a Score has always an associated MasterScore
 //---------------------------------------------------------------------------------------
 
-class Score : public QObject, ScoreElement {
+class Score : public QObject, public ScoreElement {
       Q_OBJECT
       Q_PROPERTY(int                            duration          READ duration)
 //      Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
@@ -819,8 +819,9 @@ class Score : public QObject, ScoreElement {
       qreal    styleD(Sid idx) const  { Q_ASSERT(!strcmp(MStyle::valueType(idx),"double"));      return style().value(idx).toDouble();  }
       int      styleI(Sid idx) const  { Q_ASSERT(!strcmp(MStyle::valueType(idx),"int"));         return style().value(idx).toInt();  }
 
+      void setStyleValue(Sid sid, QVariant value) { style().set(sid, value);     }
       qreal spatium() const                    { return styleD(Sid::spatium);    }
-      void setSpatium(qreal v)                 { style().set(Sid::spatium, v);  }
+      void setSpatium(qreal v)                 { setStyleValue(Sid::spatium, v); }
 
       bool genCourtesyTimesig() const          { return styleB(Sid::genCourtesyTimesig); }
       bool genCourtesyClef() const             { return styleB(Sid::genCourtesyClef); }

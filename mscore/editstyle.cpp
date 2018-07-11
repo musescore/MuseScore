@@ -229,7 +229,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       { Sid::ottavaPosAbove,          false, ottavaPosAbove,          resetOttavaPosAbove  },
       { Sid::ottavaPosBelow,          false, ottavaPosBelow,          resetOttavaPosBelow  },
-      { Sid::ottavaHook,              false, ottavaHook,              resetOttavaHook      },
+      { Sid::ottavaHookAbove,         false, ottavaHookAbove,         resetOttavaHookAbove },
+      { Sid::ottavaHookBelow,         false, ottavaHookBelow,         resetOttavaHookBelow },
       { Sid::ottavaLineWidth,         false, ottavaLineWidth,         resetOttavaLineWidth },
 
       { Sid::pedalPlacement,          false, pedalLinePlacement,      resetPedalLinePlacement  },
