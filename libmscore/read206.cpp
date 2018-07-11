@@ -2425,6 +2425,11 @@ static void readStyle(MStyle* style, XmlReader& e)
                   qreal y = e.readDouble();
                   style->set(Sid::lyricsPosBelow, QVariant(Spatium(y)));
                   }
+            else if (tag == "ottavaHook") {
+                  qreal y = qAbs(e.readDouble());
+                  style->set(Sid::ottavaHookAbove, y);
+                  style->set(Sid::ottavaHookBelow, -y);
+                  }
             else if (tag == "endBarDistance") {
                   double d = e.readDouble();
                   d += style->value(Sid::barWidth).toDouble();

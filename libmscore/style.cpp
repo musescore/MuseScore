@@ -1885,6 +1885,11 @@ void MStyle::load(XmlReader& e)
             if (tag == "TextStyle") {
                   readTextStyle206(this, e);        // obsolete
                   }
+            else if (tag == "ottavaHook") {           // obsolete, for 3.0dev bw. compatibility, should be removed in final release
+                  qreal y = qAbs(e.readDouble());
+                  set(Sid::ottavaHookAbove, y);
+                  set(Sid::ottavaHookBelow, -y);
+                  }
             else if (tag == "Spatium")
                   set(Sid::spatium, e.readDouble() * DPMM);
             else if (tag == "page-layout") {    // obsolete

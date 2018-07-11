@@ -6827,7 +6827,11 @@ int main(int argc, char* av[])
 #endif
             }
 
-      sc->close();
+      if (sc) {
+            sc->close();
+            qApp->processEvents();
+            }
+
       mscore->showPlayPanel(preferences.getBool(PREF_UI_APP_STARTUP_SHOWPLAYPANEL));
       QSettings settings;
       if (settings.value("synthControlVisible", false).toBool())
