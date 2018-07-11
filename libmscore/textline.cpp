@@ -129,23 +129,7 @@ QVariant TextLine::getProperty(Pid propertyId) const
 
 bool TextLine::setProperty(Pid propertyId, const QVariant& val)
       {
-      switch (propertyId) {
-            case Pid::PLACEMENT:
-                  if (val != getProperty(propertyId)) {
-                        // reverse hooks
-                        setBeginHookHeight(-beginHookHeight());
-                        setEndHookHeight(-endHookHeight());
-                        }
-                  TextLineBase::setProperty(propertyId, val);
-                  break;
-
-            default:
-                  if (!TextLineBase::setProperty(propertyId, val))
-                        return false;
-                  break;
-            }
-      score()->setLayoutAll();
-      return true;
+      return TextLineBase::setProperty(propertyId, val);
       }
 
 //---------------------------------------------------------

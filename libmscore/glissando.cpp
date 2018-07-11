@@ -195,7 +195,7 @@ QVariant GlissandoSegment::propertyDefault(Pid id) const
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags& GlissandoSegment::propertyFlags(Pid id)
+PropertyFlags GlissandoSegment::propertyFlags(Pid id) const
       {
       switch (id) {
             case Pid::FONT_FACE:

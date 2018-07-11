@@ -132,7 +132,7 @@ Sid SpannerSegment::getPropertyStyle(Pid id) const
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags& SpannerSegment::propertyFlags(Pid id)
+PropertyFlags SpannerSegment::propertyFlags(Pid id) const
       {
       return spanner()->propertyFlags(id);
       }

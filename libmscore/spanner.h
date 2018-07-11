@@ -93,7 +93,7 @@ class SpannerSegment : public Element {
       virtual bool setProperty(Pid id, const QVariant& v) override;
       virtual QVariant propertyDefault(Pid id) const override;
       virtual Sid getPropertyStyle(Pid id) const override;
-      virtual PropertyFlags& propertyFlags(Pid id) override;
+      virtual PropertyFlags propertyFlags(Pid id) const override;
       virtual void resetProperty(Pid id) override;
       virtual void styleChanged() override;
       void reset() override;
