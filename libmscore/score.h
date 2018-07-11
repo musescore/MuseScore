@@ -682,6 +682,7 @@ class Score : public QObject, public ScoreElement {
 
       void repitchNote(const Position& pos, bool replace);
       void regroupNotesAndRests(int startTick, int endTick, int track);
+      bool checkTimeDelete(Segment*, Segment*);
       void timeDelete(Measure*, Segment*, const Fraction&);
 
       void startCmd();                          // start undoable command
