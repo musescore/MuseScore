@@ -2467,19 +2467,18 @@ static void readStyle(MStyle* style, XmlReader& e)
                   e.skipCurrentElement();
             else if (tag == "systemDistance")  // obsolete
                   style->set(Sid::minSystemDistance, QVariant(e.readDouble()));
-            else {
-                  if (tag == "stemDir") {
-                        int voice = e.attribute("voice", "1").toInt() - 1;
-                        switch(voice) {
-                              case 0: tag = "StemDir1"; break;
-                              case 1: tag = "StemDir2"; break;
-                              case 2: tag = "StemDir3"; break;
-                              case 3: tag = "StemDir4"; break;
-                              }
+            else if (tag == "stemDir") {
+                  int voice = e.attribute("voice", "1").toInt() - 1;
+                  switch(voice) {
+                        case 0: tag = "StemDir1"; break;
+                        case 1: tag = "StemDir2"; break;
+                        case 2: tag = "StemDir3"; break;
+                        case 3: tag = "StemDir4"; break;
                         }
-                  // for compatibility:
-                  if (tag == "oddHeader" || tag == "evenHeader" || tag == "oddFooter" || tag == "evenFooter")
-                        tag += "C";
+                  }
+            // for compatibility:
+            else if (tag == "oddHeader" || tag == "evenHeader" || tag == "oddFooter" || tag == "evenFooter")
+                  tag += "C";
 #if 0 // TODO-ws
                   int idx2;
                   for (idx2 = 0; idx2 < int(ArticulationType::ARTICULATIONS); ++idx2) {
@@ -2506,9 +2505,12 @@ static void readStyle(MStyle* style, XmlReader& e)
                   if (idx2 < int(ArticulationType::ARTICULATIONS))
                         continue;
 #endif
-                  QString val(e.readElementText());
-//TODO                  style->convertToUnit(tag, val);
+            else {
+                  if (!style->readProperties(e)) {
+                        e.skipCurrentElement();
+                        }
                   }
+//TODO                  style->convertToUnit(tag, val);
             }
 
       // if we just specified a new chord description file
@@ -2564,10 +2566,10 @@ static void readStyle(MStyle* style, XmlReader& e)
 Score::FileError MasterScore::read114(XmlReader& e)
       {
       qDebug("==");
-#if 0
+
       for (unsigned int i = 0; i < sizeof(style114)/sizeof(*style114); ++i)
             style().set(style114[i].idx, style114[i].val);
-
+#if 0
       // old text style defaults
       TextStyle ts = style().textStyle("Chord Symbol");
       ts.setYoff(-4.0);
