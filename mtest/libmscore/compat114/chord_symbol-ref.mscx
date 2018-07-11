@@ -106,6 +106,7 @@
         <Harmony>
           <root>16</root>
           <extension>64</extension>
+          <name>7</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -116,6 +117,7 @@
         <Harmony>
           <root>11</root>
           <extension>16</extension>
+          <name>m</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -126,6 +128,7 @@
         <Harmony>
           <root>20</root>
           <extension>6</extension>
+          <name>Maj7</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -138,6 +141,7 @@
         <Harmony>
           <root>15</root>
           <extension>33</extension>
+          <name>dim</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -150,6 +154,7 @@
         <Harmony>
           <root>17</root>
           <extension>76</extension>
+          <name>7b9</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -161,7 +166,8 @@
       <Measure number="7">
         <Harmony>
           <root>19</root>
-          <name>o</name>
+          <extension>33</extension>
+          <name>dim</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
