@@ -323,10 +323,31 @@ static const StyleType styleTypes[] {
       { Sid::voltaAlign,              "voltaAlign",              QVariant::fromValue(Align::LEFT | Align::BASELINE) },
       { Sid::voltaOffset,             "voltaOffset",             QPointF(0.5, 1.9) },
 
-      { Sid::ottavaPlacement,         "ottavaPlacement",         int(Placement::ABOVE)  },
+      { Sid::ottava8VAPlacement,      "ottava8VAPlacement",      int(Placement::ABOVE)  },
+      { Sid::ottava8VBPlacement,      "ottava8VBPlacement",      int(Placement::BELOW)  },
+      { Sid::ottava15MAPlacement,     "ottava15MAPlacement",     int(Placement::ABOVE)  },
+      { Sid::ottava15MBPlacement,     "ottava15MBPlacement",     int(Placement::BELOW)  },
+      { Sid::ottava22MAPlacement,     "ottava22MAPlacement",     int(Placement::ABOVE)  },
+      { Sid::ottava22MBPlacement,     "ottava22MBPlacement",     int(Placement::BELOW)  },
+
+      { Sid::ottava8VAText,           "ottava8VAText",           QString("<sym>ottavaAlta</sym>") },
+      { Sid::ottava8VBText,           "ottava8VBText",           QString("<sym>ottavaBassaBa</sym>") },
+      { Sid::ottava15MAText,          "ottava15MAText",          QString("<sym>quindicesimaAlta</sym>") },
+      { Sid::ottava15MBText,          "ottava15MBText",          QString("<sym>quindicesimaBassa</sym>") },
+      { Sid::ottava22MAText,          "ottava22MAText",          QString("<sym>ventiduesimaAlta</sym>") },
+      { Sid::ottava22MBText,          "ottava22MBText",          QString("<sym>ventiduesimaBassa</sym>") },
+
+      { Sid::ottava8VAnoText,         "ottava8VAnoText",         QString("<sym>ottava</sym>") },
+      { Sid::ottava8VBnoText,         "ottava8VBnoText",         QString("<sym>ottava</sym>") },
+      { Sid::ottava15MAnoText,        "ottava15MAnoText",        QString("<sym>quindicesima</sym>") },
+      { Sid::ottava15MBnoText,        "ottava15MBnoText",        QString("<sym>quindicesima</sym>") },
+      { Sid::ottava22MAnoText,        "ottava22MAnoText",        QString("<sym>ventiduesima</sym>") },
+      { Sid::ottava22MBnoText,        "ottava22MBnoText",        QString("<sym>ventiduesima</sym>") },
+
       { Sid::ottavaPosAbove,          "ottavaPosAbove",          Spatium(-3.0) },
       { Sid::ottavaPosBelow,          "ottavaPosBelow",          Spatium(3.0) },
-      { Sid::ottavaHook,              "ottavaHook",              Spatium(1.9) },
+      { Sid::ottavaHookAbove,         "ottavaHookAbove",         Spatium(1.9) },
+      { Sid::ottavaHookBelow,         "ottavaHookBelow",         Spatium(-1.9) },
       { Sid::ottavaLineWidth,         "ottavaLineWidth",         Spatium(.1) },
       { Sid::ottavaLineStyle,         "ottavaLineStyle",         QVariant(int(Qt::DashLine)) },
       { Sid::ottavaNumbersOnly,       "ottavaNumbersOnly",       true },
@@ -878,7 +899,6 @@ const std::vector<StyledProperty> lyricistStyle {
       { Sid::lyricistAlign,                      Pid::ALIGN                  },
       { Sid::lyricistOffset,                     Pid::OFFSET                 },
       { Sid::lyricistOffsetType,                 Pid::OFFSET_TYPE            },
-//      { Sid::lyricistPlacement,                  Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
 
@@ -892,18 +912,6 @@ const std::vector<StyledProperty> lyricsStyle {
       { Sid::lyricsPlacement,                    Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
-#if 0
-const std::vector<StyledProperty> lyricsEvenStyle {
-      { Sid::lyricsEvenFontFace,                 Pid::FONT_FACE              },
-      { Sid::lyricsEvenFontSize,                 Pid::FONT_SIZE              },
-      { Sid::lyricsEvenFontBold,                 Pid::FONT_BOLD              },
-      { Sid::lyricsEvenFontItalic,               Pid::FONT_ITALIC            },
-      { Sid::lyricsEvenFontUnderline,            Pid::FONT_UNDERLINE         },
-      { Sid::lyricsEvenAlign,                    Pid::ALIGN                  },
-      { Sid::lyricsPlacement,                    Pid::PLACEMENT              },
-      { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
-      };
-#endif
 
 const std::vector<StyledProperty> fingeringStyle {
       { Sid::fingeringFontFace,                  Pid::FONT_FACE              },
@@ -1202,7 +1210,11 @@ const std::vector<StyledProperty> glissandoStyle {
       };
 
 const std::vector<StyledProperty> ottavaStyle {
+      { Sid::ottava8VAPlacement,                 Pid::PLACEMENT               },
       { Sid::ottavaNumbersOnly,                  Pid::NUMBERS_ONLY            },
+      { Sid::ottava8VAText,                      Pid::BEGIN_TEXT              },
+      { Sid::ottava8VAText,                      Pid::CONTINUE_TEXT           },
+      { Sid::ottavaHookAbove,                    Pid::END_HOOK_HEIGHT         },
       { Sid::ottavaFontFace,                     Pid::BEGIN_FONT_FACE         },
       { Sid::ottavaFontFace,                     Pid::CONTINUE_FONT_FACE      },
       { Sid::ottavaFontFace,                     Pid::END_FONT_FACE           },
@@ -1223,7 +1235,6 @@ const std::vector<StyledProperty> ottavaStyle {
       { Sid::ottavaTextAlign,                    Pid::END_TEXT_ALIGN          },
       { Sid::ottavaLineWidth,                    Pid::LINE_WIDTH              },
       { Sid::ottavaLineStyle,                    Pid::LINE_STYLE              },
-      { Sid::ottavaPlacement,                    Pid::PLACEMENT               },
       { Sid::NOSTYLE,                            Pid::END                     }      // end of list marker
       };
 
