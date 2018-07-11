@@ -12,7 +12,9 @@
       <bracketDistance>0.25</bracketDistance>
       <clefLeftMargin>0.5</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
+      <clefBarlineDistance>0.18</clefBarlineDistance>
       <minNoteDistance>0.4</minNoteDistance>
+      <barNoteDistance>1.2</barNoteDistance>
       <measureSpacing>1.14</measureSpacing>
       <ledgerLineWidth>0.12</ledgerLineWidth>
       <beamWidth>0.48</beamWidth>
@@ -26,59 +28,6 @@
       <voltaY>0</voltaY>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <offsetType>spatium</offsetType>
-        <name>Dynamics</name>
-        <family>FreeSerif</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-4</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Chord Symbol</name>
-        <family>FreeSerif</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-3</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Rehearsal Mark</name>
-        <family>FreeSerif</family>
-        <size>14</size>
-        <bold>1</bold>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <frameWidthS>0.2</frameWidthS>
-        <paddingWidthS>0.5</paddingWidthS>
-        <frameRound>20</frameRound>
-        <frameColor r="0" g="0" b="0" a="255"/>
-        <systemFlag>1</systemFlag>
-        </TextStyle>
-      <page-layout>
-        <page-height>1584</page-height>
-        <page-width>1224</page-width>
-        <page-margins type="even">
-          <left-margin>56.6929</left-margin>
-          <right-margin>56.6929</right-margin>
-          <top-margin>56.6929</top-margin>
-          <bottom-margin>113.386</bottom-margin>
-          </page-margins>
-        <page-margins type="odd">
-          <left-margin>56.6929</left-margin>
-          <right-margin>56.6929</right-margin>
-          <top-margin>56.6929</top-margin>
-          <bottom-margin>113.386</bottom-margin>
-          </page-margins>
-        </page-layout>
       <Spatium>1.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -100,6 +49,7 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
+        <bracket type="-1" span="1" col="0"/>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
@@ -142,7 +92,6 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
         <Harmony>
           <root>14</root>
@@ -157,7 +106,6 @@
         <Harmony>
           <root>16</root>
           <extension>64</extension>
-          <name>7</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -168,7 +116,6 @@
         <Harmony>
           <root>11</root>
           <extension>16</extension>
-          <name>m</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -179,7 +126,6 @@
         <Harmony>
           <root>20</root>
           <extension>6</extension>
-          <name>Maj7</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -192,7 +138,6 @@
         <Harmony>
           <root>15</root>
           <extension>33</extension>
-          <name>dim</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -205,7 +150,6 @@
         <Harmony>
           <root>17</root>
           <extension>76</extension>
-          <name>7b9</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -217,8 +161,7 @@
       <Measure number="7">
         <Harmony>
           <root>19</root>
-          <extension>33</extension>
-          <name>dim</name>
+          <name>o</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
@@ -229,9 +172,8 @@
         </Measure>
       <Measure number="8">
         <Harmony>
-          <root>21</root>
-          <extension>64</extension>
-          <name>7</name>
+          <root>14</root>
+          <name>7</name>
           </Harmony>
         <Rest>
           <durationType>measure</durationType>
