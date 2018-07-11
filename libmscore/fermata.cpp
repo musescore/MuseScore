@@ -211,14 +211,14 @@ void Fermata::layout()
       if (placeAbove()) {
             if (name.endsWith("Below")) {
                   _symId = Sym::name2id(name.left(name.size() - 5) + "Above");
-                  QRectF b(symBbox(_symId));
+                  b = symBbox(_symId);
                   setbbox(b.translated(-0.5 * b.width(), 0.0));
                   }
             }
       else {
             if (name.endsWith("Above")) {
                   _symId = Sym::name2id(name.left(name.size() - 5) + "Below");
-                  QRectF b(symBbox(_symId));
+                  b = symBbox(_symId);
                   setbbox(b.translated(-0.5 * b.width(), 0.0));
                   }
             }
@@ -318,10 +318,6 @@ QVariant Fermata::propertyDefault(Pid propertyId) const
 
 Sid Fermata::getPropertyStyle(Pid id) const
       {
-      switch (id) {
-            default:
-                  break;
-            }
       return Sid::NOSTYLE;
       }
 

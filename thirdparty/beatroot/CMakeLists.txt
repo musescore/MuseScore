@@ -12,13 +12,26 @@ add_library (
       Agent.cpp
   )
 
-set_target_properties( beatroot
-   PROPERTIES
-      COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
-   )
+if (NOT MSVC)
+   set_target_properties( beatroot
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
+      )
+else (NOT MSVC)
+   set_target_properties ( beatroot
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE}"
+      )
+endif (NOT MSVC)   
 
 xcode_pch(beatroot all)
 
-ADD_DEPENDENCIES(beatroot mops1)
-ADD_DEPENDENCIES(beatroot mops2)
+# Use MSVC pre-compiled headers
+vstudio_pch( beatroot )
+
+# MSVC does not depend on mops1 & mops2 for PCH
+if (NOT MSVC)
+   ADD_DEPENDENCIES(beatroot mops1)
+   ADD_DEPENDENCIES(beatroot mops2)
+endif (NOT MSVC)
 

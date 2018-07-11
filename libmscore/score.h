@@ -412,6 +412,7 @@ class Score : public QObject, public ScoreElement {
       InputState _is;
       MStyle _style;
 
+      static bool _loadScore;
       bool _created { false };            ///< file is never saved, has generated name
       QString _tmpName;                   ///< auto saved with this name if not empty
       QString _importedFilePath;          // file from which the score was imported, or empty
@@ -541,6 +542,7 @@ class Score : public QObject, public ScoreElement {
       Score(MasterScore*, const MStyle&);
       virtual ~Score();
 
+      static bool& loadScore() { return _loadScore; }
       virtual bool isMaster() const  { return false;        }
 
       virtual inline QList<Excerpt*>& excerpts();

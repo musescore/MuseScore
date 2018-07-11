@@ -54,8 +54,6 @@
 
 namespace Ms {
 
-bool __loadScore = false;
-
 //---------------------------------------------------------
 //   writeMeasure
 //---------------------------------------------------------
@@ -430,7 +428,16 @@ bool MasterScore::saveFile()
 #ifdef Q_OS_WIN
             QFileInfo fileBackup(dir, backupName);
             QString backupNativePath = QDir::toNativeSeparators(fileBackup.absoluteFilePath());
+#if (defined (_MSCVER) || defined (_MSC_VER))
+   #if (defined (UNICODE))
+            SetFileAttributes((LPCTSTR)backupNativePath.unicode(), FILE_ATTRIBUTE_HIDDEN);
+   #else
+            // Use byte-based Windows function
             SetFileAttributes((LPCTSTR)backupNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
+   #endif
+#else
+            SetFileAttributes((LPCTSTR)backupNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
+#endif
 #endif
             }
       else {

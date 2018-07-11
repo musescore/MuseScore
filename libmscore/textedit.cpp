@@ -173,7 +173,16 @@ bool TextBase::edit(EditData& ed)
       if (hexState >= 0) {
             if (ed.modifiers == (Qt::ControlModifier | Qt::ShiftModifier | Qt::KeypadModifier)) {
                   switch (ed.key) {
-                        case Qt::Key_0 ... Qt::Key_9:
+                          case Qt::Key_0:
+                          case Qt::Key_1:
+                          case Qt::Key_2:
+                          case Qt::Key_3:
+                          case Qt::Key_4:
+                          case Qt::Key_5:
+                          case Qt::Key_6:
+                          case Qt::Key_7:
+                          case Qt::Key_8:
+                          case Qt::Key_9:
                               s = QChar::fromLatin1(ed.key);
                               ++hexState;
                               wasHex = true;
@@ -184,7 +193,12 @@ bool TextBase::edit(EditData& ed)
                   }
             else if (ed.modifiers == (Qt::ControlModifier | Qt::ShiftModifier)) {
                   switch (ed.key) {
-                        case Qt::Key_A ... Qt::Key_F:
+                        case Qt::Key_A:
+                        case Qt::Key_B:
+                        case Qt::Key_C:
+                        case Qt::Key_D:
+                        case Qt::Key_E:
+                        case Qt::Key_F:
                               s = QChar::fromLatin1(ed.key);
                               ++hexState;
                               wasHex = true;

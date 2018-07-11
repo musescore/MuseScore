@@ -26,21 +26,40 @@ else (APPLE)
         set(INCS "")
 endif (APPLE)
 
+if (NOT MSVC)
+   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
+else (NOT MSVC)
+   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
+endif (NOT MSVC)
+
 add_library(diff_match_patch STATIC
    diff_match_patch.cpp
-   ${PROJECT_BINARY_DIR}/all.h
+   ${_all_h_file}
    ${PCH}
    ${INCS}
    )
 
-set_target_properties (
+if (NOT MSVC)
+   set_target_properties (
       diff_match_patch
       PROPERTIES
          COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+else (NOT MSVC)
+   set_target_properties (
+      diff_match_patch
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE}"
+      )
+endif (NOT MSVC)   
 
 xcode_pch(diff_match_patch all)
 
-ADD_DEPENDENCIES(diff_match_patch mops1)
-ADD_DEPENDENCIES(diff_match_patch mops2)
+# Use MSVC pre-compiled headers
+vstudio_pch( diff_match_patch )
 
+# MSVC does not depend on mops1 & mops2 for PCH
+if (NOT MSVC)
+   ADD_DEPENDENCIES(diff_match_patch mops1)
+   ADD_DEPENDENCIES(diff_match_patch mops2)
+endif (NOT MSVC)
