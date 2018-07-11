@@ -746,10 +746,9 @@ MasterScore* MuseScore::getNewFile()
       score->rebuildMidiMapping();
 
       {
-            extern bool __loadScore;
-            __loadScore = true;
+            Score::loadScore() = true;
             score->doLayout();
-            __loadScore = false;
+            Score::loadScore() = false;
             }
 
       for (Excerpt* x : excerpts) {
@@ -2223,8 +2222,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
             }
 
       {
-      extern bool __loadScore;
-      __loadScore = true;
+      Score::loadScore() = true;
       score->rebuildMidiMapping();
       score->setSoloMute();
       for (Score* s : score->scoreList()) {
@@ -2235,7 +2233,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
       score->updateChannel();
       score->setSaved(false);
       score->update();
-      __loadScore = false;
+      Score::loadScore() = false;
       }
 
       if (!ignoreVersionError && !MScore::noGui)

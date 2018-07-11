@@ -220,9 +220,7 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
       {
       if (!curCmd) {
             // this can happen for layout() outside of a command (load)
-            extern bool __loadScore;
-
-            if (!__loadScore)
+            if (!Score::loadScore())
                   qWarning("no active command, UndoStack");
 
             cmd->redo(ed);

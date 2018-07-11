@@ -241,6 +241,8 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
 //   Score
 //---------------------------------------------------------
 
+bool Score::_loadScore = false;
+
 Score::Score()
    : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
       {
