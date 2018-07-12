@@ -28,8 +28,9 @@ namespace Ms {
 class Score;
 class Staff;
 class PianoView;
+class PianoKeyboard;
 class Note;
-class Ruler;
+class PianoRuler;
 class Seq;
 class WaveView;
 
@@ -41,6 +42,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       Q_OBJECT
 
       PianoView* gv;
+      PianoKeyboard* pianoKbd;
       QScrollBar* hsb;        // horizontal scroll bar for pianoView
       Score* _score;
       Staff* staff;
@@ -51,7 +53,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       Pos locator[3];
       QComboBox* veloType;
       Awl::PosLabel* pos;
-      Ruler* ruler;
+      PianoRuler* ruler;
       QAction* showWave;
       WaveView* waveView;
       QSplitter* split;
@@ -85,6 +87,7 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       virtual ~PianorollEditor();
 
       void setStaff(Staff* staff);
+      void focusOnPosition(Position* p);
       void heartBeat(Seq*);
 
       virtual void dataChanged(const QRectF&);
