@@ -3591,7 +3591,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_ALL,
+         STATE_ALL & ~STATE_TEXT_EDIT,
          "relayout",
          "Re-Layout",
          "Re-layout",
