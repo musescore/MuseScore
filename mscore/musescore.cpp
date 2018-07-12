@@ -2927,7 +2927,7 @@ static void loadScores(const QStringList& argv)
                                     score->setCreated(true);
                                     }
                               if (score == 0) {
-                                    score = mscore->readScore(":/data/My_First_Score.mscz");
+                                    score = mscore->readScore(":/data/My_First_Score.mscx");
                                     if (score) {
                                           score->setName(mscore->createDefaultName());
                                           // TODO score->setPageFormat(*MScore::defaultStyle().pageFormat());

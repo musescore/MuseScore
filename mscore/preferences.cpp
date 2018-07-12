@@ -91,7 +91,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_APP_USESINGLEPALETTE,                            new BoolPreference(false)},
             {PREF_APP_STARTUP_FIRSTSTART,                          new BoolPreference(true)},
             {PREF_APP_STARTUP_SESSIONSTART,                        new EnumPreference(QVariant::fromValue(SessionStart::SCORE), false)},
-            {PREF_APP_STARTUP_STARTSCORE,                          new StringPreference(":/data/My_First_Score.mscz", false)},
+            {PREF_APP_STARTUP_STARTSCORE,                          new StringPreference(":/data/My_First_Score.mscx", false)},
             {PREF_APP_WORKSPACE,                                   new StringPreference("Basic", false)},
             {PREF_EXPORT_AUDIO_SAMPLERATE,                         new IntPreference(44100, false)},
             {PREF_EXPORT_MP3_BITRATE,                              new IntPreference(128, false)},

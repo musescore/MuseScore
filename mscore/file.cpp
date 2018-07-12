@@ -569,8 +569,6 @@ MasterScore* MuseScore::getNewFile()
                   score->style().chordList()->read("chords.xml");
             score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
             }
-      if (!newWizard->title().isEmpty())
-            score->fileInfo()->setFile(newWizard->title());
 
       score->sigmap()->add(0, timesig);
 
@@ -680,11 +678,21 @@ MasterScore* MuseScore::getNewFile()
                   }
             }
 
-      QString title     = newWizard->title();
-      QString subtitle  = newWizard->subtitle();
-      QString composer  = newWizard->composer();
-      QString poet      = newWizard->poet();
-      QString copyright = newWizard->copyright();
+      NewWizardPage1* metaTagsPage = newWizard->metaTagsPage();
+      score->setMetaTag("movementTitle", metaTagsPage->movementTitle());
+      score->setMetaTag("movementNumber", metaTagsPage->movementNumber());
+      score->setMetaTag("arranger", metaTagsPage->arranger());
+      score->setMetaTag("lyricist", metaTagsPage->lyricist());
+      score->setMetaTag("workNumber", metaTagsPage->workNumber());
+      score->setMetaTag("translator", metaTagsPage->translator());
+      score->setMetaTag("source", metaTagsPage->source());
+      QString title = metaTagsPage->title();
+      if (!title.isEmpty())
+            score->fileInfo()->setFile(title);
+      QString subtitle = metaTagsPage->subtitle();
+      QString composer = metaTagsPage->composer();
+      QString poet = metaTagsPage->poet();
+      QString copyright = metaTagsPage->copyright();
 
       if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !poet.isEmpty()) {
             MeasureBase* measure = score->measures()->first();
@@ -719,8 +727,7 @@ MasterScore* MuseScore::getNewFile()
                   Text* s = new Text(SubStyleId::POET, score);
                   s->setPlainText(poet);
                   measure->add(s);
-                  // the poet() functions returns data called lyricist in the dialog
-                  score->setMetaTag("lyricist", poet);
+                  score->setMetaTag("poet", poet);
                   }
             }
       else if (nvb) {
@@ -1845,7 +1852,7 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy, const QString& path, const QStr
 #else
                         cs->metaTags().insert("platform", "Unknown");
 #endif
-                        cs->metaTags().insert("source", ""); // Empty "source" to avoid clashes with masterrScore when doing "Save online"
+                        cs->metaTags().insert("source", ""); // Empty "source" to avoid clashes with masterScore when doing "Save online"
                         cs->metaTags().insert("creationDate", QDate::currentDate().toString(Qt::ISODate)); // update "creationDate"
                         }
                   }
@@ -1973,11 +1980,11 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
             qDebug("unable to clear printer margins");
 
       QString title = cs->metaTag("workTitle");
-      if (title.isEmpty()) // workTitle unset?
+      if (title.isEmpty()) // workTitle unset or tag deleted
             title = cs->masterScore()->title(); // fall back to (master)score's tab title
       if (!cs->isMaster()) { // excerpt?
             QString partname = cs->metaTag("partName");
-            if (partname.isEmpty()) // partName unset?
+            if (partname.isEmpty()) // partName unset or tag deleted
                   partname = cs->title(); // fall back to excerpt's tab title
             title += " - " + partname;
             }
@@ -2032,7 +2039,7 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
             qDebug("unable to clear printer margins");
 
       QString title = firstScore->metaTag("workTitle");
-      if (title.isEmpty()) // workTitle unset?
+      if (title.isEmpty()) // workTitle unset or tag deleted
             title = firstScore->title(); // fall back to (master)score's tab title
       title += " - " + tr("Score and Parts");
       pdfWriter.setTitle(title); // set PDF's meta data for Title

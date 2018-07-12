@@ -6,9 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>668</width>
-    <height>373</height>
+    <width>682</width>
+    <height>406</height>
    </rect>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::NoFocus</enum>
   </property>
   <property name="windowTitle">
    <string>Score Properties</string>
@@ -19,77 +22,173 @@
      <property name="topMargin">
       <number>0</number>
      </property>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="version">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>MuseScore Version:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="QLineEdit" name="revision">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>Revision:</string>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="4">
-      <widget class="QLabel" name="label_9">
+      <widget class="QLabel" name="labelLevel">
        <property name="text">
         <string>API-Level:</string>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::NoTextInteraction</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" colspan="6">
+      <widget class="QLabel" name="filePath">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Where the score is saved on your computer.</string>
+       </property>
+       <property name="whatsThis">
+        <string>Where the score is saved on your computer.</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Where the score is saved on your computer.</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Panel</enum>
+       </property>
+       <property name="text">
+        <string>The document has not been saved yet.</string>
        </property>
       </widget>
      </item>
      <item row="1" column="5">
-      <widget class="QSpinBox" name="level">
-       <property name="enabled">
-        <bool>false</bool>
+      <widget class="QLabel" name="level">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="readOnly">
-        <bool>true</bool>
+       <property name="minimumSize">
+        <size>
+         <width>51</width>
+         <height>0</height>
+        </size>
        </property>
-       <property name="buttonSymbols">
-        <enum>QAbstractSpinBox::NoButtons</enum>
+       <property name="toolTip">
+        <string>API-Level</string>
        </property>
-       <property name="maximum">
-        <number>99999</number>
+       <property name="frameShape">
+        <enum>QFrame::Panel</enum>
+       </property>
+       <property name="text">
+        <string>No level</string>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::NoTextInteraction</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="version">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>The MuseScore version which last saved the score.</string>
+       </property>
+       <property name="whatsThis">
+        <string>The MuseScore version which last saved the score.</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>The MuseScore version which last saved the score.</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Panel</enum>
+       </property>
+       <property name="text">
+        <string>No version</string>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::NoTextInteraction</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="labelRevision">
+       <property name="text">
+        <string>Revision:</string>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::NoTextInteraction</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="labelVersion">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>The MuseScore version which last saved the score.</string>
+       </property>
+       <property name="whatsThis">
+        <string>The MuseScore version which last saved the score.</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>The MuseScore version which last saved the score.</string>
+       </property>
+       <property name="text">
+        <string>MuseScore Version:</string>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::NoTextInteraction</set>
        </property>
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="labelFilePath">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Where the score is saved on your computer.</string>
+       </property>
+       <property name="whatsThis">
+        <string>Where the score is saved on your computer.</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Where the score is saved on your computer.</string>
+       </property>
        <property name="text">
         <string>File Path:</string>
        </property>
+       <property name="textInteractionFlags">
+        <set>Qt::NoTextInteraction</set>
+       </property>
       </widget>
      </item>
-     <item row="0" column="1" colspan="5">
-      <widget class="QLineEdit" name="filePath">
-       <property name="enabled">
-        <bool>false</bool>
+     <item row="1" column="3">
+      <widget class="QLabel" name="revision">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="readOnly">
-        <bool>true</bool>
+       <property name="frameShape">
+        <enum>QFrame::Panel</enum>
+       </property>
+       <property name="text">
+        <string>No revision</string>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::NoTextInteraction</set>
        </property>
       </widget>
      </item>
@@ -100,39 +199,90 @@
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
-     <widget class="QWidget" name="scrollWidget">
+     <widget class="QWidget" name="scrollAreaWidgetContents">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>646</width>
-        <height>238</height>
+        <width>660</width>
+        <height>297</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <property name="verticalSpacing">
-        <number>1</number>
+      <layout class="QGridLayout" name="scrollAreaLayout">
+       <property name="spacing">
+        <number>3</number>
        </property>
       </layout>
      </widget>
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="buttonLayout">
      <item>
       <widget class="QPushButton" name="newButton">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="toolTip">
+        <string>Add a tag to this score.</string>
+       </property>
        <property name="text">
-        <string notr="true">+</string>
+        <string>New...</string>
+       </property>
+       <property name="autoRepeat">
+        <bool>true</bool>
+       </property>
+       <property name="autoRepeatDelay">
+        <number>500</number>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
+      <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="okButton">
+       <property name="text">
+        <string>Ok</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelButton">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="saveButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="toolTip">
+        <string>Save changes made to the score's tags.</string>
+       </property>
+       <property name="whatsThis">
+        <string>Save changes made to the score's tags.</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Save changes made to the score's tags.</string>
+       </property>
+       <property name="text">
+        <string>Save</string>
        </property>
       </widget>
      </item>
@@ -140,37 +290,43 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>newButton</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>okButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
+   <sender>okButton</sender>
+   <signal>clicked()</signal>
    <receiver>MetaEditDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>424</x>
+     <y>345</y>
     </hint>
     <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
+     <x>435</x>
+     <y>389</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
+   <sender>cancelButton</sender>
+   <signal>clicked()</signal>
    <receiver>MetaEditDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>542</x>
+     <y>352</y>
     </hint>
     <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
+     <x>546</x>
+     <y>405</y>
     </hint>
    </hints>
   </connection>

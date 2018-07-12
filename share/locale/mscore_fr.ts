@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="fr">
 <context>
     <name>AboutBox</name>
     <message>
@@ -10138,7 +10140,7 @@ Restaurer la session ?</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="124"/>
-        <source>'%1' does already exist,
+        <source>&apos;%1&apos; does already exist,
 please choose a different name:</source>
         <translation>« %1 » existe déjà,
 veuillez choisir un nom différent :</translation>
@@ -11660,7 +11662,7 @@ Veuillez sélectionner une mesure et réessayer</translation>
     </message>
     <message>
         <location filename="../../mscore/textstyle.cpp" line="217"/>
-        <source>'%1' does already exist,
+        <source>&apos;%1&apos; does already exist,
 please choose a different name:</source>
         <translation>« %1 » existe déjà,
 veuillez choisir un nom différent :</translation>
@@ -14910,7 +14912,7 @@ Allez sur le %1site de MuseScore%2 pour télécharger la dernière version. </tr
     </message>
     <message>
         <location filename="../../mscore/importxml.cpp" line="165"/>
-        <source>Can't find rootfile
+        <source>Can&apos;t find rootfile
 %1</source>
         <translation>Impossible de trouver le fichier
 %1</translation>
@@ -17467,7 +17469,7 @@ a échoué :</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="89"/>
         <source>Save Selection...</source>
-        <translation>Enregistrer la sélection</translation>
+        <translation type="unfinished">Enregistrer la sélection...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="90"/>
@@ -17482,7 +17484,7 @@ a échoué :</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="100"/>
         <source>Save a Copy...</source>
-        <translation>Enregistrer une copie</translation>
+        <translation>Enregistrer une copie...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="101"/>
@@ -17497,7 +17499,7 @@ a échoué :</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="111"/>
         <source>Export...</source>
-        <translation>Exporter</translation>
+        <translation>Exporter...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="112"/>
@@ -17512,7 +17514,7 @@ a échoué :</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="122"/>
         <source>Export Parts...</source>
-        <translation>Exporter les parties</translation>
+        <translation>Exporter les parties...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="123"/>
@@ -17527,12 +17529,12 @@ a échoué :</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="133"/>
         <source>Import PDF...</source>
-        <translation>Importer PDF</translation>
+        <translation>Importer un PDF...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="134"/>
         <source>Import PDF</source>
-        <translation>Importer PDF</translation>
+        <translation>Importer un PDF</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="135"/>
@@ -17557,12 +17559,12 @@ a échoué :</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="149"/>
         <source>New...</source>
-        <translation>Nouveau</translation>
+        <translation>Nouveau...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="150"/>
         <source>File: New</source>
-        <translation>Fichier : Nouveau</translation>
+        <translation>Fichier: Nouveau</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="151"/>
@@ -17572,7 +17574,7 @@ a échoué :</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="159"/>
         <source>Print...</source>
-        <translation>Imprimer</translation>
+        <translation>Imprimer...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="160"/>
@@ -17604,7 +17606,7 @@ a échoué :</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="182"/>
         <source>Redo last undo</source>
-        <translation>Rétablir</translation>
+        <translation>Rétablir la dernière annulation</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="191"/>
@@ -17629,7 +17631,7 @@ a échoué :</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="232"/>
         <source>Instruments...</source>
-        <translation>Instruments</translation>
+        <translation>Instruments...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="233"/>
