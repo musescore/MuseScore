@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>76</width>
-    <height>60</height>
+    <height>69</height>
    </rect>
   </property>
   <property name="accessibleName">
-   <string>Glissando Inspector</string>
+   <string>Arpeggio Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
