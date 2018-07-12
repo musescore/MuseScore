@@ -200,7 +200,9 @@ bool TextBase::edit(EditData& ed)
 
             switch (ed.key) {
                   case Qt::Key_Z:         // happens when the undo stack is empty
-                        return true;
+                        if (ctrlPressed)
+                              return true;
+                        break;
 
                   case Qt::Key_Enter:
                   case Qt::Key_Return:
