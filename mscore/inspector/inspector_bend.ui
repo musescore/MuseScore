@@ -14,7 +14,7 @@
    <string/>
   </property>
   <property name="accessibleName">
-   <string>Glissando Inspector</string>
+   <string>Bend Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">

@@ -658,10 +658,20 @@
   <tabstop>underline</tabstop>
   <tabstop>resetUnderline</tabstop>
   <tabstop>resetAlign</tabstop>
+  <tabstop>hasFrame</tabstop>
+  <tabstop>resetHasFrame</tabstop>
   <tabstop>circle</tabstop>
   <tabstop>resetCircle</tabstop>
   <tabstop>square</tabstop>
   <tabstop>resetSquare</tabstop>
+  <tabstop>resetFrameColor</tabstop>
+  <tabstop>resetBgColor</tabstop>
+  <tabstop>frameWidth</tabstop>
+  <tabstop>resetFrameWidth</tabstop>
+  <tabstop>paddingWidth</tabstop>
+  <tabstop>resetPaddingWidth</tabstop>
+  <tabstop>frameRound</tabstop>
+  <tabstop>resetFrameRound</tabstop>
   <tabstop>resetToStyle</tabstop>
  </tabstops>
  <resources>

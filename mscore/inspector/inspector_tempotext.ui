@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="accessibleName">
-   <string>Tempo Marking Inspector</string>
+   <string>Tempo Text Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -44,7 +44,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Tempo Marking</string>
+      <string>Tempo Text</string>
      </property>
     </widget>
    </item>
