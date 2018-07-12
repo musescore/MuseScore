@@ -33,6 +33,7 @@
 #include "inspectorBarline.h"
 #include "inspectorFingering.h"
 #include "inspectorDynamic.h"
+#include "inspectorHarmony.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "bendproperties.h"
@@ -323,6 +324,9 @@ void Inspector::update(Score* s)
                               break;
                         case ElementType::STEM:
                               ie = new InspectorStem(this);
+                              break;
+                        case ElementType::HARMONY:
+                              ie = new InspectorHarmony(this);
                               break;
                         default:
                               if (element()->isText())

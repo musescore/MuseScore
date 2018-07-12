@@ -201,11 +201,25 @@ enum class Sid {
       harmonyFretDist,
       minHarmonyDistance,
       maxHarmonyBarDistance,
+      harmonyPlacement,
+      chordSymbolFontFace,
+      chordSymbolFontSize,
+      chordSymbolFontBold,
+      chordSymbolFontItalic,
+      chordSymbolFontUnderline,
+      chordSymbolAlign,
+
       capoPosition,
       fretNumMag,
       fretNumPos,
       fretY,
       fretMinDistance,
+      fretMag,
+      fretPlacement,
+      fretStrings,
+      fretFrets,
+      fretOffset,
+      fretBarre,
 
       showPageNumber,
       showPageNumberOne,
@@ -368,7 +382,6 @@ enum class Sid {
       tupletAlign,
 
       barreLineWidth,
-      fretMag,
       scaleBarlines,
       barGraceDistance,
 
@@ -605,13 +618,6 @@ enum class Sid {
       staffTextPosAbove,
       staffTextPosBelow,
       staffTextMinDistance,
-
-      chordSymbolFontFace,
-      chordSymbolFontSize,
-      chordSymbolFontBold,
-      chordSymbolFontItalic,
-      chordSymbolFontUnderline,
-      chordSymbolAlign,
 
       rehearsalMarkFontFace,
       rehearsalMarkFontSize,

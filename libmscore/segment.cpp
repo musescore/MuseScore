@@ -1828,6 +1828,7 @@ void Segment::createShape(int staffIdx)
             if (e->staffIdx() == staffIdx
                && !e->isRehearsalMark()
                && !e->isFretDiagram()
+               && !e->isHarmony()
                && !e->isTempoText()
                && !e->isDynamic()
                && !e->isSymbol()

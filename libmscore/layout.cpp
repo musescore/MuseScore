@@ -1188,10 +1188,8 @@ void Score::layoutSpanner()
                         c->layoutStem();
                         for (Note* n : c->notes()) {
                               Tie* tie = n->tieFor();
-                              if (tie) {
-printf("tie layout ??\n");
+                              if (tie)
                                     tie->layout();
-                                    }
                               for (Spanner* sp : n->spannerFor())
                                     sp->layout();
                               }
@@ -2476,9 +2474,11 @@ void Score::getNextMeasure(LayoutContext& lc)
                            || e->isFermata()
                            || e->isRehearsalMark()
                            || e->isFretDiagram()
-                           || e->isStaffText()
-                           || e->isFiguredBass()))
+                           || e->isHarmony()
+                           || e->isStaffText()              // ws: whats left?
+                           || e->isFiguredBass())) {
                               e->layout();
+                              }
                         }
                   // TODO, this is not going to work, we just cleaned the tempomap
                   // it breaks the test midi/testBaroqueOrnaments.mscx where first note has stretch 2
@@ -2827,7 +2827,6 @@ void Score::layoutLyrics(System* system)
 
       // align lyrics line segments
 
-//      std::vector<LyricsLineSegment*> ll;
       for (SpannerSegment* ss : system->spannerSegments()) {
             if (ss->isLyricsLineSegment()) {
                   LyricsLineSegment* lls = toLyricsLineSegment(ss);
@@ -3405,8 +3404,17 @@ System* Score::collectSystem(LayoutContext& lc)
             SegmentType st = SegmentType::ChordRest;
             Measure* m = toMeasure(mb);
             for (Segment* s = m->first(st); s; s = s->next(st)) {
+                  // layout in specific order
                   for (Element* e : s->annotations()) {
-                        if (e->visible() && (e->isRehearsalMark() || e->isStaffText() || e->isFretDiagram()))
+                        if (e->visible() && e->isFretDiagram())
+                              e->layout();
+                        }
+                  for (Element* e : s->annotations()) {
+                        if (e->visible() && (e->isStaffText() || e->isHarmony()))
+                              e->layout();
+                        }
+                  for (Element* e : s->annotations()) {
+                        if (e->visible() && e->isRehearsalMark())
                               e->layout();
                         }
                   }
@@ -3421,6 +3429,15 @@ System* Score::collectSystem(LayoutContext& lc)
             lc.firstSystem        = lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
             lc.startWithLongNames = lc.firstSystem && lm->sectionBreakElement()->startWithLongNames();
             }
+#if 1
+      for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure())
+                  continue;
+            Measure* m = toMeasure(mb);
+            for (int i = 0; i < score()->nstaves(); ++i)
+                  m->staffShape(i).clear();
+            }
+#endif
       return system;
       }
 

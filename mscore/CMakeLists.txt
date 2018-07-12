@@ -101,6 +101,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_chord.ui
       inspector/inspector_group_element.ui
       inspector/inspector_image.ui
+      inspector/inspector_harmony.ui
       inspector/inspector_lasso.ui
       inspector/inspector_volta.ui
       inspector/inspector_ottava.ui
@@ -287,6 +288,7 @@ add_executable ( ${ExecutableName}
       inspector/inspectorBeam.cpp
       inspector/inspectorGroupElement.cpp
       inspector/inspectorImage.cpp
+      inspector/inspectorHarmony.cpp
       inspector/inspectorFret.cpp
       inspector/inspectorText.cpp
       inspector/inspectorLasso.cpp
