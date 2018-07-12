@@ -271,8 +271,11 @@ bool ScoreElement::isStyled(Pid pid) const
 
 static void changeProperty(ScoreElement* e, Pid t, const QVariant& st, PropertyFlags ps)
       {
-      if (e->isSpannerSegment())
-            e = toSpannerSegment(e)->spanner();
+      if (e->isSpannerSegment()) {
+            QVariant v = e->getProperty(t);
+            if (!v.isValid())
+                  e = toSpannerSegment(e)->spanner();
+            }
       if (e->getProperty(t) != st || e->propertyFlags(t) != ps) {
             if (e->isBracketItem()) {
                   BracketItem* bi = toBracketItem(e);
