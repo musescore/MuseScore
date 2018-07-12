@@ -29,6 +29,9 @@
       <pedalPosBelow>0</pedalPosBelow>
       <pedalFontFace>MuseJazz Text</pedalFontFace>
       <trillPosAbove>0</trillPosAbove>
+      <chordSymbolFontFace>MuseJazz Text</chordSymbolFontFace>
+      <chordSymbolFontSize>15</chordSymbolFontSize>
+      <chordSymbolAlign>left,baseline</chordSymbolAlign>
       <measureNumberSystem>0</measureNumberSystem>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
@@ -84,8 +87,6 @@
       <staffFontSize>11</staffFontSize>
       <staffAlign>left,top</staffAlign>
       <staffTextPosAbove>5.5</staffTextPosAbove>
-      <chordSymbolFontFace>MuseJazz Text</chordSymbolFontFace>
-      <chordSymbolFontSize>15</chordSymbolFontSize>
       <rehearsalMarkFontFace>MuseJazz Text</rehearsalMarkFontFace>
       <rehearsalMarkFontBold>0</rehearsalMarkFontBold>
       <rehearsalMarkAlign>right,baseline</rehearsalMarkAlign>

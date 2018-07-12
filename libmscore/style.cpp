@@ -220,18 +220,33 @@ static const StyleType styleTypes[] {
       { Sid::vibratoPosAbove,         "vibratoPosAbove",         Spatium(-1) },
       { Sid::vibratoPosBelow,         "vibratoPosBelow",         Spatium(1) },
 
-      { Sid::harmonyY,                "harmonyY",                Spatium(2.5) },
-      { Sid::harmonyFretDist,         "harmonyFretDist",         Spatium(0.5) },
-      { Sid::minHarmonyDistance,      "minHarmonyDistance",      Spatium(0.5) },
-      { Sid::maxHarmonyBarDistance,   "maxHarmonyBarDistance",   Spatium(3.0) },
+      { Sid::harmonyY,                 "harmonyY",                 Spatium(2.5) },
+      { Sid::harmonyFretDist,          "harmonyFretDist",          Spatium(0.5) },
+      { Sid::minHarmonyDistance,       "minHarmonyDistance",       Spatium(0.5) },
+      { Sid::maxHarmonyBarDistance,    "maxHarmonyBarDistance",    Spatium(3.0) },
+      { Sid::harmonyPlacement,         "harmonyPlacement",         int(Placement::ABOVE) },
+      { Sid::chordSymbolFontFace,      "chordSymbolFontFace",      "FreeSerif" },
+      { Sid::chordSymbolFontSize,      "chordSymbolFontSize",      12.0 },
+      { Sid::chordSymbolFontBold,      "chordSymbolFontBold",      false },
+      { Sid::chordSymbolFontItalic,    "chordSymbolFontItalic",    false },
+      { Sid::chordSymbolFontUnderline, "chordSymbolFontUnderline", false },
+//      { Sid::chordSymbolAlign,         "chordSymbolAlign",         QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+      { Sid::chordSymbolAlign,         "chordSymbolAlign",         QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
+
       { Sid::capoPosition,            "capoPosition",            QVariant(0) },
       { Sid::fretNumMag,              "fretNumMag",              QVariant(2.0) },
       { Sid::fretNumPos,              "fretNumPos",              QVariant(0) },
       { Sid::fretY,                   "fretY",                   Spatium(2.0) },
       { Sid::fretMinDistance,         "fretMinDistance",         Spatium(0.5) },
+      { Sid::fretMag,                 "fretMag",                 QVariant(1.0) },
+      { Sid::fretPlacement,           "fretPlacement",           int(Placement::ABOVE) },
+      { Sid::fretStrings,             "fretStrings",             6 },
+      { Sid::fretFrets,               "fretFrets",               5 },
+      { Sid::fretOffset,              "fretOffset",              0 },
+      { Sid::fretBarre,               "fretBarre",               0 },
+
       { Sid::showPageNumber,          "showPageNumber",          QVariant(true) },
       { Sid::showPageNumberOne,       "showPageNumberOne",       QVariant(false) },
-
       { Sid::pageNumberOddEven,       "pageNumberOddEven",       QVariant(true) },
       { Sid::showMeasureNumber,       "showMeasureNumber",       QVariant(true) },
       { Sid::showMeasureNumberOne,    "showMeasureNumberOne",    QVariant(false) },
@@ -389,7 +404,6 @@ static const StyleType styleTypes[] {
       { Sid::tupletAlign,             "tupletAlign",             QVariant::fromValue(Align::CENTER) },
 
       { Sid::barreLineWidth,          "barreLineWidth",          QVariant(1.0) },
-      { Sid::fretMag,                 "fretMag",                 QVariant(1.0) },
       { Sid::scaleBarlines,           "scaleBarlines",           QVariant(true) },
       { Sid::barGraceDistance,        "barGraceDistance",        Spatium(.6) },
       { Sid::minVerticalDistance,     "minVerticalDistance",     Spatium(0.5) },
@@ -412,8 +426,6 @@ static const StyleType styleTypes[] {
       { Sid::tremoloBarLineWidth,       "tremoloBarLineWidth",       Spatium(0.1) },
       { Sid::jumpPosAbove,              "jumpPosAbove",              Spatium(-2.0) },
       { Sid::markerPosAbove,            "markerPosAbove",            Spatium(-2.0) },
-
-//====
 
       { Sid::defaultFontFace,               "defaultFontFace",               "FreeSerif" },
       { Sid::defaultFontSize,               "defaultFontSize",               10.0  },
@@ -627,13 +639,6 @@ static const StyleType styleTypes[] {
       { Sid::staffTextPosAbove,             "staffTextPosAbove",            Spatium(-2.0) },
       { Sid::staffTextPosBelow,             "staffTextPosBelow",            Spatium(3.5)  },
       { Sid::staffTextMinDistance,          "staffTextMinDistance",         Spatium(0.5)  },
-
-      { Sid::chordSymbolFontFace,           "chordSymbolFontFace",          "FreeSerif" },
-      { Sid::chordSymbolFontSize,           "chordSymbolFontSize",          12.0 },
-      { Sid::chordSymbolFontBold,           "chordSymbolFontBold",          false },
-      { Sid::chordSymbolFontItalic,         "chordSymbolFontItalic",        false },
-      { Sid::chordSymbolFontUnderline,      "chordSymbolFontUnderline",     false },
-      { Sid::chordSymbolAlign,              "chordSymbolAlign",             QVariant::fromValue(Align::LEFT | Align::BASELINE) },
 
       { Sid::rehearsalMarkFontFace,         "rehearsalMarkFontFace",        "FreeSerif" },
       { Sid::rehearsalMarkFontSize,         "rehearsalMarkFontSize",        14.0 },
@@ -1125,6 +1130,7 @@ const std::vector<StyledProperty> chordSymbolStyle {
       { Sid::chordSymbolFontItalic,              Pid::FONT_ITALIC            },
       { Sid::chordSymbolFontUnderline,           Pid::FONT_UNDERLINE         },
       { Sid::chordSymbolAlign,                   Pid::ALIGN                  },
+      { Sid::harmonyPlacement,                   Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
 
@@ -1430,6 +1436,12 @@ const std::vector<StyledProperty> boxStyle {
 
 const std::vector<StyledProperty> fretStyle {
       { Sid::fretNumPos,                         Pid::FRET_NUM_POS            },
+      { Sid::fretMag,                            Pid::MAG                     },
+      { Sid::fretPlacement,                      Pid::PLACEMENT               },
+      { Sid::fretStrings,                        Pid::FRET_STRINGS            },
+      { Sid::fretFrets,                          Pid::FRET_FRETS              },
+      { Sid::fretOffset,                         Pid::FRET_OFFSET             },
+      { Sid::fretBarre,                          Pid::FRET_BARRE              },
       { Sid::NOSTYLE,                            Pid::END                     }      // end of list marker
       };
 

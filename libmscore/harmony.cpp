@@ -998,11 +998,12 @@ void Harmony::layout()
       qreal yy = 0.0;
 
       if (parent()->isSegment()) {
+#if 0
             Segment* s = toSegment(parent());
             // look for fret diagram
             bool fretsFound = false;
             for (Element* e : s->annotations()) {
-                  if (e->isFretDiagram() && e->track() == track()) {
+                  if (e->isFretDiagram() && e->track() == track() && e->placement() == placement()) {
                         yy -= score()->styleP(Sid::fretY);
                         e->layout();
                         yy -= e->height();
@@ -1012,13 +1013,14 @@ void Harmony::layout()
                         }
                   }
             if (!fretsFound)
+#endif
                   yy -= score()->styleP(Sid::harmonyY);
             }
       else if (parent()->isFretDiagram()) {
             qDebug("Harmony %s with fret diagram as parent", qPrintable(_textName)); // not possible?
             yy = -score()->styleP(Sid::harmonyFretDist);
             }
-      yy += offset().y();           //      yy += offset(_spatium).y();
+//      yy += offset().y();           //      yy += offset(_spatium).y();
 
       qreal hb = lineHeight() - TextBase::baseLine();
       if (align() & Align::BOTTOM)
@@ -1061,6 +1063,7 @@ void Harmony::layout()
             layoutFrame();
             setbbox(saveBbox);
             }
+      autoplaceSegmentElement(styleP(Sid::minHarmonyDistance));
       }
 
 //---------------------------------------------------------

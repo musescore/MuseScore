@@ -374,9 +374,6 @@ void FretDiagram::layout()
 
       setPos(-_spatium, -h - styleP(Sid::fretY) + _spatium );
 
-      if (_harmony)
-            _harmony->layout();
-
       if (!parent() || !parent()->isSegment()) {
             setPos(QPointF());
             return;
@@ -676,12 +673,10 @@ bool FretDiagram::setProperty(Pid propertyId, const QVariant& v)
 QVariant FretDiagram::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case Pid::MAG:            return 1.0;
-            case Pid::FRET_STRINGS:   return DEFAULT_STRINGS;
-            case Pid::FRET_FRETS:     return DEFAULT_FRETS;
-            case Pid::FRET_BARRE:     return 0;
-            case Pid::FRET_OFFSET:    return 0;
             default:
+                  QVariant v = ScoreElement::styledPropertyDefault(propertyId);
+                  if (v.isValid())
+                        return v;
                   return Element::propertyDefault(propertyId);
             }
       }
