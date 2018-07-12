@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>290</width>
+    <width>298</width>
     <height>605</height>
    </rect>
   </property>
@@ -1331,6 +1331,65 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>title</tabstop>
+  <tabstop>beginHookType</tabstop>
+  <tabstop>resetBeginHookType</tabstop>
+  <tabstop>beginHookHeight</tabstop>
+  <tabstop>resetBeginHookHeight</tabstop>
+  <tabstop>endHookType</tabstop>
+  <tabstop>resetEndHookType</tabstop>
+  <tabstop>endHookHeight</tabstop>
+  <tabstop>resetEndHookHeight</tabstop>
+  <tabstop>hasBeginText</tabstop>
+  <tabstop>beginText</tabstop>
+  <tabstop>resetBeginText</tabstop>
+  <tabstop>beginFontFace</tabstop>
+  <tabstop>resetBeginFontFace</tabstop>
+  <tabstop>beginFontSize</tabstop>
+  <tabstop>resetBeginFontSize</tabstop>
+  <tabstop>beginFontBold</tabstop>
+  <tabstop>resetBeginFontBold</tabstop>
+  <tabstop>beginFontItalic</tabstop>
+  <tabstop>resetBeginFontItalic</tabstop>
+  <tabstop>beginFontUnderline</tabstop>
+  <tabstop>resetBeginFontUnderline</tabstop>
+  <tabstop>beginTextPlacement</tabstop>
+  <tabstop>resetBeginTextPlacement</tabstop>
+  <tabstop>resetBeginTextOffset</tabstop>
+  <tabstop>hasContinueText</tabstop>
+  <tabstop>continueText</tabstop>
+  <tabstop>resetContinueText</tabstop>
+  <tabstop>continueFontFace</tabstop>
+  <tabstop>resetContinueFontFace</tabstop>
+  <tabstop>continueFontSize</tabstop>
+  <tabstop>resetContinueFontSize</tabstop>
+  <tabstop>continueFontBold</tabstop>
+  <tabstop>resetContinueFontBold</tabstop>
+  <tabstop>continueFontItalic</tabstop>
+  <tabstop>resetContinueFontItalic</tabstop>
+  <tabstop>continueFontUnderline</tabstop>
+  <tabstop>resetContinueFontUnderline</tabstop>
+  <tabstop>continueTextPlacement</tabstop>
+  <tabstop>resetContinueTextPlacement</tabstop>
+  <tabstop>resetContinueTextOffset</tabstop>
+  <tabstop>hasEndText</tabstop>
+  <tabstop>endText</tabstop>
+  <tabstop>resetEndText</tabstop>
+  <tabstop>endFontFace</tabstop>
+  <tabstop>resetEndFontFace</tabstop>
+  <tabstop>endFontSize</tabstop>
+  <tabstop>resetEndFontSize</tabstop>
+  <tabstop>endFontBold</tabstop>
+  <tabstop>resetEndFontBold</tabstop>
+  <tabstop>endFontItalic</tabstop>
+  <tabstop>resetEndFontItalic</tabstop>
+  <tabstop>endFontUnderline</tabstop>
+  <tabstop>resetEndFontUnderline</tabstop>
+  <tabstop>endTextPlacement</tabstop>
+  <tabstop>resetEndTextPlacement</tabstop>
+  <tabstop>resetEndTextOffset</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

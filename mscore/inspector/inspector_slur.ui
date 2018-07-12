@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>168</width>
+    <width>177</width>
     <height>91</height>
    </rect>
   </property>
   <property name="accessibleName">
-   <string>Slur Inspector</string>
+   <string>Slur/Tie Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">

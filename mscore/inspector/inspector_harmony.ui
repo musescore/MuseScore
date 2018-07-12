@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="accessibleName">
-   <string>Image Inspector</string>
+   <string>Chord Symbol Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -44,7 +44,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Chord Name</string>
+      <string>Chord Symbol</string>
      </property>
     </widget>
    </item>
@@ -95,8 +95,6 @@
  <tabstops>
   <tabstop>title</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
