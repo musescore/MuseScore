@@ -2818,6 +2818,61 @@ void Score::checkSpanner(int startTick, int endTick)
 static constexpr SegmentType CR_TYPE = SegmentType::ChordRest;
 
 //---------------------------------------------------------
+//   checkTimeDelete
+//---------------------------------------------------------
+bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
+      {
+      Measure* m = startSegment->measure();
+      Measure* endMeasure;
+
+      if (endSegment)
+            endMeasure = endSegment->prev() ? endSegment->measure() : endSegment->measure()->prevMeasure();
+      else
+            endMeasure = lastMeasure();
+
+      int endTick = endSegment ? endSegment->tick() : endMeasure->endTick();
+      int tick = startSegment->tick();
+      int etick = (m == endMeasure ? endTick : m->endTick());
+      bool canDeleteTime = true;
+
+      while (canDeleteTime) {
+            for (int track = 0; canDeleteTime && track < _staves.size() * VOICES; ++track) {
+                  if (m->hasVoice(track)) {
+                        Segment* fs = m->first(CR_TYPE);
+                        for (Segment* s = fs; s; s = s->next(CR_TYPE)) {
+                              if (s->element(track)) {
+                                    ChordRest* cr = toChordRest(s->element(track));
+                                    Tuplet* t = cr->tuplet();
+                                    DurationElement* de = t ? toDurationElement(t) : toDurationElement(cr);
+                                    int cetick = de->tick() + de->actualTicks();
+                                    if (cetick <= tick)
+                                          continue;
+                                    if (de->tick() >= etick)
+                                          break;
+                                    if (t && (t->tick() < tick || cetick > etick)) {
+                                          canDeleteTime = false;
+                                          break;
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            if (m == endMeasure)
+                  break;
+            m = endMeasure;
+            tick = m->tick();
+            etick = endTick;
+            }
+      if (!canDeleteTime) {
+            QMessageBox::information(0, "MuseScore",
+               tr("Please select the complete tuplet and retry the command"),
+               QMessageBox::Ok, QMessageBox::NoButton);
+            return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
 //   globalTimeDelete
 //---------------------------------------------------------
 
@@ -2847,17 +2902,16 @@ void Score::localTimeDelete()
             else
                   return;
             startSegment = cr->segment();
-            int endTick  = startSegment->tick() + cr->duration().ticks();
-            endSegment   = cr->measure()->findSegment(CR_TYPE, endTick);
-            if (endSegment == 0) {
-                  qDebug("no segment at %d", endTick);
-                  return;
-                  }
+            int endTick  = startSegment->tick() + cr->actualTicks();
+            endSegment   = tick2measure(endTick)->findSegment(CR_TYPE, endTick);
             }
       else {
             startSegment = selection().startSegment();
             endSegment   = selection().endSegment();
             }
+
+      if (!checkTimeDelete(startSegment, endSegment))
+            return;
 
       MeasureBase* is = startSegment->measure();
       if (is->isMeasure() && toMeasure(is)->isMMRest())
@@ -2869,12 +2923,14 @@ void Score::localTimeDelete()
       else
             ie = lastMeasure();
 
+      int endTick = endSegment ? endSegment->tick() : ie->endTick();
+
       for (;;) {
             if (is->tick() != startSegment->tick()) {
                   int tick = startSegment->tick();
                   int len;
                   if (ie == is)
-                        len = endSegment->tick() - tick;
+                        len = endTick - tick;
                   else
                         len = is->endTick() - tick;
                   timeDelete(toMeasure(is), startSegment, Fraction::fromTicks(len));
@@ -2882,9 +2938,9 @@ void Score::localTimeDelete()
                         break;
                   is = is->next();
                   }
-            int endTick = endSegment ? endSegment->tick() : ie->endTick();
+            endTick = endSegment ? endSegment->tick() : ie->endTick();
             if (ie->endTick() != endTick) {
-                  int len  = endSegment->tick() - ie->tick();
+                  int len = endTick - ie->tick();
                   timeDelete(toMeasure(ie), toMeasure(ie)->first(), Fraction::fromTicks(len));
                   if (is == ie)
                         break;
@@ -2916,7 +2972,7 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                   for (Segment* s = fs; s; s = s->next(CR_TYPE)) {
                         if (s->element(track)) {
                               ChordRest* cr = toChordRest(s->element(track));
-                              int cetick    = s->rtick() + cr->duration().ticks();
+                              int cetick    = s->rtick() + cr->actualTicks();
 
                               if (cetick <= tick) {
                                     continue;
@@ -2935,7 +2991,7 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                                     }
                               else if (s->rtick() >= tick) {
                                     // running out
-                                    Fraction ff = cr->duration() - Fraction::fromTicks(cetick - etick);
+                                    Fraction ff = Fraction::fromTicks(cetick - etick);
                                     undoRemoveElement(cr);
                                     createCRSequence(ff, cr, tick + len);
                                     }
