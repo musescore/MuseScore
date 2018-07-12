@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="accessibleName">
-   <string>Clef Inspector</string>
+   <string>Stem Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -107,6 +107,9 @@
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Line width:</string>
+        </property>
+        <property name="buddy">
+         <cstring>lineWidth</cstring>
         </property>
        </widget>
       </item>

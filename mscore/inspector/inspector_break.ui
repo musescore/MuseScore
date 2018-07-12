@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="accessibleName">
-   <string>Element Inspector</string>
+   <string>Layout Break Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">

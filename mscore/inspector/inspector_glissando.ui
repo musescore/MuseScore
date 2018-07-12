@@ -498,6 +498,18 @@
   <tabstop>resetType</tabstop>
   <tabstop>showText</tabstop>
   <tabstop>resetShowText</tabstop>
+  <tabstop>text</tabstop>
+  <tabstop>resetText</tabstop>
+  <tabstop>fontFace</tabstop>
+  <tabstop>resetFontFace</tabstop>
+  <tabstop>fontSize</tabstop>
+  <tabstop>resetFontSize</tabstop>
+  <tabstop>fontBold</tabstop>
+  <tabstop>resetFontBold</tabstop>
+  <tabstop>fontItalic</tabstop>
+  <tabstop>resetFontItalic</tabstop>
+  <tabstop>fontUnderline</tabstop>
+  <tabstop>resetFontUnderline</tabstop>
   <tabstop>glissandoStyle</tabstop>
   <tabstop>resetGlissandoStyle</tabstop>
   <tabstop>playGlissando</tabstop>
