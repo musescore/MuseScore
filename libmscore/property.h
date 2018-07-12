@@ -153,7 +153,6 @@ enum class Pid {
       FBPARENTHESIS3,       //    "           "
       FBPARENTHESIS4,       //    "           "
       FBPARENTHESIS5,       //    "           "
-//      VOLTA_TYPE,
       OTTAVA_TYPE,
       NUMBERS_ONLY,
       TRILL_TYPE,
@@ -201,9 +200,9 @@ enum class Pid {
       SPANNER_TICKS,
       SPANNER_TRACK2,
       USER_OFF2,
-
       BREAK_MMR,
       REPEAT_COUNT,
+
       USER_STRETCH,
       NO_OFFSET,
       IRREGULAR,
@@ -211,10 +210,10 @@ enum class Pid {
       SLUR_UOFF1,
       SLUR_UOFF2,
       SLUR_UOFF3,
-
       SLUR_UOFF4,
       STAFF_MOVE,
       VERSE,
+
       SYLLABIC,
       LYRIC_TICKS,
       VOLTA_ENDING,
@@ -222,10 +221,10 @@ enum class Pid {
       MAG,
       USE_DRUMSET,
       PART_VOLUME,
-
       PART_MUTE,
       PART_PAN,
       PART_REVERB,
+
       PART_CHORUS,
       DURATION,
       DURATION_TYPE,
@@ -233,12 +232,11 @@ enum class Pid {
       TRACK,
       GLISSANDO_STYLE,
       FRET_STRINGS,
-
       FRET_FRETS,
       FRET_BARRE,
       FRET_OFFSET,
-      FRET_NUM_POS,
 
+      FRET_NUM_POS,
       SYSTEM_BRACKET,
       GAP,
       AUTOPLACE,
@@ -246,9 +244,9 @@ enum class Pid {
       DASH_GAP_LEN,
       TICK,
       PLAYBACK_VOICE1,
-
       PLAYBACK_VOICE2,
       PLAYBACK_VOICE3,
+
       PLAYBACK_VOICE4,
       SYMBOL,
       PLAY_REPEATS,
@@ -257,9 +255,9 @@ enum class Pid {
       LINE_DISTANCE,
       STEP_OFFSET,
       STAFF_SHOW_BARLINES,
-
       STAFF_SHOW_LEDGERLINES,
       STAFF_SLASH_STYLE,
+
       STAFF_NOTEHEAD_SCHEME,
       STAFF_GEN_CLEF,
       STAFF_GEN_TIMESIG,
@@ -268,9 +266,9 @@ enum class Pid {
       STAFF_USERDIST,
       STAFF_BARLINE_SPAN,
       STAFF_BARLINE_SPAN_FROM,
-
       STAFF_BARLINE_SPAN_TO,
       BRACKET_SPAN,
+
       BRACKET_COLUMN,
       INAME_LAYOUT_POSITION,
       SUB_STYLE,
@@ -280,8 +278,8 @@ enum class Pid {
       FONT_ITALIC,
       FONT_UNDERLINE,
       FRAME_TYPE,
-//200
       FRAME_WIDTH,
+//200
       FRAME_PADDING,
       FRAME_ROUND,
       FRAME_FG_COLOR,
@@ -289,10 +287,10 @@ enum class Pid {
       FONT_SPATIUM_DEPENDENT,
       ALIGN,
       OFFSET,
-
       OFFSET_TYPE,
       SYSTEM_FLAG,
       BEGIN_TEXT,
+
       BEGIN_TEXT_ALIGN,
       BEGIN_TEXT_PLACE,
       BEGIN_HOOK_TYPE,
@@ -300,28 +298,27 @@ enum class Pid {
       BEGIN_FONT_FACE,
       BEGIN_FONT_SIZE,
       BEGIN_FONT_BOLD,
-
       BEGIN_FONT_ITALIC,
       BEGIN_FONT_UNDERLINE,
       BEGIN_TEXT_OFFSET,
+
       CONTINUE_TEXT,
       CONTINUE_TEXT_ALIGN,
       CONTINUE_TEXT_PLACE,
       CONTINUE_FONT_FACE,
       CONTINUE_FONT_SIZE,
       CONTINUE_FONT_BOLD,
-
       CONTINUE_FONT_ITALIC,
       CONTINUE_FONT_UNDERLINE,
       CONTINUE_TEXT_OFFSET,
       END_TEXT,
+
       END_TEXT_ALIGN,
       END_TEXT_PLACE,
       END_HOOK_TYPE,
       END_HOOK_HEIGHT,
       END_FONT_FACE,
       END_FONT_SIZE,
-
       END_FONT_BOLD,
       END_FONT_ITALIC,
       END_FONT_UNDERLINE,
