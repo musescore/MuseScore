@@ -92,6 +92,7 @@ class Harmony final : public TextBase {
       void render(const QString&, qreal&, qreal&);
       void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
       virtual void styleChanged() override     { render(); }
+      virtual bool setProperty(Pid propertyId, const QVariant& v) override;
 
    public:
       Harmony(Score* = 0);

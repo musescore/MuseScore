@@ -684,7 +684,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                               }
 
                         if (false && n.slide) {
-                              Text* st = new Text(SubStyleId::HARMONY, score);
+                              Text* st = new Text(SubStyleId::HARMONY_A, score);
                               st->setXmlText(QString("SLIDE %1").arg(n.slide));
                               st->setTrack(staff * VOICES);
                               chord->notes().front()->add(st);
@@ -714,7 +714,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                         slur->setTrack2(staff  * VOICES);
                         score->addElement(slur);
 
-                        Text* st = new Text(SubStyleId::HARMONY, score);
+                        Text* st = new Text(SubStyleId::HARMONY_A, score);
                         st->setXmlText("H");
                         st->setTrack(staff * VOICES);
                         cr1->notes().front()->add(st);

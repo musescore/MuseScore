@@ -488,7 +488,7 @@ void readTextStyle206(MStyle* style, XmlReader& e)
             { "Tuplet",                  SubStyleId::TUPLET },
             { "System",                  SubStyleId::SYSTEM },
             { "Staff",                   SubStyleId::STAFF },
-            { "Chord Symbol",            SubStyleId::HARMONY },
+            { "Chord Symbol",            SubStyleId::HARMONY_A },
             { "Rehearsal Mark",          SubStyleId::REHEARSAL_MARK },
             { "Repeat Text",             SubStyleId::REPEAT_LEFT },
             { "Repeat Text Left",        SubStyleId::REPEAT_LEFT },

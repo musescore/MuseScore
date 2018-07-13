@@ -2320,9 +2320,6 @@ bool TextBase::setProperty(Pid propertyId, const QVariant& v)
                   rv = Element::setProperty(propertyId, v);
                   break;
             }
-//      if (textInvalid)
-//            genText();
-//      layoutInvalid = true;
       triggerLayout();
       return rv;
       }
