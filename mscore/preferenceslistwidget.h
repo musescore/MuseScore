@@ -30,25 +30,30 @@ namespace Ms {
 //---------------------------------------------------------
 //   PreferenceItem
 //---------------------------------------------------------
+
+// TODO: Add a Use'type'Preference class (ex: UseStringPreferenceItem),
+// which is basically a string that can be enabled or not.
+// PREF_UI_CANVAS_BG_USECOLOR and PREF_UI_CANVAS_BG_COLOR would be merged into
+// a UseColorPreferenceItem instead of 2 distinct items.
 class PreferenceItem : public QTreeWidgetItem, public QObject {
 
+      // the name is actually the Url (or #define value) of the preference
       QString _name;
 
     protected:
       void save(QVariant value);
 
     public:
-      PreferenceItem();
-      PreferenceItem(QString name);
+      PreferenceItem(const QString& name = ""); // default value to have a default ctor
 
+      virtual QWidget* editor() const = 0;
       virtual void save() = 0;
       virtual void update() = 0;
       virtual void setDefaultValue() = 0;
-      virtual QWidget* editor() const = 0;
       virtual bool isModified() const = 0;
 
-      QString name() const {return _name;}
-
+      void setVisible(const bool visible);
+      const QString& name() const { return _name; }
       };
 
 //---------------------------------------------------------
@@ -60,16 +65,14 @@ class BoolPreferenceItem : public PreferenceItem {
       QCheckBox* _editor;
 
    public:
-      BoolPreferenceItem(QString name);
+      BoolPreferenceItem(const QString& name);
 
-      void save();
-      void update();
-      void setDefaultValue();
-      QWidget* editor() const {return _editor;}
-      bool isModified() const;
-
+      QWidget* editor() const override { return _editor; }
+      inline virtual void save() override;
+      inline virtual void update() override;
+      inline virtual void setDefaultValue() override;
+      inline virtual bool isModified() const override;
       };
-
 
 //---------------------------------------------------------
 //   IntPreferenceItem
@@ -79,13 +82,13 @@ class IntPreferenceItem : public PreferenceItem {
       QSpinBox* _editor;
 
    public:
-      IntPreferenceItem(QString name);
+      IntPreferenceItem(const QString& name);
 
-      void save();
-      void update();
-      void setDefaultValue();
-      QWidget* editor() const {return _editor;}
-      bool isModified() const;
+      QWidget* editor() const override { return _editor; }
+      inline virtual void save() override;
+      inline virtual void update() override;
+      inline virtual void setDefaultValue() override;
+      inline virtual bool isModified() const override;
       };
 
 //---------------------------------------------------------
@@ -96,13 +99,13 @@ class DoublePreferenceItem : public PreferenceItem {
       QDoubleSpinBox* _editor;
 
    public:
-      DoublePreferenceItem(QString name);
+      DoublePreferenceItem(const QString& name);
 
-      void save();
-      void update();
-      void setDefaultValue();
-      QWidget* editor() const {return _editor;}
-      bool isModified() const;
+      QWidget* editor() const override { return _editor; }
+      inline virtual void save() override;
+      inline virtual void update() override;
+      inline virtual void setDefaultValue() override;
+      inline virtual bool isModified() const override;
       };
 
 //---------------------------------------------------------
@@ -113,13 +116,53 @@ class StringPreferenceItem : public PreferenceItem {
       QLineEdit* _editor;
 
    public:
-      StringPreferenceItem(QString name);
+      StringPreferenceItem(const QString& name);
 
-      void save();
-      void update();
-      void setDefaultValue();
-      QWidget* editor() const {return _editor;}
-      bool isModified() const;
+      QWidget* editor() const override { return _editor; }
+      inline virtual void save() override;
+      inline virtual void update() override;
+      inline virtual void setDefaultValue() override;
+      inline virtual bool isModified() const override;
+      };
+
+//---------------------------------------------------------
+//   FilePreferenceItem
+//---------------------------------------------------------
+class FilePreferenceItem : public PreferenceItem {
+      QString _initialValue;
+      QPushButton* _editor;
+
+   public:
+      FilePreferenceItem(const QString& name);
+
+      QWidget* editor() const override { return _editor; }
+      inline virtual void save() override;
+      inline virtual void update() override;
+      inline virtual void setDefaultValue() override;
+      inline virtual bool isModified() const override;
+
+   private slots:
+      void getFile() const;
+      };
+
+//---------------------------------------------------------
+//   DirPreferenceItem
+//---------------------------------------------------------
+class DirPreferenceItem : public PreferenceItem {
+      QString _initialValue;
+      QPushButton* _editor;
+
+   public:
+      DirPreferenceItem(const QString& name);
+
+      QWidget* editor() const override { return _editor; }
+      inline virtual void save() override;
+      inline virtual void update() override;
+      inline virtual void setDefaultValue() override;
+      inline virtual bool isModified() const override;
+
+   private slots:
+      void getDirectory() const;
       };
 
 //---------------------------------------------------------
@@ -130,13 +173,13 @@ class ColorPreferenceItem : public PreferenceItem {
       Awl::ColorLabel* _editor;
 
    public:
-      ColorPreferenceItem(QString name);
+      ColorPreferenceItem(const QString& name);
 
-      void save();
-      void update();
-      void setDefaultValue();
-      QWidget* editor() const {return _editor;}
-      bool isModified() const;
+      QWidget* editor() const override { return _editor; }
+      inline virtual void save() override;
+      inline virtual void update() override;
+      inline virtual void setDefaultValue() override;
+      inline virtual bool isModified() const override;
       };
 
 
@@ -146,23 +189,44 @@ class ColorPreferenceItem : public PreferenceItem {
 
 class PreferencesListWidget : public QTreeWidget, public PreferenceVisitor {
 
-      QHash<QString, PreferenceItem*> preferenceItems;
+      QHash<const QString, PreferenceItem*> preferenceItems;
 
       void addPreference(PreferenceItem* item);
+      QTreeWidgetItem* findChildByText(const QTreeWidgetItem* parent, const QString& text, const int column) const;
+      void recursiveChildList(QList<QTreeWidgetItem*>& list, QTreeWidgetItem* item) const;
+      const QList<QTreeWidgetItem*> recursiveChildList(QTreeWidgetItem* parent) const;
+      const QList<PreferenceItem*> recursivePreferenceItemList(QTreeWidgetItem* parent) const;
+
+   private slots:
+      void hideEmptyItems() const;
+      void selectAllVisiblePreferences();
 
    public:
-      explicit PreferencesListWidget(QWidget* parent = 0);
+      explicit PreferencesListWidget(QWidget* parent = nullptr);
+      ~PreferencesListWidget();
+
       void loadPreferences();
       void updatePreferences();
 
-      std::vector<QString> save();
+      void save() const;
 
-      void visit(QString key, IntPreference*);
-      void visit(QString key, DoublePreference*);
-      void visit(QString key, BoolPreference*);
-      void visit(QString key, StringPreference*);
-      void visit(QString key, ColorPreference*);
+      virtual void visit(const QString& key, QTreeWidgetItem* parent, IntPreference*)    override;
+      virtual void visit(const QString& key, QTreeWidgetItem* parent, DoublePreference*) override;
+      virtual void visit(const QString& key, QTreeWidgetItem* parent, BoolPreference*)   override;
+      virtual void visit(const QString& key, QTreeWidgetItem* parent, StringPreference*) override;
+      virtual void visit(const QString& key, QTreeWidgetItem* parent, ColorPreference*)  override;
+      // for now, there is no file and directory preferences in the advanced tab:
+      // they are all managed in the other tabs.
+      virtual void visit(const QString& key, QTreeWidgetItem* parent, FilePreference*)   override;
+      virtual void visit(const QString& key, QTreeWidgetItem* parent, DirPreference*)    override;
 
+   public slots:
+      void filter(const QString& query);
+      void resetSelectedPreferencesToDefault();
+      // If a "showAll" check box is put, this function combines the filter and the showAll checkBox
+      /// void filterVisiblePreferences(const QString& query, const bool all);
+      // And this one does a simple show all.
+      /// void showAll(const bool all = true);
 };
 
 } // namespace Ms

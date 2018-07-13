@@ -31,6 +31,8 @@ ColorLabel::ColorLabel(QWidget* parent)
       {
       _color  = Qt::blue;
       _pixmap = 0;
+      _text = "";
+      setCursor(Qt::PointingHandCursor);
       }
 
 ColorLabel::~ColorLabel()
@@ -45,7 +47,17 @@ ColorLabel::~ColorLabel()
 void ColorLabel::setColor(const QColor& c)
       {
       _color = c;
+      emit colorChanged(_color);
       update();
+      }
+
+//---------------------------------------------------------
+//   color
+//---------------------------------------------------------
+
+const QColor ColorLabel::color() const
+      {
+      return _color;
       }
 
 //---------------------------------------------------------
@@ -56,6 +68,7 @@ void ColorLabel::setPixmap(QPixmap* pm)
       {
       delete _pixmap;
       _pixmap = pm;
+      emit pixmapChanged(_pixmap);
       update();
       }
 
@@ -69,6 +82,35 @@ QSize ColorLabel::sizeHint() const
       }
 
 //---------------------------------------------------------
+//   pixmap
+//---------------------------------------------------------
+
+QPixmap* ColorLabel::pixmap() const
+      {
+      return _pixmap;
+      }
+
+//---------------------------------------------------------
+//   text
+//---------------------------------------------------------
+
+const QString& ColorLabel::text() const
+      {
+      return _text;
+      }
+
+//---------------------------------------------------------
+//   setText
+//---------------------------------------------------------
+
+void ColorLabel::setText(const QString& text)
+      {
+      _text = text;
+      emit textChanged(text);
+      update();
+      }
+
+//---------------------------------------------------------
 //   paintEvent
 //---------------------------------------------------------
 
@@ -77,11 +119,18 @@ void ColorLabel::paintEvent(QPaintEvent* ev)
       {
       QPainter p(this);
       int fw = frameWidth();
-      QRect r(frameRect().adjusted(fw, fw, -2*fw, -2*fw));
+      QRect r = QRect(frameRect().adjusted(fw, fw, -2 * fw, -2 * fw));
       if (_pixmap)
             p.drawTiledPixmap(r, *_pixmap);
-      else
+      else {
             p.fillRect(r, _color);
+            if (!_text.isEmpty()) {
+                  // Get a visible text: white if the text is dark and black if it's light.
+                  // Get the average of R, G and B. If it's greater than or equal to 128, it means the text is light.
+                  p.setPen(QColor((((_color.red() + _color.green() + _color.blue()) / 3) >= 128) ? Qt::black : Qt::white));
+                  p.drawText(frameRect(), _text, QTextOption(Qt::AlignCenter));
+                  }
+            }
       }
       QFrame::paintEvent(ev);
       }

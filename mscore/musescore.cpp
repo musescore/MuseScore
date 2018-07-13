@@ -441,7 +441,7 @@ void MuseScore::closeEvent(QCloseEvent* ev)
 void updateExternalValuesFromPreferences() {
       // set values in libmscore
       MScore::bgColor = preferences.getColor(PREF_UI_CANVAS_BG_COLOR);
-      MScore::dropColor = preferences.getColor(PREF_UI_SCORE_NOTE_DROPCOLOR);
+      MScore::dropColor = preferences.getColor(PREF_UI_SCORE_NOTEDROPCOLOR);
       MScore::defaultColor = preferences.getColor(PREF_UI_SCORE_DEFAULTCOLOR);
       MScore::defaultPlayDuration = preferences.getInt(PREF_SCORE_NOTE_DEFAULTPLAYDURATION);
       MScore::panPlayback = preferences.getBool(PREF_APP_PLAYBACK_PANPLAYBACK);
@@ -451,10 +451,10 @@ void updateExternalValuesFromPreferences() {
       MScore::frameMarginColor = preferences.getColor(PREF_UI_SCORE_FRAMEMARGINCOLOR);
       MScore::setVerticalOrientation(preferences.getBool(PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION));
 
-      MScore::selectColor[0] = preferences.getColor(PREF_UI_SCORE_VOICE1_COLOR);
-      MScore::selectColor[1] = preferences.getColor(PREF_UI_SCORE_VOICE2_COLOR);
-      MScore::selectColor[2] = preferences.getColor(PREF_UI_SCORE_VOICE3_COLOR);
-      MScore::selectColor[3] = preferences.getColor(PREF_UI_SCORE_VOICE4_COLOR);
+      MScore::selectColor[0] = preferences.getColor(PREF_UI_SCORE_VOICES_VOICE1COLOR);
+      MScore::selectColor[1] = preferences.getColor(PREF_UI_SCORE_VOICES_VOICE2COLOR);
+      MScore::selectColor[2] = preferences.getColor(PREF_UI_SCORE_VOICES_VOICE3COLOR);
+      MScore::selectColor[3] = preferences.getColor(PREF_UI_SCORE_VOICES_VOICE4COLOR);
 
       MScore::setHRaster(preferences.getInt(PREF_UI_APP_RASTER_HORIZONTAL));
       MScore::setVRaster(preferences.getInt(PREF_UI_APP_RASTER_VERTICAL));

@@ -381,12 +381,12 @@ void PianoKeyItem::paint(QPainter* p, const QStyleOptionGraphicsItem* /*o*/, QWi
       p->setRenderHint(QPainter::Antialiasing, true);
       p->setPen(QPen(Qt::black, .8));
       if (_pressed) {
-            QColor c(preferences.getColor(PREF_UI_PIANO_HIGHLIGHTCOLOR));
+            QColor c(preferences.getColor(PREF_UI_PIANOHIGHLIGHTCOLOR));
             c.setAlpha(180);
             p->setBrush(c);
             }
       else if (_selected) {
-            QColor c(preferences.getColor(PREF_UI_PIANO_HIGHLIGHTCOLOR));
+            QColor c(preferences.getColor(PREF_UI_PIANOHIGHLIGHTCOLOR));
             c.setAlpha(100);
             p->setBrush(c);
             }

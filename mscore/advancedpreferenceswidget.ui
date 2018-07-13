@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AdvancedPreferencesWidget</class>
+ <widget class="QWidget" name="AdvancedPreferencesWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>480</width>
+    <height>640</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="optionsButton">
+     <item>
+      <widget class="QPushButton" name="resetToDefaultButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="toolTip">
+        <string>Reset selected preference(s) to default</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>This button resets the selected preference(s) to default</string>
+       </property>
+       <property name="text">
+        <string>Reset selection to default</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="searchLineEdit">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Search for specific preferences</string>
+       </property>
+       <property name="accessibleName">
+        <string>Search filter</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Search for specific preferences</string>
+       </property>
+       <property name="placeholderText">
+        <string>Search</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0">
+    <widget class="Ms::PreferencesListWidget" name="treePreferencesWidget">
+     <property name="accessibleName">
+      <string>Advanced preferences</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Access to more advanced preferences</string>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::ExtendedSelection</enum>
+     </property>
+     <property name="uniformRowHeights">
+      <bool>true</bool>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="allColumnsShowFocus">
+      <bool>true</bool>
+     </property>
+     <property name="columnCount">
+      <number>2</number>
+     </property>
+     <attribute name="headerCascadingSectionResizes">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="headerMinimumSectionSize">
+      <number>100</number>
+     </attribute>
+     <column>
+      <property name="text">
+       <string notr="true">Preference</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string notr="true">Value</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::PreferencesListWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>preferenceslistwidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
