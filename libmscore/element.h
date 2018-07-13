@@ -364,6 +364,7 @@ class Element : public ScoreElement {
 
       virtual int tick() const;       // utility, searches for segment / segment parent
       virtual int rtick() const;      // utility, searches for segment / segment parent
+      virtual Fraction ftick() const; // fractional tick
 
       //
       // check element for consistency; return false if element
