@@ -26,19 +26,19 @@ InspectorText::InspectorText(QWidget* parent)
       f.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { Pid::SUB_STYLE, 0, f.subStyle,     f.resetSubStyle     },
+            { Pid::SUB_STYLE, 0, f.style,     f.resetStyle     },
             };
 
       const std::vector<InspectorPanel> ppList = {
             { f.title, f.panel }
             };
 
-      f.subStyle->clear();
+      f.style->clear();
       for (auto ss : { SubStyleId::FRAME, SubStyleId::TITLE, SubStyleId::SUBTITLE,SubStyleId::COMPOSER,
          SubStyleId::POET, SubStyleId::INSTRUMENT_EXCERPT,
          SubStyleId::TRANSLATOR, SubStyleId::HEADER, SubStyleId::FOOTER, SubStyleId::USER1, SubStyleId::USER2 } )
             {
-            f.subStyle->addItem(subStyleUserName(ss), int(ss));
+            f.style->addItem(subStyleUserName(ss), int(ss));
             }
 
       mapSignals(iiList, ppList);

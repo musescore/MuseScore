@@ -981,8 +981,8 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
             s.title->setText(e->isSystemText() ? tr("System Text") : tr("Staff Text"));
 
       const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,  0, s.placement,    s.resetPlacement    },
-            { Pid::SUB_STYLE,  0, s.subStyle,     s.resetSubStyle     }
+            { Pid::PLACEMENT,  0, s.placement, s.resetPlacement },
+            { Pid::SUB_STYLE,  0, s.style,     s.resetStyle     }
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel }
@@ -991,12 +991,12 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       s.placement->addItem(tr("Above"), 0);
       s.placement->addItem(tr("Below"), 1);
 
-      s.subStyle->clear();
+      s.style->clear();
       for (auto ss : { SubStyleId::SYSTEM, SubStyleId::STAFF, SubStyleId::TEMPO, SubStyleId::METRONOME,
          SubStyleId::REHEARSAL_MARK, SubStyleId::EXPRESSION,
          SubStyleId::REPEAT_LEFT, SubStyleId::REPEAT_RIGHT, SubStyleId::USER1, SubStyleId::USER2 } )
             {
-            s.subStyle->addItem(subStyleUserName(ss), int(ss));
+            s.style->addItem(subStyleUserName(ss), int(ss));
             }
 
       mapSignals(il, ppList);
