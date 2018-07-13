@@ -153,8 +153,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
       connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
       connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
-       connect(myExtensionsButton, SIGNAL(clicked()), SLOT(selectExtensionsDirectory()));
-      
+      connect(myExtensionsButton, SIGNAL(clicked()), SLOT(selectExtensionsDirectory()));
+
 
       connect(updateTranslation, SIGNAL(clicked()), SLOT(updateTranslationClicked()));
 
@@ -206,12 +206,11 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(useJackMidi,  SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
       updateRemote();
 
-      advancedWidget = new PreferencesListWidget();
-      QVBoxLayout* l = static_cast<QVBoxLayout*> (tabAdvanced->layout());
-      l->insertWidget(0, advancedWidget);
-      advancedWidget->loadPreferences();
-      connect(advancedSearch, &QLineEdit::textChanged, this, &PreferenceDialog::filterAdvancedPreferences);
-      connect(resetPreference, &QPushButton::clicked, this, &PreferenceDialog::resetAdvancedPreferenceToDefault);
+      // get back to the page that was last used.
+      QSettings settings;
+      settings.beginGroup(objectName());
+      tabWidget->setCurrentIndex(settings.value("Current page", 0).toInt());
+      settings.endGroup();
 
       MuseScore::restoreGeometry(this);
 #if !defined(Q_OS_MAC) && (!defined(Q_OS_WIN) || defined(FOR_WINSTORE))
@@ -236,6 +235,12 @@ void PreferenceDialog::start()
 PreferenceDialog::~PreferenceDialog()
       {
       qDeleteAll(localShortcuts);
+
+      // save the current page
+      QSettings settings;
+      settings.beginGroup(objectName());
+      settings.setValue("Current page", tabWidget->currentIndex());
+      settings.endGroup();
       }
 
 //---------------------------------------------------------
@@ -254,7 +259,7 @@ void PreferenceDialog::hideEvent(QHideEvent* ev)
 
 void PreferenceDialog::recordButtonClicked(int val)
       {
-      foreach(QAbstractButton* b, recordButtons->buttons()) {
+      for(QAbstractButton* b : recordButtons->buttons()) {
             b->setChecked(recordButtons->id(b) == val);
             }
       mscore->setMidiRecordId(val);
@@ -314,8 +319,6 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       {
       if (useDefaultValues)
             preferences.setReturnDefaultValues(true);
-
-      advancedWidget->updatePreferences();
 
       rcGroup->setChecked(preferences.getBool(PREF_IO_MIDI_USEREMOTECONTROL));
       advanceOnRelease->setChecked(preferences.getBool(PREF_IO_MIDI_ADVANCEONRELEASE));
@@ -407,7 +410,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       //
       qDeleteAll(localShortcuts);
       localShortcuts.clear();
-      foreach(const Shortcut* s, Shortcut::shortcuts())
+      for(const Shortcut* s: Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       updateSCListView();
 
@@ -497,7 +500,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       int idx = 0;
       importCharsetListOve->clear();
       importCharsetListGP->clear();
-      foreach (QByteArray charset, charsets) {
+      for (QByteArray charset : charsets) {
             importCharsetListOve->addItem(charset);
             importCharsetListGP->addItem(charset);
             if (charset == preferences.getString(PREF_IMPORT_OVERTURE_CHARSET))
@@ -584,7 +587,7 @@ bool ShortcutItem::operator<(const QTreeWidgetItem& item) const
 void PreferenceDialog::updateSCListView()
       {
       shortcutList->clear();
-      foreach (Shortcut* s, localShortcuts) {
+      for (Shortcut* s : localShortcuts) {
             if (!s)
                   continue;
             ShortcutItem* newItem = new ShortcutItem;
@@ -676,39 +679,8 @@ void  PreferenceDialog::filterShortcutsTextChanged(const QString &query )
           if(item->text(0).toLower().contains(query.toLower()))
               item->setHidden(false);
           else
-              item->setHidden(true);  
+              item->setHidden(true);
           }
-      }
-
-//--------------------------------------------------------
-//   filterAdvancedPreferences
-//--------------------------------------------------------
-
-void PreferenceDialog::filterAdvancedPreferences(const QString& query)
-      {
-      QTreeWidgetItem *item;
-      for(int i = 0; i < advancedWidget->topLevelItemCount(); i++) {
-            item = advancedWidget->topLevelItem(i);
-
-            if(item->text(0).toLower().contains(query.toLower()))
-                  item->setHidden(false);
-            else
-                  item->setHidden(true);
-            }
-      }
-
-//--------------------------------------------------------
-//   resetAdvancedPreferenceToDefault
-//--------------------------------------------------------
-
-void PreferenceDialog::resetAdvancedPreferenceToDefault()
-      {
-      preferences.setReturnDefaultValues(true);
-      for (QTreeWidgetItem* item : advancedWidget->selectedItems()) {
-            PreferenceItem* pref = static_cast<PreferenceItem*>(item);
-            pref->setDefaultValue();
-            }
-      preferences.setReturnDefaultValues(false);
       }
 
 //---------------------------------------------------------
@@ -1042,7 +1014,7 @@ void PreferenceDialog::apply()
 
       if (shortcutsChanged) {
             shortcutsChanged = false;
-            foreach(const Shortcut* s, localShortcuts) {
+           for(const Shortcut* s : localShortcuts) {
                   Shortcut* os = Shortcut::getShortcut(s->key());
                   if (os) {
                         if (!os->compareKeys(*s))
@@ -1108,7 +1080,7 @@ void PreferenceDialog::apply()
       emit preferencesChanged();
       preferences.save();
       mscore->startAutoSave();
-      }
+      } // apply();
 
 //---------------------------------------------------------
 //   resetAllValues
@@ -1122,7 +1094,7 @@ void PreferenceDialog::resetAllValues()
       qDeleteAll(localShortcuts);
       localShortcuts.clear();
       Shortcut::resetToDefault();
-      foreach(const Shortcut* s, Shortcut::shortcuts())
+      for(const Shortcut* s : Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       updateSCListView();
       }

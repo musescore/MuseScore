@@ -35,7 +35,7 @@ endif (SCRIPT_INTERFACE)
 
 QT5_WRAP_UI (ui_headers
       insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
-      measuresdialog.ui pagesettings.ui mixer.ui playpanel.ui prefsdialog.ui measureproperties.ui
+      measuresdialog.ui pagesettings.ui mixer.ui playpanel.ui measureproperties.ui
       textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
       editstaff.ui timesigproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
@@ -49,6 +49,8 @@ QT5_WRAP_UI (ui_headers
       startcenter.ui scorePreview.ui scoreBrowser.ui
       logindialog.ui uploadscoredialog.ui breaksdialog.ui
       toolbarEditor.ui
+      # preferences things.
+      advancedpreferenceswidget.ui  prefsdialog.ui
 
       importmidi/importmidi_panel.ui
 
@@ -240,7 +242,7 @@ add_executable ( ${ExecutableName}
       ${resource_file}
       ${INCS}
 
-      recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
+      recordbutton.h greendotbutton
       stringutils.h stringutils.cpp
       scoreview.cpp editharmony.cpp editfiguredbass.cpp events.cpp
       editinstrument.cpp editstyle.cpp
@@ -251,7 +253,7 @@ add_executable ( ${ExecutableName}
       debugger/debugger.cpp menus.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
       timeline.cpp
-      mixer.cpp playpanel.cpp selectionwindow.cpp preferences.cpp measureproperties.cpp
+      mixer.cpp playpanel.cpp selectionwindow.cpp measureproperties.cpp
       seq.cpp textpalette.cpp
       timedialog.cpp symboldialog.cpp shortcutcapturedialog.cpp
       simplebutton.cpp musedata.cpp
@@ -330,6 +332,7 @@ add_executable ( ${ExecutableName}
       pathlistdialog.cpp
       exampleview.cpp
       miconengine.cpp
+      #importmidi
       importmidi/importmidi.cpp
       importmidi/importmidi_panel.cpp importmidi/importmidi_operations.cpp
       importmidi/importmidi_model.cpp importmidi/importmidi_delegate.cpp
@@ -345,6 +348,7 @@ add_executable ( ${ExecutableName}
       importmidi/importmidi_voice.cpp importmidi/importmidi_view.cpp importmidi/importmidi_key.cpp
       importmidi/importmidi_tempo.cpp importmidi/importmidi_instrument.cpp
       importmidi/importmidi_chordname.cpp
+
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
       startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp
@@ -353,7 +357,11 @@ add_executable ( ${ExecutableName}
       toolbarEditor.cpp toolbarEditor.h
       abstractdialog.cpp abstractdialog.h
       toolbuttonmenu.cpp
-      preferenceslistwidget.cpp preferenceslistwidget.h
+      # preferences
+      prefsdialog.cpp preferences.cpp
+      preferenceslistwidget.cpp advancedpreferenceswidget.cpp
+      preferencestreewidget_delegate.cpp
+
       extension.cpp extension.h
 
       ${COCOABRIDGE}

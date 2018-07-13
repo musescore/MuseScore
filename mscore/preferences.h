@@ -23,11 +23,13 @@
 
 /*
  * HOW TO ADD A NEW PREFERENCE
- * - Add a new define to the list of defines below
+ * - Add a new define to the list of defines below (since the #defines define char[],
+ *   don't go camelCase in there, it facilitates the translations)
  * - Add the preference to the _allPreferences map in the init() function in preferences.cpp
- *   and specify the default value for this preference
- * - That's it. The preference is stored and retrieved automatically and can be read
- *   using getString(), getInt(), etc., and changed using setPreference()
+ * - Specify the default value for this preference.
+ * - Specify if the preference will go in the advanced list.
+ * That's it. The preference is stored and retrieved automatically and can be read
+ * using getString(), getInt(), etc., and changed using setPreference()
  */
 
 #include "globals.h"
@@ -78,109 +80,109 @@ enum class MusicxmlExportBreaks : char {
 // Every preference should have a define to ease the usage of the preference
 // Make sure the string key has a sensible grouping - use / for grouping
 //
-#define PREF_APP_AUTOSAVE_AUTOSAVETIME                      "application/autosave/autosaveTime"
-#define PREF_APP_AUTOSAVE_USEAUTOSAVE                       "application/autosave/useAutosave"
-#define PREF_APP_KEYBOARDLAYOUT                             "application/keyboardLayout"
+#define PREF_APP_AUTOSAVE_AUTOSAVETIME                      "Application/Autosave/Autosave time"
+#define PREF_APP_AUTOSAVE_USEAUTOSAVE                       "Application/Autosave/Use autosave"
+#define PREF_APP_KEYBOARDLAYOUT                             "Application/Keyboard layout"
 // file path of instrument templates
-#define PREF_APP_PATHS_INSTRUMENTLIST1                      "application/paths/instrumentList1"
-#define PREF_APP_PATHS_INSTRUMENTLIST2                      "application/paths/instrumentList2"
-#define PREF_APP_PATHS_MYIMAGES                             "application/paths/myImages"
-#define PREF_APP_PATHS_MYPLUGINS                            "application/paths/myPlugins"
-#define PREF_APP_PATHS_MYSCORES                             "application/paths/myScores"
-#define PREF_APP_PATHS_MYSHORTCUTS                          "application/paths/myShortcuts"
-#define PREF_APP_PATHS_MYSOUNDFONTS                         "application/paths/mySoundfonts"
-#define PREF_APP_PATHS_MYSTYLES                             "application/paths/myStyles"
-#define PREF_APP_PATHS_MYTEMPLATES                          "application/paths/myTemplates"
-#define PREF_APP_PATHS_MYEXTENSIONS                         "application/paths/myExtensions"
-#define PREF_APP_PLAYBACK_FOLLOWSONG                        "application/playback/followSong"
-#define PREF_APP_PLAYBACK_PANPLAYBACK                       "application/playback/panPlayback"
-#define PREF_APP_PLAYBACK_PLAYREPEATS                       "application/playback/playRepeats"
-#define PREF_APP_USESINGLEPALETTE                           "application/useSinglePalette"
-#define PREF_APP_STARTUP_FIRSTSTART                         "application/startup/firstStart"
-#define PREF_APP_STARTUP_SESSIONSTART                       "application/startup/sessionStart"
-#define PREF_APP_STARTUP_STARTSCORE                         "application/startup/startScore"
-#define PREF_APP_WORKSPACE                                  "application/workspace"
-#define PREF_EXPORT_AUDIO_SAMPLERATE                        "export/audio/sampleRate"
-#define PREF_EXPORT_MP3_BITRATE                             "export/mp3/bitRate"
-#define PREF_EXPORT_MUSICXML_EXPORTLAYOUT                   "export/musicXML/exportLayout"
-#define PREF_EXPORT_MUSICXML_EXPORTBREAKS                   "export/musicXML/exportBreaks"
-#define PREF_EXPORT_PDF_DPI                                 "export/pdf/dpi"
-#define PREF_EXPORT_PNG_RESOLUTION                          "export/png/resolution"
-#define PREF_EXPORT_PNG_USETRANSPARENCY                     "export/png/useTransparency"
-#define PREF_IMPORT_GUITARPRO_CHARSET                       "import/guitarpro/charset"
-#define PREF_IMPORT_MUSICXML_IMPORTBREAKS                   "import/musicXML/importBreaks"
-#define PREF_IMPORT_MUSICXML_IMPORTLAYOUT                   "import/musicXML/importLayout"
-#define PREF_IMPORT_OVERTURE_CHARSET                        "import/overture/charset"
-#define PREF_IMPORT_STYLE_STYLEFILE                         "import/style/styleFile"
-#define PREF_IO_ALSA_DEVICE                                 "io/alsa/device"
-#define PREF_IO_ALSA_FRAGMENTS                              "io/alsa/fragments"
-#define PREF_IO_ALSA_PERIODSIZE                             "io/alsa/periodSize"
-#define PREF_IO_ALSA_SAMPLERATE                             "io/alsa/sampleRate"
-#define PREF_IO_ALSA_USEALSAAUDIO                           "io/alsa/useAlsaAudio"
-#define PREF_IO_JACK_REMEMBERLASTCONNECTIONS                "io/jack/rememberLastConnections"
-#define PREF_IO_JACK_TIMEBASEMASTER                         "io/jack/timebaseMaster"
-#define PREF_IO_JACK_USEJACKAUDIO                           "io/jack/useJackAudio"
-#define PREF_IO_JACK_USEJACKMIDI                            "io/jack/useJackMIDI"
-#define PREF_IO_JACK_USEJACKTRANSPORT                       "io/jack/useJackTransport"
-#define PREF_IO_MIDI_ADVANCEONRELEASE                       "io/midi/advanceOnRelease"
-#define PREF_IO_MIDI_ENABLEINPUT                            "io/midi/enableInput"
-#define PREF_IO_MIDI_EXPANDREPEATS                          "io/midi/expandRepeats"
-#define PREF_IO_MIDI_EXPORTRPNS                             "io/midi/exportRPNs"
-#define PREF_IO_MIDI_REALTIMEDELAY                          "io/midi/realtimeDelay"
-#define PREF_IO_MIDI_REMOTE                                 "io/midi/remote"
-#define PREF_IO_MIDI_SHORTESTNOTE                           "io/midi/shortestNote"
-#define PREF_IO_MIDI_SHOWCONTROLSINMIXER                    "io/midi/showControlsInMixer"
-#define PREF_IO_MIDI_USEREMOTECONTROL                       "io/midi/useRemoteControl"
-#define PREF_IO_OSC_PORTNUMBER                              "io/osc/portNumber"
-#define PREF_IO_OSC_USEREMOTECONTROL                        "io/osc/useRemoteControl"
-#define PREF_IO_PORTAUDIO_DEVICE                            "io/portAudio/device"
-#define PREF_IO_PORTAUDIO_USEPORTAUDIO                      "io/portAudio/usePortAudio"
-#define PREF_IO_PORTMIDI_INPUTBUFFERCOUNT                   "io/portMidi/inputBufferCount"
-#define PREF_IO_PORTMIDI_INPUTDEVICE                        "io/portMidi/inputDevice"
-#define PREF_IO_PORTMIDI_OUTPUTBUFFERCOUNT                  "io/portMidi/outputBufferCount"
-#define PREF_IO_PORTMIDI_OUTPUTDEVICE                       "io/portMidi/outputDevice"
-#define PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS          "io/portMidi/outputLatencyMilliseconds"
-#define PREF_IO_PULSEAUDIO_USEPULSEAUDIO                    "io/pulseAudio/usePulseAudio"
-#define PREF_SCORE_CHORD_PLAYONADDNOTE                      "score/chord/playOnAddNote"
-#define PREF_SCORE_MAGNIFICATION                            "score/magnification"
-#define PREF_SCORE_NOTE_PLAYONCLICK                         "score/note/playOnClick"
-#define PREF_SCORE_NOTE_DEFAULTPLAYDURATION                 "score/note/defaultPlayDuration"
-#define PREF_SCORE_NOTE_WARNPITCHRANGE                      "score/note/warnPitchRange"
-#define PREF_SCORE_STYLE_DEFAULTSTYLEFILE                   "score/style/defaultStyleFile"
-#define PREF_SCORE_STYLE_PARTSTYLEFILE                      "score/style/partStyleFile"
-#define PREF_UI_CANVAS_BG_USECOLOR                          "ui/canvas/background/useColor"
-#define PREF_UI_CANVAS_FG_USECOLOR                          "ui/canvas/foreground/useColor"
-#define PREF_UI_CANVAS_BG_COLOR                             "ui/canvas/background/color"
-#define PREF_UI_CANVAS_FG_COLOR                             "ui/canvas/foreground/color"
-#define PREF_UI_CANVAS_BG_WALLPAPER                         "ui/canvas/background/wallpaper"
-#define PREF_UI_CANVAS_FG_WALLPAPER                         "ui/canvas/foreground/wallpaper"
-#define PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING              "ui/canvas/misc/antialiasedDrawing"
-#define PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY              "ui/canvas/misc/selectionProximity"
-#define PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION           "ui/canvas/scroll/verticalOrientation"
-#define PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA               "ui/canvas/scroll/limitScrollArea"
-#define PREF_UI_APP_STARTUP_CHECKUPDATE                     "ui/application/startup/checkUpdate"
-#define PREF_UI_APP_STARTUP_CHECK_EXTENSIONS_UPDATE         "ui/application/startup/checkExtensionsUpdate"
-#define PREF_UI_APP_STARTUP_SHOWNAVIGATOR                   "ui/application/startup/showNavigator"
-#define PREF_UI_APP_STARTUP_SHOWPLAYPANEL                   "ui/application/startup/showPlayPanel"
-#define PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN                "ui/application/startup/showSplashScreen"
-#define PREF_UI_APP_STARTUP_SHOWSTARTCENTER                 "ui/application/startup/showStartCenter"
-#define PREF_UI_APP_GLOBALSTYLE                             "ui/application/globalStyle"
-#define PREF_UI_APP_LANGUAGE                                "ui/application/language"
-#define PREF_UI_APP_RASTER_HORIZONTAL                       "ui/application/raster/horizontal"
-#define PREF_UI_APP_RASTER_VERTICAL                         "ui/application/raster/vertical"
-#define PREF_UI_APP_SHOWSTATUSBAR                           "ui/application/showStatusBar"
-#define PREF_UI_APP_USENATIVEDIALOGS                        "ui/application/useNativeDialogs"
-#define PREF_UI_PIANO_HIGHLIGHTCOLOR                        "ui/piano/highlightColor"
-#define PREF_UI_SCORE_NOTE_DROPCOLOR                        "ui/score/note/dropColor"
-#define PREF_UI_SCORE_DEFAULTCOLOR                          "ui/score/defaultColor"
-#define PREF_UI_SCORE_FRAMEMARGINCOLOR                      "ui/score/frameMarginColor"
-#define PREF_UI_SCORE_LAYOUTBREAKCOLOR                      "ui/score/layoutBreakColor"
-#define PREF_UI_SCORE_VOICE1_COLOR                          "ui/score/voice1/color"
-#define PREF_UI_SCORE_VOICE2_COLOR                          "ui/score/voice2/color"
-#define PREF_UI_SCORE_VOICE3_COLOR                          "ui/score/voice3/color"
-#define PREF_UI_SCORE_VOICE4_COLOR                          "ui/score/voice4/color"
-#define PREF_UI_THEME_ICONHEIGHT                            "ui/theme/iconHeight"
-#define PREF_UI_THEME_ICONWIDTH                             "ui/theme/iconWidth"
+#define PREF_APP_PATHS_INSTRUMENTLIST1                      "Application/Paths/Instrument list 1"
+#define PREF_APP_PATHS_INSTRUMENTLIST2                      "Application/Paths/Instrument list 2"
+#define PREF_APP_PATHS_MYIMAGES                             "Application/Paths/My images"
+#define PREF_APP_PATHS_MYPLUGINS                            "Application/Paths/My plugins"
+#define PREF_APP_PATHS_MYSCORES                             "Application/Paths/My scores"
+#define PREF_APP_PATHS_MYSHORTCUTS                          "Application/Paths/My shortcuts"
+#define PREF_APP_PATHS_MYSOUNDFONTS                         "Application/Paths/My soundfonts"
+#define PREF_APP_PATHS_MYSTYLES                             "Application/Paths/My styles"
+#define PREF_APP_PATHS_MYTEMPLATES                          "Application/Paths/My templates"
+#define PREF_APP_PATHS_MYEXTENSIONS                         "Application/Paths/My extensions"
+#define PREF_APP_PLAYBACK_FOLLOWSONG                        "Application/Playback/Follow song"
+#define PREF_APP_PLAYBACK_PANPLAYBACK                       "Application/Playback/Pan playback"
+#define PREF_APP_PLAYBACK_PLAYREPEATS                       "Application/Playback/Play repeats"
+#define PREF_APP_USESINGLEPALETTE                           "Application/Use single palette"
+#define PREF_APP_STARTUP_FIRSTSTART                         "Application/Startup/First start"
+#define PREF_APP_STARTUP_SESSIONSTART                       "Application/Startup/Session start"
+#define PREF_APP_STARTUP_STARTSCORE                         "Application/Startup/Start score"
+#define PREF_APP_WORKSPACE                                  "Application/Workspace"
+#define PREF_EXPORT_AUDIO_SAMPLERATE                        "Export/Audio/Sample rate"
+#define PREF_EXPORT_MP3_BITRATE                             "Export/Mp3/Bit rate"
+#define PREF_EXPORT_MUSICXML_EXPORTLAYOUT                   "Export/MusicXML/Export layout"
+#define PREF_EXPORT_MUSICXML_EXPORTBREAKS                   "Export/MusicXML/Export breaks"
+#define PREF_EXPORT_PDF_DPI                                 "Export/Pdf/Dpi"
+#define PREF_EXPORT_PNG_RESOLUTION                          "Export/Png/Resolution"
+#define PREF_EXPORT_PNG_USETRANSPARENCY                     "Export/Png/Use transparency"
+#define PREF_IMPORT_GUITARPRO_CHARSET                       "Import/Guitarpro/Charset"
+#define PREF_IMPORT_MUSICXML_IMPORTBREAKS                   "Import/MusicXML/Import breaks"
+#define PREF_IMPORT_MUSICXML_IMPORTLAYOUT                   "Import/MusicXML/Import layout"
+#define PREF_IMPORT_OVERTURE_CHARSET                        "Import/Overture/Charset"
+#define PREF_IMPORT_STYLE_STYLEFILE                         "Import/Style/Style file"
+#define PREF_IO_ALSA_DEVICE                                 "IO/Alsa/Device"
+#define PREF_IO_ALSA_FRAGMENTS                              "IO/Alsa/Fragments"
+#define PREF_IO_ALSA_PERIODSIZE                             "IO/Alsa/Period size"
+#define PREF_IO_ALSA_SAMPLERATE                             "IO/Alsa/Sample rate"
+#define PREF_IO_ALSA_USEALSAAUDIO                           "IO/Alsa/Use AlsaAudio"
+#define PREF_IO_JACK_REMEMBERLASTCONNECTIONS                "IO/Jack/Remember last connections"
+#define PREF_IO_JACK_TIMEBASEMASTER                         "IO/Jack/Timebase master"
+#define PREF_IO_JACK_USEJACKAUDIO                           "IO/Jack/Use JackAudio"
+#define PREF_IO_JACK_USEJACKMIDI                            "IO/Jack/Use JackMIDI"
+#define PREF_IO_JACK_USEJACKTRANSPORT                       "IO/Jack/Use JackTransport"
+#define PREF_IO_MIDI_ADVANCEONRELEASE                       "IO/Midi/Advance on release"
+#define PREF_IO_MIDI_ENABLEINPUT                            "IO/Midi/Enable input"
+#define PREF_IO_MIDI_EXPANDREPEATS                          "IO/Midi/Expand repeats"
+#define PREF_IO_MIDI_EXPORTRPNS                             "IO/Midi/Export RPN's"
+#define PREF_IO_MIDI_REALTIMEDELAY                          "IO/Midi/Realtime delay"
+#define PREF_IO_MIDI_REMOTE                                 "IO/Midi/Remote"
+#define PREF_IO_MIDI_SHORTESTNOTE                           "IO/Midi/Shortest note"
+#define PREF_IO_MIDI_SHOWCONTROLSINMIXER                    "IO/Midi/Show controls in mixer"
+#define PREF_IO_MIDI_USEREMOTECONTROL                       "IO/Midi/Use remote control"
+#define PREF_IO_OSC_PORTNUMBER                              "IO/Osc/Port number"
+#define PREF_IO_OSC_USEREMOTECONTROL                        "IO/Osc/Use remote control"
+#define PREF_IO_PORTAUDIO_DEVICE                            "IO/PortAudio/Device"
+#define PREF_IO_PORTAUDIO_USEPORTAUDIO                      "IO/PortAudio/Use PortAudio"
+#define PREF_IO_PORTMIDI_INPUTBUFFERCOUNT                   "IO/PortMidi/Input buffer count"
+#define PREF_IO_PORTMIDI_INPUTDEVICE                        "IO/PortMidi/Input device"
+#define PREF_IO_PORTMIDI_OUTPUTBUFFERCOUNT                  "IO/PortMidi/Output buffer count"
+#define PREF_IO_PORTMIDI_OUTPUTDEVICE                       "IO/PortMidi/Output device"
+#define PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS          "IO/PortMidi/Output latency (milliseconds)"
+#define PREF_IO_PULSEAUDIO_USEPULSEAUDIO                    "IO/PulseAudio/Use PulseAudio"
+#define PREF_SCORE_CHORD_PLAYONADDNOTE                      "Score/Chord/Play on add note"
+#define PREF_SCORE_MAGNIFICATION                            "Score/Magnification"
+#define PREF_SCORE_NOTE_PLAYONCLICK                         "Score/Note/Play on click"
+#define PREF_SCORE_NOTE_DEFAULTPLAYDURATION                 "Score/Note/Default play duration"
+#define PREF_SCORE_NOTE_WARNPITCHRANGE                      "Score/Note/Warn pitch range"
+#define PREF_SCORE_STYLE_DEFAULTSTYLEFILE                   "Score/Style/Default style file"
+#define PREF_SCORE_STYLE_PARTSTYLEFILE                      "Score/Style/Part style file"
+#define PREF_UI_CANVAS_BG_USECOLOR                          "UI/Canvas/Background/Use color"
+#define PREF_UI_CANVAS_FG_USECOLOR                          "UI/Canvas/Foreground/Use color"
+#define PREF_UI_CANVAS_BG_COLOR                             "UI/Canvas/Background/Color"
+#define PREF_UI_CANVAS_FG_COLOR                             "UI/Canvas/Foreground/Color"
+#define PREF_UI_CANVAS_BG_WALLPAPER                         "UI/Canvas/Background/Wallpaper"
+#define PREF_UI_CANVAS_FG_WALLPAPER                         "UI/Canvas/Foreground/Wallpaper"
+#define PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING              "UI/Canvas/Misc/Antialiased drawing"
+#define PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY              "UI/Canvas/Misc/Selection proximity"
+#define PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION           "UI/Canvas/Scroll/Vertical orientation"
+#define PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA               "UI/Canvas/Scroll/Limit scroll area"
+#define PREF_UI_APP_STARTUP_CHECKUPDATE                     "UI/Application/Startup/Check for update"
+#define PREF_UI_APP_STARTUP_CHECK_EXTENSIONS_UPDATE         "UI/Application/Startup/Check for extensions update"
+#define PREF_UI_APP_STARTUP_SHOWNAVIGATOR                   "UI/Application/Startup/Show navigator"
+#define PREF_UI_APP_STARTUP_SHOWPLAYPANEL                   "UI/Application/Startup/Show play panel"
+#define PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN                "UI/Application/Startup/Show splash screen"
+#define PREF_UI_APP_STARTUP_SHOWSTARTCENTER                 "UI/Application/Startup/Show start center"
+#define PREF_UI_APP_GLOBALSTYLE                             "UI/Application/Global style"
+#define PREF_UI_APP_LANGUAGE                                "UI/Application/Language"
+#define PREF_UI_APP_RASTER_HORIZONTAL                       "UI/Application/Raster/Horizontal"
+#define PREF_UI_APP_RASTER_VERTICAL                         "UI/Application/Raster/Vertical"
+#define PREF_UI_APP_SHOWSTATUSBAR                           "UI/Application/Show status bar"
+#define PREF_UI_APP_USENATIVEDIALOGS                        "UI/Application/Use native dialogs"
+#define PREF_UI_PIANOHIGHLIGHTCOLOR                         "UI/Piano highlight color"
+#define PREF_UI_SCORE_NOTEDROPCOLOR                         "UI/Score/Note drop color"
+#define PREF_UI_SCORE_DEFAULTCOLOR                          "UI/Score/Default color"
+#define PREF_UI_SCORE_FRAMEMARGINCOLOR                      "UI/Score/Frame margin color"
+#define PREF_UI_SCORE_LAYOUTBREAKCOLOR                      "UI/Score/Layout break color"
+#define PREF_UI_SCORE_VOICES_VOICE1COLOR                    "UI/Score/Voices/Voice 1 color"
+#define PREF_UI_SCORE_VOICES_VOICE2COLOR                    "UI/Score/Voices/Voice 2 color"
+#define PREF_UI_SCORE_VOICES_VOICE3COLOR                    "UI/Score/Voices/Voice 3 color"
+#define PREF_UI_SCORE_VOICES_VOICE4COLOR                    "UI/Score/Voices/Voice 4 color"
+#define PREF_UI_THEME_ICONHEIGHT                            "UI/Theme/Icon height"
+#define PREF_UI_THEME_ICONWIDTH                             "UI/Theme/Icon width"
 
 
 class PreferenceVisitor;
@@ -204,44 +206,60 @@ class Preference {
       QVariant defaultValue() const {return _defaultValue;}
       bool showInAdvancedList() const {return _showInAdvancedList;}
       QMetaType::Type type() {return _type;}
-      virtual void accept(QString key, PreferenceVisitor&) = 0;
+      virtual void accept(QString, QTreeWidgetItem*, PreferenceVisitor&) = 0;
       };
 
 class IntPreference : public Preference {
    public:
       IntPreference(int defaultValue, bool showInAdvancedList = true);
-      virtual void accept(QString key, PreferenceVisitor&);
+      virtual void accept(QString, QTreeWidgetItem*, PreferenceVisitor&) override;
       };
 
 class DoublePreference : public Preference {
    public:
       DoublePreference(double defaultValue, bool showInAdvancedList = true);
-      virtual void accept(QString key, PreferenceVisitor&);
+      virtual void accept(QString, QTreeWidgetItem*, PreferenceVisitor&) override;
       };
 
 class BoolPreference : public Preference {
    public:
       BoolPreference(bool defaultValue, bool showInAdvancedList = true);
-      virtual void accept(QString key, PreferenceVisitor&);
+      virtual void accept(QString, QTreeWidgetItem*, PreferenceVisitor&) override;
       };
 
 class StringPreference: public Preference {
    public:
       StringPreference(QString defaultValue, bool showInAdvancedList = true);
-      virtual void accept(QString key, PreferenceVisitor&);
+      virtual void accept(QString, QTreeWidgetItem*, PreferenceVisitor&) override;
       };
+
+class FilePreference : public Preference {
+      QString _filter;
+   public:
+      FilePreference(QString defaultValue, QString filter, bool showInAdvancedList = true);
+      virtual void accept(QString, QTreeWidgetItem*, PreferenceVisitor&) override;
+
+      QString filter() const;
+};
+
+class DirPreference : public Preference {
+   public:
+      DirPreference(QString defaultValue, bool showInAdvancedList = true);
+      virtual void accept(QString, QTreeWidgetItem*, PreferenceVisitor&) override;
+};
 
 class ColorPreference: public Preference {
    public:
       ColorPreference(QColor defaultValue, bool showInAdvancedList = true);
-      virtual void accept(QString key, PreferenceVisitor&);
+      virtual void accept(QString, QTreeWidgetItem*, PreferenceVisitor&) override;
       };
 
 // Support for EnumPreference is currently not fully implemented
+#define PREFS_NO_SUPPORT_FOR_ENUMS
 class EnumPreference: public Preference {
    public:
       EnumPreference(QVariant defaultValue, bool showInAdvancedList = true);
-      virtual void accept(QString, PreferenceVisitor&);
+      virtual void accept(QString, QTreeWidgetItem*, PreferenceVisitor&) override;
       };
 
 //---------------------------------------------------------
@@ -349,11 +367,13 @@ inline QDataStream &operator>>(QDataStream &in, T &val)
 
 class PreferenceVisitor {
    public:
-      virtual void visit(QString key, IntPreference*) = 0;
-      virtual void visit(QString key, DoublePreference*) = 0;
-      virtual void visit(QString key, BoolPreference*) = 0;
-      virtual void visit(QString key, StringPreference*) = 0;
-      virtual void visit(QString key, ColorPreference*) = 0;
+      virtual void visit(const QString& key, QTreeWidgetItem*, IntPreference*) = 0;
+      virtual void visit(const QString& key, QTreeWidgetItem*, DoublePreference*) = 0;
+      virtual void visit(const QString& key, QTreeWidgetItem*, BoolPreference*) = 0;
+      virtual void visit(const QString& key, QTreeWidgetItem*, StringPreference*) = 0;
+      virtual void visit(const QString& key, QTreeWidgetItem*, FilePreference*) = 0;
+      virtual void visit(const QString& key, QTreeWidgetItem*, DirPreference*) = 0;
+      virtual void visit(const QString& key, QTreeWidgetItem*, ColorPreference*) = 0;
       };
 
 
@@ -362,5 +382,6 @@ class PreferenceVisitor {
 Q_DECLARE_METATYPE(Ms::SessionStart);
 Q_DECLARE_METATYPE(Ms::MusicxmlExportBreaks);
 Q_DECLARE_METATYPE(Ms::MuseScoreStyleType);
+
 
 #endif
