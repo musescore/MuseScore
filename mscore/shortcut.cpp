@@ -2477,8 +2477,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "edit-style",
-         QT_TRANSLATE_NOOP("action","General Style..."),
-         QT_TRANSLATE_NOOP("action","Edit general style"),
+         QT_TRANSLATE_NOOP("action","Style..."),
+         QT_TRANSLATE_NOOP("action","Edit style"),
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut
