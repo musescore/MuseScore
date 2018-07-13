@@ -24,13 +24,10 @@ namespace Ms {
 //   InspectorHarmony
 //---------------------------------------------------------
 
-class InspectorHarmony : public InspectorElementBase {
+class InspectorHarmony : public InspectorTextBase {
       Q_OBJECT
 
-      Ui::InspectorHarmony b;
-
-   protected slots:
-      virtual void valueChanged(int idx) override;
+      Ui::InspectorHarmony h;
 
    public:
       InspectorHarmony(QWidget* parent);

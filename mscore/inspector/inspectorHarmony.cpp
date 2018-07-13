@@ -15,6 +15,7 @@
 #include "musescore.h"
 #include "libmscore/harmony.h"
 #include "libmscore/score.h"
+#include "icons.h"
 
 namespace Ms {
 
@@ -23,27 +24,26 @@ namespace Ms {
 //---------------------------------------------------------
 
 InspectorHarmony::InspectorHarmony(QWidget* parent)
-   : InspectorElementBase(parent)
+   : InspectorTextBase(parent)
       {
-      b.setupUi(addWidget());
-
-//      Element* e = inspector->element();
+      h.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-//            { Pid::AUTOSCALE,         0, b.autoscale,       b.resetAutoscale       },
+            { Pid::SUB_STYLE, 0, h.style, h.resetStyle     },
             };
-      const std::vector<InspectorPanel> ppList = { { b.title, b.panel } };
+
+      const std::vector<InspectorPanel> ppList = {
+            { h.title, h.panel }
+            };
+
+      h.style->clear();
+      for (auto ss : { SubStyleId::HARMONY_A, SubStyleId::HARMONY_B } ) {
+            h.style->addItem(subStyleUserName(ss), int(ss));
+            }
+
+      t.resetToStyle->setVisible(false);
 
       mapSignals(iiList, ppList);
-      }
-
-//---------------------------------------------------------
-//   valueChanged
-//---------------------------------------------------------
-
-void InspectorHarmony::valueChanged(int idx)
-      {
-      InspectorBase::valueChanged(idx);
       }
 
 }

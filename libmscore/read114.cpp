@@ -337,7 +337,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element* be)
 
                   case 22: ss = SubStyleId::SYSTEM;         break;
                   case 23: ss = SubStyleId::STAFF;          break;
-                  case 24: ss = SubStyleId::HARMONY;        break;
+                  case 24: ss = SubStyleId::HARMONY_A;        break;
                   case 25: ss = SubStyleId::REHEARSAL_MARK; break;
                   case 26: ss = SubStyleId::REPEAT_LEFT;         break;
                   case 27: ss = SubStyleId::VOLTA;          break;

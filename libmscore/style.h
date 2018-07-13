@@ -202,12 +202,20 @@ enum class Sid {
       minHarmonyDistance,
       maxHarmonyBarDistance,
       harmonyPlacement,
-      chordSymbolFontFace,
-      chordSymbolFontSize,
-      chordSymbolFontBold,
-      chordSymbolFontItalic,
-      chordSymbolFontUnderline,
-      chordSymbolAlign,
+
+      chordSymbolAFontFace,
+      chordSymbolAFontSize,
+      chordSymbolAFontBold,
+      chordSymbolAFontItalic,
+      chordSymbolAFontUnderline,
+      chordSymbolAAlign,
+
+      chordSymbolBFontFace,
+      chordSymbolBFontSize,
+      chordSymbolBFontBold,
+      chordSymbolBFontItalic,
+      chordSymbolBFontUnderline,
+      chordSymbolBAlign,
 
       capoPosition,
       fretNumMag,
@@ -839,7 +847,8 @@ enum class SubStyleId {
       TUPLET,
       SYSTEM,
       STAFF,
-      HARMONY,
+      HARMONY_A,
+      HARMONY_B,
       REHEARSAL_MARK,
       REPEAT_LEFT,       // align to start of measure
       REPEAT_RIGHT,      // align to end of measure

@@ -140,7 +140,7 @@ qDebug("ResolveDegreeList: not found in table");
 Harmony::Harmony(Score* s)
    : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(SubStyleId::HARMONY);
+      initSubStyle(SubStyleId::HARMONY_A);
       _rootTpc    = Tpc::TPC_INVALID;
       _baseTpc    = Tpc::TPC_INVALID;
       _rootCase   = NoteCaseType::CAPITAL;
@@ -1584,7 +1584,7 @@ QString Harmony::screenReaderInfo() const
 
 bool Harmony::acceptDrop(EditData& data) const
       {
-      return data.element->type() == ElementType::FRET_DIAGRAM;
+      return data.element->isFretDiagram();
       }
 
 //---------------------------------------------------------
@@ -1594,7 +1594,7 @@ bool Harmony::acceptDrop(EditData& data) const
 Element* Harmony::drop(EditData& data)
       {
       Element* e = data.element;
-      if (e->type() == ElementType::FRET_DIAGRAM) {
+      if (e->isFretDiagram()) {
             FretDiagram* fd = toFretDiagram(e);
             fd->setParent(parent());
             fd->setTrack(track());
@@ -1609,6 +1609,19 @@ Element* Harmony::drop(EditData& data)
       }
 
 //---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Harmony::setProperty(Pid propertyId, const QVariant& v)
+      {
+      if (TextBase::setProperty(propertyId, v)) {
+            render();
+            return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
@@ -1617,7 +1630,7 @@ QVariant Harmony::propertyDefault(Pid id) const
       QVariant v;
       switch (id) {
             case Pid::SUB_STYLE:
-                  v = int(SubStyleId::HARMONY);
+                  v = int(SubStyleId::HARMONY_A);
                   break;
             default:
                   v = styledPropertyDefault(id);
