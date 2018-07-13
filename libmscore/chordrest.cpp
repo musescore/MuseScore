@@ -914,9 +914,9 @@ void ChordRest::writeBeam(XmlWriter& xml)
 Segment* ChordRest::nextSegmentAfterCR(SegmentType types) const
       {
       for (Segment* s = segment()->next1MM(types); s; s = s->next1MM(types)) {
-            // chordrest ends at tick+actualTicks
+            // chordrest ends at ftick+actualFraction
             // we return the segment at or after the end of the chordrest
-            if (s->tick() >= tick() + actualTicks())
+            if (s->ftick() >= ftick() + actualFraction())
                   return s;
             }
       return 0;
