@@ -245,20 +245,44 @@ Dynamics
 
 
 ==============================================================
-Properties & Styles
+      Styles
 ==============================================================
 
-Properties are identified by the enumeration P_ID.
-Style values are identified by the enumeration StyleIdx.
+A style is part of a score. Its a list of style values.
+Style values are identified by the enumeration Sid.
+A style is initialized with a set of build in hard coded values. This build in style can be
+modified by a style set in preferences (if set).
+The style associated with a score can be modified by the user in the UI.
+If the user resets a style value in the UI, it is set to the hardcoded build in value;
+Only style values which differ from the build in values are saved in a score.
+
+==============================================================
+      Properties
+==============================================================
+
+Properties are identified by the enumeration Pid.
 
 Some properties are associated with a Style. This styled properties have
-a state (enumeration PropertyFlags). The property can by STYLED in which case it has
-the value of the associated Style. If the style changes, the value of all styled properties
-also change. If the property is UNSTYLED, then the local value of the property is valid.
-Style changes have no effect on unstyled properties. If an property has no associated style, then its
-state is NOSTYLE.
+a state (enumeration PropertyFlags):
 
-If the user changes a styled property in the inspector it is set to UNSTYLED.
+      NOSTYLE:
+            The property has no associated style.
+
+      STYLED
+            The property has the value of the associated Style. If the style changes, the value
+            of all styled properties also change.
+            If the user changes a styled property in the inspector it is set to UNSTYLED. That means
+            that it does not follow any style changes anymore but stays on the user modified value.
+            A reset of the property in the inspector resets it to its styled value and also sets
+            its state from UNSTYLED to STYLED.
+
+      UNSTYLED
+            The property has an associated style but does not follow any style changes.
+            Only the local value of the property is valid.
+
+Every element has a list of styled properties. Usually this list points to an element type specific
+static list. Some element types can change their style and therefore have a local copy of the static list.
+
 
 Element Interface
 
