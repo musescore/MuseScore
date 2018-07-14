@@ -79,7 +79,7 @@
       <item row="0" column="1">
        <widget class="QComboBox" name="type">
         <property name="accessibleName">
-         <string>Type</string>
+         <string>Style</string>
         </property>
        </widget>
       </item>
@@ -268,6 +268,9 @@
       </item>
       <item row="2" column="0" colspan="2">
        <widget class="QCheckBox" name="span">
+        <property name="accessibleName">
+         <string>Span to next staff</string>
+        </property>
         <property name="text">
          <string>Span to next staff</string>
         </property>

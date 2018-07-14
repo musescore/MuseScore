@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="accessibleName">
-   <string>Staff/System Text Inspector</string>
+   <string>Chord Symbol Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -44,7 +44,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Chord Name</string>
+      <string>Chord Symbol</string>
      </property>
     </widget>
    </item>
@@ -87,7 +87,11 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="style"/>
+       <widget class="QComboBox" name="style">
+        <property name="accessibleName">
+         <string>Style</string>
+        </property>
+       </widget>
       </item>
       <item row="0" column="2">
        <widget class="QToolButton" name="resetStyle">

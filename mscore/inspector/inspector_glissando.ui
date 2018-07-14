@@ -89,10 +89,10 @@
       <item row="6" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Size:</string>
+         <string>Font size:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>fontSize</cstring>
@@ -128,8 +128,11 @@
       </item>
       <item row="9" column="0">
        <widget class="QLabel" name="label_2">
+        <property name="accessibleName">
+         <string>Play style</string>
+        </property>
         <property name="text">
-         <string>Style:</string>
+         <string>Play style:</string>
         </property>
         <property name="buddy">
          <cstring>glissandoStyle</cstring>
@@ -156,7 +159,7 @@
       <item row="9" column="1">
        <widget class="QComboBox" name="glissandoStyle">
         <property name="accessibleName">
-         <string>Play Style</string>
+         <string>Play style</string>
         </property>
         <item>
          <property name="text">
@@ -246,6 +249,9 @@
       </item>
       <item row="10" column="0" colspan="2">
        <widget class="QCheckBox" name="playGlissando">
+        <property name="accessibleName">
+         <string>Play</string>
+        </property>
         <property name="text">
          <string>Play</string>
         </property>
@@ -272,10 +278,17 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Font face</string>
+        </property>
        </widget>
       </item>
       <item row="6" column="1">
-       <widget class="QSpinBox" name="fontSize"/>
+       <widget class="QSpinBox" name="fontSize">
+        <property name="accessibleName">
+         <string>Font size</string>
+        </property>
+       </widget>
       </item>
       <item row="7" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -442,7 +455,7 @@
          <string>Style:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -452,7 +465,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Size' value</string>
+         <string>Reset 'Font size' value</string>
         </property>
         <property name="text">
          <string notr="true"/>

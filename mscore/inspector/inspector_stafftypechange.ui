@@ -90,6 +90,9 @@
      </item>
      <item row="5" column="1">
       <widget class="QSpinBox" name="lines">
+       <property name="accessibleName">
+        <string>Lines</string>
+       </property>
        <property name="minimum">
         <number>1</number>
        </property>
@@ -127,6 +130,9 @@
      </item>
      <item row="7" column="1">
       <widget class="QSpinBox" name="stepOffset">
+       <property name="accessibleName">
+        <string>Step offset</string>
+       </property>
        <property name="minimum">
         <number>-8</number>
        </property>
@@ -164,6 +170,9 @@
      </item>
      <item row="6" column="1">
       <widget class="QDoubleSpinBox" name="lineDistance">
+       <property name="accessibleName">
+        <string>Line distance</string>
+       </property>
        <property name="suffix">
         <string>sp</string>
        </property>
@@ -200,6 +209,9 @@
      </item>
      <item row="11" column="0" colspan="2">
       <widget class="QCheckBox" name="slashStyle">
+       <property name="accessibleName">
+        <string>Slash style</string>
+       </property>
        <property name="text">
         <string>Slash style</string>
        </property>
@@ -213,7 +225,11 @@
       </widget>
      </item>
      <item row="12" column="1">
-      <widget class="QComboBox" name="noteheadScheme"/>
+      <widget class="QComboBox" name="noteheadScheme">
+       <property name="accessibleName">
+        <string>Notehead scheme</string>
+       </property>
+      </widget>
      </item>
      <item row="12" column="2">
       <widget class="QToolButton" name="resetNoteheadScheme">
@@ -346,6 +362,9 @@
      </item>
      <item row="9" column="0" colspan="2">
       <widget class="QCheckBox" name="showBarlines">
+       <property name="accessibleName">
+        <string>Show barlines</string>
+       </property>
        <property name="text">
         <string>Show barlines</string>
        </property>
@@ -353,6 +372,9 @@
      </item>
      <item row="10" column="0" colspan="2">
       <widget class="QCheckBox" name="showLedgerlines">
+       <property name="accessibleName">
+        <string>Show ledger lines</string>
+       </property>
        <property name="text">
         <string>Show ledger lines</string>
        </property>
@@ -360,6 +382,9 @@
      </item>
      <item row="13" column="0" colspan="2">
       <widget class="QCheckBox" name="genClefs">
+       <property name="accessibleName">
+        <string>Generate clefs</string>
+       </property>
        <property name="text">
         <string>Generate clefs</string>
        </property>
@@ -367,6 +392,9 @@
      </item>
      <item row="14" column="0" colspan="2">
       <widget class="QCheckBox" name="genTimesig">
+       <property name="accessibleName">
+        <string>Generate time signatures</string>
+       </property>
        <property name="text">
         <string>Generate time signatures</string>
        </property>
@@ -374,6 +402,9 @@
      </item>
      <item row="15" column="0" colspan="2">
       <widget class="QCheckBox" name="genKeysig">
+       <property name="accessibleName">
+        <string>Generate key signatures</string>
+       </property>
        <property name="text">
         <string>Generate key signatures</string>
        </property>
@@ -398,6 +429,9 @@
      </item>
      <item row="3" column="1">
       <widget class="QDoubleSpinBox" name="scale">
+       <property name="accessibleName">
+        <string>Scale</string>
+       </property>
        <property name="minimum">
         <double>0.200000000000000</double>
        </property>
@@ -458,6 +492,9 @@
      </item>
      <item row="2" column="0" colspan="2">
       <widget class="QCheckBox" name="small">
+       <property name="accessibleName">
+        <string>Small</string>
+       </property>
        <property name="text">
         <string>Small</string>
        </property>
@@ -465,6 +502,9 @@
      </item>
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="yoffset">
+       <property name="accessibleName">
+        <string>Offset Y</string>
+       </property>
        <property name="suffix">
         <string>sp</string>
        </property>

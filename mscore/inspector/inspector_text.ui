@@ -160,6 +160,9 @@
          </property>
          <item row="2" column="1">
           <widget class="QDoubleSpinBox" name="frameWidth">
+           <property name="accessibleName">
+            <string>Border</string>
+           </property>
            <property name="prefix">
             <string/>
            </property>
@@ -177,7 +180,7 @@
          <item row="1" column="1">
           <widget class="Awl::ColorLabel" name="bgColor">
            <property name="accessibleName">
-            <string>Color:</string>
+            <string>Background</string>
            </property>
            <property name="frameShape">
             <enum>QFrame::Box</enum>
@@ -206,7 +209,7 @@
             </sizepolicy>
            </property>
            <property name="accessibleName">
-            <string>Color:</string>
+            <string>Foreground</string>
            </property>
            <property name="frameShape">
             <enum>QFrame::Box</enum>
@@ -245,6 +248,9 @@
          </item>
          <item row="3" column="1">
           <widget class="QDoubleSpinBox" name="paddingWidth">
+           <property name="accessibleName">
+            <string>Text margin</string>
+           </property>
            <property name="suffix">
             <string>sp</string>
            </property>
@@ -293,7 +299,11 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QSpinBox" name="frameRound"/>
+          <widget class="QSpinBox" name="frameRound">
+           <property name="accessibleName">
+            <string>Border radius</string>
+           </property>
+          </widget>
          </item>
          <item row="1" column="2">
           <widget class="QToolButton" name="resetBgColor">
@@ -378,6 +388,9 @@
         <property name="toolTip">
          <string>Font Size</string>
         </property>
+        <property name="accessibleName">
+         <string>Font size</string>
+        </property>
         <property name="suffix">
          <string>pt</string>
         </property>
@@ -392,6 +405,9 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
+         <string>Font face</string>
+        </property>
+        <property name="accessibleName">
          <string>Font face</string>
         </property>
        </widget>
@@ -541,6 +557,9 @@
           <property name="toolTip">
            <string>Show frame</string>
           </property>
+          <property name="accessibleName">
+           <string>Frame</string>
+          </property>
           <property name="text">
            <string>Frame:</string>
           </property>
@@ -578,6 +597,9 @@
         </item>
         <item>
          <widget class="QCheckBox" name="circle">
+          <property name="accessibleName">
+           <string>Circle</string>
+          </property>
           <property name="text">
            <string>Circle</string>
           </property>
@@ -602,6 +624,9 @@
         </item>
         <item>
          <widget class="QCheckBox" name="square">
+          <property name="accessibleName">
+           <string>Box</string>
+          </property>
           <property name="text">
            <string>Box</string>
           </property>
