@@ -2844,7 +2844,8 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
                                     ChordRest* cr = toChordRest(s->element(track));
                                     Tuplet* t = cr->tuplet();
                                     DurationElement* de = t ? toDurationElement(t) : toDurationElement(cr);
-                                    int cetick = de->tick() + de->actualTicks();
+                                    Fraction f = de->ftick() + de->actualFraction();
+                                    int cetick = f.ticks();
                                     if (cetick <= tick)
                                           continue;
                                     if (de->tick() >= etick)
@@ -2971,8 +2972,9 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
             if (m->hasVoice(track)) {
                   for (Segment* s = fs; s; s = s->next(CR_TYPE)) {
                         if (s->element(track)) {
-                              ChordRest* cr = toChordRest(s->element(track));
-                              int cetick    = s->rtick() + cr->actualTicks();
+                              ChordRest* cr  = toChordRest(s->element(track));
+                              Fraction ftick = cr->ftick() + cr->actualFraction();
+                              int cetick     = ftick.ticks() - m->tick();
 
                               if (cetick <= tick) {
                                     continue;
@@ -2997,7 +2999,7 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                                     }
                               else if (s->rtick() < tick && cetick <= etick) {
                                     // running in
-                                    Fraction f1 = Fraction::fromTicks(tick - s->tick());
+                                    Fraction f1 = Fraction::fromTicks(tick - s->rtick());
                                     changeCRlen(cr, f1, false);
                                     }
                               else {
@@ -3009,6 +3011,7 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                         }
                   }
             }
+      tick = startSegment->tick();
       undoInsertTime(tick, -len);
       undo(new InsertTime(this, tick, -len));
 
@@ -4544,14 +4547,16 @@ void Score::undoInsertTime(int tick, int len)
                   int tick2 = tick - len;
                   if (s->tick() >= tick2)
                         append = true;
-                  else if ((s->tick() < tick) && (s->tick2() > tick2)) {
+                  else if (s->tick() >= tick && s->tick2() <= tick2)
+                        append = true;
+                  else if ((s->tick() <= tick) && (s->tick2() >= tick2)) {
                         int t2 = s->tick2() + len;
                         if (t2 > s->tick())
                               append = true;
                         }
-                  else if (s->tick() >= tick && s->tick2() <= tick2)
-                        append = true;
                   else if (s->tick() > tick && s->tick2() > tick2)
+                        append = true;
+                  else if (s->tick() < tick && s->tick2() < tick2)
                         append = true;
                   }
             for (Spanner* ss : sl) {
@@ -4596,25 +4601,24 @@ void Score::undoInsertTime(int tick, int len)
                               t = 0;
                         s->undoChangeProperty(Pid::SPANNER_TICK, t);
                         }
-                  else if ((s->tick() < tick) && (s->tick2() > tick2)) {
-                        //
-                        //  case B:
-                        //  +----spanner--------+
-                        //    +---remove---+
-                        //
-                        int t2 = s->tick2() + len;
-                        if (t2 > s->tick()) {
-                              s->undoChangeProperty(Pid::SPANNER_TICKS, s->ticks() + len);
-                              }
-                        }
 //                  else if (s->tick() >= tick && s->tick2() < tick2) {
                   else if (s->tick() >= tick && s->tick2() <= tick2) {
                         //
-                        //  case C:
+                        //  case B:
                         //    +---spanner---+
                         //  +----remove--------+
                         //
                         undoRemoveElement(s);
+                        }
+                  else if ((s->tick() <= tick) && (s->tick2() >= tick2)) {
+                        //
+                        //  case C:
+                        //  +----spanner--------+
+                        //    +---remove---+
+                        //
+                        int t2 = s->tick2() + len;
+                        if (t2 > s->tick())
+                              s->undoChangeProperty(Pid::SPANNER_TICKS, s->ticks() + len);
                         }
                   else if (s->tick() > tick && s->tick2() > tick2) {
                         //
@@ -4625,13 +4629,25 @@ void Score::undoInsertTime(int tick, int len)
                         int d1 = s->tick() - tick;
                         int d2 = tick2 - s->tick();
                         int len = s->ticks() - d2;
-                        if (len == 0) {
+                        if (len == 0)
                               undoRemoveElement(s);
-                              }
                         else {
                               s->undoChangeProperty(Pid::SPANNER_TICK, s->tick() - d1);
                               s->undoChangeProperty(Pid::SPANNER_TICKS, len);
                               }
+                        }
+                  else if (s->tick() < tick && s->tick2() < tick2) {
+                        //
+                        //  case E:
+                        //       +----spanner--------+
+                        //                     +---remove---+
+                        //
+                        int d = s->tick2() - tick;
+                        int len = s->ticks() - d;
+                        if (len == 0)
+                              undoRemoveElement(s);
+                        else
+                              s->undoChangeProperty(Pid::SPANNER_TICKS, len);
                         }
                   }
             }
