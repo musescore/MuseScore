@@ -131,7 +131,11 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="style"/>
+       <widget class="QComboBox" name="style">
+        <property name="accessibleName">
+         <string>Style</string>
+        </property>
+       </widget>
       </item>
       <item row="0" column="2">
        <widget class="QToolButton" name="resetStyle">

@@ -196,6 +196,9 @@
       </item>
       <item row="3" column="0" colspan="2">
        <widget class="QCheckBox" name="createSystemHeader">
+        <property name="accessibleName">
+         <string>Create system header</string>
+        </property>
         <property name="text">
          <string>Create system header</string>
         </property>

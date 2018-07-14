@@ -129,6 +129,9 @@
       </item>
       <item row="3" column="0" colspan="2">
        <widget class="QCheckBox" name="playRepeats">
+        <property name="accessibleName">
+         <string>Play repeats</string>
+        </property>
         <property name="text">
          <string>Play repeats</string>
         </property>

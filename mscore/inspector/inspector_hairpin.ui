@@ -346,7 +346,7 @@
       <item row="7" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Font:</string>
+         <string>Font face:</string>
         </property>
         <property name="buddy">
          <cstring>fontFace</cstring>
@@ -357,9 +357,6 @@
        <widget class="QLabel" name="label_9">
         <property name="text">
          <string>Style:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -381,7 +378,11 @@
        </widget>
       </item>
       <item row="8" column="1">
-       <widget class="QSpinBox" name="fontSize"/>
+       <widget class="QSpinBox" name="fontSize">
+        <property name="accessibleName">
+         <string>Font size</string>
+        </property>
+       </widget>
       </item>
       <item row="8" column="2">
        <widget class="QToolButton" name="resetFontSize">
@@ -389,7 +390,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Size' value</string>
+         <string>Reset 'Font size' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -408,15 +409,18 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Font face</string>
+        </property>
        </widget>
       </item>
       <item row="8" column="0">
        <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>Size:</string>
+        <property name="accessibleName">
+         <string>Font size</string>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <property name="text">
+         <string>Font size:</string>
         </property>
         <property name="buddy">
          <cstring>fontSize</cstring>

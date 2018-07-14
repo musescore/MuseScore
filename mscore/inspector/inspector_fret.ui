@@ -91,6 +91,9 @@
       </item>
       <item row="0" column="1">
        <widget class="QDoubleSpinBox" name="mag">
+        <property name="accessibleName">
+         <string>Scale</string>
+        </property>
         <property name="minimum">
          <double>0.200000000000000</double>
         </property>
@@ -238,6 +241,9 @@
       </item>
       <item row="3" column="1">
        <widget class="QSpinBox" name="frets">
+        <property name="accessibleName">
+         <string>Frets</string>
+        </property>
         <property name="minimum">
          <number>1</number>
         </property>
@@ -245,13 +251,20 @@
       </item>
       <item row="2" column="1">
        <widget class="QSpinBox" name="strings">
+        <property name="accessibleName">
+         <string>Strings</string>
+        </property>
         <property name="minimum">
          <number>1</number>
         </property>
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="QSpinBox" name="barre"/>
+       <widget class="QSpinBox" name="barre">
+        <property name="accessibleName">
+         <string>Barre</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="2">
        <widget class="QToolButton" name="resetFrets">
@@ -298,7 +311,11 @@
        </widget>
       </item>
       <item row="6" column="1">
-       <widget class="QSpinBox" name="offset"/>
+       <widget class="QSpinBox" name="offset">
+        <property name="accessibleName">
+         <string>Offset</string>
+        </property>
+       </widget>
       </item>
       <item row="6" column="2">
        <widget class="QToolButton" name="resetOffset">

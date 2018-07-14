@@ -101,7 +101,11 @@
           <number>0</number>
          </property>
          <item row="0" column="1">
-          <widget class="QLineEdit" name="beginText"/>
+          <widget class="QLineEdit" name="beginText">
+           <property name="accessibleName">
+            <string>Text</string>
+           </property>
+          </widget>
          </item>
          <item row="0" column="0">
           <widget class="QLabel" name="label">
@@ -354,10 +358,17 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Font face</string>
+           </property>
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QSpinBox" name="beginFontSize"/>
+          <widget class="QSpinBox" name="beginFontSize">
+           <property name="accessibleName">
+            <string>Font size</string>
+           </property>
+          </widget>
          </item>
          <item row="1" column="2">
           <widget class="QToolButton" name="resetBeginFontFace">
@@ -453,6 +464,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Begin hook</string>
         </property>
        </widget>
       </item>
@@ -668,7 +682,11 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QLineEdit" name="continueText"/>
+          <widget class="QLineEdit" name="continueText">
+           <property name="accessibleName">
+            <string>Text</string>
+           </property>
+          </widget>
          </item>
          <item row="2" column="1">
           <widget class="QFontComboBox" name="continueFontFace">
@@ -677,6 +695,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Font face</string>
            </property>
           </widget>
          </item>
@@ -691,7 +712,11 @@
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="QSpinBox" name="continueFontSize"/>
+          <widget class="QSpinBox" name="continueFontSize">
+           <property name="accessibleName">
+            <string>Font size</string>
+           </property>
+          </widget>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_12">
@@ -839,6 +864,9 @@
       </item>
       <item row="1" column="1">
        <widget class="QDoubleSpinBox" name="beginHookHeight">
+        <property name="accessibleName">
+         <string>Height</string>
+        </property>
         <property name="suffix">
          <string>sp</string>
         </property>
@@ -849,6 +877,9 @@
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_24">
+        <property name="accessibleName">
+         <string>End hook</string>
+        </property>
         <property name="text">
          <string>End hook:</string>
         </property>
@@ -898,6 +929,9 @@
       </item>
       <item row="3" column="1">
        <widget class="QDoubleSpinBox" name="endHookHeight">
+        <property name="accessibleName">
+         <string>Height</string>
+        </property>
         <property name="suffix">
          <string>sp</string>
         </property>
@@ -942,7 +976,11 @@
           <number>0</number>
          </property>
          <item row="0" column="1">
-          <widget class="QLineEdit" name="endText"/>
+          <widget class="QLineEdit" name="endText">
+           <property name="accessibleName">
+            <string>Text</string>
+           </property>
+          </widget>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_21">
@@ -955,7 +993,11 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QSpinBox" name="endFontSize"/>
+          <widget class="QSpinBox" name="endFontSize">
+           <property name="accessibleName">
+            <string>Font size</string>
+           </property>
+          </widget>
          </item>
          <item row="4" column="2">
           <widget class="QToolButton" name="resetEndTextPlacement">
@@ -1149,6 +1191,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Font face</string>
            </property>
           </widget>
          </item>
