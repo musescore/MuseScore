@@ -40,7 +40,7 @@
 #include "ui_inspector_slur.h"
 #include "ui_inspector_empty.h"
 #include "ui_inspector_text.h"
-#include "ui_inspector_fret.h"
+// #include "ui_inspector_fret.h"
 #include "ui_inspector_tremolo.h"
 #include "ui_inspector_caesura.h"
 #include "ui_inspector_bracket.h"

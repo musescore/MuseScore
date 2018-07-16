@@ -76,6 +76,7 @@
 #include "glissando.h"
 #include "stafflines.h"
 #include "bracket.h"
+#include "fret.h"
 
 namespace Ms {
 
@@ -2242,13 +2243,37 @@ void ChangeDrumset::flip(EditData*)
       }
 
 //---------------------------------------------------------
-//   undoChangeGap
+//   ChangeGap
 //---------------------------------------------------------
 
 void ChangeGap::flip(EditData*)
       {
       rest->setGap(v);
       v = !v;
+      }
+
+//---------------------------------------------------------
+//   FretDot
+//---------------------------------------------------------
+
+void FretDot::flip(EditData*)
+      {
+      int ov = fret->dot(string);
+      fret->setDot(string, dot);
+      dot = ov;
+      fret->triggerLayout();
+      }
+
+//---------------------------------------------------------
+//   FretMarker
+//---------------------------------------------------------
+
+void FretMarker::flip(EditData*)
+      {
+      int om = fret->marker(string);
+      fret->setMarker(string, marker);
+      marker = om;
+      fret->triggerLayout();
       }
 
 }

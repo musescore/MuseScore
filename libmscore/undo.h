@@ -1276,5 +1276,37 @@ class ChangeGap : public UndoCommand {
       UNDO_NAME("ChangeGap")
       };
 
+//---------------------------------------------------------
+//   FretDot
+//---------------------------------------------------------
+
+class FretDot : public UndoCommand {
+      FretDiagram* fret;
+      int string;
+      int dot;
+
+      void flip(EditData*) override;
+
+   public:
+      FretDot(FretDiagram* f, int _string, int _dot) : fret(f), string(_string), dot(_dot) {}
+      UNDO_NAME("FretDot")
+      };
+
+//---------------------------------------------------------
+//   FretMarker
+//---------------------------------------------------------
+
+class FretMarker : public UndoCommand {
+      FretDiagram* fret;
+      int string;
+      int marker;
+
+      void flip(EditData*) override;
+
+   public:
+      FretMarker(FretDiagram* f, int _string, int _marker) : fret(f), string(_string), marker(_marker) {}
+      UNDO_NAME("FretMarker")
+      };
+
 }     // namespace Ms
 #endif
