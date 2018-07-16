@@ -1412,7 +1412,9 @@ void TextBase::layout1()
 
 void TextBase::layoutFrame()
       {
-      if (empty()) {    // or bbox.width() <= 1.0
+//      if (empty()) {    // or bbox.width() <= 1.0
+      if (bbox().width() <= 1.0 || bbox().height() < 1.0) {    // or bbox.width() <= 1.0
+            // this does not work for Harmony:
             QFontMetricsF fm = QFontMetricsF(font(), MScore::paintDevice());
             qreal ch = fm.ascent();
             qreal cw = fm.width('n');

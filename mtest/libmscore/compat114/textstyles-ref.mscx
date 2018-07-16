@@ -26,7 +26,6 @@
       <beamWidth>0.48</beamWidth>
       <beamMinLen>1.25</beamMinLen>
       <propertyDistanceStem>0.5</propertyDistanceStem>
-      <harmonyY>0</harmonyY>
       <pageNumberOddEven>0</pageNumberOddEven>
       <showMeasureNumber>0</showMeasureNumber>
       <chordStyle>custom</chordStyle>

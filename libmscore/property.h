@@ -329,6 +329,8 @@ enum class Pid {
       END_FONT_UNDERLINE,
       END_TEXT_OFFSET,
 
+      POS_ABOVE,
+
       END
       };
 

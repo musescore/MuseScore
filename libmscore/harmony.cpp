@@ -154,6 +154,7 @@ Harmony::Harmony(Score* s)
 Harmony::Harmony(const Harmony& h)
    : TextBase(h)
       {
+      _posAbove   = h._posAbove;
       _rootTpc    = h._rootTpc;
       _baseTpc    = h._baseTpc;
       _rootCase   = h._rootCase;
@@ -316,6 +317,8 @@ void Harmony::read(XmlReader& e)
                   _rightParen = true;
                   e.readNext();
                   }
+            else if (readProperty(tag, e, Pid::POS_ABOVE))
+                  ;
             else if (!TextBase::readProperties(e))
                   e.unknown();
             }
@@ -998,29 +1001,13 @@ void Harmony::layout()
       qreal yy = 0.0;
 
       if (parent()->isSegment()) {
-#if 0
-            Segment* s = toSegment(parent());
-            // look for fret diagram
-            bool fretsFound = false;
-            for (Element* e : s->annotations()) {
-                  if (e->isFretDiagram() && e->track() == track() && e->placement() == placement()) {
-                        yy -= score()->styleP(Sid::fretY);
-                        e->layout();
-                        yy -= e->height();
-                        yy -= score()->styleP(Sid::harmonyFretDist);
-                        fretsFound = true;
-                        break;
-                        }
-                  }
-            if (!fretsFound)
-#endif
-                  yy -= score()->styleP(Sid::harmonyY);
+            // yy -= score()->styleP(Sid::harmonyY);
+            yy = _posAbove;
             }
       else if (parent()->isFretDiagram()) {
             qDebug("Harmony %s with fret diagram as parent", qPrintable(_textName)); // not possible?
             yy = -score()->styleP(Sid::harmonyFretDist);
             }
-//      yy += offset().y();           //      yy += offset(_spatium).y();
 
       qreal hb = lineHeight() - TextBase::baseLine();
       if (align() & Align::BOTTOM)
@@ -1058,10 +1045,10 @@ void Harmony::layout()
             }
 
       if (hasFrame()) {
-            QRectF saveBbox = bbox();
-            setbbox(bboxtight());
+//            QRectF saveBbox = bbox();
+//            setbbox(bboxtight());
             layoutFrame();
-            setbbox(saveBbox);
+//            setbbox(saveBbox);
             }
       autoplaceSegmentElement(styleP(Sid::minHarmonyDistance));
       }
@@ -1609,12 +1596,31 @@ Element* Harmony::drop(EditData& data)
       }
 
 //---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Harmony::getProperty(Pid pid) const
+      {
+      switch (pid) {
+            case Pid::POS_ABOVE:
+                  return QVariant(_posAbove);
+            default:
+                  return TextBase::getProperty(pid);
+            }
+      }
+
+//---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
-bool Harmony::setProperty(Pid propertyId, const QVariant& v)
+bool Harmony::setProperty(Pid pid, const QVariant& v)
       {
-      if (TextBase::setProperty(propertyId, v)) {
+      if (pid == Pid::POS_ABOVE) {
+            _posAbove = v.toReal();
+            triggerLayout();
+            return true;
+            }
+      if (TextBase::setProperty(pid, v)) {
             render();
             return true;
             }

@@ -142,7 +142,7 @@ static const StyleVal2 style114[] = {
       { Sid::chordDescriptionFile,         QVariant(QString("stdchords.xml")) },
       { Sid::chordStyle,                   QVariant(QString("custom")) },
       { Sid::chordsXmlFile,                QVariant(true) },
-      { Sid::harmonyY,                     QVariant(0.0) },
+//      { Sid::harmonyY,                     QVariant(0.0) },
       { Sid::concertPitch,                 QVariant(false) },
       { Sid::createMultiMeasureRests,      QVariant(false) },
       { Sid::minEmptyMeasures,             QVariant(2) },

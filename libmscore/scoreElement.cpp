@@ -216,7 +216,7 @@ void ScoreElement::initSubStyle(SubStyleId ssid)
       setSubStyleId(ssid);
       int i = 0;
       for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            Pid pid   = spp->pid;
+            Pid pid    = spp->pid;
             QVariant v = propertyDefault(pid);
             if (v.isValid()) {                  // should always be true?
                   setProperty(pid, v);
@@ -390,6 +390,7 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid id) const
             qreal _spatium = score()->spatium();
             qreal f1       = getProperty(id).toReal();
             qreal f2       = propertyDefault(id).toReal();
+
             if (qAbs(f1 - f2) < 0.0001)
                   return;
             QVariant val          = QVariant(f1/_spatium);
