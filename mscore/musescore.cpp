@@ -257,6 +257,7 @@ static constexpr double SCALE_MAX  = 16.0;
 static constexpr double SCALE_MIN  = 0.05;
 static constexpr double SCALE_STEP = 1.7;
 
+static const char* saveOnlineMenuItem = "file-save-online";
 //---------------------------------------------------------
 // cmdInsertMeasure
 //---------------------------------------------------------
@@ -1014,24 +1015,6 @@ MuseScore::MuseScore()
       pluginManager = new PluginManager(0);
 #endif
 
-      if (!converterMode && !pluginMode) {
-            _loginManager = new LoginManager(this);
-#if 0
-            // initialize help engine
-            QString lang = mscore->getLocaleISOCode();
-            if (lang == "en_US")    // HACK
-                  lang = "en";
-
-            QString s = getSharePath() + "manual/doc_" + lang + ".qhc";
-            _helpEngine = new QHelpEngine(s, this);
-            if (!_helpEngine->setupData()) {
-                  qDebug("cannot setup data for help engine: %s", qPrintable(_helpEngine->error()));
-                  delete _helpEngine;
-                  _helpEngine = 0;
-                  }
-#endif
-            }
-
       _positionLabel = new QLabel;
       _positionLabel->setObjectName("decoration widget");  // this prevents animations
 
@@ -1283,7 +1266,7 @@ MuseScore::MuseScore()
             "file-save-as",
             "file-save-a-copy",
             "file-save-selection",
-            "file-save-online",
+            saveOnlineMenuItem,
             "file-export",
             "file-part-export",
             "file-import-pdf",
@@ -1905,6 +1888,9 @@ MuseScore::MuseScore()
 #endif
       connect(this, SIGNAL(musescoreWindowWasShown()), this, SLOT(checkForUpdates()),
             Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
+      
+      if (!converterMode && !pluginMode)
+            _loginManager = new LoginManager(getAction(saveOnlineMenuItem), this);
       }
 
 MuseScore::~MuseScore()
@@ -5760,7 +5746,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             loadFiles();
       else if (cmd == "file-save")
             saveFile();
-      else if (cmd == "file-save-online")
+      else if (cmd == saveOnlineMenuItem)
             showUploadScoreDialog();
       else if (cmd == "file-export")
             exportFile();
