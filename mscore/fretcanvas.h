@@ -41,11 +41,6 @@ class FretCanvas : public QFrame {
       virtual void paintEvent(QPaintEvent*);
       virtual void mousePressEvent(QMouseEvent*);
       virtual void mouseMoveEvent(QMouseEvent*);
-      virtual void mouseReleaseEvent(QMouseEvent*);
-
-      virtual void dragEnterEvent(QDragEnterEvent*);
-      virtual void dragMoveEvent(QDragMoveEvent*);
-      virtual void dropEvent(QDropEvent*);
 
       void getPosition(const QPointF& pos, int* string, int* fret);
 

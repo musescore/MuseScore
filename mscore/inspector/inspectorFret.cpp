@@ -43,21 +43,28 @@ InspectorFretDiagram::InspectorFretDiagram(QWidget* parent)
             { f.title, f.panel }
             };
       mapSignals(iiList, ppList);
-      connect(f.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
       }
 
 //---------------------------------------------------------
-//   propertiesClicked
+//   valueChanged
 //---------------------------------------------------------
 
-void InspectorFretDiagram::propertiesClicked()
+void InspectorFretDiagram::valueChanged(int idx)
       {
-      FretDiagram* fd = static_cast<FretDiagram*>(inspector->element());
-      Score* score = fd->score();
-      score->startCmd();
-      mscore->currentScoreView()->editFretDiagram(fd);
-      score->setLayoutAll();
-      score->endCmd();
+      InspectorElementBase::valueChanged(idx);
+      FretDiagram* fd = toFretDiagram(inspector->element());
+      f.diagram->setFretDiagram(fd);
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorFretDiagram::setElement()
+      {
+      InspectorElementBase::setElement();
+      FretDiagram* fd = toFretDiagram(inspector->element());
+      f.diagram->setFretDiagram(fd);
       }
 
 }

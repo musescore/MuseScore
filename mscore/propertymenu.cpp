@@ -278,8 +278,8 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Change Instrument..."))->setData("ch-instr");
             }
-      else if (e->isFretDiagram())
-            popup->addAction(tr("Fretboard Diagram Properties..."))->setData("fret-props");
+//      else if (e->isFretDiagram())
+//            popup->addAction(tr("Fretboard Diagram Properties..."))->setData("fret-props");
       else if (e->isInstrumentName())
             popup->addAction(tr("Staff Properties..."))->setData("staff-props");
       else
@@ -500,8 +500,8 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         qDebug("no template selected?");
                   }
            }
-      else if (cmd == "fret-props")
-            editFretDiagram(static_cast<FretDiagram*>(e));
+//      else if (cmd == "fret-props")
+//            editFretDiagram(static_cast<FretDiagram*>(e));
       else if (cmd == "staff-props") {
             int tick = -1;
             if (e->isChordRest())
@@ -521,6 +521,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       }
 
+#if 0
 //---------------------------------------------------------
 //   editFretDiagram
 //---------------------------------------------------------
@@ -542,6 +543,7 @@ void ScoreView::editFretDiagram(FretDiagram* fd)
             }
       delete nFret;
       }
+#endif
 
 //---------------------------------------------------------
 //   editBendProperties

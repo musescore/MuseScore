@@ -470,7 +470,7 @@ void FretDiagram::setDot(int string, int fret)
             }
       if (0 <= string && string < _strings) {
             _dots[string] = fret;
-            setMarker(string, 0);
+            setMarker(string, 0);   // TODO: does not work with undo/redo; should be called explicit
             }
       }
 
@@ -586,9 +586,12 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
       QString strFingering = "'";
       for (int i = 0; i < _strings; ++i) {
             // TODO print frame note
-            if (_dots) strDots += QString("%1'").arg(static_cast<int>(_dots[i]));
-            if (_marker) strMarker += QString("%1'").arg(static_cast<int>(_marker[i]));
-            if (_fingering) strFingering += QString("%1'").arg(static_cast<int>(_fingering[i]));
+            if (_dots)
+                  strDots += QString("%1'").arg(static_cast<int>(_dots[i]));
+            if (_marker)
+                  strMarker += QString("%1'").arg(static_cast<int>(_marker[i]));
+            if (_fingering)
+                  strFingering += QString("%1'").arg(static_cast<int>(_fingering[i]));
             if (_marker[i] != 88) {
                   xml.stag("frame-note");
                   xml.tag("string", _strings - i);
@@ -662,7 +665,7 @@ bool FretDiagram::setProperty(Pid propertyId, const QVariant& v)
             default:
                   return Element::setProperty(propertyId, v);
             }
-      score()->setLayoutAll();
+      triggerLayout();
       return true;
       }
 
