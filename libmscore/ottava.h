@@ -51,7 +51,7 @@ class OttavaSegment final : public TextLineBaseSegment {
       virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
 
    public:
-      OttavaSegment(Score* s) : TextLineBaseSegment(s, ElementFlag::MOVABLE)  { }
+      OttavaSegment(Score* s) : TextLineBaseSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)  { }
       virtual ElementType type() const override     { return ElementType::OTTAVA_SEGMENT; }
       virtual OttavaSegment* clone() const override { return new OttavaSegment(*this); }
       Ottava* ottava() const                        { return (Ottava*)spanner(); }

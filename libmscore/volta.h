@@ -31,7 +31,7 @@ extern LineSegment* voltaDebug;
 
 class VoltaSegment final : public TextLineBaseSegment {
    public:
-      VoltaSegment(Score* s) : TextLineBaseSegment(s) {}
+      VoltaSegment(Score* s) : TextLineBaseSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
       virtual ElementType type() const override     { return ElementType::VOLTA_SEGMENT; }
       virtual VoltaSegment* clone() const override  { return new VoltaSegment(*this); }
       Volta* volta() const                          { return (Volta*)spanner(); }
