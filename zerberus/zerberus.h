@@ -87,6 +87,8 @@ class Zerberus : public Ms::Synthesizer {
       int _loadProgress = 0;
       bool _loadWasCanceled = false;
 
+      QMutex mutex;
+
       void programChange(int channel, int program);
       void trigger(Channel*, int key, int velo, Trigger, int cc, int ccVal, double durSinceNoteOn);
       void processNoteOff(Channel*, int pitch);
@@ -126,6 +128,7 @@ class Zerberus : public Ms::Synthesizer {
       virtual bool addSoundFont(const QString&);
       virtual bool removeSoundFont(const QString&);
       virtual bool loadSoundFonts(const QStringList&);
+      virtual bool removeSoundFonts(const QStringList& fileNames);
       virtual QStringList soundFonts() const;
 
       virtual Ms::SynthesizerGui* gui();

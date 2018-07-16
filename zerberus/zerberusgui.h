@@ -20,7 +20,7 @@
 
 class QProgressDialog;
 
-struct SfzNamePath {
+struct SfNamePath {
       QString name;
       QString path;
       };
@@ -32,7 +32,7 @@ struct SfzNamePath {
 class SfzListDialog : public QDialog {
       Q_OBJECT
       int _idx = -1;
-      std::vector<struct SfzNamePath> _namePaths;
+      std::vector<struct SfNamePath> _namePaths;
       QListWidget* list;
       QDialogButtonBox* buttonBox;
       QPushButton* okButton;
@@ -44,7 +44,7 @@ class SfzListDialog : public QDialog {
 
    public:
       SfzListDialog(QWidget* parent = 0);
-      std::vector<struct SfzNamePath> getNamePaths() { return _namePaths; }
+      std::vector<struct SfNamePath> getNamePaths() { return _namePaths; }
       void add(const QString& name, const QString& path);
       };
 
@@ -60,13 +60,17 @@ class ZerberusGui : public Ms::SynthesizerGui, Ui::ZerberusGui {
       QString _loadedSfName;
       QProgressDialog* _progressDialog;
       QTimer * _progressTimer;
-      std::vector<struct SfzNamePath> _sfzToLoad;
+      std::list<struct SfNamePath> _sfzToLoad;
+
       void loadSfz();
+      void loadSoundFontsAsync(QStringList sfonts);
 
    private slots:
-      void addClicked();
+      void soundFontUpClicked();
+      void soundFontDownClicked();
+      void soundFontAddClicked();
       void cancelLoadClicked();
-      void removeClicked();
+      void soundFontDeleteClicked();
       void onSoundFontLoaded();
       void updateProgress();
       void updateButtons();
@@ -76,7 +80,7 @@ class ZerberusGui : public Ms::SynthesizerGui, Ui::ZerberusGui {
 
    public:
       ZerberusGui(Ms::Synthesizer*);
-      Zerberus* zerberus() { return (Zerberus*)synthesizer(); }
+      Zerberus* zerberus() { return static_cast<Zerberus*>(synthesizer()); }
       };
 
 #endif

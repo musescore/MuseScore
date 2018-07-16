@@ -80,13 +80,23 @@ bool SFont::read(const QString& s)
       if (!load())
             return false;
 
-      foreach(Instrument* i, instruments) {
-            if (!i->import_sfont())
+      synth->setLoadProgress(0);
+      int currentInstument = 0;
+      for (auto instrument : instruments) {
+            synth->setLoadProgress(currentInstument++ * 100 / instruments.count() / 2);
+            if (synth->loadWasCanceled())
+                  return false;
+
+            if (!instrument->import_sfont())
                   return false;
             }
 
-      foreach(Preset* p, presets) {
-            if (!p->importSfont())
+      for (auto preset : presets) {
+            synth->setLoadProgress(currentInstument++ * 100 / instruments.count() / 2);
+            if (synth->loadWasCanceled())
+                  return false;
+
+            if (!preset->importSfont())
                   return false;
             }
       return true;

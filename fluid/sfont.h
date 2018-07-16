@@ -119,6 +119,7 @@ class SFont {
       SFVersion version() const                 { return _version; }
       int bankOffset() const                    { return _bankOffset; }
       void setBankOffset(int val)               { _bankOffset = val; }
+
       friend class Preset;
       };
 
