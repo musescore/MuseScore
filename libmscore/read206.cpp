@@ -143,7 +143,7 @@ struct StyleVal2 {
       { Sid::pedalLineWidth,              QVariant(.15) },
       { Sid::pedalLineStyle,              QVariant(int(Qt::SolidLine)) },
       { Sid::trillPosAbove,               QVariant(-1) },
-      { Sid::harmonyY,                    QVariant(2.5) },
+//      { Sid::harmonyY,                    QVariant(2.5) },
       { Sid::harmonyFretDist,             QVariant(0.5) },
       { Sid::minHarmonyDistance,          QVariant(0.5) },
       { Sid::maxHarmonyBarDistance,       QVariant(3.0) },

@@ -220,26 +220,26 @@ static const StyleType styleTypes[] {
       { Sid::vibratoPosAbove,         "vibratoPosAbove",         Spatium(-1) },
       { Sid::vibratoPosBelow,         "vibratoPosBelow",         Spatium(1) },
 
-      { Sid::harmonyY,                 "harmonyY",                 Spatium(2.5) },
       { Sid::harmonyFretDist,          "harmonyFretDist",          Spatium(0.5) },
       { Sid::minHarmonyDistance,       "minHarmonyDistance",       Spatium(0.5) },
       { Sid::maxHarmonyBarDistance,    "maxHarmonyBarDistance",    Spatium(3.0) },
       { Sid::harmonyPlacement,         "harmonyPlacement",         int(Placement::ABOVE) },
 
-      { Sid::chordSymbolAFontFace,      "chordSymbolFontFace",      "FreeSerif" },
-      { Sid::chordSymbolAFontSize,      "chordSymbolFontSize",      12.0 },
-      { Sid::chordSymbolAFontBold,      "chordSymbolFontBold",      false },
-      { Sid::chordSymbolAFontItalic,    "chordSymbolFontItalic",    false },
-      { Sid::chordSymbolAFontUnderline, "chordSymbolFontUnderline", false },
-//      { Sid::chordSymbolAAlign,         "chordSymbolAlign",         QVariant::fromValue(Align::LEFT | Align::BASELINE) },
-      { Sid::chordSymbolAAlign,         "chordSymbolAlign",         QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
+      { Sid::chordSymbolAPosAbove,      "chordSymbolAPosAbove",      Spatium(-2.5) },
+      { Sid::chordSymbolAFontFace,      "chordSymbolAFontFace",      "FreeSerif" },
+      { Sid::chordSymbolAFontSize,      "chordSymbolAFontSize",      12.0 },
+      { Sid::chordSymbolAFontBold,      "chordSymbolAFontBold",      false },
+      { Sid::chordSymbolAFontItalic,    "chordSymbolAFontItalic",    false },
+      { Sid::chordSymbolAFontUnderline, "chordSymbolAFontUnderline", false },
+      { Sid::chordSymbolAAlign,         "chordSymbolAAlign",         QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
 
-      { Sid::chordSymbolBFontFace,      "chordSymbolFontFace",      "FreeSerif" },
-      { Sid::chordSymbolBFontSize,      "chordSymbolFontSize",      18.0 },
-      { Sid::chordSymbolBFontBold,      "chordSymbolFontBold",      false },
-      { Sid::chordSymbolBFontItalic,    "chordSymbolFontItalic",    false },
-      { Sid::chordSymbolBFontUnderline, "chordSymbolFontUnderline", false },
-      { Sid::chordSymbolBAlign,         "chordSymbolAlign",         QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
+      { Sid::chordSymbolBPosAbove,      "chordSymbolBPosAbove",      Spatium(-2.5) },
+      { Sid::chordSymbolBFontFace,      "chordSymbolBFontFace",      "FreeSerif" },
+      { Sid::chordSymbolBFontSize,      "chordSymbolBFontSize",      18.0 },
+      { Sid::chordSymbolBFontBold,      "chordSymbolBFontBold",      false },
+      { Sid::chordSymbolBFontItalic,    "chordSymbolBFontItalic",    false },
+      { Sid::chordSymbolBFontUnderline, "chordSymbolBFontUnderline", false },
+      { Sid::chordSymbolBAlign,         "chordSymbolBAlign",         QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
 
       { Sid::capoPosition,            "capoPosition",            QVariant(0) },
       { Sid::fretNumMag,              "fretNumMag",              QVariant(2.0) },
@@ -1132,23 +1132,25 @@ const std::vector<StyledProperty> staffStyle {
       };
 
 const std::vector<StyledProperty> chordSymbolStyleA {
-      { Sid::chordSymbolAFontFace,                Pid::FONT_FACE              },
-      { Sid::chordSymbolAFontSize,                Pid::FONT_SIZE              },
-      { Sid::chordSymbolAFontBold,                Pid::FONT_BOLD              },
-      { Sid::chordSymbolAFontItalic,              Pid::FONT_ITALIC            },
-      { Sid::chordSymbolAFontUnderline,           Pid::FONT_UNDERLINE         },
-      { Sid::chordSymbolAAlign,                   Pid::ALIGN                  },
+      { Sid::chordSymbolAPosAbove,               Pid::POS_ABOVE              },
+      { Sid::chordSymbolAFontFace,               Pid::FONT_FACE              },
+      { Sid::chordSymbolAFontSize,               Pid::FONT_SIZE              },
+      { Sid::chordSymbolAFontBold,               Pid::FONT_BOLD              },
+      { Sid::chordSymbolAFontItalic,             Pid::FONT_ITALIC            },
+      { Sid::chordSymbolAFontUnderline,          Pid::FONT_UNDERLINE         },
+      { Sid::chordSymbolAAlign,                  Pid::ALIGN                  },
       { Sid::harmonyPlacement,                   Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };
 
 const std::vector<StyledProperty> chordSymbolStyleB {
-      { Sid::chordSymbolBFontFace,                Pid::FONT_FACE              },
-      { Sid::chordSymbolBFontSize,                Pid::FONT_SIZE              },
-      { Sid::chordSymbolBFontBold,                Pid::FONT_BOLD              },
-      { Sid::chordSymbolBFontItalic,              Pid::FONT_ITALIC            },
-      { Sid::chordSymbolBFontUnderline,           Pid::FONT_UNDERLINE         },
-      { Sid::chordSymbolBAlign,                   Pid::ALIGN                  },
+      { Sid::chordSymbolBPosAbove,               Pid::POS_ABOVE              },
+      { Sid::chordSymbolBFontFace,               Pid::FONT_FACE              },
+      { Sid::chordSymbolBFontSize,               Pid::FONT_SIZE              },
+      { Sid::chordSymbolBFontBold,               Pid::FONT_BOLD              },
+      { Sid::chordSymbolBFontItalic,             Pid::FONT_ITALIC            },
+      { Sid::chordSymbolBFontUnderline,          Pid::FONT_UNDERLINE         },
+      { Sid::chordSymbolBAlign,                  Pid::ALIGN                  },
       { Sid::harmonyPlacement,                   Pid::PLACEMENT              },
       { Sid::NOSTYLE,                            Pid::END                    }      // end of list marker
       };

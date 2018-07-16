@@ -197,12 +197,12 @@ enum class Sid {
       vibratoPosAbove,
       vibratoPosBelow,
 
-      harmonyY,
       harmonyFretDist,
       minHarmonyDistance,
       maxHarmonyBarDistance,
       harmonyPlacement,
 
+      chordSymbolAPosAbove,
       chordSymbolAFontFace,
       chordSymbolAFontSize,
       chordSymbolAFontBold,
@@ -210,6 +210,7 @@ enum class Sid {
       chordSymbolAFontUnderline,
       chordSymbolAAlign,
 
+      chordSymbolBPosAbove,
       chordSymbolBFontFace,
       chordSymbolBFontSize,
       chordSymbolBFontBold,

@@ -22,7 +22,6 @@
       <beamMinLen>1.25</beamMinLen>
       <propertyDistanceStem>0.5</propertyDistanceStem>
       <lastSystemFillLimit>0</lastSystemFillLimit>
-      <harmonyY>0</harmonyY>
       <chordStyle>custom</chordStyle>
       <chordsXmlFile>1</chordsXmlFile>
       <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
