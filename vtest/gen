@@ -5,7 +5,7 @@ if [ "`uname`" = 'Darwin' ]; then
       BROWSER=open
 else
       MSCORE=../../build.debug/mscore/mscore
-      BROWSER=rekonq
+      BROWSER=firefox
 fi
 
 if [ -n "$VTEST_MSCORE" ]; then

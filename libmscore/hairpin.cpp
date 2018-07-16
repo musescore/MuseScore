@@ -30,7 +30,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 HairpinSegment::HairpinSegment(Score* s)
-   : TextLineBaseSegment(s)
+   : TextLineBaseSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       }
 
