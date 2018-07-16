@@ -586,10 +586,14 @@ void Segment::remove(Element* el)
                   auto spanners = smap.findOverlapping(tick(), tick());
                   for (auto interval : spanners) {
                         Spanner* s = interval.value;
+                        Element* start = s->startElement();
+                        Element* end = s->endElement();
                         if (s->startElement() == el)
-                              s->setStartElement(nullptr);
+                              start = nullptr;
                         if (s->endElement() == el)
-                              s->setEndElement(nullptr);
+                              end = nullptr;
+                        if (start != s->startElement() || end != s->endElement())
+                              score()->undo(new ChangeStartEndSpanner(s, start, end));
                         }
                   }
                   break;
