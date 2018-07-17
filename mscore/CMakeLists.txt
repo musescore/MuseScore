@@ -410,6 +410,7 @@ add_executable ( ${ExecutableName}
       toolbuttonmenu.cpp
       preferenceslistwidget.cpp preferenceslistwidget.h
       extension.cpp extension.h
+      tourhandler.cpp
 
       ${COCOABRIDGE}
       ${OMR_FILES}

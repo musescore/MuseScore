@@ -1,9 +1,9 @@
 #=============================================================================
-#  Mscore
-#  Linux Music Score Editor
+#  MusE
+#  Linux Music Editor
 #  $Id:$
 #
-#  Copyright (C) 2002-2006 by Werner Schweer and others
+#  Copyright (C) 2002-2008 by Werner Schweer and others
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License version 2.
@@ -18,12 +18,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-subdirs(templates wallpaper locale styles sound manual
-   workspaces instruments tours)
-
-install (DIRECTORY
-      plugins
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
-      PATTERN ".*" EXCLUDE
+install(FILES
+      welcome.tour
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}tours
       )
-

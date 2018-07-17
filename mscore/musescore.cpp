@@ -85,6 +85,7 @@
 #include "resourceManager.h"
 #include "scoreaccessibility.h"
 #include "startupWizard.h"
+#include "tourhandler.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
@@ -920,6 +921,10 @@ bool MuseScore::isInstalledExtension(QString extensionId)
 MuseScore::MuseScore()
    : QMainWindow()
       {
+      _tourHandler = new TourHandler(this);
+      qApp->installEventFilter(_tourHandler);
+      _tourHandler->loadTours();
+
       QScreen* screen = QGuiApplication::primaryScreen();
       if (userDPI == 0.0) {
 #if defined(Q_OS_WIN)
@@ -3855,6 +3860,8 @@ void MuseScore::writeSettings()
             drumrollEditor->writeSettings();
       if (startcenter)
             startcenter->writeSettings();
+
+      _tourHandler->writeCompletedTours();
       }
 
 //---------------------------------------------------------
@@ -5156,6 +5163,7 @@ void MuseScore::cmd(QAction* a)
       if (lastShortcut->isCmd())
             cs->endCmd();
       endCmd();
+      TourHandler::startTour(cmdn);
       }
 
 //---------------------------------------------------------
@@ -6796,6 +6804,7 @@ int main(int argc, char* av[])
                               mscore->getPaletteBox()->updateWorkspaces();
                               }
                         }
+                  preferences.setPreference(PREF_UI_APP_STARTUP_SHOWTOURS, sw->showTours());
                   delete sw;
 
                   // reinitialize preferences so some default values are calculated based on chosen language
@@ -6915,6 +6924,8 @@ int main(int argc, char* av[])
             mscore->showSynthControl(true);
       if (settings.value("mixerVisible", false).toBool())
             mscore->showMixer(true);
+
+      mscore->tourHandler()->startTour("welcome");
 
       return qApp->exec();
       }
