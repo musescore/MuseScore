@@ -2777,7 +2777,6 @@ void Score::layoutLyrics(System* system)
       //
       //    vertical align lyrics
       //
-
       VerticalAlignRange ar = VerticalAlignRange(styleI(Sid::autoplaceVerticalAlignRange));
 
       switch (ar) {
@@ -2826,7 +2825,6 @@ void Score::layoutLyrics(System* system)
             }
 
       // align lyrics line segments
-
       for (SpannerSegment* ss : system->spannerSegments()) {
             if (ss->isLyricsLineSegment()) {
                   LyricsLineSegment* lls = toLyricsLineSegment(ss);
@@ -3028,14 +3026,16 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
 
             getNextMeasure(lc);
+
             minWidth += ww;
             if (lc.endTick < lc.prevMeasure->tick()) {
                   // TODO: we may check if another measure fits in this system
                   if (lc.prevMeasure == lc.systemOldMeasure) {
                         lc.rangeDone = true;
                         if (lc.curMeasure && lc.curMeasure->isMeasure()) {
-                              restoreBeams(toMeasure(lc.curMeasure));
-                              toMeasure(lc.curMeasure)->stretchMeasure(lc.curMeasure->width());
+                              Measure* m = toMeasure(lc.curMeasure);
+                              restoreBeams(m);
+                              m->stretchMeasure(lc.curMeasure->width());
                               }
                         break;
                         }
