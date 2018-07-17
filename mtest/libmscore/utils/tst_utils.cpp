@@ -57,7 +57,14 @@ void TestUtils::tst_compareVersion()
       QVERIFY(compareVersion("2.0", "2.1") == true);
       QVERIFY(compareVersion("2.1.1.2", "2.0") == false);
       QVERIFY(compareVersion("2.0", "2.1.1.3") == true);
+      QVERIFY(compareVersion("2.1", "2.1.1.3") == true);
+      QVERIFY(compareVersion("2.2.0.3", "2.1.1.3") == false);
+      QVERIFY(compareVersion("2.1.0.3", "2.1.1.3") == true);
+      QVERIFY(compareVersion("2.1.0.0", "2.1.1.3") == true);
       QVERIFY(compareVersion("2.1.1.2", "2.1.1.3") == true);
+      QVERIFY(compareVersion("2.1.1.9", "2.1.1.10") == true);
+      QVERIFY(compareVersion("2.1.1.9", "2.1.1.100") == true);
+      QVERIFY(compareVersion("2.1.1.99", "2.1.1.100") == true);
       QVERIFY(compareVersion("test", "2.1") == true);
       QVERIFY(compareVersion("test1", "test") == false);
       }

@@ -23,7 +23,7 @@ else
 python build/add-mc-keys.py $MC_CONSUMER_KEY $MC_CONSUMER_SECRET
 fi
 
-make -f Makefile.osx ci
+make -f Makefile.osx ci BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
 if [ "$(grep '^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)' CMakeLists.txt)" ]
 then # Build is marked UNSTABLE inside CMakeLists.txt
 build/package_mac $BRANCH-$REVISION
@@ -53,4 +53,29 @@ scp -C -i $SSH_INDENTITY build/travis/job_macos/web/nightly.xml musescore-nightl
 # trigger distribution
 ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
 
+# send nightly update to S3
+VERSION_MAJOR=$(grep 'SET(MUSESCORE_VERSION_MAJOR' CMakeLists.txt | cut -d \" -f2)
+VERSION_MINOR=$(grep 'SET(MUSESCORE_VERSION_MINOR' CMakeLists.txt | cut -d \" -f2)
+VERSION_PATCH=$(grep 'SET(MUSESCORE_VERSION_PATCH' CMakeLists.txt | cut -d \" -f2)
+BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
+MUSESCORE_VERSION=${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${BUILD_NUMBER}
+SHORT_DATE="$(date -u +%Y-%m-%d)"
+
+if [ "$(grep '^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)' CMakeLists.txt)" ]
+then
+echo "<update>
+<version>${MUSESCORE_VERSION}</version>
+<revision>${REVISION}</revision>
+<releaseType>nightly</releaseType>
+<date>${SHORT_DATE}</date>
+<description>MuseScore ${MUSESCORE_VERSION} ${REVISION}</description>
+<downloadUrl>https://ftp.osuosl.org/pub/musescore-nightlies/macosx/$DMGFILE</downloadUrl>
+<infoUrl>https://ftp.osuosl.org/pub/musescore-nightlies/macosx/</infoUrl>
+</update>" >> update_mac_nightly.xml
+ARTIFACTS_AWS_REGION=us-east-1
+ARTIFACTS_S3_BUCKET=update.musescore.org
+ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
+ARTIFACTS_PATHS=update_mac_nightly.xml
+artifacts upload
+fi
 
