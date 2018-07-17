@@ -351,6 +351,7 @@ void ScoreTab::insertTab(MasterScore* s)
       tab->insertTab(idx, s->fileInfo()->completeBaseName().replace("&","&&"));
       tab->setTabData(idx, QVariant::fromValue<void*>(new TabScoreView(s)));
       tab->blockSignals(false);
+      emit tabInserted(idx);
       }
 
 //---------------------------------------------------------
@@ -364,6 +365,7 @@ void ScoreTab::setTabText(int idx, const QString& s)
       tab->setTabText(idx, text);
       if (tab2)
             tab2->setTabText(0, text);
+      emit tabRenamed(idx);
       }
 
 //---------------------------------------------------------
@@ -431,6 +433,8 @@ void ScoreTab::removeTab(int idx, bool noCurrentChangedSignal)
 
       if (noCurrentChangedSignal)
             blockSignals(blocked);
+
+      emit tabRemoved(idx);
       }
 
 //---------------------------------------------------------
