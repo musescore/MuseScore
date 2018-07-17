@@ -134,6 +134,7 @@ for src in $SRC; do
 echo "  </body>" >> $F
 echo "</html>" >> $F
 
+echo $BROWSER
 
 $BROWSER $F 2>/dev/null
 
