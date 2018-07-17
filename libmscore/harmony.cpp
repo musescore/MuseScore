@@ -140,7 +140,6 @@ qDebug("ResolveDegreeList: not found in table");
 Harmony::Harmony(Score* s)
    : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(SubStyleId::HARMONY_A);
       _rootTpc    = Tpc::TPC_INVALID;
       _baseTpc    = Tpc::TPC_INVALID;
       _rootCase   = NoteCaseType::CAPITAL;
@@ -149,6 +148,7 @@ Harmony::Harmony(Score* s)
       _parsedForm = 0;
       _leftParen  = false;
       _rightParen = false;
+      initSubStyle(SubStyleId::HARMONY_A);
       }
 
 Harmony::Harmony(const Harmony& h)
