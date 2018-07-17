@@ -1091,19 +1091,11 @@ MuseScore::MuseScore()
       envelope->setSizes(QList<int>({550, 180}));
 
       splitter = new QSplitter;
-      tab1 = new ScoreTab(&scoreList, this);
-      tab1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-      connect(tab1, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
-      connect(tab1, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
-      connect(tab1, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
+      tab1 = createScoreTab();
       splitter->addWidget(tab1);
 
       if (splitScreen()) {
-            tab2 = new ScoreTab(&scoreList, this);
-            tab2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-            connect(tab2, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
-            connect(tab2, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
-            connect(tab2, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
+            tab2 = createScoreTab();
             splitter->addWidget(tab2);
             tab2->setVisible(false);
             }
@@ -4642,11 +4634,7 @@ void MuseScore::splitWindow(bool horizontal)
       {
       if (!_splitScreen) {
             if (tab2 == 0) {
-                  tab2 = new ScoreTab(&scoreList, this);
-                  tab2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-                  connect(tab2, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
-                  connect(tab2, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
-                  connect(tab2, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
+                  tab2 = createScoreTab();
                   splitter->addWidget(tab2);
                   }
             tab2->setVisible(true);
@@ -5358,6 +5346,20 @@ void MuseScore::setPlayRepeats(bool repeat)
             cs->updateRepeatList(repeat);
             emit cs->playlistChanged();
             }
+      }
+
+//---------------------------------------------------------
+//   createScoreTab
+//---------------------------------------------------------
+
+ScoreTab* MuseScore::createScoreTab()
+      {
+      ScoreTab* tab = new ScoreTab(&scoreList, this);
+      tab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+      connect(tab, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
+      connect(tab, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
+      connect(tab, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
+      return tab;
       }
 
 //---------------------------------------------------------

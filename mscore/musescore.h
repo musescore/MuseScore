@@ -469,6 +469,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void switchLayoutMode(LayoutMode);
       void setPlayRepeats(bool repeat);
 
+      ScoreTab* createScoreTab();
+
       QString getUtmParameters(QString medium) const;
 
    private slots:
