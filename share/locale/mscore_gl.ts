@@ -154,7 +154,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="181"/>
         <source>Store relative paths</source>
-        <translation type="unfinished"/>
+        <translation>Almacenar rutas relativas</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="197"/>
@@ -593,22 +593,22 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="108"/>
         <source>Enter a name to enable pitch editing</source>
-        <translation type="unfinished"/>
+        <translation>Introduza un nome para activar a edición da altura </translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="176"/>
         <source>Noteheads group:</source>
-        <translation type="unfinished"/>
+        <translation>Grupo de cabezas:</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="186"/>
         <source>Edit noteheads</source>
-        <translation type="unfinished"/>
+        <translation>Editar cabezas</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="218"/>
         <source>Double Whole note</source>
-        <translation type="unfinished"/>
+        <translation>Cadrada ou breve</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="225"/>
@@ -8388,7 +8388,7 @@ Hai dispoñíbel un resumo lexíbel por persoas:
     <message>
         <location filename="../../mscore/downloadUtils.cpp" line="63"/>
         <source>Downloading...</source>
-        <translation type="unfinished"/>
+        <translation>A descargar...</translation>
     </message>
 </context>
 <context>
@@ -8630,12 +8630,12 @@ produciu un fallo: </translation>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="227"/>
         <source>Extension Updates Available</source>
-        <translation type="unfinished"/>
+        <translation>Hai actualizacións de extensións dispoñíbeis</translation>
     </message>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="228"/>
         <source>One or more installed extensions have updates available in Help / Resource Manager...</source>
-        <translation type="unfinished"/>
+        <translation>Unha ou máis das extensións instaladas contan con actualizacións dispoñíbeis en Axuda / Xestor de recursos...</translation>
     </message>
 </context>
 <context>
@@ -9763,12 +9763,12 @@ Seleccione un compás e ténteo de novo</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="510"/>
         <source>Please wait, unpacking extension...</source>
-        <translation type="unfinished"/>
+        <translation>Agarde, estase a desempaquetar a extensión...</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="583"/>
         <source>Please wait, loading soundfonts...</source>
-        <translation type="unfinished"/>
+        <translation>Agarde, estanse a cargar as fontes de son...</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="733"/>
@@ -10934,7 +10934,7 @@ Gárdanse antes de fechar?</translation>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1835"/>
         <source>Choose Extensions Folder</source>
-        <translation type="unfinished"/>
+        <translation>Escolla o cartafol das extensións</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1850"/>
@@ -10964,17 +10964,17 @@ Gárdanse antes de fechar?</translation>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="114"/>
         <source>Install</source>
-        <translation type="unfinished"/>
+        <translation>Instalar</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="115"/>
         <source>Uninstall</source>
-        <translation type="unfinished"/>
+        <translation>Desinstalar</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="204"/>
         <source>%1 kB</source>
-        <translation type="unfinished"/>
+        <translation>%1 kB</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="263"/>
@@ -10993,18 +10993,19 @@ Gárdanse antes de fechar?</translation>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="335"/>
         <source>Extensions Installation Failed</source>
-        <translation type="unfinished"/>
+        <translation>Fallou a instalación das extensións</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="337"/>
         <source>Unable to save the extension file on disk</source>
-        <translation type="unfinished"/>
+        <translation>Non foi posíbel gardar o ficheiro da extensión no disco</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="339"/>
         <source>Unable to download, save and verify the package.
 Check your internet connection.</source>
-        <translation type="unfinished"/>
+        <translation>Non foi posíbel descargar, gardar e comprobar o paquete.
+Comprobe a conexión á Internet.</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="133"/>
@@ -13181,7 +13182,7 @@ Isto avalía de novo todos os engadidos, recollendo todos os cambios que se teñ
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="350"/>
         <source>Extensions:</source>
-        <translation type="unfinished"/>
+        <translation>Extensións:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="363"/>
@@ -13294,12 +13295,12 @@ Isto avalía de novo todos os engadidos, recollendo todos os cambios que se teñ
         <location filename="../../mscore/prefsdialog.ui" line="538"/>
         <location filename="../../mscore/prefsdialog.ui" line="591"/>
         <source>Extensions folder</source>
-        <translation type="unfinished"/>
+        <translation>Cartafol de extensións</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="541"/>
         <source>Insert path to extensions folder</source>
-        <translation type="unfinished"/>
+        <translation>Insira a ruta ao cartafol das extensións</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="551"/>
@@ -13319,7 +13320,7 @@ Isto avalía de novo todos os engadidos, recollendo todos os cambios que se teñ
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="594"/>
         <source>Opens a folder dialog for selecting the extensions folder</source>
-        <translation type="unfinished"/>
+        <translation>Abre un diálogo de cartafoles para seleccionar o cartafol das extensións</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="614"/>
@@ -13551,19 +13552,19 @@ Isto avalía de novo todos os engadidos, recollendo todos os cambios que se teñ
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1185"/>
         <source>Limit the scroll area to the edges of the score</source>
-        <translation type="unfinished"/>
+        <translation>Limitar a área de desprazamento aos bordos da partitura</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1188"/>
         <location filename="../../mscore/prefsdialog.ui" line="1194"/>
         <source>If this is checked, scrolling will stop at the edge of the score.</source>
-        <translation type="unfinished"/>
+        <translation>Ao escoller isto, o desprazamento detense no bordo da partitura.</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1191"/>
         <location filename="../../mscore/prefsdialog.ui" line="1197"/>
         <source>Limit scroll area to page borders</source>
-        <translation type="unfinished"/>
+        <translation>Limitar a área de desprazamento aos bordos da páxina</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1223"/>
@@ -14680,7 +14681,7 @@ Axustar a latencia pode axudar a sincronizar o hardware de MIDI co sintetizador 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4204"/>
         <source>Check for new version of MuseScore extensions</source>
-        <translation type="unfinished"/>
+        <translation>Comprobar se hai versións novas das extensións do MuseScore</translation>
     </message>
 </context>
 <context>
@@ -14972,12 +14973,12 @@ fallou: %2</translation>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1371"/>
         <source>Tab. 7-str. common</source>
-        <translation type="unfinished"/>
+        <translation>Tab. corda 7 común</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1372"/>
         <source>Tab. 8-str. common</source>
-        <translation type="unfinished"/>
+        <translation>Tab. corda 8 común</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="167"/>
@@ -15228,52 +15229,52 @@ Desexa substituílo?</translation>
         <location filename="../../mscore/musescore.cpp" line="495"/>
         <location filename="../../mscore/musescore.cpp" line="529"/>
         <source>Import Extension File</source>
-        <translation type="unfinished"/>
+        <translation>Importar ficheiro de extensión</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="405"/>
         <source>Cannot import extension on read-only storage: %1</source>
-        <translation type="unfinished"/>
+        <translation>Non é posíbel importar extensión a un almacenamento que só permite lectura: %1</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="410"/>
         <source>Cannot import extension: storage %1 is full</source>
-        <translation type="unfinished"/>
+        <translation>Non é posíbel importar a extensión: o almacenamento %1 está cheo</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="440"/>
         <source>Corrupted extension: no metadata.json</source>
-        <translation type="unfinished"/>
+        <translation>A extensión está corrupta: non ten metadata.json</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="445"/>
         <source>Corrupted extension: unsupported directories in root directory</source>
-        <translation type="unfinished"/>
+        <translation>Extensión corrupta: hai directorios non admitidos no directorio raíz</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="450"/>
         <source>Corrupted extension: unsupported files in root directory</source>
-        <translation type="unfinished"/>
+        <translation>Extensión corrupta: hai ficheiros non admitidos no directorio raíz</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="465"/>
         <source>Corrupted extension: corrupted metadata.json</source>
-        <translation type="unfinished"/>
+        <translation>Extensión corrupta: metadata.json está corrupto</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="484"/>
         <source>A newer version is already installed</source>
-        <translation type="unfinished"/>
+        <translation>Xa está instalada unha versión máis nova</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="495"/>
         <source>Error while deleting previous version of the extension: %1</source>
-        <translation type="unfinished"/>
+        <translation>Produciuse un erro ao eliminar a versión anterior da extensión: %1</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="529"/>
         <source>Unable to extract files from the extension</source>
-        <translation type="unfinished"/>
+        <translation>Non foi posíbel extraer os ficheiros da extensión</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2999"/>
@@ -15320,7 +15321,7 @@ Desexa substituílo?</translation>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="24"/>
         <source>Extensions</source>
-        <translation type="unfinished"/>
+        <translation>Extensións</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="60"/>
@@ -15330,12 +15331,12 @@ Desexa substituílo?</translation>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="65"/>
         <source>Version</source>
-        <translation type="unfinished"/>
+        <translation>Versión</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="80"/>
         <source>Uninstall</source>
-        <translation type="unfinished"/>
+        <translation>Desinstalar</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="101"/>
@@ -17092,7 +17093,7 @@ Desexa substituílo?</translation>
     <message>
         <location filename="../../libmscore/tremolo.cpp" line="34"/>
         <source>Buzz roll</source>
-        <translation type="unfinished"/>
+        <translation>Redobre</translation>
     </message>
     <message>
         <location filename="../../libmscore/tremolo.cpp" line="35"/>
@@ -19674,22 +19675,22 @@ produciu un fallo: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1781"/>
         <source>Toggle &apos;Selection Filter&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Conmutar «Filtro de selección»</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1826"/>
         <source>Toggle &apos;File Operations&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Conmutar a barra de ferramentas «Operacións de ficheiro»</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1854"/>
         <source>Toggle &apos;Note Input&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Conmutar a barra de ferramentas «Introdución de notas»</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2083"/>
         <source>Pan score automatically</source>
-        <translation type="unfinished"/>
+        <translation>Desprazar a partitura automaticamente</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1790"/>
@@ -23888,7 +23889,7 @@ O compás non está baleiro</translation>
     <message>
         <location filename="../../mscore/preferences.cpp" line="195"/>
         <source>Extensions</source>
-        <translation type="unfinished"/>
+        <translation>Extensións</translation>
     </message>
 </context>
 <context>

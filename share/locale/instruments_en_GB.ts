@@ -2055,7 +2055,7 @@
         <location filename="../instruments/instrumentsxml.h" line="14"/>
         <source>W.</source>
         <comment>Winds</comment>
-        <translation>W.</translation>
+        <translation>Wi.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="16"/>
@@ -2490,7 +2490,7 @@
         <location filename="../instruments/instrumentsxml.h" line="154"/>
         <source>Hph.</source>
         <comment>Heckelphone-clarinet</comment>
-        <translation>Hph.</translation>
+        <translation>Hph.-cl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="156"/>
@@ -3557,19 +3557,19 @@
         <location filename="../instruments/instrumentsxml.h" line="512"/>
         <source>Sop.</source>
         <comment>Soprano Bugle</comment>
-        <translation>Sop.</translation>
+        <translation>S. Bu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="514"/>
         <source>Alto</source>
         <comment>Alto Bugle</comment>
-        <translation>Alto</translation>
+        <translation>A. Bu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="516"/>
         <source>Bari.</source>
         <comment>Baritone Bugle</comment>
-        <translation>Bari.</translation>
+        <translation>Bar. Bu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="518"/>
@@ -3593,25 +3593,25 @@
         <location filename="../instruments/instrumentsxml.h" line="524"/>
         <source>Euph.</source>
         <comment>Euphonium Bugle</comment>
-        <translation>Euph.</translation>
+        <translation>Euph. Bu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="526"/>
         <source>Mello</source>
         <comment>Mellophone Bugle</comment>
-        <translation>Mello</translation>
+        <translation>Mello. Bu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="528"/>
         <source>Contra</source>
         <comment>Contrabass Bugle</comment>
-        <translation>Contra</translation>
+        <translation>Cb. Bu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="530"/>
         <source>Mello</source>
         <comment>Mellophone</comment>
-        <translation>Mello</translation>
+        <translation>Mello.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="532"/>
@@ -3778,45 +3778,45 @@
         <location filename="../instruments/instrumentsxml.h" line="586"/>
         <source>F Tu.</source>
         <comment>F Tuba</comment>
-        <translation>F Tu.</translation>
+        <translation>F Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="588"/>
         <location filename="../instruments/instrumentsxml.h" line="590"/>
         <source>E♭ Tu.</source>
         <comment>E♭ Tuba</comment>
-        <translation>E♭ Tu.</translation>
+        <translation>E♭ Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="593"/>
         <source>C Tu.</source>
         <comment>C Tuba</comment>
-        <translation>C Tu.</translation>
+        <translation>C Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="595"/>
         <location filename="../instruments/instrumentsxml.h" line="597"/>
         <source>B♭ Tu.</source>
         <comment>B♭ Tuba</comment>
-        <translation>B♭ Tu.</translation>
+        <translation>B♭ Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="600"/>
         <source>Ba. Tu. F</source>
         <comment>Bass Tuba in F</comment>
-        <translation>Ba. Tu. F</translation>
+        <translation>Ba. Tb. F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="602"/>
         <source>Ba. Tu. E♭</source>
         <comment>Bass Tuba in E♭</comment>
-        <translation>Ba. Tu. E♭</translation>
+        <translation>Ba. Tb. E♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="604"/>
         <source>SCB. Tu.</source>
         <comment>Sub-Contrabass Tuba</comment>
-        <translation>SCB. Tu.</translation>
+        <translation>SCb. Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="606"/>
@@ -3845,19 +3845,19 @@
         <location filename="../instruments/instrumentsxml.h" line="612"/>
         <source>Wag. Tu.</source>
         <comment>Wagner Tuba</comment>
-        <translation>Wag. Tu.</translation>
+        <translation>Wag. Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="614"/>
         <source>B♭ Wag. Tu.</source>
         <comment>B♭ Wagner Tuba</comment>
-        <translation>B♭ Wag. Tu.</translation>
+        <translation>B♭ Wag. Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="616"/>
         <source>F Wag. Tu.</source>
         <comment>F Wagner Tuba</comment>
-        <translation>F Wag. Tu.</translation>
+        <translation>F Wag. Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="618"/>
@@ -5841,7 +5841,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1013"/>
         <source>CB. Bal.</source>
         <comment>Contrabass Balalaika</comment>
-        <translation>CB. Bal.</translation>
+        <translation>Cb. Bal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1016"/>

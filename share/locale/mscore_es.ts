@@ -154,7 +154,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="181"/>
         <source>Store relative paths</source>
-        <translation type="unfinished"/>
+        <translation>Guardar rutas relativas</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="197"/>
@@ -8636,12 +8636,12 @@ falló:</translation>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="227"/>
         <source>Extension Updates Available</source>
-        <translation type="unfinished"/>
+        <translation>Hay disponibles actualizaciones de las extensiones </translation>
     </message>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="228"/>
         <source>One or more installed extensions have updates available in Help / Resource Manager...</source>
-        <translation type="unfinished"/>
+        <translation>Una o más de las extensiones instaladas tiene actualizaciones disponibles en Ayuda / Administrador de Recursos</translation>
     </message>
 </context>
 <context>
@@ -14985,12 +14985,12 @@ fallida: %2</translation>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1371"/>
         <source>Tab. 7-str. common</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 7 cuerdas común</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1372"/>
         <source>Tab. 8-str. common</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 8 cuerdas común</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="167"/>
@@ -15252,12 +15252,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="405"/>
         <source>Cannot import extension on read-only storage: %1</source>
-        <translation type="unfinished"/>
+        <translation>No se puede importar extensión en un dispositivo de almacenamiento de sólo lectura: %1</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="410"/>
         <source>Cannot import extension: storage %1 is full</source>
-        <translation type="unfinished"/>
+        <translation>No se puede importar extensión: el dispositivo de almacenamiento %1 está lleno</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="440"/>
@@ -15267,17 +15267,17 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="445"/>
         <source>Corrupted extension: unsupported directories in root directory</source>
-        <translation type="unfinished"/>
+        <translation>Extensión corrupta: Directorios no admitidos en el directorio raíz</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="450"/>
         <source>Corrupted extension: unsupported files in root directory</source>
-        <translation type="unfinished"/>
+        <translation>Extensión corrupta: archivos no admitidos en el directorio raíz</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="465"/>
         <source>Corrupted extension: corrupted metadata.json</source>
-        <translation type="unfinished"/>
+        <translation>Extensión corrupta: metadata.json está corrupto</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="484"/>
@@ -16158,7 +16158,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/textproperties.ui" line="522"/>
         <source>Offset is absolute</source>
-        <translation>Desplazamiento es absoluto</translation>
+        <translation>El desplazamiento es absoluto</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="525"/>
@@ -17111,7 +17111,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../libmscore/tremolo.cpp" line="34"/>
         <source>Buzz roll</source>
-        <translation type="unfinished"/>
+        <translation>Trémolo de Caja Clara</translation>
     </message>
     <message>
         <location filename="../../libmscore/tremolo.cpp" line="35"/>
@@ -19693,22 +19693,22 @@ falló:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1781"/>
         <source>Toggle &apos;Selection Filter&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Alternar &quot;Filtro de Selección&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1826"/>
         <source>Toggle &apos;File Operations&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Alternar la barra de herramientas &quot;Operaciones con archivos&quot; </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1854"/>
         <source>Toggle &apos;Note Input&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Alternar la barra de herramientas &quot;Introducción de notas&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2083"/>
         <source>Pan score automatically</source>
-        <translation type="unfinished"/>
+        <translation>Panear la  partitura automáticamente</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1790"/>
@@ -21859,22 +21859,22 @@ El compás no está vacio</translation>
     <message>
         <location filename="../../libmscore/articulation.cpp" line="209"/>
         <source>Lute thumb fing.</source>
-        <translation>Laúd pulgar dig.</translation>
+        <translation>Laúd dig. pulgar</translation>
     </message>
     <message>
         <location filename="../../libmscore/articulation.cpp" line="213"/>
         <source>Lute 1 fing.</source>
-        <translation>Laúd 1 dig.</translation>
+        <translation>Laúd díg. 1 </translation>
     </message>
     <message>
         <location filename="../../libmscore/articulation.cpp" line="217"/>
         <source>Lute 2 fing.</source>
-        <translation>Laúd 2 dig.</translation>
+        <translation>Laúd díg. 2</translation>
     </message>
     <message>
         <location filename="../../libmscore/articulation.cpp" line="221"/>
         <source>Lute 3 fing.</source>
-        <translation>Laúd 3 dig.</translation>
+        <translation>Laúd díg. 3</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="581"/>
@@ -23080,7 +23080,7 @@ El compás no está vacio</translation>
         <location filename="../../libmscore/drumset.cpp" line="272"/>
         <location filename="../../mscore/importgtp.cpp" line="267"/>
         <source>Crash Cymbal 1</source>
-        <translation>Platillo1</translation>
+        <translation>Platillo Crash 1</translation>
     </message>
     <message>
         <location filename="../../libmscore/drumset.cpp" line="273"/>
@@ -23092,7 +23092,7 @@ El compás no está vacio</translation>
         <location filename="../../libmscore/drumset.cpp" line="274"/>
         <location filename="../../mscore/importgtp.cpp" line="269"/>
         <source>Ride Cymbal 1</source>
-        <translation>Ride en Plato1</translation>
+        <translation>Platillo Ride 1</translation>
     </message>
     <message>
         <location filename="../../libmscore/drumset.cpp" line="275"/>
@@ -23128,13 +23128,13 @@ El compás no está vacio</translation>
         <location filename="../../libmscore/drumset.cpp" line="280"/>
         <location filename="../../mscore/importgtp.cpp" line="275"/>
         <source>Crash Cymbal 2</source>
-        <translation>Crash en Plato 2</translation>
+        <translation>Platillo  Crash 2</translation>
     </message>
     <message>
         <location filename="../../libmscore/drumset.cpp" line="281"/>
         <location filename="../../mscore/importgtp.cpp" line="277"/>
         <source>Ride Cymbal 2</source>
-        <translation>Ride en Plato 2</translation>
+        <translation>Platillo Ride 2</translation>
     </message>
     <message>
         <location filename="../../libmscore/drumset.cpp" line="282"/>
@@ -23271,12 +23271,12 @@ El compás no está vacio</translation>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="294"/>
         <source>Hi Wood Block</source>
-        <translation>Claves agudas</translation>
+        <translation>Caja china aguda</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="295"/>
         <source>Low Wood Block</source>
-        <translation>Claves graves</translation>
+        <translation>Caja china grave</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="296"/>
