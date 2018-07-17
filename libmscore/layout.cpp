@@ -2899,6 +2899,11 @@ System* Score::collectSystem(LayoutContext& lc)
       {
       if (!lc.curMeasure)
             return 0;
+      Measure* m  = _systems.empty() ? 0 : _systems.back()->lastMeasure();
+      if (m) {
+            lc.firstSystem        = m->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
+            lc.startWithLongNames = lc.firstSystem && m->sectionBreakElement()->startWithLongNames();
+            }
       System* system = getNextSystem(lc);
       system->setInstrumentNames(lc.startWithLongNames);
 
