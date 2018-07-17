@@ -2056,6 +2056,14 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         delete t;
                         }
                   else {
+                        if (!t->autoplace()) {
+                              // adjust position
+                              qreal userY = t->userOff().y() / t->spatium();
+                              qreal yo = -(-2.0 - userY) * t->spatium();
+                              t->layout();
+                              t->setAlign(Align::LEFT | Align::TOP);
+                              t->rUserYoffset() = yo;
+                              }
                         segment = m->getSegment(SegmentType::ChordRest, e.tick());
                         segment->add(t);
                         }
