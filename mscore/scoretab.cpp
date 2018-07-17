@@ -396,7 +396,7 @@ void ScoreTab::setCurrentIndex(int idx)
 //   removeTab
 //---------------------------------------------------------
 
-void ScoreTab::removeTab(int idx)
+void ScoreTab::removeTab(int idx, bool noCurrentChangedSignal)
       {
       TabScoreView* tsv = static_cast<TabScoreView*>(tab->tabData(idx).value<void*>());
       Score* score = tsv->score;
@@ -423,12 +423,14 @@ void ScoreTab::removeTab(int idx)
                   }
             }
 
-      int cidx = currentIndex();
-      tab->removeTab(idx);
+      bool blocked;
+      if (noCurrentChangedSignal)
+            blocked = blockSignals(true);
 
-      if (cidx > idx)
-            cidx -= 1;
-      setCurrentIndex(cidx);
+      tab->removeTab(idx); // Will call setCurrent via a signal-slot connection
+
+      if (noCurrentChangedSignal)
+            blockSignals(blocked);
       }
 
 //---------------------------------------------------------
