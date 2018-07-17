@@ -2049,15 +2049,9 @@ int MuseScore::appendScore(MasterScore* score)
                   }
             }
       scoreList.insert(index, score);
-      tab1->blockSignals(true);
-      if (tab2)
-            tab2->blockSignals(true);
       tab1->insertTab(score);
       if (tab2)
             tab2->insertTab(score);
-      tab1->blockSignals(false);
-      if (tab2)
-            tab2->blockSignals(false);
       return index;
       }
 
@@ -2802,15 +2796,9 @@ void MuseScore::removeTab(int i)
       midiPanelOnCloseFile(score->importedFilePath());
       scoreList.removeAt(i);
 
-      tab1->blockSignals(true);
-      tab1->removeTab(i);
-      tab1->blockSignals(false);
-
-      if (tab2) {
-            tab2->blockSignals(true);
-            tab2->removeTab(i);
-            tab2->blockSignals(false);
-            }
+      tab1->removeTab(i, /* noCurrentChangedSignals */ true);
+      if (tab2)
+            tab2->removeTab(i, /* noCurrentChangedSignals */ true);
 
       cs = 0;
       cv = 0;
