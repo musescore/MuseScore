@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tour name="welcome">
+  <Message>
+    <Text>Welcome to MuseScore!</Text>
+    </Message>
+  <Message>
+    <Text>This tour will help guide you through the functionality of MuseScore.</Text>
+    </Message>
+  <Message>
+    <Text>This is the score view. From here, you can visualize, navigate, and edit the score.</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  <Message>
+    <Text>These are the toolbars. The main three are: file operations, playback, and note input.</Text>
+    <Widget>entry-tools</Widget>
+    <Widget>file-operations</Widget>
+    <Widget>pitch-tools</Widget>
+    <Widget>foto-tools</Widget>
+    <Widget>transport-tools</Widget>
+    </Message>
+  <Message>
+    <Text>The file operations toolbar allows you to save/open/load files and undo/redo changes.
+    You can also save online if you go to File->Save Online</Text>
+    <Widget>file-operations</Widget>
+    </Message>
+  <Message>
+    <Text>The playback toolbar gives you the ability to playback the score.</Text>
+    <Widget>transport-tools</Widget>
+    </Message>
+  <Message>
+    <Text>The note entry toolbar allows you to enter notes and other elements into the score.</Text>
+    <Widget>entry-tools</Widget>
+    </Message>
+  <Message>
+    <Text>These are the palettes. Use them to add different symbols to the score.</Text>
+    <Widget>palette-box</Widget>
+    </Message>
+  <Message>
+    <Text>That's the end! As you use MuseScore, more tours will pop up to further explain functionality. \nTo disable those, select "Do not show me tours" before closing this window. \nYou can also turn these off in Edit->Preferences</Text>
+    </Message>
+  </Tour>

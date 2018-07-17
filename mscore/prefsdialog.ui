@@ -232,6 +232,13 @@
             </property>
            </widget>
           </item>
+          <item row="6" column="0">
+           <widget class="QCheckBox" name="showTours">
+            <property name="text">
+             <string>Show tours</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
