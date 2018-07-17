@@ -27,7 +27,9 @@ class LoginManager : public QObject
 
       static const int MAX_UPLOAD_TRY_COUNT = 5;
 
-      KQOAuthManager* _oauthManager;
+      KQOAuthManager* _oauthManager = nullptr;
+      QAction* _uploadAudioMenuAction = nullptr;
+
       QString _consumerKey = 0;
       QString _consumerSecret = 0;
       QString _accessToken = 0;
@@ -73,7 +75,7 @@ class LoginManager : public QObject
       void tryLogin();
 
    public:
-      LoginManager(QObject* parent = 0);
+      LoginManager(QAction* uploadAudioItem, QObject* parent = 0);
       void login(QString login, QString password);
       void upload(const QString& path, int nid, const QString& title, const QString& description, const QString& priv, const QString& license, const QString& tags, const QString& changes);
       bool hasAccessToken();

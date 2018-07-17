@@ -178,6 +178,8 @@ static constexpr double SCALE_MAX  = 16.0;
 static constexpr double SCALE_MIN  = 0.05;
 static constexpr double SCALE_STEP = 1.7;
 
+static const char* uploadMenuActionId = "file-save-online";
+
 //---------------------------------------------------------
 // cmdInsertMeasure
 //---------------------------------------------------------
@@ -710,25 +712,6 @@ MuseScore::MuseScore()
                   }
             }
 
-      if (!converterMode && !pluginMode) {
-            _loginManager = new LoginManager(this);
-#if 0
-            // initialize help engine
-            QString lang = mscore->getLocaleISOCode();
-            if (lang == "en_US")    // HACK
-                  lang = "en";
-
-            QString s = getSharePath() + "manual/doc_" + lang + ".qhc";
-            qDebug("init Help from: <%s>", qPrintable(s));
-            _helpEngine = new QHelpEngine(s, this);
-            if (!_helpEngine->setupData()) {
-                  qDebug("cannot setup data for help engine: %s", qPrintable(_helpEngine->error()));
-                  delete _helpEngine;
-                  _helpEngine = 0;
-                  }
-#endif
-            }
-
       _positionLabel = new QLabel;
       _positionLabel->setObjectName("decoration widget");  // this prevents animations
       _positionLabel->setToolTip(tr("Measure:Beat:Tick"));
@@ -1015,7 +998,7 @@ MuseScore::MuseScore()
 
       for (auto i : {
             "", "file-save", "file-save-as", "file-save-a-copy",
-            "file-save-selection", "file-save-online", "file-export", "file-part-export", "file-import-pdf",
+            "file-save-selection", uploadMenuActionId, "file-export", "file-part-export", "file-import-pdf",
             "", "file-close", "", "parts", "album" }) {
             if (!*i)
                   _fileMenu->addSeparator();
@@ -1402,6 +1385,9 @@ MuseScore::MuseScore()
             cornerLabel->setPixmap(QPixmap(":/data/mscore.png"));
             cornerLabel->setGeometry(width() - 48, 0, 48, 48);
             }
+
+      if (!converterMode && !pluginMode)
+            _loginManager = new LoginManager(getAction(uploadMenuActionId), this);
       }
 
 MuseScore::~MuseScore()
@@ -4823,7 +4809,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             loadFiles();
       else if (cmd == "file-save")
             saveFile();
-      else if (cmd == "file-save-online")
+      else if (cmd == uploadMenuActionId)
             showUploadScoreDialog();
       else if (cmd == "file-export")
             exportFile();
