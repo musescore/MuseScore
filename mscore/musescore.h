@@ -473,6 +473,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       QString getUtmParameters(QString medium) const;
 
+   signals:
+      void windowSplit(bool);
+
    private slots:
       void cmd(QAction* a, const QString& cmd);
       void autoSaveTimerTimeout();
