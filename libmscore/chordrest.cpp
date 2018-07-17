@@ -1181,8 +1181,8 @@ Shape ChordRest::shape() const
       qreal x1 = 1000000.0;
       qreal x2 = -1000000.0;
       for (Lyrics* l : _lyrics) {
-            if (l->autoplace())
-                  l->rUserYoffset() = 0.0;
+//            if (l->autoplace())
+//                  l->rUserYoffset() = 0.0;
             // for horizontal spacing we only need the lyrics width:
             x1 = qMin(x1, l->bbox().x() - margin + l->pos().x());
             x2 = qMax(x2, x1 + l->bbox().width() + margin);
