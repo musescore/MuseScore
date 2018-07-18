@@ -986,7 +986,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                         if (restTicks > curr->duration().ticks())
                               seg = setNoteRest(seg, curr->track(), NoteVal(), Fraction::fromTicks(restTicks), Direction::AUTO, true);
                         }
-                  else {
+                  else if (curr->isChord()) {
                         // combine tied chords
                         Chord* chord = toChord(curr);
                         Chord* lastTiedChord = chord;
