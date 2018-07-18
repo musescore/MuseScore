@@ -256,6 +256,9 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
+        <property name="accessibleName">
+         <string>Line visible</string>
+        </property>
         <property name="text">
          <string>Line visible</string>
         </property>
@@ -297,7 +300,7 @@
       <item row="6" column="1">
        <widget class="QDoubleSpinBox" name="dashLineLength">
         <property name="accessibleName">
-         <string>Line thickness</string>
+         <string>Dash line lenght</string>
         </property>
         <property name="minimum">
          <double>1.000000000000000</double>
@@ -313,7 +316,7 @@
       <item row="7" column="1">
        <widget class="QDoubleSpinBox" name="dashGapLength">
         <property name="accessibleName">
-         <string>Line thickness</string>
+         <string>Dash gap width</string>
         </property>
         <property name="minimum">
          <double>1.000000000000000</double>

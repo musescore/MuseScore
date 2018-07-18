@@ -91,10 +91,18 @@
        </widget>
       </item>
       <item row="2" column="1" colspan="2">
-       <widget class="Ms::OffsetSelect" name="pos" native="true"/>
+       <widget class="Ms::OffsetSelect" name="pos" native="true">
+        <property name="accessibleName">
+         <string>Offset</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="1" colspan="2">
-       <widget class="Ms::SizeSelect" name="size" native="true"/>
+       <widget class="Ms::SizeSelect" name="size" native="true">
+        <property name="accessibleName">
+         <string>Size</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -103,15 +111,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Ms::OffsetSelect</class>
-   <extends>QWidget</extends>
-   <header>inspector/offsetSelect.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Ms::SizeSelect</class>
    <extends>QWidget</extends>
    <header>inspector/sizeSelect.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Ms::OffsetSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/offsetSelect.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
