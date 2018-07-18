@@ -250,7 +250,9 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
 void UndoStack::push1(UndoCommand* cmd)
       {
       if (!curCmd) {
-            qWarning("no active command, UndoStack %p", this);
+            extern bool __loadScore;
+            if (!__loadScore)
+                  qWarning("no active command, UndoStack %p", this);
             return;
             }
       curCmd->appendChild(cmd);
@@ -286,7 +288,9 @@ void UndoStack::remove(int idx)
 void UndoStack::pop()
       {
       if (!curCmd) {
-            qWarning("no active command");
+            extern bool __loadScore;
+            if (!__loadScore)
+                  qWarning("no active command");
             return;
             }
       UndoCommand* cmd = curCmd->removeChild();
