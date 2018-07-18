@@ -839,14 +839,20 @@ Score::FileError MasterScore::loadMsc(QString name, bool ignoreVersionError)
 
 Score::FileError MasterScore::loadMsc(QString name, QIODevice* io, bool ignoreVersionError)
       {
+      extern bool __loadScore;
+      bool ols = __loadScore;
+      __loadScore = true;
       fileInfo()->setFile(name);
 
+      Score::FileError rv;
       if (name.endsWith(".mscz"))
             return loadCompressedMsc(io, ignoreVersionError);
       else {
             XmlReader r(io);
             return read1(r, ignoreVersionError);
             }
+      __loadScore = ols;
+      return rv;
       }
 
 //---------------------------------------------------------

@@ -1543,52 +1543,6 @@ QRectF Note::drag(EditData& ed)
       }
 
 //---------------------------------------------------------
-//   endDrag
-//---------------------------------------------------------
-
-void Note::endDrag(EditData& ed)
-      {
-      Staff* staff = score()->staff(chord()->vStaffIdx());
-      int tick     = chord()->tick();
-
-      NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
-      if (staff->isTabStaff(tick)) {
-#if 0 // TODO
-            // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
-            // determine new string of dragged note (if tablature is upside down, invert _lineOffset)
-            // and fret for the same pitch on the new string
-            const StringData* strData = staff->part()->instrument()->stringData();
-            int nString = _string + (staff->staffType(tick)->upsideDown() ? -_lineOffset : _lineOffset);
-            int nFret   = strData->fret(_pitch, nString, staff, tick);
-            if (nFret < 0)                      // no fret?
-                  return;                       // no party!
-            // move the note together with all notes tied to it
-            for (Note* nn : tiedNotes()) {
-                  bool refret = false;
-                  if (nn->fret() != nFret) {
-                        nn->undoChangeProperty(Pid::FRET, nFret);
-                        refret = true;
-                        }
-                  if (nn->string() != nString) {
-                        nn->undoChangeProperty(Pid::STRING, nString);
-                        refret = true;
-                        }
-                  if (refret)
-                        strData->fretChords(nn->chord());
-                  }
-#endif
-            }
-      else {
-            for (Note* nn : tiedNotes()) {
-                  for (PropertyData pd : ned->propertyData) {
-                        score()->undoPropertyChanged(nn, pd.id, pd.data);
-                        }
-                  }
-            }
-      score()->select(this, SelectType::SINGLE, 0);
-      }
-
-//---------------------------------------------------------
 //   acceptDrop
 //---------------------------------------------------------
 
@@ -2391,17 +2345,69 @@ int Note::customizeVelocity(int velo) const
       }
 
 //---------------------------------------------------------
-//   endEdit
+//   endDrag
 //---------------------------------------------------------
 
-void Note::endEdit(EditData&)
+void Note::endDrag(EditData& ed)
+      {
+      Staff* staff = score()->staff(chord()->vStaffIdx());
+      int tick     = chord()->tick();
+
+      NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
+      if (staff->isTabStaff(tick)) {
+#if 0 // TODO
+            // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
+            // determine new string of dragged note (if tablature is upside down, invert _lineOffset)
+            // and fret for the same pitch on the new string
+            const StringData* strData = staff->part()->instrument()->stringData();
+            int nString = _string + (staff->staffType(tick)->upsideDown() ? -_lineOffset : _lineOffset);
+            int nFret   = strData->fret(_pitch, nString, staff, tick);
+            if (nFret < 0)                      // no fret?
+                  return;                       // no party!
+            // move the note together with all notes tied to it
+            for (Note* nn : tiedNotes()) {
+                  bool refret = false;
+                  if (nn->fret() != nFret) {
+                        nn->undoChangeProperty(Pid::FRET, nFret);
+                        refret = true;
+                        }
+                  if (nn->string() != nString) {
+                        nn->undoChangeProperty(Pid::STRING, nString);
+                        refret = true;
+                        }
+                  if (refret)
+                        strData->fretChords(nn->chord());
+                  }
+#endif
+            }
+      else {
+            for (Note* nn : tiedNotes()) {
+                  for (PropertyData pd : ned->propertyData) {
+                        score()->undoPropertyChanged(nn, pd.id, pd.data);
+                        }
+                  }
+            }
+      score()->select(this, SelectType::SINGLE, 0);
+      }
+
+//---------------------------------------------------------
+//   editDrag
+//---------------------------------------------------------
+
+void Note::editDrag(EditData& ed)
       {
       Chord* ch = chord();
       if (ch->notes().size() == 1) {
-            ch->undoChangeProperty(Pid::USER_OFF, ch->userOff() + userOff());
+            // if the chord contains only this note, then move the whole chord
+            // including stem, flag etc.
+            ch->undoChangeProperty(Pid::USER_OFF, ch->userOff() + userOff() + ed.delta);
             setUserOff(QPointF());
-            triggerLayout();
             }
+      else {
+            setUserOff(userOff() + ed.delta);
+            undoChangeProperty(Pid::AUTOPLACE, false);
+            }
+      triggerLayout();
       }
 
 //---------------------------------------------------------

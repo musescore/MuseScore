@@ -262,7 +262,7 @@ class Note final : public Element {
       virtual void startDrag(EditData&) override;
       virtual QRectF drag(EditData&) override;
       virtual void endDrag(EditData&) override;
-      void endEdit(EditData&);
+      virtual void editDrag(EditData&) override;
       void addSpanner(Spanner*);
       void removeSpanner(Spanner*);
       int concertPitchIdx() const;
