@@ -112,6 +112,9 @@
         <property name="toolTip">
          <string>Font Size</string>
         </property>
+        <property name="accessibleName">
+         <string>Font size</string>
+        </property>
         <property name="suffix">
          <string>pt</string>
         </property>
@@ -126,6 +129,9 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
+         <string>Font face</string>
+        </property>
+        <property name="accessibleName">
          <string>Font face</string>
         </property>
        </widget>
@@ -495,7 +501,7 @@
       <item row="3" column="1">
        <widget class="QDoubleSpinBox" name="lineWidth">
         <property name="accessibleName">
-         <string>Height</string>
+         <string>Line width</string>
         </property>
         <property name="suffix">
          <string>sp</string>
@@ -511,7 +517,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Height' value</string>
+         <string>Reset 'Line width' value</string>
         </property>
         <property name="text">
          <string notr="true"/>

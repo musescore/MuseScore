@@ -63,6 +63,9 @@
    </item>
    <item>
     <widget class="QWidget" name="panel" native="true">
+     <property name="accessibleName">
+      <string>Local relayout</string>
+     </property>
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>3</number>

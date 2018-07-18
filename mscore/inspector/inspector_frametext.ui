@@ -89,7 +89,7 @@
       <item row="0" column="1">
        <widget class="QComboBox" name="style">
         <property name="accessibleName">
-         <string>substyle</string>
+         <string>Style</string>
         </property>
         <property name="sizeAdjustPolicy">
          <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>

@@ -109,7 +109,7 @@
       <item row="0" column="1">
        <widget class="QComboBox" name="dynRange">
         <property name="accessibleName">
-         <string>Dynamic Range</string>
+         <string>Dynamic range</string>
         </property>
         <item>
          <property name="text">
@@ -164,6 +164,9 @@
       </item>
       <item row="2" column="1">
        <widget class="QComboBox" name="placement">
+        <property name="accessibleName">
+         <string>Placement</string>
+        </property>
         <item>
          <property name="text">
           <string notr="true">Below</string>

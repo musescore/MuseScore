@@ -144,7 +144,11 @@
        </widget>
       </item>
       <item row="2" column="1" colspan="2">
-       <widget class="Ms::SizeSelect" name="size" native="true"/>
+       <widget class="Ms::SizeSelect" name="size" native="true">
+        <property name="accessibleName">
+         <string>Size</string>
+        </property>
+       </widget>
       </item>
       <item row="2" column="3">
        <widget class="QToolButton" name="resetSize">
