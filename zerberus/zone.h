@@ -88,6 +88,7 @@ struct Zone {
       float delay = 0.0;
       int pan = 0;
       float group_volume = 1.0;
+      float global_volume = 1.0;
 
       //filters
       bool isCutoffDefined;

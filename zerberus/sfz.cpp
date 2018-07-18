@@ -93,6 +93,7 @@ struct SfzRegion {
       int pan;    // [-100, 100]
       long long offset; // [0, 4Gb) or [0, 4294967295]
       float group_volume; // [-144 to 6] (dB)
+      float global_volume; // [-144 to 6] (dB)
 
       //filters
       bool isCutoffDefined;
@@ -166,6 +167,8 @@ void SfzRegion::init(const QString& _path)
       pan = 0;
       offset = 0;
       group_volume = 0.0f;
+      global_volume = 0.0f;
+
       isCutoffDefined = false;
       cutoff = 0;
       fil_keytrack = 0;
@@ -229,6 +232,7 @@ void SfzRegion::setZone(Zone* z) const
       z->delay        = delay * 1000; //convert seconds from sfz to ms for computations
       z->pan          = pan;
       z->group_volume = pow(10.0, group_volume / 20.0); //dB -> volume multiplier
+      z->global_volume = pow(10.0, global_volume / 20.0); //dB -> volume multiplier
 
       z->isCutoffDefined = isCutoffDefined;
       z->cutoff = cutoff;
@@ -550,6 +554,8 @@ void SfzRegion::readOp(const QString& b, const QString& data, SfzControl &c)
             readLongLong(opcode_data, offset);
       else if (opcode == "group_volume")
             readFloat(opcode_data, group_volume);
+      else if (opcode == "global_volume")
+            readFloat(opcode_data, global_volume);
       else if (opcode == "cutoff") {
             isCutoffDefined = true;
             readFloat(opcode_data, cutoff);
