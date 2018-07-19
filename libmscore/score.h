@@ -360,6 +360,8 @@ class Score : public QObject, public ScoreElement {
       Q_PROPERTY(int                            nstaves           READ nstaves)
       Q_PROPERTY(int                            ntracks           READ ntracks)
 //      Q_PROPERTY(QQmlListProperty<Ms::Part>     parts             READ qmlParts)
+      Q_PROPERTY(QString                        mscoreVersion     READ mscoreVersion)
+      Q_PROPERTY(QString                        mscoreRevision    READ mscoreRevision)
 
    public:
       enum class FileError : char {
