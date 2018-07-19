@@ -285,6 +285,8 @@ class Score : public QObject, public ScoreElement {
       Q_PROPERTY(QString                        poet              READ poet)
       Q_PROPERTY(QString                        subtitle          READ subtitle)
       Q_PROPERTY(QString                        title             READ title)
+      Q_PROPERTY(QString                        mscoreVersion     READ mscoreVersion)
+      Q_PROPERTY(QString                        mscoreRevision    READ mscoreRevision)
 
    public:
       enum class FileError : char {
