@@ -943,23 +943,6 @@ InspectorLyric::InspectorLyric(QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   valueChanged
-//---------------------------------------------------------
-
-void InspectorLyric::valueChanged(int idx)
-      {
-      if (iList[idx].t == Pid::VERSE) {
-            int val    = getValue(iList[idx]).toInt();
-            Lyrics* l  = toLyrics(inspector->element());
-            Lyrics* nl = l->chordRest()->lyrics(val, l->placement());
-            if (nl) {
-                  nl->undoChangeProperty(Pid::VERSE, l->no());
-                  }
-            }
-      InspectorBase::valueChanged(idx);
-      }
-
-//---------------------------------------------------------
 //   InspectorStaffText
 //---------------------------------------------------------
 

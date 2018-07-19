@@ -72,6 +72,7 @@ add_library (
       read206.cpp
       read300.cpp stafftypelist.cpp stafftypechange.cpp
       bracketItem.cpp
+      lyricsline.cpp
       )
 
 ##

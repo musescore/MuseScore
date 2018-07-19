@@ -94,6 +94,20 @@ Palette handling
       - shift+drag allows to move a palette element in the palette
       - ctrl+drag is drag operation with special semantic
 
+Lyrics
+-------------------------------
+      - lyrics can be placed above a staff by changing the Placement property to "Above".
+        Verse numbers are counted from top to bottom. If you change for example the placment
+        of a lyric in verse 3 to Above then all lyrics in verse 1-3 are placed above, verse 4+
+        will stay below.
+      - 'x' (flip) changes the placement of a lyric.
+      - up/down moves a lyric to the previous/next verse. If there is already a lyric, the text
+        is swapped.
+      - the style values "Position above" and "Position below" determine the default lyric position.
+      - lyrics are move up or down when a collision with other score elements are detected. The style
+        value "Autoplace vertical align range" tells mscore to align other lyrics measure or system wide.
+
+
 
 ====================================================================
       Programming Style Changes in MuseScore 3

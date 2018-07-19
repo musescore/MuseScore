@@ -2138,11 +2138,12 @@ void Score::createBeams(Measure* measure)
                   ChordRest* cr = segment->cr(track);
                   if (cr == 0)
                         continue;
+#if 0
                   for (Lyrics* l : cr->lyrics()) {
                         if (l)
                               l->layout();
                         }
-
+#endif
                   // handle grace notes and cross-measure beaming
                   if (cr->isChord()) {
                         Chord* chord = toChord(cr);
@@ -2437,8 +2438,14 @@ void Score::getNextMeasure(LayoutContext& lc)
                         layoutChords1(&segment, staffIdx);
                         for (int voice = 0; voice < VOICES; ++voice) {
                               ChordRest* cr = segment.cr(staffIdx * VOICES + voice);
-                              if (cr && cr->isChord())
-                                    toChord(cr)->layoutArticulations();
+                              if (cr) {
+                                    for (Lyrics* l : cr->lyrics()) {
+                                          if (l)
+                                                l->layout();
+                                          }
+                                    if (cr->isChord())
+                                          toChord(cr)->layoutArticulations();
+                                    }
                               }
                         }
                   }
@@ -2621,14 +2628,12 @@ static qreal findLyricsMaxY(Segment& s, int staffIdx)
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeBelow()) {
                               l->rUserYoffset() = 0.0;
-                              // sh.add(l->bbox().translated(l->pos()));
                               sh.add(l->bbox().translated(l->pos() + s.pos()));
                               }
                         }
                   qreal lyricsMinTopDistance = s.score()->styleP(Sid::lyricsMinTopDistance);
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeBelow()) {
-                              // qreal y = s.staffShape(staffIdx).minVerticalDistance(sh);
                               qreal y = s.measure()->staffShape(staffIdx).minVerticalDistance(sh);
                               if (y > -lyricsMinTopDistance)
                                     yMax = qMax(yMax, y + lyricsMinTopDistance);
@@ -2770,13 +2775,62 @@ static void restoreBeams(Measure* m)
 
 //---------------------------------------------------------
 //   layoutLyrics
+//
+//    vertical align lyrics
+//
 //---------------------------------------------------------
 
 void Score::layoutLyrics(System* system)
       {
-      //
-      //    vertical align lyrics
-      //
+      std::vector<int> visibleStaves;
+      for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx))
+            visibleStaves.push_back(staffIdx);
+
+      int nAbove[nstaves()];
+
+      for (int staffIdx : visibleStaves) {
+            nAbove[staffIdx] = 0;
+            for (MeasureBase* mb : system->measures()) {
+                  if (!mb->isMeasure())
+                        continue;
+                  Measure* m = toMeasure(mb);
+                  for (Segment& s : m->segments()) {
+                        if (s.isChordRestType()) {
+                              for (int voice = 0; voice < VOICES; ++voice) {
+                                    ChordRest* cr = s.cr(staffIdx * VOICES + voice);
+                                    if (cr) {
+                                          int nA = 0;
+                                          for (Lyrics* l : cr->lyrics()) {
+                                                if (l->placeAbove())
+                                                      ++nA;
+                                                }
+                                          nAbove[staffIdx] = qMax(nAbove[staffIdx], nA);
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            }
+
+      for (int staffIdx : visibleStaves) {
+            for (MeasureBase* mb : system->measures()) {
+                  if (!mb->isMeasure())
+                        continue;
+                  Measure* m = toMeasure(mb);
+                  for (Segment& s : m->segments()) {
+                        if (s.isChordRestType()) {
+                              for (int voice = 0; voice < VOICES; ++voice) {
+                                    ChordRest* cr = s.cr(staffIdx * VOICES + voice);
+                                    if (cr) {
+                                          for (Lyrics* l : cr->lyrics())
+                                                l->layout2(nAbove[staffIdx]);
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            }
+
       VerticalAlignRange ar = VerticalAlignRange(styleI(Sid::autoplaceVerticalAlignRange));
 
       switch (ar) {
@@ -2785,14 +2839,14 @@ void Score::layoutLyrics(System* system)
                         if (!mb->isMeasure())
                               continue;
                         Measure* m = toMeasure(mb);
-                        for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
+                        for (int staffIdx : visibleStaves) {
                               qreal yMax = findLyricsMaxY(m, staffIdx);
                               applyLyricsMax(m, staffIdx, yMax);
                               }
                         }
                   break;
             case VerticalAlignRange::SYSTEM:
-                  for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
+                  for (int staffIdx : visibleStaves) {
                         qreal yMax = 0.0;
                         qreal yMin = 0.0;
                         for (MeasureBase* mb : system->measures()) {
@@ -2814,7 +2868,7 @@ void Score::layoutLyrics(System* system)
                         if (!mb->isMeasure())
                               continue;
                         Measure* m = toMeasure(mb);
-                        for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
+                        for (int staffIdx : visibleStaves) {
                               for (Segment& s : m->segments()) {
                                     qreal yMax = findLyricsMaxY(s, staffIdx);
                                     applyLyricsMax(s, staffIdx, yMax);
@@ -3434,15 +3488,7 @@ System* Score::collectSystem(LayoutContext& lc)
             lc.firstSystem        = lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
             lc.startWithLongNames = lc.firstSystem && lm->sectionBreakElement()->startWithLongNames();
             }
-#if 1
-      for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure())
-                  continue;
-            Measure* m = toMeasure(mb);
-            for (int i = 0; i < score()->nstaves(); ++i)
-                  m->staffShape(i).clear();
-            }
-#endif
+
       return system;
       }
 

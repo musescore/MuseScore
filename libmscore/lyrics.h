@@ -70,6 +70,7 @@ class Lyrics final : public TextBase {
       std::vector<StyledProperty> _styledProperties;
 
       bool isMelisma() const;
+      virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
 
    protected:
       int _no;                ///< row index
@@ -99,7 +100,7 @@ class Lyrics final : public TextBase {
       ChordRest* chordRest() const                    { return toChordRest(parent()); }
 
       virtual void layout() override;
-      virtual void layout1() override;
+      void layout2(int);
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
@@ -128,6 +129,7 @@ class Lyrics final : public TextBase {
    #endif
 #endif
 
+      using ScoreElement::undoChangeProperty;
       using TextBase::paste;
       virtual void paste(EditData&) override;
 

@@ -2323,26 +2323,10 @@ void Score::cmdMoveRest(Rest* rest, Direction dir)
 
 void Score::cmdMoveLyrics(Lyrics* lyrics, Direction dir)
       {
-      ChordRest* cr       = lyrics->chordRest();
-      int verse           = lyrics->no();
-      Placement placement = lyrics->placement();
-      int newVerse;
-      if (lyrics->placeAbove())
-            dir = (dir == Direction::UP) ? Direction::DOWN : Direction::UP;
-
-      if (dir == Direction::UP) {
-            if (verse)
-                  newVerse = verse - 1;
-            else
-                  return;
-            }
-      else
-            newVerse = verse + 1;
-      Lyrics* nl = cr->lyrics(newVerse, placement);
-      if (nl)
-            nl->undoChangeProperty(Pid::VERSE, verse);
-      lyrics->undoChangeProperty(Pid::VERSE, newVerse);
-      score()->setLayout(cr->tick());
+      int verse = lyrics->no() + (dir == Direction::UP ? -1 : 1);
+      if (verse < 0)
+            return;
+      lyrics->undoChangeProperty(Pid::VERSE, verse);
       }
 
 //---------------------------------------------------------

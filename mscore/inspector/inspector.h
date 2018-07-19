@@ -331,7 +331,6 @@ class InspectorLyric : public InspectorTextBase {
       Ui::InspectorLyric l;
 
    private slots:
-      virtual void valueChanged(int idx) override;
 
    public:
       InspectorLyric(QWidget* parent);

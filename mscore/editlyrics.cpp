@@ -93,14 +93,13 @@ bool ScoreView::editKeyLyrics()
 
 void ScoreView::lyricsUpDown(bool up, bool end)
       {
-      Lyrics* lyrics   = toLyrics(editData.element);
-      int track        = lyrics->track();
-      ChordRest* cr    = lyrics->chordRest();
-      int verse        = lyrics->no();
-      Placement placement = lyrics->placement();
+      Lyrics* lyrics       = toLyrics(editData.element);
+      int track            = lyrics->track();
+      ChordRest* cr        = lyrics->chordRest();
+      int verse            = lyrics->no();
+      Placement placement  = lyrics->placement();
+      PropertyFlags pFlags = lyrics->propertyFlags(Pid::PLACEMENT);
 
-      if (placement == Placement::ABOVE)
-            up = !up;
       if (up) {
             if (verse == 0)
                   return;
@@ -120,6 +119,7 @@ void ScoreView::lyricsUpDown(bool up, bool end)
             lyrics->setParent(cr);
             lyrics->setNo(verse);
             lyrics->setPlacement(placement);
+            lyrics->setPropertyFlags(Pid::PLACEMENT, pFlags);
             _score->startCmd();
             _score->undoAddElement(lyrics);
             _score->endCmd();
@@ -156,6 +156,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
       Placement placement = lyrics->placement();
+      PropertyFlags pFlags = lyrics->propertyFlags(Pid::PLACEMENT);
 
       Segment* nextSegment = segment;
       if (back) {
@@ -209,6 +210,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
             _toLyrics->setParent(cr);
             _toLyrics->setNo(verse);
             _toLyrics->setPlacement(placement);
+            _toLyrics->setPropertyFlags(Pid::PLACEMENT, pFlags);
             _toLyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
             newLyrics = true;
             }
@@ -277,6 +279,7 @@ void ScoreView::lyricsMinus()
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
       Placement placement = lyrics->placement();
+      PropertyFlags pFlags = lyrics->propertyFlags(Pid::PLACEMENT);
 
       changeState(ViewState::NORMAL);
 
@@ -315,6 +318,7 @@ void ScoreView::lyricsMinus()
             toLyrics->setParent(nextSegment->element(track));
             toLyrics->setNo(verse);
             toLyrics->setPlacement(placement);
+            toLyrics->setPropertyFlags(Pid::PLACEMENT, pFlags);
             toLyrics->setSyllabic(Lyrics::Syllabic::END);
             }
       else {
@@ -367,6 +371,7 @@ void ScoreView::lyricsUnderscore()
       Segment* segment = lyrics->segment();
       int verse        = lyrics->no();
       Placement placement = lyrics->placement();
+      PropertyFlags pFlags = lyrics->propertyFlags(Pid::PLACEMENT);
       int endTick      = segment->tick(); // a previous melisma cannot extend beyond this point
 
       changeState(ViewState::NORMAL);
@@ -440,6 +445,7 @@ void ScoreView::lyricsUnderscore()
             toLyrics->setParent(nextSegment->element(track));
             toLyrics->setNo(verse);
             toLyrics->setPlacement(placement);
+            toLyrics->setPropertyFlags(Pid::PLACEMENT, pFlags);
             toLyrics->setSyllabic(Lyrics::Syllabic::SINGLE);
             }
       // as we arrived at toLyrics by an underscore, it cannot have syllabic dashes before
@@ -481,38 +487,20 @@ void ScoreView::lyricsUnderscore()
 
 void ScoreView::lyricsReturn()
       {
-      Lyrics* lyrics   = toLyrics(editData.element);
-      Segment* segment = lyrics->segment();
+      Lyrics* lyrics = toLyrics(editData.element);
 
       changeState(ViewState::NORMAL);
 
-      Lyrics* oldLyrics = lyrics;
-
       _score->startCmd();
       int newVerse;
-      if (lyrics->placeAbove()) {
-            newVerse = oldLyrics->no() - 1;
-            if (newVerse == -1) {
-                  // raise all lyrics above
-                  newVerse = 0;
-                  for (Segment* s = _score->firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-                        ChordRest* cr = s->cr(lyrics->track());
-                        if (cr) {
-                              for (Lyrics* l : cr->lyrics()) {
-                                    if (l->placement() == oldLyrics->placement())
-                                          l->undoChangeProperty(Pid::VERSE, l->no() + 1);
-                                    }
-                              }
-                        }
-                  }
-            }
-      else
-            newVerse = oldLyrics->no() + 1;
-      lyrics = toLyrics(Element::create(lyrics->type(), _score));
-      lyrics->setTrack(oldLyrics->track());
-      lyrics->setParent(segment->element(oldLyrics->track()));
-      lyrics->setPlacement(oldLyrics->placement());
+      newVerse = lyrics->no() + 1;
 
+      Lyrics* oldLyrics = lyrics;
+      lyrics = new Lyrics(_score);
+      lyrics->setTrack(oldLyrics->track());
+      lyrics->setParent(oldLyrics->segment()->element(oldLyrics->track()));
+      lyrics->setPlacement(oldLyrics->placement());
+      lyrics->setPropertyFlags(Pid::PLACEMENT, oldLyrics->propertyFlags(Pid::PLACEMENT));
       lyrics->setNo(newVerse);
 
       _score->undoAddElement(lyrics);
@@ -522,7 +510,6 @@ void ScoreView::lyricsReturn()
       startEdit(lyrics, Grip::NO_GRIP);
 
       adjustCanvasPosition(lyrics, false);
-      _score->setLayoutAll();
       }
 
 //---------------------------------------------------------

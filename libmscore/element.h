@@ -187,7 +187,7 @@ class Element : public ScoreElement {
       virtual void setVisible(bool f)         { setFlag(ElementFlag::INVISIBLE, !f);   }
 
       Placement placement() const             { return _placement;  }
-      void setPlacement(Placement val)        { _placement = val;   }
+      void setPlacement(Placement val)        { _placement = val; }
       void undoSetPlacement(Placement val);
       bool placeBelow() const                 { return _placement == Placement::BELOW; }
       bool placeAbove() const                 { return _placement == Placement::ABOVE; }
