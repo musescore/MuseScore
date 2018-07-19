@@ -687,15 +687,11 @@ bool Staff::readProperties(XmlReader& e)
       else if (tag == "keylist")
             _keys.read(e, score());
       else if (tag == "bracket") {
-            BracketItem* b = new BracketItem(score());
-            b->setStaff(this);
-            b->setBracketType(BracketType(e.intAttribute("type", -1)));
-            b->setBracketSpan(e.intAttribute("span", 0));
             int col = e.intAttribute("col", -1);
             if (col == -1)
                   col = _brackets.size();
-            b->setColumn(col);
-            _brackets.append(b);
+            setBracketType(col, BracketType(e.intAttribute("type", -1)));
+            setBracketSpan(col, e.intAttribute("span", 0));
             e.readNext();
             }
       else if (tag == "barLineSpan")
