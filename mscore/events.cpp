@@ -335,7 +335,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
       editData.modifiers = qApp->keyboardModifiers();
 
       Element* e         = elementNear(editData.startMove);
-      qDebug("element %s", e ? e->name() : "--");
+//      qDebug("element %s", e ? e->name() : "--");
 
       switch (state) {
             case ViewState::NORMAL:

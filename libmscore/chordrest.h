@@ -138,7 +138,6 @@ class ChordRest : public DurationElement {
       std::vector<Lyrics*>& lyrics()             { return _lyrics; }
       Lyrics* lyrics(int verse, Placement) const;
       int lastVerse(Placement) const;
-      void flipLyrics(Lyrics*);
 
       virtual void add(Element*);
       virtual void remove(Element*);

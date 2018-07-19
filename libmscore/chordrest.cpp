@@ -1226,23 +1226,6 @@ int ChordRest::lastVerse(Placement p) const
       }
 
 //---------------------------------------------------------
-//   flipLyrics
-//---------------------------------------------------------
-
-void ChordRest::flipLyrics(Lyrics* l)
-      {
-      Placement p = l->placement();
-      if (p == Placement::ABOVE)
-            p = Placement::BELOW;
-      else
-            p = Placement::ABOVE;
-      int verses = lastVerse(p);
-      l->undoChangeProperty(Pid::VERSE, verses + 1);
-      l->undoChangeProperty(Pid::AUTOPLACE, true);
-      l->undoChangeProperty(Pid::PLACEMENT, int(p));
-      }
-
-//---------------------------------------------------------
 //   removeMarkings
 //    - this is normally called after cloning a chord to tie a note over the barline
 //    - there is no special undo handling; the assumption is that undo will simply remove the cloned chord

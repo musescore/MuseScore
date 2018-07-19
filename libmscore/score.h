@@ -1148,6 +1148,7 @@ class Score : public QObject, public ScoreElement {
       void setFooterText(Text* t)             { movements()->setFooterText(t);             }
 
       void cmdAddPitch(int note, bool addFlag, bool insert);
+      void forAllLyrics(std::function<void(Lyrics*)> f);
 
       friend class ChangeSynthesizerState;
       friend class Chord;
@@ -1282,7 +1283,6 @@ class MasterScore : public Score {
 
       virtual MStyle& style() override                   { return movements()->style();       }
       virtual const MStyle& style() const override       { return movements()->style();       }
-
       };
 
 inline UndoStack* Score::undoStack() const             { return _masterScore->undoStack();      }

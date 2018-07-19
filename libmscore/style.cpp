@@ -43,7 +43,7 @@ struct StyleType {
       QVariant _defaultValue;
 
    public:
-      Sid  styleIdx() const            { return _idx;          }
+      Sid  styleIdx() const                 { return _idx;          }
       int idx() const                       { return int(_idx);     }
       const char*  valueType() const        { return _defaultValue.typeName();    }
       const char*      name() const         { return _name;         }
@@ -73,7 +73,7 @@ static const StyleType styleTypes[] {
 
       { Sid::lyricsPlacement,         "lyricsPlacement",         int(Placement::BELOW)  },
       { Sid::lyricsPosAbove,          "lyricsPosAbove",          Spatium(-2.0) },
-      { Sid::lyricsPosBelow,          "lyricsPosBelow",          Spatium(2.0) },
+      { Sid::lyricsPosBelow,          "lyricsPosBelow",          Spatium(3.0) },
       { Sid::lyricsMinTopDistance,    "lyricsMinTopDistance",    Spatium(1.0)  },
       { Sid::lyricsMinBottomDistance, "lyricsMinBottomDistance", Spatium(2.0)  },
       { Sid::lyricsLineHeight,        "lyricsLineHeight",        1.0 },

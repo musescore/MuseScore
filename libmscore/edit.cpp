@@ -1426,15 +1426,13 @@ void Score::cmdFlip()
                || e->isTextLineSegment()
                || e->isPedalSegment()
                || e->isFermata()
+               || e->isLyrics()
                || e->isTrillSegment()) {
                   // getProperty() delegates call from spannerSegment to Spanner:
                   Placement p = Placement(e->getProperty(Pid::PLACEMENT).toInt());
                   p = (p == Placement::ABOVE) ? Placement::BELOW : Placement::ABOVE;
                   e->undoChangeProperty(Pid::AUTOPLACE, true);
                   e->undoChangeProperty(Pid::PLACEMENT, int(p));
-                  }
-            else if (e->isLyrics()) {
-                  toLyrics(e)->chordRest()->flipLyrics(toLyrics(e));
                   }
             }
       }
