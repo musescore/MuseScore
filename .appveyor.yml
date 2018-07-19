@@ -48,3 +48,14 @@ after_build:
 artifacts:
   - path: $(ARTIFACT_NAME)
 
+deploy:
+  provider: S3
+  access_key_id:
+    secure: k68f3wMKIC5AzrfNMuC4kdPaxzvKdFVkRsietUKqc+E=
+  secret_access_key:
+    secure: IbpdpiHzGfMasaSA6uGrskE4xu9wE+HzElW7tIDOUww+ivHj+gN+mPgUHKCcV9Cn
+  bucket: update.musescore.org
+  region: us-east-1
+  set_public: true
+  artifact: C:\MuseScore\update_win_nightly.xml
+

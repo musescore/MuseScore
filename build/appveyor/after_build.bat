@@ -19,7 +19,7 @@ for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') d
     )
 
 :: Create msi package
-mingw32-make -f Makefile.mingw package
+mingw32-make -f Makefile.mingw package BUILD_NUMBER=%APPVEYOR_BUILD_NUMBER%
 
 :: find the MSI file without the hardcoded version
 for /r %%i in (build.release\*.msi) do ( SET FILEPATH=%%i )
@@ -55,6 +55,29 @@ SET hh=%hh1:~1,2%
 SET BUILD_DATE=%Date:~10,4%-%Date:~4,2%-%Date:~7,2%-%hh%%time:~3,2%
 SET ARTIFACT_NAME=MuseScoreNightly-%BUILD_DATE%-%APPVEYOR_REPO_BRANCH%-%MSversion%.7z
 7z a C:\MuseScore\%ARTIFACT_NAME% C:\MuseScore\MuseScoreNightly
+
+:: create update file for S3
+SET SHORT_DATE=%Date:~10,4%-%Date:~4,2%-%Date:~7,2%
+SET input=C:\MuseScore\CMakeLists.txt
+FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_MAJOR" %input%') DO set VERSION_MAJOR=%%A
+FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_MINOR" %input%') DO set VERSION_MINOR=%%A
+FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_PATCH" %input%') DO set VERSION_PATCH=%%A
+SET MUSESCORE_VERSION=%VERSION_MAJOR%.%VERSION_MINOR%.%VERSION_PATCH%.%APPVEYOR_BUILD_NUMBER%
+
+
+@echo off
+
+(
+echo ^<update^>
+echo ^<version^>%MUSESCORE_VERSION%^</version^>
+echo ^<revision^>%MSversion%^</revision^>
+echo ^<releaseType^>nightly^</releaseType^>
+echo ^<date^>%SHORT_DATE%^</date^>
+echo ^<description^>MuseScore %MUSESCORE_VERSION% %MSversion%^</description^>
+echo ^<downloadUrl^>https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%^</downloadUrl^>
+echo ^<infoUrl^>https://ftp.osuosl.org/pub/musescore-nightlies/windows/^</infoUrl^>
+echo ^</update^>
+)>"update_win_nightly.xml"
 
 
 :UPLOAD
