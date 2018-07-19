@@ -1176,22 +1176,21 @@ QString ChordRest::accessibleExtraInfo() const
 
 Shape ChordRest::shape() const
       {
-      Shape shape;
-      qreal margin = spatium() * .5;
-      qreal x1 = 1000000.0;
-      qreal x2 = -1000000.0;
-      for (Lyrics* l : _lyrics) {
-//            if (l->autoplace())
-//                  l->rUserYoffset() = 0.0;
-            // for horizontal spacing we only need the lyrics width:
-            x1 = qMin(x1, l->bbox().x() - margin + l->pos().x());
-            x2 = qMax(x2, x1 + l->bbox().width() + margin);
-            if (l->ticks() == Lyrics::TEMP_MELISMA_TICKS)
-                  x2 += spatium();
+      if (!_lyrics.empty()) {
+            qreal margin = spatium() * .5;
+            qreal x1 = 1000000.0;
+            qreal x2 = -1000000.0;
+            for (Lyrics* l : _lyrics) {
+                  // for horizontal spacing we only need the lyrics width:
+                  x1 = qMin(x1, l->bbox().x() - margin + l->pos().x());
+                  // x2 = qMax(x2, x1 + l->bbox().width() + margin);
+                  x2 = qMax(x2, l->bbox().x() + l->bbox().width() + margin);
+                  if (l->ticks() == Lyrics::TEMP_MELISMA_TICKS)
+                        x2 += spatium();
+                  }
+            return Shape(QRectF(x1, 0.0, x2-x1, 1.0));
             }
-      if (x2 > x1)
-            shape.add(QRectF(x1, 1.0, x2-x1, 0.0));
-      return shape;
+      return Shape();
       }
 
 //---------------------------------------------------------

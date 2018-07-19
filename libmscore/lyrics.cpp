@@ -24,6 +24,17 @@
 
 namespace Ms {
 
+
+#if defined (USE_FONT_DASH_METRIC)
+      static QString    g_fontFamily      = QString();
+      static qreal      g_fontSize        = -1;
+      static qreal      g_cachedDashY;
+      static qreal      g_cachedDashLength;
+   #if defined(USE_FONT_DASH_TICKNESS)
+      static qreal      g_cachedDashThickness;
+   #endif
+#endif
+
 //---------------------------------------------------------
 //   Lyrics
 //---------------------------------------------------------
@@ -199,22 +210,13 @@ bool Lyrics::isMelisma() const
 
 //---------------------------------------------------------
 //   layout
+//    - does not touch vertical position
 //---------------------------------------------------------
-
-#if defined (USE_FONT_DASH_METRIC)
-      static QString    g_fontFamily      = QString();
-      static qreal      g_fontSize        = -1;
-      static qreal      g_cachedDashY;
-      static qreal      g_cachedDashLength;
-   #if defined(USE_FONT_DASH_TICKNESS)
-      static qreal      g_cachedDashThickness;
-   #endif
-#endif
 
 void Lyrics::layout()
       {
-      setPos(QPointF());
       if (!parent()) { // palette & clone trick
+            setPos(QPointF());
             TextBase::layout1();
             return;
             }
@@ -243,7 +245,7 @@ void Lyrics::layout()
                   QString tp = punctuationMatch.captured(3);
                   // actual lyric
                   //QString actualLyric = punctuationMatch.captured(2);
-                  if (!lp.isEmpty() && !tp.isEmpty()) {
+                  if (!lp.isEmpty() || !tp.isEmpty()) {
                         qDebug("create leading, trailing <%s> -- <%s><%s>", qPrintable(s), qPrintable(lp), qPrintable(tp));
                         Lyrics leading(*this);
                         leading.setPlainText(lp);
@@ -311,9 +313,7 @@ void Lyrics::layout()
             x -= leftAdjust;
             }
 
-      rxpos() += x;
-//      rypos() += y;
-      rypos() = 0.0;
+      rxpos() = x;
 
       if (_ticks > 0 || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
             if (!_separator) {
@@ -360,6 +360,7 @@ void Lyrics::layout()
 
 //---------------------------------------------------------
 //   layout2
+//    compute vertical position
 //---------------------------------------------------------
 
 void Lyrics::layout2(int nAbove)
