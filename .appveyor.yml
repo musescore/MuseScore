@@ -57,5 +57,5 @@ deploy:
   bucket: update.musescore.org
   region: us-east-1
   set_public: true
-  artifact: C:\MuseScore\update_win_nightly.xml
+  artifact: update_win_nightly.xml
 

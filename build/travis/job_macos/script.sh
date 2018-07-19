@@ -72,6 +72,8 @@ echo "<update>
 <downloadUrl>https://ftp.osuosl.org/pub/musescore-nightlies/macosx/$DMGFILE</downloadUrl>
 <infoUrl>https://ftp.osuosl.org/pub/musescore-nightlies/macosx/</infoUrl>
 </update>" >> update_mac_nightly.xml
+ARTIFACTS_KEY=$UPDATE_S3_KEY
+ARTIFACTS_SECRET=$UPDATE_S3_SECRET
 ARTIFACTS_AWS_REGION=us-east-1
 ARTIFACTS_S3_BUCKET=update.musescore.org
 ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
