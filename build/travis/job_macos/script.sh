@@ -76,6 +76,7 @@ ARTIFACTS_AWS_REGION=us-east-1
 ARTIFACTS_S3_BUCKET=update.musescore.org
 ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
 ARTIFACTS_PATHS=update_mac_nightly.xml
+curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash
 artifacts upload
 fi
 
