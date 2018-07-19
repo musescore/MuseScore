@@ -1657,7 +1657,7 @@ SubStyleId subStyleFromName(const QString& name)
       if (name == "Technique")                  // compatibility
             return SubStyleId::EXPRESSION;
 
-      qDebug("substyle <%s> not known", qPrintable(name));
+      qWarning("substyle <%s> not known", qPrintable(name));
       return SubStyleId::DEFAULT;
       }
 

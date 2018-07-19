@@ -1828,7 +1828,6 @@ void Segment::createShape(int staffIdx)
             }
 
       for (Element* e : _annotations) {
-            // probably only allow for lyrics and chordnames
             if (e->staffIdx() == staffIdx
                && !e->isRehearsalMark()
                && !e->isFretDiagram()

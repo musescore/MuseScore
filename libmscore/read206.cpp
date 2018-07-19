@@ -468,8 +468,8 @@ void readTextStyle206(MStyle* style, XmlReader& e)
             { "Subtitle",                SubStyleId::SUBTITLE },
             { "Composer",                SubStyleId::COMPOSER },
             { "Lyricist",                SubStyleId::POET },
-//            { "Lyrics Odd Lines",        SubStyleId::LYRIC_ODD },
-//            { "Lyrics Even Lines",       SubStyleId::LYRIC_EVEN },
+            { "Lyrics Odd Lines",        SubStyleId::LYRIC },
+            { "Lyrics Even Lines",       SubStyleId::LYRIC },
             { "Lyrics Odd Lines",        SubStyleId::LYRIC },
             { "Lyrics Even Lines",       SubStyleId::LYRIC },
             { "Fingering",               SubStyleId::FINGERING },
@@ -1248,6 +1248,8 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e)
                   _verseNumber->read(e);
                   _verseNumber->setParent(lyrics);
                   }
+            else if (tag == "style")
+                  e.readElementText();    // ignore style
             else if (!lyrics->readProperties(e))
                   e.unknown();
             }
