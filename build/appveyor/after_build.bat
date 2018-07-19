@@ -77,8 +77,10 @@ echo ^<description^>MuseScore %MUSESCORE_VERSION% %MSversion%^</description^>
 echo ^<downloadUrl^>https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%^</downloadUrl^>
 echo ^<infoUrl^>https://ftp.osuosl.org/pub/musescore-nightlies/windows/^</infoUrl^>
 echo ^</update^>
-)>"update_win_nightly.xml"
+)>"C:\MuseScore\update_win_nightly.xml"
 
+@echo on
+type C:\MuseScore\update_win_nightly.xml
 
 :UPLOAD
 SET SSH_IDENTITY=C:\MuseScore\build\appveyor\resources\osuosl_nighlies_rsa_nopp
@@ -86,13 +88,13 @@ SET PATH=%OLD_PATH%
 IF DEFINED ENCRYPT_SECRET_SSH (
   scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% %ARTIFACT_NAME% musescore-nightlies@ftp-osl.osuosl.org:~/ftp/windows/
   ssh -oStrictHostKeyChecking=no -i %SSH_IDENTITY% musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/windows; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
-  create and upload index.html and RSS
+  rem create and upload index.html and RSS
   python build/appveyor/updateHTML.py %SSH_IDENTITY%
   scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% build/appveyor/web/index.html musescore-nightlies@ftp-osl.osuosl.org:ftp/windows
   scp -oStrictHostKeyChecking=no -C -i %SSH_IDENTITY% build/appveyor/web/nightly.xml musescore-nightlies@ftp-osl.osuosl.org:ftp/windows
-  trigger distribution
+  rem trigger distribution
   ssh -oStrictHostKeyChecking=no -i %SSH_IDENTITY% musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
-  notify IRC channel
+  rem notify IRC channel
   pip install irc
   python build/appveyor/irccat.py "%APPVEYOR_REPO_BRANCH%-%MSversion% (Win) compiled successfully https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%"
   )
