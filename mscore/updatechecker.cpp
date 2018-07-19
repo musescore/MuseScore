@@ -146,21 +146,18 @@ void UpdateChecker::check(QString currentVersion, bool m)
 #if defined(Q_OS_MAC)
       os = "mac";
 #endif
-      if (qApp->applicationName() == "MuseScore3") { //avoid nightly cymbals
-            if (MuseScore::unstable())
-                  release = "pre";
-            else
-                  release = "stable";
+      if (MuseScore::unstable()) {
+            release = "nightly";
+            _currentVersion = QString("%1.%2").arg(currentVersion).arg(BUILD_NUMBER);
             }
       else {
-            release = "nightly";
+            release = "stable";
+             _currentVersion =  currentVersion;
             }
       if (MScore::debugMode)
             qDebug("release type: %s", release.toLatin1().constData());
-      if (!os.isEmpty() && !release.isEmpty() && release != "nightly") {
-            _currentVersion =  currentVersion;
+      if (!os.isEmpty() && !release.isEmpty())
             manager->get(QNetworkRequest(QUrl("http://update.musescore.org/update_" + os +"_" + release +".xml")));
-            }
       }
 
 UpdateCheckerBase::UpdateCheckerBase(QObject* parent)
