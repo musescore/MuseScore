@@ -236,7 +236,7 @@ void Tuplet::layout()
       p2      = cr2->pagePos();
       p1.rx() -= noteLeft;
       p2.rx() += score()->noteHeadWidth() + noteRight;
-      p1.ry() += vHeadDistance;
+      p1.ry() += vHeadDistance;        // TODO: Direction ?
       p2.ry() += vHeadDistance;
 
       qreal xx1 = p1.x(); // use to center the number on the beam
@@ -391,14 +391,12 @@ void Tuplet::layout()
                   if (stem && !chord2->up()) {
                         // if (chord2->beam())
                         //      p2.setX(stem->abbox().x());
-#if 0 // TODO-ws beam bbox not available at this point
                         if (followBeam)
                               p2.ry() = stem->abbox().bottom() + beamAdjust;
                         if (chord2->beam())
                               p2.ry() = chord2->beam()->abbox().bottom();
                         else
                               p2.ry() = stem->abbox().bottom();
-#endif
                         l2r = vStemDistance;
                         }
                   else {
@@ -493,12 +491,13 @@ void Tuplet::layout()
             _number->layout();
             numberWidth = _number->bbox().width();
 
+            qreal y3 = p1.y() + (p2.y() - p1.y()) * .5 - l1 * (_isUp ? 1.0 : -1.0);
             //
             // for beamed tuplets, center number on beam
             //
             if (cr1->beam() && cr2->beam() && cr1->beam() == cr2->beam()) {
                   const ChordRest* crr = toChordRest(cr1);
-                  if(_isUp == crr->up()) {
+                  if (_isUp == crr->up()) {
                         qreal deltax = cr2->pagePos().x() - cr1->pagePos().x();
                         x3 = xx1 + deltax * .5;
                         }
@@ -512,7 +511,6 @@ void Tuplet::layout()
                   x3 = p1.x() + deltax * .5;
                   }
 
-            qreal y3 = p1.y() + (p2.y() - p1.y()) * .5 - l1 * (_isUp ? 1.0 : -1.0);
             _number->setPos(QPointF(x3, y3) - ipos());
             }
 

@@ -3196,35 +3196,6 @@ System* Score::collectSystem(LayoutContext& lc)
       system->setWidth(pos.x());
 
       //
-      // layout tuplet
-      //
-
-      for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure())
-                  continue;
-            Measure* m = toMeasure(mb);
-            static const SegmentType st { SegmentType::ChordRest };
-            for (int track = 0; track < score()->ntracks(); ++track) {
-                  if (!score()->staff(track / VOICES)->show()) {
-                        track += VOICES-1;
-                        continue;
-                        }
-                  for (Segment* s = m->first(st); s; s = s->next(st)) {
-                        ChordRest* cr = s->cr(track);
-                        if (!cr)
-                              continue;
-                        DurationElement* de = cr;
-                        while (de->tuplet() && de->tuplet()->elements().front() == de) {
-                              Tuplet* t = de->tuplet();
-                              t->layout();
-                              s->staffShape(t->staffIdx()).add(t->shape().translated(-s->pos()));
-                              de = de->tuplet();
-                              }
-                        }
-                  }
-            }
-
-      //
       // compute measure shape
       //
 
@@ -3330,6 +3301,35 @@ System* Score::collectSystem(LayoutContext& lc)
                               }
                         else if (e->isFiguredBass())
                               e->layout();
+                        }
+                  }
+            }
+
+      //
+      // layout tuplet
+      //
+
+      for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure())
+                  continue;
+            Measure* m = toMeasure(mb);
+            static const SegmentType st { SegmentType::ChordRest };
+            for (int track = 0; track < score()->ntracks(); ++track) {
+                  if (!score()->staff(track / VOICES)->show()) {
+                        track += VOICES-1;
+                        continue;
+                        }
+                  for (Segment* s = m->first(st); s; s = s->next(st)) {
+                        ChordRest* cr = s->cr(track);
+                        if (!cr)
+                              continue;
+                        DurationElement* de = cr;
+                        while (de->tuplet() && de->tuplet()->elements().front() == de) {
+                              Tuplet* t = de->tuplet();
+                              t->layout();
+                              s->staffShape(t->staffIdx()).add(t->shape().translated(-s->pos()));
+                              de = de->tuplet();
+                              }
                         }
                   }
             }
