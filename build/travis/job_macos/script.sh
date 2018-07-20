@@ -72,12 +72,12 @@ echo "<update>
 <downloadUrl>https://ftp.osuosl.org/pub/musescore-nightlies/macosx/$DMGFILE</downloadUrl>
 <infoUrl>https://ftp.osuosl.org/pub/musescore-nightlies/macosx/</infoUrl>
 </update>" >> update_mac_nightly.xml
-ARTIFACTS_KEY=$UPDATE_S3_KEY
-ARTIFACTS_SECRET=$UPDATE_S3_SECRET
-ARTIFACTS_AWS_REGION=us-east-1
-ARTIFACTS_S3_BUCKET=update.musescore.org
-ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
-ARTIFACTS_PATHS=update_mac_nightly.xml
+export ARTIFACTS_KEY=$UPDATE_S3_KEY
+export ARTIFACTS_SECRET=$UPDATE_S3_SECRET
+export ARTIFACTS_REGION=us-east-1
+export ARTIFACTS_BUCKET=update.musescore.org
+export ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
+export ARTIFACTS_PATHS=update_mac_nightly.xml
 curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash
 artifacts upload
 fi
