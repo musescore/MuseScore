@@ -112,7 +112,7 @@ QPointF LineSegment::gripAnchor(Grip grip) const
       // note-anchored spanners are relative to the system
       qreal y = spanner()->anchor() == Spanner::Anchor::NOTE ?
                   system()->pos().y() : system()->staffYpage(staffIdx());
-      if (spannerSegmentType() == SpannerSegmentType::MIDDLE) {
+      if (isMiddleType()) {
             qreal x;
             switch (grip) {
                   case Grip::START:
@@ -129,9 +129,7 @@ QPointF LineSegment::gripAnchor(Grip grip) const
             return QPointF(x, y);
             }
       else {
-            if ((grip == Grip::END && spannerSegmentType() == SpannerSegmentType::BEGIN)
-               || (grip == Grip::START && spannerSegmentType() == SpannerSegmentType::END)
-               )
+            if ((grip == Grip::END && isBeginType()) || (grip == Grip::START && isEndType()))
                   return QPointF(0, 0);
             else {
                   System* s;
@@ -162,10 +160,8 @@ void LineSegment::startEditDrag(EditData& ed)
 
 bool LineSegment::edit(EditData& ed)
       {
-      if (!((ed.modifiers & Qt::ShiftModifier)
-         && ((spannerSegmentType() == SpannerSegmentType::SINGLE)
-              || (spannerSegmentType() == SpannerSegmentType::BEGIN && ed.curGrip == Grip::START)
-              || (spannerSegmentType() == SpannerSegmentType::END && ed.curGrip == Grip::END))))
+      if (!((ed.modifiers & Qt::ShiftModifier) && (isSingleType() || (isBeginType() && ed.curGrip == Grip::START)
+         || (isEndType() && ed.curGrip == Grip::END))))
             return false;
 
       LineSegment* ls       = 0;
@@ -268,7 +264,8 @@ bool LineSegment::edit(EditData& ed)
                         spanner()->setNoteSpan(note1, note2);          // set new spanner span
                   }
                   break;
-            default:
+            case Spanner::Anchor::MEASURE:
+            case Spanner::Anchor::CHORD:
                   {
                   Measure* m1 = l->startMeasure();
                   Measure* m2 = l->endMeasure();
@@ -686,14 +683,21 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                         else {
                               m = endMeasure();
                               }
+
                         // back up to barline (skip courtesy elements)
                         Segment* seg = m->last();
                         while (seg && seg->segmentType() != SegmentType::EndBarLine)
                               seg = seg->prev();
+                        if (!seg || !seg->enabled()) {
+                              // no end bar line; look for BeginBarLine of next measure
+                              Measure* nm = m->nextMeasure();
+                              if (nm->system() == m->system())
+                                    seg = nm->first(SegmentType::BeginBarLine);
+                              }
                         qreal mwidth = seg ? seg->x() : m->bbox().right();
                         x = m->pos().x() + mwidth;
                         // align to barline
-                        if (seg && seg->segmentType() == SegmentType::EndBarLine) {
+                        if (seg && seg->isEndBarLineType()) {
                               Element* e = seg->element(0);
                               if (e && e->type() == ElementType::BAR_LINE) {
                                     BarLineType blt = toBarLine(e)->barLineType();
