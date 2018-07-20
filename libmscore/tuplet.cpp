@@ -225,7 +225,7 @@ void Tuplet::layout()
                   outOfStaff = false;
             }
 
-      qreal l1 = _spatium;          // bracket tip height                     TODO: create style value
+      qreal l1  =  score()->styleP(Sid::tupletBracketHookHeight);
       qreal l2l = vHeadDistance;    // left bracket vertical distance
       qreal l2r = vHeadDistance;    // right bracket vertical distance right
 

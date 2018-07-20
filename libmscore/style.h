@@ -389,6 +389,7 @@ enum class Sid {
       tupletFontItalic,
       tupletFontUnderline,
       tupletAlign,
+      tupletBracketHookHeight,
 
       barreLineWidth,
       scaleBarlines,
