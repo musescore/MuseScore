@@ -77,6 +77,8 @@ export ARTIFACTS_SECRET=$UPDATE_S3_SECRET
 export ARTIFACTS_REGION=us-east-1
 export ARTIFACTS_BUCKET=update.musescore.org
 export ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
+export ARTIFACTS_PERMISSIONS=public-read
+export ARTIFACTS_TARGET_PATHS="/"
 export ARTIFACTS_PATHS=update_mac_nightly.xml
 curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash
 artifacts upload
