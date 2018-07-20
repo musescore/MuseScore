@@ -191,7 +191,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>25</number>
+       <number>31</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -10301,7 +10301,7 @@
               <item row="0" column="0">
                <widget class="QLabel" name="label_6">
                 <property name="text">
-                 <string>Tuplet bracket thickness:</string>
+                 <string>Bracket thickness:</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -10314,6 +10314,49 @@
                 </property>
                 <property name="buddy">
                  <cstring>tupletBracketWidth</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <spacer name="horizontalSpacer_29">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="0" column="2">
+               <widget class="QToolButton" name="resetTupletBracketWidth">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Tuplet bracket thickness' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_187">
+                <property name="text">
+                 <string>Bracket hook height:</string>
                 </property>
                </widget>
               </item>
@@ -10336,21 +10379,27 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="3">
-               <spacer name="horizontalSpacer_29">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+              <item row="1" column="1">
+               <widget class="QDoubleSpinBox" name="tupletBracketHookHeight">
+                <property name="suffix">
+                 <string>sp</string>
                 </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
+                <property name="minimum">
+                 <double>0.050000000000000</double>
                 </property>
-               </spacer>
+                <property name="maximum">
+                 <double>10.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.050000000000000</double>
+                </property>
+                <property name="value">
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
               </item>
-              <item row="0" column="2">
-               <widget class="QToolButton" name="resetTupletBracketWidth">
+              <item row="1" column="2">
+               <widget class="QToolButton" name="resetTupletBracketHookHeight">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>

@@ -259,6 +259,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::tupletNoteLeftDistance,  false, tupletNoteLeftDistance,  resetTupletNoteLeftDistance   },
       { Sid::tupletNoteRightDistance, false, tupletNoteRightDistance, resetTupletNoteRightDistance  },
       { Sid::tupletBracketWidth,      false, tupletBracketWidth,      resetTupletBracketWidth       },
+      { Sid::tupletBracketHookHeight, false, tupletBracketHookHeight, resetTupletBracketHookHeight  },
       { Sid::tupletDirection,         false, tupletDirection,         resetTupletDirection          },
       { Sid::tupletNumberType,        false, tupletNumberType,        resetTupletNumberType         },
       { Sid::tupletBracketType,       false, tupletBracketType,       resetTupletBracketType        },
