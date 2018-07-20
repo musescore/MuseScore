@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1115</width>
-    <height>826</height>
+    <height>931</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -10295,7 +10295,7 @@
            <item>
             <widget class="QGroupBox" name="groupBox_19">
              <property name="title">
-              <string>Appearance</string>
+              <string>Brackets</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_21">
               <item row="0" column="0">
@@ -10420,6 +10420,208 @@
                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                 </property>
                </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_40">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="title">
+              <string>Number</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_38">
+              <item row="2" column="7">
+               <widget class="QLabel" name="label_194">
+                <property name="text">
+                 <string>size:</string>
+                </property>
+                <property name="indent">
+                 <number>10</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="10">
+               <widget class="QDoubleSpinBox" name="tupletFontSize">
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="minimum">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="12" rowspan="2">
+               <widget class="QLabel" name="label_192">
+                <property name="text">
+                 <string>style:</string>
+                </property>
+                <property name="indent">
+                 <number>11</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="3">
+               <widget class="QLabel" name="label_193">
+                <property name="text">
+                 <string>Font face:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="11">
+               <widget class="QToolButton" name="resetTupletFontSize">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Font size' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="6">
+               <widget class="QToolButton" name="resetTupletFontFace">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Font face' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="5">
+               <widget class="QFontComboBox" name="tupletFontFace">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="editable">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="13">
+               <layout class="QHBoxLayout" name="horizontalLayout_26">
+                <item>
+                 <widget class="QPushButton" name="tupletFontBold">
+                  <property name="accessibleName">
+                   <string>Bold</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="resetTupletFontBold">
+                  <property name="toolTip">
+                   <string>Reset to default</string>
+                  </property>
+                  <property name="accessibleName">
+                   <string>Reset 'Bold' value</string>
+                  </property>
+                  <property name="text">
+                   <string notr="true"/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="tupletFontItalic">
+                  <property name="accessibleName">
+                   <string>Italic</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="resetTupletFontItalic">
+                  <property name="toolTip">
+                   <string>Reset to default</string>
+                  </property>
+                  <property name="accessibleName">
+                   <string>Reset 'Italic' value</string>
+                  </property>
+                  <property name="text">
+                   <string notr="true"/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="tupletFontUnderline">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="accessibleName">
+                   <string>Underline</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/format-text-underline.svg</normaloff>:/data/icons/format-text-underline.svg</iconset>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="resetTupletFontUnderline">
+                  <property name="toolTip">
+                   <string>Reset to default</string>
+                  </property>
+                  <property name="accessibleName">
+                   <string>Reset 'Underline' value</string>
+                  </property>
+                  <property name="text">
+                   <string notr="true"/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="musescore.qrc">
+                    <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
              </layout>
             </widget>
