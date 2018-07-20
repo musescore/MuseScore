@@ -265,6 +265,11 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::tupletBracketType,       false, tupletBracketType,       resetTupletBracketType        },
       { Sid::tupletMaxSlope,          false, tupletMaxSlope,          resetTupletMaxSlope           },
       { Sid::tupletOufOfStaff,        false, tupletOutOfStaff,        0 },
+      { Sid::tupletFontFace,          false, tupletFontFace,          resetTupletFontFace           },
+      { Sid::tupletFontSize,          false, tupletFontSize,          resetTupletFontSize           },
+      { Sid::tupletFontBold,          false, tupletFontBold,          resetTupletFontBold           },
+      { Sid::tupletFontItalic,        false, tupletFontItalic,        resetTupletFontItalic         },
+      { Sid::tupletFontUnderline,     false, tupletFontUnderline,     resetTupletFontUnderline      },
 
       { Sid::repeatBarTips,           false, showRepeatBarTips,            0 },
       { Sid::startBarlineSingle,      false, showStartBarlineSingle,       0 },
