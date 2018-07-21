@@ -47,6 +47,9 @@ after_build:
 
 artifacts:
   - path: $(ARTIFACT_NAME)
+    name: musescore-binary
+  - path: update_win_nightly.xml
+    name: update_win_nightly.xml
 
 deploy:
   provider: S3
