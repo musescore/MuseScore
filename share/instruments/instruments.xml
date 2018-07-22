@@ -1066,10 +1066,13 @@
                   <shortName>Hph.</shortName>
                   <description>Heckelphone</description>
                   <musicXMLid>wind.reed.heckelphone</musicXMLid>
-                  <clef>G8vb</clef>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>45-75</aPitchRange>
                   <pPitchRange>45-78</pPitchRange>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>         
                   <Channel>
                         <program value="68"/>
                   </Channel>
@@ -2038,7 +2041,8 @@
                   <shortName>Cbsn.</shortName>
                   <description>Contrabassoon</description>
                   <musicXMLid>wind.reed.contrabassoon</musicXMLid>
-                  <clef>F</clef>
+                  <transposingClef>F</transposingClef>
+                  <concertClef>F8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>22-57</aPitchRange>
                   <pPitchRange>22-60</pPitchRange>
