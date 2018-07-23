@@ -77,8 +77,15 @@ void TextLineSegment::draw(QPainter* painter) const
 
       // color for line (text color comes from the text properties)
       QColor color;
-      if ((selected() && !(score() && score()->printing())) || !tl->visible() || !tl->lineVisible())
+      if ((selected() && !(score() && score()->printing())) || !tl->visible() || !tl->lineVisible()) {
             color = curColor();
+            if (tl->visible() && !tl->lineVisible()) {
+                  if (selected())
+                        color = color.lighter(200);
+                  else
+                        color = Qt::gray;
+                  }
+            }
       else
             color = tl->lineColor();
 
