@@ -509,6 +509,7 @@ void BarLine::drawEditMode(QPainter* p, EditData& ed)
 void BarLine::write(XmlWriter& xml) const
       {
       xml.stag("BarLine");
+
       writeProperty(xml, Pid::BARLINE_TYPE);
       writeProperty(xml, Pid::BARLINE_SPAN);
       writeProperty(xml, Pid::BARLINE_SPAN_FROM);
@@ -1178,8 +1179,10 @@ QVariant BarLine::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::BARLINE_TYPE:
-                  if (segment() && segment()->measure() && !segment()->measure()->nextMeasure())
-                        return QVariant::fromValue(BarLineType::END);
+// dynamic default values are a bad idea: writing to xml the value maybe ommited resulting in
+//    wrong values on read (as the default may be different on read)
+//                  if (segment() && segment()->measure() && !segment()->measure()->nextMeasure())
+//                        return QVariant::fromValue(BarLineType::END);
                   return QVariant::fromValue(BarLineType::NORMAL);
 
             case Pid::BARLINE_SPAN:
