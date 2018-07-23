@@ -1,3 +1,4 @@
+
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
@@ -161,8 +162,34 @@ void Marker::layout()
 
       // although normally laid out to parent (measure) width,
       // force to center over barline if left-aligned
-      if (layoutToParentWidth() && !(align() & (Align::RIGHT | Align::HCENTER)))
-            rxpos() -= width() * 0.5;
+      if (layoutToParentWidth() && !(align() & (Align::RIGHT | Align::HCENTER))){
+            // only move to center over barline if actually in a measure
+            if (measure()){
+                  qreal clefWidth = 0, keySigWidth = 0, timeSigWidth = 0;
+
+                  Segment* headerClefSeg = measure()->findSegmentR(SegmentType::HeaderClef, 0);
+                  if (headerClefSeg)
+                        clefWidth = headerClefSeg->width();
+
+                  Segment* keySigSeg = measure()->findSegmentR(SegmentType::KeySig, 0);
+                  if (keySigSeg)
+                        keySigWidth = keySigSeg->width();
+
+                  Segment* timeSigSeg = measure()->findSegmentR(SegmentType::TimeSig, 0);
+                  if (timeSigSeg)
+                        timeSigWidth = timeSigSeg->width();
+                  
+                  qreal totalOffset = (clefWidth + keySigWidth + timeSigWidth);
+                  if (totalOffset == 0){
+                        // must be in normal measure, center over barline
+                        rxpos() -= width() * 0.5;
+                        }
+                  else {
+                        // in measure with key sig/clef/time sig, so offset accordingly
+                        rxpos() += totalOffset;
+                        }
+                  }
+            }
 
       if (parent() && autoplace()) {
             setUserOff(QPointF());
