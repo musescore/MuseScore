@@ -3328,6 +3328,7 @@ System* Score::collectSystem(LayoutContext& lc)
                               Tuplet* t = de->tuplet();
                               t->layout();
                               s->staffShape(t->staffIdx()).add(t->shape().translated(-s->pos()));
+                              m->staffShape(t->staffIdx()).add(t->shape());
                               de = de->tuplet();
                               }
                         }
