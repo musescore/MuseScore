@@ -186,7 +186,9 @@ UndoStack::UndoStack()
       {
       curCmd   = 0;
       curIdx   = 0;
-      cleanIdx = 0;
+      cleanState = 0;
+      stateList.push_back(cleanState);
+      nextState = 1;
       }
 
 //---------------------------------------------------------
@@ -267,17 +269,18 @@ void UndoStack::remove(int idx)
       // remove redo stack
       while (list.size() > curIdx) {
             UndoCommand* cmd = list.takeLast();
+            stateList.pop_back();
             cmd->cleanup(false);  // delete elements for which UndoCommand() holds ownership
             delete cmd;
 //            --curIdx;
             }
       while (list.size() > idx) {
             UndoCommand* cmd = list.takeLast();
+            stateList.pop_back();
             cmd->cleanup(true);
             delete cmd;
             }
       curIdx = idx;
-      // TODO: handle cleanIdx
       }
 
 //---------------------------------------------------------
@@ -325,10 +328,12 @@ void UndoStack::endMacro(bool rollback)
             // remove redo stack
             while (list.size() > curIdx) {
                   UndoCommand* cmd = list.takeLast();
+                  stateList.pop_back();
                   cmd->cleanup(false);  // delete elements for which UndoCommand() holds ownership
                   delete cmd;
                   }
             list.append(curCmd);
+            stateList.push_back(nextState++);
             ++curIdx;
             }
       curCmd = 0;
@@ -345,6 +350,7 @@ void UndoStack::reopen()
       Q_ASSERT(curIdx > 0);
       --curIdx;
       curCmd = list.takeAt(curIdx);
+      stateList.erase(stateList.begin() + curIdx);
       for (auto i : curCmd->commands()) {
             qDebug("   <%s>", i->name());
             }
@@ -356,7 +362,7 @@ void UndoStack::reopen()
 
 void UndoStack::setClean()
       {
-      cleanIdx = curIdx;
+      cleanState = state();
       }
 
 //---------------------------------------------------------

@@ -280,6 +280,12 @@ class UpdateState {
       QList<ScoreElement*> _deleteList;
       };
 
+//---------------------------------------------------------
+//   ScoreContentState
+//---------------------------------------------------------
+
+typedef std::pair<const Score*, int> ScoreContentState;
+
 class MasterScore;
 
 //-----------------------------------------------------------------------------
@@ -796,6 +802,7 @@ class Score : public QObject, public ScoreElement {
       void setImportedFilePath(const QString& filePath);
 
       bool dirty() const;
+      ScoreContentState state() const;
       void setCreated(bool val)      { _created = val;        }
       bool created() const           { return _created;       }
       bool savedCapture() const      { return _savedCapture;  }
