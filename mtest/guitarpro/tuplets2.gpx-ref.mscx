@@ -685,6 +685,7 @@ solo concert</text>
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
+          <subtype>end</subtype>
           <lid>82</lid>
           </BarLine>
         <move>0/1</move>
@@ -1423,6 +1424,7 @@ solo concert</text>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
+            <subtype>end</subtype>
             <lid>82</lid>
             </BarLine>
           <move>0/1</move>
@@ -1993,6 +1995,7 @@ solo concert</text>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
+            <subtype>end</subtype>
             <lid>82</lid>
             </BarLine>
           <move>0/1</move>

@@ -164,6 +164,7 @@
           <duration>128/4</duration>
           </Rest>
         <BarLine>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       <Measure number="2">
@@ -352,6 +353,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>
