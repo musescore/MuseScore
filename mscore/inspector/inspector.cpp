@@ -884,6 +884,17 @@ InspectorStem::InspectorStem(QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   populatePlacement
+//---------------------------------------------------------
+
+void populatePlacement(QComboBox* b)
+      {
+      b->clear();
+      b->addItem(b->QObject::tr("Above"), int(Placement::ABOVE));
+      b->addItem(b->QObject::tr("Below"), int(Placement::BELOW));
+      }
+
+//---------------------------------------------------------
 //   InspectorTempoText
 //---------------------------------------------------------
 
@@ -900,9 +911,7 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
       const std::vector<InspectorPanel> ppList = {
             { tt.title, tt.panel }
             };
-      tt.placement->clear();
-      tt.placement->addItem(tr("Above"), 0);
-      tt.placement->addItem(tr("Below"), 1);
+      populatePlacement(tt.placement);
       mapSignals(il, ppList);
       connect(tt.followText, SIGNAL(toggled(bool)), tt.tempo, SLOT(setDisabled(bool)));
       }
@@ -935,9 +944,7 @@ InspectorLyric::InspectorLyric(QWidget* parent)
       const std::vector<InspectorPanel> ppList = {
             { l.title, l.panel }
             };
-      l.placement->clear();
-      l.placement->addItem(tr("Above"), 0);
-      l.placement->addItem(tr("Below"), 1);
+      populatePlacement(l.placement);
       mapSignals(il, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
@@ -970,9 +977,7 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel }
             };
-      s.placement->clear();
-      s.placement->addItem(tr("Above"), 0);
-      s.placement->addItem(tr("Below"), 1);
+      populatePlacement(s.placement);
 
       s.style->clear();
       for (auto ss : { SubStyleId::SYSTEM, SubStyleId::STAFF, SubStyleId::TEMPO, SubStyleId::METRONOME,

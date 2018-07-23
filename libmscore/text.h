@@ -123,7 +123,6 @@ class TextFragment {
    public:
       mutable CharFormat format;
       QPointF pos;                  // y is relative to TextBlock->y()
-
       mutable QString text;
 
       bool operator ==(const TextFragment& f) const;

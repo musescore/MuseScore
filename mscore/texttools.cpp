@@ -141,6 +141,7 @@ void TextTools::updateTools(EditData& ed)
       {
       text   = toTextBase(ed.element);
       cursor = text->cursor(ed);
+
       blockAllSignals(true);
       CharFormat* format = cursor->format();
 

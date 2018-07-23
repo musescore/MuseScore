@@ -4373,8 +4373,13 @@ void MuseScore::removeSessionFile()
 void MuseScore::autoSaveTimerTimeout()
       {
       bool sessionChanged = false;
+
+      extern bool __loadScore;
+      __loadScore = true;           //disable debug message "no active command"
+
       for (MasterScore* s : scoreList) {
             if (s->autosaveDirty()) {
+                  qDebug("<%s>", qPrintable(s->fileInfo()->baseName()));
                   QString tmp = s->tmpName();
                   if (!tmp.isEmpty()) {
                         QFileInfo fi(tmp);
@@ -4399,6 +4404,8 @@ void MuseScore::autoSaveTimerTimeout()
                   s->setAutosaveDirty(false);
                   }
             }
+      __loadScore = false;
+
       if (sessionChanged)
             writeSessionFile(false);
       if (preferences.getBool(PREF_APP_AUTOSAVE_USEAUTOSAVE)) {

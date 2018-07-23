@@ -265,6 +265,7 @@ void UndoStack::push1(UndoCommand* cmd)
 void UndoStack::remove(int idx)
       {
       Q_ASSERT(idx <= curIdx);
+      Q_ASSERT(curIdx >= 0);
       // remove redo stack
       while (list.size() > curIdx) {
             UndoCommand* cmd = list.takeLast();

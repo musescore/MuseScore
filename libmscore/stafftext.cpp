@@ -26,7 +26,7 @@ namespace Ms {
 StaffTextBase::StaffTextBase(Score* s, ElementFlags flags)
    : TextBase(s, flags)
       {
-      setPlacement(Placement::ABOVE);     // default
+//      setPlacement(Placement::ABOVE);     // default
       setSwingParameters(MScore::division / 2, 60);
       }
 
