@@ -127,7 +127,6 @@ void ScoreView::startEdit()
       editData.element->startEdit(editData);
       updateGrips();
 
-      qDebug("reset input method");
       QGuiApplication::inputMethod()->reset();
       QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
       setAttribute(Qt::WA_InputMethodEnabled, editData.element->isTextBase());

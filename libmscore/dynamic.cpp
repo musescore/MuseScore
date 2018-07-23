@@ -168,7 +168,7 @@ void Dynamic::layout()
                   Element* e = s->element(t + voice);
                   if (!e)
                         continue;
-                  if (e->isChord()) {
+                  if (e->isChord() && (align() & Align::HCENTER)) {
                         Chord* c = toChord(e);
                         qreal noteHeadWidth = score()->noteHeadWidth() * c->mag();
                         if (c->stem() && !c->up())  // stem down

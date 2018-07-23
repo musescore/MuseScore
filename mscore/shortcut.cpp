@@ -2786,7 +2786,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_FOTO,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_FOTO | STATE_TEXT_EDIT,
          "inspector",
          QT_TRANSLATE_NOOP("action","Inspector"),
          QT_TRANSLATE_NOOP("action","Show inspector")
