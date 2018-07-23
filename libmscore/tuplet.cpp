@@ -638,15 +638,13 @@ Shape Tuplet::shape() const
       Shape s;
       if (_hasBracket) {
             qreal w = _bracketWidth.val();
+            s.add(Rect(bracketL[0], bracketL[1], w));
+            s.add(Rect(bracketL[1], bracketL[2], w));
             if (_number) {
-                  s.add(Rect(bracketL[0], bracketL[1], w));
-                  s.add(Rect(bracketL[1], bracketL[2], w));
                   s.add(Rect(bracketR[0], bracketR[1], w));
                   s.add(Rect(bracketR[1], bracketR[2], w));
                   }
             else {
-                  s.add(Rect(bracketL[0], bracketL[1], w));
-                  s.add(Rect(bracketL[1], bracketL[2], w));
                   s.add(Rect(bracketL[2], bracketL[3], w));
                   }
             }
