@@ -4268,7 +4268,7 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_26">
            <item>
-            <widget class="QGroupBox" name="groupBox">
+            <widget class="QGroupBox" name="groupBox_1">
              <layout class="QGridLayout" name="gridLayout_40">
               <item row="2" column="0">
                <widget class="QCheckBox" name="showStartBarlineMultiple">
@@ -4405,7 +4405,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="groupBox">
+            <widget class="QGroupBox" name="groupBox2">
              <layout class="QGridLayout" name="gridLayout_37">
               <item row="2" column="0">
                <widget class="QLabel" name="label_84">
@@ -7883,7 +7883,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page">
+      <widget class="QWidget" name="PageStaffText">
        <layout class="QGridLayout" name="gridLayout_34">
         <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox_38">
@@ -9268,7 +9268,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_2">
+      <widget class="QWidget" name="PageBend">
        <layout class="QGridLayout" name="gridLayout_35">
         <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox_39">
