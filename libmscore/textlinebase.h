@@ -49,9 +49,8 @@ class TextLineBaseSegment : public LineSegment {
 
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
-      virtual QVariant getProperty(Pid id) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid id) const override;
+      virtual Element* propertyDelegate(Pid) override;
+
       virtual Shape shape() const override;
       };
 

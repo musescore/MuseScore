@@ -186,9 +186,6 @@ Page* Fermata::page() const
 
 void Fermata::layout()
       {
-      QRectF b(symBbox(_symId));
-      setbbox(b.translated(-0.5 * b.width(), 0.0));
-
       Segment* s = segment();
       if (!s) {          // for use in palette
             setPos(QPointF());
@@ -197,10 +194,10 @@ void Fermata::layout()
 
       qreal x = 0.0;
       Element* e = s->element(track());
-      if (e && !e->isChord())
-            x = e->x() + e->width() * staff()->mag(0) * .5;
-      else
+      if (e && e->isChord())
             x = score()->noteHeadWidth() * staff()->mag(0) * .5;
+      else
+            x = e->x() + e->width() * staff()->mag(0) * .5;
       qreal y = placeAbove() ? styleP(Sid::fermataPosAbove) : styleP(Sid::fermataPosBelow) + staff()->height();
 
       setPos(QPointF(x, y));
@@ -209,19 +206,15 @@ void Fermata::layout()
 
       QString name = Sym::id2name(_symId);
       if (placeAbove()) {
-            if (name.endsWith("Below")) {
+            if (name.endsWith("Below"))
                   _symId = Sym::name2id(name.left(name.size() - 5) + "Above");
-                  QRectF b(symBbox(_symId));
-                  setbbox(b.translated(-0.5 * b.width(), 0.0));
-                  }
             }
       else {
-            if (name.endsWith("Above")) {
+            if (name.endsWith("Above"))
                   _symId = Sym::name2id(name.left(name.size() - 5) + "Below");
-                  QRectF b(symBbox(_symId));
-                  setbbox(b.translated(-0.5 * b.width(), 0.0));
-                  }
             }
+      QRectF b(symBbox(_symId));
+      setbbox(b.translated(-0.5 * b.width(), 0.0));
       autoplaceSegmentElement(styleP(Sid::fermataMinDistance));
       }
 

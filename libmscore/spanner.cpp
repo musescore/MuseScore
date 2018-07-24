@@ -66,19 +66,29 @@ void SpannerSegment::setSystem(System* s)
       }
 
 //---------------------------------------------------------
+//   propertyDelegate
+//---------------------------------------------------------
+
+Element* SpannerSegment::propertyDelegate(Pid pid)
+      {
+      if (pid == Pid::COLOR || pid == Pid::VISIBLE)
+            return spanner();
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant SpannerSegment::getProperty(Pid id) const
+QVariant SpannerSegment::getProperty(Pid pid) const
       {
-      switch (id) {
-            case Pid::COLOR:
-            case Pid::VISIBLE:
-                  return spanner()->getProperty(id);
+      if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid))
+            return e->getProperty(pid);
+      switch (pid) {
             case Pid::USER_OFF2:
                   return _userOff2;
             default:
-                  return Element::getProperty(id);
+                  return Element::getProperty(pid);
             }
       }
 
@@ -86,18 +96,17 @@ QVariant SpannerSegment::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool SpannerSegment::setProperty(Pid id, const QVariant& v)
+bool SpannerSegment::setProperty(Pid pid, const QVariant& v)
       {
-      switch (id) {
-            case Pid::COLOR:
-            case Pid::VISIBLE:
-                 return spanner()->setProperty(id, v);
+      if (Element* e = propertyDelegate(pid))
+            return e->setProperty(pid, v);
+      switch (pid) {
             case Pid::USER_OFF2:
                   _userOff2 = v.toPointF();
                   score()->setLayoutAll();
                   break;
             default:
-                  return Element::setProperty(id, v);
+                  return Element::setProperty(pid, v);
             }
       return true;
       }
@@ -106,16 +115,15 @@ bool SpannerSegment::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SpannerSegment::propertyDefault(Pid id) const
+QVariant SpannerSegment::propertyDefault(Pid pid) const
       {
-      switch (id) {
-            case Pid::COLOR:
-            case Pid::VISIBLE:
-                  return spanner()->propertyDefault(id);
+      if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid))
+            return e->propertyDefault(pid);
+      switch (pid) {
             case Pid::USER_OFF2:
                   return QVariant();
             default:
-                  return Element::propertyDefault(id);
+                  return Element::propertyDefault(pid);
             }
       }
 
@@ -123,31 +131,33 @@ QVariant SpannerSegment::propertyDefault(Pid id) const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-Sid SpannerSegment::getPropertyStyle(Pid id) const
+Sid SpannerSegment::getPropertyStyle(Pid pid) const
       {
-      return spanner()->getPropertyStyle(id);
+      if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid))
+            return e->getPropertyStyle(pid);
+      return Element::getPropertyStyle(pid);
       }
 
 //---------------------------------------------------------
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags SpannerSegment::propertyFlags(Pid id) const
+PropertyFlags SpannerSegment::propertyFlags(Pid pid) const
       {
-      return spanner()->propertyFlags(id);
+      if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid))
+            return e->propertyFlags(pid);
+      return Element::propertyFlags(pid);
       }
 
 //---------------------------------------------------------
 //   resetProperty
 //---------------------------------------------------------
 
-void SpannerSegment::resetProperty(Pid id)
+void SpannerSegment::resetProperty(Pid pid)
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->resetProperty(id);
-            }
-      return Element::resetProperty(id);
+      if (Element* e = propertyDelegate(pid))
+            return e->resetProperty(pid);
+      return Element::resetProperty(pid);
       }
 
 //---------------------------------------------------------

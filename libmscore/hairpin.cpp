@@ -374,66 +374,14 @@ void HairpinSegment::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   getProperty
+//   propertyDelegate
 //---------------------------------------------------------
 
-QVariant HairpinSegment::getProperty(Pid id) const
+Element* HairpinSegment::propertyDelegate(Pid pid)
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->getProperty(id);
-            }
-      switch (id) {
-            case Pid::VELO_CHANGE:
-            case Pid::HAIRPIN_TYPE:
-            case Pid::HAIRPIN_CIRCLEDTIP:
-            case Pid::DYNAMIC_RANGE:
-                  return spanner()->getProperty(id);
-            default:
-                  return TextLineBaseSegment::getProperty(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool HairpinSegment::setProperty(Pid id, const QVariant& v)
-      {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->setProperty(id, v);
-            }
-      switch (id) {
-            case Pid::VELO_CHANGE:
-            case Pid::HAIRPIN_TYPE:
-            case Pid::HAIRPIN_CIRCLEDTIP:
-            case Pid::DYNAMIC_RANGE:
-                  return spanner()->setProperty(id, v);
-            default:
-                  return TextLineBaseSegment::setProperty(id, v);
-            }
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant HairpinSegment::propertyDefault(Pid id) const
-      {
-      switch (id) {
-            case Pid::VELO_CHANGE:
-            case Pid::HAIRPIN_TYPE:
-            case Pid::HAIRPIN_CIRCLEDTIP:
-            case Pid::DYNAMIC_RANGE:
-                  return spanner()->propertyDefault(id);
-            default:
-                  for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-                        if (spp->pid == id)
-                              return spanner()->propertyDefault(id);
-                        }
-                  return TextLineBaseSegment::propertyDefault(id);
-            }
+      if (pid == Pid::HAIRPIN_TYPE || pid == Pid::VELO_CHANGE || pid == Pid::HAIRPIN_CIRCLEDTIP || pid == Pid::DYNAMIC_RANGE)
+            return spanner();
+      return TextLineBaseSegment::propertyDelegate(pid);
       }
 
 //---------------------------------------------------------

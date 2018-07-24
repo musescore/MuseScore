@@ -56,9 +56,7 @@ class OttavaSegment final : public TextLineBaseSegment {
       virtual OttavaSegment* clone() const override { return new OttavaSegment(*this); }
       Ottava* ottava() const                        { return (Ottava*)spanner(); }
       virtual void layout() override;
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      virtual Element* propertyDelegate(Pid) override;
       };
 
 //---------------------------------------------------------

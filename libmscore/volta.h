@@ -37,9 +37,7 @@ class VoltaSegment final : public TextLineBaseSegment {
       Volta* volta() const                          { return (Volta*)spanner(); }
       virtual void layout() override;
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      virtual Element* propertyDelegate(Pid) override;
       };
 
 //---------------------------------------------------------

@@ -322,10 +322,6 @@ void TextLineBaseSegment::spatiumChanged(qreal ov, qreal nv)
       _endText->spatiumChanged(ov, nv);
       }
 
-//---------------------------------------------------------
-//   pids
-//---------------------------------------------------------
-
 static constexpr std::array<Pid, 34> pids = { {
       Pid::LINE_WIDTH,
       Pid::LINE_VISIBLE,
@@ -364,42 +360,16 @@ static constexpr std::array<Pid, 34> pids = { {
       } };
 
 //---------------------------------------------------------
-//   getProperty
+//   propertyDelegate
 //---------------------------------------------------------
 
-QVariant TextLineBaseSegment::getProperty(Pid id) const
+Element* TextLineBaseSegment::propertyDelegate(Pid pid)
       {
-      for (Pid pid : pids) {
+      for (Pid id : pids) {
             if (pid == id)
-                  return textLineBase()->getProperty(id);
+                  return spanner();
             }
-      return LineSegment::getProperty(id);
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool TextLineBaseSegment::setProperty(Pid id, const QVariant& v)
-      {
-      for (Pid pid : pids) {
-            if (pid == id)
-                  return textLineBase()->setProperty(id, v);
-            }
-      return LineSegment::setProperty(id, v);
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant TextLineBaseSegment::propertyDefault(Pid id) const
-      {
-      for (Pid pid : pids) {
-            if (pid == id)
-                  return textLineBase()->propertyDefault(id);
-            }
-      return LineSegment::propertyDefault(id);
+      return LineSegment::propertyDelegate(pid);
       }
 
 //---------------------------------------------------------
@@ -671,11 +641,11 @@ bool TextLineBase::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TextLineBase::propertyDefault(Pid id) const
+QVariant TextLineBase::propertyDefault(Pid pid) const
       {
-      QVariant v = styledPropertyDefault(id);
+      QVariant v = styledPropertyDefault(pid);
       if (!v.isValid())
-            v = SLine::propertyDefault(id);
+            v = SLine::propertyDefault(pid);
       return v;
       }
 

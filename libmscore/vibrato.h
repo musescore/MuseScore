@@ -38,11 +38,10 @@ class VibratoSegment final : public LineSegment {
       virtual VibratoSegment* clone() const override { return new VibratoSegment(*this); }
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
-      Shape shape() const override;
 
+      virtual Element* propertyDelegate(Pid) override;
+
+      Shape shape() const override;
       std::vector<SymId> symbols() const           { return _symbols; }
       void setSymbols(const std::vector<SymId>& s) { _symbols = s; }
       };

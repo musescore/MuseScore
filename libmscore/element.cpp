@@ -1050,9 +1050,9 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Element::propertyDefault(Pid id) const
+QVariant Element::propertyDefault(Pid pid) const
       {
-      switch(id) {
+      switch (pid) {
             case Pid::GENERATED:
                   return false;
             case Pid::VISIBLE:
@@ -1070,7 +1070,7 @@ QVariant Element::propertyDefault(Pid id) const
             case Pid::Z:
                   return int(type()) * 100;
             default:
-                  return ScoreElement::propertyDefault(id);
+                  return ScoreElement::propertyDefault(pid);
             }
       }
 
