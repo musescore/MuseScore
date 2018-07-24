@@ -19,29 +19,6 @@ namespace Ms {
 
 class Note;
 
-#if 0
-//---------------------------------------------------------
-//   @@ TextLineSegment
-//---------------------------------------------------------
-
-class TextLineSegment : public TextLineBaseSegment {
-   protected:
-
-   public:
-      TextLineSegment(Score* s) : TextLineBaseSegment(s)  { }
-      virtual ElementType type() const override     { return ElementType::TEXTLINE_SEGMENT; }
-      virtual TextLineSegment* clone() const override { return new TextLineSegment(*this); }
-      TextLine* textLine() const                      { return (TextLine*)spanner(); }
-      virtual void layout() override;
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
-      virtual PropertyStyle propertyStyle(Pid) const override;
-      virtual void resetProperty(Pid id) override;
-      virtual void styleChanged() override;
-      };
-#endif
-
 //---------------------------------------------------------
 //   @@ NoteLine
 //---------------------------------------------------------

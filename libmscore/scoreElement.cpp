@@ -179,14 +179,14 @@ void ScoreElement::setSubStyleId(SubStyleId ssid)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant ScoreElement::propertyDefault(Pid id) const
+QVariant ScoreElement::propertyDefault(Pid pid) const
       {
-      if (id == Pid::SUB_STYLE)
+      if (pid == Pid::SUB_STYLE)
             return int(SubStyleId::DEFAULT);
       // this is wrong, styled properties should be considered first:
-      QVariant v = styledPropertyDefault(id);
+      QVariant v = styledPropertyDefault(pid);
       if (!v.isValid()) {
-            qDebug("<%s>(%d) not found in <%s> style <%s>", propertyName(id), int(id), name(), subStyleName(subStyleId()));
+            qDebug("<%s>(%d) not found in <%s> style <%s>", propertyName(pid), int(pid), name(), subStyleName(subStyleId()));
             }
       return v;
       }
@@ -271,11 +271,6 @@ bool ScoreElement::isStyled(Pid pid) const
 
 static void changeProperty(ScoreElement* e, Pid t, const QVariant& st, PropertyFlags ps)
       {
-      if (e->isSpannerSegment()) {
-            QVariant v = e->getProperty(t);
-            if (!v.isValid())
-                  e = toSpannerSegment(e)->spanner();
-            }
       if (e->getProperty(t) != st || e->propertyFlags(t) != ps) {
             if (e->isBracketItem()) {
                   BracketItem* bi = toBracketItem(e);

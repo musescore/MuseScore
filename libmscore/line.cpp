@@ -406,60 +406,19 @@ void LineSegment::localSpatiumChanged(qreal ov, qreal nv)
       }
 
 //---------------------------------------------------------
-//   getProperty
+//   propertyDelegate
 //---------------------------------------------------------
 
-QVariant LineSegment::getProperty(Pid id) const
+Element* LineSegment::propertyDelegate(Pid pid)
       {
-      switch (id) {
-            case Pid::DIAGONAL:
-            case Pid::LINE_COLOR:
-            case Pid::LINE_WIDTH:
-            case Pid::LINE_STYLE:
-            case Pid::DASH_LINE_LEN:
-            case Pid::DASH_GAP_LEN:
-                  return line()->getProperty(id);
-            default:
-                  return SpannerSegment::getProperty(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool LineSegment::setProperty(Pid id, const QVariant& val)
-      {
-      switch (id) {
-            case Pid::DIAGONAL:
-            case Pid::LINE_COLOR:
-            case Pid::LINE_WIDTH:
-            case Pid::LINE_STYLE:
-            case Pid::DASH_LINE_LEN:
-            case Pid::DASH_GAP_LEN:
-                  return line()->setProperty(id, val);
-            default:
-                  return SpannerSegment::setProperty(id, val);
-            }
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant LineSegment::propertyDefault(Pid id) const
-      {
-      switch (id) {
-            case Pid::DIAGONAL:
-            case Pid::LINE_COLOR:
-            case Pid::LINE_WIDTH:
-            case Pid::LINE_STYLE:
-            case Pid::DASH_LINE_LEN:
-            case Pid::DASH_GAP_LEN:
-                  return line()->propertyDefault(id);
-            default:
-                  return SpannerSegment::propertyDefault(id);
-            }
+      if (pid == Pid::DIAGONAL
+         || pid == Pid::LINE_COLOR
+         || pid ==   Pid::LINE_WIDTH
+         || pid ==   Pid::LINE_STYLE
+         || pid ==   Pid::DASH_LINE_LEN
+         || pid ==   Pid::DASH_GAP_LEN)
+            return spanner();
+      return SpannerSegment::propertyDelegate(pid);
       }
 
 //---------------------------------------------------------

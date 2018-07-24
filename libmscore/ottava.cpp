@@ -81,60 +81,14 @@ void OttavaSegment::layout()
       }
 
 //---------------------------------------------------------
-//   getProperty
+//   propertyDelegate
 //---------------------------------------------------------
 
-QVariant OttavaSegment::getProperty(Pid id) const
+Element* OttavaSegment::propertyDelegate(Pid pid)
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->getProperty(id);
-            }
-      switch (id) {
-            case Pid::OTTAVA_TYPE:
-            case Pid::NUMBERS_ONLY:
-                  return spanner()->getProperty(id);
-            default:
-                  return TextLineBaseSegment::getProperty(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool OttavaSegment::setProperty(Pid id, const QVariant& v)
-      {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->setProperty(id, v);
-            }
-      switch (id) {
-            case Pid::OTTAVA_TYPE:
-            case Pid::NUMBERS_ONLY:
-                  return spanner()->setProperty(id, v);
-            default:
-                  return TextLineBaseSegment::setProperty(id, v);
-            }
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant OttavaSegment::propertyDefault(Pid id) const
-      {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->propertyDefault(id);
-            }
-      switch (id) {
-            case Pid::OTTAVA_TYPE:
-            case Pid::NUMBERS_ONLY:
-                  return spanner()->propertyDefault(id);
-            default:
-                  return TextLineBaseSegment::propertyDefault(id);
-            }
+      if (pid == Pid::OTTAVA_TYPE || pid == Pid::NUMBERS_ONLY)
+            return spanner();
+      return TextLineBaseSegment::propertyDelegate(pid);
       }
 
 //---------------------------------------------------------
@@ -415,9 +369,9 @@ bool Ottava::setProperty(Pid propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Ottava::propertyDefault(Pid propertyId) const
+QVariant Ottava::propertyDefault(Pid pid) const
       {
-      switch (propertyId) {
+      switch (pid) {
             case Pid::OTTAVA_TYPE:
                   return QVariant();
             case Pid::END_HOOK_TYPE:
@@ -425,11 +379,10 @@ QVariant Ottava::propertyDefault(Pid propertyId) const
             case Pid::LINE_VISIBLE:
                   return true;
             default:
-                  QVariant v = ScoreElement::styledPropertyDefault(propertyId);
+                  QVariant v = ScoreElement::styledPropertyDefault(pid);
                   if (v.isValid())
                         return v;
-                  return getProperty(propertyId);
-
+                  return getProperty(pid);
             }
       }
 

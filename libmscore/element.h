@@ -407,6 +407,7 @@ class Element : public ScoreElement {
       virtual QVariant getProperty(Pid) const override;
       virtual bool setProperty(Pid, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
+      virtual Element* propertyDelegate(Pid) { return 0; }  // return Spanner for SpannerSegment for some properties
 
       bool custom(Pid) const;
       virtual bool isUserModified() const;

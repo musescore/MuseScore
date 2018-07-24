@@ -353,6 +353,9 @@ void InspectorBase::valueChanged(int idx, bool reset)
             for (int i = 0; i < ii.parent; ++i)
                   e = e->parent();
 
+            if (Element* ee = e->propertyDelegate(id))
+                  e = ee;
+
             // reset sets property style UNSTYLED to STYLED
 
             PropertyFlags ps = e->propertyFlags(id);

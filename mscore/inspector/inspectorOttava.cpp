@@ -16,6 +16,7 @@
 #include "musescore.h"
 #include "libmscore/ottava.h"
 #include "libmscore/score.h"
+#include "icons.h"
 
 namespace Ms {
 
@@ -32,13 +33,13 @@ InspectorOttava::InspectorOttava(QWidget* parent)
       o.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
-            { Pid::DIAGONAL,      0, l.diagonal,       l.resetDiagonal       },
-            { Pid::LINE_VISIBLE,  0, l.lineVisible,    l.resetLineVisible    },
-            { Pid::LINE_COLOR,    0, l.lineColor,      l.resetLineColor      },
-            { Pid::LINE_WIDTH,    0, l.lineWidth,      l.resetLineWidth      },
-            { Pid::LINE_STYLE,    0, l.lineStyle,      l.resetLineStyle      },
-            { Pid::DASH_LINE_LEN, 0, l.dashLineLength, l.resetDashLineLength },
-            { Pid::DASH_GAP_LEN,  0, l.dashGapLength,  l.resetDashGapLength  },
+            { Pid::DIAGONAL,                0, l.diagonal,                l.resetDiagonal              },
+            { Pid::LINE_VISIBLE,            0, l.lineVisible,             l.resetLineVisible           },
+            { Pid::LINE_COLOR,              0, l.lineColor,               l.resetLineColor             },
+            { Pid::LINE_WIDTH,              0, l.lineWidth,               l.resetLineWidth             },
+            { Pid::LINE_STYLE,              0, l.lineStyle,               l.resetLineStyle             },
+            { Pid::DASH_LINE_LEN,           0, l.dashLineLength,          l.resetDashLineLength        },
+            { Pid::DASH_GAP_LEN,            0, l.dashGapLength,           l.resetDashGapLength         },
 
             { Pid::BEGIN_TEXT,              0, tl.beginText,             tl.resetBeginText             },
             { Pid::BEGIN_TEXT_PLACE,        0, tl.beginTextPlacement,    tl.resetBeginTextPlacement    },
@@ -71,15 +72,27 @@ InspectorOttava::InspectorOttava(QWidget* parent)
             { Pid::END_HOOK_TYPE,           0, tl.endHookType,           tl.resetEndHookType           },
             { Pid::END_HOOK_HEIGHT,         0, tl.endHookHeight,         tl.resetEndHookHeight         },
 
-            { Pid::OTTAVA_TYPE,             0, o.ottavaType,     0                     },
-            { Pid::PLACEMENT,               0, o.placement,      o.resetPlacement      },
-            { Pid::NUMBERS_ONLY,            0, o.numbersOnly,    o.resetNumbersOnly    }
+            { Pid::OTTAVA_TYPE,             0, o.ottavaType,              0                            },
+            { Pid::PLACEMENT,               0, o.placement,               o.resetPlacement             },
+            { Pid::NUMBERS_ONLY,            0, o.numbersOnly,             o.resetNumbersOnly           }
             };
       const std::vector<InspectorPanel> ppList = {
             { l.title,  l.panel },
             { tl.title, tl.panel },
             { o.title,  o.panel }
             };
+
+      tl.beginFontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
+      tl.beginFontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
+      tl.beginFontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
+
+      tl.continueFontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
+      tl.continueFontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
+      tl.continueFontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
+
+      tl.endFontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
+      tl.endFontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
+      tl.endFontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
 
       populateHookType(tl.beginHookType);
       populateHookType(tl.endHookType);

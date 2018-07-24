@@ -16,6 +16,7 @@
 #include "musescore.h"
 #include "libmscore/volta.h"
 #include "libmscore/score.h"
+#include "icons.h"
 
 namespace Ms {
 
@@ -78,6 +79,18 @@ InspectorVolta::InspectorVolta(QWidget* parent)
             { tl.title, tl.panel },
             { v.title, v.panel }
             };
+      tl.beginFontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
+      tl.beginFontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
+      tl.beginFontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
+
+      tl.continueFontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
+      tl.continueFontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
+      tl.continueFontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
+
+      tl.endFontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
+      tl.endFontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
+      tl.endFontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
+
       populateHookType(tl.beginHookType);
       populateHookType(tl.endHookType);
       populateTextPlace(tl.beginTextPlacement);

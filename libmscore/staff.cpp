@@ -1282,8 +1282,10 @@ QVariant Staff::getProperty(Pid id) const
                   return barLineTo();
             case Pid::STAFF_USERDIST:
                   return userDist();
+            case Pid::GENERATED:
+                  return false;
             default:
-                  qDebug("unhandled id %s", propertyName(id));
+                  qDebug("unhandled id <%s>", propertyName(id));
                   return QVariant();
             }
       }
@@ -1332,7 +1334,7 @@ bool Staff::setProperty(Pid id, const QVariant& v)
                   setUserDist(v.toReal());
                   break;
             default:
-                  qDebug("unhandled id %s", propertyName(id));
+                  qDebug("unhandled id <%s>", propertyName(id));
                   break;
             }
       score()->setLayoutAll();
@@ -1365,7 +1367,7 @@ QVariant Staff::propertyDefault(Pid id) const
             case Pid::STAFF_USERDIST:
                   return qreal(0.0);
             default:
-                  qDebug("unhandled id %s", propertyName(id));
+                  qDebug("unhandled id <%s>", propertyName(id));
                   return QVariant();
             }
       }
