@@ -22,7 +22,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 TextLineSegment::TextLineSegment(Score* s)
-   : TextLineBaseSegment(s)
+   : TextLineBaseSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       setPlacement(Placement::ABOVE);
       }
