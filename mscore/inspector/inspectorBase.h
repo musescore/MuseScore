@@ -52,6 +52,7 @@ class InspectorBase : public QWidget {
       bool dirty() const;
       void checkDifferentValues(const InspectorItem&);
       bool compareValues(const InspectorItem& ii, QVariant a, QVariant b);
+      Element* effectiveElement(const InspectorItem&) const;
 
    private slots:
       void resetToStyle();

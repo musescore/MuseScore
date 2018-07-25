@@ -310,6 +310,7 @@ add_executable ( ${ExecutableName}
       inspector/scaleSelect.cpp
       inspector/sizeSelect.cpp
       inspector/inspectorTextBase.cpp
+      inspector/inspectorTextLineBase.cpp
       inspector/inspectorDynamic.cpp
       inspector/inspectorElementBase.cpp
       enableplayforwidget.cpp

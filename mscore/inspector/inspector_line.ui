@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>226</width>
-    <height>201</height>
+    <width>458</width>
+    <height>237</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -269,6 +269,9 @@
         <property name="text">
          <string>Dash gap width:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>dashGapLength</cstring>
         </property>
@@ -278,6 +281,9 @@
        <widget class="QLabel" name="dashLineLengthLabel">
         <property name="text">
          <string>Dash line length:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>dashLineLength</cstring>

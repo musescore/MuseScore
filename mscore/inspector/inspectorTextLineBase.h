@@ -1,9 +1,8 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
-//  Copyright (C) 2012 Werner Schweer and others
+//  Copyright (C) 2017 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -11,29 +10,40 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __INSPECTOR_OTTAVA_H__
-#define __INSPECTOR_OTTAVA_H__
+#ifndef __INSPECTOR_TEXT_LINE_BASE_H__
+#define __INSPECTOR_TEXT_LINE_BASE_H__
 
-#include "inspector.h"
-#include "inspectorTextLineBase.h"
-#include "ui_inspector_ottava.h"
+#include "inspectorElementBase.h"
+#include "ui_inspector_line.h"
+#include "ui_inspector_textline.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorOttava
+//   InspectorTextBase
 //---------------------------------------------------------
 
-class InspectorOttava : public InspectorTextLineBase {
+class InspectorTextLineBase : public InspectorElementBase {
       Q_OBJECT
 
-      Ui::InspectorOttava   o;
+      virtual void valueChanged(int) override;
+      void updateBeginHookType();
+      void updateEndHookType();
+      void updateLineType();
+
+   protected:
+      Ui::InspectorLine l;
+      Ui::InspectorTextLine tl;
 
    public:
-      InspectorOttava(QWidget* parent);
+      InspectorTextLineBase(QWidget* parent);
+      virtual void setElement() override;
       };
 
-
 } // namespace Ms
+
+
 #endif
+
+
 

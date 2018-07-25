@@ -404,7 +404,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       for (QComboBox* cb : std::vector<QComboBox*> {
             lyricsPlacement, textLinePlacement, hairpinPlacement, pedalLinePlacement,
-            trillLinePlacement, vibratoLinePlacement, dynamicsPlacement, tempoTextPlacement, rehearsalMarkPlacement
+            trillLinePlacement, vibratoLinePlacement, dynamicsPlacement,
+            tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement
             }) {
             cb->clear();
             cb->addItem(tr("Above"), int(Placement::ABOVE));
