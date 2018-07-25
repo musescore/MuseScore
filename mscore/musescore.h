@@ -786,6 +786,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void updateWindowTitle(Score* score);
       bool importExtension(QString path);
       bool uninstallExtension(QString extensionId);
+      Q_INVOKABLE bool isInstalledExtension(QString extensionId);
       };
 
 extern MuseScore* mscore;
