@@ -15,9 +15,7 @@
 #define __INSPECTOR_VOLTA_H__
 
 #include "inspector.h"
-#include "inspectorBase.h"
-#include "ui_inspector_line.h"
-#include "ui_inspector_textline.h"
+#include "inspectorTextLineBase.h"
 #include "ui_inspector_volta.h"
 
 namespace Ms {
@@ -26,16 +24,13 @@ namespace Ms {
 //   InspectorVolta
 //---------------------------------------------------------
 
-class InspectorVolta : public InspectorElementBase {
+class InspectorVolta : public InspectorTextLineBase {
       Q_OBJECT
 
-      Ui::InspectorLine l;
-      Ui::InspectorTextLine tl;
       Ui::InspectorVolta v;
 
    public:
       InspectorVolta(QWidget* parent);
-      virtual void setElement() override;
       };
 
 
