@@ -499,7 +499,7 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
             else if (qobject_cast<QLineEdit*>(w))
                   connect(qobject_cast<QLineEdit*>(w), QOverload<const QString&>::of(&QLineEdit::textChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Awl::ColorLabel*>(w))
-                  connect(qobject_cast<Awl::ColorLabel*>(w), QOverload<QColor>::of(&Awl::ColorLabel::colorChanged), [=] { valueChanged(i); });
+                  connect(qobject_cast<Awl::ColorLabel*>(w), QOverload<const QColor&>::of(&Awl::ColorLabel::colorChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Ms::AlignSelect*>(w))
                   connect(qobject_cast<Ms::AlignSelect*>(w), QOverload<Align>::of(&Ms::AlignSelect::alignChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Ms::OffsetSelect*>(w))
