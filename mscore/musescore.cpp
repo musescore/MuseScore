@@ -664,6 +664,16 @@ bool MuseScore::uninstallExtension(QString extensionId)
       }
 
 //---------------------------------------------------------
+//   isInstalled
+///  used from javascript in start center webview
+//---------------------------------------------------------
+
+bool MuseScore::isInstalledExtension(QString extensionId)
+      {
+      return Extension::isInstalled(extensionId);
+      }
+
+//---------------------------------------------------------
 //   MuseScore
 //---------------------------------------------------------
 
