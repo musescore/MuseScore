@@ -57,5 +57,18 @@ void SystemText::write(XmlWriter& xml) const
       xml.etag();
       }
 
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void SystemText::layout()
+      {
+      Staff* s = staff();
+      qreal y = placeAbove() ? styleP(Sid::systemTextPosAbove) : styleP(Sid::systemTextPosBelow) + (s ? s->height() : 0.0);
+      setPos(QPointF(0.0, y));
+      TextBase::layout1();
+      autoplaceSegmentElement(styleP(Sid::systemTextMinDistance));
+      }
+
 } // namespace Ms
 

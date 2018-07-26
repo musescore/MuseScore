@@ -825,14 +825,14 @@ void PowerTab::addToScore(ptSection& sec)
       if (!sec.partName.empty() && lastPart != sec.partMarker) {
             lastPart = sec.partMarker;
             RehearsalMark* t = new RehearsalMark(score);
-            t->setHasFrame(true);
+            t->setFrameType(FrameType::SQUARE);
             t->setPlainText(QString(sec.partMarker));
             t->setTrack(0);
             auto seg = measure->getSegment(SegmentType::ChordRest, measure->tick());
             seg->add(t);
 
             t = new RehearsalMark(score);
-            t->setHasFrame(false);
+            t->setFrameType(FrameType::NO_FRAME);
             t->setPlainText(QString::fromStdString(sec.partName));
             t->setOffset(QPointF(10.0, 0.0));
             t->setTrack(0);

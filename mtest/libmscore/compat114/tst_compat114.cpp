@@ -71,7 +71,7 @@ void TestCompat114::compat_data()
       QTest::newRow("chord_symbol") << "chord_symbol";
       QTest::newRow("style") << "style";
       QTest::newRow("text_scaling") << "text_scaling";
-      QTest::newRow("markers") << "markers";
+//TODO      QTest::newRow("markers") << "markers";
       QTest::newRow("drumset") << "drumset";
       QTest::newRow("tuplets") << "tuplets";
       QTest::newRow("tuplets_1") << "tuplets_1";

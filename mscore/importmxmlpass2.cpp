@@ -2460,14 +2460,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   }
 
             if (_enclosure == "circle") {
-                  t->setHasFrame(true);
-                  t->setCircle(true);
+                  t->setFrameType(FrameType::CIRCLE);
                   }
             else if (_enclosure == "none") {
-                  t->setHasFrame(false);
+                  t->setFrameType(FrameType::NO_FRAME);
                   }
             else if (_enclosure == "rectangle") {
-                  t->setHasFrame(true);
+                  t->setFrameType(FrameType::SQUARE);
                   t->setFrameRound(0);
                   }
 

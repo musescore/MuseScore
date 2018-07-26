@@ -22,6 +22,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class SystemText final : public StaffTextBase  {
+      virtual void layout() override;
    public:
       SystemText(Score* score);
       SystemText(SubStyleId, Score* = 0, ElementFlags = ElementFlag::NOTHING);

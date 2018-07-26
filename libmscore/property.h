@@ -279,10 +279,8 @@ enum class Pid {
       FONT_BOLD,
       FONT_ITALIC,
       FONT_UNDERLINE,
-      FRAME,
+      FRAME_TYPE,
 //200
-      FRAME_SQUARE,
-      FRAME_CIRCLE,
       FRAME_WIDTH,
       FRAME_PADDING,
       FRAME_ROUND,
@@ -291,7 +289,7 @@ enum class Pid {
       FONT_SPATIUM_DEPENDENT,
       ALIGN,
       OFFSET,
-//210
+
       OFFSET_TYPE,
       SYSTEM_FLAG,
       BEGIN_TEXT,
@@ -302,7 +300,7 @@ enum class Pid {
       BEGIN_FONT_FACE,
       BEGIN_FONT_SIZE,
       BEGIN_FONT_BOLD,
-//220
+
       BEGIN_FONT_ITALIC,
       BEGIN_FONT_UNDERLINE,
       BEGIN_TEXT_OFFSET,

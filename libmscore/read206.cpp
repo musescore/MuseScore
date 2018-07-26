@@ -255,7 +255,6 @@ struct StyleVal2 {
       { Sid::fretMag,                     QVariant(1.0) },
       { Sid::scaleBarlines,               QVariant(true) },
       { Sid::barGraceDistance,            QVariant(.6) },
-      { Sid::rehearsalMarkFrameSquare,    QVariant(false)  },
       { Sid::rehearsalMarkFrameRound,     QVariant(20)    },
       { Sid::dynamicsFontItalic,          QVariant(false) },
       };
@@ -327,13 +326,11 @@ void readTextStyle206(MStyle* style, XmlReader& e)
       bool underline = false;
       Align align = Align::LEFT;
       bool sizeIsSpatiumDependent = true;
-      bool hasFrame = false;
+      FrameType frameType = FrameType::NO_FRAME;
       Spatium paddingWidth(0.0);
-      int frameRound = 0;
       QColor frameColor = QColor(0, 0, 0, 255);
       QColor foregroundColor = QColor(0, 0, 0, 255);
       QColor backgroundColor = QColor(255, 255, 255, 0);
-      bool circle = false;
       bool systemFlag = false;
       QPointF offset;
       OffsetType offsetType = OffsetType::SPATIUM;
@@ -418,21 +415,21 @@ void readTextStyle206(MStyle* style, XmlReader& e)
             else if (tag == "sizeIsSpatiumDependent" || tag == "spatiumSizeDependent")
                   sizeIsSpatiumDependent = e.readInt();
             else if (tag == "frameWidth") { // obsolete
-                  hasFrame = true;
+                  frameType = FrameType::SQUARE;
                   /*frameWidthMM =*/ e.readDouble();
                   }
             else if (tag == "frameWidthS") {
-                  hasFrame = true;
+                  frameType = FrameType::SQUARE;
                   frameWidth = Spatium(e.readDouble());
                   }
             else if (tag == "frame")
-                  hasFrame = e.readInt();
+                  frameType = e.readInt() ? FrameType::SQUARE : FrameType::NO_FRAME;
             else if (tag == "paddingWidth")          // obsolete
                   /*paddingWidthMM =*/ e.readDouble();
             else if (tag == "paddingWidthS")
                   paddingWidth = Spatium(e.readDouble());
             else if (tag == "frameRound")
-                  frameRound = e.readInt();
+                  e.readInt();
             else if (tag == "frameColor")
                   frameColor = e.readColor();
             else if (tag == "foregroundColor")
@@ -440,7 +437,7 @@ void readTextStyle206(MStyle* style, XmlReader& e)
             else if (tag == "backgroundColor")
                   backgroundColor = e.readColor();
             else if (tag == "circle")
-                  circle = e.readInt();
+                  frameType = e.readInt() ? FrameType::CIRCLE : FrameType::NO_FRAME;
             else if (tag == "systemFlag")
                   systemFlag = e.readInt();
             else if (tag == "placement") {
@@ -561,23 +558,14 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                   case Pid::FONT_UNDERLINE:
                         value = underline;
                         break;
-                  case Pid::FRAME:
-                        value = hasFrame;
-                        break;
-                  case Pid::FRAME_SQUARE:
-                        value = false;
-                        break;
-                  case Pid::FRAME_CIRCLE:
-                        value = circle;
+                  case Pid::FRAME_TYPE:
+                        value = int(frameType);
                         break;
                   case Pid::FRAME_WIDTH:
                         value = frameWidth;
                         break;
                   case Pid::FRAME_PADDING:
                         value = paddingWidth;
-                        break;
-                  case Pid::FRAME_ROUND:
-                        value = frameRound;
                         break;
                   case Pid::FRAME_FG_COLOR:
                         value = frameColor;
@@ -1125,7 +1113,7 @@ static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
       else if (tag == "foregroundColor")  // same as "color" ?
             e.skipCurrentElement();
       else if (tag == "frame")
-            t->setHasFrame(e.readBool());
+            t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
       else if (tag == "halign") {
             Align align = Align(int(t->align()) & int(~Align::HMASK));
             const QString& val(e.readElementText());
@@ -2133,10 +2121,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   readTempoText(tt, e);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(tt);
-            }
-            else if (tag == "Marker"
-               || tag == "Jump"
-               ) {
+                  }
+            else if (tag == "Marker" || tag == "Jump") {
                   Element* el = Element::name2Element(tag, score);
                   el->setTrack(e.track());
                   el->read(e);

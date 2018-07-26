@@ -56,6 +56,7 @@
 #include "lyrics.h"
 #include "image.h"
 #include "textframe.h"
+#include "jump.h"
 
 namespace Ms {
 
@@ -369,7 +370,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element* be)
       else if (tag == "foregroundColor")  // same as "color" ?
             e.skipCurrentElement();
       else if (tag == "frame")
-            t->setHasFrame(e.readBool());
+            t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
       else if (tag == "halign") {
             Align align = Align(int(t->align()) & int(~Align::HMASK));
             const QString& val(e.readElementText());
@@ -1781,22 +1782,51 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
                   }
-            else if (tag == "Marker" || tag == "Jump") {
-                  Element* el = Element::name2Element(tag, m->score());
-                  el->setTrack(e.track());
-                  el->read(e);
-
-                  if (el->isMarker()) {
-                        Marker* m = toMarker(el);
-                        if (m->markerType() == Marker::Type::SEGNO || m->markerType() == Marker::Type::CODA  ||
-                            m->markerType() == Marker::Type::VARCODA || m->markerType() == Marker::Type::CODETTA) {
-                              // force the marker type for correct display
-                              m->setXmlText("");
-                              m->setMarkerType(m->markerType());
-                              m->initSubStyle(SubStyleId::REPEAT_LEFT);
-                              }
+            else if (tag == "Jump") {
+                  Jump* j = new Jump(m->score());
+                  j->setTrack(e.track());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "jumpTo")
+                              j->setJumpTo(e.readElementText());
+                        else if (tag == "playUntil")
+                              j->setPlayUntil(e.readElementText());
+                        else if (tag == "continueAt")
+                              j->setContinueAt(e.readElementText());
+                        else if (tag == "playRepeats")
+                              j->setPlayRepeats(e.readBool());
+                        else if (tag == "subtype")
+                              e.readInt();
+                        else if (!j->TextBase::readProperties(e))
+                              e.unknown();
                         }
-                  m->add(el);
+                  m->add(j);
+                  }
+            else if (tag == "Marker") {
+                  Marker* a = new Marker(m->score());
+                  a->setTrack(e.track());
+
+                  Marker::Type mt = Marker::Type::SEGNO;
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "subtype") {
+                              QString s(e.readElementText());
+                              a->setLabel(s);
+                              mt = a->markerType(s);
+                              }
+                        else if (!a->TextBase::readProperties(e))
+                              e.unknown();
+                        }
+                  a->setMarkerType(mt);
+
+                  if (a->markerType() == Marker::Type::SEGNO || a->markerType() == Marker::Type::CODA  ||
+                      a->markerType() == Marker::Type::VARCODA || a->markerType() == Marker::Type::CODETTA) {
+                        // force the marker type for correct display
+                        a->setXmlText("");
+                        a->setMarkerType(a->markerType());
+                        a->initSubStyle(SubStyleId::REPEAT_LEFT);
+                        }
+                  m->add(a);
                   }
             else if (tag == "Image") {
                   if (MScore::noImages)

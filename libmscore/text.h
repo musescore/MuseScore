@@ -26,8 +26,30 @@ class TextBase;
 class TextBlock;
 class ChangeText;
 
-enum class VerticalAlignment : char { AlignNormal, AlignSuperScript, AlignSubScript };
-enum class FormatId : char          { Bold, Italic, Underline, Valign, FontSize, FontFamily };
+
+//---------------------------------------------------------
+//   FrameType
+//---------------------------------------------------------
+
+enum class FrameType : char {
+      NO_FRAME, SQUARE, CIRCLE
+      };
+
+//---------------------------------------------------------
+//   VerticalAlignment
+//---------------------------------------------------------
+
+enum class VerticalAlignment : char {
+      AlignNormal, AlignSuperScript, AlignSubScript
+      };
+
+//---------------------------------------------------------
+//   FormatId
+//---------------------------------------------------------
+
+enum class FormatId : char {
+      Bold, Italic, Underline, Valign, FontSize, FontFamily
+      };
 
 //---------------------------------------------------------
 //   CharFormat
@@ -185,23 +207,23 @@ class TextBlock {
 //---------------------------------------------------------
 
 class TextBase : public Element {
-      M_PROPERTY(QString,    family,                 setFamily)
-      M_PROPERTY(qreal,      size,                   setSize)
+      // sorted by size to allow for most compact memory layout
       M_PROPERTY(bool,       bold,                   setBold)
       M_PROPERTY(bool,       italic,                 setItalic)
       M_PROPERTY(bool,       underline,              setUnderline)
+      M_PROPERTY(Align,      align,                  setAlign)
+      M_PROPERTY(FrameType,  frameType,              setFrameType)
+      M_PROPERTY(bool,       sizeIsSpatiumDependent, setSizeIsSpatiumDependent)
+      M_PROPERTY(OffsetType, offsetType,             setOffsetType)
+
+      M_PROPERTY(QString,    family,                 setFamily)
+      M_PROPERTY(qreal,      size,                   setSize)
       M_PROPERTY(QColor,     bgColor,                setBgColor)
       M_PROPERTY(QColor,     frameColor,             setFrameColor)
-      M_PROPERTY(Align,      align,                  setAlign)
-      M_PROPERTY(bool,       hasFrame,               setHasFrame)
-      M_PROPERTY(bool,       circle,                 setCircle)
-      M_PROPERTY(bool,       square,                 setSquare)
-      M_PROPERTY(bool,       sizeIsSpatiumDependent, setSizeIsSpatiumDependent)
       M_PROPERTY(Spatium,    frameWidth,             setFrameWidth)
       M_PROPERTY(Spatium,    paddingWidth,           setPaddingWidth)
       M_PROPERTY(int,        frameRound,             setFrameRound)
       M_PROPERTY(QPointF,    offset,                 setOffset)            // inch or spatium
-      M_PROPERTY(OffsetType, offsetType,             setOffsetType)
 
       // there are two representations of text; only one
       // might be valid and the other can be constructed from it
@@ -328,6 +350,11 @@ class TextBase : public Element {
       void setTextInvalid()                      { textInvalid = true;   };
       bool isTextInvalid() const                 { return textInvalid;   }
       bool isLayoutInvalid() const               { return layoutInvalid; }
+
+      // helper functions
+      bool hasFrame() const                      { return _frameType != FrameType::NO_FRAME; }
+      bool circle() const                        { return _frameType == FrameType::CIRCLE; }
+      bool square() const                        { return _frameType == FrameType::SQUARE; }
 
       friend class TextCursor;
       };
