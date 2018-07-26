@@ -1621,7 +1621,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                               }
                         }
                   }
-            Fraction stretch = score()->staff(staffIdx)->timeStretch(tick());
+            Fraction stretch = s->staff(staffIdx)->timeStretch(tick());
             // if just a single rest
             if (rests == 1 && chords == 0) {
                   // if measure value didn't change, stick to whole measure rest
