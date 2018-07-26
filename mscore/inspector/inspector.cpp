@@ -980,9 +980,31 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       populatePlacement(s.placement);
 
       s.style->clear();
-      for (auto ss : { SubStyleId::SYSTEM, SubStyleId::STAFF, SubStyleId::TEMPO, SubStyleId::METRONOME,
-         SubStyleId::REHEARSAL_MARK, SubStyleId::EXPRESSION,
-         SubStyleId::REPEAT_LEFT, SubStyleId::REPEAT_RIGHT, SubStyleId::USER1, SubStyleId::USER2 } )
+      for (auto ss : {
+         SubStyleId::SYSTEM,
+         SubStyleId::STAFF,
+         SubStyleId::TEMPO,
+         SubStyleId::METRONOME,
+         SubStyleId::REHEARSAL_MARK,
+         SubStyleId::EXPRESSION,
+         SubStyleId::REPEAT_LEFT,
+         SubStyleId::REPEAT_RIGHT,
+         SubStyleId::FRAME,
+         SubStyleId::TITLE,
+         SubStyleId::SUBTITLE,
+         SubStyleId::COMPOSER,
+         SubStyleId::POET,
+         SubStyleId::INSTRUMENT_EXCERPT,
+         SubStyleId::TRANSLATOR,
+         SubStyleId::HEADER,
+         SubStyleId::FOOTER,
+         SubStyleId::USER1,
+         SubStyleId::USER2,
+         SubStyleId::USER3,
+         SubStyleId::USER4,
+         SubStyleId::USER5,
+         SubStyleId::USER6
+         } )
             {
             s.style->addItem(subStyleUserName(ss), int(ss));
             }
