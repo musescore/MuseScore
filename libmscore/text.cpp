@@ -1078,9 +1078,7 @@ TextBase::TextBase(Score* s, ElementFlags f)
       _bgColor                = QColor(255, 255, 255, 0);
       _frameColor             = QColor(0, 0, 0, 255);
       _align                  = Align::LEFT;
-      _hasFrame               = false;
-      _circle                 = false;
-      _square                 = false;
+      _frameType              = FrameType::NO_FRAME;
       _sizeIsSpatiumDependent = true;
       _frameWidth             = Spatium(0.1);
       _paddingWidth           = Spatium(0.2);
@@ -1108,9 +1106,7 @@ TextBase::TextBase(const TextBase& st)
       _bgColor                     = st._bgColor;
       _frameColor                  = st._frameColor;
       _align                       = st._align;
-      _hasFrame                    = st._hasFrame;
-      _circle                      = st._circle;
-      _square                      = st._square;
+      _frameType                   = st._frameType;
       _sizeIsSpatiumDependent      = st._sizeIsSpatiumDependent;
       _frameWidth                  = st._frameWidth;
       _paddingWidth                = st._paddingWidth;
@@ -1665,9 +1661,7 @@ static const std::array<Pid, 18> pids { {
       Pid::FONT_BOLD,
       Pid::FONT_ITALIC,
       Pid::FONT_UNDERLINE,
-      Pid::FRAME,
-      Pid::FRAME_SQUARE,
-      Pid::FRAME_CIRCLE,
+      Pid::FRAME_TYPE,
       Pid::FRAME_WIDTH,
       Pid::FRAME_PADDING,
       Pid::FRAME_ROUND,
@@ -2221,12 +2215,8 @@ QVariant TextBase::getProperty(Pid propertyId) const
                   return italic();
             case Pid::FONT_UNDERLINE:
                   return underline();
-            case Pid::FRAME:
-                  return hasFrame();
-            case Pid::FRAME_SQUARE:
-                  return square();
-            case Pid::FRAME_CIRCLE:
-                  return circle();
+            case Pid::FRAME_TYPE:
+                  return int(frameType());
             case Pid::FRAME_WIDTH:
                   return frameWidth();
             case Pid::FRAME_PADDING:
@@ -2256,11 +2246,10 @@ QVariant TextBase::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TextBase::setProperty(Pid propertyId, const QVariant& v)
+bool TextBase::setProperty(Pid pid, const QVariant& v)
       {
-      score()->addRefresh(canvasBoundingRect());
       bool rv = true;
-      switch (propertyId) {
+      switch (pid) {
             case Pid::SUB_STYLE:
                   setSubStyleId(SubStyleId(v.toInt()));
                   break;
@@ -2279,14 +2268,8 @@ bool TextBase::setProperty(Pid propertyId, const QVariant& v)
             case Pid::FONT_UNDERLINE:
                   setUnderline(v.toBool());
                   break;
-            case Pid::FRAME:
-                  setHasFrame(v.toBool());
-                  break;
-            case Pid::FRAME_SQUARE:
-                  setSquare(v.toBool());
-                  break;
-            case Pid::FRAME_CIRCLE:
-                  setCircle(v.toBool());
+            case Pid::FRAME_TYPE:
+                  setFrameType(FrameType(v.toInt()));
                   break;
             case Pid::FRAME_WIDTH:
                   setFrameWidth(v.value<Spatium>());
@@ -2319,9 +2302,10 @@ bool TextBase::setProperty(Pid propertyId, const QVariant& v)
                   setOffsetType(OffsetType(v.toInt()));
                   break;
             default:
-                  rv = Element::setProperty(propertyId, v);
+                  rv = Element::setProperty(pid, v);
                   break;
             }
+      layoutInvalid = true;
       triggerLayout();
       return rv;
       }

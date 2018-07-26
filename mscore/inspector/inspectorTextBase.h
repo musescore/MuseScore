@@ -25,7 +25,7 @@ namespace Ms {
 class InspectorTextBase : public InspectorElementBase {
       Q_OBJECT
 
-      virtual void valueChanged(int) override;
+      virtual void valueChanged(int, bool) override;
       void updateFrame();
 
    protected:

@@ -83,7 +83,7 @@ const static std::map<QString, QString> instrumentMapping = {
             {"bnj5",            "banjo"},
             {"bnj6",            "banjo"},
             {"bongo",           "bongos"},
-            {"brthns",          "baritone-horn"}, 
+            {"brthns",          "baritone-horn"},
             {"brtn-c",          "baritone"},
             {"brtn-s",          "baritone"},
             {"cbs",             "cabasa"},
@@ -2398,14 +2398,14 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                   Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
                   if (bars[measureCounter].section[0].length()) {
                         RehearsalMark* t = new RehearsalMark(score);
-                        t->setHasFrame(true);
+                        t->setFrameType(FrameType::SQUARE);
                         t->setPlainText(bars[measureCounter].section[0]);
                         t->setTrack(0);
                         s->add(t);
                         }
                   if (bars[measureCounter].section[1].length()) {
                         RehearsalMark* t = new RehearsalMark(score);
-                        t->setHasFrame(false);
+                        t->setFrameType(FrameType::NO_FRAME);
                         t->setPlainText(bars[measureCounter].section[1]);
                         t->setTrack(0);
                         s->add(t);

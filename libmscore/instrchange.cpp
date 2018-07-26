@@ -31,7 +31,6 @@ InstrumentChange::InstrumentChange(Score* s)
    : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       initSubStyle(SubStyleId::INSTRUMENT_CHANGE);
-      setPlacement(Placement::ABOVE);
       _instrument = new Instrument();
       }
 
@@ -39,7 +38,6 @@ InstrumentChange::InstrumentChange(const Instrument& i, Score* s)
    : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       initSubStyle(SubStyleId::INSTRUMENT_CHANGE);
-      setPlacement(Placement::ABOVE);
       _instrument = new Instrument(i);
       }
 
@@ -118,8 +116,6 @@ QVariant InstrumentChange::getProperty(Pid propertyId) const
 QVariant InstrumentChange::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case Pid::PLACEMENT:
-                  return int(Placement::ABOVE);
             case Pid::SUB_STYLE:
                   return int(SubStyleId::INSTRUMENT_CHANGE);
             default:

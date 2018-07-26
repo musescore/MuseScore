@@ -257,10 +257,8 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::FONT_BOLD,               "font_bold",               false, "bold",                  P_TYPE::BOOL            },
       { Pid::FONT_ITALIC,             "font_italic",             false, "italic",                P_TYPE::BOOL            },
       { Pid::FONT_UNDERLINE,          "font_underline",          false, "underline",             P_TYPE::BOOL            },
-      { Pid::FRAME,                   "has_frame",               false, "hasFrame",              P_TYPE::BOOL            },
+      { Pid::FRAME_TYPE,              "frame_type",              false, "frameType",             P_TYPE::INT             },
 
-      { Pid::FRAME_SQUARE,            "frame_square",            false, "frameSquare",           P_TYPE::BOOL            },
-      { Pid::FRAME_CIRCLE,            "frame_circle",            false, "frameCircle",           P_TYPE::BOOL            },
       { Pid::FRAME_WIDTH,             "frame_width",             false, "frameWidth",            P_TYPE::SPATIUM         },
       { Pid::FRAME_PADDING,           "frame_padding",           false, "framePadding",          P_TYPE::SPATIUM         },
       { Pid::FRAME_ROUND,             "frame_round",             false, "frameRound",            P_TYPE::INT             },
