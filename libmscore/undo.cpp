@@ -271,7 +271,7 @@ void UndoStack::remove(int idx)
             UndoCommand* cmd = list.takeLast();
             cmd->cleanup(false);  // delete elements for which UndoCommand() holds ownership
             delete cmd;
-            --curIdx;
+//            --curIdx;
             }
       while (list.size() > idx) {
             UndoCommand* cmd = list.takeLast();
