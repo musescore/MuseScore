@@ -1490,6 +1490,7 @@ int Note::transposition() const
 class NoteEditData : public ElementEditData {
    public:
       int line;
+      int string;
       };
 
 //---------------------------------------------------------
@@ -1499,11 +1500,14 @@ class NoteEditData : public ElementEditData {
 void Note::startDrag(EditData& ed)
       {
       NoteEditData* ned = new NoteEditData();
-      ned->e    = this;
-      ned->line = _line;
+      ned->e      = this;
+      ned->line   = _line;
+      ned->string = _string;
       ned->pushProperty(Pid::PITCH);
       ned->pushProperty(Pid::TPC1);
       ned->pushProperty(Pid::TPC2);
+      ned->pushProperty(Pid::FRET);
+      ned->pushProperty(Pid::STRING);
 
       ed.addData(ned);
       }
@@ -1514,19 +1518,36 @@ void Note::startDrag(EditData& ed)
 
 QRectF Note::drag(EditData& ed)
       {
-      if (staff()->isDrumStaff(tick()))
+      int _tick           = chord()->tick();
+      const StaffType* st = staff()->staffType(_tick);
+      if (st->isDrumStaff())
             return QRect();
 
-      NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
-      int _tick      = chord()->tick();
-      qreal _spatium = spatium();
-      bool tab       = staff()->isTabStaff(_tick);
-      qreal step     = _spatium * (tab ? staff()->staffType(_tick)->lineDistance().val() : 0.5);
-      int lineOffset = lrint(ed.delta.y() / step);
+      NoteEditData* ned   = static_cast<NoteEditData*>(ed.getData(this));
+      qreal _spatium      = spatium();
+      bool tab            = st->isTabStaff();
+      qreal step          = _spatium * (tab ? st->lineDistance().val() : 0.5);
+      int lineOffset      = lrint(ed.delta.y() / step);
 
-
-      if (staff()->isTabStaff(_tick)) {
-            // TODO
+      if (tab) {
+            const StringData* strData = staff()->part()->instrument()->stringData();
+            int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
+            int nFret   = strData->fret(_pitch, nString, staff(), _tick);
+            if (nFret >= 0) {                      // no fret?
+                  bool refret = false;
+                  if (fret() != nFret) {
+                        _fret = nFret;
+                        refret = true;
+                        }
+                  if (string() != nString) {
+                        _string = nString;
+                        refret = true;
+                        }
+                  if (refret) {
+                        strData->fretChords(chord());
+                        triggerLayout();
+                        }
+                  }
             }
       else {
             Key key = staff()->key(_tick);
@@ -1537,9 +1558,24 @@ QRectF Note::drag(EditData& ed)
                   }
             _tpc[0] = pitch2tpc(_pitch, key, Prefer::NEAREST);
             _tpc[1] = pitch2tpc(_pitch - transposition(), key, Prefer::NEAREST);
+            triggerLayout();
             }
-      triggerLayout();
       return QRectF();
+      }
+
+//---------------------------------------------------------
+//   endDrag
+//---------------------------------------------------------
+
+void Note::endDrag(EditData& ed)
+      {
+      NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
+      for (Note* nn : tiedNotes()) {
+            for (PropertyData pd : ned->propertyData) {
+                  score()->undoPropertyChanged(nn, pd.id, pd.data);
+                  }
+            }
+      score()->select(this, SelectType::SINGLE, 0);
       }
 
 //---------------------------------------------------------
@@ -2342,52 +2378,6 @@ int Note::customizeVelocity(int velo) const
       else if (veloType() == ValueType::USER_VAL)
             velo = veloOffset();
       return limit(velo, 1, 127);
-      }
-
-//---------------------------------------------------------
-//   endDrag
-//---------------------------------------------------------
-
-void Note::endDrag(EditData& ed)
-      {
-      Staff* staff = score()->staff(chord()->vStaffIdx());
-      int tick     = chord()->tick();
-
-      NoteEditData* ned = static_cast<NoteEditData*>(ed.getData(this));
-      if (staff->isTabStaff(tick)) {
-#if 0 // TODO
-            // on TABLATURE staves, dragging a note keeps same pitch on a different string (if possible)
-            // determine new string of dragged note (if tablature is upside down, invert _lineOffset)
-            // and fret for the same pitch on the new string
-            const StringData* strData = staff->part()->instrument()->stringData();
-            int nString = _string + (staff->staffType(tick)->upsideDown() ? -_lineOffset : _lineOffset);
-            int nFret   = strData->fret(_pitch, nString, staff, tick);
-            if (nFret < 0)                      // no fret?
-                  return;                       // no party!
-            // move the note together with all notes tied to it
-            for (Note* nn : tiedNotes()) {
-                  bool refret = false;
-                  if (nn->fret() != nFret) {
-                        nn->undoChangeProperty(Pid::FRET, nFret);
-                        refret = true;
-                        }
-                  if (nn->string() != nString) {
-                        nn->undoChangeProperty(Pid::STRING, nString);
-                        refret = true;
-                        }
-                  if (refret)
-                        strData->fretChords(nn->chord());
-                  }
-#endif
-            }
-      else {
-            for (Note* nn : tiedNotes()) {
-                  for (PropertyData pd : ned->propertyData) {
-                        score()->undoPropertyChanged(nn, pd.id, pd.data);
-                        }
-                  }
-            }
-      score()->select(this, SelectType::SINGLE, 0);
       }
 
 //---------------------------------------------------------
