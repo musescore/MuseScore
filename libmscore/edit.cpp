@@ -1516,6 +1516,8 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                         continue; // this voice is empty here (CR overlaps with CR in other track)
                   if (seg->tick() + curr->actualTicks() > maxTick)
                         break; // outside range
+                  if (curr->tuplet())
+                        break; // do not use Regroup Rhythms inside a tuplet
                   if (curr->isRest()) {
                         // combine consecutive rests
                         ChordRest* lastRest = curr;
@@ -1528,8 +1530,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                               lastRest = cr;
                               }
                         int restTicks = lastRest->tick() + lastRest->duration().ticks() - curr->tick();
-                        if (restTicks > curr->duration().ticks())
-                              seg = setNoteRest(seg, curr->track(), NoteVal(), Fraction::fromTicks(restTicks), MScore::Direction::AUTO, true);
+                        seg = setNoteRest(seg, curr->track(), NoteVal(), Fraction::fromTicks(restTicks), MScore::Direction::AUTO, true);
                         }
                   else if (curr->isChord()) {
                         // combine tied chords
@@ -1541,127 +1542,125 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                         if (!lastTiedChord)
                               lastTiedChord = chord;
                         int noteTicks = lastTiedChord->tick() + lastTiedChord->duration().ticks() - chord->tick();
-                        if (noteTicks > chord->duration().ticks()) {
-                              // store start/end note for backward/forward ties ending/starting on the group of notes being rewritten
-                              int numNotes = chord->notes().size();
-                              Note* tieBack[numNotes];
-                              Note* tieFor[numNotes];
-                              for (int i = 0; i < numNotes; i++) {
-                                    Note* n = chord->notes()[i];
-                                    Note* nn = lastTiedChord->notes()[i];
-                                    if (n->tieBack())
-                                          tieBack[i] = n->tieBack()->startNote();
-                                    else
-                                          tieBack[i] = 0;
-                                    if (nn->tieFor())
-                                          tieFor[i] = nn->tieFor()->endNote();
-                                    else
-                                          tieFor[i] = 0;
+                        // store start/end note for backward/forward ties ending/starting on the group of notes being rewritten
+                        int numNotes = chord->notes().size();
+                        Note* tieBack[numNotes];
+                        Note* tieFor[numNotes];
+                        for (int i = 0; i < numNotes; i++) {
+                              Note* n = chord->notes()[i];
+                              Note* nn = lastTiedChord->notes()[i];
+                              if (n->tieBack())
+                                    tieBack[i] = n->tieBack()->startNote();
+                              else
+                                    tieBack[i] = 0;
+                              if (nn->tieFor())
+                                    tieFor[i] = nn->tieFor()->endNote();
+                              else
+                                    tieFor[i] = 0;
+                              }
+                        int tick      = seg->tick();
+                        int track     = chord->track();
+                        Fraction sd   = Fraction::fromTicks(noteTicks);
+                        Tie* tie      = 0;
+                        Segment* segment = seg;
+                        ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
+                        Chord* nchord = static_cast<Chord*>(chord->clone());
+                        for (int i = 0; i < numNotes; i++) { // strip ties from cloned chord
+                              Note* n = nchord->notes()[i];
+                              n->setTieFor(0);
+                              n->setTieBack(0);
+                              }
+                        Chord* startChord = nchord;
+                        Measure* measure = 0;
+                        bool firstpart = true;
+                        for (;;) {
+                              if (track % VOICES)
+                                    expandVoice(segment, track);
+                              // the returned gap ends at the measure boundary or at tuplet end
+                              Fraction dd = makeGap(segment, track, sd, cr->tuplet());
+                              if (dd.isZero())
+                                    break;
+                              measure = segment->measure();
+                              QList<TDuration> dl = toRhythmicDurationList(dd, false, segment->rtick(), sigmap()->timesig(tick).nominal(), measure, 1);
+                              int n = dl.size();
+                              for (int i = 0; i < n; ++i) {
+                                    const TDuration& d = dl[i];
+                                    Chord* nchord2 = static_cast<Chord*>(nchord->clone());
+                                    if (!firstpart)
+                                          nchord2->removeMarkings(true);
+                                    nchord2->setDurationType(d);
+                                    nchord2->setDuration(d.fraction());
+                                    QList<Note*> nl1 = nchord->notes();
+                                    QList<Note*> nl2 = nchord2->notes();
+                                    if (!firstpart)
+                                          for (int j = 0; j < nl1.size(); ++j) {
+                                                tie = new Tie(this);
+                                                tie->setStartNote(nl1[j]);
+                                                tie->setEndNote(nl2[j]);
+                                                tie->setTrack(track);
+                                                nl1[j]->setTieFor(tie);
+                                                nl2[j]->setTieBack(tie);
+                                                }
+                                    undoAddCR(nchord2, measure, tick);
+                                    segment = nchord2->segment();
+                                    tick += nchord2->actualTicks();
+                                    nchord = nchord2;
+                                    firstpart = false;
                                     }
-                              int tick      = seg->tick();
-                              int track     = chord->track();
-                              Fraction sd   = Fraction::fromTicks(noteTicks);
-                              Tie* tie      = 0;
-                              Segment* segment = seg;
-                              ChordRest* cr = static_cast<ChordRest*>(segment->element(track));
-                              Chord* nchord = static_cast<Chord*>(chord->clone());
-                              for (int i = 0; i < numNotes; i++) { // strip ties from cloned chord
-                                    Note* n = nchord->notes()[i];
-                                    n->setTieFor(0);
-                                    n->setTieBack(0);
-                                    }
-                              Chord* startChord = nchord;
-                              Measure* measure = 0;
-                              bool firstpart = true;
-                              for (;;) {
+                              sd -= dd;
+                              if (sd.isZero())
+                                    break;
+                              Segment* nseg = tick2segment(tick, false, Segment::Type::ChordRest);
+                              if (nseg == 0)
+                                    break;
+                              segment = nseg;
+                              cr = static_cast<ChordRest*>(segment->element(track));
+                              if (cr == 0) {
                                     if (track % VOICES)
-                                          expandVoice(segment, track);
-                                    // the returned gap ends at the measure boundary or at tuplet end
-                                    Fraction dd = makeGap(segment, track, sd, cr->tuplet());
-                                    if (dd.isZero())
+                                          cr = addRest(segment, track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                                    else
                                           break;
-                                    measure = segment->measure();
-                                    QList<TDuration> dl = toRhythmicDurationList(dd, false, segment->rtick(), sigmap()->timesig(tick).nominal(), measure, 1);
-                                    int n = dl.size();
-                                    for (int i = 0; i < n; ++i) {
-                                          const TDuration& d = dl[i];
-                                          Chord* nchord2 = static_cast<Chord*>(nchord->clone());
-                                          if (!firstpart)
-                                                nchord2->removeMarkings(true);
-                                          nchord2->setDurationType(d);
-                                          nchord2->setDuration(d.fraction());
-                                          QList<Note*> nl1 = nchord->notes();
-                                          QList<Note*> nl2 = nchord2->notes();
-                                          if (!firstpart)
-                                                for (int j = 0; j < nl1.size(); ++j) {
-                                                      tie = new Tie(this);
-                                                      tie->setStartNote(nl1[j]);
-                                                      tie->setEndNote(nl2[j]);
-                                                      tie->setTrack(track);
-                                                      nl1[j]->setTieFor(tie);
-                                                      nl2[j]->setTieBack(tie);
-                                                      }
-                                          undoAddCR(nchord2, measure, tick);
-                                          segment = nchord2->segment();
-                                          tick += nchord2->actualTicks();
-                                          nchord = nchord2;
-                                          firstpart = false;
-                                          }
-                                    sd -= dd;
-                                    if (sd.isZero())
-                                          break;
-                                    Segment* nseg = tick2segment(tick, false, Segment::Type::ChordRest);
-                                    if (nseg == 0)
-                                          break;
-                                    segment = nseg;
-                                    cr = static_cast<ChordRest*>(segment->element(track));
-                                    if (cr == 0) {
-                                          if (track % VOICES)
-                                                cr = addRest(segment, track, TDuration(TDuration::DurationType::V_MEASURE), 0);
-                                          else
-                                                break;
-                                          }
                                     }
-                              if (_is.slur()) {
-                                    // extend slur
-                                    _is.slur()->undoChangeProperty(P_ID::SPANNER_TICKS, nchord->tick() - _is.slur()->tick());
-                                    for (ScoreElement* e : _is.slur()->linkList()) {
-                                          Slur* slur = static_cast<Slur*>(e);
-                                          for (ScoreElement* ee : nchord->linkList()) {
-                                                Element* e = static_cast<Element*>(ee);
-                                                if (e->score() == slur->score() && e->track() == slur->track2()) {
-                                                      slur->score()->undo(new ChangeSpannerElements(slur, slur->startElement(), e));
-                                                      break;
-                                                      }
+                              }
+                        if (_is.slur()) {
+                              // extend slur
+                              _is.slur()->undoChangeProperty(P_ID::SPANNER_TICKS, nchord->tick() - _is.slur()->tick());
+                              for (ScoreElement* e : _is.slur()->linkList()) {
+                                    Slur* slur = static_cast<Slur*>(e);
+                                    for (ScoreElement* ee : nchord->linkList()) {
+                                          Element* e = static_cast<Element*>(ee);
+                                          if (e->score() == slur->score() && e->track() == slur->track2()) {
+                                                slur->score()->undo(new ChangeSpannerElements(slur, slur->startElement(), e));
+                                                break;
                                                 }
                                           }
                                     }
-                              // recreate previously stored pending ties
-                              for (int i = 0; i < numNotes; i++) {
-                                    Note* n = startChord->notes()[i];
-                                    Note* nn = nchord->notes()[i];
-                                    if (tieBack[i]) {
-                                          tie = new Tie(this);
-                                          tie->setStartNote(tieBack[i]);
-                                          tie->setEndNote(n);
-                                          tie->setTrack(track);
-                                          n->setTieBack(tie);
-                                          tieBack[i]->setTieFor(tie);
-                                          undoAddElement(tie);
-                                          }
-                                    if (tieFor[i]) {
-                                          tie = new Tie(this);
-                                          tie->setStartNote(nn);
-                                          tie->setEndNote(tieFor[i]);
-                                          tie->setTrack(track);
-                                          n->setTieFor(tie);
-                                          tieFor[i]->setTieBack(tie);
-                                          undoAddElement(tie);
-                                          }
-                                    }
-                              if (tie) // at least one tie was created
-                                    connectTies();
                               }
+                        // recreate previously stored pending ties
+                        for (int i = 0; i < numNotes; i++) {
+                              Note* n = startChord->notes()[i];
+                              Note* nn = nchord->notes()[i];
+                              if (tieBack[i]) {
+                                    tie = new Tie(this);
+                                    tie->setStartNote(tieBack[i]);
+                                    tie->setEndNote(n);
+                                    tie->setTrack(track);
+                                    n->setTieBack(tie);
+                                    tieBack[i]->setTieFor(tie);
+                                    undoAddElement(tie);
+                                    }
+                              if (tieFor[i]) {
+                                    tie = new Tie(this);
+                                    tie->setStartNote(nn);
+                                    tie->setEndNote(tieFor[i]);
+                                    tie->setTrack(track);
+                                    n->setTieFor(tie);
+                                    tieFor[i]->setTieBack(tie);
+                                    undoAddElement(tie);
+                                    }
+                              }
+                        if (tie) // at least one tie was created
+                              connectTies();
                         }
                   }
             }
