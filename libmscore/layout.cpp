@@ -3921,6 +3921,11 @@ void LayoutContext::layout()
             while (score->npages() > curPage)        // Remove not needed pages. TODO: make undoable:
                   score->pages().takeLast();
             }
+      else {
+            Page* p = curSystem->page();
+            if (p && (p != page))
+                  p->rebuildBspTree();
+            }
       score->systems().append(systemList);     // TODO
       }
 
