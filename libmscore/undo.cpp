@@ -1798,23 +1798,21 @@ void ChangeNoteEvents::flip(EditData*)
 
 void ChangeInstrument::flip(EditData*)
       {
-      Instrument* oi = is->instrument();  //new Instrument(*is->instrument());
-      is->setInstrument(instrument);      //*instrument
-
-      // transpose
+      Part* part = is->staff()->part();
       int tickStart = is->segment()->tick();
-      auto i = is->staff()->part()->instruments()->find(tickStart);
-      ++i;
-      int tickEnd;
-      if (i == is->staff()->part()->instruments()->end())
-            tickEnd = -1;
-      else
-            tickEnd = i->first;
-      is->score()->transpositionChanged(is->staff()->part(), oi->transpose(), tickStart, tickEnd);
+      Instrument* oi = is->instrument();  //new Instrument(*is->instrument());
 
+      // set instrument in both part and instrument change element
+      is->setInstrument(instrument);      //*instrument
+      part->setInstrument(instrument, tickStart);
+
+      // update score
       is->masterScore()->rebuildMidiMapping();
+      is->masterScore()->updateChannel();
       is->score()->setInstrumentsChanged(true);
       is->score()->setLayoutAll();
+
+      // remember original instrument
       instrument = oi;
       }
 

@@ -491,10 +491,28 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             if (si.exec()) {
                   const InstrumentTemplate* it = si.instrTemplate();
                   if (it) {
+                        int tickStart = ic->segment()->tick();
+                        Part* part = ic->staff()->part();
+                        Interval oldV = part->instrument(tickStart)->transpose();
+                        //Instrument* oi = ic->instrument();  //part->instrument(tickStart);
                         //Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
-                        ic->setInstrument(Instrument::fromTemplate(it));
-                        score()->undo(new ChangeInstrument(ic, ic->instrument()));
-                        score()->masterScore()->updateChannel();
+                        // change instrument in all linked scores
+                        for (ScoreElement* se : ic->linkList()) {
+                              InstrumentChange* lic = static_cast<InstrumentChange*>(se);
+                              Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
+                              lic->score()->undo(new ChangeInstrument(lic, instrument));
+                              }
+                        // transpose for current score only
+                        // this automatically propagates to linked scores
+                        if (part->instrument(tickStart)->transpose() != oldV) {
+                              auto i = part->instruments()->upper_bound(tickStart);    // find(), ++i
+                              int tickEnd;
+                              if (i == part->instruments()->end())
+                                    tickEnd = -1;
+                              else
+                                    tickEnd = i->first;
+                              ic->score()->transpositionChanged(part, oldV, tickStart, tickEnd);
+                              }
                         }
                   else
                         qDebug("no template selected?");
