@@ -40,6 +40,7 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       QMap<QString, Shortcut*> localShortcuts;
       bool shortcutsChanged;
       QButtonGroup* recordButtons;
+      int _currentTabIndex;
 
       virtual void hideEvent(QHideEvent*);
       void apply();
@@ -81,6 +82,8 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
 
       void changeSoundfontPaths();
       void updateTranslationClicked();
+
+      void tabAboutToChange(int index);
 
    signals:
       void preferencesChanged();

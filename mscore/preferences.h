@@ -101,6 +101,7 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_APP_STARTUP_FIRSTSTART                         "Application/Startup/First start"
 #define PREF_APP_STARTUP_SESSIONSTART                       "Application/Startup/Session start"
 #define PREF_APP_STARTUP_STARTSCORE                         "Application/Startup/Start score"
+#define PREF_APP_SHOWADVANCEDPREFERENCESWARNING             "Application/Show advanced preferences warning"
 #define PREF_APP_WORKSPACE                                  "Application/Workspace"
 #define PREF_EXPORT_AUDIO_SAMPLERATE                        "Export/Audio/Sample rate"
 #define PREF_EXPORT_MP3_BITRATE                             "Export/Mp3/Bit rate"

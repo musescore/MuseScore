@@ -92,6 +92,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_APP_STARTUP_FIRSTSTART,                          new BoolPreference(true)},
             {PREF_APP_STARTUP_SESSIONSTART,                        new EnumPreference(QVariant::fromValue(SessionStart::SCORE), false)},
             {PREF_APP_STARTUP_STARTSCORE,                          new FilePreference(":/data/My_First_Score.mscz", QCoreApplication::translate("MuseScore_files", "MuseScore Files") + " (*.mscz *.mscx);;" + QCoreApplication::translate("MuseScore_files", "All") + " (*)", false)},
+            {PREF_APP_SHOWADVANCEDPREFERENCESWARNING,              new BoolPreference(true)},
             {PREF_APP_WORKSPACE,                                   new StringPreference("Basic", false)},
             {PREF_EXPORT_AUDIO_SAMPLERATE,                         new IntPreference(44100, false)},
             {PREF_EXPORT_MP3_BITRATE,                              new IntPreference(128, false)},
@@ -323,7 +324,7 @@ int Preferences::getInt(const QString key) const
             return defaultValue(key).toInt();
             }
       return pref;
-}
+      }
 
 double Preferences::getDouble(const QString key) const
       {

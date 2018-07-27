@@ -34,6 +34,8 @@
 #include "resourceManager.h"
 #include "synthesizer/msynthesizer.h"
 
+#include <QtWidgets>
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -211,6 +213,9 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       settings.beginGroup(objectName());
       tabWidget->setCurrentIndex(settings.value("Current page", 0).toInt());
       settings.endGroup();
+      _currentTabIndex = tabWidget->currentIndex();
+
+      connect(tabWidget, &QTabWidget::currentChanged, this, &PreferenceDialog::tabAboutToChange);
 
       MuseScore::restoreGeometry(this);
 #if !defined(Q_OS_MAC) && (!defined(Q_OS_WIN) || defined(FOR_WINSTORE))
@@ -1301,6 +1306,49 @@ void PreferenceDialog::updateTranslationClicked()
       ResourceManager r(0);
       r.selectLanguagesTab();
       r.exec();
+      }
+
+//---------------------------------------------------------
+//   tabChanged
+//---------------------------------------------------------
+
+void PreferenceDialog::tabAboutToChange(int index)
+      {
+      if (tabWidget->tabText(index) == tr("Advanced")) {
+            if(preferences.getBool(PREF_APP_SHOWADVANCEDPREFERENCESWARNING)) {
+                  QMessageBox msgbox(QMessageBox::Warning,
+                                     tr("MuseScore"),
+                                     tr("Warning: \n"
+                                        "Changing these advanced settings can be harmful to the stability, security, and performance of this application.\n"
+                                        "You should only continue if you know what you are doing."),
+                                     QMessageBox::Ok | QMessageBox::Cancel,
+                                     this);
+                  msgbox.setEscapeButton(QMessageBox::Cancel);
+
+                  QCheckBox* checkbox = new QCheckBox("Show this message next time");
+                  checkbox->setChecked(true);
+                  msgbox.setCheckBox(checkbox);
+                  QMessageBox::StandardButton result = static_cast<QMessageBox::StandardButton>(msgbox.exec());
+                  // close or cancel clicked: cancel page change.
+                  if (result == QMessageBox::NoButton || result == QMessageBox::Cancel) {
+                        // don't set the "show this message next time" preference.
+                        tabWidget->setCurrentIndex(_currentTabIndex);
+                        return;
+                        }
+
+                  if (result == QMessageBox::Ok) { // accept page change.
+                        // save to temporary preferences to avoid:
+                        // 1) breaking the rule that preferences are only saved when apply is clicked
+                        // 2)
+                        preferences.setTemporaryPreference(QString("temporary") + QString(PREF_APP_SHOWADVANCEDPREFERENCESWARNING),
+                                                           checkbox->isChecked());
+                        _currentTabIndex = index;
+                        return;
+                        }
+                  Q_UNREACHABLE();
+                  return;
+                  }
+            }
       }
 
 //---------------------------------------------------------

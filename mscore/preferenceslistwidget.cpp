@@ -36,11 +36,11 @@ PreferencesListWidget::PreferencesListWidget(QWidget* parent)
       expandAll();
       resizeColumnToContents(0);
 
-      setContextMenuPolicy(Qt::ActionsContextMenu);
       QAction* selectAllPreferences = new QAction(tr("Select all preferences"), this);
       selectAllPreferences->setShortcut(QKeySequence::SelectAll);
       addAction(selectAllPreferences);
       connect(selectAllPreferences, &QAction::triggered, this, &PreferencesListWidget::selectAllVisiblePreferences);
+      setContextMenuPolicy(Qt::ActionsContextMenu);
       }
 
 PreferencesListWidget::~PreferencesListWidget()
@@ -188,6 +188,12 @@ void PreferencesListWidget::updatePreferences()
             item->update();
       }
 
+void PreferencesListWidget::updateToTemporaryPreferences()
+      {
+      for (PreferenceItem* item : preferenceItems.values())
+            item->update(QString("temporary") + item->name());
+      }
+
 void PreferencesListWidget::addPreference(PreferenceItem* item)
       {
       setItemWidget(item, PREF_VALUE_COLUMN, item->editor());
@@ -291,6 +297,14 @@ void PreferencesListWidget::selectAllVisiblePreferences()
             pref->setSelected(!pref->isHidden());
       }
 
+// For now, the only preference that is synced with this showEvent is PREF_APP_SHOWADVANCEDPREFERENCESWARNING.
+void PreferencesListWidget::showEvent(QShowEvent* event)
+      {
+      // all this long line does it set the PREF_APP_SHOWADVANCEDPREFERENCESWARNING's checkbox to what was set just before in prefsDialog::tabAboutToChange
+      static_cast<QCheckBox*>(static_cast<BoolPreferenceItem*>(preferenceItems.value(PREF_APP_SHOWADVANCEDPREFERENCESWARNING))->editor())->setChecked(preferences.getBool(PREF_APP_SHOWADVANCEDPREFERENCESWARNING));
+      QTreeWidget::showEvent(event);
+      }
+
 void PreferencesListWidget::save() const
       {
       for (PreferenceItem* item : preferenceItems.values()) {
@@ -364,7 +378,7 @@ void ColorPreferenceItem::save()
       PreferenceItem::save(newValue);
       }
 
-void ColorPreferenceItem::update()
+void ColorPreferenceItem::update(const QString& name)
       {
       QColor newValue = preferences.getColor(name());
       _editor->setColor(newValue);
@@ -403,7 +417,7 @@ void IntPreferenceItem::save()
       PreferenceItem::save(newValue);
       }
 
-void IntPreferenceItem::update()
+void IntPreferenceItem::update(const QString& name)
       {
       int newValue = preferences.getInt(name());
       _editor->setValue(newValue);
@@ -443,7 +457,7 @@ void DoublePreferenceItem::save()
       PreferenceItem::save(newValue);
       }
 
-void DoublePreferenceItem::update()
+void DoublePreferenceItem::update(const QString& name)
       {
       double newValue = preferences.getDouble(name());
       _editor->setValue(newValue);
@@ -489,9 +503,9 @@ void BoolPreferenceItem::save()
       PreferenceItem::save(newValue);
       }
 
-void BoolPreferenceItem::update()
+void BoolPreferenceItem::update(const QString name)
       {
-      bool newValue = preferences.getBool(name());
+      bool newValue = preferences.getBool(name);
       _editor->setChecked(newValue);
       }
 
@@ -525,7 +539,7 @@ void StringPreferenceItem::save()
       PreferenceItem::save(newValue);
       }
 
-void StringPreferenceItem::update()
+void StringPreferenceItem::update(const QString& name)
       {
       QString newValue = preferences.getString(name());
       _editor->setText(newValue);
@@ -566,7 +580,7 @@ void FilePreferenceItem::save()
       PreferenceItem::save(newValue);
       }
 
-void FilePreferenceItem::update()
+void FilePreferenceItem::update(const QString& name)
       {
       QString newValue = preferences.getString(name());
       _editor->setText(newValue);
@@ -626,7 +640,7 @@ void DirPreferenceItem::save()
       PreferenceItem::save(newValue);
       }
 
-void DirPreferenceItem::update()
+void DirPreferenceItem::update(const QString& name)
       {
       QString newValue = preferences.getString(name());
       _editor->setText(newValue);

@@ -25,6 +25,8 @@
 
 #define PREF_VALUE_COLUMN 1
 
+#include <QtWidgets>
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -48,10 +50,12 @@ class PreferenceItem : public QTreeWidgetItem, public QObject {
 
       virtual QWidget* editor() const = 0;
       virtual void save() = 0;
-      virtual void update() = 0;
+      // using a variable other than name means it will go take the information coming
+      // from another name. THis is useful, for example, to sync a preference with a
+      // temporary copy of itself (probably under the name ("temporary" + name())
+      virtual void update(const QString name = this->name()) = 0;
       virtual void setDefaultValue() = 0;
       virtual bool isModified() const = 0;
-
       void setVisible(const bool visible);
       const QString& name() const { return _name; }
       };
@@ -69,7 +73,7 @@ class BoolPreferenceItem : public PreferenceItem {
 
       QWidget* editor() const override { return _editor; }
       inline virtual void save() override;
-      inline virtual void update() override;
+      inline virtual void update(const QString name = name()) override;
       inline virtual void setDefaultValue() override;
       inline virtual bool isModified() const override;
       };
@@ -86,7 +90,7 @@ class IntPreferenceItem : public PreferenceItem {
 
       QWidget* editor() const override { return _editor; }
       inline virtual void save() override;
-      inline virtual void update() override;
+      inline virtual void update(const QString name = name()) override;
       inline virtual void setDefaultValue() override;
       inline virtual bool isModified() const override;
       };
@@ -103,7 +107,7 @@ class DoublePreferenceItem : public PreferenceItem {
 
       QWidget* editor() const override { return _editor; }
       inline virtual void save() override;
-      inline virtual void update() override;
+      inline virtual void update(const QString name = name()) override;
       inline virtual void setDefaultValue() override;
       inline virtual bool isModified() const override;
       };
@@ -120,7 +124,7 @@ class StringPreferenceItem : public PreferenceItem {
 
       QWidget* editor() const override { return _editor; }
       inline virtual void save() override;
-      inline virtual void update() override;
+      inline virtual void update(const QString name = name()) override;
       inline virtual void setDefaultValue() override;
       inline virtual bool isModified() const override;
       };
@@ -137,7 +141,7 @@ class FilePreferenceItem : public PreferenceItem {
 
       QWidget* editor() const override { return _editor; }
       inline virtual void save() override;
-      inline virtual void update() override;
+      inline virtual void update(const QString name = name()) override;
       inline virtual void setDefaultValue() override;
       inline virtual bool isModified() const override;
 
@@ -157,7 +161,8 @@ class DirPreferenceItem : public PreferenceItem {
 
       QWidget* editor() const override { return _editor; }
       inline virtual void save() override;
-      inline virtual void update() override;
+      inline virtual void update(const QString name = name()) override;
+
       inline virtual void setDefaultValue() override;
       inline virtual bool isModified() const override;
 
@@ -177,7 +182,8 @@ class ColorPreferenceItem : public PreferenceItem {
 
       QWidget* editor() const override { return _editor; }
       inline virtual void save() override;
-      inline virtual void update() override;
+      inline virtual void update(const QString name = name()) override;
+
       inline virtual void setDefaultValue() override;
       inline virtual bool isModified() const override;
       };
@@ -201,12 +207,17 @@ class PreferencesListWidget : public QTreeWidget, public PreferenceVisitor {
       void hideEmptyItems() const;
       void selectAllVisiblePreferences();
 
+      virtual void showEvent(QShowEvent* event) override;
+      virtual void keyPressEvent(QKeyEvent* event) override;
+
    public:
       explicit PreferencesListWidget(QWidget* parent = nullptr);
       ~PreferencesListWidget();
 
       void loadPreferences();
       void updatePreferences();
+      // not used for now, since there is no syncing with the other tabs of the prefs dialog.
+      void updateToTemporaryPreferences();
 
       void save() const;
 
