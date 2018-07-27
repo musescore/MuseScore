@@ -133,13 +133,9 @@ Element* TBox::drop(EditData& data)
       Element* e = data.element;
       switch (e->type()) {
             case ElementType::TEXT:
-                  {
-                  Text* t = toText(e);
-                  _text->undoSetText(t->xmlText());
-//TODO-ws                  _text->undoChangeProperty(Pid::SUB_STYLE, int(t->subStyle()));
+                  _text->undoChangeProperty(Pid::TEXT, toText(e)->xmlText());
                   delete e;
                   return _text;
-                  }
             default:
                   return VBox::drop(data);
             }
@@ -154,9 +150,7 @@ void TBox::add(Element* e)
       {
       if (e->isText()) {
             // does not normally happen, since drop() handles this directly
-            Text* t = toText(e);
-            _text->undoSetText(t->xmlText());
-//TODO-ws            _text->undoChangeProperty(Pid::SUB_STYLE, int(t->subStyle()));
+            _text->undoChangeProperty(Pid::TEXT, toText(e)->xmlText());
             }
       else {
             VBox::add(e);

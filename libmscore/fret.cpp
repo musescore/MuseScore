@@ -159,7 +159,7 @@ QLineF FretDiagram::dragAnchor() const
       QPointF p1(xp, yp);
       return QLineF(p1, canvasPos());
 #if 0 // TODOxx
-      if (parent()->type() == ElementType::SEGMENT) {
+      if (parent()->isSegment()) {
             Segment* s     = toSegment(parent());
             Measure* m     = s->measure();
             System* system = m->system();
