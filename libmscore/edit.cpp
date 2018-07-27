@@ -2068,9 +2068,8 @@ void Score::cmdDeleteSelection()
                               Staff* staff = Score::staff(track / VOICES);
                               for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
                                     int tick    = m->tick();
-                                    TimeSig* ts = staff->timeSig(tick);
-                                    Fraction f  = ts ? ts->sig() : Fraction(4, 4);
-                                    Rest* r     = setRest(tick, track, f, false, 0);
+                                    Fraction ff = m->stretchedLen(staff);
+                                    Rest* r = setRest(tick, track, ff, false, 0);
                                     if (!cr)
                                           cr = r;
                                     if (s2 && (m == s2->measure()))
