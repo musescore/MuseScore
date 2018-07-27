@@ -1326,6 +1326,8 @@ void Score::addElement(Element* element)
 
             case ElementType::INSTRUMENT_CHANGE: {
                   InstrumentChange* ic = toInstrumentChange(element);
+                  ic->part()->setInstrument(ic->instrument(), ic->segment()->tick());
+#if 0
                   int tickStart = ic->segment()->tick();
                   auto i = ic->part()->instruments()->upper_bound(tickStart);
                   int tickEnd;
@@ -1336,6 +1338,7 @@ void Score::addElement(Element* element)
                   Interval oldV = ic->part()->instrument(tickStart)->transpose();
                   ic->part()->setInstrument(ic->instrument(), tickStart);
                   transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
+#endif
                   masterScore()->rebuildMidiMapping();
                   cmdState()._instrumentsChanged = true;
                   }
@@ -1480,6 +1483,8 @@ void Score::removeElement(Element* element)
                   break;
             case ElementType::INSTRUMENT_CHANGE: {
                   InstrumentChange* ic = toInstrumentChange(element);
+                  ic->part()->removeInstrument(ic->segment()->tick());
+#if 0
                   int tickStart = ic->segment()->tick();
                   auto i = ic->part()->instruments()->upper_bound(tickStart);
                   int tickEnd;
@@ -1490,6 +1495,7 @@ void Score::removeElement(Element* element)
                   Interval oldV = ic->part()->instrument(tickStart)->transpose();
                   ic->part()->removeInstrument(tickStart);
                   transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
+#endif
                   masterScore()->rebuildMidiMapping();
                   cmdState()._instrumentsChanged = true;
                   }

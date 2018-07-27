@@ -673,8 +673,18 @@ void Score::transpositionChanged(Part* part, Interval oldV, int tickStart, int t
       Interval diffV(oldV.chromatic + v.chromatic);
 
       // transpose keys first
-      if (!styleB(Sid::concertPitch))
-            transposeKeys(part->startTrack() / VOICES, part->endTrack() / VOICES, tickStart, tickEnd, diffV);
+      QList<Score*> scores;
+      for (Staff* ls : part->staff(0)->staffList()) {
+            // TODO: special handling for linked staves within a score
+            // could be useful for capo
+            Score* score = ls->score();
+            if (scores.contains(score))
+                  continue;
+            scores.append(score);
+            Part* lp = ls->part();
+            if (!score->styleB(Sid::concertPitch))
+                  score->transposeKeys(lp->startTrack() / VOICES, lp->endTrack() / VOICES, tickStart, tickEnd, diffV);
+            }
 
       // now transpose notes and chord symbols
       for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {

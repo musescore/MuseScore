@@ -1790,6 +1790,25 @@ void Score::deleteItem(Element* el)
                         undoRemoveElement(el);
                   break;
 
+            case ElementType::INSTRUMENT_CHANGE:
+                  {
+                  InstrumentChange* ic = static_cast<InstrumentChange*>(el);
+                  int tickStart = ic->segment()->tick();
+                  Part* part = ic->part();
+                  Interval oldV = part->instrument(tickStart)->transpose();
+                  undoRemoveElement(el);
+                  if (part->instrument(tickStart)->transpose() != oldV) {
+                        auto i = part->instruments()->upper_bound(tickStart);
+                        int tickEnd;
+                        if (i == part->instruments()->end())
+                              tickEnd = -1;
+                        else
+                              tickEnd = i->first;
+                        transpositionChanged(part, oldV, tickStart, tickEnd);
+                        }
+                  }
+                  break;
+
             default:
                   undoRemoveElement(el);
                   break;
@@ -4288,12 +4307,25 @@ void Score::undoAddElement(Element* element)
                         Segment* ns1   = nm1->findSegment(s1->segmentType(), s1->tick());
                         InstrumentChange* nis = toInstrumentChange(ne);
                         nis->setParent(ns1);
+                        int tickStart = nis->segment()->tick();
+                        Part* part = nis->part();
+                        Interval oldV = nis->part()->instrument(tickStart)->transpose();
                         // ws: instrument should not be changed here
                         if (is->instrument()->channel().empty() || is->instrument()->channel(0)->program == -1)
                               nis->setInstrument(*staff->part()->instrument(s1->tick()));
                         else if (nis != is)
                               nis->setInstrument(*is->instrument());
                         undo(new AddElement(nis));
+                        // transpose root score; parts will follow
+                        if (score->isMaster() && part->instrument(tickStart)->transpose() != oldV) {
+                              auto i = part->instruments()->upper_bound(tickStart);
+                              int tickEnd;
+                              if (i == part->instruments()->end())
+                                    tickEnd = -1;
+                              else
+                                    tickEnd = i->first;
+                              transpositionChanged(part, oldV, tickStart, tickEnd);
+                              }
                         }
                   else if (element->isBreath()) {
                         Breath* breath   = toBreath(element);
