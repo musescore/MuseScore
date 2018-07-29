@@ -39,6 +39,7 @@ class ColorLabel : public QFrame {
 
       virtual void paintEvent(QPaintEvent*) override;
       virtual void mousePressEvent(QMouseEvent*) override;
+      virtual void keyPressEvent(QKeyEvent*) override;
 
    signals:
       void colorChanged(const QColor&);
@@ -49,16 +50,17 @@ class ColorLabel : public QFrame {
       ColorLabel(QWidget* parent = nullptr);
       ~ColorLabel();
 
-      void setColor(const QColor&);
-      const QColor color() const;
-
       virtual QSize sizeHint() const override;
-
+      const QColor color() const;
       QPixmap* pixmap() const;
-      void setPixmap(QPixmap*);
-
       const QString& text() const;
+
+   public slots:
       void setText(const QString& text);
+      void setPixmap(QPixmap*);
+      void setColor(const QColor&);
+      void getColor();
+
 };
 
 }  // namespace Awl

@@ -52,6 +52,25 @@ void ColorLabel::setColor(const QColor& c)
       }
 
 //---------------------------------------------------------
+//   get
+//---------------------------------------------------------
+
+void ColorLabel::getColor()
+      {
+      QColor c = QColorDialog::getColor(_color, this,
+         tr("Select Color"),
+         QColorDialog::ShowAlphaChannel
+         );
+      if (c.isValid()) {
+            if (_color != c) {
+                  _color = c;
+                  emit colorChanged(_color);
+                  update();
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   color
 //---------------------------------------------------------
 
@@ -126,7 +145,8 @@ void ColorLabel::paintEvent(QPaintEvent* ev)
             p.fillRect(r, _color);
             if (!_text.isEmpty()) {
                   // Get a visible text: white if the text is dark and black if it's light.
-                  // Get the average of R, G and B. If it's greater than or equal to 128, it means the text is light.
+                  // Get the average of R, G and B. If it's greater than or equal to 128,
+                  // then consider that the text is light.
                   p.setPen(QColor((((_color.red() + _color.green() + _color.blue()) / 3) >= 128) ? Qt::black : Qt::white));
                   p.drawText(frameRect(), _text, QTextOption(Qt::AlignCenter));
                   }
@@ -139,21 +159,21 @@ void ColorLabel::paintEvent(QPaintEvent* ev)
 //   mousePressEvent
 //---------------------------------------------------------
 
-void ColorLabel::mousePressEvent(QMouseEvent*)
+void ColorLabel::mousePressEvent(QMouseEvent* event)
       {
+      event->accept();
       if (_pixmap)
             return;
-      QColor c = QColorDialog::getColor(_color, this,
-         tr("Select Color"),
-         QColorDialog::ShowAlphaChannel
-         );
-      if (c.isValid()) {
-            if (_color != c) {
-                  _color = c;
-                  emit colorChanged(_color);
-                  update();
-                  }
-            }
+      getColor();
+      }
+
+void ColorLabel::keyPressEvent(QKeyEvent* event)
+      {
+      event->accept();
+      if (_pixmap)
+            return;
+      if ((event->key() == Qt::Key_Space) || (event->key() == Qt::Key_Enter))
+            getColor();
       }
 
 } // namespace Awl

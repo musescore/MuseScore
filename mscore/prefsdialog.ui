@@ -4293,10 +4293,17 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>fgWallpaperButton</tabstop>
   <tabstop>fgWallpaper</tabstop>
   <tabstop>fgWallpaperSelect</tabstop>
+  <tabstop>pageHorizontal</tabstop>
+  <tabstop>pageVertical</tabstop>
+  <tabstop>limitScrollArea</tabstop>
+  <tabstop>drawAntialiased</tabstop>
+  <tabstop>proximity</tabstop>
   <tabstop>enableMidiInput</tabstop>
+  <tabstop>warnPitchRange</tabstop>
+  <tabstop>realtimeDelay</tabstop>
+  <tabstop>playNotes</tabstop>
   <tabstop>defaultPlayDuration</tabstop>
   <tabstop>playChordOnAddNote</tabstop>
-  <tabstop>warnPitchRange</tabstop>
   <tabstop>rcGroup</tabstop>
   <tabstop>rewindActive</tabstop>
   <tabstop>recordRewind</tabstop>
@@ -4326,12 +4333,12 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>recordUndo</tabstop>
   <tabstop>rca9</tabstop>
   <tabstop>rcr9</tabstop>
+  <tabstop>rca12</tabstop>
+  <tabstop>rcr12</tabstop>
   <tabstop>rca10</tabstop>
   <tabstop>rcr10</tabstop>
   <tabstop>rca11</tabstop>
   <tabstop>rcr11</tabstop>
-  <tabstop>rca12</tabstop>
-  <tabstop>rcr12</tabstop>
   <tabstop>realtimeAdvanceActive</tabstop>
   <tabstop>recordRealtimeAdvance</tabstop>
   <tabstop>advanceOnRelease</tabstop>
@@ -4345,6 +4352,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>partStyle</tabstop>
   <tabstop>partStyleButton</tabstop>
   <tabstop>scale</tabstop>
+  <tabstop>showMidiControls</tabstop>
   <tabstop>pulseaudioDriver</tabstop>
   <tabstop>portaudioDriver</tabstop>
   <tabstop>portaudioApi</tabstop>
@@ -4374,7 +4382,11 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>shortestNote</tabstop>
   <tabstop>pngResolution</tabstop>
   <tabstop>pngTransparent</tabstop>
+  <tabstop>expandRepeats</tabstop>
+  <tabstop>exportRPNs</tabstop>
+  <tabstop>exportPdfDpi</tabstop>
   <tabstop>exportAudioSampleRate</tabstop>
+  <tabstop>exportMp3BitRate</tabstop>
   <tabstop>exportLayout</tabstop>
   <tabstop>exportAllBreaks</tabstop>
   <tabstop>exportManualBreaks</tabstop>
@@ -4385,12 +4397,12 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>loadShortcutList</tabstop>
   <tabstop>clearShortcut</tabstop>
   <tabstop>defineShortcut</tabstop>
+  <tabstop>filterShortcuts</tabstop>
   <tabstop>printShortcuts</tabstop>
+  <tabstop>checkUpdateStartup</tabstop>
+  <tabstop>checkExtensionsUpdateStartup</tabstop>
   <tabstop>resetToDefault</tabstop>
   <tabstop>buttonBox</tabstop>
-  <tabstop>limitScrollArea</tabstop>
-  <tabstop>drawAntialiased</tabstop>
-  <tabstop>proximity</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>

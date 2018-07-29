@@ -803,10 +803,10 @@ void PreferenceDialog::updateFgView(bool useColor)
 
       if (useColor) {
             fgColorLabel->setColor(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
-            fgColorLabel->setPixmap(0);
+            fgColorLabel->setText(tr("Click to modify"));
             }
       else {
-            fgColorLabel->setPixmap(new QPixmap(fgWallpaper->text()));
+            fgColorLabel->setText(fgWallpaper->text());
             }
       }
 
@@ -823,10 +823,10 @@ void PreferenceDialog::updateBgView(bool useColor)
 
       if (useColor) {
             bgColorLabel->setColor(preferences.getColor(PREF_UI_CANVAS_BG_COLOR));
-            bgColorLabel->setPixmap(0);
+            bgColorLabel->setText(tr("Click to modify"));
             }
       else {
-            bgColorLabel->setPixmap(new QPixmap(bgWallpaper->text()));
+            bgColorLabel->setText(bgWallpaper->text());
             }
       }
 
@@ -842,12 +842,13 @@ void PreferenceDialog::buttonBoxClicked(QAbstractButton* button)
                   break;
             case QDialogButtonBox::Ok:
                   apply();
-                  // intentional ??
-                  // fall through
-            case QDialogButtonBox::Cancel:
-            default:
                   hide();
                   break;
+            case QDialogButtonBox::Cancel:
+                  hide();
+                  break;
+            default:
+                  hide();
             }
       }
 

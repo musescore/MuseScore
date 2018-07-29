@@ -188,12 +188,6 @@ void PreferencesListWidget::updatePreferences()
             item->update();
       }
 
-void PreferencesListWidget::updateToTemporaryPreferences()
-      {
-      for (PreferenceItem* item : preferenceItems.values())
-            item->update(QString("temporary") + item->name());
-      }
-
 void PreferencesListWidget::addPreference(PreferenceItem* item)
       {
       setItemWidget(item, PREF_VALUE_COLUMN, item->editor());
@@ -305,6 +299,29 @@ void PreferencesListWidget::showEvent(QShowEvent* event)
       QTreeWidget::showEvent(event);
       }
 
+void PreferencesListWidget::keyPressEvent(QKeyEvent* event)
+      {
+      // Key_F2 alternates between the item and it's editor
+      if (event->key() == Qt::Key_F2) {
+            PreferenceItem* pref= dynamic_cast<PreferenceItem*> (currentItem());
+            if (pref) {
+                  if (!pref->editor()->hasFocus()) {
+                        pref->editor()->setFocus();
+                        pref->editor()->grabKeyboard();
+                        }
+                  else {
+                        setCurrentItem(pref);
+                        pref->editor()->clearFocus();
+                        pref->editor()->releaseKeyboard();
+                        }
+                  }
+            event->accept();
+            return;
+            }
+
+      QTreeView::keyPressEvent(event);
+      }
+
 void PreferencesListWidget::save() const
       {
       for (PreferenceItem* item : preferenceItems.values()) {
@@ -378,7 +395,7 @@ void ColorPreferenceItem::save()
       PreferenceItem::save(newValue);
       }
 
-void ColorPreferenceItem::update(const QString& name)
+void ColorPreferenceItem::update()
       {
       QColor newValue = preferences.getColor(name());
       _editor->setColor(newValue);
@@ -417,7 +434,7 @@ void IntPreferenceItem::save()
       PreferenceItem::save(newValue);
       }
 
-void IntPreferenceItem::update(const QString& name)
+void IntPreferenceItem::update()
       {
       int newValue = preferences.getInt(name());
       _editor->setValue(newValue);
@@ -457,7 +474,7 @@ void DoublePreferenceItem::save()
       PreferenceItem::save(newValue);
       }
 
-void DoublePreferenceItem::update(const QString& name)
+void DoublePreferenceItem::update()
       {
       double newValue = preferences.getDouble(name());
       _editor->setValue(newValue);
@@ -503,9 +520,9 @@ void BoolPreferenceItem::save()
       PreferenceItem::save(newValue);
       }
 
-void BoolPreferenceItem::update(const QString name)
+void BoolPreferenceItem::update()
       {
-      bool newValue = preferences.getBool(name);
+      bool newValue = preferences.getBool(name());
       _editor->setChecked(newValue);
       }
 
@@ -539,7 +556,7 @@ void StringPreferenceItem::save()
       PreferenceItem::save(newValue);
       }
 
-void StringPreferenceItem::update(const QString& name)
+void StringPreferenceItem::update()
       {
       QString newValue = preferences.getString(name());
       _editor->setText(newValue);
@@ -580,7 +597,7 @@ void FilePreferenceItem::save()
       PreferenceItem::save(newValue);
       }
 
-void FilePreferenceItem::update(const QString& name)
+void FilePreferenceItem::update()
       {
       QString newValue = preferences.getString(name());
       _editor->setText(newValue);
@@ -640,7 +657,7 @@ void DirPreferenceItem::save()
       PreferenceItem::save(newValue);
       }
 
-void DirPreferenceItem::update(const QString& name)
+void DirPreferenceItem::update()
       {
       QString newValue = preferences.getString(name());
       _editor->setText(newValue);
