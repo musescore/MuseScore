@@ -178,6 +178,7 @@ void PaletteBox::selectWorkspace(QString path)
       {
       int idx = workspaceList->findData(path);
       workspaceList->setCurrentIndex(idx);
+      workspaceSelected(idx);
       }
 
 //---------------------------------------------------------
