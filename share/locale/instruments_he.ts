@@ -1038,7 +1038,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="478"/>
         <source>Slide Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>חצוצרת הזזה</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="481"/>
@@ -1743,7 +1743,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="801"/>
         <source>Ratchet</source>
-        <translation type="unfinished"/>
+        <translation>רעשן</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="803"/>
@@ -1989,12 +1989,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1"/>
         <source>Common</source>
-        <translation type="unfinished"/>
+        <translation>נפוצים</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2"/>
         <source>Pop/Rock</source>
-        <translation type="unfinished"/>
+        <translation>פופ/רוק</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3"/>
@@ -2004,12 +2004,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4"/>
         <source>Choral</source>
-        <translation type="unfinished"/>
+        <translation>ווקאלי</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5"/>
         <source>Orchestra</source>
-        <translation type="unfinished"/>
+        <translation>תזמורת</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6"/>
@@ -2044,7 +2044,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="12"/>
         <source>Woodwinds</source>
-        <translation type="unfinished"/>
+        <translation>כלי נשיפה מעץ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="13"/>
@@ -4543,7 +4543,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="823"/>
         <source>Percussion - Marching</source>
-        <translation type="unfinished"/>
+        <translation>כלי הקשה- מצעד</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="825"/>
@@ -4572,7 +4572,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="832"/>
         <source>Percussion - Body</source>
-        <translation type="unfinished"/>
+        <translation>כלי הקשה- גוף</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="834"/>
@@ -4661,7 +4661,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="862"/>
         <source>Women</source>
-        <translation type="unfinished"/>
+        <translation>נשים</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="863"/>
@@ -4672,7 +4672,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="864"/>
         <source>Men</source>
-        <translation type="unfinished"/>
+        <translation>גברים</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="865"/>
@@ -4797,7 +4797,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="906"/>
         <source>Electronic</source>
-        <translation type="unfinished"/>
+        <translation>אלקטרוני</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="908"/>
@@ -5771,7 +5771,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="985"/>
         <source>Strings - Plucked</source>
-        <translation type="unfinished"/>
+        <translation>כלי פריטה</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="987"/>

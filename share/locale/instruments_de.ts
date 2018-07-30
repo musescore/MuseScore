@@ -3980,13 +3980,13 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="654"/>
         <source>Chimes</source>
-        <translation>Windspiele</translation>
+        <translation>Röhrenglocken</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="655"/>
         <source>Cme.</source>
         <comment>Chimes</comment>
-        <translation>Wsp.</translation>
+        <translation>Rgl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="657"/>

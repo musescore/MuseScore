@@ -3980,13 +3980,13 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="654"/>
         <source>Chimes</source>
-        <translation>Chimes</translation>
+        <translation>Tubular Bells</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="655"/>
         <source>Cme.</source>
         <comment>Chimes</comment>
-        <translation>Cme.</translation>
+        <translation>T.B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="657"/>

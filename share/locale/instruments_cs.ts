@@ -2044,7 +2044,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="12"/>
         <source>Woodwinds</source>
-        <translation>Dechové nástroje</translation>
+        <translation>Dřevěné dechové nástroje</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="13"/>

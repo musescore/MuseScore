@@ -1994,7 +1994,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2"/>
         <source>Pop/Rock</source>
-        <translation type="unfinished"/>
+        <translation>Pop/Rock</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3"/>
@@ -2004,17 +2004,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4"/>
         <source>Choral</source>
-        <translation type="unfinished"/>
+        <translation>Cor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5"/>
         <source>Orchestra</source>
-        <translation type="unfinished"/>
+        <translation>Orquestra</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6"/>
         <source>Concert Band</source>
-        <translation type="unfinished"/>
+        <translation>Banda simfònica</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="7"/>
@@ -3557,7 +3557,7 @@
         <location filename="../instruments/instrumentsxml.h" line="512"/>
         <source>Sop.</source>
         <comment>Soprano Bugle</comment>
-        <translation type="unfinished"/>
+        <translation>Sop.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="514"/>
@@ -3569,7 +3569,7 @@
         <location filename="../instruments/instrumentsxml.h" line="516"/>
         <source>Bari.</source>
         <comment>Baritone Bugle</comment>
-        <translation type="unfinished"/>
+        <translation>Bari.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="518"/>
@@ -3980,13 +3980,13 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="654"/>
         <source>Chimes</source>
-        <translation type="unfinished"/>
+        <translation>Campana tubular</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="655"/>
         <source>Cme.</source>
         <comment>Chimes</comment>
-        <translation type="unfinished"/>
+        <translation>Camp. tub.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="657"/>

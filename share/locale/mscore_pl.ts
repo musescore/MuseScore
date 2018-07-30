@@ -14676,7 +14676,7 @@ Precyzyjne ustawienie synchronizacji wyjścia MIDI jest możliwe tylko przez JAC
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4149"/>
         <source>Update</source>
-        <translation>Aktualizacja</translation>
+        <translation>Aktualizacje</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4155"/>
