@@ -24,6 +24,12 @@ python build/add-mc-keys.py $MC_CONSUMER_KEY $MC_CONSUMER_SECRET
 fi
 
 make -f Makefile.osx ci
+
+# install lame
+wget -c --no-check-certificate -nv -O musescore_dependencies_macos.zip  http://utils.musescore.org.s3.amazonaws.com/musescore_dependencies_macos.zip
+mkdir -p applebuild/mscore.app/Contents/Resources/Frameworks
+unzip musescore_dependencies_macos.zip -d applebuild/mscore.app/Contents/Resources/Frameworks
+
 if [ "$(grep '^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)' CMakeLists.txt)" ]
 then # Build is marked UNSTABLE inside CMakeLists.txt
 build/package_mac $BRANCH-$REVISION
