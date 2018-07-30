@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tour name="timeline-tour">
+  <Message>
+    <Text>This is a timeline. It shows a reduction of the score for easier navigation.</Text>
+    <Widget>Timeline</Widget>
+    </Message>
+  <Message>
+    <Text>Each box represents a measure of a specific instrument. If it is blue, then there are notes in that measure.</Text>
+    <Widget>Timeline</Widget>
+    </Message>
+  </Tour>

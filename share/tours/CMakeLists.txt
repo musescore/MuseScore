@@ -19,6 +19,10 @@
 #=============================================================================
 
 install(FILES
+      mmrest.tour
+      noteinput.tour
+      palette.tour
+      timeline.tour
       welcome.tour
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}tours
       )
