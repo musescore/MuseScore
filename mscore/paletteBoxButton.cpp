@@ -13,6 +13,7 @@
 #include "paletteBoxButton.h"
 #include "palette.h"
 #include "preferences.h"
+#include "tourhandler.h"
 
 namespace Ms {
 
@@ -123,6 +124,8 @@ void PaletteBoxButton::showPalette(bool visible)
       palette->setVisible(visible);
       setChecked(visible);
       setArrowType(visible ? Qt::DownArrow : Qt::RightArrow );
+      if (visible)
+            TourHandler::startTour("show-palette");
       }
 
 //---------------------------------------------------------

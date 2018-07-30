@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tour name="note-input">
+  <Event objectName="note-entry-methods">MouseButtonRelease</Event>
+  <Event objectName="pad-note-128">MouseButtonRelease</Event>
+  <Event objectName="pad-note-64">MouseButtonRelease</Event>
+  <Event objectName="pad-note-32">MouseButtonRelease</Event>
+  <Event objectName="pad-note-16">MouseButtonRelease</Event>
+  <Event objectName="pad-note-8">MouseButtonRelease</Event>
+  <Event objectName="pad-note-4">MouseButtonRelease</Event>
+  <Event objectName="pad-note-2">MouseButtonRelease</Event>
+  <Event objectName="pad-note-1">MouseButtonRelease</Event>
+  <Event objectName="note-breve">MouseButtonRelease</Event>
+  <Event objectName="note-longa">MouseButtonRelease</Event>
+  <Event objectName="pad-dot">MouseButtonRelease</Event>
+  <Event objectName="pad-dotdot">MouseButtonRelease</Event>
+  <Event objectName="pad-dot3">MouseButtonRelease</Event>
+  <Event objectName="pad-dot4">MouseButtonRelease</Event>
+  <Event objectName="tie">MouseButtonRelease</Event>
+  <Event objectName="pad-rest">MouseButtonRelease</Event>
+  <Event objectName="flip">MouseButtonRelease</Event>
+  <Event objectName="sharp2">MouseButtonRelease</Event>
+  <Event objectName="sharp">MouseButtonRelease</Event>
+  <Event objectName="nat">MouseButtonRelease</Event>
+  <Event objectName="flat">MouseButtonRelease</Event>
+  <Event objectName="flat2">MouseButtonRelease</Event>
+  <Event objectName="voice">MouseButtonRelease</Event>
+  <Message>
+    <Text>This is the note input toolbar</Text>
+    <Widget>entry-tools</Widget>
+    </Message>
+  <Message>
+    <Text>To get started, click the note input icon. Or you can press "N".</Text>
+    <Widget>note-entry-methods</Widget>
+    </Message>
+  <Message>
+    <Text>You can select a duration to add by clicking one of these icons.</Text>
+    <Widget>pad-note-128</Widget>
+    <Widget>pad-note-64</Widget>
+    <Widget>pad-note-32</Widget>
+    <Widget>pad-note-16</Widget>
+    <Widget>pad-note-8</Widget>
+    <Widget>pad-note-4</Widget>
+    <Widget>pad-note-2</Widget>
+    <Widget>pad-note-1</Widget>
+    <Widget>note-breve</Widget>
+    <Widget>note-longa</Widget>
+    <Widget>pad-dot</Widget>
+    <Widget>pad-dotdot</Widget>
+    <Widget>pad-dot3</Widget>
+    <Widget>pad-dot4</Widget>
+    </Message>
+  <Message>
+    <Text>To enter rests, select this icon and a duration.</Text>
+    <Widget>pad-rest</Widget>
+    </Message>
+  <Message>
+    <Text>Accidentals can be added to notes by selecting these icons.</Text>
+    <Widget>sharp2</Widget>
+    <Widget>sharp</Widget>
+    <Widget>nat</Widget>
+    <Widget>flat</Widget>
+    <Widget>flat2</Widget>
+    </Message>
+  <Message>
+    <Text>To change voices, click these number icons.</Text>
+    <Widget>voice</Widget>
+    </Message>
+  </Tour>
