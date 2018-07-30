@@ -595,6 +595,7 @@ void MuseScore::populateNoteInputMenu()
                            getAction("note-input"),
                            noteEntryMethods,
                            this);
+                        w->setObjectName("note-entry-methods");
                         }
                   else if (strncmp(s, "voice-", 6) == 0) {
                         AccessibleToolButton* tb = new AccessibleToolButton(this, a);
@@ -610,8 +611,10 @@ void MuseScore::populateNoteInputMenu()
                         // tb->setDefaultAction(a);
                         w = tb;
                         }
-                  else
+                  else {
                         w = new AccessibleToolButton(entryTools, a);
+                        w->setObjectName(s);
+                        }
                   entryTools->addWidget(w);
                   }
             }
