@@ -1516,6 +1516,8 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                         continue; // this voice is empty here (CR overlaps with CR in other track)
                   if (seg->tick() + curr->actualTicks() > maxTick)
                         break; // outside range
+                  if (curr->tuplet())
+                        break; // do not use Regroup Rhythms inside a tuplet
                   if (curr->isRest()) {
                         // combine consecutive rests
                         ChordRest* lastRest = curr;
@@ -1528,7 +1530,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                               lastRest = cr;
                               }
                         int restTicks = lastRest->tick() + lastRest->duration().ticks() - curr->tick();
-                        if (restTicks > curr->duration().ticks())
+                        if (true)
                               seg = setNoteRest(seg, curr->track(), NoteVal(), Fraction::fromTicks(restTicks), MScore::Direction::AUTO, true);
                         }
                   else if (curr->isChord()) {
@@ -1541,7 +1543,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                         if (!lastTiedChord)
                               lastTiedChord = chord;
                         int noteTicks = lastTiedChord->tick() + lastTiedChord->duration().ticks() - chord->tick();
-                        if (noteTicks > chord->duration().ticks()) {
+                        if (true) {
                               // store start/end note for backward/forward ties ending/starting on the group of notes being rewritten
                               int numNotes = chord->notes().size();
                               Note* tieBack[numNotes];
