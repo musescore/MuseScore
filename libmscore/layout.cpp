@@ -1630,6 +1630,7 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
       if (undoRedo())   // no change possible in this state
             return;
 
+      Segment* headerClefSeg = 0;
       int tick = m->tick();
       int i    = 0;
       foreach (Staff* staff, _staves) {
@@ -1662,8 +1663,12 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                               keysig = static_cast<KeySig*>(el);
                               break;
                         case Element::Type::CLEF:
-                              clef = static_cast<Clef*>(el);
-                              clef->setSmall(false);
+                              if (!clef) {
+                                    clef = static_cast<Clef*>(el);
+                                    if (clef->small())
+                                          // this is not the clef we are looking for
+                                          clef = 0;
+                                    }
                               break;
                         default:
                               break;
@@ -1696,6 +1701,18 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                || staff->clef(m->tick()) != staff->clef(m->tick()-1);
 
             if (needClef) {
+                  // find the clef type at the previous tick
+                  ClefTypeList clefType = staff->clefType(m->tick() - 1);
+                  // look for a clef change at the end of the previous measure
+                  Measure* prevMeasure = m->prevMeasure();
+                  if (prevMeasure) {
+                        Segment* clefSeg = prevMeasure->findSegment(Segment::Type::Clef, m->tick());
+                        if (clefSeg) {
+                              Clef* prevClef = static_cast<Clef*>(clefSeg->element(strack));
+                              if (prevClef)
+                                    clefType = prevClef->clefTypeList();
+                              }
+                        }
                   if (!clef) {
                         //
                         // create missing clef
@@ -1705,31 +1722,36 @@ void Score::addSystemHeader(Measure* m, bool isFirstSystem)
                         clef->setSmall(false);
                         clef->setGenerated(true);
 
-                        Segment* ns = m->findSegment(Segment::Type::Clef, tick);
-                        Segment* s;
-                        if (ns && !ns->element(clef->track())) {
-                              s = ns;
-                              ns = 0;
+                        if (!headerClefSeg) {
+                              // if there is a header clef segment, it will be the first segment of the measure
+                              Segment* s = m->first();
+                              if (s && s->segmentType() == Segment::Type::Clef) {
+                                    // check for a clef in each staff
+                                    // stop when a clef is found
+                                    // if it is small, then a new segment will have to be created
+                                    Clef* c = 0;
+                                    for (int t = 0; !c && t < score()->ntracks(); t += VOICES)
+                                          c = static_cast<Clef*>(s->element(t));
+                                    if (c && !c->small())
+                                          // this is the header clef segment
+                                          headerClefSeg = s;
+                                    }
+                              if (!headerClefSeg) {
+                                    // create a new segment for the header clef
+                                    headerClefSeg = new Segment(m, Segment::Type::Clef, tick);
+                                    // insert the new segment at the front of the segments list
+                                    headerClefSeg->setNext(m->first());
+                                    undoAddElement(headerClefSeg);
+                                    }
                               }
-                        else {
-                              s  = new Segment(m, Segment::Type::Clef, tick);
-                              undoAddElement(s);
-                              }
-                        clef->setParent(s);
-
-                        // if there is already a clef at the same tick position,
-                        // then this is the real clef change and we have to
-                        // show the previous clef type at tick-1
-
-                        ClefTypeList clefType = staff->clefType(ns ? tick - 1 : tick);
-                        clef->layout();
+                        clef->setParent(headerClefSeg);
                         clef->setClefType(clefType);  // set before add !
                         undo(new AddElement(clef));
                         }
-                  else if (clef->generated()) {
-                        ClefTypeList cl = staff->clefType(tick);
-                        if (cl != clef->clefTypeList())
-                              undo(new ChangeClefType(clef, cl._concertClef, cl._transposingClef));
+                  else {
+                        headerClefSeg = clef->segment();
+                        if (clef->generated() && clef->clefTypeList() != clefType)
+                              undo(new ChangeClefType(clef, clefType._concertClef, clefType._transposingClef));
                         }
                   }
             else {

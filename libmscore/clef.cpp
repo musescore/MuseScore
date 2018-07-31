@@ -428,6 +428,8 @@ void Clef::read(XmlReader& e)
                   _clefTypes._transposingClef = Clef::clefType(e.readElementText());
             else if (tag == "showCourtesyClef")
                   _showCourtesy = e.readInt();
+            else if (tag == "header")
+                  _small = !e.readInt();
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -444,6 +446,8 @@ void Clef::read(XmlReader& e)
 void Clef::write(Xml& xml) const
       {
       xml.stag(name());
+      if (tick() == measure()->tick() && _small)
+            xml.tag("header", QVariant(false));
       if(_clefTypes._concertClef != ClefType::INVALID)
             xml.tag("concertClefType", ClefInfo::tag(_clefTypes._concertClef));
       if(_clefTypes._transposingClef != ClefType::INVALID)

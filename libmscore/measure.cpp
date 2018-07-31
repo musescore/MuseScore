@@ -2096,50 +2096,41 @@ void Measure::read(XmlReader& e, int staffIdx)
                   // if (score()->mscVersion() > 114)
                   //      staff->setClef(e.tick(), clef->clefTypeList());
 
-                  // there may be more than one clef segment for same tick position
-                  if (!segment) {
-                        // this is the first segment of measure
-                        segment = getSegment(Segment::Type::Clef, e.tick());
+                  if (segment)
+                        // not the first segment, so this is not a header clef
+                        clef->setSmall(true);
+                  segment = 0;
+                  Segment* ns = 0;  // the place to insert a new segment
+                  Segment* s = 0;   // the segment to try to reuse, if possible
+                  if (clef->small()) {
+                        // mid-measure clefs are inserted right before the ChordRest
+                        ns = findSegment(Segment::Type::ChordRest, e.tick());
+                        // there might already be a segment for mid-measure clefs
+                        s = ns ? ns->prev() : 0;
                         }
                   else {
-                        bool firstSegment = false;
-                        // the first clef may be missing and is added later in layout
-                        for (Segment* s = _segments.first(); s && s->tick() == e.tick(); s = s->next()) {
-                              if (s->segmentType() == Segment::Type::Clef
-                                    // hack: there may be other segment types which should
-                                    // generate a clef at current position
-                                 || s->segmentType() == Segment::Type::StartRepeatBarLine
-                                 ) {
-                                    firstSegment = true;
-                                    break;
-                                    }
-                              }
-                        if (firstSegment) {
-                              Segment* ns = 0;
-                              if (segment->next()) {
-                                    ns = segment->next();
-                                    while (ns && ns->tick() < e.tick())
-                                          ns = ns->next();
-                                    }
-                              segment = 0;
-                              for (Segment* s = ns; s && s->tick() == e.tick(); s = s->next()) {
-                                    if (s->segmentType() == Segment::Type::Clef) {
-                                          segment = s;
-                                          break;
-                                          }
-                                    }
-                              if (!segment) {
-                                    segment = new Segment(this, Segment::Type::Clef, e.tick());
-                                    _segments.insert(segment, ns);
-                                    }
-                              }
-                        else {
-                              // this is the first clef: move to left
-                              segment = getSegment(Segment::Type::Clef, e.tick());
-                              }
+                        // header clefs are inserted at the front of the segments list
+                        ns = first();
+                        // there might already be a segment for header clefs
+                        s = ns;
                         }
-                  if (e.tick() != tick())
-                        clef->setSmall(true);         // layout does this ?
+                  if (s && s->segmentType() == Segment::Type::Clef) {
+                        // check for a clef in each staff
+                        // stop when a clef is found
+                        // if it is the same size as the new clef, then use this segment
+                        // otherwise, create a new segment for the clef
+                        Clef* c = 0;
+                        for (int t = 0; !c && t < score()->ntracks(); t += VOICES)
+                              c = static_cast<Clef*>(s->element(t));
+                        if (c && c->small() == clef->small())
+                              // use this segment for the clef
+                              segment = s;
+                        }
+                  if (!segment) {
+                        // create a new segment for the clef
+                        segment = new Segment(this, Segment::Type::Clef, e.tick());
+                        _segments.insert(segment, ns);
+                        }
                   segment->add(clef);
                   }
             else if (tag == "TimeSig") {
