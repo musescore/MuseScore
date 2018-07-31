@@ -2454,7 +2454,7 @@ void Score::cmdExchangeVoice(int s, int d)
             return;
 
       if (t2 > m2->tick())
-            m2 = 0;
+            m2 = m2->nextMeasure();
 
       for (;;) {
             undoExchangeVoice(m1, s, d, selection().staffStart(), selection().staffEnd());
