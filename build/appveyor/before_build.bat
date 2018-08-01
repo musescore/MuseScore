@@ -6,6 +6,7 @@ SET OLD_PATH=%PATH%
 
 :: copy dependencies
 START " " /wait "7z" x -y dependencies.7z > nul
+CD musescore_dependencies_win32
 CD dependencies
 XCOPY i686-w64-mingw32 "C:\Qt\Tools\mingw530_32\i686-w64-mingw32" /E /Y
 XCOPY lib "C:\Qt\Tools\mingw530_32\lib" /E /Y
