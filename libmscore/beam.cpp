@@ -35,6 +35,10 @@
 
 namespace Ms {
 
+static const ElementStyle beamStyle {
+      { Sid::beamNoSlope,                        Pid::BEAM_NO_SLOPE           },
+      };
+
 //---------------------------------------------------------
 //   BeamFragment
 //    position of primary beam
@@ -54,7 +58,7 @@ struct BeamFragment {
 Beam::Beam(Score* s)
    : Element(s)
       {
-      initSubStyle(SubStyleId::BEAM);
+      initElementStyle(&beamStyle);
       _direction       = Direction::AUTO;
       _up              = true;
       _distribute      = false;
@@ -2379,7 +2383,7 @@ bool Beam::setProperty(Pid propertyId, const QVariant& v)
 QVariant Beam::propertyDefault(Pid id) const
       {
       switch (id) {
-            case Pid::SUB_STYLE:      return int(SubStyleId::BEAM);
+//            case Pid::SUB_STYLE:      return int(Tid::BEAM);
             case Pid::STEM_DIRECTION: return QVariant::fromValue<Direction>(Direction::AUTO);
             case Pid::DISTRIBUTE:     return false;
             case Pid::GROW_LEFT:      return 1.0;

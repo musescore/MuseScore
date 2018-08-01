@@ -87,9 +87,9 @@ void Score::updateSwing()
             return;
       for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             for (const Element* e : s->annotations()) {
-                  if (!e->isStaffText())
+                  if (!e->isStaffTextBase())
                         continue;
-                  const StaffText* st = toStaffText(e);
+                  const StaffTextBase* st = toStaffTextBase(e);
                   if (st->xmlText().isEmpty())
                         continue;
                   Staff* staff = st->staff();
@@ -130,9 +130,9 @@ void MasterScore::updateChannel()
                               staff->channelList(voice)->insert(s->tick(), 0);
                         continue;
                         }
-                  if (!e->isStaffText())
+                  if (!e->isStaffTextBase())
                         continue;
-                  const StaffText* st = toStaffText(e);
+                  const StaffTextBase* st = toStaffTextBase(e);
                   for (int voice = 0; voice < VOICES; ++voice) {
                         QString an(st->channelName(voice));
                         if (an.isEmpty())
@@ -404,11 +404,9 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
       for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
             // int tick = s->tick();
             for (Element* e : s->annotations()) {
-                  if (e->type() != ElementType::STAFF_TEXT
-                     || e->staffIdx() < firstStaffIdx
-                     || e->staffIdx() >= nextStaffIdx)
+                  if (!e->isStaffTextBase() || e->staffIdx() < firstStaffIdx || e->staffIdx() >= nextStaffIdx)
                         continue;
-                  const StaffText* st = static_cast<const StaffText*>(e);
+                  const StaffTextBase* st = toStaffTextBase(e);
                   int tick = s->tick() + tickOffset;
 
                   Instrument* instr = e->part()->instrument(tick);
@@ -766,22 +764,23 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
       {
       int tick = chord->rtick();
       // adjust for anacrusis
-      Measure* cm = chord->measure();
+      Measure* cm     = chord->measure();
       MeasureBase* pm = cm->prev();
-      ElementType pt = pm ? pm->type() : ElementType::INVALID;
+      ElementType pt  = pm ? pm->type() : ElementType::INVALID;
       if (!pm || pm->lineBreak() || pm->pageBreak() || pm->sectionBreak()
          || pt == ElementType::VBOX || pt == ElementType::HBOX
          || pt == ElementType::FBOX || pt == ElementType::TBOX) {
             int offset = (cm->timesig() - cm->len()).ticks();
-            if (offset > 0)
+            if (offset > 0) {
                   tick += offset;
+                  }
             }
 
-      int swingBeat = swingUnit * 2;
-      qreal ticksDuration = (qreal)chord->actualTicks();
-      qreal swingTickAdjust = ((qreal)swingBeat) * (((qreal)(swingRatio-50))/100.0);
+      int swingBeat           = swingUnit * 2;
+      qreal ticksDuration     = (qreal)chord->actualTicks();
+      qreal swingTickAdjust   = ((qreal)swingBeat) * (((qreal)(swingRatio-50))/100.0);
       qreal swingActualAdjust = (swingTickAdjust/ticksDuration) * 1000.0;
-      ChordRest *ncr = nextChordRest(chord);
+      ChordRest *ncr          = nextChordRest(chord);
 
       //Check the position of the chord to apply changes accordingly
       if (tick % swingBeat == swingUnit) {
@@ -1704,13 +1703,13 @@ void Score::createPlayEvents(Chord* chord)
             instr->updateGateTime(&gateTime, 0, "");
             }
 
-      int ontime = 0;
+      int ontime    = 0;
       int trailtime = 0;
       createGraceNotesPlayEvents(tick, chord, ontime, trailtime); // ontime and trailtime are modified by this call depending on grace notes before and after
 
       SwingParameters st = chord->staff()->swing(tick);
-      int unit = st.swingUnit;
-      int ratio = st.swingRatio;
+      int unit           = st.swingUnit;
+      int ratio          = st.swingRatio;
       // Check if swing needs to be applied
       if (unit && !chord->tuplet()) {
             swingAdjustParams(chord, gateTime, ontime, unit, ratio);

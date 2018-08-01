@@ -65,7 +65,7 @@ class OttavaSegment final : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class Ottava final : public TextLineBase {
-      std::vector<StyledProperty> _styledProperties;
+      ElementStyle _ottavaStyle;
       OttavaType _ottavaType;
       bool _numbersOnly;
 
@@ -79,9 +79,6 @@ class Ottava final : public TextLineBase {
       Ottava(const Ottava&);
       virtual Ottava* clone() const override    { return new Ottava(*this); }
       virtual ElementType type() const override { return ElementType::OTTAVA; }
-
-      virtual const StyledProperty* styledProperties() const override { return _styledProperties.data(); }
-      StyledProperty* styledProperties() { return _styledProperties.data(); }
 
       void setOttavaType(OttavaType val);
       OttavaType ottavaType() const             { return _ottavaType; }

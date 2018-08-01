@@ -20,7 +20,6 @@
 
 namespace Ms {
 
-class TextStyle;
 enum class Sid;
 
 //---------------------------------------------------------

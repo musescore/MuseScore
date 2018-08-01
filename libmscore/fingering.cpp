@@ -22,20 +22,35 @@
 
 namespace Ms {
 
+static const ElementStyle fingeringStyle {
+      { Sid::fingeringFontFace,                  Pid::FONT_FACE              },
+      { Sid::fingeringFontSize,                  Pid::FONT_SIZE              },
+      { Sid::fingeringFontBold,                  Pid::FONT_BOLD              },
+      { Sid::fingeringFontItalic,                Pid::FONT_ITALIC            },
+      { Sid::fingeringFontUnderline,             Pid::FONT_UNDERLINE         },
+      { Sid::fingeringAlign,                     Pid::ALIGN                  },
+      { Sid::fingeringFrameType,                 Pid::FRAME_TYPE             },
+      { Sid::fingeringFramePadding,              Pid::FRAME_PADDING          },
+      { Sid::fingeringFrameWidth,                Pid::FRAME_WIDTH            },
+      { Sid::fingeringFrameRound,                Pid::FRAME_ROUND            },
+      { Sid::fingeringFrameFgColor,              Pid::FRAME_FG_COLOR         },
+      { Sid::fingeringFrameBgColor,              Pid::FRAME_BG_COLOR         },
+      { Sid::fingeringOffset,                    Pid::OFFSET                 },
+      };
 
 //---------------------------------------------------------
 //   Fingering
 //      Element(Score* = 0, ElementFlags = ElementFlag::NOTHING);
 //---------------------------------------------------------
 
-Fingering::Fingering(SubStyleId ssid, Score* s, ElementFlags ef)
-   : TextBase(s, ef)
+Fingering::Fingering(Score* s, Tid tid, ElementFlags ef)
+   : TextBase(s, tid, ef)
       {
-      initSubStyle(ssid);
+      initElementStyle(&fingeringStyle);
       }
 
 Fingering::Fingering(Score* s, ElementFlags ef)
-  : Fingering(SubStyleId::FINGERING, s, ef)
+  : Fingering(s, Tid::FINGERING, ef)
       {
       }
 
@@ -116,7 +131,7 @@ void Fingering::draw(QPainter* painter) const
 QString Fingering::accessibleInfo() const
       {
       QString rez = Element::accessibleInfo();
-      if (subStyleId() == SubStyleId::STRING_NUMBER)
+      if (tid() == Tid::STRING_NUMBER)
             rez += " " + QObject::tr("String number");
       return QString("%1: %2").arg(rez).arg(plainText());
       }
@@ -129,7 +144,7 @@ QVariant Fingering::propertyDefault(Pid id) const
       {
       switch (id) {
             case Pid::SUB_STYLE:
-                  return int(SubStyleId::FINGERING);
+                  return int(Tid::FINGERING);
             default:
                   return TextBase::propertyDefault(id);
             }

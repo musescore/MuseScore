@@ -21,13 +21,21 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   tremoloBarStyle
+//---------------------------------------------------------
+
+static const ElementStyle tremoloBarStyle {
+      { Sid::tremoloBarLineWidth,  Pid::LINE_WIDTH  },
+      };
+
+//---------------------------------------------------------
 //   TremoloBar
 //---------------------------------------------------------
 
 TremoloBar::TremoloBar(Score* s)
    : Element(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(SubStyleId::TREMOLO_BAR);
+      initElementStyle(&tremoloBarStyle);
       }
 
 //---------------------------------------------------------
@@ -111,6 +119,8 @@ void TremoloBar::read(XmlReader& e)
                   ;
             else if (tag == "play")
                   setPlay(e.readInt());
+            else if (readProperty(tag, e, Pid::LINE_WIDTH))
+                  ;
             else
                   e.unknown();
             }
@@ -162,17 +172,22 @@ bool TremoloBar::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TremoloBar::propertyDefault(Pid propertyId) const
+QVariant TremoloBar::propertyDefault(Pid pid) const
       {
-      switch (propertyId) {
-            case Pid::LINE_WIDTH:
-                  return score()->styleV(Sid::tremoloBarLineWidth);
+      switch (pid) {
             case Pid::MAG:
                   return 1.0;
             case Pid::PLAY:
                   return true;
             default:
-                  return Element::propertyDefault(propertyId);
+                  for (const StyledProperty& p : *styledProperties()) {
+                        if (p.pid == pid) {
+                              if (propertyType(pid) == P_TYPE::SP_REAL)
+                                    return score()->styleP(p.sid);
+                              return score()->styleV(p.sid);
+                              }
+                        }
+                  return Element::propertyDefault(pid);
             }
       }
 

@@ -1367,7 +1367,7 @@ void TextView::setElement(Element* e)
       {
       Text* te = static_cast<Text*>(e);
 
-      tb.subStyle->setText(subStyleName(te->subStyleId()));
+      tb.subStyle->setText(textStyleName(te->tid()));
 
       ShowElementBase::setElement(e);
       tb.text->setPlainText(te->xmlText());

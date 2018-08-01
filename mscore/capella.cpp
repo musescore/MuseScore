@@ -972,7 +972,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         case CapellaType::TEXT: {
 
                               TextObj* to = static_cast<TextObj*>(o);
-                              Text* s = new Text(SubStyleId::TITLE, score);
+                              Text* s = new Text(score, Tid::TITLE);
                               QString ss = ::rtf2html(QString(to->text));
 
                               // qDebug("string %f:%f w %d ratio %d <%s>",
@@ -1237,14 +1237,14 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   case CapellaType::SIMPLE_TEXT:
                         {
                         SimpleTextObj* to = static_cast<SimpleTextObj*>(o);
-                        SubStyleId ssid;
+                        Tid tid;
                         switch (to->textalign()) {
-                              case 0:   ssid = SubStyleId::POET;    break;
-                              case 1:   ssid = SubStyleId::TITLE;   break;
-                              case 2:   ssid = SubStyleId::COMPOSER; break;
-                              default:  ssid = SubStyleId::DEFAULT; break;
+                              case 0:   tid = Tid::POET;    break;
+                              case 1:   tid = Tid::TITLE;   break;
+                              case 2:   tid = Tid::COMPOSER; break;
+                              default:  tid = Tid::DEFAULT; break;
                               }
-                        Text* s = new Text(ssid, score);
+                        Text* s = new Text(score, tid);
                         QFont f(to->font());
                         s->setItalic(f.italic());
                         // s->setUnderline(f.underline());

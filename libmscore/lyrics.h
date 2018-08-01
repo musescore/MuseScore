@@ -67,7 +67,6 @@ class Lyrics final : public TextBase {
                               ///< (melisma)
       Syllabic _syllabic;
       LyricsLine* _separator;
-      std::vector<StyledProperty> _styledProperties;
 
       bool isMelisma() const;
       virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
@@ -92,8 +91,6 @@ class Lyrics final : public TextBase {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
-
-      virtual const StyledProperty* styledProperties() const override { return _styledProperties.data(); }
 
       Segment* segment() const                        { return toSegment(parent()->parent()); }
       Measure* measure() const                        { return toMeasure(parent()->parent()->parent()); }

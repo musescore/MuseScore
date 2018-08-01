@@ -428,25 +428,25 @@ int XmlReader::spannerId(const Spanner* s)
 //      (too many user text styles)
 //---------------------------------------------------------
 
-SubStyleId XmlReader::addUserTextStyle(const QString& name)
+Tid XmlReader::addUserTextStyle(const QString& name)
       {
       qDebug("%s", qPrintable(name));
-      SubStyleId id = SubStyleId::SUBSTYLES;
+      Tid id = Tid::TEXT_STYLES;
       if (userTextStyles.size() == 0)
-            id = SubStyleId::USER1;
+            id = Tid::USER1;
       else if (userTextStyles.size() == 1)
-            id = SubStyleId::USER2;
+            id = Tid::USER2;
       else if (userTextStyles.size() == 2)
-            id = SubStyleId::USER3;
+            id = Tid::USER3;
       else if (userTextStyles.size() == 3)
-            id = SubStyleId::USER4;
+            id = Tid::USER4;
       else if (userTextStyles.size() == 4)
-            id = SubStyleId::USER5;
+            id = Tid::USER5;
       else if (userTextStyles.size() == 5)
-            id = SubStyleId::USER6;
+            id = Tid::USER6;
       else
             qDebug("too many user defined textstyles");
-      if (id != SubStyleId::SUBSTYLES)
+      if (id != Tid::TEXT_STYLES)
             userTextStyles.push_back({name, id});
       return id;
       }
@@ -455,13 +455,13 @@ SubStyleId XmlReader::addUserTextStyle(const QString& name)
 //   lookupUserTextStyle
 //---------------------------------------------------------
 
-SubStyleId XmlReader::lookupUserTextStyle(const QString& name)
+Tid XmlReader::lookupUserTextStyle(const QString& name)
       {
       for (const auto& i : userTextStyles) {
             if (i.name == name)
                   return i.ss;
             }
-      return SubStyleId::SUBSTYLES;       // not found
+      return Tid::TEXT_STYLES;       // not found
       }
 }
 

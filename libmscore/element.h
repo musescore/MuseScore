@@ -34,7 +34,6 @@ class XmlReader;
 class XmlWriter;
 enum class SymId;
 enum class Pid;
-enum class SubStyleId;
 
 //---------------------------------------------------------
 //   Grip
@@ -375,7 +374,7 @@ class Element : public ScoreElement {
       static Ms::Element* create(Ms::ElementType type, Score*);
       static Element* name2Element(const QStringRef&, Score*);
 
-      virtual bool systemFlag() const          { return flag(ElementFlag::SYSTEM);  }
+      bool systemFlag() const          { return flag(ElementFlag::SYSTEM);  }
       void setSystemFlag(bool v) const { setFlag(ElementFlag::SYSTEM, v);  }
 
       bool header() const              { return flag(ElementFlag::HEADER);        }

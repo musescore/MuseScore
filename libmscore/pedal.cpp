@@ -22,6 +22,33 @@
 
 namespace Ms {
 
+static const ElementStyle pedalStyle {
+      { Sid::pedalFontFace,                      Pid::BEGIN_FONT_FACE         },
+      { Sid::pedalFontFace,                      Pid::CONTINUE_FONT_FACE      },
+      { Sid::pedalFontFace,                      Pid::END_FONT_FACE           },
+      { Sid::pedalFontSize,                      Pid::BEGIN_FONT_SIZE         },
+      { Sid::pedalFontSize,                      Pid::CONTINUE_FONT_SIZE      },
+      { Sid::pedalFontSize,                      Pid::END_FONT_SIZE           },
+      { Sid::pedalFontBold,                      Pid::BEGIN_FONT_BOLD         },
+      { Sid::pedalFontBold,                      Pid::CONTINUE_FONT_BOLD      },
+      { Sid::pedalFontBold,                      Pid::END_FONT_BOLD           },
+      { Sid::pedalFontItalic,                    Pid::BEGIN_FONT_ITALIC       },
+      { Sid::pedalFontItalic,                    Pid::CONTINUE_FONT_ITALIC    },
+      { Sid::pedalFontItalic,                    Pid::END_FONT_ITALIC         },
+      { Sid::pedalFontUnderline,                 Pid::BEGIN_FONT_UNDERLINE    },
+      { Sid::pedalFontUnderline,                 Pid::CONTINUE_FONT_UNDERLINE },
+      { Sid::pedalFontUnderline,                 Pid::END_FONT_UNDERLINE      },
+      { Sid::pedalTextAlign,                     Pid::BEGIN_TEXT_ALIGN        },
+      { Sid::pedalTextAlign,                     Pid::CONTINUE_TEXT_ALIGN     },
+      { Sid::pedalTextAlign,                     Pid::END_TEXT_ALIGN          },
+      { Sid::pedalHookHeight,                    Pid::BEGIN_HOOK_HEIGHT       },
+      { Sid::pedalHookHeight,                    Pid::END_HOOK_HEIGHT         },
+      { Sid::pedalBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET       },
+      { Sid::pedalBeginTextOffset,               Pid::CONTINUE_TEXT_OFFSET    },
+      { Sid::pedalBeginTextOffset,               Pid::END_TEXT_OFFSET         },
+      { Sid::pedalPlacement,                     Pid::PLACEMENT               },
+      };
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -62,6 +89,7 @@ void PedalSegment::layout()
 Pedal::Pedal(Score* s)
    : TextLineBase(s)
       {
+      initElementStyle(&pedalStyle);
       setLineVisible(true);
       resetProperty(Pid::BEGIN_TEXT);
       resetProperty(Pid::END_TEXT);
@@ -74,8 +102,6 @@ Pedal::Pedal(Score* s)
 
       resetProperty(Pid::BEGIN_TEXT_PLACE);
       resetProperty(Pid::LINE_VISIBLE);
-
-      initSubStyle(SubStyleId::PEDAL);
       }
 
 //---------------------------------------------------------
@@ -113,8 +139,8 @@ void Pedal::write(XmlWriter& xml) const
          }) {
             writeProperty(xml, i);
             }
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->pid);
+      for (const StyledProperty& spp : *styledProperties())
+            writeProperty(xml, spp.pid);
 
       Element::writeProperties(xml);
       xml.etag();

@@ -30,6 +30,15 @@ static const char* label[] = {
       "2 1/4", "2 1/2", "2 3/4", "3"
       };
 
+static const ElementStyle bendStyle {
+      { Sid::bendFontFace,                       Pid::FONT_FACE              },
+      { Sid::bendFontSize,                       Pid::FONT_SIZE              },
+      { Sid::bendFontBold,                       Pid::FONT_BOLD              },
+      { Sid::bendFontItalic,                     Pid::FONT_ITALIC            },
+      { Sid::bendFontUnderline,                  Pid::FONT_UNDERLINE         },
+      { Sid::bendLineWidth,                      Pid::LINE_WIDTH             },
+      };
+
 //---------------------------------------------------------
 //   Bend
 //---------------------------------------------------------
@@ -37,7 +46,7 @@ static const char* label[] = {
 Bend::Bend(Score* s)
    : Element(s, ElementFlag::MOVABLE)
       {
-      initSubStyle(SubStyleId::BEND);
+      initElementStyle(&bendStyle);
       }
 
 //---------------------------------------------------------

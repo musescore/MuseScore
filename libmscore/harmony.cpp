@@ -134,11 +134,20 @@ qDebug("ResolveDegreeList: not found in table");
       }
 
 //---------------------------------------------------------
+//   chordSymbolStyle
+//---------------------------------------------------------
+
+const ElementStyle chordSymbolStyle {
+      { Sid::chordSymbolAPosAbove,   Pid::POS_ABOVE  },
+      { Sid::harmonyPlacement,       Pid::PLACEMENT  },
+      };
+
+//---------------------------------------------------------
 //   Harmony
 //---------------------------------------------------------
 
 Harmony::Harmony(Score* s)
-   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+   : TextBase(s, Tid::HARMONY_A, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       _rootTpc    = Tpc::TPC_INVALID;
       _baseTpc    = Tpc::TPC_INVALID;
@@ -148,7 +157,7 @@ Harmony::Harmony(Score* s)
       _parsedForm = 0;
       _leftParen  = false;
       _rightParen = false;
-      initSubStyle(SubStyleId::HARMONY_A);
+      initElementStyle(&chordSymbolStyle);
       }
 
 Harmony::Harmony(const Harmony& h)
@@ -166,7 +175,7 @@ Harmony::Harmony(const Harmony& h)
       _parsedForm = h._parsedForm ? new ParsedChord(*h._parsedForm) : 0;
       _textName   = h._textName;
       _userName   = h._userName;
-      foreach(const TextSegment* s, h.textList) {
+      for (const TextSegment* s : h.textList) {
             TextSegment* ns = new TextSegment();
             ns->set(s->text, s->font, s->x, s->y);
             textList.append(ns);
@@ -1636,20 +1645,10 @@ QVariant Harmony::propertyDefault(Pid id) const
       QVariant v;
       switch (id) {
             case Pid::SUB_STYLE:
-                  v = int(SubStyleId::HARMONY_A);
+                  v = int(Tid::HARMONY_A);
                   break;
             default:
-                  v = styledPropertyDefault(id);
-                  if (!v.isValid()) {
-                        for (const StyledProperty& p : defaultStyle) {
-                              if (p.pid == id) {
-                                    v = score()->styleV(p.sid);
-                                    break;
-                                    }
-                              }
-                        }
-                  if (!v.isValid())
-                        v = Element::propertyDefault(id);
+                  v = TextBase::propertyDefault(id);
                   break;
             }
       return v;

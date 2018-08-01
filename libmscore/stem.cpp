@@ -26,6 +26,10 @@
 
 namespace Ms {
 
+static const ElementStyle stemStyle {
+      { Sid::stemWidth,                          Pid::LINE_WIDTH              },
+      };
+
 //---------------------------------------------------------
 //   Stem
 //    Notenhals
@@ -34,7 +38,7 @@ namespace Ms {
 Stem::Stem(Score* s)
    : Element(s)
       {
-      initSubStyle(SubStyleId::STEM);
+      initElementStyle(&stemStyle);
       resetProperty(Pid::USER_LEN);
       }
 

@@ -30,6 +30,14 @@
 
 namespace Ms {
 
+static const ElementStyle boxStyle {
+      { Sid::systemFrameDistance,                Pid::TOP_GAP                 },
+      { Sid::frameSystemDistance,                Pid::BOTTOM_GAP              },
+      };
+
+static const ElementStyle hBoxStyle {
+      };
+
 //---------------------------------------------------------
 //   Box
 //---------------------------------------------------------
@@ -401,8 +409,6 @@ bool Box::setProperty(Pid propertyId, const QVariant& v)
 QVariant Box::propertyDefault(Pid id) const
       {
       switch(id) {
-            case Pid::SUB_STYLE:
-                  return int(SubStyleId::BOX);
             case Pid::BOX_HEIGHT:
             case Pid::BOX_WIDTH:
                   return Spatium(0.0);
@@ -447,7 +453,7 @@ void Box::copyValues(Box* origin)
 HBox::HBox(Score* score)
    : Box(score)
       {
-      initSubStyle(SubStyleId::BOX);
+      initElementStyle(&hBoxStyle);
       setBoxWidth(Spatium(5.0));
       }
 
@@ -558,7 +564,7 @@ Element* Box::drop(EditData& data)
 
             case ElementType::STAFF_TEXT:
                   {
-                  Text* text = new Text(SubStyleId::FRAME, score());
+                  Text* text = new Text(score(), Tid::FRAME);
                   text->setParent(this);
                   text->setXmlText(toStaffText(e)->xmlText());
                   score()->undoAddElement(text);
@@ -676,8 +682,6 @@ bool HBox::setProperty(Pid propertyId, const QVariant& v)
 QVariant HBox::propertyDefault(Pid id) const
       {
       switch(id) {
-            case Pid::SUB_STYLE:
-                  return int(SubStyleId::BOX);
             case Pid::CREATE_SYSTEM_HEADER:
                   return true;
             default:
@@ -692,7 +696,7 @@ QVariant HBox::propertyDefault(Pid id) const
 VBox::VBox(Score* score)
    : Box(score)
       {
-      initSubStyle(SubStyleId::BOX);
+      initElementStyle(&boxStyle);
       setBoxHeight(Spatium(10.0));
       setLineBreak(true);
       }

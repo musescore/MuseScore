@@ -45,6 +45,14 @@
 
 namespace Ms {
 
+static const ElementStyle partInstrumentStyle {
+      { Sid::partInstrumentFontFace,             Pid::FONT_FACE              },
+      { Sid::partInstrumentFontSize,             Pid::FONT_SIZE              },
+      { Sid::partInstrumentFontBold,             Pid::FONT_BOLD              },
+      { Sid::partInstrumentFontItalic,           Pid::FONT_ITALIC            },
+      { Sid::partInstrumentFontUnderline,        Pid::FONT_UNDERLINE         },
+      };
+
 //---------------------------------------------------------
 //   ~Excerpt
 //---------------------------------------------------------
@@ -207,7 +215,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
       titleFramePart->copyValues(titleFrameScore);
       QString partLabel = excerpt->title();     // parts.front()->longName();
       if (!partLabel.isEmpty()) {
-            Text* txt = new Text(SubStyleId::INSTRUMENT_EXCERPT, score);
+            Text* txt = new Text(score, Tid::INSTRUMENT_EXCERPT);
             txt->setPlainText(partLabel);
             txt->setTrack(0);
             measure->add(txt);

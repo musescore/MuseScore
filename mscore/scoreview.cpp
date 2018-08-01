@@ -1829,27 +1829,27 @@ void ScoreView::cmd(const char* s)
             cmdAddChordName();
             }
       else if (cmd == "title-text")
-            cmdAddText(TEXT::TITLE);
+            cmdAddText(Tid::TITLE);
       else if (cmd == "subtitle-text")
-            cmdAddText(TEXT::SUBTITLE);
+            cmdAddText(Tid::SUBTITLE);
       else if (cmd == "composer-text")
-            cmdAddText(TEXT::COMPOSER);
+            cmdAddText(Tid::COMPOSER);
       else if (cmd == "poet-text")
-            cmdAddText(TEXT::POET);
+            cmdAddText(Tid::POET);
       else if (cmd == "part-text")
-            cmdAddText(TEXT::PART);
+            cmdAddText(Tid::INSTRUMENT_EXCERPT);
       else if (cmd == "system-text")
-            cmdAddText(TEXT::SYSTEM);
+            cmdAddText(Tid::SYSTEM);
       else if (cmd == "staff-text")
-            cmdAddText(TEXT::STAFF);
+            cmdAddText(Tid::STAFF);
       else if (cmd == "expression-text")
-            cmdAddText(TEXT::EXPRESSION);
+            cmdAddText(Tid::EXPRESSION);
       else if (cmd == "rehearsalmark-text")
-            cmdAddText(TEXT::REHEARSAL_MARK);
+            cmdAddText(Tid::REHEARSAL_MARK);
       else if (cmd == "instrument-change-text")
-            cmdAddText(TEXT::INSTRUMENT_CHANGE);
+            cmdAddText(Tid::INSTRUMENT_CHANGE);
       else if (cmd == "fingering-text")
-            cmdAddText(TEXT::FINGERING);
+            cmdAddText(Tid::FINGERING);
 
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
@@ -3710,7 +3710,7 @@ void ScoreView::cmdAddChordName()
 //   cmdAddText
 //---------------------------------------------------------
 
-void ScoreView::cmdAddText(TEXT type)
+void ScoreView::cmdAddText(Tid tid)
       {
       if (!_score->checkHasMeasures())
             return;
@@ -3720,34 +3720,25 @@ void ScoreView::cmdAddText(TEXT type)
       TextBase* s = 0;
       TextBase* es = 0;
       _score->startCmd();
-      switch(type) {
-            case TEXT::TITLE:
-            case TEXT::SUBTITLE:
-            case TEXT::COMPOSER:
-            case TEXT::POET:
-            case TEXT::PART:
+      switch (tid) {
+            case Tid::TITLE:
+            case Tid::SUBTITLE:
+            case Tid::COMPOSER:
+            case Tid::POET:
+            case Tid::INSTRUMENT_EXCERPT:
                   {
                   MeasureBase* measure = _score->first();
                   if (!measure->isVBox()) {
                         _score->insertMeasure(ElementType::VBOX, measure);
                         measure = measure->prev();
                         }
-                  SubStyleId ssid;
-                  switch(type) {
-                        case TEXT::TITLE:    ssid = SubStyleId::TITLE;    break;
-                        case TEXT::SUBTITLE: ssid = SubStyleId::SUBTITLE; break;
-                        case TEXT::COMPOSER: ssid = SubStyleId::COMPOSER; break;
-                        case TEXT::POET:     ssid = SubStyleId::POET;     break;
-                        case TEXT::PART:     ssid = SubStyleId::INSTRUMENT_EXCERPT; break;
-                        default: ssid = SubStyleId::DEFAULT; /* can't happen, but need to keep compiler happy */ break;
-                        }
-                  s = new Text(ssid, _score);
+                  s = new Text(_score, tid);
                   s->setParent(measure);
                   adjustCanvasPosition(measure, false);
                   }
                   break;
 
-            case TEXT::REHEARSAL_MARK:
+            case Tid::REHEARSAL_MARK:
                   {
                   ChordRest* cr = _score->getSelectedChordRest();
                   if (!cr)
@@ -3757,17 +3748,17 @@ void ScoreView::cmdAddText(TEXT type)
                   s->setParent(cr->segment());
                   }
                   break;
-            case TEXT::STAFF:
+            case Tid::STAFF:
                   {
                   ChordRest* cr = _score->getSelectedChordRest();
                   if (!cr)
                         break;
-                  s = new StaffText(SubStyleId::STAFF, _score);
+                  s = new StaffText(_score, Tid::STAFF);
                   Segment* parent = 0;
                   if (cr->segment()->measure()->isMMRest()) {     // mm hack
                         Measure* m = cr->segment()->measure()->mmRestFirst();
                         parent = m->findSegmentR(SegmentType::ChordRest, 0);
-                        es = new StaffText(SubStyleId::STAFF, _score);
+                        es = new StaffText(_score, Tid::STAFF);
                         es->setTrack(cr->track());
                         es->setParent(cr->segment());
                         _score->addElement(es);
@@ -3779,28 +3770,28 @@ void ScoreView::cmdAddText(TEXT type)
                   s->setParent(parent);
                   }
                   break;
-            case TEXT::SYSTEM:
+            case Tid::SYSTEM:
                   {
                   ChordRest* cr = _score->getSelectedChordRest();
                   if (!cr)
                         break;
-                  s = new SystemText(SubStyleId::SYSTEM, _score);
+                  s = new SystemText(_score, Tid::SYSTEM);
                   s->setTrack(0);
                   s->setParent(cr->segment());
                   }
                   break;
-            case TEXT::EXPRESSION:
+            case Tid::EXPRESSION:
                   {
                   ChordRest* cr = _score->getSelectedChordRest();
                   if (!cr)
                         break;
-                  s = new StaffText(SubStyleId::EXPRESSION, _score);
+                  s = new StaffText(_score, Tid::EXPRESSION);
                   s->setTrack(cr->track());
                   s->setPlacement(Placement::BELOW);
                   s->setParent(cr->segment());
                   }
                   break;
-            case TEXT::INSTRUMENT_CHANGE:
+            case Tid::INSTRUMENT_CHANGE:
                   {
                   ChordRest* cr = _score->getSelectedChordRest();
                   if (!cr)
@@ -3810,7 +3801,7 @@ void ScoreView::cmdAddText(TEXT type)
                   s->setParent(cr->segment());
                   }
                   break;
-            case TEXT::FINGERING:
+            case Tid::FINGERING:
                   {
                   Element* e = _score->getSelectedElement();
                   if (!e || !e->isNote())
@@ -3823,6 +3814,8 @@ void ScoreView::cmdAddText(TEXT type)
                   s->setTrack(e->track());
                   s->setParent(e);
                   }
+                  break;
+            default:
                   break;
             }
 

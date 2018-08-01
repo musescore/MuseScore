@@ -37,7 +37,6 @@ class StaffTypeChange final : public Element {
       virtual StaffTypeChange* clone() const override { return new StaffTypeChange(*this); }
 
       virtual ElementType type() const override { return ElementType::STAFFTYPE_CHANGE; }
-      virtual bool systemFlag() const override  { return false;  }
 
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
@@ -45,7 +44,7 @@ class StaffTypeChange final : public Element {
       StaffType* staffType() const     { return _staffType; }
       void setStaffType(StaffType* st) { _staffType = st; }
 
-      Measure* measure() const            { return (Measure*)parent();   }
+      Measure* measure() const         { return toMeasure(parent());   }
 
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;

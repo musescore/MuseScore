@@ -41,14 +41,13 @@ class StaffTextBase : public TextBase  {
       bool _swing          { false };
 
    public:
-      StaffTextBase(Score* = 0, ElementFlags = ElementFlag::NOTHING);
+      StaffTextBase(Score*, Tid tid, ElementFlags = ElementFlag::NOTHING);
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual bool readProperties(XmlReader&) override;
-      virtual int subtype() const                         { return (int) subStyleId(); }
+      virtual int subtype() const                         { return 0; }       // TODO::ws
       virtual QString subtypeName() const                 { return "??"; }
-      virtual QVariant propertyDefault(Pid id) const override;
 
       Segment* segment() const;
       QString channelName(int voice) const                { return _channelNames[voice]; }

@@ -22,14 +22,13 @@ namespace Ms {
 //---------------------------------------------------------
 
 LayoutBreak::LayoutBreak(Score* score)
-   : Element(score)
+   : Element(score, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
       {
       _layoutBreakType     = Type(propertyDefault(Pid::LAYOUT_BREAK).toInt());
       _pause               = score->styleD(Sid::SectionPause);
       _startWithLongNames  = true;
       _startWithMeasureOne = true;
       lw                   = spatium() * 0.3;
-      setFlag(ElementFlag::HAS_TAG, true);
       }
 
 LayoutBreak::LayoutBreak(const LayoutBreak& lb)

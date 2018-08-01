@@ -1740,12 +1740,12 @@ void Score::setSelection(const Selection& s)
 //   getText
 //---------------------------------------------------------
 
-Text* Score::getText(SubStyleId subStyle)
+Text* Score::getText(Tid tid)
       {
       MeasureBase* m = first();
-      if (m && m->type() == ElementType::VBOX) {
+      if (m && m->isVBox()) {
             for (Element* e : m->el()) {
-                  if (e->type() == ElementType::TEXT && toText(e)->subStyleId() == subStyle)
+                  if (e->isText() && toText(e)->tid() == tid)
                         return toText(e);
                   }
             }
@@ -3421,12 +3421,12 @@ void Score::addText(const QString& type, const QString& txt)
             insertMeasure(ElementType::VBOX, measure);
             measure = first();
             }
-      SubStyleId stid = SubStyleId::DEFAULT;
+      Tid tid = Tid::DEFAULT;
       if (type == "title")
-            stid = SubStyleId::TITLE;
+            tid = Tid::TITLE;
       else if (type == "subtitle")
-            stid = SubStyleId::SUBTITLE;
-      Text* text = new Text(stid, this);
+            tid = Tid::SUBTITLE;
+      Text* text = new Text(this, tid);
       text->setParent(measure);
       text->setXmlText(txt);
       undoAddElement(text);

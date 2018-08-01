@@ -43,7 +43,7 @@ class Marker final : public TextBase {
 
    public:
       Marker(Score*);
-      Marker(SubStyleId, Score*);
+      Marker(Score*, Tid);
 
       void setMarkerType(Type t);
       Type markerType() const          { return _markerType; }
@@ -65,7 +65,6 @@ class Marker final : public TextBase {
       void undoSetMarkerType(Type t);
 
       virtual void styleChanged() override;
-      virtual bool systemFlag() const override  { return true;        }
 
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;

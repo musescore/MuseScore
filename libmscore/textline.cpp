@@ -17,6 +17,24 @@
 
 namespace Ms {
 
+static const ElementStyle textLineStyle {
+      { Sid::textLineFontFace,                   Pid::BEGIN_FONT_FACE         },
+      { Sid::textLineFontFace,                   Pid::CONTINUE_FONT_FACE      },
+      { Sid::textLineFontFace,                   Pid::END_FONT_FACE           },
+      { Sid::textLineFontSize,                   Pid::BEGIN_FONT_SIZE         },
+      { Sid::textLineFontSize,                   Pid::CONTINUE_FONT_SIZE      },
+      { Sid::textLineFontSize,                   Pid::END_FONT_SIZE           },
+      { Sid::textLineFontBold,                   Pid::BEGIN_FONT_BOLD         },
+      { Sid::textLineFontBold,                   Pid::CONTINUE_FONT_BOLD      },
+      { Sid::textLineFontBold,                   Pid::END_FONT_BOLD           },
+      { Sid::textLineFontItalic,                 Pid::BEGIN_FONT_ITALIC       },
+      { Sid::textLineFontItalic,                 Pid::CONTINUE_FONT_ITALIC    },
+      { Sid::textLineFontItalic,                 Pid::END_FONT_ITALIC         },
+      { Sid::textLineFontUnderline,              Pid::BEGIN_FONT_UNDERLINE    },
+      { Sid::textLineFontUnderline,              Pid::CONTINUE_FONT_UNDERLINE },
+      { Sid::textLineFontUnderline,              Pid::END_FONT_UNDERLINE      },
+      };
+
 //---------------------------------------------------------
 //   TextLineSegment
 //---------------------------------------------------------
@@ -68,6 +86,8 @@ void TextLineSegment::layout()
 TextLine::TextLine(Score* s)
    : TextLineBase(s)
       {
+      initElementStyle(&textLineStyle);
+
       setPlacement(Placement::ABOVE);
       setBeginText("");
       setContinueText("");
@@ -79,7 +99,6 @@ TextLine::TextLine(Score* s)
       setBeginHookType(HookType::NONE);
       setEndHookType(HookType::NONE);
       setBeginTextPlace(PlaceText::LEFT);
-//      setBeginTextPlace(PlaceText::AUTO);
       setContinueTextPlace(PlaceText::AUTO);
       setEndTextPlace(PlaceText::AUTO);
       setBeginHookHeight(Spatium(1.5));
@@ -88,8 +107,6 @@ TextLine::TextLine(Score* s)
       resetProperty(Pid::BEGIN_TEXT_ALIGN);
       resetProperty(Pid::CONTINUE_TEXT_ALIGN);
       resetProperty(Pid::END_TEXT_ALIGN);
-
-      initSubStyle(SubStyleId::TEXTLINE);
       }
 
 TextLine::TextLine(const TextLine& tl)

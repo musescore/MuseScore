@@ -34,9 +34,9 @@ InspectorFingering::InspectorFingering(QWidget* parent)
             };
 
       f.style->clear();
-      for (auto ss : { SubStyleId::FINGERING, SubStyleId::LH_GUITAR_FINGERING, SubStyleId::RH_GUITAR_FINGERING, SubStyleId::STRING_NUMBER } )
+      for (auto ss : { Tid::FINGERING, Tid::LH_GUITAR_FINGERING, Tid::RH_GUITAR_FINGERING, Tid::STRING_NUMBER } )
             {
-            f.style->addItem(subStyleUserName(ss), int(ss));
+            f.style->addItem(textStyleUserName(ss), int(ss));
             }
 
       mapSignals(iiList, ppList);

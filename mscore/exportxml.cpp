@@ -1183,7 +1183,7 @@ static void defaults(XmlWriter& xml, Score* s, double& millimeters, const int& t
 
       // font defaults
       // as MuseScore supports dozens of different styles, while MusicXML only has defaults
-      // for music (TODO), words and lyrics, use SubStyleId STAFF (typically used for words)
+      // for music (TODO), words and lyrics, use Tid STAFF (typically used for words)
       // and LYRIC1 to get MusicXML defaults
 
       // TODO xml.tagE("music-font font-family=\"TBD\" font-size=\"TBD\"");
@@ -2473,11 +2473,11 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
                   notations.tag(xml);
                   technical.tag(xml);
                   QString t = MScoreTextToMXML::toPlainText(f->xmlText());
-                  if (f->subStyleId() == SubStyleId::RH_GUITAR_FINGERING)
+                  if (f->tid() == Tid::RH_GUITAR_FINGERING)
                         xml.tag("pluck", t);
-                  else if (f->subStyleId() == SubStyleId::LH_GUITAR_FINGERING)
+                  else if (f->tid() == Tid::LH_GUITAR_FINGERING)
                         xml.tag("fingering", t);
-                  else if (f->subStyleId() == SubStyleId::FINGERING) {
+                  else if (f->tid() == Tid::FINGERING) {
                         // for generic fingering, try to detect plucking
                         // (backwards compatibility with MuseScore 1.x)
                         // p, i, m, a, c represent the plucking finger
@@ -2486,7 +2486,7 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
                         else
                               xml.tag("fingering", t);
                         }
-                  else if (f->subStyleId() == SubStyleId::STRING_NUMBER) {
+                  else if (f->tid() == Tid::STRING_NUMBER) {
                         bool ok;
                         int i = t.toInt(&ok);
                         if (ok) {

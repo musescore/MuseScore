@@ -167,7 +167,6 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
 
       switch (propertyType(id)) {
             case P_TYPE::BOOL:
-            case P_TYPE::SUBTYPE:
             case P_TYPE::INT:
             case P_TYPE::ZERO_INT:
             case P_TYPE::SPATIUM:
@@ -271,7 +270,7 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
                   tag(name, NoteHead::type2name(NoteHead::Type(data.toInt())));
                   break;
             case P_TYPE::SUB_STYLE:
-                  tag(name, subStyleName(SubStyleId(data.toInt())));
+                  tag(name, textStyleName(Tid(data.toInt())));
                   break;
             case P_TYPE::FRACTION:
                   qFatal("unknown: FRACTION");

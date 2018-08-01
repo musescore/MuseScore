@@ -1037,8 +1037,8 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
                   setSystemFlag(v.toBool());
                   break;
             default:
-//                  qFatal("<%s> unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
-                  qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
+//                  qFatal("<%s> unknown <%s>(%d), data <%s>", name(), propertyQmlName(propertyId), int(propertyId), qPrintable(v.toString()));
+                  qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyQmlName(propertyId), int(propertyId), qPrintable(v.toString()));
                   return false;
             }
       triggerLayout();
@@ -1525,8 +1525,8 @@ bool Element::prevGrip(EditData& ed) const
 
 bool Element::isUserModified() const
       {
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            Pid pid               = spp->pid;
+      for (const StyledProperty& spp : *styledProperties()) {
+            Pid pid               = spp.pid;
             QVariant val          = getProperty(pid);
             QVariant defaultValue = propertyDefault(pid);
 

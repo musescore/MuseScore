@@ -592,6 +592,7 @@ enum class Sid {
       measureNumberFontUnderline,
       measureNumberOffset,
       measureNumberOffsetType,
+      measureNumberAlign,
 
       translatorFontFace,
       translatorFontSize,
@@ -722,6 +723,12 @@ enum class Sid {
       user1Align,
       user1Offset,
       user1OffsetType,
+      user1FrameType,
+      user1FramePadding,
+      user1FrameWidth,
+      user1FrameRound,
+      user1FrameFgColor,
+      user1FrameBgColor,
 
       user2FontFace,
       user2FontSize,
@@ -731,6 +738,12 @@ enum class Sid {
       user2Align,
       user2Offset,
       user2OffsetType,
+      user2FrameType,
+      user2FramePadding,
+      user2FrameWidth,
+      user2FrameRound,
+      user2FrameFgColor,
+      user2FrameBgColor,
 
       user3FontFace,
       user3FontSize,
@@ -740,6 +753,12 @@ enum class Sid {
       user3Align,
       user3Offset,
       user3OffsetType,
+      user3FrameType,
+      user3FramePadding,
+      user3FrameWidth,
+      user3FrameRound,
+      user3FrameFgColor,
+      user3FrameBgColor,
 
       user4FontFace,
       user4FontSize,
@@ -749,6 +768,12 @@ enum class Sid {
       user4Align,
       user4Offset,
       user4OffsetType,
+      user4FrameType,
+      user4FramePadding,
+      user4FrameWidth,
+      user4FrameRound,
+      user4FrameFgColor,
+      user4FrameBgColor,
 
       user5FontFace,
       user5FontSize,
@@ -758,6 +783,12 @@ enum class Sid {
       user5Align,
       user5Offset,
       user5OffsetType,
+      user5FrameType,
+      user5FramePadding,
+      user5FrameWidth,
+      user5FrameRound,
+      user5FrameFgColor,
+      user5FrameBgColor,
 
       user6FontFace,
       user6FontSize,
@@ -767,6 +798,12 @@ enum class Sid {
       user6Align,
       user6Offset,
       user6OffsetType,
+      user6FrameType,
+      user6FramePadding,
+      user6FrameWidth,
+      user6FrameRound,
+      user6FrameFgColor,
+      user6FrameBgColor,
 
       letRingFontFace,
       letRingFontSize,
@@ -805,29 +842,20 @@ enum class Sid {
       STYLES
       };
 
-//---------------------------------------------------------
-//   StyledProperty
-//---------------------------------------------------------
-
-struct StyledProperty {
-      Sid sid;
-      Pid pid;
-      };
-
 //-------------------------------------------------------------------
-//   SubStyleId
-//    Enumerate the list of built-in substyles
-//    must be in sync with namedStyles array
+//   Tid
+//    Enumerate the list of built-in text substyles
+//    must be in sync with textStyles array
 //-------------------------------------------------------------------
 
-enum class SubStyleId {
-      EMPTY,
+enum class Tid {
       DEFAULT,
       TITLE,
       SUBTITLE,
       COMPOSER,
       POET,
-      LYRIC,
+      LYRICS_ODD,
+      LYRICS_EVEN,
       FINGERING,
       LH_GUITAR_FINGERING,
       RH_GUITAR_FINGERING,
@@ -862,24 +890,19 @@ enum class SubStyleId {
       HEADER,
       FOOTER,
       INSTRUMENT_CHANGE,
-      FIGURED_BASS,
-      BEAM,
-      BOX,
-      FRET,
-      TREMOLO_BAR,
-      TIMESIG,
-      STEM,
       USER1,
       USER2,
       USER3,
       USER4,
       USER5,
       USER6,
-      SUBSTYLES
+      TEXT_STYLES
       };
 
 //---------------------------------------------------------
 //   MStyle
+//    the name "Style" gives problems with some microsoft
+//    header files...
 //---------------------------------------------------------
 
 class MStyle {
@@ -914,20 +937,27 @@ class MStyle {
       static Sid styleIdx(const QString& name);
       };
 
-typedef std::vector<StyledProperty> SubStyle;
+//---------------------------------------------------------
+//   StyledProperty
+//---------------------------------------------------------
 
-extern const SubStyle emptyStyle;
-extern const SubStyle defaultStyle;
-extern const SubStyle fingeringStyle;
-extern const SubStyle lyricsStyle;
-extern const SubStyle ottavaStyle;
+struct StyledProperty {
+      Sid sid;
+      Pid pid;
+      };
 
-const SubStyle& subStyle(SubStyleId);
-const SubStyle& subStyle(const char*);
+typedef std::vector<StyledProperty> ElementStyle;
 
-const char* subStyleName(SubStyleId);
-QString subStyleUserName(SubStyleId);
-SubStyleId subStyleFromName(const QString&);
+#define TEXT_STYLE_SIZE 15
+typedef std::array<StyledProperty, TEXT_STYLE_SIZE> TextStyle;
+
+
+const TextStyle* textStyle(Tid);
+const TextStyle* textStyle(const char*);
+
+const char* textStyleName(Tid);
+QString textStyleUserName(Tid);
+Tid textStyleFromName(const QString&);
 
 #ifndef NDEBUG
 extern void checkStyles();

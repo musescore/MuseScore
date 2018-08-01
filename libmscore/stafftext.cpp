@@ -20,19 +20,21 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   staffStyle
+//---------------------------------------------------------
+
+static const ElementStyle staffStyle {
+      { Sid::staffTextPlacement, Pid::PLACEMENT },
+      };
+
+//---------------------------------------------------------
 //   StaffText
 //---------------------------------------------------------
 
-StaffText::StaffText(Score* s)
-   : StaffTextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+StaffText::StaffText(Score* s, Tid tid)
+   : StaffTextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(SubStyleId::STAFF);
-      }
-
-StaffText::StaffText(SubStyleId ss, Score* s)
-   : StaffTextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
-      {
-      initSubStyle(ss);
+      initElementStyle(&staffStyle);
       }
 
 //---------------------------------------------------------
@@ -46,6 +48,20 @@ void StaffText::layout()
       setPos(QPointF(0.0, y));
       TextBase::layout1();
       autoplaceSegmentElement(styleP(Sid::staffTextMinDistance));
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant StaffText::propertyDefault(Pid id) const
+      {
+      switch(id) {
+            case Pid::SUB_STYLE:
+                  return int(Tid::STAFF);
+            default:
+                  return TextBase::propertyDefault(id);
+            }
       }
 
 }
