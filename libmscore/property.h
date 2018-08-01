@@ -333,7 +333,6 @@ enum class Pid {
       };
 
 enum class P_TYPE : char {
-      SUBTYPE,
       BOOL,
       INT,
       REAL,

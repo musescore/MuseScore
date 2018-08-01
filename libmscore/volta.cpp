@@ -19,6 +19,34 @@
 
 namespace Ms {
 
+static const ElementStyle voltaStyle {
+      { Sid::voltaFontFace,                      Pid::BEGIN_FONT_FACE         },
+      { Sid::voltaFontFace,                      Pid::CONTINUE_FONT_FACE      },
+      { Sid::voltaFontFace,                      Pid::END_FONT_FACE           },
+      { Sid::voltaFontSize,                      Pid::BEGIN_FONT_SIZE         },
+      { Sid::voltaFontSize,                      Pid::CONTINUE_FONT_SIZE      },
+      { Sid::voltaFontSize,                      Pid::END_FONT_SIZE           },
+      { Sid::voltaFontBold,                      Pid::BEGIN_FONT_BOLD         },
+      { Sid::voltaFontBold,                      Pid::CONTINUE_FONT_BOLD      },
+      { Sid::voltaFontBold,                      Pid::END_FONT_BOLD           },
+      { Sid::voltaFontItalic,                    Pid::BEGIN_FONT_ITALIC       },
+      { Sid::voltaFontItalic,                    Pid::CONTINUE_FONT_ITALIC    },
+      { Sid::voltaFontItalic,                    Pid::END_FONT_ITALIC         },
+      { Sid::voltaFontUnderline,                 Pid::BEGIN_FONT_UNDERLINE    },
+      { Sid::voltaFontUnderline,                 Pid::CONTINUE_FONT_UNDERLINE },
+      { Sid::voltaFontUnderline,                 Pid::END_FONT_UNDERLINE      },
+      { Sid::voltaAlign,                         Pid::BEGIN_TEXT_ALIGN        },
+      { Sid::voltaAlign,                         Pid::CONTINUE_TEXT_ALIGN     },
+      { Sid::voltaAlign,                         Pid::END_TEXT_ALIGN          },
+      { Sid::voltaOffset,                        Pid::BEGIN_TEXT_OFFSET       },
+      { Sid::voltaOffset,                        Pid::CONTINUE_TEXT_OFFSET    },
+      { Sid::voltaOffset,                        Pid::END_TEXT_OFFSET         },
+      { Sid::voltaLineWidth,                     Pid::LINE_WIDTH              },
+      { Sid::voltaLineStyle,                     Pid::LINE_STYLE              },
+      { Sid::voltaHook,                          Pid::BEGIN_HOOK_HEIGHT       },
+      { Sid::voltaHook,                          Pid::END_HOOK_HEIGHT         },
+      };
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -56,9 +84,9 @@ Element* VoltaSegment::propertyDelegate(Pid pid)
 //---------------------------------------------------------
 
 Volta::Volta(Score* s)
-   : TextLineBase(s)
+   : TextLineBase(s, ElementFlag::SYSTEM)
       {
-      initSubStyle(SubStyleId::VOLTA);
+      initElementStyle(&voltaStyle);
 
       setBeginTextPlace(PlaceText::BELOW);
       setContinueTextPlace(PlaceText::BELOW);

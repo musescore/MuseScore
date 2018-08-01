@@ -65,7 +65,6 @@ class Dynamic;
 class Selection;
 class Text;
 struct Channel;
-class TextStyle;
 class Tuplet;
 class KeySig;
 class TimeSig;

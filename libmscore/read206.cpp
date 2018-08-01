@@ -143,7 +143,6 @@ struct StyleVal2 {
       { Sid::pedalLineWidth,              QVariant(.15) },
       { Sid::pedalLineStyle,              QVariant(int(Qt::SolidLine)) },
       { Sid::trillPosAbove,               QVariant(-1) },
-//      { Sid::harmonyY,                    QVariant(2.5) },
       { Sid::harmonyFretDist,             QVariant(0.5) },
       { Sid::minHarmonyDistance,          QVariant(0.5) },
       { Sid::maxHarmonyBarDistance,       QVariant(3.0) },
@@ -317,26 +316,30 @@ void readPageFormat(MStyle* style, XmlReader& e)
 
 void readTextStyle206(MStyle* style, XmlReader& e)
       {
-      Spatium frameWidth(0.0);
-      QString name = e.attribute("name");
       QString family = "FreeSerif";
       double size = 10;
+      bool sizeIsSpatiumDependent = true;
       bool bold = false;
       bool italic = false;
       bool underline = false;
       Align align = Align::LEFT;
-      bool sizeIsSpatiumDependent = true;
-      FrameType frameType = FrameType::NO_FRAME;
-      Spatium paddingWidth(0.0);
-      QColor frameColor = QColor(0, 0, 0, 255);
-      QColor foregroundColor = QColor(0, 0, 0, 255);
-      QColor backgroundColor = QColor(255, 255, 255, 0);
-      bool systemFlag = false;
       QPointF offset;
       OffsetType offsetType = OffsetType::SPATIUM;
       bool offsetValid = false;
+
+      FrameType frameType = FrameType::NO_FRAME;
+      Spatium paddingWidth(0.0);
+      Spatium frameWidth(0.0);
+      QColor foregroundColor = QColor(0, 0, 0, 255);
+      QColor backgroundColor = QColor(255, 255, 255, 0);
+
       Placement placement = Placement::ABOVE;
       bool placementValid = false;
+
+      QString name = e.attribute("name");
+      QColor frameColor = QColor(0, 0, 0, 255);
+
+      bool systemFlag = false;
       qreal lineWidth = -1.0;
 
       while (e.readNextStartElement()) {
@@ -458,69 +461,65 @@ void readTextStyle206(MStyle* style, XmlReader& e)
 
       struct StyleTable {
             const char* name;
-            SubStyleId ss;
+            Tid ss;
             } styleTable[] = {
-            { "",                        SubStyleId::DEFAULT },
-            { "Title",                   SubStyleId::TITLE },
-            { "Subtitle",                SubStyleId::SUBTITLE },
-            { "Composer",                SubStyleId::COMPOSER },
-            { "Lyricist",                SubStyleId::POET },
-            { "Lyrics Odd Lines",        SubStyleId::LYRIC },
-            { "Lyrics Even Lines",       SubStyleId::LYRIC },
-            { "Lyrics Odd Lines",        SubStyleId::LYRIC },
-            { "Lyrics Even Lines",       SubStyleId::LYRIC },
-            { "Fingering",               SubStyleId::FINGERING },
-            { "LH Guitar Fingering",     SubStyleId::LH_GUITAR_FINGERING },
-            { "RH Guitar Fingering",     SubStyleId::RH_GUITAR_FINGERING },
-            { "String Number",           SubStyleId::STRING_NUMBER },
-            { "Instrument Name (Long)",  SubStyleId::INSTRUMENT_LONG },
-            { "Instrument Name (Short)", SubStyleId::INSTRUMENT_SHORT },
-            { "Instrument Name (Part)",  SubStyleId::INSTRUMENT_EXCERPT },
-            { "Dynamics",                SubStyleId::DYNAMICS },
-            { "Technique",               SubStyleId::EXPRESSION },
-            { "Tempo",                   SubStyleId::TEMPO },
-            { "Metronome",               SubStyleId::METRONOME },
-            { "Measure Number",          SubStyleId::MEASURE_NUMBER },
-            { "Translator",              SubStyleId::TRANSLATOR },
-            { "Tuplet",                  SubStyleId::TUPLET },
-            { "System",                  SubStyleId::SYSTEM },
-            { "Staff",                   SubStyleId::STAFF },
-            { "Chord Symbol",            SubStyleId::HARMONY_A },
-            { "Rehearsal Mark",          SubStyleId::REHEARSAL_MARK },
-            { "Repeat Text",             SubStyleId::REPEAT_LEFT },
-            { "Repeat Text Left",        SubStyleId::REPEAT_LEFT },
-            { "Repeat Text Right",       SubStyleId::REPEAT_RIGHT },
-            { "Frame",                   SubStyleId::FRAME },
-            { "Text Line",               SubStyleId::TEXTLINE },
-            { "Glissando",               SubStyleId::GLISSANDO },
-            { "Ottava",                  SubStyleId::OTTAVA },
-            { "Pedal",                   SubStyleId::PEDAL },
-            { "Hairpin",                 SubStyleId::HAIRPIN },
-            { "Bend",                    SubStyleId::BEND },
-            { "Header",                  SubStyleId::HEADER },
-            { "Footer",                  SubStyleId::FOOTER },
-            { "Instrument Change",       SubStyleId::INSTRUMENT_CHANGE },
-            { "Figured Bass",            SubStyleId::FIGURED_BASS },
-            { "Volta",                   SubStyleId::VOLTA },
+            { "",                        Tid::DEFAULT },
+            { "Title",                   Tid::TITLE },
+            { "Subtitle",                Tid::SUBTITLE },
+            { "Composer",                Tid::COMPOSER },
+            { "Lyricist",                Tid::POET },
+            { "Lyrics Odd Lines",        Tid::LYRICS_ODD },
+            { "Lyrics Even Lines",       Tid::LYRICS_EVEN },
+            { "Fingering",               Tid::FINGERING },
+            { "LH Guitar Fingering",     Tid::LH_GUITAR_FINGERING },
+            { "RH Guitar Fingering",     Tid::RH_GUITAR_FINGERING },
+            { "String Number",           Tid::STRING_NUMBER },
+            { "Instrument Name (Long)",  Tid::INSTRUMENT_LONG },
+            { "Instrument Name (Short)", Tid::INSTRUMENT_SHORT },
+            { "Instrument Name (Part)",  Tid::INSTRUMENT_EXCERPT },
+            { "Dynamics",                Tid::DYNAMICS },
+            { "Technique",               Tid::EXPRESSION },
+            { "Tempo",                   Tid::TEMPO },
+            { "Metronome",               Tid::METRONOME },
+            { "Measure Number",          Tid::MEASURE_NUMBER },
+            { "Translator",              Tid::TRANSLATOR },
+            { "Tuplet",                  Tid::TUPLET },
+            { "System",                  Tid::SYSTEM },
+            { "Staff",                   Tid::STAFF },
+            { "Chord Symbol",            Tid::HARMONY_A },
+            { "Rehearsal Mark",          Tid::REHEARSAL_MARK },
+            { "Repeat Text",             Tid::REPEAT_LEFT },
+            { "Repeat Text Left",        Tid::REPEAT_LEFT },
+            { "Repeat Text Right",       Tid::REPEAT_RIGHT },
+            { "Frame",                   Tid::FRAME },
+            { "Text Line",               Tid::TEXTLINE },
+            { "Glissando",               Tid::GLISSANDO },
+            { "Ottava",                  Tid::OTTAVA },
+            { "Pedal",                   Tid::PEDAL },
+            { "Hairpin",                 Tid::HAIRPIN },
+            { "Bend",                    Tid::BEND },
+            { "Header",                  Tid::HEADER },
+            { "Footer",                  Tid::FOOTER },
+            { "Instrument Change",       Tid::INSTRUMENT_CHANGE },
+            { "Figured Bass",            Tid::TEXT_STYLES },            // invalid
+            { "Volta",                   Tid::VOLTA },
             };
-      SubStyleId ss = SubStyleId::SUBSTYLES;
+      Tid ss = Tid::TEXT_STYLES;
       for (const auto& i : styleTable) {
             if (name == i.name) {
                   ss = i.ss;
                   break;
                   }
             }
-      if (ss == SubStyleId::SUBSTYLES) {
+      if (ss == Tid::TEXT_STYLES) {
             ss = e.addUserTextStyle(name);
-            if (ss == SubStyleId::SUBSTYLES) {
+            if (ss == Tid::TEXT_STYLES) {
                   qDebug("unhandled substyle <%s>", qPrintable(name));
                   return;
                   }
             }
 
-//      qDebug("read substyle <%s>", qPrintable(name));
-      const std::vector<StyledProperty>& spl = subStyle(ss);
-      for (const auto& i : spl) {
+      for (const auto& i : *textStyle(ss)) {
             QVariant value;
             if (i.sid == Sid::NOSTYLE)
                   break;
@@ -584,15 +583,15 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                         break;
                   case Pid::OFFSET:
                         if (offsetValid) {
-                              if (ss == SubStyleId::TEMPO) {
+                              if (ss == Tid::TEMPO) {
                                     style->set(Sid::tempoPosAbove, Spatium(offset.y()));
                                     offset = QPointF();
                                     }
-                              else if (ss == SubStyleId::STAFF) {
+                              else if (ss == Tid::STAFF) {
                                     style->set(Sid::staffTextPosAbove, Spatium(offset.y()));
                                     offset = QPointF();
                                     }
-                              else if (ss == SubStyleId::REHEARSAL_MARK) {
+                              else if (ss == Tid::REHEARSAL_MARK) {
                                     style->set(Sid::rehearsalMarkPosAbove, Spatium(offset.y()));
                                     offset = QPointF();
                                     }
@@ -1102,12 +1101,12 @@ static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
       if (tag == "style") {
             QString s = e.readElementText();
             if (!be->isTuplet()) {      // Hack
-                  SubStyleId ss;
+                  Tid ss;
                   ss = e.lookupUserTextStyle(s);
-                  if (ss == SubStyleId::SUBSTYLES)
-                        ss = subStyleFromName(s);
-                  if (ss != SubStyleId::SUBSTYLES)
-                        be->initSubStyle(ss);
+                  if (ss == Tid::TEXT_STYLES)
+                        ss = textStyleFromName(s);
+                  if (ss != Tid::TEXT_STYLES)
+                        t->initTid(ss);
                   }
             }
       else if (tag == "foregroundColor")  // same as "color" ?
@@ -2210,7 +2209,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Segment")
                   segment->read(e);
             else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(SubStyleId::MEASURE_NUMBER, score);
+                  Text* noText = new Text(score, Tid::MEASURE_NUMBER);
                   noText->read(e);
                   noText->setFlag(ElementFlag::ON_STAFF, true);
                   // noText->setFlag(ElementFlag::MOVABLE, false); ??

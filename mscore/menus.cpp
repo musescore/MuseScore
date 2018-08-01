@@ -546,19 +546,19 @@ Palette* MuseScore::newFingeringPalette()
             }
       finger = "pimac";
       for (unsigned i = 0; i < strlen(finger); ++i) {
-            Fingering* f = new Fingering(SubStyleId::RH_GUITAR_FINGERING, gscore);
+            Fingering* f = new Fingering(gscore, Tid::RH_GUITAR_FINGERING);
             f->setXmlText(QString(finger[i]));
             sp->append(f, tr("RH Guitar Fingering %1").arg(finger[i]));
             }
       for (char c : "012345") {
-            Fingering* f = new Fingering(SubStyleId::LH_GUITAR_FINGERING, gscore);
+            Fingering* f = new Fingering(gscore, Tid::LH_GUITAR_FINGERING);
             f->setXmlText(QString(c));
             sp->append(f, tr("LH Guitar Fingering %1").arg(c));
             }
 
       const char* stringnumber = "0123456";
       for (unsigned i = 0; i < strlen(stringnumber); ++i) {
-            Fingering* f = new Fingering(SubStyleId::STRING_NUMBER, gscore);
+            Fingering* f = new Fingering(gscore, Tid::STRING_NUMBER);
             f->setXmlText(QString(stringnumber[i]));
             sp->append(f, tr("String number %1").arg(stringnumber[i]));
             }
@@ -1410,7 +1410,7 @@ Palette* MuseScore::newTextPalette()
       st->setXmlText(tr("Staff Text"));
       sp->append(st, tr("Staff text"));
 
-      st = new StaffText(SubStyleId::EXPRESSION, gscore);
+      st = new StaffText(gscore, Tid::EXPRESSION);
       st->setXmlText(tr("Expression"));
       st->setPlacement(Placement::BELOW);
       sp->append(st, tr("Expression text"));
@@ -1426,10 +1426,12 @@ Palette* MuseScore::newTextPalette()
       rhm->setXmlText("B1");
       sp->append(rhm, tr("Rehearsal mark"));
 
-      st = new StaffText(SubStyleId::TEMPO, gscore);
+#if 0
+      st = new StaffText(Tid::TEMPO, gscore);
       st->setXmlText(tr("Swing"));
       st->setSwing(true);
       sp->append(st, tr("Swing"));
+#endif
 
       SystemText* stxt = new SystemText(gscore);
       stxt->setXmlText(tr("System Text"));

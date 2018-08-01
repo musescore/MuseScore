@@ -23,6 +23,10 @@
 
 namespace Ms {
 
+static const ElementStyle timesigStyle {
+      { Sid::timesigScale,                       Pid::SCALE                   },
+      };
+
 //---------------------------------------------------------
 //   TimeSig
 //    Constructs an invalid time signature element.
@@ -34,7 +38,7 @@ namespace Ms {
 TimeSig::TimeSig(Score* s)
   : Element(s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
       {
-      initSubStyle(SubStyleId::TIMESIG);
+      initElementStyle(&timesigStyle);
 
       _showCourtesySig = true;
       _stretch.set(1, 1);

@@ -27,6 +27,23 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   tupletStyle
+//---------------------------------------------------------
+
+static const ElementStyle tupletStyle {
+      { Sid::tupletDirection,                    Pid::DIRECTION               },
+      { Sid::tupletNumberType,                   Pid::NUMBER_TYPE             },
+      { Sid::tupletBracketType,                  Pid::BRACKET_TYPE            },
+      { Sid::tupletBracketWidth,                 Pid::LINE_WIDTH              },
+      { Sid::tupletFontFace,                     Pid::FONT_FACE               },
+      { Sid::tupletFontSize,                     Pid::FONT_SIZE               },
+      { Sid::tupletFontBold,                     Pid::FONT_BOLD               },
+      { Sid::tupletFontItalic,                   Pid::FONT_ITALIC             },
+      { Sid::tupletFontUnderline,                Pid::FONT_UNDERLINE          },
+      { Sid::tupletAlign,                        Pid::ALIGN                   },
+      };
+
+//---------------------------------------------------------
 //   Tuplet
 //---------------------------------------------------------
 
@@ -38,7 +55,7 @@ Tuplet::Tuplet(Score* s)
       _number       = 0;
       _hasBracket   = false;
       _isUp         = true;
-      initSubStyle(SubStyleId::TUPLET);
+      initElementStyle(&tupletStyle);
       }
 
 Tuplet::Tuplet(const Tuplet& t)
@@ -1027,6 +1044,12 @@ bool Tuplet::setProperty(Pid propertyId, const QVariant& v)
 QVariant Tuplet::propertyDefault(Pid id) const
       {
       switch(id) {
+            case Pid::SUB_STYLE:
+                  return int(Tid::TUPLET);
+            case Pid::SYSTEM_FLAG:
+                  return false;
+            case Pid::TEXT:
+                  return QString("");
             case Pid::NORMAL_NOTES:
             case Pid::ACTUAL_NOTES:
                   return 0;
@@ -1034,6 +1057,13 @@ QVariant Tuplet::propertyDefault(Pid id) const
             case Pid::P2:
                   return QPointF();
             default:
+                  for (const StyledProperty& p : *textStyle(Tid::DEFAULT)) {
+                        if (p.pid == id) {
+                              if (propertyType(id) == P_TYPE::SP_REAL)
+                                    return score()->styleP(p.sid);
+                              return score()->styleV(p.sid);
+                              }
+                        }
                   return DurationElement::propertyDefault(id);
             }
       }

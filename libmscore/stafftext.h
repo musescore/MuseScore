@@ -26,11 +26,11 @@ namespace Ms {
 
 class StaffText final : public StaffTextBase  {
    public:
-      StaffText(Score* score);
-      StaffText(SubStyleId, Score* = 0);
+      StaffText(Score* s = 0, Tid = Tid::STAFF);
       virtual StaffText* clone() const override       { return new StaffText(*this); }
       virtual ElementType type() const override       { return ElementType::STAFF_TEXT; }
       virtual void layout() override;
+      virtual QVariant propertyDefault(Pid id) const override;
       };
 
 

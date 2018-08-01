@@ -307,25 +307,25 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
             case META_SUBTITLE:
             case META_TITLE:
                   {
-                  SubStyleId ssid = SubStyleId::DEFAULT;
+                  Tid ssid = Tid::DEFAULT;
                   switch(mm.metaType()) {
                         case META_COMPOSER:
-                              ssid = SubStyleId::COMPOSER;
+                              ssid = Tid::COMPOSER;
                               break;
                         case META_TRANSLATOR:
-                              ssid = SubStyleId::TRANSLATOR;
+                              ssid = Tid::TRANSLATOR;
                               break;
                         case META_POET:
-                              ssid = SubStyleId::POET;
+                              ssid = Tid::POET;
                               break;
                         case META_SUBTITLE:
-                              ssid = SubStyleId::SUBTITLE;
+                              ssid = Tid::SUBTITLE;
                               break;
                         case META_TITLE:
-                              ssid = SubStyleId::TITLE;
+                              ssid = Tid::TITLE;
                               break;
                         }
-                  Text* text = new Text(ssid, cs);
+                  Text* text = new Text(cs, ssid);
 
                   text->setPlainText((const char*)(mm.edata()));
 

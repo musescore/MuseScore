@@ -27,6 +27,20 @@ namespace Ms {
 //
 
 //---------------------------------------------------------
+//   fretStyle
+//---------------------------------------------------------
+
+static const ElementStyle fretStyle {
+      { Sid::fretNumPos,                         Pid::FRET_NUM_POS            },
+      { Sid::fretMag,                            Pid::MAG                     },
+      { Sid::fretPlacement,                      Pid::PLACEMENT               },
+      { Sid::fretStrings,                        Pid::FRET_STRINGS            },
+      { Sid::fretFrets,                          Pid::FRET_FRETS              },
+      { Sid::fretOffset,                         Pid::FRET_OFFSET             },
+      { Sid::fretBarre,                          Pid::FRET_BARRE              },
+      };
+
+//---------------------------------------------------------
 //   FretDiagram
 //---------------------------------------------------------
 
@@ -35,7 +49,7 @@ FretDiagram::FretDiagram(Score* score)
       {
       font.setFamily("FreeSans");
       font.setPointSize(4.0 * mag());
-      initSubStyle(SubStyleId::FRET);
+      initElementStyle(&fretStyle);
       }
 
 FretDiagram::FretDiagram(const FretDiagram& f)
@@ -673,14 +687,18 @@ bool FretDiagram::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant FretDiagram::propertyDefault(Pid propertyId) const
+QVariant FretDiagram::propertyDefault(Pid pid) const
       {
-      switch (propertyId) {
+      switch (pid) {
             default:
-                  QVariant v = ScoreElement::styledPropertyDefault(propertyId);
-                  if (v.isValid())
-                        return v;
-                  return Element::propertyDefault(propertyId);
+                  for (const StyledProperty& p : *styledProperties()) {
+                        if (p.pid == pid) {
+                              if (propertyType(pid) == P_TYPE::SP_REAL)
+                                    return score()->styleP(p.sid);
+                              return score()->styleV(p.sid);
+                              }
+                        }
+                  return Element::propertyDefault(pid);
             }
       }
 

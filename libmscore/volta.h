@@ -76,7 +76,6 @@ class Volta final : public TextLineBase {
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
 
-      virtual bool systemFlag() const override  { return true;  }
       virtual QString accessibleInfo() const override;
       };
 

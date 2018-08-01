@@ -36,6 +36,16 @@ NICE-TO-HAVE TODO:
 
 namespace Ms {
 
+static const ElementStyle glissandoElementStyle {
+      { Sid::glissandoFontFace,                  Pid::FONT_FACE               },
+      { Sid::glissandoFontSize,                  Pid::FONT_SIZE               },
+      { Sid::glissandoFontBold,                  Pid::FONT_BOLD               },
+      { Sid::glissandoFontItalic,                Pid::FONT_ITALIC             },
+      { Sid::glissandoFontUnderline,             Pid::FONT_UNDERLINE          },
+      { Sid::glissandoLineWidth,                 Pid::LINE_WIDTH              },
+      { Sid::glissandoText,                      Pid::GLISS_TEXT              },
+      };
+
 static const qreal      GLISS_PALETTE_WIDTH           = 4.0;
 static const qreal      GLISS_PALETTE_HEIGHT          = 4.0;
 
@@ -152,7 +162,7 @@ Glissando::Glissando(Score* s)
       setAnchor(Spanner::Anchor::NOTE);
       setDiagonal(true);
 
-      initSubStyle(SubStyleId::GLISSANDO);
+      initElementStyle(&glissandoElementStyle);
 
       resetProperty(Pid::GLISS_SHOW_TEXT);
       resetProperty(Pid::PLAY);

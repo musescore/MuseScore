@@ -36,15 +36,22 @@ namespace Ms {
 #endif
 
 //---------------------------------------------------------
+//   lyricsElementStyle
+//---------------------------------------------------------
+
+static const ElementStyle lyricsElementStyle {
+      { Sid::lyricsPlacement, Pid::PLACEMENT  },
+      };
+
+//---------------------------------------------------------
 //   Lyrics
 //---------------------------------------------------------
 
 Lyrics::Lyrics(Score* s)
-   : TextBase(s)
+   : TextBase(s, Tid::LYRICS_ODD)
       {
-      _even = false;
-      _styledProperties = lyricsStyle;       // make copy
-      initSubStyle(SubStyleId::LYRIC);
+      _even       = false;
+      initElementStyle(&lyricsElementStyle);
       _no         = 0;
       _ticks      = 0;
       _syllabic   = Syllabic::SINGLE;
@@ -54,7 +61,6 @@ Lyrics::Lyrics(Score* s)
 Lyrics::Lyrics(const Lyrics& l)
    : TextBase(l)
       {
-      _styledProperties = l._styledProperties;
       _even      = l._even;
       _no        = l._no;
       _ticks     = l._ticks;
@@ -263,35 +269,29 @@ void Lyrics::layout()
 
       bool styleDidChange = false;
       if ((_no & 1) && !_even) {
-            _styledProperties[0].sid = Sid::lyricsEvenFontFace;
-            _styledProperties[1].sid = Sid::lyricsEvenFontSize;
-            _styledProperties[2].sid = Sid::lyricsEvenFontBold;
-            _styledProperties[3].sid = Sid::lyricsEvenFontItalic;
-            _styledProperties[4].sid = Sid::lyricsEvenFontUnderline;
+            initTid(Tid::LYRICS_EVEN);
             _even             = true;
             styleDidChange    = true;
             }
       if (!(_no & 1) && _even) {
-            _styledProperties[0].sid = Sid::lyricsOddFontFace;
-            _styledProperties[1].sid = Sid::lyricsOddFontSize;
-            _styledProperties[2].sid = Sid::lyricsOddFontBold;
-            _styledProperties[3].sid = Sid::lyricsOddFontItalic;
-            _styledProperties[4].sid = Sid::lyricsOddFontUnderline;
+            initTid(Tid::LYRICS_ODD);
             _even             = false;
             styleDidChange    = true;
             }
+#if 0
       if (isMelisma() || hasNumber) {
-            if (_styledProperties[5].sid != Sid::lyricsMelismaAlign) {
-                  _styledProperties[5].sid = Sid::lyricsMelismaAlign;
+            if (_subStyle[5].sid != Sid::lyricsMelismaAlign) {
+                  _subStyle[5].sid = Sid::lyricsMelismaAlign;
                   styleDidChange = true;
                   }
             }
       else {
-            if (_styledProperties[5].sid != (_even ? Sid::lyricsEvenAlign : Sid::lyricsOddAlign)) {
-                  _styledProperties[5].sid = _even ? Sid::lyricsEvenAlign : Sid::lyricsOddAlign;
+            if (_subStyle[5].sid != (_even ? Sid::lyricsEvenAlign : Sid::lyricsOddAlign)) {
+                  _subStyle[5].sid = _even ? Sid::lyricsEvenAlign : Sid::lyricsOddAlign;
                   styleDidChange = true;
                   }
             }
+#endif
       if (styleDidChange)
             styleChanged();
 
@@ -564,7 +564,7 @@ QVariant Lyrics::propertyDefault(Pid id) const
       {
       switch (id) {
             case Pid::SUB_STYLE:
-                  return int(SubStyleId::LYRIC);
+                  return int((_no & 1) ? Tid::LYRICS_EVEN : Tid::LYRICS_ODD);
             case Pid::PLACEMENT:
                   return score()->styleI(Sid::lyricsPlacement);
             case Pid::SYLLABIC:

@@ -303,61 +303,59 @@ QString convertFromHtml(TextBase* t, const QString& ss)
 //   readTextProperties
 //---------------------------------------------------------
 
-static bool readTextProperties(XmlReader& e, TextBase* t, Element* be)
+static bool readTextProperties(XmlReader& e, TextBase* t, Element*)
       {
       const QStringRef& tag(e.name());
       if (tag == "style") {
             int i = e.readInt();
-            SubStyleId ss = SubStyleId::DEFAULT;
+            Tid ss = Tid::DEFAULT;
             switch (i) {
-                  case 2:  ss = SubStyleId::TITLE;     break;
-                  case 3:  ss = SubStyleId::SUBTITLE;  break;
-                  case 4:  ss = SubStyleId::COMPOSER;  break;
-                  case 5:  ss = SubStyleId::POET;      break;
+                  case 2:  ss = Tid::TITLE;     break;
+                  case 3:  ss = Tid::SUBTITLE;  break;
+                  case 4:  ss = Tid::COMPOSER;  break;
+                  case 5:  ss = Tid::POET;      break;
 
-//                  case 6:  ss = SubStyleId::LYRIC_ODD;    break;
-//                  case 7:  ss = SubStyleId::LYRIC_EVEN;    break;
-                  case 6:  ss = SubStyleId::LYRIC;    break;
-                  case 7:  ss = SubStyleId::LYRIC;    break;
+                  case 6:  ss = Tid::LYRICS_ODD;    break;
+                  case 7:  ss = Tid::LYRICS_EVEN;    break;
 
-                  case 8:  ss = SubStyleId::FINGERING; break;
-                  case 9:  ss = SubStyleId::INSTRUMENT_LONG;    break;
-                  case 10: ss = SubStyleId::INSTRUMENT_SHORT;   break;
-                  case 11: ss = SubStyleId::INSTRUMENT_EXCERPT; break;
+                  case 8:  ss = Tid::FINGERING; break;
+                  case 9:  ss = Tid::INSTRUMENT_LONG;    break;
+                  case 10: ss = Tid::INSTRUMENT_SHORT;   break;
+                  case 11: ss = Tid::INSTRUMENT_EXCERPT; break;
 
-                  case 12: ss = SubStyleId::DYNAMICS;  break;
-                  case 13: ss = SubStyleId::EXPRESSION;   break;
-                  case 14: ss = SubStyleId::TEMPO;     break;
-                  case 15: ss = SubStyleId::METRONOME; break;
-                  case 16: ss = SubStyleId::FOOTER;    break;  // TextStyleType::COPYRIGHT
-                  case 17: ss = SubStyleId::MEASURE_NUMBER; break;
-                  case 18: ss = SubStyleId::FOOTER; break;    // TextStyleType::PAGE_NUMBER_ODD
-                  case 19: ss = SubStyleId::FOOTER; break;    // TextStyleType::PAGE_NUMBER_EVEN
-                  case 20: ss = SubStyleId::TRANSLATOR; break;
-                  case 21: ss = SubStyleId::TUPLET;     break;
+                  case 12: ss = Tid::DYNAMICS;  break;
+                  case 13: ss = Tid::EXPRESSION;   break;
+                  case 14: ss = Tid::TEMPO;     break;
+                  case 15: ss = Tid::METRONOME; break;
+                  case 16: ss = Tid::FOOTER;    break;  // TextStyleType::COPYRIGHT
+                  case 17: ss = Tid::MEASURE_NUMBER; break;
+                  case 18: ss = Tid::FOOTER; break;    // TextStyleType::PAGE_NUMBER_ODD
+                  case 19: ss = Tid::FOOTER; break;    // TextStyleType::PAGE_NUMBER_EVEN
+                  case 20: ss = Tid::TRANSLATOR; break;
+                  case 21: ss = Tid::TUPLET;     break;
 
-                  case 22: ss = SubStyleId::SYSTEM;         break;
-                  case 23: ss = SubStyleId::STAFF;          break;
-                  case 24: ss = SubStyleId::HARMONY_A;        break;
-                  case 25: ss = SubStyleId::REHEARSAL_MARK; break;
-                  case 26: ss = SubStyleId::REPEAT_LEFT;         break;
-                  case 27: ss = SubStyleId::VOLTA;          break;
-                  case 28: ss = SubStyleId::FRAME;          break;
-                  case 29: ss = SubStyleId::TEXTLINE;       break;
-                  case 30: ss = SubStyleId::GLISSANDO;      break;
-                  case 31: ss = SubStyleId::STRING_NUMBER;  break;
+                  case 22: ss = Tid::SYSTEM;         break;
+                  case 23: ss = Tid::STAFF;          break;
+                  case 24: ss = Tid::HARMONY_A;        break;
+                  case 25: ss = Tid::REHEARSAL_MARK; break;
+                  case 26: ss = Tid::REPEAT_LEFT;         break;
+                  case 27: ss = Tid::VOLTA;          break;
+                  case 28: ss = Tid::FRAME;          break;
+                  case 29: ss = Tid::TEXTLINE;       break;
+                  case 30: ss = Tid::GLISSANDO;      break;
+                  case 31: ss = Tid::STRING_NUMBER;  break;
 
-                  case 32: ss = SubStyleId::OTTAVA;  break;
-//??                  case 33: ss = SubStyleId::BENCH;   break;
-                  case 34: ss = SubStyleId::HEADER;  break;
-                  case 35: ss = SubStyleId::FOOTER;  break;
+                  case 32: ss = Tid::OTTAVA;  break;
+//??                  case 33: ss = Tid::BENCH;   break;
+                  case 34: ss = Tid::HEADER;  break;
+                  case 35: ss = Tid::FOOTER;  break;
                   case 0:
                   default:
                         qDebug("style %d invalid", i);
-                        ss = SubStyleId::DEFAULT;
+                        ss = Tid::DEFAULT;
                         break;
                   }
-            be->initSubStyle(ss);
+            t->initTid(ss);
             }
       else if (tag == "subtype")
             e.skipCurrentElement();
@@ -1824,7 +1822,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         // force the marker type for correct display
                         a->setXmlText("");
                         a->setMarkerType(a->markerType());
-                        a->initSubStyle(SubStyleId::REPEAT_LEFT);
+//TODO::ws                        a->initElementStyle(Tid::REPEAT_LEFT);
                         }
                   m->add(a);
                   }
@@ -1919,7 +1917,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         }
                   }
             else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(SubStyleId::MEASURE_NUMBER, m->score());
+                  Text* noText = new Text(m->score(), Tid::MEASURE_NUMBER);
                   noText->read(e);
                   noText->setFlag(ElementFlag::ON_STAFF, true);
                   // noText->setFlag(ElementFlag::MOVABLE, false); ??

@@ -549,11 +549,11 @@ Element* ChordRest::drop(EditData& data)
                   {
                   TextBase* t = toTextBase(e);
 #if 0
-                  SubStyleId st = t->subStyleId();           { SubStyleId::EMPTY };
+                  Tid st = t->subStyleId();           { Tid::EMPTY };
                   // for palette items, we want to use current score text style settings
                   // except where the source element had explicitly overridden these via text properties
                   // palette text style will be relative to baseStyle, so rebase this to score
-                  if (st >= SubStyleId::DEFAULT && fromPalette)
+                  if (st >= Tid::DEFAULT && fromPalette)
                         t->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
 #endif
                   if (e->isRehearsalMark() && fromPalette)

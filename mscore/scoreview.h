@@ -79,20 +79,6 @@ enum class ViewState {
       FOTO_LASSO,
       };
 
-enum class TEXT : char {
-      TITLE,
-      SUBTITLE,
-      COMPOSER,
-      POET,
-      PART,
-      SYSTEM,
-      STAFF,
-      EXPRESSION,
-      REHEARSAL_MARK,
-      INSTRUMENT_CHANGE,
-      FINGERING
-      };
-
 //---------------------------------------------------------
 //   ScoreView
 //---------------------------------------------------------
@@ -207,7 +193,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void realtimeAdvance(bool allowRests);
       void cmdAddFret(int fret);
       void cmdAddChordName();
-      void cmdAddText(TEXT style);
+      void cmdAddText(Tid tid);
       void cmdEnterRest(const TDuration&);
       void cmdEnterRest();
       void cmdTuplet(int n, ChordRest*);

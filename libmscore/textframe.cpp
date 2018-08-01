@@ -34,7 +34,7 @@ TBox::TBox(Score* score)
    : VBox(score)
       {
       setBoxHeight(Spatium(1));
-      _text  = new Text(SubStyleId::FRAME, score);
+      _text  = new Text(score, Tid::FRAME);
       _text->setLayoutToParentWidth(true);
       _text->setParent(this);
       }
@@ -169,7 +169,7 @@ void TBox::remove(Element* el)
             // replace with new empty text element
             // this keeps undo/redo happier than just clearing the text
             qDebug("TBox::remove() - replacing _text");
-            _text = new Text(SubStyleId::FRAME, score());
+            _text = new Text(score(), Tid::FRAME);
             _text->setLayoutToParentWidth(true);
             _text->setParent(this);
            }

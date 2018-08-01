@@ -368,7 +368,6 @@ QVariant getProperty(Pid id, XmlReader& e)
       switch (propertyType(id)) {
             case P_TYPE::BOOL:
                   return QVariant(bool(e.readInt()));
-            case P_TYPE::SUBTYPE:
             case P_TYPE::ZERO_INT:
             case P_TYPE::INT:
                   return QVariant(e.readInt());
@@ -487,7 +486,7 @@ QVariant getProperty(Pid id, XmlReader& e)
             case P_TYPE::INT_LIST:
                   return QVariant();
             case P_TYPE::SUB_STYLE:
-                  return int(subStyleFromName(e.readElementText()));
+                  return int(textStyleFromName(e.readElementText()));
             case P_TYPE::ALIGN: {
                   QString s = e.readElementText();
                   QStringList sl = s.split(',');

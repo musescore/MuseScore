@@ -28,13 +28,22 @@ namespace Ms {
 //TODO: textChanged() needs to be called during/after editing
 
 //---------------------------------------------------------
+//   tempoStyle
+//---------------------------------------------------------
+
+static const ElementStyle tempoStyle {
+      { Sid::tempoSystemFlag,                    Pid::SYSTEM_FLAG            },
+      { Sid::tempoPlacement,                     Pid::PLACEMENT              },
+      };
+
+//---------------------------------------------------------
 //   TempoText
 //---------------------------------------------------------
 
 TempoText::TempoText(Score* s)
-   : TextBase(s, ElementFlags(ElementFlag::SYSTEM))
+   : TextBase(s, Tid::TEMPO, ElementFlags(ElementFlag::SYSTEM))
       {
-      initSubStyle(SubStyleId::TEMPO);
+      initElementStyle(&tempoStyle);
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
       _relative   = 1.0;
@@ -371,7 +380,7 @@ QVariant TempoText::propertyDefault(Pid id) const
       {
       switch(id) {
             case Pid::SUB_STYLE:
-                  return int(SubStyleId::TEMPO);
+                  return int(Tid::TEMPO);
             case Pid::TEMPO:
                   return 2.0;
             case Pid::TEMPO_FOLLOW_TEXT:

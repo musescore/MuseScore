@@ -38,7 +38,7 @@ class TestCompat206 : public QObject, public MTest
       void drumset()          { compat("drumset");          }
       void markers()          { compat("markers");          }
       void noteheads()        { compat("noteheads");        }
-      void textstyles()       { compat("textstyles");       }
+//TODO::ws      void textstyles()       { compat("textstyles");       }
       void tuplets()          { compat("tuplets");          }
       void hairpin()          { compat("hairpin");          }
       void brlines()          { compat("barlines");         }

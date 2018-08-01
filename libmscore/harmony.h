@@ -100,7 +100,6 @@ class Harmony final : public TextBase {
       ~Harmony();
       virtual Harmony* clone() const override     { return new Harmony(*this); }
       virtual ElementType type() const override   { return ElementType::HARMONY; }
-      virtual bool systemFlag() const override    { return false;  }
 
       qreal posAbove() const                   { return _posAbove; }
       void setPosAbove(qreal v)                { _posAbove = v; }

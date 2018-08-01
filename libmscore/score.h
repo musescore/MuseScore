@@ -74,7 +74,6 @@ class Staff;
 class System;
 class TempoMap;
 class Text;
-class TextStyle;
 class TimeSig;
 class TimeSigMap;
 class Tuplet;
@@ -88,7 +87,7 @@ struct Interval;
 struct TEvent;
 struct LayoutContext;
 
-enum class SubStyleId;
+enum class Tid;
 enum class ClefType : signed char;
 enum class BeatType : char;
 enum class SymId;
@@ -886,7 +885,7 @@ class Score : public QObject, public ScoreElement {
 
       bool defaultsRead() const                      { return _defaultsRead;    }
       void setDefaultsRead(bool b)                   { _defaultsRead = b;       }
-      Text* getText(SubStyleId subtype);
+      Text* getText(Tid subtype);
 
       void lassoSelect(const QRectF&);
       void lassoSelectEnd();

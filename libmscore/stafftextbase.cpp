@@ -23,8 +23,8 @@ namespace Ms {
 //   StaffTextBase
 //---------------------------------------------------------
 
-StaffTextBase::StaffTextBase(Score* s, ElementFlags flags)
-   : TextBase(s, flags)
+StaffTextBase::StaffTextBase(Score* s, Tid tid, ElementFlags flags)
+   : TextBase(s, tid, flags)
       {
       setSwingParameters(MScore::division / 2, 60);
       }
@@ -37,7 +37,7 @@ void StaffTextBase::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag("StaffText");
+      xml.stag(name());
 
       for (ChannelActions s : _channelActions) {
             int channel = s.channel;
@@ -194,20 +194,6 @@ Segment* StaffTextBase::segment() const
             }
       Segment* s = toSegment(parent());
       return s;
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant StaffTextBase::propertyDefault(Pid id) const
-      {
-      switch(id) {
-            case Pid::SUB_STYLE:
-                  return int(SubStyleId::STAFF);
-            default:
-                  return TextBase::propertyDefault(id);
-            }
       }
 
 }

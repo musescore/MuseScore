@@ -643,11 +643,15 @@ bool TextLineBase::setProperty(Pid id, const QVariant& v)
 
 QVariant TextLineBase::propertyDefault(Pid pid) const
       {
-      QVariant v = styledPropertyDefault(pid);
-      if (!v.isValid())
-            v = SLine::propertyDefault(pid);
-      return v;
-      }
+      for (const StyledProperty& p : *styledProperties()) {
+            if (p.pid == pid) {
+                  if (propertyType(pid) == P_TYPE::SP_REAL)
+                        return score()->styleP(p.sid);
+                  return score()->styleV(p.sid);
+                  }
+            }
+       return SLine::propertyDefault(pid);
+       }
 
-}
+ }
 

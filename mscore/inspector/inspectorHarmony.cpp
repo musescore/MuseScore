@@ -38,8 +38,8 @@ InspectorHarmony::InspectorHarmony(QWidget* parent)
             };
 
       h.style->clear();
-      for (auto ss : { SubStyleId::HARMONY_A, SubStyleId::HARMONY_B } ) {
-            h.style->addItem(subStyleUserName(ss), int(ss));
+      for (auto ss : { Tid::HARMONY_A, Tid::HARMONY_B } ) {
+            h.style->addItem(textStyleUserName(ss), int(ss));
             }
 
       t.resetToStyle->setVisible(false);

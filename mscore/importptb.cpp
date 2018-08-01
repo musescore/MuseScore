@@ -684,7 +684,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                               }
 
                         if (false && n.slide) {
-                              Text* st = new Text(SubStyleId::HARMONY_A, score);
+                              Text* st = new Text(score, Tid::HARMONY_A);
                               st->setXmlText(QString("SLIDE %1").arg(n.slide));
                               st->setTrack(staff * VOICES);
                               chord->notes().front()->add(st);
@@ -714,7 +714,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                         slur->setTrack2(staff  * VOICES);
                         score->addElement(slur);
 
-                        Text* st = new Text(SubStyleId::HARMONY_A, score);
+                        Text* st = new Text(score, Tid::HARMONY_A);
                         st->setXmlText("H");
                         st->setTrack(staff * VOICES);
                         cr1->notes().front()->add(st);
@@ -1258,7 +1258,7 @@ Score::FileError PowerTab::read()
       // create title
       std::string name = song.info.name;
       if (!name.empty()) {
-            Text* s = new Text(SubStyleId::TITLE, score);
+            Text* s = new Text(score, Tid::TITLE);
             s->setPlainText(QString::fromStdString(name));
             m->add(s);
             }
@@ -1337,7 +1337,7 @@ Score::FileError PowerTab::read()
                   pscore->addMeasure(mb, measure);
                   measure = mb;
                   }
-            Text* txt = new Text(SubStyleId::INSTRUMENT_EXCERPT, pscore);
+            Text* txt = new Text(pscore, Tid::INSTRUMENT_EXCERPT);
             txt->setPlainText(part->longName());
             measure->add(txt);
 

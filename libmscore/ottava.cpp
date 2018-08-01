@@ -26,6 +26,38 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   ottavaElementStyle
+//---------------------------------------------------------
+
+static const ElementStyle ottavaElementStyle {
+      { Sid::ottava8VAPlacement,                 Pid::PLACEMENT               },
+      { Sid::ottavaNumbersOnly,                  Pid::NUMBERS_ONLY            },
+      { Sid::ottava8VAText,                      Pid::BEGIN_TEXT              },
+      { Sid::ottava8VAText,                      Pid::CONTINUE_TEXT           },
+      { Sid::ottavaHookAbove,                    Pid::END_HOOK_HEIGHT         },
+      { Sid::ottavaFontFace,                     Pid::BEGIN_FONT_FACE         },
+      { Sid::ottavaFontFace,                     Pid::CONTINUE_FONT_FACE      },
+      { Sid::ottavaFontFace,                     Pid::END_FONT_FACE           },
+      { Sid::ottavaFontSize,                     Pid::BEGIN_FONT_SIZE         },
+      { Sid::ottavaFontSize,                     Pid::CONTINUE_FONT_SIZE      },
+      { Sid::ottavaFontSize,                     Pid::END_FONT_SIZE           },
+      { Sid::ottavaFontBold,                     Pid::BEGIN_FONT_BOLD         },
+      { Sid::ottavaFontBold,                     Pid::CONTINUE_FONT_BOLD      },
+      { Sid::ottavaFontBold,                     Pid::END_FONT_BOLD           },
+      { Sid::ottavaFontItalic,                   Pid::BEGIN_FONT_ITALIC       },
+      { Sid::ottavaFontItalic,                   Pid::CONTINUE_FONT_ITALIC    },
+      { Sid::ottavaFontItalic,                   Pid::END_FONT_ITALIC         },
+      { Sid::ottavaFontUnderline,                Pid::BEGIN_FONT_UNDERLINE    },
+      { Sid::ottavaFontUnderline,                Pid::CONTINUE_FONT_UNDERLINE },
+      { Sid::ottavaFontUnderline,                Pid::END_FONT_UNDERLINE      },
+      { Sid::ottavaTextAlign,                    Pid::BEGIN_TEXT_ALIGN        },
+      { Sid::ottavaTextAlign,                    Pid::CONTINUE_TEXT_ALIGN     },
+      { Sid::ottavaTextAlign,                    Pid::END_TEXT_ALIGN          },
+      { Sid::ottavaLineWidth,                    Pid::LINE_WIDTH              },
+      { Sid::ottavaLineStyle,                    Pid::LINE_STYLE              },
+      };
+
+//---------------------------------------------------------
 //   OttavaDefault
 //---------------------------------------------------------
 
@@ -130,15 +162,14 @@ void Ottava::updateStyledProperties()
 
       // switch right substyles depending on _ottavaType and _numbersOnly
 
-      StyledProperty* spl = _styledProperties.data();
       int idx    = int(_ottavaType) * 2 + (_numbersOnly ? 0 : 12);
-      spl[0].sid = ss[idx];         // PLACEMENT
-      spl[2].sid = ss[idx+1];       // BEGIN_TEXT
-      spl[3].sid = ss[idx+1];       // CONTINUE_TEXT
+      _ottavaStyle[0].sid = ss[idx];         // PLACEMENT
+      _ottavaStyle[2].sid = ss[idx+1];       // BEGIN_TEXT
+      _ottavaStyle[3].sid = ss[idx+1];       // CONTINUE_TEXT
       if (isStyled(Pid::PLACEMENT))
-            spl[4].sid = score()->styleI(ss[idx]) == int(Placement::ABOVE) ? Sid::ottavaHookAbove : Sid::ottavaHookBelow;
+            _ottavaStyle[4].sid = score()->styleI(ss[idx]) == int(Placement::ABOVE) ? Sid::ottavaHookAbove : Sid::ottavaHookBelow;
       else
-            spl[4].sid = placeAbove() ? Sid::ottavaHookAbove : Sid::ottavaHookBelow;
+            _ottavaStyle[4].sid = placeAbove() ? Sid::ottavaHookAbove : Sid::ottavaHookBelow;
       styleChanged();   // this changes all styled properties with flag STYLED
       MuseScoreCore::mscoreCore->updateInspector();
       }
@@ -195,21 +226,22 @@ void OttavaSegment::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags 
 Ottava::Ottava(Score* s)
    : TextLineBase(s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
       {
-      _ottavaType = OttavaType::OTTAVA_8VA;
-      _styledProperties = ottavaStyle;       // make copy
+      _ottavaType  = OttavaType::OTTAVA_8VA;
+      _ottavaStyle = ottavaElementStyle;       // make copy
 
       setBeginTextPlace(PlaceText::LEFT);
       setContinueTextPlace(PlaceText::LEFT);
       setEndHookType(HookType::HOOK_90);
       setLineVisible(true);
 
-      initSubStyle(SubStyleId::OTTAVA);
+      initElementStyle(&_ottavaStyle);
       }
 
 Ottava::Ottava(const Ottava& o)
    : TextLineBase(o)
       {
-      _styledProperties = o._styledProperties;
+      _ottavaStyle = o._ottavaStyle;
+      _subStyle = &_ottavaStyle;
       setOttavaType(o._ottavaType);
       _numbersOnly = o._numbersOnly;
       }
@@ -243,8 +275,8 @@ void Ottava::write(XmlWriter& xml) const
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
       xml.tag("subtype", ottavaDefault[int(ottavaType())].name);
 
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->pid);
+      for (const StyledProperty& spp : *styledProperties())
+            writeProperty(xml, spp.pid);
 
       Element::writeProperties(xml);
       xml.etag();
@@ -379,10 +411,7 @@ QVariant Ottava::propertyDefault(Pid pid) const
             case Pid::LINE_VISIBLE:
                   return true;
             default:
-                  QVariant v = ScoreElement::styledPropertyDefault(pid);
-                  if (v.isValid())
-                        return v;
-                  return getProperty(pid);
+                  return TextLineBase::propertyDefault(pid);
             }
       }
 

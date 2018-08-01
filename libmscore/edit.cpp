@@ -3916,7 +3916,7 @@ void Score::undoAddElement(Element* element)
             if (et == ElementType::TEXT) {
 #if 0 // TODO-ws
                   Text* t = toText(element);
-                  if (t->subStyle() == SubStyle::INSTRUMENT_EXCERPT)
+                  if (t->subStyle() == ElementStyle::INSTRUMENT_EXCERPT)
                         links = 0;
 #endif
                   }
