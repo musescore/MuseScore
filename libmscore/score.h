@@ -1221,6 +1221,7 @@ class MasterScore : public Score {
       void removeDeletedMidiMapping();
       int updateMidiMapping();
 
+      QFileInfo _sessionStartBackupInfo;
       QFileInfo info;
 
       bool read(XmlReader&);
@@ -1308,6 +1309,8 @@ class MasterScore : public Score {
       QFileInfo* fileInfo()               { return &info; }
       const QFileInfo* fileInfo() const   { return &info; }
       void setName(const QString&);
+
+      const QFileInfo& sessionStartBackupInfo() const { return _sessionStartBackupInfo; }
 
       virtual QString title() const override;
 

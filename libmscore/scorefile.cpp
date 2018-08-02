@@ -433,8 +433,11 @@ bool MasterScore::saveFile()
 //                               tr("Renaming old file <%1> to backup <%2> failed").arg(name, backupname);
                         }
                   }
-#ifdef Q_OS_WIN
+
             QFileInfo fileBackup(dir, backupName);
+            _sessionStartBackupInfo = fileBackup;
+
+#ifdef Q_OS_WIN
             QString backupNativePath = QDir::toNativeSeparators(fileBackup.absoluteFilePath());
 #if (defined (_MSCVER) || defined (_MSC_VER))
    #if (defined (UNICODE))
