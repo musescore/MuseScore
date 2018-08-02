@@ -372,6 +372,8 @@ void Score::readStaff(XmlReader& e)
 
 bool MasterScore::saveFile()
       {
+      if (readOnly())
+            return false;
       QString suffix = info.suffix();
       if (info.exists() && !info.isWritable()) {
             MScore::lastError = tr("The following file is locked: \n%1 \n\nTry saving to a different location.").arg(info.filePath());
@@ -482,6 +484,8 @@ bool MasterScore::saveFile()
 
 bool Score::saveCompressedFile(QFileInfo& info, bool onlySelection)
       {
+      if (readOnly() && info == *masterScore()->fileInfo())
+            return false;
       QFile fp(info.filePath());
       if (!fp.open(QIODevice::WriteOnly)) {
             MScore::lastError = tr("Open File\n%1\nfailed: %2").arg(info.filePath(), strerror(errno));
@@ -627,6 +631,8 @@ bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
 
 bool Score::saveFile(QFileInfo& info)
       {
+      if (readOnly() && info == *masterScore()->fileInfo())
+            return false;
       if (info.suffix().isEmpty())
             info.setFile(info.filePath() + ".mscx");
       QFile fp(info.filePath());

@@ -556,6 +556,7 @@ class Score : public QObject, public ScoreElement {
       Score* clone();
 
       virtual bool isMaster() const  { return false;        }
+      virtual bool readOnly() const;
 
       virtual inline QList<Excerpt*>& excerpts();
       virtual inline const QList<Excerpt*>& excerpts() const;
@@ -1199,6 +1200,8 @@ class MasterScore : public Score {
       MasterScore* _prev      { 0 };
       Movements* _movements   { 0 };
 
+      bool _readOnly          { false };
+
       CmdState _cmdState;     // modified during cmd processing
 
       Omr* _omr               { 0 };
@@ -1231,6 +1234,8 @@ class MasterScore : public Score {
       MasterScore* clone();
 
       virtual bool isMaster() const override                          { return true;        }
+      virtual bool readOnly() const override                          { return _readOnly;   }
+      void setReadOnly(bool ro)                                       { _readOnly = ro;     }
       virtual UndoStack* undoStack() const override                   { return _movements->undo(); }
       virtual TimeSigMap* sigmap() const override                     { return _sigmap;     }
       virtual TempoMap* tempomap() const override                     { return _tempomap;   }
