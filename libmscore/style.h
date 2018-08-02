@@ -63,6 +63,10 @@ enum class Sid {
       lyricsAlignVerseNumber,
       lyricsLineThickness,
       lyricsMelismaAlign,
+      lyricsMelismaPad,
+      lyricsDashPad,
+      lyricsDashLineThickness,
+      lyricsDashYposRatio,
 
       lyricsOddFontFace,
       lyricsOddFontSize,

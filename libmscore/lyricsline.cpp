@@ -24,6 +24,10 @@
 
 namespace Ms {
 
+// metrics for dashes and melisma; all in sp. units:
+static constexpr qreal  LYRICS_DASH_Y_POS_RATIO             = 0.67;     // the fraction of lyrics font x-height to
+                                                                        //    raise the dashes above text base line;
+
 //---------------------------------------------------------
 //   searchNextLyrics
 //---------------------------------------------------------
@@ -59,7 +63,7 @@ LyricsLine::LyricsLine(Score* s)
       {
       setGenerated(true);           // no need to save it, as it can be re-generated
       setDiagonal(false);
-      setLineWidth(Lyrics::LYRICS_DASH_DEFAULT_LINE_THICKNESS * spatium());
+      setLineWidth(score()->styleP(Sid::lyricsDashLineThickness));
       setAnchor(Spanner::Anchor::SEGMENT);
       _nextLyrics = 0;
       }
@@ -68,6 +72,15 @@ LyricsLine::LyricsLine(const LyricsLine& g)
    : SLine(g)
       {
       _nextLyrics = 0;
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//---------------------------------------------------------
+
+void LyricsLine::styleChanged()
+      {
+      setLineWidth(score()->styleP(Sid::lyricsDashLineThickness));
       }
 
 //---------------------------------------------------------
@@ -144,9 +157,6 @@ void LyricsLine::layout()
             setTicks(s->tick() - lyricsStartTick);
             }
       else {                                    // dash(es)
-#if defined(USE_FONT_DASH_TICKNESS)
-            setLineWidth(Spatium(lyrics()->dashThickness() / spatium()));
-#endif
             _nextLyrics = searchNextLyrics(lyrics()->segment(), staffIdx(), lyrics()->no(), lyrics()->placement());
             setTick2(_nextLyrics ? _nextLyrics->segment()->tick() : tick());
             }
@@ -258,7 +268,7 @@ void LyricsLineSegment::layout()
                   qreal lyrXp       = lyr->pagePos().x();
                   qreal sysXp       = sys->pagePos().x();
                   toX               = lyrXp - sysXp + lyrX;       // syst.rel. X pos.
-                  qreal offsetX     = toX - pos().x() - pos2().x() - Lyrics::LYRICS_DASH_DEFAULT_PAD * sp;
+                  qreal offsetX     = toX - pos().x() - pos2().x() - score()->styleP(Sid::lyricsDashPad);
                   //                    delta from current end pos.| ending padding
                   rxpos2()          += offsetX;
                   }
@@ -274,7 +284,7 @@ void LyricsLineSegment::layout()
             fromX             = lyrXp - sysXp + lyrX + lyrW;
             //               syst.rel. X pos. | lyr.advance
             qreal offsetX     = fromX - pos().x();
-            offsetX           += (isEndMelisma ? Lyrics::MELISMA_DEFAULT_PAD : Lyrics::LYRICS_DASH_DEFAULT_PAD) * sp;
+            offsetX           += score()->styleP(isEndMelisma ? Sid::lyricsMelismaPad : Sid::lyricsDashPad);
 
             //               delta from curr.pos. | add initial padding
             rxpos()           += offsetX;
@@ -302,14 +312,9 @@ void LyricsLineSegment::layout()
             rxpos2() += (isBeginType() || isEndType()) ? -offsetX : +offsetX;
             }
       else {                              // dash(es)
-#if defined(USE_FONT_DASH_METRIC)
-            rypos()     += lyr->dashY();
-            _dashLength = lyr->dashLength();
-#else
             // set conventional dash Y pos
-            rypos() -= MScore::pixelRatio * lyr->fontMetrics().xHeight() * Lyrics::LYRICS_DASH_Y_POS_RATIO;
+            rypos() -= MScore::pixelRatio * lyr->fontMetrics().xHeight() * score()->styleD(Sid::lyricsDashYposRatio);
             _dashLength = score()->styleP(Sid::lyricsDashMaxLength) * mag();  // and dash length
-#endif
             qreal len         = pos2().x();
             qreal minDashLen  = score()->styleS(Sid::lyricsDashMinLength).val() * sp;
             qreal maxDashDist = score()->styleS(Sid::lyricsDashMaxDistance).val() * sp;
