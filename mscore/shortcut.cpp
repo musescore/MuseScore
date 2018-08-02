@@ -3879,7 +3879,7 @@ void Shortcut::retranslate()
 
 void Shortcut::refreshIcons()
       {
-      foreach (Shortcut* s, _shortcuts) {
+      for (Shortcut* s : _shortcuts) {
             QAction* a = s->action();
             if (a && s->icon() != Icons::Invalid_ICON) {
                   a->setIcon(*icons[int(s->icon())]);
@@ -3933,7 +3933,7 @@ void Shortcut::write(XmlWriter& xml) const
       xml.tag("key", _key.data());
       if (_standardKey != QKeySequence::UnknownKey)
             xml.tag("std", QString("%1").arg(_standardKey));
-      foreach(QKeySequence ks, _keys)
+      for (QKeySequence ks : _keys)
             xml.tag("seq", Shortcut::keySeqToString(ks, QKeySequence::PortableText));
       xml.etag();
       }

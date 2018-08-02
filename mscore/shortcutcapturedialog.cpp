@@ -88,12 +88,10 @@ bool ShortcutCaptureDialog::eventFilter(QObject* /*o*/, QEvent* e)
       {
       if (e->type() == QEvent::KeyPress) {
             QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
-            if(keyEvent->key() == Qt::Key_Tab || keyEvent->key() == Qt::Key_Backtab){
-                  QWidget::keyPressEvent(keyEvent);
+            if((keyEvent->key() != Qt::Key_Tab) && (keyEvent->key() != Qt::Key_Backtab)){
+                  keyPress(keyEvent);
                   return true;
                   }
-            keyPress(keyEvent);
-            return true;
             }
       return false;
       }
@@ -118,7 +116,7 @@ void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
       // remove shift-modifier for keys that don't need it: letters and special keys
       if ((k & Qt::ShiftModifier) && ((e->key() < 0x41) || (e->key() > 0x5a) || (e->key() >= 0x01000000))) {
             qDebug() << k;
-      	k -= Qt::ShiftModifier;
+            k -= Qt::ShiftModifier;
             qDebug() << k;
             }
 
@@ -175,21 +173,21 @@ void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
             }
       addButton->setEnabled(conflict == false);
       replaceButton->setEnabled(conflict == false);
+
 //      nshrtLabel->setText(key.toString(QKeySequence::NativeText));
       QString keyStr = Shortcut::keySeqToString(key, QKeySequence::NativeText);
       nshrtLabel->setText(keyStr);
-
 //      QString A = key.toString(QKeySequence::NativeText);
       QString A = keyStr;
       QString B = Shortcut::keySeqToString(key, QKeySequence::PortableText);
-qDebug("capture key 0x%x  modifiers 0x%x virt 0x%x scan 0x%x <%s><%s>",
-      k,
-      int(e->modifiers()),
-      int(e->nativeVirtualKey()),
-      int(e->nativeScanCode()),
-      qPrintable(A),
-      qPrintable(B)
-      );
+      qDebug("capture key 0x%x  modifiers 0x%x virt 0x%x scan 0x%x <%s><%s>",
+            k,
+            int(e->modifiers()),
+            int(e->nativeVirtualKey()),
+            int(e->nativeScanCode()),
+            qPrintable(A),
+            qPrintable(B)
+            );
       }
 
 //---------------------------------------------------------
@@ -220,5 +218,5 @@ void ShortcutCaptureDialog::hideEvent(QHideEvent* event)
       QWidget::hideEvent(event);
       }
 
-}
+} // namespace Ms
 

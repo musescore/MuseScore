@@ -34,8 +34,15 @@
    </property>
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="descrLabel">
+     <property name="toolTip">
+      <string>To enter a shortcut, choose a key sequence, for example, Ctrl+A, and press it on your keyboard. 
+A key sequence can be implemented into another: Ctrl+B, and then Ctrl+C is a valid shortcut.
+Up to four combinations can be used: Ctrl+A then Ctrl+B then Ctrl+C then Ctrl+D is also a valid shortcut.
+Note: this last shortcut would be noted &quot;Ctrl+A,Ctrl+B,Ctrl+C,Ctrl+D&quot;</string>
+     </property>
      <property name="text">
-      <string>Press up to four keys to enter shortcut sequence</string>
+      <string>Press up to four key combinations to enter shortcut sequence.
+Note: Ctrl+Shift+1 is one key combination</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -58,6 +65,9 @@
    </item>
    <item row="2" column="1">
     <widget class="QLineEdit" name="oshrtLabel">
+     <property name="cursor">
+      <cursorShape>ArrowCursor</cursorShape>
+     </property>
      <property name="accessibleName">
       <string>Old shortcuts</string>
      </property>
@@ -75,6 +85,9 @@
    </item>
    <item row="3" column="1">
     <widget class="QLineEdit" name="nshrtLabel">
+     <property name="cursor">
+      <cursorShape>ArrowCursor</cursorShape>
+     </property>
      <property name="accessibleName">
       <string>New shortcut</string>
      </property>
@@ -112,7 +125,7 @@
         <string>Clear</string>
        </property>
        <property name="accessibleDescription">
-        <string/>
+        <string>Clear new shortcut</string>
        </property>
        <property name="text">
         <string>Clear</string>
@@ -137,6 +150,9 @@
        <property name="accessibleName">
         <string>Add</string>
        </property>
+       <property name="accessibleDescription">
+        <string>Add the new shortcut to the list of existing shortcuts</string>
+       </property>
        <property name="text">
         <string>Add</string>
        </property>
@@ -149,6 +165,9 @@
        </property>
        <property name="accessibleName">
         <string>Replace</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Replace the old shortcut(s) with new one.</string>
        </property>
        <property name="text">
         <string>Replace</string>
