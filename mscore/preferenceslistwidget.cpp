@@ -294,9 +294,16 @@ void PreferencesListWidget::selectAllVisiblePreferences()
 // For now, the only preference that is synced with this showEvent is PREF_APP_SHOWADVANCEDPREFERENCESWARNING.
 void PreferencesListWidget::showEvent(QShowEvent* event)
       {
-      // all this long line does it set the PREF_APP_SHOWADVANCEDPREFERENCESWARNING's checkbox to what was set just before in prefsDialog::tabAboutToChange
+      // all this long line does is set the PREF_APP_SHOWADVANCEDPREFERENCESWARNING's checkbox to what was set just before in prefsDialog::tabAboutToChange
       static_cast<QCheckBox*>(static_cast<BoolPreferenceItem*>(preferenceItems.value(PREF_APP_SHOWADVANCEDPREFERENCESWARNING))->editor())->setChecked(preferences.getBool(PREF_APP_SHOWADVANCEDPREFERENCESWARNING));
       QTreeWidget::showEvent(event);
+      }
+
+void PreferencesListWidget::hideEvent(QHideEvent* event)
+      {
+      // all this long line does is set the PREF_APP_SHOWADVANCEDPREFERENCESWARNING preference to its value in the treewidget.
+      preferences.setPreference(PREF_APP_SHOWADVANCEDPREFERENCESWARNING, static_cast<QCheckBox*>(static_cast<BoolPreferenceItem*>(preferenceItems.value(PREF_APP_SHOWADVANCEDPREFERENCESWARNING))->editor())->isChecked());
+      QTreeWidget::hideEvent(event);
       }
 
 void PreferencesListWidget::keyPressEvent(QKeyEvent* event)
@@ -307,12 +314,10 @@ void PreferencesListWidget::keyPressEvent(QKeyEvent* event)
             if (pref) {
                   if (!pref->editor()->hasFocus()) {
                         pref->editor()->setFocus();
-                        pref->editor()->grabKeyboard();
                         }
                   else {
                         setCurrentItem(pref);
                         pref->editor()->clearFocus();
-                        pref->editor()->releaseKeyboard();
                         }
                   }
             event->accept();

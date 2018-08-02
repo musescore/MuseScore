@@ -203,12 +203,13 @@ class PreferencesListWidget : public QTreeWidget, public PreferenceVisitor {
       const QList<QTreeWidgetItem*> recursiveChildList(QTreeWidgetItem* parent) const;
       const QList<PreferenceItem*> recursivePreferenceItemList(QTreeWidgetItem* parent) const;
 
+      virtual void showEvent(QShowEvent* event) override;
+      virtual void keyPressEvent(QKeyEvent* event) override;
+      virtual void hideEvent(QHideEvent* event) override;
+
    private slots:
       void hideEmptyItems() const;
       void selectAllVisiblePreferences();
-
-      virtual void showEvent(QShowEvent* event) override;
-      virtual void keyPressEvent(QKeyEvent* event) override;
 
    public:
       explicit PreferencesListWidget(QWidget* parent = nullptr);
