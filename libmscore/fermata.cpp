@@ -194,10 +194,12 @@ void Fermata::layout()
 
       qreal x = 0.0;
       Element* e = s->element(track());
-      if (e && e->isChord())
-            x = score()->noteHeadWidth() * staff()->mag(0) * .5;
-      else
-            x = e->x() + e->width() * staff()->mag(0) * .5;
+      if (e) {
+            if (e->isChord())
+                  x = score()->noteHeadWidth() * staff()->mag(0) * .5;
+            else
+                  x = e->x() + e->width() * staff()->mag(0) * .5;
+            }
       qreal y = placeAbove() ? styleP(Sid::fermataPosAbove) : styleP(Sid::fermataPosBelow) + staff()->height();
 
       setPos(QPointF(x, y));
