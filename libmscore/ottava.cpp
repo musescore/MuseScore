@@ -240,8 +240,8 @@ Ottava::Ottava(Score* s)
 Ottava::Ottava(const Ottava& o)
    : TextLineBase(o)
       {
-      _ottavaStyle = o._ottavaStyle;
-      _subStyle = &_ottavaStyle;
+      _ottavaStyle  = o._ottavaStyle;
+      _elementStyle = &_ottavaStyle;
       setOttavaType(o._ottavaType);
       _numbersOnly = o._numbersOnly;
       }

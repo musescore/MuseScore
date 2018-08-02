@@ -169,7 +169,7 @@ class ScoreElement {
       static ElementStyle const emptyStyle;
 
    protected:
-      const ElementStyle* _subStyle         { &emptyStyle };
+      const ElementStyle* _elementStyle { &emptyStyle };
       PropertyFlags* _propertyFlagsList { 0 };
       LinkedElements* _links            { 0 };
       int getPropertyFlagsIdx(Pid id) const;
@@ -198,7 +198,7 @@ class ScoreElement {
       virtual void reset();                     // reset all properties & position to default
 
       virtual void initElementStyle(const ElementStyle*);
-      virtual const ElementStyle* styledProperties() const   { return _subStyle; }
+      virtual const ElementStyle* styledProperties() const   { return _elementStyle; }
 
       virtual PropertyFlags* propertyFlagsList() const   { return _propertyFlagsList; }
       virtual PropertyFlags propertyFlags(Pid) const;
