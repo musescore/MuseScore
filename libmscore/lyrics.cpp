@@ -24,17 +24,6 @@
 
 namespace Ms {
 
-
-#if defined (USE_FONT_DASH_METRIC)
-      static QString    g_fontFamily      = QString();
-      static qreal      g_fontSize        = -1;
-      static qreal      g_cachedDashY;
-      static qreal      g_cachedDashLength;
-   #if defined(USE_FONT_DASH_TICKNESS)
-      static qreal      g_cachedDashThickness;
-   #endif
-#endif
-
 //---------------------------------------------------------
 //   lyricsElementStyle
 //---------------------------------------------------------
@@ -280,21 +269,15 @@ void Lyrics::layout()
             }
 #if 0
       if (isMelisma() || hasNumber) {
-            if (_subStyle[5].sid != Sid::lyricsMelismaAlign) {
-                  _subStyle[5].sid = Sid::lyricsMelismaAlign;
-                  styleDidChange = true;
+            if (isStyled(Pid::ALIGN)) {
+                  // setAlign(score()->styleI(Sid::lyricsMelismaAlign));
                   }
             }
       else {
-            if (_subStyle[5].sid != (_even ? Sid::lyricsEvenAlign : Sid::lyricsOddAlign)) {
-                  _subStyle[5].sid = _even ? Sid::lyricsEvenAlign : Sid::lyricsOddAlign;
-                  styleDidChange = true;
-                  }
             }
 #endif
       if (styleDidChange)
             styleChanged();
-
       TextBase::layout1();
 
       ChordRest* cr = chordRest();
@@ -325,28 +308,6 @@ void Lyrics::layout()
             _separator->setTick(cr->tick());
             _separator->setTrack(track());
             _separator->setTrack2(track());
-#if defined(USE_FONT_DASH_METRIC)
-            // if font parameters different from font cached values, compute new dash values from font metrics
-            if (textStyle().family() != g_fontFamily && textStyle().size() != g_fontSize) {
-                  QFontMetricsF     fm    = textStyle().fontMetrics(spatium());
-                  QRectF            r     = fm.tightBoundingRect("\u2013");   // U+2013 EN DASH
-                  g_cachedDashY           = _dashY          = r.y() + (r.height() * .5);
-                  g_cachedDashLength      = _dashLength     = r.width();
-   #if defined(USE_FONT_DASH_TICKNESS)
-                  g_cachedDashThickness   = _dashThickness  = r.height();
-   #endif
-                  g_fontFamily            = textStyle().family();
-                  g_fontSize              = textStyle().size();
-                  }
-            // if same font, use cached values
-            else {
-                  _dashY                  = g_cachedDashY;
-                  _dashLength             = g_cachedDashLength;
-   #if defined(USE_FONT_DASH_TICKNESS)
-                  _dashThickness          = g_cachedDashThickness;
-   #endif
-                  }
-#endif
             bbox().setWidth(bbox().width());  // ??
             }
       else {
