@@ -1179,6 +1179,54 @@ static void readVolta114(XmlReader& e, Volta* volta)
       }
 
 //---------------------------------------------------------
+//   readOttava114
+//---------------------------------------------------------
+
+static void readOttava114(XmlReader& e, Ottava* ottava)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "subtype") {
+                  QString s = e.readElementText();
+                  bool ok;
+                  int idx = s.toInt(&ok);
+                  if (!ok) {
+                        idx = int(OttavaType::OTTAVA_8VA);
+                        for (unsigned i = 0; i < sizeof(ottavaDefault)/sizeof(*ottavaDefault); ++i) {
+                              if (s == ottavaDefault[i].name) {
+                                    idx = i;
+                                    break;
+                                    }
+                              }
+                        }
+                  else if (ottava->score()->mscVersion() <= 114) {
+                        //subtype are now in a different order...
+                        if (idx == 1)
+                              idx = 2;
+                        else if (idx == 2)
+                              idx = 1;
+                        }
+                  ottava->setOttavaType(OttavaType(idx));
+                  }
+            else if (tag == "numbersOnly") {
+                  ottava->setNumbersOnly(e.readInt());
+                  }
+            else if (tag == "lineWidth") {
+                  ottava->setLineWidth(e.readDouble() * ottava->spatium());
+                  }
+            else if (tag == "lineStyle") {
+                  ottava->setLineStyle(Qt::PenStyle(e.readInt()));
+                  }
+            else if (tag == "beginSymbol") {                      // obsolete
+                  }
+            else if (tag == "continueSymbol") {                   // obsolete
+                  }
+            else if (!readTextLineProperties114(e, ottava))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
 //   readHarmony114
 //---------------------------------------------------------
 
@@ -2750,6 +2798,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   Spanner* s = toSpanner(Element::name2Element(tag, this));
                   if (tag == "Volta")
                         readVolta114(e, toVolta(s));
+                  else if (tag == "Ottava")
+                        readOttava114(e, toOttava(s));
                   else
                         s->read(e);
                   if (s->track() == -1)
