@@ -1776,8 +1776,11 @@ void Score::deleteItem(Element* el)
             case ElementType::VOLTA_SEGMENT:
             case ElementType::SLUR_SEGMENT:
             case ElementType::TIE_SEGMENT:
+            case ElementType::LYRICSLINE_SEGMENT:
             case ElementType::PEDAL_SEGMENT:
             case ElementType::GLISSANDO_SEGMENT:
+            case ElementType::LET_RING_SEGMENT:
+            case ElementType::PALM_MUTE_SEGMENT:
                   {
                   el = toSpannerSegment(el)->spanner();
                   undoRemoveElement(el);

@@ -129,6 +129,7 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
 
 void InspectorTextLineBase::setElement()
       {
+      InspectorElementBase::setElement();
       TextLineBaseSegment* ts = static_cast<TextLineBaseSegment*>(inspector->element());
       TextLineBase* t = ts->textLineBase();
 
@@ -147,8 +148,6 @@ void InspectorTextLineBase::setElement()
       updateLineType();
       updateBeginHookType();
       updateEndHookType();
-
-      InspectorElementBase::setElement();
       }
 
 //---------------------------------------------------------
