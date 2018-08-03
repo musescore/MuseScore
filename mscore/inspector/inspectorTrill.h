@@ -31,6 +31,10 @@ class InspectorTrill : public InspectorElementBase {
       Ui::InspectorLine l;
       Ui::InspectorTrill t;
 
+      void updateLineType();
+      virtual void setElement() override;
+      virtual void valueChanged(int idx) override;
+
    public:
       InspectorTrill(QWidget* parent);
       };

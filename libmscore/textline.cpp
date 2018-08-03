@@ -33,6 +33,9 @@ static const ElementStyle textLineStyle {
       { Sid::textLineFontUnderline,              Pid::BEGIN_FONT_UNDERLINE    },
       { Sid::textLineFontUnderline,              Pid::CONTINUE_FONT_UNDERLINE },
       { Sid::textLineFontUnderline,              Pid::END_FONT_UNDERLINE      },
+//      { Sid::textLineTextAlign,                  Pid::BEGIN_TEXT_ALIGN        },
+//      { Sid::textLineTextAlign,                  Pid::CONTINUE_TEXT_ALIGN     },
+//      { Sid::textLineTextAlign,                  Pid::END_TEXT_ALIGN          },
       };
 
 //---------------------------------------------------------
@@ -107,6 +110,10 @@ TextLine::TextLine(Score* s)
       resetProperty(Pid::BEGIN_TEXT_ALIGN);
       resetProperty(Pid::CONTINUE_TEXT_ALIGN);
       resetProperty(Pid::END_TEXT_ALIGN);
+
+      resetProperty(Pid::BEGIN_TEXT_PLACE);
+      resetProperty(Pid::CONTINUE_TEXT_PLACE);
+      resetProperty(Pid::END_TEXT_PLACE);
       }
 
 TextLine::TextLine(const TextLine& tl)
@@ -125,28 +132,6 @@ LineSegment* TextLine::createLineSegment()
       if (anchor() == Spanner::Anchor::NOTE)
             seg->setFlag(ElementFlag::ON_STAFF, false);
       return seg;
-      }
-
-//---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
-QVariant TextLine::getProperty(Pid propertyId) const
-      {
-      switch (propertyId) {
-            default:
-                  break;
-            }
-      return TextLineBase::getProperty(propertyId);
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool TextLine::setProperty(Pid propertyId, const QVariant& val)
-      {
-      return TextLineBase::setProperty(propertyId, val);
       }
 
 //---------------------------------------------------------
@@ -181,7 +166,6 @@ QVariant TextLine::propertyDefault(Pid propertyId) const
             case Pid::BEGIN_TEXT_ALIGN:
             case Pid::END_TEXT_ALIGN:
             case Pid::CONTINUE_TEXT_ALIGN:
-//                  return QVariant::fromValue(Align::LEFT | Align::TOP);
                   return QVariant::fromValue(Align::LEFT | Align::VCENTER);
             default:
                   return TextLineBase::propertyDefault(propertyId);

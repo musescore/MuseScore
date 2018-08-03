@@ -31,6 +31,10 @@ class InspectorHairpin : public InspectorElementBase {
       Ui::InspectorLine l;
       Ui::InspectorHairpin h;
 
+      void updateLineType();
+      virtual void setElement() override;
+      virtual void valueChanged(int idx) override;
+
    public:
       InspectorHairpin(QWidget* parent);
       virtual void postInit() override;

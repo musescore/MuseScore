@@ -411,6 +411,7 @@ Element* HairpinSegment::propertyDelegate(Pid pid)
       if (pid == Pid::HAIRPIN_TYPE || pid == Pid::VELO_CHANGE || pid == Pid::HAIRPIN_CIRCLEDTIP
          || pid == Pid::HAIRPIN_HEIGHT
          || pid == Pid::HAIRPIN_CONT_HEIGHT
+         || pid == Pid::LINE_VISIBLE
          || pid == Pid::DYNAMIC_RANGE)
             return spanner();
       return TextLineBaseSegment::propertyDelegate(pid);

@@ -48,5 +48,45 @@ InspectorTrill::InspectorTrill(QWidget* parent)
 
       mapSignals(iiList, ppList);
       }
+
+//---------------------------------------------------------
+//   updateLineType
+//---------------------------------------------------------
+
+void InspectorTrill::updateLineType()
+      {
+      TrillSegment* hs = toTrillSegment(inspector->element());
+      Trill* h = hs->trill();
+      bool userDash = h->lineStyle() == Qt::CustomDashLine;
+
+      l.dashLineLength->setVisible(userDash);
+      l.dashGapLength->setVisible(userDash);
+      l.resetDashLineLength->setVisible(userDash);
+      l.resetDashGapLength->setVisible(userDash);
+      l.dashLineLengthLabel->setVisible(userDash);
+      l.dashGapLengthLabel->setVisible(userDash);
+      }
+
+//---------------------------------------------------------
+//   valueChanged
+//---------------------------------------------------------
+
+void InspectorTrill::valueChanged(int idx)
+      {
+      InspectorBase::valueChanged(idx);
+      if (iList[idx].t == Pid::LINE_STYLE)
+            updateLineType();
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorTrill::setElement()
+      {
+      InspectorElementBase::setElement();
+      updateLineType();
+      }
+
 }
 

@@ -176,16 +176,19 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
             static_cast<QFontComboBox*>(w)->setCurrentFont(QFont(val.toString()));
       else if (qobject_cast<QComboBox*>(w)) {
             int ival = val.toInt();
+            bool found = false;
             QComboBox* cb = qobject_cast<QComboBox*>(w);
             if (cb->itemData(0).isValid()) {
                   for (int i = 0; i < cb->count(); ++i) {
                         if (cb->itemData(i).toInt() == ival) {
-                              ival = i;
+                              cb->setCurrentIndex(i);
+                              found = true;
                               break;
                               }
                         }
+                  if (!found)
+                        qDebug("ComboBox item not found: pid <%s> data <%d>", propertyName(id), ival);
                   }
-            cb->setCurrentIndex(ival);
             }
       else if (qobject_cast<QCheckBox*>(w))
             static_cast<QCheckBox*>(w)->setChecked(val.toBool());
