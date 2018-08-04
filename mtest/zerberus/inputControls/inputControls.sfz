@@ -1,5 +1,6 @@
 <global>
 sample=../sample.wav
+global_volume=-4.5
 <region> key=19
 <region> lokey=20 hikey=30
 <region> key=40 lovel=30 hivel=40

@@ -70,7 +70,7 @@ class SynthControl : public QWidget, Ui::SynthControl {
       SynthControl(QWidget* parent);
       void setMeter(float, float, float, float);
       void stop();
-      void setScore(Score* s) { _score = s; }
+      void setScore(Score* s);
       void writeSettings();
       void updateGui();
       };

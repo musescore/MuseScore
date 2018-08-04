@@ -28,8 +28,9 @@ static const char* MUSESCORE_HOST = "api.musescore.com";
 //   LoginManager
 //---------------------------------------------------------
 
-LoginManager::LoginManager(QObject* parent)
- : QObject(parent)
+LoginManager::LoginManager(QAction* uploadAudioMenuAction, QObject* parent)
+ :  QObject(parent),
+   _uploadAudioMenuAction(uploadAudioMenuAction)
       {
       _oauthManager = new KQOAuthManager(this);
       connect(_oauthManager, SIGNAL(accessTokenReceived(QString, QString)),
@@ -59,7 +60,7 @@ LoginManager::LoginManager(QObject* parent)
       load();
       _progressDialog = new QProgressDialog(mscore);
       _progressDialog->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
-      _progressDialog->setWindowModality(Qt::ApplicationModal);
+      _progressDialog->setWindowModality(Qt::NonModal);
       _progressDialog->reset(); // required for Qt 5.5, see QTBUG-47042
       }
 
@@ -420,6 +421,7 @@ void LoginManager::uploadMedia()
       {
       if (_mediaUrl.isEmpty()) {
             _progressDialog->hide();
+            _uploadAudioMenuAction->setEnabled(true);
             return;
             }
       if (!_mp3File->exists()) {
@@ -435,6 +437,7 @@ void LoginManager::uploadMedia()
             _progressDialog->setCancelButtonText(tr("Cancel"));
             _progressDialog->show();
             _uploadTryCount++;
+            _uploadAudioMenuAction->setEnabled(false);
             QNetworkReply *reply = mscore->networkManager()->put(request, _mp3File);
             connect(_progressDialog, SIGNAL(canceled()), reply, SLOT(abort()));
             connect(reply, SIGNAL(finished()), this, SLOT(mediaUploadFinished()));
@@ -448,6 +451,7 @@ void LoginManager::uploadMedia()
 
 void LoginManager::mediaUploadFinished()
       {
+      _uploadAudioMenuAction->setEnabled(true);
       QNetworkReply* reply = static_cast<QNetworkReply*>(QObject::sender());
       int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
       QNetworkReply::NetworkError e = reply->error();

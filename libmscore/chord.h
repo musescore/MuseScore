@@ -161,7 +161,7 @@ class Chord : public ChordRest {
       void setEndsGlissando (bool val)       { _endsGlissando = val; }
       void updateEndsGlissando();
       StemSlash* stemSlash() const           { return _stemSlash; }
-      bool slash();
+      bool slash() const;
       void setSlash(bool flag, bool stemless);
       void removeMarkings(bool keepTremolo = false);
 

@@ -15,7 +15,8 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  frametext,ottava,slurs-1,slurs-2,slurs-3,slurs-4,hairpins-1,pedal-1,line-1,line-2,line-3,line-4,line-5,gliss-1,gliss-2, ^
  chord-layout-1,chord-layout-2,chord-layout-3,chord-layout-4,chord-layout-5, ^
  chord-layout-6,chord-layout-7,chord-layout-8,chord-layout-9,chord-layout-10, ^
- chord-layout-11,chord-layout-12,chord-layout-13,chord-layout-14,chord-layout-15,chord-layout-16,cross-1,cross-2, ^
+ chord-layout-11,chord-layout-12,chord-layout-13,chord-layout-14,chord-layout-15,chord-layout-16,chord-layout-17, ^
+ cross-1,cross-2, ^
  accidental-1,accidental-2,accidental-3,accidental-4,accidental-5, accidental-mirror ^
  accidental-6,accidental-7,accidental-8,accidental-9,accidental-10, ^
  tie-1,tie-2,tie-3,grace-1,grace-2,grace-3,grace-4,tuplets-1,tuplets-2,breath-1, ^

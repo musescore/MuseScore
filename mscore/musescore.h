@@ -618,6 +618,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool savePng(Score*, const QString& name);
 //      bool saveLilypond(Score*, const QString& name);
       bool saveMidi(Score* score, const QString& name);
+      void writeEdata(const QString&, const QString&, Score*, qreal, const QList<const Element*>&);
 
       virtual void closeScore(Score* score);
 
@@ -710,6 +711,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static QMap<QString, QStringList>* bravuraRanges();
       bool importExtension(QString path, QWidget* parent = nullptr);
       bool uninstallExtension(QString extensionId);
+      Q_INVOKABLE bool isInstalledExtension(QString extensionId);
       };
 
 extern MuseScore* mscore;

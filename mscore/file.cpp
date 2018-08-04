@@ -49,6 +49,7 @@
 #include "libmscore/pedal.h"
 #include "libmscore/trill.h"
 #include "libmscore/volta.h"
+#include "libmscore/hook.h"
 #include "newwizard.h"
 #include "libmscore/timesig.h"
 #include "libmscore/box.h"
@@ -70,6 +71,9 @@
 #include "libmscore/tempotext.h"
 #include "libmscore/sym.h"
 #include "libmscore/image.h"
+#include "libmscore/chord.h"
+#include "libmscore/accidental.h"
+#include "libmscore/marker.h"
 #include "synthesizer/msynthesizer.h"
 #include "svggenerator.h"
 #include "scorePreview.h"
@@ -90,6 +94,7 @@ extern Ms::Score::FileError importOve(Ms::Score*, const QString& name);
 
 namespace Ms {
 
+extern bool edata;
 extern Score::FileError importMidi(Score*, const QString& name);
 extern Score::FileError importGTP(Score*, const QString& name);
 extern Score::FileError importBww(Score*, const QString& path);
@@ -2416,6 +2421,12 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
       const QList<Page*>& pl = score->pages();
       int pages = pl.size();
 
+      if (edata) {
+            convDpi = DPI * 20.0 / score->spatium();          // spatium is always 20 pixel in image output
+            transparent = false;
+            f = QImage::Format_Grayscale8;
+            }
+
       int padding = QString("%1").arg(pages).size();
       bool overwrite = false;
       bool noToAll = false;
@@ -2456,19 +2467,22 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
                   colorTable.push_back(QColor(0, 0, 0, 0).rgba());
                   if (!transparent) {
                         for (int i = 1; i < 256; i++)
-                              colorTable.push_back(QColor(i, i, i).rgb());
+                            colorTable.push_back(QColor(i, i, i).rgb());
                         }
                   else {
                         for (int i = 1; i < 256; i++)
-                              colorTable.push_back(QColor(0, 0, 0, i).rgba());
+                            colorTable.push_back(QColor(0, 0, 0, i).rgba());
                         }
                   printer = printer.convertToFormat(QImage::Format_Indexed8, colorTable);
                   }
+            else if (format == QImage::Format_Grayscale8) {
+                  printer = printer.convertToFormat(QImage::Format_Grayscale8);
+            }
 
-            QString fileName(name);
-            if (fileName.endsWith(".png"))
-                  fileName = fileName.left(fileName.size() - 4);
-            fileName += QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+            QString fName(name);
+            if (fName.endsWith(".png"))
+                  fName = fName.left(fName.size() - 4);
+            QString fileName = fName + QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
             if (!converterMode) {
                   QFileInfo fip(fileName);
                   if(fip.exists() && !overwrite) {
@@ -2494,6 +2508,10 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
                         }
                   }
             rv = printer.save(fileName, "png");
+            if (edata) {
+                  QString edataName = fName + QString("-%1.xml").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+                  writeEdata(edataName, fileName, score, mag, pel);
+                  }
             if (!rv)
                   break;
             }

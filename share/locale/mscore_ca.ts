@@ -10983,7 +10983,7 @@ Save before closing?</source>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="204"/>
         <source>%1 kB</source>
-        <translation type="unfinished"/>
+        <translation>%1 kB</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="263"/>

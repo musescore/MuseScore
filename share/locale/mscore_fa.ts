@@ -613,17 +613,17 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="225"/>
         <source>Whole note</source>
-        <translation type="unfinished"/>
+        <translation>نت گرد</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="242"/>
         <source>Quarter note</source>
-        <translation type="unfinished"/>
+        <translation>نت سیاه</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="249"/>
         <source>Half note</source>
-        <translation type="unfinished"/>
+        <translation>نت سفید</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="375"/>
@@ -13664,12 +13664,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1591"/>
         <source>Whole note</source>
-        <translation type="unfinished"/>
+        <translation>نت گرد</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1601"/>
         <source>Half note</source>
-        <translation type="unfinished"/>
+        <translation>نت سفید</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1614"/>
@@ -13694,7 +13694,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1683"/>
         <source>Quarter note</source>
-        <translation type="unfinished"/>
+        <translation>نت سیاه</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1693"/>
@@ -19073,7 +19073,7 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="1331"/>
         <location filename="../../mscore/shortcut.cpp" line="3009"/>
         <source>Whole note</source>
-        <translation type="unfinished"/>
+        <translation>نت گرد</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1340"/>
@@ -19089,7 +19089,7 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="1342"/>
         <location filename="../../mscore/shortcut.cpp" line="3020"/>
         <source>Half note</source>
-        <translation type="unfinished"/>
+        <translation>نت سفید</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1351"/>
@@ -19105,7 +19105,7 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="1353"/>
         <location filename="../../mscore/shortcut.cpp" line="3031"/>
         <source>Quarter note</source>
-        <translation type="unfinished"/>
+        <translation>نت سیاه</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1362"/>

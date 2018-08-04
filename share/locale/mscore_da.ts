@@ -154,7 +154,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="181"/>
         <source>Store relative paths</source>
-        <translation type="unfinished"/>
+        <translation>Gem relativ sti</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="197"/>
@@ -593,17 +593,17 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="108"/>
         <source>Enter a name to enable pitch editing</source>
-        <translation type="unfinished"/>
+        <translation>Indsæt et navn, for at kunne redigere tonehøjde</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="176"/>
         <source>Noteheads group:</source>
-        <translation type="unfinished"/>
+        <translation>Gruppe af nodehoveder:</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="186"/>
         <source>Edit noteheads</source>
-        <translation type="unfinished"/>
+        <translation>Rediger nodehoveder</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="218"/>
@@ -8637,12 +8637,12 @@ fejlede:</translation>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="227"/>
         <source>Extension Updates Available</source>
-        <translation type="unfinished"/>
+        <translation>Opdatering af udvidelser til rådighed</translation>
     </message>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="228"/>
         <source>One or more installed extensions have updates available in Help / Resource Manager...</source>
-        <translation type="unfinished"/>
+        <translation>En eller flere af de installerede udvidelser har opdateringer tilgængelige i Hjælp/Resursehåndtering</translation>
     </message>
 </context>
 <context>
@@ -9951,7 +9951,7 @@ Vælg en takt og prøv igen</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1346"/>
         <source>About &amp;Qt...</source>
-        <translation>Om &amp;Qt</translation>
+        <translation>Om &amp;Qt...</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1351"/>
@@ -10978,7 +10978,7 @@ Gem før lukning?</translation>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="115"/>
         <source>Uninstall</source>
-        <translation type="unfinished"/>
+        <translation>Afinstaller</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="204"/>
@@ -11007,13 +11007,14 @@ Gem før lukning?</translation>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="337"/>
         <source>Unable to save the extension file on disk</source>
-        <translation type="unfinished"/>
+        <translation>Udvidelsesfilen kan ikke gemmes på disk</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="339"/>
         <source>Unable to download, save and verify the package.
 Check your internet connection.</source>
-        <translation type="unfinished"/>
+        <translation>Det er ikke muligt at hente, gemme og verificere pakken.
+Check din internetforbindelse.</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="133"/>
@@ -13331,7 +13332,7 @@ Dette vil gen-evaluere alle tilføjelser, og opsamle eventuelle ændringer, som 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="594"/>
         <source>Opens a folder dialog for selecting the extensions folder</source>
-        <translation type="unfinished"/>
+        <translation>Åbner en dialog, til at udvælge en folder til udvidelsen</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="614"/>
@@ -13563,19 +13564,19 @@ Dette vil gen-evaluere alle tilføjelser, og opsamle eventuelle ændringer, som 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1185"/>
         <source>Limit the scroll area to the edges of the score</source>
-        <translation type="unfinished"/>
+        <translation>Begræns rullleområdet til kanterne af nodearket</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1188"/>
         <location filename="../../mscore/prefsdialog.ui" line="1194"/>
         <source>If this is checked, scrolling will stop at the edge of the score.</source>
-        <translation type="unfinished"/>
+        <translation>Hvis denne er markeret, vil rulning stoppe ved kanten af nodearket</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1191"/>
         <location filename="../../mscore/prefsdialog.ui" line="1197"/>
         <source>Limit scroll area to page borders</source>
-        <translation type="unfinished"/>
+        <translation>Begræns rulleområdet til kanterne af papiret</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1223"/>
@@ -14691,7 +14692,7 @@ Justering af forsinkelsen kan gøre det lettere at synkronisere MIDI udstyr med 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4204"/>
         <source>Check for new version of MuseScore extensions</source>
-        <translation type="unfinished"/>
+        <translation>Se efter nye udgaver at MuseScore udvidelser</translation>
     </message>
 </context>
 <context>
@@ -14982,12 +14983,12 @@ fejlede: %2</translation>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1371"/>
         <source>Tab. 7-str. common</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 7-str. normal</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1372"/>
         <source>Tab. 8-str. common</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 8-str. normal</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="167"/>
@@ -15247,32 +15248,32 @@ Vil du overskrive?</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="405"/>
         <source>Cannot import extension on read-only storage: %1</source>
-        <translation type="unfinished"/>
+        <translation>Udvidelse kan ikke importeres til read-only lager: %1</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="410"/>
         <source>Cannot import extension: storage %1 is full</source>
-        <translation type="unfinished"/>
+        <translation>Udvidelse kan ikke importeres: lager %1 er fyldt</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="440"/>
         <source>Corrupted extension: no metadata.json</source>
-        <translation type="unfinished"/>
+        <translation>Udvidelse korrupt: mangler metadata.json</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="445"/>
         <source>Corrupted extension: unsupported directories in root directory</source>
-        <translation type="unfinished"/>
+        <translation>Udvidelse korrupt: ikke supporterede foldere i rod-folderen</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="450"/>
         <source>Corrupted extension: unsupported files in root directory</source>
-        <translation type="unfinished"/>
+        <translation>Udvidelse korrupt: ikke suporterede filer i folderen</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="465"/>
         <source>Corrupted extension: corrupted metadata.json</source>
-        <translation type="unfinished"/>
+        <translation>Udvidelse korrupt: fejl i metadata.json</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="484"/>
@@ -15282,7 +15283,7 @@ Vil du overskrive?</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="495"/>
         <source>Error while deleting previous version of the extension: %1</source>
-        <translation type="unfinished"/>
+        <translation>Fejl ved sletning af forrige version af udvidelsen: %1</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="529"/>
@@ -15349,7 +15350,7 @@ Vil du overskrive?</translation>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="80"/>
         <source>Uninstall</source>
-        <translation type="unfinished"/>
+        <translation>Afinstaller</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="101"/>
@@ -17106,7 +17107,7 @@ Vil du overskrive?</translation>
     <message>
         <location filename="../../libmscore/tremolo.cpp" line="34"/>
         <source>Buzz roll</source>
-        <translation type="unfinished"/>
+        <translation>Buzz roll</translation>
     </message>
     <message>
         <location filename="../../libmscore/tremolo.cpp" line="35"/>
@@ -19688,22 +19689,22 @@ fejlede:</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1781"/>
         <source>Toggle &apos;Selection Filter&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Slå &apos;Afgrænsningsfilter&apos; til/fra</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1826"/>
         <source>Toggle &apos;File Operations&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Slå værktøjslinjen &apos;Fil håndtering&apos; til/fra</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1854"/>
         <source>Toggle &apos;Note Input&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Slå værktøjslinjen &apos;Nodeindtastning&apos; til/fra</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2083"/>
         <source>Pan score automatically</source>
-        <translation type="unfinished"/>
+        <translation>Panorer nodearket automatisk</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1790"/>

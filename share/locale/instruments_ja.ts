@@ -676,22 +676,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="307"/>
         <source>Saxophone</source>
-        <translation>サックス</translation>
+        <translation>サクソフォーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="309"/>
         <source>Sopranissimo Saxophone</source>
-        <translation>ソプラニッシモ サックス</translation>
+        <translation>ソプラニッシモ サクソフォーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="311"/>
         <source>Sopranino Saxophone</source>
-        <translation>ソプラニーノ サックス</translation>
+        <translation>ソプラニーノ サクソフォーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="313"/>
         <source>Soprano Saxophone</source>
-        <translation>ソプラノ サックス</translation>
+        <translation>ソプラノ サクソフォーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="315"/>
@@ -701,42 +701,42 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="317"/>
         <source>Mezzo-Soprano Saxophone</source>
-        <translation>メゾソプラノ サックス</translation>
+        <translation>メゾソプラノ サクソフォーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="319"/>
         <source>Alto Saxophone</source>
-        <translation>アルト サックス</translation>
+        <translation>アルト サクソフォーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="321"/>
         <source>Melody Saxophone</source>
-        <translation>メロディ サックス</translation>
+        <translation>メロディ サクソフォーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="323"/>
         <source>Tenor Saxophone</source>
-        <translation>テナー サックス</translation>
+        <translation>テナー サクソフォーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="325"/>
         <source>Baritone Saxophone</source>
-        <translation>バリトン サックス</translation>
+        <translation>バリトン サクソフォーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="327"/>
         <source>Bass Saxophone</source>
-        <translation>バス サックス</translation>
+        <translation>バス サクソフォーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="329"/>
         <source>Contrabass Saxophone</source>
-        <translation>コントラバス サックス</translation>
+        <translation>コントラバス サクソフォーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="331"/>
         <source>Subcontrabass Saxophone</source>
-        <translation>サブコントラバス サックス</translation>
+        <translation>サブコントラバス サクソフォーン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="333"/>
@@ -746,7 +746,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="335"/>
         <source>Free Reed</source>
-        <translation>フリー リード</translation>
+        <translation>フリーリード</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="336"/>
@@ -882,7 +882,7 @@
         <location filename="../instruments/instrumentsxml.h" line="388"/>
         <location filename="../instruments/instrumentsxml.h" line="389"/>
         <source>Brass</source>
-        <translation>ブラス</translation>
+        <translation>金管楽器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="391"/>
@@ -2049,7 +2049,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="13"/>
         <source>Winds</source>
-        <translation>管楽器</translation>
+        <translation>木管楽器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="14"/>
@@ -5219,17 +5219,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="971"/>
         <source>synth-bass-1</source>
-        <translation>シンセベース-1</translation>
+        <translation>ベースシンセ1</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="972"/>
         <source>synth-bass-2</source>
-        <translation>シンセベース-2</translation>
+        <translation>ベースシンセ2</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="973"/>
         <source>Brass Synthesizer</source>
-        <translation>シンセブラス</translation>
+        <translation>ブラス シンセサイザー</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="974"/>
@@ -5240,17 +5240,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="975"/>
         <source>synth-brass-1</source>
-        <translation>シンセブラス-1</translation>
+        <translation>ブラスシンセ1</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="976"/>
         <source>synth-brass-2</source>
-        <translation>シンセブラス-2</translation>
+        <translation>ブラスシンセ2</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="977"/>
         <source>String Synthesizer</source>
-        <translation>シンセストリングス</translation>
+        <translation>ストリング シンセサイザー</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="978"/>
@@ -5261,12 +5261,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="979"/>
         <source>synth-string-1</source>
-        <translation>シンセストリングス-1</translation>
+        <translation>ストリングシンセ1</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="980"/>
         <source>synth-string-2</source>
-        <translation>シンセストリングス-2</translation>
+        <translation>ストリングスシンセ2</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="981"/>
@@ -5771,8 +5771,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="985"/>
         <source>Strings - Plucked</source>
-        <translation>撥弦楽器
-</translation>
+        <translation>撥弦楽器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="987"/>

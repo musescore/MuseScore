@@ -46,7 +46,7 @@
     <message>
         <location filename="../../aeolus/aeolus_gui.ui" line="63"/>
         <source>Delay</source>
-        <translation>延迟</translation>
+        <translation>Delay</translation>
     </message>
     <message>
         <location filename="../../aeolus/aeolus_gui.ui" line="70"/>
@@ -81,7 +81,7 @@
     <message>
         <location filename="../../aeolus/aeolus_gui.ui" line="361"/>
         <source>Position</source>
-        <translation>布局</translation>
+        <translation>Position</translation>
     </message>
 </context>
 <context>
@@ -154,7 +154,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="181"/>
         <source>Store relative paths</source>
-        <translation type="unfinished"/>
+        <translation>存储相对路径</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="197"/>
@@ -414,17 +414,17 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="202"/>
         <source>Release time (ms)</source>
-        <translation>释放时间(ms)</translation>
+        <translation>释放时间 (ms)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="205"/>
         <source>The release time in milliseconds.</source>
-        <translation>以毫秒（ms）计算释放的时间</translation>
+        <translation>以毫秒(ms)计算释放的时间</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="312"/>
         <source>Ratio (1:n)</source>
-        <translation>比率(1:N)</translation>
+        <translation>比率（1:N）</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="315"/>
@@ -454,7 +454,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="438"/>
         <source>Controls the final gain after compression, in dB.</source>
-        <translation>控制补偿输入信号的增益（dB）。</translation>
+        <translation>控制补偿输入信号的增益 (dB)。</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="473"/>
@@ -593,22 +593,22 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="108"/>
         <source>Enter a name to enable pitch editing</source>
-        <translation type="unfinished"/>
+        <translation>输入名字以启用音高编辑</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="176"/>
         <source>Noteheads group:</source>
-        <translation type="unfinished"/>
+        <translation>符头组：</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="186"/>
         <source>Edit noteheads</source>
-        <translation type="unfinished"/>
+        <translation>编辑符头</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="218"/>
         <source>Double Whole note</source>
-        <translation type="unfinished"/>
+        <translation>二全音符</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="225"/>
@@ -749,57 +749,57 @@
     <message>
         <location filename="../../mscore/editpitch.ui" line="54"/>
         <source>Octave 9</source>
-        <translation type="unfinished"/>
+        <translation>第9个八度</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="59"/>
         <source>Octave 8</source>
-        <translation>第8个8度</translation>
+        <translation>第8个八度</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="64"/>
         <source>Octave 7</source>
-        <translation>第7个8度</translation>
+        <translation>第7个八度</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="69"/>
         <source>Octave 6</source>
-        <translation>第6个8度</translation>
+        <translation>第6个八度</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="74"/>
         <source>Octave 5</source>
-        <translation>第5个8度</translation>
+        <translation>第5个八度</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="79"/>
         <source>Octave 4</source>
-        <translation>第4个8度</translation>
+        <translation>第4个八度</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="84"/>
         <source>Octave 3</source>
-        <translation>第3个8度</translation>
+        <translation>第3个八度</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="89"/>
         <source>Octave 2</source>
-        <translation>第2个8度</translation>
+        <translation>第2个八度</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="94"/>
         <source>Octave 1</source>
-        <translation>第1个8度</translation>
+        <translation>第1个八度</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="99"/>
         <source>Octave 0</source>
-        <translation>第0个8度</translation>
+        <translation>第0个八度</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="104"/>
         <source>Octave -1</source>
-        <translation>第-1个8度</translation>
+        <translation>第-1个八度</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="109"/>
@@ -875,8 +875,7 @@
     <message>
         <location filename="../../mscore/editpitch.ui" line="179"/>
         <source>C♯ 9</source>
-        <translation>C♯ 9
-</translation>
+        <translation>C♯ 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="184"/>
@@ -1945,7 +1944,7 @@
         <location filename="../../mscore/editstafftype.ui" line="431"/>
         <location filename="../../mscore/editstafftype.ui" line="722"/>
         <source>pt</source>
-        <translation>bang</translation>
+        <translation>磅</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="451"/>
@@ -2333,7 +2332,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="211"/>
         <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation type="unfinished"/>
+        <translation>显示横跨不同小节的音符（实验性特性，仅限于早期音乐！）</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="218"/>
@@ -2609,7 +2608,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1634"/>
         <source>Spacing (1=tight):</source>
-        <translation>间距(1=紧密)：</translation>
+        <translation>间距（1=紧密）：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1662"/>
@@ -2685,7 +2684,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2211"/>
         <source>Show repeat barline tips (&quot;winged&quot; repeats)</source>
-        <translation type="unfinished"/>
+        <translation>显示反复小节线的提示 (&quot;winged&quot; 反复)</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2218"/>
@@ -2832,7 +2831,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2830"/>
         <source>Hook length:</source>
-        <translation type="unfinished"/>
+        <translation>线条长度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2878"/>
@@ -2848,7 +2847,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2907"/>
         <source>Beam distance (in beam thickness units):</source>
-        <translation>符杠间距 (符杠粗度单位):</translation>
+        <translation>符杠间距（符杠粗度单位）:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2937"/>
@@ -2915,7 +2914,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3327"/>
         <source>Hairpins</source>
-        <translation>音量变化记号</translation>
+        <translation>渐变符号</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3369"/>
@@ -2964,7 +2963,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="3566"/>
         <location filename="../../mscore/editstyle.ui" line="3777"/>
         <source>Hook height:</source>
-        <translation type="unfinished"/>
+        <translation>线条高度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3601"/>
@@ -3082,7 +3081,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4272"/>
         <source>German</source>
-        <translation>德国的</translation>
+        <translation>德式</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4279"/>
@@ -3092,7 +3091,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4282"/>
         <source>Full German</source>
-        <translation type="unfinished"/>
+        <translation>全德式</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4289"/>
@@ -3112,7 +3111,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4302"/>
         <source>French</source>
-        <translation>法国的</translation>
+        <translation>法式</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4324"/>
@@ -3208,7 +3207,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4821"/>
         <source>pt</source>
-        <translation>bang</translation>
+        <translation>磅</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4837"/>
@@ -3269,7 +3268,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4997"/>
         <source>Stem distance:</source>
-        <translation type="unfinished"/>
+        <translation>符干距离：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5007"/>
@@ -3287,7 +3286,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5037"/>
         <source>Notehead distance:</source>
-        <translation type="unfinished"/>
+        <translation>符头距离：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5073"/>
@@ -3318,7 +3317,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5182"/>
         <source>Naturals in Key Signatures</source>
-        <translation type="unfinished"/>
+        <translation>调号的还原号</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5188"/>
@@ -3354,12 +3353,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5254"/>
         <source>Vertical distance from stem:</source>
-        <translation type="unfinished"/>
+        <translation>符干垂直间距：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5264"/>
         <source>Vertical distance from notehead:</source>
-        <translation type="unfinished"/>
+        <translation>符头垂直间距：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5274"/>
@@ -3374,22 +3373,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5344"/>
         <source>Distance before the stem of the first note:</source>
-        <translation type="unfinished"/>
+        <translation>第一个音符符干前的间距：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5354"/>
         <source>Distance before the head of the first note:</source>
-        <translation type="unfinished"/>
+        <translation>第一个音符符头前的间距：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5364"/>
         <source>Distance after the stem of the last note:</source>
-        <translation type="unfinished"/>
+        <translation>最后一个音符符干后的间距：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5374"/>
         <source>Distance after the head of the last note:</source>
-        <translation type="unfinished"/>
+        <translation>最后一个音符符头后的间距：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5512"/>
@@ -3399,17 +3398,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5562"/>
         <source>Hairpins, Volta, Ottava</source>
-        <translation type="unfinished"/>
+        <translation>渐变符号、括号和八度记号</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5567"/>
         <source>Pedal, Trill</source>
-        <translation type="unfinished"/>
+        <translation>踏板线和颤音线</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5572"/>
         <source>Chord Symbols, Fretboard Diagrams</source>
-        <translation>和弦符号，品格图</translation>
+        <translation>和弦符号和品格图</translation>
     </message>
 </context>
 <context>
@@ -3521,7 +3520,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/fretdprops.ui" line="14"/>
         <source>Fretboard Diagram Properties</source>
-        <translation type="unfinished"/>
+        <translation>品格图属性</translation>
     </message>
     <message>
         <location filename="../../mscore/fretdprops.ui" line="31"/>
@@ -3539,7 +3538,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/glissandoprop.ui" line="14"/>
         <source>Glissando Properties</source>
-        <translation type="unfinished"/>
+        <translation>滑音属性</translation>
     </message>
     <message>
         <location filename="../../mscore/glissandoprop.ui" line="34"/>
@@ -3595,7 +3594,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/importmidi/importmidi_panel.ui" line="281"/>
         <source>Cancel non-applied MIDI import operations</source>
-        <translation type="unfinished"/>
+        <translation>取消未完成的MIDI导入操作</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi_panel.ui" line="284"/>
@@ -3658,18 +3657,18 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="110"/>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="113"/>
         <source>Small</source>
-        <translation>缩小的</translation>
+        <translation>Small</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="139"/>
         <source>Reset &apos;Has bracket&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置 &apos;Has bracket&apos; 值</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="162"/>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="165"/>
         <source>Has bracket</source>
-        <translation type="unfinished"/>
+        <translation>Has bracket</translation>
     </message>
 </context>
 <context>
@@ -4024,7 +4023,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="449"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="731"/>
         <source>Octave</source>
-        <translation>8度</translation>
+        <translation>八度</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="467"/>
@@ -5199,7 +5198,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="47"/>
         <source>Hairpin</source>
-        <translation>音量记号</translation>
+        <translation>渐变记号</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="84"/>
@@ -7363,7 +7362,7 @@ space unit</extracomment>
         <location filename="../../mscore/lineproperties.ui" line="140"/>
         <location filename="../../mscore/lineproperties.ui" line="255"/>
         <source>Hook:</source>
-        <translation type="unfinished"/>
+        <translation>符尾：</translation>
     </message>
     <message>
         <location filename="../../mscore/lineproperties.ui" line="147"/>
@@ -21414,12 +21413,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3338"/>
         <source>Add Brackets to Element</source>
-        <translation type="unfinished"/>
+        <translation>对元素添加括号</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3339"/>
         <source>Add brackets to element</source>
-        <translation type="unfinished"/>
+        <translation>对元素添加括号</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3349"/>

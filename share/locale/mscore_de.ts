@@ -16812,7 +16812,7 @@ Soll sie überschrieben werden?</translation>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="72"/>
         <source>A♭ major / F minor</source>
-        <translation>As-Dur / fiMoll</translation>
+        <translation>As-Dur / f-Moll</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="77"/>

@@ -89,7 +89,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="17"/>
         <source>Album Manager</source>
-        <translation>アルバム マネージャ</translation>
+        <translation>アルバム マネージャー</translation>
     </message>
     <message>
         <location filename="../../mscore/albummanager.ui" line="28"/>
@@ -311,7 +311,7 @@
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="24"/>
         <source>Break systems every X measures</source>
-        <translation>譜表の折り返し を X小節ごとに付ける</translation>
+        <translation>譜表の折り返しを x小節ごとに付ける</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="27"/>
@@ -429,7 +429,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="315"/>
         <source>The gain reduction ratio used when the signal level exceeds the threshold.</source>
-        <translation>信号レベルがしきい値を超えたときに使用されるゲイン低減率</translation>
+        <translation>信号レベルが一定の値を超えたときに使用されるゲイン低減率</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="356"/>
@@ -3721,7 +3721,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="138"/>
         <source>XCircle</source>
-        <translation>ｘ サークル符頭</translation>
+        <translation>xサークル符頭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="143"/>
@@ -4436,12 +4436,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="112"/>
         <source>Grow right:</source>
-        <translation>右側の旗の位置:</translation>
+        <translation>右旗の位置:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="125"/>
         <source>Grow left:</source>
-        <translation>左側の旗の位置:</translation>
+        <translation>左旗の位置:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="138"/>
@@ -7008,7 +7008,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrwizard.ui" line="25"/>
         <source>Instrument Genre Filter</source>
-        <translation>楽器ジャンルフィルタ</translation>
+        <translation>楽器ジャンルフィルター</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwizard.ui" line="32"/>
@@ -7132,7 +7132,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="42"/>
         <source>Instrument Genre Filter</source>
-        <translation>楽器ジャンルフィルタ</translation>
+        <translation>楽器ジャンルフィルター</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="55"/>
@@ -7702,7 +7702,7 @@ pickup measure</source>
 You only need to do this once.
 
 Would you like to locate %2 now?</source>
-        <translation>MuseScoreはMP3を書き出すために無料のLAMEエンコーダを使用します。
+        <translation>MuseScore はMP3を書き出すために無料の LAMEエンコーダ を使用します。
 別途 %1 を取得しエンコーダーの場所を手動で指定 (詳細はハンドブックを確認して下さい)しなければなりません。
 この操作は初回のみで次回以降は不要です。
 
@@ -8170,8 +8170,8 @@ Support MuseScore with your %3donation%4.
 
 Copyright &amp;copy; 1999-2018 Werner Schweer and Others.
 Published under the GNU General Public License.</source>
-        <translation>新バージョンや他の情報を得るには %1www.musescore.org%2  にアクセスしてください。
-MuseScoreはあなたの %3寄付%4 で支援することができます。
+        <translation>新しいバージョンや他の情報を得るには %1www.musescore.org%2  にアクセスしてください。
+MuseScore はあなたの %3寄付%4 で支援することができます。
 
 Copyright &amp;copy; 1999-2018 Werner Schweer and Others.
 Published under the GNU General Public License.</translation>
@@ -8641,7 +8641,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="228"/>
         <source>One or more installed extensions have updates available in Help / Resource Manager...</source>
-        <translation>アップデート可能になった拡張機能がにあります。 ヘルプ／リソースマネージャ を確認してください。</translation>
+        <translation>アップデート可能な拡張機能があります。 ヘルプ／リソースマネージャー を確認してください。</translation>
     </message>
 </context>
 <context>
@@ -9023,7 +9023,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/loginmanager.cpp" line="469"/>
         <source>Sorry, MuseScore couldn&apos;t upload the audio file. Error %1</source>
-        <translation>申し訳ありませんが、MuseScoreはこのオーディオファイルをアップロードできませんでした。Error %1</translation>
+        <translation>申し訳ありませんが、このオーディオファイルをアップロードできませんでした。Error %1</translation>
     </message>
     <message>
         <location filename="../../mscore/loginmanager.cpp" line="572"/>
@@ -9744,7 +9744,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/menus.cpp" line="1292"/>
         <source>&amp;Measures</source>
-        <translation>小節(&amp;M)</translation>
+        <translation>小節</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1299"/>
@@ -9771,12 +9771,12 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="510"/>
         <source>Please wait, unpacking extension...</source>
-        <translation>お待ちください、拡張機能を開いています。。</translation>
+        <translation>拡張機能を開いています…</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="583"/>
         <source>Please wait, loading soundfonts...</source>
-        <translation>お待ちください、サウンドフォントを読み込んでいます。。</translation>
+        <translation>サウンドフォントを読み込んでいます…</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="733"/>
@@ -9881,7 +9881,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1072"/>
         <source>&amp;Voices</source>
-        <translation>声部(&amp;V)</translation>
+        <translation>声部</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1087"/>
@@ -10610,7 +10610,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="199"/>
         <source>MuseScore Plugin Creator</source>
-        <translation>MuseScore プラグイン クリエイタ</translation>
+        <translation>MuseScore プラグイン クリエイター</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="245"/>
@@ -11009,7 +11009,8 @@ Save before closing?</source>
         <location filename="../../mscore/resourceManager.cpp" line="339"/>
         <source>Unable to download, save and verify the package.
 Check your internet connection.</source>
-        <translation>パッケージをダウンロード、保存、検証することができません - インターネット接続を確かめてください</translation>
+        <translation>パッケージをダウンロード、保存、検証することができません。
+インターネット接続を確かめてください。</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="133"/>
@@ -11603,7 +11604,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="39"/>
         <source>Selection filter</source>
-        <translation>選択フィルタ</translation>
+        <translation>選択フィルター</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="40"/>
@@ -11616,7 +11617,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="60"/>
         <source>Selection Filter</source>
-        <translation>選択フィルタ</translation>
+        <translation>選択フィルター</translation>
     </message>
 </context>
 <context>
@@ -12972,7 +12973,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/pluginCreator.ui" line="171"/>
         <source>Close Plugin Creator</source>
-        <translation>プラグイン クリエイタを閉じる</translation>
+        <translation>プラグイン クリエイターを閉じる</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.ui" line="179"/>
@@ -12995,7 +12996,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/pluginManager.ui" line="17"/>
         <source>Plugin Manager</source>
-        <translation>プラグイン マネージャ</translation>
+        <translation>プラグイン マネージャー</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginManager.ui" line="44"/>
@@ -13062,7 +13063,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="96"/>
         <source>Preferences Tab Manager</source>
-        <translation>環境設定タブ マネージャ</translation>
+        <translation>環境設定タブマネージャー</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="103"/>
@@ -14683,12 +14684,12 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4197"/>
         <source>Check for new version of MuseScore</source>
-        <translation>新バージョンのチェック</translation>
+        <translation>新しいバージョンのチェック</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4204"/>
         <source>Check for new version of MuseScore extensions</source>
-        <translation>新しいバージョンのMuseScore拡張機能を確認する</translation>
+        <translation>MuseScore拡張機能の新しいバージョンをチェック</translation>
     </message>
 </context>
 <context>
@@ -15248,17 +15249,17 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="405"/>
         <source>Cannot import extension on read-only storage: %1</source>
-        <translation>読み取り専用のストーレージ上には拡張子をインポートすることができません: %1</translation>
+        <translation>読み取り専用のストレージ上には拡張機能をインポートすることができません: %1</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="410"/>
         <source>Cannot import extension: storage %1 is full</source>
-        <translation>拡張機能をインポートできません。ストレージ %1 は十分な空き容量がありません。</translation>
+        <translation>拡張機能をインポートできません: ストレージ %1 に十分な空き容量がありません。</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="440"/>
         <source>Corrupted extension: no metadata.json</source>
-        <translation>拡張機能が破損しています: metadata.jsonがありません。</translation>
+        <translation>拡張機能が破損しています: metadata.json がありません。</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="445"/>
@@ -15273,7 +15274,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="465"/>
         <source>Corrupted extension: corrupted metadata.json</source>
-        <translation>拡張機能が破損しています: metadata.jsonが破損しています。</translation>
+        <translation>拡張機能が破損しています: metadata.json が破損しています。</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="484"/>
@@ -15335,12 +15336,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="24"/>
         <source>Extensions</source>
-        <translation>拡張機能:</translation>
+        <translation>拡張機能</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="60"/>
         <source>Extension</source>
-        <translation>拡張</translation>
+        <translation>拡張機能</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="65"/>
@@ -18975,12 +18976,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1165"/>
         <source>Append One Measure</source>
-        <translation>1小節追加</translation>
+        <translation>小節追加</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1166"/>
         <source>Append one measure</source>
-        <translation>1小節追加</translation>
+        <translation>小節追加</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1172"/>
@@ -18995,12 +18996,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1179"/>
         <source>Insert One Measure</source>
-        <translation>1小節挿入</translation>
+        <translation>小節挿入</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1180"/>
         <source>Insert one measure</source>
-        <translation>1小節挿入</translation>
+        <translation>小節挿入</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1188"/>
@@ -19684,12 +19685,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1780"/>
         <source>Selection Filter</source>
-        <translation>選択フィルタ</translation>
+        <translation>選択フィルター</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1781"/>
         <source>Toggle &apos;Selection Filter&apos;</source>
-        <translation>選択フィルタ 切替</translation>
+        <translation>選択フィルター 切替</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1826"/>
@@ -20776,22 +20777,22 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2757"/>
         <source>Plugin Creator...</source>
-        <translation>プラグイン クリエイタ...</translation>
+        <translation>プラグイン クリエイター...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2758"/>
         <source>Plugin creator</source>
-        <translation>プラグイン クリエイタ</translation>
+        <translation>プラグイン クリエイター</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2767"/>
         <source>Plugin Manager...</source>
-        <translation>プラグイン マネージャ...</translation>
+        <translation>プラグイン マネージャー...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2768"/>
         <source>Plugin manager</source>
-        <translation>プラグイン マネージャ</translation>
+        <translation>プラグイン マネージャー</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2777"/>
@@ -20806,12 +20807,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2784"/>
         <source>Resource Manager...</source>
-        <translation>リソース マネージャ...</translation>
+        <translation>リソース マネージャー...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2785"/>
         <source>Resource manager</source>
-        <translation>リソース マネージャ</translation>
+        <translation>リソース マネージャー</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2795"/>
@@ -23904,7 +23905,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="195"/>
         <source>Extensions</source>
-        <translation>拡張機能:</translation>
+        <translation>拡張機能</translation>
     </message>
 </context>
 <context>

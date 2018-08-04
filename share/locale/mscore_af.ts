@@ -9939,7 +9939,7 @@ Kies asseblief &apos;n maat en probeer weer</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1358"/>
         <source>Check for &amp;Update</source>
-        <translation>Kyk vir nuwe &amp;weergawe</translation>
+        <translation>Soek vir &amp;bywerking</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1363"/>
@@ -11801,18 +11801,18 @@ kies asseblief &apos;n ander naam:</translation>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="99"/>
         <source>An update for MuseScore is available: %1MuseScore %2 r.%3%4</source>
-        <translation>&apos;n Nuwe weergawe van MuseScore is beskikbaar: %1MuseScore %2 r.%3%4</translation>
+        <translation>&apos;n MuseScore-bywerking is beskikbaar: %1MuseScore %2 r.%3%4</translation>
     </message>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="107"/>
         <source>Update Available</source>
-        <translation>Nuwe weergawe beskikbaar</translation>
+        <translation>Bywerking beskikbaar</translation>
     </message>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="114"/>
         <location filename="../../mscore/updatechecker.cpp" line="115"/>
         <source>No Update Available</source>
-        <translation>Geen nuwe weergawe beskikbaar</translation>
+        <translation>Geen bywerking beskikbaar</translation>
     </message>
 </context>
 <context>

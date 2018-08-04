@@ -20,12 +20,12 @@
 
 REVISION  = `cat mscore/revision.h`
 #VERSION   = "2.3b-${REVISION}"
-VERSION = 2.3
+VERSION = 2.3.2
 PREFIX=../applebuild
 
 XCODEPROJ = mscore.xcodeproj
 
-BUILD_WEBKIT="ON"     # Override with "OFF" to disable.
+BUILD_WEBKIT="OFF"     # Override with "ON" to disable.
 
 # Use xcpretty if installed
 ifneq ($(strip $(shell which xcpretty)),)

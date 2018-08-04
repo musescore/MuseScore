@@ -291,6 +291,7 @@ add_executable ( ${ExecutableName}
       help.cpp help.h
       toolbuttonmenu.cpp
       extension.cpp extension.h
+      edata.cpp
 
       ${COCOABRIDGE}
       ${OMR_FILES}

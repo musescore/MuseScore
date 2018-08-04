@@ -306,12 +306,12 @@
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="14"/>
         <source>Add/Remove System Breaks</source>
-        <translation type="unfinished"/>
+        <translation>הוסף/הסר שבירת סיסטמות</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="24"/>
         <source>Break systems every X measures</source>
-        <translation type="unfinished"/>
+        <translation>שבור סיסטמות כל X תיבות</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="27"/>
@@ -18121,17 +18121,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="484"/>
         <source>Add A</source>
-        <translation type="unfinished"/>
+        <translation>הוסף לה</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="485"/>
         <source>Add note A to chord</source>
-        <translation type="unfinished"/>
+        <translation>הוסף תו לה לאקורד</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="491"/>
         <source>Add B</source>
-        <translation type="unfinished"/>
+        <translation>הוסף סי</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="492"/>

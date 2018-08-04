@@ -870,14 +870,13 @@ void Score::layoutChords3(QList<Note*>& notes, Staff* staff, Segment* segment)
             //if (chord->stem())
             //      chord->stem()->rxpos() = _up ? x + hw - stemWidth5 : x + stemWidth5;
 
-            qreal xx = x + chord->stemPosX() + chord->pos().x();
+            qreal xx = x + note->headBodyWidth() + chord->pos().x();
 
             if (chord->dots()) {
                   if (chord->up())
                         upDotPosX = qMax(upDotPosX, xx);
                   else {
-                        qreal noteheadShift = note->headBodyWidth();
-                        downDotPosX = qMax(downDotPosX, xx + noteheadShift);
+                        downDotPosX = qMax(downDotPosX, xx);
                         }
 
                   MScore::Direction dotPosition = note->userDotPosition();

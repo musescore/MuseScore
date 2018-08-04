@@ -77,6 +77,7 @@ Kept as an example of how to integrate with a complex synthesizer.
     Clone from [Qt Single Application](https://github.com/qtproject/qt-solutions/tree/master/qtsingleapplication)
 
     * **thirdparty/portmidi**
+
     Clone from [PortMidi](https://sourceforge.net/projects/portmedia/)
 
     * **thirdparty/beatroot**
@@ -133,3 +134,15 @@ To generate program documentation using DoxyGen, first do `make debug`, then typ
     make doxy
 
 Browse the documentation in subdirectory Doc/html/index.html using any html browser.
+
+### OMR
+
+* **Export data for OMR** - mscore file.mscz -o file.png -A
+
+* **Missing Shapes in SMuFL**
+
+  bracketLine:
+  ![bracketLine](omr/reference_data/bracketLine.png)
+
+  bracketSquare:
+  ![bracketSquare](omr/reference_data/bracketSquare.png)

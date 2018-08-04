@@ -82,7 +82,7 @@ include (CreatePrecompiledHeader)
 
 set (CMAKE_AUTOMOC TRUE)
 
-set(MSCORE_UNSTABLE  FALSE)          # mark as unstable
+set(MSCORE_UNSTABLE FALSE)          # mark as unstable
 
 set(USE_SSE           TRUE)
 set(SCRIPT_INTERFACE  TRUE)
@@ -127,7 +127,7 @@ option(BUILD_PULSEAUDIO "Build with support for Pulseaudio audio backend." ON)
 option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
 option(BUILD_PORTAUDIO "Build with support for Portaudio audio backend." ON)
 option(BUILD_PORTMIDI "Build with support for PortAudio's MIDI features." ${BUILD_PORTAUDIO}) # PortAudio required
-option(BUILD_WEBKIT "Built in webkit support" ON)
+option(BUILD_WEBKIT "Built in webkit support" OFF)
 option(BUILD_PCH "Build using precompiled headers." OFF)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 
@@ -194,7 +194,7 @@ set(CMAKE_SKIP_RULE_DEPENDENCY TRUE)
 SET(MUSESCORE_NAME "MuseScore")
 SET(MUSESCORE_VERSION_MAJOR  "2")
 SET(MUSESCORE_VERSION_MINOR  "3")
-SET(MUSESCORE_VERSION_PATCH  "0")
+SET(MUSESCORE_VERSION_PATCH  "2")
 SET(MUSESCORE_VERSION       "${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}")
 SET(MUSESCORE_NAME_VERSION "${MUSESCORE_NAME} ${MUSESCORE_VERSION_MAJOR}")
 #

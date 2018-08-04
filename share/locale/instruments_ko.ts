@@ -5889,7 +5889,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1031"/>
         <source>7-string Guitar</source>
-        <translation type="unfinished"/>
+        <translation>7현 기타</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1032"/>
@@ -5900,23 +5900,23 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1033"/>
         <source>7-string Guitar [Tablature]</source>
-        <translation type="unfinished"/>
+        <translation>7현 기타 [타브 악보]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1034"/>
         <source>Cavaquinho</source>
-        <translation type="unfinished"/>
+        <translation>카바킨호</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1035"/>
         <source>Cava.</source>
         <comment>Cavaquinho</comment>
-        <translation type="unfinished"/>
+        <translation>Cava.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1036"/>
         <source>Cavaquinho [Tablature]</source>
-        <translation type="unfinished"/>
+        <translation>카바킨호 [타브 악보]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1037"/>

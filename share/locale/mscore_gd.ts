@@ -9,7 +9,7 @@
     <message>
         <location filename="../../mscore/aboutbox.ui" line="130"/>
         <source>Copy revision number</source>
-        <translation>Àireamh lèirmheas an lethbhric</translation>
+        <translation>Dèan lethbhreac dhen àireamh lèirmheis</translation>
     </message>
 </context>
 <context>
@@ -227,7 +227,7 @@
     <message>
         <location filename="../../mscore/articulation.ui" line="86"/>
         <source>Chord Automatic</source>
-        <translation>Còrd fèin-obrachail</translation>
+        <translation>A-rèir a’ chùird</translation>
     </message>
     <message>
         <location filename="../../mscore/articulation.ui" line="91"/>
@@ -2801,7 +2801,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2733"/>
         <source>Standard TAB clef</source>
-        <translation>Iuchair TAB stannnardach</translation>
+        <translation>Iuchair TAB stannardach</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2740"/>
@@ -3268,7 +3268,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4997"/>
         <source>Stem distance:</source>
-        <translation>Astar an earbaill:</translation>
+        <translation>Astar nan earball:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5007"/>
@@ -3281,7 +3281,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5017"/>
         <source>Articulation distance:</source>
-        <translation>Astar an altachaidh:</translation>
+        <translation>Astar nan altachaidhean:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5037"/>
@@ -3291,7 +3291,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5073"/>
         <source>Articulation size:</source>
-        <translation>Meud an altachaidh:</translation>
+        <translation>Meud nan altachaidhean:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5151"/>
@@ -3408,7 +3408,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5572"/>
         <source>Chord Symbols, Fretboard Diagrams</source>
-        <translation>Samhlaidhean cùird, diagraman bùird-cheapan</translation>
+        <translation>Cùird, bùird-cheapan</translation>
     </message>
 </context>
 <context>
@@ -6032,7 +6032,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_note.ui" line="669"/>
         <location filename="../../mscore/inspector/inspector_note.ui" line="672"/>
         <source>Fix to line</source>
-        <translation>Glais ris an loidhne</translation>
+        <translation>Glais ri loidhne</translation>
     </message>
 </context>
 <context>
@@ -9139,7 +9139,7 @@ a shàbhaladh mus dùin thu e?</translation>
         <location filename="../../mscore/file.cpp" line="289"/>
         <location filename="../../mscore/file.cpp" line="2329"/>
         <source>All Supported Files</source>
-        <translation>A h-uile faidhle ris an cuirear taic</translation>
+        <translation>Gach faidhle ris an cuirear taic</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="291"/>
@@ -10967,7 +10967,7 @@ A bheil thu airson a shàbhaladh mus dùin thu e?</translation>
         <location filename="../../mscore/resourceManager.cpp" line="130"/>
         <location filename="../../mscore/resourceManager.cpp" line="205"/>
         <source>Update</source>
-        <translation>Ùraich</translation>
+        <translation>Ùrachadh</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="114"/>
@@ -14350,7 +14350,7 @@ Ma chuireas tu gleus air an fhoillidheachd, dh’fhaoidte gun cuidich seo le sio
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3333"/>
         <source>Import</source>
-        <translation>Ion-phortaich</translation>
+        <translation>Ion-phortadh</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3339"/>
@@ -14485,7 +14485,7 @@ Ma chuireas tu gleus air an fhoillidheachd, dh’fhaoidte gun cuidich seo le sio
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3583"/>
         <source>Export</source>
-        <translation>Às-phortaich</translation>
+        <translation>Às-phortadh</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3602"/>
@@ -16104,7 +16104,7 @@ A bheil thu airson sgrìobhadh thairis air?</translation>
     <message>
         <location filename="../../mscore/textproperties.ui" line="302"/>
         <source>Size follows &apos;Staff space&apos; setting</source>
-        <translation>Tha am meud a-rèir na roghainn “Eadra-loidhne na clèithe”</translation>
+        <translation>Meud a-rèir na roghainn “Eadra-loidhne na clèithe”</translation>
     </message>
     <message>
         <location filename="../../mscore/textproperties.ui" line="319"/>
@@ -20244,12 +20244,12 @@ a sgrìobhadh: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2288"/>
         <source>Edit Element</source>
-        <translation>Deasaich eileamaid</translation>
+        <translation>Deasaich an eileamaid</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2289"/>
         <source>Edit element</source>
-        <translation>Deasaich eileamaid</translation>
+        <translation>Deasaich an eileamaid</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2295"/>

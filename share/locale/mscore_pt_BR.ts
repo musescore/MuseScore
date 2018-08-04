@@ -9322,23 +9322,23 @@ antes de fechar?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="1352"/>
         <source>Load Plugin</source>
-        <translation>Carregar Plugin</translation>
+        <translation>Carregar Extensão</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1353"/>
         <source>MuseScore Plugin</source>
-        <translation>Plugin MuseScore</translation>
+        <translation>Extensão MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1356"/>
         <location filename="../../mscore/file.cpp" line="1406"/>
         <source>Save Plugin</source>
-        <translation>Salvar Plugin</translation>
+        <translation>Salvar Extensão</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1357"/>
         <source>MuseScore Plugin File</source>
-        <translation>Arquivo de Plugin MuseScore</translation>
+        <translation>Arquivo de Extensão do MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1435"/>
@@ -9933,7 +9933,7 @@ Por favor, selecione um compasso e tente novamente</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1308"/>
         <source>&amp;Plugins</source>
-        <translation>&amp;Plugins</translation>
+        <translation>&amp;Extensões</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1325"/>
@@ -10348,7 +10348,7 @@ com a Internet habilitada</translation>
     <message>
         <location filename="../../effects/noeffect/noeffect.cpp" line="41"/>
         <source>No Plugin</source>
-        <translation>Sem Plugins</translation>
+        <translation>Sem Extensões</translation>
     </message>
 </context>
 <context>
@@ -10616,7 +10616,7 @@ com a Internet habilitada</translation>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="199"/>
         <source>MuseScore Plugin Creator</source>
-        <translation>Criador de plugin do MuseScore</translation>
+        <translation>Criador da Extensão do MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="245"/>
@@ -10631,8 +10631,8 @@ com a Internet habilitada</translation>
         <location filename="../../mscore/pluginCreator.cpp" line="492"/>
         <source>Plugin &quot;%1&quot; has changes.
 Save before closing?</source>
-        <translation>O plugin &quot;%1&quot; foi alterado.
-Salvá-lo antes de fechar?</translation>
+        <translation>A extensão &quot;%1&quot; foi alterada.
+Salvá-la antes de fechar?</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="295"/>
@@ -10651,7 +10651,7 @@ Salvá-lo antes de fechar?</translation>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="316"/>
         <source>Plugin Details:</source>
-        <translation>Detalhes do Plugin:</translation>
+        <translation>Detalhes da Extensão:</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="317"/>
@@ -10676,8 +10676,7 @@ Salvá-lo antes de fechar?</translation>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="455"/>
         <source>Save Plugin</source>
-        <translation>Salvar Plugin
-</translation>
+        <translation>Salvar Extensão</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.cpp" line="455"/>
@@ -10705,7 +10704,7 @@ Salvá-lo antes de fechar?</translation>
     <message>
         <location filename="../../mscore/pluginManager.cpp" line="208"/>
         <source>Plugins reloaded.</source>
-        <translation>Plugins recarregados.</translation>
+        <translation>Extensões recarregadas.</translation>
     </message>
 </context>
 <context>
@@ -10936,7 +10935,7 @@ Salvá-lo antes de fechar?</translation>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1803"/>
         <source>Choose Plugin Folder</source>
-        <translation>Escolha a Pasta de Plugins</translation>
+        <translation>Escolha a Pasta de Extensões</translation>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1819"/>
@@ -12981,7 +12980,7 @@ falhou: </translation>
     <message>
         <location filename="../../mscore/pluginCreator.ui" line="171"/>
         <source>Close Plugin Creator</source>
-        <translation>Fechar Criador de plugin</translation>
+        <translation>Fechar Criador de Extensão</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.ui" line="179"/>
@@ -12991,7 +12990,7 @@ falhou: </translation>
     <message>
         <location filename="../../mscore/pluginCreator.ui" line="182"/>
         <source>Reload current plugin source</source>
-        <translation>Recarregue o fonte do plugin atual</translation>
+        <translation>Recarregue o fonte da extensão atual</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginCreator.ui" line="187"/>
@@ -13004,7 +13003,7 @@ falhou: </translation>
     <message>
         <location filename="../../mscore/pluginManager.ui" line="17"/>
         <source>Plugin Manager</source>
-        <translation>Gerenciador de plugins</translation>
+        <translation>Gerenciador de Extensão</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginManager.ui" line="44"/>
@@ -13040,13 +13039,13 @@ falhou: </translation>
         <location filename="../../mscore/pluginManager.ui" line="126"/>
         <source>Reload all plugins.
 This will re-evaluate all plugins, picking up any changes that may have occurred.</source>
-        <translation>Recarregar plugins.
-Isto vai reavaliar todos plugins, atualizando qualquer modificação que tenha ocorrido.</translation>
+        <translation>Recarregar extensões.
+Isto vai reavaliar todas as extensões, atualizando qualquer modificação que tenha ocorrido.</translation>
     </message>
     <message>
         <location filename="../../mscore/pluginManager.ui" line="130"/>
         <source>Reload Plugins</source>
-        <translation>Recarregar Plugins</translation>
+        <translation>Recarregar Extensões</translation>
     </message>
 </context>
 <context>
@@ -13248,7 +13247,7 @@ Isto vai reavaliar todos plugins, atualizando qualquer modificação que tenha o
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="452"/>
         <source>Plugins:</source>
-        <translation>Plugins:</translation>
+        <translation>Extensões:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="465"/>
@@ -13263,12 +13262,12 @@ Isto vai reavaliar todos plugins, atualizando qualquer modificação que tenha o
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="475"/>
         <source>Plugin folder</source>
-        <translation>Pasta de plugin</translation>
+        <translation>Pasta de Extensão</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="478"/>
         <source>Insert path to plugin folder</source>
-        <translation>Insira o caminho para a pasta de plugin</translation>
+        <translation>Insira o caminho para a pasta de extensão</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="485"/>
@@ -13284,12 +13283,12 @@ Isto vai reavaliar todos plugins, atualizando qualquer modificação que tenha o
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="498"/>
         <source>Choose plugin folder</source>
-        <translation>Escolha pasta de plugin</translation>
+        <translation>Escolha pasta de extensão</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="501"/>
         <source>Opens a folder dialog for selecting the plugin folder</source>
-        <translation>Abre uma caixa de diálogo de pastas para selecionar pasta de plugin</translation>
+        <translation>Abre uma caixa de diálogo de pastas para selecionar pasta de extensão</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="515"/>
@@ -20788,22 +20787,22 @@ falhou: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2757"/>
         <source>Plugin Creator...</source>
-        <translation>Criador de plugin...</translation>
+        <translation>Criador de extensão...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2758"/>
         <source>Plugin creator</source>
-        <translation>Criador de plugin</translation>
+        <translation>Criador de extensão</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2767"/>
         <source>Plugin Manager...</source>
-        <translation>Gerenciador de plugins...</translation>
+        <translation>Gerenciador de Extensões...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2768"/>
         <source>Plugin manager</source>
-        <translation>Gerenciador de plugins</translation>
+        <translation>Gerenciador de extensões</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2777"/>
@@ -24193,7 +24192,7 @@ O compasso não está vazio</translation>
     <message>
         <location filename="../../mscore/preferences.cpp" line="193"/>
         <source>Plugins</source>
-        <translation>Plugins</translation>
+        <translation>Extensões</translation>
     </message>
 </context>
 <context>

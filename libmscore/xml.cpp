@@ -597,6 +597,12 @@ void Xml::tag(const QString& name, QVariant data)
                   *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(p.width()).arg(p.height());
                   }
                   break;
+            case QVariant::Size:
+                  {
+                  QSize p(data.value<QSize>());
+                  *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(p.width()).arg(p.height());
+                  }
+                  break;
             default:
                   qDebug("Xml::tag: unsupported type %d", data.type());
                   // abort();

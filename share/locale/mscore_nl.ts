@@ -8637,12 +8637,12 @@ openen mislukt:</translation>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="227"/>
         <source>Extension Updates Available</source>
-        <translation>Nieuwe versie van uitbreidingen beschikbaar</translation>
+        <translation>Nieuwe versies van uitbreidingen beschikbaar</translation>
     </message>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="228"/>
         <source>One or more installed extensions have updates available in Help / Resource Manager...</source>
-        <translation>Een of meerdere uitbreidingen kunnen bijgewerkt worden naar een nieuwe versie. Ga naar Help → Beheer databronnen…</translation>
+        <translation>Een of meerdere geïnstalleerde uitbreidingen kunnen bijgewerkt worden naar een nieuwere versie. Ga naar Help → Beheer databronnen…</translation>
     </message>
 </context>
 <context>
@@ -9777,7 +9777,7 @@ selecteer eerst een maat en probeer het dan opnieuw</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="583"/>
         <source>Please wait, loading soundfonts...</source>
-        <translation>Even geduld, laden soundfonts...</translation>
+        <translation>Even geduld, soundfonts worden geladen...</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="733"/>
@@ -11001,18 +11001,18 @@ Opslaan voor sluiten?</translation>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="335"/>
         <source>Extensions Installation Failed</source>
-        <translation>Installeren uitbreiding mislukt</translation>
+        <translation>Het installeren van de uitbreiding is mislukt</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="337"/>
         <source>Unable to save the extension file on disk</source>
-        <translation>Kan het uitbreidingsbestand niet opslaan op de schijf</translation>
+        <translation>Kan het uitbreidingsbestand niet opslaan op de harde schijf</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="339"/>
         <source>Unable to download, save and verify the package.
 Check your internet connection.</source>
-        <translation>Downloaden, opslaan en verifiëren van het pakket mislukt.
+        <translation>Het downloaden, opslaan en verifiëren van het pakket is mislukt.
 Controleer uw internetverbinding.</translation>
     </message>
     <message>
@@ -15250,7 +15250,7 @@ Wil je dit overschrijven?</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="405"/>
         <source>Cannot import extension on read-only storage: %1</source>
-        <translation>Kan uitbreiding niet importeren in alleen-lezen opslagruimte: %1</translation>
+        <translation>Kan de uitbreiding niet importeren in de alleen-lezen opslagruimte: %1</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="410"/>

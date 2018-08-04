@@ -140,6 +140,7 @@ QString dataPath;
 QString iconPath;
 
 bool converterMode = false;
+bool edata = false;
 bool processJob = false;
 bool externalIcons = false;
 bool pluginMode = false;
@@ -177,6 +178,8 @@ extern TextPalette* textPalette;
 static constexpr double SCALE_MAX  = 16.0;
 static constexpr double SCALE_MIN  = 0.05;
 static constexpr double SCALE_STEP = 1.7;
+
+static const char* uploadMenuActionId = "file-save-online";
 
 //---------------------------------------------------------
 // cmdInsertMeasure
@@ -662,6 +665,16 @@ bool MuseScore::uninstallExtension(QString extensionId)
       }
 
 //---------------------------------------------------------
+//   isInstalled
+///  used from javascript in start center webview
+//---------------------------------------------------------
+
+bool MuseScore::isInstalledExtension(QString extensionId)
+      {
+      return Extension::isInstalled(extensionId);
+      }
+
+//---------------------------------------------------------
 //   MuseScore
 //---------------------------------------------------------
 
@@ -708,25 +721,6 @@ MuseScore::MuseScore()
                   MScore::defaultStyle()->load(&f);
                   f.close();
                   }
-            }
-
-      if (!converterMode && !pluginMode) {
-            _loginManager = new LoginManager(this);
-#if 0
-            // initialize help engine
-            QString lang = mscore->getLocaleISOCode();
-            if (lang == "en_US")    // HACK
-                  lang = "en";
-
-            QString s = getSharePath() + "manual/doc_" + lang + ".qhc";
-            qDebug("init Help from: <%s>", qPrintable(s));
-            _helpEngine = new QHelpEngine(s, this);
-            if (!_helpEngine->setupData()) {
-                  qDebug("cannot setup data for help engine: %s", qPrintable(_helpEngine->error()));
-                  delete _helpEngine;
-                  _helpEngine = 0;
-                  }
-#endif
             }
 
       _positionLabel = new QLabel;
@@ -1015,7 +1009,7 @@ MuseScore::MuseScore()
 
       for (auto i : {
             "", "file-save", "file-save-as", "file-save-a-copy",
-            "file-save-selection", "file-save-online", "file-export", "file-part-export", "file-import-pdf",
+            "file-save-selection", uploadMenuActionId, "file-export", "file-part-export", "file-import-pdf",
             "", "file-close", "", "parts", "album" }) {
             if (!*i)
                   _fileMenu->addSeparator();
@@ -1402,6 +1396,9 @@ MuseScore::MuseScore()
             cornerLabel->setPixmap(QPixmap(":/data/mscore.png"));
             cornerLabel->setGeometry(width() - 48, 0, 48, 48);
             }
+
+      if (!converterMode && !pluginMode)
+            _loginManager = new LoginManager(getAction(uploadMenuActionId), this);
       }
 
 MuseScore::~MuseScore()
@@ -4136,6 +4133,7 @@ void MuseScore::splitWindow(bool horizontal)
             if (_horizontalSplit == horizontal) {
                   _splitScreen = false;
                   tab2->setVisible(false);
+                  setCurrentView(0, tab1->currentIndex());
                   }
             else {
                   _horizontalSplit = horizontal;
@@ -4822,7 +4820,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             loadFiles();
       else if (cmd == "file-save")
             saveFile();
-      else if (cmd == "file-save-online")
+      else if (cmd == uploadMenuActionId)
             showUploadScoreDialog();
       else if (cmd == "file-export")
             exportFile();
@@ -5632,14 +5630,36 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               playTime  += n;
                               frames    -= n;
                               }
-                        const NPlayEvent& e = playPos->second;
-                        if (e.isChannelEvent()) {
-                              int channelIdx = e.channel();
+                        const NPlayEvent& event = playPos->second;
+                        if (event.isChannelEvent()) {
+                              int channelIdx = event.channel();
                               Channel* c = score->midiMapping(channelIdx)->articulation;
-                              if (!c->mute) {
-                                    synti->play(e, synti->index(c->synti));
+                              int type = event.type();
+                              int syntiIndex = synti->index(c->synti);
+                              if (type == ME_NOTEON) {
+                                    bool mute;
+                                    const Note* note = event.note();
+                                    if (note) {
+                                          Instrument* instr = note->staff()->part()->instrument(note->chord()->tick());
+                                          const Channel* a = instr->channel(note->subchannel());
+                                          mute = a->mute || a->soloMute;
+                                          }
+                                    else
+                                          mute = false;
+
+                                    if (!mute) {
+                                          if (event.discard()) { // ignore noteoff but restrike noteon
+                                                if (event.velo() > 0)
+                                                      synti->play(NPlayEvent(ME_NOTEON, event.channel(), event.pitch(), 0), syntiIndex);
+                                                else
+                                                      continue;
+                                                }
+                                          synti->play(event, syntiIndex);
+                                          }
                                     }
-                              }
+                              else if (type == ME_CONTROLLER || type == ME_PITCHBEND)
+                                    synti->play(event, syntiIndex);
+                            }
                         }
                   if (frames) {
                         float bu[frames * 2];
@@ -5804,7 +5824,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Used with '-o <file>.pdf', export score and parts"));
       parser.addOption(QCommandLineOption({"f", "force"}, "Used with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
       parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
-      parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless if -e is passed too", "extension file"));
+      parser.addOption(QCommandLineOption({"A", "emeta"}, "create metatdata xml file for every exported image file"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -5850,9 +5870,9 @@ int main(int argc, char* av[])
             if (pluginName.isEmpty())
                   parser.showHelp(EXIT_FAILURE);
             }
-      if (parser.isSet("E")) {
+      if (parser.isSet("A")) {
             MScore::noGui = true;
-            extensionName = parser.value("E");
+            extensionName = parser.value("A");
             }
       MScore::saveTemplateMode = parser.isSet("template-mode");
       if (parser.isSet("r")) {
@@ -5903,6 +5923,9 @@ int main(int argc, char* av[])
             styleFile = parser.value("S");
             if (styleFile.isEmpty())
                   parser.showHelp(EXIT_FAILURE);
+            }
+      if (parser.isSet("A")) {
+            edata = true;
             }
       useFactorySettings = parser.isSet("F");
       deletePreferences = (useFactorySettings || parser.isSet("R"));
