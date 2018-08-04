@@ -216,8 +216,8 @@ void ZerberusGui::loadSfz() {
 
      QStringList sl;
      for (int i = 0; i < files->count(); ++i) {
-           QListWidgetItem* item = files->item(i);
-           sl.append(item->text());
+           QListWidgetItem* item1 = files->item(i);
+           sl.append(item1->text());
            }
 
       if (sl.contains(sfName)) {

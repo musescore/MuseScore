@@ -170,7 +170,13 @@ void ResourceManager::displayLanguages()
 
       int row = 0;
       int col = 0;
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       QPushButton* updateButtons[rowCount];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<QPushButton*> updateButtons(rowCount);
+#endif
       QPushButton* temp;
       languagesTable->verticalHeader()->show();
 

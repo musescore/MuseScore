@@ -200,7 +200,9 @@ bool MidiCoreEvent::isChannelEvent() const
             default:
                   return false;
             }
-      return false;
+
+      // Prevent "unreachable code" warning.
+      // return false;
       }
 
 //---------------------------------------------------------

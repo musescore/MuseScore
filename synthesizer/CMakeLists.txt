@@ -18,22 +18,42 @@ else (APPLE)
       set(INCS "")
 endif (APPLE)
 
+if (NOT MSVC)
+   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
+else (NOT MSVC)
+   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
+endif (NOT MSVC)
+
 add_library (synthesizer STATIC
-      ${PROJECT_BINARY_DIR}/all.h
+      ${_all_h_file}
       ${PCH}
       msynthesizer.cpp
       event.cpp
       synthesizergui.cpp
       ${INCS}
       )
-set_target_properties (
+if (NOT MSVC)
+   set_target_properties (
       synthesizer
       PROPERTIES
          COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+else (NOT MSVC)
+   set_target_properties (
+      synthesizer
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE}"
+      )
+endif (NOT MSVC)   
 
 xcode_pch(synthesizer all)
 
-ADD_DEPENDENCIES(synthesizer mops1)
-ADD_DEPENDENCIES(synthesizer mops2)
+# Use MSVC pre-compiled headers
+vstudio_pch( synthesizer )
+
+# MSVC does not depend on mops1 & mops2 for PCH
+if (NOT MSVC)
+   ADD_DEPENDENCIES(synthesizer mops1)
+   ADD_DEPENDENCIES(synthesizer mops2)
+endif (NOT MSVC)   
 

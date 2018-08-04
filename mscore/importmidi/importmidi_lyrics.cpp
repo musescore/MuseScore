@@ -135,7 +135,7 @@ BestTrack findBestTrack(
 
 bool isTitlePrefix(const QString &text)
       {
-      return (text.left(TEXT_PREFIX.size()) == QString::fromStdString(TEXT_PREFIX));
+      return (text.left(TEXT_PREFIX.size()) == QString::fromUtf8(TEXT_PREFIX.data(), TEXT_PREFIX.size())); 
       }
 
 void addTitleToScore(Score *score, const QString &string, int textCounter)

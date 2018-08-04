@@ -108,7 +108,7 @@ FretDiagram* FretDiagram::fromString(Score* score, const QString &s)
       int barreString = -1;
       for (int i = 0; i < s.size(); i++) {
             QChar c = s.at(i);
-            if (c == 'X' or c == 'O')
+            if (c == 'X' || c == 'O')
                   fd->setMarker(i, c.unicode());
             else if (c == '-' && barreString == -1) {
                   fd->setBarre(1);

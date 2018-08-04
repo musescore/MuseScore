@@ -563,7 +563,8 @@ void Ambitus::updateRange()
       int   lastTrack   = firstTrack + VOICES-1;
       int   pitchTop    = -1000;
       int   pitchBottom = 1000;
-      int   tpcTop, tpcBottom;
+      int   tpcTop      = 0;  // Initialized to prevent warning
+      int   tpcBottom   = 0;  // Initialized to prevent warning
       int   trk;
       Measure* meas     = segment()->measure();
       Segment* segm     = meas->findSegment(SegmentType::ChordRest, segment()->tick());

@@ -240,7 +240,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
                 return false;
             }
             sf     = sf_open(qPrintable(filename), SFM_WRITE, &info);
-            if (sf == 0) {
+            if (sf == nullptr) {
                   qDebug("open soundfile failed: %s", sf_strerror(sf));
                   return false;
             }

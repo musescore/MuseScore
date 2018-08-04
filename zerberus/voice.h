@@ -17,6 +17,11 @@
 #include <math.h>
 #include "filter.h"
 
+// Disable warning C4201: nonstandard extension used: nameless struct/union in VS2017
+#if (defined (_MSCVER) || defined (_MSC_VER))
+      #pragma warning ( disable: 4201)
+#endif
+
 class Channel;
 struct Zone;
 class Sample;

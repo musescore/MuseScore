@@ -23,6 +23,13 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+
+#if (defined (_MSCVER) || defined (_MSC_VER))
+   // Include stdint.h and #define _STDINT_H to prevent <systemdeps.h> from redefining types
+   // #undef UNICODE to force LoadLibrary to use the char-based implementation instead of the wchar_t one.
+   #include <stdint.h>
+   #define _STDINT_H 1  
+#endif
 #include <jack/jack.h>
 #include <jack/thread.h>
 #include <jack/midiport.h>
@@ -53,19 +60,33 @@ static void *libjack_handle = 0;
 #endif
 
 
+// Since MSVC does not support the __attribute(constructor)__ extension, an alternative through
+//   static object construction is implemented. 
+//   See https://stackoverflow.com/questions/1113409/attribute-constructor-equivalent-in-vc for a similar
+//   approach.
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
 static void __attribute__((constructor)) tryload_libjack()
+#else
+static int tryload_libjack();
+static int tryload_static = tryload_libjack();
+static int tryload_libjack()
+#endif
 {
     if (getenv("SKIP_LIBJACK") == 0) { // just in case libjack is causing troubles..
     #ifdef __APPLE__
         libjack_handle = dlopen("libjack.0.dylib", RTLD_LAZY);
     #elif defined(WIN32)
-        libjack_handle = LoadLibrary("libjack.dll");
+        // Force char implementation of library instead of possibly wchar_t implementation to be called.
+        libjack_handle = LoadLibraryA("libjack.dll");
     #else
         libjack_handle = dlopen("libjack.so.0", RTLD_LAZY);
     #endif
 
     }
     libjack_is_present = (libjack_handle != 0);
+#if (defined (_MSCVER) || defined (_MSC_VER))
+    return 1;
+#endif
 }
 
 void *load_jack_function(const char *fn_name)

@@ -186,7 +186,12 @@ const char* toString(Direction val)
             case Direction::UP:   return "up";
             case Direction::DOWN: return "down";
             }
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       __builtin_unreachable();
+#else
+      // The MSVC __assume() optimizer hint is similar, though not identical, to __builtin_unreachable()
+      __assume(0);
+#endif
       }
 
 //---------------------------------------------------------

@@ -302,7 +302,8 @@ QString AccessibleAbstractSlider::text(QAccessible::Text t) const
             default:
                   return QString();
             }
-      return QString();
+      // Eliminate "unreachable code" 
+      // return QString();
       }
 
 void AccessibleAbstractSlider::valueChanged(double, int)

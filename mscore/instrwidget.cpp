@@ -680,7 +680,13 @@ void InstrumentsWidget::on_upButton_clicked()
                   // Qt looses the QComboBox set into StaffListItem's when they are re-inserted into the tree:
                   // get the currently selected staff type of each combo and re-insert
                   int numOfStaffListItems = item->childCount();
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
                   int staffIdx[numOfStaffListItems];
+#else
+                  // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+                  //    heap allocation is slow, an optimization might be used.
+                  std::vector<int> staffIdx(numOfStaffListItems);
+#endif
                   for (int itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
                         staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
                   // do not consider hidden ones
@@ -763,7 +769,13 @@ void InstrumentsWidget::on_downButton_clicked()
                   // Qt looses the QComboBox set into StaffListItem's when they are re-inserted into the tree:
                   // get the currently selected staff type of each combo and re-insert
                   int numOfStaffListItems = item->childCount();
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
                   int staffIdx[numOfStaffListItems];
+#else
+                  // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+                  //    heap allocation is slow, an optimization might be used.
+                  std::vector<int> staffIdx(numOfStaffListItems);
+#endif
                   int itemIdx;
                   for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
                         staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
