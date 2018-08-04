@@ -1,5 +1,8 @@
 SET BUILD_FOR_WINSTORE="OFF"
 
+IF NOT "%2"=="" (
+   SET BUILD_NUMBER=%2
+   )
 
 IF "%1"=="release" (
    echo releaseStep
