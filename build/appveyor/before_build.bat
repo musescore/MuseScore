@@ -31,10 +31,17 @@ SET PATH=C:\Qt\5.9\msvc2015\bin;%PATH%
 C:\MuseScore\msvc_build.bat revision
 ::git rev-parse --short=7 HEAD > mscore/revision.h
 SET /p MSversion=<mscore\revision.h
+
+echo on
+echo MSVersion:
+echo %MSversion%
+echo off
+
 @echo on
 echo MSVersion:
 echo %MSversion%
 @echo off
+
 :: CMake refuses to generate MinGW Makefiles if sh.exe is in the PATH (C:\Program Files\Git\usr\bin)
 SET PATH=C:\Qt\5.9\msvc2015\bin;C:\Program Files (x86)\CMake\bin;C:\Program Files\7-Zip;C:\ccache\bin;C:\Tools\curl\bin;%WIX%\bin;C:\Windows\system32;C:\Windows
 
