@@ -945,13 +945,13 @@ static Segment* getNextValidInputSegment(Segment* s, int track, int voice)
             return 0;
       Q_ASSERT(s->segmentType() == SegmentType::ChordRest);
       // Segment* s1 = s;
-      ChordRest* cr1;
+      ChordRest* cr1 = nullptr;
       for (Segment* s1 = s; s1; s1 = s1->prev(SegmentType::ChordRest)) {
             cr1 = toChordRest(s1->element(track + voice));
             if (cr1)
                   break;
             }
-      int nextTick = (cr1 == 0) ? s->measure()->tick() : cr1->tick() + cr1->actualTicks();
+      int nextTick = (cr1 == nullptr) ? s->measure()->tick() : cr1->tick() + cr1->actualTicks();
 
       static const SegmentType st { SegmentType::ChordRest };
       while (s) {
@@ -1871,6 +1871,16 @@ void Score::removeAudio()
       {
       delete _audio;
       _audio = 0;
+      }
+
+//---------------------------------------------------------
+//   isScoreLoaded
+//---------------------------------------------------------
+
+bool& Score::isScoreLoaded()
+      {
+      static bool scoreLoaded = false;
+      return scoreLoaded;
       }
 
 //---------------------------------------------------------

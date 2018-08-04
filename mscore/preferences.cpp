@@ -248,7 +248,7 @@ bool Preferences::checkIfKeyExists(const QString key) const
       {
       bool exists = _allPreferences.contains(key);
       if (!exists) {
-            qWarning("Preference not found: %s", key.toStdString().c_str());
+            qWarning("Preference not found: %s", key.toUtf8().constData());
             Q_ASSERT(exists);
             }
       return exists;
@@ -266,7 +266,7 @@ QMetaType::Type Preferences::type(const QString key) const
 bool Preferences::checkType(const QString key, QMetaType::Type t) const
       {
       if (type(key) != t) {
-            qWarning("Preference is not of correct type: %s", key.toStdString().c_str());
+            qWarning("Preference is not of correct type: %s", key.toUtf8().constData());
             Q_ASSERT(type(key) == QMetaType::Bool);
             }
       return type(key) == t;
@@ -319,7 +319,7 @@ int Preferences::getInt(const QString key) const
       bool ok;
       int pref = v.toInt(&ok);
       if (!ok) {
-            qWarning("Can not convert preference %s to int. Returning default value.", key.toStdString().c_str());
+            qWarning("Can not convert preference %s to int. Returning default value.", key.toUtf8().constData());
             return defaultValue(key).toInt();
             }
       return pref;
@@ -332,7 +332,7 @@ double Preferences::getDouble(const QString key) const
       bool ok;
       double pref = v.toDouble(&ok);
       if (!ok) {
-            qWarning("Can not convert preference %s to double. Returning default value.", key.toStdString().c_str());
+            qWarning("Can not convert preference %s to double. Returning default value.", key.toUtf8().constData());
             return defaultValue(key).toDouble();
             }
       return pref;

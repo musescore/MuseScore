@@ -24,6 +24,7 @@
 #cmakedefine USE_PORTMIDI
 #cmakedefine USE_PULSEAUDIO
 #cmakedefine USE_LAME
+#cmakedefine USE_WEBENGINE
 
 #cmakedefine FOR_WINSTORE
 

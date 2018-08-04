@@ -509,7 +509,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showWorkspaceMenu();
       void switchLayer(const QString&);
       void switchPlayMode(int);
-      void networkFinished(QNetworkReply*);
+      void networkFinished();
       void switchLayoutMode(int);
       void showMidiImportPanel();
       void changeWorkspace(QAction*);

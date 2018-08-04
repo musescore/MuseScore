@@ -574,10 +574,10 @@ void MQZipReaderPrivate::scanFiles()
 
     // find EndOfDirectory header
     int i = 0;
-    int start_of_directory = -1;
+    int start_of_directory_local = -1;
     int num_dir_entries = 0;
     EndOfDirectory eod;
-    while (start_of_directory == -1) {
+    while (start_of_directory_local == -1) {
         const int pos = device->size() - int(sizeof(EndOfDirectory)) - i;
         if (pos < 0 || i > 65535) {
             qWarning("QZip: EndOfDirectory not found");
@@ -592,16 +592,16 @@ void MQZipReaderPrivate::scanFiles()
     }
 
     // have the eod
-    start_of_directory = readUInt(eod.dir_start_offset);
+    start_of_directory_local = readUInt(eod.dir_start_offset);
     num_dir_entries = readUShort(eod.num_dir_entries);
-    ZDEBUG("start_of_directory at %d, num_dir_entries=%d", start_of_directory, num_dir_entries);
+    ZDEBUG("start_of_directory at %d, num_dir_entries=%d", start_of_directory_local, num_dir_entries);
     int comment_length = readUShort(eod.comment_length);
     if (comment_length != i)
         qWarning("QZip: failed to parse zip file.");
     comment = device->read(qMin(comment_length, i));
 
 
-    device->seek(start_of_directory);
+    device->seek(start_of_directory_local);
     for (i = 0; i < num_dir_entries; ++i) {
         FileHeader header;
         int read = device->read((char *) &header.h, sizeof(CentralFileHeader));

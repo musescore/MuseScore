@@ -206,7 +206,7 @@ void ScoreView::lyricsTab(bool back, bool end, bool moveOnly)
       if (!_toLyrics) {
             _toLyrics = new Lyrics(_score);
             _toLyrics->setTrack(track);
-            ChordRest* cr = toChordRest(nextSegment->element(track));
+            cr = toChordRest(nextSegment->element(track));
             _toLyrics->setParent(cr);
             _toLyrics->setNo(verse);
             _toLyrics->setPlacement(placement);

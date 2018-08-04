@@ -1655,6 +1655,10 @@
         FT_SubGlyph  subglyph;
 
         FT_Outline  outline;
+        // #if (defined (_MSCVER) || defined (_MSC_VER))
+        // Initialize outline to prevent "potentially uninitialized local variable" warning
+        outline = (FT_Outline) { .n_contours = 0, .n_points = 0, .points = NULL, .tags = NULL, .contours = NULL, .flags = 0 };
+
         FT_Vector*  points   = NULL;
         char*       tags     = NULL;
         short*      contours = NULL;

@@ -233,12 +233,12 @@ Chord* Score::addChord(int tick, TDuration d, Chord* oc, bool genTie, Tuplet* tu
       if (genTie) {
             int n = oc->notes().size();
             for(int i = 0; i < n; ++i) {
-                  Note* n  = oc->notes()[i];
-                  Note* nn = chord->notes()[i];
+                  Note* n1  = oc->notes()[i];
+                  Note* n2 = chord->notes()[i];
                   Tie* tie = new Tie(this);
-                  tie->setStartNote(n);
-                  tie->setEndNote(nn);
-                  tie->setTrack(n->track());
+                  tie->setStartNote(n1);
+                  tie->setEndNote(n2);
+                  tie->setTrack(n1->track());
                   undoAddElement(tie);
                   }
             }
@@ -539,10 +539,10 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
       //
       // split into Measure segments fm-lm
       //
-      for (MeasureBase* m = fm; ; m = m->next()) {
+      for (MeasureBase* measure = fm; ; measure = measure->next()) {
 
-            if (!m || !m->isMeasure() || lm->sectionBreak()
-              || (toMeasure(m)->first(SegmentType::TimeSig) && m != fm))
+            if (!measure || !measure->isMeasure() || lm->sectionBreak()
+              || (toMeasure(measure)->first(SegmentType::TimeSig) && measure != fm))
                   {
 
                   // save section break to reinstate after rewrite
@@ -583,18 +583,18 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
                   // m->prevMeasure () is new last measure of range
                   // set nm to first true Measure after rewritten range
                   // we may use this to reinstate time signatures
-                  if (m && m->prevMeasure())
-                        nm = m->prevMeasure()->nextMeasure();
+                  if (measure && measure->prevMeasure())
+                        nm = measure->prevMeasure()->nextMeasure();
                   else
                         nm = nullptr;
 
                   if (sectionBreak) {
                         // reinstate section break, then stop rewriting
-                        if (m && m->prevMeasure()) {
-                              sectionBreak->setParent(m->prevMeasure());
+                        if (measure && measure->prevMeasure()) {
+                              sectionBreak->setParent(measure->prevMeasure());
                               undoAddElement(sectionBreak);
                               }
-                        else if (!m) {
+                        else if (!measure) {
                               sectionBreak->setParent(lastMeasure());
                               undoAddElement(sectionBreak);
                               }
@@ -608,27 +608,27 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
 
                   // stop rewriting at end of score
                   // or at a measure (which means we found a time signature segment)
-                  if (!m || m->isMeasure())
+                  if (!measure || measure->isMeasure())
                         break;
 
                   // skip frames
-                  while (!m->isMeasure()) {
-                        if (m->sectionBreak()) {
+                  while (!measure->isMeasure()) {
+                        if (measure->sectionBreak()) {
                               // frame has a section break; we can stop skipping ahead
-                              sectionBreak = m->sectionBreakElement();
+                              sectionBreak = measure->sectionBreakElement();
                               break;
                               }
-                        m = m->next();
-                        if (!m)
+                        measure = measure->next();
+                        if (!measure)
                               break;
                         }
                   // stop rewriting if we encountered a section break on a frame
                   // or if there is a time signature on first measure after the frame
-                  if (sectionBreak || (m && toMeasure(m)->first(SegmentType::TimeSig)))
+                  if (sectionBreak || (measure && toMeasure(measure)->first(SegmentType::TimeSig)))
                         break;
 
                   // set up for next range to rewrite
-                  fm1 = toMeasure(m);
+                  fm1 = toMeasure(measure);
                   if (fm1 == 0)
                         break;
                   }
@@ -636,7 +636,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
             // if we didn't break the loop already,
             // we must have an ordinary measure
             // add measure to range to rewrite
-            lm = toMeasure(m);
+            lm = toMeasure(measure);
             }
 
       // if any staves don't have time signatures at the point where we stopped,
@@ -732,13 +732,13 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   }
             }
       else {
-            Score* score = masterScore();
-            Measure* fm  = score->tick2measure(tick);
+            Score* mScore = masterScore();
+            Measure* fm  = mScore->tick2measure(tick);
 
             //
             // rewrite all measures up to the next time signature
             //
-            if (fm == score->firstMeasure() && fm->nextMeasure() && (fm->len() != fm->timesig())) {
+            if (fm == mScore->firstMeasure() && fm->nextMeasure() && (fm->len() != fm->timesig())) {
                   // handle upbeat
                   fm->undoChangeProperty(Pid::TIMESIG_NOMINAL, QVariant::fromValue(ns));
                   Measure* m = fm->nextMeasure();
@@ -751,7 +751,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         // but we need to rewrite any staves with local time signatures
                         for (int i = 0; i < nstaves(); ++i) {
                               if (staff(i)->timeSig(tick) && staff(i)->timeSig(tick)->isLocal()) {
-                                    if (!score->rewriteMeasures(fm, ns, i)) {
+                                    if (!mScore->rewriteMeasures(fm, ns, i)) {
                                           undoStack()->current()->unwind();
                                           return;
                                           }
@@ -765,14 +765,13 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             // we will only add time signatures if this succeeds
             // this means, however, that the rewrite cannot depend on the time signatures being in place
             if (fm) {
-                  if (!score->rewriteMeasures(fm, ns, local ? staffIdx : -1)) {
+                  if (!mScore->rewriteMeasures(fm, ns, local ? staffIdx : -1)) {
                         undoStack()->current()->unwind();
                         return;
                         }
                   }
-
             // add the time signatures
-            foreach (Score* score, scoreList()) {
+            for (Score* score : scoreList()) {
                   Measure* nfm = score->tick2measure(tick);
                   seg   = nfm->undoGetSegment(SegmentType::TimeSig, nfm->tick());
                   int startStaffIdx, endStaffIdx;
@@ -999,8 +998,15 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                         if (noteTicks > chord->duration().ticks()) {
                               // store start/end note for backward/forward ties ending/starting on the group of notes being rewritten
                               int numNotes = chord->notes().size();
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
                               Note* tieBack[numNotes];
                               Note* tieFor[numNotes];
+#else
+                              // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+                              //    heap allocation is slow, an optimization might be used.
+                              std::vector<Note *> tieBack(numNotes);
+                              std::vector<Note *> tieFor(numNotes);
+#endif
                               for (int i = 0; i < numNotes; i++) {
                                     Note* n = chord->notes()[i];
                                     Note* nn = lastTiedChord->notes()[i];
@@ -1084,9 +1090,9 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                                     for (ScoreElement* e : _is.slur()->linkList()) {
                                           Slur* slur = toSlur(e);
                                           for (ScoreElement* ee : nchord->linkList()) {
-                                                Element* e = static_cast<Element*>(ee);
-                                                if (e->score() == slur->score() && e->track() == slur->track2()) {
-                                                      slur->score()->undo(new ChangeSpannerElements(slur, slur->startElement(), e));
+                                                Element* e1 = static_cast<Element*>(ee);
+                                                if (e1->score() == slur->score() && e1->track() == slur->track2()) {
+                                                      slur->score()->undo(new ChangeSpannerElements(slur, slur->startElement(), e1));
                                                       break;
                                                       }
                                                 }
@@ -1185,8 +1191,8 @@ void Score::cmdAddTie()
                   // try to re-use existing note or chord
                   Note* n = nullptr;
                   if (cr->isChord()) {
-                        Chord* c = toChord(cr);
-                        Note* nn = c->findNote(note->pitch());
+                        Chord* chord = toChord(cr);
+                        Note* nn = chord->findNote(note->pitch());
                         if (nn && nn->tpc() == note->tpc())
                               n = nn;           // re-use note
                         else

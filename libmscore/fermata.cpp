@@ -313,10 +313,6 @@ QVariant Fermata::propertyDefault(Pid propertyId) const
 
 Sid Fermata::getPropertyStyle(Pid id) const
       {
-      switch (id) {
-            default:
-                  break;
-            }
       return Sid::NOSTYLE;
       }
 

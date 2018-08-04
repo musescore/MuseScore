@@ -25,7 +25,7 @@
 #ifndef __MIDIDRIVER_H__
 #define __MIDIDRIVER_H__
 
-#if not defined(Q_OS_WIN)
+#if !defined(Q_OS_WIN)
 #include <poll.h>
 #endif
 

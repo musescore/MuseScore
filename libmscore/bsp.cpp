@@ -307,7 +307,6 @@ void BspTree::climbTree(BspTreeVisitor* visitor, const QRectF& rect, int index)
                         }
                   break;
             case Node::Type::HORIZONTAL:
-                  int childIndex = firstChildIndex(index);
                   if (rect.top() < node->offset) {
                         climbTree(visitor, rect, childIndex);
                         if (rect.bottom() >= node->offset)

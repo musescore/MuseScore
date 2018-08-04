@@ -124,7 +124,7 @@ public:
     } else {
       for (int i = 0; i < nChars; ++i) {
         const int c = getChar();
-        if (likely(c != EOF)) buffer[i] = c;
+        if (likely(c != EOF)) buffer[i] = static_cast<Guchar>(c);
         else return i;
       }
       return nChars;

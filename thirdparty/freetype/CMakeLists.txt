@@ -188,7 +188,7 @@ add_library(mscore_freetype
   ${BASE_SRCS}
 )
 
-if (MSVC)
-  set_target_properties(freetype PROPERTIES
-    COMPILE_FLAGS /Fd"$(IntDir)$(TargetName).pdb")
-endif ()
+###-###if (MSVC)
+###-###  set_target_properties(freetype PROPERTIES
+###-###    COMPILE_FLAGS /Fd"$(IntDir)$(TargetName).pdb")
+###-###endif ()

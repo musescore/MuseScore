@@ -188,24 +188,24 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
       p.setPen(QPen(Qt::white, 2));
 
       for (int i = 0; i < _channel; ++i) {
-            int h = mh - (lrint(fast_log10(meterval[i]) * -20.0f * mh / range));
-            if (h < 0)
-                  h = 0;
-            else if (h > mh)
-                  h = mh;
+            int h1 = mh - (lrint(fast_log10(meterval[i]) * -20.0f * mh / range));
+            if (h1 < 0)
+                  h1 = 0;
+            else if (h1 > mh)
+                  h1 = mh;
 
-            p.drawPixmap(x, y1 + mh - h, mw, h,      onPm,  0, mh - h, mw, h);
-            p.drawPixmap(x, y1,          mw, mh - h, offPm, 0, 0,      mw, mh - h);
+            p.drawPixmap(x, y1 + mh - h1, mw, h1,      onPm,  0, mh - h1, mw, h1);
+            p.drawPixmap(x, y1,           mw, mh - h1, offPm, 0, 0,       mw, mh - h1);
 
             //---------------------------------------------------
             //    draw peak line
             //---------------------------------------------------
 
-            h = mh - (lrint(fast_log10(meterPeak[i]) * -20.0f * mh / range));
-            if (h > mh)
-                  h = mh;
-            if (h > 0)
-                p.drawLine(x, y3 - h, x + mw, y3 - h);
+            h1 = mh - (lrint(fast_log10(meterPeak[i]) * -20.0f * mh / range));
+            if (h1 > mh)
+                  h1 = mh;
+            if (h1 > 0)
+                p.drawLine(x, y3 - h1, x + mw, y3 - h1);
 
             x += mw;
             }
@@ -241,13 +241,13 @@ void MeterSlider::paintEvent(QPaintEvent* ev)
             h  = y1 + lrint(i * mh / range);
             s.setNum(i);
             if (i == 0) {
-                  p.drawText(QRect(0, h - 3, METER_LEFT_EDGE - 3, 9), Qt::AlignRight, QString::fromStdString("dB"));
+                  p.drawText(QRect(0, h - 3, METER_LEFT_EDGE - 3, 9), Qt::AlignRight, QString("dB"));
                   p.drawLine(METER_LEFT_EDGE - 1, h + 1, METER_LEFT_EDGE - 1, h + 1);
                   continue;
                   }
             else if (i == range)
                   h -= 2;
-            p.drawText(QRect(0, h - 3, METER_LEFT_EDGE - 3, 9), Qt::AlignRight, QString::fromStdString("-") + s);
+            p.drawText(QRect(0, h - 3, METER_LEFT_EDGE - 3, 9), Qt::AlignRight, QString("-") + s);
             p.drawLine(METER_LEFT_EDGE - 1, h + 1, METER_LEFT_EDGE - 1, h + 1);
             }
 

@@ -129,7 +129,7 @@ void ExportMidi::writeHeader()
       //---------------------------------------------------
 
       int staffIdx = 0;
-      for (auto &track: mf.tracks()) {
+      for (auto& track1: mf.tracks()) {
             Staff* staff  = cs->staff(staffIdx);
             KeyList* keys = staff->keyList();
 
@@ -153,7 +153,7 @@ void ExportMidi::writeHeader()
                         data[1]   = 0;  // major
                         ev.setEData(data);
                         int tick = ik->first + tickOffset;
-                        track.insert(pauseMap.addPauseTicks(tick), ev);
+                        track1.insert(pauseMap.addPauseTicks(tick), ev);
                         if (tick == 0)
                               initialKeySigFound = true;
                         }
@@ -170,7 +170,7 @@ void ExportMidi::writeHeader()
                   data[0]   = key;
                   data[1]   = 0;  // major
                   ev.setEData(data);
-                  track.insert(0, ev);
+                  track1.insert(0, ev);
                   }
 
             ++staffIdx;

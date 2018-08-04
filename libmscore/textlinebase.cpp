@@ -265,7 +265,7 @@ void TextLineBaseSegment::layout()
             return;
 
       if (tl->lineVisible() || !score()->printing()) {
-            QPointF pp1(l, 0.0);
+            pp1 = QPointF(l, 0.0);
 
             qreal beginHookWidth;
             qreal endHookWidth;

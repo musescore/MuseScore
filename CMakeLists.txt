@@ -55,6 +55,11 @@ if(POLICY CMP0071)
       cmake_policy(SET CMP0071 OLD)
 endif(POLICY CMP0071)
 
+# Define MINGW for VS, as it appears not to be defined
+if (MSVC)
+   set (MINGW false)
+endif (MSVC)
+
 #  Look for Qt5
 SET(QT_MIN_VERSION    "5.8.0")
 # Include modules
@@ -74,11 +79,11 @@ set(USE_SSE           TRUE)
 set(SCRIPT_INTERFACE  TRUE)
 
 # Disable components not supported on Windows
-if (MINGW)
+if (MSVC OR MINGW)
       set(WIN_NOT_AVAIL "Not available on Windows")
       option(BUILD_PULSEAUDIO ${WIN_NOT_AVAIL} OFF)
       option(BUILD_ALSA ${WIN_NOT_AVAIL} OFF)
-endif (MINGW)
+endif (MSVC OR MINGW)
 
 # Disable components not supported on Mac
 if (APPLE)
@@ -88,10 +93,10 @@ if (APPLE)
 endif (APPLE)
 
 # Disable components not supported on Linux/BSD
-if (NOT APPLE AND NOT MINGW)
+if (NOT APPLE AND NOT MINGW AND NOT MSVC)
       set(NIX_NOT_AVAIL "Not available on Linux/BSD")
       #option(BUILD_PORTMIDI "PortMidi disabled on Linux. (It uses ALSA but it's better to use ALSA directly)" OFF)
-endif (NOT APPLE AND NOT MINGW)
+endif (NOT APPLE AND NOT MINGW AND NOT MSVC)
 
 option(AEOLUS        "Enable pipe organ synthesizer"      OFF)
 option(ZERBERUS      "Enable experimental SFZ sampler"    ON)
@@ -113,6 +118,7 @@ option(BUILD_PULSEAUDIO "Build with support for PulseAudio audio backend." ON)
 option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
 option(BUILD_PORTAUDIO "Build with support for PortAudio audio backend." ON)
 option(BUILD_PORTMIDI "Build with support for PortAudio's MIDI features." ${BUILD_PORTAUDIO}) # PortAudio required
+option(BUILD_WEBEBENGINE "Built in webkit support" ON)
 option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
@@ -155,8 +161,10 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
       endif()
 endif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 
-set(CMAKE_CXX_FLAGS_DEBUG   "-g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG -DQT_NO_DEBUG")
+if (NOT MSVC)
+   set(CMAKE_CXX_FLAGS_DEBUG   "-g")
+   set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG -DQT_NO_DEBUG")
+endif (NOT MSVC)
 
 if (APPLE)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC -stdlib=libc++ -Wno-inconsistent-missing-override")
@@ -165,16 +173,29 @@ if (APPLE)
    SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
    SET(CMAKE_INSTALL_RPATH "${QT_INSTALL_PREFIX}/lib")
 else (APPLE)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
-   if (MINGW)
-      # -mno-ms-bitfields see #22048
-      set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -mno-ms-bitfields")
-      set(CMAKE_EXE_LINKER_FLAGS "-Wl,--large-address-aware")
-   else (MINGW)
-      set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -fPIC")
-      set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Woverloaded-virtual")
-      set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DQT_NO_DEBUG_OUTPUT")
-   endif (MINGW)
+   if (MSVC)
+   # Set compiler options for VS2017 toolchain.
+   # Note: /D_CRT_SECURE_NO WARNINGS disables warnings when using "non-secure" library functions like sscanf...
+      set(CMAKE_CXX_FLAGS                "/DWIN32 /D_WINDOWS /GR /EHsc /D_UNICODE /DUNICODE /D_CRT_SECURE_NO_WARNINGS /execution-charset:utf-8")
+      if (USE_SSE)
+         # If USE_SSE is set, enable use of SSE instructions to compiler.
+         set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} /arch:SSE")
+      endif (USE_SSE)
+      set(CMAKE_CXX_FLAGS_DEBUG         "/MDd /permissive- /std:c++14 /W4 /Zi /Ob0 /Od /RTC1")
+      set(CMAKE_CXX_FLAGS_RELEASE        "/MD /permissive- /std:c++14 /W4 /O2 /Ob2 -DNDEBUG -DQT_NO_DEBUG")
+      set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "/MD /permissive- /std:c++14 /W4 /Zi /O2 /Ob1 -DNDEBUG -DQT_NO_DEBUG")
+   else (MSVC)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+      if (MINGW)
+         # -mno-ms-bitfields see #22048
+         set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -mno-ms-bitfields")
+         set(CMAKE_EXE_LINKER_FLAGS "-Wl,--large-address-aware")
+      else (MINGW)
+         set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -fPIC")
+         set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Woverloaded-virtual")
+         set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DQT_NO_DEBUG_OUTPUT")
+      endif (MINGW)
+   endif (MSVC)
 endif(APPLE)
 
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
@@ -193,6 +214,14 @@ SET(MUSESCORE_NAME_VERSION "${MUSESCORE_NAME} ${MUSESCORE_VERSION_MAJOR}")
 #
 SET(MUSESCORE_VERSION_FULL  "${MUSESCORE_VERSION}.${MUSESCORE_VERSION_PATCH}")
 
+if (BUILD_WEBEBENGINE)
+   if (MINGW)
+      SET (USE_WEBENGINE 0)
+   else (MINGW)
+      SET (USE_WEBENGINE 1)
+   endif(MINGW)
+endif (BUILD_WEBEBENGINE)
+
 if (MUSESCORE_LABEL)
   SET (MUSESCORE_NAME_VERSION "${MUSESCORE_NAME_VERSION} ${MUSESCORE_LABEL}")
 endif (MUSESCORE_LABEL)
@@ -201,18 +230,20 @@ if (MSCORE_UNSTABLE)
   SET (MUSESCORE_NAME_VERSION "${MUSESCORE_NAME_VERSION} (${MUSESCORE_VERSION_FULL} unstable)")
 endif (MSCORE_UNSTABLE)
 
-if (MINGW OR APPLE)
-  if(MINGW)
+if (MINGW OR MSVC OR APPLE)
+  if(MINGW OR MSVC)
+      # Option for MINGW and MSVC
       SET(Mscore_INSTALL_NAME  "")
       SET(Mscore_SHARE_NAME    "./")
-  else(MINGW)
-      SET(Mscore_INSTALL_NAME  "Contents/Resources/")
-      SET(Mscore_SHARE_NAME    "mscore.app/")
-  endif(MINGW)
-else (MINGW OR APPLE)
+  else(MINGW OR MSVC)
+       # Option for Apple
+       SET(Mscore_INSTALL_NAME  "Contents/Resources/")
+       SET(Mscore_SHARE_NAME    "mscore.app/")
+  endif(MINGW OR MSVC)
+else (MINGW OR MSVC OR APPLE)
       SET(Mscore_INSTALL_NAME  "mscore${MSCORE_INSTALL_SUFFIX}-${MUSESCORE_VERSION}/")
       SET(Mscore_SHARE_NAME    "share/")
-endif (MINGW OR APPLE)
+endif (MINGW OR MSVC OR APPLE)
 
 # Download MuseScore SoundFont
 if (DOWNLOAD_SOUNDFONT)
@@ -301,13 +332,13 @@ endif (BUILD_ALSA)
 ## MIDI
 ##
 
-if (APPLE OR MINGW)
+if (APPLE OR MINGW OR MSVC)
       set (HAS_MIDI 1)
-else (APPLE OR MINGW)
+else (APPLE OR MINGW OR MSVC)
       if (USE_ALSA)
             set (HAS_MIDI 1)
       endif (USE_ALSA)
-endif (APPLE OR MINGW)
+endif (APPLE OR MINGW OR MSVC)
 
 ##
 ## PulseAudio
@@ -324,35 +355,37 @@ else (BUILD_PULSEAUDIO)
       message(STATUS "PulseAudio support disabled")
 endif (BUILD_PULSEAUDIO)
 
+
 ##
 ## LAME
 ##
-if (APPLE OR MINGW)
-      IF (BUILD_LAME)
-            include (FindLame)
-            set (USE_LAME 1)
-      ENDIF (BUILD_LAME)
-else (APPLE OR MINGW)
-      IF (BUILD_LAME)
-            include (FindLame)
-            IF (LAME_FOUND)
-                  set(USE_LAME 1)
-                  MESSAGE("LAME found.")
-            ELSE (LAME_FOUND)
-                  set(USE_LAME 0)
-                  MESSAGE("LAME not found.")
-            ENDIF (LAME_FOUND)
-      ELSE (BUILD_LAME)
-            MESSAGE(STATUS "LAME MP3 support disabled")
-      ENDIF (BUILD_LAME)
-endif (APPLE OR MINGW)
+
+
+if (BUILD_LAME)
+  if (MSVC)
+	 include (FindLameMSVC)
+  else (MSVC)
+	 include (FindLame)
+  endif (MSVC)
+  if (LAME_FOUND)
+	 set(USE_LAME 1)
+	 MESSAGE("LAME found.")
+  else (LAME_FOUND)
+	 set(USE_LAME 0)
+	 MESSAGE("LAME not found.")
+  endif (LAME_FOUND)
+else (BUILD_LAME)
+  MESSAGE(STATUS "LAME MP3 support disabled")
+endif (BUILD_LAME)
+
 
 ##
 ## Find JACK >= JACK_MIN_VERSION
 ##
 
+
 IF(BUILD_JACK)
-     IF(MINGW)
+     IF(MINGW OR MSVC)
            set (USE_JACK 1)
            IF("$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "")
               IF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
@@ -374,7 +407,7 @@ IF(BUILD_JACK)
            set (JACK_INCDIR "$ENV{${progenv}}/Jack/includes")
            set (JACK_LIB "$ENV{${progenv}}/Jack/lib/libjack.a")
            MESSAGE("JACK support enabled.")
-     ELSE(MINGW)
+     ELSE(MINGW OR MSVC)
            PKGCONFIG1 (jack ${JACK_MIN_VERSION} JACK_INCDIR JACK_LIBDIR JACK_LIB JACK_CPP)
            IF(JACK_INCDIR)
                  MESSAGE(STATUS "${JACK_LONGNAME} >= ${JACK_MIN_VERSION} found. jack support enabled.")
@@ -383,7 +416,7 @@ IF(BUILD_JACK)
                  MESSAGE(STATUS "${JACK_LONGNAME} >= ${JACK_MIN_VERSION} not found")
                  MESSAGE(SEND_ERROR "Error: JACK support requested (BUILD_JACK=${BUILD_JACK}), but JACK was not found")
            ENDIF(JACK_INCDIR)
-     ENDIF(MINGW)
+     ENDIF(MINGW OR MSVC)
 ELSE(BUILD_JACK)
      MESSAGE(STATUS "${JACK_LONGNAME} support disabled")
 ENDIF(BUILD_JACK)
@@ -394,9 +427,14 @@ ENDIF(BUILD_JACK)
 ##
 
 if (BUILD_PORTAUDIO)
-    if (MINGW)
+    if (MINGW OR MSVC)
         set ( USE_PORTAUDIO 1 )
-    else (MINGW)
+        include(FindPortAudio)
+        add_library(portaudio1 SHARED IMPORTED)	
+        message(STATUS ${PORTAUDIO_LIBRARY})
+        #set_target_properties(portaudio1 PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/dependencies/libx86/libportaudio.dll)
+        set_target_properties(portaudio1 PROPERTIES IMPORTED_IMPLIB ${PROJECT_SOURCE_DIR}/dependencies/libx86/portaudio.lib)   
+    else (MINGW OR MSVC)
         PKGCONFIG1 (portaudio-2.0 19 PORTAUDIO_INCDIR PORTAUDIO_LIBDIR PORTAUDIO_LIB PORTAUDIO_CPP)
         if (PORTAUDIO_INCDIR)
               message("PortAudio found. PortAudio support enabled. INCDIR ${PORTAUDIO_INCDIR}, LIBDIR ${PORTAUDIO_LIBDIR}, LIB ${PORTAUDIO_LIB}")
@@ -404,7 +442,7 @@ if (BUILD_PORTAUDIO)
         else (PORTAUDIO_INCDIR)
               message(SEND_ERROR "Error: PortAudio support requested (BUILD_PORTAUDIO=${BUILD_PORTAUDIO}), but portaudio-2.0 version 19 was not found (package portaudio19-dev)")
         endif (PORTAUDIO_INCDIR)
-    endif (MINGW)
+    endif (MINGW OR MSVC)
 else (BUILD_PORTAUDIO)
      message(STATUS "PortAudio support disabled")
 endif (BUILD_PORTAUDIO)
@@ -461,12 +499,30 @@ if (APPLE)
       endif (SNDFILE_INCDIR)
    endif(HAS_AUDIOFILE)
 else(APPLE)
-   if(MINGW)
+   if(MINGW OR MSVC)
       set(SNDFILE_LIB sndfile-1)
-   else(MINGW)
+
+	  include(FindVorbis)
+	  add_library(vorbis1 SHARED IMPORTED)
+	  set_target_properties(vorbis1 PROPERTIES IMPORTED_IMPLIB ${VORBIS_LIBRARY})
+
+	  include(FindSndFile)
+	  add_library(sndfile1 SHARED IMPORTED)
+	  set_target_properties(sndfile1 PROPERTIES IMPORTED_IMPLIB ${SNDFILE_LIBRARY})
+
+	  include(FindVorbisfile)
+	  add_library(vorbisfile1 SHARED IMPORTED)
+	  set_target_properties(vorbisfile1 PROPERTIES IMPORTED_IMPLIB ${VORBISFILE_LIBRARY})
+
+	  include(FindOgg)
+	  add_library(ogg1 SHARED IMPORTED)
+	  set_target_properties(ogg1 PROPERTIES IMPORTED_IMPLIB ${OGG_LIBRARY})
+
+   else(MINGW OR MSVC)
       set(SNDFILE_LIB sndfile)
-   endif(MINGW)
+   endif(MINGW OR MSVC)
    set(OGG_LIB ogg)
+
    set(VORBIS_LIB vorbis)
 endif(APPLE)
 
@@ -491,7 +547,7 @@ configure_file (
       ${PROJECT_BINARY_DIR}/config.h
       )
 
-if (NOT MINGW AND NOT APPLE)
+if (NOT MINGW AND NOT MSVC AND NOT APPLE)
     #### PACKAGING for Linux and BSD based systems (more in mscore/CMakeLists.txt) ####
     #
     #     set library search path for runtime linker to load the same
@@ -587,22 +643,28 @@ if (NOT MINGW AND NOT APPLE)
     configure_file(build/Linux+BSD/musescore.xml.in musescore${MSCORE_INSTALL_SUFFIX}.xml)
     install( FILES ${PROJECT_BINARY_DIR}/musescore${MSCORE_INSTALL_SUFFIX}.xml DESTINATION share/mime/packages COMPONENT doc)
     # Note: Must now run "update-mime-database" to apply changes. This is done in the Makefile.
-endif (NOT MINGW AND NOT APPLE)
+endif (NOT MINGW AND NOT MSVC AND NOT APPLE)
 
 #
 #  Create precompiled header file
 #
 
-# all.h is expected in PROJECT_BINARY_DIR by subdirs
-execute_process(
-    COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
-    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-    )
+# all.h is expected in PROJECT_BINARY_DIR by subdirs, except for MSVC
+if (NOT MSVC)
+   execute_process(
+      COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
+      WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+      )
+endif (NOT MSVC)
 
 precompiled_header(QT_INCLUDES all ${BUILD_PCH})
 
-ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
-ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
+# MSVC does not require these targets, as all.h is not copied and the
+#   PCH generation is done per-project
+if (NOT MSVC)
+   ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
+   ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
+endif (NOT MSVC)
 
 ##
 ## Add subdirs
@@ -628,9 +690,9 @@ add_subdirectory(fonttools EXCLUDE_FROM_ALL)
 add_subdirectory(manual)
 add_subdirectory(demos)
 
-if (USE_PORTMIDI AND (MINGW OR APPLE))
+if (USE_PORTMIDI AND (MINGW OR APPLE OR MSVC))
       subdirs (thirdparty/portmidi)
-endif (USE_PORTMIDI AND (MINGW OR APPLE))
+endif (USE_PORTMIDI AND (MINGW OR APPLE OR MSVC))
 
 if (AEOLUS)
       subdirs (aeolus)
@@ -667,6 +729,16 @@ include_directories(
    ${LAME_INCLUDE_DIR}
 )
 
+if (MSVC)
+   include_directories(${PROJECT_SOURCE_DIR}/dependencies)
+   include_directories(${PROJECT_SOURCE_DIR}/dependencies/include)
+   include_directories(${PROJECT_SOURCE_DIR}/dependencies/include/vorbis)
+   include_directories(${SNDFILE_INCLUDE_DIR})
+   include_directories(${VORBIS_INCLUDE_DIR})
+   include_directories(${PORTAUDIO_INCLUDE_DIR})
+   include_directories(${OGG_INCLUDE_DIR})
+endif (MSVC)
+   
 if (USE_SYSTEM_FREETYPE)
       include_directories(${FREETYPE_INCLUDE_DIRS})
 else (USE_SYSTEM_FREETYPE)
@@ -714,3 +786,26 @@ add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
    COMMAND genManual ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}
    DEPENDS genManual
    )
+
+
+##
+##  For MSVC: set the startup project to be mscore 
+##     (requires CMake 3.6.3+ to work, but should be benign on other versions
+##      as it is just setting the value for a property).
+##
+if (MSVC)
+   set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true)
+   set(CMAKE_SKIP_PACKAGE_ALL_DEPENDENCY true)
+   set(VS_STARTUP_PROJECT mscore)
+endif (MSVC)
+
+## TEMP: Display all variables!
+### message(STATUS "===========================================================")
+### message(STATUS "VARIABLES:")
+### message(STATUS "")
+### get_cmake_property(_variableNames VARIABLES)
+### list (SORT _variableNames)
+### foreach (_variableName ${_variableNames})
+###     message(STATUS "${_variableName}=${${_variableName}}")
+### endforeach()
+### message(STATUS "===========================================================")

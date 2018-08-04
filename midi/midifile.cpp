@@ -293,7 +293,9 @@ bool MidiFile::read(QIODevice* in)
                   break;
             default:
                   throw(QString("midi file format %1 not implemented").arg(_format));
-                  return false;
+
+                  // Prevent "unreachable code" warning 
+                  // return false;
             }
       return true;
       }
@@ -429,10 +431,23 @@ void MidiFile::writeLong(int i)
 
 void MidiFile::skip(qint64 len)
       {
+      // Note: if MS is updated to use Qt 5.10, this can be implemented with QIODevice::skip(), which should be more efficient
+      //       as bytes do not need to be moved around.
       if (len <= 0)
             return;
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       char tmp[len];
       read(tmp, len);
+#else
+      const int tmp_size = 256;  // Size of fixed-length temporary buffer. MSVC does not support VLA.
+      char tmp[tmp_size];
+      while(len > tmp_size) {
+            read(tmp, len);
+            len -= tmp_size;
+            }
+      // Now len is <= tmp_size, last read fits in the buffer.
+      read(tmp, tmp_size);
+#endif
       }
 
 /*---------------------------------------------------------
@@ -708,9 +723,9 @@ void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType *mt)
                               ++ii;
                               bool found = false;
                               for (; ii != _events.end(); ++ii) {
-                                    MidiEvent& ev = ii->second;
-                                    if (ev.type() == ME_CONTROLLER) {
-                                          if (ev.controller() == CTRL_LDATA) {
+                                    MidiEvent& ev1 = ii->second;
+                                    if (ev1.type() == ME_CONTROLLER) {
+                                          if (ev1.controller() == CTRL_LDATA) {
                                                 // handle later
                                                 found = true;
                                                 }

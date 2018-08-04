@@ -151,8 +151,8 @@ void ChordLine::read(XmlReader& e)
                   QPointF p1;
                   int state = 0;
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "Element") {
+                        const QStringRef& nextTag(e.name());
+                        if (nextTag == "Element") {
                               int type = e.intAttribute("type");
                               qreal x  = e.doubleAttribute("x");
                               qreal y  = e.doubleAttribute("y");
