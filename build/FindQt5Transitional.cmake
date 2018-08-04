@@ -85,7 +85,6 @@ else()
     endif()
     list(APPEND _components Qt${_component})
   endforeach()
-  find_package(Qt4 ${QT_MIN_VERSION} REQUIRED ${_components})
   include_directories(${QT_INCLUDES})
 
   if(QT4_FOUND)
