@@ -18,6 +18,8 @@ for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') d
     "C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe" sign /f "C:\MuseScore\build\appveyor\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p "%CERTIFICATE_PASSWORD%" "%%f"
     )
 
+echo %MSversion%
+
 :: Create msi package
 ::mingw32-make -f Makefile.mingw package BUILD_NUMBER=%APPVEYOR_BUILD_NUMBER%
 
@@ -55,7 +57,10 @@ SET hh0=%time:~0,2%
 SET /a hh1=%hh0%+100
 SET hh=%hh1:~1,2%
 SET BUILD_DATE=%Date:~10,4%-%Date:~4,2%-%Date:~7,2%-%hh%%time:~3,2%
+echo %MSversion%
 SET ARTIFACT_NAME=MuseScoreNightly-%BUILD_DATE%-%APPVEYOR_REPO_BRANCH%-%MSversion%.7z
+echo %ARTIFACT_NAME%
+echo %MSversion%
 7z a C:\MuseScore\%ARTIFACT_NAME% C:\MuseScore\MuseScoreNightly
 
 :: create update file for S3
