@@ -25,7 +25,7 @@ echo %MSversion%
 :: Create msi package
 ::mingw32-make -f Makefile.mingw package BUILD_NUMBER=%APPVEYOR_BUILD_NUMBER%
 
-C:\MuseScore\msvc_build.bat package
+call C:\MuseScore\msvc_build.bat package
 
 :: find the MSI file without the hardcoded version
 for /r %%i in (msvc.build.release\*.msi) do ( SET FILEPATH=%%i )

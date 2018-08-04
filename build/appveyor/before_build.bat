@@ -28,7 +28,7 @@ python build/add-mc-keys.py %MC_CONSUMER_KEY% %MC_CONSUMER_SECRET%
 
 :: get revision number
 SET PATH=C:\Qt\5.9\msvc2015\bin;%PATH%
-C:\MuseScore\msvc_build.bat revision
+call C:\MuseScore\msvc_build.bat revision
 ::git rev-parse --short=7 HEAD > mscore/revision.h
 SET /p MSversion=<mscore\revision.h
 
