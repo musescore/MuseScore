@@ -18,10 +18,7 @@ for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') d
     "C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe" sign /f "C:\MuseScore\build\appveyor\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p "%CERTIFICATE_PASSWORD%" "%%f"
     )
 
-:: Create msi package
-::mingw32-make -f Makefile.mingw package BUILD_NUMBER=%APPVEYOR_BUILD_NUMBER%
-
-C:\MuseScore\msvc_build.bat package
+call C:\MuseScore\msvc_build.bat package %APPVEYOR_BUILD_NUMBER%
 
 :: find the MSI file without the hardcoded version
 for /r %%i in (msvc.build.release\*.msi) do ( SET FILEPATH=%%i )
