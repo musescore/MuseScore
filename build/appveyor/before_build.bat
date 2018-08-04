@@ -32,6 +32,7 @@ C:\MuseScore\msvc_build.bat revision
 ::git rev-parse --short=7 HEAD > mscore/revision.h
 SET /p MSversion=<mscore\revision.h
 @echo on
+echo MSVersion:
 echo %MSversion%
 @echo off
 :: CMake refuses to generate MinGW Makefiles if sh.exe is in the PATH (C:\Program Files\Git\usr\bin)
