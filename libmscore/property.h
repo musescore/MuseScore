@@ -331,6 +331,9 @@ enum class Pid {
       LOCATION_GRACE,
       LOCATION_NOTE,
 
+      VOICE,
+      POSITION,
+
       END
       };
 

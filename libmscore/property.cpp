@@ -208,7 +208,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::DURATION,                "duration",                false, 0,                       P_TYPE::FRACTION        },
       { Pid::DURATION_TYPE,           "duration_type",           false, 0,                       P_TYPE::TDURATION       },
       { Pid::ROLE,                    "role",                    false, "role",                  P_TYPE::INT             },
-      { Pid::TRACK,                   "track",                   false, 0,                       P_TYPE::INT             },
+      { Pid::TRACK,                   "track",                   false, "track",                 P_TYPE::INT             },
       { Pid::GLISSANDO_STYLE,         "glissando_style",         true,  "glissandoStyle",        P_TYPE::GLISSANDO_STYLE },
       { Pid::FRET_STRINGS,            "fret_strings",            false, "strings",               P_TYPE::INT             },
       { Pid::FRET_FRETS,              "fret_frets",              false, "frets",                 P_TYPE::INT             },
@@ -309,6 +309,9 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::LOCATION_FRACTIONS,      0,                         false, "fractions",             P_TYPE::FRACTION        },
       { Pid::LOCATION_GRACE,          0,                         false, "grace",                 P_TYPE::INT             },
       { Pid::LOCATION_NOTE,           0,                         false, "note",                  P_TYPE::INT             },
+
+      { Pid::VOICE,                   0,                         false, "voice",                 P_TYPE::INT             },
+      { Pid::POSITION,                0,                         false, "position",              P_TYPE::FRACTION        },
 
       { Pid::END, "++end++", false, "++end++", P_TYPE::INT }
       };
