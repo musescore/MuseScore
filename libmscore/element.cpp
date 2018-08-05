@@ -507,13 +507,15 @@ void Element::writeProperties(XmlWriter& xml) const
                   xml.etag(); // </linked>
                   }
             }
-      if ((track() != xml.curTrack()) && (track() != -1) && !isBeam()) {
+      if ((xml.writeTrack() || track() != xml.curTrack())
+         && (track() != -1) && !isBeam()) {
             // Writing track number for beams is redundant as it is calculated
             // during layout.
-            int t;
-            t = track() + xml.trackDiff();
+            int t = track() + xml.trackDiff();
             xml.tag("track", t);
             }
+      if (xml.writePosition())
+            xml.tag(Pid::POSITION, rfrac());
       if (_tag != 0x1) {
             for (int i = 1; i < MAX_TAGS; i++) {
                   if (_tag == ((unsigned)1 << i)) {
@@ -1066,6 +1068,10 @@ QVariant Element::getProperty(Pid propertyId) const
       switch (propertyId) {
             case Pid::TRACK:
                   return track();
+            case Pid::VOICE:
+                  return voice();
+            case Pid::POSITION:
+                  return rfrac();
             case Pid::GENERATED:
                   return generated();
             case Pid::COLOR:
@@ -1100,6 +1106,9 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
       switch (propertyId) {
             case Pid::TRACK:
                   setTrack(v.toInt());
+                  break;
+            case Pid::VOICE:
+                  setVoice(v.toInt());
                   break;
             case Pid::GENERATED:
                   setGenerated(v.toBool());
