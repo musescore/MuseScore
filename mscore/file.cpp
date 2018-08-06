@@ -1612,12 +1612,15 @@ void MuseScore::exportFile()
 
       QString saveDialogTitle = tr("Export");
 
-      QSettings settings;
-      if (lastSaveCopyDirectory.isEmpty())
-            lastSaveCopyDirectory = settings.value("lastSaveCopyDirectory", preferences.getString(PREF_APP_PATHS_MYSCORES)).toString();
-      if (lastSaveDirectory.isEmpty())
-            lastSaveDirectory = settings.value("lastSaveDirectory", preferences.getString(PREF_APP_PATHS_MYSCORES)).toString();
-      QString saveDirectory = lastSaveCopyDirectory;
+      QString saveDirectory;
+      if (cs->masterScore()->fileInfo()->exists())
+            saveDirectory = cs->masterScore()->fileInfo()->dir().path();
+      else {
+            QSettings settings;
+            if (lastSaveCopyDirectory.isEmpty())
+                  lastSaveCopyDirectory = settings.value("lastSaveCopyDirectory", preferences.getString(PREF_APP_PATHS_MYSCORES)).toString();
+            saveDirectory = lastSaveCopyDirectory;
+            }
 
       if (saveDirectory.isEmpty())
             saveDirectory = preferences.getString(PREF_APP_PATHS_MYSCORES);
@@ -1689,16 +1692,15 @@ bool MuseScore::exportParts()
 
       QString saveDialogTitle = tr("Export Parts");
 
-      QSettings settings;
-      if (lastSaveCopyDirectory.isEmpty())
-          lastSaveCopyDirectory = settings.value("lastSaveCopyDirectory", preferences.getString(PREF_APP_PATHS_MYSCORES)).toString();
-      if (lastSaveDirectory.isEmpty())
-          lastSaveDirectory = settings.value("lastSaveDirectory", preferences.getString(PREF_APP_PATHS_MYSCORES)).toString();
-      QString saveDirectory = lastSaveCopyDirectory;
-
-      if (saveDirectory.isEmpty()) {
-          saveDirectory = preferences.getString(PREF_APP_PATHS_MYSCORES);
-          }
+      QString saveDirectory;
+      if (cs->masterScore()->fileInfo()->exists())
+            saveDirectory = cs->masterScore()->fileInfo()->dir().path();
+      else {
+            QSettings settings;
+            if (lastSaveCopyDirectory.isEmpty())
+                lastSaveCopyDirectory = settings.value("lastSaveCopyDirectory", preferences.getString(PREF_APP_PATHS_MYSCORES)).toString();
+            saveDirectory = lastSaveCopyDirectory;
+            }
 
       if (saveDirectory.isEmpty())
             saveDirectory = preferences.getString(PREF_APP_PATHS_MYSCORES);
@@ -2262,12 +2264,22 @@ bool MuseScore::saveAs(Score* cs, bool saveCopy)
       QString saveDialogTitle = saveCopy ? tr("Save a Copy") :
                                            tr("Save As");
 
-      QSettings settings;
-      if (mscore->lastSaveCopyDirectory.isEmpty())
-            mscore->lastSaveCopyDirectory = settings.value("lastSaveCopyDirectory", preferences.getString(PREF_APP_PATHS_MYSCORES)).toString();
-      if (mscore->lastSaveDirectory.isEmpty())
-            mscore->lastSaveDirectory = settings.value("lastSaveDirectory", preferences.getString(PREF_APP_PATHS_MYSCORES)).toString();
-      QString saveDirectory = saveCopy ? mscore->lastSaveCopyDirectory : mscore->lastSaveDirectory;
+      QString saveDirectory;
+      if (cs->masterScore()->fileInfo()->exists())
+            saveDirectory = cs->masterScore()->fileInfo()->dir().path();
+      else {
+            QSettings settings;
+            if (saveCopy) {
+                  if (mscore->lastSaveCopyDirectory.isEmpty())
+                        mscore->lastSaveCopyDirectory = settings.value("lastSaveCopyDirectory", preferences.getString(PREF_APP_PATHS_MYSCORES)).toString();
+                  saveDirectory = mscore->lastSaveCopyDirectory;
+                  }
+            else {
+                  if (mscore->lastSaveDirectory.isEmpty())
+                        mscore->lastSaveDirectory = settings.value("lastSaveDirectory", preferences.getString(PREF_APP_PATHS_MYSCORES)).toString();
+                  saveDirectory = mscore->lastSaveDirectory;
+                  }
+            }
 
       if (saveDirectory.isEmpty())
             saveDirectory = preferences.getString(PREF_APP_PATHS_MYSCORES);
@@ -2321,10 +2333,15 @@ bool MuseScore::saveSelection(Score* cs)
       fl.append(tr("MuseScore File") + " (*.mscz)");
       QString saveDialogTitle = tr("Save Selection");
 
-      QSettings settings;
-      if (mscore->lastSaveDirectory.isEmpty())
-            mscore->lastSaveDirectory = settings.value("lastSaveDirectory", preferences.getString(PREF_APP_PATHS_MYSCORES)).toString();
-      QString saveDirectory = mscore->lastSaveDirectory;
+      QString saveDirectory;
+      if (cs->masterScore()->fileInfo()->exists())
+            saveDirectory = cs->masterScore()->fileInfo()->dir().path();
+      else {
+            QSettings settings;
+            if (mscore->lastSaveDirectory.isEmpty())
+                  mscore->lastSaveDirectory = settings.value("lastSaveDirectory", preferences.getString(PREF_APP_PATHS_MYSCORES)).toString();
+            saveDirectory = mscore->lastSaveDirectory;
+            }
 
       if (saveDirectory.isEmpty())
             saveDirectory = preferences.getString(PREF_APP_PATHS_MYSCORES);
