@@ -2262,6 +2262,8 @@ QVariant TextBase::getProperty(Pid propertyId) const
 
 bool TextBase::setProperty(Pid pid, const QVariant& v)
       {
+      if (textInvalid)
+            genText();
       bool rv = true;
       switch (pid) {
             case Pid::SUB_STYLE:

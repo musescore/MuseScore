@@ -199,6 +199,7 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       p->translate(text->pos());
       text->draw(p);
       p->translate(-text->pos());
+      text->setParent(0);
       }
 
 #if 0

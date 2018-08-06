@@ -99,11 +99,9 @@ TextLine::TextLine(Score* s)
       setContinueTextOffset(QPointF(0,0));
       setEndTextOffset(QPointF(0,0));
       setLineVisible(true);
+
       setBeginHookType(HookType::NONE);
       setEndHookType(HookType::NONE);
-      setBeginTextPlace(PlaceText::LEFT);
-      setContinueTextPlace(PlaceText::AUTO);
-      setEndTextPlace(PlaceText::AUTO);
       setBeginHookHeight(Spatium(1.5));
       setEndHookHeight(Spatium(1.5));
 
