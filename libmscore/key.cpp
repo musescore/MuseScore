@@ -124,18 +124,23 @@ Key transposeKey(Key key, const Interval& interval)
 
 void KeySigEvent::initFromSubtype(int st)
       {
-      union U {
-            int subtype;
-            struct {
-                  int _key:4;
-                  int _naturalType:4;
-                  unsigned _customType:16;
-                  bool _custom : 1;
-                  bool _invalid : 1;
-                  };
-            };
-      U a;
-      a.subtype       = st;
+      //anatoly-os: legacy code. I don't understand why it is so overcomplicated.
+      //Did refactoring to avoid exception on MSVC, but left the same logic.
+      struct {
+            int _key:4;
+            int _naturalType:4;
+            unsigned _customType:16;
+            bool _custom : 1;
+            bool _invalid : 1;
+            } a;
+
+      a._key         = (st & 0xf);
+      a._naturalType = (st >> 4) & 0xf;
+      a._customType  = (st >> 8) & 0xffff;
+      a._custom      = (st >> 24) & 0x1;
+      a._invalid     = (st >> 25) & 0x1;
+      //end of legacy code
+
       _key            = Key(a._key);
 //      _customType     = a._customType;
       _custom         = a._custom;
@@ -144,6 +149,7 @@ void KeySigEvent::initFromSubtype(int st)
       enforceLimits();
       }
 
+#pragma pack (pop)
 //---------------------------------------------------------
 //   accidentalVal
 //---------------------------------------------------------
