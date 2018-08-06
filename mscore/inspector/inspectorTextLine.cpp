@@ -23,7 +23,10 @@ namespace Ms {
 InspectorTextLine::InspectorTextLine(QWidget* parent)
    : InspectorTextLineBase(parent)
       {
+      ttl.setupUi(addWidget());
+
       const std::vector<InspectorItem> il = {
+            { Pid::PLACEMENT,  0, ttl.placement,  ttl.resetPlacement             },
             };
       const std::vector<InspectorPanel> ppList = {
             };

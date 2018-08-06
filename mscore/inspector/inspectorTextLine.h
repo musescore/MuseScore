@@ -13,8 +13,8 @@
 #ifndef __INSPECTOR_TEXTLINE_H__
 #define __INSPECTOR_TEXTLINE_H__
 
-#include "inspector.h"
 #include "inspectorTextLineBase.h"
+#include "ui_inspector_textline.h"
 
 namespace Ms {
 
@@ -24,6 +24,8 @@ namespace Ms {
 
 class InspectorTextLine : public InspectorTextLineBase {
       Q_OBJECT
+
+      Ui::InspectorTextLine ttl;
 
    public:
       InspectorTextLine(QWidget* parent);

@@ -88,7 +88,7 @@ static const StyleType styleTypes[] {
       { Sid::lyricsMelismaPad,        "lyricsMelismaPad",        Spatium(0.10) }, // the empty space before a melisma line
       { Sid::lyricsDashPad,           "lyricsDashPad",           Spatium(0.05) }, // the min. empty space before and after a dash
       { Sid::lyricsDashLineThickness, "lyricsDashLineThickness", Spatium(0.15) }, // in sp. units
-      { Sid::lyricsDashYposRatio,     "lyricsDasYposRatio",      0.67          }, // the fraction of lyrics font x-height to raise the dashes above text base line;
+      { Sid::lyricsDashYposRatio,     "lyricsDashYposRatio",     0.67          }, // the fraction of lyrics font x-height to raise the dashes above text base line
 
       { Sid::lyricsOddFontFace,       "lyricsOddFontFace",       "FreeSerif" },
       { Sid::lyricsOddFontSize,       "lyricsOddFontSize",       11.0 },

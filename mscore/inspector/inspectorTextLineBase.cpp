@@ -14,7 +14,6 @@
 #include "inspectorTextLineBase.h"
 #include "libmscore/textlinebase.h"
 #include "icons.h"
-#include "inspectorTextLine.h"
 
 namespace Ms {
 

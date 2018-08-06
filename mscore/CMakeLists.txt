@@ -125,6 +125,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_lyric.ui
       inspector/inspector_line.ui
       inspector/inspector_textline.ui
+      inspector/inspector_textlinebase.ui
       inspector/inspector_slur.ui
       inspector/inspector_text.ui
       inspector/inspector_stafftext.ui
@@ -346,13 +347,13 @@ add_executable ( ${ExecutableName}
       inspector/inspectorAmbitus.cpp
       inspector/inspectorArpeggio.cpp
       inspector/inspectorFingering.cpp
-      inspector/inspectorTextLine.cpp
       inspector/alignSelect.cpp
       inspector/offsetSelect.cpp
       inspector/scaleSelect.cpp
       inspector/sizeSelect.cpp
       inspector/inspectorTextBase.cpp
       inspector/inspectorTextLineBase.cpp
+      inspector/inspectorTextLine.cpp
       inspector/inspectorDynamic.cpp
       inspector/inspectorElementBase.cpp
       enableplayforwidget.cpp

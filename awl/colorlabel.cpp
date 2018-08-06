@@ -74,7 +74,6 @@ QSize ColorLabel::sizeHint() const
 
 void ColorLabel::paintEvent(QPaintEvent* ev)
       {
-      {
       QPainter p(this);
       int fw = frameWidth();
       QRect r(frameRect().adjusted(fw, fw, -2*fw, -2*fw));
@@ -82,7 +81,6 @@ void ColorLabel::paintEvent(QPaintEvent* ev)
             p.drawTiledPixmap(r, *_pixmap);
       else
             p.fillRect(r, _color);
-      }
       QFrame::paintEvent(ev);
       }
 
