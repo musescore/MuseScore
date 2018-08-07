@@ -258,11 +258,15 @@ int AlsaDriver::playInit(snd_pcm_uframes_t len)
 
 void AlsaDriver::printinfo()
       {
-      qDebug("\n  nchan  : %d", _play_nchan);
+      qDebug("Info:");
+      qDebug("  nchan  : %d", _play_nchan);
       qDebug("  rate   : %d", _rate);
       qDebug("  frsize : %ld", _frsize);
       qDebug("  nfrags : %d", _nfrags);
-      qDebug("  format : %s", snd_pcm_format_name (_play_format));
+
+      snd_pcm_format_t format;
+      snd_pcm_hw_params_get_format (_play_hwpar, &format);
+      qDebug("  format : %s", snd_pcm_format_name (format));
       }
 
 //---------------------------------------------------------
@@ -342,7 +346,8 @@ bool AlsaDriver::setHwpar(snd_pcm_t* handle, snd_pcm_hw_params_t* hwpar)
             }
 
       if ((err = snd_pcm_hw_params (handle, hwpar)) < 0) {
-            qDebug("Alsa_driver: can't set hardware parameters.");
+            qDebug("Alsa_driver: can't set hardware parameters: %s", snd_strerror(err));
+            printinfo();
             return false;
             }
       return true;

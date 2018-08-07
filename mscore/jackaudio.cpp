@@ -22,7 +22,7 @@
 // Include stdint.h and #define _STDINT_H to prevent <systemdeps.h> from redefining types
 // #undef UNICODE to force LoadLibrary to use the char-based implementation instead of the wchar_t one.
 #include <stdint.h>
-#define _STDINT_H 1  
+#define _STDINT_H 1
 #endif
 
 #include "jackaudio.h"

@@ -357,7 +357,6 @@ void Seq::stop()
       if (cv)
             cv->setCursorOn(false);
       if (cs) {
-//??            cs->setLayoutAll();
             cs->setUpdateAll();
             cs->update();
             }
@@ -1555,7 +1554,7 @@ double Seq::curTempo() const
       {
       if (playPos != events.end())
             return cs ? cs->tempomap()->tempo(playPos->first) : 0.0;
-      
+
       return 0.0;
       }
 
