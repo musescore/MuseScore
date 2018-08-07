@@ -41,6 +41,27 @@ enum class OttavaType : char {
       OTTAVA_22MB
       };
 
+//---------------------------------------------------------
+//   OttavaDefault
+//---------------------------------------------------------
+
+struct OttavaDefault {
+      OttavaType type;
+      int shift;
+      const char* name;
+      };
+
+// order is important, should be the same as OttavaType
+static const OttavaDefault ottavaDefault[] = {
+      { OttavaType::OTTAVA_8VA,  12,  "8va"   },
+      { OttavaType::OTTAVA_8VB,  -12, "8vb"   },
+      { OttavaType::OTTAVA_15MA, 24,  "15ma"  },
+      { OttavaType::OTTAVA_15MB, -24, "15mb"  },
+      { OttavaType::OTTAVA_22MA, 36,  "22ma"  },
+      { OttavaType::OTTAVA_22MB, -36, "22mb"  }
+      };
+
+
 class Ottava;
 
 //---------------------------------------------------------
