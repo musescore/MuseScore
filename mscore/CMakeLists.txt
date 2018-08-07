@@ -629,11 +629,11 @@ else (MINGW)
             )
          install(DIRECTORY
             ${QT_INSTALL_PREFIX}/resources
-            DESTINATION bin/webengineresources
+            DESTINATION bin
             )
          install(DIRECTORY
             ${QT_INSTALL_PREFIX}/translations/qtwebengine_locales
-            DESTINATION bin/webengineresources/translations/qtwebengine_locales
+            DESTINATION bin/qtwebengine_locales
             )
       endif(APPLE)
 
@@ -895,10 +895,10 @@ else (MINGW)
          DESTINATION bin/webengineresources
 		 )
 
-      install(FILES
-         ${QT_INSTALL_PREFIX}/bin/QtWebEngineProcess.exe
-	     DESTINATION bin
-         )
+      install(DIRECTORY
+         ${QT_INSTALL_PREFIX}/translations/qtwebengine_locales
+         DESTINATION bin/webengineresources/translations
+		 )
 
       install(DIRECTORY
          ${QT_INSTALL_PREFIX}/qml
