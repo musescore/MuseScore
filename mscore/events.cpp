@@ -25,6 +25,7 @@
 #include "libmscore/stafflines.h"
 #include "libmscore/chord.h"
 #include "libmscore/shadownote.h"
+#include "libmscore/repeatlist.h"
 
 namespace Ms {
 
@@ -412,6 +413,16 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   }
                   break;
 
+            case ViewState::PLAY: {
+                  if (seq && e && (e->isNote() || e->isRest())) {
+                        if (e->isNote())
+                              e = e->parent();
+                        ChordRest* cr = toChordRest(e);
+                        seq->seek(seq->score()->repeatList()->tick2utick(cr->tick()));
+                        }
+                  }
+                  break;
+
             default:
                   qDebug("mousePressEvent in state %d", int(state));
                   break;
@@ -477,6 +488,11 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
                   score()->startCmd();
                   editData.element->startEditDrag(editData);
                   changeState(ViewState::DRAG_EDIT);
+                  break;
+
+            case ViewState::PLAY:
+                  if (drag && !editData.element)
+                        dragScoreView(me);
                   break;
 
             default:
