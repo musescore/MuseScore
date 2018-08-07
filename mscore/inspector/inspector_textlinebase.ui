@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>353</width>
-    <height>684</height>
+    <width>361</width>
+    <height>814</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -112,12 +112,15 @@
            <property name="text">
             <string>Text:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
            <property name="buddy">
             <cstring>beginText</cstring>
            </property>
           </widget>
          </item>
-         <item row="4" column="1">
+         <item row="5" column="1">
           <widget class="QComboBox" name="beginTextPlacement">
            <property name="accessibleName">
             <string>Placement</string>
@@ -134,7 +137,7 @@
            </item>
           </widget>
          </item>
-         <item row="5" column="0">
+         <item row="6" column="0">
           <widget class="QLabel" name="label_3">
            <property name="text">
             <string>Offset:</string>
@@ -174,7 +177,7 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="2">
+         <item row="5" column="2">
           <widget class="QToolButton" name="resetBeginTextPlacement">
            <property name="toolTip">
             <string>Reset to default</string>
@@ -392,12 +395,15 @@
            <property name="text">
             <string>Font face:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
            <property name="buddy">
             <cstring>beginFontFace</cstring>
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
+         <item row="5" column="0">
           <widget class="QLabel" name="label_2">
            <property name="text">
             <string>Placement:</string>
@@ -417,7 +423,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="2">
+         <item row="6" column="2">
           <widget class="QToolButton" name="resetBeginTextOffset">
            <property name="toolTip">
             <string>Reset to default</string>
@@ -434,8 +440,42 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item row="6" column="1">
           <widget class="Ms::OffsetSelect" name="beginTextOffset" native="true"/>
+         </item>
+         <item row="4" column="1">
+          <widget class="Ms::AlignSelect" name="beginTextAlign" native="true">
+           <property name="toolTip">
+            <string>Text Alignment</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="2">
+          <widget class="QToolButton" name="resetBeginTextAlign">
+           <property name="toolTip">
+            <string>Reset to default</string>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Alignment' values</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="../musescore.qrc">
+             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Alignment:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -505,7 +545,7 @@
          <property name="verticalSpacing">
           <number>0</number>
          </property>
-         <item row="6" column="2">
+         <item row="7" column="2">
           <widget class="QToolButton" name="resetContinueTextOffset">
            <property name="toolTip">
             <string>Reset to default</string>
@@ -664,7 +704,7 @@
            </item>
           </layout>
          </item>
-         <item row="5" column="2">
+         <item row="6" column="2">
           <widget class="QToolButton" name="resetContinueTextPlacement">
            <property name="toolTip">
             <string>Reset to default</string>
@@ -706,6 +746,9 @@
            <property name="text">
             <string>Text:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
            <property name="buddy">
             <cstring>continueText</cstring>
            </property>
@@ -731,7 +774,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
+         <item row="6" column="0">
           <widget class="QLabel" name="label_14">
            <property name="text">
             <string>Placement:</string>
@@ -785,7 +828,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item row="6" column="1">
           <widget class="QComboBox" name="continueTextPlacement">
            <property name="accessibleName">
             <string>Placement</string>
@@ -806,6 +849,9 @@
           <widget class="QLabel" name="label_11">
            <property name="text">
             <string>Font face:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
            <property name="buddy">
             <cstring>continueFontFace</cstring>
@@ -829,7 +875,7 @@
            </property>
           </widget>
          </item>
-         <item row="6" column="0">
+         <item row="7" column="0">
           <widget class="QLabel" name="label_15">
            <property name="text">
             <string>Offset:</string>
@@ -839,8 +885,42 @@
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
+         <item row="7" column="1">
           <widget class="Ms::OffsetSelect" name="continueTextOffset" native="true"/>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>Alignment:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="Ms::AlignSelect" name="continueTextAlign" native="true">
+           <property name="toolTip">
+            <string>Text Alignment</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="2">
+          <widget class="QToolButton" name="resetContinueTextAlign">
+           <property name="toolTip">
+            <string>Reset to default</string>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Alignment' values</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="../musescore.qrc">
+             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -999,7 +1079,7 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="2">
+         <item row="5" column="2">
           <widget class="QToolButton" name="resetEndTextPlacement">
            <property name="toolTip">
             <string>Reset to default</string>
@@ -1016,7 +1096,7 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
+         <item row="5" column="0">
           <widget class="QLabel" name="label_22">
            <property name="text">
             <string>Placement:</string>
@@ -1025,9 +1105,6 @@
             <cstring>endTextPlacement</cstring>
            </property>
           </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="Ms::OffsetSelect" name="endTextOffset" native="true"/>
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="label_20">
@@ -1041,6 +1118,9 @@
             <cstring>endFontSize</cstring>
            </property>
           </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="Ms::OffsetSelect" name="endTextOffset" native="true"/>
          </item>
          <item row="3" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -1197,7 +1277,7 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="1">
+         <item row="5" column="1">
           <widget class="QComboBox" name="endTextPlacement">
            <property name="accessibleName">
             <string>Placement</string>
@@ -1236,6 +1316,9 @@
            <property name="text">
             <string>Text:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
            <property name="buddy">
             <cstring>endText</cstring>
            </property>
@@ -1245,6 +1328,9 @@
           <widget class="QLabel" name="label_19">
            <property name="text">
             <string>Font face:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
            <property name="buddy">
             <cstring>endFontFace</cstring>
@@ -1285,7 +1371,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
+         <item row="6" column="0">
           <widget class="QLabel" name="label_16">
            <property name="text">
             <string>Offset:</string>
@@ -1295,13 +1381,47 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="2">
+         <item row="6" column="2">
           <widget class="QToolButton" name="resetEndTextOffset">
            <property name="toolTip">
             <string>Reset to default</string>
            </property>
            <property name="accessibleName">
             <string>Reset 'Offset' value</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="../musescore.qrc">
+             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_17">
+           <property name="text">
+            <string>Alignment:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="Ms::AlignSelect" name="endTextAlign" native="true">
+           <property name="toolTip">
+            <string>Text Alignment</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="2">
+          <widget class="QToolButton" name="resetEndTextAlign">
+           <property name="toolTip">
+            <string>Reset to default</string>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Alignment' values</string>
            </property>
            <property name="text">
             <string notr="true"/>
@@ -1373,6 +1493,12 @@
    <class>Ms::OffsetSelect</class>
    <extends>QWidget</extends>
    <header>inspector/offsetSelect.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Ms::AlignSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/alignSelect.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

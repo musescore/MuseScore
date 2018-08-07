@@ -675,6 +675,7 @@ enum class Sid {
       textLineFontBold,
       textLineFontItalic,
       textLineFontUnderline,
+      textLineTextAlign,
 
       glissandoFontFace,
       glissandoFontSize,

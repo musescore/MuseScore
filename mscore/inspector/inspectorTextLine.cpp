@@ -29,6 +29,7 @@ InspectorTextLine::InspectorTextLine(QWidget* parent)
             { Pid::PLACEMENT,  0, ttl.placement,  ttl.resetPlacement             },
             };
       const std::vector<InspectorPanel> ppList = {
+            { ttl.title, ttl.panel },
             };
 
       mapSignals(il, ppList);
