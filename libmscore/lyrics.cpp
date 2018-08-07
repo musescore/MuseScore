@@ -274,6 +274,8 @@ void Lyrics::layout()
             }
       else {
             }
+#else
+      Q_UNUSED(hasNumber);
 #endif
       if (styleDidChange)
             styleChanged();
