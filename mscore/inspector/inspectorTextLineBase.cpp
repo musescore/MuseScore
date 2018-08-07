@@ -65,6 +65,7 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
 
             { Pid::BEGIN_TEXT,              0, tl.beginText,             tl.resetBeginText             },
             { Pid::BEGIN_TEXT_PLACE,        0, tl.beginTextPlacement,    tl.resetBeginTextPlacement    },
+            { Pid::BEGIN_TEXT_ALIGN,        0, tl.beginTextAlign,        tl.resetBeginTextAlign        },
             { Pid::BEGIN_FONT_FACE,         0, tl.beginFontFace,         tl.resetBeginFontFace         },
             { Pid::BEGIN_FONT_SIZE,         0, tl.beginFontSize,         tl.resetBeginFontSize         },
             { Pid::BEGIN_FONT_BOLD,         0, tl.beginFontBold,         tl.resetBeginFontBold         },
@@ -76,6 +77,7 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
             { Pid::BEGIN_HOOK_HEIGHT,       0, tl.beginHookHeight,       tl.resetBeginHookHeight       },
             { Pid::CONTINUE_TEXT,           0, tl.continueText,          tl.resetContinueText          },
             { Pid::CONTINUE_TEXT_PLACE,     0, tl.continueTextPlacement, tl.resetContinueTextPlacement },
+            { Pid::CONTINUE_TEXT_ALIGN,     0, tl.continueTextAlign,     tl.resetContinueTextAlign     },
             { Pid::CONTINUE_FONT_FACE,      0, tl.continueFontFace,      tl.resetContinueFontFace      },
             { Pid::CONTINUE_FONT_SIZE,      0, tl.continueFontSize,      tl.resetContinueFontSize      },
             { Pid::CONTINUE_FONT_BOLD,      0, tl.continueFontBold,      tl.resetContinueFontBold      },
@@ -85,6 +87,7 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
 
             { Pid::END_TEXT,                0, tl.endText,               tl.resetEndText               },
             { Pid::END_TEXT_PLACE,          0, tl.endTextPlacement,      tl.resetEndTextPlacement      },
+            { Pid::END_TEXT_ALIGN,          0, tl.endTextAlign,          tl.resetEndTextAlign          },
             { Pid::END_FONT_FACE,           0, tl.endFontFace,           tl.resetEndFontFace           },
             { Pid::END_FONT_SIZE,           0, tl.endFontSize,           tl.resetEndFontSize           },
             { Pid::END_FONT_BOLD,           0, tl.endFontBold,           tl.resetEndFontBold           },

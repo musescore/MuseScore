@@ -17,6 +17,10 @@
 
 namespace Ms {
 
+//---------------------------------------------------------
+//   textLineStyle
+//---------------------------------------------------------
+
 static const ElementStyle textLineStyle {
       { Sid::textLineFontFace,                   Pid::BEGIN_FONT_FACE         },
       { Sid::textLineFontFace,                   Pid::CONTINUE_FONT_FACE      },
@@ -33,9 +37,9 @@ static const ElementStyle textLineStyle {
       { Sid::textLineFontUnderline,              Pid::BEGIN_FONT_UNDERLINE    },
       { Sid::textLineFontUnderline,              Pid::CONTINUE_FONT_UNDERLINE },
       { Sid::textLineFontUnderline,              Pid::END_FONT_UNDERLINE      },
-//      { Sid::textLineTextAlign,                  Pid::BEGIN_TEXT_ALIGN        },
-//      { Sid::textLineTextAlign,                  Pid::CONTINUE_TEXT_ALIGN     },
-//      { Sid::textLineTextAlign,                  Pid::END_TEXT_ALIGN          },
+      { Sid::textLineTextAlign,                  Pid::BEGIN_TEXT_ALIGN        },
+      { Sid::textLineTextAlign,                  Pid::CONTINUE_TEXT_ALIGN     },
+      { Sid::textLineTextAlign,                  Pid::END_TEXT_ALIGN          },
       };
 
 //---------------------------------------------------------
@@ -105,9 +109,9 @@ TextLine::TextLine(Score* s)
       setBeginHookHeight(Spatium(1.5));
       setEndHookHeight(Spatium(1.5));
 
-      resetProperty(Pid::BEGIN_TEXT_ALIGN);
-      resetProperty(Pid::CONTINUE_TEXT_ALIGN);
-      resetProperty(Pid::END_TEXT_ALIGN);
+//      resetProperty(Pid::BEGIN_TEXT_ALIGN);
+//      resetProperty(Pid::CONTINUE_TEXT_ALIGN);
+//      resetProperty(Pid::END_TEXT_ALIGN);
 
       resetProperty(Pid::BEGIN_TEXT_PLACE);
       resetProperty(Pid::CONTINUE_TEXT_PLACE);
@@ -161,10 +165,10 @@ QVariant TextLine::propertyDefault(Pid propertyId) const
             case Pid::BEGIN_HOOK_HEIGHT:
             case Pid::END_HOOK_HEIGHT:
                   return Spatium(1.5);
-            case Pid::BEGIN_TEXT_ALIGN:
-            case Pid::END_TEXT_ALIGN:
-            case Pid::CONTINUE_TEXT_ALIGN:
-                  return QVariant::fromValue(Align::LEFT | Align::VCENTER);
+//            case Pid::BEGIN_TEXT_ALIGN:
+//            case Pid::END_TEXT_ALIGN:
+//            case Pid::CONTINUE_TEXT_ALIGN:
+//                  return QVariant::fromValue(Align::LEFT | Align::VCENTER);
             default:
                   return TextLineBase::propertyDefault(propertyId);
             }

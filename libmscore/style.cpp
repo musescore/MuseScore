@@ -696,6 +696,7 @@ static const StyleType styleTypes[] {
       { Sid::textLineFontBold,              "textLineFontBold",             false },
       { Sid::textLineFontItalic,            "textLineFontItalic",           false },
       { Sid::textLineFontUnderline,         "textLineFontUnderline",        false },
+      { Sid::textLineTextAlign,             "textLineTextAlign",            QVariant::fromValue(Align::LEFT | Align::VCENTER) },
 
       { Sid::glissandoFontFace,             "glissandoFontFace",            "FreeSerif" },
       { Sid::glissandoFontSize,             "glissandoFontSize",            QVariant(8.0) },
