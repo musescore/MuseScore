@@ -173,8 +173,9 @@ void* PulseAudio::paLoop(void* data)
       {
       PulseAudio* pa = (PulseAudio*)data;
       pa->runState = 2;
-      while (pa->runState == 2)
+      while (pa->runState == 2) {
             pa_mainloop_iterate(pa->pa_ml, 1, NULL);
+            }
       pa->runState = 0;
       return 0;
       }

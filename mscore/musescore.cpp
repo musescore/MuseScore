@@ -3839,7 +3839,6 @@ void MuseScore::writeSettings()
             mixer->writeSettings();
       settings.setValue("mixerVisible", mixer && mixer->isVisible());
       if (seq) {
-            seq->stopWait();
             seq->exit();
             }
       if (instrList)
@@ -6354,7 +6353,7 @@ int main(int argc, char* av[])
       const char* appName2;
       if (MuseScore::unstable()) {
             appName2 = "mscore-dev3";
-            appName  = "MuseScoreDevelopment";
+            appName  = "MuseScore3Development";
             }
       else {
             appName2 = "mscore3";
