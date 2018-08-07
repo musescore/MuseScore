@@ -311,7 +311,7 @@ QVariant Fermata::propertyDefault(Pid propertyId) const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-Sid Fermata::getPropertyStyle(Pid id) const
+Sid Fermata::getPropertyStyle(Pid /*id*/) const
       {
       return Sid::NOSTYLE;
       }

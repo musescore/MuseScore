@@ -456,7 +456,7 @@ const char* Articulation::articulationName() const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-Sid Articulation::getPropertyStyle(Pid id) const
+Sid Articulation::getPropertyStyle(Pid /*id*/) const
       {
       return Sid::NOSTYLE;
       }
