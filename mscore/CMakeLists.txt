@@ -845,6 +845,7 @@ else (MINGW)
       list(REMOVE_DUPLICATES QtInstallLibraries)
       
       target_link_libraries(mscore ${QT_LIBRARIES})
+      add_dependencies(mscore lrelease)
 
       install( FILES
 #        ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
