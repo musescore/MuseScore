@@ -96,23 +96,15 @@ extern bool savePositions(Score*, const QString& name, bool segments);
 extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
-//   paintElement(s)
+//   paintElements
 //---------------------------------------------------------
 
-static void paintElement(QPainter& p, const Element* e)
-      {
-      QPointF pos(e->pagePos());
-      p.translate(pos);
-      e->draw(&p);
-      p.translate(-pos);
-      }
-
-static void paintElements(QPainter& p, const QList<Element*>& el)
+static void paintElements(QPainter* p, const QList<Element*>& el)
       {
       for (Element* e : el) {
             if (!e->visible())
                   continue;
-            paintElement(p, e);
+            e->drawAt(p, e->pagePos());
             }
       }
 
@@ -225,6 +217,89 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
             }
       return false;
       }
+
+
+//---------------------------------------------------------
+//   print
+//---------------------------------------------------------
+
+void Score::print(QPaintDevice* paintDevice, QPainter* painter, int pageNumber)
+      {
+      _printing  = true;
+      MScore::pdfPrinting = true;
+      Page* page = pages().at(pageNumber);
+
+      // 1st pass: Group contiguous staff lines together into single longer lines to be printed once (to reduce element count in PDF & SVG files)
+      for (System* system : page->systems()) {
+            for (int i = 0; i < system->staves()->size(); i++) {
+
+                  // ignore staves that won't be drawn
+                  if (score()->staff(i)->invisible() || !score()->staff(i)->show() ||
+                      system->staves()->isEmpty() || !system->staff(i)->show())
+                        continue;
+
+                  StaffLines* firstSL = 0;
+                  qreal additionalLength = 0.0;
+                  for (MeasureBase* mb = system->firstMeasure(); mb != 0; mb = mb->nextMeasureMM()) {
+
+                        if (mb->isMeasure() && static_cast<Measure*>(mb)->visible(i)) {
+                              if (firstSL)
+                                    additionalLength += static_cast<Measure*>(mb)->width();
+                              else {
+                                    firstSL = static_cast<Measure*>(mb)->staffLines(i);
+                                    additionalLength = 0.0;
+                                    }
+                              }
+
+                        // draw staff lines only when reaching a break in staff lines
+                        if (firstSL &&
+                            !(system->nextMeasureBase(mb) &&
+                              system->nextMeasureBase(mb)->isMeasure() &&
+                              static_cast<Measure*>(system->nextMeasureBase(mb))->visible(i))
+                            ) {
+                              painter->translate(firstSL->pagePos());
+                              firstSL->drawMultipleMeasures(painter, additionalLength);
+                              painter->translate(-firstSL->pagePos());
+
+                              firstSL = 0; // indicate that a break in staff lines has occurred.
+                              }
+
+                        if (system->nextMeasureBase(mb) == 0)
+                              break;
+                        }
+                  }
+            }
+
+      // 2nd pass: print the remaining elements other than staff lines
+      QList<Element*> pel = page->elements();
+      qStableSort(pel.begin(), pel.end(), elementLessThan);
+      ElementType eType;
+      for (const Element* e : pel) {
+            // Always exclude invisible elements
+            if (!e->visible())
+                  continue;
+
+            eType = e->type();
+            switch (eType) { // In future sub-type code, this switch() grows, and eType gets used
+            case ElementType::STAFF_LINES : // Handled in the 1st pass above
+                  continue; // Exclude from 2nd pass
+                  break;
+            default:
+                  break;
+            } // switch(eType)
+
+            // Set the Element pointer inside SvgGenerator/SvgPaintEngine
+            if (MScore::svgPrinting)
+                  static_cast<SvgGenerator*>(paintDevice)->setElement(e);
+
+            // Paint it
+            e->drawAtPagePos(painter);
+            }
+
+      MScore::pdfPrinting = false;
+      _printing = false;
+      }
+
 
 //---------------------------------------------------------
 //   checkDirty
@@ -1556,6 +1631,8 @@ void MuseScore::printFile()
             MScore::pixelRatio = 1.0 / mag;
             p.scale(mag, mag);
 
+            cs->setPrinting(true);
+
             int fromPage = printerDev.fromPage() - 1;
             int toPage   = printerDev.toPage() - 1;
             if (fromPage < 0)
@@ -1570,12 +1647,13 @@ void MuseScore::printFile()
                               printerDev.newPage();
                         firstPage = false;
 
-                        cs->print(&p, n);
+                        cs->print(&printerDev, &p, n);
                         if ((copy + 1) < printerDev.numCopies())
                               printerDev.newPage();
                         }
                   }
             p.end();
+            cs->setPrinting(false);
             MScore::pixelRatio = pr;
             }
 
@@ -2002,7 +2080,7 @@ bool MuseScore::savePdf(Score* cs, const QString& saveName)
             if (!firstPage)
                   pdfWriter.newPage();
             firstPage = false;
-            cs->print(&p, n);
+            cs->print(0, &p, n);
             }
       p.end();
       cs->setPrinting(false);
@@ -2067,7 +2145,7 @@ bool MuseScore::savePdf(QList<Score*> cs, const QString& saveName)
                   if (!firstPage)
                         pdfWriter.newPage();
                   firstPage = false;
-                  s->print(&p, n);
+                  s->print(0, &p, n);
                   }
             //reset score
             s->setPrinting(false);
@@ -2481,16 +2559,16 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
             double mag = convDpi / DPI;
             MScore::pixelRatio = 1.0 / mag;
 
-            QPainter p(&printer);
-            p.setRenderHint(QPainter::Antialiasing, true);
-            p.setRenderHint(QPainter::TextAntialiasing, true);
-            p.scale(mag, mag);
+            QPainter painter(&printer);
+            painter.setRenderHint(QPainter::Antialiasing, true);
+            painter.setRenderHint(QPainter::TextAntialiasing, true);
+            painter.scale(mag, mag);
             if (trimMargin >= 0)
-                  p.translate(-r.topLeft());
+                  painter.translate(-r.topLeft());
 
             QList<Element*> pel = page->elements();
             qStableSort(pel.begin(), pel.end(), elementLessThan);
-            paintElements(p, pel);
+            paintElements(&painter, pel);
 
             if (format == QImage::Format_Indexed8) {
                   //convert to grayscale & respect alpha
@@ -2665,8 +2743,8 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
       double pr = MScore::pixelRatio;
       for (int pageNumber = 0; pageNumber < pages; ++pageNumber) {
             Page* page = pl.at(pageNumber);
-            SvgGenerator printer;
-            printer.setTitle(pages > 1 ? QString("%1 (%2)").arg(title).arg(pageNumber + 1) : title);
+            SvgGenerator paintDev;
+            paintDev.setTitle(pages > 1 ? QString("%1 (%2)").arg(title).arg(pageNumber + 1) : title);
 
             QString fileName(saveName);
             if (fileName.endsWith(".svg"))
@@ -2696,7 +2774,7 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                               continue;
                         }
                   }
-            printer.setFileName(fileName);
+            paintDev.setFileName(fileName);
 
             QRectF r;
             if (trimMargin >= 0) {
@@ -2707,89 +2785,19 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                   r = page->abbox();
             qreal w = r.width();
             qreal h = r.height();
-            printer.setSize(QSize(w, h));
-            printer.setViewBox(QRectF(0, 0, w, h));
-            QPainter p(&printer);
+            paintDev.setSize(QSize(w, h));
+            paintDev.setViewBox(QRectF(0, 0, w, h));
+            QPainter p(&paintDev);
             p.setRenderHint(QPainter::Antialiasing, true);
             p.setRenderHint(QPainter::TextAntialiasing, true);
             if (trimMargin >= 0 && score->npages() == 1)
                   p.translate(-r.topLeft());
-            MScore::pixelRatio = DPI / printer.logicalDpiX();
+            MScore::pixelRatio = DPI / paintDev.logicalDpiX();
             if (trimMargin >= 0)
-                   p.translate(-r.topLeft());
-            // 1st pass: StaffLines
-            for  (System* s : page->systems()) {
-                  for (int i = 0, n = s->staves()->size(); i < n; i++) {
-                        if (score->staff(i)->invisible() || !score->staff(i)->show())
-                              continue;  // ignore invisible staves
-                        if (s->staves()->isEmpty() || !s->staff(i)->show())
-                              continue;
+                  p.translate(-r.topLeft());
 
-                        // The goal here is to draw SVG staff lines more efficiently.
-                        // MuseScore draws staff lines by measure, but for SVG they can
-                        // generally be drawn once for each system. This makes a big
-                        // difference for scores that scroll horizontally on a single
-                        // page. But there are exceptions to this rule:
-                        //
-                        //   ~ One (or more) invisible measure(s) in a system/staff ~
-                        //   ~ One (or more) elements of type HBOX or VBOX          ~
-                        //
-                        // In these cases the SVG staff lines for the system/staff
-                        // are drawn by measure.
-                        //
-                        bool byMeasure = false;
-                        for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
-                              if (mb->isHBox() || mb->isVBox() || !toMeasure(mb)->visible(i)) {
-                                    byMeasure = true;
-                                    break;
-                                    }
-                              }
-                        if (byMeasure) { // Draw visible staff lines by measure
-                              for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
-                                    if (mb->type() != ElementType::HBOX
-                                     && mb->type() != ElementType::VBOX
-                                     && static_cast<Measure*>(mb)->visible(i)) {
-                                          StaffLines* sl = toMeasure(mb)->staffLines(i);
-                                          printer.setElement(sl);
-                                          paintElement(p, sl);
-                                          }
-                                    }
-                              }
-                        else { // Draw staff lines once per system
-                              StaffLines* firstSL = s->firstMeasure()->staffLines(i)->clone();
-                              StaffLines*  lastSL =  s->lastMeasure()->staffLines(i);
-                              firstSL->bbox().setRight(lastSL->bbox().right()
-                                                    +  lastSL->pagePos().x()
-                                                    - firstSL->pagePos().x());
-                              printer.setElement(firstSL);
-                              paintElement(p, firstSL);
-                              }
-                        }
-                  }
-            // 2nd pass: the rest of the elements
-            QList<Element*> pel = page->elements();
-            qStableSort(pel.begin(), pel.end(), elementLessThan);
-            ElementType eType;
-            for (const Element* e : pel) {
-                  // Always exclude invisible elements
-                  if (!e->visible())
-                        continue;
+            score->print(&paintDev, &p, pageNumber);
 
-                  eType = e->type();
-                  switch (eType) { // In future sub-type code, this switch() grows, and eType gets used
-                  case ElementType::STAFF_LINES : // Handled in the 1st pass above
-                        continue; // Exclude from 2nd pass
-                        break;
-                  default:
-                        break;
-                  } // switch(eType)
-
-                  // Set the Element pointer inside SvgGenerator/SvgPaintEngine
-                  printer.setElement(e);
-
-                  // Paint it
-                  paintElement(p, e);
-                  }
             p.end(); // Writes MuseScore SVG file to disk, finally
             }
 

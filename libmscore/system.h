@@ -132,8 +132,8 @@ class System final : public Element {
       Measure* lastMeasure() const;
       int endTick() const;
 
-      MeasureBase* prevMeasure(const MeasureBase*) const;
-      MeasureBase* nextMeasure(const MeasureBase*) const;
+      MeasureBase* prevMeasureBase(const MeasureBase*) const;
+      MeasureBase* nextMeasureBase(const MeasureBase*) const;
 
       qreal leftMargin() const    { return _leftMargin; }
       Box* vbox() const;

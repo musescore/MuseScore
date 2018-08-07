@@ -745,7 +745,7 @@ class Score : public QObject, public ScoreElement {
       bool saveCompressedFile(QIODevice*, QFileInfo&, bool onlySelection, bool createThumbnail = true);
       bool exportFile();
 
-      void print(QPainter* printer, int page);
+      void print(QPaintDevice* paintDevice, QPainter* painter, int pageNumber);
       ChordRest* getSelectedChordRest() const;
       QSet<ChordRest*> getSelectedChordRests() const;
       void getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const;

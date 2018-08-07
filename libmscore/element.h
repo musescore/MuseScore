@@ -252,7 +252,8 @@ class Element : public ScoreElement {
       virtual int subtype() const                 { return -1; }  // for select gui
 
       virtual void draw(QPainter*) const {}
-      void drawAt(QPainter*p, const QPointF& pt) const { p->translate(pt); draw(p); p->translate(-pt);}
+      void drawAt(QPainter* p, const QPointF& pt) const { p->translate(pt); draw(p); p->translate(-pt);}
+      void drawAtPagePos(QPainter* p) const { drawAt(p, pagePos()); }
 
       virtual void writeProperties(XmlWriter& xml) const;
       virtual bool readProperties(XmlReader&);

@@ -510,12 +510,12 @@ QImage Score::createThumbnail()
       double pr = MScore::pixelRatio;
       MScore::pixelRatio = 1.0;
 
-      QPainter p(&pm);
-      p.setRenderHint(QPainter::Antialiasing, true);
-      p.setRenderHint(QPainter::TextAntialiasing, true);
-      p.scale(mag, mag);
-      print(&p, 0);
-      p.end();
+      QPainter painter(&pm);
+      painter.setRenderHint(QPainter::Antialiasing, true);
+      painter.setRenderHint(QPainter::TextAntialiasing, true);
+      painter.scale(mag, mag);
+      print(0, &painter, 0);
+      painter.end();
 
       MScore::pixelRatio = pr;
 
@@ -947,31 +947,6 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                   e.unknown();
             }
       return FileError::FILE_CORRUPTED;
-      }
-
-//---------------------------------------------------------
-//   print
-//---------------------------------------------------------
-
-void Score::print(QPainter* painter, int pageNo)
-      {
-      _printing  = true;
-      MScore::pdfPrinting = true;
-      Page* page = pages().at(pageNo);
-      QRectF fr  = page->abbox();
-
-      QList<Element*> ell = page->items(fr);
-      qStableSort(ell.begin(), ell.end(), elementLessThan);
-      for (const Element* e : ell) {
-            if (!e->visible())
-                  continue;
-            painter->save();
-            painter->translate(e->pagePos());
-            e->draw(painter);
-            painter->restore();
-            }
-      MScore::pdfPrinting = false;
-      _printing = false;
       }
 
 //---------------------------------------------------------

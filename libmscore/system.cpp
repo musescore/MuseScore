@@ -850,7 +850,7 @@ Measure* System::lastMeasure() const
 //   prevMeasure
 //---------------------------------------------------------
 
-MeasureBase* System::prevMeasure(const MeasureBase* m) const
+MeasureBase* System::prevMeasureBase(const MeasureBase* m) const
       {
       if (m == ml.front())
             return 0;
@@ -861,7 +861,7 @@ MeasureBase* System::prevMeasure(const MeasureBase* m) const
 //   nextMeasure
 //---------------------------------------------------------
 
-MeasureBase* System::nextMeasure(const MeasureBase* m) const
+MeasureBase* System::nextMeasureBase(const MeasureBase* m) const
       {
       if (m == ml.back())
             return 0;
