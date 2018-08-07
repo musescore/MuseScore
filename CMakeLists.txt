@@ -153,13 +153,13 @@ endif (APPLE)
 #
 #     Check for gcc compiler >= 4.8
 #
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
       if (${CMAKE_CXX_COMPILER_MAJOR} LESS 4
         OR ((${CMAKE_CXX_COMPILER_MAJOR} EQUAL 4) AND (${CMAKE_CXX_COMPILER_MINOR} LESS 8)))
             message(FATAL_ERROR "bad gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION}
                   " >= 4.8 required")
       endif()
-endif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+endif (${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
 
 if (NOT MSVC)
    set(CMAKE_CXX_FLAGS_DEBUG   "-g")

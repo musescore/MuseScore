@@ -14,7 +14,7 @@ if (LAMEMSVC_INCLUDE_DIR AND LAMEMSVC_LIBRARY)
 endif (LAMEMSVC_INCLUDE_DIR AND LAMEMSVC_LIBRARY)
 
 if (LAME_FOUND)
-      message (STATUS "Found vorbis: ${LAMEMSVC_LIBRARY}")
+      message (STATUS "Found lame: ${LAMEMSVC_LIBRARY}")
 else (LAME_FOUND)
       message (FATAL_ERROR "Could not find: lame")
 endif (LAME_FOUND)
