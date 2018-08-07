@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>712</width>
-    <height>538</height>
+    <width>834</width>
+    <height>569</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -3796,7 +3796,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           <string>Audio</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_15">
-          <item row="1" column="2">
+          <item row="2" column="2">
            <widget class="QComboBox" name="exportMp3BitRate">
             <property name="currentText">
              <string>128</string>
@@ -3876,14 +3876,14 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             </item>
            </widget>
           </item>
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QLabel" name="label_18">
             <property name="text">
              <string>Sample rate:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
+          <item row="1" column="2">
            <widget class="QComboBox" name="exportAudioSampleRate">
             <property name="accessibleName">
              <string>Sample rate</string>
@@ -3911,21 +3911,21 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             </item>
            </widget>
           </item>
-          <item row="0" column="3">
+          <item row="1" column="3">
            <widget class="QLabel" name="label_8">
             <property name="text">
              <string extracomment="Hertz">Hz</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="3">
+          <item row="2" column="3">
            <widget class="QLabel" name="exportMp3BitRateUnit">
             <property name="text">
              <string>kBit/s</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="4">
+          <item row="2" column="4">
            <spacer name="horizontalSpacer_19">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -3938,10 +3938,17 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             </property>
            </spacer>
           </item>
-          <item row="1" column="0">
+          <item row="2" column="0">
            <widget class="QLabel" name="exportMp3BitRateLabel">
             <property name="text">
              <string>MP3 Bitrate:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="3">
+           <widget class="QCheckBox" name="normalize">
+            <property name="text">
+             <string>Normalize</string>
             </property>
            </widget>
           </item>

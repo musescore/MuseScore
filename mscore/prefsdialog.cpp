@@ -154,7 +154,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
       connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
        connect(myExtensionsButton, SIGNAL(clicked()), SLOT(selectExtensionsDirectory()));
-      
+
 
       connect(updateTranslation, SIGNAL(clicked()), SLOT(updateTranslationClicked()));
 
@@ -372,6 +372,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
             }
       sessionScore->setText(preferences.getString(PREF_APP_STARTUP_STARTSCORE));
       expandRepeats->setChecked(preferences.getBool(PREF_IO_MIDI_EXPANDREPEATS));
+      normalize->setChecked(preferences.getBool(PREF_EXPORT_AUDIO_NORMALIZE));
       exportRPNs->setChecked(preferences.getBool(PREF_IO_MIDI_EXPORTRPNS));
       instrumentList1->setText(preferences.getString(PREF_APP_PATHS_INSTRUMENTLIST1));
       instrumentList2->setText(preferences.getString(PREF_APP_PATHS_INSTRUMENTLIST2));
@@ -676,7 +677,7 @@ void  PreferenceDialog::filterShortcutsTextChanged(const QString &query )
           if(item->text(0).toLower().contains(query.toLower()))
               item->setHidden(false);
           else
-              item->setHidden(true);  
+              item->setHidden(true);
           }
       }
 
@@ -914,6 +915,7 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_IO_MIDI_ADVANCEONRELEASE, advanceOnRelease->isChecked());
       preferences.setPreference(PREF_IO_MIDI_ENABLEINPUT, enableMidiInput->isChecked());
       preferences.setPreference(PREF_IO_MIDI_EXPANDREPEATS, expandRepeats->isChecked());
+      preferences.setPreference(PREF_EXPORT_AUDIO_NORMALIZE, normalize->isChecked());
       preferences.setPreference(PREF_IO_MIDI_EXPORTRPNS, exportRPNs->isChecked());
       preferences.setPreference(PREF_IO_MIDI_REALTIMEDELAY, realtimeDelay->value());
       preferences.setPreference(PREF_IO_MIDI_USEREMOTECONTROL, rcGroup->isChecked());

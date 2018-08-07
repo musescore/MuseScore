@@ -84,7 +84,8 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
     const int maxEndTime = (score->utick2utime(endPos->first) + 3) * MScore::sampleRate;
 
     bool cancelled = false;
-    for (int pass = 0; pass < 2; ++pass) {
+    int passes = preferences.getBool(PREF_EXPORT_AUDIO_NORMALIZE) ? 2 : 1;
+    for (int pass = 0; pass < passes; ++pass) {
           EventMap::const_iterator playPos;
           playPos = events.cbegin();
           synti->allSoundsOff(-1);
@@ -151,7 +152,6 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
                             max = qMax(max, qAbs(buffer[i]));
                             buffer[i] *= gain;
                             }
-                      device->write(reinterpret_cast<const char*>(buffer), 2 * FRAMES * sizeof(float));
                       }
                 else {
                       for (unsigned i = 0; i < FRAMES * 2; ++i) {
@@ -159,10 +159,12 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
                             peak = qMax(peak, qAbs(buffer[i]));
                             }
                       }
+                if (pass == (passes - 1))
+                      device->write(reinterpret_cast<const char*>(buffer), 2 * FRAMES * sizeof(float));
                 playTime = endTime;
                 if (updateProgress) {
                     // normalize to [0, 1] range
-                    if (!updateProgress((pass * et + playTime) / 2.0 / et)) {
+                    if (!updateProgress((pass * et + playTime) / passes / et)) {
                         cancelled = true;
                         break;
                     }
