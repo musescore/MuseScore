@@ -2758,9 +2758,14 @@ bool MuseScore::saveSvg(Score* score, const QString& saveName)
                         else { // Draw staff lines once per system
                               StaffLines* firstSL = s->firstMeasure()->staffLines(i)->clone();
                               StaffLines*  lastSL =  s->lastMeasure()->staffLines(i);
-                              firstSL->bbox().setRight(lastSL->bbox().right()
-                                                    +  lastSL->pagePos().x()
-                                                    - firstSL->pagePos().x());
+
+                              qreal lastX =  lastSL->bbox().right()
+                                          +  lastSL->pagePos().x()
+                                          - firstSL->pagePos().x();
+                              QVector<QLineF>& lines = firstSL->getLines();
+                              for (int l = 0, c = lines.size(); l < c; l++)
+                                    lines[l].setP2(QPointF(lastX, lines[l].p2().y()));
+
                               printer.setElement(firstSL);
                               paintElement(p, firstSL);
                               }
