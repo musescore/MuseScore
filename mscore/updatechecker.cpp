@@ -146,9 +146,16 @@ void UpdateChecker::check(QString currentVersion, bool m)
 #if defined(Q_OS_MAC)
       os = "mac";
 #endif
+      bool check = true;
       if (MuseScore::unstable()) {
             release = "nightly";
-            _currentVersion = QString("%1.%2").arg(currentVersion).arg(BUILD_NUMBER);
+            QString buildNumber = QString("%1").arg(BUILD_NUMBER);
+            if (!buildNumber.isEmpty())
+                  _currentVersion = QString("%1.%2").arg(currentVersion).arg(BUILD_NUMBER);
+            else {
+                  _currentVersion = currentVersion;
+                  check = false;
+                  }
             }
       else {
             release = "stable";
@@ -156,7 +163,7 @@ void UpdateChecker::check(QString currentVersion, bool m)
             }
       if (MScore::debugMode)
             qDebug("release type: %s", release.toLatin1().constData());
-      if (!os.isEmpty() && !release.isEmpty())
+      if (!os.isEmpty() && !release.isEmpty() && check)
             manager->get(QNetworkRequest(QUrl("http://update.musescore.org/update_" + os +"_" + release +".xml")));
       }
 
