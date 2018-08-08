@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2013 Werner Schweer
+//  Copyright (C) 2018 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -11,29 +11,29 @@
 //=============================================================================
 
 #include "inspector.h"
-#include "inspectorTextLine.h"
+#include "inspectorPedal.h"
 #include "musescore.h"
 #include "libmscore/score.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorTextLine
+//   InspectorPedal
 //---------------------------------------------------------
 
-InspectorTextLine::InspectorTextLine(QWidget* parent)
+InspectorPedal::InspectorPedal(QWidget* parent)
    : InspectorTextLineBase(parent)
       {
-      ttl.setupUi(addWidget());
+      p.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,  0, ttl.placement,  ttl.resetPlacement             },
+            { Pid::PLACEMENT,  0, p.placement,  p.resetPlacement             },
             };
       const std::vector<InspectorPanel> ppList = {
-            { ttl.title, ttl.panel },
+            { p.title, p.panel },
             };
 
-      populatePlacement(ttl.placement);
+      populatePlacement(p.placement);
       mapSignals(il, ppList);
       }
 }

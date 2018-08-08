@@ -11,6 +11,7 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#include "inspector.h"
 #include "inspectorOttava.h"
 #include "inspectorTextLine.h"
 #include "musescore.h"
@@ -37,6 +38,7 @@ InspectorOttava::InspectorOttava(QWidget* parent)
       const std::vector<InspectorPanel> ppList = {
             { o.title,  o.panel }
             };
+      populatePlacement(o.placement);
       mapSignals(il, ppList);
       }
 

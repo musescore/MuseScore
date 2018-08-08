@@ -192,9 +192,6 @@ QVariant Pedal::propertyDefault(Pid propertyId) const
             case Pid::END_HOOK_TYPE:
                   return int(HookType::NONE);
 
-            case Pid::PLACEMENT:
-                  return int(Placement::BELOW);
-
             case Pid::LINE_VISIBLE:
                   return true;
 

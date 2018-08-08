@@ -1,9 +1,8 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
-//  Copyright (C) 2012 Werner Schweer and others
+//  Copyright (C) 2018 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -11,29 +10,26 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __INSPECTOR_TRILL_H__
-#define __INSPECTOR_TRILL_H__
+#ifndef __INSPECTOR_PEDAL_H__
+#define __INSPECTOR_PEDAL_H__
 
-#include "inspector.h"
-#include "inspectorBase.h"
-#include "ui_inspector_line.h"
-#include "ui_inspector_trill.h"
+#include "inspectorTextLineBase.h"
+#include "ui_inspector_pedal.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorTrill
+//   InspectorPedal
 //---------------------------------------------------------
 
-class InspectorTrill : public InspectorElementBase {
+class InspectorPedal : public InspectorTextLineBase {
       Q_OBJECT
 
-      Ui::InspectorTrill t;
+      Ui::InspectorPedal p;
 
    public:
-      InspectorTrill(QWidget* parent);
+      InspectorPedal(QWidget* parent);
       };
-
 
 } // namespace Ms
 #endif

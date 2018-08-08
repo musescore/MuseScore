@@ -34,6 +34,10 @@
 #include "inspectorFingering.h"
 #include "inspectorDynamic.h"
 #include "inspectorHarmony.h"
+#include "inspectorLetRing.h"
+#include "inspectorPedal.h"
+#include "inspectorPalmMute.h"
+#include "inspectorVibrato.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "bendproperties.h"
@@ -253,10 +257,16 @@ void Inspector::update(Score* s)
                               ie = new InspectorHairpin(this);
                               break;
                         case ElementType::TEXTLINE_SEGMENT:
-                        case ElementType::PEDAL_SEGMENT:
-                        case ElementType::LET_RING_SEGMENT:
-                        case ElementType::PALM_MUTE_SEGMENT:
                               ie = new InspectorTextLine(this);
+                              break;
+                        case ElementType::PEDAL_SEGMENT:
+                              ie = new InspectorPedal(this);
+                              break;
+                        case ElementType::LET_RING_SEGMENT:
+                              ie = new InspectorLetRing(this);
+                              break;
+                        case ElementType::PALM_MUTE_SEGMENT:
+                              ie = new InspectorPalmMute(this);
                               break;
                         case ElementType::SLUR_SEGMENT:
                         case ElementType::TIE_SEGMENT:
@@ -327,6 +337,9 @@ void Inspector::update(Score* s)
                               break;
                         case ElementType::HARMONY:
                               ie = new InspectorHarmony(this);
+                              break;
+                        case ElementType::VIBRATO_SEGMENT:
+                              ie = new InspectorVibrato(this);
                               break;
                         default:
                               if (element()->isText())

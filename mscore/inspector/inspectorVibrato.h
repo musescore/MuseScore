@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2013 Werner Schweer
+//  Copyright (C) 2018 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -10,31 +10,29 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#ifndef __INSPECTOR_VIBRATO_H__
+#define __INSPECTOR_VIBRATO_H__
+
 #include "inspector.h"
-#include "inspectorTextLine.h"
-#include "musescore.h"
-#include "libmscore/score.h"
+#include "inspectorBase.h"
+#include "ui_inspector_vibrato.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorTextLine
+//   InspectorVibrato
 //---------------------------------------------------------
 
-InspectorTextLine::InspectorTextLine(QWidget* parent)
-   : InspectorTextLineBase(parent)
-      {
-      ttl.setupUi(addWidget());
+class InspectorVibrato : public InspectorElementBase {
+      Q_OBJECT
 
-      const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,  0, ttl.placement,  ttl.resetPlacement             },
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { ttl.title, ttl.panel },
-            };
+      Ui::InspectorVibrato v;
 
-      populatePlacement(ttl.placement);
-      mapSignals(il, ppList);
-      }
-}
+   public:
+      InspectorVibrato(QWidget* parent);
+      };
+
+
+} // namespace Ms
+#endif
 
