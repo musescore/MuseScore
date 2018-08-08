@@ -110,6 +110,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_volta.ui
       inspector/inspector_ottava.ui
       inspector/inspector_trill.ui
+      inspector/inspector_vibrato.ui
       inspector/inspector_hairpin.ui
       inspector/inspector_jump.ui
       inspector/inspector_marker.ui
@@ -125,6 +126,9 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_lyric.ui
       inspector/inspector_line.ui
       inspector/inspector_textline.ui
+      inspector/inspector_letring.ui
+      inspector/inspector_palmmute.ui
+      inspector/inspector_pedal.ui
       inspector/inspector_textlinebase.ui
       inspector/inspector_slur.ui
       inspector/inspector_text.ui
@@ -259,12 +263,12 @@ add_executable ( ${ExecutableName}
       abstractdialog.h accessibletoolbutton.h albummanager.h
       alsa.h alsamidi.h analyse.h articulationprop.h bb.h
       bendcanvas.h bendproperties.h breaksdialog.h capella.h
-      chordview.h click.h continuouspanel.h downloadUtils.h 
+      chordview.h click.h continuouspanel.h downloadUtils.h
       driver.h drumroll.h drumtools.h drumview.h editdrumset.h
-      editinstrument.h editpitch.h editraster.h editstaff.h 
+      editinstrument.h editpitch.h editraster.h editstaff.h
       editstafftype.h editstringdata.h editstyle.h enableplayforwidget.h
-      exampleview.h excerptsdialog.h exportmidi.h exportmp3.h extension.h 
-      file.h fotomode.h fretcanvas.h fretproperties.h globals.h greendotbutton.h 
+      exampleview.h excerptsdialog.h exportmidi.h exportmp3.h extension.h
+      file.h fotomode.h fretcanvas.h fretproperties.h globals.h greendotbutton.h
       harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h importgtp.h importmxml.h
       importmxmllogger.h importmxmlnoteduration.h importmxmlnotepitch.h importmxmlpass1.h
       importmxmlpass2.h importptb.h importxmlfirstpass.h instrdialog.h instrwidget.h jackaudio.h
@@ -276,7 +280,7 @@ add_executable ( ${ExecutableName}
       pluginManager.h pm.h preferences.h preferenceslistwidget.h prefsdialog.h qmledit.h
       qmlplugin.h recordbutton.h resourceManager.h revision.h ruler.h scoreaccessibility.h
       scoreBrowser.h scoreInfo.h scorePreview.h scoretab.h scoreview.h searchComboBox.h
-      sectionbreakprop.h selectdialog.h selectionwindow.h selectnotedialog.h selinstrument.h 
+      sectionbreakprop.h selectdialog.h selectionwindow.h selectnotedialog.h selinstrument.h
       seq.h shortcut.h shortcutcapturedialog.h simplebutton.h splitstaff.h stafftextproperties.h
       startcenter.h startupWizard.h stringutils.h svggenerator.h symboldialog.h synthcontrol.h
       textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
@@ -339,6 +343,7 @@ add_executable ( ${ExecutableName}
       inspector/inspectorVolta.cpp
       inspector/inspectorOttava.cpp
       inspector/inspectorTrill.cpp
+      inspector/inspectorVibrato.cpp
       inspector/inspectorHairpin.cpp
       inspector/inspectorJump.cpp
       inspector/inspectorMarker.cpp
@@ -354,6 +359,9 @@ add_executable ( ${ExecutableName}
       inspector/inspectorTextBase.cpp
       inspector/inspectorTextLineBase.cpp
       inspector/inspectorTextLine.cpp
+      inspector/inspectorLetRing.cpp
+      inspector/inspectorPalmMute.cpp
+      inspector/inspectorPedal.cpp
       inspector/inspectorDynamic.cpp
       inspector/inspectorElementBase.cpp
       enableplayforwidget.cpp
@@ -467,7 +475,7 @@ endif (SOUNDFONT3)
 if (HAS_AUDIOFILE)
       if (MSVC)
          target_link_libraries(mscore audiofile ${SNDFILE_LIBRARY})
-      else (MSVC)   
+      else (MSVC)
          target_link_libraries(mscore audiofile ${SNDFILE_LIB})
       endif (MSVC)
 endif (HAS_AUDIOFILE)
@@ -616,7 +624,7 @@ else (MINGW)
             ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Resources/qtwebengine_resources.pak
             ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Resources/qtwebengine_resources_100p.pak
             ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Resources/qtwebengine_resources_200p.pak
-            DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}/webengineresources 
+            DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}/webengineresources
             )
          install(DIRECTORY
             ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Resources/qtwebengine_locales
@@ -803,7 +811,7 @@ else (MINGW)
       vstudio_pch( mscore )
 
       # Copy DLL dependencies to .EXE DIRECTORY
-      list(APPEND dlls_to_copy 
+      list(APPEND dlls_to_copy
                   "${QT_INSTALL_PREFIX}/bin/Qt5Core.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Gui.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Help.dll"
                   "${QT_INSTALL_PREFIX}/bin/Qt5Network.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5PrintSupport.dll"
                   "${QT_INSTALL_PREFIX}/bin/Qt5Qml.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Quick.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Sql.dll"
@@ -827,7 +835,7 @@ else (MINGW)
       COPY_FILES_INTO_DIRECTORY_IF_CHANGED( "${dlls_to_copy}" ${output_dir_for_dlls}  mscore)
 
       add_dependencies(mscore pluginDocumentation)
-      
+
       # Keep dependencies in alphabetical order. Changes made to this list
       # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
       get_filename_component(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
@@ -843,7 +851,7 @@ else (MINGW)
          endif (EXISTS ${QtSharedLibrary})
       endforeach (QtLibrary ${QT_LIBRARIES})
       list(REMOVE_DUPLICATES QtInstallLibraries)
-      
+
       target_link_libraries(mscore ${QT_LIBRARIES})
       add_dependencies(mscore lrelease)
 
@@ -884,7 +892,7 @@ else (MINGW)
       install(FILES
          ${QT_INSTALL_PREFIX}/plugins/sqldrivers/qsqlite.dll
          DESTINATION bin/sqldrivers)
-	  
+
 	  install( TARGETS mscore RUNTIME DESTINATION bin ) # this duplicate due to the correctly package step
 
       install(FILES
@@ -912,8 +920,8 @@ else (MINGW)
          REGEX ".*QtTest.*" EXCLUDE
 		 REGEX ".*QtWebkit.*" EXCLUDE
 		 )
-      
-      
+
+
    endif ( NOT MSVC )
 endif (MINGW)
 

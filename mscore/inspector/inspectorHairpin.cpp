@@ -11,6 +11,7 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#include "inspector.h"
 #include "inspectorHairpin.h"
 #include "musescore.h"
 #include "libmscore/hairpin.h"
@@ -61,6 +62,7 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             { l.title, l.panel },
             { h.title, h.panel }
             };
+      populatePlacement(h.placement);
       h.fontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
       h.fontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
       h.fontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);

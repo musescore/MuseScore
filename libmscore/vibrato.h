@@ -89,6 +89,10 @@ class Vibrato final : public SLine {
       virtual QString accessibleInfo() const override;
       };
 
+//---------------------------------------------------------
+//   VibratoTableItem
+//---------------------------------------------------------
+
 struct VibratoTableItem {
       Vibrato::Type type;
       const char* name;

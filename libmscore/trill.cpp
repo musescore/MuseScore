@@ -25,7 +25,11 @@
 namespace Ms {
 
 
-// must be in sync with Trill::Type
+//---------------------------------------------------------
+//   trillTable
+//    must be in sync with Trill::Type
+//---------------------------------------------------------
+
 const TrillTableItem trillTable[] = {
       { Trill::Type::TRILL_LINE,      "trill",      QT_TRANSLATE_NOOP("trillType", "Trill line")          },
       { Trill::Type::UPPRALL_LINE,    "upprall",    QT_TRANSLATE_NOOP("trillType", "Upprall line")        },
@@ -297,33 +301,6 @@ void Trill::layout()
       if (spannerSegments().empty())
             return;
       TrillSegment* ls = toTrillSegment(frontSegment());
-#if 0
-// this is now handled differently, in SLine::linePos
-      //
-      // special case:
-      // if end segment is first chord/rest segment in measure,
-      // shorten trill line so it ends at end of previous measure
-      //
-      qreal _spatium = spatium();
-      Segment* seg1  = startSegment();
-      Segment* seg2  = endSegment();
-      if (seg1
-         && seg2
-         && (seg1->system() == seg2->system())
-         && (spannerSegments().size() == 1)
-         && (seg2->tick() == seg2->measure()->tick())
-         ) {
-            qreal x1   = seg2->pagePos().x();
-            Measure* m = seg2->measure()->prevMeasure();
-            if (m) {
-                  Segment* s2      = m->last();
-                  qreal x2         = s2->pagePos().x();
-                  qreal dx         = x1 - x2 + _spatium * .3;
-                  ls->setPos2(ls->ipos2() + QPointF(-dx, 0.0));
-                  ls->layout();
-                  }
-            }
-#endif
       if (spannerSegments().empty())
             qDebug("Trill: no segments");
       if (_accidental)
@@ -496,7 +473,7 @@ bool Trill::setProperty(Pid propertyId, const QVariant& val)
 
 QVariant Trill::propertyDefault(Pid propertyId) const
       {
-      switch(propertyId) {
+      switch (propertyId) {
             case Pid::TRILL_TYPE:
                   return 0;
             case Pid::ORNAMENT_STYLE:

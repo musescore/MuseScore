@@ -1,8 +1,9 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
+//  $Id:$
 //
-//  Copyright (C) 2013 Werner Schweer
+//  Copyright (C) 2012 Werner Schweer
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -11,30 +12,34 @@
 //=============================================================================
 
 #include "inspector.h"
-#include "inspectorTextLine.h"
+#include "inspectorVibrato.h"
 #include "musescore.h"
+#include "libmscore/vibrato.h"
 #include "libmscore/score.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   InspectorTextLine
+//   InspectorVibrato
 //---------------------------------------------------------
 
-InspectorTextLine::InspectorTextLine(QWidget* parent)
-   : InspectorTextLineBase(parent)
+InspectorVibrato::InspectorVibrato(QWidget* parent)
+   : InspectorElementBase(parent)
       {
-      ttl.setupUi(addWidget());
+      v.setupUi(addWidget());
 
-      const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,  0, ttl.placement,  ttl.resetPlacement             },
+      const std::vector<InspectorItem> iiList = {
+            { Pid::VIBRATO_TYPE,   0, v.vibratoType,      v.resetVibratoType      },
+            { Pid::PLACEMENT,      0, v.placement,        v.resetPlacement        },
+            { Pid::PLAY,           0, v.playArticulation, v.resetPlayArticulation }
             };
       const std::vector<InspectorPanel> ppList = {
-            { ttl.title, ttl.panel },
+            { v.title, v.panel }
             };
 
-      populatePlacement(ttl.placement);
-      mapSignals(il, ppList);
+      populatePlacement(v.placement);
+      mapSignals(iiList, ppList);
       }
+
 }
 

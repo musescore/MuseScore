@@ -446,6 +446,8 @@ class InspectorEmpty : public InspectorBase {
       virtual QSize sizeHint() const override;
       };
 
+extern void populatePlacement(QComboBox*);
+
 } // namespace Ms
 #endif
 

@@ -408,10 +408,11 @@ void HairpinSegment::draw(QPainter* painter) const
 
 Element* HairpinSegment::propertyDelegate(Pid pid)
       {
-      if (pid == Pid::HAIRPIN_TYPE || pid == Pid::VELO_CHANGE || pid == Pid::HAIRPIN_CIRCLEDTIP
+      if (pid == Pid::HAIRPIN_TYPE
+         || pid == Pid::VELO_CHANGE
+         || pid == Pid::HAIRPIN_CIRCLEDTIP
          || pid == Pid::HAIRPIN_HEIGHT
          || pid == Pid::HAIRPIN_CONT_HEIGHT
-         || pid == Pid::LINE_VISIBLE
          || pid == Pid::DYNAMIC_RANGE)
             return spanner();
       return TextLineBaseSegment::propertyDelegate(pid);
@@ -640,14 +641,18 @@ QVariant Hairpin::propertyDefault(Pid id) const
       switch (id) {
             case Pid::HAIRPIN_CIRCLEDTIP:
                   return false;
+
             case Pid::VELO_CHANGE:
                   return 0;
+
             case Pid::DYNAMIC_RANGE:
                   return int(Dynamic::Range::PART);
+
             case Pid::LINE_STYLE:
                   if (_hairpinType == HairpinType::CRESC_HAIRPIN || _hairpinType == HairpinType::DECRESC_HAIRPIN)
                         return int(Qt::SolidLine);
                   return int(Qt::CustomDashLine);
+
             case Pid::BEGIN_TEXT:
             case Pid::CONTINUE_TEXT:
                   return QString("");

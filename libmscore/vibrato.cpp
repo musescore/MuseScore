@@ -25,12 +25,16 @@
 namespace Ms {
 
 
-// must be in sync with Vibrato::Type
+//---------------------------------------------------------
+//   vibratoTable
+//    must be in sync with Vibrato::Type
+//---------------------------------------------------------
+
 const VibratoTableItem vibratoTable[] = {
-      { Vibrato::Type::GUITAR_VIBRATO,         "guitarVibrato",         QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato")          },
-      { Vibrato::Type::GUITAR_VIBRATO_WIDE,    "guitarVibratoWide",     QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato wide")     },
-      { Vibrato::Type::VIBRATO_SAWTOOTH,         "vibratoSawtooth",       QT_TRANSLATE_NOOP("vibratoType", "Vibrato sawtooth")        },
-      { Vibrato::Type::VIBRATO_SAWTOOTH_WIDE,    "vibratoSawtoothWide",   QT_TRANSLATE_NOOP("vibratoType", "tremolo sawtooth wide")   }
+      { Vibrato::Type::GUITAR_VIBRATO,        "guitarVibrato",       QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato")        },
+      { Vibrato::Type::GUITAR_VIBRATO_WIDE,   "guitarVibratoWide",   QT_TRANSLATE_NOOP("vibratoType", "Guitar vibrato wide")   },
+      { Vibrato::Type::VIBRATO_SAWTOOTH,      "vibratoSawtooth",     QT_TRANSLATE_NOOP("vibratoType", "Vibrato sawtooth")      },
+      { Vibrato::Type::VIBRATO_SAWTOOTH_WIDE, "vibratoSawtoothWide", QT_TRANSLATE_NOOP("vibratoType", "tremolo sawtooth wide") }
       };
 
 int vibratoTableSize() {
@@ -156,7 +160,7 @@ Shape VibratoSegment::shape() const
 
 Element* VibratoSegment::propertyDelegate(Pid pid)
       {
-      if (pid == Pid::VIBRATO_TYPE || pid == Pid::ORNAMENT_STYLE || pid == Pid::PLACEMENT || pid == Pid::PLAY)
+      if (pid == Pid::VIBRATO_TYPE || pid == Pid::PLACEMENT || pid == Pid::PLAY)
             return spanner();
       return LineSegment::propertyDelegate(pid);
       }
