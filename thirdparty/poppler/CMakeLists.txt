@@ -151,7 +151,7 @@ else (APPLE)
          # -Woverloaded-virtual  -> /Wall enabled all warnings, no need to enable particularly
          # -Wno-missing-field-initializers -> ???
          # -Wno-unused-but-set-variable -> Warning C4189: 'identifier': local variable is initialized but not referenced
-         set (POPPLER_COMPILE_FLAGS "/wd4100 /wd4189")
+         set (POPPLER_COMPILE_FLAGS "/wd4065 /wd4100 /wd4121 /wd4127 /wd4189 /wd4244 /wd4245 /wd4310 /wd4255 /wd4309 /wd4456 /wd4458 /wd4459 /wd4701 /wd4702 /wd4706 /wd4805 /wd4996")
       endif (NOT MSVC)
    endif(MINGW)
 endif(APPLE)
