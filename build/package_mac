@@ -58,6 +58,27 @@ EOF
 
 }
 
+function change_rpath() {
+   for P in `otool -L $1 | awk '{print $1}'`
+   do
+      if [[ "$P" == *@rpath* ]]
+      then
+         PSLASH=$(echo $P | sed 's,@rpath,@executable_path/../Frameworks,g')
+         FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
+         install_name_tool -change $P $PSLASH $1
+         for P1 in `otool -L $FNAME | awk '{print $1}'`
+         do
+            if [[ "$P1" == *@rpath* ]]
+            then
+                PSLASH1=$(echo $P1 | sed "s,@rpath,@executable_path/../Frameworks,g")
+                install_name_tool -change $P1 $PSLASH1 $FNAME
+            fi
+         done
+      fi
+   done
+}
+
+
 rm ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
 
 #tip: increase the size if error on copy or macdeployqt
@@ -94,7 +115,6 @@ rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtPositioning
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtPurchasing
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtQuick/Particles*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/Qt/WebSockets
-# rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtWebEngine
 
 find ${VOLUME}/${APPNAME}.app/Contents -type d -name "*.dSYM" -exec rm -r {} +
 
@@ -104,23 +124,10 @@ macdeployqt ${VOLUME}/${APPNAME}.app
 
 # fix the libs, qt5.6 has @rpath...
 BIN_FILE=${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
-for P in `otool -L $BIN_FILE | awk '{print $1}'`
-do
-    if [[ "$P" == *@rpath* ]]
-    then
-        PSLASH=$(echo $P | sed 's,@rpath,@executable_path/../Frameworks,g')
-        FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
-        install_name_tool -change $P $PSLASH $BIN_FILE
-        for P1 in `otool -L $FNAME | awk '{print $1}'`
-        do
-            if [[ "$P1" == *@rpath* ]]
-            then
-                PSLASH1=$(echo $P1 | sed "s,@rpath,@executable_path/../Frameworks,g")
-                install_name_tool -change $P1 $PSLASH1 $FNAME
-            fi
-        done
-    fi
-done
+change_rpath $BIN_FILE
+# fix the QWebEngineProcess, qt5.9 has @rpath...
+WebEngineProcess=${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngineCore.framework/Versions/5/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess
+change_rpath $WebEngineProcess
 
 # Workaround:
 # fix Homebrew libraries with hard coded absolute path, see QTBUG-56814
@@ -149,6 +156,7 @@ do
 done
 
 otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
+otool -L ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngineCore.framework/Versions/5/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess
 
 mv ${VOLUME}/${APPNAME}.app "${VOLUME}/${LONGER_NAME}.app"
 
