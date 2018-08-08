@@ -5996,6 +5996,8 @@ bool MuseScore::canSaveMp3()
 bool MuseScore::saveMp3(Score* score, const QString& name)
       {
 #ifndef USE_LAME
+      Q_UNUSED(score);
+      Q_UNUSED(name);
       return false;
 #else
       EventMap events;

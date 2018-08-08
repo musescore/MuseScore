@@ -149,7 +149,6 @@ void KeySigEvent::initFromSubtype(int st)
       enforceLimits();
       }
 
-#pragma pack (pop)
 //---------------------------------------------------------
 //   accidentalVal
 //---------------------------------------------------------

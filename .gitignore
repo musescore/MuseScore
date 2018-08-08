@@ -49,3 +49,4 @@ MuseScore_General-changelog.txt
 VERSION
 /mscore/data/mscore.aps
 /msvc.build.release
+/msvc.build.relwithdebinfo
