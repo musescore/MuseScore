@@ -9,7 +9,7 @@ IF "%1"=="release" (
    cd C:\MuseScore
    if not exist msvc.build.release\nul mkdir msvc.build.release
    if not exist msvc.install\nul mkdir msvc.install
-   cd msvc.build.release & cmake -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX=../msvc.install -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_FOR_WINSTORE=%BUILD_FOR_WINSTORE ..
+   cd msvc.build.release & cmake -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX=../msvc.install -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_FOR_WINSTORE="%BUILD_FOR_WINSTORE%" ..
    cmake --build . --target lrelease
    cd msvc.build.release & cmake --build . --config release --target mscore
    )
@@ -18,7 +18,7 @@ IF "%1"=="debug" (
    cd C:\MuseScore
    if not exist msvc.build.debug\nul mkdir msvc.build.debug
    if not exist msvc.install\nul mkdir msvc.install
-   cd msvc.build.debug & cmake -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX=../msvc.install -DCMAKE_BUILD_TYPE=DEBUG -DBUILD_FOR_WINSTORE=%BUILD_FOR_WINSTORE ..
+   cd msvc.build.debug & cmake -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX=../msvc.install -DCMAKE_BUILD_TYPE=DEBUG -DBUILD_FOR_WINSTORE="%BUILD_FOR_WINSTORE%" ..
    cmake --build . --target lrelease
    cd msvc.build.debug & cmake --build . --config debug --target mscore
    )
@@ -27,7 +27,7 @@ IF "%1"=="relwithdebinfo" (
    cd C:\MuseScore
    if not exist msvc.build.relwithdebinfo\nul mkdir msvc.build.relwithdebinfo
    if not exist msvc.install\nul mkdir msvc.install
-   cd msvc.build.relwithdebinfo & cmake -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX=../msvc.install -DCMAKE_BUILD_TYPE=RELWITHDEBINFO -DBUILD_FOR_WINSTORE=%BUILD_FOR_WINSTORE ..
+   cd msvc.build.relwithdebinfo & cmake -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX=../msvc.install -DCMAKE_BUILD_TYPE=RELWITHDEBINFO -DBUILD_FOR_WINSTORE="%BUILD_FOR_WINSTORE%" ..
    cmake --build . --target lrelease
    cd msvc.build.relwithdebinfo & cmake --build . --config relwithdebinfo --target mscore
    )
