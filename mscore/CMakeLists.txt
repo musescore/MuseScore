@@ -629,11 +629,11 @@ else (MINGW)
             )
          install(DIRECTORY
             ${QT_INSTALL_PREFIX}/resources
-            DESTINATION bin
+            DESTINATION lib/qt5
             )
          install(DIRECTORY
             ${QT_INSTALL_PREFIX}/translations/qtwebengine_locales
-            DESTINATION bin/qtwebengine_locales
+            DESTINATION lib/qt5/translations
             )
       endif(APPLE)
 
