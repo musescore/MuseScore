@@ -1266,18 +1266,32 @@ void Note::read(XmlReader& e)
       // including perhaps some we don't know about yet,
       // we will attempt to fix some problems here regardless of version
 
-      if (!e.pasteMode() && !MScore::testMode) {
+      if (staff() && !staff()->isDrumStaff(e.tick()) && !e.pasteMode() && !MScore::testMode) {
             int tpc1Pitch = (tpc2pitch(_tpc[0]) + 12) % 12;
             int tpc2Pitch = (tpc2pitch(_tpc[1]) + 12) % 12;
-            int concertPitch = _pitch % 12;
-            if (tpc1Pitch != concertPitch) {
-                  qDebug("bad tpc1 - concertPitch = %d, tpc1 = %d", concertPitch, tpc1Pitch);
-                  _pitch += tpc1Pitch - concertPitch;
+            int soundingPitch = _pitch % 12;
+            if (tpc1Pitch != soundingPitch) {
+                  qDebug("bad tpc1 - soundingPitch = %d, tpc1 = %d", soundingPitch, tpc1Pitch);
+                  _pitch += tpc1Pitch - soundingPitch;
                   }
-            Interval v = staff()->part()->instrument(e.tick())->transpose();
-            int transposedPitch = (_pitch - v.chromatic) % 12;
-            if (tpc2Pitch != transposedPitch) {
-                  qDebug("bad tpc2 - transposedPitch = %d, tpc2 = %d", transposedPitch, tpc2Pitch);
+            if (staff()) {
+                  Interval v = staff()->part()->instrument(e.tick())->transpose();
+                  int writtenPitch = (_pitch - v.chromatic) % 12;
+                  if (tpc2Pitch != writtenPitch) {
+                        qDebug("bad tpc2 - writtenPitch = %d, tpc2 = %d", writtenPitch, tpc2Pitch);
+                        if (concertPitch()) {
+                              // assume we want to keep sounding pitch
+                              // so fix written pitch (tpc only)
+                              v.flip();
+                              _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
+                              }
+                        else {
+                              // assume we want to keep written pitch
+                              // so fix sounding pitch (both tpc and pitch)
+                              _tpc[0] = Ms::transposeTpc(_tpc[1], v, true);
+                              _pitch += tpc2Pitch - writtenPitch;
+                              }
+                        }
                   }
             }
       }
