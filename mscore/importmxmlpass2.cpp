@@ -801,9 +801,10 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
        el, track, qPrintable(placement), tick);
        */
 
+#if 0 // ws: use placement for symbols
       // move to correct position
       // TODO: handle rx, ry
-      if (el->type() == ElementType::SYMBOL) {
+      if (el->isSymbol()) {
             qreal y = 0;
             // calc y offset assuming five line staff and default style
             // note that required y offset is element type dependent
@@ -821,9 +822,10 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
             el->setUserOff(QPoint(0, y));
             }
       else {
-            el->setPlacement(placement == "above"
-                             ? Placement::ABOVE : Placement::BELOW);
+            el->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
             }
+#endif
+      el->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
 
       el->setTrack(track);
       Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
@@ -1296,11 +1298,11 @@ static NoteHead::Group convertNotehead(QString mxmlName)
  Add Text to Note.
  */
 
-static void addTextToNote(int l, int c, QString txt, SubStyleId style, Score* score, Note* note)
+static void addTextToNote(int l, int c, QString txt, Tid style, Score* score, Note* note)
       {
       if (note) {
             if (!txt.isEmpty()) {
-                  TextBase* t = new Fingering(style, score);
+                  TextBase* t = new Fingering(score, style);
                   t->setPlainText(txt);
                   note->add(t);
                   }
@@ -1345,6 +1347,7 @@ static void setSLinePlacement(SLine* sli, const QString placement)
        sli, sli->type(), sli->score()->spatium(), qPrintable(placement));
        */
 
+#if 0
       // calc y offset assuming five line staff and default style
       // note that required y offset is element type dependent
       if (sli->type() == ElementType::HAIRPIN) {
@@ -1363,9 +1366,10 @@ static void setSLinePlacement(SLine* sli, const QString placement)
                   }
             }
       else {
-            sli->setPlacement(placement == "above"
-                              ? Placement::ABOVE : Placement::BELOW);
+            sli->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
             }
+#endif
+      sli->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
       }
 
 //---------------------------------------------------------
@@ -2456,14 +2460,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   }
 
             if (_enclosure == "circle") {
-                  t->setHasFrame(true);
-                  t->setCircle(true);
+                  t->setFrameType(FrameType::CIRCLE);
                   }
             else if (_enclosure == "none") {
-                  t->setHasFrame(false);
+                  t->setFrameType(FrameType::NO_FRAME);
                   }
             else if (_enclosure == "rectangle") {
-                  t->setHasFrame(true);
+                  t->setFrameType(FrameType::SQUARE);
                   t->setFrameRound(0);
                   }
 
@@ -2731,11 +2734,11 @@ static Marker* findMarker(const QString& repeat, Score* score)
             m->setMarkerType(Marker::Type::CODA);
             }
       else if (repeat == "fine") {
-            m = new Marker(SubStyleId::REPEAT_RIGHT, score);
+            m = new Marker(score, Tid::REPEAT_RIGHT);
             m->setMarkerType(Marker::Type::FINE);
             }
       else if (repeat == "toCoda") {
-            m = new Marker(SubStyleId::REPEAT_RIGHT, score);
+            m = new Marker(score, Tid::REPEAT_RIGHT);
             m->setMarkerType(Marker::Type::TOCODA);
             }
       return m;
@@ -4155,7 +4158,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       bool graceSlash = false;
       bool printObject = _e.attributes().value("print-object") != "no";
       Beam::Mode bm  = Beam::Mode::AUTO;
-      QString instrId;
+      QString instrumentId;
 
       mxmlNoteDuration mnd(_divs, _logger);
       mxmlNotePitch mnp(_logger);
@@ -4183,7 +4186,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   _e.readNext();
                   }
             else if (_e.name() == "instrument") {
-                  instrId = _e.attributes().value("id").toString();
+                  instrumentId = _e.attributes().value("id").toString();
                   _e.readNext();
                   }
             else if (_e.name() == "notehead") {
@@ -4370,11 +4373,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             if (mnp.unpitched()) {
                   //&& drumsets.contains(partId)
                   if (_hasDrumset
-                      && mxmlDrumset.contains(instrId)) {
+                      && mxmlDrumset.contains(instrumentId)) {
                         // step and oct are display-step and ...-oct
                         // get pitch from instrument definition in drumset instead
-                        int pitch = mxmlDrumset[instrId].pitch;
-                        note->setPitch(pitch);
+                        int pitch = mxmlDrumset[instrumentId].pitch;
+                        note->setPitch(limit(pitch, 0, 127));
                         // TODO - does this need to be key-aware?
                         note->setTpc(pitch2tpc(pitch, Key::C, Prefer::NEAREST)); // TODO: necessary ?
                         }
@@ -4426,7 +4429,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   }
                    */
                   // this should be done in pass 1, would make _pass1 const here
-                  _pass1.setDrumsetDefault(partId, instrId, headGroup, line, stemDir);
+                  _pass1.setDrumsetDefault(partId, instrumentId, headGroup, line, stemDir);
                   }
 
             // accidental handling
@@ -4832,8 +4835,8 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       double rx = 0.0;        // 0.1 * e.attribute("relative-x", "0").toDouble();
       double ry = 0.0;        // -0.1 * e.attribute("relative-y", "0").toDouble();
 
-      double styleYOff = _score->textStyle(SubStyleId::HARMONY).offset().y();
-      OffsetType offsetType = _score->textStyle(SubStyleId::HARMONY).offsetType();
+      double styleYOff = _score->textStyle(Tid::HARMONY).offset().y();
+      OffsetType offsetType = _score->textStyle(Tid::HARMONY).offsetType();
       if (offsetType == OffsetType::ABS) {
             styleYOff = styleYOff * DPMM / _score->spatium();
             }
@@ -5487,10 +5490,10 @@ void MusicXMLParserPass2::technical(Note* note, ChordRest* cr)
                   continue;
                   }
             else if (_e.name() == "fingering")
-                  // TODO: distinguish between keyboards (style SubStyleId::FINGERING)
-                  // and (plucked) strings (style SubStyleId::LH_GUITAR_FINGERING)
+                  // TODO: distinguish between keyboards (style Tid::FINGERING)
+                  // and (plucked) strings (style Tid::LH_GUITAR_FINGERING)
                   addTextToNote(_e.lineNumber(), _e.columnNumber(), _e.readElementText(),
-                                SubStyleId::FINGERING, _score, note);
+                                  Tid::FINGERING, _score, note);
             else if (_e.name() == "fret") {
                   int fret = _e.readElementText().toInt();
                   if (note) {
@@ -5502,7 +5505,7 @@ void MusicXMLParserPass2::technical(Note* note, ChordRest* cr)
                   }
             else if (_e.name() == "pluck")
                   addTextToNote(_e.lineNumber(), _e.columnNumber(), _e.readElementText(),
-                                SubStyleId::RH_GUITAR_FINGERING, _score, note);
+                                Tid::RH_GUITAR_FINGERING, _score, note);
             else if (_e.name() == "string") {
                   QString txt = _e.readElementText();
                   if (note) {
@@ -5510,7 +5513,7 @@ void MusicXMLParserPass2::technical(Note* note, ChordRest* cr)
                               note->setString(txt.toInt() - 1);
                         else
                               addTextToNote(_e.lineNumber(), _e.columnNumber(), txt,
-                                            SubStyleId::STRING_NUMBER, _score, note);
+                                            Tid::STRING_NUMBER, _score, note);
                         }
                   else
                         _logger->logError("no note for string", &_e);

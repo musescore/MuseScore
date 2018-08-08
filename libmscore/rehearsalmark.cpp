@@ -18,13 +18,33 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   rehearsalMarkStyle
+//---------------------------------------------------------
+
+static const ElementStyle rehearsalMarkStyle {
+      { Sid::rehearsalMarkFontFace,              Pid::FONT_FACE              },
+      { Sid::rehearsalMarkFontSize,              Pid::FONT_SIZE              },
+      { Sid::rehearsalMarkFontBold,              Pid::FONT_BOLD              },
+      { Sid::rehearsalMarkFontItalic,            Pid::FONT_ITALIC            },
+      { Sid::rehearsalMarkFontUnderline,         Pid::FONT_UNDERLINE         },
+      { Sid::rehearsalMarkAlign,                 Pid::ALIGN                  },
+      { Sid::rehearsalMarkFrameType,             Pid::FRAME_TYPE             },
+      { Sid::rehearsalMarkFramePadding,          Pid::FRAME_PADDING          },
+      { Sid::rehearsalMarkFrameWidth,            Pid::FRAME_WIDTH            },
+      { Sid::rehearsalMarkFrameRound,            Pid::FRAME_ROUND            },
+      { Sid::rehearsalMarkFrameFgColor,          Pid::FRAME_FG_COLOR         },
+      { Sid::rehearsalMarkFrameBgColor,          Pid::FRAME_BG_COLOR         },
+      { Sid::rehearsalMarkPlacement,             Pid::PLACEMENT              },
+      };
+
+//---------------------------------------------------------
 //   RehearsalMark
 //---------------------------------------------------------
 
 RehearsalMark::RehearsalMark(Score* s)
-   : TextBase(s)
+   : TextBase(s, Tid::REHEARSAL_MARK)
       {
-      initSubStyle(SubStyleId::REHEARSAL_MARK);
+      initElementStyle(&rehearsalMarkStyle);
       setSystemFlag(true);
       }
 
@@ -65,7 +85,7 @@ QVariant RehearsalMark::propertyDefault(Pid id) const
       {
       switch (id) {
             case Pid::SUB_STYLE:
-                  return int(SubStyleId::REHEARSAL_MARK);
+                  return int(Tid::REHEARSAL_MARK);
             case Pid::PLACEMENT:
                   return score()->styleV(Sid::rehearsalMarkPlacement);
             default:

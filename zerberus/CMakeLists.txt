@@ -14,28 +14,49 @@ include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
 QT5_WRAP_UI (zerberusUi zerberus_gui.ui)
 
+if (NOT MSVC)
+   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
+else (NOT MSVC)
+   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
+endif (NOT MSVC)
+
 add_library (zerberus STATIC
       ${zerberusUi}
       channel.cpp
+      filter.cpp
       instrument.cpp
       sfz.cpp
       voice.cpp
       zerberus.cpp
       zone.cpp
       zerberusgui.cpp
-      ${PROJECT_BINARY_DIR}/all.h
+      ${_all_h_file}
       ${PCH}
       ${INCS}
       )
 
-set_target_properties (
+if (NOT MSVC)
+   set_target_properties (
       zerberus
       PROPERTIES
          COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+else (NOT MSVC)
+   set_target_properties (
+      zerberus
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE}"
+      )
+endif (NOT MSVC)   
 
 xcode_pch(zerberus all)
 
-ADD_DEPENDENCIES(zerberus mops1)
-ADD_DEPENDENCIES(zerberus mops2)
+# Use MSVC pre-compiled headers
+vstudio_pch( zerberus )
+
+# MSVC does not depend on mops1 & mops2 for PCH
+if (NOT MSVC)
+   ADD_DEPENDENCIES(zerberus mops1)
+   ADD_DEPENDENCIES(zerberus mops2)
+endif (NOT MSVC)   
 

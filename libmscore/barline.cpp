@@ -54,8 +54,8 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType)
                               }
                         }
                   else if (segmentType == SegmentType::BeginBarLine) {
-                        Segment* segment = m->undoGetSegmentR(SegmentType::BeginBarLine, 0);
-                        for (Element* e : segment->elist()) {
+                        Segment* segment1 = m->undoGetSegmentR(SegmentType::BeginBarLine, 0);
+                        for (Element* e : segment1->elist()) {
                               if (e) {
                                     e->score()->undo(new ChangeProperty(e, Pid::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
                                     e->score()->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
@@ -64,7 +64,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType)
                                     auto score = bl->score();
                                     BarLine* newBl = new BarLine(score);
                                     newBl->setBarLineType(barType);
-                                    newBl->setParent(segment);
+                                    newBl->setParent(segment1);
                                     newBl->setTrack(0);
                                     newBl->setSpanStaff(score->nstaves());
                                     newBl->score()->undo(new AddElement(newBl));
@@ -320,20 +320,20 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
       {
       qreal _spatium = spatium();
 
-      qreal y1;
-      qreal y2;
+      qreal y1l;
+      qreal y2l;
       if (parent() == 0) {    // for use in palette
-            y1 = 2.0 * _spatium;
-            y2 = 3.0 * _spatium;
+            y1l = 2.0 * _spatium;
+            y2l = 3.0 * _spatium;
             }
       else {
             Staff* staff  = score()->staff(staffIdx());
             StaffType* st = staff->staffType(tick());
-            y1            = st->doty1() * _spatium + 0.5 * score()->spatium() * mag();
-            y2            = st->doty2() * _spatium + 0.5 * score()->spatium() * mag();
+            y1l           = st->doty1() * _spatium + 0.5 * score()->spatium() * mag();
+            y2l           = st->doty2() * _spatium + 0.5 * score()->spatium() * mag();
             }
-      drawSymbol(SymId::repeatDot, painter, QPointF(x, y1));
-      drawSymbol(SymId::repeatDot, painter, QPointF(x, y2));
+      drawSymbol(SymId::repeatDot, painter, QPointF(x, y1l));
+      drawSymbol(SymId::repeatDot, painter, QPointF(x, y2l));
       }
 
 //---------------------------------------------------------
@@ -509,6 +509,7 @@ void BarLine::drawEditMode(QPainter* p, EditData& ed)
 void BarLine::write(XmlWriter& xml) const
       {
       xml.stag("BarLine");
+
       writeProperty(xml, Pid::BARLINE_TYPE);
       writeProperty(xml, Pid::BARLINE_SPAN);
       writeProperty(xml, Pid::BARLINE_SPAN_FROM);
@@ -566,7 +567,8 @@ printf("may drop\n");
                && segment()
                && segment()->isEndBarLineType());
             }
-      return false;
+      // Prevent unreachable code warning 
+      // return false;
       }
 
 //---------------------------------------------------------
@@ -1178,8 +1180,10 @@ QVariant BarLine::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::BARLINE_TYPE:
-                  if (segment() && segment()->measure() && !segment()->measure()->nextMeasure())
-                        return QVariant::fromValue(BarLineType::END);
+// dynamic default values are a bad idea: writing to xml the value maybe ommited resulting in
+//    wrong values on read (as the default may be different on read)
+//                  if (segment() && segment()->measure() && !segment()->measure()->nextMeasure())
+//                        return QVariant::fromValue(BarLineType::END);
                   return QVariant::fromValue(BarLineType::NORMAL);
 
             case Pid::BARLINE_SPAN:
@@ -1254,8 +1258,8 @@ QString BarLine::accessibleExtraInfo() const
                   if (e->type() == ElementType::JUMP)
                         rez= QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                   if (e->type() == ElementType::MARKER) {
-                        const Marker* m = toMarker(e);
-                        if (m->markerType() == Marker::Type::FINE)
+                        const Marker* m1 = toMarker(e);
+                        if (m1->markerType() == Marker::Type::FINE)
                               rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
                         }
 

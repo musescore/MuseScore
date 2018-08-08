@@ -242,6 +242,7 @@
           <duration>4/4</duration>
           </RepeatMeasure>
         <BarLine>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>

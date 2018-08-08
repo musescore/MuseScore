@@ -76,17 +76,29 @@ static Dyn dynList[] = {
       };
 
 //---------------------------------------------------------
+//   dynamicsStyle
+//---------------------------------------------------------
+
+static const ElementStyle dynamicsStyle {
+      { Sid::dynamicsFontFace,                   Pid::FONT_FACE              },
+      { Sid::dynamicsFontSize,                   Pid::FONT_SIZE              },
+      { Sid::dynamicsFontBold,                   Pid::FONT_BOLD              },
+      { Sid::dynamicsFontItalic,                 Pid::FONT_ITALIC            },
+      { Sid::dynamicsFontUnderline,              Pid::FONT_UNDERLINE         },
+      { Sid::dynamicsAlign,                      Pid::ALIGN                  },
+      };
+
+//---------------------------------------------------------
 //   Dynamic
 //---------------------------------------------------------
 
 Dynamic::Dynamic(Score* s)
-   : TextBase(s)
+   : TextBase(s, Tid::DYNAMICS, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(SubStyleId::DYNAMICS);
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
+      initElementStyle(&dynamicsStyle);
       _velocity = -1;
       _dynRange = Range::PART;
-      _dynamicType  = Type::OTHER;
+      _dynamicType = Type::OTHER;
       }
 
 Dynamic::Dynamic(const Dynamic& d)
@@ -139,8 +151,6 @@ void Dynamic::read(XmlReader& e)
             else if (!TextBase::readProperties(e))
                   e.unknown();
             }
-      if (subStyleId() == SubStyleId::DEFAULT)
-            initSubStyle(SubStyleId::DYNAMICS);
       }
 
 //---------------------------------------------------------
@@ -169,7 +179,7 @@ void Dynamic::layout()
                   Element* e = s->element(t + voice);
                   if (!e)
                         continue;
-                  if (e->isChord()) {
+                  if (e->isChord() && (align() & Align::HCENTER)) {
                         Chord* c = toChord(e);
                         qreal noteHeadWidth = score()->noteHeadWidth() * c->mag();
                         if (c->stem() && !c->up())  // stem down
@@ -324,9 +334,12 @@ void Dynamic::undoSetDynRange(Range v)
 QVariant Dynamic::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case Pid::DYNAMIC_RANGE:     return int(_dynRange);
-            case Pid::VELOCITY:          return velocity();
-            case Pid::SUBTYPE:           return int(_dynamicType);
+            case Pid::DYNAMIC_RANGE:
+                  return int(_dynRange);
+            case Pid::VELOCITY:
+                  return velocity();
+            case Pid::SUBTYPE:
+                  return int(_dynamicType);
             default:
                   return TextBase::getProperty(propertyId);
             }
@@ -365,7 +378,7 @@ QVariant Dynamic::propertyDefault(Pid id) const
       {
       switch(id) {
             case Pid::SUB_STYLE:
-                  return int(SubStyleId::DYNAMICS);
+                  return int(Tid::DYNAMICS);
             case Pid::DYNAMIC_RANGE:
                   return int(Range::PART);
             case Pid::VELOCITY:

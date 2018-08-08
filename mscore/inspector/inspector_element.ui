@@ -84,6 +84,9 @@
       </property>
       <item row="4" column="0" colspan="3">
        <widget class="QCheckBox" name="autoplace">
+        <property name="accessibleName">
+         <string>Automatic placement</string>
+        </property>
         <property name="text">
          <string>Automatic placement</string>
         </property>
@@ -165,6 +168,9 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
+        <property name="accessibleName">
+         <string>Visible</string>
+        </property>
         <property name="text">
          <string>Visible</string>
         </property>
@@ -221,6 +227,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Offset</string>
         </property>
        </widget>
       </item>

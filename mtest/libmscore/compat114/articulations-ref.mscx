@@ -13,14 +13,15 @@
       <bracketDistance>0.2</bracketDistance>
       <clefLeftMargin>0.5</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
+      <clefBarlineDistance>0.18</clefBarlineDistance>
       <minNoteDistance>0.4</minNoteDistance>
+      <barNoteDistance>1.2</barNoteDistance>
       <measureSpacing>1.14</measureSpacing>
       <ledgerLineWidth>0.12</ledgerLineWidth>
       <beamWidth>0.48</beamWidth>
       <beamMinLen>1.25</beamMinLen>
       <propertyDistanceStem>0.5</propertyDistanceStem>
       <lastSystemFillLimit>0</lastSystemFillLimit>
-      <harmonyY>0</harmonyY>
       <chordStyle>custom</chordStyle>
       <chordsXmlFile>1</chordsXmlFile>
       <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
@@ -28,59 +29,6 @@
       <voltaY>0</voltaY>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <offsetType>spatium</offsetType>
-        <name>Dynamics</name>
-        <family>FreeSerif</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-4</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Chord Symbol</name>
-        <family>FreeSerif</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-3</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Rehearsal Mark</name>
-        <family>FreeSerif</family>
-        <size>14</size>
-        <bold>1</bold>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <frameWidthS>0.2</frameWidthS>
-        <paddingWidthS>0.5</paddingWidthS>
-        <frameRound>20</frameRound>
-        <frameColor r="0" g="0" b="0" a="255"/>
-        <systemFlag>1</systemFlag>
-        </TextStyle>
-      <page-layout>
-        <page-height>1683.78</page-height>
-        <page-width>1190.55</page-width>
-        <page-margins type="even">
-          <left-margin>56.6929</left-margin>
-          <right-margin>56.6929</right-margin>
-          <top-margin>56.6929</top-margin>
-          <bottom-margin>113.386</bottom-margin>
-          </page-margins>
-        <page-margins type="odd">
-          <left-margin>56.6929</left-margin>
-          <right-margin>56.6929</right-margin>
-          <top-margin>56.6929</top-margin>
-          <bottom-margin>113.386</bottom-margin>
-          </page-margins>
-        </page-layout>
       <Spatium>1.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -102,6 +50,7 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
+        <bracket type="-1" span="1" col="0"/>
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
@@ -142,46 +91,44 @@
         <TimeSig>
           <sigN>4</sigN>
           <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Fermata>
+          <subtype>fermataAbove</subtype>
+          </Fermata>
         <Chord>
           <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>fermataAbove</subtype>
-            </Articulation>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
           </Chord>
+        <Fermata>
+          <subtype>fermataBelow</subtype>
+          <placement>below</placement>
+          </Fermata>
         <Chord>
           <durationType>quarter</durationType>
-          <Articulation>
-            <direction>down</direction>
-            <subtype>fermataBelow</subtype>
-            </Articulation>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
           </Chord>
+        <Fermata>
+          <subtype>fermataShortAbove</subtype>
+          </Fermata>
         <Chord>
           <durationType>quarter</durationType>
-          <Articulation>
-            <direction>up</direction>
-            <subtype>fermataShortAbove</subtype>
-            </Articulation>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
           </Chord>
+        <Fermata>
+          <subtype>fermataShortBelow</subtype>
+          <placement>below</placement>
+          </Fermata>
         <Chord>
           <durationType>quarter</durationType>
-          <Articulation>
-            <direction>down</direction>
-            <subtype>fermataShortBelow</subtype>
-            </Articulation>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -189,45 +136,43 @@
           </Chord>
         </Measure>
       <Measure number="2">
+        <Fermata>
+          <subtype>fermataLongAbove</subtype>
+          </Fermata>
         <Chord>
           <durationType>quarter</durationType>
-          <Articulation>
-            <direction>up</direction>
-            <subtype>fermataLongAbove</subtype>
-            </Articulation>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
           </Chord>
+        <Fermata>
+          <subtype>fermataLongBelow</subtype>
+          <placement>below</placement>
+          </Fermata>
         <Chord>
           <durationType>quarter</durationType>
-          <Articulation>
-            <direction>down</direction>
-            <subtype>fermataLongBelow</subtype>
-            </Articulation>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
           </Chord>
+        <Fermata>
+          <subtype>fermataVeryLongAbove</subtype>
+          </Fermata>
         <Chord>
           <durationType>quarter</durationType>
-          <Articulation>
-            <direction>up</direction>
-            <subtype>fermataVeryLongAbove</subtype>
-            </Articulation>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
             </Note>
           </Chord>
+        <Fermata>
+          <subtype>fermataVeryLongBelow</subtype>
+          <placement>below</placement>
+          </Fermata>
         <Chord>
           <durationType>quarter</durationType>
-          <Articulation>
-            <direction>down</direction>
-            <subtype>fermataVeryLongBelow</subtype>
-            </Articulation>
           <Note>
             <pitch>72</pitch>
             <tpc>14</tpc>
@@ -490,7 +435,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Articulation>
-            <subtype>ornamentDownPrall</subtype>
+            <subtype>ornamentPrecompMordentUpperPrefix</subtype>
             </Articulation>
           <Note>
             <pitch>72</pitch>
@@ -569,6 +514,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>

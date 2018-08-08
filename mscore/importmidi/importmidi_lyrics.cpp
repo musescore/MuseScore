@@ -135,18 +135,18 @@ BestTrack findBestTrack(
 
 bool isTitlePrefix(const QString &text)
       {
-      return (text.left(TEXT_PREFIX.size()) == QString::fromStdString(TEXT_PREFIX));
+      return (text.left(TEXT_PREFIX.size()) == QString::fromUtf8(TEXT_PREFIX.data(), TEXT_PREFIX.size())); 
       }
 
 void addTitleToScore(Score *score, const QString &string, int textCounter)
       {
-      SubStyleId ssid = SubStyleId::DEFAULT;
+      Tid ssid = Tid::DEFAULT;
       if (textCounter == 1)
-            ssid = SubStyleId::TITLE;
+            ssid = Tid::TITLE;
       else if (textCounter == 2)
-            ssid = SubStyleId::COMPOSER;
+            ssid = Tid::COMPOSER;
 
-      Text* text = new Text(ssid, score);
+      Text* text = new Text(score, ssid);
       text->setPlainText(string.right(string.size() - TEXT_PREFIX.size()));
 
       MeasureBase* measure = score->first();

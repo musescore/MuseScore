@@ -235,7 +235,6 @@
           <durationType>half</durationType>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
           </BarLine>
         <move>0/1</move>
         <Chord>
@@ -330,7 +329,6 @@
           <durationType>half</durationType>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
           </BarLine>
         </Measure>
       </Staff>

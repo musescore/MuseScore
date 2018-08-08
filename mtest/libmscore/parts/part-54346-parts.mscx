@@ -150,12 +150,12 @@
           <lid>3</lid>
           <durationType>eighth</durationType>
           </Rest>
-        <StaffText>
+        <SystemText>
           <swing unit="eighth" ratio= "60"/>
           <lid>4</lid>
           <style>Tempo</style>
           <text>Swing</text>
-          </StaffText>
+          </SystemText>
         <Chord>
           <lid>5</lid>
           <durationType>eighth</durationType>
@@ -357,12 +357,12 @@
             <lid>3</lid>
             <durationType>eighth</durationType>
             </Rest>
-          <StaffText>
+          <SystemText>
             <swing unit="eighth" ratio= "60"/>
             <lid>4</lid>
             <style>Tempo</style>
             <text>Swing</text>
-            </StaffText>
+            </SystemText>
           <Chord>
             <lid>5</lid>
             <durationType>eighth</durationType>
@@ -511,12 +511,12 @@
             <durationType>quarter</durationType>
             </Rest>
           <move>1/8</move>
-          <StaffText>
+          <SystemText>
             <swing unit="eighth" ratio= "60"/>
             <lid>4</lid>
             <style>Tempo</style>
             <text>Swing</text>
-            </StaffText>
+            </SystemText>
           </Measure>
         <Measure number="1">
           <Chord>

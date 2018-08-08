@@ -83,7 +83,7 @@ const static std::map<QString, QString> instrumentMapping = {
             {"bnj5",            "banjo"},
             {"bnj6",            "banjo"},
             {"bongo",           "bongos"},
-            {"brthns",          "baritone-horn"}, 
+            {"brthns",          "baritone-horn"},
             {"brtn-c",          "baritone"},
             {"brtn-s",          "baritone"},
             {"cbs",             "cabasa"},
@@ -2398,14 +2398,14 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                   Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
                   if (bars[measureCounter].section[0].length()) {
                         RehearsalMark* t = new RehearsalMark(score);
-                        t->setHasFrame(true);
+                        t->setFrameType(FrameType::SQUARE);
                         t->setPlainText(bars[measureCounter].section[0]);
                         t->setTrack(0);
                         s->add(t);
                         }
                   if (bars[measureCounter].section[1].length()) {
                         RehearsalMark* t = new RehearsalMark(score);
-                        t->setHasFrame(false);
+                        t->setFrameType(FrameType::NO_FRAME);
                         t->setPlainText(bars[measureCounter].section[1]);
                         t->setTrack(0);
                         s->add(t);
@@ -2506,7 +2506,14 @@ void GuitarPro6::readGpif(QByteArray* data)
                   continue;
             const StringData* sd = instr->stringData();
             if (sd) {
-                  int tuning[sd->strings()];
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+               int tuning[sd->strings()];
+#else
+               // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+               //    heap allocation is slow, an optimization might be used.
+               std::vector<int> vTuning(sd->strings());
+               int* tuning = vTuning.data();
+#endif
                   int frets   = sd->frets();
                   int strings;
                   for (strings = 0; strings < sd->strings(); strings++) {

@@ -176,16 +176,19 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
             static_cast<QFontComboBox*>(w)->setCurrentFont(QFont(val.toString()));
       else if (qobject_cast<QComboBox*>(w)) {
             int ival = val.toInt();
+            bool found = false;
             QComboBox* cb = qobject_cast<QComboBox*>(w);
             if (cb->itemData(0).isValid()) {
                   for (int i = 0; i < cb->count(); ++i) {
                         if (cb->itemData(i).toInt() == ival) {
-                              ival = i;
+                              cb->setCurrentIndex(i);
+                              found = true;
                               break;
                               }
                         }
+                  if (!found)
+                        qDebug("ComboBox item not found: pid <%s> data <%d>", propertyName(id), ival);
                   }
-            cb->setCurrentIndex(ival);
             }
       else if (qobject_cast<QCheckBox*>(w))
             static_cast<QCheckBox*>(w)->setChecked(val.toBool());
@@ -210,15 +213,26 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
       }
 
 //---------------------------------------------------------
+//   effectiveElement
+//---------------------------------------------------------
+
+Element* InspectorBase::effectiveElement(const InspectorItem& ii) const
+      {
+      Element* e = inspector->element();
+      for (int i = 0; i < ii.parent; ++i)
+            e = e->parent();
+      if (Element* ee = e->propertyDelegate(ii.t))
+            e = ee;
+      return e;
+      }
+
+//---------------------------------------------------------
 //   isDefault
 //---------------------------------------------------------
 
 bool InspectorBase::isDefault(const InspectorItem& ii)
       {
-      Element* e = inspector->element();
-      for (int i = 0; i < ii.parent; ++i)
-            e = e->parent();
-
+      Element* e  = effectiveElement(ii);
       Pid id      = ii.t;
       QVariant val = e->getProperty(id);
       QVariant def = e->propertyDefault(id);
@@ -237,7 +251,6 @@ bool InspectorBase::compareValues(const InspectorItem& ii, QVariant a, QVariant 
             QSizeF s1 = a.toSizeF();
             QSizeF s2 = b.toSizeF();
             bool a = qFuzzyCompare(s1.width(), s2.width()) && qFuzzyCompare(s1.height(), s2.height());
-            printf("%d %f %f -- %f %f\n", a, s1.width(), s2.width(), s1.height(), s2.height());
             return a;
             }
       return b == a;
@@ -251,9 +264,7 @@ bool InspectorBase::compareValues(const InspectorItem& ii, QVariant a, QVariant 
 bool InspectorBase::dirty() const
       {
       for (const InspectorItem& ii : iList) {
-            Element* e = inspector->element();
-            for (int i = 0; i < ii.parent; ++i)
-                  e = e->parent();
+            Element* e = effectiveElement(ii);
             if (e->getProperty(ii.t) != getValue(ii))
                   return true;
             }
@@ -268,9 +279,7 @@ void InspectorBase::setElement()
       {
       for (const InspectorItem& ii : iList) {
             Pid id    = ii.t;
-            Element* e = inspector->element();
-            for (int k = 0; k < ii.parent; ++k)
-                  e = e->parent();
+            Element* e = effectiveElement(ii);
             QVariant val = e->getProperty(id);
             if (ii.w) {
                   ii.w->blockSignals(true);
@@ -300,6 +309,8 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
             for (Element* e : *inspector->el()) {
                   for (int k = 0; k < ii.parent; ++k)
                         e = e->parent();
+                  if (Element* ee = e->propertyDelegate(id))
+                        e = ee;
 
                   valuesAreDifferent = !compareValues(ii, e->getProperty(id), val);
                   if (valuesAreDifferent)
@@ -311,7 +322,9 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
       //deal with reset if only one element, or if values are the same
       bool enableReset = true;
       if (!valuesAreDifferent) {
-            PropertyFlags styledValue = inspector->el()->front()->propertyFlags(ii.t);
+            Element* e = effectiveElement(ii);
+            PropertyFlags styledValue = e->propertyFlags(ii.t);
+
             switch (styledValue) {
                   case PropertyFlags::STYLED:
                         ii.w->setStyleSheet(QString("* { color: %1 }").arg(c.name()));
@@ -352,6 +365,8 @@ void InspectorBase::valueChanged(int idx, bool reset)
       for (Element* e : *inspector->el()) {
             for (int i = 0; i < ii.parent; ++i)
                   e = e->parent();
+            if (Element* ee = e->propertyDelegate(id))
+                  e = ee;
 
             // reset sets property style UNSTYLED to STYLED
 
@@ -546,7 +561,7 @@ void InspectorBase::resetToStyle()
       Score* score = inspector->element()->score();
       score->startCmd();
       for (Element* e : *inspector->el()) {     // TODO: ??
-            Text* text = toText(e);
+            TextBase* text = toTextBase(e);
             // Preserve <sym> tags
             text->undoChangeProperty(Pid::TEXT, text->plainText().toHtmlEscaped().replace("&lt;sym&gt;","<sym>").replace("&lt;/sym&gt;","</sym>"));
             }

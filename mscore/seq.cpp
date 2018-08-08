@@ -357,7 +357,6 @@ void Seq::stop()
       if (cv)
             cv->setCursorOn(false);
       if (cs) {
-//??            cs->setLayoutAll();
             cs->setUpdateAll();
             cs->update();
             }
@@ -1553,7 +1552,10 @@ void Seq::updateSynthesizerState(int tick1, int tick2)
 
 double Seq::curTempo() const
       {
-      return cs ? cs->tempomap()->tempo(playPos->first) : 0.0;
+      if (playPos != events.end())
+            return cs ? cs->tempomap()->tempo(playPos->first) : 0.0;
+
+      return 0.0;
       }
 
 //---------------------------------------------------------

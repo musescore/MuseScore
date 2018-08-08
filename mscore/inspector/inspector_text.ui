@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>324</width>
-    <height>357</height>
+    <width>497</width>
+    <height>398</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -160,6 +160,9 @@
          </property>
          <item row="2" column="1">
           <widget class="QDoubleSpinBox" name="frameWidth">
+           <property name="accessibleName">
+            <string>Border</string>
+           </property>
            <property name="prefix">
             <string/>
            </property>
@@ -177,7 +180,7 @@
          <item row="1" column="1">
           <widget class="Awl::ColorLabel" name="bgColor">
            <property name="accessibleName">
-            <string>Color:</string>
+            <string>Background</string>
            </property>
            <property name="frameShape">
             <enum>QFrame::Box</enum>
@@ -206,7 +209,7 @@
             </sizepolicy>
            </property>
            <property name="accessibleName">
-            <string>Color:</string>
+            <string>Foreground</string>
            </property>
            <property name="frameShape">
             <enum>QFrame::Box</enum>
@@ -245,6 +248,9 @@
          </item>
          <item row="3" column="1">
           <widget class="QDoubleSpinBox" name="paddingWidth">
+           <property name="accessibleName">
+            <string>Text margin</string>
+           </property>
            <property name="suffix">
             <string>sp</string>
            </property>
@@ -293,7 +299,11 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QSpinBox" name="frameRound"/>
+          <widget class="QSpinBox" name="frameRound">
+           <property name="accessibleName">
+            <string>Border radius</string>
+           </property>
+          </widget>
          </item>
          <item row="1" column="2">
           <widget class="QToolButton" name="resetBgColor">
@@ -378,6 +388,9 @@
         <property name="toolTip">
          <string>Font Size</string>
         </property>
+        <property name="accessibleName">
+         <string>Font size</string>
+        </property>
         <property name="suffix">
          <string>pt</string>
         </property>
@@ -392,6 +405,9 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
+         <string>Font face</string>
+        </property>
+        <property name="accessibleName">
          <string>Font face</string>
         </property>
        </widget>
@@ -537,78 +553,24 @@
       <item row="8" column="0" colspan="4">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QCheckBox" name="hasFrame">
-          <property name="toolTip">
-           <string>Show frame</string>
-          </property>
+         <widget class="QLabel" name="label">
           <property name="text">
            <string>Frame:</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="resetHasFrame">
-          <property name="toolTip">
-           <string>Reset to default</string>
-          </property>
-          <property name="accessibleName">
-           <string>Reset 'Frame' value</string>
-          </property>
-          <property name="text">
-           <string notr="true"/>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+         <widget class="QComboBox" name="frameType">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
          </widget>
         </item>
         <item>
-         <spacer name="horizontalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="circle">
-          <property name="text">
-           <string>Circle</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="resetCircle">
-          <property name="toolTip">
-           <string>Reset to default</string>
-          </property>
-          <property name="accessibleName">
-           <string>Reset 'Circle' value</string>
-          </property>
-          <property name="text">
-           <string notr="true"/>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="square">
-          <property name="text">
-           <string>Box</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="resetSquare">
+         <widget class="QToolButton" name="resetFrameType">
           <property name="toolTip">
            <string>Reset to default</string>
           </property>
@@ -658,10 +620,15 @@
   <tabstop>underline</tabstop>
   <tabstop>resetUnderline</tabstop>
   <tabstop>resetAlign</tabstop>
-  <tabstop>circle</tabstop>
-  <tabstop>resetCircle</tabstop>
-  <tabstop>square</tabstop>
-  <tabstop>resetSquare</tabstop>
+  <tabstop>resetFrameType</tabstop>
+  <tabstop>resetFrameColor</tabstop>
+  <tabstop>resetBgColor</tabstop>
+  <tabstop>frameWidth</tabstop>
+  <tabstop>resetFrameWidth</tabstop>
+  <tabstop>paddingWidth</tabstop>
+  <tabstop>resetPaddingWidth</tabstop>
+  <tabstop>frameRound</tabstop>
+  <tabstop>resetFrameRound</tabstop>
   <tabstop>resetToStyle</tabstop>
  </tabstops>
  <resources>

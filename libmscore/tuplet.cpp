@@ -27,18 +27,35 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   tupletStyle
+//---------------------------------------------------------
+
+static const ElementStyle tupletStyle {
+      { Sid::tupletDirection,                    Pid::DIRECTION               },
+      { Sid::tupletNumberType,                   Pid::NUMBER_TYPE             },
+      { Sid::tupletBracketType,                  Pid::BRACKET_TYPE            },
+      { Sid::tupletBracketWidth,                 Pid::LINE_WIDTH              },
+      { Sid::tupletFontFace,                     Pid::FONT_FACE               },
+      { Sid::tupletFontSize,                     Pid::FONT_SIZE               },
+      { Sid::tupletFontBold,                     Pid::FONT_BOLD               },
+      { Sid::tupletFontItalic,                   Pid::FONT_ITALIC             },
+      { Sid::tupletFontUnderline,                Pid::FONT_UNDERLINE          },
+      { Sid::tupletAlign,                        Pid::ALIGN                   },
+      };
+
+//---------------------------------------------------------
 //   Tuplet
 //---------------------------------------------------------
 
 Tuplet::Tuplet(Score* s)
-  : DurationElement(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
+  : DurationElement(s)
       {
       _tick         = 0;
       _ratio        = Fraction(1, 1);
       _number       = 0;
       _hasBracket   = false;
       _isUp         = true;
-      initSubStyle(SubStyleId::TUPLET);
+      initElementStyle(&tupletStyle);
       }
 
 Tuplet::Tuplet(const Tuplet& t)
@@ -120,7 +137,6 @@ void Tuplet::layout()
                   _number->setTrack(track());
                   _number->setParent(this);
                   _number->setVisible(visible());
-                  // initSubStyle(SubStyleId::TUPLET);   // hack
                   for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
                         _number->resetProperty(p);
                   }
@@ -226,7 +242,7 @@ void Tuplet::layout()
                   outOfStaff = false;
             }
 
-      qreal l1 = _spatium;          // bracket tip height                     TODO: create style value
+      qreal l1  =  score()->styleP(Sid::tupletBracketHookHeight);
       qreal l2l = vHeadDistance;    // left bracket vertical distance
       qreal l2r = vHeadDistance;    // right bracket vertical distance right
 
@@ -237,7 +253,7 @@ void Tuplet::layout()
       p2      = cr2->pagePos();
       p1.rx() -= noteLeft;
       p2.rx() += score()->noteHeadWidth() + noteRight;
-      p1.ry() += vHeadDistance;
+      p1.ry() += vHeadDistance;        // TODO: Direction ?
       p2.ry() += vHeadDistance;
 
       qreal xx1 = p1.x(); // use to center the number on the beam
@@ -392,14 +408,12 @@ void Tuplet::layout()
                   if (stem && !chord2->up()) {
                         // if (chord2->beam())
                         //      p2.setX(stem->abbox().x());
-#if 0 // TODO-ws beam bbox not available at this point
                         if (followBeam)
                               p2.ry() = stem->abbox().bottom() + beamAdjust;
                         if (chord2->beam())
                               p2.ry() = chord2->beam()->abbox().bottom();
                         else
                               p2.ry() = stem->abbox().bottom();
-#endif
                         l2r = vStemDistance;
                         }
                   else {
@@ -493,12 +507,14 @@ void Tuplet::layout()
       if (_number) {
             _number->layout();
             numberWidth = _number->bbox().width();
+
+            qreal y3 = p1.y() + (p2.y() - p1.y()) * .5 - l1 * (_isUp ? 1.0 : -1.0);
             //
             // for beamed tuplets, center number on beam
             //
             if (cr1->beam() && cr2->beam() && cr1->beam() == cr2->beam()) {
                   const ChordRest* crr = toChordRest(cr1);
-                  if(_isUp == crr->up()) {
+                  if (_isUp == crr->up()) {
                         qreal deltax = cr2->pagePos().x() - cr1->pagePos().x();
                         x3 = xx1 + deltax * .5;
                         }
@@ -512,7 +528,6 @@ void Tuplet::layout()
                   x3 = p1.x() + deltax * .5;
                   }
 
-            qreal y3 = p1.y() + (p2.y() - p1.y()) * .5 - l1 * (_isUp ? 1.0 : -1.0);
             _number->setPos(QPointF(x3, y3) - ipos());
             }
 
@@ -640,15 +655,13 @@ Shape Tuplet::shape() const
       Shape s;
       if (_hasBracket) {
             qreal w = _bracketWidth.val();
+            s.add(Rect(bracketL[0], bracketL[1], w));
+            s.add(Rect(bracketL[1], bracketL[2], w));
             if (_number) {
-                  s.add(Rect(bracketL[0], bracketL[1], w));
-                  s.add(Rect(bracketL[1], bracketL[2], w));
                   s.add(Rect(bracketR[0], bracketR[1], w));
                   s.add(Rect(bracketR[1], bracketR[2], w));
                   }
             else {
-                  s.add(Rect(bracketL[0], bracketL[1], w));
-                  s.add(Rect(bracketL[1], bracketL[2], w));
                   s.add(Rect(bracketL[2], bracketL[3], w));
                   }
             }
@@ -702,7 +715,7 @@ void Tuplet::write(XmlWriter& xml) const
 
 void Tuplet::read(XmlReader& e)
       {
-      _id    = e.intAttribute("id", 0);
+      _id = e.intAttribute("id", 0);
       while (e.readNextStartElement()) {
             if (readProperties(e))
                   ;
@@ -728,23 +741,22 @@ bool Tuplet::readProperties(XmlReader& e)
       else if (tag == "actualNotes")
             _ratio.setNumerator(e.readInt());
       else if (tag == "p1")
-            _p1 = e.readPoint();
+            _p1 = e.readPoint() * score()->spatium();
       else if (tag == "p2")
-            _p2 = e.readPoint();
+            _p2 = e.readPoint() * score()->spatium();
       else if (tag == "baseNote")
             _baseLen = TDuration(e.readElementText());
       else if (tag == "Number") {
             _number = new Text(score());
             _number->setComposition(true);
             _number->setParent(this);
-//            _number->setSubStyleId(SubStyleId::TUPLET);
-//            initSubStyle(SubStyleId::TUPLET);   // hack: initialize number
+            // _number reads property defaults from parent tuplet as "composition" is set:
             for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
                   _number->resetProperty(p);
             _number->read(e);
             _number->setVisible(visible());     //?? override saved property
             _number->setTrack(track());
-            // move property flags from _number
+            // move property flags from _number back to tuplet
             for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
                   setPropertyFlags(p, _number->propertyFlags(p));
             }
@@ -1051,6 +1063,12 @@ bool Tuplet::setProperty(Pid propertyId, const QVariant& v)
 QVariant Tuplet::propertyDefault(Pid id) const
       {
       switch(id) {
+            case Pid::SUB_STYLE:
+                  return int(Tid::TUPLET);
+            case Pid::SYSTEM_FLAG:
+                  return false;
+            case Pid::TEXT:
+                  return QString("");
             case Pid::NORMAL_NOTES:
             case Pid::ACTUAL_NOTES:
                   return 0;
@@ -1058,6 +1076,13 @@ QVariant Tuplet::propertyDefault(Pid id) const
             case Pid::P2:
                   return QPointF();
             default:
+                  for (const StyledProperty& p : *textStyle(Tid::DEFAULT)) {
+                        if (p.pid == id) {
+                              if (propertyType(id) == P_TYPE::SP_REAL)
+                                    return score()->styleP(p.sid);
+                              return score()->styleV(p.sid);
+                              }
+                        }
                   return DurationElement::propertyDefault(id);
             }
       }

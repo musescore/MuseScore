@@ -92,7 +92,9 @@ PmDeviceID Pm_GetDefaultOutputDeviceID() {
         }
     }
     return pmNoDevice;
-    return 0;
+
+    // Prevent "unreachable code" warning
+    // return 0;
 }
 
 #include "stdio.h"

@@ -167,7 +167,6 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
 
       switch (propertyType(id)) {
             case P_TYPE::BOOL:
-            case P_TYPE::SUBTYPE:
             case P_TYPE::INT:
             case P_TYPE::ZERO_INT:
             case P_TYPE::SPATIUM:
@@ -175,6 +174,7 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
             case P_TYPE::REAL:
             case P_TYPE::SCALE:
             case P_TYPE::POINT:
+            case P_TYPE::POINT_SP:
             case P_TYPE::SIZE:
             case P_TYPE::COLOR:
             case P_TYPE::DIRECTION:
@@ -270,12 +270,10 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
                   tag(name, NoteHead::type2name(NoteHead::Type(data.toInt())));
                   break;
             case P_TYPE::SUB_STYLE:
-                  tag(name, subStyleName(SubStyleId(data.toInt())));
+                  tag(name, textStyleName(Tid(data.toInt())));
                   break;
             case P_TYPE::FRACTION:
                   qFatal("unknown: FRACTION");
-            case P_TYPE::POINT_SP:
-                  qFatal("unknown: POINT_SP");
             case P_TYPE::POINT_MM:
                   qFatal("unknown: POINT_MM");
             case P_TYPE::SIZE_MM:

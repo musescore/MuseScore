@@ -130,6 +130,7 @@ MasterScore* MTest::readCreatedScore(const QString& name)
       score->setName(fi.completeBaseName());
       QString csl  = fi.suffix().toLower();
 
+      Score::isScoreLoaded() = true;
       Score::FileError rv;
       if (csl == "cap") {
             rv = importCapella(score, name);
@@ -161,10 +162,13 @@ MasterScore* MTest::readCreatedScore(const QString& name)
       if (rv != Score::FileError::FILE_NO_ERROR) {
             QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
             delete score;
-            return 0;
+            score = 0;
             }
-      for (Score* s : score->scoreList())
-            s->doLayout();
+      else {
+            for (Score* s : score->scoreList())
+                  s->doLayout();
+            }
+      Score::isScoreLoaded() = false;
       return score;
       }
 

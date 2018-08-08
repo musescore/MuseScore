@@ -342,7 +342,7 @@ void Mixer::patchListChanged()
             bool drum        = m.part->instrument()->useDrumset();
             pe->patch->clear();
             for (const MidiPatch* p : pl) {
-                  if (p->drum == drum)
+                  if (p->drum == drum || p->synti != "Fluid")
                         pe->patch->addItem(p->name, QVariant::fromValue<void*>((void*)p));
                   }
             pe->setPart(m.part, m.articulation);
@@ -390,6 +390,9 @@ void Mixer::midiPrefsChanged(bool showMidiControls)
 
 void MuseScore::showMixer(bool val)
       {
+      if (!cs)
+            return;
+
       QAction* a = getAction("toggle-mixer");
       if (mixer == 0) {
             mixer = new Mixer(this);

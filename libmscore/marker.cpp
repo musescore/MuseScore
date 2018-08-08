@@ -18,6 +18,14 @@
 
 namespace Ms {
 
+//---------------------------------------------------------
+//   markerStyle
+//---------------------------------------------------------
+
+static const ElementStyle markerStyle {
+      { Sid::repeatLeftPlacement, Pid::PLACEMENT },
+      };
+
 //must be in sync with Marker::Type enum
 const MarkerTypeItem markerTypeTable[] = {
       { Marker::Type::SEGNO   , QT_TRANSLATE_NOOP("markerType", "Segno")          },
@@ -40,20 +48,18 @@ int markerTypeTableSize()
 //---------------------------------------------------------
 
 Marker::Marker(Score* s)
-   : TextBase(s)
+   : TextBase(s, Tid::REPEAT_LEFT, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
       {
-      initSubStyle(SubStyleId::REPEAT_LEFT);
+      initElementStyle(&markerStyle);
       _markerType = Type::FINE;
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setLayoutToParentWidth(true);
       }
 
-Marker::Marker(SubStyleId ssid, Score* s)
-   : TextBase(s)
+Marker::Marker(Score* s, Tid tid)
+   : TextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(ssid);
+      initElementStyle(&markerStyle);
       _markerType = Type::FINE;
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setLayoutToParentWidth(true);
       }
 
@@ -93,13 +99,13 @@ void Marker::setMarkerType(Type t)
 
             case Type::FINE:
                   txt = "Fine";
-//TODO-ws                  initSubStyle(SubStyleId::REPEAT_RIGHT);
+//TODO-ws                  initElementStyle(Tid::REPEAT_RIGHT);
                   setLabel("fine");
                   break;
 
             case Type::TOCODA:
                   txt = "To Coda";
-//TODO-ws                  initSubStyle(SubStyle::REPEAT_RIGHT);
+//TODO-ws                  initElementStyle(ElementStyle::REPEAT_RIGHT);
                   setLabel("coda");
                   break;
 

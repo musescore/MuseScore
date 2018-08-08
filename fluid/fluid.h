@@ -308,6 +308,9 @@ class Fluid : public Synthesizer {
       float _masterTuning;                // usually 440.0
       double _tuning[128];                // the pitch of every key, in cents
 
+      int _loadProgress = 0;
+      bool _loadWasCanceled = false;
+
       QMutex mutex;
       void updatePatchList();
 
@@ -342,6 +345,11 @@ class Fluid : public Synthesizer {
 
       virtual void allSoundsOff(int);
       virtual void allNotesOff(int);
+
+      int loadProgress()            { return _loadProgress; }
+      void setLoadProgress(int val) { _loadProgress = val; }
+      bool loadWasCanceled()        { return _loadWasCanceled; }
+      void setLoadWasCanceled(bool status)     { _loadWasCanceled = status; }
 
       Preset* get_preset(unsigned int sfontnum, unsigned int banknum, unsigned int prognum);
       Preset* find_preset(unsigned int banknum, unsigned int prognum);

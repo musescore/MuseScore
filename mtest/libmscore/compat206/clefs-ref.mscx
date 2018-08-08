@@ -353,6 +353,7 @@
             </Note>
           </Chord>
         <BarLine>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>

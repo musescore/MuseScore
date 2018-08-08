@@ -971,8 +971,8 @@ void Hairpin::write300old(XmlWriter& xml) const
       writeProperty(xml, Pid::BEGIN_TEXT);
       writeProperty(xml, Pid::CONTINUE_TEXT);
 
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->pid);
+      for (const StyledProperty& spp : *styledProperties())
+            writeProperty(xml, spp.pid);
 
       Element::writeProperties300old(xml);
       xml.etag();
@@ -988,8 +988,8 @@ void LetRing::write300old(XmlWriter& xml) const
             return;
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
 
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->pid);
+      for (const StyledProperty& spp : *styledProperties())
+            writeProperty(xml, spp.pid);
 
       Element::writeProperties300old(xml);
       xml.etag();
@@ -1017,8 +1017,8 @@ void PalmMute::write300old(XmlWriter& xml) const
             return;
       xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
 
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->pid);
+      for (const StyledProperty& spp : *styledProperties())
+            writeProperty(xml, spp.pid);
 
       Element::writeProperties300old(xml);
       xml.etag();
@@ -1045,8 +1045,8 @@ void Pedal::write300old(XmlWriter& xml) const
          }) {
             writeProperty(xml, i);
             }
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->pid);
+      for (const StyledProperty& spp : *styledProperties())
+            writeProperty(xml, spp.pid);
 
       Element::writeProperties300old(xml);
       xml.etag();
@@ -1383,45 +1383,6 @@ void Marker::write300old(XmlWriter& xml) const
       xml.stag(name());
       TextBase::writeProperties300old(xml);
       xml.tag("label", _label);
-      xml.etag();
-      }
-
-//---------------------------------------------------------
-//   StaffText::write300old
-//---------------------------------------------------------
-
-void StaffText::write300old(XmlWriter& xml) const
-      {
-      if (!xml.canWrite(this))
-            return;
-      xml.stag("StaffText");
-
-      for (ChannelActions s : _channelActions) {
-            int channel = s.channel;
-            for (QString name : s.midiActionNames)
-                  xml.tagE(QString("MidiAction channel=\"%1\" name=\"%2\"").arg(channel).arg(name));
-            }
-      for (int voice = 0; voice < VOICES; ++voice) {
-            if (!_channelNames[voice].isEmpty())
-                  xml.tagE(QString("channelSwitch voice=\"%1\" name=\"%2\"").arg(voice).arg(_channelNames[voice]));
-            }
-      if (_setAeolusStops) {
-            for (int i = 0; i < 4; ++i)
-                  xml.tag(QString("aeolus group=\"%1\"").arg(i), aeolusStops[i]);
-            }
-      if (swing()) {
-            QString swingUnit;
-            if (swingParameters()->swingUnit == MScore::division / 2)
-                  swingUnit = TDuration(TDuration::DurationType::V_EIGHTH).name();
-            else if (swingParameters()->swingUnit == MScore::division / 4)
-                  swingUnit = TDuration(TDuration::DurationType::V_16TH).name();
-            else
-                  swingUnit = TDuration(TDuration::DurationType::V_ZERO).name();
-            int swingRatio = swingParameters()->swingRatio;
-            xml.tagE(QString("swing unit=\"%1\" ratio= \"%2\"").arg(swingUnit).arg(swingRatio));
-            }
-      TextBase::writeProperties300old(xml);
-
       xml.etag();
       }
 

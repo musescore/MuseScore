@@ -134,13 +134,21 @@ qDebug("ResolveDegreeList: not found in table");
       }
 
 //---------------------------------------------------------
+//   chordSymbolStyle
+//---------------------------------------------------------
+
+const ElementStyle chordSymbolStyle {
+      { Sid::chordSymbolAPosAbove,   Pid::POS_ABOVE  },
+      { Sid::harmonyPlacement,       Pid::PLACEMENT  },
+      };
+
+//---------------------------------------------------------
 //   Harmony
 //---------------------------------------------------------
 
 Harmony::Harmony(Score* s)
-   : TextBase(s)
+   : TextBase(s, Tid::HARMONY_A, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(SubStyleId::HARMONY);
       _rootTpc    = Tpc::TPC_INVALID;
       _baseTpc    = Tpc::TPC_INVALID;
       _rootCase   = NoteCaseType::CAPITAL;
@@ -149,12 +157,13 @@ Harmony::Harmony(Score* s)
       _parsedForm = 0;
       _leftParen  = false;
       _rightParen = false;
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
+      initElementStyle(&chordSymbolStyle);
       }
 
 Harmony::Harmony(const Harmony& h)
    : TextBase(h)
       {
+      _posAbove   = h._posAbove;
       _rootTpc    = h._rootTpc;
       _baseTpc    = h._baseTpc;
       _rootCase   = h._rootCase;
@@ -166,7 +175,7 @@ Harmony::Harmony(const Harmony& h)
       _parsedForm = h._parsedForm ? new ParsedChord(*h._parsedForm) : 0;
       _textName   = h._textName;
       _userName   = h._userName;
-      foreach(const TextSegment* s, h.textList) {
+      for (const TextSegment* s : h.textList) {
             TextSegment* ns = new TextSegment();
             ns->set(s->text, s->font, s->x, s->y);
             textList.append(ns);
@@ -317,6 +326,8 @@ void Harmony::read(XmlReader& e)
                   _rightParen = true;
                   e.readNext();
                   }
+            else if (readProperty(tag, e, Pid::POS_ABOVE))
+                  ;
             else if (!TextBase::readProperties(e))
                   e.unknown();
             }
@@ -697,7 +708,6 @@ void Harmony::startEdit(EditData& ed)
       if (!textList.empty())
             setXmlText(harmonyName());
       TextBase::startEdit(ed);
-      layout();
       }
 
 //---------------------------------------------------------
@@ -713,7 +723,10 @@ bool Harmony::edit(EditData& ed)
       int root, base;
       QString str = xmlText();
       bool badSpell = !str.isEmpty() && !parseHarmony(str, &root, &base, true);
-      spellCheckUnderline(badSpell);
+      setProperty(Pid::COLOR, badSpell ? QColor(Qt::red) : QColor(Qt::black));
+
+      if (badSpell)
+            qDebug("bad spell");
       return rv;
       }
 
@@ -983,6 +996,10 @@ const ChordDescription* Harmony::generateDescription()
 
 void Harmony::layout()
       {
+      if (isLayoutInvalid())
+            createLayout();
+      if (textBlockList().empty())
+            textBlockList().append(TextBlock());
       calculateBoundingRect();    // for normal symbols this is called in layout: computeMinWidth()
 
       if (!parent()) {
@@ -993,27 +1010,13 @@ void Harmony::layout()
       qreal yy = 0.0;
 
       if (parent()->isSegment()) {
-            Segment* s = toSegment(parent());
-            // look for fret diagram
-            bool fretsFound = false;
-            for (Element* e : s->annotations()) {
-                  if (e->isFretDiagram() && e->track() == track()) {
-                        yy -= score()->styleP(Sid::fretY);
-                        e->layout();
-                        yy -= e->height();
-                        yy -= score()->styleP(Sid::harmonyFretDist);
-                        fretsFound = true;
-                        break;
-                        }
-                  }
-            if (!fretsFound)
-                  yy -= score()->styleP(Sid::harmonyY);
+            // yy -= score()->styleP(Sid::harmonyY);
+            yy = _posAbove;
             }
       else if (parent()->isFretDiagram()) {
             qDebug("Harmony %s with fret diagram as parent", qPrintable(_textName)); // not possible?
             yy = -score()->styleP(Sid::harmonyFretDist);
             }
-      yy += offset().y();           //      yy += offset(_spatium).y();
 
       qreal hb = lineHeight() - TextBase::baseLine();
       if (align() & Align::BOTTOM)
@@ -1051,11 +1054,12 @@ void Harmony::layout()
             }
 
       if (hasFrame()) {
-            QRectF saveBbox = bbox();
-            setbbox(bboxtight());
+//            QRectF saveBbox = bbox();
+//            setbbox(bboxtight());
             layoutFrame();
-            setbbox(saveBbox);
+//            setbbox(saveBbox);
             }
+      autoplaceSegmentElement(styleP(Sid::minHarmonyDistance));
       }
 
 //---------------------------------------------------------
@@ -1120,6 +1124,20 @@ void Harmony::draw(QPainter* painter) const
             painter->setFont(f);
             painter->drawText(QPointF(ts->x, ts->y), ts->text);
             }
+      }
+
+//---------------------------------------------------------
+//   drawEditMode
+//---------------------------------------------------------
+
+void Harmony::drawEditMode(QPainter* p, EditData& ed)
+      {
+      TextBase::drawEditMode(p, ed);
+
+      QPointF pos(pagePos());
+      p->translate(pos);
+      TextBase::draw(p);
+      p->translate(-pos);
       }
 
 //---------------------------------------------------------
@@ -1192,7 +1210,7 @@ void TextSegment::set(const QString& s, const QFont& f, qreal _x, qreal _y)
 void Harmony::render(const QString& s, qreal& x, qreal& y)
       {
       int fontIdx = 0;
-      if(!s.isEmpty()) {
+      if (!s.isEmpty()) {
             TextSegment* ts = new TextSegment(s, fontList[fontIdx], x, y);
             textList.append(ts);
             x += ts->width();
@@ -1209,9 +1227,11 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
       QStack<QPointF> stack;
       int fontIdx    = 0;
       qreal _spatium = spatium();
-      qreal mag      = _spatium / SPATIUM20;
+      qreal mag      = magS();
 
+// qDebug("===");
       for (const RenderAction& a : renderList) {
+// a.print();
             if (a.type == RenderAction::RenderActionType::SET) {
                   TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
                   ChordSymbol cs = chordList->symbol(a.text);
@@ -1225,8 +1245,8 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                   x += ts->width();
                   }
             else if (a.type == RenderAction::RenderActionType::MOVE) {
-                  x += a.movex * mag;
-                  y += a.movey * mag;
+                  x += a.movex * mag * _spatium * .2;
+                  y += a.movey * mag * _spatium * .2;
                   }
             else if (a.type == RenderAction::RenderActionType::PUSH)
                   stack.push(QPointF(x,y));
@@ -1252,8 +1272,9 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                         ts->font = fontList[cs.fontIdx];
                         ts->setText(cs.value);
                         }
-                  else
+                  else {
                         ts->setText(c);
+                        }
                   textList.append(ts);
                   x += ts->width();
                   }
@@ -1283,7 +1304,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                         }
                   }
             else
-                  qDebug("Harmony::render(): unknown render action %d", static_cast<int>(a.type));
+                  qDebug("unknown render action %d", static_cast<int>(a.type));
             }
       }
 
@@ -1559,7 +1580,7 @@ QString Harmony::screenReaderInfo() const
 
 bool Harmony::acceptDrop(EditData& data) const
       {
-      return data.element->type() == ElementType::FRET_DIAGRAM;
+      return data.element->isFretDiagram();
       }
 
 //---------------------------------------------------------
@@ -1569,7 +1590,7 @@ bool Harmony::acceptDrop(EditData& data) const
 Element* Harmony::drop(EditData& data)
       {
       Element* e = data.element;
-      if (e->type() == ElementType::FRET_DIAGRAM) {
+      if (e->isFretDiagram()) {
             FretDiagram* fd = toFretDiagram(e);
             fd->setParent(parent());
             fd->setTrack(track());
@@ -1584,6 +1605,38 @@ Element* Harmony::drop(EditData& data)
       }
 
 //---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Harmony::getProperty(Pid pid) const
+      {
+      switch (pid) {
+            case Pid::POS_ABOVE:
+                  return QVariant(_posAbove);
+            default:
+                  return TextBase::getProperty(pid);
+            }
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Harmony::setProperty(Pid pid, const QVariant& v)
+      {
+      if (pid == Pid::POS_ABOVE) {
+            _posAbove = v.toReal();
+            triggerLayout();
+            return true;
+            }
+      if (TextBase::setProperty(pid, v)) {
+            render();
+            return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
@@ -1592,20 +1645,10 @@ QVariant Harmony::propertyDefault(Pid id) const
       QVariant v;
       switch (id) {
             case Pid::SUB_STYLE:
-                  v = int(SubStyleId::HARMONY);
+                  v = int(Tid::HARMONY_A);
                   break;
             default:
-                  v = styledPropertyDefault(id);
-                  if (!v.isValid()) {
-                        for (const StyledProperty& p : defaultStyle) {
-                              if (p.pid == id) {
-                                    v = score()->styleV(p.sid);
-                                    break;
-                                    }
-                              }
-                        }
-                  if (!v.isValid())
-                        v = Element::propertyDefault(id);
+                  v = TextBase::propertyDefault(id);
                   break;
             }
       return v;

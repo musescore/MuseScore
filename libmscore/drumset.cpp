@@ -130,9 +130,6 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
                               else if (taga == "tremolo") {
                                     div.tremolo = Tremolo::name2Type(e.readElementText());
                                     }
-                              else {
-                                    qDebug() << "trdf";
-                                    }
                               }
                         _drum[pitch].addVariant(div);
                         }
@@ -172,6 +169,7 @@ void Drumset::clear()
             _drum[i].name = "";
             _drum[i].notehead = NoteHead::Group::HEAD_INVALID;
             _drum[i].shortcut = 0;
+            _drum[i].variants.clear();
             }
       }
 
@@ -214,12 +212,12 @@ int Drumset::prevPitch(int ii) const
 /// find a variant for the given pitch with matching chord articulation and tremolo
 //---------------------------------------------------------
 
-DrumInstrumentVariant Drumset::findVariant(int p, const QVector<Articulation*> articulations, Tremolo* tremolo)
+DrumInstrumentVariant Drumset::findVariant(int p, const QVector<Articulation*> articulations, Tremolo* tremolo) const
       {
       DrumInstrumentVariant div;
       auto vs = variants(p);
       for (auto v : vs) {
-            bool matchTremolo = (!tremolo && v.tremolo == TremoloType::INVALID_TREMOLO) || v.tremolo == tremolo->tremoloType();
+            bool matchTremolo = (!tremolo && v.tremolo == TremoloType::INVALID_TREMOLO) || (tremolo && v.tremolo == tremolo->tremoloType());
             bool matchArticulation = v.articulationName.isEmpty() && articulations.isEmpty();
             for (auto a : articulations) {
                   matchArticulation = a->articulationName() == v.articulationName;

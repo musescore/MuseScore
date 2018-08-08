@@ -27,6 +27,14 @@
 
 namespace Ms {
 
+static const std::vector<StyledProperty> figuredBassTextStyle {
+      { Sid::figuredBassFontFace,                Pid::FONT_FACE              },
+      { Sid::figuredBassFontSize,                Pid::FONT_SIZE              },
+      { Sid::figuredBassFontBold,                Pid::FONT_BOLD              },
+      { Sid::figuredBassFontItalic,              Pid::FONT_ITALIC            },
+      { Sid::figuredBassFontUnderline,           Pid::FONT_UNDERLINE         },
+      };
+
 static constexpr qreal  FB_CONTLINE_HEIGHT            = 0.875;    // the % of font EM to raise the cont. line at
                                                                   // (0 = top of font; 1 = bottom of font)
 static constexpr qreal  FB_CONTLINE_LEFT_PADDING      = 0.1875;   // (3/16sp) the blank space at the left of a cont. line (in sp)
@@ -956,10 +964,9 @@ bool FiguredBassItem::startsWithParenthesis() const
 //---------------------------------------------------------
 
 FiguredBass::FiguredBass(Score* s)
-   : TextBase(s)
+   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(SubStyleId::FIGURED_BASS);
-      setFlag(ElementFlag::ON_STAFF, true);
+      initElementStyle(&figuredBassTextStyle);
       setOnNote(true);
 #if 0  // TODO
       TextStyle st(
@@ -972,7 +979,7 @@ FiguredBass::FiguredBass(Score* s)
          QPointF(0, score()->styleD(Sid::figuredBassYOffset)),
          OffsetType::SPATIUM);
       st.setSizeIsSpatiumDependent(true);
-      setSubStyle(st);
+      setElementStyle(st);
 #endif
       setTicks(0);
       items.clear();
@@ -1079,8 +1086,9 @@ void FiguredBass::layout()
 #endif
       // if in edit mode or if style has been changed,
       // do nothing else, keeping default laying out and formatting
-//      if (editMode() || items.size() < 1 || subStyle() != SubStyle::FIGURED_BASS) {
-      if (items.size() < 1 || subStyleId() != SubStyleId::FIGURED_BASS) {
+//      if (editMode() || items.size() < 1 || subStyle() != ElementStyle::FIGURED_BASS) {
+//      if (items.size() < 1 || tid() != Tid::FIGURED_BASS) {
+      if (items.size() < 1) {
             TextBase::layout();
             return;
             }
@@ -1118,8 +1126,8 @@ void FiguredBass::layoutLines()
             return;
             }
 
-      ChordRest* lastCR;                                   // the last ChordRest of this
-      Segment *  nextSegm;                                 // the Segment beyond this' segment
+      ChordRest* lastCR = nullptr;                                   // the last ChordRest of this
+      Segment *  nextSegm = nullptr;                                 // the Segment beyond this' segment
       int        nextTick = segment()->tick() + _ticks;    // the tick beyond this' duration
 
       // locate the measure containing the last tick of this; it is either:
@@ -1205,10 +1213,10 @@ void FiguredBass::draw(QPainter* painter) const
                   }
             }
       // if in edit mode or with custom style, use standard text drawing
-//      if (editMode() || subStyle() != SubStyle::FIGURED_BASS)
-      if (subStyleId() != SubStyleId::FIGURED_BASS)
-            TextBase::draw(painter);
-      else
+//      if (editMode() || subStyle() != ElementStyle::FIGURED_BASS)
+//      if (tid() != Tid::FIGURED_BASS)
+//            TextBase::draw(painter);
+//      else
             {                                                // not edit mode:
             if (items.size() < 1)                           // if not parseable into f.b. items
                   TextBase::draw(painter);                      // draw as standard text

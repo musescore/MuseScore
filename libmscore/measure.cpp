@@ -519,7 +519,8 @@ void Measure::layout2()
                         smn = system()->firstMeasure() == this;
                   else {
                         smn = (no() == 0 && score()->styleB(Sid::showMeasureNumberOne)) ||
-                              ( ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0) );
+                              ( ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0) ) ||
+                              (score()->styleI(Sid::measureNumberInterval) == 1);
                         }
                   }
             }
@@ -548,7 +549,7 @@ void Measure::layout2()
                   t->setTrack(staffIdx * VOICES);
             if (smn && ((staffIdx == nn) || nas)) {
                   if (t == 0) {
-                        t = new Text(SubStyleId::MEASURE_NUMBER, score());
+                        t = new Text(score(), Tid::MEASURE_NUMBER);
                         t->setFlag(ElementFlag::ON_STAFF, true);
                         t->setTrack(staffIdx * VOICES);
                         t->setGenerated(true);
@@ -800,6 +801,10 @@ void Measure::add(Element* e)
                   for (s = first(); s && s->rtick() < t; s = s->next())
                         ;
                   while (s && s->rtick() == t) {
+                        if (!seg->isChordRestType() && (seg->segmentType() == s->segmentType())) {
+                              qDebug("there is already a <%s> segment", seg->subTypeName());
+                              return;
+                              }
                         if (s->segmentType() > st)
                               break;
                         s = s->next();
@@ -972,13 +977,25 @@ void Measure::spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/)
 
 void Measure::moveTicks(int diff)
       {
+      std::set<Tuplet*> tuplets;
       setTick(tick() + diff);
       for (Segment* segment = last(); segment; segment = segment->prev()) {
             if (segment->segmentType() & (SegmentType::EndBarLine | SegmentType::TimeSigAnnounce))
                   segment->setTick(tick() + ticks());
             else if (segment->isChordRestType())
-                  break;
+                  // Tuplet ticks are stored as absolute ticks, so they must be adjusted.
+                  // But each tuplet must only be adjusted once.
+                  for (Element* e : segment->elist())
+                        if (e) {
+                              ChordRest* cr = toChordRest(e);
+                              Tuplet* tuplet = cr->tuplet();
+                              if (tuplet && tuplets.count(tuplet) == 0) {
+                                    tuplet->setTick(tuplet->tick() + diff);
+                                    tuplets.insert(tuplet);
+                                    }
+                              }
             }
+      tuplets.clear();
       }
 
 //---------------------------------------------------------
@@ -1467,6 +1484,7 @@ Element* Measure::drop(EditData& data)
                         spacer->setGap(gap);
                         }
                   score()->undoAddElement(spacer);
+                  score()->setLayoutAll();
                   return spacer;
                   }
 
@@ -1650,16 +1668,22 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                               }
                         }
                   }
+            Fraction stretch = s->staff(staffIdx)->timeStretch(tick());
             // if just a single rest
             if (rests == 1 && chords == 0) {
                   // if measure value didn't change, stick to whole measure rest
                   if (_timesig == nf) {
-                        rest->undoChangeProperty(Pid::DURATION, QVariant::fromValue<Fraction>(nf));
+                        rest->undoChangeProperty(Pid::DURATION, QVariant::fromValue<Fraction>(nf * stretch));
                         rest->undoChangeProperty(Pid::DURATION_TYPE, QVariant::fromValue<TDuration>(TDuration::DurationType::V_MEASURE));
                         }
                   else {      // if measure value did change, represent with rests actual measure value
+#if 0
+                        // any reason not to do this instead?
+                        s->undoRemoveElement(rest);
+                        s->setRest(tick(), staffIdx * VOICES, nf * stretch, false, 0, false);
+#else
                         // convert the measure duration in a list of values (no dots for rests)
-                        std::vector<TDuration> durList = toDurationList(nf, false, 0);
+                        std::vector<TDuration> durList = toDurationList(nf * stretch, false, 0);
 
                         // set the existing rest to the first value of the duration list
                         for (ScoreElement* e : rest->linkList()) {
@@ -1668,15 +1692,16 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                               }
 
                         // add rests for any other duration list value
-                        int tickOffset = tick() + durList[0].ticks();
+                        int tickOffset = tick() + rest->actualTicks();
                         for (unsigned i = 1; i < durList.size(); i++) {
                               Rest* newRest = new Rest(s);
                               newRest->setDurationType(durList.at(i));
                               newRest->setDuration(durList.at(i).fraction());
                               newRest->setTrack(rest->track());
                               score()->undoAddCR(newRest, this, tickOffset);
-                              tickOffset += durList.at(i).ticks();
+                              tickOffset += newRest->actualTicks();
                               }
+#endif
                         }
                   continue;
                   }
@@ -1723,7 +1748,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                         // add rest to measure
                         int rtick = tick() + nl - n;
                         int track = staffIdx * VOICES + voice;
-                        s->setRest(rtick, track, Fraction::fromTicks(n), false, 0, false);
+                        s->setRest(rtick, track, Fraction::fromTicks(n) * stretch, false, 0, false);
                         }
                   }
             }
@@ -1989,7 +2014,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   e.initTick(e.lastMeasure()->tick());
                   }
             else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(SubStyleId::MEASURE_NUMBER, score());
+                  Text* noText = new Text(score(), Tid::MEASURE_NUMBER);
                   noText->read(e);
                   noText->setFlag(ElementFlag::ON_STAFF, true);
                   noText->setTrack(e.track());
@@ -2782,8 +2807,8 @@ void Measure::read300(XmlReader& e, int staffIdx)
             else if (tag == "Segment")
                   segment->read300(e);
             else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(SubStyleId::MEASURE_NUMBER, score());
-                  noText->read300(e);
+                  Text* noText = new Text(score(), Tid::MEASURE_NUMBER);
+                  noText->read(e);
                   noText->setFlag(ElementFlag::ON_STAFF, true);
                   noText->setTrack(e.track());
                   noText->setParent(this);

@@ -40,6 +40,15 @@ struct SpannerValues {
       };
 
 //---------------------------------------------------------
+//   TextStyleMap
+//---------------------------------------------------------
+
+struct TextStyleMap {
+      QString name;
+      Tid ss;
+      };
+
+//---------------------------------------------------------
 //   LinksIndexer
 //---------------------------------------------------------
 
@@ -83,6 +92,8 @@ class XmlReader : public QXmlStreamReader {
       QMap<int, QList<QPair<LinkedElements*, PointInfo>>> _staffLinkedElements; // one list per staff
       LinksIndexer _linksIndexer;
       QMultiMap<int, int> _tracks;
+
+      QList<TextStyleMap> userTextStyles;
 
    public:
       XmlReader(QFile* f) : QXmlStreamReader(f), docName(f->fileName()) {}
@@ -180,6 +191,8 @@ class XmlReader : public QXmlStreamReader {
       QMultiMap<int, int>& tracks()         { return _tracks;     }
 
       void checkTuplets();
+      Tid addUserTextStyle(const QString& name);
+      Tid lookupUserTextStyle(const QString& name);
       };
 
 //---------------------------------------------------------

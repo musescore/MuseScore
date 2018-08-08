@@ -153,6 +153,8 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(myPluginsButton, SIGNAL(clicked()), SLOT(selectPluginsDirectory()));
       connect(myImagesButton, SIGNAL(clicked()), SLOT(selectImagesDirectory()));
       connect(mySoundfontsButton, SIGNAL(clicked()), SLOT(changeSoundfontPaths()));
+       connect(myExtensionsButton, SIGNAL(clicked()), SLOT(selectExtensionsDirectory()));
+
 
       connect(updateTranslation, SIGNAL(clicked()), SLOT(updateTranslationClicked()));
 
@@ -204,6 +206,13 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(useJackMidi,  SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
       updateRemote();
 
+      advancedWidget = new PreferencesListWidget();
+      QVBoxLayout* l = static_cast<QVBoxLayout*> (tabAdvanced->layout());
+      l->insertWidget(0, advancedWidget);
+      advancedWidget->loadPreferences();
+      connect(advancedSearch, &QLineEdit::textChanged, this, &PreferenceDialog::filterAdvancedPreferences);
+      connect(resetPreference, &QPushButton::clicked, this, &PreferenceDialog::resetAdvancedPreferenceToDefault);
+
       MuseScore::restoreGeometry(this);
 #if !defined(Q_OS_MAC) && (!defined(Q_OS_WIN) || defined(FOR_WINSTORE))
       General->removeTab(General->indexOf(tabUpdate)); // updateTab not needed on Linux and not wanted in Windows Store
@@ -211,7 +220,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       }
 
 //---------------------------------------------------------
-//   setPreferences
+//   start
 //---------------------------------------------------------
 
 void PreferenceDialog::start()
@@ -306,6 +315,8 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       if (useDefaultValues)
             preferences.setReturnDefaultValues(true);
 
+      advancedWidget->updatePreferences();
+
       rcGroup->setChecked(preferences.getBool(PREF_IO_MIDI_USEREMOTECONTROL));
       advanceOnRelease->setChecked(preferences.getBool(PREF_IO_MIDI_ADVANCEONRELEASE));
 
@@ -361,6 +372,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
             }
       sessionScore->setText(preferences.getString(PREF_APP_STARTUP_STARTSCORE));
       expandRepeats->setChecked(preferences.getBool(PREF_IO_MIDI_EXPANDREPEATS));
+      normalize->setChecked(preferences.getBool(PREF_EXPORT_AUDIO_NORMALIZE));
       exportRPNs->setChecked(preferences.getBool(PREF_IO_MIDI_EXPORTRPNS));
       instrumentList1->setText(preferences.getString(PREF_APP_PATHS_INSTRUMENTLIST1));
       instrumentList2->setText(preferences.getString(PREF_APP_PATHS_INSTRUMENTLIST2));
@@ -523,6 +535,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       myTemplates->setText(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
       myPlugins->setText(preferences.getString(PREF_APP_PATHS_MYPLUGINS));
       mySoundfonts->setText(preferences.getString(PREF_APP_PATHS_MYSOUNDFONTS));
+      myExtensions->setText(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
 
       index = exportAudioSampleRate->findData(preferences.getInt(PREF_EXPORT_AUDIO_SAMPLERATE));
       exportAudioSampleRate->setCurrentIndex(index);
@@ -666,6 +679,37 @@ void  PreferenceDialog::filterShortcutsTextChanged(const QString &query )
           else
               item->setHidden(true);
           }
+      }
+
+//--------------------------------------------------------
+//   filterAdvancedPreferences
+//--------------------------------------------------------
+
+void PreferenceDialog::filterAdvancedPreferences(const QString& query)
+      {
+      QTreeWidgetItem *item;
+      for(int i = 0; i < advancedWidget->topLevelItemCount(); i++) {
+            item = advancedWidget->topLevelItem(i);
+
+            if(item->text(0).toLower().contains(query.toLower()))
+                  item->setHidden(false);
+            else
+                  item->setHidden(true);
+            }
+      }
+
+//--------------------------------------------------------
+//   resetAdvancedPreferenceToDefault
+//--------------------------------------------------------
+
+void PreferenceDialog::resetAdvancedPreferenceToDefault()
+      {
+      preferences.setReturnDefaultValues(true);
+      for (QTreeWidgetItem* item : advancedWidget->selectedItems()) {
+            PreferenceItem* pref = static_cast<PreferenceItem*>(item);
+            pref->setDefaultValue();
+            }
+      preferences.setReturnDefaultValues(false);
       }
 
 //---------------------------------------------------------
@@ -837,6 +881,8 @@ void PreferenceDialog::buttonBoxClicked(QAbstractButton* button)
 
 void PreferenceDialog::apply()
       {
+      advancedWidget->save();
+
       if (lastSession->isChecked())
             preferences.setCustomPreference<SessionStart>(PREF_APP_STARTUP_SESSIONSTART, SessionStart::LAST);
       else if (newSession->isChecked())
@@ -856,6 +902,7 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_APP_PATHS_MYSOUNDFONTS, mySoundfonts->text());
       preferences.setPreference(PREF_APP_PATHS_MYSTYLES, myStyles->text());
       preferences.setPreference(PREF_APP_PATHS_MYTEMPLATES, myTemplates->text());
+      preferences.setPreference(PREF_APP_PATHS_MYEXTENSIONS, myExtensions->text());
       preferences.setPreference(PREF_APP_STARTUP_STARTSCORE, sessionScore->text());
       preferences.setPreference(PREF_EXPORT_AUDIO_SAMPLERATE, exportAudioSampleRate->currentData().toInt());
       preferences.setPreference(PREF_EXPORT_MP3_BITRATE, exportMp3BitRate->currentData().toInt());
@@ -868,6 +915,7 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_IO_MIDI_ADVANCEONRELEASE, advanceOnRelease->isChecked());
       preferences.setPreference(PREF_IO_MIDI_ENABLEINPUT, enableMidiInput->isChecked());
       preferences.setPreference(PREF_IO_MIDI_EXPANDREPEATS, expandRepeats->isChecked());
+      preferences.setPreference(PREF_EXPORT_AUDIO_NORMALIZE, normalize->isChecked());
       preferences.setPreference(PREF_IO_MIDI_EXPORTRPNS, exportRPNs->isChecked());
       preferences.setPreference(PREF_IO_MIDI_REALTIMEDELAY, realtimeDelay->value());
       preferences.setPreference(PREF_IO_MIDI_USEREMOTECONTROL, rcGroup->isChecked());
@@ -1259,12 +1307,29 @@ void PreferenceDialog::changeSoundfontPaths()
       }
 
 //---------------------------------------------------------
+//   selectExtensionsDirectory
+//---------------------------------------------------------
+
+void PreferenceDialog::selectExtensionsDirectory()
+      {
+      QString s = QFileDialog::getExistingDirectory(
+         this,
+         tr("Choose Extensions Folder"),
+         myExtensions->text(),
+         QFileDialog::ShowDirsOnly | (preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS) ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
+         );
+      if (!s.isNull())
+            myExtensions->setText(s);
+      }
+
+//---------------------------------------------------------
 //   updateLanguagesClicked
 //---------------------------------------------------------
 
 void PreferenceDialog::updateTranslationClicked()
       {
       ResourceManager r(0);
+      r.selectLanguagesTab();
       r.exec();
       }
 
@@ -1363,5 +1428,6 @@ void PreferenceDialog::printShortcutsClicked()
       p.end();
 #endif
 }
+
 
 } // namespace Ms

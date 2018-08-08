@@ -80,6 +80,32 @@ bool EditDrumsetTreeWidgetItem::operator<(const QTreeWidgetItem & other) const
 //   EditDrumset
 //---------------------------------------------------------
 
+struct SymbolIcon {
+      SymId id;
+      QIcon icon;
+      SymbolIcon(SymId i, QIcon j)
+            : id(i), icon(j)
+            {}
+
+      static SymbolIcon generateIcon(const SymId& id, double w, double h, double defaultScale)
+            {
+            QIcon icon;
+            QPixmap image(w, h);
+            image.fill(Qt::transparent);
+            QPainter painter(&image);
+            const QRectF& bbox = ScoreFont::fallbackFont()->bbox(id, 1);
+            const qreal actualSymbolScale = std::min(w / bbox.width(), h / bbox.height());
+            qreal mag = std::min(defaultScale, actualSymbolScale);
+            const qreal& xStShift = (w - mag * bbox.width()) / 2 - mag*bbox.left();
+            const qreal& yStShift = (h - mag * bbox.height()) / 2 - mag*bbox.top();
+            const QPointF& stPtPos = QPointF(xStShift, yStShift);
+            ScoreFont::fallbackFont()->draw(id, &painter, mag, stPtPos);
+            painter.end();
+            icon.addPixmap(image);
+            return SymbolIcon(id, icon);
+            }
+};
+
 EditDrumset::EditDrumset(const Drumset* ds, QWidget* parent)
    : QDialog(parent)
       {
@@ -113,43 +139,66 @@ EditDrumset::EditDrumset(const Drumset* ds, QWidget* parent)
       pitchList->setColumnWidth(1, 60);
       pitchList->setColumnWidth(2, 30);
 
-      QStringList validNoteheadRanges = { "Noteheads", "Slash noteheads", "Round and square noteheads", "Shape note noteheads", "Shape note noteheads supplement" };
-      QSet<QString> excludeSym = {"noteheadParenthesisLeft", "noteheadParenthesisRight"};
-      struct SymbolIcon {
-            SymId id;
-            QIcon icon;
-            SymbolIcon(SymId i, QIcon j)
-                  : id(i), icon(j)
-                  {}
+      QStringList validNoteheadRanges = { "Noteheads", "Round and square noteheads", "Slash noteheads", "Shape note noteheads", "Shape note noteheads supplement" };
+      QSet<QString> excludeSym = {"noteheadParenthesisLeft", "noteheadParenthesisRight", "noteheadParenthesis", "noteheadNull"};
+      QStringList primaryNoteheads = {
+            "noteheadXOrnate",
+            "noteheadXBlack",
+            "noteheadXHalf",
+            "noteheadXWhole",
+            "noteheadXDoubleWhole",
+            "noteheadSlashedBlack1",
+            "noteheadSlashedHalf1",
+            "noteheadSlashedWhole1",
+            "noteheadSlashedDoubleWhole1",
+            "noteheadSlashedBlack2",
+            "noteheadSlashedHalf2",
+            "noteheadSlashedWhole2",
+            "noteheadSlashedDoubleWhole2",
+            "noteheadSquareBlack",
+            "noteheadMoonBlack",
+            "noteheadTriangleUpRightBlack",
+            "noteheadTriangleDownBlack",
+            "noteheadTriangleUpBlack",
+            "noteheadTriangleLeftBlack",
+            "noteheadTriangleRoundDownBlack",
+            "noteheadDiamondBlack",
+            "noteheadDiamondHalf",
+            "noteheadDiamondWhole",
+            "noteheadDiamondDoubleWhole",
+            "noteheadRoundWhiteWithDot",
+            "noteheadVoidWithX",
+            "noteheadHalfWithX",
+            "noteheadWholeWithX",
+            "noteheadDoubleWholeWithX",
+            "noteheadLargeArrowUpBlack",
+            "noteheadLargeArrowUpHalf",
+            "noteheadLargeArrowUpWhole",
+            "noteheadLargeArrowUpDoubleWhole"
       };
+
       int w = quarterCmb->iconSize().width()  * qApp->devicePixelRatio();
       int h = quarterCmb->iconSize().height() * qApp->devicePixelRatio();
-      QList<SymbolIcon> validNoteheads;
+      //default scale is 0.3, will use smaller scale for large noteheads symbols
+      const qreal defaultScale = 0.3 * qApp->devicePixelRatio();
+
+      QList<SymbolIcon> resNoteheads;
+      for (auto symName : primaryNoteheads) {
+             SymId id = Sym::name2id(symName);
+             resNoteheads.append(SymbolIcon::generateIcon(id, w, h, defaultScale));
+             }
+
       for (QString range : validNoteheadRanges) {
             for (auto symName : (*smuflRanges())[range]) {
                    SymId id = Sym::name2id(symName);
-                   if (!excludeSym.contains(symName)) {
-                         QIcon icon;
-                         QPixmap image(w, h);
-                         image.fill(Qt::transparent);
-                         QPainter painter(&image);
-                         const QRectF& bbox = ScoreFont::fallbackFont()->bbox(id, 1);
-                         //default scale is 0.3, use smaller scale for large noteheads symbols
-                         qreal mag = std::min(0.3, std::min(w / bbox.width(), h / bbox.height()));
-                         const qreal& xStShift = (w - mag * bbox.width()) / 2 - mag*bbox.left();
-                         const qreal& yStShift = (h - mag * bbox.height()) / 2 - mag*bbox.top();
-                         const QPointF& stPtPos = QPointF(xStShift, yStShift);
-                         ScoreFont::fallbackFont()->draw(id, &painter, mag, stPtPos);
-                         painter.end();
-                         icon.addPixmap(image);
-                         validNoteheads.append(SymbolIcon(id, icon));
-                         }
+                   if (!excludeSym.contains(symName) && !primaryNoteheads.contains(symName))
+                         resNoteheads.append(SymbolIcon::generateIcon(id, w, h, defaultScale));
                    }
             }
 
       QComboBox* combos[] = { wholeCmb, halfCmb, quarterCmb, doubleWholeCmb };
       for (QComboBox* combo : combos) {
-            for (auto si : validNoteheads) {
+            for (auto si : resNoteheads) {
                   SymId id = si.id;
                   QIcon icon = si.icon;
                   combo->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);

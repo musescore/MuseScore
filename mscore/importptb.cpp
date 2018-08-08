@@ -520,7 +520,7 @@ std::vector<int> PowerTab::getStaffMap(ptSection& sec)
                   if (first.rhytmSlash) {
                         for (unsigned int i = 0; i < curTrack->infos.size(); ++i) {
                               if ((i << 1) & first.rhytmSlash) {
-                                    slash.push_back(-i - 1);
+                                    slash.push_back(-1 - i);
                                     }
                               }
                         }
@@ -684,7 +684,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                               }
 
                         if (false && n.slide) {
-                              Text* st = new Text(SubStyleId::HARMONY, score);
+                              Text* st = new Text(score, Tid::HARMONY_A);
                               st->setXmlText(QString("SLIDE %1").arg(n.slide));
                               st->setTrack(staff * VOICES);
                               chord->notes().front()->add(st);
@@ -714,7 +714,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                         slur->setTrack2(staff  * VOICES);
                         score->addElement(slur);
 
-                        Text* st = new Text(SubStyleId::HARMONY, score);
+                        Text* st = new Text(score, Tid::HARMONY_A);
                         st->setXmlText("H");
                         st->setTrack(staff * VOICES);
                         cr1->notes().front()->add(st);
@@ -775,8 +775,8 @@ void PowerTab::addToScore(ptSection& sec)
                   part->insertStaff(s, -1);
                   auto info = &curTrack->infos[i];
                   std::string ss = info->name;
-                  part->setPartName(QString::fromStdString(ss));
-                  part->setPlainLongName(QString::fromStdString(ss));
+                  part->setPartName(QString::fromUtf8(ss.data(), ss.size()));
+                  part->setPlainLongName(QString::fromUtf8(ss.data(), ss.size()));
 
                   std::vector<int> reverseStr;
                   for (auto it = info->strings.rbegin(); it != info->strings.rend(); ++it)
@@ -825,15 +825,15 @@ void PowerTab::addToScore(ptSection& sec)
       if (!sec.partName.empty() && lastPart != sec.partMarker) {
             lastPart = sec.partMarker;
             RehearsalMark* t = new RehearsalMark(score);
-            t->setHasFrame(true);
+            t->setFrameType(FrameType::SQUARE);
             t->setPlainText(QString(sec.partMarker));
             t->setTrack(0);
             auto seg = measure->getSegment(SegmentType::ChordRest, measure->tick());
             seg->add(t);
 
             t = new RehearsalMark(score);
-            t->setHasFrame(false);
-            t->setPlainText(QString::fromStdString(sec.partName));
+            t->setFrameType(FrameType::NO_FRAME);
+            t->setPlainText(QString::fromUtf8(sec.partName.data(), sec.partName.size()));
             t->setOffset(QPointF(10.0, 0.0));
             t->setTrack(0);
             seg->add(t);
@@ -1258,8 +1258,8 @@ Score::FileError PowerTab::read()
       // create title
       std::string name = song.info.name;
       if (!name.empty()) {
-            Text* s = new Text(SubStyleId::TITLE, score);
-            s->setPlainText(QString::fromStdString(name));
+            Text* s = new Text(score, Tid::TITLE);
+            s->setPlainText(QString::fromUtf8(name.data(), name.size()));
             m->add(s);
             }
 
@@ -1337,7 +1337,7 @@ Score::FileError PowerTab::read()
                   pscore->addMeasure(mb, measure);
                   measure = mb;
                   }
-            Text* txt = new Text(SubStyleId::INSTRUMENT_EXCERPT, pscore);
+            Text* txt = new Text(pscore, Tid::INSTRUMENT_EXCERPT);
             txt->setPlainText(part->longName());
             measure->add(txt);
 

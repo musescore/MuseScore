@@ -972,7 +972,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         case CapellaType::TEXT: {
 
                               TextObj* to = static_cast<TextObj*>(o);
-                              Text* s = new Text(SubStyleId::TITLE, score);
+                              Text* s = new Text(score, Tid::TITLE);
                               QString ss = ::rtf2html(QString(to->text));
 
                               // qDebug("string %f:%f w %d ratio %d <%s>",
@@ -1237,14 +1237,14 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   case CapellaType::SIMPLE_TEXT:
                         {
                         SimpleTextObj* to = static_cast<SimpleTextObj*>(o);
-                        SubStyleId ssid;
+                        Tid tid;
                         switch (to->textalign()) {
-                              case 0:   ssid = SubStyleId::POET;    break;
-                              case 1:   ssid = SubStyleId::TITLE;   break;
-                              case 2:   ssid = SubStyleId::COMPOSER; break;
-                              default:  ssid = SubStyleId::DEFAULT; break;
+                              case 0:   tid = Tid::POET;    break;
+                              case 1:   tid = Tid::TITLE;   break;
+                              case 2:   tid = Tid::COMPOSER; break;
+                              default:  tid = Tid::DEFAULT; break;
                               }
-                        Text* s = new Text(ssid, score);
+                        Text* s = new Text(score, tid);
                         QFont f(to->font());
                         s->setItalic(f.italic());
                         // s->setUnderline(f.underline());
@@ -1412,7 +1412,14 @@ void TextObj::read()
       {
       BasicRectObj::read();
       unsigned size = cap->readUnsigned();
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       char txt[size+1];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<char> vtxt(size+1);
+      char* txt = vtxt.data();
+#endif
       cap->read(txt, size);
       txt[size] = 0;
       text = QString(txt);
@@ -1496,7 +1503,14 @@ void MetafileObj::read()
       {
       BasicRectObj::read();
       unsigned size = cap->readUnsigned();
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       char enhMetaFileBits[size];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<char> vEnhMetaFileBits(size);
+      char* enhMetaFileBits = vEnhMetaFileBits.data();
+#endif
       cap->read(enhMetaFileBits, size);
       // qDebug("MetaFileObj::read %d bytes", size);
       }
@@ -2210,7 +2224,7 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
             uchar iMin = readByte();
             Q_UNUSED(iMin);
             uchar n    = readByte();
-            Q_ASSERT (n > 0 and iMin + n <= 128);
+            Q_ASSERT (n > 0 && iMin + n <= 128);
             f->read(sl->soundMapIn, n);
             curPos += n;
             }
@@ -2218,7 +2232,7 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
             unsigned char iMin = readByte();
             Q_UNUSED(iMin);
             unsigned char n    = readByte();
-            Q_ASSERT (n > 0 and iMin + n <= 128);
+            Q_ASSERT (n > 0 && iMin + n <= 128);
             f->read(sl->soundMapOut, n);
             curPos += n;
             }

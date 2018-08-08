@@ -21,6 +21,7 @@
 REVISION  = `cat mscore/revision.h`
 VERSION   = "3.0b-${REVISION}"
 #VERSION = 3.0.0
+BUILD_NUMBER = ""
 PREFIX=../applebuild
 
 XCODEPROJ = mscore.xcodeproj
@@ -35,6 +36,7 @@ release:
 	mkdir build.release;                               \
     cd build.release;                                  \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
+          -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"  \
           .. -G Xcode; 			       \
     xcodebuild -project ${XCODEPROJ} -target lrelease;                            \
 		$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target ALL_BUILD $(FORMATTER_END);    \
@@ -43,6 +45,7 @@ debug:
 	mkdir build.debug;                               \
     cd build.debug;                            \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=DEBUG \
+          -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"  \
           .. -G Xcode; 			       \
     xcodebuild -project ${XCODEPROJ} -target lrelease;                             \
     $(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Debug -target ALL_BUILD $(FORMATTER_END);       \
@@ -51,6 +54,7 @@ xcode:
 	mkdir build.xcode;              \
     cd build.xcode;                                  \
     cmake -DCMAKE_INSTALL_PREFIX=../build.xcode/mscore/Debug -DCMAKE_BUILD_TYPE=DEBUG \
+          -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"  \
           .. -G Xcode;                         \
     xcodebuild -project ${XCODEPROJ} -target lrelease;
 
@@ -81,6 +85,7 @@ ci: revision
 	mkdir build.release;     \
     cd build.release;            \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
+          -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"  \
           .. -G Xcode;                                                  \
     xcodebuild -project ${XCODEPROJ} -target lrelease;                  \
     $(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target install $(FORMATTER_END);

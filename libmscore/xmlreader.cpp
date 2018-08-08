@@ -21,6 +21,7 @@
 #include "sym.h"
 #include "note.h"
 #include "barline.h"
+#include "style.h"
 
 namespace Ms {
 
@@ -517,6 +518,48 @@ int XmlReader::spannerId(const Spanner* s)
             }
       qDebug("XmlReader::spannerId not found");
       return -1;
+      }
+
+//---------------------------------------------------------
+//   addUserTextStyle
+//    return false if mapping is not possible
+//      (too many user text styles)
+//---------------------------------------------------------
+
+Tid XmlReader::addUserTextStyle(const QString& name)
+      {
+      qDebug("%s", qPrintable(name));
+      Tid id = Tid::TEXT_STYLES;
+      if (userTextStyles.size() == 0)
+            id = Tid::USER1;
+      else if (userTextStyles.size() == 1)
+            id = Tid::USER2;
+      else if (userTextStyles.size() == 2)
+            id = Tid::USER3;
+      else if (userTextStyles.size() == 3)
+            id = Tid::USER4;
+      else if (userTextStyles.size() == 4)
+            id = Tid::USER5;
+      else if (userTextStyles.size() == 5)
+            id = Tid::USER6;
+      else
+            qDebug("too many user defined textstyles");
+      if (id != Tid::TEXT_STYLES)
+            userTextStyles.push_back({name, id});
+      return id;
+      }
+
+//---------------------------------------------------------
+//   lookupUserTextStyle
+//---------------------------------------------------------
+
+Tid XmlReader::lookupUserTextStyle(const QString& name)
+      {
+      for (const auto& i : userTextStyles) {
+            if (i.name == name)
+                  return i.ss;
+            }
+      return Tid::TEXT_STYLES;       // not found
       }
 
 //---------------------------------------------------------

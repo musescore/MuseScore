@@ -90,10 +90,8 @@ ClefType ClefInfo::tag2type(const QString& s)
 //---------------------------------------------------------
 
 Clef::Clef(Score* s)
-  : Element(s)
+  : Element(s, ElementFlag::ON_STAFF)
       {
-      setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-
       _showCourtesy               = true;
       _small                      = false;
       _clefTypes._concertClef     = ClefType::INVALID;
@@ -148,6 +146,14 @@ void Clef::layout()
                         _clefTypes = staff()->clefType(0);
                   }
 
+            Measure* meas = clefSeg->measure();
+            if (meas && meas->system()) {
+                  auto ml = meas->system()->measures();
+                  bool found = (std::find(ml.begin(), ml.end(), meas) != ml.end());
+                  bool courtesy = (tick == meas->endTick() && (meas == meas->system()->lastMeasure() || !found));
+                  if (courtesy && (!showCourtesy() || !score()->styleB(Sid::genCourtesyClef) || meas->isFinalMeasureOfSection()))
+                        show = false;
+                  }
             // if clef not to show or not compatible with staff group
             if (!show) {
                   setbbox(QRectF());
@@ -425,6 +431,37 @@ void Clef::undoSetShowCourtesy(bool v)
       }
 
 //---------------------------------------------------------
+//   otherClef
+//    try to locate the 'other clef' of a courtesy / main pair
+//---------------------------------------------------------
+
+Clef* Clef::otherClef()
+      {
+      // if not in a clef-segment-measure hierarchy, do nothing
+      if (!parent() || !parent()->isSegment())
+            return nullptr;
+      Segment* segm = toSegment(parent());
+      int segmTick = segm->tick();
+      if (!segm->parent() || !segm->parent()->isMeasure())
+            return nullptr;
+      Measure* meas = toMeasure(segm->parent());
+      Measure* otherMeas = nullptr;
+      Segment* otherSegm = nullptr;
+      if (segmTick == meas->tick())                         // if clef segm is measure-initial
+            otherMeas = meas->prevMeasure();                // look for a previous measure
+      else if (segmTick == meas->tick() + meas->ticks())    // if clef segm is measure-final
+            otherMeas = meas->nextMeasure();                // look for a next measure
+      if (!otherMeas)
+            return nullptr;
+      // look for a clef segment in the 'other' measure at the same tick of this clef segment
+      otherSegm = otherMeas->findSegment(SegmentType::Clef | SegmentType::HeaderClef, segmTick);
+      if (!otherSegm)
+            return nullptr;
+      // if any 'other' segment found, look for a clef in the same track as this
+      return toClef(otherSegm->element(track()));
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -450,6 +487,7 @@ bool Clef::setProperty(Pid propertyId, const QVariant& v)
             default:
                   return Element::setProperty(propertyId, v);
             }
+      triggerLayout();
       return true;
       }
 

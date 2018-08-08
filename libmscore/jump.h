@@ -17,8 +17,6 @@
 
 namespace Ms {
 
-enum class SubStyleId;
-
 //---------------------------------------------------------
 //   @@ Jump
 ///    Jump label
@@ -77,8 +75,6 @@ class Jump final : public TextBase {
       bool playRepeats() const                  { return _playRepeats; }
       void setPlayRepeats(bool val)             { _playRepeats = val;  }
 
-      virtual bool systemFlag() const override  { return true;        }
-
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
@@ -94,7 +90,6 @@ class Jump final : public TextBase {
 
 struct JumpTypeTable {
       Jump::Type type;
-      SubStyleId subStyle;
       const char* text;
       const char* jumpTo;
       const char* playUntil;

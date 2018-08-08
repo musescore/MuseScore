@@ -63,17 +63,43 @@ bool AudioFile::open(const QByteArray& b)
       idx = 0;
       sf  = sf_open_virtual(&sfio, SFM_READ, &info, this);
       hasInstrument = sf_command(sf, SFC_GET_INSTRUMENT, &inst, sizeof(inst)) == SF_TRUE;
-
+      _type = info.format & SF_FORMAT_OGG ? fltp : s16p;
       return sf != 0;
       }
 
 //---------------------------------------------------------
-//   read
+//   readData
 //---------------------------------------------------------
 
-int AudioFile::read(short* data, int frames)
+sf_count_t AudioFile::readData(short* data, sf_count_t frames)
       {
-      return sf_readf_short(sf, data, frames);
+      //see https://musescore.org/en/node/22086#comment-83671
+      //see https://github.com/erikd/libsndfile/issues/16
+      //this code fixes the bug in libsndfile: float values are not normalized when reading .ogg
+      //this leads to overflowing signed short values, reverting a sign and clicking noise
+      sf_count_t resFrames = 0;
+      if (s16p == _type)
+            resFrames = sf_readf_short(sf, data, frames);
+      else {
+            //read native float values
+            int totalFrames = frames * channels();
+            float* dataF = new float[totalFrames];
+            resFrames = sf_readf_float(sf, dataF, frames);
+            //find the maximum signal value
+            float maxSignal = 0.f;
+            for (int i = 0; i < totalFrames; ++i) {
+                  if (fabs(dataF[i]) > maxSignal)
+                        maxSignal = dataF[i] > 0 ? dataF[i] : -dataF[i];
+                  }
+            //normalize values if and only if sample values range is incorrect
+            //which means having at least one sample value more than 1.0
+            float adjScale = maxSignal > 1.f ? 1.f/maxSignal : 1.f;
+            //convert normalized floats to signed short values
+            for (int i = 0; i < totalFrames; ++i)
+                  data[i] = adjScale * lrintf(dataF[i] * (dataF[i] > 0 ? SHRT_MAX : -SHRT_MIN));
+            }
+
+      return resFrames;
       }
 
 //---------------------------------------------------------

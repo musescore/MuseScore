@@ -68,6 +68,7 @@ class PaletteBox : public QDockWidget {
       bool eventFilter(QObject* obj, QEvent *event);
       void setKeyboardNavigation(bool val) { keyboardNavigation = val; }
       bool getKeyboardNavigation() { return keyboardNavigation; }
+      void selectWorkspace(QString path);
       };
 
 //---------------------------------------------------------

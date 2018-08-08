@@ -87,9 +87,9 @@ void Score::updateSwing()
             return;
       for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             for (const Element* e : s->annotations()) {
-                  if (!e->isStaffText())
+                  if (!e->isStaffTextBase())
                         continue;
-                  const StaffText* st = toStaffText(e);
+                  const StaffTextBase* st = toStaffTextBase(e);
                   if (st->xmlText().isEmpty())
                         continue;
                   Staff* staff = st->staff();
@@ -130,9 +130,9 @@ void MasterScore::updateChannel()
                               staff->channelList(voice)->insert(s->tick(), 0);
                         continue;
                         }
-                  if (!e->isStaffText())
+                  if (!e->isStaffTextBase())
                         continue;
-                  const StaffText* st = toStaffText(e);
+                  const StaffTextBase* st = toStaffTextBase(e);
                   for (int voice = 0; voice < VOICES; ++voice) {
                         QString an(st->channelName(voice));
                         if (an.isEmpty())
@@ -404,11 +404,9 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
       for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
             // int tick = s->tick();
             for (Element* e : s->annotations()) {
-                  if (e->type() != ElementType::STAFF_TEXT
-                     || e->staffIdx() < firstStaffIdx
-                     || e->staffIdx() >= nextStaffIdx)
+                  if (!e->isStaffTextBase() || e->staffIdx() < firstStaffIdx || e->staffIdx() >= nextStaffIdx)
                         continue;
-                  const StaffText* st = static_cast<const StaffText*>(e);
+                  const StaffTextBase* st = toStaffTextBase(e);
                   int tick = s->tick() + tickOffset;
 
                   Instrument* instr = e->part()->instrument(tick);
@@ -766,22 +764,23 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
       {
       int tick = chord->rtick();
       // adjust for anacrusis
-      Measure* cm = chord->measure();
+      Measure* cm     = chord->measure();
       MeasureBase* pm = cm->prev();
-      ElementType pt = pm ? pm->type() : ElementType::INVALID;
+      ElementType pt  = pm ? pm->type() : ElementType::INVALID;
       if (!pm || pm->lineBreak() || pm->pageBreak() || pm->sectionBreak()
          || pt == ElementType::VBOX || pt == ElementType::HBOX
          || pt == ElementType::FBOX || pt == ElementType::TBOX) {
             int offset = (cm->timesig() - cm->len()).ticks();
-            if (offset > 0)
+            if (offset > 0) {
                   tick += offset;
+                  }
             }
 
-      int swingBeat = swingUnit * 2;
-      qreal ticksDuration = (qreal)chord->actualTicks();
-      qreal swingTickAdjust = ((qreal)swingBeat) * (((qreal)(swingRatio-50))/100.0);
+      int swingBeat           = swingUnit * 2;
+      qreal ticksDuration     = (qreal)chord->actualTicks();
+      qreal swingTickAdjust   = ((qreal)swingBeat) * (((qreal)(swingRatio-50))/100.0);
       qreal swingActualAdjust = (swingTickAdjust/ticksDuration) * 1000.0;
-      ChordRest *ncr = nextChordRest(chord);
+      ChordRest *ncr          = nextChordRest(chord);
 
       //Check the position of the chord to apply changes accordingly
       if (tick % swingBeat == swingUnit) {
@@ -811,6 +810,15 @@ bool Score::isSubdivided(ChordRest* chord, int swingUnit)
             return false;
       }
 
+const Drumset* getDrumset(const Chord* chord)
+      {
+      if (chord->staff() && chord->staff()->isDrumStaff(chord->tick())) {
+            const Drumset* ds = chord->staff()->part()->instrument(chord->tick())->drumset();
+            return ds;
+            }
+      return nullptr;
+      }
+
 //---------------------------------------------------------
 //   renderTremolo
 //---------------------------------------------------------
@@ -822,17 +830,20 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
       int notes = chord->notes().size();
 
       // check if tremolo was rendered before for drum staff
-      if (chord->staff() && chord->staff()->isDrumStaff(chord->tick())) {
-            Drumset* ds = chord->staff()->part()->instrument(chord->tick())->drumset();
+      const Drumset* ds = getDrumset(chord);
+      if (ds) {
             for (Note* n : chord->notes()) {
                   DrumInstrumentVariant div = ds->findVariant(n->pitch(), chord->articulations(), chord->tremolo());
-                  if (div.pitch !=INVALID_PITCH && div.tremolo == tremolo->tremoloType())
+                  if (div.pitch != INVALID_PITCH && div.tremolo == tremolo->tremoloType())
                         return; // already rendered
                   }
             }
 
-      //int n = 1 << tremolo->lines();
-      //int l = 1000 / n;
+      // we cannot render buzz roll with MIDI events only
+      if (tremolo->tremoloType() == TremoloType::BUZZ_ROLL)
+            return;
+
+      // render tremolo with multiple events
       if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
             int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
             SegmentType st = SegmentType::ChordRest;
@@ -1559,11 +1570,11 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, 
 
 void Score::createGraceNotesPlayEvents(int tick, Chord* chord, int &ontime, int &trailtime)
       {
-      QVector<Chord*>  gnb= chord->graceNotesBefore();
-      QVector<Chord*>  gna= chord->graceNotesAfter();
+      QVector<Chord*> gnb = chord->graceNotesBefore();
+      QVector<Chord*> gna = chord->graceNotesAfter();
       int nb = gnb.size();
       int na = gna.size();
-      if (0 == nb+na){
+      if (0 == nb + na){
             return; // return immediately if no grace notes to deal with
             }
       // return immediately if the chord has a trill or articulation which effectively plays the graces notes.
@@ -1579,7 +1590,17 @@ void Score::createGraceNotesPlayEvents(int tick, Chord* chord, int &ontime, int 
       // exception is if the note is dotted or double-dotted; see below.
       float weighta = float(na) / (nb+na);
       float weightb = float(nb) / (nb+na);
-      if (nb) {
+
+      int graceDuration = 0;
+      bool drumset = (getDrumset(chord) != nullptr);
+      const qreal ticksPerSecond = tempo(tick) * MScore::division;
+      const qreal chordTimeMS = (chord->actualTicks() / ticksPerSecond) * 1000;
+      if (drumset) {
+            int flamDuration = 15; //ms
+            graceDuration = flamDuration / chordTimeMS * 1000; //ratio 1/1000 from the main note length
+            ontime = graceDuration * nb;
+            }
+      else if (nb) {
             //
             //  render grace notes:
             //  simplified implementation:
@@ -1589,53 +1610,50 @@ void Score::createGraceNotesPlayEvents(int tick, Chord* chord, int &ontime, int 
             //  - for appoggiaturas, the duration is divided by the number of grace notes
             //  - the grace note duration as notated does not matter
             //
-            Chord* graceChordB = gnb[0];
-            if (graceChordB->noteType() ==  NoteType::ACCIACCATURA) {
-                  qreal ticksPerSecond = tempo(tick) * MScore::division;
+            Chord* graceChord = gnb[0];
+            if (graceChord->noteType() ==  NoteType::ACCIACCATURA) {
                   int graceTimeMS = 65 * nb;     // value determined empirically (TODO: make instrument-specific, like articulations)
-                  // 1000 occurs below for two different reasons:
-                  // number of milliseconds per second, also unit for ontime
-                  qreal chordTimeMS = (chord->actualTicks() / ticksPerSecond) * 1000;
+                  // 1000 occurs below as a unit for ontime
                   ontime = qMin(500, static_cast<int>((graceTimeMS / chordTimeMS) * 1000));
-                  weightb=0.0;
-                  weighta=1.0;
+                  weightb = 0.0;
+                  weighta = 1.0;
                   }
             else if (chord->dots() == 1)
-                  ontime = floor(667*weightb);
+                  ontime = floor(667 * weightb);
             else if (chord->dots() == 2)
-                  ontime = floor(571*weightb);
+                  ontime = floor(571 * weightb);
             else
-                  ontime = floor(500*weightb);
+                  ontime = floor(500 * weightb);
 
-            int graceDuration = ontime / nb;
+            graceDuration = ontime / nb;
+            }
 
-            int on = 0;
-            for (int i = 0; i < nb; ++i) {
-                  QList<NoteEventList> el;
-                  Chord* gc = gnb.at(i);
-                  int nn = gc->notes().size();
-                  for (int ii = 0; ii < nn; ++ii) {
-                        NoteEventList nel;
-                        nel.append(NoteEvent(0, on, graceDuration)); // NoteEvent(pitch,ontime,len)
-                        el.append(nel);
-                        }
-
-                  if (gc->playEventType() == PlayEventType::InvalidUser)
-                        gc->score()->undo(new ChangeEventList(gc, el));
-                  else if (gc->playEventType() == PlayEventType::Auto) {
-                        for (int ii = 0; ii < nn; ++ii)
-                              gc->notes()[ii]->setPlayEvents(el[ii]);
-                        }
-                  on += graceDuration;
+      int on = 0;
+      for (int i = 0; i < nb; ++i) {
+            QList<NoteEventList> el;
+            Chord* gc = gnb.at(i);
+            int nn = gc->notes().size();
+            for (int ii = 0; ii < nn; ++ii) {
+                  NoteEventList nel;
+                  nel.append(NoteEvent(0, on, graceDuration));
+                  el.append(nel);
                   }
+
+            if (gc->playEventType() == PlayEventType::InvalidUser)
+                  gc->score()->undo(new ChangeEventList(gc, el));
+            else if (gc->playEventType() == PlayEventType::Auto) {
+                  for (int ii = 0; ii < nn; ++ii)
+                        gc->notes()[ii]->setPlayEvents(el[ii]);
+                  }
+            on += graceDuration;
             }
       if (na) {
             if (chord->dots() == 1)
-                  trailtime = floor(667*weighta);
+                  trailtime = floor(667 * weighta);
             else if (chord->dots() == 2)
-                  trailtime = floor(571*weighta);
+                  trailtime = floor(571 * weighta);
             else
-                  trailtime = floor(500*weighta);
+                  trailtime = floor(500 * weighta);
             int graceDuration = trailtime / na;
             int on = 1000 - trailtime;
             for (int i = 0; i < na; ++i) {
@@ -1643,10 +1661,10 @@ void Score::createGraceNotesPlayEvents(int tick, Chord* chord, int &ontime, int 
                   Chord* gc = gna.at(i);
                   int nn = gc->notes().size();
                   for (int ii = 0; ii < nn; ++ii) {
-                  NoteEventList nel;
-                  nel.append(NoteEvent(0, on, graceDuration)); // NoteEvent(pitch,ontime,len)
-                  el.append(nel);
-                  }
+                        NoteEventList nel;
+                        nel.append(NoteEvent(0, on, graceDuration)); // NoteEvent(pitch,ontime,len)
+                        el.append(nel);
+                        }
 
                   if (gc->playEventType() == PlayEventType::InvalidUser)
                         gc->score()->undo(new ChangeEventList(gc, el));
@@ -1685,13 +1703,13 @@ void Score::createPlayEvents(Chord* chord)
             instr->updateGateTime(&gateTime, 0, "");
             }
 
-      int ontime = 0;
+      int ontime    = 0;
       int trailtime = 0;
       createGraceNotesPlayEvents(tick, chord, ontime, trailtime); // ontime and trailtime are modified by this call depending on grace notes before and after
 
       SwingParameters st = chord->staff()->swing(tick);
-      int unit = st.swingUnit;
-      int ratio = st.swingRatio;
+      int unit           = st.swingUnit;
+      int ratio          = st.swingRatio;
       // Check if swing needs to be applied
       if (unit && !chord->tuplet()) {
             swingAdjustParams(chord, gateTime, ontime, unit, ratio);

@@ -19,6 +19,34 @@
 
 namespace Ms {
 
+static const ElementStyle voltaStyle {
+      { Sid::voltaFontFace,                      Pid::BEGIN_FONT_FACE         },
+      { Sid::voltaFontFace,                      Pid::CONTINUE_FONT_FACE      },
+      { Sid::voltaFontFace,                      Pid::END_FONT_FACE           },
+      { Sid::voltaFontSize,                      Pid::BEGIN_FONT_SIZE         },
+      { Sid::voltaFontSize,                      Pid::CONTINUE_FONT_SIZE      },
+      { Sid::voltaFontSize,                      Pid::END_FONT_SIZE           },
+      { Sid::voltaFontBold,                      Pid::BEGIN_FONT_BOLD         },
+      { Sid::voltaFontBold,                      Pid::CONTINUE_FONT_BOLD      },
+      { Sid::voltaFontBold,                      Pid::END_FONT_BOLD           },
+      { Sid::voltaFontItalic,                    Pid::BEGIN_FONT_ITALIC       },
+      { Sid::voltaFontItalic,                    Pid::CONTINUE_FONT_ITALIC    },
+      { Sid::voltaFontItalic,                    Pid::END_FONT_ITALIC         },
+      { Sid::voltaFontUnderline,                 Pid::BEGIN_FONT_UNDERLINE    },
+      { Sid::voltaFontUnderline,                 Pid::CONTINUE_FONT_UNDERLINE },
+      { Sid::voltaFontUnderline,                 Pid::END_FONT_UNDERLINE      },
+      { Sid::voltaAlign,                         Pid::BEGIN_TEXT_ALIGN        },
+      { Sid::voltaAlign,                         Pid::CONTINUE_TEXT_ALIGN     },
+      { Sid::voltaAlign,                         Pid::END_TEXT_ALIGN          },
+      { Sid::voltaOffset,                        Pid::BEGIN_TEXT_OFFSET       },
+      { Sid::voltaOffset,                        Pid::CONTINUE_TEXT_OFFSET    },
+      { Sid::voltaOffset,                        Pid::END_TEXT_OFFSET         },
+      { Sid::voltaLineWidth,                     Pid::LINE_WIDTH              },
+      { Sid::voltaLineStyle,                     Pid::LINE_STYLE              },
+      { Sid::voltaHook,                          Pid::BEGIN_HOOK_HEIGHT       },
+      { Sid::voltaHook,                          Pid::END_HOOK_HEIGHT         },
+      };
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -41,66 +69,14 @@ void VoltaSegment::layout()
       }
 
 //---------------------------------------------------------
-//   getProperty
+//   propertyDelegate
 //---------------------------------------------------------
 
-QVariant VoltaSegment::getProperty(Pid id) const
+Element* VoltaSegment::propertyDelegate(Pid pid)
       {
-      switch (id) {
-            case Pid::BEGIN_HOOK_TYPE:
-            case Pid::END_HOOK_TYPE:
-            case Pid::VOLTA_ENDING:
-                  return spanner()->getProperty(id);
-            default:
-                  break;
-            }
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->getProperty(id);
-            }
-      return TextLineBaseSegment::getProperty(id);
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool VoltaSegment::setProperty(Pid id, const QVariant& v)
-      {
-      switch (id) {
-            case Pid::BEGIN_HOOK_TYPE:
-            case Pid::END_HOOK_TYPE:
-            case Pid::VOLTA_ENDING:
-                  return spanner()->setProperty(id, v);
-            default:
-                  break;
-            }
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->setProperty(id, v);
-            }
-      return TextLineBaseSegment::setProperty(id, v);
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant VoltaSegment::propertyDefault(Pid id) const
-      {
-      switch (id) {
-            case Pid::BEGIN_HOOK_TYPE:
-            case Pid::END_HOOK_TYPE:
-            case Pid::VOLTA_ENDING:
-                  return volta()->propertyDefault(id);
-            default:
-                  break;
-            }
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->propertyDefault(id);
-            }
-      return TextLineBaseSegment::propertyDefault(id);
+      if (pid == Pid::BEGIN_HOOK_TYPE || pid == Pid::END_HOOK_TYPE || pid == Pid::VOLTA_ENDING)
+            return spanner();
+      return TextLineBaseSegment::propertyDelegate(pid);
       }
 
 //---------------------------------------------------------
@@ -108,9 +84,9 @@ QVariant VoltaSegment::propertyDefault(Pid id) const
 //---------------------------------------------------------
 
 Volta::Volta(Score* s)
-   : TextLineBase(s)
+   : TextLineBase(s, ElementFlag::SYSTEM)
       {
-      initSubStyle(SubStyleId::VOLTA);
+      initElementStyle(&voltaStyle);
 
       setBeginTextPlace(PlaceText::BELOW);
       setContinueTextPlace(PlaceText::BELOW);

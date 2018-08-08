@@ -579,8 +579,7 @@ void ScoreView::paintRect(bool printMode, QPainter& p, const QRectF& r, double m
                   break;
             p.translate(page->pos());
             QList<Element*> ell = page->items(r.translated(-page->pos()));
-            qStableSort(ell.begin(), ell.end(), elementLessThan);
-            drawElements(p, ell);
+            drawElements(p, ell, nullptr);
             p.translate(-page->pos());
             }
 

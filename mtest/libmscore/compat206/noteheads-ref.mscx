@@ -625,6 +625,7 @@
           <durationType>half</durationType>
           </Rest>
         <BarLine>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>

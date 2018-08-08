@@ -139,6 +139,7 @@
             </Note>
           </Chord>
         <BarLine>
+          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>

@@ -68,6 +68,7 @@ class Workspace : public QObject {
       static Workspace* createNewWorkspace(const QString& name);
       static bool workspacesRead;
       static void writeBuiltinWorkspace();
+      static QList<Workspace*>& refreshWorkspaces();
       };
 }
 #endif

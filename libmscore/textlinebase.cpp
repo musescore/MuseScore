@@ -27,8 +27,8 @@ namespace Ms {
 //   TextLineBaseSegment
 //---------------------------------------------------------
 
-TextLineBaseSegment::TextLineBaseSegment(Score* score)
-   : LineSegment(score)
+TextLineBaseSegment::TextLineBaseSegment(Score* score, ElementFlags f)
+   : LineSegment(score, f)
       {
       _text    = new Text(score);
       _endText = new Text(score);
@@ -265,7 +265,7 @@ void TextLineBaseSegment::layout()
             return;
 
       if (tl->lineVisible() || !score()->printing()) {
-            QPointF pp1(l, 0.0);
+            pp1 = QPointF(l, 0.0);
 
             qreal beginHookWidth;
             qreal endHookWidth;
@@ -322,10 +322,6 @@ void TextLineBaseSegment::spatiumChanged(qreal ov, qreal nv)
       _endText->spatiumChanged(ov, nv);
       }
 
-//---------------------------------------------------------
-//   pids
-//---------------------------------------------------------
-
 static constexpr std::array<Pid, 34> pids = { {
       Pid::LINE_WIDTH,
       Pid::LINE_VISIBLE,
@@ -360,45 +356,20 @@ static constexpr std::array<Pid, 34> pids = { {
       Pid::END_FONT_ITALIC,
       Pid::END_FONT_UNDERLINE,
       Pid::END_TEXT_OFFSET,
+      Pid::PLACEMENT,
       } };
 
 //---------------------------------------------------------
-//   getProperty
+//   propertyDelegate
 //---------------------------------------------------------
 
-QVariant TextLineBaseSegment::getProperty(Pid id) const
+Element* TextLineBaseSegment::propertyDelegate(Pid pid)
       {
-      for (Pid pid : pids) {
+      for (Pid id : pids) {
             if (pid == id)
-                  return textLineBase()->getProperty(id);
+                  return spanner();
             }
-      return LineSegment::getProperty(id);
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool TextLineBaseSegment::setProperty(Pid id, const QVariant& v)
-      {
-      for (Pid pid : pids) {
-            if (pid == id)
-                  return textLineBase()->setProperty(id, v);
-            }
-      return LineSegment::setProperty(id, v);
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant TextLineBaseSegment::propertyDefault(Pid id) const
-      {
-      for (Pid pid : pids) {
-            if (pid == id)
-                  return textLineBase()->propertyDefault(id);
-            }
-      return LineSegment::propertyDefault(id);
+      return LineSegment::propertyDelegate(pid);
       }
 
 //---------------------------------------------------------
@@ -697,13 +668,17 @@ bool TextLineBase::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TextLineBase::propertyDefault(Pid id) const
+QVariant TextLineBase::propertyDefault(Pid pid) const
       {
-      QVariant v = styledPropertyDefault(id);
-      if (!v.isValid())
-            v = SLine::propertyDefault(id);
-      return v;
-      }
+      for (const StyledProperty& p : *styledProperties()) {
+            if (p.pid == pid) {
+                  if (propertyType(pid) == P_TYPE::SP_REAL)
+                        return score()->styleP(p.sid);
+                  return score()->styleV(p.sid);
+                  }
+            }
+       return SLine::propertyDefault(pid);
+       }
 
-}
+ }
 

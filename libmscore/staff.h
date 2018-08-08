@@ -45,24 +45,6 @@ class BracketItem;
 
 enum class Key;
 
-#if 0
-//---------------------------------------------------------
-//   LinkedStaves
-//---------------------------------------------------------
-
-class LinkedStaves {
-      QList<Staff*> _staves;
-
-   public:
-      LinkedStaves() {}
-      QList<Staff*>& staves()             { return _staves; }
-      const QList<Staff*>& staves() const { return _staves; }
-      void add(Staff*);
-      void remove(Staff*);
-      bool empty() const { return _staves.empty(); }
-      };
-#endif
-
 //---------------------------------------------------------
 //   SwingParameters
 //---------------------------------------------------------
@@ -142,6 +124,7 @@ class Staff final : public ScoreElement {
       void setBracketType(int idx, BracketType val);
       void setBracketSpan(int idx, int val);
       void swapBracket(int oldIdx, int newIdx);
+      void changeBracketColumn(int oldColumn, int newColumn);
       void addBracket(BracketItem*);
       const QList<BracketItem*>& brackets() const { return _brackets; }
       QList<BracketItem*>& brackets()             { return _brackets; }

@@ -291,7 +291,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                               int staffIdx;
                               e = _score->pos2measure(pos, &staffIdx, 0, 0, 0);
                               }
-                        if (e && (e->isNote() || e->isSymbol() || e->isImage() || e->isText())) {
+                        if (e && (e->isNote() || e->isSymbol() || e->isImage() || e->isTextBase())) {
                               EditData dropData(this);
                               dropData.pos        = pos;
                               dropData.element    = editData.element;
@@ -300,13 +300,12 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                               if (e->acceptDrop(dropData)) {
                                     setDropTarget(e);
                                     event->accept();
-                                    return;
                                     }
                               else {
                                     setDropTarget(0);
                                     event->ignore();
-                                    return;
                                     }
+                              return;
                               }
                         }
                         // fall through

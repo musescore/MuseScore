@@ -35,7 +35,6 @@ class XmlReader;
 class XmlWriter;
 enum class SymId;
 enum class Pid;
-enum class SubStyleId;
 
 //---------------------------------------------------------
 //   Grip
@@ -57,16 +56,15 @@ enum class Grip {
 enum class ElementFlag {
       NOTHING         = 0x00000000,
       DROP_TARGET     = 0x00000001,
-      SELECTABLE      = 0x00000002,
+      NOT_SELECTABLE  = 0x00000002,
       MOVABLE         = 0x00000004,
-//      SEGMENT         = 0x00000008,
       COMPOSITION     = 0x00000008,       // true if element is part of another element
       HAS_TAG         = 0x00000010,       // true if this is a layered element
       ON_STAFF        = 0x00000020,
       SELECTED        = 0x00000040,
       GENERATED       = 0x00000080,
-      VISIBLE         = 0x00000100,
-      AUTOPLACE       = 0x00000200,
+      INVISIBLE       = 0x00000100,
+      NO_AUTOPLACE    = 0x00000200,
       SYSTEM          = 0x00000400,
 
       // measure flags
@@ -148,17 +146,12 @@ class EditData {
 
 class Element : public ScoreElement {
       Element* _parent { 0 };
-      mutable ElementFlags _flags  {
-            ElementFlag::ENABLED | ElementFlag::EMPTY | ElementFlag::AUTOPLACE | ElementFlag::SELECTABLE
-            | ElementFlag::VISIBLE
-            };    // used for segments
-
+      mutable ElementFlags _flags;
       Placement _placement;
       int _track;                 ///< staffIdx * VOICES + voice
       qreal _mag;                 ///< standard magnification (derived value)
       QPointF _pos;               ///< Reference position, relative to _parent.
       QPointF _userOff;           ///< offset from normal layout position:
-//      QPointF _readPos;
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _userOff
                                   ///< valid after call to layout()
       uint _tag;                  ///< tag bitmask
@@ -189,18 +182,15 @@ class Element : public ScoreElement {
       inline void setFlag(ElementFlag f, bool v)       { if (v) _flags |= f; else _flags &= ~ElementFlags(f); }
       inline void setFlag(ElementFlag f, bool v) const { if (v) _flags |= f; else _flags &= ~ElementFlags(f); }
       inline bool flag(ElementFlag f) const            { return _flags & f; }
-      inline void setFlags(ElementFlags f)             { _flags |= f;       }
-      inline void clearFlags(ElementFlags f)           { _flags &= ~f;      }
-      inline ElementFlags flags() const                { return _flags;     }
 
       bool selected() const                   { return flag(ElementFlag::SELECTED); }
       virtual void setSelected(bool f)        { setFlag(ElementFlag::SELECTED, f);  }
 
-      bool visible() const                    { return flag(ElementFlag::VISIBLE);  }
-      virtual void setVisible(bool f)         { setFlag(ElementFlag::VISIBLE, f);   }
+      bool visible() const                    { return !flag(ElementFlag::INVISIBLE);  }
+      virtual void setVisible(bool f)         { setFlag(ElementFlag::INVISIBLE, !f);   }
 
       Placement placement() const             { return _placement;  }
-      void setPlacement(Placement val)        { _placement = val;   }
+      void setPlacement(Placement val)        { _placement = val; }
       void undoSetPlacement(Placement val);
       bool placeBelow() const                 { return _placement == Placement::BELOW; }
       bool placeAbove() const                 { return _placement == Placement::ABOVE; }
@@ -332,6 +322,7 @@ class Element : public ScoreElement {
       virtual QColor color() const             { return _color; }
       QColor curColor() const;
       QColor curColor(bool isVisible) const;
+      QColor curColor(bool isVisible, QColor normalColor) const;
       virtual void setColor(const QColor& c)     { _color = c;    }
       void undoSetColor(const QColor& c);
       void undoSetVisible(bool v);
@@ -382,6 +373,7 @@ class Element : public ScoreElement {
       virtual int rtick() const;      // utility, searches for segment / segment parent
       virtual Fraction rfrac() const; // utility, searches for segment / segment parent
       virtual Fraction afrac() const; // utility, searches for segment / segment parent
+      virtual Fraction ftick() const; // fractional tick
 
       //
       // check element for consistency; return false if element
@@ -392,7 +384,7 @@ class Element : public ScoreElement {
       static Ms::Element* create(Ms::ElementType type, Score*);
       static Element* name2Element(const QStringRef&, Score*);
 
-      virtual bool systemFlag() const          { return flag(ElementFlag::SYSTEM);  }
+      bool systemFlag() const          { return flag(ElementFlag::SYSTEM);  }
       void setSystemFlag(bool v) const { setFlag(ElementFlag::SYSTEM, v);  }
 
       bool header() const              { return flag(ElementFlag::HEADER);        }
@@ -401,8 +393,8 @@ class Element : public ScoreElement {
       bool trailer() const             { return flag(ElementFlag::TRAILER); }
       void setTrailer(bool val)        { setFlag(ElementFlag::TRAILER, val); }
 
-      bool selectable() const          { return flag(ElementFlag::SELECTABLE);  }
-      void setSelectable(bool val)     { setFlag(ElementFlag::SELECTABLE, val); }
+      bool selectable() const          { return !flag(ElementFlag::NOT_SELECTABLE);  }
+      void setSelectable(bool val)     { setFlag(ElementFlag::NOT_SELECTABLE, !val); }
 
       bool dropTarget() const          { return flag(ElementFlag::DROP_TARGET); }
       void setDropTarget(bool v) const { setFlag(ElementFlag::DROP_TARGET, v);  }
@@ -411,7 +403,6 @@ class Element : public ScoreElement {
       void setComposition(bool v) const { setFlag(ElementFlag::COMPOSITION, v);  }
 
       virtual bool isMovable() const   { return flag(ElementFlag::MOVABLE);     }
-//      bool isSegmentFlag() const       { return flag(ElementFlag::SEGMENT);   }
 
       bool enabled() const             { return flag(ElementFlag::ENABLED); }
       void setEnabled(bool val)        { setFlag(ElementFlag::ENABLED, val); }
@@ -419,12 +410,13 @@ class Element : public ScoreElement {
       uint tag() const                 { return _tag;                      }
       void setTag(uint val)            { _tag = val;                       }
 
-      bool autoplace() const           { return flag(ElementFlag::AUTOPLACE); }
-      void setAutoplace(bool v)        { setFlag(ElementFlag::AUTOPLACE, v); }
+      bool autoplace() const           { return !flag(ElementFlag::NO_AUTOPLACE); }
+      void setAutoplace(bool v)        { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
 
       virtual QVariant getProperty(Pid) const override;
       virtual bool setProperty(Pid, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
+      virtual Element* propertyDelegate(Pid) { return 0; }  // return Spanner for SpannerSegment for some properties
 
       bool custom(Pid) const;
       virtual bool isUserModified() const;

@@ -36,6 +36,16 @@ NICE-TO-HAVE TODO:
 
 namespace Ms {
 
+static const ElementStyle glissandoElementStyle {
+      { Sid::glissandoFontFace,                  Pid::FONT_FACE               },
+      { Sid::glissandoFontSize,                  Pid::FONT_SIZE               },
+      { Sid::glissandoFontBold,                  Pid::FONT_BOLD               },
+      { Sid::glissandoFontItalic,                Pid::FONT_ITALIC             },
+      { Sid::glissandoFontUnderline,             Pid::FONT_UNDERLINE          },
+      { Sid::glissandoLineWidth,                 Pid::LINE_WIDTH              },
+      { Sid::glissandoText,                      Pid::GLISS_TEXT              },
+      };
+
 static const qreal      GLISS_PALETTE_WIDTH           = 4.0;
 static const qreal      GLISS_PALETTE_HEIGHT          = 4.0;
 
@@ -119,13 +129,12 @@ void GlissandoSegment::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   getProperty
+//   propertyDelegate
 //---------------------------------------------------------
 
-QVariant GlissandoSegment::getProperty(Pid id) const
+Element* GlissandoSegment::propertyDelegate(Pid pid)
       {
-      switch (id) {
-            // route properties of the whole Glissando element to it
+      switch (pid) {
             case Pid::GLISS_TYPE:
             case Pid::GLISS_TEXT:
             case Pid::GLISS_SHOW_TEXT:
@@ -137,119 +146,9 @@ QVariant GlissandoSegment::getProperty(Pid id) const
             case Pid::FONT_ITALIC:
             case Pid::FONT_UNDERLINE:
             case Pid::LINE_WIDTH:
-                  return glissando()->getProperty(id);
+                  return glissando();
             default:
-                  return LineSegment::getProperty(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool GlissandoSegment::setProperty(Pid id, const QVariant& v)
-      {
-      switch (id) {
-            case Pid::GLISS_TYPE:
-            case Pid::GLISS_TEXT:
-            case Pid::GLISS_SHOW_TEXT:
-            case Pid::GLISSANDO_STYLE:
-            case Pid::PLAY:
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  return glissando()->setProperty(id, v);
-            default:
-                  return LineSegment::setProperty(id, v);
-            }
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant GlissandoSegment::propertyDefault(Pid id) const
-      {
-      switch (id) {
-            case Pid::GLISS_TYPE:
-            case Pid::GLISS_TEXT:
-            case Pid::GLISS_SHOW_TEXT:
-            case Pid::GLISSANDO_STYLE:
-            case Pid::PLAY:
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  return glissando()->propertyDefault(id);
-            default:
-                  return LineSegment::propertyDefault(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   propertyFlags
-//---------------------------------------------------------
-
-PropertyFlags& GlissandoSegment::propertyFlags(Pid id)
-      {
-      switch (id) {
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  return glissando()->propertyFlags(id);
-
-            default:
-                  return LineSegment::propertyFlags(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   setPropertyFlags
-//---------------------------------------------------------
-
-void GlissandoSegment::setPropertyFlags(Pid id, PropertyFlags f)
-      {
-      switch (id) {
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  glissando()->setPropertyFlags(id, f);
-                  break;
-
-            default:
-                  LineSegment::setPropertyFlags(id, f);
-                  break;
-            }
-      }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid GlissandoSegment::getPropertyStyle(Pid id) const
-      {
-      switch (id) {
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  return glissando()->getPropertyStyle(id);
-
-            default:
-                  return LineSegment::getPropertyStyle(id);
+                  return LineSegment::propertyDelegate(pid);
             }
       }
 
@@ -258,12 +157,12 @@ Sid GlissandoSegment::getPropertyStyle(Pid id) const
 //=========================================================
 
 Glissando::Glissando(Score* s)
-  : SLine(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE)
+  : SLine(s, ElementFlag::MOVABLE)
       {
       setAnchor(Spanner::Anchor::NOTE);
       setDiagonal(true);
 
-      initSubStyle(SubStyleId::GLISSANDO);
+      initElementStyle(&glissandoElementStyle);
 
       resetProperty(Pid::GLISS_SHOW_TEXT);
       resetProperty(Pid::PLAY);
@@ -294,7 +193,7 @@ Glissando::Glissando(const Glissando& g)
 LineSegment* Glissando::createLineSegment()
       {
       GlissandoSegment* seg = new GlissandoSegment(score());
-      seg->setFlag(ElementFlag::ON_STAFF, false);
+//      seg->setFlag(ElementFlag::ON_STAFF, false);
       seg->setTrack(track());
       seg->setColor(color());
       return seg;

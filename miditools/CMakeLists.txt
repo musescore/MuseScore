@@ -12,19 +12,34 @@
 
 add_executable (smf2xml smf2xml.cpp xmlwriter.cpp midifile.cpp)
 
-set_target_properties(smf2xml
+if (NOT MSVC)
+   set_target_properties(smf2xml
       PROPERTIES COMPILE_FLAGS "-g -Wall -Wextra"
       )
+else (NOT MSVC)
+   set_target_properties (smf2xml
+      PROPERTIES COMPILE_FLAGS ""
+      )
+endif (NOT MSVC)   
+
 target_link_libraries(smf2xml
       ${QT_LIBRARIES}
       )
 
 add_executable (xml2smf xml2smf.cpp xmlreader.cpp midifile.cpp)
 
-set_target_properties (
+if (NOT MSVC)
+   set_target_properties (
       xml2smf
       PROPERTIES COMPILE_FLAGS "-g -Wall -Wextra"
       )
+else (NOT MSVC)
+   set_target_properties (
+      xml2smf
+      PROPERTIES COMPILE_FLAGS ""
+      )
+endif (NOT MSVC)   
+
 target_link_libraries(xml2smf
       ${QT_LIBRARIES}
       )

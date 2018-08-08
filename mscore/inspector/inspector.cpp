@@ -33,6 +33,7 @@
 #include "inspectorBarline.h"
 #include "inspectorFingering.h"
 #include "inspectorDynamic.h"
+#include "inspectorHarmony.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "bendproperties.h"
@@ -107,6 +108,7 @@ Inspector::Inspector(QWidget* parent)
       _inspectorEdit = false;
       ie             = 0;
       oe             = 0;
+      oSameTypes     = true;
       _score         = 0;
 //      retranslate();
       setWindowTitle(tr("Inspector"));
@@ -161,31 +163,33 @@ void Inspector::update(Score* s)
       if (_inspectorEdit)     // if within an inspector-originated edit
             return;
       _score = s;
-      if (oe != element()) {
+      bool sameTypes = true;
+      if (!el())
+            return;
+
+      for (Element* ee : *el()) {
+            if (((element()->type() != ee->type()) && // different and
+                (!element()->isSystemText()     || !ee->isStaffText())  && // neither system text nor
+                (!element()->isStaffText()      || !ee->isSystemText()) && // staff text either side and
+                (!element()->isPedalSegment()   || !ee->isTextLineSegment()) && // neither pedal nor
+                (!element()->isTextLineSegment()|| !ee->isPedalSegment())    && // text line either side and
+                (!element()->isSlurTieSegment() || !ee->isSlurTieSegment())) || // neither Slur nor Tie either side, or
+                (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(element())->chord()->isGrace())) // HACK
+                  {
+                  sameTypes = false;
+                  break;
+                  }
+            }
+      if (oe != element() || oSameTypes != sameTypes) {
             delete ie;
             ie  = 0;
             oe  = element();
-            bool sameTypes = true;
+            oSameTypes = sameTypes;
             if (!element())
                   ie = new InspectorEmpty(this);
-            else {
-                  for (Element* ee : *el()) {
-                        if (((element()->type() != ee->type()) && // different and
-                            (!element()->isSystemText()     || !ee->isStaffText())  && // neither system text nor
-                            (!element()->isStaffText()      || !ee->isSystemText()) && // staff text either side and
-                            (!element()->isPedalSegment()   || !ee->isTextLineSegment()) && // neither pedal nor
-                            (!element()->isTextLineSegment()|| !ee->isPedalSegment())    && // text line either side and
-                            (!element()->isSlurTieSegment() || !ee->isSlurTieSegment())) || // neither Slur nor Tie either side, or
-                            (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(element())->chord()->isGrace())) // HACK
-                              {
-                              sameTypes = false;
-                              break;
-                              }
-                        }
-                  }
-            if (!sameTypes)
+            else if (!sameTypes)
                   ie = new InspectorGroupElement(this);
-            else if (element()) {
+            else {
                   switch(element()->type()) {
                         case ElementType::FBOX:
                         case ElementType::VBOX:
@@ -320,6 +324,9 @@ void Inspector::update(Score* s)
                               break;
                         case ElementType::STEM:
                               ie = new InspectorStem(this);
+                              break;
+                        case ElementType::HARMONY:
+                              ie = new InspectorHarmony(this);
                               break;
                         default:
                               if (element()->isText())
@@ -848,32 +855,8 @@ InspectorClef::InspectorClef(QWidget* parent)
 
 void InspectorClef::setElement()
       {
-      otherClef = nullptr;                      // no 'other clef' yet
+      otherClef = toClef(inspector->element())->otherClef();
       InspectorElementBase::setElement();
-
-      // try to locate the 'other clef' of a courtesy / main pair
-      Clef* clef = toClef(inspector->element());
-      // if not in a clef-segment-measure hierarchy, do nothing
-      if (!clef->parent() || clef->parent()->type() != ElementType::SEGMENT)
-            return;
-      Segment*    segm = toSegment(clef->parent());
-      int         segmTick = segm->tick();
-      if (!segm->parent() || segm->parent()->type() != ElementType::MEASURE)
-            return;
-
-      Measure* meas = toMeasure(segm->parent());
-      Measure* otherMeas = nullptr;
-      Segment* otherSegm = nullptr;
-      if (segmTick == meas->tick())                         // if clef segm is measure-initial
-            otherMeas = meas->prevMeasure();                // look for a previous measure
-      else if (segmTick == meas->tick()+meas->ticks())      // if clef segm is measure-final
-            otherMeas = meas->nextMeasure();                // look for a next measure
-      // look for a clef segment in the 'other' measure at the same tick of this clef segment
-      if (otherMeas)
-            otherSegm = otherMeas->findSegment(SegmentType::Clef, segmTick);
-      // if any 'other' segment found, look for a clef in the same track as this
-      if (otherSegm)
-            otherClef = toClef(otherSegm->element(clef->track()));
       }
 
 void InspectorClef::valueChanged(int idx)
@@ -901,6 +884,17 @@ InspectorStem::InspectorStem(QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   populatePlacement
+//---------------------------------------------------------
+
+void populatePlacement(QComboBox* b)
+      {
+      b->clear();
+      b->addItem(b->QObject::tr("Above"), int(Placement::ABOVE));
+      b->addItem(b->QObject::tr("Below"), int(Placement::BELOW));
+      }
+
+//---------------------------------------------------------
 //   InspectorTempoText
 //---------------------------------------------------------
 
@@ -917,9 +911,7 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
       const std::vector<InspectorPanel> ppList = {
             { tt.title, tt.panel }
             };
-      tt.placement->clear();
-      tt.placement->addItem(tr("Above"), 0);
-      tt.placement->addItem(tr("Below"), 1);
+      populatePlacement(tt.placement);
       mapSignals(il, ppList);
       connect(tt.followText, SIGNAL(toggled(bool)), tt.tempo, SLOT(setDisabled(bool)));
       }
@@ -952,28 +944,9 @@ InspectorLyric::InspectorLyric(QWidget* parent)
       const std::vector<InspectorPanel> ppList = {
             { l.title, l.panel }
             };
-      l.placement->clear();
-      l.placement->addItem(tr("Above"), 0);
-      l.placement->addItem(tr("Below"), 1);
+      populatePlacement(l.placement);
       mapSignals(il, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
-      }
-
-//---------------------------------------------------------
-//   valueChanged
-//---------------------------------------------------------
-
-void InspectorLyric::valueChanged(int idx)
-      {
-      if (iList[idx].t == Pid::VERSE) {
-            int val    = getValue(iList[idx]).toInt();
-            Lyrics* l  = toLyrics(inspector->element());
-            Lyrics* nl = l->chordRest()->lyrics(val, l->placement());
-            if (nl) {
-                  nl->undoChangeProperty(Pid::VERSE, l->no());
-                  }
-            }
-      InspectorBase::valueChanged(idx);
       }
 
 //---------------------------------------------------------
@@ -998,22 +971,42 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
             s.title->setText(e->isSystemText() ? tr("System Text") : tr("Staff Text"));
 
       const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,  0, s.placement,    s.resetPlacement    },
-            { Pid::SUB_STYLE,  0, s.subStyle,     s.resetSubStyle     }
+            { Pid::PLACEMENT,  0, s.placement, s.resetPlacement },
+            { Pid::SUB_STYLE,  0, s.style,     s.resetStyle     }
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel }
             };
-      s.placement->clear();
-      s.placement->addItem(tr("Above"), 0);
-      s.placement->addItem(tr("Below"), 1);
+      populatePlacement(s.placement);
 
-      s.subStyle->clear();
-      for (auto ss : { SubStyleId::SYSTEM, SubStyleId::STAFF, SubStyleId::TEMPO, SubStyleId::METRONOME,
-         SubStyleId::REHEARSAL_MARK, SubStyleId::EXPRESSION,
-         SubStyleId::REPEAT_LEFT, SubStyleId::REPEAT_RIGHT, SubStyleId::USER1, SubStyleId::USER2 } )
+      s.style->clear();
+      for (auto ss : {
+         Tid::SYSTEM,
+         Tid::STAFF,
+         Tid::TEMPO,
+         Tid::METRONOME,
+         Tid::REHEARSAL_MARK,
+         Tid::EXPRESSION,
+         Tid::REPEAT_LEFT,
+         Tid::REPEAT_RIGHT,
+         Tid::FRAME,
+         Tid::TITLE,
+         Tid::SUBTITLE,
+         Tid::COMPOSER,
+         Tid::POET,
+         Tid::INSTRUMENT_EXCERPT,
+         Tid::TRANSLATOR,
+         Tid::HEADER,
+         Tid::FOOTER,
+         Tid::USER1,
+         Tid::USER2,
+         Tid::USER3,
+         Tid::USER4,
+         Tid::USER5,
+         Tid::USER6
+         } )
             {
-            s.subStyle->addItem(subStyleUserName(ss), int(ss));
+            s.style->addItem(textStyleUserName(ss), int(ss));
             }
 
       mapSignals(il, ppList);

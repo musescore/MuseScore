@@ -41,15 +41,14 @@ class Marker final : public TextBase {
       Type _markerType;
       QString _label;               ///< referenced from Jump() element
 
-      Type markerType(const QString&) const;
-
    public:
       Marker(Score*);
-      Marker(SubStyleId, Score*);
+      Marker(Score*, Tid);
 
       void setMarkerType(Type t);
       Type markerType() const          { return _markerType; }
       QString markerTypeUserName() const;
+      Type markerType(const QString&) const;
 
       virtual Marker* clone() const override    { return new Marker(*this); }
       virtual ElementType type() const override { return ElementType::MARKER; }
@@ -68,7 +67,6 @@ class Marker final : public TextBase {
       void undoSetMarkerType(Type t);
 
       virtual void styleChanged() override;
-      virtual bool systemFlag() const override  { return true;        }
 
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;

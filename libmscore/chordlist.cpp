@@ -1108,8 +1108,8 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                   if (_xmlDegrees.removeAll(unalt) > 0) {
                         QString alt(d);
                         alt.replace("alt","add");
-                        int i = _xmlDegrees.indexOf(d);
-                        _xmlDegrees.replace(i,alt);
+                        int i1 = _xmlDegrees.indexOf(d);
+                        _xmlDegrees.replace(i1, alt);
                         }
                   }
             }
@@ -1387,15 +1387,15 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             bool found = false;
             // potential definitions for token
             if (cl) {
-                  foreach (ChordToken ct, cl->chordTokenList) {
-                        foreach (QString ctn, ct.names) {
+                  for (ChordToken ct : cl->chordTokenList) {
+                        for (QString ctn : ct.names) {
                               if (ctn == n)
                                     definedTokens += ct;
                               }
                         }
                   }
             // find matching class, fallback on ChordTokenClass::ALL
-            foreach (ChordToken matchingTok, definedTokens) {
+            for (ChordToken matchingTok : definedTokens) {
                   if (tok.tokenClass == matchingTok.tokenClass) {
                         rl = matchingTok.renderList;
                         found = true;
@@ -1657,10 +1657,10 @@ void ChordList::read(XmlReader& e)
 void ChordList::write(XmlWriter& xml) const
       {
       int fontIdx = 0;
-      foreach (ChordFont f, fonts) {
+      for (ChordFont f : fonts) {
             xml.stag(QString("font id=\"%1\" family=\"%2\"").arg(fontIdx).arg(f.family));
             xml.tag("mag", f.mag);
-            foreach(ChordSymbol s, symbols) {
+            for (ChordSymbol s : symbols) {
                   if (s.fontIdx == fontIdx) {
                         if (s.code.isNull())
                               xml.tagE(QString("sym name=\"%1\" value=\"%2\"").arg(s.name).arg(s.value));
@@ -1794,6 +1794,20 @@ void ChordList::unload()
       renderListRoot.clear();
       renderListBase.clear();
       chordTokenList.clear();
+      }
+
+//---------------------------------------------------------
+//   print
+//    only for debugging
+//---------------------------------------------------------
+
+void RenderAction::print() const
+      {
+      static const char* names[] = {
+            "SET", "MOVE", "PUSH", "POP",
+            "NOTE", "ACCIDENTAL"
+            };
+      qDebug("%10s <%s> %f %f", names[int(type)], qPrintable(text), movex, movey);
       }
 
 

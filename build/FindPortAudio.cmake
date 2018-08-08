@@ -1,0 +1,20 @@
+find_path(PORTAUDIO_INCLUDE_DIR portaudio.h PATHS ${PROJECT_SOURCE_DIR}/dependencies/include;)
+
+find_library(PORTAUDIO_LIBRARY NAMES portaudio PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
+
+if (MINGW)
+  set(PORTAUDIO_INCLUDE_DIR "")
+  set(PORTAUDIO_LIBRARY "")
+endif(MINGW)
+
+message(STATUS ${PORTAUDIO_LIBRARY})
+
+if (PORTAUDIO_INCLUDE_DIR AND PORTAUDIO_LIBRARY)
+      set(PORTAUDIO_FOUND TRUE)
+endif (PORTAUDIO_INCLUDE_DIR AND PORTAUDIO_LIBRARY)
+
+if (PORTAUDIO_FOUND)
+      message (STATUS "Found PortAudio: ${PORTAUDIO_LIBRARY}")
+else (PORTAUDIO_FOUND)
+      message (FATAL_ERROR "Could not find: PortAudio")
+endif (PORTAUDIO_FOUND)

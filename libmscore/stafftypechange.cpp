@@ -25,9 +25,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 StaffTypeChange::StaffTypeChange(Score* score)
-   : Element(score)
+   : Element(score, ElementFlag::HAS_TAG)
       {
-      setFlag(ElementFlag::HAS_TAG, true);
       lw = spatium() * 0.3;
       }
 

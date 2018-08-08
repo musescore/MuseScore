@@ -1907,8 +1907,8 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Add lyrics"),
          0,
          Icons::Invalid_ICON,
-         Qt::WindowShortcut,
-         ShortcutFlags::A_CMD
+         Qt::WindowShortcut
+//         ,ShortcutFlags::A_CMD
          },
       {
          MsWidget::SCORE_TAB,
@@ -2477,8 +2477,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "edit-style",
-         QT_TRANSLATE_NOOP("action","General Style..."),
-         QT_TRANSLATE_NOOP("action","Edit general style"),
+         QT_TRANSLATE_NOOP("action","Style..."),
+         QT_TRANSLATE_NOOP("action","Edit style"),
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut
@@ -2786,7 +2786,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_FOTO,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_FOTO | STATE_TEXT_EDIT,
          "inspector",
          QT_TRANSLATE_NOOP("action","Inspector"),
          QT_TRANSLATE_NOOP("action","Show inspector")
@@ -3591,7 +3591,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_ALL,
+         STATE_ALL & ~STATE_TEXT_EDIT,
          "relayout",
          "Re-Layout",
          "Re-layout",
@@ -3873,6 +3873,16 @@ void Shortcut::retranslate()
       for (const Shortcut& i : _sc) {
             if (i._action) {
                   i.translateAction(i._action);
+                  }
+            }
+      }
+
+void Shortcut::refreshIcons()
+      {
+      foreach (Shortcut* s, _shortcuts) {
+            QAction* a = s->action();
+            if (a && s->icon() != Icons::Invalid_ICON) {
+                  a->setIcon(*icons[int(s->icon())]);
                   }
             }
       }

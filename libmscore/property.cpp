@@ -76,7 +76,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::BARLINE_SPAN,            "barline_span",            false, "span",                  P_TYPE::BOOL            },
       { Pid::BARLINE_SPAN_FROM,       "barline_span_from",       false, "spanFromOffset",        P_TYPE::INT             },
       { Pid::BARLINE_SPAN_TO,         "barline_span_to",         false, "spanToOffset",          P_TYPE::INT             },
-      { Pid::USER_OFF,                "user_off",                false, "userOff",               P_TYPE::POINT_SP         },
+      { Pid::USER_OFF,                "offset",                  false, "offset",                P_TYPE::POINT_SP         },
       { Pid::FRET,                    "fret",                    true,  "fret",                  P_TYPE::INT             },
       { Pid::STRING,                  "string",                  true,  "string",                P_TYPE::INT             },
       { Pid::GHOST,                   "ghost",                   true,  "ghost",                 P_TYPE::BOOL            },
@@ -257,10 +257,8 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::FONT_BOLD,               "font_bold",               false, "bold",                  P_TYPE::BOOL            },
       { Pid::FONT_ITALIC,             "font_italic",             false, "italic",                P_TYPE::BOOL            },
       { Pid::FONT_UNDERLINE,          "font_underline",          false, "underline",             P_TYPE::BOOL            },
-      { Pid::FRAME,                   "has_frame",               false, "hasFrame",              P_TYPE::BOOL            },
+      { Pid::FRAME_TYPE,              "frame_type",              false, "frameType",             P_TYPE::INT             },
 
-      { Pid::FRAME_SQUARE,            "frame_square",            false, "frameSquare",           P_TYPE::BOOL            },
-      { Pid::FRAME_CIRCLE,            "frame_circle",            false, "frameCircle",           P_TYPE::BOOL            },
       { Pid::FRAME_WIDTH,             "frame_width",             false, "frameWidth",            P_TYPE::SPATIUM         },
       { Pid::FRAME_PADDING,           "frame_padding",           false, "framePadding",          P_TYPE::SPATIUM         },
       { Pid::FRAME_ROUND,             "frame_round",             false, "frameRound",            P_TYPE::INT             },
@@ -268,9 +266,9 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::FRAME_BG_COLOR,          "frame_bg_color",          false, "frameBgColor",          P_TYPE::COLOR           },
       { Pid::FONT_SPATIUM_DEPENDENT,  "font_spatium_dependent",  false, "sizeIsSpatiumDependent", P_TYPE::BOOL           },
       { Pid::ALIGN,                   "align",                   false, "align",                 P_TYPE::ALIGN           },
-      { Pid::OFFSET,                  "offset",                  false, "offset",                P_TYPE::POINT           },
-
+      { Pid::OFFSET,                  "layoutOffset",            false, "layoutOffset",          P_TYPE::POINT           },
       { Pid::OFFSET_TYPE,             "offset_type",             false, "offsetType",            P_TYPE::INT             },
+
       { Pid::SYSTEM_FLAG,             "system_flag",             false, "systemFlag",            P_TYPE::BOOL            },
       { Pid::BEGIN_TEXT,              "begin_text",              false, "beginText",             P_TYPE::STRING          },
       { Pid::BEGIN_TEXT_ALIGN,        "begin_text_align",        false, "beginTextAlign",        P_TYPE::ALIGN           },
@@ -306,6 +304,8 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::END_FONT_ITALIC,         "end_font_italic",         false, "endFontItalic",         P_TYPE::BOOL            },
       { Pid::END_FONT_UNDERLINE,      "end_font_underline",      false, "endFontUnderline",      P_TYPE::BOOL            },
       { Pid::END_TEXT_OFFSET,         "end_text_offset",         false, "endTextOffset",         P_TYPE::POINT           },
+
+      { Pid::POS_ABOVE,               "pos_above",               false, "posAbove",              P_TYPE::SP_REAL         },
 
       { Pid::END, "++end++", false, "++end++", P_TYPE::INT }
       };
@@ -368,7 +368,6 @@ QVariant getProperty(Pid id, XmlReader& e)
       switch (propertyType(id)) {
             case P_TYPE::BOOL:
                   return QVariant(bool(e.readInt()));
-            case P_TYPE::SUBTYPE:
             case P_TYPE::ZERO_INT:
             case P_TYPE::INT:
                   return QVariant(e.readInt());
@@ -487,7 +486,7 @@ QVariant getProperty(Pid id, XmlReader& e)
             case P_TYPE::INT_LIST:
                   return QVariant();
             case P_TYPE::SUB_STYLE:
-                  return int(subStyleFromName(e.readElementText()));
+                  return int(textStyleFromName(e.readElementText()));
             case P_TYPE::ALIGN: {
                   QString s = e.readElementText();
                   QStringList sl = s.split(',');

@@ -32,15 +32,29 @@
 
 namespace Ms {
 
+static const ElementStyle headerStyle {
+      { Sid::headerFontFace,                     Pid::FONT_FACE              },
+      { Sid::headerFontSize,                     Pid::FONT_SIZE              },
+      { Sid::headerFontBold,                     Pid::FONT_BOLD              },
+      { Sid::headerFontItalic,                   Pid::FONT_ITALIC            },
+      { Sid::headerFontUnderline,                Pid::FONT_UNDERLINE         },
+      };
+
+static const ElementStyle footerStyle {
+      { Sid::footerFontFace,                     Pid::FONT_FACE              },
+      { Sid::footerFontSize,                     Pid::FONT_SIZE              },
+      { Sid::footerFontBold,                     Pid::FONT_BOLD              },
+      { Sid::footerFontItalic,                   Pid::FONT_ITALIC            },
+      { Sid::footerFontUnderline,                Pid::FONT_UNDERLINE         },
+      };
+
 //---------------------------------------------------------
 //   Page
 //---------------------------------------------------------
 
 Page::Page(Score* s)
-   : Element(s),
-   _no(0)
+   : Element(s, ElementFlag::NOT_SELECTABLE), _no(0)
       {
-      setFlags(0);
       bspTreeValid = false;
       }
 
@@ -156,7 +170,7 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       if (area < 3) {
             text = score()->headerText();
             if (!text) {
-                  text = new Text(SubStyleId::HEADER, score());
+                  text = new Text(score(), Tid::HEADER);
                   text->setLayoutToParentWidth(true);
                   score()->setHeaderText(text);
                   }
@@ -164,7 +178,7 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       else {
             text = score()->footerText();
             if (!text) {
-                  text = new Text(SubStyleId::FOOTER, score());
+                  text = new Text(score(), Tid::FOOTER);
                   text->setLayoutToParentWidth(true);
                   score()->setFooterText(text);
                   }
@@ -185,6 +199,7 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       p->translate(text->pos());
       text->draw(p);
       p->translate(-text->pos());
+      text->setParent(0);
       }
 
 #if 0

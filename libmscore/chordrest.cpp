@@ -289,8 +289,8 @@ bool ChordRest::readProperties(XmlReader& e)
             }
       else if (tag == "Spanner")
             Spanner::readSpanner(e, this, track());
-      else if (tag == "Lyrics" /*|| tag == "FiguredBass"*/) {
-            Element* element = Element::name2Element(tag, score());
+      else if (tag == "Lyrics") {
+            Element* element = new Lyrics(score());
             element->setTrack(e.track());
             element->read(e);
             add(element);
@@ -527,9 +527,24 @@ Element* ChordRest::drop(EditData& data)
                         return 0;
                         }
                   // fall through
+
             case ElementType::REHEARSAL_MARK:
                   e->setParent(segment());
                   e->setTrack((track() / VOICES) * VOICES);
+                  {
+                  TextBase* t = toTextBase(e);
+#if 0
+                  Tid st = t->subStyleId();           { Tid::EMPTY };
+                  // for palette items, we want to use current score text style settings
+                  // except where the source element had explicitly overridden these via text properties
+                  // palette text style will be relative to baseStyle, so rebase this to score
+                  if (st >= Tid::DEFAULT && fromPalette)
+                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
+#endif
+                  if (e->isRehearsalMark() && fromPalette)
+                        t->setXmlText(score()->createRehearsalMarkText(toRehearsalMark(e)));
+                  }
+
                   score()->undoAddElement(e);
                   return e;
 
@@ -828,7 +843,8 @@ QVariant ChordRest::propertyDefault(Pid propertyId) const
             default:
                   return DurationElement::propertyDefault(propertyId);
             }
-      triggerLayout();
+      // Prevent unreachable code warning 
+      // triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -883,9 +899,9 @@ void ChordRest::writeBeam(XmlWriter& xml) const
 Segment* ChordRest::nextSegmentAfterCR(SegmentType types) const
       {
       for (Segment* s = segment()->next1MM(types); s; s = s->next1MM(types)) {
-            // chordrest ends at tick+actualTicks
+            // chordrest ends at ftick+actualFraction
             // we return the segment at or after the end of the chordrest
-            if (s->tick() >= tick() + actualTicks())
+            if (s->ftick() >= ftick() + actualFraction())
                   return s;
             }
       return 0;
@@ -1145,20 +1161,21 @@ QString ChordRest::accessibleExtraInfo() const
 
 Shape ChordRest::shape() const
       {
-      Shape shape;
-      qreal margin = spatium() * .5;
-      qreal x1 = 1000000.0;
-      qreal x2 = -1000000.0;
-      for (Lyrics* l : _lyrics) {
-            if (l->autoplace())
-                  l->rUserYoffset() = 0.0;
-            // for horizontal spacing we only need the lyrics width:
-            x1 = qMin(x1, l->bbox().x() - margin + l->pos().x());
-            x2 = qMax(x2, x1 + l->bbox().width() + margin);
+      if (!_lyrics.empty()) {
+            qreal margin = spatium() * .5;
+            qreal x1 = 1000000.0;
+            qreal x2 = -1000000.0;
+            for (Lyrics* l : _lyrics) {
+                  // for horizontal spacing we only need the lyrics width:
+                  x1 = qMin(x1, l->bbox().x() - margin + l->pos().x());
+                  // x2 = qMax(x2, x1 + l->bbox().width() + margin);
+                  x2 = qMax(x2, l->bbox().x() + l->bbox().width() + margin);
+                  if (l->ticks() == Lyrics::TEMP_MELISMA_TICKS)
+                        x2 += spatium();
+                  }
+            return Shape(QRectF(x1, 0.0, x2-x1, 1.0));
             }
-      if (x2 > x1)
-            shape.add(QRectF(x1, 1.0, x2-x1, 0.0));
-      return shape;
+      return Shape();
       }
 
 //---------------------------------------------------------
@@ -1190,23 +1207,6 @@ int ChordRest::lastVerse(Placement p) const
             }
 
       return lastVerse;
-      }
-
-//---------------------------------------------------------
-//   flipLyrics
-//---------------------------------------------------------
-
-void ChordRest::flipLyrics(Lyrics* l)
-      {
-      Placement p = l->placement();
-      if (p == Placement::ABOVE)
-            p = Placement::BELOW;
-      else
-            p = Placement::ABOVE;
-      int verses = lastVerse(p);
-      l->undoChangeProperty(Pid::VERSE, verses + 1);
-      l->undoChangeProperty(Pid::AUTOPLACE, true);
-      l->undoChangeProperty(Pid::PLACEMENT, int(p));
       }
 
 //---------------------------------------------------------

@@ -24,6 +24,7 @@ CPUS      := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSOR
 PREFIX    = "/usr/local"
 VERSION   = "3.0b-${REVISION}"
 #VERSION = 3.0.0
+BUILD_NUMBER=""
 
 # Override SUFFIX and LABEL when multiple versions are installed to avoid conflicts.
 SUFFIX=""# E.g.: SUFFIX="dev" --> "mscore" becomes "mscoredev"
@@ -54,6 +55,7 @@ release:
   	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"       \
   	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"      \
   	  -DMUSESCORE_LABEL="${LABEL}"             \
+  	  -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"   \
   	  -DBUILD_LAME="${BUILD_LAME}"             \
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}" \
   	  -DBUILD_JACK="${BUILD_JACK}"             \
@@ -80,6 +82,7 @@ debug:
   	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"                  \
   	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"                 \
   	  -DMUSESCORE_LABEL="${LABEL}"                        \
+  	  -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"              \
   	  -DBUILD_LAME="${BUILD_LAME}"                        \
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}"            \
   	  -DBUILD_JACK="${BUILD_JACK}"                        \

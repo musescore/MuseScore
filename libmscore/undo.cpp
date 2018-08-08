@@ -76,6 +76,7 @@
 #include "glissando.h"
 #include "stafflines.h"
 #include "bracket.h"
+#include "fret.h"
 
 namespace Ms {
 
@@ -170,6 +171,7 @@ void UndoCommand::unwind()
       {
       while (!childList.empty()) {
             UndoCommand* c = childList.takeLast();
+            qDebug("unwind <%s>", c->name());
             c->undo(0);
             delete c;
             }
@@ -205,35 +207,10 @@ UndoStack::~UndoStack()
 void UndoStack::beginMacro()
       {
       if (curCmd) {
-            qWarning("UndoStack:beginMacro(): already active");
+            qWarning("already active");
             return;
             }
       curCmd = new UndoCommand();
-      }
-
-//---------------------------------------------------------
-//   endMacro
-//---------------------------------------------------------
-
-void UndoStack::endMacro(bool rollback)
-      {
-      if (curCmd == 0) {
-            qWarning("UndoStack:endMacro(): not active");
-            return;
-            }
-      if (rollback)
-            delete curCmd;
-      else {
-            // remove redo stack
-            while (list.size() > curIdx) {
-                  UndoCommand* cmd = list.takeLast();
-                  cmd->cleanup(false);  // delete elements for which UndoCommand() holds ownership
-                  delete cmd;
-                  }
-            list.append(curCmd);
-            ++curIdx;
-            }
-      curCmd = 0;
       }
 
 //---------------------------------------------------------
@@ -244,7 +221,8 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
       {
       if (!curCmd) {
             // this can happen for layout() outside of a command (load)
-            // qWarning("UndoStack:push(): no active command, UndoStack %p", this);
+            if (!Score::isScoreLoaded())
+                  qWarning("no active command, UndoStack");
 
             cmd->redo(ed);
             delete cmd;
@@ -270,10 +248,35 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
 void UndoStack::push1(UndoCommand* cmd)
       {
       if (!curCmd) {
-            qWarning("UndoStack:push1(): no active command, UndoStack %p", this);
+              if (!Score::isScoreLoaded())
+                  qWarning("no active command, UndoStack %p", this);
             return;
             }
       curCmd->appendChild(cmd);
+      }
+
+//---------------------------------------------------------
+//   remove
+//---------------------------------------------------------
+
+void UndoStack::remove(int idx)
+      {
+      Q_ASSERT(idx <= curIdx);
+      Q_ASSERT(curIdx >= 0);
+      // remove redo stack
+      while (list.size() > curIdx) {
+            UndoCommand* cmd = list.takeLast();
+            cmd->cleanup(false);  // delete elements for which UndoCommand() holds ownership
+            delete cmd;
+//            --curIdx;
+            }
+      while (list.size() > idx) {
+            UndoCommand* cmd = list.takeLast();
+            cmd->cleanup(true);
+            delete cmd;
+            }
+      curIdx = idx;
+      // TODO: handle cleanIdx
       }
 
 //---------------------------------------------------------
@@ -283,11 +286,67 @@ void UndoStack::push1(UndoCommand* cmd)
 void UndoStack::pop()
       {
       if (!curCmd) {
-            qWarning("UndoStack:pop(): no active command");
+              if (!Score::isScoreLoaded())
+                  qWarning("no active command");
             return;
             }
       UndoCommand* cmd = curCmd->removeChild();
       cmd->undo(0);
+      }
+
+//---------------------------------------------------------
+//   rollback
+//---------------------------------------------------------
+
+void UndoStack::rollback()
+      {
+      qDebug("==");
+      Q_ASSERT(curCmd == 0);
+      Q_ASSERT(curIdx > 0);
+      int idx = curIdx - 1;
+      list[idx]->unwind();
+      remove(idx);
+      }
+
+//---------------------------------------------------------
+//   endMacro
+//---------------------------------------------------------
+
+void UndoStack::endMacro(bool rollback)
+      {
+      if (curCmd == 0) {
+            qWarning("not active");
+            return;
+            }
+      if (rollback)
+            delete curCmd;
+      else {
+            // remove redo stack
+            while (list.size() > curIdx) {
+                  UndoCommand* cmd = list.takeLast();
+                  cmd->cleanup(false);  // delete elements for which UndoCommand() holds ownership
+                  delete cmd;
+                  }
+            list.append(curCmd);
+            ++curIdx;
+            }
+      curCmd = 0;
+      }
+
+//---------------------------------------------------------
+//   reopen
+//---------------------------------------------------------
+
+void UndoStack::reopen()
+      {
+      qDebug("curIdx %d size %d", curIdx, list.size());
+      Q_ASSERT(curCmd == 0);
+      Q_ASSERT(curIdx > 0);
+      --curIdx;
+      curCmd = list.takeAt(curIdx);
+      for (auto i : curCmd->commands()) {
+            qDebug("   <%s>", i->name());
+            }
       }
 
 //---------------------------------------------------------
@@ -563,6 +622,26 @@ const char* AddElement::name() const
       }
 
 //---------------------------------------------------------
+//   removeNote
+//    Helper function for RemoveElement class
+//---------------------------------------------------------
+
+static void removeNote(const Note* note)
+      {
+      Score* score = note->score();
+      if (note->tieFor() && note->tieFor()->endNote())
+            score->undo(new RemoveElement(note->tieFor()));
+      if (note->tieBack())
+            score->undo(new RemoveElement(note->tieBack()));
+      for (Spanner* s : note->spannerBack()) {
+            score->undo(new RemoveElement(s));
+            }
+      for (Spanner* s : note->spannerFor()) {
+            score->undo(new RemoveElement(s));
+            }
+      }
+
+//---------------------------------------------------------
 //   RemoveElement
 //---------------------------------------------------------
 
@@ -584,18 +663,14 @@ RemoveElement::RemoveElement(Element* e)
                               score->undo(new RemoveElement(tremolo));
                         }
                   for (const Note* note : chord->notes()) {
-                        if (note->tieFor() && note->tieFor()->endNote())
-                              score->undo(new RemoveElement(note->tieFor()));
-                        if (note->tieBack())
-                              score->undo(new RemoveElement(note->tieBack()));
-                        for (Spanner* s : note->spannerBack()) {
-                              score->undo(new RemoveElement(s));
-                              }
-                        for (Spanner* s : note->spannerFor()) {
-                              score->undo(new RemoveElement(s));
-                              }
+                        removeNote(note);
                         }
                   }
+            }
+      else if (element->isNote()) {
+            // Removing an individual note within a chord
+            const Note* note = toNote(element);
+            removeNote(note);
             }
       }
 
@@ -623,10 +698,7 @@ void RemoveElement::undo(EditData*)
             if (element->isChord()) {
                   Chord* chord = toChord(element);
                   for (Note* note : chord->notes()) {
-                        if (note->tieBack())
-                              note->tieBack()->setEndNote(note);
-                        if (note->tieFor() && note->tieFor()->endNote())
-                              note->tieFor()->endNote()->setTieBack(note->tieFor());
+                        note->connectTiedNotes();
                         }
                   }
             undoAddTuplet(toChordRest(element));
@@ -650,9 +722,7 @@ void RemoveElement::redo(EditData*)
             if (element->isChord()) {
                   Chord* chord = toChord(element);
                   for (Note* note : chord->notes()) {
-                        if (note->tieFor() && note->tieFor()->endNote()) {
-                              note->tieFor()->endNote()->setTieBack(0);
-                              }
+                        note->disconnectTiedNotes();
                         }
                   }
             }
@@ -915,10 +985,12 @@ void ChangeElement::flip(EditData*)
             }
 
       Score* score = oldElement->score();
-      if (oldElement->selected())
-            score->deselect(oldElement);
-      if (newElement->selected())
-            score->select(newElement);
+      if (!score->selection().isRange()) {
+            if (oldElement->selected())
+                  score->deselect(oldElement);
+            if (newElement->selected())
+                  score->select(newElement, SelectType::ADD);
+            }
       if (oldElement->parent() == 0) {
             score->removeElement(oldElement);
             score->addElement(newElement);
@@ -1198,7 +1270,7 @@ void ChangePatch::flip(EditData*)
       patch            = op;
 
       if (MScore::seq == 0) {
-            qWarning("ChangePatch: no seq");
+            qWarning("no seq");
             return;
             }
 
@@ -1453,8 +1525,8 @@ void InsertRemoveMeasures::insertMeasures()
       Score* score = fm->score();
       QList<Clef*> clefs;
       QList<KeySig*> keys;
-      Segment* fs = nullptr;
-      Segment* ls = nullptr;
+      Segment* fs = 0;
+      Segment* ls = 0;
       if (fm->isMeasure()) {
             score->setPlaylistDirty();
             fs = toMeasure(fm)->first();
@@ -1543,15 +1615,16 @@ void InsertRemoveMeasures::removeMeasures()
                         systemList.push_back(system);
                         }
                   auto i = std::find(system->measures().begin(), system->measures().end(), mb);
-                  if (i != system->measures().end())
+                  if (i != system->measures().end()) {
                         system->measures().erase(i);
+                        (*i)->setParent(0);
+                        }
                   }
             if (mb == fm)
                   break;
             }
       score->measures()->remove(fm, lm);
 
-      //      if (score->firstMeasure())    // any measures left?
       score->fixTicks();
       if (fm->isMeasure()) {
             score->setPlaylistDirty();
@@ -1583,7 +1656,6 @@ void InsertRemoveMeasures::removeMeasures()
 
       for (System* s : systemList) {
             if (s->measures().empty()) {
-qDebug("remove system");
                   Page* page = s->page();
                   if (page) {
                         // erase system from page
@@ -1850,6 +1922,17 @@ void ChangeProperty::flip(EditData*)
 #endif
       property = v;
       flags = ps;
+      }
+
+//---------------------------------------------------------
+//   ChangeBracketProperty::flip
+//---------------------------------------------------------
+
+void ChangeBracketProperty::flip(EditData* ed)
+      {
+      element = staff->brackets()[level];
+      ChangeProperty::flip(ed);
+      level = toBracketItem(element)->column();
       }
 
 //---------------------------------------------------------
@@ -2161,7 +2244,7 @@ void ChangeDrumset::flip(EditData*)
       }
 
 //---------------------------------------------------------
-//   undoChangeGap
+//   ChangeGap
 //---------------------------------------------------------
 
 void ChangeGap::flip(EditData*)
@@ -2171,117 +2254,27 @@ void ChangeGap::flip(EditData*)
       }
 
 //---------------------------------------------------------
-//  ChangeText::insertText
+//   FretDot
 //---------------------------------------------------------
 
-void ChangeText::insertText(EditData* ed)
+void FretDot::flip(EditData*)
       {
-      TextCursor tc = c;
-      c.text()->editInsertText(&tc, s);
-      c.text()->triggerLayout();
-      if (ed) {
-            TextCursor* ttc = c.text()->cursor(*ed);
-            *ttc = tc;
-            }
+      int ov = fret->dot(string);
+      fret->setDot(string, dot);
+      dot = ov;
+      fret->triggerLayout();
       }
 
 //---------------------------------------------------------
-//  ChangeText::removeText
+//   FretMarker
 //---------------------------------------------------------
 
-void ChangeText::removeText(EditData* ed)
+void FretMarker::flip(EditData*)
       {
-      TextCursor tc = c;
-      TextBlock& l  = c.curLine();
-      int column    = c.column();
-
-      for (int n = 0; n < s.size(); ++n)
-            l.remove(column);
-      c.text()->triggerLayout();
-      if (ed)
-            *c.text()->cursor(*ed) = tc;
-      }
-
-//---------------------------------------------------------
-//   SplitText
-//---------------------------------------------------------
-
-void SplitText::undo(EditData* ed)
-      {
-      TextCursor tc = c;
-      tc.deleteChar();
-      c.text()->triggerLayout();
-      if (ed)
-            *c.text()->cursor(*ed) = tc;
-      }
-
-void SplitText::redo(EditData* ed)
-      {
-      TextCursor tc = c;
-      TextBase* t   = tc.text();
-      int line      = tc.row();
-
-      CharFormat* charFmt = tc.format();         // take current format
-      t->textBlockList().insert(line + 1, tc.curLine().split(tc.column()));
-      t->textBlock(line).setEol(true);
-      t->setTextInvalid();
-      if (t->textBlockList().last() != t->textBlock(line+1))
-            t->textBlock(line+1).setEol(true);
-
-      c.text()->triggerLayout();
-      if (ed) {
-            tc.setRow(line+1);
-            tc.setColumn(0);
-            tc.setFormat(*charFmt);             // restore orig. format at new line
-            *c.text()->cursor(*ed) = tc;
-            }
-      }
-
-//---------------------------------------------------------
-//   JoinText
-//---------------------------------------------------------
-
-void JoinText::redo(EditData* ed)
-      {
-      TextBase* t   = c.text();
-      int line      = c.row();
-      t->setTextInvalid();
-      t->triggerLayout();
-
-      CharFormat* charFmt = c.format();         // take current format
-      int col             = t->textBlock(line-1).columns();
-      int eol             = t->textBlock(line).eol();
-      t->textBlock(line-1).fragments().append(t->textBlock(line).fragments());
-      int lines = t->rows();
-      if (line < lines)
-            t->textBlock(line).setEol(eol);
-      t->textBlockList().removeAt(line);
-      c.setRow(line-1);
-      c.setColumn(col);
-      c.setFormat(*charFmt);             // restore orig. format at new line
-      c.clearSelection();
-      if (ed)
-            *t->cursor(*ed) = c;
-      }
-
-void JoinText::undo(EditData* ed)
-      {
-      TextBase* t   = c.text();
-      int line      = c.row();
-      t->setTextInvalid();
-      t->triggerLayout();
-
-      CharFormat* charFmt = c.format();         // take current format
-      t->textBlockList().insert(line + 1, c.curLine().split(c.column()));
-      c.curLine().setEol(true);
-
-      c.setRow(line+1);
-      c.setColumn(0);
-      c.setFormat(*charFmt);             // restore orig. format at new line
-      c.clearSelection();
-
-      if (ed)
-            *t->cursor(*ed) = c;
+      int om = fret->marker(string);
+      fret->setMarker(string, marker);
+      marker = om;
+      fret->triggerLayout();
       }
 
 }

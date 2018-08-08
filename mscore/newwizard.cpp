@@ -1,3 +1,4 @@
+
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
@@ -24,6 +25,7 @@
 #include "palette.h"
 #include "instrdialog.h"
 #include "scoreBrowser.h"
+#include "extension.h"
 
 #include "libmscore/instrtemplate.h"
 #include "libmscore/score.h"
@@ -274,18 +276,9 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
 
       templateFileBrowser = new ScoreBrowser;
       templateFileBrowser->setStripNumbers(true);
-      QDir dir(mscoreGlobalShare + "/templates");
-      QFileInfoList fil = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name);
-      if(fil.isEmpty()){
-          fil.append(QFileInfo(QFile(":data/Empty_Score.mscz")));
-          }
-
-      QDir myTemplatesDir(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
-      fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
-
       templateFileBrowser->setShowCustomCategory(true);
-      templateFileBrowser->setScores(fil);
       templateFileBrowser->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
+      buildTemplatesList();
 
       QVBoxLayout* layout = new QVBoxLayout;
       QHBoxLayout* searchLayout = new QHBoxLayout;
@@ -315,6 +308,31 @@ void NewWizardPage4::initializePage()
       {
       templateFileBrowser->show();
       path.clear();
+      }
+
+//---------------------------------------------------------
+//   buildTemplatesList
+//---------------------------------------------------------
+
+void NewWizardPage4::buildTemplatesList()
+      {
+
+      QDir dir(mscoreGlobalShare + "/templates");
+      QFileInfoList fil = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name);
+      if(fil.isEmpty()){
+          fil.append(QFileInfo(QFile(":data/Empty_Score.mscz")));
+          }
+
+      QDir myTemplatesDir(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
+      fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
+
+      // append templates directories from extensions
+      QStringList extensionsDir = Extension::getDirectoriesByType(Extension::templatesDir);
+      for (QString extDir : extensionsDir) {
+            QDir extTemplateDir(extDir);
+            fil.append(extTemplateDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
+            }
+      templateFileBrowser->setScores(fil);
       }
 
 //---------------------------------------------------------

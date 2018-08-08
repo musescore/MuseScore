@@ -129,7 +129,7 @@
   <!ENTITY p_lp "(">
   <!ENTITY p_rp ")">
 <!-- use these declarations instead to eliminate the parens in the above and use superscript instead (commented out by default)
-  <!ENTITY d_lp "m:0:-4"> 
+  <!ENTITY d_lp "m:0:-4">
   <!ENTITY d_rp "m:0:4">
   <!ENTITY p_lp "">
   <!ENTITY p_rp ""> -->
@@ -138,7 +138,7 @@
   <!ENTITY d_alp "m:1:-5 s( m:0:5">
   <!ENTITY d_arp "m:0:-5 s) m:0:5">
 <!-- use these declarations instead to eliminate the parens in the above
-  <!ENTITY d_alp ""> 
+  <!ENTITY d_alp "">
   <!ENTITY d_arp ""> -->
 
 <!-- these numbers are used for primary extensions: eg, the 7 in C7b9 -->
@@ -367,7 +367,7 @@
          render   this is a script which contains render commands
                   commands:
                         xxx         draw symbol name xxx
-                        m:x:y       add x:y (point) to current position
+                        m:x:y       add x:y to current position (1/5 spatium units)
                         :push
                         :pop
                         :n          root or base note

@@ -38,7 +38,7 @@ class TestCompat206 : public QObject, public MTest
       void drumset()          { compat("drumset");          }
       void markers()          { compat("markers");          }
       void noteheads()        { compat("noteheads");        }
-      void textstyles()       { compat("textstyles");       }
+//TODO::ws      void textstyles()       { compat("textstyles");       }
       void tuplets()          { compat("tuplets");          }
       void hairpin()          { compat("hairpin");          }
       void brlines()          { compat("barlines");         }
@@ -64,7 +64,6 @@ void TestCompat206::compat(const QString& file)
       QString reference(DIR  + file + "-ref.mscx");
 
       MasterScore* score = readScore(readFile);
-      score->doLayout();
       QVERIFY(score);
       QVERIFY(saveCompareScore(score, writeFile, reference));
       }

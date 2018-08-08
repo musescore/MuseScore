@@ -36,7 +36,7 @@
 #include "pedal.h"
 #include "rest.h"
 #include "slur.h"
-#include "stafftext.h"
+#include "stafftextbase.h"
 #include "stafftypechange.h"
 #include "tempotext.h"
 #include "textframe.h"
@@ -207,6 +207,43 @@ void TextBase::read300(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   TextBase::readProperties300
+//---------------------------------------------------------
+
+bool TextBase::readProperties300(XmlReader& e)
+      {
+      static const std::array<Pid, 18> pids { {
+            Pid::SUB_STYLE,
+            Pid::FONT_FACE,
+            Pid::FONT_SIZE,
+            Pid::FONT_BOLD,
+            Pid::FONT_ITALIC,
+            Pid::FONT_UNDERLINE,
+            Pid::FRAME_TYPE,
+            Pid::FRAME_WIDTH,
+            Pid::FRAME_PADDING,
+            Pid::FRAME_ROUND,
+            Pid::FRAME_FG_COLOR,
+            Pid::FRAME_BG_COLOR,
+            Pid::FONT_SPATIUM_DEPENDENT,
+            Pid::ALIGN,
+            Pid::OFFSET,
+            Pid::OFFSET_TYPE
+            } };
+
+      const QStringRef& tag(e.name());
+      for (Pid i :pids) {
+            if (readProperty(tag, e, i))
+                  return true;
+            }
+      if (tag == "text")
+            setXmlText(e.readXml());
+      else if (!Element::readProperties300(e))
+            return false;
+      return true;
+      }
+
+//---------------------------------------------------------
 //   Text::read300
 //---------------------------------------------------------
 
@@ -218,8 +255,8 @@ void Text::read300(XmlReader& e)
                   QString sn = e.readElementText();
                   if (sn == "Tuplet")          // ugly hack for compatibility
                         continue;
-                  SubStyleId s = subStyleFromName(sn);
-                  initSubStyle(s);
+                  Tid s = textStyleFromName(sn);
+                  initTid(s);
                   }
             else if (!readProperties300(e))
                   e.unknown();
@@ -243,8 +280,6 @@ void Dynamic::read300(XmlReader& e)
             else if (!TextBase::readProperties300(e))
                   e.unknown();
             }
-      if (subStyleId() == SubStyleId::DEFAULT)
-            initSubStyle(SubStyleId::DYNAMICS);
       }
 
 //---------------------------------------------------------
@@ -352,10 +387,10 @@ void Marker::read300(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   StaffText::read300
+//   StaffTextBase::read300
 //---------------------------------------------------------
 
-void StaffText::read300(XmlReader& e)
+void StaffTextBase::read300(XmlReader& e)
       {
       for (int voice = 0; voice < VOICES; ++voice)
             _channelNames[voice].clear();
@@ -367,10 +402,10 @@ void StaffText::read300(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   StaffText::readProperties300
+//   StaffTextBase::readProperties300
 //---------------------------------------------------------
 
-bool StaffText::readProperties300(XmlReader& e)
+bool StaffTextBase::readProperties300(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 

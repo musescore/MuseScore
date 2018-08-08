@@ -18,6 +18,13 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#if (defined (_MSCVER) || defined (_MSC_VER))
+// Include stdint.h and #define _STDINT_H to prevent <systemdeps.h> from redefining types
+// #undef UNICODE to force LoadLibrary to use the char-based implementation instead of the wchar_t one.
+#include <stdint.h>
+#define _STDINT_H 1
+#endif
+
 #include "jackaudio.h"
 #include "musescore.h"
 #include "libmscore/mscore.h"
@@ -397,7 +404,14 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
                   }
             }
       if (l && r) {
-            float buffer[frames * 2];
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+         float buffer[frames * 2];
+#else
+         // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+         //    heap allocation is slow, an optimization might be used.
+         std::vector<float> vBuffer(frames * 2);
+         float* buffer = vBuffer.data();
+#endif
             audio->seq->process((unsigned)frames, buffer);
             float* sp = buffer;
             for (unsigned i = 0; i < frames; ++i) {
@@ -407,7 +421,14 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
             }
       else {
             // JACK MIDI only
-            float buffer[frames * 2];
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+         float buffer[frames * 2];
+#else
+            // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+            //    heap allocation is slow, an optimization might be used.
+         std::vector<float> vBuffer(frames * 2);
+         float* buffer = vBuffer.data();
+#endif
             audio->seq->process((unsigned)frames, buffer);
             }
       return 0;

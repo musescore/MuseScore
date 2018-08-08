@@ -30,9 +30,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 Articulation::Articulation(Score* s)
-   : Element(s)
+   : Element(s, ElementFlag::MOVABLE)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       _symId         = SymId::noSym;
       _anchor        = ArticulationAnchor::TOP_STAFF;
       _direction     = Direction::AUTO;
@@ -389,12 +388,12 @@ QVariant Articulation::propertyDefault(Pid propertyId) const
       }
 
 //---------------------------------------------------------
-//   articulationName
+//   symId2ArticulationName
 //---------------------------------------------------------
 
-const char* Articulation::articulationName() const
+const char* Articulation::symId2ArticulationName(SymId symId)
       {
-      switch (_symId) {
+      switch (symId) {
             case SymId::articStaccatissimoAbove:
             case SymId::articStaccatissimoBelow:
             case SymId::articStaccatissimoStrokeAbove:
@@ -436,9 +435,21 @@ const char* Articulation::articulationName() const
             case SymId::stringsHarmonic:
                   return "harmonic";
 
+            case SymId::ornamentMordentInverted:
+                  return "mordent-inverted";
+
             default:
                   return "---";
             }
+      }
+
+//---------------------------------------------------------
+//   articulationName
+//---------------------------------------------------------
+
+const char* Articulation::articulationName() const
+      {
+      return symId2ArticulationName(_symId);
       }
 
 //---------------------------------------------------------
@@ -447,10 +458,6 @@ const char* Articulation::articulationName() const
 
 Sid Articulation::getPropertyStyle(Pid id) const
       {
-      switch (id) {
-            default:
-                  break;
-            }
       return Sid::NOSTYLE;
       }
 

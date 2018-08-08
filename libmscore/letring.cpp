@@ -21,6 +21,29 @@
 
 namespace Ms {
 
+static const ElementStyle letRingStyle {
+      { Sid::letRingFontFace,                      Pid::BEGIN_FONT_FACE        },
+      { Sid::letRingFontFace,                      Pid::CONTINUE_FONT_FACE     },
+      { Sid::letRingFontFace,                      Pid::END_FONT_FACE          },
+      { Sid::letRingFontSize,                      Pid::BEGIN_FONT_SIZE        },
+      { Sid::letRingFontSize,                      Pid::CONTINUE_FONT_SIZE     },
+      { Sid::letRingFontSize,                      Pid::END_FONT_SIZE          },
+      { Sid::letRingFontBold,                      Pid::BEGIN_FONT_BOLD        },
+      { Sid::letRingFontBold,                      Pid::CONTINUE_FONT_BOLD     },
+      { Sid::letRingFontBold,                      Pid::END_FONT_BOLD          },
+      { Sid::letRingFontItalic,                    Pid::BEGIN_FONT_ITALIC      },
+      { Sid::letRingFontItalic,                    Pid::CONTINUE_FONT_ITALIC   },
+      { Sid::letRingFontItalic,                    Pid::END_FONT_ITALIC        },
+      { Sid::letRingFontUnderline,                 Pid::BEGIN_FONT_UNDERLINE   },
+      { Sid::letRingFontUnderline,                 Pid::CONTINUE_FONT_UNDERLINE},
+      { Sid::letRingFontUnderline,                 Pid::END_FONT_UNDERLINE     },
+      { Sid::letRingTextAlign,                     Pid::BEGIN_TEXT_ALIGN       },
+      { Sid::letRingTextAlign,                     Pid::CONTINUE_TEXT_ALIGN    },
+      { Sid::letRingTextAlign,                     Pid::END_TEXT_ALIGN         },
+      { Sid::letRingHookHeight,                    Pid::BEGIN_HOOK_HEIGHT      },
+      { Sid::letRingHookHeight,                    Pid::END_HOOK_HEIGHT        },
+      };
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -57,7 +80,7 @@ void LetRingSegment::layout()
 LetRing::LetRing(Score* s)
    : TextLineBase(s)
       {
-      initSubStyle(SubStyleId::LET_RING);
+      initElementStyle(&letRingStyle);
       resetProperty(Pid::LINE_VISIBLE);
       }
 
@@ -83,8 +106,8 @@ void LetRing::write(XmlWriter& xml) const
             return;
       xml.stag(name());
 
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->pid);
+      for (const StyledProperty& spp : *styledProperties())
+            writeProperty(xml, spp.pid);
 
       Element::writeProperties(xml);
       xml.etag();

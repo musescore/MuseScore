@@ -26,15 +26,19 @@
 
 namespace Ms {
 
+static const ElementStyle stemStyle {
+      { Sid::stemWidth,                          Pid::LINE_WIDTH              },
+      };
+
 //---------------------------------------------------------
 //   Stem
 //    Notenhals
 //---------------------------------------------------------
 
 Stem::Stem(Score* s)
-   : Element(s, ElementFlag::SELECTABLE)
+   : Element(s)
       {
-      initSubStyle(SubStyleId::STEM);
+      initElementStyle(&stemStyle);
       resetProperty(Pid::USER_LEN);
       }
 

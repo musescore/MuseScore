@@ -5,7 +5,7 @@ if [ "`uname`" = 'Darwin' ]; then
       BROWSER=open
 else
       MSCORE=../../build.debug/mscore/mscore
-      BROWSER=rekonq
+      BROWSER=firefox
 fi
 
 if [ -n "$VTEST_MSCORE" ]; then
@@ -44,9 +44,10 @@ else
        hairpins-1 pedal-1 line-1 line-2 line-3 line-4 line-5 line-6 gliss-1 gliss-2\
        chord-layout-1 chord-layout-2 chord-layout-3 chord-layout-4 chord-layout-5\
        chord-layout-6 chord-layout-7 chord-layout-8 chord-layout-9 chord-layout-10\
-       chord-layout-11 chord-layout-12 chord-layout-13 chord-layout-14 chord-layout-15 chord-layout-16 cross-1 cross-2\
+       chord-layout-11 chord-layout-12 chord-layout-13 chord-layout-14 chord-layout-15 chord-layout-16 chord-layout-17\
+       cross-1 cross-2\
        accidental-1 accidental-2 accidental-3 accidental-4 accidental-5\
-       accidental-6 accidental-7 accidental-8 accidental-9 accidental-10\
+       accidental-6 accidental-7 accidental-8 accidental-9 accidental-10 accidental-mirror\
        tie-1 tie-2 tie-3 \
        grace-1 grace-2 grace-3 grace-4 grace-5 \
        tuplets-1 tuplets-2 breath-1\
@@ -75,7 +76,7 @@ DPI=130
 DIR="$(cd "$(dirname "$0")" && pwd)"
 mkdir -p $DIR/html
 cd $DIR/html
-rm *.png
+rm -f *.png
 
 if test -f LOG; then
       rm LOG
@@ -133,6 +134,7 @@ for src in $SRC; do
 echo "  </body>" >> $F
 echo "</html>" >> $F
 
+echo $BROWSER
 
 $BROWSER $F 2>/dev/null
 

@@ -145,6 +145,7 @@ class NewWizardPage4 : public QWizardPage {
       virtual bool isComplete() const override;
       QString templatePath() const;
       virtual void initializePage();
+      void buildTemplatesList();
       };
 
 //---------------------------------------------------------
@@ -207,6 +208,7 @@ class NewWizard : public QWizard {
       double tempo() const                { return p5->tempo();       }
       bool createTempo() const            { return p5->createTempo(); }
       bool emptyScore() const;
+      void updateValues() const;
       };
 
 

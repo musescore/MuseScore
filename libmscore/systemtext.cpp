@@ -14,20 +14,24 @@
 
 namespace Ms {
 
+static const ElementStyle systemStyle {
+      { Sid::systemTextPlacement,                Pid::PLACEMENT              },
+      };
+
 //---------------------------------------------------------
 //   SystemText
 //---------------------------------------------------------
 
 SystemText::SystemText(Score* s)
-   : TextBase(s, ElementFlag::SYSTEM)
+   : StaffTextBase(s, Tid::SYSTEM, ElementFlag::SYSTEM)
       {
-      initSubStyle(SubStyleId::SYSTEM);
+      initElementStyle(&systemStyle);
       }
 
-SystemText::SystemText(SubStyleId ss, Score* s)
-   : TextBase(s, ElementFlag::SYSTEM)
+SystemText::SystemText(Score* s, Tid tid, ElementFlags flags)
+   : StaffTextBase(s, tid, flags)
       {
-      initSubStyle(ss);
+      initElementStyle(&systemStyle);
       }
 
 //---------------------------------------------------------
@@ -38,23 +42,23 @@ QVariant SystemText::propertyDefault(Pid id) const
       {
       switch (id) {
             case Pid::SUB_STYLE:
-                  return int(SubStyleId::SYSTEM);
+                  return int(Tid::SYSTEM);
             default:
                   return TextBase::propertyDefault(id);
             }
       }
 
 //---------------------------------------------------------
-//   write
+//   layout
 //---------------------------------------------------------
 
-void SystemText::write(XmlWriter& xml) const
+void SystemText::layout()
       {
-      if (!xml.canWrite(this))
-            return;
-      xml.stag(name());
-      TextBase::writeProperties(xml);
-      xml.etag();
+      Staff* s = staff();
+      qreal y = placeAbove() ? styleP(Sid::systemTextPosAbove) : styleP(Sid::systemTextPosBelow) + (s ? s->height() : 0.0);
+      setPos(QPointF(0.0, y));
+      TextBase::layout1();
+      autoplaceSegmentElement(styleP(Sid::systemTextMinDistance));
       }
 
 } // namespace Ms

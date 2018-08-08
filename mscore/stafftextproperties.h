@@ -25,7 +25,7 @@
 
 namespace Ms {
 
-class StaffText;
+class StaffTextBase;
 
 //---------------------------------------------------------
 //   StaffTextProperties
@@ -35,7 +35,7 @@ class StaffText;
 class StaffTextProperties : public QDialog, public Ui::StaffTextProperties {
       Q_OBJECT
 
-      StaffText* _staffText;
+      StaffTextBase* _staffText;
       QToolButton* vb[4][4];
       QComboBox* channelCombo[4];
       QPushButton* stops[4][16];
@@ -51,10 +51,10 @@ class StaffTextProperties : public QDialog, public Ui::StaffTextProperties {
       void setSwingControls(bool);
 
    public:
-      StaffTextProperties(const StaffText*, QWidget* parent = 0);
+      StaffTextProperties(const StaffTextBase*, QWidget* parent = 0);
       ~StaffTextProperties();
 
-      const StaffText* staffText() const { return _staffText; }
+      const StaffTextBase* staffTextBase() const { return _staffText; }
       };
 }
 

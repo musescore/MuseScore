@@ -25,7 +25,7 @@ class Pedal;
 
 class PedalSegment final : public TextLineBaseSegment {
    public:
-      PedalSegment(Score* s) : TextLineBaseSegment(s) {}
+      PedalSegment(Score* s) : TextLineBaseSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
       virtual ElementType type() const override       { return ElementType::PEDAL_SEGMENT; }
       virtual PedalSegment* clone() const override    { return new PedalSegment(*this);    }
       Pedal* pedal() const                            { return (Pedal*)spanner();          }

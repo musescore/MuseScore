@@ -112,6 +112,7 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       // or a memory leak may result
 
       bool canUseTabs = false; // assume only normal staves are applicable
+      int numFrettedStrings = 0;
       bool canUsePerc = false;
       PartListItem* part = static_cast<PartListItem*>(QTreeWidgetItem::parent());
 
@@ -120,7 +121,9 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       if (part) {
             const StringData* stringData = part->it ? &(part->it->stringData) :
                         ( (part->part && part->part->instrument()) ? part->part->instrument()->stringData() : 0);
-            canUseTabs = stringData && stringData->strings() > 0;
+            canUseTabs = stringData && stringData->frettedStrings() > 0;
+            if (canUseTabs)
+                  numFrettedStrings = stringData->frettedStrings();
             canUsePerc = part->it ? part->it->useDrumset :
                         ( (part->part && part->part->instrument()) ? part->part->instrument()->useDrumset() : false);
             }
@@ -130,7 +133,7 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
       for (const StaffType& st : StaffType::presets()) {
             if ( (st.group() == StaffGroup::STANDARD && (!canUsePerc))    // percussion excludes standard
                         || (st.group() == StaffGroup::PERCUSSION && canUsePerc)
-                        || (st.group() == StaffGroup::TAB && canUseTabs)) {
+                        || (st.group() == StaffGroup::TAB && canUseTabs && st.lines() <= numFrettedStrings)) {
                   _staffTypeCombo->addItem(st.name(), idx);
                   }
             ++idx;
@@ -410,7 +413,7 @@ void populateGenreCombo(QComboBox* combo)
 void populateInstrumentList(QTreeWidget* instrumentList)
       {
       instrumentList->clear();
-      // TODO: memory leak
+      // TODO: memory leak?
       foreach(InstrumentGroup* g, instrumentGroups) {
             InstrumentTemplateListItem* group = new InstrumentTemplateListItem(g->name, instrumentList);
             group->setFlags(Qt::ItemIsEnabled);
@@ -677,7 +680,13 @@ void InstrumentsWidget::on_upButton_clicked()
                   // Qt looses the QComboBox set into StaffListItem's when they are re-inserted into the tree:
                   // get the currently selected staff type of each combo and re-insert
                   int numOfStaffListItems = item->childCount();
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
                   int staffIdx[numOfStaffListItems];
+#else
+                  // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+                  //    heap allocation is slow, an optimization might be used.
+                  std::vector<int> staffIdx(numOfStaffListItems);
+#endif
                   for (int itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
                         staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();
                   // do not consider hidden ones
@@ -760,7 +769,13 @@ void InstrumentsWidget::on_downButton_clicked()
                   // Qt looses the QComboBox set into StaffListItem's when they are re-inserted into the tree:
                   // get the currently selected staff type of each combo and re-insert
                   int numOfStaffListItems = item->childCount();
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
                   int staffIdx[numOfStaffListItems];
+#else
+                  // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+                  //    heap allocation is slow, an optimization might be used.
+                  std::vector<int> staffIdx(numOfStaffListItems);
+#endif
                   int itemIdx;
                   for (itemIdx=0; itemIdx < numOfStaffListItems; ++itemIdx)
                         staffIdx[itemIdx] = (static_cast<StaffListItem*>(item->child(itemIdx)))->staffTypeIdx();

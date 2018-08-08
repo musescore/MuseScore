@@ -148,9 +148,8 @@ AccidentalVal sym2accidentalVal(SymId id)
 //---------------------------------------------------------
 
 Accidental::Accidental(Score* s)
-   : Element(s)
+   : Element(s, ElementFlag::MOVABLE)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
 //---------------------------------------------------------
@@ -302,8 +301,8 @@ void Accidental::layout()
       if (_bracket != AccidentalBracket::NONE) {
             SymId id = _bracket == AccidentalBracket::PARENTHESIS ? SymId::accidentalParensRight : SymId::accidentalBracketRight;
             x = r.x()+r.width();
-            SymElement e(id, x);
-            el.append(e);
+            SymElement e1(id, x);
+            el.append(e1);
             r |= symBbox(id).translated(x, 0.0);
             }
       setbbox(r);

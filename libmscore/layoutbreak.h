@@ -53,7 +53,6 @@ class LayoutBreak final : public Element {
       virtual LayoutBreak* clone() const override { return new LayoutBreak(*this); }
 
       virtual ElementType type() const override   { return ElementType::LAYOUT_BREAK; }
-      virtual bool systemFlag() const override    { return true;  }
 
       void setLayoutBreakType(Type);
       Type layoutBreakType() const  { return _layoutBreakType; }

@@ -946,13 +946,13 @@ static Segment* getNextValidInputSegment(Segment* s, int track, int voice)
             return 0;
       Q_ASSERT(s->segmentType() == SegmentType::ChordRest);
       // Segment* s1 = s;
-      ChordRest* cr1;
+      ChordRest* cr1 = nullptr;
       for (Segment* s1 = s; s1; s1 = s1->prev(SegmentType::ChordRest)) {
             cr1 = toChordRest(s1->element(track + voice));
             if (cr1)
                   break;
             }
-      int nextTick = (cr1 == 0) ? s->measure()->tick() : cr1->tick() + cr1->actualTicks();
+      int nextTick = (cr1 == nullptr) ? s->measure()->tick() : cr1->tick() + cr1->actualTicks();
 
       static const SegmentType st { SegmentType::ChordRest };
       while (s) {
@@ -1509,7 +1509,6 @@ void Score::removeElement(Element* element)
             default:
                   break;
             }
-      setLayout(element->tick());
       }
 
 //---------------------------------------------------------
@@ -1742,12 +1741,12 @@ void Score::setSelection(const Selection& s)
 //   getText
 //---------------------------------------------------------
 
-Text* Score::getText(SubStyleId subStyle)
+Text* Score::getText(Tid tid)
       {
       MeasureBase* m = first();
-      if (m && m->type() == ElementType::VBOX) {
+      if (m && m->isVBox()) {
             for (Element* e : m->el()) {
-                  if (e->type() == ElementType::TEXT && toText(e)->subStyleId() == subStyle)
+                  if (e->isText() && toText(e)->tid() == tid)
                         return toText(e);
                   }
             }
@@ -1873,6 +1872,16 @@ void Score::removeAudio()
       {
       delete _audio;
       _audio = 0;
+      }
+
+//---------------------------------------------------------
+//   isScoreLoaded
+//---------------------------------------------------------
+
+bool& Score::isScoreLoaded()
+      {
+      static bool scoreLoaded = false;
+      return scoreLoaded;
       }
 
 //---------------------------------------------------------
@@ -2400,6 +2409,7 @@ void Score::cmdRemoveStaff(int staffIdx)
                   sl.append(s);
             }
       for (auto i : sl) {
+printf("remove %p <%s>\n", i, i->name());
             i->undoUnlink();
             undo(new RemoveElement(i));
             }
@@ -2684,7 +2694,7 @@ void Score::deselect(Element* el)
       addRefresh(el->abbox());
       _selection.remove(el);
       setSelectionChanged(true);
-      update();
+      _selection.update();
       }
 
 //---------------------------------------------------------
@@ -3422,12 +3432,12 @@ void Score::addText(const QString& type, const QString& txt)
             insertMeasure(ElementType::VBOX, measure);
             measure = first();
             }
-      SubStyleId stid = SubStyleId::DEFAULT;
+      Tid tid = Tid::DEFAULT;
       if (type == "title")
-            stid = SubStyleId::TITLE;
+            tid = Tid::TITLE;
       else if (type == "subtitle")
-            stid = SubStyleId::SUBTITLE;
-      Text* text = new Text(stid, this);
+            tid = Tid::SUBTITLE;
+      Text* text = new Text(this, tid);
       text->setParent(measure);
       text->setXmlText(txt);
       undoAddElement(text);

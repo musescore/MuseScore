@@ -21,33 +21,42 @@
 #include "staff.h"
 #include "segment.h"
 #include "sym.h"
+#include "musescoreCore.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   OttavaDefault
+//   ottavaElementStyle
 //---------------------------------------------------------
 
-struct OttavaDefault {
-      SymId id;
-      SymId numbersOnlyId;
-      QPointF offset;
-      qreal  hookDirection;
-      Placement place;
-      int shift;
-      const char* name;
-      const char* numbersOnlyName;
+static const ElementStyle ottavaElementStyle {
+      { Sid::ottava8VAPlacement,                 Pid::PLACEMENT               },
+      { Sid::ottavaNumbersOnly,                  Pid::NUMBERS_ONLY            },
+      { Sid::ottava8VAText,                      Pid::BEGIN_TEXT              },
+      { Sid::ottava8VAText,                      Pid::CONTINUE_TEXT           },
+      { Sid::ottavaHookAbove,                    Pid::END_HOOK_HEIGHT         },
+      { Sid::ottavaFontFace,                     Pid::BEGIN_FONT_FACE         },
+      { Sid::ottavaFontFace,                     Pid::CONTINUE_FONT_FACE      },
+      { Sid::ottavaFontFace,                     Pid::END_FONT_FACE           },
+      { Sid::ottavaFontSize,                     Pid::BEGIN_FONT_SIZE         },
+      { Sid::ottavaFontSize,                     Pid::CONTINUE_FONT_SIZE      },
+      { Sid::ottavaFontSize,                     Pid::END_FONT_SIZE           },
+      { Sid::ottavaFontBold,                     Pid::BEGIN_FONT_BOLD         },
+      { Sid::ottavaFontBold,                     Pid::CONTINUE_FONT_BOLD      },
+      { Sid::ottavaFontBold,                     Pid::END_FONT_BOLD           },
+      { Sid::ottavaFontItalic,                   Pid::BEGIN_FONT_ITALIC       },
+      { Sid::ottavaFontItalic,                   Pid::CONTINUE_FONT_ITALIC    },
+      { Sid::ottavaFontItalic,                   Pid::END_FONT_ITALIC         },
+      { Sid::ottavaFontUnderline,                Pid::BEGIN_FONT_UNDERLINE    },
+      { Sid::ottavaFontUnderline,                Pid::CONTINUE_FONT_UNDERLINE },
+      { Sid::ottavaFontUnderline,                Pid::END_FONT_UNDERLINE      },
+      { Sid::ottavaTextAlign,                    Pid::BEGIN_TEXT_ALIGN        },
+      { Sid::ottavaTextAlign,                    Pid::CONTINUE_TEXT_ALIGN     },
+      { Sid::ottavaTextAlign,                    Pid::END_TEXT_ALIGN          },
+      { Sid::ottavaLineWidth,                    Pid::LINE_WIDTH              },
+      { Sid::ottavaLineStyle,                    Pid::LINE_STYLE              },
       };
 
-// order is important, should be the same as OttavaType
-static const OttavaDefault ottavaDefault[] = {
-      { SymId::ottavaAlta,        SymId::ottava,       QPointF(0.0, .7),    1.0, Placement::ABOVE,  12, "8va", "8"   },
-      { SymId::ottavaBassaBa,     SymId::ottava,       QPointF(0.0, -1.0), -1.0, Placement::BELOW, -12, "8vb", "8"   },
-      { SymId::quindicesimaAlta,  SymId::quindicesima, QPointF(0.0, .7),    1.0, Placement::ABOVE,  24, "15ma", "15" },
-      { SymId::quindicesimaBassa, SymId::quindicesima, QPointF(0.0, -1.0), -1.0, Placement::BELOW, -24, "15mb", "15" },
-      { SymId::ventiduesimaAlta,  SymId::ventiduesima, QPointF(0.0, .7),    1.0, Placement::ABOVE,  36, "22ma", "22" },
-      { SymId::ventiduesimaBassa, SymId::ventiduesima, QPointF(0.0, -1.0), -1.0, Placement::BELOW, -36, "22mb", "22" }
-      };
 
 //---------------------------------------------------------
 //   layout
@@ -55,14 +64,19 @@ static const OttavaDefault ottavaDefault[] = {
 
 void OttavaSegment::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
-
       TextLineBaseSegment::layout();
       if (parent()) {
-            qreal yo = score()->styleP(ottava()->placeBelow() ? Sid::ottavaPosBelow : Sid::ottavaPosAbove) * mag();
-            rypos() += yo;
+            qreal y;
+            if (placeAbove()) {
+                  y = score()->styleP(Sid::ottavaPosAbove);
+                  }
+            else {
+                  qreal sh = ottava()->staff() ? ottava()->staff()->height() : 0;
+                  y = score()->styleP(Sid::ottavaPosBelow) + sh;
+                  }
+            rypos() = y;
             if (autoplace()) {
+                  setUserOff(QPointF());
                   qreal minDistance = spatium() * .7;
                   Shape s1 = shape().translated(pos());
                   if (ottava()->placeAbove()) {
@@ -80,79 +94,65 @@ void OttavaSegment::layout()
       }
 
 //---------------------------------------------------------
-//   getProperty
+//   propertyDelegate
 //---------------------------------------------------------
 
-QVariant OttavaSegment::getProperty(Pid id) const
+Element* OttavaSegment::propertyDelegate(Pid pid)
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->getProperty(id);
-            }
-      switch (id) {
-            case Pid::OTTAVA_TYPE:
-                  return spanner()->getProperty(id);
-            default:
-                  return TextLineBaseSegment::getProperty(id);
-            }
+      if (pid == Pid::OTTAVA_TYPE || pid == Pid::NUMBERS_ONLY)
+            return spanner();
+      return TextLineBaseSegment::propertyDelegate(pid);
       }
 
 //---------------------------------------------------------
-//   setProperty
+//   updateStyledProperties
+//    some properties change styling
 //---------------------------------------------------------
 
-bool OttavaSegment::setProperty(Pid id, const QVariant& v)
+void Ottava::updateStyledProperties()
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->setProperty(id, v);
-            }
-      switch (id) {
-            case Pid::OTTAVA_TYPE:
-                  return spanner()->setProperty(id, v);
-            default:
-                  return TextLineBaseSegment::setProperty(id, v);
-            }
-      }
+      Q_ASSERT(int(OttavaType::OTTAVA_22MB) - int(OttavaType::OTTAVA_8VA) == 5);
 
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
+      static const Sid ss[24] = {
+            Sid::ottava8VAPlacement,
+            Sid::ottava8VAnoText,
+            Sid::ottava8VBPlacement,
+            Sid::ottava8VBnoText,
+            Sid::ottava15MAPlacement,
+            Sid::ottava15MAnoText,
+            Sid::ottava15MBPlacement,
+            Sid::ottava15MBnoText,
+            Sid::ottava22MAPlacement,
+            Sid::ottava22MAnoText,
+            Sid::ottava22MBPlacement,
+            Sid::ottava22MBnoText,
 
-QVariant OttavaSegment::propertyDefault(Pid id) const
-      {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->propertyDefault(id);
-            }
-      switch (id) {
-            case Pid::OTTAVA_TYPE:
-                  return spanner()->propertyDefault(id);
-            default:
-                  return TextLineBaseSegment::propertyDefault(id);
-            }
-      }
+            Sid::ottava8VAPlacement,
+            Sid::ottava8VAText,
+            Sid::ottava8VBPlacement,
+            Sid::ottava8VBText,
+            Sid::ottava15MAPlacement,
+            Sid::ottava15MAText,
+            Sid::ottava15MBPlacement,
+            Sid::ottava15MBText,
+            Sid::ottava22MAPlacement,
+            Sid::ottava22MAText,
+            Sid::ottava22MBPlacement,
+            Sid::ottava22MBText,
+            };
 
-//---------------------------------------------------------
-//   Ottava
-//---------------------------------------------------------
+      // switch right substyles depending on _ottavaType and _numbersOnly
 
-Ottava::Ottava(Score* s)
-   : TextLineBase(s, ElementFlag::ON_STAFF)
-      {
-      _ottavaType = OttavaType::OTTAVA_8VA;
-      setBeginTextPlace(PlaceText::LEFT);
-      setContinueTextPlace(PlaceText::LEFT);
-      setLineVisible(true);
-      initSubStyle(SubStyleId::OTTAVA);
-      }
-
-Ottava::Ottava(const Ottava& o)
-   : TextLineBase(o)
-      {
-      setOttavaType(o._ottavaType);
-      _numbersOnly = o._numbersOnly;
-      _pitchShift  = o._pitchShift;
+      int idx    = int(_ottavaType) * 2 + (_numbersOnly ? 0 : 12);
+      _ottavaStyle[0].sid = ss[idx];         // PLACEMENT
+      _ottavaStyle[2].sid = ss[idx+1];       // BEGIN_TEXT
+      _ottavaStyle[3].sid = ss[idx+1];       // CONTINUE_TEXT
+      if (isStyled(Pid::PLACEMENT))
+            _ottavaStyle[4].sid = score()->styleI(ss[idx]) == int(Placement::ABOVE) ? Sid::ottavaHookAbove : Sid::ottavaHookBelow;
+      else
+            _ottavaStyle[4].sid = placeAbove() ? Sid::ottavaHookAbove : Sid::ottavaHookBelow;
+      styleChanged();   // this changes all styled properties with flag STYLED
+      MuseScoreCore::mscoreCore->updateInspector();
       }
 
 //---------------------------------------------------------
@@ -162,16 +162,78 @@ Ottava::Ottava(const Ottava& o)
 void Ottava::setOttavaType(OttavaType val)
       {
       _ottavaType = val;
+      updateStyledProperties();
+      }
 
-      const OttavaDefault* def = &ottavaDefault[int(_ottavaType)];
-      setBeginText(propertyDefault(Pid::BEGIN_TEXT).toString());
-      setContinueText(propertyDefault(Pid::CONTINUE_TEXT).toString());
+//---------------------------------------------------------
+//   setNumbersOnly
+//---------------------------------------------------------
 
+void Ottava::setNumbersOnly(bool val)
+      {
+      _numbersOnly = val;
+      updateStyledProperties();
+      }
+
+//---------------------------------------------------------
+//   setPlacement
+//---------------------------------------------------------
+
+void Ottava::setPlacement(Placement p)
+      {
+      TextLineBase::setPlacement(p);
+      updateStyledProperties();
+      }
+
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void OttavaSegment::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+      {
+      if (id == Pid::OTTAVA_TYPE || id == Pid::NUMBERS_ONLY || id == Pid::PLACEMENT) {
+            ScoreElement::undoChangeProperty(id, v, ps);
+            ottava()->updateStyledProperties();
+            }
+      else {
+            ScoreElement::undoChangeProperty(id, v, ps);
+            }
+      }
+
+//---------------------------------------------------------
+//   Ottava
+//---------------------------------------------------------
+
+Ottava::Ottava(Score* s)
+   : TextLineBase(s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
+      {
+      _ottavaType  = OttavaType::OTTAVA_8VA;
+      _ottavaStyle = ottavaElementStyle;       // make copy
+
+      setBeginTextPlace(PlaceText::LEFT);
+      setContinueTextPlace(PlaceText::LEFT);
       setEndHookType(HookType::HOOK_90);
-      setEndHookHeight(score()->styleS(Sid::ottavaHook) * def->hookDirection);
+      setLineVisible(true);
 
-      setPlacement(def->place);
-      _pitchShift = def->shift;
+      initElementStyle(&_ottavaStyle);
+      }
+
+Ottava::Ottava(const Ottava& o)
+   : TextLineBase(o)
+      {
+      _ottavaStyle  = o._ottavaStyle;
+      _elementStyle = &_ottavaStyle;
+      setOttavaType(o._ottavaType);
+      _numbersOnly = o._numbersOnly;
+      }
+
+//---------------------------------------------------------
+//   pitchShift
+//---------------------------------------------------------
+
+int Ottava::pitchShift() const
+      {
+      return ottavaDefault[int(_ottavaType)].shift;
       }
 
 //---------------------------------------------------------
@@ -192,11 +254,10 @@ void Ottava::write(XmlWriter& xml) const
       if (!xml.canWrite(this))
             return;
       xml.stag(name());
-//      writeProperty(xml, Pid::NUMBERS_ONLY);
       xml.tag("subtype", ottavaDefault[int(ottavaType())].name);
 
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->pid);
+      for (const StyledProperty& spp : *styledProperties())
+            writeProperty(xml, spp.pid);
 
       Element::writeProperties(xml);
       xml.etag();
@@ -214,8 +275,8 @@ void Ottava::write300old(XmlWriter& xml) const
 //      writeProperty(xml, Pid::NUMBERS_ONLY);
       xml.tag("subtype", ottavaDefault[int(ottavaType())].name);
 
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->pid);
+      for (const StyledProperty& spp : *styledProperties())
+            writeProperty(xml, spp.pid);
 
       Element::writeProperties300old(xml);
       xml.etag();
@@ -231,6 +292,7 @@ void Ottava::read(XmlReader& e)
       spannerSegments().clear();
       while (e.readNextStartElement())
             readProperties(e);
+      updateStyledProperties();
       }
 
 //---------------------------------------------------------
@@ -258,10 +320,10 @@ bool Ottava::readProperties(XmlReader& e)
             bool ok;
             int idx = s.toInt(&ok);
             if (!ok) {
-                  idx = int(OttavaType::OTTAVA_8VA);
+                  _ottavaType = OttavaType::OTTAVA_8VA;
                   for (unsigned i = 0; i < sizeof(ottavaDefault)/sizeof(*ottavaDefault); ++i) {
                         if (s == ottavaDefault[i].name) {
-                              idx = i;
+                              _ottavaType = ottavaDefault[i].type;
                               break;
                               }
                         }
@@ -272,9 +334,11 @@ bool Ottava::readProperties(XmlReader& e)
                         idx = 2;
                   else if (idx == 2)
                         idx = 1;
+                  _ottavaType = OttavaType(idx);
                   }
-            setOttavaType(OttavaType(idx));
             }
+      else  if (readStyledProperty(e, tag))
+            return true;
       else if (!TextLineBase::readProperties(e)) {
             e.unknown();
             return false;
@@ -319,15 +383,6 @@ bool Ottava::readProperties300(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   undoSetOttavaType
-//---------------------------------------------------------
-
-void Ottava::undoSetOttavaType(OttavaType val)
-      {
-      undoChangeProperty(Pid::OTTAVA_TYPE, int(val));
-      }
-
-//---------------------------------------------------------
 //   setYoff
 //    used in musicxml import
 //---------------------------------------------------------
@@ -346,8 +401,10 @@ QVariant Ottava::getProperty(Pid propertyId) const
       switch (propertyId) {
             case Pid::OTTAVA_TYPE:
                   return int(ottavaType());
+
             case Pid::NUMBERS_ONLY:
                   return _numbersOnly;
+
             default:
                   break;
             }
@@ -365,18 +422,8 @@ bool Ottava::setProperty(Pid propertyId, const QVariant& val)
                   setOttavaType(OttavaType(val.toInt()));
                   break;
 
-            case Pid::PLACEMENT:
-                  if (val != getProperty(propertyId)) {
-                        // reverse hooks
-                        // setBeginHookHeight(-beginHookHeight());
-                        setEndHookHeight(-endHookHeight());
-                        }
-                  setPlacement(Placement(val.toInt()));
-                  break;
-
             case Pid::NUMBERS_ONLY:
-                  setNumbersOnly(val.toBool());
-                  setOttavaType(_ottavaType);
+                  _numbersOnly = val.toBool();
                   break;
 
             case Pid::SPANNER_TICKS:
@@ -402,29 +449,17 @@ bool Ottava::setProperty(Pid propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Ottava::propertyDefault(Pid propertyId) const
+QVariant Ottava::propertyDefault(Pid pid) const
       {
-      switch (propertyId) {
+      switch (pid) {
             case Pid::OTTAVA_TYPE:
                   return QVariant();
             case Pid::END_HOOK_TYPE:
                   return int(HookType::HOOK_90);
-            case Pid::PLACEMENT:
-                  return int(ottavaDefault[int(_ottavaType)].place);
-            case Pid::END_HOOK_HEIGHT:
-                  return score()->styleS(Sid::ottavaHook) * ottavaDefault[int(_ottavaType)].hookDirection;
-            case Pid::BEGIN_TEXT:
-            case Pid::CONTINUE_TEXT: {
-                  const OttavaDefault* def = &ottavaDefault[int(_ottavaType)];
-                  SymId id = _numbersOnly ? def->numbersOnlyId : def->id;
-                  return QString("<sym>%1</sym>").arg(Sym::id2name(id));
-                  }
+            case Pid::LINE_VISIBLE:
+                  return true;
             default:
-                  for (const StyledProperty& p : subStyle(subStyleId())) {
-                        if (p.pid == propertyId)
-                              return score()->styleV(p.sid);
-                        }
-                  return getProperty(propertyId);
+                  return TextLineBase::propertyDefault(pid);
             }
       }
 

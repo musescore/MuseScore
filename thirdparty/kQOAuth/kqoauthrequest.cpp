@@ -265,7 +265,8 @@ bool KQOAuthRequestPrivate::validateRequest() const {
     }
 
     // We should not come here.
-    return false;
+    // Prevent "unreachable code" warning.
+    // return false;
 }
 
 //////////// Public implementation ////////////////

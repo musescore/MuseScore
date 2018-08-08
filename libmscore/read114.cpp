@@ -56,6 +56,7 @@
 #include "lyrics.h"
 #include "image.h"
 #include "textframe.h"
+#include "jump.h"
 
 namespace Ms {
 
@@ -142,7 +143,7 @@ static const StyleVal2 style114[] = {
       { Sid::chordDescriptionFile,         QVariant(QString("stdchords.xml")) },
       { Sid::chordStyle,                   QVariant(QString("custom")) },
       { Sid::chordsXmlFile,                QVariant(true) },
-      { Sid::harmonyY,                     QVariant(0.0) },
+//      { Sid::harmonyY,                     QVariant(0.0) },
       { Sid::concertPitch,                 QVariant(false) },
       { Sid::createMultiMeasureRests,      QVariant(false) },
       { Sid::minEmptyMeasures,             QVariant(2) },
@@ -302,57 +303,59 @@ QString convertFromHtml(TextBase* t, const QString& ss)
 //   readTextProperties
 //---------------------------------------------------------
 
-static bool readTextProperties(XmlReader& e, TextBase* t, Element* be)
+static bool readTextProperties(XmlReader& e, TextBase* t, Element*)
       {
       const QStringRef& tag(e.name());
       if (tag == "style") {
             int i = e.readInt();
-            SubStyleId ss = SubStyleId::DEFAULT;
+            Tid ss = Tid::DEFAULT;
             switch (i) {
-                  case 2:  ss = SubStyleId::TITLE;     break;
-                  case 3:  ss = SubStyleId::SUBTITLE;  break;
-                  case 4:  ss = SubStyleId::COMPOSER;  break;
-                  case 5:  ss = SubStyleId::POET;      break;
-                  case 6:  ss = SubStyleId::LYRIC_ODD;    break;
-                  case 7:  ss = SubStyleId::LYRIC_EVEN;    break;
-                  case 8:  ss = SubStyleId::FINGERING; break;
-                  case 9:  ss = SubStyleId::INSTRUMENT_LONG;    break;
-                  case 10: ss = SubStyleId::INSTRUMENT_SHORT;   break;
-                  case 11: ss = SubStyleId::INSTRUMENT_EXCERPT; break;
+                  case 2:  ss = Tid::TITLE;     break;
+                  case 3:  ss = Tid::SUBTITLE;  break;
+                  case 4:  ss = Tid::COMPOSER;  break;
+                  case 5:  ss = Tid::POET;      break;
 
-                  case 12: ss = SubStyleId::DYNAMICS;  break;
-                  case 13: ss = SubStyleId::EXPRESSION;   break;
-                  case 14: ss = SubStyleId::TEMPO;     break;
-                  case 15: ss = SubStyleId::METRONOME; break;
-                  case 16: ss = SubStyleId::FOOTER;    break;  // TextStyleType::COPYRIGHT
-                  case 17: ss = SubStyleId::MEASURE_NUMBER; break;
-                  case 18: ss = SubStyleId::FOOTER; break;    // TextStyleType::PAGE_NUMBER_ODD
-                  case 19: ss = SubStyleId::FOOTER; break;    // TextStyleType::PAGE_NUMBER_EVEN
-                  case 20: ss = SubStyleId::TRANSLATOR; break;
-                  case 21: ss = SubStyleId::TUPLET;     break;
+                  case 6:  ss = Tid::LYRICS_ODD;    break;
+                  case 7:  ss = Tid::LYRICS_EVEN;    break;
 
-                  case 22: ss = SubStyleId::SYSTEM;         break;
-                  case 23: ss = SubStyleId::STAFF;          break;
-                  case 24: ss = SubStyleId::HARMONY;        break;
-                  case 25: ss = SubStyleId::REHEARSAL_MARK; break;
-                  case 26: ss = SubStyleId::REPEAT_LEFT;         break;
-                  case 27: ss = SubStyleId::VOLTA;          break;
-                  case 28: ss = SubStyleId::FRAME;          break;
-                  case 29: ss = SubStyleId::TEXTLINE;       break;
-                  case 30: ss = SubStyleId::GLISSANDO;      break;
-                  case 31: ss = SubStyleId::STRING_NUMBER;  break;
+                  case 8:  ss = Tid::FINGERING; break;
+                  case 9:  ss = Tid::INSTRUMENT_LONG;    break;
+                  case 10: ss = Tid::INSTRUMENT_SHORT;   break;
+                  case 11: ss = Tid::INSTRUMENT_EXCERPT; break;
 
-                  case 32: ss = SubStyleId::OTTAVA;  break;
-//??                  case 33: ss = SubStyleId::BENCH;   break;
-                  case 34: ss = SubStyleId::HEADER;  break;
-                  case 35: ss = SubStyleId::FOOTER;  break;
+                  case 12: ss = Tid::DYNAMICS;  break;
+                  case 13: ss = Tid::EXPRESSION;   break;
+                  case 14: ss = Tid::TEMPO;     break;
+                  case 15: ss = Tid::METRONOME; break;
+                  case 16: ss = Tid::FOOTER;    break;  // TextStyleType::COPYRIGHT
+                  case 17: ss = Tid::MEASURE_NUMBER; break;
+                  case 18: ss = Tid::FOOTER; break;    // TextStyleType::PAGE_NUMBER_ODD
+                  case 19: ss = Tid::FOOTER; break;    // TextStyleType::PAGE_NUMBER_EVEN
+                  case 20: ss = Tid::TRANSLATOR; break;
+                  case 21: ss = Tid::TUPLET;     break;
+
+                  case 22: ss = Tid::SYSTEM;         break;
+                  case 23: ss = Tid::STAFF;          break;
+                  case 24: ss = Tid::HARMONY_A;        break;
+                  case 25: ss = Tid::REHEARSAL_MARK; break;
+                  case 26: ss = Tid::REPEAT_LEFT;         break;
+                  case 27: ss = Tid::VOLTA;          break;
+                  case 28: ss = Tid::FRAME;          break;
+                  case 29: ss = Tid::TEXTLINE;       break;
+                  case 30: ss = Tid::GLISSANDO;      break;
+                  case 31: ss = Tid::STRING_NUMBER;  break;
+
+                  case 32: ss = Tid::OTTAVA;  break;
+//??                  case 33: ss = Tid::BENCH;   break;
+                  case 34: ss = Tid::HEADER;  break;
+                  case 35: ss = Tid::FOOTER;  break;
                   case 0:
                   default:
                         qDebug("style %d invalid", i);
-                        ss = SubStyleId::DEFAULT;
+                        ss = Tid::DEFAULT;
                         break;
                   }
-            be->initSubStyle(ss);
+            t->initTid(ss);
             }
       else if (tag == "subtype")
             e.skipCurrentElement();
@@ -365,7 +368,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element* be)
       else if (tag == "foregroundColor")  // same as "color" ?
             e.skipCurrentElement();
       else if (tag == "frame")
-            t->setHasFrame(e.readBool());
+            t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
       else if (tag == "halign") {
             Align align = Align(int(t->align()) & int(~Align::HMASK));
             const QString& val(e.readElementText());
@@ -953,6 +956,40 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   readTremolo
+//---------------------------------------------------------
+
+static void readTremolo(Tremolo* tremolo, XmlReader& e)
+      {
+      enum class OldTremoloType : char {
+            OLD_R8 = 0,
+            OLD_R16,
+            OLD_R32,
+            OLD_C8,
+            OLD_C16,
+            OLD_C32
+            };
+      while (e.readNextStartElement()) {
+            if (e.name() == "subtype") {
+                  OldTremoloType sti = OldTremoloType(e.readElementText().toInt());
+                  TremoloType st;
+                  switch (sti) {
+                        default:
+                        case OldTremoloType::OLD_R8:  st = TremoloType::R8;  break;
+                        case OldTremoloType::OLD_R16: st = TremoloType::R16; break;
+                        case OldTremoloType::OLD_R32: st = TremoloType::R32; break;
+                        case OldTremoloType::OLD_C8:  st = TremoloType::C8;  break;
+                        case OldTremoloType::OLD_C16: st = TremoloType::C16; break;
+                        case OldTremoloType::OLD_C32: st = TremoloType::C32; break;
+                        }
+                  tremolo->setTremoloType(st);
+                  }
+            else if (!tremolo->Element::readProperties300(e))
+                  e.unknown();
+            }
+      }
+
+//---------------------------------------------------------
 //   readChord
 //---------------------------------------------------------
 
@@ -978,6 +1015,13 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e)
                   else
                         chord->add(el);
                   }
+            else if (tag == "Tremolo") {
+                  Tremolo* tremolo = new Tremolo(chord->score());
+                  chord->setTremolo(tremolo);
+                  tremolo->setTrack(chord->track());
+                  readTremolo(tremolo, e);
+                  tremolo->setParent(chord);
+            }
             else if (chord->readProperties300(e))
                   ;
             else
@@ -1132,6 +1176,54 @@ static void readVolta114(XmlReader& e, Volta* volta)
             }
       volta->setUserOff(QPointF());        // ignore offsets
       volta->setAutoplace(true);
+      }
+
+//---------------------------------------------------------
+//   readOttava114
+//---------------------------------------------------------
+
+static void readOttava114(XmlReader& e, Ottava* ottava)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "subtype") {
+                  QString s = e.readElementText();
+                  bool ok;
+                  int idx = s.toInt(&ok);
+                  if (!ok) {
+                        idx = int(OttavaType::OTTAVA_8VA);
+                        for (unsigned i = 0; i < sizeof(ottavaDefault)/sizeof(*ottavaDefault); ++i) {
+                              if (s == ottavaDefault[i].name) {
+                                    idx = i;
+                                    break;
+                                    }
+                              }
+                        }
+                  else if (ottava->score()->mscVersion() <= 114) {
+                        //subtype are now in a different order...
+                        if (idx == 1)
+                              idx = 2;
+                        else if (idx == 2)
+                              idx = 1;
+                        }
+                  ottava->setOttavaType(OttavaType(idx));
+                  }
+            else if (tag == "numbersOnly") {
+                  ottava->setNumbersOnly(e.readInt());
+                  }
+            else if (tag == "lineWidth") {
+                  ottava->setLineWidth(e.readDouble() * ottava->spatium());
+                  }
+            else if (tag == "lineStyle") {
+                  ottava->setLineStyle(Qt::PenStyle(e.readInt()));
+                  }
+            else if (tag == "beginSymbol") {                      // obsolete
+                  }
+            else if (tag == "continueSymbol") {                   // obsolete
+                  }
+            else if (!readTextLineProperties114(e, ottava))
+                  e.unknown();
+            }
       }
 
 //---------------------------------------------------------
@@ -1366,21 +1458,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   segment = chord->segment();
                   if (chord->noteType() != NoteType::NORMAL) {
                         graceNotes.push_back(chord);
-                        if (chord->tremolo() && chord->tremolo()->tremoloType() < TremoloType::R8) {
-                              // old style tremolo found
-                              Tremolo* tremolo = chord->tremolo();
-                              TremoloType st;
-                              switch (tremolo->tremoloType()) {
-                                    default:
-                                    case TremoloType::OLD_R8:  st = TremoloType::R8;  break;
-                                    case TremoloType::OLD_R16: st = TremoloType::R16; break;
-                                    case TremoloType::OLD_R32: st = TremoloType::R32; break;
-                                    case TremoloType::OLD_C8:  st = TremoloType::C8;  break;
-                                    case TremoloType::OLD_C16: st = TremoloType::C16; break;
-                                    case TremoloType::OLD_C32: st = TremoloType::C32; break;
-                                    }
-                              tremolo->setTremoloType(st);
-                              }
                         }
                   else {
                         segment->add(chord);
@@ -1394,21 +1471,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         graceNotes.clear();
                         int crticks = chord->actualTicks();
 
-                        if (chord->tremolo() && chord->tremolo()->tremoloType() < TremoloType::R8) {
-                              // old style tremolo found
-
+                        if (chord->tremolo()) {
                               Tremolo* tremolo = chord->tremolo();
-                              TremoloType st;
-                              switch (tremolo->tremoloType()) {
-                                    default:
-                                    case TremoloType::OLD_R8:  st = TremoloType::R8;  break;
-                                    case TremoloType::OLD_R16: st = TremoloType::R16; break;
-                                    case TremoloType::OLD_R32: st = TremoloType::R32; break;
-                                    case TremoloType::OLD_C8:  st = TremoloType::C8;  break;
-                                    case TremoloType::OLD_C16: st = TremoloType::C16; break;
-                                    case TremoloType::OLD_C32: st = TremoloType::C32; break;
-                                    }
-                              tremolo->setTremoloType(st);
                               if (tremolo->twoNotes()) {
                                     int track = chord->track();
                                     Segment* ss = 0;
@@ -1764,22 +1828,51 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
                   }
-            else if (tag == "Marker" || tag == "Jump") {
-                  Element* el = Element::name2Element(tag, m->score());
-                  el->setTrack(e.track());
-                  el->read300(e);
-
-                  if (el->isMarker()) {
-                        Marker* m = toMarker(el);
-                        if (m->markerType() == Marker::Type::SEGNO || m->markerType() == Marker::Type::CODA  ||
-                            m->markerType() == Marker::Type::VARCODA || m->markerType() == Marker::Type::CODETTA) {
-                              // force the marker type for correct display
-                              m->setXmlText("");
-                              m->setMarkerType(m->markerType());
-                              m->initSubStyle(SubStyleId::REPEAT_LEFT);
-                              }
+            else if (tag == "Jump") {
+                  Jump* j = new Jump(m->score());
+                  j->setTrack(e.track());
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "jumpTo")
+                              j->setJumpTo(e.readElementText());
+                        else if (tag == "playUntil")
+                              j->setPlayUntil(e.readElementText());
+                        else if (tag == "continueAt")
+                              j->setContinueAt(e.readElementText());
+                        else if (tag == "playRepeats")
+                              j->setPlayRepeats(e.readBool());
+                        else if (tag == "subtype")
+                              e.readInt();
+                        else if (!j->TextBase::readProperties300(e))
+                              e.unknown();
                         }
-                  m->add(el);
+                  m->add(j);
+                  }
+            else if (tag == "Marker") {
+                  Marker* a = new Marker(m->score());
+                  a->setTrack(e.track());
+
+                  Marker::Type mt = Marker::Type::SEGNO;
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "subtype") {
+                              QString s(e.readElementText());
+                              a->setLabel(s);
+                              mt = a->markerType(s);
+                              }
+                        else if (!a->TextBase::readProperties300(e))
+                              e.unknown();
+                        }
+                  a->setMarkerType(mt);
+
+                  if (a->markerType() == Marker::Type::SEGNO || a->markerType() == Marker::Type::CODA  ||
+                      a->markerType() == Marker::Type::VARCODA || a->markerType() == Marker::Type::CODETTA) {
+                        // force the marker type for correct display
+                        a->setXmlText("");
+                        a->setMarkerType(a->markerType());
+//TODO::ws                        a->initElementStyle(Tid::REPEAT_LEFT);
+                        }
+                  m->add(a);
                   }
             else if (tag == "Image") {
                   if (MScore::noImages)
@@ -1872,7 +1965,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         }
                   }
             else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(SubStyleId::MEASURE_NUMBER, m->score());
+                  Text* noText = new Text(m->score(), Tid::MEASURE_NUMBER);
                   noText->read300(e);
                   noText->setFlag(ElementFlag::ON_STAFF, true);
                   // noText->setFlag(ElementFlag::MOVABLE, false); ??
@@ -2298,7 +2391,7 @@ static void readPart(Part* part, XmlReader& e)
                   }
             else if (tag == "shortName") {
                   Text* t = new Text(_score);
-                  t->read300(e);
+                  readText114(e, t, t);
                   part->instrument()->setShortName(t->xmlText());
                   delete t;
                   }
@@ -2450,19 +2543,18 @@ static void readStyle(MStyle* style, XmlReader& e)
                   e.skipCurrentElement();
             else if (tag == "systemDistance")  // obsolete
                   style->set(Sid::minSystemDistance, QVariant(e.readDouble()));
-            else {
-                  if (tag == "stemDir") {
-                        int voice = e.attribute("voice", "1").toInt() - 1;
-                        switch(voice) {
-                              case 0: tag = "StemDir1"; break;
-                              case 1: tag = "StemDir2"; break;
-                              case 2: tag = "StemDir3"; break;
-                              case 3: tag = "StemDir4"; break;
-                              }
+            else if (tag == "stemDir") {
+                  int voice = e.attribute("voice", "1").toInt() - 1;
+                  switch(voice) {
+                        case 0: tag = "StemDir1"; break;
+                        case 1: tag = "StemDir2"; break;
+                        case 2: tag = "StemDir3"; break;
+                        case 3: tag = "StemDir4"; break;
                         }
-                  // for compatibility:
-                  if (tag == "oddHeader" || tag == "evenHeader" || tag == "oddFooter" || tag == "evenFooter")
-                        tag += "C";
+                  }
+            // for compatibility:
+            else if (tag == "oddHeader" || tag == "evenHeader" || tag == "oddFooter" || tag == "evenFooter")
+                  tag += "C";
 #if 0 // TODO-ws
                   int idx2;
                   for (idx2 = 0; idx2 < int(ArticulationType::ARTICULATIONS); ++idx2) {
@@ -2489,9 +2581,12 @@ static void readStyle(MStyle* style, XmlReader& e)
                   if (idx2 < int(ArticulationType::ARTICULATIONS))
                         continue;
 #endif
-                  QString val(e.readElementText());
-//TODO                  style->convertToUnit(tag, val);
+            else {
+                  if (!style->readProperties(e)) {
+                        e.skipCurrentElement();
+                        }
                   }
+//TODO                  style->convertToUnit(tag, val);
             }
 
       // if we just specified a new chord description file
@@ -2547,10 +2642,10 @@ static void readStyle(MStyle* style, XmlReader& e)
 Score::FileError MasterScore::read114(XmlReader& e)
       {
       qDebug("==");
-#if 0
+
       for (unsigned int i = 0; i < sizeof(style114)/sizeof(*style114); ++i)
             style().set(style114[i].idx, style114[i].val);
-
+#if 0
       // old text style defaults
       TextStyle ts = style().textStyle("Chord Symbol");
       ts.setYoff(-4.0);
@@ -2703,6 +2798,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   Spanner* s = toSpanner(Element::name2Element(tag, this));
                   if (tag == "Volta")
                         readVolta114(e, toVolta(s));
+                  else if (tag == "Ottava")
+                        readOttava114(e, toOttava(s));
                   else
                         s->read300(e);
                   if (s->track() == -1)

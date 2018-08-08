@@ -215,7 +215,6 @@ Chord::Chord(Score* s)
       _playEventType    = PlayEventType::Auto;
       _crossMeasure     = CrossMeasure::UNKNOWN;
       _graceIndex   = 0;
-      setFlags(ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
       }
 
 Chord::Chord(const Chord& c, bool link)
@@ -444,10 +443,7 @@ void Chord::add(Element* e)
                         }
                   if (!found)
                         _notes.push_back(note);
-                  if (note->tieFor()) {
-                        if (note->tieFor()->endNote())
-                              note->tieFor()->endNote()->setTieBack(note->tieFor());
-                        }
+                  note->connectTiedNotes();
                   if (voice() && measure() && note->visible())
                         measure()->setHasVoices(staffIdx(), true);
                   }
@@ -497,7 +493,7 @@ void Chord::add(Element* e)
                   Chord* gc = toChord(e);
                   Q_ASSERT(gc->noteType() != NoteType::NORMAL);
                   int idx = gc->graceIndex();
-                  gc->setFlags(ElementFlag::MOVABLE);
+                  gc->setFlag(ElementFlag::MOVABLE, true);
                   _graceNotes.insert(_graceNotes.begin() + idx, gc);
                   }
                   break;
@@ -529,10 +525,7 @@ void Chord::remove(Element* e)
                   auto i = std::find(_notes.begin(), _notes.end(), note);
                   if (i != _notes.end()) {
                         _notes.erase(i);
-                        if (note->tieFor()) {
-                              if (note->tieFor()->endNote())
-                                    note->tieFor()->endNote()->setTieBack(0);
-                              }
+                        note->disconnectTiedNotes();
                         for (Spanner* s : note->spannerBack())
                               note->removeSpannerBack(s);
                         for (Spanner* s : note->spannerFor())
@@ -653,7 +646,6 @@ void Chord::addLedgerLines()
       if (downLine() <= lineBelow + 1 && upLine() >= -1)
             return;
 
-      LedgerLineData lld;
       // the extra length of a ledger line with respect to notehead (half of it on each side)
       qreal extraLen = score()->styleP(Sid::ledgerLineLength) * _mag * 0.5;
       qreal hw = _notes[0]->headWidth();
@@ -728,11 +720,12 @@ void Chord::addLedgerLines()
                                     d.maxX = maxX;
                         }
 
+                  LedgerLineData lld;
                   // check if note vert. pos. is outside current range
                   // and, if so, add data for new line(s)
                   if (l < minLine) {
-                        for (int i = l; i < minLine; i += 2) {
-                              lld.line = i;
+                        for (int i1 = l; i1 < minLine; i1 += 2) {
+                              lld.line = i1;
                               if (lineDistance != 1.0)
                                     lld.line *= lineDistance;
                               lld.minX = minX;
@@ -744,8 +737,8 @@ void Chord::addLedgerLines()
                         minLine = l;
                         }
                   if (l > maxLine) {
-                        for (int i = maxLine+2; i <= l; i += 2) {
-                              lld.line = i;
+                        for (int i1 = maxLine+2; i1 <= l; i1 += 2) {
+                              lld.line = i1;
                               if (lineDistance != 1.0)
                                     lld.line *= lineDistance;
                               lld.minX = minX;
@@ -870,8 +863,8 @@ void Chord::computeUp()
                         int up = 0;
                         int n = _notes.size();
                         for (int i = 0; i < n; ++i) {
-                              const Note* n = _notes.at(i);
-                              int l = tabStaff ? n->string() * 2 : n->line();
+                              const Note* currentNote = _notes.at(i);
+                              int l = tabStaff ? currentNote->string() * 2 : currentNote->line();
                               if (l <= dnMaxLine)
                                     --up;
                               else
@@ -895,11 +888,11 @@ Note* Chord::selectedNote() const
       Note* note = 0;
       int n = _notes.size();
       for (int i = 0; i < n; ++i) {
-            Note* n = _notes.at(i);
-            if (n->selected()) {
+            Note* currentNote = _notes.at(i);
+            if (currentNote->selected()) {
                   if (note)
                         return 0;
-                  note = n;
+                  note = currentNote;
                   }
             }
       return note;
@@ -1302,7 +1295,7 @@ qreal Chord::defaultStemLength()
       // adjust stem len for tremolo
       if (_tremolo && !_tremolo->twoNotes()) {
             // hook up odd lines
-            static const int tab[2][2][2][4] = {
+            static const int tab1[2][2][2][4] = {
                   { { { 0, 0, 0,  1 },  // stem - down - even - lines
                       { 0, 0, 0,  2 }   // stem - down - odd - lines
                       },
@@ -1319,7 +1312,7 @@ qreal Chord::defaultStemLength()
                     }
                   };
             int odd = (up() ? upLine() : downLine()) & 1;
-            int n = tab[_hook ? 1 : 0][up() ? 1 : 0][odd][_tremolo->lines()-1];
+            int n = tab1[_hook ? 1 : 0][up() ? 1 : 0][odd][_tremolo->lines()-1];
             stemLen += n * .5;
             }
       return stemLen * _spatium * lineDistance;
@@ -1411,7 +1404,7 @@ void Chord::layoutStem()
                         // process stem:
                         _stem->setLen(tab->chordStemLength(this) * spatium());
                         // process hook
-                        int   hookIdx = durationType().hooks();
+                        hookIdx = durationType().hooks();
                         if (!up())
                               hookIdx = -hookIdx;
                         if (hookIdx && _hook) {
@@ -1769,6 +1762,10 @@ void Chord::layoutPitched()
                   }
             computeUp();
             layoutStem1();
+            if (_stem) { //false when dragging notes from drum palette
+                  qreal stemWidth5 = _stem->lineWidth() * .5;
+                  _stem->rxpos()   = up() ? (upNote()->headBodyWidth() - stemWidth5) : stemWidth5;
+                  }
             addLedgerLines();
             return;
             }

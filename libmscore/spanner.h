@@ -56,7 +56,7 @@ class SpannerSegment : public Element {
       QPointF _userOff2;
 
    public:
-      SpannerSegment(Score* s);
+      SpannerSegment(Score* s, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
       SpannerSegment(const SpannerSegment&);
       virtual SpannerSegment* clone() const = 0;
 
@@ -92,8 +92,10 @@ class SpannerSegment : public Element {
       virtual QVariant getProperty(Pid id) const override;
       virtual bool setProperty(Pid id, const QVariant& v) override;
       virtual QVariant propertyDefault(Pid id) const override;
+      virtual Element* propertyDelegate(Pid) override;
+
       virtual Sid getPropertyStyle(Pid id) const override;
-      virtual PropertyFlags& propertyFlags(Pid id) override;
+      virtual PropertyFlags propertyFlags(Pid id) const override;
       virtual void resetProperty(Pid id) override;
       virtual void styleChanged() override;
       void reset() override;

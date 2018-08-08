@@ -165,7 +165,6 @@
           <durationType>half</durationType>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
           <span>1</span>
           </BarLine>
         </Measure>

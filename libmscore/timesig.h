@@ -57,9 +57,6 @@ class TimeSig final : public Element {
       TimeSigType _timeSigType;
       bool _showCourtesySig;
       bool _largeParentheses;
-//      PropertyFlags scaleStyle;
-
-      void layout1();
 
    public:
       TimeSig(Score* = 0);

@@ -542,6 +542,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
+          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         <move>0/1</move>
@@ -859,6 +860,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
+          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         <move>0/1</move>

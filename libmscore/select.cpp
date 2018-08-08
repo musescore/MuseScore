@@ -474,12 +474,10 @@ void Selection::updateSelectedElements()
                   for (Element* e : s->annotations()) {
                         if (e->track() != st)
                               continue;
-                        // if (e->systemFlag()) //exclude system text  // ws: why?
-                        //      continue;
                         appendFiltered(e);
                         }
                   Element* e = s->element(st);
-                  if (!e || e->generated() || e->type() == ElementType::TIMESIG || e->type() == ElementType::KEYSIG)
+                  if (!e || e->generated() || e->isTimeSig() || e->isKeySig())
                         continue;
                   if (e->isChordRest()) {
                         ChordRest* cr = toChordRest(e);

@@ -79,6 +79,7 @@ class HPiano : public QGraphicsView {
       void setPressedPitches(QSet<int> pitches);
       void pressPitch(int pitch);
       void releasePitch(int pitch);
+      void clearSelection();
       void changeSelection(Selection selection);
       void updateAllKeys();
       virtual QSize sizeHint() const;
@@ -109,6 +110,7 @@ class PianoTools : public QDockWidget {
       void pressPitch(int pitch)    { _piano->pressPitch(pitch);   }
       void releasePitch(int pitch)  { _piano->releasePitch(pitch); }
       void heartBeat(QList<const Note*> notes);
+      void clearSelection();
       void changeSelection(Selection selection);
       };
 

@@ -32,19 +32,19 @@ for child in root:
         for instrument in instruments:
             longName = instrument.find("longName")
             if longName is not None:
-                print "longName " + longName.text
+                print "longName " + longName.text.encode('utf8')
                 addMessage(f, longName.text)
                 previousLongName = longName.text
 
             shortName = instrument.find("shortName")
             if shortName is not None:
-                print "shortName " + shortName.text
+                print "shortName " + shortName.text.encode('utf8')
                 addMessage(f, shortName.text, previousLongName)
                 previousLongName = ""
 
             trackName = instrument.find("trackName")
             if trackName is not None:
-                print "trackName " + trackName.text
+                print "trackName " + trackName.text.encode('utf8')
                 addMessage(f, trackName.text)
                 previousLongName = ""
 

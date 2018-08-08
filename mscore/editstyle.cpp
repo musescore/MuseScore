@@ -107,24 +107,29 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::minSystemDistance,       false, minSystemDistance,       resetMinSystemDistance },
       { Sid::maxSystemDistance,       false, maxSystemDistance,       resetMaxSystemDistance },
 
-      { Sid::lyricsPlacement,         false, lyricsPlacement,         resetLyricsPlacement },
-      { Sid::lyricsPosAbove,          false, lyricsPosAbove,          resetLyricsPosAbove },
-      { Sid::lyricsPosBelow,          false, lyricsPosBelow,          resetLyricsPosBelow },
-      { Sid::lyricsMinTopDistance,    false, lyricsMinTopDistance,    resetLyricsMinTopDistance },
+      { Sid::lyricsPlacement,         false, lyricsPlacement,         resetLyricsPlacement         },
+      { Sid::lyricsPosAbove,          false, lyricsPosAbove,          resetLyricsPosAbove          },
+      { Sid::lyricsPosBelow,          false, lyricsPosBelow,          resetLyricsPosBelow          },
+      { Sid::lyricsMinTopDistance,    false, lyricsMinTopDistance,    resetLyricsMinTopDistance    },
       { Sid::lyricsMinBottomDistance, false, lyricsMinBottomDistance, resetLyricsMinBottomDistance },
-      { Sid::lyricsLineHeight,        true,  lyricsLineHeight,        resetLyricsLineHeight },
-      { Sid::lyricsDashMinLength,     false, lyricsDashMinLength,     resetLyricsDashMinLength },
-      { Sid::lyricsDashMaxLength,     false, lyricsDashMaxLength,     resetLyricsDashMaxLength },
-      { Sid::lyricsDashMaxDistance,   false, lyricsDashMaxDistance,   resetLyricsDashMaxDistance },
-      { Sid::lyricsDashForce,         false, lyricsDashForce,         resetLyricsDashForce },
-      { Sid::lyricsAlignVerseNumber,  false, lyricsAlignVerseNumber,  resetLyricsAlignVerseNumber },
-      { Sid::lyricsLineThickness,     false, lyricsLineThickness,     resetLyricsLineThickness },
+      { Sid::lyricsLineHeight,        true,  lyricsLineHeight,        resetLyricsLineHeight        },
+      { Sid::lyricsDashMinLength,     false, lyricsDashMinLength,     resetLyricsDashMinLength     },
+      { Sid::lyricsDashMaxLength,     false, lyricsDashMaxLength,     resetLyricsDashMaxLength     },
+      { Sid::lyricsDashMaxDistance,   false, lyricsDashMaxDistance,   resetLyricsDashMaxDistance   },
+      { Sid::lyricsDashForce,         false, lyricsDashForce,         resetLyricsDashForce         },
+      { Sid::lyricsAlignVerseNumber,  false, lyricsAlignVerseNumber,  resetLyricsAlignVerseNumber  },
+      { Sid::lyricsLineThickness,     false, lyricsLineThickness,     resetLyricsLineThickness     },
+      { Sid::lyricsMelismaPad,        false, lyricsMelismaPad,        resetLyricsMelismaPad        },
+      { Sid::lyricsDashPad,           false, lyricsDashPad,           resetLyricsDashPad           },
+      { Sid::lyricsDashLineThickness, false, lyricsDashLineThickness, resetLyricsDashLineThickness },
+      { Sid::lyricsDashYposRatio,     false, lyricsDashYposRatio,     resetLyricsDashYposRatio     },
 
       { Sid::lyricsOddFontFace,       false, lyricsOddFontFace,       resetLyricsOddFontFace       },
       { Sid::lyricsOddFontSize,       false, lyricsOddFontSize,       resetLyricsOddFontSize       },
       { Sid::lyricsOddFontBold,       false, lyricsOddFontBold,       resetLyricsOddFontBold       },
       { Sid::lyricsOddFontItalic,     false, lyricsOddFontItalic,     resetLyricsOddFontItalic     },
       { Sid::lyricsOddFontUnderline,  false, lyricsOddFontUnderline,  resetLyricsOddFontUnderline  },
+
       { Sid::lyricsEvenFontFace,      false, lyricsEvenFontFace,      resetLyricsEvenFontFace      },
       { Sid::lyricsEvenFontSize,      false, lyricsEvenFontSize,      resetLyricsEvenFontSize      },
       { Sid::lyricsEvenFontBold,      false, lyricsEvenFontBold,      resetLyricsEvenFontBold      },
@@ -136,12 +141,12 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::minMeasureWidth,         false, minMeasureWidth_2,       resetMinMeasureWidth },
       { Sid::measureSpacing,          false, measureSpacing,          resetMeasureSpacing },
 
-      { Sid::barWidth,                false, barWidth,                0 },
-      { Sid::endBarWidth,             false, endBarWidth,             0 },
-      { Sid::endBarDistance,          false, endBarDistance,          0 },
-      { Sid::doubleBarWidth,          false, doubleBarWidth,          0 },
-      { Sid::doubleBarDistance,       false, doubleBarDistance,       0 },
-      { Sid::repeatBarlineDotSeparation, false, repeatBarlineDotSeparation, 0 },
+      { Sid::barWidth,                false, barWidth,                resetBarWidth },
+      { Sid::endBarWidth,             false, endBarWidth,             resetEndBarWidth },
+      { Sid::endBarDistance,          false, endBarDistance,          resetEndBarDistance },
+      { Sid::doubleBarWidth,          false, doubleBarWidth,          resetDoubleBarWidth },
+      { Sid::doubleBarDistance,       false, doubleBarDistance,       resetDoubleBarDistance },
+      { Sid::repeatBarlineDotSeparation, false, repeatBarlineDotSeparation, resetRepeatBarlineDotSeparation },
 
       { Sid::barGraceDistance,        false, barGraceDistance,        resetBarGraceDistance },
       { Sid::useStandardNoteNames,    false, useStandardNoteNames,    0 },
@@ -229,7 +234,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       { Sid::ottavaPosAbove,          false, ottavaPosAbove,          resetOttavaPosAbove  },
       { Sid::ottavaPosBelow,          false, ottavaPosBelow,          resetOttavaPosBelow  },
-      { Sid::ottavaHook,              false, ottavaHook,              resetOttavaHook      },
+      { Sid::ottavaHookAbove,         false, ottavaHookAbove,         resetOttavaHookAbove },
+      { Sid::ottavaHookBelow,         false, ottavaHookBelow,         resetOttavaHookBelow },
       { Sid::ottavaLineWidth,         false, ottavaLineWidth,         resetOttavaLineWidth },
 
       { Sid::pedalPlacement,          false, pedalLinePlacement,      resetPedalLinePlacement  },
@@ -245,7 +251,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::vibratoPosAbove,         false, vibratoLinePosAbove,       resetVibratoLinePosAbove   },
       { Sid::vibratoPosBelow,         false, vibratoLinePosBelow,       resetVibratoLinePosBelow   },
 
-      { Sid::harmonyY,                false, harmonyY,                0 },
+      { Sid::chordSymbolAPosAbove,    false, chordSymbolPosAboveA,    resetChordSymbolPosAboveA },
+      { Sid::chordSymbolBPosAbove,    false, chordSymbolPosAboveB,    resetChordSymbolPosAboveB },
       { Sid::harmonyFretDist,         false, harmonyFretDist,         0 },
       { Sid::minHarmonyDistance,      false, minHarmonyDistance,      0 },
       { Sid::maxHarmonyBarDistance,   false, maxHarmonyBarDistance,   0 },
@@ -257,15 +264,21 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::tupletNoteLeftDistance,  false, tupletNoteLeftDistance,  resetTupletNoteLeftDistance   },
       { Sid::tupletNoteRightDistance, false, tupletNoteRightDistance, resetTupletNoteRightDistance  },
       { Sid::tupletBracketWidth,      false, tupletBracketWidth,      resetTupletBracketWidth       },
+      { Sid::tupletBracketHookHeight, false, tupletBracketHookHeight, resetTupletBracketHookHeight  },
       { Sid::tupletDirection,         false, tupletDirection,         resetTupletDirection          },
       { Sid::tupletNumberType,        false, tupletNumberType,        resetTupletNumberType         },
       { Sid::tupletBracketType,       false, tupletBracketType,       resetTupletBracketType        },
       { Sid::tupletMaxSlope,          false, tupletMaxSlope,          resetTupletMaxSlope           },
-      { Sid::tupletOufOfStaff,        false, tupletOutOfStaff,        0 },
+      { Sid::tupletOufOfStaff,        false, tupletOutOfStaff,        0                             },
+      { Sid::tupletFontFace,          false, tupletFontFace,          resetTupletFontFace           },
+      { Sid::tupletFontSize,          false, tupletFontSize,          resetTupletFontSize           },
+      { Sid::tupletFontBold,          false, tupletFontBold,          resetTupletFontBold           },
+      { Sid::tupletFontItalic,        false, tupletFontItalic,        resetTupletFontItalic         },
+      { Sid::tupletFontUnderline,     false, tupletFontUnderline,     resetTupletFontUnderline      },
 
-      { Sid::repeatBarTips,           false, showRepeatBarTips,            0 },
-      { Sid::startBarlineSingle,      false, showStartBarlineSingle,       0 },
-      { Sid::startBarlineMultiple,    false, showStartBarlineMultiple,     0 },
+      { Sid::repeatBarTips,           false, showRepeatBarTips,            resetShowRepeatBarTips },
+      { Sid::startBarlineSingle,      false, showStartBarlineSingle,       resetShowStartBarlineSingle },
+      { Sid::startBarlineMultiple,    false, showStartBarlineMultiple,     resetShowStartBarlineMultiple },
       { Sid::dividerLeftSym,          false, dividerLeftSym,               0 },
       { Sid::dividerRightSym,         false, dividerRightSym,              0 },
 
@@ -348,7 +361,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::fretY,                   false, fretY,                        0 },
       { Sid::barreLineWidth,          false, barreLineWidth,               0 },
       { Sid::fretMag,                 false, fretMag,                      0 },
-      { Sid::scaleBarlines,           false, scaleBarlines,                0 },
+      { Sid::scaleBarlines,           false, scaleBarlines,                resetScaleBarlines},
       { Sid::crossMeasureValues,      false, crossMeasureValues,           0 },
 
       { Sid::MusicalSymbolFont,       false, musicalSymbolFont,            0 },
@@ -396,7 +409,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       for (QComboBox* cb : std::vector<QComboBox*> {
             lyricsPlacement, textLinePlacement, hairpinPlacement, pedalLinePlacement,
-            trillLinePlacement, vibratoLinePlacement, dynamicsPlacement, tempoTextPlacement, rehearsalMarkPlacement
+            trillLinePlacement, vibratoLinePlacement, dynamicsPlacement,
+            tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement
             }) {
             cb->clear();
             cb->addItem(tr("Above"), int(Placement::ABOVE));
@@ -1041,8 +1055,13 @@ const StyleWidget& EditStyle::styleWidget(Sid idx) const
             if (sw.idx == idx)
                   return sw;
             }
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       __builtin_unreachable();
-      }
+#else
+      // The MSVC __assume() optimizer hint is similar, though not identical, to __builtin_unreachable()
+      __assume(0);
+#endif
+   }
 
 //---------------------------------------------------------
 //   valueChanged

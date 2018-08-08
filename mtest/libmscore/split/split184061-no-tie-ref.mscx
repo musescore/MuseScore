@@ -185,7 +185,6 @@
             </Note>
           </Chord>
         <BarLine>
-          <subtype>normal</subtype>
           </BarLine>
         </Measure>
       </Staff>

@@ -126,6 +126,10 @@ void ScoreView::startEdit()
 
       editData.element->startEdit(editData);
       updateGrips();
+
+      QGuiApplication::inputMethod()->reset();
+      QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
+      setAttribute(Qt::WA_InputMethodEnabled, editData.element->isTextBase());
       _score->update();
       setCursor(QCursor(Qt::ArrowCursor));
       }
@@ -136,6 +140,7 @@ void ScoreView::startEdit()
 
 void ScoreView::endEdit()
       {
+      setAttribute(Qt::WA_InputMethodEnabled, false);
       setDropTarget(0);
       if (!editData.element)
             return;
@@ -144,39 +149,17 @@ void ScoreView::endEdit()
             score()->addRefresh(editData.grip[i]);
       editData.element->endEdit(editData);
 
-      _score->addRefresh(editData.element->canvasBoundingRect());
+      if (editData.element) {
+            _score->addRefresh(editData.element->canvasBoundingRect());
+            ElementType tp = editData.element->type();
+            if (tp == ElementType::LYRICS)
+                  lyricsEndEdit();
+            else if (tp == ElementType::HARMONY)
+                  harmonyEndEdit();
+            else if (tp == ElementType::FIGURED_BASS)
+                  figuredBassEndEdit();
+            }
 
-      ElementType tp = editData.element->type();
-      if (tp == ElementType::LYRICS)
-            lyricsEndEdit();
-      else if (tp == ElementType::HARMONY)
-            harmonyEndEdit();
-      else if (tp == ElementType::FIGURED_BASS)
-            figuredBassEndEdit();
-      else if (editData.element->isText()) {
-            Text* text = toText(editData.element);
-            if (text->links()) {
-                  for (ScoreElement* se : *text->links()) {
-                        Text* lt = toText(se);
-                        if (lt != text) {
-                              lt->setXmlText(text->xmlText());
-                              lt->layout();
-                              lt->triggerLayout();
-                              }
-                        }
-                  }
-            // remove text if empty
-            // dont do this for TBOX
-            if (text->empty() && text->parent() && !text->parent()->isTBox())
-                  _score->undoRemoveElement(text);
-            }
-#if 0
-      if (dragElement && (dragElement != editData.element)) {
-            curElement = dragElement;
-            _score->select(curElement);
-            _score->update();
-            }
-#endif
       editData.clearData();
       mscore->updateInspector();
       }
@@ -201,10 +184,12 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
       editData.delta = editData.pos - editData.lastPos;
       score()->addRefresh(editData.element->canvasBoundingRect());
 
-      if (editData.element->isText()) {
+      if (editData.element->isTextBase()) {
+            toTextBase(editData.element)->dragTo(editData);
+#if 0
             if (editData.element->shape().translated(editData.element->pagePos()).contains(editData.pos)) {
                   qDebug("in");
-                  toText(editData.element)->dragTo(editData);
+                  toTextBase(editData.element)->dragTo(editData);
                   }
             else {
                   qDebug("out");
@@ -213,6 +198,7 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
                   editData.element->editDrag(editData);
                   updateGrips();
                   }
+#endif
             }
       else {
             editData.hRaster = false;

@@ -94,6 +94,27 @@ Fraction DurationElement::actualFraction() const
       }
 
 //---------------------------------------------------------
+//   ftick
+//    fractional tick
+//---------------------------------------------------------
+
+Fraction DurationElement::ftick() const
+      {
+      Tuplet* t = tuplet();
+      if (t) {
+            Fraction f = t->ftick();
+            for (DurationElement* de : t->elements()) {
+                  if (de == this)
+                        break;
+                  f += de->actualFraction();
+                  }
+            return f.reduced();
+            }
+      else
+            return Fraction::fromTicks(tick());
+      }
+
+//---------------------------------------------------------
 //   readAddTuplet
 //---------------------------------------------------------
 

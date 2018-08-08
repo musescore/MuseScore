@@ -153,7 +153,7 @@ QString Element::subtypeName() const
 Element::Element(Score* s, ElementFlags f)
    : ScoreElement(s)
       {
-      _flags         = f | ElementFlag::ENABLED | ElementFlag::EMPTY | ElementFlag::AUTOPLACE | ElementFlag::SELECTABLE | ElementFlag::VISIBLE;
+      _flags         = f;
       _placement     = Placement::BELOW;
       _track         = -1;
       _color         = MScore::defaultColor;
@@ -172,7 +172,6 @@ Element::Element(const Element& e)
       _mag        = e._mag;
       _pos        = e._pos;
       _userOff    = e._userOff;
-//      _readPos    = e._readPos;
       _bbox       = e._bbox;
       _tag        = e._tag;
       _z          = e._z;
@@ -287,10 +286,15 @@ QColor Element::curColor() const
 
 QColor Element::curColor(bool isVisible) const
       {
+      return curColor(isVisible, color());
+      }
+
+QColor Element::curColor(bool isVisible, QColor normalColor) const
+      {
       // the default element color is always interpreted as black in
       // printing
       if (score() && score()->printing())
-            return (color() == MScore::defaultColor) ? Qt::black : color();
+            return (normalColor == MScore::defaultColor) ? Qt::black : normalColor;
 
       if (flag(ElementFlag::DROP_TARGET))
             return MScore::dropColor;
@@ -311,13 +315,13 @@ QColor Element::curColor(bool isVisible) const
                   int red = originalColor.red();
                   int green = originalColor.green();
                   int blue = originalColor.blue();
-                  float tint = .6;  // Between 0 and 1. Higher means lighter, lower means darker
+                  float tint = .6f;  // Between 0 and 1. Higher means lighter, lower means darker
                   return QColor(red + tint * (255 - red), green + tint * (255 - green), blue + tint * (255 - blue));
                   }
             }
       if (!isVisible)
             return Qt::gray;
-      return color();
+      return normalColor;
       }
 
 //---------------------------------------------------------
@@ -639,20 +643,8 @@ bool Element::readProperties(XmlReader& e)
             if (val >= 0)
                   e.initTick(score()->fileDivision(val));
             }
-#if 0
-      else if (tag == "userOff") {
-            _userOff = e.readPoint();
-            setAutoplace(false);
-            }
-#endif
-      else if (tag == "offset") {
+      else if (tag == "offset" || tag == "pos") {
             setUserOff(e.readPoint() * score()->spatium());
-            setAutoplace(false);
-            }
-      else if (tag == "pos") {
-            QPointF pt = e.readPoint();
-//            _readPos = pt * score()->spatium();
-            _userOff = pt * score()->spatium();
             setAutoplace(false);
             }
       else if (tag == "voice")
@@ -1149,12 +1141,12 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
                   setSystemFlag(v.toBool());
                   break;
             default:
-                  qFatal("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
-//                  qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
+//                  qFatal("<%s> unknown <%s>(%d), data <%s>", name(), propertyQmlName(propertyId), int(propertyId), qPrintable(v.toString()));
+                  qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyQmlName(propertyId), int(propertyId), qPrintable(v.toString()));
                   return false;
             }
       triggerLayout();
-      setGenerated(false);
+//      setGenerated(false);
       return true;
       }
 
@@ -1162,9 +1154,9 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Element::propertyDefault(Pid id) const
+QVariant Element::propertyDefault(Pid pid) const
       {
-      switch(id) {
+      switch (pid) {
             case Pid::GENERATED:
                   return false;
             case Pid::VISIBLE:
@@ -1182,7 +1174,7 @@ QVariant Element::propertyDefault(Pid id) const
             case Pid::Z:
                   return int(type()) * 100;
             default:
-                  return ScoreElement::propertyDefault(id);
+                  return ScoreElement::propertyDefault(pid);
             }
       }
 
@@ -1671,8 +1663,8 @@ bool Element::prevGrip(EditData& ed) const
 
 bool Element::isUserModified() const
       {
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            Pid pid               = spp->pid;
+      for (const StyledProperty& spp : *styledProperties()) {
+            Pid pid               = spp.pid;
             QVariant val          = getProperty(pid);
             QVariant defaultValue = propertyDefault(pid);
 
@@ -1756,6 +1748,16 @@ Fraction Element::afrac() const
             e = e->parent();
             }
       return -1;
+      }
+
+//---------------------------------------------------------
+//   ftick
+//    fractional tick
+//---------------------------------------------------------
+
+Fraction Element::ftick() const
+      {
+      return Fraction::fromTicks(tick());
       }
 
 //---------------------------------------------------------
@@ -1878,7 +1880,7 @@ QRectF Element::drag(EditData& ed)
             }
 
       setUserOff(QPointF(x, y));
-      setGenerated(false);
+//      setGenerated(false);
 
       if (isTextBase()) {         // TODO: check for other types
             //
@@ -1994,8 +1996,10 @@ void Element::endEditDrag(EditData& ed)
                   }
             eed->propertyData.clear();
             }
-      if (changed)
+      if (changed) {
             undoChangeProperty(Pid::AUTOPLACE, false);
+            undoChangeProperty(Pid::GENERATED, false);
+            }
       }
 
 //---------------------------------------------------------

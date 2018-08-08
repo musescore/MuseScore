@@ -25,10 +25,9 @@ namespace Ms {
 
 class BSymbol : public Element, public ElementLayout {
       QList<Element*> _leafs;
-      bool _systemFlag;
 
    public:
-      BSymbol(Score* s);
+      BSymbol(Score* s, ElementFlags f = ElementFlag::NOTHING);
       BSymbol(const BSymbol&);
 
       BSymbol &operator=(const BSymbol&) = delete;
@@ -50,8 +49,6 @@ class BSymbol : public Element, public ElementLayout {
       virtual QPointF canvasPos() const override;
       virtual QLineF dragAnchor() const override;
       Segment* segment() const            { return (Segment*)parent(); }
-      bool systemFlag() const             { return _systemFlag; }
-      void setSystemFlag(bool val)        { _systemFlag = val;  }
       };
 
 }     // namespace Ms

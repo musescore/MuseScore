@@ -29,7 +29,6 @@ class Score;
 class Sym;
 class MuseScoreView;
 class Segment;
-class TextStyle;
 class Element;
 class BarLine;
 class Articulation;
@@ -131,6 +130,8 @@ class VibratoSegment;
 class PalmMute;
 class PalmMuteSegment;
 
+class StaffTextBase;
+
 enum class Pid : int;
 enum class PropertyFlags : char;
 enum class Sid : int;
@@ -168,12 +169,13 @@ struct ElementName {
 
 class ScoreElement {
       Score* _score;
-
-      PropertyFlags* _propertyFlagsList { 0 };
-      SubStyleId _subStyleId            { SubStyleId::EMPTY };
+      static ElementStyle const emptyStyle;
 
    protected:
+      const ElementStyle* _elementStyle { &emptyStyle };
+      PropertyFlags* _propertyFlagsList { 0 };
       LinkedElements* _links            { 0 };
+      int getPropertyFlagsIdx(Pid id) const;
 
    public:
       ScoreElement(Score* s) : _score(s)   {}
@@ -194,17 +196,16 @@ class ScoreElement {
       virtual QVariant getProperty(Pid) const = 0;
       virtual bool setProperty(Pid, const QVariant&) = 0;
       virtual QVariant propertyDefault(Pid) const;
-      QVariant styledPropertyDefault(Pid id) const;
       virtual void resetProperty(Pid id);
 
       virtual void reset();                     // reset all properties & position to default
 
-      SubStyleId subStyleId() const                          { return _subStyleId; }
-      void setSubStyleId(SubStyleId);
-      void initSubStyle(SubStyleId);
-      virtual const StyledProperty* styledProperties() const { return subStyle(_subStyleId).data(); }
-      virtual PropertyFlags* propertyFlagsList()             { return _propertyFlagsList; }
-      virtual PropertyFlags& propertyFlags(Pid);
+      virtual void initElementStyle(const ElementStyle*);
+      virtual const ElementStyle* styledProperties() const   { return _elementStyle; }
+
+      virtual PropertyFlags* propertyFlagsList() const   { return _propertyFlagsList; }
+      virtual PropertyFlags propertyFlags(Pid) const;
+      bool isStyled(Pid pid) const;
 
       virtual void setPropertyFlags(Pid, PropertyFlags);
 
@@ -219,7 +220,6 @@ class ScoreElement {
       virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps);
       void undoChangeProperty(Pid id, const QVariant&);
       void undoResetProperty(Pid id);
-
 
       void undoPushProperty(Pid);
       void writeProperty(XmlWriter& xml, Pid id) const;
@@ -392,6 +392,9 @@ class ScoreElement {
          || isSLine()
          ;
          }
+      bool isStaffTextBase() const {
+            return isStaffText() || isSystemText();
+            }
       };
 
 //---------------------------------------------------
@@ -461,6 +464,14 @@ static inline TextLineBase* toTextLineBase(ScoreElement* e) {
 static inline TextBase* toTextBase(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isTextBase());
       return (TextBase*)e;
+      }
+static inline StaffTextBase* toStaffTextBase(ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isStaffTextBase());
+      return (StaffTextBase*)e;
+      }
+static inline const StaffTextBase* toStaffTextBase(const ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isStaffTextBase());
+      return (const StaffTextBase*)e;
       }
 
 #define CONVERT(a)  \

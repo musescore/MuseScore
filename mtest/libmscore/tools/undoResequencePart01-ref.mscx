@@ -263,6 +263,7 @@
             </Note>
           </Chord>
         <BarLine>
+          <subtype>end</subtype>
           <span>1</span>
           <lid>33</lid>
           </BarLine>
@@ -532,6 +533,7 @@
               </Note>
             </Chord>
           <BarLine>
+            <subtype>end</subtype>
             <span>1</span>
             <lid>33</lid>
             </BarLine>

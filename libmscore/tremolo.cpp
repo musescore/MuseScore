@@ -9,6 +9,7 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
 //=============================================================================
+
 #include "tremolo.h"
 #include "score.h"
 #include "style.h"
@@ -17,6 +18,7 @@
 #include "measure.h"
 #include "segment.h"
 #include "stem.h"
+#include "sym.h"
 #include "xml.h"
 
 namespace Ms {
@@ -30,6 +32,7 @@ static const char* tremoloName[] = {
       QT_TRANSLATE_NOOP("Tremolo", "16th through stem"),
       QT_TRANSLATE_NOOP("Tremolo", "32nd through stem"),
       QT_TRANSLATE_NOOP("Tremolo", "64th through stem"),
+      QT_TRANSLATE_NOOP("Tremolo", "Buzz roll"),
       QT_TRANSLATE_NOOP("Tremolo", "Eighth between notes"),
       QT_TRANSLATE_NOOP("Tremolo", "16th between notes"),
       QT_TRANSLATE_NOOP("Tremolo", "32nd between notes"),
@@ -37,12 +40,11 @@ static const char* tremoloName[] = {
       };
 
 Tremolo::Tremolo(Score* score)
-   : Element(score)
+   : Element(score, ElementFlag::MOVABLE)
       {
       setTremoloType(TremoloType::R8);
       _chord1  = 0;
       _chord2  = 0;
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
 Tremolo::Tremolo(const Tremolo& t)
@@ -51,7 +53,6 @@ Tremolo::Tremolo(const Tremolo& t)
       setTremoloType(t.tremoloType());
       _chord1  = t.chord1();
       _chord2  = t.chord2();
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
 //---------------------------------------------------------
@@ -69,9 +70,15 @@ qreal Tremolo::mag() const
 
 void Tremolo::draw(QPainter* painter) const
       {
-      painter->setBrush(QBrush(curColor()));
-      painter->setPen(Qt::NoPen);
-      painter->drawPath(path);
+      if (tremoloType() == TremoloType::BUZZ_ROLL) {
+            painter->setPen(curColor());
+            drawSymbol(SymId::buzzRoll, painter);
+            }
+      else {
+            painter->setBrush(QBrush(curColor()));
+            painter->setPen(Qt::NoPen);
+            painter->drawPath(path);
+            }
       if ((parent() == 0) && !twoNotes()) {
             qreal x = 0.0; // bbox().width() * .25;
             QPen pen(curColor(), point(score()->styleS(Sid::stemWidth)));
@@ -405,6 +412,7 @@ QString Tremolo::type2name(TremoloType t)
             case TremoloType::C16: return QString("c16");
             case TremoloType::C32: return QString("c32");
             case TremoloType::C64: return QString("c64");
+            case TremoloType::BUZZ_ROLL: return QString("buzzroll");
             default:
                   break;
             }
@@ -418,7 +426,7 @@ QString Tremolo::type2name(TremoloType t)
 
 TremoloType Tremolo::name2Type(const QString& s)
       {
-      TremoloType t;
+      TremoloType t = TremoloType::INVALID_TREMOLO;
       if (s == "r8")
             t = TremoloType::R8;
       else if (s == "r16")
@@ -435,8 +443,8 @@ TremoloType Tremolo::name2Type(const QString& s)
             t = TremoloType::C32;
       else if (s == "c64")
             t = TremoloType::C64;
-      else
-            t = TremoloType(s.toInt());    // for compatibility with old tremolo type
+      else if (s == "buzzroll")
+            t = TremoloType::BUZZ_ROLL;
       return t;
       }
 
@@ -462,7 +470,7 @@ Fraction Tremolo::tremoloLen() const
 
 QString Tremolo::subtypeName() const
       {
-      return qApp->translate("Tremolo", tremoloName[subtype() - int(TremoloType::R8)]);
+      return qApp->translate("Tremolo", tremoloName[subtype()]);
       }
 
 //---------------------------------------------------------

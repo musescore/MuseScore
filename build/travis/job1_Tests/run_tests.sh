@@ -32,7 +32,7 @@ rm -f /tmp/$$ # Cleanup
 
 #pwd == build.debug/mtest
 cd ../../vtest
-xvfb-run ./gen
+VTEST_BROWSER=ls xvfb-run ./gen
 cd -
 
 #make reporthtml

@@ -462,7 +462,7 @@
          render   this is a script which contains render commands
                   commands:
                         xxx         draw symbol name xxx
-                        m:x:y       add x:y (point) to current position
+                        m:x:y       add x:y to current position (1/5 spatium units)
                         :push
                         :pop
                         :n          root or base note

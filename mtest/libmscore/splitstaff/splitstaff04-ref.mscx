@@ -107,6 +107,7 @@
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
+          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>

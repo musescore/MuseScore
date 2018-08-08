@@ -52,7 +52,8 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       QAction* a = getAction("instruments");
       connect(a, SIGNAL(triggered()), SLOT(reject()));
       addAction(a);
-
+      saveButton->setVisible(false);
+      loadButton->setVisible(false);
       readSettings();
       }
 
@@ -171,6 +172,24 @@ QTreeWidget* InstrumentsDialog::partiturList()
       return instrumentsWidget->getPartiturList();
       }
 
+//---------------------------------------------------------
+//   buildInstrumentsList
+//---------------------------------------------------------
+
+void InstrumentsDialog::buildInstrumentsList()
+      {
+      instrumentsWidget->buildTemplateList();
+      }
+
+//---------------------------------------------------------
+//   updateInstrumentDialog
+//---------------------------------------------------------
+
+void MuseScore::updateInstrumentDialog()
+      {
+      if (instrList)
+            instrList->buildInstrumentsList();
+      }
 //---------------------------------------------------------
 //   editInstrList
 //---------------------------------------------------------

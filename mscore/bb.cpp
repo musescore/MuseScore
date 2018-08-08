@@ -113,7 +113,13 @@ bool BBFile::read(const QString& name)
       int idx = 0;
       _version = a[idx++];
       switch(_version) {
-            case 0x43 ... 0x49:
+            case 0x43:
+            case 0x44:
+            case 0x45:
+            case 0x46:
+            case 0x47:
+            case 0x48:
+            case 0x49:
                   break;
             default:
                   qDebug("BB: unknown file version %02x", _version);
@@ -459,7 +465,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
       //    create title
       //---------------------------------------------------
 
-      Text* text = new Text(SubStyleId::TITLE, score);
+      Text* text = new Text(score, Tid::TITLE);
       text->setPlainText(bb.title());
 
       MeasureBase* measure = score->first();

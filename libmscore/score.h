@@ -74,7 +74,6 @@ class Staff;
 class System;
 class TempoMap;
 class Text;
-class TextStyle;
 class TimeSig;
 class TimeSigMap;
 class Tuplet;
@@ -88,7 +87,7 @@ struct Interval;
 struct TEvent;
 struct LayoutContext;
 
-enum class SubStyleId;
+enum class Tid;
 enum class ClefType : signed char;
 enum class BeatType : char;
 enum class SymId;
@@ -341,7 +340,7 @@ class Movements : public std::vector<MasterScore*> {
 //    a Score has always an associated MasterScore
 //---------------------------------------------------------------------------------------
 
-class Score : public QObject, ScoreElement {
+class Score : public QObject, public ScoreElement {
       Q_OBJECT
       Q_PROPERTY(int                            duration          READ duration)
 //      Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
@@ -360,6 +359,8 @@ class Score : public QObject, ScoreElement {
       Q_PROPERTY(int                            nstaves           READ nstaves)
       Q_PROPERTY(int                            ntracks           READ ntracks)
 //      Q_PROPERTY(QQmlListProperty<Ms::Part>     parts             READ qmlParts)
+      Q_PROPERTY(QString                        mscoreVersion     READ mscoreVersion)
+      Q_PROPERTY(QString                        mscoreRevision    READ mscoreRevision)
 
    public:
       enum class FileError : char {
@@ -585,6 +586,7 @@ class Score : public QObject, ScoreElement {
       bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
       bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
 
+      static bool& isScoreLoaded();
       bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
       void write(XmlWriter&, bool onlySelection);
@@ -686,6 +688,7 @@ class Score : public QObject, ScoreElement {
 
       void repitchNote(const Position& pos, bool replace);
       void regroupNotesAndRests(int startTick, int endTick, int track);
+      bool checkTimeDelete(Segment*, Segment*);
       void timeDelete(Measure*, Segment*, const Fraction&);
 
       void startCmd();                          // start undoable command
@@ -823,8 +826,9 @@ class Score : public QObject, ScoreElement {
       qreal    styleD(Sid idx) const  { Q_ASSERT(!strcmp(MStyle::valueType(idx),"double"));      return style().value(idx).toDouble();  }
       int      styleI(Sid idx) const  { Q_ASSERT(!strcmp(MStyle::valueType(idx),"int"));         return style().value(idx).toInt();  }
 
+      void setStyleValue(Sid sid, QVariant value) { style().set(sid, value);     }
       qreal spatium() const                    { return styleD(Sid::spatium);    }
-      void setSpatium(qreal v)                 { style().set(Sid::spatium, v);  }
+      void setSpatium(qreal v)                 { setStyleValue(Sid::spatium, v); }
 
       bool genCourtesyTimesig() const          { return styleB(Sid::genCourtesyTimesig); }
       bool genCourtesyClef() const             { return styleB(Sid::genCourtesyClef); }
@@ -887,7 +891,7 @@ class Score : public QObject, ScoreElement {
 
       bool defaultsRead() const                      { return _defaultsRead;    }
       void setDefaultsRead(bool b)                   { _defaultsRead = b;       }
-      Text* getText(SubStyleId subtype);
+      Text* getText(Tid subtype);
 
       void lassoSelect(const QRectF&);
       void lassoSelectEnd();
@@ -1152,6 +1156,7 @@ class Score : public QObject, ScoreElement {
       void setFooterText(Text* t)             { movements()->setFooterText(t);             }
 
       void cmdAddPitch(int note, bool addFlag, bool insert);
+      void forAllLyrics(std::function<void(Lyrics*)> f);
 
       friend class ChangeSynthesizerState;
       friend class Chord;
@@ -1289,7 +1294,6 @@ class MasterScore : public Score {
 
       virtual MStyle& style() override                   { return movements()->style();       }
       virtual const MStyle& style() const override       { return movements()->style();       }
-
       };
 
 inline UndoStack* Score::undoStack() const             { return _masterScore->undoStack();      }
