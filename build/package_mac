@@ -78,6 +78,18 @@ function change_rpath() {
    done
 }
 
+function change_rpathQWebEngine() {
+   for P in `otool -L $1 | awk '{print $1}'`
+   do
+      if [[ "$P" == *@rpath* ]]
+      then
+         PSLASH=$(echo $P | sed 's,@rpath,@executable_path/../../../../../Frameworks,g')
+         FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
+         install_name_tool -change $P $PSLASH $1
+      fi
+   done
+}
+
 
 rm ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
 
@@ -127,7 +139,7 @@ BIN_FILE=${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
 change_rpath $BIN_FILE
 # fix the QWebEngineProcess, qt5.9 has @rpath...
 WebEngineProcess=${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngineCore.framework/Versions/5/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess
-change_rpath $WebEngineProcess
+change_rpathQWebEngine $WebEngineProcess
 
 # Workaround:
 # fix Homebrew libraries with hard coded absolute path, see QTBUG-56814
