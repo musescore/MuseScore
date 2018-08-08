@@ -39,6 +39,7 @@ InspectorTextBase::InspectorTextBase(QWidget* parent)
             { Pid::FRAME_PADDING,     0, t.paddingWidth, t.resetPaddingWidth },
             { Pid::FRAME_ROUND,       0, t.frameRound,   t.resetFrameRound   },
             { Pid::ALIGN,             0, t.align,        t.resetAlign        },
+            { Pid::OFFSET,            0, t.textOffset,   t.resetTextOffset   },
             };
       for (auto& i : iiList)
             iList.push_back(i);

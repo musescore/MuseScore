@@ -596,7 +596,7 @@ static const StyleType styleTypes[] {
       { Sid::tempoFontItalic,               "tempoFontItalic",              false },
       { Sid::tempoFontUnderline,            "tempoFontUnderline",           false },
       { Sid::tempoAlign,                    "tempoAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
-      { Sid::tempoOffset,                   "tempoOffset",                  QPointF(0.0, 0.0) },   // not used
+      { Sid::tempoOffset,                   "tempoOffset",                  QPointF(0.0, 0.0) },
       { Sid::tempoSystemFlag,               "tempoSystemFlag",              true },
       { Sid::tempoPlacement,                "tempoPlacement",               int(Placement::ABOVE)  },
       { Sid::tempoPosAbove,                 "tempoPosAbove",                Spatium(-2.0) },
@@ -631,7 +631,7 @@ static const StyleType styleTypes[] {
       { Sid::systemTextFontItalic,          "systemFontItalic",             false },
       { Sid::systemTextFontUnderline,       "systemFontUnderline",          false },
       { Sid::systemTextAlign,               "systemAlign",                  QVariant::fromValue(Align::LEFT | Align::BASELINE) },
-      { Sid::systemTextOffset,              "systemOffset",                 QPointF(0.0, -4.0) },
+      { Sid::systemTextOffset,              "systemOffset",                 QPointF(0.0, 0.0) },
       { Sid::systemTextOffsetType,          "systemOffsetType",             int(OffsetType::SPATIUM)   },
       { Sid::systemTextPlacement,           "systemPlacement",              int(Placement::ABOVE) },
       { Sid::systemTextPosAbove,            "systemPosAbove",               Spatium(-2.0) },
@@ -644,7 +644,7 @@ static const StyleType styleTypes[] {
       { Sid::staffTextFontItalic,           "staffFontItalic",              false },
       { Sid::staffTextFontUnderline,        "staffFontUnderline",           false },
       { Sid::staffTextAlign,                "staffAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
-      { Sid::staffTextOffset,               "staffOffset",                  QPointF(0.0, 0.0) },      // not used
+      { Sid::staffTextOffset,               "staffOffset",                  QPointF(0.0, 0.0) },
       { Sid::staffTextOffsetType,           "systemOffsetType",             int(OffsetType::SPATIUM)   },
       { Sid::staffTextPlacement,            "staffTextPlacement",           int(Placement::ABOVE) },
       { Sid::staffTextPosAbove,             "staffTextPosAbove",            Spatium(-2.0) },

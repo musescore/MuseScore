@@ -45,7 +45,8 @@ void StaffText::layout()
       {
       Staff* s = staff();
       qreal y = placeAbove() ? styleP(Sid::staffTextPosAbove) : styleP(Sid::staffTextPosBelow) + (s ? s->height() : 0.0);
-      setPos(QPointF(0.0, y));
+      QPointF o(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
+      setPos(o + QPointF(0.0, y));
       TextBase::layout1();
       autoplaceSegmentElement(styleP(Sid::staffTextMinDistance));
       }

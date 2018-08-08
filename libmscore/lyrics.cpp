@@ -215,7 +215,6 @@ void Lyrics::layout()
             TextBase::layout1();
             return;
             }
-      qreal x = 0.0;
 
       //
       // parse leading verse number and/or punctuation, so we can factor it into layout separately
@@ -278,6 +277,10 @@ void Lyrics::layout()
 #endif
       if (styleDidChange)
             styleChanged();
+
+      QPointF o(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
+      setPos(o);
+      qreal x = pos().x();
       TextBase::layout1();
 
       ChordRest* cr = chordRest();
