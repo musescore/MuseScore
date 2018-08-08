@@ -537,8 +537,13 @@ endif(APPLE)
 ##
 
 if (USE_SYSTEM_QTSINGLEAPPLICATION)
+    if (USE_PATH_WITH_EXPLICIT_QT_VERSION)
+      find_path(QTSINGLEAPPLICATION_INCLUDE_DIRS qtsingleapplication.h PATH_SUFFIXES qt5/QtSolutions)
+      find_library(QTSINGLEAPPLICATION_LIBRARIES Qt5Solutions_SingleApplication-2.6)
+    else (USE_PATH_WITH_EXPLICIT_QT_VERSION)
       find_path(QTSINGLEAPPLICATION_INCLUDE_DIRS qtsingleapplication.h PATH_SUFFIXES QtSolutions)
       find_library(QTSINGLEAPPLICATION_LIBRARIES QtSolutions_SingleApplication-2.6)
+    endif (USE_PATH_WITH_EXPLICIT_QT_VERSION)
 else(USE_SYSTEM_QTSINGLEAPPLICATION)
       subdirs (thirdparty/singleapp)
       set(QTSINGLEAPPLICATION_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/singleapp/src)
