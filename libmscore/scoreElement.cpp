@@ -169,9 +169,24 @@ ScoreElement::~ScoreElement()
 //   propertyDefault
 //---------------------------------------------------------
 
+QVariant ScoreElement::propertyDefault(Pid pid, Tid tid) const
+      {
+      for (const StyledProperty& spp : *textStyle(tid)) {
+            if (spp.pid == pid) {
+                  if (propertyType(pid) == P_TYPE::SP_REAL)
+                        return score()->styleP(spp.sid);
+                  return score()->styleV(spp.sid);
+                  }
+            }
+      return QVariant();
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
 QVariant ScoreElement::propertyDefault(Pid pid) const
       {
-      QVariant v;
       for (const StyledProperty& spp : *_elementStyle) {
             if (spp.pid == pid) {
                   if (propertyType(pid) == P_TYPE::SP_REAL)
@@ -179,9 +194,8 @@ QVariant ScoreElement::propertyDefault(Pid pid) const
                   return score()->styleV(spp.sid);
                   }
             }
-      if (!v.isValid())
-            qDebug("<%s>(%d) not found in <%s>", propertyQmlName(pid), int(pid), name());
-      return v;
+      qDebug("<%s>(%d) not found in <%s>", propertyQmlName(pid), int(pid), name());
+      return QVariant();
       }
 
 //---------------------------------------------------------

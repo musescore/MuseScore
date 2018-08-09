@@ -3329,7 +3329,7 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
                   int curPitch = 60;
                   if (is.segment()) {
                         Staff* staff = Score::staff(is.track() / VOICES);
-                        Segment* seg = is.segment()->prev1(SegmentType::ChordRest | SegmentType::Clef);
+                        Segment* seg = is.segment()->prev1(SegmentType::ChordRest | SegmentType::Clef | SegmentType::HeaderClef);
                         while (seg) {
                               if (seg->isChordRestType()) {
                                     Element* p = seg->element(is.track());
@@ -3338,7 +3338,7 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
                                           break;
                                           }
                                     }
-                              else if (seg->isClefType()) {
+                              else if (seg->isClefType() || seg->isHeaderClefType()) {
                                     Element* p = seg->element( (is.track() / VOICES) * VOICES); // clef on voice 1
                                     if (p && p->isClef()) {
                                           Clef* clef = toClef(p);

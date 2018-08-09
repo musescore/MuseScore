@@ -1057,13 +1057,11 @@ QVariant Tuplet::propertyDefault(Pid id) const
             case Pid::P2:
                   return QPointF();
             default:
-                  for (const StyledProperty& p : *textStyle(Tid::DEFAULT)) {
-                        if (p.pid == id) {
-                              if (propertyType(id) == P_TYPE::SP_REAL)
-                                    return score()->styleP(p.sid);
-                              return score()->styleV(p.sid);
-                              }
-                        }
+                  {
+                  QVariant v = ScoreElement::propertyDefault(id, Tid::DEFAULT);
+                  if (v.isValid())
+                        return v;
+                  }
                   return DurationElement::propertyDefault(id);
             }
       }
