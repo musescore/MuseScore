@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>InspectorFrameText</class>
- <widget class="QWidget" name="InspectorFrameText">
+ <class>InspectorNoteDot</class>
+ <widget class="QWidget" name="InspectorNoteDot">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>218</width>
-    <height>89</height>
+    <width>303</width>
+    <height>525</height>
    </rect>
   </property>
   <property name="accessibleName">
-   <string>Frame Text Inspector</string>
+   <string>Note Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -44,20 +44,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Frame Text</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::HLine</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <property name="lineWidth">
-      <number>2</number>
+      <string>Note Dot</string>
      </property>
     </widget>
    </item>
@@ -76,26 +63,64 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Style:</string>
+         <string>Dot position:</string>
         </property>
         <property name="buddy">
-         <cstring>style</cstring>
+         <cstring>dotPosition</cstring>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="style">
+      <item row="1" column="1">
+       <widget class="QComboBox" name="dotPosition">
         <property name="accessibleName">
-         <string>Style</string>
+         <string>Dot position</string>
         </property>
         <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
+         <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
         </property>
-        <property name="minimumContentsLength">
-         <number>10</number>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string>Auto</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Top</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Bottom</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QToolButton" name="resetDotPosition">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Dot position' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -106,6 +131,8 @@
  </widget>
  <tabstops>
   <tabstop>title</tabstop>
+  <tabstop>dotPosition</tabstop>
+  <tabstop>resetDotPosition</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

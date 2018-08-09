@@ -38,6 +38,7 @@
 #include "inspectorPedal.h"
 #include "inspectorPalmMute.h"
 #include "inspectorVibrato.h"
+#include "inspectorNoteDot.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "bendproperties.h"
@@ -340,6 +341,9 @@ void Inspector::update(Score* s)
                               break;
                         case ElementType::VIBRATO_SEGMENT:
                               ie = new InspectorVibrato(this);
+                              break;
+                        case ElementType::NOTEDOT:
+                              ie = new InspectorNoteDot(this);
                               break;
                         default:
                               if (element()->isText())

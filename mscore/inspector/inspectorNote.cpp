@@ -80,7 +80,6 @@ InspectorNote::InspectorNote(QWidget* parent)
             { Pid::HEAD_GROUP,     0, n.noteHeadGroup, n.resetNoteHeadGroup },
             { Pid::HEAD_TYPE,      0, n.noteHeadType,  n.resetNoteHeadType  },
             { Pid::MIRROR_HEAD,    0, n.mirrorHead,    n.resetMirrorHead    },
-            { Pid::DOT_POSITION,   0, n.dotPosition,   n.resetDotPosition   },
             { Pid::PLAY,           0, n.play,          n.resetPlay          },
             { Pid::TUNING,         0, n.tuning,        n.resetTuning        },
             { Pid::VELO_TYPE,      0, n.velocityType,  n.resetVelocityType  },
@@ -129,12 +128,17 @@ void InspectorNote::setElement()
       n.hook->setEnabled(note->chord()->hook());
       n.beam->setEnabled(note->chord()->beam());
       n.tuplet->setEnabled(note->chord()->tuplet());
-      bool isNHGroupEnabled = note->chord()->staff()->isPitchedStaff(note->tick()) &&
-                  note->chord()->staff()->staffType(note->tick())->noteHeadScheme() == NoteHeadScheme::HEAD_NORMAL;
+
+      bool isNHGroupEnabled = note->chord()->staff()->isPitchedStaff(note->tick())
+         && note->chord()->staff()->staffType(note->tick())->noteHeadScheme() == NoteHeadScheme::HEAD_NORMAL;
       n.noteHeadGroup->setEnabled(isNHGroupEnabled);
+
       InspectorElementBase::setElement();
+
       //must be placed after InspectorBase::setElement() cause the last one sets resetButton enability
-      n.resetNoteHeadGroup->setEnabled(isNHGroupEnabled);
+      if (!isNHGroupEnabled)
+            n.resetNoteHeadGroup->setEnabled(false);
+
       bool nograce = !note->chord()->isGrace();
       s.leadingSpace->setEnabled(nograce);
       s.resetLeadingSpace->setEnabled(nograce && s.leadingSpace->value());
