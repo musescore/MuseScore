@@ -194,6 +194,7 @@ class ScoreElement {
       virtual bool setProperty(Pid, const QVariant&) = 0;
       virtual QVariant propertyDefault(Pid) const;
       virtual void resetProperty(Pid id);
+      QVariant propertyDefault(Pid pid, Tid tid) const;
 
       virtual void reset();                     // reset all properties & position to default
 
