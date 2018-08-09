@@ -2638,6 +2638,50 @@ bool Note::setProperty(Pid propertyId, const QVariant& v)
       }
 
 //---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant Note::propertyDefault(Pid propertyId) const
+      {
+      switch(propertyId) {
+            case Pid::GHOST:
+            case Pid::SMALL:
+                  return false;
+            case Pid::MIRROR_HEAD:
+                  return int(MScore::DirectionH::AUTO);
+            case Pid::DOT_POSITION:
+                  return QVariant::fromValue<Direction>(Direction::AUTO);
+            case Pid::HEAD_GROUP:
+                  return int(NoteHead::Group::HEAD_NORMAL);
+            case Pid::VELO_OFFSET:
+                  return 0;
+            case Pid::TUNING:
+                  return 0.0;
+            case Pid::FRET:
+            case Pid::STRING:
+                  return -1;
+            case Pid::HEAD_TYPE:
+                  return int(NoteHead::Type::HEAD_AUTO);
+            case Pid::VELO_TYPE:
+                  return int (ValueType::OFFSET_VAL);
+            case Pid::PLAY:
+                  return true;
+            case Pid::FIXED:
+                  return false;
+            case Pid::FIXED_LINE:
+                  return 0;
+            case Pid::TPC2:
+                  return getProperty(Pid::TPC1);
+            case Pid::PITCH:
+            case Pid::TPC1:
+                  return QVariant();
+            default:
+                  break;
+            }
+      return Element::propertyDefault(propertyId);
+      }
+
+//---------------------------------------------------------
 //   undoSetFret
 //---------------------------------------------------------
 
@@ -2752,50 +2796,6 @@ void Note::setHeadType(NoteHead::Type t)
 void Note::undoSetHeadType(NoteHead::Type val)
       {
       undoChangeProperty(Pid::HEAD_TYPE, int(val));
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant Note::propertyDefault(Pid propertyId) const
-      {
-      switch(propertyId) {
-            case Pid::GHOST:
-            case Pid::SMALL:
-                  return false;
-            case Pid::MIRROR_HEAD:
-                  return int(MScore::DirectionH::AUTO);
-            case Pid::DOT_POSITION:
-                  return QVariant::fromValue<Direction>(Direction::AUTO);
-            case Pid::HEAD_GROUP:
-                  return int(NoteHead::Group::HEAD_NORMAL);
-            case Pid::VELO_OFFSET:
-                  return 0;
-            case Pid::TUNING:
-                  return 0.0;
-            case Pid::FRET:
-            case Pid::STRING:
-                  return -1;
-            case Pid::HEAD_TYPE:
-                  return int(NoteHead::Type::HEAD_AUTO);
-            case Pid::VELO_TYPE:
-                  return int (ValueType::OFFSET_VAL);
-            case Pid::PLAY:
-                  return true;
-            case Pid::FIXED:
-                  return false;
-            case Pid::FIXED_LINE:
-                  return 0;
-            case Pid::TPC2:
-                  return getProperty(Pid::TPC1);
-            case Pid::PITCH:
-            case Pid::TPC1:
-                  return QVariant();
-            default:
-                  break;
-            }
-      return Element::propertyDefault(propertyId);
       }
 
 //---------------------------------------------------------

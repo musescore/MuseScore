@@ -101,6 +101,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_segment.ui
       inspector/inspector_beam.ui
       inspector/inspector_note.ui
+      inspector/inspector_notedot.ui
       inspector/inspector_rest.ui
       inspector/inspector_chord.ui
       inspector/inspector_group_element.ui
@@ -349,6 +350,7 @@ add_executable ( ${ExecutableName}
       inspector/inspectorMarker.cpp
       inspector/inspectorGlissando.cpp
       inspector/inspectorNote.cpp
+      inspector/inspectorNoteDot.cpp
       inspector/inspectorAmbitus.cpp
       inspector/inspectorArpeggio.cpp
       inspector/inspectorFingering.cpp
