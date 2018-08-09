@@ -63,14 +63,14 @@ function change_rpath() {
    do
       if [[ "$P" == *@rpath* ]]
       then
-         PSLASH=$(echo $P | sed 's,@rpath,@executable_path/../Frameworks,g')
+         PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../Frameworks,g')
          FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
          install_name_tool -change $P $PSLASH $1
          for P1 in `otool -L $FNAME | awk '{print $1}'`
          do
             if [[ "$P1" == *@rpath* ]]
             then
-                PSLASH1=$(echo $P1 | sed "s,@rpath,@executable_path/../Frameworks,g")
+                PSLASH1=$(echo $P1 | sed "s,@rpath,@loader_path/../../../,g")
                 install_name_tool -change $P1 $PSLASH1 $FNAME
             fi
          done
@@ -78,12 +78,12 @@ function change_rpath() {
    done
 }
 
-function change_rpathQWebEngine() {
+function change_rpath_QWebEngine() {
    for P in `otool -L $1 | awk '{print $1}'`
    do
       if [[ "$P" == *@rpath* ]]
       then
-         PSLASH=$(echo $P | sed 's,@rpath,@executable_path/../../../../../Frameworks,g')
+         PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../../../../../../../,g')
          FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
          install_name_tool -change $P $PSLASH $1
       fi
@@ -139,7 +139,7 @@ BIN_FILE=${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
 change_rpath $BIN_FILE
 # fix the QWebEngineProcess, qt5.9 has @rpath...
 WebEngineProcess=${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngineCore.framework/Versions/5/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess
-change_rpathQWebEngine $WebEngineProcess
+change_rpath_QWebEngine $WebEngineProcess
 
 # Workaround:
 # fix Homebrew libraries with hard coded absolute path, see QTBUG-56814
@@ -153,7 +153,7 @@ do
             if [[ "$P1" == /usr/local/Cellar*.dylib ]]
             then
                 PATHNAME=$(dirname $P1)
-                PSLASH1=$(echo $P1 | sed "s,$PATHNAME,@executable_path/../Frameworks,g")
+                PSLASH1=$(echo $P1 | sed "s,$PATHNAME,@loader_path/../../../,g")
                 install_name_tool -change $P1 $PSLASH1 $P
             fi
         done
