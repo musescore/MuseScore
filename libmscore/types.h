@@ -180,7 +180,6 @@ class Mops : public QObject {
       Q_GADGET
       };
 
-
 extern Direction toDirection(const QString&);
 extern const char* toString(Direction);
 extern void fillComboBoxDirection(QComboBox*);
@@ -189,7 +188,3 @@ extern void fillComboBoxDirection(QComboBox*);
 } // namespace Ms
 
 #endif
-
-
-
-
