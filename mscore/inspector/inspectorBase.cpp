@@ -102,7 +102,7 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
                   v = QVariant::fromValue(BarLineType(v.toInt()));
                   break;
             case P_TYPE::DIRECTION:
-                  v = QVariant::fromValue(Direction(v.toInt()));
+                  v = QVariant::fromValue<Direction>(Direction(v.toInt()));
                   break;
             case P_TYPE::INT_LIST: {
                   QStringList sl = v.toString().split(",", QString::SkipEmptyParts);
@@ -175,7 +175,7 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
       else if (qobject_cast<QFontComboBox*>(w))
             static_cast<QFontComboBox*>(w)->setCurrentFont(QFont(val.toString()));
       else if (qobject_cast<QComboBox*>(w)) {
-            int ival = val.toInt();
+            int ival   = val.toInt();
             bool found = false;
             QComboBox* cb = qobject_cast<QComboBox*>(w);
             if (cb->itemData(0).isValid()) {
@@ -189,6 +189,8 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
                   if (!found)
                         qDebug("ComboBox item not found: pid <%s> data <%d>", propertyName(id), ival);
                   }
+            else
+                  cb->setCurrentIndex(ival);
             }
       else if (qobject_cast<QCheckBox*>(w))
             static_cast<QCheckBox*>(w)->setChecked(val.toBool());
