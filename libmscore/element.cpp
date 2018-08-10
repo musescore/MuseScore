@@ -1716,7 +1716,8 @@ int Element::rtick() const
 
 //---------------------------------------------------------
 //   rfrac
-//    utility, searches for segment / segment parent
+//    Position of element in fractions relative to a
+//    measure start.
 //---------------------------------------------------------
 
 Fraction Element::rfrac() const
@@ -1734,7 +1735,7 @@ Fraction Element::rfrac() const
 
 //---------------------------------------------------------
 //   afrac
-//    utility, searches for segment
+//    Absolute position of element in fractions.
 //---------------------------------------------------------
 
 Fraction Element::afrac() const
@@ -1748,16 +1749,6 @@ Fraction Element::afrac() const
             e = e->parent();
             }
       return -1;
-      }
-
-//---------------------------------------------------------
-//   ftick
-//    fractional tick
-//---------------------------------------------------------
-
-Fraction Element::ftick() const
-      {
-      return Fraction::fromTicks(tick());
       }
 
 //---------------------------------------------------------
