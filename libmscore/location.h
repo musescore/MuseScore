@@ -23,7 +23,7 @@ class Element;
 class XmlReader;
 class XmlWriter;
 
-class PointInfo {
+class Location {
       int _staff;
       int _voice;
       int _measure;
@@ -33,14 +33,14 @@ class PointInfo {
       bool _rel;
 
    public:
-      constexpr PointInfo(int staff, int voice, int measure, Fraction frac, int graceIndex, int note, bool rel)
+      constexpr Location(int staff, int voice, int measure, Fraction frac, int graceIndex, int note, bool rel)
          : _staff(staff), _voice(voice), _measure(measure), _frac(frac), _graceIndex(graceIndex), _note(note), _rel(rel) {}
 
-      static constexpr PointInfo absolute() { return PointInfo(INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, false); }
-      static constexpr PointInfo relative() { return PointInfo(0, 0, 0, 0, INT_MIN, 0, true); }
+      static constexpr Location absolute() { return Location(INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, INT_MIN, false); }
+      static constexpr Location relative() { return Location(0, 0, 0, 0, INT_MIN, 0, true); }
 
-      void toAbsolute(const PointInfo& ref);
-      void toRelative(const PointInfo& ref);
+      void toAbsolute(const Location& ref);
+      void toRelative(const Location& ref);
 
       void write(XmlWriter& xml) const;
       void read(XmlReader& e);
@@ -65,11 +65,11 @@ class PointInfo {
 
       void fillForElement(const Element* e, bool absfrac = true);
       void fillPositionForElement(const Element* e, bool absfrac = true);
-      static PointInfo forElement(const Element* e, bool absfrac = true);
-      static PointInfo positionForElement(const Element* e, bool absfrac = true);
+      static Location forElement(const Element* e, bool absfrac = true);
+      static Location positionForElement(const Element* e, bool absfrac = true);
 
-      bool operator==(const PointInfo& other) const;
-      bool operator!=(const PointInfo& other) const { return !(*this == other); }
+      bool operator==(const Location& other) const;
+      bool operator!=(const Location& other) const { return !(*this == other); }
       };
 
 }     // namespace Ms

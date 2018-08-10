@@ -10,7 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "point.h"
+#include "location.h"
 
 #include "chord.h"
 #include "element.h"
@@ -20,14 +20,14 @@
 
 namespace Ms {
 
-static constexpr PointInfo absDefaults = PointInfo::absolute();
-static constexpr PointInfo relDefaults = PointInfo::relative();
+static constexpr Location absDefaults = Location::absolute();
+static constexpr Location relDefaults = Location::relative();
 
 //---------------------------------------------------------
-//   PointInfo::track
+//   Location::track
 //---------------------------------------------------------
 
-int PointInfo::track() const
+int Location::track() const
       {
       if ((_staff == absDefaults._staff) || (_voice == absDefaults._voice))
             return INT_MIN;
@@ -35,24 +35,24 @@ int PointInfo::track() const
       }
 
 //---------------------------------------------------------
-//   PointInfo::setTrack
+//   Location::setTrack
 //---------------------------------------------------------
 
-void PointInfo::setTrack(int track)
+void Location::setTrack(int track)
       {
       _staff = track / VOICES;
       _voice = track % VOICES;
       }
 
 //---------------------------------------------------------
-//   PointInfo::write
+//   Location::write
 //    Only relative locations should be written
 //---------------------------------------------------------
 
-void PointInfo::write(XmlWriter& xml) const
+void Location::write(XmlWriter& xml) const
       {
       Q_ASSERT(isRelative());
-      xml.stag("move");
+      xml.stag("location");
       xml.tag("staves", _staff, relDefaults._staff);
       xml.tag("voices", _voice, relDefaults._voice);
       xml.tag("measures", _measure, relDefaults._measure);
@@ -63,10 +63,10 @@ void PointInfo::write(XmlWriter& xml) const
       }
 
 //---------------------------------------------------------
-//   PointInfo::read
+//   Location::read
 //---------------------------------------------------------
 
-void PointInfo::read(XmlReader& e)
+void Location::read(XmlReader& e)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -89,10 +89,10 @@ void PointInfo::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   PointInfo::toAbsolute
+//   Location::toAbsolute
 //---------------------------------------------------------
 
-void PointInfo::toAbsolute(const PointInfo& ref)
+void Location::toAbsolute(const Location& ref)
       {
       if (isAbsolute())
             return;
@@ -105,10 +105,10 @@ void PointInfo::toAbsolute(const PointInfo& ref)
       }
 
 //---------------------------------------------------------
-//   PointInfo::toRelative
+//   Location::toRelative
 //---------------------------------------------------------
 
-void PointInfo::toRelative(const PointInfo& ref)
+void Location::toRelative(const Location& ref)
       {
       if (isRelative())
             return;
@@ -121,18 +121,18 @@ void PointInfo::toRelative(const PointInfo& ref)
       }
 
 //---------------------------------------------------------
-//   PointInfo::fillPositionForElement
-//    Fills default fields of PointInfo by values relevant
+//   Location::fillPositionForElement
+//    Fills default fields of Location by values relevant
 //    for the given Element. This function fills only
 //    position values, not dealing with parameters specific
 //    for Chords and Notes, like grace index.
 //---------------------------------------------------------
 
-void PointInfo::fillPositionForElement(const Element* e, bool absfrac)
+void Location::fillPositionForElement(const Element* e, bool absfrac)
       {
       Q_ASSERT(isAbsolute());
       if (!e) {
-            qWarning("PointInfo::fillPositionForElement: element is nullptr");
+            qWarning("Location::fillPositionForElement: element is nullptr");
             return;
             }
       if (track() == absDefaults.track()) {
@@ -157,7 +157,7 @@ void PointInfo::fillPositionForElement(const Element* e, bool absfrac)
                   if (m)
                         setMeasure(m->measureIndex());
                   else {
-                        qWarning("PointInfo::fillFor: cannot find element's measure (%s)", e->name());
+                        qWarning("Location::fillFor: cannot find element's measure (%s)", e->name());
                         setMeasure(0);
                         }
                   }
@@ -165,17 +165,17 @@ void PointInfo::fillPositionForElement(const Element* e, bool absfrac)
       }
 
 //---------------------------------------------------------
-//   PointInfo::fillForElement
-//    Fills default fields of PointInfo by values relevant
+//   Location::fillForElement
+//    Fills default fields of Location by values relevant
 //    for the given Element, including parameters specific
 //    for Chords and Notes.
 //---------------------------------------------------------
 
-void PointInfo::fillForElement(const Element* e, bool absfrac)
+void Location::fillForElement(const Element* e, bool absfrac)
       {
       Q_ASSERT(isAbsolute());
       if (!e) {
-            qWarning("PointInfo::fillForElement: element is nullptr");
+            qWarning("Location::fillForElement: element is nullptr");
             return;
             }
 
@@ -203,33 +203,33 @@ void PointInfo::fillForElement(const Element* e, bool absfrac)
       }
 
 //---------------------------------------------------------
-//   PointInfo::forElement
+//   Location::forElement
 //---------------------------------------------------------
 
-PointInfo PointInfo::forElement(const Element* e, bool absfrac)
+Location Location::forElement(const Element* e, bool absfrac)
       {
-      PointInfo i = PointInfo::absolute();
+      Location i = Location::absolute();
       i.fillForElement(e, absfrac);
       return i;
       }
 
 //---------------------------------------------------------
-//   PointInfo::positionForElement
+//   Location::positionForElement
 //---------------------------------------------------------
 
-PointInfo PointInfo::positionForElement(const Element* e, bool absfrac)
+Location Location::positionForElement(const Element* e, bool absfrac)
       {
-      PointInfo i = PointInfo::absolute();
+      Location i = Location::absolute();
       i.fillPositionForElement(e, absfrac);
       return i;
       }
 
 //---------------------------------------------------------
-//   PointInfo::operator==
+//   Location::operator==
 //---------------------------------------------------------
 
-bool PointInfo::operator==(const PointInfo& pi2) const {
-      const PointInfo& pi1 = *this;
+bool Location::operator==(const Location& pi2) const {
+      const Location& pi1 = *this;
       return ((pi1._frac == pi2._frac)
              && (pi1._measure == pi2._measure)
              && (pi1._voice == pi2._voice)

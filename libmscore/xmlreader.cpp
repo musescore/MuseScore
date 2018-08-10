@@ -239,55 +239,55 @@ Fraction XmlReader::afrac() const
       }
 
 //---------------------------------------------------------
-//   point
+//   location
 //---------------------------------------------------------
 
-PointInfo XmlReader::point(bool forceAbsFrac) const
+Location XmlReader::location(bool forceAbsFrac) const
       {
-      PointInfo info = PointInfo::absolute();
-      fillPoint(info, forceAbsFrac);
-      return info;
+      Location l = Location::absolute();
+      fillLocation(l, forceAbsFrac);
+      return l;
       }
 
 //---------------------------------------------------------
-//   fillPoint
-//    fills point fields which have default values with
+//   fillLocation
+//    fills location fields which have default values with
 //    values relevant for the current reader's position.
 //    When in paste mode (or forceAbsFrac is true) absolute
 //    fraction values are used and measure number is set to
 //    zero.
 //---------------------------------------------------------
 
-void XmlReader::fillPoint(PointInfo& p, bool forceAbsFrac) const
+void XmlReader::fillLocation(Location& l, bool forceAbsFrac) const
       {
-      constexpr PointInfo defaults = PointInfo::absolute();
+      constexpr Location defaults = Location::absolute();
       const bool absFrac = (pasteMode() || forceAbsFrac);
-      if (p.track() == defaults.track())
-            p.setTrack(track());
-      if (p.frac() == defaults.frac())
-            p.setFrac(absFrac ? afrac() : rfrac());
-      if (p.measure() == defaults.measure())
-            p.setMeasure(absFrac ? 0 : currentMeasureIndex());
+      if (l.track() == defaults.track())
+            l.setTrack(track());
+      if (l.frac() == defaults.frac())
+            l.setFrac(absFrac ? afrac() : rfrac());
+      if (l.measure() == defaults.measure())
+            l.setMeasure(absFrac ? 0 : currentMeasureIndex());
       }
 
 //---------------------------------------------------------
-//   fillPoint
-//    sets a new reading point, taking into account its
+//   setLocation
+//    sets a new reading location, taking into account its
 //    type (absolute or relative).
 //---------------------------------------------------------
 
-void XmlReader::setPoint(const PointInfo& p)
+void XmlReader::setLocation(const Location& l)
       {
-      if (p.isRelative()) {
-            PointInfo info = p;
-            info.toAbsolute(point());
-            setPoint(info); // recursion
+      if (l.isRelative()) {
+            Location newLoc = l;
+            newLoc.toAbsolute(location());
+            setLocation(newLoc); // recursion
             return;
             }
-      setTrack(p.track() - _trackOffset);
-      int tick = p.frac().ticks() - _tickOffset;
+      setTrack(l.track() - _trackOffset);
+      int tick = l.frac().ticks() - _tickOffset;
       if (!pasteMode()) {
-            Q_ASSERT(p.measure() == currentMeasureIndex());
+            Q_ASSERT(l.measure() == currentMeasureIndex());
             tick += currentMeasure()->tick();
             }
       initTick(tick);
@@ -689,7 +689,7 @@ void XmlReader::addLink(Staff* s, LinkedElements* link)
       if (!masterScore)
             staff *= -1;
 
-      QList<QPair<LinkedElements*, PointInfo>>& staffLinks = _staffLinkedElements[staff];
+      QList<QPair<LinkedElements*, Location>>& staffLinks = _staffLinkedElements[staff];
       if (!masterScore) {
             if (!staffLinks.empty()
                && (link->mainElement()->score() != staffLinks.front().first->mainElement()->score())
@@ -697,30 +697,30 @@ void XmlReader::addLink(Staff* s, LinkedElements* link)
                   staffLinks.clear();
             }
 
-      PointInfo p = point(true);
-      _linksIndexer.assignLocalIndex(p);
-      staffLinks.push_back(qMakePair(link, p));
+      Location l = location(true);
+      _linksIndexer.assignLocalIndex(l);
+      staffLinks.push_back(qMakePair(link, l));
       }
 
 //---------------------------------------------------------
 //   getLink
 //---------------------------------------------------------
 
-LinkedElements* XmlReader::getLink(bool masterScore, const PointInfo& p, int localIndexDiff)
+LinkedElements* XmlReader::getLink(bool masterScore, const Location& l, int localIndexDiff)
       {
-      int staff = p.staff();
+      int staff = l.staff();
       if (!masterScore)
             staff *= -1;
-      const int localIndex = _linksIndexer.assignLocalIndex(p) + localIndexDiff;
-      QList<QPair<LinkedElements*, PointInfo>>& staffLinks = _staffLinkedElements[staff];
+      const int localIndex = _linksIndexer.assignLocalIndex(l) + localIndexDiff;
+      QList<QPair<LinkedElements*, Location>>& staffLinks = _staffLinkedElements[staff];
       for (int i = 0; i < staffLinks.size(); ++i) {
-            if (staffLinks[i].second == p) {
+            if (staffLinks[i].second == l) {
                   if (localIndex == 0)
                         return staffLinks[i].first;
                   i += localIndex;
                   if ((i < 0) || (i >= staffLinks.size()))
                         return nullptr;
-                  if (staffLinks[i].second == p)
+                  if (staffLinks[i].second == l)
                         return staffLinks[i].first;
                   return nullptr;
                   }
@@ -732,12 +732,12 @@ LinkedElements* XmlReader::getLink(bool masterScore, const PointInfo& p, int loc
 //   assignLocalIndex
 //---------------------------------------------------------
 
-int LinksIndexer::assignLocalIndex(const PointInfo& mainElementInfo)
+int LinksIndexer::assignLocalIndex(const Location& mainElementLocation)
       {
-      if (_lastLinkedElementInfo == mainElementInfo)
+      if (_lastLinkedElementLoc == mainElementLocation)
             return (++_lastLocalIndex);
       _lastLocalIndex = 0;
-      _lastLinkedElementInfo = mainElementInfo;
+      _lastLinkedElementLoc = mainElementLocation;
       return 0;
       }
 }

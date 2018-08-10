@@ -1400,7 +1400,7 @@ bool Note::readProperties(XmlReader& e)
 void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
       {
       const ElementType type = info->type();
-      const PointInfo& pi = info->info();
+      const Location& l = info->location();
       switch(type) {
             case ElementType::TIE:
             case ElementType::TEXTLINE:
@@ -1408,7 +1408,7 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                   {
                   Spanner* sp = toSpanner(info->connector());
                   if (info->isStart()) {
-                        sp->setTrack(pi.track());
+                        sp->setTrack(l.track());
                         sp->setTick(tick());
                         if (sp->isTie()) {
                               Tie* tie = toTie(sp);
@@ -1437,7 +1437,7 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                         // of glissandi..." note above)
                         if (!sp)
                               break;
-                        sp->setTrack2(pi.track());
+                        sp->setTrack2(l.track());
                         sp->setTick2(tick());
                         sp->setEndElement(this);
                         if (sp->isTie())

@@ -154,10 +154,10 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                     break;
                                     }
                               }
-                        else if (tag == "move") {
-                              PointInfo move = PointInfo::relative();
-                              move.read(e);
-                              e.setPoint(move);
+                        else if (tag == "location") {
+                              Location loc = Location::relative();
+                              loc.read(e);
+                              e.setLocation(loc);
                               }
                         else if (tag == "Tuplet") {
                               Tuplet* oldTuplet = tuplet;
@@ -480,15 +480,15 @@ void Score::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
             case ElementType::VOLTA:
                   {
                   Spanner* sp = toSpanner(info->connector());
-                  const PointInfo& pi = info->info();
+                  const Location& l = info->location();
                   if (info->isStart()) {
                         sp->setAnchor(Spanner::Anchor::SEGMENT);
-                        sp->setTrack(pi.track());
-                        sp->setTrack2(pi.track());
-                        sp->setTick(pi.frac().ticks());
+                        sp->setTrack(l.track());
+                        sp->setTrack2(l.track());
+                        sp->setTick(l.frac().ticks());
                         }
                   else if (info->isEnd()) {
-                        sp->setTick2(pi.frac().ticks());
+                        sp->setTick2(l.frac().ticks());
                         undoAddElement(sp);
                         if (sp->isOttava())
                               sp->staff()->updateOttava();

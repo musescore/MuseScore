@@ -82,7 +82,7 @@ add_library (
       read300.cpp
       read301.cpp stafftypelist.cpp stafftypechange.cpp
       bracketItem.cpp
-      connector.cpp point.cpp
+      connector.cpp location.cpp
       lyricsline.cpp
       )
 

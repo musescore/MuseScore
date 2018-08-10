@@ -13,7 +13,7 @@
 #ifndef __CONNECTOR_H__
 #define __CONNECTOR_H__
 
-#include "point.h"
+#include "location.h"
 #include "types.h"
 
 namespace Ms {
@@ -44,21 +44,21 @@ class ConnectorInfo {
 
    protected:
       ElementType _type       { ElementType::INVALID };
-      PointInfo _currentInfo;
-      PointInfo _prevInfo     { PointInfo::absolute()   };
-      PointInfo _nextInfo     { PointInfo::absolute()   };
+      Location _currentLoc;
+      Location _prevLoc       { Location::absolute() };
+      Location _nextLoc       { Location::absolute() };
 
       ConnectorInfo* _prev    { 0 };
       ConnectorInfo* _next    { 0 };
 
-      void updatePointInfo(const Element* e, PointInfo& i, bool clipboardmode);
+      void updateLocation(const Element* e, Location& i, bool clipboardmode);
       void updateCurrentInfo(bool clipboardmode);
       bool currentUpdated() const         { return _currentUpdated; }
       void setCurrentUpdated(bool v)      { _currentUpdated = v;    }
 
    public:
       ConnectorInfo(const Element* current, int track = -1, Fraction frac = -1);
-      ConnectorInfo(const PointInfo& currentInfo);
+      ConnectorInfo(const Location& currentLocation);
 
       ConnectorInfo* prev() const   { return _prev; }
       ConnectorInfo* next() const   { return _next; }
@@ -66,7 +66,7 @@ class ConnectorInfo {
       ConnectorInfo* end();
 
       ElementType type() const { return _type; }
-      const PointInfo& info() const { return _currentInfo; }
+      const Location& location() const { return _currentLoc; }
 
       bool connect(ConnectorInfo* other);
       bool finished() const;
@@ -75,8 +75,8 @@ class ConnectorInfo {
       int connectionDistance(const ConnectorInfo& c2) const;
       void forceConnect(ConnectorInfo* c2);
 
-      bool hasPrevious() const      { return (_prevInfo.measure() != INT_MIN); }
-      bool hasNext() const          { return (_nextInfo.measure() != INT_MIN); }
+      bool hasPrevious() const      { return (_prevLoc.measure() != INT_MIN); }
+      bool hasNext() const          { return (_nextLoc.measure() != INT_MIN); }
       bool isStart() const          { return (!hasPrevious() && hasNext()); }
       bool isMiddle() const         { return (hasPrevious() && hasNext());  }
       bool isEnd() const            { return (hasPrevious() && !hasNext()); }
@@ -93,7 +93,7 @@ class ConnectorInfoReader final : public ConnectorInfo {
       Element* _currentElement;
       ScoreElement* _connectorReceiver;
 
-      void readDestinationInfo(PointInfo& info);
+      void readEndpointLocation(Location& l);
 
    public:
       ConnectorInfoReader(XmlReader& e, Element* current, int track = -1);

@@ -191,7 +191,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::SLUR_UOFF3,              "slur_uoff3",              false,  "o3",                   P_TYPE::POINT_SP        },
 
       { Pid::SLUR_UOFF4,              "slur_uoff4",              false,  "o4",                   P_TYPE::POINT_SP        },
-      { Pid::STAFF_MOVE,              "staff_move",              true,  "move",                  P_TYPE::INT             },
+      { Pid::STAFF_MOVE,              "staff_move",              true,  "staffMove",             P_TYPE::INT             },
       { Pid::VERSE,                   "verse",                   true,  "no",                    P_TYPE::ZERO_INT        },
       { Pid::SYLLABIC,                "syllabic",                true,  "syllabic",              P_TYPE::INT             },
       { Pid::LYRIC_TICKS,             "lyric_ticks",             true,  "ticks",                 P_TYPE::INT             },

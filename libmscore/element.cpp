@@ -476,15 +476,15 @@ void Element::writeProperties(XmlWriter& xml) const
                   if (!s)
                         qWarning("Element::writeProperties: linked element's staff not found (%s)", name());
                   }
-            PointInfo p = PointInfo::positionForElement(this);
+            Location loc = Location::positionForElement(this);
             if (me == this) {
                   xml.tagE("linkedMain");
-                  xml.setLidLocalIndex(_links->lid(), xml.assignLocalIndex(p));
+                  xml.setLidLocalIndex(_links->lid(), xml.assignLocalIndex(loc));
                   }
             else {
                   if (s->links()) {
                         Staff* linkedStaff = toStaff(s->links()->mainElement());
-                        p.setStaff(linkedStaff->idx());
+                        loc.setStaff(linkedStaff->idx());
                         }
                   xml.stag("linked");
                   if (!me->score()->isMaster()) {
@@ -495,11 +495,11 @@ void Element::writeProperties(XmlWriter& xml) const
                               qWarning("Element::writeProperties: linked elements belong to different scores but none of them is master score: (%s lid=%d)", name(), _links->lid());
                               }
                         }
-                  PointInfo mp = PointInfo::positionForElement(me);
-                  const int guessedLocalIndex = xml.assignLocalIndex(mp);
-                  if (p != mp) {
-                        mp.toRelative(p);
-                        mp.write(xml);
+                  Location mainLoc = Location::positionForElement(me);
+                  const int guessedLocalIndex = xml.assignLocalIndex(mainLoc);
+                  if (loc != mainLoc) {
+                        mainLoc.toRelative(loc);
+                        mainLoc.write(xml);
                         }
                   const int indexDiff = xml.lidLocalIndex(_links->lid()) - guessedLocalIndex;
                   xml.tag("indexDiff", indexDiff, 0);
@@ -573,11 +573,11 @@ bool Element::readProperties(XmlReader& e)
             else {
                   Staff* ls = s->links() ? toStaff(s->links()->mainElement()) : nullptr;
                   bool linkedIsMaster = ls ? ls->score()->isMaster() : false;
-                  PointInfo p = e.point(true);
+                  Location loc = e.location(true);
                   if (ls)
-                        p.setStaff(ls->idx());
-                  PointInfo mp = PointInfo::relative();
-                  bool pointInfoRead = false;
+                        loc.setStaff(ls->idx());
+                  Location mainLoc = Location::relative();
+                  bool locationRead = false;
                   int localIndexDiff = 0;
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
@@ -587,19 +587,19 @@ bool Element::readProperties(XmlReader& e)
                               if (val == "same")
                                     linkedIsMaster = score()->isMaster();
                               }
-                        else if (tag == "move") {
-                              mp.read(e);
-                              mp.toAbsolute(p);
-                              pointInfoRead = true;
+                        else if (tag == "location") {
+                              mainLoc.read(e);
+                              mainLoc.toAbsolute(loc);
+                              locationRead = true;
                               }
                         else if (tag == "indexDiff")
                               localIndexDiff = e.readInt();
                         else
                               e.unknown();
                         }
-                  if (!pointInfoRead)
-                        mp = p;
-                  LinkedElements* link = e.getLink(linkedIsMaster, mp, localIndexDiff);
+                  if (!locationRead)
+                        mainLoc = loc;
+                  LinkedElements* link = e.getLink(linkedIsMaster, mainLoc, localIndexDiff);
                   if (link) {
                         ScoreElement* linked = link->mainElement();
                         if (linked->type() == type())
@@ -608,7 +608,7 @@ bool Element::readProperties(XmlReader& e)
                               qWarning("Element::readProperties: linked elements have different types: %s, %s. Input file corrupted?", name(), linked->name());
                         }
                   if (!_links)
-                        qWarning("Element::readProperties: could not link %s at staff %d", name(), mp.staff() + 1);
+                        qWarning("Element::readProperties: could not link %s at staff %d", name(), mainLoc.staff() + 1);
                   }
             }
       else if (tag == "lid") {

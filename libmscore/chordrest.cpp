@@ -160,13 +160,7 @@ void ChordRest::writeProperties(XmlWriter& xml) const
       writeProperty(xml, Pid::SMALL);
       if (actualDurationType().dots())
             xml.tag("dots", actualDurationType().dots());
-      // To make syntax more consistent write staffMove property
-      // using the commonly used "move" tag.
-      if (_staffMove) {
-            PointInfo move = PointInfo::relative();
-            move.setStaff(_staffMove);
-            move.write(xml);
-            }
+      writeProperty(xml, Pid::STAFF_MOVE);
 
       if (actualDurationType().isValid())
             xml.tag("durationType", actualDurationType().name());
@@ -284,11 +278,8 @@ bool ChordRest::readProperties(XmlReader& e)
             }
       else if (tag == "dots")
             setDots(e.readInt());
-      else if (tag == "move") {
-            PointInfo move = PointInfo::relative();
-            move.read(e);
-            _staffMove = move.staff();
-            }
+      else if (tag == "staffMove")
+            _staffMove = e.readInt();
       else if (tag == "Spanner")
             Spanner::readSpanner(e, this, track());
       else if (tag == "Lyrics") {
@@ -319,10 +310,10 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
             case ElementType::SLUR:
                   {
                   Spanner* spanner = toSpanner(info->connector());
-                  const PointInfo& pi = info->info();
+                  const Location& l = info->location();
 
                   if (info->isStart()) {
-                        spanner->setTrack(pi.track());
+                        spanner->setTrack(l.track());
                         spanner->setTick(tick());
                         spanner->setStartElement(this);
                         if (pasteMode) {
@@ -348,7 +339,7 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                               score()->addSpanner(spanner);
                         }
                   else if (info->isEnd()) {
-                        spanner->setTrack2(pi.track());
+                        spanner->setTrack2(l.track());
                         spanner->setTick2(tick());
                         spanner->setEndElement(this);
                         if (pasteMode) {

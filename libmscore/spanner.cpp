@@ -33,7 +33,7 @@ class SpannerWriter : public ConnectorInfoWriter {
    public:
       SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* spanner, int track, Fraction frac, bool start);
 
-      static void fillSpannerPosition(PointInfo& info, const Element* endpoint, int tick, bool clipboardmode);
+      static void fillSpannerPosition(Location& l, const Element* endpoint, int tick, bool clipboardmode);
       };
 
 //---------------------------------------------------------
@@ -1043,18 +1043,18 @@ void Spanner::readSpanner(XmlReader& e, Score* current, int track)
 //   SpannerWriter::fillSpannerPosition
 //---------------------------------------------------------
 
-void SpannerWriter::fillSpannerPosition(PointInfo& info, const Element* endpoint, int tick, bool clipboardmode)
+void SpannerWriter::fillSpannerPosition(Location& l, const Element* endpoint, int tick, bool clipboardmode)
       {
       if (clipboardmode) {
-            info.setMeasure(0);
-            info.setFrac(Fraction::fromTicks(tick));
+            l.setMeasure(0);
+            l.setFrac(Fraction::fromTicks(tick));
             }
       else {
             const MeasureBase* m = toMeasureBase(endpoint->findMeasure());
             if (!m) {
                   qWarning("fillSpannerPosition: couldn't find spanner's endpoint's measure");
-                  info.setMeasure(0);
-                  info.setFrac(Fraction::fromTicks(tick));
+                  l.setMeasure(0);
+                  l.setFrac(Fraction::fromTicks(tick));
                   return;
                   }
             // It may happen (hairpins!) that the spanner's end element is
@@ -1068,8 +1068,8 @@ void SpannerWriter::fillSpannerPosition(PointInfo& info, const Element* endpoint
                   else
                         break;
                   }
-            info.setMeasure(m->measureIndex());
-            info.setFrac(Fraction::fromTicks(tick - m->tick()));
+            l.setMeasure(m->measureIndex());
+            l.setFrac(Fraction::fromTicks(tick - m->tick()));
             }
       }
 
@@ -1091,13 +1091,13 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
             // We cannot determine position of the spanner from its start/end
             // elements and will try to obtain this info from the spanner itself.
             if (!start) {
-                  _prevInfo.setTrack(sp->track());
-                  fillSpannerPosition(_prevInfo, sp->startElement(), sp->tick(), clipboardmode);
+                  _prevLoc.setTrack(sp->track());
+                  fillSpannerPosition(_prevLoc, sp->startElement(), sp->tick(), clipboardmode);
                   }
             else {
                   const int track2 = (sp->track2() != -1) ? sp->track2() : sp->track();
-                  _nextInfo.setTrack(track2);
-                  fillSpannerPosition(_nextInfo, sp->endElement(), sp->tick2(), clipboardmode);
+                  _nextLoc.setTrack(track2);
+                  fillSpannerPosition(_nextLoc, sp->endElement(), sp->tick2(), clipboardmode);
                   }
             }
       else {
@@ -1105,9 +1105,9 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
             // elements and will prefer this source of information.
             // Reason: some spanners contain no or wrong information (e.g. Ties).
             if (!start)
-                  updatePointInfo(sp->startElement(), _prevInfo, clipboardmode);
+                  updateLocation(sp->startElement(), _prevLoc, clipboardmode);
             else
-                  updatePointInfo(sp->endElement(), _nextInfo, clipboardmode);
+                  updateLocation(sp->endElement(), _nextLoc, clipboardmode);
             }
       }
 

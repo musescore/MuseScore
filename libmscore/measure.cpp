@@ -1989,10 +1989,10 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-            if (tag == "move") {
-                  PointInfo move = PointInfo::relative();
-                  move.read(e);
-                  e.setPoint(move);
+            if (tag == "location") {
+                  Location loc = Location::relative();
+                  loc.read(e);
+                  e.setLocation(loc);
                   }
             else if (tag == "tick") {
                   e.initTick(score()->fileDivision(e.readInt()));
@@ -2309,16 +2309,16 @@ void Measure::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
             case ElementType::VOLTA:
                   {
                   Spanner* sp = toSpanner(info->connector());
-                  const PointInfo& pi = info->info();
-                  const int piTick = pi.frac().ticks();
-                  const int spTick = pasteMode ? piTick : (tick() + piTick);
+                  const Location& l = info->location();
+                  const int lTick = l.frac().ticks();
+                  const int spTick = pasteMode ? lTick : (tick() + lTick);
                   if (info->isStart()) {
-                        sp->setTrack(pi.track());
+                        sp->setTrack(l.track());
                         sp->setTick(spTick);
                         score()->addSpanner(sp);
                         }
                   else if (info->isEnd()) {
-                        sp->setTrack2(pi.track());
+                        sp->setTrack2(l.track());
                         sp->setTick2(spTick);
                         }
                   }

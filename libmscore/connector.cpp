@@ -24,7 +24,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction frac)
-   : _current(current), _currentInfo(PointInfo::absolute())
+   : _current(current), _currentLoc(Location::absolute())
       {
       if (!current)
             qFatal("ConnectorInfo::ConnectorInfo(): invalid argument: %p", current);
@@ -33,26 +33,26 @@ ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction frac)
       // If the caller does not know the track number and passes -1
       // it may be corrected later.
       if (track >= 0)
-            _currentInfo.setTrack(track);
+            _currentLoc.setTrack(track);
       if (frac >= 0)
-            _currentInfo.setFrac(frac);
+            _currentLoc.setFrac(frac);
       }
 
 //---------------------------------------------------------
 //   ConnectorInfo
 //---------------------------------------------------------
 
-ConnectorInfo::ConnectorInfo(const PointInfo& currentInfo)
-   : _currentInfo(currentInfo)
+ConnectorInfo::ConnectorInfo(const Location& currentLocation)
+   : _currentLoc(currentLocation)
       {}
 
 //---------------------------------------------------------
-//   ConnectorInfo::updatePointInfo
+//   ConnectorInfo::updateLocation
 //---------------------------------------------------------
 
-void ConnectorInfo::updatePointInfo(const Element* e, PointInfo& i, bool clipboardmode)
+void ConnectorInfo::updateLocation(const Element* e, Location& l, bool clipboardmode)
       {
-      i.fillForElement(e, clipboardmode);
+      l.fillForElement(e, clipboardmode);
       }
 
 //---------------------------------------------------------
@@ -61,7 +61,7 @@ void ConnectorInfo::updatePointInfo(const Element* e, PointInfo& i, bool clipboa
 
 void ConnectorInfo::updateCurrentInfo(bool clipboardmode) {
       if (!currentUpdated() && _current)
-            updatePointInfo(_current, _currentInfo, clipboardmode);
+            updateLocation(_current, _currentLoc, clipboardmode);
       setCurrentUpdated(true);
 }
 
@@ -78,8 +78,8 @@ bool ConnectorInfo::connect(ConnectorInfo* other)
       if (hasPrevious() && _prev == nullptr
          && other->hasNext() && other->_next == nullptr
          ) {
-            if ((_prevInfo == other->_currentInfo)
-               && (_currentInfo == other->_nextInfo)
+            if ((_prevLoc == other->_currentLoc)
+               && (_currentLoc == other->_nextLoc)
                ) {
                   _prev = other;
                   other->_next = this;
@@ -89,8 +89,8 @@ bool ConnectorInfo::connect(ConnectorInfo* other)
       if (hasNext() && _next == nullptr
          && other->hasPrevious() && other->_prev == nullptr
          ) {
-            if ((_nextInfo == other->_currentInfo)
-               && (_currentInfo == other->_prevInfo)
+            if ((_nextLoc == other->_currentLoc)
+               && (_currentLoc == other->_prevLoc)
                ) {
                   _next = other;
                   other->_prev = this;
@@ -116,13 +116,13 @@ void ConnectorInfo::forceConnect(ConnectorInfo* other)
 //   distance
 //---------------------------------------------------------
 
-static int distance(const PointInfo& p1, const PointInfo& p2)
+static int distance(const Location& l1, const Location& l2)
       {
       constexpr int commonDenominator = 1000;
-      Fraction dfrac = (p2.frac() - p1.frac()).absValue();
+      Fraction dfrac = (l2.frac() - l1.frac()).absValue();
       int dpos = dfrac.numerator() * commonDenominator / dfrac.denominator();
-      dpos += 10000 * qAbs(p2.measure() - p1.measure());
-      return 1000 * dpos + 100 * qAbs(p2.track() - p1.track()) + 10 * qAbs(p2.note() - p1.note()) + qAbs(p2.graceIndex() - p1.graceIndex());
+      dpos += 10000 * qAbs(l2.measure() - l1.measure());
+      return 1000 * dpos + 100 * qAbs(l2.track() - l1.track()) + 10 * qAbs(l2.note() - l1.note()) + qAbs(l2.graceIndex() - l1.graceIndex());
       }
 
 //---------------------------------------------------------
@@ -131,12 +131,12 @@ static int distance(const PointInfo& p1, const PointInfo& p2)
 
 int ConnectorInfo::orderedConnectionDistance(const ConnectorInfo& c1, const ConnectorInfo& c2)
       {
-      PointInfo c1Next = c1._nextInfo;
-      c1Next.toRelative(c1._currentInfo);
-      PointInfo c2Prev = c2._currentInfo; // inversed order to get equal signs
-      c2Prev.toRelative(c2._prevInfo);
+      Location c1Next = c1._nextLoc;
+      c1Next.toRelative(c1._currentLoc);
+      Location c2Prev = c2._currentLoc; // inversed order to get equal signs
+      c2Prev.toRelative(c2._prevLoc);
       if (c1Next == c2Prev)
-            return distance(c1._nextInfo, c2._currentInfo);
+            return distance(c1._nextLoc, c2._currentLoc);
       return INT_MAX;
       }
 
@@ -239,8 +239,8 @@ ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Element* current, int tra
 //   readPositionInfo
 //---------------------------------------------------------
 
-static PointInfo readPositionInfo(const XmlReader& e, int track) {
-      PointInfo info = e.point();
+static Location readPositionInfo(const XmlReader& e, int track) {
+      Location info = e.location();
       info.setTrack(track);
       return info;
       }
@@ -284,14 +284,14 @@ void ConnectorInfoWriter::write()
             _connector->write(xml);
       if (hasPrevious()) {
             xml.stag("prev");
-            _prevInfo.toRelative(_currentInfo);
-            _prevInfo.write(xml);
+            _prevLoc.toRelative(_currentLoc);
+            _prevLoc.write(xml);
             xml.etag();
             }
       if (hasNext()) {
             xml.stag("next");
-            _nextInfo.toRelative(_currentInfo);
-            _nextInfo.write(xml);
+            _nextLoc.toRelative(_currentLoc);
+            _nextLoc.write(xml);
             xml.etag();
             }
       xml.etag();
@@ -307,15 +307,15 @@ bool ConnectorInfoReader::read()
       const QString name(e.attribute("type"));
       _type = ScoreElement::name2type(&name);
 
-      e.fillPoint(_currentInfo);
+      e.fillLocation(_currentLoc);
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
             if (tag == "prev")
-                  readDestinationInfo(_prevInfo);
+                  readEndpointLocation(_prevLoc);
             else if (tag == "next")
-                  readDestinationInfo(_nextInfo);
+                  readEndpointLocation(_nextLoc);
             else {
                   if (tag == name)
                         _connector = Element::name2Element(tag, _connectorReceiver->score());
@@ -326,7 +326,7 @@ bool ConnectorInfoReader::read()
                         e.unknown();
                         return false;
                         }
-                  _connector->setTrack(_currentInfo.track());
+                  _connector->setTrack(_currentLoc.track());
                   _connector->read(e);
                   }
             }
@@ -334,18 +334,18 @@ bool ConnectorInfoReader::read()
       }
 
 //---------------------------------------------------------
-//   ConnectorInfoReader::readDestinationInfo
+//   ConnectorInfoReader::readEndpointLocation
 //---------------------------------------------------------
 
-void ConnectorInfoReader::readDestinationInfo(PointInfo& info)
+void ConnectorInfoReader::readEndpointLocation(Location& l)
       {
       XmlReader& e = *_reader;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-            if (tag == "move") {
-                  info = PointInfo::relative();
-                  info.read(e);
+            if (tag == "location") {
+                  l = Location::relative();
+                  l.read(e);
                   }
             else
                   e.unknown();
@@ -361,9 +361,9 @@ void ConnectorInfoReader::update()
       if (!currentUpdated())
             updateCurrentInfo(_reader->pasteMode());
       if (hasPrevious())
-            _prevInfo.toAbsolute(_currentInfo);
+            _prevLoc.toAbsolute(_currentLoc);
       if (hasNext())
-            _nextInfo.toAbsolute(_currentInfo);
+            _nextLoc.toAbsolute(_currentLoc);
       }
 
 //---------------------------------------------------------
@@ -439,7 +439,7 @@ bool ConnectorInfoReader::operator==(const ConnectorInfoReader& other) const {
       if ((_type != other._type)
          || (_connectorReceiver != other._connectorReceiver)
          || (connector() != other.connector())
-         || (_currentInfo != other._currentInfo)
+         || (_currentLoc != other._currentLoc)
          )
             return false;
       return true;
