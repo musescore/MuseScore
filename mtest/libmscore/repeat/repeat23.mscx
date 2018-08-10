@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -65,91 +65,94 @@
           <text>Complex roadmap</text>
           </Text>
         </VBox>
-      <Measure number="1">
+      <Measure>
         <startRepeat/>
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <BarLine>
-          <subtype>start-repeat</subtype>
-          <span>1</span>
-          </BarLine>
-        <StaffText>
-          <pos x="-8.79999" y="-9.4"/>
-          <text>1;2;1;2;3;2;3;4;5;6;7;6;7;8;9;10;11;9;10;12;12;13;14;13;14;15:16;13;14</text>
-          </StaffText>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>double</subtype>
-          <span>1</span>
-          </BarLine>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <BarLine>
+            <subtype>start-repeat</subtype>
+            <span>1</span>
+            </BarLine>
+          <StaffText>
+            <pos x="-8.79999" y="-11.4"/>
+            <text>1;2;1;2;3;2;3;4;5;6;7;6;7;8;9;10;11;9;10;12;12;13;14;13;14;15:16;13;14</text>
+            </StaffText>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>double</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="2">
+      <Measure>
         <endRepeat>2</endRepeat>
         <Marker>
           <style>Repeat Text Left</style>
           <text><sym>segno</sym></text>
           <label>segno</label>
           </Marker>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="3">
+      <Measure>
         <Jump>
           <style>Repeat Text Right</style>
           <text>D.S.</text>
@@ -157,499 +160,527 @@
           <playUntil>end</playUntil>
           <continueAt></continueAt>
           </Jump>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>double</subtype>
-          <span>1</span>
-          </BarLine>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>double</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="4">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="5">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="6">
+      <Measure>
         <startRepeat/>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="7">
+      <Measure>
         <endRepeat>2</endRepeat>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="8">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="9">
+      <Measure>
         <Marker>
-          <pos x="3.67477" y="-2.59996"/>
+          <offset x="3.67477" y="-2.59996"/>
           <style>Repeat Text Left</style>
           <text><sym>segno</sym><font size="12"></font>1</text>
           <label>segno1</label>
           </Marker>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="10">
+      <Measure>
         <Marker>
           <style>Repeat Text Right</style>
           <text>To Coda</text>
           <label>coda</label>
           </Marker>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>double</subtype>
-          <span>1</span>
-          </BarLine>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>double</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="11">
+      <Measure>
         <Jump>
-          <pos x="-0.899943" y="-2.59996"/>
+          <offset x="-0.899943" y="-2.59996"/>
           <style>Repeat Text Right</style>
           <text>D.S1. al Coda</text>
           <jumpTo>segno1</jumpTo>
           <playUntil>coda</playUntil>
           <continueAt>codab</continueAt>
           </Jump>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="12">
+      <Measure>
         <startRepeat/>
         <endRepeat>2</endRepeat>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
         <Marker>
-          <pos x="0" y="-2"/>
+          <offset x="0" y="-2"/>
           <style>Repeat Text Left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
           </Marker>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="13">
+      <Measure>
         <startRepeat/>
         <Marker>
-          <pos x="3.82476" y="-2.74995"/>
+          <offset x="3.82476" y="-2.74995"/>
           <style>Repeat Text Left</style>
           <text><sym>segno</sym><font size="12"></font>2</text>
           <label>segno2</label>
           </Marker>
-        <BarLine>
-          <subtype>start-repeat</subtype>
-          <span>1</span>
-          </BarLine>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <BarLine>
+            <subtype>start-repeat</subtype>
+            <span>1</span>
+            </BarLine>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="14">
+      <Measure>
         <endRepeat>2</endRepeat>
         <Marker>
           <style>Repeat Text Right</style>
           <text>Fine</text>
           <label>fine</label>
           </Marker>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="15">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="16">
+      <Measure>
         <Jump>
-          <pos x="-1.19992" y="-2.14999"/>
+          <offset x="-1.19992" y="-2.14999"/>
           <style>Repeat Text Right</style>
           <text>D.S2. al Fine</text>
           <jumpTo>segno2</jumpTo>
           <playUntil>fine</playUntil>
           <continueAt></continueAt>
           </Jump>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     </Score>

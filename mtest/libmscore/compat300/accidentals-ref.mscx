@@ -659,7 +659,7 @@
               </Note>
             </Chord>
           <BarLine>
-            <subtype>normal</subtype>
+            <subtype>end</subtype>
             </BarLine>
           </voice>
         </Measure>

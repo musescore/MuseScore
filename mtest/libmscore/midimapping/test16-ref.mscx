@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -591,160 +591,145 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <linkedMain/>
         </VBox>
-      <Measure number="1">
-        <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
-          <lid>1</lid>
-          </Clef>
-        <KeySig>
-          <lid>2</lid>
-          <accidental>0</accidental>
-          </KeySig>
-        <TimeSig>
-          <lid>3</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Dynamic>
-          <subtype>f</subtype>
-          <velocity>96</velocity>
-          <lid>4</lid>
-          </Dynamic>
-        <Chord>
-          <lid>5</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>6</lid>
-            <pitch>48</pitch>
-            <tpc>14</tpc>
-            <fret>3</fret>
-            <string>4</string>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G8vb</concertClefType>
+            <transposingClefType>G8vb</transposingClefType>
+            <linkedMain/>
+            </Clef>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            <linkedMain/>
+            </Dynamic>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              <fret>3</fret>
+              <string>4</string>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="2">
-      <Measure number="1">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          <lid>8</lid>
-          </Clef>
-        <KeySig>
-          <lid>9</lid>
-          <accidental>0</accidental>
-          </KeySig>
-        <TimeSig>
-          <lid>10</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Chord>
-          <lid>11</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>12</lid>
-            <pitch>52</pitch>
-            <tpc>18</tpc>
-            <fret>2</fret>
-            <string>3</string>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <linkedMain/>
+            </Clef>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              <fret>2</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="3">
-      <Measure number="1">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          <lid>13</lid>
-          </Clef>
-        <KeySig>
-          <lid>14</lid>
-          <accidental>0</accidental>
-          </KeySig>
-        <TimeSig>
-          <lid>15</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Chord>
-          <lid>16</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>17</lid>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            <fret>0</fret>
-            <string>2</string>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <linkedMain/>
+            </Clef>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              <fret>0</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="4">
-      <Measure number="1">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          <lid>18</lid>
-          </Clef>
-        <KeySig>
-          <lid>19</lid>
-          <accidental>0</accidental>
-          </KeySig>
-        <TimeSig>
-          <lid>20</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Chord>
-          <lid>21</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>22</lid>
-            <pitch>59</pitch>
-            <tpc>19</tpc>
-            <fret>0</fret>
-            <string>1</string>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <linkedMain/>
+            </Clef>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <fret>0</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="5">
-      <Measure number="1">
-        <Clef>
-          <concertClefType>PERC</concertClefType>
-          <transposingClefType>PERC</transposingClefType>
-          <lid>23</lid>
-          </Clef>
-        <KeySig>
-          <lid>24</lid>
-          <accidental>0</accidental>
-          </KeySig>
-        <TimeSig>
-          <lid>25</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Chord>
-          <lid>26</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>27</lid>
-            <pitch>38</pitch>
-            <tpc>16</tpc>
-            <fret>38</fret>
-            <string>0</string>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>PERC</concertClefType>
+            <transposingClefType>PERC</transposingClefType>
+            <linkedMain/>
+            </Clef>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
+              <fret>38</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
       </Staff>
     <Score>
@@ -764,7 +749,7 @@
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
             </StaffType>
-          <bracket type="0" span="2"/>
+          <bracket type="0" span="2" col="0"/>
           </Staff>
         <Staff id="2">
           <linkedTo>1</linkedTo>
@@ -772,7 +757,6 @@
             <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
-            <stepOffset>2</stepOffset>
             <timesig>0</timesig>
             <durations>0</durations>
             <durationFontName>MuseScore Tab Modern</durationFontName>
@@ -790,7 +774,6 @@
             <upsideDown>0</upsideDown>
             <useNumbers>1</useNumbers>
             </StaffType>
-          <bracket type="-1" span="0"/>
           </Staff>
         <trackName></trackName>
         <Instrument>
@@ -815,63 +798,68 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <linked>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Track 1</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
-            <lid>1</lid>
-            </Clef>
-          <KeySig>
-            <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <TimeSig>
-            <lid>3</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
-            </TimeSig>
-          <Dynamic>
-            <subtype>f</subtype>
-            <velocity>96</velocity>
-            <lid>4</lid>
-            </Dynamic>
-          <Chord>
-            <lid>5</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>6</lid>
-              <pitch>48</pitch>
-              <tpc>14</tpc>
-              <fret>3</fret>
-              <string>4</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G8vb</concertClefType>
+              <transposingClefType>G8vb</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Dynamic>
+              <subtype>f</subtype>
+              <velocity>96</velocity>
+              <linked>
+                </linked>
+              </Dynamic>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>48</pitch>
+                <tpc>14</tpc>
+                <fret>3</fret>
+                <string>4</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <Staff id="2">
-        <Measure number="1">
-          <KeySig>
-            <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <Chord>
-            <lid>5</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>6</lid>
-              <pitch>48</pitch>
-              <tpc>14</tpc>
-              <fret>3</fret>
-              <string>4</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                <indexDiff>-2</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>-2</indexDiff>
+                  </linked>
+                <pitch>48</pitch>
+                <tpc>14</tpc>
+                <fret>3</fret>
+                <string>4</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <name>Track 1</name>
@@ -893,7 +881,7 @@
           <linkedTo>2</linkedTo>
           <StaffType group="pitched">
             </StaffType>
-          <bracket type="0" span="2"/>
+          <bracket type="0" span="2" col="0"/>
           </Staff>
         <Staff id="2">
           <linkedTo>2</linkedTo>
@@ -901,7 +889,6 @@
             <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
-            <stepOffset>2</stepOffset>
             <timesig>0</timesig>
             <durations>0</durations>
             <durationFontName>MuseScore Tab Modern</durationFontName>
@@ -919,7 +906,6 @@
             <upsideDown>0</upsideDown>
             <useNumbers>1</useNumbers>
             </StaffType>
-          <bracket type="-1" span="0"/>
           </Staff>
         <trackName></trackName>
         <Instrument>
@@ -944,58 +930,66 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            <indexDiff>-8</indexDiff>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Track 2</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <lid>8</lid>
-            </Clef>
-          <KeySig>
-            <lid>9</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <TimeSig>
-            <lid>10</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
-            </TimeSig>
-          <Chord>
-            <lid>11</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>12</lid>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              <fret>2</fret>
-              <string>3</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>52</pitch>
+                <tpc>18</tpc>
+                <fret>2</fret>
+                <string>3</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <Staff id="2">
-        <Measure number="1">
-          <KeySig>
-            <lid>9</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <Chord>
-            <lid>11</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>12</lid>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              <fret>2</fret>
-              <string>3</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                <indexDiff>-2</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>-2</indexDiff>
+                  </linked>
+                <pitch>52</pitch>
+                <tpc>18</tpc>
+                <fret>2</fret>
+                <string>3</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <name>Track 2</name>
@@ -1017,7 +1011,7 @@
           <linkedTo>3</linkedTo>
           <StaffType group="pitched">
             </StaffType>
-          <bracket type="0" span="2"/>
+          <bracket type="0" span="2" col="0"/>
           </Staff>
         <Staff id="2">
           <linkedTo>3</linkedTo>
@@ -1025,7 +1019,6 @@
             <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
-            <stepOffset>2</stepOffset>
             <timesig>0</timesig>
             <durations>0</durations>
             <durationFontName>MuseScore Tab Modern</durationFontName>
@@ -1043,7 +1036,6 @@
             <upsideDown>0</upsideDown>
             <useNumbers>1</useNumbers>
             </StaffType>
-          <bracket type="-1" span="0"/>
           </Staff>
         <trackName></trackName>
         <Instrument>
@@ -1068,58 +1060,65 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <linked>
+            <location>
+              <staves>-2</staves>
+              </location>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Track 3</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <lid>13</lid>
-            </Clef>
-          <KeySig>
-            <lid>14</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <TimeSig>
-            <lid>15</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
-            </TimeSig>
-          <Chord>
-            <lid>16</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>17</lid>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              <fret>0</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>55</pitch>
+                <tpc>15</tpc>
+                <fret>0</fret>
+                <string>2</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <Staff id="2">
-        <Measure number="1">
-          <KeySig>
-            <lid>14</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <Chord>
-            <lid>16</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>17</lid>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              <fret>0</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                <indexDiff>-2</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>-2</indexDiff>
+                  </linked>
+                <pitch>55</pitch>
+                <tpc>15</tpc>
+                <fret>0</fret>
+                <string>2</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <name>Track 3</name>
@@ -1141,7 +1140,7 @@
           <linkedTo>4</linkedTo>
           <StaffType group="pitched">
             </StaffType>
-          <bracket type="0" span="2"/>
+          <bracket type="0" span="2" col="0"/>
           </Staff>
         <Staff id="2">
           <linkedTo>4</linkedTo>
@@ -1149,7 +1148,6 @@
             <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
-            <stepOffset>2</stepOffset>
             <timesig>0</timesig>
             <durations>0</durations>
             <durationFontName>MuseScore Tab Modern</durationFontName>
@@ -1167,7 +1165,6 @@
             <upsideDown>0</upsideDown>
             <useNumbers>1</useNumbers>
             </StaffType>
-          <bracket type="-1" span="0"/>
           </Staff>
         <trackName></trackName>
         <Instrument>
@@ -1192,58 +1189,65 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <linked>
+            <location>
+              <staves>-3</staves>
+              </location>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Track 4</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <lid>18</lid>
-            </Clef>
-          <KeySig>
-            <lid>19</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <TimeSig>
-            <lid>20</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
-            </TimeSig>
-          <Chord>
-            <lid>21</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>22</lid>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
-              <fret>0</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>59</pitch>
+                <tpc>19</tpc>
+                <fret>0</fret>
+                <string>1</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <Staff id="2">
-        <Measure number="1">
-          <KeySig>
-            <lid>19</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <Chord>
-            <lid>21</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>22</lid>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
-              <fret>0</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                <indexDiff>-2</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>-2</indexDiff>
+                  </linked>
+                <pitch>59</pitch>
+                <tpc>19</tpc>
+                <fret>0</fret>
+                <string>1</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <name>Track 4</name>
@@ -1720,39 +1724,44 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <linked>
+            <location>
+              <staves>-4</staves>
+              </location>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Track 5</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            <lid>23</lid>
-            </Clef>
-          <KeySig>
-            <lid>24</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <TimeSig>
-            <lid>25</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
-            </TimeSig>
-          <Chord>
-            <lid>26</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>27</lid>
-              <pitch>38</pitch>
-              <tpc>16</tpc>
-              <fret>38</fret>
-              <string>0</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>PERC</concertClefType>
+              <transposingClefType>PERC</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>38</pitch>
+                <tpc>16</tpc>
+                <fret>38</fret>
+                <string>0</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <name>Track 5</name>

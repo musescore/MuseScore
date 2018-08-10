@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -74,124 +74,207 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure number="1">
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Trill id="2">
-          <subtype>trill</subtype>
-          <ornamentStyle>baroque</ornamentStyle>
-          <lineWidth>0.15</lineWidth>
-          </Trill>
-        <Chord>
-          <durationType>half</durationType>
-          <Note>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            </Note>
-          </Chord>
-        <endSpanner id="2"/>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Spanner type="Trill">
+            <Trill>
+              <subtype>trill</subtype>
+              <ornamentStyle>baroque</ornamentStyle>
+              </Trill>
+            <next>
+              <location>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Spanner type="Trill">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Trill id="3">
-          <subtype>upprall</subtype>
-          <lineWidth>0.15</lineWidth>
-          </Trill>
-        <Chord>
-          <durationType>half</durationType>
-          <Note>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            </Note>
-          </Chord>
-        <endSpanner id="3"/>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <Spanner type="Trill">
+            <Trill>
+              <subtype>upprall</subtype>
+              </Trill>
+            <next>
+              <location>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Spanner type="Trill">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <Trill id="4">
-          <subtype>downprall</subtype>
-          <lineWidth>0.15</lineWidth>
-          </Trill>
-        <Chord>
-          <durationType>half</durationType>
-          <Note>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            </Note>
-          </Chord>
-        <endSpanner id="4"/>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <Spanner type="Trill">
+            <Trill>
+              <subtype>downprall</subtype>
+              </Trill>
+            <next>
+              <location>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Spanner type="Trill">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="4">
-        <Trill id="5">
-          <subtype>prallprall</subtype>
-          <lineWidth>0.15</lineWidth>
-          </Trill>
-        <Chord>
-          <durationType>half</durationType>
-          <Note>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            </Note>
-          </Chord>
-        <endSpanner id="5"/>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <Spanner type="Trill">
+            <Trill>
+              <subtype>prallprall</subtype>
+              </Trill>
+            <next>
+              <location>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Spanner type="Trill">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="5">
-        <Trill id="6">
-          <subtype>prallprall</subtype>
-          <lineWidth>0.15</lineWidth>
-          </Trill>
-        <Chord>
-          <durationType>half</durationType>
-          <Note>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            </Note>
-          </Chord>
-        <endSpanner id="6"/>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <Spanner type="Trill">
+            <Trill>
+              <subtype>prallprall</subtype>
+              </Trill>
+            <next>
+              <location>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Spanner type="Trill">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="6">
-        <Trill id="7">
-          <subtype>prallprall</subtype>
-          <lineWidth>0.15</lineWidth>
-          </Trill>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>69</pitch>
-            <tpc>17</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <endSpanner id="7"/>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
+      <Measure>
+        <voice>
+          <Spanner type="Trill">
+            <Trill>
+              <subtype>prallprall</subtype>
+              </Trill>
+            <next>
+              <location>
+                <fractions>1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Spanner type="Trill">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     </Score>

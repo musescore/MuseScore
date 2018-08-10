@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -74,46 +74,63 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>1</lid>
+        <linkedMain/>
         </VBox>
-      <Measure number="1">
-        <TimeSig>
-          <lid>2</lid>
-          <sigN>2</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Chord>
-          <lid>3</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>4</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            <Glissando id="2">
-              <text>gliss.</text>
-              <lid>8</lid>
-              <diagonal>1</diagonal>
-              <anchor>3</anchor>
-              </Glissando>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>5</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>6</lid>
-            <pitch>84</pitch>
-            <tpc>14</tpc>
-            <endSpanner id="2"/>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <Spanner type="Glissando">
+                <Glissando>
+                  <text>gliss.</text>
+                  <linkedMain/>
+                  <diagonal>1</diagonal>
+                  <anchor>3</anchor>
+                  </Glissando>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              <Spanner type="Glissando">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Rest>
-          <lid>7</lid>
-          <durationType>measure</durationType>
-          <duration>2/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
         </Measure>
       </Staff>
     <Score>
@@ -182,50 +199,75 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>1</lid>
+          <linked>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Flute</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <TimeSig>
-            <lid>2</lid>
-            <sigN>2</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Chord>
-            <lid>3</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>4</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              <Glissando id="3">
-                <text>gliss.</text>
-                <lid>8</lid>
-                <diagonal>1</diagonal>
-                <anchor>3</anchor>
-                </Glissando>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>5</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>6</lid>
-              <pitch>84</pitch>
-              <tpc>14</tpc>
-              <endSpanner id="3"/>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>2</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                <Spanner type="Glissando">
+                  <Glissando>
+                    <text>gliss.</text>
+                    <linked>
+                      </linked>
+                    <diagonal>1</diagonal>
+                    <anchor>3</anchor>
+                    </Glissando>
+                  <next>
+                    <location>
+                      <fractions>1/4</fractions>
+                      </location>
+                    </next>
+                  </Spanner>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>84</pitch>
+                <tpc>14</tpc>
+                <Spanner type="Glissando">
+                  <prev>
+                    <location>
+                      <fractions>-1/4</fractions>
+                      </location>
+                    </prev>
+                  </Spanner>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="2">
-          <Rest>
-            <lid>7</lid>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
           </Measure>
         </Staff>
       <name>Flute</name>

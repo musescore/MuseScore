@@ -992,7 +992,7 @@
             <durationType>half</durationType>
             </Rest>
           <BarLine>
-            <subtype>normal</subtype>
+            <subtype>end</subtype>
             </BarLine>
           </voice>
         </Measure>
@@ -1158,7 +1158,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <subtype>normal</subtype>
+            <subtype>end</subtype>
             </BarLine>
           </voice>
         </Measure>
@@ -1395,7 +1395,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <subtype>normal</subtype>
+            <subtype>end</subtype>
             </BarLine>
           </voice>
         </Measure>
@@ -1536,7 +1536,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <subtype>normal</subtype>
+            <subtype>end</subtype>
             </BarLine>
           </voice>
         </Measure>

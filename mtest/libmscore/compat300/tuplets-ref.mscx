@@ -409,9 +409,9 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <move>
+          <location>
             <fractions>-1/1920</fractions>
-            </move>
+            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -448,9 +448,9 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <move>
+          <location>
             <fractions>-1/640</fractions>
-            </move>
+            </location>
           <Rest>
             <durationType>half</durationType>
             </Rest>
@@ -597,9 +597,9 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <move>
+          <location>
             <fractions>1/1920</fractions>
-            </move>
+            </location>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -636,14 +636,14 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <move>
+          <location>
             <fractions>-1/1920</fractions>
-            </move>
+            </location>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
-            <subtype>normal</subtype>
+            <subtype>end</subtype>
             </BarLine>
           </voice>
         </Measure>

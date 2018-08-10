@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -74,139 +74,200 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure number="1">
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>60</pitch>
-            <tpc>14</tpc>
-            <Glissando id="2">
-              <text>gliss.</text>
-              <subtype>0</subtype>
-              <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
-              <anchor>3</anchor>
-              </Glissando>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>64</pitch>
-            <tpc>18</tpc>
-            <Glissando id="3">
-              <text>gliss.</text>
-              <subtype>0</subtype>
-              <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
-              <anchor>3</anchor>
-              </Glissando>
-            <endSpanner id="2"/>
-            </Note>
-          </Chord>
-        <Rest>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            <endSpanner id="4"/>
-            </Note>
-          </Chord>
-        <move>0/1</move>
-        <move>1/2</move>
-        <Chord>
-          <track>1</track>
-          <durationType>quarter</durationType>
-          <Note>
-            <track>1</track>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            <Glissando id="4">
-              <text>gliss.</text>
-              <subtype>0</subtype>
-              <track>1</track>
-              <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
-              <anchor>3</anchor>
-              </Glissando>
-            <endSpanner id="3"/>
-            </Note>
-          </Chord>
-        <Rest>
-          <track>1</track>
-          <durationType>quarter</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <Spanner type="Glissando">
+                <Glissando>
+                  <text>gliss.</text>
+                  <diagonal>1</diagonal>
+                  <anchor>3</anchor>
+                  </Glissando>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <Spanner type="Glissando">
+                <Glissando>
+                  <text>gliss.</text>
+                  <diagonal>1</diagonal>
+                  <anchor>3</anchor>
+                  </Glissando>
+                <next>
+                  <location>
+                    <voices>1</voices>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Glissando">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <Spanner type="Glissando">
+                <prev>
+                  <location>
+                    <voices>1</voices>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <location>
+            <fractions>1/2</fractions>
+            </location>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <Spanner type="Glissando">
+                <Glissando>
+                  <text>gliss.</text>
+                  <diagonal>1</diagonal>
+                  <anchor>3</anchor>
+                  </Glissando>
+                <next>
+                  <location>
+                    <voices>-1</voices>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Glissando">
+                <prev>
+                  <location>
+                    <voices>-1</voices>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            <Glissando id="5">
-              <text>gliss.</text>
-              <subtype>1</subtype>
-              <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
-              <anchor>3</anchor>
-              </Glissando>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            <endSpanner id="6"/>
-            </Note>
-          </Chord>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
-        <move>0/1</move>
-        <Chord>
-          <track>1</track>
-          <durationType>quarter</durationType>
-          <Note>
-            <track>1</track>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            <Glissando id="6">
-              <text>gliss.</text>
-              <subtype>0</subtype>
-              <track>1</track>
-              <diagonal>1</diagonal>
-              <lineWidth>0.15</lineWidth>
-              <anchor>3</anchor>
-              </Glissando>
-            </Note>
-          </Chord>
-        <Chord>
-          <track>1</track>
-          <durationType>quarter</durationType>
-          <Note>
-            <track>1</track>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            <endSpanner id="5"/>
-            </Note>
-          </Chord>
-        <Rest>
-          <track>1</track>
-          <durationType>half</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <Spanner type="Glissando">
+                <Glissando>
+                  <text>gliss.</text>
+                  <subtype>1</subtype>
+                  <diagonal>1</diagonal>
+                  <anchor>3</anchor>
+                  </Glissando>
+                <next>
+                  <location>
+                    <voices>1</voices>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <Spanner type="Glissando">
+                <prev>
+                  <location>
+                    <voices>1</voices>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <Spanner type="Glissando">
+                <Glissando>
+                  <text>gliss.</text>
+                  <diagonal>1</diagonal>
+                  <anchor>3</anchor>
+                  </Glissando>
+                <next>
+                  <location>
+                    <voices>-1</voices>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <Spanner type="Glissando">
+                <prev>
+                  <location>
+                    <voices>-1</voices>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
         </Measure>
       </Staff>
     </Score>
