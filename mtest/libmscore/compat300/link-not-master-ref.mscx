@@ -638,9 +638,9 @@
               <tempo>1.66667</tempo>
               <linked>
                 <score>same</score>
-                <move>
+                <location>
                   <staves>-2</staves>
-                  </move>
+                  </location>
                 </linked>
               <text>𝅘𝅥 = 100</text>
               </Tempo>

@@ -111,9 +111,9 @@
               <linkedMain/>
               </HairPin>
             <next>
-              <move>
+              <location>
                 <measures>5</measures>
-                </move>
+                </location>
               </next>
             </Spanner>
           <Chord>
@@ -318,9 +318,9 @@
         <voice>
           <Spanner type="HairPin">
             <prev>
-              <move>
+              <location>
                 <measures>-5</measures>
-                </move>
+                </location>
               </prev>
             </Spanner>
           <Chord>
@@ -594,7 +594,6 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <subtype>normal</subtype>
             <linkedMain/>
             </BarLine>
           </voice>
@@ -711,9 +710,9 @@
                   </linked>
                 </HairPin>
               <next>
-                <move>
+                <location>
                   <measures>5</measures>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Chord>
@@ -958,9 +957,9 @@
           <voice>
             <Spanner type="HairPin">
               <prev>
-                <move>
+                <location>
                   <measures>-5</measures>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Chord>
@@ -1027,7 +1026,6 @@
               <duration>104/4</duration>
               </Rest>
             <BarLine>
-              <subtype>normal</subtype>
               </BarLine>
             </voice>
           </Measure>
@@ -1280,7 +1278,6 @@
               <duration>4/4</duration>
               </Rest>
             <BarLine>
-              <subtype>normal</subtype>
               <linked>
                 </linked>
               </BarLine>

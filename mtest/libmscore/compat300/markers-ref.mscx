@@ -267,7 +267,6 @@
             <duration>4/4</duration>
             </RepeatMeasure>
           <BarLine>
-            <subtype>normal</subtype>
             </BarLine>
           </voice>
         </Measure>

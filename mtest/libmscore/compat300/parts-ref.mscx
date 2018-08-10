@@ -171,9 +171,9 @@
               <linkedMain/>
               </HairPin>
             <next>
-              <move>
+              <location>
                 <fractions>1/4</fractions>
-                </move>
+                </location>
               </next>
             </Spanner>
           <Chord>
@@ -187,9 +187,9 @@
             </Chord>
           <Spanner type="HairPin">
             <prev>
-              <move>
+              <location>
                 <fractions>-1/4</fractions>
-                </move>
+                </location>
               </prev>
             </Spanner>
           <Chord>
@@ -290,9 +290,9 @@
                 <linkedMain/>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <fractions>3/4</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Note>
@@ -324,9 +324,9 @@
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <fractions>-3/4</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Note>
@@ -352,9 +352,9 @@
                   <linkedMain/>
                   </Tie>
                 <next>
-                  <move>
+                  <location>
                     <fractions>1/4</fractions>
-                    </move>
+                    </location>
                   </next>
                 </Spanner>
               <pitch>67</pitch>
@@ -368,9 +368,9 @@
               <linkedMain/>
               <Spanner type="Tie">
                 <prev>
-                  <move>
+                  <location>
                     <fractions>-1/4</fractions>
-                    </move>
+                    </location>
                   </prev>
                 </Spanner>
               <pitch>67</pitch>
@@ -1169,9 +1169,9 @@
                   </linked>
                 </HairPin>
               <next>
-                <move>
+                <location>
                   <fractions>1/4</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Chord>
@@ -1187,9 +1187,9 @@
               </Chord>
             <Spanner type="HairPin">
               <prev>
-                <move>
+                <location>
                   <fractions>-1/4</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Chord>
@@ -1309,9 +1309,9 @@
                     </linked>
                   </Slur>
                 <next>
-                  <move>
+                  <location>
                     <fractions>3/4</fractions>
-                    </move>
+                    </location>
                   </next>
                 </Spanner>
               <Note>
@@ -1349,9 +1349,9 @@
               <durationType>quarter</durationType>
               <Spanner type="Slur">
                 <prev>
-                  <move>
+                  <location>
                     <fractions>-3/4</fractions>
-                    </move>
+                    </location>
                   </prev>
                 </Spanner>
               <Note>
@@ -1378,9 +1378,9 @@
                       </linked>
                     </Tie>
                   <next>
-                    <move>
+                    <location>
                       <fractions>1/4</fractions>
-                      </move>
+                      </location>
                     </next>
                   </Spanner>
                 <pitch>67</pitch>
@@ -1396,9 +1396,9 @@
                   </linked>
                 <Spanner type="Tie">
                   <prev>
-                    <move>
+                    <location>
                       <fractions>-1/4</fractions>
-                      </move>
+                      </location>
                     </prev>
                   </Spanner>
                 <pitch>67</pitch>
@@ -1798,15 +1798,15 @@
         <VBox>
           <height>10</height>
           <linked>
-            <move>
+            <location>
               <staves>-1</staves>
-              </move>
+              </location>
             </linked>
           <Text>
             <linked>
-              <move>
+              <location>
                 <staves>-1</staves>
-                </move>
+                </location>
               </linked>
             <style>Title</style>
             <text>testpart2</text>
@@ -1833,9 +1833,9 @@
             <Tempo>
               <tempo>1.66667</tempo>
               <linked>
-                <move>
+                <location>
                   <staves>-1</staves>
-                  </move>
+                  </location>
                 <indexDiff>4</indexDiff>
                 </linked>
               <text>𝅘𝅥 = 100</text>
@@ -1859,9 +1859,9 @@
             <Tempo>
               <tempo>1.66667</tempo>
               <linked>
-                <move>
+                <location>
                   <staves>-1</staves>
-                  </move>
+                  </location>
                 <indexDiff>4</indexDiff>
                 </linked>
               <text>𝅘𝅥 = 100</text>

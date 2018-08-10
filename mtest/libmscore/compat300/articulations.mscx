@@ -1856,7 +1856,7 @@
           <durationType>quarter</durationType>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>

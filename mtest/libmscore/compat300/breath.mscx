@@ -121,7 +121,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>

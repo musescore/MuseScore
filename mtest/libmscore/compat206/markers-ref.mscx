@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -79,44 +79,50 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure number="1">
+      <Measure>
         <Marker>
           <style>Repeat Text Left</style>
           <text><sym>segno</sym></text>
           <label>segno</label>
           </Marker>
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
+      <Measure>
         <Marker>
           <style>Repeat Text Left</style>
           <text><sym>segnoSerpent1</sym></text>
           <label>varsegno</label>
           </Marker>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="3">
+      <Measure>
         <Marker>
           <style>Repeat Text Left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
           </Marker>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="4">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
@@ -125,34 +131,40 @@
           <text><sym>codaSquare</sym></text>
           <label>varcoda</label>
           </Marker>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="5">
+      <Measure>
         <Marker>
           <style>Repeat Text Right</style>
           <text>Fine</text>
           <label>fine</label>
           </Marker>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="6">
+      <Measure>
         <Marker>
           <style>Repeat Text Right</style>
           <text>To Coda</text>
           <label>coda</label>
           </Marker>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="7">
+      <Measure>
         <Jump>
           <style>Repeat Text Right</style>
           <text>D.C.</text>
@@ -160,12 +172,14 @@
           <playUntil>end</playUntil>
           <continueAt></continueAt>
           </Jump>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="8">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
@@ -176,12 +190,14 @@
           <playUntil>fine</playUntil>
           <continueAt></continueAt>
           </Jump>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="9">
+      <Measure>
         <Jump>
           <style>Repeat Text Right</style>
           <text>D.C. al Coda</text>
@@ -189,12 +205,14 @@
           <playUntil>coda</playUntil>
           <continueAt>codab</continueAt>
           </Jump>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="10">
+      <Measure>
         <Jump>
           <style>Repeat Text Right</style>
           <text>D.S. al Coda</text>
@@ -202,12 +220,14 @@
           <playUntil>coda</playUntil>
           <continueAt>codab</continueAt>
           </Jump>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="11">
+      <Measure>
         <Jump>
           <style>Repeat Text Right</style>
           <text>D.S. al Fine</text>
@@ -215,12 +235,14 @@
           <playUntil>fine</playUntil>
           <continueAt></continueAt>
           </Jump>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="12">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
@@ -231,19 +253,23 @@
           <playUntil>end</playUntil>
           <continueAt></continueAt>
           </Jump>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="13">
-        <RepeatMeasure>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </RepeatMeasure>
-        <BarLine>
-          <subtype>end</subtype>
-          </BarLine>
+      <Measure>
+        <voice>
+          <RepeatMeasure>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </RepeatMeasure>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     </Score>

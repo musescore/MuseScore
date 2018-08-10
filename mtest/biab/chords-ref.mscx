@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -43,569 +43,665 @@
           <text>Chord Test1</text>
           </Text>
         </VBox>
-      <Measure number="1">
-        <KeySig>
-          <accidental>0</accidental>
-          </KeySig>
-        <Harmony>
-          <root>14</root>
-          <extension>2</extension>
-          <name>Maj</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <KeySig>
+            <accidental>0</accidental>
+            </KeySig>
+          <Harmony>
+            <root>14</root>
+            <extension>2</extension>
+            <name>Maj</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Harmony>
-          <root>14</root>
-          <extension>3</extension>
-          <name>5b</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>3</extension>
+            <name>5b</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <Harmony>
-          <root>14</root>
-          <extension>4</extension>
-          <name>+</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>4</extension>
+            <name>+</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="4">
-        <Harmony>
-          <root>14</root>
-          <extension>5</extension>
-          <name>6</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>5</extension>
+            <name>6</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="5">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Harmony>
-          <root>14</root>
-          <extension>6</extension>
-          <name>Maj7</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>6</extension>
+            <name>Maj7</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="6">
-        <Harmony>
-          <root>14</root>
-          <extension>7</extension>
-          <name>Maj9</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>7</extension>
+            <name>Maj9</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="7">
-        <Harmony>
-          <root>14</root>
-          <extension>8</extension>
-          <name>Maj9#11</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>8</extension>
+            <name>Maj9#11</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="8">
-        <Harmony>
-          <root>14</root>
-          <extension>9</extension>
-          <name>Maj13#11</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>9</extension>
+            <name>Maj13#11</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="9">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Harmony>
-          <root>14</root>
-          <extension>10</extension>
-          <name>Maj13</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>10</extension>
+            <name>Maj13</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="10">
-        <Harmony>
-          <root>14</root>
-          <extension>13</extension>
-          <name>Maj7#5</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>13</extension>
+            <name>Maj7#5</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="11">
-        <Harmony>
-          <root>14</root>
-          <extension>14</extension>
-          <name>69</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>14</extension>
+            <name>69</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="12">
-        <Harmony>
-          <root>14</root>
-          <extension>15</extension>
-          <name>2</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>15</extension>
+            <name>2</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="13">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Harmony>
-          <root>14</root>
-          <extension>16</extension>
-          <name>m</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>16</extension>
+            <name>m</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="14">
-        <Harmony>
-          <root>14</root>
-          <extension>17</extension>
-          <name>m+</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>17</extension>
+            <name>m+</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="15">
-        <Harmony>
-          <root>14</root>
-          <extension>18</extension>
-          <name>mMaj7</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>18</extension>
+            <name>mMaj7</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="16">
-        <Harmony>
-          <root>14</root>
-          <extension>19</extension>
-          <name>m7</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>19</extension>
+            <name>m7</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="17">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Harmony>
-          <root>14</root>
-          <extension>20</extension>
-          <name>m9</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>20</extension>
+            <name>m9</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="18">
-        <Harmony>
-          <root>14</root>
-          <extension>21</extension>
-          <name>m11</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>21</extension>
+            <name>m11</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="19">
-        <Harmony>
-          <root>14</root>
-          <extension>22</extension>
-          <name>m13</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>22</extension>
+            <name>m13</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="20">
-        <Harmony>
-          <root>14</root>
-          <extension>23</extension>
-          <name>m6</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>23</extension>
+            <name>m6</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="21">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Harmony>
-          <root>14</root>
-          <extension>24</extension>
-          <name>m#5</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>24</extension>
+            <name>m#5</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="22">
-        <Harmony>
-          <root>14</root>
-          <extension>25</extension>
-          <name>m7#5</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>25</extension>
+            <name>m7#5</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="23">
-        <Harmony>
-          <root>14</root>
-          <extension>26</extension>
-          <name>m69</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>26</extension>
+            <name>m69</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="24">
-        <Harmony>
-          <root>14</root>
-          <extension>28</extension>
-          <name>Maj7Lyd</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>28</extension>
+            <name>Maj7Lyd</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="25">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Harmony>
-          <root>14</root>
-          <extension>29</extension>
-          <name>Maj7b5</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>29</extension>
+            <name>Maj7b5</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="26">
-        <Harmony>
-          <root>14</root>
-          <extension>32</extension>
-          <name>m7b5</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>32</extension>
+            <name>m7b5</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="27">
-        <Harmony>
-          <root>14</root>
-          <extension>33</extension>
-          <name>dim</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>33</extension>
+            <name>dim</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="28">
-        <Harmony>
-          <root>14</root>
-          <extension>34</extension>
-          <name>m9b5</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>34</extension>
+            <name>m9b5</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="29">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Harmony>
-          <root>14</root>
-          <extension>40</extension>
-          <name>5</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>40</extension>
+            <name>5</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="30">
-        <Harmony>
-          <root>14</root>
-          <extension>56</extension>
-          <name>7+</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>56</extension>
+            <name>7+</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="31">
-        <Harmony>
-          <root>14</root>
-          <extension>57</extension>
-          <name>9+</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>57</extension>
+            <name>9+</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="32">
-        <Harmony>
-          <root>14</root>
-          <extension>58</extension>
-          <name>13+</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>58</extension>
+            <name>13+</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="33">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Harmony>
-          <root>14</root>
-          <extension>64</extension>
-          <name>7</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>64</extension>
+            <name>7</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="34">
-        <Harmony>
-          <root>14</root>
-          <extension>65</extension>
-          <name>13</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>65</extension>
+            <name>13</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="35">
-        <Harmony>
-          <root>14</root>
-          <extension>66</extension>
-          <name>7b13</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>66</extension>
+            <name>7b13</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="36">
-        <Harmony>
-          <root>14</root>
-          <extension>67</extension>
-          <name>7#11</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>67</extension>
+            <name>7#11</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="37">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Harmony>
-          <root>14</root>
-          <extension>74</extension>
-          <name>13#11</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>74</extension>
+            <name>13#11</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="38">
-        <Harmony>
-          <root>14</root>
-          <extension>75</extension>
-          <name>9#11b13</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>75</extension>
+            <name>9#11b13</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="39">
-        <Harmony>
-          <root>14</root>
-          <extension>76</extension>
-          <name>7b9</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>76</extension>
+            <name>7b9</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="40">
-        <Harmony>
-          <root>14</root>
-          <extension>77</extension>
-          <name>13b9</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>77</extension>
+            <name>13b9</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="41">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Harmony>
-          <root>14</root>
-          <extension>85</extension>
-          <name>9#11</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>85</extension>
+            <name>9#11</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="42">
-        <Harmony>
-          <root>14</root>
-          <extension>74</extension>
-          <name>13#11</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>74</extension>
+            <name>13#11</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="43">
-        <Harmony>
-          <root>14</root>
-          <extension>75</extension>
-          <name>9#11b13</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>75</extension>
+            <name>9#11b13</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="44">
-        <Harmony>
-          <root>14</root>
-          <extension>76</extension>
-          <name>7b9</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>76</extension>
+            <name>7b9</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="45">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Harmony>
-          <root>14</root>
-          <extension>77</extension>
-          <name>13b9</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>77</extension>
+            <name>13b9</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="46">
-        <Harmony>
-          <root>14</root>
-          <extension>78</extension>
-          <name>7b9b13</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>78</extension>
+            <name>7b9b13</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="47">
-        <Harmony>
-          <root>14</root>
-          <extension>79</extension>
-          <name>7b9#11</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>79</extension>
+            <name>7b9#11</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="48">
-        <Harmony>
-          <root>14</root>
-          <extension>80</extension>
-          <name>13b9#11</name>
-          </Harmony>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>80</extension>
+            <name>13b9#11</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
       </Staff>
     </Score>

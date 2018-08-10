@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -75,198 +75,230 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>34</lid>
+        <linkedMain/>
         </VBox>
-      <Measure number="1">
-        <TimeSig>
-          <lid>1</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Chord>
-          <lid>2</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>3</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Chord>
-          <lid>4</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>5</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <Chord>
-          <lid>6</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>7</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="4">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Chord>
-          <lid>8</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>9</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="5">
-        <RehearsalMark>
-          <lid>10</lid>
-          <text>C</text>
-          </RehearsalMark>
-        <Chord>
-          <lid>11</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>12</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <RehearsalMark>
+            <linkedMain/>
+            <text>C</text>
+            </RehearsalMark>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="6">
-        <Chord>
-          <lid>13</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>14</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="7">
-        <Chord>
-          <lid>15</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>16</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="8">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Chord>
-          <lid>17</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>18</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="9">
-        <RehearsalMark>
-          <lid>19</lid>
-          <text>D</text>
-          </RehearsalMark>
-        <Rest>
-          <lid>20</lid>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <RehearsalMark>
+            <linkedMain/>
+            <text>D</text>
+            </RehearsalMark>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="10">
-        <Rest>
-          <lid>21</lid>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="11">
-        <Rest>
-          <lid>22</lid>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="12">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Rest>
-          <lid>23</lid>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="13">
-        <RehearsalMark>
-          <lid>24</lid>
-          <text>E</text>
-          </RehearsalMark>
-        <Chord>
-          <lid>25</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>26</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <RehearsalMark>
+            <linkedMain/>
+            <text>E</text>
+            </RehearsalMark>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="14">
-        <Chord>
-          <lid>27</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>28</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="15">
-        <Chord>
-          <lid>29</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>30</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="16">
-        <Chord>
-          <lid>31</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>32</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          <lid>33</lid>
-          </BarLine>
+      <Measure>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            <linkedMain/>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     <Score>
@@ -335,208 +367,280 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>34</lid>
+          <linked>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Flute</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <TimeSig>
-            <lid>1</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Chord>
-            <lid>2</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>3</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="2">
-          <Chord>
-            <lid>4</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>5</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="3">
-          <Chord>
-            <lid>6</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>7</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="4">
-          <Chord>
-            <lid>8</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>9</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="5">
-          <RehearsalMark>
-            <lid>10</lid>
-            <text>C</text>
-            </RehearsalMark>
-          <Chord>
-            <lid>11</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>12</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <RehearsalMark>
+              <linked>
+                </linked>
+              <text>C</text>
+              </RehearsalMark>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="6">
-          <Chord>
-            <lid>13</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>14</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="7">
-          <Chord>
-            <lid>15</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>16</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="8">
-          <Chord>
-            <lid>17</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>18</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="9">
-          <RehearsalMark>
-            <lid>19</lid>
-            <text>D</text>
-            </RehearsalMark>
-          <Rest>
-            <lid>20</lid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <RehearsalMark>
+              <linked>
+                </linked>
+              <text>D</text>
+              </RehearsalMark>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>4/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="9" len="16/4">
+        <Measure len="16/4">
           <multiMeasureRest>4</multiMeasureRest>
-          <RehearsalMark>
-            <lid>19</lid>
-            <text>D</text>
-            </RehearsalMark>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          <move>4/1</move>
-          <BarLine>
-            <span>1</span>
-            </BarLine>
+          <voice>
+            <RehearsalMark>
+              <linked>
+                <indexDiff>-2</indexDiff>
+                </linked>
+              <text>D</text>
+              </RehearsalMark>
+            <Rest>
+              <durationType>measure</durationType>
+              <duration>4/4</duration>
+              </Rest>
+            <location>
+              <fractions>3/1</fractions>
+              </location>
+            <BarLine>
+              <span>1</span>
+              </BarLine>
+            </voice>
           </Measure>
-        <Measure number="10">
-          <Rest>
-            <lid>21</lid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>4/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="11">
-          <Rest>
-            <lid>22</lid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>4/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="12">
-          <Rest>
-            <lid>23</lid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>4/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="13">
-          <RehearsalMark>
-            <lid>24</lid>
-            <text>E</text>
-            </RehearsalMark>
-          <Chord>
-            <lid>25</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>26</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <RehearsalMark>
+              <linked>
+                </linked>
+              <text>E</text>
+              </RehearsalMark>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="14">
-          <Chord>
-            <lid>27</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>28</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="15">
-          <Chord>
-            <lid>29</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>30</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="16">
-          <Chord>
-            <lid>31</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>32</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            <lid>33</lid>
-            </BarLine>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            <BarLine>
+              <subtype>end</subtype>
+              <span>1</span>
+              <linked>
+                </linked>
+              </BarLine>
+            </voice>
           </Measure>
         </Staff>
       <name>Flute</name>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <StaffList version="2.00" tick="0" len="1920" staff="0" staves="1">
   <Staff id="0">
-    <voice id="0">0</voice>
-    <move>0/1</move>
+    <voiceOffset>
+      <voice id="0">0</voice>
+      </voiceOffset>
     <FretDiagram>
-      <track>0</track>
       <string no="0">
         <marker>88</marker>
         </string>
@@ -25,62 +25,49 @@
         </string>
       </FretDiagram>
     <Chord>
-      <track>0</track>
       <durationType>quarter</durationType>
       <Note>
-        <track>0</track>
         <pitch>47</pitch>
         <tpc>19</tpc>
         </Note>
       <Note>
-        <track>0</track>
         <pitch>52</pitch>
         <tpc>18</tpc>
         </Note>
       <Note>
-        <track>0</track>
         <pitch>59</pitch>
         <tpc>19</tpc>
         </Note>
       </Chord>
     <Chord>
-      <track>0</track>
       <durationType>quarter</durationType>
       <Note>
-        <track>0</track>
         <pitch>62</pitch>
         <tpc>16</tpc>
         </Note>
       </Chord>
     <Chord>
-      <track>0</track>
       <durationType>quarter</durationType>
       <Note>
-        <track>0</track>
         <pitch>47</pitch>
         <tpc>19</tpc>
         </Note>
       <Note>
-        <track>0</track>
         <pitch>52</pitch>
         <tpc>18</tpc>
         </Note>
       <Note>
-        <track>0</track>
         <pitch>59</pitch>
         <tpc>19</tpc>
         </Note>
       <Note>
-        <track>0</track>
         <pitch>64</pitch>
         <tpc>18</tpc>
         </Note>
       </Chord>
     <Chord>
-      <track>0</track>
       <durationType>quarter</durationType>
       <Note>
-        <track>0</track>
         <pitch>65</pitch>
         <tpc>13</tpc>
         </Note>

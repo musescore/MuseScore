@@ -101,20 +101,20 @@
               <Slur>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <measures>1</measures>
                   <fractions>3/4</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Spanner type="Slur">
               <Slur>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <measures>2</measures>
                   <fractions>1/2</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Spanner type="Slur">
@@ -122,10 +122,10 @@
                 <up>down</up>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <measures>7</measures>
                   <fractions>1/4</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Note>
@@ -154,10 +154,10 @@
                 <up>down</up>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <measures>6</measures>
                   <fractions>-3/4</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Note>
@@ -175,9 +175,9 @@
               <Slur>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <fractions>3/4</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Note>
@@ -203,17 +203,17 @@
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <measures>-1</measures>
                   <fractions>-3/4</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <fractions>-3/4</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Note>
@@ -227,20 +227,20 @@
               <Slur>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <measures>1</measures>
                   <fractions>-3/4</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Spanner type="Slur">
               <Slur>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <measures>2</measures>
                   <fractions>-3/4</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Note>
@@ -263,10 +263,10 @@
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <measures>-1</measures>
                   <fractions>3/4</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Note>
@@ -278,10 +278,10 @@
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <measures>-2</measures>
                   <fractions>-1/2</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Note>
@@ -295,10 +295,10 @@
               <Slur>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <measures>1</measures>
                   <fractions>-3/4</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Note>
@@ -316,19 +316,19 @@
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <measures>-1</measures>
                   <fractions>3/4</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Spanner type="Slur">
               <Slur>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <fractions>1/2</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Note>
@@ -340,10 +340,10 @@
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <measures>-2</measures>
                   <fractions>3/4</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Note>
@@ -355,9 +355,9 @@
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <fractions>-1/2</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Note>
@@ -373,10 +373,10 @@
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <staves>1</staves>
                   <measures>-4</measures>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Note>
@@ -397,21 +397,21 @@
               <Slur>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <measures>3</measures>
                   <fractions>-1/4</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Spanner type="Slur">
               <Slur>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <staves>1</staves>
                   <measures>1</measures>
                   <fractions>-1/4</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Note>
@@ -444,10 +444,10 @@
               <Slur>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <measures>1</measures>
                   <fractions>-1/4</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Note>
@@ -464,18 +464,18 @@
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <measures>-6</measures>
                   <fractions>3/4</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <measures>-1</measures>
                   <fractions>1/4</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Note>
@@ -502,26 +502,26 @@
             <durationType>half</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <measures>-7</measures>
                   <fractions>-1/4</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <measures>-3</measures>
                   <fractions>1/4</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <staves>1</staves>
                   <fractions>-1/4</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Note>
@@ -545,10 +545,10 @@
               <Slur>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <staves>-1</staves>
                   <measures>4</measures>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Note>
@@ -720,11 +720,11 @@
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <staves>-1</staves>
                   <measures>-1</measures>
                   <fractions>1/4</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Note>
@@ -753,10 +753,10 @@
               <Slur>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <staves>-1</staves>
                   <fractions>1/4</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Note>

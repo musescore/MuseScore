@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -79,87 +79,93 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure number="1">
-        <Ambitus>
-          <topPitch>84</topPitch>
-          <topTpc>14</topTpc>
-          <bottomPitch>47</bottomPitch>
-          <bottomTpc>19</bottomTpc>
-          <color r="0" g="255" b="0" a="255"/>
-          </Ambitus>
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>60</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>84</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <Ambitus>
+            <topPitch>84</topPitch>
+            <topTpc>14</topTpc>
+            <bottomPitch>47</bottomPitch>
+            <bottomTpc>19</bottomTpc>
+            <color r="0" g="255" b="0" a="255"/>
+            </Ambitus>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
-        <Clef>
-          <concertClefType>F</concertClefType>
-          <transposingClefType>F</transposingClefType>
-          </Clef>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <Clef>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
+            </Clef>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <Ambitus>
-          <head>cross</head>
-          <headType>half</headType>
-          <mirror>right</mirror>
-          <topPitch>60</topPitch>
-          <topTpc>14</topTpc>
-          <bottomPitch>46</bottomPitch>
-          <bottomTpc>12</bottomTpc>
-          <bottomAccidental>
-            <Accidental>
-              <subtype>accidentalFlat</subtype>
-              </Accidental>
-            </bottomAccidental>
-          </Ambitus>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Accidental>
-              <subtype>accidentalFlat</subtype>
-              </Accidental>
-            <pitch>46</pitch>
-            <tpc>12</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>60</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          </BarLine>
+      <Measure>
+        <voice>
+          <Ambitus>
+            <head>cross</head>
+            <headType>half</headType>
+            <mirror>right</mirror>
+            <topPitch>60</topPitch>
+            <topTpc>14</topTpc>
+            <bottomPitch>46</bottomPitch>
+            <bottomTpc>12</bottomTpc>
+            <bottomAccidental>
+              <Accidental>
+                <subtype>accidentalFlat</subtype>
+                </Accidental>
+              </bottomAccidental>
+            </Ambitus>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <Accidental>
+                <subtype>accidentalFlat</subtype>
+                </Accidental>
+              <pitch>46</pitch>
+              <tpc>12</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     </Score>
