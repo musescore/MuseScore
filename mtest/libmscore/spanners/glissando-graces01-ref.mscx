@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -72,101 +72,158 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure number="1">
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Chord>
-          <offset x="-4" y="0"/>
-          <durationType>16th</durationType>
-          <Beam>1</Beam>
-          <grace16after/>
-          <Note>
-            <pitch>76</pitch>
-            <tpc>18</tpc>
-            <Glissando id="2">
-              <text>gliss.</text>
-              <diagonal>1</diagonal>
-              <anchor>3</anchor>
-              </Glissando>
-            </Note>
-          </Chord>
-        <Beam id="1">
-          <l1>-12</l1>
-          <l2>-9</l2>
-          </Beam>
-        <Chord>
-          <offset x="-4" y="0"/>
-          <durationType>16th</durationType>
-          <Beam>1</Beam>
-          <grace16after/>
-          <Note>
-            <pitch>79</pitch>
-            <tpc>15</tpc>
-            <endSpanner id="3"/>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>half</durationType>
-          <Note>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            <Glissando id="3">
-              <text>gliss.</text>
-              <diagonal>1</diagonal>
-              <anchor>3</anchor>
-              </Glissando>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>eighth</durationType>
-          <appoggiatura/>
-          <Note>
-            <pitch>79</pitch>
-            <tpc>15</tpc>
-            <endSpanner id="2"/>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>half</durationType>
-          <Note>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            <Glissando id="4">
-              <text>gliss.</text>
-              <diagonal>1</diagonal>
-              <anchor>3</anchor>
-              </Glissando>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <offset x="-4" y="0"/>
+            <durationType>16th</durationType>
+            <grace16after/>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              <Spanner type="Glissando">
+                <Glissando>
+                  <text>gliss.</text>
+                  <diagonal>1</diagonal>
+                  <anchor>3</anchor>
+                  </Glissando>
+                <next>
+                  <location>
+                    <fractions>1/2</fractions>
+                    <grace>0</grace>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Beam>
+            <l1>-12</l1>
+            <l2>-9</l2>
+            </Beam>
+          <Chord>
+            <offset x="-4" y="0"/>
+            <durationType>16th</durationType>
+            <grace16after/>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              <Spanner type="Glissando">
+                <prev>
+                  <location>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <Spanner type="Glissando">
+                <Glissando>
+                  <text>gliss.</text>
+                  <diagonal>1</diagonal>
+                  <anchor>3</anchor>
+                  </Glissando>
+                <next>
+                  <location>
+                    <grace>1</grace>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <appoggiatura/>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              <Spanner type="Glissando">
+                <prev>
+                  <location>
+                    <fractions>-1/2</fractions>
+                    <grace>0</grace>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <Spanner type="Glissando">
+                <Glissando>
+                  <text>gliss.</text>
+                  <diagonal>1</diagonal>
+                  <anchor>3</anchor>
+                  </Glissando>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    <fractions>-1/2</fractions>
+                    <grace>0</grace>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Chord>
-          <durationType>eighth</durationType>
-          <appoggiatura/>
-          <Note>
-            <pitch>76</pitch>
-            <tpc>18</tpc>
-            <Glissando id="5">
-              <text>gliss.</text>
-              <diagonal>1</diagonal>
-              <anchor>3</anchor>
-              </Glissando>
-            <endSpanner id="4"/>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>half</durationType>
-          <Note>
-            <pitch>79</pitch>
-            <tpc>15</tpc>
-            <endSpanner id="5"/>
-            </Note>
-          </Chord>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>eighth</durationType>
+            <appoggiatura/>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              <Spanner type="Glissando">
+                <Glissando>
+                  <text>gliss.</text>
+                  <diagonal>1</diagonal>
+                  <anchor>3</anchor>
+                  </Glissando>
+                <next>
+                  <location>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Glissando">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    <fractions>1/2</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              <Spanner type="Glissando">
+                <prev>
+                  <location>
+                    <grace>0</grace>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
         </Measure>
       </Staff>
     </Score>

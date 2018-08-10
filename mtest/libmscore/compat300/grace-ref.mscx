@@ -96,9 +96,9 @@
               <Slur>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <grace>1</grace>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Spanner type="Slur">
@@ -106,9 +106,9 @@
                 <up>up</up>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <fractions>3/4</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <appoggiatura/>
@@ -121,19 +121,19 @@
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <grace>0</grace>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Spanner type="Slur">
               <Slur>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <fractions>1/2</fractions>
                   <grace>0</grace>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Spanner type="Slur">
@@ -148,9 +148,9 @@
                   </SlurSegment>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <fractions>1/2</fractions>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <appoggiatura/>
@@ -174,10 +174,10 @@
                 <up>up</up>
                 </Slur>
               <next>
-                <move>
+                <location>
                   <fractions>3/4</fractions>
                   <grace>0</grace>
-                  </move>
+                  </location>
                 </next>
               </Spanner>
             <Note>
@@ -195,10 +195,10 @@
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <fractions>-1/2</fractions>
                   <grace>1</grace>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <acciaccatura/>
@@ -211,10 +211,10 @@
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <fractions>-1/2</fractions>
                   <grace>1</grace>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Note>
@@ -226,17 +226,17 @@
             <durationType>32nd</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <fractions>-3/4</fractions>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Spanner type="Slur">
               <Slur>
                 </Slur>
               <next>
-                <move>
-                  </move>
+                <location>
+                  </location>
                 </next>
               </Spanner>
             <grace32/>
@@ -249,17 +249,17 @@
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <fractions>-3/4</fractions>
                   <grace>0</grace>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Spanner type="Slur">
               <prev>
-                <move>
+                <location>
                   <grace>0</grace>
-                  </move>
+                  </location>
                 </prev>
               </Spanner>
             <Note>

@@ -12876,7 +12876,7 @@
             </Note>
           </Chord>
         <BarLine>
-          <subtype>normal</subtype>
+          <subtype>end</subtype>
           <span>1</span>
           </BarLine>
         </Measure>

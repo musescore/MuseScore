@@ -18,6 +18,8 @@
       <staffLowerBorder>4</staffLowerBorder>
       <minSystemDistance>9</minSystemDistance>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
+      <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
       <repeatBarTips>1</repeatBarTips>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
@@ -49,8 +51,6 @@
       <composerFontFace>MuseJazz Text</composerFontFace>
       <composerFontSpatiumDependent>1</composerFontSpatiumDependent>
       <lyricistFontFace>MuseJazz Text</lyricistFontFace>
-      <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
-      <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
       <fingeringFontFace>MuseJazz Text</fingeringFontFace>
       <fingeringFramePadding>0</fingeringFramePadding>
       <fingeringFrameWidth>0</fingeringFrameWidth>
@@ -81,8 +81,6 @@
       <staffFontSize>11</staffFontSize>
       <staffAlign>left,top</staffAlign>
       <staffOffset x="0" y="5.5"/>
-      <chordSymbolFontFace>MuseJazz Text</chordSymbolFontFace>
-      <chordSymbolFontSize>15</chordSymbolFontSize>
       <rehearsalMarkFontFace>MuseJazz Text</rehearsalMarkFontFace>
       <rehearsalMarkFontBold>0</rehearsalMarkFontBold>
       <rehearsalMarkAlign>right,baseline</rehearsalMarkAlign>
@@ -450,9 +448,9 @@
               <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
               </Pedal>
             <next>
-              <move>
+              <location>
                 <measures>1</measures>
-                </move>
+                </location>
               </next>
             </Spanner>
           <Chord>
@@ -479,9 +477,9 @@
             </StaffText>
           <Spanner type="Pedal">
             <prev>
-              <move>
+              <location>
                 <measures>-1</measures>
-                </move>
+                </location>
               </prev>
             </Spanner>
           <Spanner type="Ottava">
@@ -489,9 +487,9 @@
               <subtype>8vb</subtype>
               </Ottava>
             <next>
-              <move>
+              <location>
                 <measures>1</measures>
-                </move>
+                </location>
               </next>
             </Spanner>
           <Chord>
@@ -513,9 +511,9 @@
         <voice>
           <Spanner type="Ottava">
             <prev>
-              <move>
+              <location>
                 <measures>-1</measures>
-                </move>
+                </location>
               </prev>
             </Spanner>
           <Spanner type="Volta">
@@ -525,9 +523,9 @@
               <endings>1</endings>
               </Volta>
             <next>
-              <move>
+              <location>
                 <measures>1</measures>
-                </move>
+                </location>
               </next>
             </Spanner>
           <Rest>
@@ -540,21 +538,20 @@
         <voice>
           <Spanner type="Volta">
             <prev>
-              <move>
+              <location>
                 <measures>-1</measures>
-                </move>
+                </location>
               </prev>
             </Spanner>
           <Spanner type="TextLine">
             <TextLine>
               <endHookType>1</endHookType>
               <beginText>VII</beginText>
-              <beginTextPlace>3</beginTextPlace>
               </TextLine>
             <next>
-              <move>
+              <location>
                 <fractions>1/1</fractions>
-                </move>
+                </location>
               </next>
             </Spanner>
           <Rest>
@@ -562,13 +559,12 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <subtype>normal</subtype>
             </BarLine>
           <Spanner type="TextLine">
             <prev>
-              <move>
+              <location>
                 <fractions>-1/1</fractions>
-                </move>
+                </location>
               </prev>
             </Spanner>
           </voice>

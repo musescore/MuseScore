@@ -465,7 +465,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <span>1</span>
+          <span>2</span>
           </BarLine>
         </Measure>
       <Measure number="4">
@@ -474,7 +474,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <span>1</span>
+          <span>3</span>
           </BarLine>
         </Measure>
       <Measure number="5">
@@ -495,7 +495,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>
@@ -533,7 +533,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <span>1</span>
+          <span>2</span>
           </BarLine>
         </Measure>
       <Measure number="5">
@@ -554,7 +554,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>
@@ -613,7 +613,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>
@@ -642,7 +642,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <span>1</span>
+          <span>2</span>
           </BarLine>
         </Measure>
       <Measure number="4">
@@ -671,7 +671,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>
@@ -707,7 +707,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <span>1</span>
+          <span>3</span>
           </BarLine>
         </Measure>
       <Measure number="5">
@@ -728,7 +728,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>
@@ -763,7 +763,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <span>1</span>
+          <span>2</span>
           </BarLine>
         </Measure>
       <Measure number="5">
@@ -784,7 +784,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>
@@ -838,7 +838,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>
@@ -891,7 +891,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
-          <subtype>normal</subtype>
+          <subtype>end</subtype>
           </BarLine>
         </Measure>
       </Staff>

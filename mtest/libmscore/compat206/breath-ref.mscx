@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -79,50 +79,58 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure number="1">
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
-        <Breath>
-          <symbol>breathMarkComma</symbol>
-          </Breath>
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <Breath>
+            <symbol>breathMarkComma</symbol>
+            </Breath>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
-        <Breath>
-          <symbol>caesuraCurved</symbol>
-          <pause>2</pause>
-          </Breath>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <Breath>
+            <symbol>caesuraCurved</symbol>
+            <pause>2</pause>
+            </Breath>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
-        <Breath>
-          <symbol>caesura</symbol>
-          <pause>2</pause>
-          </Breath>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <Breath>
+            <symbol>caesura</symbol>
+            <pause>2</pause>
+            </Breath>
+          </voice>
         </Measure>
-      <Measure number="4">
+      <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          </BarLine>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     </Score>

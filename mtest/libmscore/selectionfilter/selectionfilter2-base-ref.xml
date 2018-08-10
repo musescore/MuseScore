@@ -1,53 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <StaffList version="2.00" tick="0" len="1920" staff="0" staves="1">
   <Staff id="0">
-    <voice id="0">0</voice>
-    <move>0/1</move>
+    <voiceOffset>
+      <voice id="0">0</voice>
+      </voiceOffset>
     <Chord>
-      <track>0</track>
       <durationType>quarter</durationType>
       <Articulation>
         <subtype>fermataAbove</subtype>
-        <track>0</track>
         </Articulation>
       <Note>
-        <track>0</track>
         <pitch>72</pitch>
         <tpc>14</tpc>
         </Note>
       </Chord>
     <Chord>
-      <track>0</track>
       <durationType>quarter</durationType>
       <Articulation>
         <subtype>articStaccatissimoAbove</subtype>
-        <track>0</track>
         </Articulation>
       <Note>
-        <track>0</track>
         <pitch>74</pitch>
         <tpc>16</tpc>
         </Note>
       </Chord>
-    <Trill id="2">
-      <subtype>trill</subtype>
-      <track>0</track>
-      </Trill>
+    <Spanner type="Trill">
+      <Trill>
+        <subtype>trill</subtype>
+        </Trill>
+      <next>
+        <location>
+          <fractions>1/4</fractions>
+          </location>
+        </next>
+      </Spanner>
     <Chord>
-      <track>0</track>
       <durationType>quarter</durationType>
       <Note>
-        <track>0</track>
         <pitch>76</pitch>
         <tpc>18</tpc>
         </Note>
       </Chord>
-    <endSpanner id="2"/>
+    <Spanner type="Trill">
+      <prev>
+        <location>
+          <fractions>-1/4</fractions>
+          </location>
+        </prev>
+      </Spanner>
     <Chord>
-      <track>0</track>
       <durationType>quarter</durationType>
       <Note>
-        <track>0</track>
         <pitch>77</pitch>
         <tpc>13</tpc>
         </Note>

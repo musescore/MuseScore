@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -73,126 +73,207 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure number="1">
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>53</pitch>
-            <tpc>13</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Rest>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              <velocity>80</velocity>
+              <veloType>user</veloType>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Tie id="2">
-              </Tie>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Tie id="3">
-              </Tie>
-            <pitch>57</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Note>
-            <endSpanner id="2"/>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Tie id="4">
-              </Tie>
-            <pitch>45</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Note>
-            <endSpanner id="3"/>
-            <pitch>57</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <endSpanner id="4"/>
-            <pitch>45</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Note>
-            <Tie id="5">
-              </Tie>
-            <pitch>57</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    <notes>1</notes>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <velocity>80</velocity>
+              <veloType>user</veloType>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    <notes>1</notes>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <velocity>80</velocity>
+              <veloType>user</veloType>
+              </Note>
+            <Note>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    <notes>-1</notes>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <velocity>80</velocity>
+              <veloType>user</veloType>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>45</pitch>
+              <tpc>17</tpc>
+              <velocity>80</velocity>
+              <veloType>user</veloType>
+              </Note>
+            <Note>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    <notes>-1</notes>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <velocity>80</velocity>
+              <veloType>user</veloType>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>45</pitch>
+              <tpc>17</tpc>
+              <velocity>80</velocity>
+              <veloType>user</veloType>
+              </Note>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    <fractions>-3/4</fractions>
+                    <notes>-1</notes>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <velocity>80</velocity>
+              <veloType>user</veloType>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <Tie id="6">
-              </Tie>
-            <endSpanner id="5"/>
-            <pitch>57</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>45</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          <Note>
-            <endSpanner id="6"/>
-            <pitch>57</pitch>
-            <tpc>17</tpc>
-            <velocity>80</velocity>
-            <veloType>user</veloType>
-            </Note>
-          </Chord>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    <notes>1</notes>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    <fractions>3/4</fractions>
+                    <notes>1</notes>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <velocity>80</velocity>
+              <veloType>user</veloType>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>45</pitch>
+              <tpc>17</tpc>
+              <velocity>80</velocity>
+              <veloType>user</veloType>
+              </Note>
+            <Note>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    <notes>-1</notes>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <velocity>80</velocity>
+              <veloType>user</veloType>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
         </Measure>
       </Staff>
     </Score>
