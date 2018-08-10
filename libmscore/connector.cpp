@@ -341,10 +341,6 @@ void ConnectorInfoReader::readDestinationInfo(PointInfo& info)
                   info = PointInfo::relative();
                   info.read(e);
                   }
-            else if (tag == "move_abs") {
-                  info = PointInfo::absolute();
-                  info.read(e);
-                  }
             else
                   e.unknown();
             }

@@ -46,30 +46,20 @@ void PointInfo::setTrack(int track)
 
 //---------------------------------------------------------
 //   PointInfo::write
+//    Only relative locations should be written
 //---------------------------------------------------------
 
 void PointInfo::write(XmlWriter& xml) const
       {
-      if (isRelative()) {
-            xml.stag("move");
-            xml.tag("staves", _staff, relDefaults._staff);
-            xml.tag("voices", _voice, relDefaults._voice);
-            xml.tag("measures", _measure, relDefaults._measure);
-            xml.tag("fractions", _frac.reduced(), relDefaults._frac);
-            xml.tag("grace", _graceIndex, relDefaults._graceIndex);
-            xml.tag("notes", _note, relDefaults._note);
-            xml.etag();
-            }
-      else {
-            xml.stag("move_abs");
-            xml.tag("staff", _staff, absDefaults._staff);
-            xml.tag("voice", _voice, absDefaults._voice);
-            xml.tag("measure", _measure, absDefaults._measure);
-            xml.tag("fraction", _frac.reduced(), absDefaults._frac);
-            xml.tag("grace", _graceIndex, absDefaults._graceIndex);
-            xml.tag("note", _note, absDefaults._note);
-            xml.etag();
-            }
+      Q_ASSERT(isRelative());
+      xml.stag("move");
+      xml.tag("staves", _staff, relDefaults._staff);
+      xml.tag("voices", _voice, relDefaults._voice);
+      xml.tag("measures", _measure, relDefaults._measure);
+      xml.tag("fractions", _frac.reduced(), relDefaults._frac);
+      xml.tag("grace", _graceIndex, relDefaults._graceIndex);
+      xml.tag("notes", _note, relDefaults._note);
+      xml.etag();
       }
 
 //---------------------------------------------------------
@@ -81,17 +71,17 @@ void PointInfo::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-            if ((tag == "staves") || (tag == "staff"))
+            if (tag == "staves")
                   _staff = e.readInt();
-            else if ((tag == "voices") || (tag == "voice"))
+            else if (tag == "voices")
                   _voice = e.readInt();
-            else if ((tag == "measures") || (tag == "measure"))
+            else if (tag == "measures")
                   _measure = e.readInt();
-            else if ((tag == "fractions") || (tag == "fraction"))
+            else if (tag == "fractions")
                   _frac = e.readFraction();
             else if (tag == "grace")
                   _graceIndex = e.readInt();
-            else if ((tag == "notes") || (tag == "note"))
+            else if (tag == "notes")
                   _note = e.readInt();
             else
                   e.unknown();
