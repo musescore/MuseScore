@@ -1354,7 +1354,6 @@ void ScoreView::zoom(qreal _mag, const QPointF& pos)
       update();
       }
 
-
 //-----------------------------------------------------------------------------
 //   constraintCanvas
 //-----------------------------------------------------------------------------
@@ -1370,7 +1369,7 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
       QRectF rect = QRectF(0, 0, width(), height());
 
       Page* firstPage = score()->pages().front();
-      Page* lastPage = score()->pages().back();
+      Page* lastPage  = score()->pages().back();
 
       if (firstPage && lastPage) {
             QPointF offsetPt(xoffset(), yoffset());
@@ -1382,7 +1381,7 @@ void ScoreView::constraintCanvas (int* dxx, int* dyy)
                                          lastPage->pos().y() * mag(),
                                          lastPage->width() * mag(),
                                          lastPage->height() * mag());
-            QRectF pagesRect = firstPageRect.united(lastPageRect).translated(offsetPt);
+            QRectF pagesRect     = firstPageRect.united(lastPageRect).translated(offsetPt);
             bool limitScrollArea = preferences.getBool(PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA);
             if (!limitScrollArea) {
                   qreal hmargin = this->width() * 0.75;

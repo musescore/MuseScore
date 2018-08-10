@@ -2795,7 +2795,7 @@ void Score::layoutLyrics(System* system)
 
       //int nAbove[nstaves()];
       std::vector<int> VnAbove(nstaves());
-      
+
       for (int staffIdx : visibleStaves) {
             VnAbove[staffIdx] = 0;
             for (MeasureBase* mb : system->measures()) {
@@ -3692,6 +3692,9 @@ void LayoutContext::collectPage()
                         }
                   m->layout2();
                   }
+            }
+      if (score->lineMode()) {
+            page->setWidth(page->systems().front()->width());
             }
       page->rebuildBspTree();
       }
