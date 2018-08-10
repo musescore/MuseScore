@@ -590,9 +590,7 @@ class Score : public QObject, public ScoreElement {
       bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
       void write(XmlWriter&, bool onlySelection);
-      void write300old(XmlWriter&, bool onlySelection);
       void writeMovement(XmlWriter&, bool onlySelection);
-      void writeMovement300old(XmlWriter&, bool onlySelection);
 
       QList<Staff*>& staves()                { return _staves; }
       const QList<Staff*>& staves() const    { return _staves; }
@@ -743,8 +741,8 @@ class Score : public QObject, public ScoreElement {
       void setShowInstrumentNames(bool v) { _showInstrumentNames = v; }
       void setShowVBox(bool v)            { _showVBox = v;            }
 
-      bool saveFile(QFileInfo& info, bool oldFormat = false);
-      bool saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false, bool oldFormat = false);
+      bool saveFile(QFileInfo& info);
+      bool saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false);
       bool saveCompressedFile(QFileInfo&, bool onlySelection);
       bool saveCompressedFile(QIODevice*, QFileInfo&, bool onlySelection, bool createThumbnail = true);
       bool exportFile();
@@ -995,7 +993,6 @@ class Score : public QObject, public ScoreElement {
       void setMasterScore(MasterScore* s) { _masterScore = s;    }
       void createRevision();
       void writeSegments(XmlWriter& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool);
-      void writeSegments300old(XmlWriter& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool, bool);
 
       const QMap<QString, QString>& metaTags() const   { return _metaTags; }
       QMap<QString, QString>& metaTags()               { return _metaTags; }

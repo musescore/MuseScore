@@ -623,7 +623,7 @@ bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
 //    return true on success
 //---------------------------------------------------------
 
-bool Score::saveFile(QFileInfo& info, bool oldFormat)
+bool Score::saveFile(QFileInfo& info)
       {
       if (info.suffix().isEmpty())
             info.setFile(info.filePath() + ".mscx");
@@ -632,7 +632,7 @@ bool Score::saveFile(QFileInfo& info, bool oldFormat)
             MScore::lastError = tr("Open File\n%1\nfailed: %2").arg(info.filePath(), strerror(errno));
             return false;
             }
-      saveFile(&fp, false, false, oldFormat);
+      saveFile(&fp, false, false);
       fp.close();
       return true;
       }
@@ -695,29 +695,19 @@ bool Score::saveStyle(const QString& name)
 
 extern QString revision;
 
-bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection, bool oldFormat)
+bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       {
       XmlWriter xml(this, f);
       xml.setWriteOmr(msczFormat);
       xml.header();
-      if (oldFormat) {
-            xml.stag("museScore version=\"3.00\"");
-            if (!MScore::testMode) {
-                  xml.tag("programVersion", VERSION);
-                  xml.tag("programRevision", revision);
-                  }
-            }
-      else if (!MScore::testMode) {
+      if (!MScore::testMode) {
             xml.stag("museScore version=\"" MSC_VERSION "\"");
             xml.tag("programVersion", VERSION);
             xml.tag("programRevision", revision);
             }
       else
             xml.stag("museScore version=\"3.01\"");
-      if (oldFormat)
-            write300old(xml, onlySelection);
-      else
-            write(xml, onlySelection);
+      write(xml, onlySelection);
       xml.etag();
       if (isMaster())
             masterScore()->revisions()->write(xml);

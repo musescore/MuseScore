@@ -264,25 +264,6 @@ void Ottava::write(XmlWriter& xml) const
       }
 
 //---------------------------------------------------------
-//   Ottava::write300old
-//---------------------------------------------------------
-
-void Ottava::write300old(XmlWriter& xml) const
-      {
-      if (!xml.canWrite(this))
-            return;
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
-//      writeProperty(xml, Pid::NUMBERS_ONLY);
-      xml.tag("subtype", ottavaDefault[int(ottavaType())].name);
-
-      for (const StyledProperty& spp : *styledProperties())
-            writeProperty(xml, spp.pid);
-
-      Element::writeProperties300old(xml);
-      xml.etag();
-      }
-
-//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 

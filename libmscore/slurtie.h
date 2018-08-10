@@ -132,7 +132,6 @@ class SlurTie : public Spanner {
       virtual void read(XmlReader&) override;
 
       void writeProperties(XmlWriter& xml) const;
-      void writeProperties300old(XmlWriter& xml) const;
       bool readProperties(XmlReader&);
       bool readProperties300(XmlReader&);
 

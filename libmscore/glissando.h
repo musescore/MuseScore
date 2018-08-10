@@ -72,7 +72,6 @@ class Glissando final : public SLine {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       virtual void layout() override;
       virtual void write(XmlWriter&) const override;
-      virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
       virtual void read300(XmlReader&) override;
 

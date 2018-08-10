@@ -102,7 +102,6 @@ class Tuplet final : public DurationElement {
       virtual void read(XmlReader&) override;
       virtual void read300(XmlReader&) override;
       virtual void write(XmlWriter&) const override;
-      virtual void write300old(XmlWriter&) const override;
       virtual bool readProperties(XmlReader&) override;
       virtual bool readProperties300(XmlReader&) override;
 

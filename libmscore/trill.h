@@ -81,7 +81,6 @@ class Trill final : public SLine {
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
       virtual void write(XmlWriter&) const override;
-      virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
       virtual void read300(XmlReader&) override;
 

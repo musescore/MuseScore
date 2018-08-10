@@ -2086,47 +2086,6 @@ void Beam::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   Beam::write300old
-//---------------------------------------------------------
-
-void Beam::write300old(XmlWriter& xml) const
-      {
-      if (_elements.empty())
-            return;
-      xml.stag(QString("Beam id=\"%1\"").arg(_id));
-      Element::writeProperties300old(xml);
-
-      writeProperty(xml, Pid::STEM_DIRECTION);
-      writeProperty(xml, Pid::DISTRIBUTE);
-      writeProperty(xml, Pid::BEAM_NO_SLOPE);
-      writeProperty(xml, Pid::GROW_LEFT);
-      writeProperty(xml, Pid::GROW_RIGHT);
-
-      int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
-      if (_userModified[idx]) {
-            qreal _spatium = spatium();
-            for (BeamFragment* f : fragments) {
-                  xml.stag("Fragment");
-                  xml.tag("y1", f->py1[idx] / _spatium);
-                  xml.tag("y2", f->py2[idx] / _spatium);
-                  xml.etag();
-                  }
-            }
-
-      // this info is used for regression testing
-      // l1/l2 is the beam position of the layout engine
-      if (MScore::testMode) {
-            qreal _spatium4 = spatium() * .25;
-            for (BeamFragment* f : fragments) {
-                  xml.tag("l1", int(lrint(f->py1[idx] / _spatium4)));
-                  xml.tag("l2", int(lrint(f->py2[idx] / _spatium4)));
-                  }
-            }
-
-      xml.etag();
-      }
-
-//---------------------------------------------------------
 //   Beam::read300
 //---------------------------------------------------------
 

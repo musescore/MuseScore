@@ -94,8 +94,6 @@ class MeasureBase : public Element {
 
       virtual void write(XmlWriter&) const override = 0;
       virtual void write(XmlWriter&, int, bool, bool) const = 0;
-      virtual void write300old(XmlWriter&) const override = 0;
-      virtual void write300old(XmlWriter&, int, bool, bool) const = 0;
 
       virtual void layout();
 
@@ -118,7 +116,6 @@ class MeasureBase : public Element {
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
       virtual void writeProperties(XmlWriter&) const override;
-      virtual void writeProperties300old(XmlWriter&) const override;
       virtual bool readProperties(XmlReader&) override;
       virtual bool readProperties300(XmlReader&) override;
 

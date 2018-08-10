@@ -83,7 +83,6 @@ class ChordRest : public DurationElement {
       virtual Measure* measure() const = 0;
 
       virtual void writeProperties(XmlWriter& xml) const;
-      virtual void writeProperties300old(XmlWriter&) const;
       virtual bool readProperties(XmlReader&);
       virtual bool readProperties300(XmlReader&);
       virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
@@ -164,7 +163,6 @@ class ChordRest : public DurationElement {
       bool isGraceBefore() const;
       bool isGraceAfter() const;
       void writeBeam(XmlWriter& xml) const;
-      void writeBeam300old(XmlWriter& xml);
       Segment* nextSegmentAfterCR(SegmentType types) const;
 
       virtual void setScore(Score* s) override;

@@ -51,7 +51,6 @@ class PalmMute final : public TextLineBase {
       virtual void read(XmlReader&) override;
       virtual void read300(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
-      virtual void write300old(XmlWriter&) const override;
       LineSegment* createLineSegment();
       virtual void setYoff(qreal) override;
       virtual QVariant propertyDefault(Pid propertyId) const override;

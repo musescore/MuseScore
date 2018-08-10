@@ -108,7 +108,6 @@ class Hairpin final : public TextLineBase {
       void setHairpinContHeight(Spatium val)    { _hairpinContHeight = val; }
 
       virtual void write(XmlWriter&) const override;
-      virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
       virtual void read300(XmlReader&) override;
 

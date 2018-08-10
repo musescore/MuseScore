@@ -1764,68 +1764,6 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
       }
 
 //---------------------------------------------------------
-//   write300old
-//---------------------------------------------------------
-
-void Measure::write300old(XmlWriter& xml, int staff, bool writeSystemElements, bool forceTimeSig) const
-      {
-      int mno = no() + 1;
-      if (_len != _timesig) {
-            // this is an irregular measure
-            xml.stag(QString("Measure number=\"%1\" len=\"%2/%3\"").arg(mno).arg(_len.numerator()).arg(_len.denominator()));
-            }
-      else
-            xml.stag(QString("Measure number=\"%1\"").arg(mno));
-
-      xml.setCurTick(tick());
-
-      if (_mmRestCount > 0)
-            xml.tag("multiMeasureRest", _mmRestCount);
-      if (writeSystemElements) {
-            if (repeatStart())
-                  xml.tagE("startRepeat");
-            if (repeatEnd())
-                  xml.tag("endRepeat", _repeatCount);
-            writeProperty(xml, Pid::IRREGULAR);
-            writeProperty(xml, Pid::BREAK_MMR);
-            writeProperty(xml, Pid::USER_STRETCH);
-            writeProperty(xml, Pid::NO_OFFSET);
-            writeProperty(xml, Pid::MEASURE_NUMBER_MODE);
-            }
-      qreal _spatium = spatium();
-      MStaff* mstaff = _mstaves[staff];
-      if (mstaff->noText() && !mstaff->noText()->generated()) {
-            xml.stag("MeasureNumber");
-            mstaff->noText()->writeProperties300old(xml);
-            xml.etag();
-            }
-
-      if (mstaff->vspacerUp())
-            xml.tag("vspacerUp", mstaff->vspacerUp()->gap() / _spatium);
-      if (mstaff->vspacerDown()) {
-            if (mstaff->vspacerDown()->spacerType() == SpacerType::FIXED)
-                  xml.tag("vspacerFixed", mstaff->vspacerDown()->gap() / _spatium);
-            else
-                  xml.tag("vspacerDown", mstaff->vspacerDown()->gap() / _spatium);
-            }
-      if (!mstaff->visible())
-            xml.tag("visible", mstaff->visible());
-      if (mstaff->slashStyle())
-            xml.tag("slashStyle", mstaff->slashStyle());
-
-      int strack = staff * VOICES;
-      int etrack = strack + VOICES;
-      for (const Element* e : el()) {
-            if (!e->generated() && ((e->staffIdx() == staff) || (e->systemFlag() && writeSystemElements)))
-                  e->write300old(xml);
-            }
-      Q_ASSERT(first());
-      Q_ASSERT(last());
-      score()->writeSegments300old(xml, strack, etrack, first(), last()->next1(), writeSystemElements, false, false, forceTimeSig);
-      xml.etag();
-      }
-
-//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 

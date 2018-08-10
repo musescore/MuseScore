@@ -113,7 +113,6 @@ class Ottava final : public TextLineBase {
       int pitchShift() const;
 
       virtual void write(XmlWriter& xml) const override;
-      virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader& de) override;
       virtual void read300(XmlReader&) override;
       bool readProperties(XmlReader& e);

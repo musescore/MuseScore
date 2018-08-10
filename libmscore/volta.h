@@ -59,7 +59,6 @@ class Volta final : public TextLineBase {
       virtual LineSegment* createLineSegment() override;
 
       virtual void write(XmlWriter&) const override;
-      virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader& e) override;
       virtual void read300(XmlReader&) override;
 

@@ -43,7 +43,6 @@ class TempoText final : public TextBase  {
       virtual ElementType type() const override   { return ElementType::TEMPO_TEXT; }
 
       virtual void write(XmlWriter& xml) const override;
-      virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
       virtual void read300(XmlReader&) override;
 

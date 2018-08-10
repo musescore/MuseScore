@@ -79,7 +79,6 @@ class BarLine final : public Element {
       virtual BarLine* clone() const override     { return new BarLine(*this); }
       virtual ElementType type() const override   { return ElementType::BAR_LINE; }
       virtual void write(XmlWriter& xml) const override;
-      virtual void write300old(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void draw(QPainter*) const override;
       virtual QPointF pagePos() const override;      ///< position in canvas coordinates

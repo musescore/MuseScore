@@ -59,10 +59,7 @@ class Box : public MeasureBase {
       virtual void layout() override;
       virtual void write(XmlWriter&) const override;
       virtual void write(XmlWriter& xml, int, bool, bool) const override { write(xml); }
-      virtual void write300old(XmlWriter& xml) const override;
-      virtual void write300old(XmlWriter& xml, int, bool, bool) const override { write300old(xml); }
       virtual void writeProperties(XmlWriter&) const override;
-      virtual void writeProperties300old(XmlWriter&) const override;
       virtual bool readProperties(XmlReader&) override;
       virtual void read(XmlReader&) override;
       virtual bool readProperties300(XmlReader&) override;

@@ -265,7 +265,6 @@ class FiguredBass final : public TextBase {
       virtual void      setVisible(bool f) override;
       virtual void      startEdit(EditData&) override;
       virtual void      write(XmlWriter& xml) const override;
-      virtual void      write300old(XmlWriter&) const override;
 
       // read / write MusicXML
       void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;

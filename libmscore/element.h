@@ -259,12 +259,10 @@ class Element : public ScoreElement {
       void drawAt(QPainter*p, const QPointF& pt) const { p->translate(pt); draw(p); p->translate(-pt);}
 
       virtual void writeProperties(XmlWriter& xml) const;
-      virtual void writeProperties300old(XmlWriter& xml) const;
       virtual bool readProperties(XmlReader&);
       virtual bool readProperties300(XmlReader& xml) { return Element::readProperties(xml); }
 
       virtual void write(XmlWriter&) const;
-      virtual void write300old(XmlWriter& xml) const { write(xml); }
       virtual void read(XmlReader&);
       virtual void read300(XmlReader& xml) { read(xml); }
 
@@ -493,7 +491,6 @@ class ElementList : public std::vector<Element*> {
       bool remove(Element*);
       void replace(Element* old, Element* n);
       void write(XmlWriter&) const;
-      void write300old(XmlWriter&) const;
       void write(XmlWriter&, const char* name) const;
       };
 

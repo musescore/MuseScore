@@ -295,15 +295,11 @@ class TextBase : public Element {
       void selectAll(TextCursor*);
 
       virtual void write(XmlWriter& xml) const override;
-      virtual void write300old(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
       virtual void read300(XmlReader&) override;
       virtual void writeProperties(XmlWriter& xml) const { writeProperties(xml, true, true); }
-      virtual void writeProperties300old(XmlWriter& xml) const override { writeProperties300old(xml, true, true); }
       void writeProperties(XmlWriter& xml, bool writeText) const { writeProperties(xml, writeText, true); }
-      void writeProperties300old(XmlWriter& xml, bool writeText) const { writeProperties300old(xml, writeText, true); }
       void writeProperties(XmlWriter&, bool, bool) const;
-      void writeProperties300old(XmlWriter&, bool, bool) const;
       bool readProperties(XmlReader&);
       bool readProperties300(XmlReader&);
 

@@ -432,18 +432,6 @@ void TextLineBase::writeProperties(XmlWriter& xml) const
       }
 
 //---------------------------------------------------------
-//   writeProperties300old
-//    write properties different from prototype
-//---------------------------------------------------------
-
-void TextLineBase::writeProperties300old(XmlWriter& xml) const
-      {
-      for (Pid pid : pids)
-            writeProperty(xml, pid);
-      SLine::writeProperties300old(xml);
-      }
-
-//---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------
 
