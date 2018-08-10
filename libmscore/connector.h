@@ -27,7 +27,7 @@ class XmlWriter;
 //---------------------------------------------------------
 //   @@ ConnectorInfo
 ///    Stores a general information on various connecting
-///    elements (spanners, beams, tuplets) including their
+///    elements (currently only spanners) including their
 ///    endpoints locations.
 ///    Base class of helper classes used to read and write
 ///    such elements.
@@ -35,7 +35,7 @@ class XmlWriter;
 
 class ConnectorInfo {
       const Element* _current    { 0      };
-      bool _currentUpdated { false };
+      bool _currentUpdated       { false  };
 
       bool finishedLeft() const;
       bool finishedRight() const;
@@ -118,7 +118,7 @@ class ConnectorInfoReader final : public ConnectorInfo {
 
 //---------------------------------------------------------
 //   @@ ConnectorInfoWriter
-///    Helper class for writing beams, tuplets and spanners.
+///    Helper class for writing connecting elements.
 ///    Subclasses should fill _prevInfo and _nextInfo with
 ///    the proper information on the connector's endpoints.
 //---------------------------------------------------------

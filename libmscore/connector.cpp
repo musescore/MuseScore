@@ -75,7 +75,9 @@ bool ConnectorInfo::connect(ConnectorInfo* other)
             return false;
       if (_type != other->_type)
             return false;
-      if (!_prev && hasPrevious() && !other->_next && other->hasNext()) {
+      if (hasPrevious() && _prev == nullptr
+         && other->hasNext() && other->_next == nullptr
+         ) {
             if ((_prevInfo == other->_currentInfo)
                && (_currentInfo == other->_nextInfo)
                ) {
@@ -84,7 +86,9 @@ bool ConnectorInfo::connect(ConnectorInfo* other)
                   return true;
                   }
             }
-      if (!_next && hasNext() && !other->_prev && other->hasPrevious()) {
+      if (hasNext() && _next == nullptr
+         && other->hasPrevious() && other->_prev == nullptr
+         ) {
             if ((_nextInfo == other->_currentInfo)
                && (_currentInfo == other->_prevInfo)
                ) {
@@ -151,9 +155,11 @@ int ConnectorInfo::connectionDistance(const ConnectorInfo& other) const
             return INT_MAX;
       int distThisOther = INT_MAX;
       int distOtherThis = INT_MAX;
-      if (!_next && hasNext() && !other._prev && other.hasPrevious())
+      if (hasNext() && _next == nullptr
+         && other.hasPrevious() && other._prev == nullptr)
             distThisOther = orderedConnectionDistance(*this, other);
-      if (!_prev && hasPrevious() && !other._next && other.hasNext())
+      if (hasPrevious() && _prev == nullptr
+         && other.hasNext() && other._next == nullptr)
             distOtherThis = orderedConnectionDistance(other, *this);
       if (distOtherThis < distThisOther)
             return -distOtherThis;
