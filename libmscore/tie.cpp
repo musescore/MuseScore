@@ -746,7 +746,7 @@ bool Tie::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      if (tag == "SlurSegment") {
+      if (tag == "TieSegment") {
             int idx = e.intAttribute("no", 0);
             int n = spannerSegments().size();
             for (int i = n; i < idx; ++i)
