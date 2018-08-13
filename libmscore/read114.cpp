@@ -20,7 +20,6 @@
 #include "volta.h"
 #include "measure.h"
 #include "beam.h"
-#include "page.h"
 #include "segment.h"
 #include "ottava.h"
 #include "stafftype.h"
@@ -45,7 +44,6 @@
 #include "repeat.h"
 #include "breath.h"
 #include "tremolo.h"
-#include "articulation.h"
 #include "utils.h"
 #include "accidental.h"
 #include "fingering.h"
@@ -57,6 +55,7 @@
 #include "image.h"
 #include "textframe.h"
 #include "jump.h"
+#include "textline.h"
 
 namespace Ms {
 
@@ -1226,6 +1225,86 @@ static void readOttava114(XmlReader& e, Ottava* ottava)
             }
       }
 
+//---------------------------------------------------------
+//   resolveSymCompatibility
+//---------------------------------------------------------
+
+static QString resolveSymCompatibility(SymId i, QString programVersion)
+      {
+      if (!programVersion.isEmpty() && programVersion < "1.1")
+            i = SymId(int(i) + 5);
+      switch (int(i)) {
+            case 197:
+                  return "keyboardPedalPed";
+            case 191:
+                  return "keyboardPedalUp";
+            case 193:
+                  return "noSym"; //SymId(pedaldotSym);
+            case 192:
+                  return "noSym"; //SymId(pedaldashSym);
+            case 139:
+                  return "ornamentTrill";
+            default:
+                  return "noSym";
+          }
+      }
+
+//---------------------------------------------------------
+//   readTextLine114
+//---------------------------------------------------------
+
+static void readTextLine114(XmlReader& e, TextLine* textLine)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+
+            if (tag == "lineVisible")
+                  textLine->setLineVisible(e.readBool());     
+            else if (tag == "beginHookHeight") {
+                  textLine->setBeginHookHeight(Spatium(e.readDouble()));
+                  } 
+            else if (tag == "endHookHeight" || tag == "hookHeight") { // hookHeight is obsolete
+                  textLine->setEndHookHeight(Spatium(e.readDouble()));
+                  } 
+            else if (tag == "hookUp") // obsolete
+                  textLine->setEndHookHeight(Spatium(qreal(-1.0)));
+            else if (tag == "beginSymbol" || tag == "symbol") { // "symbol" is obsolete
+                  QString text(e.readElementText());
+                  textLine->setBeginText(QString("<sym>%1</sym>").arg(
+                        text[0].isNumber()
+                              ? resolveSymCompatibility(SymId(text.toInt()), textLine->score()->mscoreVersion())
+                              : text));
+                  } 
+            else if (tag == "continueSymbol") {
+                  QString text(e.readElementText());
+                  textLine->setContinueText(QString("<sym>%1</sym>").arg(
+                        text[0].isNumber()
+                              ? resolveSymCompatibility(SymId(text.toInt()), textLine->score()->mscoreVersion())
+                              : text));
+                  } 
+            else if (tag == "endSymbol") {
+                  QString text(e.readElementText());
+                  textLine->setEndText(QString("<sym>%1</sym>").arg(
+                        text[0].isNumber()
+                              ? resolveSymCompatibility(SymId(text.toInt()), textLine->score()->mscoreVersion())
+                              : text));
+                  } 
+            else if (tag == "beginSymbolOffset") // obsolete
+                  e.readPoint();
+            else if (tag == "continueSymbolOffset") // obsolete
+                  e.readPoint();
+            else if (tag == "endSymbolOffset") // obsolete
+                  e.readPoint();
+            else if (tag == "beginTextPlace")
+                  textLine->setBeginTextPlace(readPlacement(e));
+            else if (tag == "continueTextPlace")
+                  textLine->setContinueTextPlace(readPlacement(e));
+            else if (tag == "endTextPlace")
+                  textLine->setEndTextPlace(readPlacement(e));
+            else if (!readTextLineProperties114(e, textLine))
+                e.unknown();
+            }
+      }
 //---------------------------------------------------------
 //   readHarmony114
 //---------------------------------------------------------
@@ -2800,6 +2879,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
                         readVolta114(e, toVolta(s));
                   else if (tag == "Ottava")
                         readOttava114(e, toOttava(s));
+                  else if (tag == "TextLine")
+                        readTextLine114(e, toTextLine(s));
                   else
                         s->read(e);
                   if (s->track() == -1)
