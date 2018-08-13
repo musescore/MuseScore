@@ -261,10 +261,10 @@ void TrackList::read(const Segment* fs, const Segment* es)
       int tick = fs->tick();
       int gap  = 0;
 
-      while (fs && !fs->enabled())
-            fs = fs->next1();
       const Segment* s;
-      for (s = fs; s && (s != es); s = s->next1enabled()) {
+      for (s = fs; s && (s != es); s = s->next1()) {
+            if (!s->enabled())
+                  continue;
             Element* e = s->element(_track);
             if (!e || e->generated()) {
                   for (Element* ee : s->annotations()) {
