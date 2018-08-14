@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -73,44 +73,47 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>9</lid>
+        <linkedMain/>
         </VBox>
-      <Measure number="1">
-        <TimeSig>
-          <lid>1</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Harmony>
-          <root>15</root>
-          <name>7</name>
-          <lid>2</lid>
-          </Harmony>
-        <Chord>
-          <lid>3</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>4</lid>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Harmony>
+            <root>15</root>
+            <name>7</name>
+            <linkedMain/>
+            </Harmony>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Harmony>
-          <root>14</root>
-          <lid>5</lid>
-          </Harmony>
-        <Chord>
-          <lid>6</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>7</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <linkedMain/>
+            </Harmony>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
       </Staff>
     <Score>
@@ -177,48 +180,59 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>9</lid>
+          <linked>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Flute</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <TimeSig>
-            <lid>1</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
-            </TimeSig>
-          <Harmony>
-            <root>15</root>
-            <name>7</name>
-            <lid>2</lid>
-            </Harmony>
-          <Chord>
-            <lid>3</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>4</lid>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Harmony>
+              <root>15</root>
+              <name>7</name>
+              <linked>
+                </linked>
+              </Harmony>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>71</pitch>
+                <tpc>19</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="2">
-          <Harmony>
-            <root>14</root>
-            <lid>5</lid>
-            </Harmony>
-          <Chord>
-            <lid>6</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>7</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Harmony>
+              <root>14</root>
+              <linked>
+                </linked>
+              </Harmony>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <name>Flute</name>

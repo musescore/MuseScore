@@ -110,8 +110,6 @@ Pedal::Pedal(Score* s)
 
 void Pedal::read(XmlReader& e)
       {
-      int id = e.intAttribute("id", -1);
-      e.addSpanner(id, this);
       while (e.readNextStartElement()) {
             if (!TextLineBase::readProperties(e))
                   e.unknown();
@@ -126,8 +124,7 @@ void Pedal::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      int id = xml.spannerId(this);
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
+      xml.stag(name());
 
       for (auto i : {
          Pid::END_HOOK_TYPE,

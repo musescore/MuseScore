@@ -30,6 +30,7 @@ namespace Ms {
 #define VOICES 4
 #endif
 
+class ConnectorInfoReader;
 class XmlReader;
 class XmlWriter;
 enum class SymId;
@@ -172,6 +173,9 @@ class Element : public ScoreElement {
       Element* parent() const                 { return _parent;     }
       void setParent(Element* e)              { _parent = e;        }
       Element* findMeasure();
+      const Element* findMeasure() const;
+      MeasureBase* findMeasureBase();
+      const MeasureBase* findMeasureBase() const;
 
       qreal spatium() const;
 
@@ -256,9 +260,11 @@ class Element : public ScoreElement {
 
       virtual void writeProperties(XmlWriter& xml) const;
       virtual bool readProperties(XmlReader&);
+      virtual bool readProperties300(XmlReader& xml) { return Element::readProperties(xml); }
 
       virtual void write(XmlWriter&) const;
       virtual void read(XmlReader&);
+      virtual void read300(XmlReader& xml) { read(xml); }
 
       virtual void startDrag(EditData&);
       virtual QRectF drag(EditData&);
@@ -363,7 +369,8 @@ class Element : public ScoreElement {
 
       virtual int tick() const;       // utility, searches for segment / segment parent
       virtual int rtick() const;      // utility, searches for segment / segment parent
-      virtual Fraction ftick() const; // fractional tick
+      virtual Fraction rfrac() const; // utility, searches for segment / segment parent
+      virtual Fraction afrac() const; // utility, searches for segment / segment parent
 
       //
       // check element for consistency; return false if element

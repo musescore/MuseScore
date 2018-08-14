@@ -495,8 +495,7 @@ void Hairpin::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      int id = xml.spannerId(this);
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(id));
+      xml.stag(name());
       xml.tag("subtype", int(_hairpinType));
       writeProperty(xml, Pid::VELO_CHANGE);
       writeProperty(xml, Pid::HAIRPIN_CIRCLEDTIP);
@@ -520,9 +519,6 @@ void Hairpin::read(XmlReader& e)
       foreach(SpannerSegment* seg, spannerSegments())
             delete seg;
       spannerSegments().clear();
-
-      int id = e.intAttribute("id", -1);
-      e.addSpanner(id, this);
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());

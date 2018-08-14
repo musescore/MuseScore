@@ -764,13 +764,23 @@ void Segment::checkEmpty() const
       }
 
 //---------------------------------------------------------
-//   fpos
+//   rfrac
 //    return relative position of segment in measure
 //---------------------------------------------------------
 
-Fraction Segment::fpos() const
+Fraction Segment::rfrac() const
       {
       return Fraction::fromTicks(_tick);
+      }
+
+//---------------------------------------------------------
+//   afrac
+//    return absolute position of segment
+//---------------------------------------------------------
+
+Fraction Segment::afrac() const
+      {
+      return Fraction::fromTicks(tick());
       }
 
 //---------------------------------------------------------

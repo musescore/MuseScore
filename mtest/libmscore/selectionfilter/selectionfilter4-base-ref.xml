@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <StaffList version="2.00" tick="0" len="1920" staff="0" staves="1">
   <Staff id="0">
-    <voice id="0">0</voice>
-    <move>0/1</move>
+    <voiceOffset>
+      <voice id="0">0</voice>
+      </voiceOffset>
     <Chord>
-      <track>0</track>
       <durationType>quarter</durationType>
       <Note>
-        <track>0</track>
         <Fingering>
-          <track>0</track>
           <text>0</text>
           </Fingering>
         <pitch>72</pitch>
@@ -17,12 +15,9 @@
         </Note>
       </Chord>
     <Chord>
-      <track>0</track>
       <durationType>quarter</durationType>
       <Note>
-        <track>0</track>
         <Fingering>
-          <track>0</track>
           <text>1</text>
           </Fingering>
         <pitch>74</pitch>
@@ -30,12 +25,9 @@
         </Note>
       </Chord>
     <Chord>
-      <track>0</track>
       <durationType>quarter</durationType>
       <Note>
-        <track>0</track>
         <Fingering>
-          <track>0</track>
           <text>5</text>
           </Fingering>
         <pitch>76</pitch>
@@ -43,12 +35,9 @@
         </Note>
       </Chord>
     <Chord>
-      <track>0</track>
       <durationType>quarter</durationType>
       <Note>
-        <track>0</track>
         <Fingering>
-          <track>0</track>
           <text>3</text>
           </Fingering>
         <pitch>77</pitch>

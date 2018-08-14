@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "duration.h"
+#include "measure.h"
 #include "tuplet.h"
 #include "score.h"
 #include "undo.h"
@@ -94,15 +95,15 @@ Fraction DurationElement::actualFraction() const
       }
 
 //---------------------------------------------------------
-//   ftick
-//    fractional tick
+//   afrac
+//    Absolute position of element in fractions.
 //---------------------------------------------------------
 
-Fraction DurationElement::ftick() const
+Fraction DurationElement::afrac() const
       {
       Tuplet* t = tuplet();
       if (t) {
-            Fraction f = t->ftick();
+            Fraction f = t->afrac();
             for (DurationElement* de : t->elements()) {
                   if (de == this)
                         break;
@@ -111,59 +112,56 @@ Fraction DurationElement::ftick() const
             return f.reduced();
             }
       else
-            return Fraction::fromTicks(tick());
+            return Element::afrac();
       }
 
 //---------------------------------------------------------
-//   readProperties
+//   rfrac
 //---------------------------------------------------------
 
-bool DurationElement::readProperties(XmlReader& e)
+Fraction DurationElement::rfrac() const
       {
-      if (e.name() == "Tuplet") {
-            int i = e.readInt();
-            Tuplet* t = e.findTuplet(i);
-            if (!t) {
-                  qDebug("DurationElement:read(): Tuplet id %d not found", i);
-                  t = score()->searchTuplet(e, i);
-                  if (t) {
-                        qDebug("   ...found outside measure, input file corrupted?");
-                        e.addTuplet(t);
-                        }
-                  }
-            if (t) {
-                  setTuplet(t);
-                  if (!score()->undoStack()->active())     // HACK, also added in Undo::AddElement()
-                        t->add(this);
-                  }
-            return true;
+      if (tuplet()) {
+            if (Measure* m = measure())
+                  return afrac() - m->afrac();
             }
-      else if (Element::readProperties(e))
-            return true;
-      return false;
+      return Element::rfrac();
       }
 
 //---------------------------------------------------------
-//   writeProperties
+//   readAddTuplet
 //---------------------------------------------------------
 
-void DurationElement::writeProperties(XmlWriter& xml) const
+void DurationElement::readAddTuplet(Tuplet* t)
       {
-      Element::writeProperties(xml);
-      if (tuplet())
-            xml.tag("Tuplet", tuplet()->id());
+      if (t) {
+            setTuplet(t);
+            if (!score()->undoStack()->active())     // HACK, also added in Undo::AddElement()
+                  t->add(this);
+            }
       }
 
 //---------------------------------------------------------
-//   writeTuplet
+//   writeTupletStart
 //---------------------------------------------------------
 
-void DurationElement::writeTuplet(XmlWriter& xml)
+void DurationElement::writeTupletStart(XmlWriter& xml) const
       {
       if (tuplet() && tuplet()->elements().front() == this) {
-            tuplet()->writeTuplet(xml);           // recursion
-            tuplet()->setId(xml.nextTupletId());
+            tuplet()->writeTupletStart(xml);           // recursion
             tuplet()->write(xml);
+            }
+      }
+
+//---------------------------------------------------------
+//   writeTupletEnd
+//---------------------------------------------------------
+
+void DurationElement::writeTupletEnd(XmlWriter& xml) const
+      {
+      if (tuplet() && tuplet()->elements().back() == this) {
+            xml.tagE("endTuplet");
+            tuplet()->writeTupletEnd(xml);           // recursion
             }
       }
 

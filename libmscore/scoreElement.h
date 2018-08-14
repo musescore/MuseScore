@@ -21,6 +21,7 @@ namespace Ms {
 class ScoreElement;
 class MasterScore;
 class XmlWriter;
+class ConnectorInfoReader;
 class Measure;
 class Staff;
 class Part;
@@ -148,6 +149,8 @@ class LinkedElements : public QList<ScoreElement*> {
 
       void setLid(Score*, int val);
       int lid() const   { return _lid;    }
+
+      ScoreElement* mainElement();
       };
 
 //---------------------------------------------------------
@@ -210,6 +213,8 @@ class ScoreElement {
       virtual Sid getPropertyStyle(Pid) const;
       bool readProperty(const QStringRef&, XmlReader&, Pid);
       bool readStyledProperty(XmlReader& e, const QStringRef& tag);
+
+      virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode);
 
       virtual void styleChanged();
 
@@ -441,10 +446,6 @@ static inline Box* toBox(ScoreElement* e) {
      Q_ASSERT(e == 0 || e->isBox());
       return (Box*)e;
       }
-static inline Spanner* toSpanner(ScoreElement* e) {
-      Q_ASSERT(e == 0 || e->isSpanner());
-      return (Spanner*)e;
-      }
 static inline SpannerSegment* toSpannerSegment(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isSpannerSegment());
       return (SpannerSegment*)e;
@@ -495,6 +496,7 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(VBox)
       CONVERT(TBox)
       CONVERT(FBox)
+      CONVERT(Spanner)
       CONVERT(Tie)
       CONVERT(Slur)
       CONVERT(Glissando)

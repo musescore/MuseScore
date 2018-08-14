@@ -72,6 +72,8 @@ class Lyrics final : public TextBase {
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual bool readProperties(XmlReader&);
+      virtual void read300(XmlReader&) override;
+      virtual bool readProperties300(XmlReader&) override;
       virtual int subtype() const override            { return _no; }
       virtual QString subtypeName() const override    { return QObject::tr("Verse %1").arg(_no + 1); }
       void setNo(int n)                               { _no = n; }

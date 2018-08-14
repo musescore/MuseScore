@@ -1193,11 +1193,9 @@ void Note::write(XmlWriter& xml) const
             for (NoteDot* dot : _dots)
                   dot->write(xml);
       if (_tieFor)
-            _tieFor->write(xml);
-      if (_tieBack) {
-            int id = xml.spannerId(_tieBack);
-            xml.tagE(QString("endSpanner id=\"%1\"").arg(id));
-            }
+            _tieFor->writeSpannerStart(xml, this, track());
+      if (_tieBack)
+            _tieBack->writeSpannerEnd(xml, this, track());
       if ((chord() == 0 || chord()->playEventType() != PlayEventType::Auto) && !_playEvents.empty()) {
             xml.stag("Events");
             for (const NoteEvent& e : _playEvents)
@@ -1212,9 +1210,9 @@ void Note::write(XmlWriter& xml) const
             }
 
       for (Spanner* e : _spannerFor)
-            e->write(xml);
+            e->writeSpannerStart(xml, this, track());
       for (Spanner* e : _spannerBack)
-            xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(e)));
+            e->writeSpannerEnd(xml, this, track());
 
       xml.etag();
       }
@@ -1321,14 +1319,8 @@ bool Note::readProperties(XmlReader& e)
             a->read(e);
             add(a);
             }
-      else if (tag == "Tie") {
-            Tie* tie = new Tie(score());
-            tie->setParent(this);
-            tie->setTrack(track());
-            tie->read(e);
-            tie->setStartNote(this);
-            _tieFor = tie;
-            }
+      else if (tag == "Spanner")
+            Spanner::readSpanner(e, this, track());
       else if (tag == "tpc2")
             _tpc[1] = e.readInt();
       else if (tag == "small")
@@ -1363,6 +1355,7 @@ bool Note::readProperties(XmlReader& e)
             setLine(e.readInt());
       else if (tag == "Fingering") {
             Fingering* f = new Fingering(score());
+            f->setTrack(track());
             f->read(e);
             add(f);
             }
@@ -1408,79 +1401,6 @@ bool Note::readProperties(XmlReader& e)
             if (chord())
                   chord()->setPlayEventType(PlayEventType::User);
             }
-      else if (tag == "endSpanner") {
-            int id = e.intAttribute("id");
-            Spanner* sp = e.findSpanner(id);
-            if (sp) {
-                  sp->setEndElement(this);
-                  if (sp->isTie())
-                        _tieBack = toTie(sp);
-                  else {
-                        if (sp->isGlissando() && parent() && parent()->isChord())
-                              toChord(parent())->setEndsGlissando(true);
-                        addSpannerBack(sp);
-                        }
-                  e.removeSpanner(sp);
-                  }
-            else {
-                  // End of a spanner whose start element will appear later;
-                  // may happen for cross-staff spanner from a lower to a higher staff
-                  // (for instance a glissando from bass to treble staff of piano).
-                  // Create a place-holder spanner with end data
-                  // (a TextLine is used only because both Spanner or SLine are abstract,
-                  // the actual class does not matter, as long as it is derived from Spanner)
-                  int id = e.intAttribute("id", -1);
-                  if (id != -1 &&
-                              // DISABLE if pasting into a staff with linked staves
-                              // because the glissando is not properly cloned into the linked staves
-                              staff() && (!e.pasteMode() || !staff()->links() || staff()->links()->empty())) {
-                        Spanner* placeholder = new TextLine(score());
-                        placeholder->setAnchor(Spanner::Anchor::NOTE);
-                        placeholder->setEndElement(this);
-                        placeholder->setTrack2(track());
-                        placeholder->setTick(0);
-                        placeholder->setTick2(e.tick());
-                        e.addSpanner(id, placeholder);
-                        }
-                  }
-            e.readNext();
-            }
-      else if (tag == "TextLine"
-            || tag == "Glissando") {
-            Spanner* sp = toSpanner(Element::name2Element(tag, score()));
-            // check this is not a lower-to-higher cross-staff spanner we already got
-            int id = e.intAttribute("id");
-            Spanner* placeholder = e.findSpanner(id);
-            if (placeholder && placeholder->endElement()) {
-                  // if it is, fill end data from place-holder
-                  sp->setAnchor(Spanner::Anchor::NOTE);           // make sure we can set a Note as end element
-                  sp->setEndElement(placeholder->endElement());
-                  sp->setTrack2(placeholder->track2());
-                  sp->setTick(e.tick());                          // make sure tick2 will be correct
-                  sp->setTick2(placeholder->tick2());
-                  toNote(placeholder->endElement())->addSpannerBack(sp);
-                  // remove no longer needed place-holder before reading the new spanner,
-                  // as reading it also adds it to XML reader list of spanners,
-                  // which would overwrite the place-holder
-                  e.removeSpanner(placeholder);
-                  delete placeholder;
-                  }
-            sp->setTrack(track());
-            sp->read(e);
-            // DISABLE pasting of glissandi into staves with other lionked staves
-            // because the glissando is not properly cloned into the linked staves
-            if (e.pasteMode() && staff() && staff()->links() && !staff()->links()->empty()) {
-                  e.removeSpanner(sp);    // read() added the element to the XMLReader: remove it
-                  delete sp;
-                  }
-            else {
-                  sp->setAnchor(Spanner::Anchor::NOTE);
-                  sp->setStartElement(this);
-                  sp->setTick(e.tick());
-                  addSpannerFor(sp);
-                  sp->setParent(this);
-                  }
-            }
       else if (tag == "offset")
             Element::readProperties(e);
       else if (Element::readProperties(e))
@@ -1488,6 +1408,67 @@ bool Note::readProperties(XmlReader& e)
       else
             return false;
       return true;
+      }
+
+//---------------------------------------------------------
+//   Note::readAddConnector
+//---------------------------------------------------------
+
+void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
+      {
+      const ElementType type = info->type();
+      const Location& l = info->location();
+      switch(type) {
+            case ElementType::TIE:
+            case ElementType::TEXTLINE:
+            case ElementType::GLISSANDO:
+                  {
+                  Spanner* sp = toSpanner(info->connector());
+                  if (info->isStart()) {
+                        sp->setTrack(l.track());
+                        sp->setTick(tick());
+                        if (sp->isTie()) {
+                              Tie* tie = toTie(sp);
+                              tie->setParent(this);
+                              tie->setStartNote(this);
+                              _tieFor = tie;
+                              }
+                        else {
+                              // DISABLE pasting of glissandi into staves with other lionked staves
+                              // because the glissando is not properly cloned into the linked staves
+                              if (pasteMode && staff() && staff()->links() && !staff()->links()->empty()) {
+                                    // Do nothing. The spanner is no longer needed.
+                                    info->releaseConnector();
+                                    delete sp;
+                                    }
+                              else {
+                                    sp->setAnchor(Spanner::Anchor::NOTE);
+                                    sp->setStartElement(this);
+                                    addSpannerFor(sp);
+                                    sp->setParent(this);
+                                    }
+                              }
+                        }
+                  else if (info->isEnd()) {
+                        // We might have deleted a spanner (see "DISABLE pasting
+                        // of glissandi..." note above)
+                        if (!sp)
+                              break;
+                        sp->setTrack2(l.track());
+                        sp->setTick2(tick());
+                        sp->setEndElement(this);
+                        if (sp->isTie())
+                              _tieBack = toTie(sp);
+                        else {
+                              if (sp->isGlissando() && parent() && parent()->isChord())
+                                    toChord(parent())->setEndsGlissando(true);
+                              addSpannerBack(sp);
+                              }
+                        }
+                  }
+            default:
+                  break;
+            }
       }
 
 //---------------------------------------------------------

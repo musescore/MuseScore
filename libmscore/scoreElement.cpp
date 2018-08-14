@@ -435,6 +435,16 @@ void ScoreElement::reset()
       }
 
 //---------------------------------------------------------
+//   readAddConnector
+//---------------------------------------------------------
+
+void ScoreElement::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
+      {
+      Q_UNUSED(pasteMode);
+      qDebug("Cannot add connector %s to %s", info->connector()->name(), name());
+      }
+
+//---------------------------------------------------------
 //   linkTo
 //    link this to element
 //---------------------------------------------------------
@@ -538,6 +548,22 @@ void LinkedElements::setLid(Score* score, int id)
       {
       _lid = id;
       score->linkId(id);
+      }
+
+//---------------------------------------------------------
+//   mainElement
+//---------------------------------------------------------
+
+ScoreElement* LinkedElements::mainElement()
+      {
+      if (isEmpty())
+            return nullptr;
+      MasterScore* ms = at(0)->masterScore();
+      for (ScoreElement* se : *this) {
+            if (se->score() == ms)
+                  return se;
+            }
+      return front();
       }
 
 //---------------------------------------------------------

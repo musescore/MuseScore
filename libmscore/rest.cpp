@@ -848,6 +848,7 @@ void Rest::write(XmlWriter& xml) const
       {
       if (_gap)
             return;
+      writeBeam(xml);
       xml.stag(name());
       ChordRest::writeProperties(xml);
       el().write(xml);

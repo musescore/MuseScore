@@ -30,6 +30,7 @@
 #include "chordline.h"
 #include "chordrest.h"
 #include "clef.h"
+#include "connector.h"
 #include "dynamic.h"
 #include "figuredbass.h"
 #include "fingering.h"
@@ -76,6 +77,7 @@
 #include "textframe.h"
 #include "text.h"
 #include "textline.h"
+#include "tie.h"
 #include "timesig.h"
 #include "tremolobar.h"
 #include "tremolo.h"
@@ -463,8 +465,47 @@ bool Element::intersects(const QRectF& rr) const
 void Element::writeProperties(XmlWriter& xml) const
       {
       // copy paste should not keep links
-      if (_links && (_links->size() > 1) && !xml.clipboardmode())
-            xml.tag("lid", _links->lid());
+      if (_links && (_links->size() > 1) && !xml.clipboardmode()) {
+            if (MScore::debugMode)
+                  xml.tag("lid", _links->lid());
+            Element* me = static_cast<Element*>(_links->mainElement());
+            Q_ASSERT(type() == me->type());
+            Staff* s = staff();
+            if (!s) {
+                  s = score()->staff(xml.curTrack() / VOICES);
+                  if (!s)
+                        qWarning("Element::writeProperties: linked element's staff not found (%s)", name());
+                  }
+            Location loc = Location::positionForElement(this);
+            if (me == this) {
+                  xml.tagE("linkedMain");
+                  xml.setLidLocalIndex(_links->lid(), xml.assignLocalIndex(loc));
+                  }
+            else {
+                  if (s->links()) {
+                        Staff* linkedStaff = toStaff(s->links()->mainElement());
+                        loc.setStaff(linkedStaff->idx());
+                        }
+                  xml.stag("linked");
+                  if (!me->score()->isMaster()) {
+                        if (me->score() == score()) {
+                              xml.tag("score", "same");
+                              }
+                        else {
+                              qWarning("Element::writeProperties: linked elements belong to different scores but none of them is master score: (%s lid=%d)", name(), _links->lid());
+                              }
+                        }
+                  Location mainLoc = Location::positionForElement(me);
+                  const int guessedLocalIndex = xml.assignLocalIndex(mainLoc);
+                  if (loc != mainLoc) {
+                        mainLoc.toRelative(loc);
+                        mainLoc.write(xml);
+                        }
+                  const int indexDiff = xml.lidLocalIndex(_links->lid()) - guessedLocalIndex;
+                  xml.tag("indexDiff", indexDiff, 0);
+                  xml.etag(); // </linked>
+                  }
+            }
       if (!autoplace() && !userOff().isNull()) {      // TODO: remove pos of offset
             if (isFingering() || isHarmony() || isTuplet() || isStaffText()) {
                   QPointF p = userOff() / score()->spatium();
@@ -476,7 +517,9 @@ void Element::writeProperties(XmlWriter& xml) const
             else
                   xml.tag("offset", userOff() / score()->spatium());
             }
-      if (((track() != xml.curTrack()) || isSlur()) && (track() != -1)) {
+      if ((track() != xml.curTrack()) && (track() != -1) && !isBeam()) {
+            // Writing track number for beams is redundant as it is calculated
+            // during layout.
             int t;
             t = track() + xml.trackDiff();
             xml.tag("track", t);
@@ -511,7 +554,68 @@ bool Element::readProperties(XmlReader& e)
             setVisible(e.readInt());
       else if (tag == "selected") // obsolete
             e.readInt();
+      else if ((tag == "linked") || (tag == "linkedMain")) {
+            Staff* s = staff();
+            if (!s) {
+                  s = score()->staff(e.track() / VOICES);
+                  if (!s) {
+                        qWarning("Element::readProperties: linked element's staff not found (%s)", name());
+                        e.skipCurrentElement();
+                        return true;
+                        }
+                  }
+            if (tag == "linkedMain") {
+                  _links = new LinkedElements(score());
+                  _links->push_back(this);
+                  e.addLink(s, _links);
+                  e.readNext();
+                  }
+            else {
+                  Staff* ls = s->links() ? toStaff(s->links()->mainElement()) : nullptr;
+                  bool linkedIsMaster = ls ? ls->score()->isMaster() : false;
+                  Location loc = e.location(true);
+                  if (ls)
+                        loc.setStaff(ls->idx());
+                  Location mainLoc = Location::relative();
+                  bool locationRead = false;
+                  int localIndexDiff = 0;
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+
+                        if (tag == "score") {
+                              QString val(e.readElementText());
+                              if (val == "same")
+                                    linkedIsMaster = score()->isMaster();
+                              }
+                        else if (tag == "location") {
+                              mainLoc.read(e);
+                              mainLoc.toAbsolute(loc);
+                              locationRead = true;
+                              }
+                        else if (tag == "indexDiff")
+                              localIndexDiff = e.readInt();
+                        else
+                              e.unknown();
+                        }
+                  if (!locationRead)
+                        mainLoc = loc;
+                  LinkedElements* link = e.getLink(linkedIsMaster, mainLoc, localIndexDiff);
+                  if (link) {
+                        ScoreElement* linked = link->mainElement();
+                        if (linked->type() == type())
+                              linkTo(linked);
+                        else
+                              qWarning("Element::readProperties: linked elements have different types: %s, %s. Input file corrupted?", name(), linked->name());
+                        }
+                  if (!_links)
+                        qWarning("Element::readProperties: could not link %s at staff %d", name(), mainLoc.staff() + 1);
+                  }
+            }
       else if (tag == "lid") {
+            if (score()->mscVersion() >= 301) {
+                  e.skipCurrentElement();
+                  return true;
+                  }
             int id = e.readInt();
             _links = e.linkIds().value(id);
             if (!_links) {
@@ -868,6 +972,7 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::FIGURED_BASS:      return new FiguredBass(score);
             case ElementType::STEM:              return new Stem(score);
             case ElementType::SLUR:              return new Slur(score);
+            case ElementType::TIE:               return new Tie(score);
             case ElementType::FINGERING:          return new Fingering(score);
             case ElementType::HBOX:              return new HBox(score);
             case ElementType::VBOX:              return new VBox(score);
@@ -886,7 +991,6 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::SLUR_SEGMENT:
             case ElementType::TIE_SEGMENT:
             case ElementType::STEM_SLASH:
-            case ElementType::TIE:
             case ElementType::PAGE:
             case ElementType::BEAM:
             case ElementType::HOOK:
@@ -1124,6 +1228,40 @@ Element* Element::findMeasure()
             return _parent->findMeasure();
       else
             return 0;
+      }
+
+//---------------------------------------------------------
+//   findMeasure
+//---------------------------------------------------------
+
+const Element* Element::findMeasure() const
+      {
+      Element* e = const_cast<Element*>(this);
+      return e->findMeasure();
+      }
+
+//---------------------------------------------------------
+//   findMeasureBase
+//---------------------------------------------------------
+
+MeasureBase* Element::findMeasureBase()
+      {
+      if (isMeasureBase())
+            return toMeasureBase(this);
+      else if (_parent)
+            return _parent->findMeasureBase();
+      else
+            return 0;
+      }
+
+//---------------------------------------------------------
+//   findMeasureBase
+//---------------------------------------------------------
+
+const MeasureBase* Element::findMeasureBase() const
+      {
+      Element* e = const_cast<Element*>(this);
+      return e->findMeasureBase();
       }
 
 //---------------------------------------------------------
@@ -1577,15 +1715,41 @@ int Element::rtick() const
       }
 
 //---------------------------------------------------------
-//   ftick
-//    fractional tick
+//   rfrac
+//    Position of element in fractions relative to a
+//    measure start.
 //---------------------------------------------------------
 
-Fraction Element::ftick() const
+Fraction Element::rfrac() const
       {
-      return Fraction::fromTicks(tick());
+      const Element* e = this;
+      while (e) {
+            if (e->isSegment())
+                  return toSegment(e)->rfrac();
+            else if (e->isMeasureBase())
+                  return toMeasureBase(e)->rfrac();
+            e = e->parent();
+            }
+      return -1;
       }
 
+//---------------------------------------------------------
+//   afrac
+//    Absolute position of element in fractions.
+//---------------------------------------------------------
+
+Fraction Element::afrac() const
+      {
+      const Element* e = this;
+      while (e) {
+            if (e->isSegment())
+                  return toSegment(e)->afrac();
+            else if (e->isMeasureBase())
+                  return toMeasureBase(e)->afrac();
+            e = e->parent();
+            }
+      return -1;
+      }
 
 //---------------------------------------------------------
 //   triggerLayout

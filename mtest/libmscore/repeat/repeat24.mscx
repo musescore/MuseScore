@@ -1,174 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>top</valign>
-        <offsetType>absolute</offsetType>
-        <name>Title</name>
-        <family>Times New Roman</family>
-        <size>36</size>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>top</valign>
-        <xoffset>0</xoffset>
-        <yoffset>10</yoffset>
-        <offsetType>absolute</offsetType>
-        <name>Subtitle</name>
-        <family>Times New Roman</family>
-        <size>24</size>
-        </TextStyle>
-      <TextStyle>
-        <halign>right</halign>
-        <valign>bottom</valign>
-        <offsetType>absolute</offsetType>
-        <name>Composer</name>
-        <family>Times New Roman</family>
-        <size>14</size>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>bottom</valign>
-        <offsetType>absolute</offsetType>
-        <name>Lyricist</name>
-        <family>Times New Roman</family>
-        <size>14</size>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>6</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Lyrics Odd Lines</name>
-        <family>FreeSerif</family>
-        <size>10</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <foregroundColor r="150" g="0" b="0" a="255"/>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>6</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Lyrics Even Lines</name>
-        <family>FreeSerif</family>
-        <size>10</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <foregroundColor r="150" g="0" b="0" a="255"/>
-        </TextStyle>
-      <TextStyle>
-        <halign>right</halign>
-        <valign>center</valign>
-        <offsetType>absolute</offsetType>
-        <name>Instrument Name (Long)</name>
-        <family>Times New Roman</family>
-        <size>9</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <foregroundColor r="85" g="85" b="255" a="255"/>
-        </TextStyle>
-      <TextStyle>
-        <halign>right</halign>
-        <valign>center</valign>
-        <offsetType>absolute</offsetType>
-        <name>Instrument Name (Short)</name>
-        <family>Times New Roman</family>
-        <size>9</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <foregroundColor r="85" g="85" b="255" a="255"/>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>8</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Dynamics</name>
-        <family>FreeSerif</family>
-        <size>11</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-4</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Tempo</name>
-        <family>Times New Roman</family>
-        <size>10</size>
-        <bold>1</bold>
-        <italic>1</italic>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <foregroundColor r="255" g="0" b="0" a="255"/>
-        <systemFlag>1</systemFlag>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>bottom</valign>
-        <xoffset>-1.2</xoffset>
-        <yoffset>-2</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Measure Number</name>
-        <family>FreeSerif</family>
-        <size>8</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <foregroundColor r="140" g="70" b="0" a="255"/>
-        <backgroundColor r="255" g="200" b="180" a="0"/>
-        <frameWidthS>0.1</frameWidthS>
-        <paddingWidthS>0.5</paddingWidthS>
-        <frameRound>0</frameRound>
-        <frameColor r="220" g="160" b="150" a="255"/>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>center</valign>
-        <offsetType>spatium</offsetType>
-        <name>Ottava</name>
-        <family>FreeSerif</family>
-        <size>10</size>
-        <italic>1</italic>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>0.15</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Pedal</name>
-        <family>FreeSerif</family>
-        <size>10</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>center</valign>
-        <offsetType>spatium</offsetType>
-        <name>Bend</name>
-        <family>FreeSerif</family>
-        <size>8</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>bottom</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-3</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Instrument Change</name>
-        <family>Times New Roman</family>
-        <size>10</size>
-        <bold>1</bold>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <foregroundColor r="0" g="85" b="127" a="255"/>
-        </TextStyle>
+      <lyricsOddFontSize>10</lyricsOddFontSize>
+      <lyricsOddOffset x="0" y="6"/>
+      <lyricsEvenFontSize>10</lyricsEvenFontSize>
+      <lyricsEvenOffset x="0" y="6"/>
+      <pedalFontSize>10</pedalFontSize>
+      <ottavaFontSize>10</ottavaFontSize>
+      <ottavaFontItalic>1</ottavaFontItalic>
+      <defaultAlign>center,center</defaultAlign>
+      <defaultFramePadding>0</defaultFramePadding>
+      <defaultFrameWidth>0</defaultFrameWidth>
+      <defaultOffset x="0" y="8"/>
+      <titleFontFace>Times New Roman</titleFontFace>
+      <titleFontSize>36</titleFontSize>
+      <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
+      <subTitleFontFace>Times New Roman</subTitleFontFace>
+      <subTitleFontSize>24</subTitleFontSize>
+      <subTitleFontSpatiumDependent>1</subTitleFontSpatiumDependent>
+      <composerFontFace>Times New Roman</composerFontFace>
+      <composerFontSize>14</composerFontSize>
+      <composerFontSpatiumDependent>1</composerFontSpatiumDependent>
+      <lyricistFontFace>Times New Roman</lyricistFontFace>
+      <lyricistFontSize>14</lyricistFontSize>
+      <longInstrumentFontFace>Times New Roman</longInstrumentFontFace>
+      <longInstrumentFontSize>9</longInstrumentFontSize>
+      <shortInstrumentFontFace>Times New Roman</shortInstrumentFontFace>
+      <shortInstrumentFontSize>9</shortInstrumentFontSize>
+      <dynamicsFontSize>11</dynamicsFontSize>
+      <dynamicsFontItalic>0</dynamicsFontItalic>
+      <tempoFontFace>Times New Roman</tempoFontFace>
+      <tempoFontSize>10</tempoFontSize>
+      <tempoFontItalic>1</tempoFontItalic>
+      <tempoPosAbove>-4</tempoPosAbove>
+      <measureNumberOffset x="-1.2" y="-2"/>
+      <measureNumberAlign>center,bottom</measureNumberAlign>
+      <instrumentChangeFontFace>Times New Roman</instrumentChangeFontFace>
+      <instrumentChangeFontSize>10</instrumentChangeFontSize>
+      <instrumentChangeAlign>left,bottom</instrumentChangeAlign>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -191,7 +64,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Flûte</trackName>
       <Instrument>
@@ -244,103 +116,109 @@
           <text>Repeat Test</text>
           </Text>
         </VBox>
-      <Measure number="1">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="2">
+      <Measure>
         <Marker>
           <style>Repeat Text Left</style>
           <text><sym>segno</sym></text>
           <label>segno</label>
           </Marker>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="3">
+      <Measure>
         <startRepeat/>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="4">
+      <Measure>
         <Jump>
           <style>Repeat Text Right</style>
           <text>D.S.</text>
@@ -348,103 +226,109 @@
           <playUntil>end</playUntil>
           <continueAt></continueAt>
           </Jump>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>double</subtype>
-          <span>1</span>
-          </BarLine>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>double</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="5">
+      <Measure>
         <endRepeat>2</endRepeat>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="6">
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>71</pitch>
-            <tpc>19</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     </Score>

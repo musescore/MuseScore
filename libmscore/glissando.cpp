@@ -370,7 +370,7 @@ void Glissando::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      xml.stag(name());
       if (_showText && !_text.isEmpty())
             xml.tag("text", _text);
 
@@ -389,7 +389,6 @@ void Glissando::read(XmlReader& e)
       {
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
-      e.addSpanner(e.intAttribute("id", -1), this);
 
       _showText = false;
       while (e.readNextStartElement()) {

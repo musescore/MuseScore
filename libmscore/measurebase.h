@@ -117,11 +117,15 @@ class MeasureBase : public Element {
       virtual void remove(Element*) override;
       virtual void writeProperties(XmlWriter&) const override;
       virtual bool readProperties(XmlReader&) override;
+      virtual bool readProperties300(XmlReader&) override;
 
       virtual int tick() const override      { return _tick;  }
       virtual int ticks() const              { return 0;      }
       int endTick() const                    { return tick() + ticks();  }
       void setTick(int t)                    { _tick = t;     }
+
+      Fraction rfrac() const override        { return 0;      }
+      Fraction afrac() const override;
 
       qreal pause() const;
 
@@ -167,6 +171,7 @@ class MeasureBase : public Element {
       virtual void computeMinWidth() { };
 
       int index() const;
+      int measureIndex() const;
       };
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -132,133 +132,141 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <linkedMain/>
         <Text>
-          <lid>1</lid>
+          <linkedMain/>
           <style>Title</style>
           <text>Test</text>
           </Text>
         </VBox>
-      <Measure number="1" len="1/4">
+      <Measure len="1/4">
         <irregular>1</irregular>
-        <TimeSig>
-          <lid>2</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Rest>
-          <lid>3</lid>
-          <durationType>eighth</durationType>
-          </Rest>
-        <SystemText>
-          <swing unit="eighth" ratio= "60"/>
-          <lid>4</lid>
-          <style>Tempo</style>
-          <text>Swing</text>
-          </SystemText>
-        <Chord>
-          <lid>5</lid>
-          <durationType>eighth</durationType>
-          <Note>
-            <lid>6</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            <tpc2>16</tpc2>
-            </Note>
-          </Chord>
+        <voice>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <linkedMain/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <SystemText>
+            <swing unit="eighth" ratio= "60"/>
+            <linkedMain/>
+            <style>Tempo</style>
+            <text>Swing</text>
+            </SystemText>
+          <Chord>
+            <linkedMain/>
+            <durationType>eighth</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="1">
-        <Chord>
-          <lid>8</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>9</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            <tpc2>16</tpc2>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>10</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>11</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            <tpc2>16</tpc2>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>12</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>13</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            <tpc2>16</tpc2>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>14</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>15</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            <tpc2>16</tpc2>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <tpc2>16</tpc2>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="2">
-      <Measure number="1" len="1/4">
-        <TimeSig>
-          <lid>17</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Rest>
-          <lid>18</lid>
-          <durationType>quarter</durationType>
-          </Rest>
+      <Measure len="1/4">
+        <voice>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="1">
-        <Chord>
-          <lid>19</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>20</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>21</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>22</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>23</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>24</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>25</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>26</lid>
-            <pitch>72</pitch>
-            <tpc>14</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
       </Staff>
     <Score>
@@ -332,9 +340,11 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <linked>
+            </linked>
           <Text>
-            <lid>1</lid>
+            <linked>
+              </linked>
             <style>Title</style>
             <text>Test</text>
             </Text>
@@ -343,78 +353,95 @@
             <text>B♭ Trumpet</text>
             </Text>
           </VBox>
-        <Measure number="1" len="1/4">
+        <Measure len="1/4">
           <irregular>1</irregular>
-          <KeySig>
-            <accidental>2</accidental>
-            </KeySig>
-          <TimeSig>
-            <lid>2</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Rest>
-            <lid>3</lid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <SystemText>
-            <swing unit="eighth" ratio= "60"/>
-            <lid>4</lid>
-            <style>Tempo</style>
-            <text>Swing</text>
-            </SystemText>
-          <Chord>
-            <lid>5</lid>
-            <durationType>eighth</durationType>
-            <Note>
-              <lid>6</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              <tpc2>16</tpc2>
-              </Note>
-            </Chord>
+          <voice>
+            <KeySig>
+              <accidental>2</accidental>
+              </KeySig>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>eighth</durationType>
+              </Rest>
+            <SystemText>
+              <swing unit="eighth" ratio= "60"/>
+              <linked>
+                </linked>
+              <style>Tempo</style>
+              <text>Swing</text>
+              </SystemText>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>eighth</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                <tpc2>16</tpc2>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="1">
-          <Chord>
-            <lid>8</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>9</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              <tpc2>16</tpc2>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>10</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>11</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              <tpc2>16</tpc2>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>12</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>13</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              <tpc2>16</tpc2>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>14</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>15</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              <tpc2>16</tpc2>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                <tpc2>16</tpc2>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                <tpc2>16</tpc2>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                <tpc2>16</tpc2>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                <tpc2>16</tpc2>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <name>B♭ Trumpet</name>
@@ -488,9 +515,17 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <Text>
-            <lid>1</lid>
+            <linked>
+              <location>
+                <staves>-1</staves>
+                </location>
+              </linked>
             <style>Title</style>
             <text>Test</text>
             </Text>
@@ -499,62 +534,82 @@
             <text>C Trumpet</text>
             </Text>
           </VBox>
-        <Measure number="1" len="1/4">
+        <Measure len="1/4">
           <irregular>1</irregular>
-          <TimeSig>
-            <lid>17</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Rest>
-            <lid>18</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <move>1/8</move>
-          <SystemText>
-            <swing unit="eighth" ratio= "60"/>
-            <lid>4</lid>
-            <style>Tempo</style>
-            <text>Swing</text>
-            </SystemText>
+          <voice>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <location>
+              <fractions>-1/8</fractions>
+              </location>
+            <SystemText>
+              <swing unit="eighth" ratio= "60"/>
+              <linked>
+                <location>
+                  <staves>-1</staves>
+                  </location>
+                </linked>
+              <style>Tempo</style>
+              <text>Swing</text>
+              </SystemText>
+            </voice>
           </Measure>
-        <Measure number="1">
-          <Chord>
-            <lid>19</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>20</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>21</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>22</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>23</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>24</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>25</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>26</lid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>72</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <name>C Trumpet</name>
