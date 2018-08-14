@@ -106,8 +106,8 @@ void PartEdit::setPart(Part* p, Channel* a)
       pan->setDclickValue1(0);
       pan->setDclickValue2(0);
       for (int i = 0; i < patch->count(); ++i) {
-            MidiPatch* p = (MidiPatch*)patch->itemData(i, Qt::UserRole).value<void*>();
-            if (a->synti == p->synti && a->program == p->prog && a->bank == p->bank) {
+            MidiPatch* mp = (MidiPatch*)patch->itemData(i, Qt::UserRole).value<void*>();
+            if (a->synti == mp->synti && a->program == mp->prog && a->bank == mp->bank) {
                   patch->setCurrentIndex(i);
                   break;
                   }
@@ -127,9 +127,9 @@ void PartEdit::setPart(Part* p, Channel* a)
                         tb->setChecked(staff->playbackVoice(voice));
                         tb->setFocusPolicy(Qt::ClickFocus);
                         tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
-                        QPalette p(tb->palette());
-                        p.setColor(QPalette::Base, MScore::selectColor[voice]);
-                        tb->setPalette(p);
+                        QPalette pal(tb->palette());
+                        pal.setColor(QPalette::Base, MScore::selectColor[voice]);
+                        tb->setPalette(pal);
                         hb->addWidget(tb);
                         voiceButtons.append(tb);
                         connect(tb, SIGNAL(clicked()), SLOT(playbackVoiceChanged()));

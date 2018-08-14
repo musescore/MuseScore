@@ -2458,7 +2458,7 @@ bool MuseScore::savePng(Score* score, const QString& name)
 //    return true on success
 //---------------------------------------------------------
 
-bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool transparent, double convDpi, int trimMargin, QImage::Format format)
+bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool transparent, double convDpi, int _trimMargin, QImage::Format format)
       {
       bool rv = true;
       score->setPrinting(!screenshot);    // dont print page break symbols etc.
@@ -2480,8 +2480,8 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
             Page* page = pl.at(pageNumber);
 
             QRectF r;
-            if (trimMargin >= 0) {
-                  QMarginsF margins(trimMargin, trimMargin, trimMargin, trimMargin);
+            if (_trimMargin >= 0) {
+                  QMarginsF margins(_trimMargin, _trimMargin, _trimMargin, _trimMargin);
                   r = page->tbbox() + margins;
                   }
             else
@@ -2502,7 +2502,7 @@ bool MuseScore::savePng(Score* score, const QString& name, bool screenshot, bool
             p.setRenderHint(QPainter::Antialiasing, true);
             p.setRenderHint(QPainter::TextAntialiasing, true);
             p.scale(mag, mag);
-            if (trimMargin >= 0)
+            if (_trimMargin >= 0)
                   p.translate(-r.topLeft());
 
             QList<Element*> pel = page->elements();

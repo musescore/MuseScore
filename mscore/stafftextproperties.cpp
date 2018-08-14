@@ -374,37 +374,37 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
       QString channelName = channel->name;
 
       for (const NamedEventList& e : part->instrument(tick)->midiActions()) {
-            QTreeWidgetItem* item = new QTreeWidgetItem(actionList);
+            QTreeWidgetItem* ti = new QTreeWidgetItem(actionList);
             if (e.name.isEmpty() || e.name == "normal") {
-                  item->setText(0, tr("normal"));
-                  item->setData(0, Qt::UserRole, "normal");
+                  ti->setText(0, tr("normal"));
+                  ti->setData(0, Qt::UserRole, "normal");
                   }
             else {
-                  item->setText(0, qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
-                  item->setData(0, Qt::UserRole, e.name);
+                  ti->setText(0, qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
+                  ti->setData(0, Qt::UserRole, e.name);
                   }
-            item->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
+            ti->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
             }
       for (const NamedEventList& e : channel->midiActions) {
-            QTreeWidgetItem* item = new QTreeWidgetItem(actionList);
+            QTreeWidgetItem* ti = new QTreeWidgetItem(actionList);
             if (e.name.isEmpty() || e.name == "normal") {
-                  item->setText(0, tr("normal"));
-                  item->setData(0, Qt::UserRole, "normal");
+                  ti->setText(0, tr("normal"));
+                  ti->setData(0, Qt::UserRole, "normal");
                   }
             else {
-                  item->setText(0, qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
-                  item->setData(0, Qt::UserRole, e.name);
+                  ti->setText(0, qApp->translate("InstrumentsXML", e.name.toUtf8().data()));
+                  ti->setData(0, Qt::UserRole, e.name);
                   }
-            item->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
+            ti->setText(1, qApp->translate("InstrumentsXML", e.descr.toUtf8().data()));
             }
       for (const ChannelActions& ca : *_staffText->channelActions()) {
             if (ca.channel == channelIdx) {
                   for (QString s : ca.midiActionNames) {
                         QList<QTreeWidgetItem*> items;
                         for (int i = 0; i < actionList->topLevelItemCount(); i++) {
-                              QTreeWidgetItem* item = actionList->topLevelItem(i);
-                              if (item->data(0, Qt::UserRole) == s) {
-                                    item->setSelected(true);
+                              QTreeWidgetItem* ti = actionList->topLevelItem(i);
+                              if (ti->data(0, Qt::UserRole) == s) {
+                                    ti->setSelected(true);
                                     }
                               }
                         }

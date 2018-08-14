@@ -1388,7 +1388,7 @@ void PreferenceDialog::printShortcutsClicked()
 
       QPainter p;
       p.begin(&printer);
-      qreal y;
+      qreal y = 0.0;
       qreal lh = QFontMetricsF(p.font()).lineSpacing();
 
       // get max width for description

@@ -583,9 +583,9 @@ void Part::insertTime(int tick, int len)
       InstrumentList il;
       for (auto i = _instruments.lower_bound(tick); i != _instruments.end();) {
             Instrument* instrument = i->second;
-            int tick = i->first;
+            int t = i->first;
             _instruments.erase(i++);
-            _instruments[tick + len] = instrument;
+            _instruments[t + len] = instrument;
             }
       _instruments.insert(il.begin(), il.end());
       }

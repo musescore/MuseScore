@@ -1075,8 +1075,8 @@ void EditStyle::valueChanged(int i)
       if (idx == Sid::MusicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
               ScoreFont* scoreFont = ScoreFont::fontFactory(val.toString());
               if (scoreFont) {
-                    for (auto i : scoreFont->engravingDefaults()) {
-                          cs->undo(new ChangeStyleVal(cs, i.first, i.second));
+                    for (auto j : scoreFont->engravingDefaults()) {
+                          cs->undo(new ChangeStyleVal(cs, j.first, j.second));
                           }
                     if (scoreFont->textEnclosureThickness()) {
 //                           TextStyle ts = cs->textStyle(TextStyleType::REHEARSAL_MARK);
