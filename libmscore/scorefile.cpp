@@ -1057,6 +1057,43 @@ qDebug("createRevision");
       }
 
 //---------------------------------------------------------
+//   writeMove
+//    write <move> tag to denote change in position, track etc.
+//---------------------------------------------------------
+
+static void writeMove(XmlWriter& xml, Segment* seg, int track)
+      {
+      bool voiceTagWritten = false;
+      if ((lastTrackWritten < track) && !xml.clipboardmode()) {
+            while (lastTrackWritten < (track - 1)) {
+                  xml.tagE("voice");
+                  ++lastTrackWritten;
+                  }
+            xml.stag("voice");
+            xml.setCurTick(startTick);
+            xml.setCurTrack(track);
+            voiceTagWritten = true;
+            }
+
+      if ((xml.afrac() != seg->afrac()) || (track != xml.curTrack())) {
+            Location curr = Location::absolute();
+            Location dest = Location::absolute();
+            curr.setFrac(xml.afrac());
+            dest.setFrac(seg->afrac());
+            curr.setTrack(xml.curTrack());
+            dest.setTrack(track);
+
+            dest.toRelative(curr);
+            dest.write(xml);
+
+            xml.setCurTick(seg->tick());
+            xml.setCurTrack(track);
+            }
+
+      return voiceTagWritten;
+      }
+
+//---------------------------------------------------------
 //   writeSegments
 //    ls  - write upto this segment (excluding)
 //          can be zero
@@ -1139,10 +1176,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                         if (e1->track() != track || e1->generated() || (e1->systemFlag() && !writeSystemElements))
                               continue;
                         if (needTick) {
-                              // xml.tag("tick", segment->tick() - xml.tickDiff);
-                              int tick = xml.clipboardmode() ? segment->tick() : segment->rtick();
-                              xml.tag("move", Fraction::fromTicks(tick + xml.tickDiff()));
-                              xml.setCurTick(segment->tick());
+                              writeMove(xml, segment, track);
                               needTick = false;
                               }
                         e1->write(xml);
@@ -1160,10 +1194,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                                           end = s->tick2() <= endTick;
                                     if (s->tick() == segment->tick() && (!clip || end)) {
                                           if (needTick) {
-                                                // xml.tag("tick", segment->tick() - xml.tickDiff);
-                                                int tick = xml.clipboardmode() ? segment->tick() : segment->rtick();
-                                                xml.tag("move", Fraction::fromTicks(tick + xml.tickDiff()));
-                                                xml.setCurTick(segment->tick());
+                                                writeMove(xml, segment, track);
                                                 needTick = false;
                                                 }
                                           s->write(xml);
@@ -1175,10 +1206,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                                  && (!clip || s->tick() >= fs->tick())
                                  ) {
                                     if (needTick) {
-                                          // xml.tag("tick", segment->tick() - xml.tickDiff);
-                                          int tick = xml.clipboardmode() ? segment->tick() : segment->rtick();
-                                          xml.tag("move", Fraction::fromTicks(tick + xml.tickDiff()));
-                                          xml.setCurTick(segment->tick());
+                                          writeMove(xml, segment, track);
                                           needTick = false;
                                           }
                                     xml.tagE(QString("endSpanner id=\"%1\"").arg(xml.spannerId(s)));
@@ -1209,10 +1237,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                         timeSigWritten = true;
                         }
                   if (needTick) {
-                        // xml.tag("tick", segment->tick() - xml.tickDiff);
-                        int tick = xml.clipboardmode() ? segment->tick() : segment->rtick();
-                        xml.tag("move", Fraction::fromTicks(tick + xml.tickDiff()));
-                        xml.setCurTick(segment->tick());
+                        writeMove(xml, segment, track);
                         needTick = false;
                         }
                   if (e->isChordRest()) {

@@ -568,6 +568,26 @@ int MeasureBase::index() const
       }
 
 //---------------------------------------------------------
+//   measureIndex
+//    returns index of measure counting only Measures but
+//    skipping other MeasureBase descendants
+//---------------------------------------------------------
+
+int MeasureBase::measureIndex() const
+      {
+      int idx = 0;
+      MeasureBase* m = score()->first();
+      while (m) {
+            if (m == this)
+                  return idx;
+            m = m->next();
+            if (m->isMeasure())
+                  ++idx;
+            }
+      return  -1;
+      }
+
+//---------------------------------------------------------
 //   sectionBreakElement
 //---------------------------------------------------------
 
