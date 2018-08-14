@@ -77,17 +77,9 @@ function change_rpath() {
                fi
             done
          else
-            PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../Frameworks,g')
+            PSLASH=$(echo $P | sed 's,@rpath,@executable_path/../Frameworks,g')
             FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
             install_name_tool -change $P $PSLASH $1
-            for P1 in `otool -L $FNAME | awk '{print $1}'`
-            do
-               if [[ "$P1" == *@rpath* ]]
-               then
-                   PSLASH1=$(echo $P1 | sed "s,@rpath,@loader_path,g")
-                   install_name_tool -change $P1 $PSLASH1 $FNAME
-               fi
-            done
          fi
       fi
    done
@@ -168,7 +160,7 @@ do
             if [[ "$P1" == /usr/local/Cellar*.dylib ]]
             then
                 PATHNAME=$(dirname $P1)
-                PSLASH1=$(echo $P1 | sed "s,$PATHNAME,@loader_path/../../../,g")
+                PSLASH1=$(echo $P1 | sed "s,$PATHNAME,@executable_path/../Frameworks,g")
                 install_name_tool -change $P1 $PSLASH1 $P
             fi
         done
