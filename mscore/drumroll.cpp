@@ -384,9 +384,9 @@ void DrumrollEditor::keyReleased(int /*pitch*/)
 //   heartBeat
 //---------------------------------------------------------
 
-void DrumrollEditor::heartBeat(Seq* seq)
+void DrumrollEditor::heartBeat(Seq* s)
       {
-      unsigned t = seq->getCurTick();
+      unsigned t = s->getCurTick();
       if (locator[0].tick() != t) {
             locator[0].setTick(t);
             gv->moveLocator(0);

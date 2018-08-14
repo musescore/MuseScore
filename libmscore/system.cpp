@@ -1091,9 +1091,9 @@ qreal System::minDistance(System* s2) const
                         qreal ax2 = mb2->x() + mb2->width();
                         if (ax2 < bx1)
                               continue;
-                        Shape s1 = m1->staffShape(lastStaff).translated(m1->pos());
-                        Shape s2 = m2->staffShape(firstStaff).translated(m2->pos());
-                        qreal d  = s1.minVerticalDistance(s2) + minVerticalDistance;
+                        Shape sh1 = m1->staffShape(lastStaff).translated(m1->pos());
+                        Shape sh2 = m2->staffShape(firstStaff).translated(m2->pos());
+                        qreal d   = sh1.minVerticalDistance(sh2) + minVerticalDistance;
                         dist = qMax(dist, d - m1->staffLines(lastStaff)->height());
                         }
                   }

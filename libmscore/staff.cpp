@@ -1173,9 +1173,9 @@ void Staff::insertTime(int tick, int len)
       KeyList kl2;
       for (auto i = _keys.lower_bound(tick); i != _keys.end();) {
             KeySigEvent kse = i->second;
-            int tick = i->first;
+            int t = i->first;
             _keys.erase(i++);
-            kl2[tick + len] = kse;
+            kl2[t + len] = kse;
             }
       _keys.insert(kl2.begin(), kl2.end());
 

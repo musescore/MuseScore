@@ -726,7 +726,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               };
                         off += keyOffsets[int(key) + 7];
 
-                        foreach(CNote n, o->notes) {
+                        for (CNote n : o->notes) {
                               Note* note = new Note(score);
                               int pitch = 0;
                               // .cap import: pitch contains the diatonic note number relative to clef and key
@@ -761,7 +761,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     note->setTieFor(tie);
                                     }
                               }
-                        foreach(Verse v, o->verse) {
+                        for (Verse v : o->verse) {
                               Lyrics* l = new Lyrics(score);
                               l->setTrack(track);
                               l->setPlainText(v.text);
@@ -935,7 +935,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                   d = static_cast<BasicDurationalObj*>(static_cast<ChordObj*>(no));
             if (!d)
                   continue;
-            foreach(BasicDrawObj* o, d->objects) {
+            for (BasicDrawObj* o : d->objects) {
                   switch (o->type) {
                         case CapellaType::SIMPLE_TEXT:
                               // qDebug("simple text at %d", tick);
@@ -1136,7 +1136,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 #if 1
       foreach(CapSystem* csys, cap->systems) {
             qDebug("System:");
-            foreach(CapStaff* cstaff, csys->staves) {
+            for (CapStaff* cstaff : csys->staves) {
                   CapStaffLayout* cl = cap->staffLayout(cstaff->iLayout);
                   qDebug("  Staff layout <%s><%s><%s><%s><%s> %d  barline %d-%d mode %d",
                          qPrintable(cl->descr), qPrintable(cl->name), qPrintable(cl->abbrev),
@@ -1294,7 +1294,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   }
             */
             int mtick = 0;
-            foreach(CapStaff* cstaff, csys->staves) {
+            for (CapStaff* cstaff : csys->staves) {
                   //
                   // assumption: layout index is mscore staffIdx
                   //    which means that there is a 1:1 relation between layout/staff
@@ -1303,7 +1303,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   qDebug("  ReadCapStaff %d/%d", cstaff->numerator, 1 << cstaff->log2Denom);
                   int staffIdx = cstaff->iLayout;
                   int voice = 0;
-                  foreach(CapVoice* cvoice, cstaff->voices) {
+                  for (CapVoice* cvoice : cstaff->voices) {
                         int tick = readCapVoice(score, cvoice, staffIdx, systemTick, capxMode);
                         ++voice;
                         if (tick > mtick)

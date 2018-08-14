@@ -203,13 +203,13 @@ Measure::Measure(Score* s)
       int n = score()->nstaves();
       _mstaves.reserve(n);
       for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
-            MStaff* s    = new MStaff;
+            MStaff* ms   = new MStaff;
             Staff* staff = score()->staff(staffIdx);
-            s->setLines(new StaffLines(score()));
-            s->lines()->setTrack(staffIdx * VOICES);
-            s->lines()->setParent(this);
-            s->lines()->setVisible(!staff->invisible());
-            _mstaves.push_back(s);
+            ms->setLines(new StaffLines(score()));
+            ms->lines()->setTrack(staffIdx * VOICES);
+            ms->lines()->setParent(this);
+            ms->lines()->setVisible(!staff->invisible());
+            _mstaves.push_back(ms);
             }
       setIrregular(false);
       _noMode                   = MeasureNumberMode::AUTO;
@@ -1896,7 +1896,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   //  EndBarLine:         at the end of a measure
                   //  BeginBarLine:       first segment of a measure, systemic barline
 
-                  SegmentType st;
+                  SegmentType st = SegmentType::Invalid;
                   int t = e.tick() - tick();
                   if (t && (t != ticks()))
                         st = SegmentType::BarLine;

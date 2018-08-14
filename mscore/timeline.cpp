@@ -2233,9 +2233,9 @@ void Timeline::setScore(Score* s)
             }
       else {
             //Clear timeline if no score is present
-            QSplitter* s = scrollArea->grid();
-            if (s && s->count() > 0) {
-                  TRowLabels* t_row_labels = static_cast<TRowLabels*>(s->widget(0));
+            QSplitter* sp = scrollArea->grid();
+            if (sp && sp->count() > 0) {
+                  TRowLabels* t_row_labels = static_cast<TRowLabels*>(sp->widget(0));
                   std::vector<std::pair<QString, bool>> no_labels;
                   t_row_labels->updateLabels(no_labels, 0);
                   }

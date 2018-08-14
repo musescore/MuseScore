@@ -526,7 +526,7 @@ void ScoreView::moveCursor(int tick)
       if (measure == 0)
             return;
 
-      qreal x;
+      qreal x = 0.0;
       Segment* s;
       for (s = measure->first(SegmentType::ChordRest); s;) {
             int t1 = s->tick();
@@ -741,7 +741,7 @@ void ScoreView::setLoopCursor(PositionCursor *curLoop, int tick, bool isInPos)
       Measure* measure = score()->tick2measure(tick);
       if (measure == 0)
             return;
-      qreal x;
+      qreal x = 0.0;
 
       Segment* s;
       for (s = measure->first(SegmentType::ChordRest); s;) {
@@ -2101,8 +2101,8 @@ void ScoreView::cmd(const char* s)
       else if (cmd == "enh-current")
             cmdChangeEnharmonic(false);
       else if (cmd == "revision") {
-            Score* s = _score->masterScore();
-            s->createRevision();
+            Score* sc = _score->masterScore();
+            sc->createRevision();
             }
       else if (cmd == "append-measure")
             cmdAppendMeasures(1, ElementType::MEASURE);
