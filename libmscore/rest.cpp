@@ -400,6 +400,12 @@ void Rest::layout()
       _sym = getSymbol(durationType().type(), lineOffset / 2 + userLine, lines, &yo);
       rypos() = (qreal(yo) + qreal(lineOffset) * .5) * lineDist * _spatium;
       setbbox(symBbox(_sym));
+      if (dots()) {
+            qreal w = width() + score()->styleP(Sid::dotNoteDistance)
+               + (dots() - 1) * score()->styleP(Sid::dotDotDistance)
+               + symWidth(SymId::augmentationDot);
+            setWidth(w);
+            }
       }
 
 //---------------------------------------------------------
