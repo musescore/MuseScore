@@ -125,6 +125,11 @@ class XmlReader : public QXmlStreamReader {
       bool pasteMode() const       { return _pasteMode; }
       void setPasteMode(bool v)    { _pasteMode = v;    }
 
+      Location location(bool forceAbsFrac = false) const;
+      void fillLocation(Location&, bool forceAbsFrac = false) const;
+      void setLocation(const Location&); // sets a new reading point, taking into
+                                         // account its type (absolute or relative).
+
       void addBeam(Beam* s);
       Beam* findBeam(int id) const { return _beams.value(id);   }
 

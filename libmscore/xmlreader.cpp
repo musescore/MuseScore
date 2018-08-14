@@ -219,6 +219,58 @@ Fraction XmlReader::afrac() const
       }
 
 //---------------------------------------------------------
+//   location
+//---------------------------------------------------------
+
+Location XmlReader::location(bool forceAbsFrac) const
+      {
+      Location l = Location::absolute();
+      fillLocation(l, forceAbsFrac);
+      return l;
+      }
+
+//---------------------------------------------------------
+//   fillLocation
+//    fills location fields which have default values with
+//    values relevant for the current reader's position.
+//---------------------------------------------------------
+
+void XmlReader::fillLocation(Location& l, bool forceAbsFrac) const
+      {
+      constexpr Location defaults = Location::absolute();
+      const bool absFrac = (pasteMode() || forceAbsFrac);
+      if (l.track() == defaults.track())
+            l.setTrack(track());
+      if (l.frac() == defaults.frac())
+            l.setFrac(absFrac ? afrac() : rfrac());
+      if (l.measure() == defaults.measure())
+            l.setMeasure(absFrac ? 0 : currentMeasureIndex());
+      }
+
+//---------------------------------------------------------
+//   setLocation
+//    sets a new reading location, taking into account its
+//    type (absolute or relative).
+//---------------------------------------------------------
+
+void XmlReader::setLocation(const Location& l)
+      {
+      if (l.isRelative()) {
+            Location newLoc = l;
+            newLoc.toAbsolute(location());
+            setLocation(newLoc); // recursion
+            return;
+            }
+      setTrack(l.track() - _trackOffset);
+      int tick = l.frac().ticks() - _tickOffset;
+      if (!pasteMode()) {
+            Q_ASSERT(l.measure() == currentMeasureIndex());
+            tick += currentMeasure()->tick();
+            }
+      initTick(tick);
+      }
+
+//---------------------------------------------------------
 //   addBeam
 //---------------------------------------------------------
 

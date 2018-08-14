@@ -1781,6 +1781,7 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
             xml.stag("Measure");
 
       xml.setCurTick(tick());
+      xml.setCurTrack(staff * VOICES);
 
       if (_mmRestCount > 0)
             xml.tag("multiMeasureRest", _mmRestCount);
@@ -1885,8 +1886,11 @@ void Measure::read(XmlReader& e, int staffIdx)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-            if (tag == "move")
-                  e.initTick(e.readFraction().ticks() + tick());
+            if (tag == "location") {
+                  Location loc = Location::relative();
+                  loc.read(e);
+                  e.setLocation(loc);
+                  }
             else if (tag == "tick") {
                   e.initTick(score()->fileDivision(e.readInt()));
                   }
