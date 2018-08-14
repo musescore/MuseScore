@@ -689,17 +689,14 @@ bool FretDiagram::setProperty(Pid propertyId, const QVariant& v)
 
 QVariant FretDiagram::propertyDefault(Pid pid) const
       {
-      switch (pid) {
-            default:
-                  for (const StyledProperty& p : *styledProperties()) {
-                        if (p.pid == pid) {
-                              if (propertyType(pid) == P_TYPE::SP_REAL)
-                                    return score()->styleP(p.sid);
-                              return score()->styleV(p.sid);
-                              }
-                        }
-                  return Element::propertyDefault(pid);
+      for (const StyledProperty& p : *styledProperties()) {
+            if (p.pid == pid) {
+                  if (propertyType(pid) == P_TYPE::SP_REAL)
+                        return score()->styleP(p.sid);
+                  return score()->styleV(p.sid);
+                  }
             }
+      return Element::propertyDefault(pid);
       }
 
 }

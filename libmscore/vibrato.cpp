@@ -337,7 +337,6 @@ QVariant Vibrato::propertyDefault(Pid propertyId) const
             default:
                   return SLine::propertyDefault(propertyId);
             }
-      return QVariant();
       }
 
 //---------------------------------------------------------

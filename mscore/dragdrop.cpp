@@ -75,10 +75,10 @@ void ScoreView::setDropRectangle(const QRectF& r)
             dropTarget = 0;
             }
       else if (!dropAnchor.isNull()) {
-            QRectF r;
-            r.setTopLeft(dropAnchor.p1());
-            r.setBottomRight(dropAnchor.p2());
-            _score->addRefresh(r.normalized());
+            QRectF rf;
+            rf.setTopLeft(dropAnchor.p1());
+            rf.setBottomRight(dropAnchor.p2());
+            _score->addRefresh(rf.normalized());
             dropAnchor = QLineF();
             }
 //      _score->addRefresh(r);

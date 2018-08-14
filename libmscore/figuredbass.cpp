@@ -1370,29 +1370,18 @@ qreal FiguredBass::additionalContLineX(qreal pagePosY) const
 
 QVariant FiguredBass::getProperty(Pid propertyId) const
       {
-      switch(propertyId) {
-            default:
-                  return TextBase::getProperty(propertyId);
-            }
+      return TextBase::getProperty(propertyId);
       }
 
 bool FiguredBass::setProperty(Pid propertyId, const QVariant& v)
       {
       score()->addRefresh(canvasBoundingRect());
-      switch(propertyId) {
-            default:
-                  return TextBase::setProperty(propertyId, v);
-            }
-      score()->setLayoutAll();
-      return true;
+      return TextBase::setProperty(propertyId, v);
       }
 
 QVariant FiguredBass::propertyDefault(Pid id) const
       {
-      switch(id) {
-            default:
-                  return TextBase::propertyDefault(id);
-            }
+      return TextBase::propertyDefault(id);
       }
 
 //---------------------------------------------------------

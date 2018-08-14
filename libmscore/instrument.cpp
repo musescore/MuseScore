@@ -505,12 +505,12 @@ void Channel::read(XmlReader& e, Part* part)
                               break;
                         default:
                               {
-                              Event e(ME_CONTROLLER);
-                              e.setOntime(-1);
-                              e.setChannel(0);
-                              e.setDataA(ctrl);
-                              e.setDataB(value);
-                              init.push_back(e);
+                              Event ev(ME_CONTROLLER);
+                              ev.setOntime(-1);
+                              ev.setChannel(0);
+                              ev.setDataA(ctrl);
+                              ev.setDataB(value);
+                              init.push_back(ev);
                               }
                               break;
                         }

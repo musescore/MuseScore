@@ -2837,8 +2837,8 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
       //
 	std::vector<Part*> infoParts;
       for (Part* part : score->parts()) {
-		const QString& name = part->longName();
-		if (!name.isEmpty() && name[0] == '@') {
+		const QString& longName = part->longName();
+		if (!longName.isEmpty() && longName[0] == '@') {
 		      infoParts.push_back(part);
 			continue;
 			}

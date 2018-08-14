@@ -199,11 +199,11 @@ void ScoreBrowser::setScores(QFileInfoList& s)
       QSet<QString> entries; //to avoid duplicates
       for (const QFileInfo& fi : s) {
             if (fi.isDir()) {
-                  QString s(fi.fileName());
-                  if (!s.isEmpty() && s[0].isNumber() && _stripNumbers)
-                        s = s.mid(3);
-                  s = s.replace('_', ' ');
-                  QLabel* label = new QLabel(s);
+                  QString st(fi.fileName());
+                  if (!st.isEmpty() && st[0].isNumber() && _stripNumbers)
+                        st = st.mid(3);
+                  st = st.replace('_', ' ');
+                  QLabel* label = new QLabel(st);
                   QFont f = label->font();
                   f.setBold(true);
                   label->setFont(f);
@@ -228,10 +228,10 @@ void ScoreBrowser::setScores(QFileInfoList& s)
             }
       for (const QFileInfo& fi : s) {
             if (fi.isFile()) {
-                  QString s = fi.filePath();
-                  if (entries.contains(s))
+                  QString st = fi.filePath();
+                  if (entries.contains(st))
                       continue;
-                  if (s.endsWith(".mscz") || s.endsWith(".mscx")) {
+                  if (st.endsWith(".mscz") || st.endsWith(".mscx")) {
                         if (!sl) {
                               if (_showCustomCategory) {
                                     QLabel* label = new QLabel(tr("Custom Templates"));
@@ -244,7 +244,7 @@ void ScoreBrowser::setScores(QFileInfoList& s)
                               l->insertWidget(3,sl);
                               }
                         sl->addItem(genScoreItem(fi, sl));
-                        entries.insert(s);
+                        entries.insert(st);
                         }
                   }
             }

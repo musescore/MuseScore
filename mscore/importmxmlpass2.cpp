@@ -1782,8 +1782,8 @@ void MusicXMLParserPass2::part()
 
 static Measure* findMeasure(Score* score, const int tick)
       {
-      for (Measure* m = score->firstMeasure();; m = m->nextMeasure()) {
-            if (m && m->tick() == tick)
+      for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+            if (m->tick() == tick)
                   return m;
             }
       return 0;

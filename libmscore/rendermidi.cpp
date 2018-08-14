@@ -322,7 +322,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                   lastPointTick = nextPointTick;
                   }
             NPlayEvent ev(ME_PITCHBEND, channel, 0, 64); // 0:64 is 8192 - no pitch bend
-            events->insert(std::pair<int, NPlayEvent>(tick1+noteLen, ev));
+            events->insert(std::pair<int, NPlayEvent>(tick1+int(noteLen), ev));
             }
       }
 
@@ -375,8 +375,8 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                         continue;
 
                   Chord* chord = toChord(cr);
-                  Staff* staff = chord->staff();
-                  int velocity = staff->velocities().velo(seg->tick());
+                  Staff* st    = chord->staff();
+                  int velocity = st->velocities().velo(seg->tick());
                   Instrument* instr = chord->part()->instrument(tick);
                   int channel = instr->channel(chord->upNote()->subchannel())->channel;
 
@@ -427,9 +427,9 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                               }
                         }
                   if (st->setAeolusStops()) {
-                        Staff* staff = st->staff();
+                        Staff* s = st->staff();
                         int voice   = 0;
-                        int channel = staff->channel(tick, voice);
+                        int channel = s->channel(tick, voice);
 
                         for (int i = 0; i < 4; ++i) {
                               static int num[4] = { 12, 13, 16, 16 };

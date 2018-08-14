@@ -464,11 +464,11 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             }
 
       if (tieNote) {
-	      int staffIdx = note->staffIdx();
-		if (slurs[staffIdx]) {
-                  score->removeSpanner(slurs[staffIdx]);
-			delete slurs[staffIdx];
-			slurs[staffIdx] = 0;
+	      int si = note->staffIdx();
+		if (slurs[si]) {
+                  score->removeSpanner(slurs[si]);
+			delete slurs[si];
+			slurs[si] = 0;
 		      }
             bool found = false;
 		Chord* chord = note->chord();

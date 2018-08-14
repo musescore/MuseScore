@@ -560,7 +560,6 @@ QVariant Image::propertyDefault(Pid id) const
             default:
                   return Element::propertyDefault(id);
             }
-      return QVariant();
       }
 
 //---------------------------------------------------------

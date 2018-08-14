@@ -252,8 +252,8 @@ bool InspectorBase::compareValues(const InspectorItem& ii, QVariant a, QVariant 
       if (t == P_TYPE::SIZE) {
             QSizeF s1 = a.toSizeF();
             QSizeF s2 = b.toSizeF();
-            bool a = qFuzzyCompare(s1.width(), s2.width()) && qFuzzyCompare(s1.height(), s2.height());
-            return a;
+            bool c = qFuzzyCompare(s1.width(), s2.width()) && qFuzzyCompare(s1.height(), s2.height());
+            return c;
             }
       return b == a;
       }

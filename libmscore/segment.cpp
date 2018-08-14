@@ -1683,7 +1683,6 @@ Element* Segment::prevElement(int activeStaff)
                          }
                   }
             }
-            return nullptr;
       }
 
 //--------------------------------------------------------

@@ -220,7 +220,7 @@ Sid PalmMute::getPropertyStyle(Pid id) const
 
 QPointF PalmMute::linePos(Grip grip, System** sys) const
       {
-      qreal x;
+      qreal x = 0.0;
       qreal nhw = score()->noteHeadWidth();
       System* s = nullptr;
       if (grip == Grip::START) {

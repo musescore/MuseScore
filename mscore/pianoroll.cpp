@@ -490,9 +490,9 @@ void PianorollEditor::keyReleased(int /*pitch*/)
 //   heartBeat
 //---------------------------------------------------------
 
-void PianorollEditor::heartBeat(Seq* seq)
+void PianorollEditor::heartBeat(Seq* s)
       {
-      unsigned tick = seq->getCurTick();
+      unsigned tick = s->getCurTick();
       if (score()->repeatList())
             tick = score()->repeatList()->utick2tick(tick);
       if (locator[0].tick() != tick) {

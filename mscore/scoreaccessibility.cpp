@@ -63,7 +63,6 @@ QString AccessibleScoreView::text(QAccessible::Text t) const
             default:
                   return QString();
            }
-      return QString();
       }
 
 QWindow* AccessibleScoreView::window() const {
@@ -225,7 +224,7 @@ void ScoreAccessibility::updateAccessibilityInfo()
 std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
       {
       if (!e) {
-            return std::pair<int, float>(0, 0);
+            return std::pair<int, float>(0, 0.0F);
             }
 
       int bar = 0;
@@ -237,7 +236,7 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
             p = p->parent();
 
       if (!p) {
-            return std::pair<int, float>(0, 0);
+            return std::pair<int, float>(0, 0.0F);
             }
       else if (p->type() == ElementType::SEGMENT) {
             Segment* seg = static_cast<Segment*>(p);

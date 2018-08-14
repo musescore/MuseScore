@@ -409,13 +409,13 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
 
             QByteArray a = e->mimeData(QPointF());
 
-            XmlReader e(a);
+            XmlReader n(a);
             Fraction duration;  // dummy
             QPointF dragOffset;
-            ElementType type = Element::readType(e, &dragOffset, &duration);
+            ElementType type = Element::readType(n, &dragOffset, &duration);
             dropData.element = Element::create(type, score);
 
-            dropData.element->read(e);
+            dropData.element->read(n);
             dropData.element->styleChanged();   // update to local style
 
             Element* el = target->drop(dropData);

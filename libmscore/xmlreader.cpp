@@ -309,14 +309,13 @@ QString XmlReader::readXml()
       {
       QString s;
       int level = 1;
-      for (;;) {
-            QXmlStreamReader::TokenType t = readNext();
+      for (QXmlStreamReader::TokenType t = readNext(); t != QXmlStreamReader::EndElement; t = readNext()) {
             switch(t) {
                   case QXmlStreamReader::StartElement:
                         htmlToString(level, &s);
                         break;
                   case QXmlStreamReader::EndElement:
-                        return s;
+                        break;
                   case QXmlStreamReader::Characters:
                         s += text().toString().toHtmlEscaped();
                         break;

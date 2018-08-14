@@ -1029,11 +1029,11 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
                   }
             // first segment in measure was removed, have to recreate it
             Segment* s = m->undoGetSegment(SegmentType::ChordRest, m->tick());
-            int track  = cr->track();
-            cr = toChordRest(s->element(track));
+            int t  = cr->track();
+            cr = toChordRest(s->element(t));
             if (cr == 0) {
-                  addRest(s, track, TDuration(TDuration::DurationType::V_MEASURE), 0);
-                  cr = toChordRest(s->element(track));
+                  addRest(s, t, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                  cr = toChordRest(s->element(t));
                   }
             }
       return true;

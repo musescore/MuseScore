@@ -326,14 +326,14 @@ bool ChordRest::readProperties(XmlReader& e)
                         if (spanner->type() == ElementType::SLUR)
                               spanner->setStartElement(this);
                         if (e.pasteMode()) {
-                              for (ScoreElement* e : spanner->linkList()) {
-                                    if (e == spanner)
+                              for (ScoreElement* ee : spanner->linkList()) {
+                                    if (ee == spanner)
                                           continue;
-                                    Spanner* ls = static_cast<Spanner*>(e);
+                                    Spanner* ls = static_cast<Spanner*>(ee);
                                     ls->setTick(spanner->tick());
-                                    for (ScoreElement* ee : linkList()) {
-                                          ChordRest* cr = toChordRest(ee);
-                                          if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
+                                    for (ScoreElement* eee : linkList()) {
+                                          ChordRest* cr = toChordRest(eee);
+                                          if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack(cr->track());
                                                 if (ls->type() == ElementType::SLUR)
                                                       ls->setStartElement(cr);
@@ -352,14 +352,14 @@ bool ChordRest::readProperties(XmlReader& e)
                         if (start)
                               spanner->setTrack(start->track());
                         if (e.pasteMode()) {
-                              for (ScoreElement* e : spanner->linkList()) {
-                                    if (e == spanner)
+                              for (ScoreElement* ee : spanner->linkList()) {
+                                    if (ee == spanner)
                                           continue;
-                                    Spanner* ls = static_cast<Spanner*>(e);
+                                    Spanner* ls = static_cast<Spanner*>(ee);
                                     ls->setTick2(spanner->tick2());
-                                    for (ScoreElement* ee : linkList()) {
-                                          ChordRest* cr = toChordRest(ee);
-                                          if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
+                                    for (ScoreElement* eee : linkList()) {
+                                          ChordRest* cr = toChordRest(eee);
+                                          if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack2(cr->track());
                                                 if (ls->type() == ElementType::SLUR)
                                                       ls->setEndElement(cr);

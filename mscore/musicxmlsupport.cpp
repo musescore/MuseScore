@@ -202,8 +202,8 @@ static QString domElementPath(const QDomElement& e)
       QDomNode dn(e);
       while (!dn.parentNode().isNull()) {
             dn = dn.parentNode();
-            const QDomElement& e = dn.toElement();
-            const QString k(e.tagName());
+            const QDomElement& de = dn.toElement();
+            const QString k(de.tagName());
             if (!s.isEmpty())
                   s += ":";
             s += k;
