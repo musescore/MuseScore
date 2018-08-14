@@ -4158,7 +4158,7 @@ static bool elementLower(const Element* e1, const Element* e2)
                   if (e1->type() == ElementType::NOTEDOT) {
                         const NoteDot* n1 = static_cast<const NoteDot*>(e1);
                         const NoteDot* n2 = static_cast<const NoteDot*>(e2);
-                        if (n1->note()->hidden())
+                        if (n1->note() && n1->note()->hidden())
                               return n2;
                         else
                               return n1;

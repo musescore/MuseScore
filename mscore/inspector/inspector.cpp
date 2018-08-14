@@ -617,6 +617,20 @@ InspectorRest::InspectorRest(QWidget* parent)
       _layout->addWidget(f);
 
       QHBoxLayout* hbox = new QHBoxLayout;
+      dot1 = new QToolButton(this);
+      dot1->setText(tr("Dot 1"));
+      hbox->addWidget(dot1);
+      dot2 = new QToolButton(this);
+      dot2->setText(tr("Dot 2"));
+      hbox->addWidget(dot2);
+      dot3 = new QToolButton(this);
+      dot3->setText(tr("Dot 3"));
+      hbox->addWidget(dot3);
+      dot4 = new QToolButton(this);
+      dot4->setText(tr("Dot 4"));
+      hbox->addWidget(dot4);
+      _layout->addLayout(hbox);
+      hbox = new QHBoxLayout;
       tuplet = new QToolButton(this);
       tuplet->setText(tr("Tuplet"));
       tuplet->setEnabled(false);
@@ -625,6 +639,10 @@ InspectorRest::InspectorRest(QWidget* parent)
 
 //TODO      e.offset->setSingleStep(1.0);        // step in spatium units
 
+      connect(dot1,     SIGNAL(clicked()),     SLOT(dot1Clicked()));
+      connect(dot2,     SIGNAL(clicked()),     SLOT(dot2Clicked()));
+      connect(dot3,     SIGNAL(clicked()),     SLOT(dot3Clicked()));
+      connect(dot4,     SIGNAL(clicked()),     SLOT(dot4Clicked()));
       connect(tuplet,   SIGNAL(clicked()),     SLOT(tupletClicked()));
       }
 
@@ -635,8 +653,66 @@ InspectorRest::InspectorRest(QWidget* parent)
 void InspectorRest::setElement()
       {
       Rest* rest = toRest(inspector->element());
+      int dots = rest->dots();
+      dot1->setEnabled(dots > 0);
+      dot2->setEnabled(dots > 1);
+      dot3->setEnabled(dots > 2);
+      dot4->setEnabled(dots > 3);
       tuplet->setEnabled(rest->tuplet());
       InspectorElementBase::setElement();
+      }
+
+//---------------------------------------------------------
+//   dotClicked
+//---------------------------------------------------------
+
+void InspectorRest::dotClicked(int n)
+      {
+      Rest* rest = toRest(inspector->element());
+      if (rest == 0)
+            return;
+      if (rest->dots() > n) {
+            NoteDot* dot = rest->dot(n);
+            dot->score()->select(dot);
+            dot->score()->update();
+            inspector->update();
+            }
+      }
+
+//---------------------------------------------------------
+//   dot1Clicked
+//---------------------------------------------------------
+
+void InspectorRest::dot1Clicked()
+      {
+      dotClicked(0);
+      }
+
+//---------------------------------------------------------
+//   dot2Clicked
+//---------------------------------------------------------
+
+void InspectorRest::dot2Clicked()
+      {
+      dotClicked(1);
+      }
+
+//---------------------------------------------------------
+//   dot3Clicked
+//---------------------------------------------------------
+
+void InspectorRest::dot3Clicked()
+      {
+      dotClicked(2);
+      }
+
+//---------------------------------------------------------
+//   dot4Clicked
+//---------------------------------------------------------
+
+void InspectorRest::dot4Clicked()
+      {
+      dotClicked(3);
       }
 
 //---------------------------------------------------------

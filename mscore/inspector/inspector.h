@@ -175,9 +175,19 @@ class InspectorRest : public InspectorElementBase {
       Ui::InspectorSegment s;
       Ui::InspectorRest    r;
 
+      QToolButton* dot1;
+      QToolButton* dot2;
+      QToolButton* dot3;
+      QToolButton* dot4;
       QToolButton* tuplet;
 
+      void dotClicked(int n);
+
    private slots:
+      void dot1Clicked();
+      void dot2Clicked();
+      void dot3Clicked();
+      void dot4Clicked();
       void tupletClicked();
 
    public:
