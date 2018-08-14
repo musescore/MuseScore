@@ -51,7 +51,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::PITCH,                   "pitch",                   true,  "pitch",                 P_TYPE::INT             },
 
       { Pid::TPC1,                    "tpc1",                    true,  "tpc",                   P_TYPE::INT             },
-      { Pid::TPC2,                    "tpc1",                    true,  "tpc2",                  P_TYPE::INT             },
+      { Pid::TPC2,                    "tpc2",                    true,  "tpc2",                  P_TYPE::INT             },
       { Pid::LINE,                    "line",                    false, "line",                  P_TYPE::INT             },
       { Pid::FIXED,                   "fixed",                   false, "fixed",                 P_TYPE::BOOL            },
       { Pid::FIXED_LINE,              "fixed_line",              false, "fixedLine",             P_TYPE::INT             },
@@ -114,7 +114,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::BEAM_POS,                "beam_pos",                false, 0,                       P_TYPE::POINT           },
       { Pid::BEAM_MODE,               "beam_mode",               true, "BeamMode",               P_TYPE::BEAM_MODE       },
       { Pid::BEAM_NO_SLOPE,           "beam_no_slope",           true, "noSlope",                P_TYPE::BOOL            },
-      { Pid::USER_LEN,                "user_len",                false, "userLen",               P_TYPE::SP_REAL            },
+      { Pid::USER_LEN,                "user_len",                false, "userLen",               P_TYPE::SP_REAL         },
 
       { Pid::SPACE,                   "space",                   false, "space",                 P_TYPE::SP_REAL         },
       { Pid::TEMPO,                   "tempo",                   true,  "tempo",                 P_TYPE::TEMPO           },
@@ -132,7 +132,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::FBPARENTHESIS3,          "fbparenthesis3",          false, "",                      P_TYPE::INT             },
       { Pid::FBPARENTHESIS4,          "fbparenthesis4",          false, "",                      P_TYPE::INT             },
       { Pid::FBPARENTHESIS5,          "fbparenthesis5",          false, "",                      P_TYPE::INT             },
-      { Pid::OTTAVA_TYPE,             "ottava_type",             false, "",                      P_TYPE::INT             },
+      { Pid::OTTAVA_TYPE,             "ottava_type",             true,  "",                      P_TYPE::INT             },
       { Pid::NUMBERS_ONLY,            "numbers_only",            false, "numbersOnly",           P_TYPE::BOOL            },
       { Pid::TRILL_TYPE,              "trill_type",              false, "",                      P_TYPE::INT             },
       { Pid::VIBRATO_TYPE,            "vibrato_type",            false, "",                      P_TYPE::INT             },
@@ -145,12 +145,12 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::DYNAMIC_RANGE,           "dynamic_range",           true,  "dynType",               P_TYPE::INT             },
       { Pid::PLACEMENT,               "placement",               false, "placement",             P_TYPE::PLACEMENT       },
       { Pid::VELOCITY,                "velocity",                false, "velocity",              P_TYPE::INT             },
-      { Pid::JUMP_TO,                 "jump_to",                 false, "jumpTo",                P_TYPE::STRING          },
-      { Pid::PLAY_UNTIL,              "play_until",              false, "playUntil",             P_TYPE::STRING          },
-      { Pid::CONTINUE_AT,             "continue_at",             false, "continueAt",            P_TYPE::STRING          },
+      { Pid::JUMP_TO,                 "jump_to",                 true,  "jumpTo",                P_TYPE::STRING          },
+      { Pid::PLAY_UNTIL,              "play_until",              true,  "playUntil",             P_TYPE::STRING          },
+      { Pid::CONTINUE_AT,             "continue_at",             true,  "continueAt",            P_TYPE::STRING          },
 //100
-      { Pid::LABEL,                   "label",                   false, "label",                 P_TYPE::STRING          },
-      { Pid::MARKER_TYPE,             "marker_type",             false, 0,                       P_TYPE::INT             },
+      { Pid::LABEL,                   "label",                   true,  "label",                 P_TYPE::STRING          },
+      { Pid::MARKER_TYPE,             "marker_type",             true,  0,                       P_TYPE::INT             },
       { Pid::ARP_USER_LEN1,           "arp_user_len1",           false, 0,                       P_TYPE::REAL            },
       { Pid::ARP_USER_LEN2,           "arp_user_len2",           false, 0,                       P_TYPE::REAL            },
       { Pid::REPEAT_END,              "repeat_end",              true,  0,                       P_TYPE::BOOL            },
@@ -168,8 +168,8 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::LINE_WIDTH,              "line_width",              false, "lineWidth",             P_TYPE::SP_REAL         },
       { Pid::LASSO_POS,               "lasso_pos",               false, 0,                       P_TYPE::POINT_MM        },
       { Pid::LASSO_SIZE,              "lasso_size",              false, 0,                       P_TYPE::SIZE_MM         },
-      { Pid::TIME_STRETCH,            "time_stretch",            false, "timeStretch",           P_TYPE::REAL            },
-      { Pid::ORNAMENT_STYLE,          "ornament_style",          false, "ornamentStyle",         P_TYPE::ORNAMENT_STYLE  },
+      { Pid::TIME_STRETCH,            "time_stretch",            true,  "timeStretch",           P_TYPE::REAL            },
+      { Pid::ORNAMENT_STYLE,          "ornament_style",          true,  "ornamentStyle",         P_TYPE::ORNAMENT_STYLE  },
 
       { Pid::TIMESIG,                 "timesig",                 false, 0,                       P_TYPE::FRACTION        },
       { Pid::TIMESIG_GLOBAL,          "timesig_global",          false, 0,                       P_TYPE::FRACTION        },
@@ -179,9 +179,9 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::SPANNER_TICKS,           "spanner_ticks",           true,  "ticks",                 P_TYPE::INT             },
       { Pid::SPANNER_TRACK2,          "spanner_track2",          true,  "track2",                P_TYPE::INT             },
       { Pid::USER_OFF2,               "user_off2",               false, "userOff2",              P_TYPE::POINT_SP        },
-
       { Pid::BREAK_MMR,               "break_mmr",               false, "breakMultiMeasureRest", P_TYPE::BOOL            },
       { Pid::REPEAT_COUNT,            "repeat_count",            true,  "endRepeat",             P_TYPE::INT             },
+
       { Pid::USER_STRETCH,            "user_stretch",            false, "stretch",               P_TYPE::REAL            },
       { Pid::NO_OFFSET,               "no_offset",               false, "noOffset",              P_TYPE::INT             },
       { Pid::IRREGULAR,               "irregular",               true,  "irregular",             P_TYPE::BOOL            },
@@ -189,10 +189,10 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::SLUR_UOFF1,              "slur_uoff1",              false,  "o1",                   P_TYPE::POINT_SP        },
       { Pid::SLUR_UOFF2,              "slur_uoff2",              false,  "o2",                   P_TYPE::POINT_SP        },
       { Pid::SLUR_UOFF3,              "slur_uoff3",              false,  "o3",                   P_TYPE::POINT_SP        },
-
       { Pid::SLUR_UOFF4,              "slur_uoff4",              false,  "o4",                   P_TYPE::POINT_SP        },
       { Pid::STAFF_MOVE,              "staff_move",              true,  "move",                  P_TYPE::INT             },
       { Pid::VERSE,                   "verse",                   true,  "no",                    P_TYPE::ZERO_INT        },
+
       { Pid::SYLLABIC,                "syllabic",                true,  "syllabic",              P_TYPE::INT             },
       { Pid::LYRIC_TICKS,             "lyric_ticks",             true,  "ticks",                 P_TYPE::INT             },
       { Pid::VOLTA_ENDING,            "volta_ending",            true,  "endings",               P_TYPE::INT_LIST        },
@@ -200,23 +200,22 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::MAG,                     "mag",                     false, "mag",                   P_TYPE::REAL            },
       { Pid::USE_DRUMSET,             "use_drumset",             false, "useDrumset",            P_TYPE::BOOL            },
       { Pid::PART_VOLUME,             "part_volume",             false, "volume",                P_TYPE::INT             },
-
       { Pid::PART_MUTE,               "part_mute",               false, "mute",                  P_TYPE::BOOL            },
       { Pid::PART_PAN,                "part_pan",                false, "pan",                   P_TYPE::INT             },
       { Pid::PART_REVERB,             "part_reverb",             false, "reverb",                P_TYPE::INT             },
+
       { Pid::PART_CHORUS,             "part_chorus",             false, "chorus",                P_TYPE::INT             },
       { Pid::DURATION,                "duration",                false, 0,                       P_TYPE::FRACTION        },
       { Pid::DURATION_TYPE,           "duration_type",           false, 0,                       P_TYPE::TDURATION       },
       { Pid::ROLE,                    "role",                    false, "role",                  P_TYPE::INT             },
       { Pid::TRACK,                   "track",                   false, 0,                       P_TYPE::INT             },
-      { Pid::GLISSANDO_STYLE,         "glissando_style",         false, "glissandoStyle",        P_TYPE::GLISSANDO_STYLE },
+      { Pid::GLISSANDO_STYLE,         "glissando_style",         true,  "glissandoStyle",        P_TYPE::GLISSANDO_STYLE },
       { Pid::FRET_STRINGS,            "fret_strings",            false, "strings",               P_TYPE::INT             },
-
       { Pid::FRET_FRETS,              "fret_frets",              false, "frets",                 P_TYPE::INT             },
       { Pid::FRET_BARRE,              "fret_barre",              false, "barre",                 P_TYPE::INT             },
       { Pid::FRET_OFFSET,             "fret_offset",             false, "fretOffset",            P_TYPE::INT             },
-      { Pid::FRET_NUM_POS,            "fret_num_pos",            false, "fretNumPos",            P_TYPE::INT             },
 
+      { Pid::FRET_NUM_POS,            "fret_num_pos",            false, "fretNumPos",            P_TYPE::INT             },
       { Pid::SYSTEM_BRACKET,          "system_bracket",          false, "type",                  P_TYPE::INT             },
       { Pid::GAP,                     "gap",                     false, 0,                       P_TYPE::BOOL            },
       { Pid::AUTOPLACE,               "autoplace",               false, "autoplace",             P_TYPE::BOOL            },
@@ -224,20 +223,20 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::DASH_GAP_LEN,            "dash_gap_len",            false, "dashGapLength",         P_TYPE::REAL            },
       { Pid::TICK,                    "tick",                    false, 0,                       P_TYPE::INT             },
       { Pid::PLAYBACK_VOICE1,         "playback_voice1",         false, "playbackVoice1",        P_TYPE::BOOL            },
-
       { Pid::PLAYBACK_VOICE2,         "playback_voice2",         false, "playbackVoice2",        P_TYPE::BOOL            },
       { Pid::PLAYBACK_VOICE3,         "playback_voice3",         false, "playbackVoice3",        P_TYPE::BOOL            },
+
       { Pid::PLAYBACK_VOICE4,         "playback_voice4",         false, "playbackVoice4",        P_TYPE::BOOL            },
       { Pid::SYMBOL,                  "symbol",                  true,  "symbol",                P_TYPE::SYMID           },
-      { Pid::PLAY_REPEATS,            "play_repeats",            false, "playRepeats",           P_TYPE::BOOL            },
+      { Pid::PLAY_REPEATS,            "play_repeats",            true,  "playRepeats",           P_TYPE::BOOL            },
       { Pid::CREATE_SYSTEM_HEADER,    "create_system_header",    false, "createSystemHeader",    P_TYPE::BOOL            },
       { Pid::STAFF_LINES,             "staff_lines",             true,  "lines",                 P_TYPE::INT             },
       { Pid::LINE_DISTANCE,           "line_distance",           true,  "lineDistance",          P_TYPE::SPATIUM         },
       { Pid::STEP_OFFSET,             "step_offset",             true,  "stepOffset",            P_TYPE::INT             },
       { Pid::STAFF_SHOW_BARLINES,     "staff_show_barlines",     false, "",                      P_TYPE::BOOL            },
-
       { Pid::STAFF_SHOW_LEDGERLINES,  "staff_show_ledgerlines",  false, "",                      P_TYPE::BOOL            },
       { Pid::STAFF_SLASH_STYLE,       "staff_slash_style",       false, "",                      P_TYPE::BOOL            },
+
       { Pid::STAFF_NOTEHEAD_SCHEME,   "staff_notehead_scheme",   false, "",                      P_TYPE::INT             },
       { Pid::STAFF_GEN_CLEF,          "staff_gen_clef",          false, "",                      P_TYPE::BOOL            },
       { Pid::STAFF_GEN_TIMESIG,       "staff_gen_timesig",       false, "",                      P_TYPE::BOOL            },
@@ -246,9 +245,9 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::STAFF_USERDIST,          "staff_userdist",          false, "distOffset",            P_TYPE::SP_REAL         },
       { Pid::STAFF_BARLINE_SPAN,      "staff_barline_span",      false, "barLineSpan",           P_TYPE::BOOL            },
       { Pid::STAFF_BARLINE_SPAN_FROM, "staff_barline_span_from", false, "barLineSpanFrom",       P_TYPE::INT             },
-//190
       { Pid::STAFF_BARLINE_SPAN_TO,   "staff_barline_span_to",   false, "barLineSpanTo",         P_TYPE::INT             },
       { Pid::BRACKET_SPAN,            "bracket_span",            false, "bracketSpan",           P_TYPE::INT             },
+
       { Pid::BRACKET_COLUMN,          "bracket_column",          false, "level",                 P_TYPE::INT             },
       { Pid::INAME_LAYOUT_POSITION,   "iname_layout_position",   false, "layoutPosition",        P_TYPE::INT             },
       { Pid::SUB_STYLE,               "sub_style",               false, "style",                 P_TYPE::SUB_STYLE       },
@@ -258,19 +257,19 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::FONT_ITALIC,             "font_italic",             false, "italic",                P_TYPE::BOOL            },
       { Pid::FONT_UNDERLINE,          "font_underline",          false, "underline",             P_TYPE::BOOL            },
       { Pid::FRAME_TYPE,              "frame_type",              false, "frameType",             P_TYPE::INT             },
-
       { Pid::FRAME_WIDTH,             "frame_width",             false, "frameWidth",            P_TYPE::SPATIUM         },
+//200
       { Pid::FRAME_PADDING,           "frame_padding",           false, "framePadding",          P_TYPE::SPATIUM         },
       { Pid::FRAME_ROUND,             "frame_round",             false, "frameRound",            P_TYPE::INT             },
       { Pid::FRAME_FG_COLOR,          "frame_fg_color",          false, "frameFgColor",          P_TYPE::COLOR           },
       { Pid::FRAME_BG_COLOR,          "frame_bg_color",          false, "frameBgColor",          P_TYPE::COLOR           },
-      { Pid::FONT_SPATIUM_DEPENDENT,  "font_spatium_dependent",  false, "sizeIsSpatiumDependent", P_TYPE::BOOL           },
+      { Pid::FONT_SPATIUM_DEPENDENT,  "font_spatium_dependent",  false, "sizeIsSpatiumDependent",P_TYPE::BOOL            },
       { Pid::ALIGN,                   "align",                   false, "align",                 P_TYPE::ALIGN           },
       { Pid::OFFSET,                  "layoutOffset",            false, "layoutOffset",          P_TYPE::POINT           },
       { Pid::OFFSET_TYPE,             "offset_type",             false, "offsetType",            P_TYPE::INT             },
-
       { Pid::SYSTEM_FLAG,             "system_flag",             false, "systemFlag",            P_TYPE::BOOL            },
       { Pid::BEGIN_TEXT,              "begin_text",              false, "beginText",             P_TYPE::STRING          },
+
       { Pid::BEGIN_TEXT_ALIGN,        "begin_text_align",        false, "beginTextAlign",        P_TYPE::ALIGN           },
       { Pid::BEGIN_TEXT_PLACE,        "begin_text_place",        false, "beginTextPlace",        P_TYPE::INT             },
       { Pid::BEGIN_HOOK_TYPE,         "begin_hook_type",         false, "beginHookType",         P_TYPE::INT             },
@@ -278,7 +277,6 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::BEGIN_FONT_FACE,         "begin_font_face",         false, "beginFontFace",         P_TYPE::FONT            },
       { Pid::BEGIN_FONT_SIZE,         "begin_font_size",         false, "beginFontSize",         P_TYPE::REAL            },
       { Pid::BEGIN_FONT_BOLD,         "begin_font_bold",         false, "beginFontBold",         P_TYPE::BOOL            },
-
       { Pid::BEGIN_FONT_ITALIC,       "begin_font_italic",       false, "beginFontItalic",       P_TYPE::BOOL            },
       { Pid::BEGIN_FONT_UNDERLINE,    "begin_font_underline",    false, "beginFontUnderline",    P_TYPE::BOOL            },
       { Pid::BEGIN_TEXT_OFFSET,       "begin_text_offset",       false, "beginTextOffset",       P_TYPE::POINT           },
@@ -292,8 +290,8 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::CONTINUE_FONT_ITALIC,    "continue_font_italic",    false, "continueFontItalic",    P_TYPE::BOOL            },
       { Pid::CONTINUE_FONT_UNDERLINE, "continue_font_underline", false, "continueFontUnderline", P_TYPE::BOOL            },
       { Pid::CONTINUE_TEXT_OFFSET,    "continue_text_offset",    false, "continueTextOffset",    P_TYPE::POINT           },
-
       { Pid::END_TEXT,                "end_text",                false, "endText",               P_TYPE::STRING          },
+
       { Pid::END_TEXT_ALIGN,          "end_text_align",          false, "endTextAlign",          P_TYPE::ALIGN           },
       { Pid::END_TEXT_PLACE,          "end_text_place",          false, "endTextPlace",          P_TYPE::INT             },
       { Pid::END_HOOK_TYPE,           "end_hook_type",           false, "endHookType",           P_TYPE::INT             },
