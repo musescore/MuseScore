@@ -486,7 +486,6 @@ QVariant Trill::propertyDefault(Pid propertyId) const
             default:
                   return SLine::propertyDefault(propertyId);
             }
-      return QVariant();
       }
 
 //---------------------------------------------------------

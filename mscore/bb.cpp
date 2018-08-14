@@ -664,7 +664,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
       const EventList el = track->events();
 
       for (int voice = 0; voice < voices; ++voice) {
-            int track = staffIdx * VOICES + voice;
+            int tr = staffIdx * VOICES + voice;
             QList<MNote*> notes;
 
             int ctick = 0;
@@ -686,9 +686,9 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
                         qFatal("bad restlen ontime %d - ctick %d", e.ontime(), ctick);
 
                   while (!notes.isEmpty()) {
-                        int len = processPendingNotes(score, &notes, restLen, track);
+                        int len = processPendingNotes(score, &notes, restLen, tr);
                         if (len == 0) {
-                              qDebug("processPendingNotes returns zero, restlen %d, track %d", restLen, track);
+                              qDebug("processPendingNotes returns zero, restlen %d, track %d", restLen, tr);
                               ctick += restLen;
                               restLen = 0;
                               break;
@@ -744,7 +744,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
             // process pending notes
             //
             while (!notes.isEmpty()) {
-                  int len = processPendingNotes(score, &notes, 0x7fffffff, track);
+                  int len = processPendingNotes(score, &notes, 0x7fffffff, tr);
                   ctick += len;
                   }
             if (voice == 0) {

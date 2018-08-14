@@ -297,7 +297,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
             a.write(xml, nullptr);
       foreach(const MidiArticulation& ma, articulation) {
             bool isGlobal = false;
-            foreach(const MidiArticulation& ga, Ms::articulation) {
+            for (const MidiArticulation& ga : Ms::articulation) {
                   if (ma == ga) {
                         isGlobal = true;
                         break;
@@ -339,18 +339,20 @@ void InstrumentTemplate::read(XmlReader& e)
             if (tag == "longName" || tag == "name") {               // "name" is obsolete
                   int pos = e.intAttribute("pos", 0);
                   for (QList<StaffName>::iterator i = longNames.begin(); i != longNames.end(); ++i) {
-                        if ((*i).pos() == pos)
+                        if ((*i).pos() == pos) {
                               longNames.erase(i);
-                        break;
+                              break;
+                              }
                         }
                   longNames.append(StaffName(qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
                   }
             else if (tag == "shortName" || tag == "short-name") {   // "short-name" is obsolete
                   int pos = e.intAttribute("pos", 0);
                   for (QList<StaffName>::iterator i = shortNames.begin(); i != shortNames.end(); ++i) {
-                        if ((*i).pos() == pos)
+                        if ((*i).pos() == pos) {
                               shortNames.erase(i);
-                        break;
+                              break;
+							  }
                         }
                   shortNames.append(StaffName(qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
                   }
@@ -566,7 +568,7 @@ bool saveInstrumentTemplates(const QString& instrTemplates)
             xml.tag("name", group->name);
             if (group->extended)
                   xml.tag("extended", group->extended);
-            foreach(InstrumentTemplate* it, group->instrumentTemplates) {
+            for (InstrumentTemplate* it : group->instrumentTemplates) {
                   it->write(xml);
                   xml << "\n";
                   }
@@ -597,7 +599,7 @@ bool saveInstrumentTemplates1(const QString& instrTemplates)
       foreach(InstrumentGroup* group, instrumentGroups) {
             xml.stag(QString("InstrumentGroup id=\"%1\"").arg(group->id));
             xml.tag("name", group->name);
-            foreach(InstrumentTemplate* it, group->instrumentTemplates) {
+            for (InstrumentTemplate* it : group->instrumentTemplates) {
                   it->write1(xml);
                   xml << "\n";
                   }
@@ -682,7 +684,7 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
 InstrumentTemplate* searchTemplate(const QString& name)
       {
       foreach (InstrumentGroup* g, instrumentGroups) {
-            foreach(InstrumentTemplate* it, g->instrumentTemplates) {
+            for (InstrumentTemplate* it : g->instrumentTemplates) {
                   if (it->id == name)
                         return it;
                   }
@@ -697,7 +699,7 @@ InstrumentTemplate* searchTemplate(const QString& name)
 InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId)
       {
       foreach(InstrumentGroup* g, instrumentGroups) {
-            foreach(InstrumentTemplate* it, g->instrumentTemplates) {
+            for (InstrumentTemplate* it : g->instrumentTemplates) {
                   if (it->musicXMLid == mxmlId)
                         return it;
                   }

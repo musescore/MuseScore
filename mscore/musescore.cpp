@@ -659,10 +659,10 @@ bool MuseScore::importExtension(QString path)
                   hasMetadata = true;
             else {
                   // get folders
-                  auto path = QDir::cleanPath(fi.filePath);
-                  QStringList folders(path);
-                  while ((path = QFileInfo(path).path()).length() < folders.last().length())
-                        folders << path;
+                  auto fpath = QDir::cleanPath(fi.filePath);
+                  QStringList folders(fpath);
+                  while ((fpath = QFileInfo(fpath).path()).length() < folders.last().length())
+                        folders << fpath;
                   if (folders.size() < 2) {
                         hasAlienFiles = true; // in root dir
                         break;
@@ -2793,19 +2793,19 @@ void MuseScore::removeTab(int i)
 //   loadTranslation
 //---------------------------------------------------------
 
-void loadTranslation(QString filename, QString localeName)
+void loadTranslation(QString filename, QString _localeName)
       {
       QString userPrefix    = dataPath + "/locale/"+ filename +"_";
       QString defaultPrefix = mscoreGlobalShare + "locale/"+ filename +"_";
-      QString userlp        = userPrefix + localeName;
-      QString defaultlp     = defaultPrefix + localeName;
+      QString userlp        = userPrefix + _localeName;
+      QString defaultlp     = defaultPrefix + _localeName;
       QString lp            = defaultlp;
 
       QFileInfo userFi(userlp + ".qm");
       QFileInfo defaultFi(defaultlp + ".qm");
 
       if (!defaultFi.exists()) {     // try with a shorter locale name
-            QString shortLocaleName = localeName.left(localeName.lastIndexOf("_"));
+            QString shortLocaleName = _localeName.left(_localeName.lastIndexOf("_"));
             QString shortDefaultlp = defaultPrefix + shortLocaleName;
             QFileInfo shortDefaultFi(shortDefaultlp + ".qm");
             if (shortDefaultFi.exists()) {
@@ -2843,7 +2843,7 @@ void loadTranslation(QString filename, QString localeName)
 //   setLocale
 //---------------------------------------------------------
 
-void setMscoreLocale(QString localeName)
+void setMscoreLocale(QString _localeName)
       {
       for (QTranslator* t : translatorList) {
             qApp->removeTranslator(t);
@@ -2852,22 +2852,22 @@ void setMscoreLocale(QString localeName)
       translatorList.clear();
 
       if (MScore::debugMode)
-            qDebug("configured localeName <%s>", qPrintable(localeName));
-      if (localeName.toLower() == "system") {
-            localeName = QLocale::system().name();
+            qDebug("configured localeName <%s>", qPrintable(_localeName));
+      if (_localeName.toLower() == "system") {
+            _localeName = QLocale::system().name();
             if (MScore::debugMode)
-                  qDebug("real localeName <%s>", qPrintable(localeName));
-            if (localeName == "en_AU") {
-                  localeName = "en_GB"; // otherwise Australia would fall back to US English
+                  qDebug("real localeName <%s>", qPrintable(_localeName));
+            if (_localeName == "en_AU") {
+                  _localeName = "en_GB"; // otherwise Australia would fall back to US English
                   if (MScore::debugMode)
-                        qDebug("modified localeName <%s>", qPrintable(localeName));
+                        qDebug("modified localeName <%s>", qPrintable(_localeName));
                   }
             }
 
       // find the most recent translation file
       // try to replicate QTranslator.load algorithm in our particular case
-      loadTranslation("mscore", localeName);
-      loadTranslation("instruments", localeName);
+      loadTranslation("mscore", _localeName);
+      loadTranslation("instruments", _localeName);
 
       QString resourceDir;
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
@@ -2878,15 +2878,15 @@ void setMscoreLocale(QString localeName)
       QTranslator* qtTranslator = new QTranslator;
       if (MScore::debugMode)
             qDebug("load translator <qt_%s> from <%s>",
-               qPrintable(localeName), qPrintable(resourceDir));
+               qPrintable(_localeName), qPrintable(resourceDir));
 
-      if (!qtTranslator->load(QLatin1String("qt_") + localeName, resourceDir) && MScore::debugMode)
-            qDebug("load translator <qt_%s> failed", qPrintable(localeName));
+      if (!qtTranslator->load(QLatin1String("qt_") + _localeName, resourceDir) && MScore::debugMode)
+            qDebug("load translator <qt_%s> failed", qPrintable(_localeName));
       else {
             qApp->installTranslator(qtTranslator);
             translatorList.append(qtTranslator);
             }
-      QLocale locale(localeName);
+      QLocale locale(_localeName);
       QLocale::setDefault(locale);
       qApp->setLayoutDirection(locale.textDirection());
       // initShortcuts();
@@ -3247,24 +3247,24 @@ static bool processNonGui(const QStringList& argv)
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
 static void mscoreMessageHandler(QtMsgType type, const QMessageLogContext &context,const QString &msg)
      {
-     QTextStream cerr(stderr);
+     QTextStream err(stderr);
      QByteArray localMsg = msg.toLocal8Bit();
 
      switch (type) {
      case QtInfoMsg:
-         cerr << "Info: "     << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
+         err << "Info: "     << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
          break;
      case QtDebugMsg:
-         cerr << "Debug: "    << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
+         err << "Debug: "    << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
          break;
      case QtWarningMsg:
-         cerr << "Warning: "  << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
+         err << "Warning: "  << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
          break;
      case QtCriticalMsg: // same as QtSystemMsg
-         cerr << "Critical: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
+         err << "Critical: " << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
          break;
      case QtFatalMsg: // set your breakpoint here, if you want to catch the abort
-         cerr << "Fatal: "    << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
+         err << "Fatal: "    << localMsg.constData() << " ("  << context.file << ":" << context.line << ", " << context.function << ")" << endl;
          abort();
          }
      }
@@ -6071,18 +6071,18 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       int bufferSize   = exporter.getOutBufferSize();
       uchar* bufferOut = new uchar[bufferSize];
-      MasterSynthesizer* synti = synthesizerFactory();
-      synti->init();
-      synti->setSampleRate(sampleRate);
+      MasterSynthesizer* synth = synthesizerFactory();
+      synth->init();
+      synth->setSampleRate(sampleRate);
       if (MScore::noGui) { // use score settings if possible
-            bool r = synti->setState(score->synthesizerState());
+            bool r = synth->setState(score->synthesizerState());
             if (!r)
-                  synti->init();
+                  synth->init();
             }
       else { // use current synth settings
-            bool r = synti->setState(mscore->synthesizerState());
+            bool r = synth->setState(mscore->synthesizerState());
             if (!r)
-                  synti->init();
+                  synth->init();
             }
 
       MScore::sampleRate = sampleRate;
@@ -6111,7 +6111,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
       for (int pass = 0; pass < 2; ++pass) {
             EventMap::const_iterator playPos;
             playPos = events.cbegin();
-            synti->allSoundsOff(-1);
+            synth->allSoundsOff(-1);
 
             //
             // init instruments
@@ -6119,14 +6119,14 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
             foreach(Part* part, score->parts()) {
                   const InstrumentList* il = part->instruments();
                   for(auto i = il->begin(); i!= il->end(); i++) {
-                        foreach(const Channel* a, i->second->channel()) {
+                        for (const Channel* a : i->second->channel()) {
                               a->updateInitList();
-                              foreach(MidiCoreEvent e, a->init) {
+                              for (MidiCoreEvent e : a->init) {
                                     if (e.type() == ME_INVALID)
                                           continue;
                                     e.setChannel(a->channel);
-                                    int syntiIdx= synti->index(score->masterScore()->midiMapping(a->channel)->articulation->synti);
-                                    synti->play(e, syntiIdx);
+                                    int syntiIdx= synth->index(score->masterScore()->midiMapping(a->channel)->articulation->synti);
+									synth->play(e, syntiIdx);
                                     }
                               }
                         }
@@ -6163,7 +6163,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               float* bu = vBu.data();
 #endif
 
-                              synti->process(n, bu);
+                              synth->process(n, bu);
                               float* sp = bu;
                               for (int i = 0; i < n; ++i) {
                                     *l++ = *sp++;
@@ -6177,7 +6177,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               int channelIdx = e.channel();
                               Channel* c = score->masterScore()->midiMapping(channelIdx)->articulation;
                               if (!c->mute) {
-                                    synti->play(e, synti->index(c->synti));
+                                    synth->play(e, synth->index(c->synti));
                                     }
                               }
                         }
@@ -6191,7 +6191,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                         std::vector<float> vBu(frames * 2, 0);   // Default initialized, memset() not required.
                         float* bu = vBu.data();
 #endif
-                        synti->process(frames, bu);
+                        synth->process(frames, bu);
                         float* sp = bu;
                         for (unsigned i = 0; i < frames; ++i) {
                               *l++ = *sp++;
@@ -6264,7 +6264,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       bool wasCanceled = progress.wasCanceled();
       progress.close();
-      delete synti;
+      delete synth;
       delete[] bufferOut;
       file.close();
       if (wasCanceled)

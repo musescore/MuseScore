@@ -417,7 +417,7 @@ void populateInstrumentList(QTreeWidget* instrumentList)
       foreach(InstrumentGroup* g, instrumentGroups) {
             InstrumentTemplateListItem* group = new InstrumentTemplateListItem(g->name, instrumentList);
             group->setFlags(Qt::ItemIsEnabled);
-            foreach(InstrumentTemplate* t, g->instrumentTemplates) {
+            for (InstrumentTemplate* t : g->instrumentTemplates) {
                   new InstrumentTemplateListItem(t, group);
                   }
             }
@@ -459,7 +459,7 @@ void InstrumentsWidget::genPartList(Score* cs)
       foreach (Part* p, cs->parts()) {
             PartListItem* pli = new PartListItem(p, partiturList);
             pli->setVisible(p->show());
-            foreach (Staff* s, *p->staves()) {
+            for (Staff* s : *p->staves()) {
                   StaffListItem* sli = new StaffListItem(pli);
                   sli->setStaff(s);
                   sli->setClefType(s->clefType(0));

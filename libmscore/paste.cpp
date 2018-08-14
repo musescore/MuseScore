@@ -429,15 +429,15 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
 
             //finding the first element that has a track
             //the canvas position will be set to this element
-            Element* e = 0;
-            Segment* s = s1;
+            Element* el = 0;
+            Segment* s  = s1;
             bool found = false;
             if (s2)
                   s2 = s2->next1MM();
             while (!found && s != s2) {
                   for (int i = dstStaff * VOICES; i < (endStaff + 1) * VOICES; i++) {
-                        e = s->element(i);
-                        if (e) {
+                        el = s->element(i);
+                        if (el) {
                               found = true;
                               break;
                               }
@@ -446,7 +446,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                   }
 
             for (MuseScoreView* v : viewer)
-                  v->adjustCanvasPosition(e, false);
+                  v->adjustCanvasPosition(el, false);
             if (!selection().isRange())
                   _selection.setState(SelState::RANGE);
             }

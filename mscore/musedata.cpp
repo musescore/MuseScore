@@ -56,7 +56,7 @@ void MuseData::musicalAttribute(QString s, Part* part)
                   int key = item.mid(2).toInt();
                   KeySigEvent ke;
                   ke.setKey(Key(key));
-                  foreach(Staff* staff, *(part->staves()))
+                  for (Staff* staff : *(part->staves()))
                         staff->setKey(curTick, ke);
                   }
             else if (item.startsWith("Q:")) {
@@ -76,8 +76,8 @@ void MuseData::musicalAttribute(QString s, Part* part)
                         Staff* staff = part->staff(0);
                         ts->setTrack(staff->idx() * VOICES);
                         Measure* measure = score->tick2measure(curTick);
-                        Segment* s = measure->getSegment(SegmentType::TimeSig, curTick);
-                        s->add(ts);
+                        Segment* seg = measure->getSegment(SegmentType::TimeSig, curTick);
+                        seg->add(ts);
                         }
                   }
             else if (item.startsWith("X:"))
@@ -392,8 +392,8 @@ void MuseData::readNote(Part* part, const QString& s)
             Dynamic* dyn = new Dynamic(score);
             dyn->setDynamicType(dynamics);
             dyn->setTrack(gstaff * VOICES);
-            Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
-            s->add(dyn);
+            Segment* seg = measure->getSegment(SegmentType::ChordRest, tick);
+            seg->add(dyn);
             }
 
       QString txt = s.mid(43, 36);

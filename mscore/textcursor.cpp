@@ -139,7 +139,7 @@ void PositionCursor::move(int tick)
       Measure* measure = score->tick2measureMM(tick);
       if (measure == 0)
             return;
-      qreal x;
+      qreal x = 0.0;
       int offset = 0;
 
       Segment* s;

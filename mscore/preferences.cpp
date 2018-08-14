@@ -93,7 +93,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_APP_STARTUP_SESSIONSTART,                        new EnumPreference(QVariant::fromValue(SessionStart::SCORE), false)},
             {PREF_APP_STARTUP_STARTSCORE,                          new StringPreference(":/data/My_First_Score.mscz", false)},
             {PREF_APP_WORKSPACE,                                   new StringPreference("Basic", false)},
-            {PREF_EXPORT_AUDIO_NORMALIZE,                          new BoolPreference(44100, true)},
+            {PREF_EXPORT_AUDIO_NORMALIZE,                          new BoolPreference(true)},
             {PREF_EXPORT_AUDIO_SAMPLERATE,                         new IntPreference(44100, false)},
             {PREF_EXPORT_MP3_BITRATE,                              new IntPreference(128, false)},
             {PREF_EXPORT_MUSICXML_EXPORTBREAKS,                    new EnumPreference(QVariant::fromValue(MusicxmlExportBreaks::ALL), false)},
@@ -230,7 +230,7 @@ void Preferences::remove(const QString key)
 
 bool Preferences::has(const QString key) const
       {
-      return _inMemorySettings.contains(key) > 0 || settings()->contains(key);
+      return _inMemorySettings.contains(key) || settings()->contains(key);
       }
 
 QVariant Preferences::preference(const QString key) const

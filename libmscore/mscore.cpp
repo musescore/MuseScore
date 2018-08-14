@@ -525,7 +525,6 @@ int MPaintDevice::metric(PaintDeviceMetric m) const
                   printf("debug: metric %d\n", int(m));
                   return 1;
             }
-      return 0;
       }
 
 //---------------------------------------------------------
