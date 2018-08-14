@@ -1400,6 +1400,23 @@ void Score::removeElement(Element* element)
             if (element->isVBox() && system->measures().size() == 1) {
                   auto i = std::find(page->systems().begin(), page->systems().end(), system);
                   page->systems().erase(i);
+                  mb->setSystem(0);
+                  if (page->systems().isEmpty()) {
+                        // Remove this page, since it is now empty.
+                        // This involves renumbering and repositioning all subsequent pages.
+                        QPointF pos = page->pos();
+                        auto i = std::find(pages().begin(), pages().end(), page);
+                        pages().erase(i);
+                        i++;
+                        while (i != pages().end()) {
+                              page = *i;
+                              page->setNo(page->no() - 1);
+                              QPointF p = page->pos();
+                              page->setPos(pos);
+                              pos = p;
+                              i++;
+                              }
+                        }
                   }
 //            setLayout(mb->tick());
             return;
