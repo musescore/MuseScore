@@ -278,7 +278,7 @@ bool ChordRest::readProperties(XmlReader& e)
             }
       else if (tag == "dots")
             setDots(e.readInt());
-      else if (tag == "move")
+      else if (tag == "staffMove")
             _staffMove = e.readInt();
       else if (tag == "Spanner")
             Spanner::readSpanner(e, this, track());
