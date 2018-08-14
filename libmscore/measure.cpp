@@ -1844,14 +1844,10 @@ int Measure::ticks() const
 
 void Measure::read(XmlReader& e, int staffIdx)
       {
-      Segment* segment = 0;
       qreal _spatium = spatium();
-
-      QList<Chord*> graceNotes;
-      Beam* startingBeam = nullptr;
-      Tuplet* tuplet = nullptr;
-      e.setTrack(staffIdx * VOICES);
       e.setCurrentMeasure(this);
+      int nextTrack = staffIdx * VOICES;
+      e.setTrack(nextTrack);
 
       for (int n = _mstaves.size(); n <= staffIdx; ++n) {
             Staff* staff = score()->staff(n);
@@ -1876,6 +1872,112 @@ void Measure::read(XmlReader& e, int staffIdx)
             }
       else
             irregular = false;
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+
+            if (tag == "voice") {
+                  e.setTrack(nextTrack++);
+                  e.initTick(tick());
+                  readVoice(e, staffIdx, irregular);
+                  }
+            else if (tag == "Marker" || tag == "Jump") {
+                  Element* el = Element::name2Element(tag, score());
+                  el->setTrack(e.track());
+                  el->read(e);
+                  add(el);
+                  }
+            else if (tag == "stretch") {
+                  double val = e.readDouble();
+                  if (val < 0.0)
+                        val = 0;
+                  setUserStretch(val);
+                  }
+            else if (tag == "noOffset")
+                  setNoOffset(e.readInt());
+            else if (tag == "measureNumberMode")
+                  setMeasureNumberMode(MeasureNumberMode(e.readInt()));
+            else if (tag == "irregular")
+                  setIrregular(e.readBool());
+            else if (tag == "breakMultiMeasureRest")
+                  _breakMultiMeasureRest = e.readBool();
+            else if (tag == "startRepeat") {
+                  setRepeatStart(true);
+                  e.readNext();
+                  }
+            else if (tag == "endRepeat") {
+                  _repeatCount = e.readInt();
+                  setRepeatEnd(true);
+                  }
+            else if (tag == "vspacer" || tag == "vspacerDown") {
+                  if (!_mstaves[staffIdx]->vspacerDown()) {
+                        Spacer* spacer = new Spacer(score());
+                        spacer->setSpacerType(SpacerType::DOWN);
+                        spacer->setTrack(staffIdx * VOICES);
+                        add(spacer);
+                        }
+                  _mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
+                  }
+            else if (tag == "vspacerFixed") {
+                  if (!_mstaves[staffIdx]->vspacerDown()) {
+                        Spacer* spacer = new Spacer(score());
+                        spacer->setSpacerType(SpacerType::FIXED);
+                        spacer->setTrack(staffIdx * VOICES);
+                        add(spacer);
+                        }
+                  _mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
+                  }
+            else if (tag == "vspacerUp") {
+                  if (!_mstaves[staffIdx]->vspacerUp()) {
+                        Spacer* spacer = new Spacer(score());
+                        spacer->setSpacerType(SpacerType::UP);
+                        spacer->setTrack(staffIdx * VOICES);
+                        add(spacer);
+                        }
+                  _mstaves[staffIdx]->vspacerUp()->setGap(e.readDouble() * _spatium);
+                  }
+            else if (tag == "visible")
+                  _mstaves[staffIdx]->setVisible(e.readInt());
+            else if (tag == "slashStyle")
+                  _mstaves[staffIdx]->setSlashStyle(e.readInt());
+            else if (tag == "SystemDivider") {
+                  SystemDivider* sd = new SystemDivider(score());
+                  sd->read(e);
+                  add(sd);
+                  }
+            else if (tag == "multiMeasureRest") {
+                  _mmRestCount = e.readInt();
+                  // set tick to previous measure
+                  setTick(e.lastMeasure()->tick());
+                  e.initTick(e.lastMeasure()->tick());
+                  }
+            else if (tag == "MeasureNumber") {
+                  Text* noText = new Text(score(), Tid::MEASURE_NUMBER);
+                  noText->read(e);
+                  noText->setFlag(ElementFlag::ON_STAFF, true);
+                  noText->setTrack(e.track());
+                  noText->setParent(this);
+                  _mstaves[noText->staffIdx()]->setNoText(noText);
+                  }
+            else if (MeasureBase::readProperties(e))
+                  ;
+            else
+                  e.unknown();
+            }
+      e.checkConnectors();
+      e.setCurrentMeasure(nullptr);
+      }
+
+//---------------------------------------------------------
+//   Measure::readVoice
+//---------------------------------------------------------
+
+void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
+      {
+      Segment* segment = nullptr;
+      QList<Chord*> graceNotes;
+      Beam* startingBeam = nullptr;
+      Tuplet* tuplet = nullptr;
 
       Staff* staff = score()->staff(staffIdx);
       Fraction timeStretch(staff->timeStretch(tick()));
@@ -2111,13 +2213,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   segment = getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
                   }
-            else if (tag == "Marker" || tag == "Jump"
-               ) {
-                  Element* el = Element::name2Element(tag, score());
-                  el->setTrack(e.track());
-                  el->read(e);
-                  add(el);
-                  }
             else if (tag == "Image") {
                   if (MScore::noImages)
                         e.skipCurrentElement();
@@ -2130,20 +2225,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                         }
                   }
             //----------------------------------------------------
-            else if (tag == "stretch") {
-                  double val = e.readDouble();
-                  if (val < 0.0)
-                        val = 0;
-                  setUserStretch(val);
-                  }
-            else if (tag == "noOffset")
-                  setNoOffset(e.readInt());
-            else if (tag == "measureNumberMode")
-                  setMeasureNumberMode(MeasureNumberMode(e.readInt()));
-            else if (tag == "irregular")
-                  setIrregular(e.readBool());
-            else if (tag == "breakMultiMeasureRest")
-                  _breakMultiMeasureRest = e.readBool();
             else if (tag == "Tuplet") {
                   Tuplet* oldTuplet = tuplet;
                   tuplet = new Tuplet(score());
@@ -2171,45 +2252,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                         }
                   e.readNext();
                   }
-            else if (tag == "startRepeat") {
-                  setRepeatStart(true);
-                  e.readNext();
-                  }
-            else if (tag == "endRepeat") {
-                  _repeatCount = e.readInt();
-                  setRepeatEnd(true);
-                  }
-            else if (tag == "vspacer" || tag == "vspacerDown") {
-                  if (!_mstaves[staffIdx]->vspacerDown()) {
-                        Spacer* spacer = new Spacer(score());
-                        spacer->setSpacerType(SpacerType::DOWN);
-                        spacer->setTrack(staffIdx * VOICES);
-                        add(spacer);
-                        }
-                  _mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
-                  }
-            else if (tag == "vspacerFixed") {
-                  if (!_mstaves[staffIdx]->vspacerDown()) {
-                        Spacer* spacer = new Spacer(score());
-                        spacer->setSpacerType(SpacerType::FIXED);
-                        spacer->setTrack(staffIdx * VOICES);
-                        add(spacer);
-                        }
-                  _mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
-                  }
-            else if (tag == "vspacerUp") {
-                  if (!_mstaves[staffIdx]->vspacerUp()) {
-                        Spacer* spacer = new Spacer(score());
-                        spacer->setSpacerType(SpacerType::UP);
-                        spacer->setTrack(staffIdx * VOICES);
-                        add(spacer);
-                        }
-                  _mstaves[staffIdx]->vspacerUp()->setGap(e.readDouble() * _spatium);
-                  }
-            else if (tag == "visible")
-                  _mstaves[staffIdx]->setVisible(e.readInt());
-            else if (tag == "slashStyle")
-                  _mstaves[staffIdx]->setSlashStyle(e.readInt());
             else if (tag == "Beam") {
                   Beam* beam = new Beam(score());
                   beam->setTrack(e.track());
@@ -2223,19 +2265,6 @@ void Measure::read(XmlReader& e, int staffIdx)
                   }
             else if (tag == "Segment")
                   segment->read(e);
-            else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(score(), Tid::MEASURE_NUMBER);
-                  noText->read(e);
-                  noText->setFlag(ElementFlag::ON_STAFF, true);
-                  noText->setTrack(e.track());
-                  noText->setParent(this);
-                  _mstaves[noText->staffIdx()]->setNoText(noText);
-                  }
-            else if (tag == "SystemDivider") {
-                  SystemDivider* sd = new SystemDivider(score());
-                  sd->read(e);
-                  add(sd);
-                  }
             else if (tag == "Ambitus") {
                   Ambitus* range = new Ambitus(score());
                   range->read(e);
@@ -2244,31 +2273,21 @@ void Measure::read(XmlReader& e, int staffIdx)
                   range->setTrack(trackZeroVoice(e.track()));
                   segment->add(range);
                   }
-            else if (tag == "multiMeasureRest") {
-                  _mmRestCount = e.readInt();
-                  // set tick to previous measure
-                  setTick(e.lastMeasure()->tick());
-                  e.initTick(e.lastMeasure()->tick());
-                  }
-            else if (MeasureBase::readProperties(e))
-                  ;
             else
                   e.unknown();
             }
-      e.checkConnectors();
       if (startingBeam) {
             qDebug("The read beam was not used");
             delete startingBeam;
             }
       if (tuplet) {
-            qDebug("Measure:read: measure index=%d, <endTuplet/> not found", e.currentMeasureIndex());
+            qDebug("Measure:readVoice: measure index=%d, <endTuplet/> not found", e.currentMeasureIndex());
             if (tuplet->elements().empty()) {
                   if (tuplet->tuplet())
                         tuplet->tuplet()->remove(tuplet);
                   delete tuplet;
                   }
             }
-      e.setCurrentMeasure(nullptr);
       }
 
 //---------------------------------------------------------

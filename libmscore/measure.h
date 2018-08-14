@@ -90,6 +90,8 @@ class Measure final : public MeasureBase {
       void fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch);
       void computeMinWidth(Segment* s, qreal x, bool isSystemHeader);
 
+      void readVoice(XmlReader& e, int staffIdx, bool irregular);
+
    public:
       Measure(Score* = 0);
       Measure(const Measure&);
