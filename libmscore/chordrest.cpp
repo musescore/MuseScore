@@ -1236,9 +1236,9 @@ int ChordRest::lastVerse(Placement p) const
 void ChordRest::removeMarkings(bool /* keepTremolo */)
       {
       qDeleteAll(el());
-      if (isChord())
-            qDeleteAll(toChord(this)->articulations());
+      el().clear();
       qDeleteAll(lyrics());
+      lyrics().clear();
       }
 
 //---------------------------------------------------------
