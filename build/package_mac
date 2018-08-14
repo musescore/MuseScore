@@ -63,17 +63,32 @@ function change_rpath() {
    do
       if [[ "$P" == *@rpath* ]]
       then
-         PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../Frameworks,g')
-         FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
-         install_name_tool -change $P $PSLASH $1
-         for P1 in `otool -L $FNAME | awk '{print $1}'`
-         do
-            if [[ "$P1" == *@rpath* ]]
-            then
-                PSLASH1=$(echo $P1 | sed "s,@rpath,@loader_path/../../../,g")
-                install_name_tool -change $P1 $PSLASH1 $FNAME
-            fi
-         done
+         if [[ "$P" == *Qt* ]]
+         then  
+            PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../Frameworks,g')
+            FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
+            install_name_tool -change $P $PSLASH $1
+            for P1 in `otool -L $FNAME | awk '{print $1}'`
+            do
+               if [[ "$P1" == *@rpath* ]]
+               then
+                   PSLASH1=$(echo $P1 | sed "s,@rpath,@loader_path/../../..,g")
+                   install_name_tool -change $P1 $PSLASH1 $FNAME
+               fi
+            done
+         else
+            PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../Frameworks,g')
+            FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
+            install_name_tool -change $P $PSLASH $1
+            for P1 in `otool -L $FNAME | awk '{print $1}'`
+            do
+               if [[ "$P1" == *@rpath* ]]
+               then
+                   PSLASH1=$(echo $P1 | sed "s,@rpath,@loader_path,g")
+                   install_name_tool -change $P1 $PSLASH1 $FNAME
+               fi
+            done
+         fi
       fi
    done
 }
@@ -83,7 +98,7 @@ function change_rpath_QWebEngine() {
    do
       if [[ "$P" == *@rpath* ]]
       then
-         PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../../../../../../../,g')
+         PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../../../../../../..,g')
          FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
          install_name_tool -change $P $PSLASH $1
       fi
