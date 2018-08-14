@@ -496,6 +496,11 @@ void Selection::updateSelectedElements()
                         }
                   else {
                         appendFiltered(e);
+                        if (e->isRest()) {
+                              Rest* r = toRest(e);
+                              for (int i = 0; i < r->dots(); ++i)
+                                    appendFiltered(r->dot(i));
+                              }
                         }
                   }
             }

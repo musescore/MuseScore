@@ -1183,12 +1183,15 @@ void Note::write(XmlWriter& xml) const
       if (_accidental)
             _accidental->write(xml);
       _el.write(xml);
-      for (NoteDot* dot : _dots) {
+      bool write_dots = false;
+      for (NoteDot* dot : _dots)
             if (!dot->userOff().isNull() || !dot->visible() || dot->color() != Qt::black || dot->visible() != visible()) {
-                  dot->write(xml);
+                  write_dots = true;
                   break;
                   }
-            }
+      if (write_dots)
+            for (NoteDot* dot : _dots)
+                  dot->write(xml);
       if (_tieFor)
             _tieFor->write(xml);
       if (_tieBack) {
