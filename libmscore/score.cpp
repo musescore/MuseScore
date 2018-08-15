@@ -1407,7 +1407,6 @@ void Score::removeElement(Element* element)
                         QPointF pos = page->pos();
                         auto i = std::find(pages().begin(), pages().end(), page);
                         pages().erase(i);
-                        i++;
                         while (i != pages().end()) {
                               page = *i;
                               page->setNo(page->no() - 1);
