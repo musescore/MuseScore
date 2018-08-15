@@ -453,7 +453,7 @@ NewWizard::NewWizard(QWidget* parent)
       setWindowTitle(tr("New Score Wizard"));
 
       setOption(QWizard::NoCancelButton, false);
-      setOption(QWizard::CancelButtonOnLeft, true);
+      setOption(QWizard::CancelButtonOnLeft, false);
       setOption(QWizard::HaveFinishButtonOnEarlyPages, true);
       setOption(QWizard::HaveNextButtonOnLastPage, true);
 
