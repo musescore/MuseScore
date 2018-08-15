@@ -212,12 +212,14 @@ QPointF Pedal::linePos(Grip grip, System** sys) const
       System* s = nullptr;
       if (grip == Grip::START) {
             ChordRest* c = toChordRest(startElement());
-            s = c->segment()->system();
-            x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-            if (c->type() == ElementType::REST && c->durationType() == TDuration::DurationType::V_MEASURE)
-                  x -= c->x();
-            if (beginHookType() == HookType::HOOK_45)
-                  x += nhw * .5;
+            if (c) {
+                  s = c->segment()->system();
+                  x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
+                  if (c->type() == ElementType::REST && c->durationType() == TDuration::DurationType::V_MEASURE)
+                        x -= c->x();
+                  if (beginHookType() == HookType::HOOK_45)
+                        x += nhw * .5;
+                  }
             }
       else {
             Element* e = endElement();
