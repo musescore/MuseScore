@@ -56,6 +56,7 @@
 #include "textframe.h"
 #include "jump.h"
 #include "textline.h"
+#include "pedal.h"
 
 namespace Ms {
 
@@ -1305,6 +1306,37 @@ static void readTextLine114(XmlReader& e, TextLine* textLine)
                 e.unknown();
             }
       }
+
+//---------------------------------------------------------
+//   readPedal114
+//---------------------------------------------------------
+
+static void readPedal114(XmlReader& e, Pedal* pedal)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "beginSymbol" 
+                  || tag == "beginSymbolOffset" 
+                  || tag == "endSymbol" 
+                  || tag == "endSymbolOffset"
+                  || tag == "subtype"
+                  )
+                  e.skipCurrentElement();
+            else if (tag == "endHookHeight" || tag == "hookHeight") { // hookHeight is obsolete
+                  pedal->setEndHookHeight(Spatium(e.readDouble()));
+                  } 
+            else if (tag == "lineWidth") {
+                  pedal->setLineWidth(qreal(e.readDouble()));
+                  } 
+            else if (tag == "lineStyle") {
+                  pedal->setLineStyle(Qt::PenStyle(e.readInt()));
+                  } 
+            else if (!readTextLineProperties114(e, pedal))
+                  e.unknown();
+            }
+      pedal->setBeginText("<sym>keyboardPedalPed</sym>");
+      }
+
 //---------------------------------------------------------
 //   readHarmony114
 //---------------------------------------------------------
@@ -2881,6 +2913,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
                         readOttava114(e, toOttava(s));
                   else if (tag == "TextLine")
                         readTextLine114(e, toTextLine(s));
+                  else if (tag == "Pedal")
+                         readPedal114(e, toPedal(s));
                   else
                         s->read(e);
                   if (s->track() == -1)
@@ -2894,8 +2928,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   if (s->track2() == -1)
                         s->setTrack2(s->track());
                   if (s->ticks() == 0) {
-                        delete s;
                         qDebug("zero spanner %s ticks: %d", s->name(), s->ticks());
+                        delete s;
                         }
                   else {
                         addSpanner(s);
