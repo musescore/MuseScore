@@ -2113,8 +2113,13 @@ void Measure::read(XmlReader& e, int staffIdx)
                   t->setTrack(e.track());
                   t->read(e);
                   if (t->empty()) {
-                        qDebug("==reading empty text: deleted");
-                        delete t;
+                        if (t->links()) {
+                              if (t->links()->size() == 1) {
+                                    qDebug("==reading empty text: deleted lid = %d", t->links()->lid());
+                                    e.linkIds().remove(t->links()->lid());
+                                    delete t;
+                                    }
+                              }
                         }
                   else {
                         segment = getSegment(SegmentType::ChordRest, e.tick());
