@@ -82,6 +82,7 @@ add_library (
       read300.cpp stafftypelist.cpp stafftypechange.cpp
       bracketItem.cpp
       lyricsline.cpp
+      layoutlinear.cpp
       )
 
 ##
@@ -111,7 +112,7 @@ else (NOT MSVC)
       PROPERTIES
          COMPILE_FLAGS "${PCH_INCLUDE}"
       )
-endif (NOT MSVC)   
+endif (NOT MSVC)
 
 xcode_pch(libmscore all)
 
@@ -122,4 +123,4 @@ vstudio_pch( libmscore )
 if (NOT MSVC)
    ADD_DEPENDENCIES(libmscore mops1)
    ADD_DEPENDENCIES(libmscore mops2)
-endif (NOT MSVC)   
+endif (NOT MSVC)

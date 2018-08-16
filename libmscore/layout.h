@@ -46,6 +46,9 @@ struct LayoutContext {
       int measureNo            { 0 };
       int endTick;
 
+      void layoutLinear();
+      void layoutMeasureLinear(MeasureBase*);
+
       void layout();
       int adjustMeasureNo(MeasureBase*);
       void getEmptyPage();
