@@ -2265,7 +2265,7 @@ void Score::createBeams(Measure* measure)
 //   layoutDrumsetChord
 //---------------------------------------------------------
 
-static void layoutDrumsetChord(Chord* c, const Drumset* drumset, StaffType* st, qreal spatium)
+void layoutDrumsetChord(Chord* c, const Drumset* drumset, StaffType* st, qreal spatium)
       {
       for (Note* note : c->notes()) {
             int pitch = note->pitch();
@@ -2301,16 +2301,7 @@ void Score::getNextMeasure(LayoutContext& lc)
 
       int mno = lc.adjustMeasureNo(lc.curMeasure);
 
-      if (lineMode()) {
-            while (lc.curMeasure && lc.curMeasure->isVBox()) {
-                  lc.curMeasure  = lc.nextMeasure;
-                  if (lc.curMeasure)
-                        lc.nextMeasure = lc.curMeasure->next();
-                  }
-            if (!lc.curMeasure)
-                  return;
-            }
-      else if (lc.curMeasure->isMeasure()) {
+      if (lc.curMeasure->isMeasure()) {
             if (score()->styleB(Sid::createMultiMeasureRests)) {
                   Measure* m = toMeasure(lc.curMeasure);
                   Measure* nm = m;
@@ -2578,7 +2569,7 @@ void Score::getNextMeasure(LayoutContext& lc)
 //   isTopBeam
 //---------------------------------------------------------
 
-static bool isTopBeam(ChordRest* cr)
+bool isTopBeam(ChordRest* cr)
       {
       if (cr->beam() && cr->beam()->elements().front() == cr) {
             Beam* b = cr->beam();
@@ -2599,7 +2590,7 @@ static bool isTopBeam(ChordRest* cr)
 //   notTopBeam
 //---------------------------------------------------------
 
-static bool notTopBeam(ChordRest* cr)
+bool notTopBeam(ChordRest* cr)
       {
       if (cr->beam() && cr->beam()->elements().front() == cr) {
             Beam* b = cr->beam();
@@ -2900,7 +2891,7 @@ void Score::layoutLyrics(System* system)
 //   layoutTies
 //---------------------------------------------------------
 
-static void layoutTies(Chord* ch, System* system, int stick)
+void layoutTies(Chord* ch, System* system, int stick)
       {
       for (Note* note : ch->notes()) {
             if (note->tieFor())
@@ -2917,7 +2908,7 @@ static void layoutTies(Chord* ch, System* system, int stick)
 //   processLines
 //---------------------------------------------------------
 
-static void processLines(System* system, std::vector<Spanner*> lines, bool align)
+void processLines(System* system, std::vector<Spanner*> lines, bool align)
       {
       std::vector<SpannerSegment*> segments;
       for (Spanner* sp : lines) {
@@ -3023,7 +3014,7 @@ System* Score::collectSystem(LayoutContext& lc)
             // check if lc.curMeasure fits, remove if not
             // collect at least one measure and the break
 
-            bool doBreak = (system->measures().size() > 1) && !lineMode() && ((minWidth + ww) > systemWidth);
+            bool doBreak = (system->measures().size() > 1) && ((minWidth + ww) > systemWidth);
             if (doBreak) {
                   if (lc.prevMeasure->noBreak() && system->measures().size() > 2) {
                         // remove last two measures
@@ -3105,7 +3096,7 @@ System* Score::collectSystem(LayoutContext& lc)
             // ElementType nt = lc.curMeasure ? lc.curMeasure->type() : ElementType::INVALID;
             mb = lc.curMeasure;
             bool tooWide = false; // minWidth + minMeasureWidth > systemWidth;  // TODO: noBreak
-            if (!lineMode() && (lineBreak || !mb || mb->isVBox() || mb->isTBox() || mb->isFBox() || tooWide))
+            if (lineBreak || !mb || mb->isVBox() || mb->isTBox() || mb->isFBox() || tooWide)
                   break;
             }
 
@@ -3120,29 +3111,28 @@ System* Score::collectSystem(LayoutContext& lc)
 
       hideEmptyStaves(system, lc.firstSystem);
 
-      if (!lineMode()) {
             //-------------------------------------------------------
             //    add system trailer if needed
             //    (cautionary time/key signatures etc)
             //-------------------------------------------------------
 
-            Measure* m  = system->lastMeasure();
-            if (m) {
-                  Measure* nm = m->nextMeasure();
-                  if (nm) {
-                        qreal w = m->width();
-                        m->addSystemTrailer(nm);
-                        if (m->trailer())
-                              m->computeMinWidth();
-                        minWidth += m->width() - w;
-                        }
+      Measure* m  = system->lastMeasure();
+      if (m) {
+            Measure* nm = m->nextMeasure();
+            if (nm) {
+                  qreal w = m->width();
+                  m->addSystemTrailer(nm);
+                  if (m->trailer())
+                        m->computeMinWidth();
+                  minWidth += m->width() - w;
                   }
             }
+
       //
       // stretch incomplete row
       //
       qreal rest;
-      if (lineMode() || MScore::noHorizontalStretch)
+      if (MScore::noHorizontalStretch)
             rest = 0;
       else {
             qreal mw          = system->leftMargin();      // DEBUG
@@ -3188,8 +3178,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   mb->setPos(pos);
                   Measure* m = toMeasure(mb);
                   qreal stretch = m->basicStretch();
-                  if (!lineMode())
-                        ww  += rest * m->ticks() * stretch;
+                  ww  += rest * m->ticks() * stretch;
                   m->stretchMeasure(ww);
                   m->layoutStaffLines();
                   }
@@ -3693,9 +3682,6 @@ void LayoutContext::collectPage()
                   m->layout2();
                   }
             }
-      if (score->lineMode()) {
-            page->setWidth(page->systems().front()->width());
-            }
       page->rebuildBspTree();
       }
 
@@ -3768,6 +3754,10 @@ void Score::doLayoutRange(int stick, int etick)
 //      qDebug("start <%s> tick %d, system %p", m->name(), m->tick(), m->system());
       lc.score        = m->score();
 
+      if (lineMode()) {
+            layoutLinear(layoutAll, lc);
+            return;
+            }
       std::vector<std::pair<int, BracketItem*>> selectedBrackets;
 
       if (!layoutAll && m->system()) {
@@ -3816,8 +3806,8 @@ void Score::doLayoutRange(int stick, int etick)
                               setSelectionChanged(true);
                               }
                         }
-                  for (SpannerSegment* ss : s->spannerSegments())
-                        ss->setParent(0);
+//                  for (SpannerSegment* ss : s->spannerSegments())
+//                        ss->setParent(0);
                   s->setParent(nullptr);
                   }
             for (MeasureBase* mb = first(); mb; mb = mb->next()) {

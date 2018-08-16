@@ -483,12 +483,10 @@ class Score : public QObject, public ScoreElement {
       void createMMRest(Measure*, Measure*, const Fraction&);
       bool layoutSystem1(qreal& minWidth, bool, bool);
       QList<System*> layoutSystemRow(qreal w, bool, bool);
-      System* getNextSystem(LayoutContext&);
       bool doReLayout();
 
       void beamGraceNotes(Chord*, bool);
 
-      void hideEmptyStaves(System* system, bool isFirstSystem);
 
       void checkSlurs();
       void checkScore();
@@ -506,11 +504,9 @@ class Score : public QObject, public ScoreElement {
       void selectAdd(Element* e);
       void selectRange(Element* e, int staffIdx);
 
-      void createBeams(Measure*);
       void cmdAddPitch(const EditData&, int note, bool addFlag, bool insert);
       void cmdAddFret(int fret);
       void cmdToggleVisible();
-      void layoutLyrics(System*);
 
    protected:
       int _fileDivision; ///< division of current loading *.msc file
@@ -971,7 +967,7 @@ class Score : public QObject, public ScoreElement {
 
       void doLayout();
       void doLayoutRange(int, int);
-      void layoutLinear(LayoutContext& lc);
+      void layoutLinear(bool layoutAll, LayoutContext& lc);
 
       void layoutSystemsUndoRedo();
       void layoutPagesUndoRedo();
@@ -1151,6 +1147,11 @@ class Score : public QObject, public ScoreElement {
 
       void cmdAddPitch(int note, bool addFlag, bool insert);
       void forAllLyrics(std::function<void(Lyrics*)> f);
+
+      System* getNextSystem(LayoutContext&);
+      void hideEmptyStaves(System* system, bool isFirstSystem);
+      void layoutLyrics(System*);
+      void createBeams(Measure*);
 
       friend class ChangeSynthesizerState;
       friend class Chord;

@@ -171,7 +171,7 @@ void PositionCursor::move(int tick)
             return;
 
       System* system = measure->system();
-      if (system == 0)
+      if (system == 0 || system->page() == 0)
             return;
       double y        = system->staffYpage(0) + system->page()->pos().y();
       double _spatium = score->spatium();

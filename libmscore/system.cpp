@@ -71,6 +71,8 @@ System::System(Score* s)
 
 System::~System()
       {
+      for (SpannerSegment* ss : spannerSegments())
+            ss->setParent(0);
       qDeleteAll(_staves);
       qDeleteAll(_brackets);
       delete _systemDividerLeft;
@@ -112,7 +114,7 @@ Box* System::vbox() const
       {
       if (!ml.empty()) {
             if (ml[0]->isVBox() || ml[0]->isTBox())
-                  return static_cast<Box*>(ml[0]);
+                  return toBox(ml[0]);
             }
       return 0;
       }
