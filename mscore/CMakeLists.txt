@@ -616,23 +616,7 @@ else (MINGW)
 
    if ( NOT MSVC )
 ## install qwebengine core
-      if(APPLE)
-         install(FILES
-            ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess
-            DESTINATION ${CMAKE_INSTALL_PREFIX}
-            )
-         install(FILES
-            ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Resources/qtwebengine_devtools_resources.pak
-            ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Resources/qtwebengine_resources.pak
-            ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Resources/qtwebengine_resources_100p.pak
-            ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Resources/qtwebengine_resources_200p.pak
-            DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}/webengineresources
-            )
-         install(DIRECTORY
-            ${QT_INSTALL_PREFIX}/lib/QtWebEngineCore.framework/Versions/Current/Resources/qtwebengine_locales
-            DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}/webengineresources/translations/qtwebengine_locales
-            )
-      else(APPLE)
+      if (NOT APPLE)
          install(FILES
             ${QT_INSTALL_PREFIX}/libexec/QtWebEngineProcess
             DESTINATION bin
@@ -645,7 +629,7 @@ else (MINGW)
             ${QT_INSTALL_PREFIX}/translations/qtwebengine_locales
             DESTINATION lib/qt5/translations
             )
-      endif(APPLE)
+      endif(NOT APPLE)
 
       target_link_libraries(mscore
          ${ALSA_LIB}
