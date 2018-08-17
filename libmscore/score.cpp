@@ -3000,6 +3000,13 @@ void Score::collectMatch(void* data, Element* e)
                   ee = ee->parent();
                   } while (ee);
             }
+
+      if (e->isRest()) {
+            const Rest* r = toRest(e);
+            if (p->durationTicks != r->actualTicks())
+                  return;
+            }
+
       p->el.append(e);
       }
 
