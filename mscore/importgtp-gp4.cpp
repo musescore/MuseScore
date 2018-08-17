@@ -1019,7 +1019,7 @@ bool GuitarPro4::read(QFile* fp)
                                           if (seg->segmentType() == SegmentType::ChordRest) {
                                                 bool br = false;
                                                 Chord* cr = toChord(seg->cr(chord->track()));
-                                                if (cr)
+                                                if (cr) {
                                                       for (auto n : cr->notes()) {
                                                             if (n->string() == last->string()) {
                                                                   Glissando* s = new Glissando(score);
@@ -1039,10 +1039,11 @@ bool GuitarPro4::read(QFile* fp)
                                                                               createSlur(false, chord->staffIdx(), chord);
                                                                               }
                                                                         }
+                                                                  br = true;
+                                                                  break;
                                                                   }
-                                                            br = true;
-                                                            break;
                                                             }
+                                                      }
                                                 if (br)
                                                       break;
                                                 }
@@ -1090,24 +1091,24 @@ bool GuitarPro4::read(QFile* fp)
                                                       }
                                                 }
                                           }
-                                    }
-                              if (br)
-                                    break;
+                                    if (br)
+                                          break;
 #if 1  // TODO-ws: crash
-                              Glissando* s = new Glissando(score);
-                              s->setAnchor(Spanner::Anchor::NOTE);
-                              s->setStartElement(n);
-                              s->setTick(n->chord()->segment()->tick());
-                              s->setTrack(n->track());
-                              s->setParent(n);
-                              s->setGlissandoType(GlissandoType::STRAIGHT);
-                              s->setEndElement(nt);
-                              s->setTick2(nt->chord()->segment()->tick());
-                              s->setTrack2(n->track());
-                              score->addElement(s);
+                                    Glissando* s = new Glissando(score);
+                                    s->setAnchor(Spanner::Anchor::NOTE);
+                                    s->setStartElement(n);
+                                    s->setTick(n->chord()->segment()->tick());
+                                    s->setTrack(n->track());
+                                    s->setParent(n);
+                                    s->setGlissandoType(GlissandoType::STRAIGHT);
+                                    s->setEndElement(nt);
+                                    s->setTick2(nt->chord()->segment()->tick());
+                                    s->setTrack2(n->track());
+                                    score->addElement(s);
 #endif
-                              br = true;
-                              break;
+                                    br = true;
+                                    break;
+                                    }
                               }
                         if (br)
                               break;
