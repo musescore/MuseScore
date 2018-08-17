@@ -1390,7 +1390,7 @@ QString MuseScore::getPluginFilename(bool open)
                   loadPluginDialog->restoreState(settings.value("loadPluginDialog").toByteArray());
                   loadPluginDialog->setAcceptMode(QFileDialog::AcceptOpen);
                   }
-            urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/styles"));
+            urls.append(QUrl::fromLocalFile(mscoreGlobalShare+"/plugins"));
             dialog = loadPluginDialog;
             }
       else {
