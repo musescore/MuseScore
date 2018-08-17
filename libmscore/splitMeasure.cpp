@@ -93,10 +93,10 @@ void Score::splitMeasure(Segment* segment)
 
       for (auto i : sl) {
             Spanner* s = std::get<0>(i);
-            int tick   = std::get<1>(i);
+            int t      = std::get<1>(i);
             int ticks  = std::get<2>(i);
-            if (s->tick() != tick)
-                  s->undoChangeProperty(Pid::SPANNER_TICK, tick);
+            if (s->tick() != t)
+                  s->undoChangeProperty(Pid::SPANNER_TICK, t);
             if (s->ticks() != ticks)
                   s->undoChangeProperty(Pid::SPANNER_TICKS, ticks);
             }

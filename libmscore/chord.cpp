@@ -1524,8 +1524,8 @@ void Chord::layout2()
 
       const qreal minDist = _spatium * .17;
 
-      Segment* s = segment()->prev(SegmentType::ChordRest);
-      if (s) {
+      Segment* ps = segment()->prev(SegmentType::ChordRest);
+      if (ps) {
             int strack = staff2track(staffIdx());
             int etrack = strack + VOICES;
 
@@ -1537,7 +1537,7 @@ void Chord::layout2()
                   qreal cx  = h->measureXPos();
 
                   for (int track = strack; track < etrack; ++track) {
-                        Element* el = s->element(track);
+                        Element* el = ps->element(track);
                         if (!el || !el->isChord())
                               continue;
                         Chord* e = toChord(el);
@@ -2510,8 +2510,8 @@ void Chord::layoutArpeggio2()
 
 Note* Chord::findNote(int pitch) const
       {
-      int n = _notes.size();
-      for (int i = 0; i < n; ++i) {
+      int ns = _notes.size();
+      for (int i = 0; i < ns; ++i) {
             Note* n = _notes.at(i);
             if (n->pitch() == pitch)
                   return n;

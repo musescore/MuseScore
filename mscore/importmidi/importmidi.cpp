@@ -838,10 +838,10 @@ void createMeasures(const ReducedFraction &firstTick, ReducedFraction &lastTick,
 
       for (int i = begBarIndex; i < barCount; ++i) {
             Measure* m = new Measure(score);
-            const int tick = score->sigmap()->bar2tick(i, 0);
+            const int t = score->sigmap()->bar2tick(i, 0);
             m->setTick(tick);
             m->setNo(i);
-            const Fraction timeSig = score->sigmap()->timesig(tick).timesig();
+            const Fraction timeSig = score->sigmap()->timesig(t).timesig();
             m->setTimesig(timeSig);
             m->setLen(timeSig);
             score->measures()->add(m);

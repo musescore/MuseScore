@@ -93,9 +93,9 @@ void GlissandoSegment::draw(QPainter* painter) const
             }
       else if (glissando()->glissandoType() == GlissandoType::WAVY) {
             QRectF b = symBbox(SymId::wiggleTrill);
-            qreal w  = symAdvance(SymId::wiggleTrill);
-            int n    = (int)(l / w);      // always round down (truncate) to avoid overlap
-            qreal x  = (l - n*w) * 0.5;   // centre line in available space
+            qreal a  = symAdvance(SymId::wiggleTrill);
+            int n    = (int)(l / a);      // always round down (truncate) to avoid overlap
+            qreal x  = (l - n*a) * 0.5;   // centre line in available space
             std::vector<SymId> ids;
             for (int i = 0; i < n; ++i)
                   ids.push_back(SymId::wiggleTrill);
@@ -331,10 +331,10 @@ void Glissando::layout()
 
       // final note arpeggio / accidental / ledger line / accidental / arpeggio (i.e. from outermost to innermost)
       offs2 *= -1.0;          // discount changes already applied
-      if (Arpeggio* a = cr2->arpeggio())
-            offs2.rx() += a->pos().x() + a->userOff().x();
-      else if (Accidental* a = anchor2->accidental())
-            offs2.rx() += a->pos().x() + a->userOff().x();
+      if (Arpeggio* ap = cr2->arpeggio())
+            offs2.rx() += ap->pos().x() + ap->userOff().x();
+      else if (Accidental* ac = anchor2->accidental())
+            offs2.rx() += ac->pos().x() + ac->userOff().x();
       else if ( (ledLin = cr2->ledgerLines()) != nullptr)
             offs2.rx() += ledLin->pos().x();
 

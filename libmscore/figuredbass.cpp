@@ -1527,22 +1527,22 @@ bool FiguredBassFont::read(XmlReader& e)
                   if (digit < 0 || digit > 9)
                         return false;
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "simple")
+                        const QStringRef& t(e.name());
+                        if (t == "simple")
                               displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::SIMPLE)]      = e.readElementText()[0];
-                        else if (tag == "crossed")
+                        else if (t == "crossed")
                               displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::CROSSED)]     = e.readElementText()[0];
-                        else if (tag == "backslashed")
+                        else if (t == "backslashed")
                               displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::BACKSLASHED)] = e.readElementText()[0];
-                        else if (tag == "slashed")
+                        else if (t == "slashed")
                               displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::SLASHED)]     = e.readElementText()[0];
-                        else if (tag == "simpleHistoric")
+                        else if (t == "simpleHistoric")
                               displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::SIMPLE)]      = e.readElementText()[0];
-                        else if (tag == "crossedHistoric")
+                        else if (t == "crossedHistoric")
                               displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::CROSSED)]     = e.readElementText()[0];
-                        else if (tag == "backslashedHistoric")
+                        else if (t == "backslashedHistoric")
                               displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::BACKSLASHED)] = e.readElementText()[0];
-                        else if (tag == "slashedHistoric")
+                        else if (t == "slashedHistoric")
                               displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::SLASHED)]     = e.readElementText()[0];
                         else {
                               e.unknown();
@@ -1585,13 +1585,13 @@ bool FiguredBass::readConfigFile(const QString& fileName)
       else
             path = fileName;
 
-      QFile f(path);
-      if (!f.open(QIODevice::ReadOnly)) {
-            MScore::lastError = QObject::tr("Cannot open figured bass description:\n%1\n%2").arg(f.fileName()).arg(f.errorString());
+      QFile fi(path);
+      if (!fi.open(QIODevice::ReadOnly)) {
+            MScore::lastError = QObject::tr("Cannot open figured bass description:\n%1\n%2").arg(fi.fileName()).arg(fi.errorString());
             qDebug("FiguredBass::read failed: <%s>", qPrintable(path));
             return false;
             }
-      XmlReader e(&f);
+      XmlReader e(&fi);
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
                   // QString version = e.attribute(QString("version"));

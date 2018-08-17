@@ -287,9 +287,9 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                   Segment* s = toKeySig(e)->segment();
                   bool first = true;
                   for (int staffIdx = 0; staffIdx < _score->nstaves(); ++staffIdx) {
-                        Element* e = s->element(staffIdx * VOICES);
-                        if (e) {
-                              e->score()->select(e, first ? SelectType::SINGLE : SelectType::ADD);
+                        Element* ee = s->element(staffIdx * VOICES);
+                        if (ee) {
+                              ee->score()->select(ee, first ? SelectType::SINGLE : SelectType::ADD);
                               first = false;
                               }
                         }

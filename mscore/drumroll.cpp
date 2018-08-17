@@ -89,8 +89,8 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
             QPalette p(b->palette());
             p.setColor(QPalette::Base, MScore::selectColor[i]);
             b->setPalette(p);
-            QAction* a = getAction(voiceActions[i]);
-            b->setDefaultAction(a);
+            QAction* aa = getAction(voiceActions[i]);
+            b->setDefaultAction(aa);
             tb->addWidget(b);
             }
 

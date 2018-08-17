@@ -966,8 +966,8 @@ static void readPart(Part* part, XmlReader& e)
                   Staff*   s = part->staff(0);
                   int lld = s ? qRound(s->lineDistance(0)) : 1;
                   if (ds && s && lld > 1) {
-                        for (int i = 0; i < DRUM_INSTRUMENTS; ++i)
-                              ds->drum(i).line /= lld;
+                        for (int j = 0; j < DRUM_INSTRUMENTS; ++j)
+                              ds->drum(j).line /= lld;
                         }
                   }
             else if (tag == "Staff") {
@@ -1279,8 +1279,8 @@ static void readChord(Chord* chord, XmlReader& e)
             else if (tag == "Stem") {
                   Stem* stem = new Stem(chord->score());
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "subtype")        // obsolete
+                        const QStringRef& t(e.name());
+                        if (t == "subtype")        // obsolete
                               e.skipCurrentElement();
                         else if (!stem->readProperties(e))
                               e.unknown();
@@ -1737,12 +1737,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   BarLine* bl = new BarLine(score);
                   bl->setTrack(e.track());
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "subtype")
+                        const QStringRef& t(e.name());
+                        if (t == "subtype")
                               bl->setBarLineType(e.readElementText());
-                        else if (tag == "customSubtype")                      // obsolete
+                        else if (t == "customSubtype")                      // obsolete
                               e.readInt();
-                        else if (tag == "span") {
+                        else if (t == "span") {
                               //TODO bl->setSpanFrom(e.intAttribute("from", bl->spanFrom()));  // obsolete
                               // bl->setSpanTo(e.intAttribute("to", bl->spanTo()));            // obsolete
                               int span = e.readInt();
@@ -1750,11 +1750,11 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                                     span--;
                               bl->setSpanStaff(span);
                               }
-                        else if (tag == "spanFromOffset")
+                        else if (t == "spanFromOffset")
                               bl->setSpanFrom(e.readInt());
-                        else if (tag == "spanToOffset")
+                        else if (t == "spanToOffset")
                               bl->setSpanTo(e.readInt());
-                        else if (tag == "Articulation") {
+                        else if (t == "Articulation") {
                               Articulation* a = new Articulation(score);
                               a->read(e);
                               bl->add(a);
@@ -2340,11 +2340,11 @@ static void readStaffContent(Score* score, XmlReader& e)
                         else {
                               // this is a multi measure rest
                               // always preceded by the first measure it replaces
-                              Measure* m = e.lastMeasure();
+                              Measure* lm = e.lastMeasure();
 
-                              if (m) {
-                                    m->setMMRest(measure);
-                                    measure->setTick(m->tick());
+                              if (lm) {
+                                    lm->setMMRest(measure);
+                                    measure->setTick(lm->tick());
                                     }
                               }
                         }
@@ -2507,10 +2507,10 @@ static bool readScore(Score* score, XmlReader& e)
                   score->setPlayMode(PlayMode(e.readInt()));
             else if (tag == "LayerTag") {
                   int id = e.intAttribute("id");
-                  const QString& tag = e.attribute("tag");
+                  const QString& t = e.attribute("tag");
                   QString val(e.readElementText());
                   if (id >= 0 && id < 32) {
-                        score->layerTags()[id] = tag;
+                        score->layerTags()[id] = t;
                         score->layerTagComments()[id] = val;
                         }
                   }
@@ -2738,15 +2738,15 @@ void PageFormat::read(XmlReader& e)
                   type = e.attribute("type","both");
                   qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
+                        const QStringRef& t(e.name());
                         qreal val = e.readDouble() * 0.5 / PPI;
-                        if (tag == "left-margin")
+                        if (t == "left-margin")
                               lm = val;
-                        else if (tag == "right-margin")
+                        else if (t == "right-margin")
                               rm = val;
-                        else if (tag == "top-margin")
+                        else if (t == "top-margin")
                               tm = val;
-                        else if (tag == "bottom-margin")
+                        else if (t == "bottom-margin")
                               bm = val;
                         else
                               e.unknown();

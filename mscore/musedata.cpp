@@ -406,8 +406,8 @@ void MuseData::readNote(Part* part, const QString& s)
                   l->setPlainText(w);
                   l->setNo(no++);
                   l->setTrack(gstaff * VOICES);
-                  Segment* segment = measure->tick2segment(tick);
-                  segment->add(l);
+                  Segment* seg = measure->tick2segment(tick);
+                  seg->add(l);
                   }
             }
       }

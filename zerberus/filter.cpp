@@ -40,12 +40,12 @@ ZFilter::ZFilter()
 //   initialize
 //---------------------------------------------------------
 
-void ZFilter::initialize(const Zerberus* zerberus, const Zone* z, int velocity)
+void ZFilter::initialize(const Zerberus* _zerberus, const Zone* z, int velocity)
       {
-      this->zerberus = zerberus;
+      this->zerberus = _zerberus;
       this->sampleZone = z;
 
-      resonanceF = zerberus->ct2hz(13500.0);
+      resonanceF = _zerberus->ct2hz(13500.0);
       if (z->isCutoffDefined) {
             //calculate current cutoff value
             float cutoffHz = z->cutoff;

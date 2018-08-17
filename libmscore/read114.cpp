@@ -1343,12 +1343,12 @@ static void readHarmony114(XmlReader& e, Harmony* h)
                   int degreeAlter = 0;
                   QString degreeType = "";
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "degree-value")
+                        const QStringRef& t(e.name());
+                        if (t == "degree-value")
                               degreeValue = e.readInt();
-                        else if (tag == "degree-alter")
+                        else if (t == "degree-alter")
                               degreeAlter = e.readInt();
-                        else if (tag == "degree-type")
+                        else if (t == "degree-type")
                               degreeType = e.readElementText();
                         else
                               e.unknown();
@@ -1477,8 +1477,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   barLine->resetProperty(Pid::BARLINE_SPAN_TO);
 
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "subtype") {
+                        const QStringRef& tg(e.name());
+                        if (tg == "subtype") {
                               BarLineType t = BarLineType::NORMAL;
                               switch (e.readInt()) {
                                     default:
@@ -1795,10 +1795,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   Text* _verseNumber = 0;
 
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "no")
+                        const QStringRef& t(e.name());
+                        if (t == "no")
                               l->setNo(e.readInt());
-                        else if (tag == "syllabic") {
+                        else if (t == "syllabic") {
                               QString val(e.readElementText());
                               if (val == "single")
                                     l->setSyllabic(Lyrics::Syllabic::SINGLE);
@@ -1811,14 +1811,14 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               else
                                     qDebug("bad syllabic property");
                               }
-                        else if (tag == "endTick") {          // obsolete
+                        else if (t == "endTick") {          // obsolete
                               // store <endTick> tag value until a <ticks> tag has been read
                               // which positions this lyrics element in the score
                               iEndTick = e.readInt();
                               }
-                        else if (tag == "ticks")
+                        else if (t == "ticks")
                               l->setTicks(e.readInt());
-                        else if (tag == "Number") {                           // obsolete
+                        else if (t == "Number") {                           // obsolete
                               _verseNumber = new Text(l->score());
                               _verseNumber->read(e);
                               _verseNumber->setParent(l);
@@ -1911,16 +1911,16 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   Jump* j = new Jump(m->score());
                   j->setTrack(e.track());
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "jumpTo")
+                        const QStringRef& t(e.name());
+                        if (t == "jumpTo")
                               j->setJumpTo(e.readElementText());
-                        else if (tag == "playUntil")
+                        else if (t == "playUntil")
                               j->setPlayUntil(e.readElementText());
-                        else if (tag == "continueAt")
+                        else if (t == "continueAt")
                               j->setContinueAt(e.readElementText());
-                        else if (tag == "playRepeats")
+                        else if (t == "playRepeats")
                               j->setPlayRepeats(e.readBool());
-                        else if (tag == "subtype")
+                        else if (t == "subtype")
                               e.readInt();
                         else if (!j->TextBase::readProperties(e))
                               e.unknown();
@@ -1933,8 +1933,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
 
                   Marker::Type mt = Marker::Type::SEGNO;
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "subtype") {
+                        const QStringRef& t(e.name());
+                        if (t == "subtype") {
                               QString s(e.readElementText());
                               a->setLabel(s);
                               mt = a->markerType(s);
@@ -2034,8 +2034,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Segment") {
                   segment->read(e);
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "off1") {
+                        const QStringRef& t(e.name());
+                        if (t == "off1") {
                               qreal o = e.readDouble();
                               qDebug("TODO: off1 %f", o);
                               }
@@ -2458,8 +2458,8 @@ static void readPart(Part* part, XmlReader& e)
                         int n = 0;
                         if (st->lines(0) == 1)
                               n = 4;
-                        for (int  i = 0; i < DRUM_INSTRUMENTS; ++i)
-                              d->drum(i).line -= n;
+                        for (int  j = 0; j < DRUM_INSTRUMENTS; ++j)
+                              d->drum(j).line -= n;
                         }
                   }
             else if (tag == "name") {
@@ -2529,15 +2529,15 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
                   type = e.attribute("type","both");
                   qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
+                        const QStringRef& t(e.name());
                         qreal val = e.readDouble() * 0.5 / PPI;
-                        if (tag == "left-margin")
+                        if (t == "left-margin")
                               lm = val;
-                        else if (tag == "right-margin")
+                        else if (t == "right-margin")
                               rm = val;
-                        else if (tag == "top-margin")
+                        else if (t == "top-margin")
                               tm = val;
-                        else if (tag == "bottom-margin")
+                        else if (t == "bottom-margin")
                               bm = val;
                         else
                               e.unknown();
