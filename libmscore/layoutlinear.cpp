@@ -42,9 +42,30 @@ namespace Ms {
 
 extern bool isTopBeam(ChordRest* cr);
 extern bool notTopBeam(ChordRest* cr);
-void processLines(System* system, std::vector<Spanner*> lines, bool align);
 void layoutTies(Chord* ch, System* system, int stick);
 void layoutDrumsetChord(Chord* c, const Drumset* drumset, StaffType* st, qreal spatium);
+
+//---------------------------------------------------------
+//   processLines
+//---------------------------------------------------------
+
+static void processLines(System* system, std::vector<Spanner*> lines, bool align)
+      {
+      std::vector<SpannerSegment*> segments;
+      for (Spanner* sp : lines) {
+            SpannerSegment* ss = sp->layoutSystem(system);     // create/layout spanner segment for this system
+            if (ss->autoplace())
+                  segments.push_back(ss);
+            }
+
+      if (align && segments.size() > 1) {
+            qreal y = segments[0]->userOff().y();
+            for (unsigned i = 1; i < segments.size(); ++i)
+                  y = qMax(y, segments[i]->userOff().y());
+            for (auto ss : segments)
+                  ss->rUserYoffset() = y;
+            }
+      }
 
 //---------------------------------------------------------
 //   layoutLinear
@@ -135,26 +156,6 @@ void LayoutContext::layoutLinear()
       score->hideEmptyStaves(system, true);
 
       //
-      // compute measure shape
-      //
-
-      for (int si = 0; si < score->nstaves(); ++si) {
-            for (MeasureBase* mb : system->measures()) {
-                  if (!mb->isMeasure())
-                        continue;
-                  Measure* m = toMeasure(mb);
-                  Shape& ss  = m->staffShape(si);
-                  ss.clear();
-
-                  for (Segment& s : m->segments()) {
-                        if (s.isTimeSigType())       // hack: ignore time signatures
-                              continue;
-                        ss.add(s.staffShape(si).translated(s.pos()));
-                        }
-                  ss.add(m->staffLines(si)->bbox());
-                  }
-            }
-      //
       // layout
       //    - beams
       //    - RehearsalMark, StaffText
@@ -194,12 +195,8 @@ void LayoutContext::layoutLinear()
                               continue;
                         if (e->isChordRest()) {
                               ChordRest* cr = toChordRest(e);
-                              if (isTopBeam(cr)) {
+                              if (isTopBeam(cr))
                                     cr->beam()->layout();
-                                    Shape shape(cr->beam()->shape().translated(-(cr->segment()->pos()+mb->pos())));
-                                    s->staffShape(cr->staffIdx()).add(shape);
-                                    m->staffShape(cr->staffIdx()).add(shape.translated(s->pos()));
-                                    }
                               if (e->isChord()) {
                                     Chord* c = toChord(e);
                                     for (Chord* ch : c->graceNotes())
@@ -213,30 +210,6 @@ void LayoutContext::layoutLinear()
                         if (e->visible() && e->isDynamic()) {
                               Dynamic* d = toDynamic(e);
                               d->layout();
-
-                              if (d->autoplace()) {
-                                    // If dynamic is at start or end of a hairpin
-                                    // don't autoplace. This is done later on layout of hairpin
-                                    // and allows horizontal alignment of dynamic and hairpin.
-
-                                    int tick = d->tick();
-                                    auto si = score->spannerMap().findOverlapping(tick, tick);
-                                    bool doAutoplace = true;
-                                    for (auto is : si) {
-                                          Spanner* sp = is.value;
-                                          sp->computeStartElement();
-                                          sp->computeEndElement();
-
-                                          if (sp->isHairpin()
-                                             && (lookupDynamic(sp->startElement()) == d
-                                             || lookupDynamic(sp->endElement()) == d))
-                                                doAutoplace = false;
-                                          }
-                                    if (doAutoplace) {
-                                          d->doAutoplace();
-                                          dynamics.push_back(d);
-                                          }
-                                    }
                               }
                         else if (e->isFiguredBass())
                               e->layout();
@@ -266,21 +239,10 @@ void LayoutContext::layoutLinear()
                         while (de->tuplet() && de->tuplet()->elements().front() == de) {
                               Tuplet* t = de->tuplet();
                               t->layout();
-                              s->staffShape(t->staffIdx()).add(t->shape().translated(-s->pos()));
-                              m->staffShape(t->staffIdx()).add(t->shape());
                               de = de->tuplet();
                               }
                         }
                   }
-            }
-
-      // add dynamics shape to staff shape
-      for (Dynamic* d : dynamics) {
-            int si = d->staffIdx();
-            Segment* s = d->segment();
-            s->staffShape(si).add(d->shape().translated(d->pos()));
-            Measure* m = s->measure();
-            m->staffShape(si).add(d->shape().translated(s->pos() + d->pos()));
             }
 
       //
@@ -329,28 +291,6 @@ void LayoutContext::layoutLinear()
                         continue;
                   sp->layout();
                   }
-
-            //
-            // add SpannerSegment shapes to staff shapes
-            //
-
-            for (MeasureBase* mb : system->measures()) {
-                  if (!mb->isMeasure())
-                        continue;
-                  Measure* m = toMeasure(mb);
-                  for (SpannerSegment* ss : system->spannerSegments()) {
-                        Spanner* sp = ss->spanner();
-                        if (sp->tick() < m->endTick() && sp->tick2() > m->tick()) {
-                              // spanner shape must be translated from system coordinate space
-                              // to measure coordinate space
-                              Shape* shape = &m->staffShape(sp->staffIdx());
-                              if (ss->isLyricsLineSegment())
-                                    shape->add(ss->shape().translated(-m->pos()));
-                              else
-                                    shape->add(ss->shape().translated(ss->pos() - m->pos()));
-                              }
-                        }
-                  }
             }
 
       //
@@ -369,12 +309,8 @@ void LayoutContext::layoutLinear()
                               score->setTempo(tt->segment(), tt->tempo());
                               tt->layout();
                               }
-                        else if (e->isFermata()) {
+                        else if (e->isFermata())
                               e->layout();
-                              int si = e->staffIdx();
-                              s->staffShape(si).add(e->shape().translated(e->pos()));
-                              m->staffShape(si).add(e->shape().translated(s->pos() + e->pos()));
-                              }
                         }
                   }
             }

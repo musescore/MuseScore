@@ -2908,7 +2908,7 @@ void layoutTies(Chord* ch, System* system, int stick)
 //   processLines
 //---------------------------------------------------------
 
-void processLines(System* system, std::vector<Spanner*> lines, bool align)
+static void processLines(System* system, std::vector<Spanner*> lines, bool align)
       {
       std::vector<SpannerSegment*> segments;
       for (Spanner* sp : lines) {

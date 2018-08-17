@@ -400,9 +400,9 @@ void System::layout2()
                   break;
                   }
 
-            int si2    = ni->first;
+            int si2        = ni->first;
             Staff* staff2  = score()->staff(si2);
-            qreal dist = h;
+            qreal dist     = h;
 
             switch (staff2->innerBracket()) {
                   case BracketType::BRACE:
@@ -424,7 +424,7 @@ void System::layout2()
                   Shape& s1  = m->staffShape(si1);
                   Shape& s2  = m->staffShape(si2);
 
-                  qreal d    = s1.minVerticalDistance(s2);
+                  qreal d    = score()->lineMode() ? 0.0 : s1.minVerticalDistance(s2);
                   dist       = qMax(dist, d + minVerticalDistance);
 
                   Spacer* sp = m->vspacerDown(si1);
@@ -1095,7 +1095,7 @@ qreal System::minDistance(System* s2) const
                               continue;
                         Shape sh1 = m1->staffShape(lastStaff).translated(m1->pos());
                         Shape sh2 = m2->staffShape(firstStaff).translated(m2->pos());
-                        qreal d   = sh1.minVerticalDistance(sh2) + minVerticalDistance;
+                        qreal d   = (score()->lineMode() ? 0.0 : sh1.minVerticalDistance(sh2)) + minVerticalDistance;
                         dist = qMax(dist, d - m1->staffLines(lastStaff)->height());
                         }
                   }
@@ -1116,7 +1116,7 @@ qreal System::topDistance(int staffIdx, const Shape& s) const
             if (!mb1->isMeasure())
                   continue;
             Measure* m1 = toMeasure(mb1);
-            dist = qMax(dist, s.minVerticalDistance(m1->staffShape(staffIdx).translated(m1->pos())));
+            dist = qMax(dist, score()->lineMode() ? 0.0 : s.minVerticalDistance(m1->staffShape(staffIdx).translated(m1->pos())));
             }
       return dist;
       }
@@ -1133,7 +1133,7 @@ qreal System::bottomDistance(int staffIdx, const Shape& s) const
             if (!mb1->isMeasure())
                   continue;
             Measure* m1 = toMeasure(mb1);
-            dist = qMax(dist, m1->staffShape(staffIdx).translated(m1->pos()).minVerticalDistance(s));
+            dist = qMax(dist, score()->lineMode() ? 0.0 : m1->staffShape(staffIdx).translated(m1->pos()).minVerticalDistance(s));
             }
       return dist;
       }
