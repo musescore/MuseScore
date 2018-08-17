@@ -1189,10 +1189,10 @@ void SvgPaintEngine::drawPath(const QPainterPath &p)
             stream() << SVG_CURVE << x << SVG_COMMA << y;
             ++i;
             while (i < p.elementCount()) {
-                const QPainterPath::Element &e = p.elementAt(i);
-                if (e.type == QPainterPath::CurveToDataElement) {
-                    stream() << SVG_SPACE << e.x + _dx
-                             << SVG_COMMA << e.y + _dy;
+                const QPainterPath::Element &ee = p.elementAt(i);
+                if (ee.type == QPainterPath::CurveToDataElement) {
+                    stream() << SVG_SPACE << ee.x + _dx
+                             << SVG_COMMA << ee.y + _dy;
                     ++i;
                 }
                 else {

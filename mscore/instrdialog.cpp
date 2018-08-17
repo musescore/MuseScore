@@ -214,11 +214,11 @@ void MuseScore::editInstrList()
             masterScore->endCmd();
             return;
             }
-      ScoreView* cv = currentScoreView();
-      if (cv && cv->noteEntryMode()) {
-		cv->cmd(getAction("escape"));
+      ScoreView* csv = currentScoreView();
+      if (csv && csv->noteEntryMode()) {
+		csv->cmd(getAction("escape"));
             qApp->processEvents();
-            updateInputState(cv->score());
+            updateInputState(csv->score());
             }
       masterScore->inputState().setTrack(-1);
 
@@ -354,8 +354,8 @@ void MuseScore::editInstrList()
                               if (linkedStaff) {
                                     // do not create a link if linkedStaff will be removed,
                                     for (int k = 0; pli->child(k); ++k) {
-                                          StaffListItem* i = static_cast<StaffListItem*>(pli->child(k));
-                                          if (i->op() == ListItemOp::I_DELETE && i->staff() == linkedStaff) {
+                                          StaffListItem* li = static_cast<StaffListItem*>(pli->child(k));
+                                          if (li->op() == ListItemOp::I_DELETE && li->staff() == linkedStaff) {
                                                 linkedStaff = 0;
                                                 break;
                                                 }
@@ -429,8 +429,8 @@ void MuseScore::editInstrList()
       for (Score* s : masterScore->scoreList()) {
             int n = s->nstaves();
             int curSpan = 0;
-            for (int i = 0; i < n; ++i) {
-                  Staff* staff = s->staff(i);
+            for (int j = 0; j < n; ++j) {
+                  Staff* staff = s->staff(j);
                   int span = staff->barLineSpan();
                   int setSpan = -1;
 
@@ -440,12 +440,12 @@ void MuseScore::editInstrList()
                         if (span == 0) {
                               // no span; this staff must have been within a span
                               // update it to a span of 1
-                              setSpan = 1;
+                              setSpan = j;
                               }
-                        else if (span > (n - i)) {
+                        else if (span > (n - j)) {
                               // span too big; staves must have been removed
                               // reduce span to last staff
-                              setSpan = n - i;
+                              setSpan = n - j;
                               }
                         else if (span > 1 && staff->barLineTo() > 0) {
                               // TODO: check if span is still valid
@@ -485,8 +485,8 @@ void MuseScore::editInstrList()
 
                   // update brackets
                   for (BracketItem* bi : staff->brackets()) {
-                        if ((bi->bracketSpan() > (n - i)))
-                              bi->undoChangeProperty(Pid::BRACKET_SPAN, n - i);
+                        if ((bi->bracketSpan() > (n - j)))
+                              bi->undoChangeProperty(Pid::BRACKET_SPAN, n - j);
                         }
                   }
             }
@@ -508,8 +508,8 @@ void MuseScore::editInstrList()
                         for (auto le : *sll) {
                               Staff* ss = toStaff(le);
                               if (ss->primaryStaff()) {
-                                    for (int i = s->idx() * VOICES; i < (s->idx() + 1) * VOICES; i++) {
-                                          int strack = tr.key(i, -1);
+                                    for (int j = s->idx() * VOICES; j < (s->idx() + 1) * VOICES; j++) {
+                                          int strack = tr.key(j, -1);
                                           if (strack != -1 && ((strack & ~3) == ss->idx()))
                                                 break;
                                           else if (strack != -1)

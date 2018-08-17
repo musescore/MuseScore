@@ -79,16 +79,16 @@ bool PluginManager::readPluginList()
                         if (tag == "Plugin") {
                               PluginDescription d;
                               while (e.readNextStartElement()) {
-                                    const QStringRef& tag(e.name());
-                                    if (tag == "path")
+                                    const QStringRef& t(e.name());
+                                    if (t == "path")
                                           d.path = e.readElementText();
-                                    else if (tag == "load")
+                                    else if (t == "load")
                                           d.load = e.readInt();
-                                    else if (tag == "SC")
+                                    else if (t == "SC")
                                           d.shortcut.read(e);
-                                    else if (tag == "version")
+                                    else if (t == "version")
                                           d.version = e.readElementText();
-                                    else if (tag == "description")
+                                    else if (t == "description")
                                           d.description = e.readElementText();
                                     else
                                           e.unknown();
@@ -191,8 +191,8 @@ void PluginManager::updatePluginList(bool forceRefresh)
             engine->clearComponentCache(); //TODO: Check this doesn't have unwanted side effects.
             }
 
-      foreach(QString pluginPath, pluginPathList) {
-            Ms::updatePluginList(pluginPathList, pluginPath, _pluginList);
+      for (QString _pluginPath : pluginPathList) {
+            Ms::updatePluginList(pluginPathList, _pluginPath, _pluginList);
             }
       //remove non existing files
       auto i = _pluginList.begin();

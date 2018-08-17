@@ -197,9 +197,9 @@ void ScoreBrowser::setScores(QFileInfoList& s)
             std::sort(s.begin(), s.end(), [](QFileInfo a, QFileInfo b)->bool { return a.fileName() < b.fileName(); });
 
       QSet<QString> entries; //to avoid duplicates
-      for (const QFileInfo& fi : s) {
-            if (fi.isDir()) {
-                  QString st(fi.fileName());
+      for (const QFileInfo& fil : s) {
+            if (fil.isDir()) {
+                  QString st(fil.fileName());
                   if (!st.isEmpty() && st[0].isNumber() && _stripNumbers)
                         st = st.mid(3);
                   st = st.replace('_', ' ');
@@ -208,11 +208,11 @@ void ScoreBrowser::setScores(QFileInfoList& s)
                   f.setBold(true);
                   label->setFont(f);
                   static_cast<QVBoxLayout*>(l)->addWidget(label);
-                  QDir dir(fi.filePath());
+                  QDir dir(fil.filePath());
                   sl = createScoreList();
                   l->addWidget(sl);
                   unsigned count = 0; //nbr of entries added
-                  for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files, QDir::Name)){
+                  for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files, QDir::Name)) {
                         if (entries.contains(fi.filePath()))
                             continue;
                         sl->addItem(genScoreItem(fi, sl));

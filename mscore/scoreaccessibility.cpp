@@ -123,10 +123,9 @@ void ScoreAccessibility::currentInfoChanged()
                   }
             Element* el = e->isSpannerSegment() ? static_cast<SpannerSegment*>(e)->spanner() : e;
             QString barsAndBeats = "";
-            std::pair<int, float> bar_beat;
             if (el->isSpanner()){
                   Spanner* s = static_cast<Spanner*>(el);
-                  bar_beat = barbeat(s->startSegment());
+                  std::pair<int, float> bar_beat = barbeat(s->startSegment());
                   barsAndBeats += tr("Start Measure: %1; Start Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
                   Segment* seg = s->endSegment();
                   if(!seg)

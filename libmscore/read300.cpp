@@ -61,10 +61,10 @@ bool Score::read(XmlReader& e)
                   _playMode = PlayMode(e.readInt());
             else if (tag == "LayerTag") {
                   int id = e.intAttribute("id");
-                  const QString& tag = e.attribute("tag");
+                  const QString& t = e.attribute("tag");
                   QString val(e.readElementText());
                   if (id >= 0 && id < 32) {
-                        _layerTags[id] = tag;
+                        _layerTags[id] = t;
                         _layerTagComments[id] = val;
                         }
                   }

@@ -93,8 +93,8 @@ void ResourceManager::displayExtensions()
       QPushButton* buttonUninstall;
       extensionsTable->verticalHeader()->show();
 
-      QStringList extensions = result.object().keys();
-      for (QString key : extensions) {
+      QStringList exts = result.object().keys();
+      for (QString key : exts) {
             if (!result.object().value(key).isObject())
                   continue;
             QJsonObject value = result.object().value(key).toObject();
@@ -181,19 +181,19 @@ void ResourceManager::displayLanguages()
       languagesTable->verticalHeader()->show();
 
       // move current language to first row
-      QStringList languages = result.object().keys();
+      QStringList langs = result.object().keys();
       QString lang = mscore->getLocaleISOCode();
-      int index = languages.indexOf(lang);
+      int index = langs.indexOf(lang);
       if (index < 0 &&  lang.size() > 2) {
             lang = lang.left(2);
-            index = languages.indexOf(lang);
+            index = langs.indexOf(lang);
             }
       if (index >= 0) {
-            QString l = languages.takeAt(index);
-            languages.prepend(l);
+            QString l = langs.takeAt(index);
+            langs.prepend(l);
             }
 
-      for (QString key : languages) {
+      for (QString key : langs) {
             if (!result.object().value(key).isObject())
                   continue;
             QJsonObject value = result.object().value(key).toObject();
@@ -266,14 +266,14 @@ bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
 void ResourceManager::downloadLanguage()
       {
       QPushButton *button = static_cast<QPushButton*>( sender() );
-      QString data = languageButtonMap[button];
+      QString dta  = languageButtonMap[button];
       QString hash = languageButtonHashMap[button];
       button->setText(tr("Updating"));
       button->setDisabled(true);
-      QString baseAddress = baseAddr() + data;
+      QString baseAddress = baseAddr() + dta;
       DownloadUtils dl(this);
       dl.setTarget(baseAddress);
-      QString localPath = dataPath + "/locale/" + data.split('/')[1];
+      QString localPath = dataPath + "/locale/" + dta.split('/')[1];
       dl.setLocalFile(localPath);
       dl.download();
       if (!dl.saveFile() || !verifyFile(localPath, hash)) {
@@ -305,7 +305,7 @@ void ResourceManager::downloadLanguage()
                   QFile::remove(localPath);
                   button->setText(tr("Updated"));
                   //  retranslate the UI if current language is updated
-                  if (data == languageButtonMap.first())
+                  if (dta == languageButtonMap.first())
                         setMscoreLocale(localeName);
                   }
             else {
@@ -322,14 +322,14 @@ void ResourceManager::downloadLanguage()
 void ResourceManager::downloadExtension()
       {
       QPushButton* button = static_cast<QPushButton*>(sender());
-      QString data = button->property("path").toString();
+      QString path  = button->property("path").toString();
       QString hash = button->property("hash").toString();
       button->setText(tr("Updating"));
       button->setDisabled(true);
-      QString baseAddress = baseAddr() + data;
+      QString baseAddress = baseAddr() + path;
       DownloadUtils dl(this);
       dl.setTarget(baseAddress);
-      QString localPath = QDir::tempPath() + "/" + data.split('/')[1];
+      QString localPath = QDir::tempPath() + "/" + path.split('/')[1];
       QFile::remove(localPath);
       dl.setLocalFile(localPath);
       dl.download(true);

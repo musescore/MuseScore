@@ -934,10 +934,10 @@ void Capella::readCapxStaveLayout(XmlReader& e, CapStaffLayout* sl, int /*idx*/)
                   sl->abbrev = e.attribute("abbrev");
                   // elements name and abbrev overrule attributes name and abbrev
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "name")
+                        const QStringRef& t(e.name());
+                        if (t == "name")
                               sl->name = e.readElementText();
-                        else if (tag == "abbrev")
+                        else if (t == "abbrev")
                               sl->abbrev = e.readElementText();
                         else
                               e.unknown();
