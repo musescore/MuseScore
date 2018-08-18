@@ -437,7 +437,7 @@ static const StyleType styleTypes[] {
       { Sid::textLinePosAbove,          "textLinePosAbove",          Spatium(-3.5) },
       { Sid::textLinePosBelow,          "textLinePosBelow",          Spatium(3.5) },
 
-      { Sid::tremoloBarLineWidth,       "tremoloBarLineWidth",       Spatium(0.1) },
+      { Sid::tremoloBarLineWidth,       "tremoloBarLineWidth",       Spatium(0.12) },
       { Sid::jumpPosAbove,              "jumpPosAbove",              Spatium(-2.0) },
       { Sid::markerPosAbove,            "markerPosAbove",            Spatium(-2.0) },
 
