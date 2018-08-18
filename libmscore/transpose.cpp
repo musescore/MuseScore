@@ -238,7 +238,8 @@ bool Score::transpose(Note* n, Interval interval, bool useDoubleSharpsFlats)
 //---------------------------------------------------------
 
 bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKey,
-  int transposeInterval, bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats)
+  int transposeInterval, bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats,
+  bool addToNotes)
       {
       bool rangeSelection = selection().isRange();
       int startStaffIdx = 0;
@@ -309,6 +310,10 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                   if (!e->staff() || e->staff()->staffType(e->tick())->group() == StaffGroup::PERCUSSION)
                         continue;
                   if (e->isNote()) {
+                        if (addToNotes) {
+                              duplicateNote(e);
+                              }
+
                         Note* note = toNote(e);
                         if (mode == TransposeMode::DIATONICALLY)
                               note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
@@ -401,6 +406,10 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         Chord* chord = toChord(e);
                         std::vector<Note*> nl = chord->notes();
                         for (Note* n : nl) {
+                              if (addToNotes) {
+                                    duplicateNote(n);
+                                    }
+                              
                               if (mode == TransposeMode::DIATONICALLY)
                                     n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
                               else {
@@ -410,9 +419,16 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                               }
                         for (Chord* g : chord->graceNotes()) {
                               for (Note* n : g->notes()) {
-                                    if (mode == TransposeMode::DIATONICALLY)
+                                    if (mode == TransposeMode::DIATONICALLY){
+                                          if (addToNotes) {
+                                                duplicateNote(n);
+                                                }
                                           n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
+                                          }
                                     else {
+                                          if (addToNotes) {
+                                                duplicateNote(n);
+                                                }
                                           if (!transpose(n, interval, useDoubleSharpsFlats))
                                                 return false;
                                           }
@@ -480,6 +496,26 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         }
                   }
 //            }
+      return true;
+      }
+
+bool Score::duplicateNote(Element* e)
+      {
+      if (! e->isNote())
+            return false;
+      Position pos;
+      Note* selectedNote = toNote(e);
+      Chord* chord  = selectedNote->chord();
+      Segment* seg  = chord->segment();
+      pos.segment   = seg;
+      pos.staffIdx  = selectedNote->track() / VOICES;
+      pos.line      = selectedNote->line();
+      bool error;
+      NoteVal nval = noteValForPosition(pos, error);
+      if (error)
+            return false;
+            
+      addNote(chord, nval);
       return true;
       }
 
@@ -586,7 +622,7 @@ void Score::transposeSemitone(int step)
       const int interval = intervalListArray[keyType][step > 0 ? 0 : 1];
 
       cmdSelectAll();
-      if (!transpose(TransposeMode::BY_INTERVAL, dir, Key::C, interval, true, true, false)) {
+      if (!transpose(TransposeMode::BY_INTERVAL, dir, Key::C, interval, true, true, false, false)) {
             qDebug("Score::transposeSemitone: failed");
             // TODO: set error message
             }

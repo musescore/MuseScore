@@ -578,7 +578,8 @@ class Score : public QObject, public ScoreElement {
       bool transpose(Note* n, Interval, bool useSharpsFlats);
       void transposeKeys(int staffStart, int staffEnd, int tickStart, int tickEnd, const Interval&, bool useInstrument = false, bool flip = false);
       bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
-      bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
+      bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats, bool addToNotes);
+      bool duplicateNote(Element* e);
 
       static bool& isScoreLoaded();
       bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);

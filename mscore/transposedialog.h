@@ -59,6 +59,7 @@ class TransposeDialog : public QDialog, Ui::TransposeDialogBase {
       TransposeMode mode() const;
       void setKey(Key k)                  { keyList->setCurrentIndex(int(k) + 7); }
       bool useDoubleSharpsFlats() const   { return accidentalOptions->currentIndex() == 1; }
+      bool addToNotes() const             { return addToNotesCheckbox->isChecked() == 1; }
       };
 }
 

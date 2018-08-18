@@ -180,7 +180,7 @@ void TestChordSymbol::testTranspose()
       MasterScore* score = test_pre("transpose");
       score->startCmd();
       score->cmdSelectAll();
-      score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
+      score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true, false);
       score->endCmd();
       test_post(score, "transpose");
       }
@@ -190,7 +190,7 @@ void TestChordSymbol::testTransposePart()
       MasterScore* score = test_pre("transpose-part");
       score->startCmd();
       score->cmdSelectAll();
-      score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
+      score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true, false);
       score->endCmd();
       test_post(score, "transpose-part");
       }
