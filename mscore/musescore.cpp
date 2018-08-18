@@ -5054,7 +5054,7 @@ void MuseScore::transpose()
             return;
 
       cs->transpose(td.mode(), td.direction(), td.transposeKey(), td.transposeInterval(),
-         td.getTransposeKeys(), td.getTransposeChordNames(), td.useDoubleSharpsFlats());
+         td.getTransposeKeys(), td.getTransposeChordNames(), td.useDoubleSharpsFlats(), td.addToNotes());
 
       if (noSelection)
             cs->deselectAll();

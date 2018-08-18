@@ -465,6 +465,16 @@
            </item>
           </widget>
          </item>
+         <item>
+          <widget class="QCheckBox" name="addToNotesCheckbox">
+           <property name="text">
+            <string>Add notes instead of moving</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>
