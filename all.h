@@ -213,6 +213,14 @@
 #define Q_ASSERT(a)
 #endif
 
+// Define qt's foreach to c++ 11's for.
+// More infos at qglobal.h at #define Q_FOREACH(variable, container)...
+#ifdef Q_FOREACH
+#  undef Q_FOREACH
+#  define Q_FOREACH(variable, container) for(variable : container)
+#endif // Q_FOREACH
+
+
 #if (defined (_MSCVER) || defined (_MSC_VER))
    // Undefined problematic #def'd macros in Microsoft headers
    #undef STRING_NONE
