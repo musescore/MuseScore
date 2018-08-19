@@ -876,6 +876,8 @@ class Score : public QObject, public ScoreElement {
       void updateSwing();
       void createPlayEvents();
 
+      void updateCapo();
+
       void cmdConcertPitchChanged(bool, bool /*useSharpsFlats*/);
 
       virtual inline TempoMap* tempomap() const;

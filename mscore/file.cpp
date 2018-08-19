@@ -311,6 +311,7 @@ Score* MuseScore::openScore(const QString& fn)
 
       MasterScore* score = readScore(fn);
       if (score) {
+            score->updateCapo();
             setCurrentScoreView(appendScore(score));
             writeSessionFile(false);
             }

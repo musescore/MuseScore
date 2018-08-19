@@ -2346,7 +2346,11 @@ int Note::ppitch() const
                         return div.pitch;
                   }
             }
-      return _pitch + staff()->pitchOffset(ch->segment()->tick());;
+      int capoFretId = staff()->capo(ch->segment()->tick());
+      if (capoFretId != 0)
+            capoFretId -= 1;
+      
+      return _pitch + staff()->pitchOffset(ch->segment()->tick()) + capoFretId;
       }
 
 //---------------------------------------------------------

@@ -80,7 +80,7 @@ bool graceNotesMerged(Chord *chord);
 void Score::updateSwing()
       {
       for (Staff* s : _staves) {
-            s->swingList()->clear();
+            s->clearSwingList();
             }
       Measure* fm = firstMeasure();
       if (!fm)
@@ -100,11 +100,38 @@ void Score::updateSwing()
                   sp.swingUnit = st->swingParameters()->swingUnit;
                   if (st->systemFlag()) {
                         for (Staff* sta : _staves) {
-                              sta->swingList()->insert(s->tick(),sp);
+                              sta->insertIntoSwingList(s->tick(),sp);
                               }
                         }
                   else
-                        staff->swingList()->insert(s->tick(),sp);
+                        staff->insertIntoSwingList(s->tick(),sp);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   updateCapo
+//---------------------------------------------------------
+
+void Score::updateCapo()
+      {
+      for (Staff* s : _staves) {
+            s->clearCapoList();
+            }
+      Measure* fm = firstMeasure();
+      if (!fm)
+            return;
+      for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+            for (const Element* e : s->annotations()) {
+                  if (!e->isStaffTextBase())
+                        continue;
+                  const StaffTextBase* st = toStaffTextBase(e);
+                  if (st->xmlText().isEmpty())
+                        continue;
+                  Staff* staff = st->staff();
+                  if (st->capo() == 0)
+                        continue;
+                  staff->insertIntoCapoList(s->tick(),st->capo());
                   }
             }
       }
@@ -117,7 +144,7 @@ void MasterScore::updateChannel()
       {
       for (Staff* s : staves()) {
             for (int i = 0; i < VOICES; ++i)
-                  s->channelList(i)->clear();
+                  s->clearChannelList(i);
             }
       Measure* fm = firstMeasure();
       if (!fm)
@@ -127,7 +154,7 @@ void MasterScore::updateChannel()
                   if (e->isInstrumentChange()) {
                         Staff* staff = Score::staff(e->staffIdx());
                         for (int voice = 0; voice < VOICES; ++voice)
-                              staff->channelList(voice)->insert(s->tick(), 0);
+                              staff->insertIntoChannelList(voice, s->tick(), 0);
                         continue;
                         }
                   if (!e->isStaffTextBase())
@@ -140,7 +167,7 @@ void MasterScore::updateChannel()
                         Staff* staff = Score::staff(st->staffIdx());
                         int a = staff->part()->instrument(s->tick())->channelIdx(an);
                         if (a != -1)
-                              staff->channelList(voice)->insert(s->tick(), a);
+                              staff->insertIntoChannelList(voice, s->tick(), a);
                         }
                   }
             }
@@ -1782,6 +1809,7 @@ void Score::renderMetronome(EventMap* events, Measure* m, int tickOffset)
 void Score::renderMidi(EventMap* events)
       {
       updateSwing();
+      updateCapo();
       createPlayEvents();
 
       updateRepeatList(MScore::playRepeats);
