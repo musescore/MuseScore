@@ -60,6 +60,7 @@ StaffTextProperties::StaffTextProperties(const StaffTextBase* st, QWidget* paren
             tabWidget->removeTab(tabWidget->indexOf(tabAeolusStops)); // Aeolus settings  for staff text only
             //if (!enableExperimental) tabWidget->removeTab(tabWidget->indexOf(tabMIDIAction));
             tabWidget->removeTab(tabWidget->indexOf(tabChangeChannel)); // Channel switching  for staff text only
+            tabWidget->removeTab(tabWidget->indexOf(tabCapoSettings)); // Capos for staff text only
             }
       else {
             setWindowTitle(tr("Staff Text Properties"));
@@ -162,6 +163,19 @@ StaffTextProperties::StaffTextProperties(const StaffTextBase* st, QWidget* paren
       connect(swingEighth, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
       connect(swingSixteenth, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
 
+
+      //---------------------------------------------------
+      //    setup capo
+      //      Note that capo is stored as an int, where 0 = no change,
+      //      1 = remove capo, and everyother number (n) = pitch increase
+      //      of n-1 semitones.
+      //---------------------------------------------------
+
+      if (_staffText->capo() != 0) {
+            setCapoBox->setChecked(true);
+            fretList->setCurrentIndex(_staffText->capo()-1);
+            }
+      
       //---------------------------------------------------
       //    setup midi actions
       //---------------------------------------------------
@@ -465,6 +479,11 @@ void StaffTextProperties::saveValues()
                   swingBox->setEnabled(true);
                   }
             }
+
+      if (setCapoBox->isChecked())
+            _staffText->setCapo(fretList->currentIndex()+1);
+      else
+            _staffText->setCapo(0);
       }
 
 //---------------------------------------------------------

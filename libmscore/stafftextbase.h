@@ -39,6 +39,7 @@ class StaffTextBase : public TextBase  {
       bool _setAeolusStops { false };
       int aeolusStops[4]   { 0, 0, 0, 0 };
       bool _swing          { false };
+      int _capo            { 0 };
 
    public:
       StaffTextBase(Score*, Tid tid, ElementFlags = ElementFlag::NOTHING);
@@ -61,8 +62,10 @@ class StaffTextBase : public TextBase  {
       bool getAeolusStop(int group, int idx) const;
       void setSetAeolusStops(bool val)                    { _setAeolusStops = val; }
       void setSwing(bool checked)                         { _swing = checked; }
+      void setCapo(int fretId)                            { _capo = fretId; }
       bool setAeolusStops() const                         { return _setAeolusStops; }
       bool swing() const                                  { return _swing; }
+      int capo() const                                    { return _capo; }
       };
 
 }     // namespace Ms

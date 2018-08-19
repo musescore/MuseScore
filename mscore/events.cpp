@@ -309,8 +309,10 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                   else
                         e->score()->select(e, st, -1);
                   }
-            if (e->isNote())
+            if (e->isNote()) {
+                  e->score()->updateCapo();
                   mscore->play(e);
+                  }
             if (e) {
                   _score = e->score();
                   _score->setUpdateAll();

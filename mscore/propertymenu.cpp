@@ -406,6 +406,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   nt->setScore(score);
                   score->undoChangeElement(e, nt);
                   score->masterScore()->updateChannel();
+                  score->updateCapo();
                   score->updateSwing();
                   score->setPlaylistDirty();
                   }
