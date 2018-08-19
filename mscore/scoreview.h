@@ -397,6 +397,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       void changeState(ViewState);
 
       virtual const QRect geometry() const override { return QWidget::geometry(); }
+
+      bool clickOffElement;
       };
 
 } // namespace Ms
