@@ -970,20 +970,19 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                         continue; // this voice is empty here (CR overlaps with CR in other track)
                   if (seg->tick() + curr->actualTicks() > maxTick)
                         break; // outside range
-                  if (curr->isRest()) {
+                  if (curr->isRest() && !(curr->tuplet()) && !(toRest(curr)->isGap())) {
                         // combine consecutive rests
                         ChordRest* lastRest = curr;
                         for (Segment* s = seg->next(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                               ChordRest* cr = s->cr(track);
                               if (!cr)
                                     continue; // this voice is empty here
-                              if (!cr->isRest() || s->tick() + cr->actualTicks() > maxTick)
-                                    break;
+                              if (!cr->isRest() || s->tick() + cr->actualTicks() > maxTick || toRest(cr)->isGap())
+                                    break; // next element in the same voice is not a rest, or it exceeds the selection, or it is a gap
                               lastRest = cr;
                               }
                         int restTicks = lastRest->tick() + lastRest->duration().ticks() - curr->tick();
-                        if (restTicks > curr->duration().ticks())
-                              seg = setNoteRest(seg, curr->track(), NoteVal(), Fraction::fromTicks(restTicks), Direction::AUTO, true);
+                        seg = setNoteRest(seg, curr->track(), NoteVal(), Fraction::fromTicks(restTicks), Direction::AUTO, true);
                         }
                   else if (curr->isChord()) {
                         // combine tied chords
@@ -995,7 +994,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                         if (!lastTiedChord)
                               lastTiedChord = chord;
                         int noteTicks = lastTiedChord->tick() + lastTiedChord->duration().ticks() - chord->tick();
-                        if (noteTicks > chord->duration().ticks()) {
+                        if (!(curr->tuplet())) {
                               // store start/end note for backward/forward ties ending/starting on the group of notes being rewritten
                               int numNotes = chord->notes().size();
 #if (!defined (_MSCVER) && !defined (_MSC_VER))
