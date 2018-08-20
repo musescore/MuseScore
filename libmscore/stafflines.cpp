@@ -77,6 +77,15 @@ QPointF StaffLines::canvasPos() const
 
 void StaffLines::layout()
       {
+      layoutForWidth(measure()->width());
+      }
+
+//---------------------------------------------------------
+//   layoutForWidth
+//---------------------------------------------------------
+
+void StaffLines::layoutForWidth(qreal w)
+      {
       Staff* s       = staff();
       qreal _spatium = spatium();
       qreal dist     = _spatium;
@@ -96,8 +105,7 @@ void StaffLines::layout()
             _lines = 5;
             setColor(MScore::defaultColor);
             }
-      qreal w = measure()->width();
-      lw      = score()->styleS(Sid::staffLineWidth).val() * _spatium;
+      lw       = score()->styleS(Sid::staffLineWidth).val() * _spatium;
       qreal x1 = pos().x();
       qreal x2 = x1 + w;
       qreal y  = pos().y();
