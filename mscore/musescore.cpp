@@ -5267,9 +5267,17 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   mixer->updateAll(cs->masterScore());
             }
       else if (cmd == "rewind") {
-            seq->rewindStart();
-            if (playPanel)
-                  playPanel->heartBeat(0, 0, 0);
+            if (cs) {
+                  int tick = loop() ? cs->loopInTick() : 0;
+                  seq->seek(tick);
+                  if (cv) {
+                        Measure* m = cs->tick2measureMM(tick);
+                        if (m)
+                              cv->gotoMeasure(m);
+                        }
+                  if (playPanel)
+                        playPanel->heartBeat(0, 0, 0);
+                  }
             }
       else if (cmd == "play-next-measure")
             seq->nextMeasure();
