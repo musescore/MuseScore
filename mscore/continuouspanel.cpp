@@ -113,8 +113,8 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
             if (!e->visible() && !_score->showInvisible())
                   continue;
 
-            if (e->isMeasure()) {
-                  _currentMeasure = toMeasure(e);
+            if (e->isStaffLines()) {
+                  _currentMeasure = toStaffLines(e)->measure();
                   break;
                   }
             }
@@ -328,9 +328,8 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   StaffLines newStaffLines(*toStaffLines(e));
                   newStaffLines.setParent(parent);
                   newStaffLines.setTrack(e->track());
-                  newStaffLines.layout();
+                  newStaffLines.layoutForWidth(bg.width());
                   newStaffLines.setColor(color);
-                  newStaffLines.setWidth(bg.width());
                   newStaffLines.draw(&painter);
 
                   // Draw barline
