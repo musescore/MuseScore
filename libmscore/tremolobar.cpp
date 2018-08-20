@@ -65,7 +65,7 @@ void TremoloBar::layout()
       for (auto v : _points)
             polygon << QPointF(v.time * timeFactor, v.pitch * pitchFactor);
 
-      qreal w = _lw.val() * _spatium;
+      qreal w = _lw.val();
       setbbox(polygon.boundingRect().adjusted(-w, -w, w, w));
       }
 
@@ -75,7 +75,7 @@ void TremoloBar::layout()
 
 void TremoloBar::draw(QPainter* painter) const
       {
-      QPen pen(curColor(), _lw.val() * spatium(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+      QPen pen(curColor(), _lw.val(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
       painter->setPen(pen);
       painter->drawPolyline(polygon);
       }
