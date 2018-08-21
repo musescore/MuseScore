@@ -21,7 +21,7 @@ set(_components
 if (NOT MINGW)
   set(_components
     ${_components}
-	WebEngine
+    WebEngine
     WebEngineCore
     WebEngineWidgets
 	)

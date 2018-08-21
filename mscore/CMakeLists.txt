@@ -616,7 +616,7 @@ else (MINGW)
 
    if ( NOT MSVC )
 ## install qwebengine core
-      if (NOT APPLE)
+      if (NOT APPLE AND USE_WEBENGINE)
          install(FILES
             ${QT_INSTALL_PREFIX}/libexec/QtWebEngineProcess
             DESTINATION bin
@@ -629,7 +629,7 @@ else (MINGW)
             ${QT_INSTALL_PREFIX}/translations/qtwebengine_locales
             DESTINATION lib/qt5/translations
             )
-      endif(NOT APPLE)
+      endif(NOT APPLE AND USE_WEBENGINE)
 
       target_link_libraries(mscore
          ${ALSA_LIB}
@@ -803,9 +803,13 @@ else (MINGW)
                   "${QT_INSTALL_PREFIX}/bin/Qt5Qml.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Quick.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Sql.dll"
                   "${QT_INSTALL_PREFIX}/bin/Qt5Svg.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Widgets.dll"  "${QT_INSTALL_PREFIX}/bin/Qt5Xml.dll"
                   "${QT_INSTALL_PREFIX}/bin/Qt5XmlPatterns.dll"
-                  "${QT_INSTALL_PREFIX}/bin/Qt5WebEngineWidgets.dll" "${QT_INSTALL_PREFIX}/bin/Qt5WebEngineCore.dll" "${QT_INSTALL_PREFIX}/bin/Qt5WebChannel.dll"
+                  "${QT_INSTALL_PREFIX}/bin/Qt5WebChannel.dll"
                   "${QT_INSTALL_PREFIX}/bin/Qt5QuickWidgets.dll" "${QT_INSTALL_PREFIX}/bin/Qt5Positioning.dll"
                   )
+      if (USE_WEBENGINE)
+         list(APPEND dlls_to_copy "${QT_INSTALL_PREFIX}/bin/Qt5WebEngineWidgets.dll" "${QT_INSTALL_PREFIX}/bin/Qt5WebEngineCore.dll")
+      endif(USE_WEBENGINE)
+
       set(CMAKE_FIND_LIBRARY_PREFIX "")
       set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
       find_library( dll_lame        NAMES "lame_enc.dll"       PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
@@ -879,33 +883,34 @@ else (MINGW)
          ${QT_INSTALL_PREFIX}/plugins/sqldrivers/qsqlite.dll
          DESTINATION bin/sqldrivers)
 
-	  install( TARGETS mscore RUNTIME DESTINATION bin ) # this duplicate due to the correctly package step
+      install( TARGETS mscore RUNTIME DESTINATION bin ) # this duplicate due to the correctly package step
 
-      install(FILES
-         ${QT_INSTALL_PREFIX}/bin/QtWebEngineProcess.exe
-	     DESTINATION bin
-         )
-      install(DIRECTORY
-         ${QT_INSTALL_PREFIX}/resources
-         DESTINATION bin/webengineresources
-		 )
-
-      install(DIRECTORY
-         ${QT_INSTALL_PREFIX}/translations/qtwebengine_locales
-         DESTINATION bin/webengineresources/translations
-		 )
-
+      if (USE_WEBENGINE)
+         install(FILES
+            ${QT_INSTALL_PREFIX}/bin/QtWebEngineProcess.exe
+            DESTINATION bin
+            )
+         install(DIRECTORY
+            ${QT_INSTALL_PREFIX}/resources
+            DESTINATION bin/webengineresources
+            )
+         install(DIRECTORY
+            ${QT_INSTALL_PREFIX}/translations/qtwebengine_locales
+            DESTINATION bin/webengineresources/translations
+            )
+      endif (USE_WEBENGINE)
+      
       install(DIRECTORY
          ${QT_INSTALL_PREFIX}/qml
          DESTINATION .
          REGEX ".*d\\.dll" EXCLUDE
-		 REGEX ".pdb" EXCLUDE
+         REGEX ".pdb" EXCLUDE
          REGEX ".*QtGraphicalEffects.*" EXCLUDE
          REGEX ".*QtMultimedia.*" EXCLUDE
          REGEX ".*QtSensors.*" EXCLUDE
          REGEX ".*QtTest.*" EXCLUDE
-		 REGEX ".*QtWebkit.*" EXCLUDE
-		 )
+         REGEX ".*QtWebkit.*" EXCLUDE
+         )
 
 
    endif ( NOT MSVC )
