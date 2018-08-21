@@ -60,6 +60,9 @@ void TestCompat114::compat_data()
       QTest::newRow("hairpin") << "hairpin";
       QTest::newRow("articulations") << "articulations";
       QTest::newRow("textstyles") << "textstyles";
+      QTest::newRow("pedal") << "pedal";
+      QTest::newRow("textline") << "textline";
+      QTest::newRow("ottava") << "ottava";
       QTest::newRow("title") << "title";
 //TODO      QTest::newRow("notes_useroffset") << "notes_useroffset";
       QTest::newRow("tremolo2notes") << "tremolo2notes";
