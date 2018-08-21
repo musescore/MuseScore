@@ -50,6 +50,7 @@ class MasterPalette : public QWidget, Ui::MasterPalette
    protected:
       virtual void changeEvent(QEvent *event);
       void retranslate(bool firstTime = false);
+      virtual void keyPressEvent(QKeyEvent *ev);
 
    public:
       MasterPalette(QWidget* parent = 0);
