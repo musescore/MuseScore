@@ -96,6 +96,19 @@ Palette* MasterPalette::createPalette(int w, int h, bool grid, double mag)
       }
 
 //---------------------------------------------------------
+//   keyPressEvent
+//---------------------------------------------------------
+
+void MasterPalette::keyPressEvent(QKeyEvent* ev) 
+      {
+      if (ev->key() == Qt::Key_Escape && ev->modifiers() == Qt::NoModifier) {
+            close();
+            return;
+            }
+      QWidget::keyPressEvent(ev);
+      }
+
+//---------------------------------------------------------
 //   selectItem
 //---------------------------------------------------------
 
