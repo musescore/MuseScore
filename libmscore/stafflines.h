@@ -36,6 +36,7 @@ class StaffLines final : public Element {
       QVector<QLineF>& getLines() { return lines; }
       Measure* measure() const { return (Measure*)parent(); }
       qreal y1() const;
+      void layoutForWidth(qreal width);
       };
 
 }     // namespace Ms
