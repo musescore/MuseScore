@@ -189,6 +189,8 @@ void Fermata::layout()
       Segment* s = segment();
       if (!s) {          // for use in palette
             setPos(QPointF());
+            QRectF b(symBbox(_symId));
+            setbbox(b.translated(-0.5 * b.width(), 0.0));
             return;
             }
 
