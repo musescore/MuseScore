@@ -73,6 +73,7 @@ static const char* iconNames[] = {
       "media-playback-start.svg",
       "media-playback-repeats.svg",
       "media-playback-pan.svg",
+      "media-playback-highlight.svg",
       "sbeam.svg",
       "mbeam.svg",
       "nbeam.svg",

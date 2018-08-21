@@ -357,6 +357,7 @@ class MScore : public QObject {
 
       static bool playRepeats;
       static bool panPlayback;
+      static bool highlightPlayback;
       static qreal nudgeStep;
       static qreal nudgeStep10;
       static qreal nudgeStep50;

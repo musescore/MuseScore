@@ -1487,7 +1487,7 @@ void Seq::heartBeatTimeout()
             const NPlayEvent& n = guiPos->second;
             if (n.type() == ME_NOTEON) {
                   const Note* note1 = n.note();
-                  if (n.velo()) {
+                  if (n.velo() && mscore->highlightDuringPlayback()) {
                         while (note1) {
                               note1->setMark(true);
                               markedNotes.append(note1);

@@ -403,6 +403,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QAction* loopInAction;
       QAction* loopOutAction;
       QAction* panAction;
+      QAction* highlightAction;
 
       QLabel* cornerLabel;
       QStringList _recentScores;
@@ -696,6 +697,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool metronome() const         { return metronomeAction->isChecked(); }
       bool countIn() const           { return countInAction->isChecked(); }
       bool panDuringPlayback() const { return panAction->isChecked(); }
+      bool highlightDuringPlayback() const { return highlightAction->isChecked(); }
       void noteTooShortForTupletDialog();
       void loadFiles();
                   // midi panel functions

@@ -97,6 +97,7 @@ bool    MScore::warnPitchRange;
 
 bool    MScore::playRepeats;
 bool    MScore::panPlayback;
+bool    MScore::highlightPlayback;
 qreal   MScore::nudgeStep;
 qreal   MScore::nudgeStep10;
 qreal   MScore::nudgeStep50;
