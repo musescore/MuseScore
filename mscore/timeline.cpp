@@ -2206,7 +2206,7 @@ void Timeline::wheelEvent(QWheelEvent* event)
 
 void Timeline::updateGrid()
       {
-      if (_score) {
+      if (_score && _score->firstMeasure()) {
             drawGrid(nstaves(), _score->nmeasures());
             updateView();
             drawSelection();
