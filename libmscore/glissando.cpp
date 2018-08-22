@@ -230,11 +230,11 @@ void Glissando::layout()
             s->layout();
             return;
             }
+      SLine::layout();
       if (spannerSegments().empty()) {
             qDebug("no segments");
             return;
             }
-      SLine::layout();
       setPos(0.0, 0.0);
 
       Note*       anchor1     = toNote(startElement());
