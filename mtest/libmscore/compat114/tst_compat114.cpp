@@ -64,6 +64,7 @@ void TestCompat114::compat_data()
       QTest::newRow("textline") << "textline";
       QTest::newRow("ottava") << "ottava";
       QTest::newRow("title") << "title";
+      QTest::newRow("fingering") << "fingering";
 //TODO      QTest::newRow("notes_useroffset") << "notes_useroffset";
       QTest::newRow("tremolo2notes") << "tremolo2notes";
       QTest::newRow("accidentals") << "accidentals";
