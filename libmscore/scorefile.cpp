@@ -567,7 +567,7 @@ bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
             }
 
       // create thumbnail
-      if (doCreateThumbnail) {
+      if (doCreateThumbnail && !pages().isEmpty()) {
             QImage pm = createThumbnail();
 
             QByteArray ba;
