@@ -1675,14 +1675,22 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
       Element::writeProperties(xml);
       writeProperty(xml, Pid::SUB_STYLE);
 
+      // used to prevent duplicate writing of any property
+      QVector<Pid> writtenProperties;
+
       for (const StyledProperty& spp : *_elementStyle) {
-            if (!isStyled(spp.pid))
-                  writeProperty(xml, spp.pid);
+            if (!isStyled(spp.pid) || writtenProperties.indexOf(spp.pid) != -1)
+                  continue;
+            writeProperty(xml, spp.pid);
+            writtenProperties.append(spp.pid);
             }
       for (const StyledProperty& spp : *textStyle(tid())) {
-            if (!isStyled(spp.pid))
-                  writeProperty(xml, spp.pid);
+            if (!isStyled(spp.pid) || writtenProperties.indexOf(spp.pid) != -1)
+                  continue;
+            writeProperty(xml, spp.pid);
+            writtenProperties.append(spp.pid);
             }
+
       if (writeText)
             xml.writeXml("text", xmlText());
       }
