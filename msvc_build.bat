@@ -137,7 +137,7 @@ IF "%1"=="clean" (
 @echo on
    echo "Installing MuseScore files..."
 @echo off
-   cmake --build . --config release --target install
+   cmake --build . --config %CONFIGURATION_STR% --target install
    GOTO :END
 
 :END
