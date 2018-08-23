@@ -418,7 +418,7 @@ add_executable ( ${ExecutableName}
       )
 
 if (MSVC)
-	target_link_libraries(mscore vorbisfile1)
+	target_link_libraries(mscore vorbisfiledll)
 else (MSVC)
 	target_link_libraries(mscore vorbisfile)
 endif (MSVC)
@@ -468,7 +468,7 @@ if (AEOLUS)
 endif (AEOLUS)
 if (SOUNDFONT3)
       if (MSVC)
-         target_link_libraries(mscore ${VORBISFILE_LIBRARY}  ogg1)
+          target_link_libraries(mscore vorbisdll oggdll)
       else (MSVC)
           target_link_libraries(mscore ${VORBIS_LIB} ${OGG_LIB})
       endif (MSVC)
@@ -476,7 +476,7 @@ endif (SOUNDFONT3)
 
 if (HAS_AUDIOFILE)
       if (MSVC)
-         target_link_libraries(mscore audiofile ${SNDFILE_LIBRARY})
+         target_link_libraries(mscore audiofile sndfiledll)
       else (MSVC)
          target_link_libraries(mscore audiofile ${SNDFILE_LIB})
       endif (MSVC)
@@ -779,7 +779,7 @@ else (MINGW)
 
       include(FindStaticLibrary)
       target_link_libraries(mscore
-         portaudio1
+         portaudiodll
          portmidi
          winmm
          mscore_freetype
@@ -812,15 +812,15 @@ else (MINGW)
 
       set(CMAKE_FIND_LIBRARY_PREFIX "")
       set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
-      find_library( dll_lame        NAMES "lame_enc.dll"       PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
-      find_library( dll_ogg         NAMES "libogg.dll"         PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
-      find_library( dll_sndfile     NAMES "libsndfile-1.dll"   PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
-      find_library( dll_vorbis      NAMES "libvorbis.dll"        PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
-      find_library( dll_vorbisfile  NAMES "libvorbisfile.dll"    PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
-      find_library( dll_portaudio   NAMES "portaudio.dll"      PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
+      find_library( dll_lame        NAMES "lame_enc${ARCH_TYPE}"       PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+      find_library( dll_ogg         NAMES "libogg${ARCH_TYPE}"         PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+      find_library( dll_sndfile     NAMES "libsndfile-1${ARCH_TYPE}"     PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+      find_library( dll_vorbis      NAMES "libvorbis${ARCH_TYPE}"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+      find_library( dll_vorbisfile  NAMES "libvorbisfile${ARCH_TYPE}"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+      find_library( dll_portaudio   NAMES "portaudio${ARCH_TYPE}"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
 
       list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} "$<TARGET_FILE_DIR:mscore>/${MUSESCORE_NAME}.exe")
-      set( output_dir_for_dlls "${PROJECT_BINARY_DIR}/../msvc.install/bin")
+      set( output_dir_for_dlls "${PROJECT_BINARY_DIR}/../msvc.install${ARCH_TYPE}/bin")
 
       COPY_FILES_INTO_DIRECTORY_IF_CHANGED( "${dlls_to_copy}" ${output_dir_for_dlls}  mscore)
 

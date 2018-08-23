@@ -12,16 +12,16 @@ IF "%UNSTABLE%" == "" (
 echo "Stable: Build MSI package"
 :: sign dlls and exe files
 CD C:\MuseScore
-SET dSource=msvc.install
+SET dSource=msvc.install_x64
 for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') do (
     echo "Signing %%f"
     "C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe" sign /f "C:\MuseScore\build\appveyor\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p "%CERTIFICATE_PASSWORD%" "%%f"
     )
 
-call C:\MuseScore\msvc_build.bat package %APPVEYOR_BUILD_NUMBER%
+call C:\MuseScore\msvc_build.bat package 64 %APPVEYOR_BUILD_NUMBER%
 
 :: find the MSI file without the hardcoded version
-for /r %%i in (msvc.build.release\*.msi) do ( SET FILEPATH=%%i )
+for /r %%i in (msvc.build_x64\*.msi) do ( SET FILEPATH=%%i )
 echo on
 echo %FILEPATH%
 echo off

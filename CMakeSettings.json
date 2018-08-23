@@ -2,108 +2,25 @@
    // See https://go.microsoft.com//fwlink//?linkid=834763 for more information about this file.
    "configurations": [
       {
-         "name": "x86-Debug",
-         "generator": "Visual Studio 15 2017",
-         "configurationType": "Debug",
-         "inheritEnvironments": [ "msvc_x86" ],
-         "buildRoot": "${projectDir}\\msvc.build.debug", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}", 
-         "installRoot": "${projectDir}\\msvc.install", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
-         "cmakeCommandArgs": "-Wno-deprecated -LA",
-         "variables": [
-            {
-               "name": "CMAKE_BUILD_TYPE",
-               "value": "DEBUG"
-            },
-            {
-               "name": "BUILD_FOR_WINSTORE",
-               "value": "OFF"
-            },
-            {
-               "name": "CMAKE_PREFIX_PATH",
-               "value": "${env.PATH};${projectDir}\\dependencies"
-            },
-            {
-               "name": "CMAKE_LIBRARY_PATH",
-               "value": "${projectDir}\\dependencies\\libx86;${projectDir}\\dependencies\\zlib\\x86\\static\\Release"
-            }
-         ],
-         "buildCommandArgs": "-v",
-         "ctestCommandArgs": ""
-      },
-      {
-         "name": "x86-Release",
-         "generator": "Visual Studio 15 2017",
-         "configurationType": "RelWithDebInfo",
-         "inheritEnvironments": [ "msvc_x86" ],
-         "buildRoot": "${projectDir}\\msvc.build.release", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}", 
-         "installRoot": "${projectDir}\\msvc.install", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}", 
-         "cmakeCommandArgs": "-Wno-deprecated",
-         "variables": [
-            {
-               "name": "CMAKE_BUILD_TYPE",
-               "value": "RELEASE"
-            },
-            {
-               "name": "BUILD_FOR_WINSTORE",
-               "value": "OFF"
-            },
-            {
-               "name": "CMAKE_PREFIX_PATH",
-               "value": "${env.PATH};${projectDir}\\dependencies"
-            },
-            {
-               "name": "CMAKE_LIBRARY_PATH",
-               "value": "${projectDir}\\dependencies\\libx86;${projectDir}\\dependencies\\zlib\\x86\\static\\Release"
-            }
-         ],
-         "buildCommandArgs": "-v",
-         "ctestCommandArgs": ""
-      },
-      {
-         "name": "x64-Debug",
+         "name": "x64-RelWithDebInfo",
          "generator": "Visual Studio 15 2017 Win64",
-         "configurationType": "Debug",
-         "inheritEnvironments": [ "msvc_x64_x64" ],
-         "buildRoot": "${projectDir}\\msvc.build.debug64", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}", 
-         "installRoot": "${projectDir}\\msvc.install", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
-         "cmakeCommandArgs": "-Wno-deprecated",
-         "variables": [
-            {
-               "name": "CMAKE_BUILD_TYPE",
-               "value": "DEBUG"
-            },
-            {
-               "name": "BUILD_FOR_WINSTORE",
-               "value": "OFF"
-            },
-            {
-               "name": "CMAKE_PREFIX_PATH",
-               "value": "${env.PATH};${projectDir}\\dependencies"
-            },
-            {
-               "name": "CMAKE_LIBRARY_PATH",
-               "value": "${projectDir}\\dependencies\\libx64;${projectDir}\\dependencies\\zlib\\x64\\static\\Release"
-            }
-         ],
-         "buildCommandArgs": "-v",
-         "ctestCommandArgs": ""
-      },
-      {
-         "name": "x64-Release",
-         "generator": "Ninja",
          "configurationType": "RelWithDebInfo",
          "inheritEnvironments": [ "msvc_x64_x64" ],
-         "buildRoot": "${projectDir}\\msvc.build.release64", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}", 
-         "installRoot": "${projectDir}\\msvc.install", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+         "buildRoot": "${projectDir}\\msvc.build_x64", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}", 
+         "installRoot": "${projectDir}\\msvc.install_x64", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
          "cmakeCommandArgs": "-Wno-deprecated",
          "variables": [
             {
                "name": "CMAKE_BUILD_TYPE",
-               "value": "RELEASE"
+               "value": "RELWITHDEBINFO"
             },
             {
                "name": "BUILD_FOR_WINSTORE",
                "value": "OFF"
+            },
+            {
+               "name": "BUILD_64",
+               "value": "ON"
             },
             {
                "name": "CMAKE_PREFIX_PATH",
@@ -111,7 +28,7 @@
             },
             {
                "name": "CMAKE_LIBRARY_PATH",
-               "value": "${projectDir}\\dependencies\\libx64;${projectDir}\\dependencies\\zlib\\x64\\static\\Release"
+               "value": "${projectDir}\\dependencies\\libx64"
             }
          ],
          "buildCommandArgs": "-v",

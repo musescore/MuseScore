@@ -1,6 +1,7 @@
 find_path(OGG_INCLUDE_DIR ogg.h PATHS ${PROJECT_SOURCE_DIR}/dependencies/include/ogg;)
 
-find_library(OGG_LIBRARY NAMES ogg PATHS ${PROJECT_SOURCE_DIR}/dependencies/libx86 NO_DEFAULT_PATH)
+set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
+find_library(OGG_LIBRARY NAMES libogg${ARCH_TYPE} PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
 
 if (MINGW)
   set(OGG_INCLUDE_DIR "")
