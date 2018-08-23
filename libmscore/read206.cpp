@@ -1678,7 +1678,7 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
             el = new Fermata(sym, cr->score());
             setFermataPlacement(el, anchor, direction);
             }
-      el->setTrack(cr->staffIdx() * VOICES);
+      el->setTrack(cr->track());
       return el;
       }
 
