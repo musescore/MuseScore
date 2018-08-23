@@ -84,6 +84,8 @@ void Score::layoutLinear(bool layoutAll, LayoutContext& lc)
             systems().clear();
             qDeleteAll(pages());
             pages().clear();
+            if (!firstMeasure())
+                  return;
 
             page = new Page(this);
             pages().push_back(page);
@@ -97,6 +99,8 @@ void Score::layoutLinear(bool layoutAll, LayoutContext& lc)
                   system->insertStaff(i);
             }
       else {
+            if (pages().isEmpty())
+                  return;
             page = pages().front();
             system = systems().front();
             }
