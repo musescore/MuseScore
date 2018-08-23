@@ -1,3 +1,5 @@
+@echo off
+
 REM Default build is 64-bit
 REM 32-bit compilation is available using "32" as a second parameter when you run msvc_build.bat
 REM How to use:
@@ -28,7 +30,6 @@ REM
 REM CLEAN:
 REM    "msvc_build.bat clean" remove all files in msvc.* folders and the folders itself
 
-@echo off
 REM BUILD_64 and BUILD_FOR_WINSTORE are used in CMakeLists.txt
 SET BUILD_FOR_WINSTORE="OFF"
 SET BUILD_64="ON"
@@ -61,7 +62,6 @@ IF "%1"=="debug" (
 )
 
 IF "%1"=="relwithdebinfo" (
-   SET ARCH="x86"
    SET CONFIGURATION_STR="relwithdebinfo"
    GOTO :BUILD
    )
@@ -134,8 +134,6 @@ IF "%1"=="clean" (
 
 :INSTALL
    cd %BUILD_FOLDER%
-@echo on
-   echo  %BUILD_FOLDER%
 @echo on
    echo "Installing MuseScore files..."
 @echo off
