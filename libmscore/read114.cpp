@@ -643,6 +643,53 @@ static NoteHead::Group convertHeadGroup(int i)
       return val;
       }
 
+
+//---------------------------------------------------------
+//   readFingering114
+//---------------------------------------------------------
+
+static void readFingering114(XmlReader& e, Fingering* fing)
+      {
+      bool isStringNumber = false;
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+
+            if (tag == "html-data") {
+                  auto htmlDdata = QTextDocumentFragment::fromHtml(e.readXml()).toPlainText();
+                  htmlDdata.replace(" ", "");
+                  fing->setPlainText(htmlDdata);
+                  } 
+            else if (tag == "subtype") {
+                  auto subtype = e.readElementText();
+                  if (subtype == "StringNumber") {
+                        isStringNumber = true;
+                        fing->setProperty(Pid::SUB_STYLE, QVariant(10));
+                        fing->setPropertyFlags(Pid::SUB_STYLE, PropertyFlags::UNSTYLED);
+                        }
+                  } 
+            else if (tag == "frame") {
+                  auto frame = e.readInt();
+                  if (frame)
+                        if (isStringNumber) //default value is circle for stringnumber, square is setted in tag circle
+                              fing->setFrameType(FrameType::CIRCLE); 
+                        else //default value is square for stringnumber, circle is setted in tag circle
+                              fing->setFrameType(FrameType::SQUARE);
+                  else
+                        fing->setFrameType(FrameType::NO_FRAME);
+                  }
+            else if (tag == "circle") {
+                  auto circle = e.readInt();
+                  if (circle)
+                        fing->setFrameType(FrameType::CIRCLE);
+                  else
+                        fing->setFrameType(FrameType::SQUARE);
+                  }
+            else {
+                  e.skipCurrentElement();
+                  }
+            }
+      }
+
 //---------------------------------------------------------
 //   readNote
 //---------------------------------------------------------
@@ -679,7 +726,7 @@ static void readNote(Note* note, XmlReader& e)
                   }
             else if (tag == "Text") {
                   Fingering* f = new Fingering(note->score());
-                  f->read300(e);
+                  readFingering114(e, f);
                   note->add(f);
                   }
             else if (tag == "onTimeType") {
