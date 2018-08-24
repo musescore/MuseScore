@@ -283,7 +283,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
       if (autoplace() && visible() && (color() == Qt::black))
             return;
 
-      xml.stag(QString("SlurSegment no=\"%1\"").arg(no));
+      xml.stag(QString("%1 no=\"%2\"").arg(name()).arg(no));
 
       qreal _spatium = spatium();
       xml.tag("o1", ups(Grip::START).off   / _spatium);
@@ -377,8 +377,6 @@ SlurTie::~SlurTie()
 void SlurTie::writeProperties(XmlWriter& xml) const
       {
       Element::writeProperties(xml);
-      if (track() != track2() && track2() != -1)
-            xml.tag("track2", track2());
       int idx = 0;
       for (const SpannerSegment* ss : spannerSegments())
             ((SlurTieSegment*)ss)->writeSlur(xml, idx++);
@@ -398,7 +396,7 @@ bool SlurTie::readProperties(XmlReader& e)
             ;
       else if (tag == "lineType")
             _lineType = e.readInt();
-      else if (tag == "SlurSegment") {
+      else if (tag == "SlurSegment" || tag == "TieSegment") {
             SlurTieSegment* s = newSlurTieSegment();
             s->read(e);
             add(s);
@@ -406,6 +404,18 @@ bool SlurTie::readProperties(XmlReader& e)
       else if (!Element::readProperties(e))
             return false;
       return true;
+      }
+
+//---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
+void SlurTie::read(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            if (!SlurTie::readProperties(e))
+                  e.unknown();
+            }
       }
 
 //---------------------------------------------------------

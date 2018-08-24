@@ -2648,6 +2648,11 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
 
             mb->setNext(im);
             mb->setPrev(im ? im->prev() : score->last());
+            if (mb->isMeasure()) {
+                  Measure* m = toMeasure(mb);
+                  m->setTimesig(f);
+                  m->setLen(f);
+                  }
             undo(new InsertMeasures(mb, mb));
 
             if (type == ElementType::MEASURE) {
@@ -2657,9 +2662,6 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
 
                   if (score->isMaster())
                         om = m;
-
-                  m->setTimesig(f);
-                  m->setLen(f);
 
                   QList<TimeSig*> tsl;
                   QList<KeySig*>  ksl;
@@ -2869,7 +2871,7 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
                                     ChordRest* cr = toChordRest(s->element(track));
                                     Tuplet* t = cr->tuplet();
                                     DurationElement* de = t ? toDurationElement(t) : toDurationElement(cr);
-                                    Fraction f = de->ftick() + de->actualFraction();
+                                    Fraction f = de->afrac() + de->actualFraction();
                                     int cetick = f.ticks();
                                     if (cetick <= tick)
                                           continue;
@@ -2998,8 +3000,8 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                   for (Segment* s = fs; s; s = s->next(CR_TYPE)) {
                         if (s->element(track)) {
                               ChordRest* cr  = toChordRest(s->element(track));
-                              Fraction ftick = cr->ftick() + cr->actualFraction();
-                              int cetick     = ftick.ticks() - m->tick();
+                              Fraction afrac = cr->afrac() + cr->actualFraction();
+                              int cetick     = afrac.ticks() - m->tick();
 
                               if (cetick <= tick) {
                                     continue;

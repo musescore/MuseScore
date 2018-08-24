@@ -687,9 +687,7 @@ void Tuplet::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 void Tuplet::write(XmlWriter& xml) const
       {
-      xml.stag(QString("Tuplet id=\"%1\"").arg(_id));
-      if (tuplet())
-            xml.tag("Tuplet", tuplet()->id());
+      xml.stag(name());
       Element::writeProperties(xml);
 
       writeProperty(xml, Pid::DIRECTION);
@@ -935,6 +933,27 @@ static bool tickGreater(const DurationElement* a, const DurationElement* b)
 void Tuplet::sortElements()
       {
       qSort(_elements.begin(), _elements.end(), tickGreater);
+      }
+
+//---------------------------------------------------------
+//   afrac
+//---------------------------------------------------------
+
+Fraction Tuplet::afrac() const
+      {
+      return Fraction::fromTicks(tick());
+      }
+
+//---------------------------------------------------------
+//   rfrac
+//---------------------------------------------------------
+
+Fraction Tuplet::rfrac() const
+      {
+      const Measure* m = measure();
+      if (m)
+            return Fraction::fromTicks(tick() - m->tick());
+      return afrac();
       }
 
 //---------------------------------------------------------

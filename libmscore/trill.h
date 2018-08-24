@@ -82,6 +82,7 @@ class Trill final : public SLine {
       virtual void remove(Element*) override;
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
+      virtual void read300(XmlReader&) override;
 
       void setTrillType(const QString& s);
       void undoSetTrillType(Type val);

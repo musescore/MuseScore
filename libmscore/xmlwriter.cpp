@@ -407,6 +407,16 @@ void XmlWriter::tag(const char* name, const QWidget* g)
       }
 
 //---------------------------------------------------------
+//   comment
+//---------------------------------------------------------
+
+void XmlWriter::comment(const QString& text)
+      {
+      putLevel();
+      *this << "<!-- " << text << " -->" << endl;
+      }
+
+//---------------------------------------------------------
 //   xmlString
 //---------------------------------------------------------
 
@@ -525,6 +535,15 @@ int XmlWriter::spannerId(const Spanner* s)
                   return i.first;
             }
       return addSpanner(s);
+      }
+
+//---------------------------------------------------------
+//   assignLocalIndex
+//---------------------------------------------------------
+
+int XmlWriter::assignLocalIndex(const Location& mainElementLocation)
+      {
+      return _linksIndexer.assignLocalIndex(mainElementLocation);
       }
 
 //---------------------------------------------------------

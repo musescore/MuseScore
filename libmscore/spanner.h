@@ -149,6 +149,13 @@ class Spanner : public Element {
       virtual ElementType type() const = 0;
       virtual void setScore(Score* s) override;
 
+      void writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction frac = -1) const;
+      void writeSpannerEnd(XmlWriter& xml, const Element* current, int track, Fraction frac = -1) const;
+      void writeSpannerStart(XmlWriter& xml, const Element* current, int track, int tick) const;
+      void writeSpannerEnd(XmlWriter& xml, const Element* current, int track, int tick) const;
+      static void readSpanner(XmlReader& e, Element* current, int track);
+      static void readSpanner(XmlReader& e, Score* current, int track);
+
       virtual int tick() const override { return _tick;          }
       int tick2() const                 { return _tick + _ticks; }
       int ticks() const                 { return _ticks;         }
@@ -159,6 +166,9 @@ class Spanner : public Element {
 
       int track2() const       { return _track2;   }
       void setTrack2(int v)    { _track2 = v;      }
+
+      Fraction rfrac() const override;
+      Fraction afrac() const override;
 
       bool broken() const      { return _broken;   }
       void setBroken(bool v)   { _broken = v;      }

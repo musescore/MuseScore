@@ -554,7 +554,9 @@ class Score : public QObject, public ScoreElement {
       void removeStaff(Staff*);
       void addMeasure(MeasureBase*, MeasureBase*);
       void readStaff(XmlReader&);
+      void readStaff300(XmlReader&);
       bool read(XmlReader&);
+      bool read300(XmlReader&);
 
       Excerpt* excerpt()            { return _excerpt; }
       void setExcerpt(Excerpt* e)   { _excerpt = e;     }
@@ -853,6 +855,7 @@ class Score : public QObject, public ScoreElement {
 
       void cmdPaste(const QMimeData* ms, MuseScoreView* view);
       bool pasteStaff(XmlReader&, Segment* dst, int staffIdx);
+      void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
       void renderStaff(EventMap* events, Staff*);
@@ -985,7 +988,7 @@ class Score : public QObject, public ScoreElement {
       MasterScore* masterScore() const    { return _masterScore; }
       void setMasterScore(MasterScore* s) { _masterScore = s;    }
       void createRevision();
-      void writeSegments(XmlWriter& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool, bool, bool);
+      void writeSegments(XmlWriter& xml, int strack, int etrack, Segment* first, Segment* last, bool, bool);
 
       const QMap<QString, QString>& metaTags() const   { return _metaTags; }
       QMap<QString, QString>& metaTags()               { return _metaTags; }
@@ -1194,6 +1197,7 @@ class MasterScore : public Score {
       QFileInfo info;
 
       bool read(XmlReader&);
+      bool read300(XmlReader&);
       void setPrev(MasterScore* s) { _prev = s; }
       void setNext(MasterScore* s) { _next = s; }
 
@@ -1244,7 +1248,8 @@ class MasterScore : public Score {
       FileError loadMsc(QString name, QIODevice*, bool ignoreVersionError);
       FileError read114(XmlReader&);
       FileError read206(XmlReader&);
-      FileError read300(XmlReader&);
+      FileError readScore300(XmlReader&);
+      FileError read301(XmlReader&);
       QByteArray readToBuffer();
       QByteArray readCompressedToBuffer();
 

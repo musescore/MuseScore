@@ -69,6 +69,7 @@ class Vibrato final : public SLine {
       virtual LineSegment* createLineSegment() override;
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
+      virtual void read300(XmlReader&) override;
 
       void setVibratoType(const QString& s);
       void undoSetVibratoType(Type val);
