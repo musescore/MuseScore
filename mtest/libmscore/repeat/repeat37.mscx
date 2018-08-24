@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -97,27 +97,28 @@
       <HBox>
         <width>5</width>
         </HBox>
-      <Measure number="1">
+      <Measure>
         <Marker>
-          <pos x="-1.05" y="-1.4"/>
+          <offset x="-1.05" y="-1.4"/>
           <style>Repeat Text Right</style>
           <text>Fine</text>
           <label>fine</label>
           </Marker>
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <StaffText>
-          <text>1,2,1</text>
-          </StaffText>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <StaffText>
+            <text>1,2,1</text>
+            </StaffText>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
+      <Measure>
         <Jump>
           <style>Repeat Text Right</style>
           <text>D.C. al Fine</text>
@@ -125,10 +126,12 @@
           <playUntil>fine</playUntil>
           <continueAt></continueAt>
           </Jump>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
       <TBox>
         <height>1</height>
@@ -140,22 +143,24 @@
           <text>SECTION_BREAK on vertical frame w/text</text>
           </Text>
         </TBox>
-      <Measure number="1">
+      <Measure>
         <Marker>
-          <pos x="-0.899999" y="-2.3"/>
+          <offset x="-0.899999" y="-2.3"/>
           <style>Repeat Text Right</style>
           <text>Fine</text>
           <label>fine</label>
           </Marker>
-        <StaffText>
-          <text>1,2,1</text>
-          </StaffText>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <StaffText>
+            <text>1,2,1</text>
+            </StaffText>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
+      <Measure>
         <Jump>
           <style>Repeat Text Right</style>
           <text>D.C. al Fine</text>
@@ -163,10 +168,12 @@
           <playUntil>fine</playUntil>
           <continueAt></continueAt>
           </Jump>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
       <HBox>
         <width>5</width>
@@ -174,22 +181,24 @@
           <subtype>section</subtype>
           </LayoutBreak>
         </HBox>
-      <Measure number="1">
+      <Measure>
         <Marker>
-          <pos x="-1.65" y="-2.3"/>
+          <offset x="-1.65" y="-2.3"/>
           <style>Repeat Text Right</style>
           <text>Fine</text>
           <label>fine</label>
           </Marker>
-        <StaffText>
-          <text>1,2,1</text>
-          </StaffText>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <StaffText>
+            <text>1,2,1</text>
+            </StaffText>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
+      <Measure>
         <Jump>
           <style>Repeat Text Right</style>
           <text>D.C. al Fine</text>
@@ -197,10 +206,12 @@
           <playUntil>fine</playUntil>
           <continueAt></continueAt>
           </Jump>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
       <HBox>
         <width>5</width>
@@ -211,56 +222,62 @@
       <HBox>
         <width>5</width>
         </HBox>
-      <Measure number="1">
+      <Measure>
         <Marker>
-          <pos x="-1.8" y="-2.45"/>
+          <offset x="-1.8" y="-2.45"/>
           <style>Repeat Text Right</style>
           <text>Fine</text>
           <label>fine</label>
           </Marker>
-        <StaffText>
-          <text>1,2,1</text>
-          </StaffText>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <StaffText>
+            <text>1,2,1</text>
+            </StaffText>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
+      <Measure>
         <LayoutBreak>
           <subtype>section</subtype>
           </LayoutBreak>
         <Jump>
-          <pos x="-5.25" y="-2"/>
+          <offset x="-5.25" y="-2"/>
           <style>Repeat Text Right</style>
           <text>D.C. al Fine</text>
           <jumpTo>start</jumpTo>
           <playUntil>fine</playUntil>
           <continueAt></continueAt>
           </Jump>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
       <HBox>
         <width>5</width>
         </HBox>
-      <Measure number="1">
+      <Measure>
         <Marker>
           <style>Repeat Text Right</style>
           <text>Fine</text>
           <label>fine</label>
           </Marker>
-        <StaffText>
-          <text>1,2,1</text>
-          </StaffText>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+        <voice>
+          <StaffText>
+            <text>1,2,1</text>
+            </StaffText>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
+      <Measure>
         <Jump>
           <style>Repeat Text Right</style>
           <text>D.C. al Fine</text>
@@ -271,14 +288,16 @@
         <LayoutBreak>
           <subtype>section</subtype>
           </LayoutBreak>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
       <TBox>
         <height>1</height>

@@ -47,6 +47,8 @@ class Stem final : public Element {
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader& e) override;
       virtual bool readProperties(XmlReader&) override;
+      virtual void read300(XmlReader& e) override;
+      virtual bool readProperties300(XmlReader&) override;
       virtual void reset() override;
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;

@@ -51,6 +51,8 @@ class LineSegment : public SpannerSegment {
       friend class SLine;
       virtual void read(XmlReader&) override;
       bool readProperties(XmlReader&);
+      virtual void read300(XmlReader&) override;
+      virtual bool readProperties300(XmlReader&) override;
 
       virtual Element* propertyDelegate(Pid) override;
 
@@ -85,6 +87,7 @@ class SLine : public Spanner {
       virtual SpannerSegment* layoutSystem(System*) override;
 
       bool readProperties(XmlReader& node);
+      bool readProperties300(XmlReader&);
       void writeProperties(XmlWriter& xml) const;
       virtual LineSegment* createLineSegment() = 0;
       void setLen(qreal l);
@@ -93,6 +96,7 @@ class SLine : public Spanner {
 
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
+      virtual void read300(XmlReader&) override;
 
       bool diagonal() const               { return _diagonal; }
       void setDiagonal(bool v)            { _diagonal = v;    }
