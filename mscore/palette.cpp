@@ -322,6 +322,11 @@ void Palette::mousePressEvent(QMouseEvent* ev)
       dragStartPosition = ev->pos();
       dragIdx           = idx(dragStartPosition);
 
+      // Take out of edit mode to prevent crashes when adding
+      // elements from palette
+      ScoreView* cv = mscore->currentScoreView();
+      cv->changeState(ViewState::NORMAL);
+
       if (dragIdx == -1)
             return;
       if (_selectable) {
