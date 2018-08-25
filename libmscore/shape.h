@@ -39,7 +39,7 @@ struct ShapeElement : public QRectF {
 //   Shape
 //---------------------------------------------------------
 
-class Shape : std::vector<ShapeElement> {
+class Shape : public std::vector<ShapeElement> {
    public:
       Shape() {}
 #ifndef NDEBUG
