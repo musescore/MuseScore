@@ -375,12 +375,12 @@ QPointF Element::pagePos() const
 QPointF Element::canvasPos() const
       {
       QPointF p(pos());
-      if (parent() == 0)
+      if (parent() == nullptr)
             return p;
 
       if (_flags & ElementFlag::ON_STAFF) {
-            System* system = 0;
-            Measure* measure = 0;
+            System* system = nullptr;
+            Measure* measure = nullptr;
             if (parent()->isSegment())
                   measure = toSegment(parent())->measure();
             else if (parent()->isMeasure())     // used in measure number
