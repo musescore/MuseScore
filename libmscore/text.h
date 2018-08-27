@@ -29,7 +29,6 @@ class Text final : public TextBase {
       virtual ElementType type() const override    { return ElementType::TEXT; }
       virtual Text* clone() const override         { return new Text(*this); }
       virtual void read(XmlReader&) override;
-      virtual void read300(XmlReader&) override;
       virtual QVariant propertyDefault(Pid id) const override;
       };
 

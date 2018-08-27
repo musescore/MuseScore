@@ -45,9 +45,7 @@ class StaffTextBase : public TextBase  {
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
-      virtual void read300(XmlReader&) override;
       virtual bool readProperties(XmlReader&) override;
-      virtual bool readProperties300(XmlReader&) override;
       virtual int subtype() const                         { return 0; }       // TODO::ws
       virtual QString subtypeName() const                 { return "??"; }
 

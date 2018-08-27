@@ -88,6 +88,8 @@ Pedal::Pedal(Score* s)
 
 void Pedal::read(XmlReader& e)
       {
+      if (score()->mscVersion() < 301)
+            e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement()) {
             if (!TextLineBase::readProperties(e))
                   e.unknown();

@@ -13,6 +13,7 @@
 #include "ambitus.h"
 #include "chord.h"
 #include "measure.h"
+#include "read206.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -244,16 +245,24 @@ bool Ambitus::readProperties(XmlReader& e)
             _bottomTpc = e.readInt();
       else if (tag == "topAccidental") {
             while (e.readNextStartElement()) {
-                  if (e.name() == "Accidental")
-                        _topAccid.read(e);
+                  if (e.name() == "Accidental") {
+                        if (score()->mscVersion() < 301)
+                              readAccidental206(&_topAccid, e);
+                        else
+                              _topAccid.read(e);
+                        }
                   else
                         e.skipCurrentElement();
                   }
             }
       else if (tag == "bottomAccidental") {
             while (e.readNextStartElement()) {
-                  if (e.name() == "Accidental")
-                        _bottomAccid.read(e);
+                  if (e.name() == "Accidental") {
+                        if (score()->mscVersion() < 301)
+                              readAccidental206(&_bottomAccid, e);
+                        else
+                              _bottomAccid.read(e);
+                        }
                   else
                         e.skipCurrentElement();
                   }

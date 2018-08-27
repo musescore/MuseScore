@@ -405,6 +405,9 @@ void TextLineBase::read(XmlReader& e)
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
 
+      if (score()->mscVersion() < 301)
+            e.addSpanner(e.intAttribute("id", -1), this);
+
       while (e.readNextStartElement()) {
             if (!readProperties(e))
                   e.unknown();
@@ -445,22 +448,6 @@ bool TextLineBase::readProperties(XmlReader& e)
                   }
             }
       return SLine::readProperties(e);
-      }
-
-//---------------------------------------------------------
-//   TextLineBase::readProperties300
-//---------------------------------------------------------
-
-bool TextLineBase::readProperties300(XmlReader& e)
-      {
-      const QStringRef& tag(e.name());
-      for (Pid i :pids) {
-            if (readProperty(tag, e, i)) {
-                  setPropertyFlags(i, PropertyFlags::UNSTYLED);
-                  return true;
-                  }
-            }
-      return SLine::readProperties300(e);
       }
 
 //---------------------------------------------------------
