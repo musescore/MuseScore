@@ -71,7 +71,6 @@ class Rest : public ChordRest {
       virtual void remove(Element*);
 
       virtual void read(XmlReader&) override;
-      virtual void read300(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
 
       void layoutMMRest(qreal val);

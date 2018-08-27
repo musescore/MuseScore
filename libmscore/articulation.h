@@ -87,10 +87,8 @@ class Articulation final : public Element {
       virtual void layout() override;
 
       virtual void read(XmlReader&) override;
-      virtual void read300(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
       virtual bool readProperties(XmlReader&) override;
-      virtual bool readProperties300(XmlReader&) override;
 
       virtual void reset() override;
       virtual QLineF dragAnchor() const override;

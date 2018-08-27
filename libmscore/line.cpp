@@ -1130,6 +1130,9 @@ void SLine::read(XmlReader& e)
             delete seg;
       spannerSegments().clear();
 
+      if (score()->mscVersion() < 301)
+            e.addSpanner(e.intAttribute("id", -1), this);
+
       while (e.readNextStartElement()) {
             if (!SLine::readProperties(e))
                   e.unknown();
