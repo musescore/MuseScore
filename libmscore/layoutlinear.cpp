@@ -68,65 +68,72 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
       }
 
 //---------------------------------------------------------
-//   layoutLinear
+//   resetSystems
 //    in linear mode there is only one page
 //    which contains one system
 //---------------------------------------------------------
 
-void Score::layoutLinear(bool layoutAll, LayoutContext& lc)
+ void Score::resetSystems(bool layoutAll, LayoutContext& lc)
       {
-      Page* page;
-      System* system;
+// if (layoutAll) {
+      qDeleteAll(systems());
+      systems().clear();
+      qDeleteAll(pages());
+      pages().clear();
+      if (!firstMeasure())
+            return;
 
-//      if (layoutAll) {
-      if (true) {
-            qDeleteAll(systems());
-            systems().clear();
-            qDeleteAll(pages());
-            pages().clear();
-            if (!firstMeasure())
-                  return;
+      auto page = new Page(this);
+      pages().push_back(page);
+      page->bbox().setRect(0.0, 0.0, loWidth(), loHeight());
+      page->setNo(0);
 
-            page = new Page(this);
-            pages().push_back(page);
-            page->bbox().setRect(0.0, 0.0, loWidth(), loHeight());
-            page->setNo(0);
-
-            system = new System(this);
-            systems().append(system);
-            page->appendSystem(system);
-            for (int i = 0; i < nstaves(); ++i)
-                  system->insertStaff(i);
-            }
-      else {
-            if (pages().isEmpty())
-                  return;
-            page = pages().front();
-            system = systems().front();
-            }
+      auto system = new System(this);
+      systems().append(system);
+      page->appendSystem(system);
+      for (int i = 0; i < nstaves(); ++i)
+            system->insertStaff(i);
+//            }
+//      else {
+//            if (pages().isEmpty())
+//                  return;
+//            page = pages().front();
+//            system = systems().front();
+//            }
 
       lc.page = page;
-      lc.layoutLinear();
       }
 
 //---------------------------------------------------------
-//   layoutLinear
+//   collectLinearSystem
+//   Append all measures to System. VBox is not included to System
 //---------------------------------------------------------
 
-void LayoutContext::layoutLinear()
+ void Score::collectLinearSystem(LayoutContext& lc)
       {
-      System* system = score->systems().front();
-
+      System* system = systems().front();
+      
       QPointF pos;
       bool firstMeasure = true;
-      for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+      
+      //set first measure to lc.nextMeasures for following 
+      //utilizing in getNextMeasure()
+      lc.nextMeasure = _measures.first();
+      getNextMeasure(lc);
+      
+      while (lc.curMeasure) {
             qreal ww = 0.0;
-            if (mb->isVBox() || mb->isTBox())
+            if (lc.curMeasure->isVBox() || lc.curMeasure->isTBox()) {
+                  lc.curMeasure->setParent(nullptr);
+                  getNextMeasure(lc);
                   continue;
-            system->appendMeasure(mb);
-            layoutMeasureLinear(mb);
-            if (mb->isMeasure()) {
-                  Measure* m = toMeasure(mb);
+                  }
+            system->appendMeasure(lc.curMeasure);
+            if (lc.curMeasure->isMeasure()) {
+                  Measure* m = toMeasure(lc.curMeasure);
+                        if (m->mmRest()) {
+                              m->mmRest()->setSystem(nullptr);
+                              }
                   if (firstMeasure) {
                         system->layoutSystem(0.0);
                         if (m->repeatStart()) {
@@ -147,16 +154,41 @@ void LayoutContext::layoutLinear()
                   m->setPos(pos);
                   m->layoutStaffLines();
                   }
-            else if (mb->isHBox()) {
-                  mb->setPos(pos + QPointF(toHBox(mb)->topGap(), 0.0));
-                  mb->layout();
-                  ww = mb->width();;
+            else if (lc.curMeasure->isHBox()) {
+                  lc.curMeasure->setPos(pos + QPointF(toHBox(lc.curMeasure)->topGap(), 0.0));
+                  lc.curMeasure->layout();
+                  ww = lc.curMeasure->width();
                   }
             pos.rx() += ww;
-            }
-      system->setWidth(pos.x());
 
-      score->hideEmptyStaves(system, true);
+            getNextMeasure(lc);
+            }
+
+      system->setWidth(pos.x());
+      }
+
+//---------------------------------------------------------
+//   layoutLinear
+//---------------------------------------------------------
+
+void Score::layoutLinear(bool layoutAll, LayoutContext& lc)
+      {
+      resetSystems(layoutAll, lc);
+
+      collectLinearSystem(lc);
+      
+      hideEmptyStaves(systems().front(), true);
+
+      lc.layoutLinear();
+      }
+
+//---------------------------------------------------------
+//   layoutLinear
+//---------------------------------------------------------
+
+void LayoutContext::layoutLinear()
+      {
+      System* system = score->systems().front();
 
       //
       // layout
