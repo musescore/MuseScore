@@ -74,6 +74,8 @@ Startcenter::Startcenter()
 //      QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, false);
       recentPage->setBoldTitle(false);
       updateRecentScores();
+
+      setFocus();
       }
 
 //---------------------------------------------------------
