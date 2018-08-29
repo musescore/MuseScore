@@ -866,7 +866,8 @@ void Score::appendPart(Part* p)
 Page* Score::searchPage(const QPointF& p) const
       {
       for (Page* page : pages()) {
-            if (page->bbox().translated(page->pos()).contains(p))
+            QRectF r = page->bbox().translated(page->pos());
+            if (r.contains(p))
                   return page;
             }
       return 0;

@@ -155,7 +155,6 @@ void LayoutContext::layoutLinear()
             pos.rx() += ww;
             }
       system->setWidth(pos.x());
-      page->setWidth(system->width());
 
       score->hideEmptyStaves(system, true);
 
@@ -415,7 +414,7 @@ void LayoutContext::layoutLinear()
             }
       page->setPos(0, 0);
       system->setPos(page->lm(), page->tm() + score->styleP(Sid::staffUpperBorder));
-      page->setWidth(system->width());
+      page->setWidth(system->width() + system->pos().x());
       page->rebuildBspTree();
       }
 
