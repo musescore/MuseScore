@@ -44,7 +44,8 @@ add_library (fluid STATIC
       ${fluidUi}
       fluidgui.cpp
       dsp.cpp fluid.cpp voice.cpp chan.cpp sfont.cpp
-      conv.cpp gen.cpp mod.cpp tuning.cpp
+      conv.cpp gen.cpp mod.cpp
+      conv.h fluid.h fluidgui.h gen.h sfont.h voice.h
       ${SF3_SRC}
       ${INCS}
       )
