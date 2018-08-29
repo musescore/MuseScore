@@ -759,23 +759,22 @@ else (MINGW)
          string( APPEND all_library_paths " /LIBPATH:${item}" )
       endforeach()
 
-      # Windows: Add -mconsole to LINK_FLAGS to get a console window for debug output
-      if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+      # Windows: Add /SUBSYSTEM:WINDOWS to LINK_FLAGS to avoid a console window in release
+      if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
         set_target_properties( mscore
            PROPERTIES
               COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
               LINK_FLAGS    "/LIBPATH:${QT_INSTALL_PREFIX}/lib ${all_library_paths}"
-              #LINK_FLAGS "-mwindows -mconsole -L ${QT_INSTALL_PREFIX}/lib"
+              LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup"
            )
-      else(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+      else(CMAKE_BUILD_TYPE MATCHES "RELEASE")
         set_target_properties( mscore
            PROPERTIES
-              COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+              COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} /DQT_SVG_LIB /DQT_GUI_LIB /DQT_XML_LIB /DQT_CORE_LIB"
               LINK_FLAGS    "/LIBPATH:${QT_INSTALL_PREFIX}/lib ${all_library_paths}"
-              # LINK_FLAGS "-Wl,-S -mwindows -L ${QT_INSTALL_PREFIX}/lib"
+              LINK_FLAGS "/SUBSYSTEM:CONSOLE"
            )
-      endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-
+      endif(CMAKE_BUILD_TYPE MATCHES "RELEASE")
 
       include(FindStaticLibrary)
       target_link_libraries(mscore
