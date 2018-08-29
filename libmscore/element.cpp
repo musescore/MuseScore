@@ -93,6 +93,7 @@
 #include "vibrato.h"
 #include "palmmute.h"
 #include "fermata.h"
+#include "shape.h"
 
 namespace Ms {
 
@@ -2024,27 +2025,107 @@ void Element::autoplaceSegmentElement(qreal minDistance)
             Shape s1          = m->staffShape(si);
             Shape s2          = shape().translated(s->pos() + pos());
 
-            // look for collisions in the next measure
-            // if necessary
+            if (isTextBase()) {
+                  // look for collisions in next measures
+                  qreal totalWidth = m->width();
+                  for (Measure* nm = m->nextMeasure(); nm; nm = nm->nextMeasure()) {
+                        if (s2.right() > totalWidth) {
+                              s1.add(nm->staffShape(si).translated(QPointF(totalWidth, 0.0)));
+                              totalWidth += nm->width();
+                              }
+                        else
+                              break;
+                        }
 
-            bool cnm = (s2.right() > m->width()) && m->nextMeasure() && m->nextMeasure()->system() == m->system();
-            if (cnm) {
-                  Measure* nm = m->nextMeasure();
-                  s1.add(nm->staffShape(si).translated(QPointF(m->width(), 0.0)));
+                  // look for collisions in previous measures
+                  totalWidth = 0;
+                  for (Measure* pm = m->prevMeasure(); pm; pm = pm->prevMeasure()) {
+                        if (s2.left() > totalWidth) {
+                              s1.add(pm->staffShape(si).translated(QPointF(-(totalWidth + pm->width()), 0.0)));
+                              totalWidth += pm->width();
+                              }
+                        else
+                              break;
+                        }
+
+                  // actually check for collisions
+                  bool intersection = true;
+                  qreal totalYOff = 0;
+                  while (intersection) {
+                        intersection = false;
+                        for (ShapeElement se : s1) {
+                              if (s2.intersects(se)){
+                                    intersection = true;
+                                    break;
+                                    }
+                              }
+                        if (! intersection)
+                              break;
+                        else {
+                              qreal yd = -1;
+                              if (placeAbove())
+                                    yd = 1;
+                              totalYOff -= yd;
+                              s2.translateY(-yd);
+                              }
+                        }
+
+                  // margin of 5 to stop slight overlap, hardcoded for now
+                  qreal textMarginBottom = 5;  
+                  s2.translateY(-textMarginBottom);
+                  rUserYoffset() = totalYOff - textMarginBottom;
+
+                  m->staffShape(si).add(s2);
+
+                  Shape s3 = s2.translated(QPointF()); // make a copy of s2
+                  totalWidth = m->width();
+                  for (Measure* nm = m->nextMeasure(); nm; nm = nm->nextMeasure()) {
+                        if (s2.right() > totalWidth) {
+                              s3.translateX(-totalWidth);
+                              nm->staffShape(staffIdx()).add(s3);
+                              totalWidth += nm->width();
+                              s3 = s2.translated(QPointF()); // reset translation
+                              }
+                        else
+                              break;
+                        }
+
+                  s3 = s2.translated(QPointF());
+                  totalWidth = 0;
+                  for (Measure* pm = m->prevMeasure(); pm; pm = pm->prevMeasure()) {
+                        if (s2.left() > totalWidth) {
+                              s3.translateX(totalWidth+pm->width());
+                              pm->staffShape(staffIdx()).add(s3);
+                              totalWidth += pm->width();
+                              s3 = s2.translated(QPointF()); // reset translation
+                              }
+                        else
+                              break;
+                        }
+
                   }
-            qreal d = placeAbove() ? s2.minVerticalDistance(s1) : s1.minVerticalDistance(s2);
-            if (d > -minDistance) {
-                  qreal yd = d + minDistance;
-                  if (placeAbove())
-                        yd *= -1.0;
-                  rUserYoffset() = yd;
-                  s2.translateY(yd);
-                  }
-            m->staffShape(si).add(s2);
-            if (cnm) {
-                  Measure* nm = m->nextMeasure();
-                  s2.translateX(-m->width());
-                  nm->staffShape(staffIdx()).add(s2);
+            else {
+                  // look for collisions in the next measure
+                  // if necessary
+                  bool cnm = (s2.right() > m->width()) && m->nextMeasure() && m->nextMeasure()->system() == m->system();
+                  if (cnm) {
+                        Measure* nm = m->nextMeasure();
+                        s1.add(nm->staffShape(si).translated(QPointF(m->width(), 0.0)));
+                        }
+                  qreal d = placeAbove() ? s2.minVerticalDistance(s1) : s1.minVerticalDistance(s2);
+                  if (d > -minDistance) {
+                        qreal yd = d + minDistance;
+                        if (placeAbove())
+                              yd *= -1.0;
+                        rUserYoffset() = yd;
+                        s2.translateY(yd);
+                        }
+                  m->staffShape(si).add(s2);
+                  if (cnm) {
+                        Measure* nm = m->nextMeasure();
+                        s2.translateX(-m->width());
+                        nm->staffShape(staffIdx()).add(s2);
+                        }
                   }
             }
       }
