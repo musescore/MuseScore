@@ -83,6 +83,9 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
       if (!firstMeasure())
             return;
 
+      for (MeasureBase* mb = first(); mb; mb = mb->next())
+            mb->setSystem(nullptr);
+
       auto page = new Page(this);
       pages().push_back(page);
       page->bbox().setRect(0.0, 0.0, loWidth(), loHeight());

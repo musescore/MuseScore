@@ -5768,7 +5768,7 @@ void MuseScore::switchLayoutMode(LayoutMode mode)
       {
       // find a measure to use as reference, if possible
       QRectF view = cv->toLogical(QRect(0.0, 0.0, width(), height()));
-      Measure* m = cs->firstMeasure();
+      Measure* m = cs->firstMeasureMM();
       while (m && !view.intersects(m->canvasBoundingRect()))
             m = m->nextMeasureMM();
 
@@ -5784,7 +5784,7 @@ void MuseScore::switchLayoutMode(LayoutMode mode)
       // also, better positioning is usually achieved if you start from the top
       // and there is really no better place to position canvas if we were all the way off page previously
       cv->pageTop();
-      if (m && m != cs->firstMeasure())
+      if (m && m != cs->firstMeasureMM())
             cv->adjustCanvasPosition(m, false);
       }
 
