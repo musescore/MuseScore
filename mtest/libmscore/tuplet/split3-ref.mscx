@@ -116,6 +116,7 @@
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
+              <italic>1</italic>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -154,6 +155,7 @@
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
+              <italic>1</italic>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -181,6 +183,7 @@
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
+              <italic>1</italic>
               <text>3</text>
               </Number>
             </Tuplet>

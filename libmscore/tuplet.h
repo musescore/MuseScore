@@ -58,6 +58,8 @@ class Tuplet final : public DurationElement {
       QPointF bracketL[4];
       QPointF bracketR[3];
 
+      void resetNumberProperty();
+
    public:
       Tuplet(Score*);
       Tuplet(const Tuplet&);
