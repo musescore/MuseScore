@@ -508,6 +508,9 @@ class Score : public QObject, public ScoreElement {
       void cmdAddFret(int fret);
       void cmdToggleVisible();
 
+      void resetSystems(bool layoutAll, LayoutContext& lc);
+      void collectLinearSystem(LayoutContext& lc);
+
    protected:
       int _fileDivision; ///< division of current loading *.msc file
       LayoutMode _layoutMode { LayoutMode::PAGE };
