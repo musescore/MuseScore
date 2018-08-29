@@ -26,6 +26,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/shadownote.h"
 #include "libmscore/repeatlist.h"
+#include "libmscore/select.h"
 
 namespace Ms {
 
@@ -248,6 +249,10 @@ void ScoreView::mouseReleaseEvent(QMouseEvent*)
                   changeState(ViewState::FOTO);
                   break;
             case ViewState::NORMAL:
+                  if (editData.startMove == editData.pos && clickOffElement) {
+                        _score->deselectAll();
+                        _score->update();
+                        }
             case ViewState::EDIT:
             case ViewState::NOTE_ENTRY:
             case ViewState::PLAY:
@@ -306,6 +311,7 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                   _score = e->score();
                   _score->setUpdateAll();
                   }
+            clickOffElement = false;
             }
       else {
             // special case: chacke if measure is selected
@@ -314,9 +320,10 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
             if (m && m->staffLines(staffIdx)->canvasBoundingRect().contains(editData.startMove)) {
                   _score->select(m, st, staffIdx);
                   _score->setUpdateAll();
+                  clickOffElement = false;
                   }
             else if (st != SelectType::ADD)
-                  _score->deselectAll();
+                  clickOffElement = true;
             }
       _score->update();
       mscore->endCmd();
