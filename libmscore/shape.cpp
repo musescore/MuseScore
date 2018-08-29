@@ -96,7 +96,7 @@ qreal Shape::minHorizontalDistance(const Shape& a) const
 
 //-------------------------------------------------------------------
 //   minVerticalDistance
-//    a is located below of this shape.
+//    a is located below this shape.
 //    Calculates the minimum distance between two shapes.
 //-------------------------------------------------------------------
 
