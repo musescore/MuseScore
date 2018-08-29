@@ -925,7 +925,7 @@ void Voice::update_param(int _gen)
       float y;
       unsigned int count;
       // Alternate attenuation scale used by EMU10K1 cards when setting the attenuation at the preset or instrument level within the SoundFont bank.
-      static const float ALT_ATTENUATION_SCALE = 0.4f;
+      static const float ALT_ATTENUATION_SCALE = 1.f;
 
       double gain = 1.0 / 32768.0f;
       switch (_gen) {
@@ -1869,8 +1869,9 @@ void Voice::effects(int startBufIdx, int count, float* out, float* reverb, float
             /* Increment is added to each filter coefficient filter_coeff_incr_count times. */
             for (int i = startBufIdx; i < startBufIdx + count; i++) {
                   /* The filter is implemented in Direct-II form. */
-                  float dsp_centernode = dsp_buf[i] - a1 * hist1 - a2 * hist2;
-                  dsp_buf[i] = b02 * (dsp_centernode + hist2) + b1 * hist1;
+                  auto& dspValRef = dsp_buf[i];
+                  float dsp_centernode = dspValRef - a1 * hist1 - a2 * hist2;
+                  dspValRef = b02 * (dsp_centernode + hist2) + b1 * hist1;
                   hist2 = hist1;
                   hist1 = dsp_centernode;
 
@@ -1880,29 +1881,38 @@ void Voice::effects(int startBufIdx, int count, float* out, float* reverb, float
                         b02 += b02_incr;
                         b1  += b1_incr;
                         }
+
+                  //code duplication is needed to optimize using std::vector::operator[]
+                  float vv = dspValRef * amp_left;
+                  *out++ += vv;
+                  *reverb++ += vv * amp_reverb;
+                  *chorus++ += vv * amp_chorus;
+
+                  vv = dspValRef * amp_right;
+                  *out++ += vv;
+                  *reverb++ += vv * amp_reverb;
+                  *chorus++ += vv * amp_chorus;
                   }
             }
       else { /* The filter parameters are constant.  This is duplicated to save time. */
             for (int i = startBufIdx; i < startBufIdx + count; i++) {   // The filter is implemented in Direct-II form.
-                  float dsp_centernode = dsp_buf[i] - a1 * hist1 - a2 * hist2;
-                  dsp_buf[i]     = b02 * (dsp_centernode + hist2) + b1 * hist1;
+                  auto& dspValRef = dsp_buf[i];
+                  float dsp_centernode = dspValRef - a1 * hist1 - a2 * hist2;
+                  dspValRef      = b02 * (dsp_centernode + hist2) + b1 * hist1;
                   hist2          = hist1;
                   hist1          = dsp_centernode;
+
+                  //code duplication is needed to optimize using std::vector::operator[]
+                  float vv = dspValRef * amp_left;
+                  *out++ += vv;
+                  *reverb++ += vv * amp_reverb;
+                  *chorus++ += vv * amp_chorus;
+
+                  vv = dspValRef * amp_right;
+                  *out++ += vv;
+                  *reverb++ += vv * amp_reverb;
+                  *chorus++ += vv * amp_chorus;
                   }
-            }
-
-      for (int i = startBufIdx; i < startBufIdx + count; ++i) {
-            float v    = dsp_buf[i];
-
-            float vv   = v  * amp_left;
-            *out++     += vv;
-            *reverb++  += vv * amp_reverb;
-            *chorus++  += vv * amp_chorus;
-
-            vv         = v  * amp_right;
-            *out++     += vv;
-            *reverb++  += vv * amp_reverb;
-            *chorus++  += vv * amp_chorus;
             }
       }
 }
