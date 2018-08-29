@@ -121,7 +121,7 @@ void LayoutContext::layoutLinear()
       bool firstMeasure = true;
       for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
             qreal ww = 0.0;
-            if (mb->isVBox())
+            if (mb->isVBox() || mb->isTBox())
                   continue;
             system->appendMeasure(mb);
             layoutMeasureLinear(mb);
