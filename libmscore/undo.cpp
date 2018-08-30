@@ -1616,8 +1616,8 @@ void InsertRemoveMeasures::removeMeasures()
                         }
                   auto i = std::find(system->measures().begin(), system->measures().end(), mb);
                   if (i != system->measures().end()) {
-                        system->measures().erase(i);
                         (*i)->setParent(0);
+                        system->measures().erase(i);
                         }
                   }
             if (mb == fm)
