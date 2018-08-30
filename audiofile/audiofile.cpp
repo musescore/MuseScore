@@ -83,8 +83,9 @@ sf_count_t AudioFile::readData(short* data, sf_count_t frames)
       else {
             //read native float values
             int totalFrames = frames * channels();
-            float* dataF = new float[totalFrames];
-            resFrames = sf_readf_float(sf, dataF, frames);
+            std::vector<float> dataF;
+            dataF.resize(totalFrames);
+            resFrames = sf_readf_float(sf, dataF.data(), frames);
             //find the maximum signal value
             float maxSignal = 0.f;
             for (int i = 0; i < totalFrames; ++i) {
@@ -97,8 +98,6 @@ sf_count_t AudioFile::readData(short* data, sf_count_t frames)
             //convert normalized floats to signed short values
             for (int i = 0; i < totalFrames; ++i)
                   data[i] = adjScale * lrintf(dataF[i] * (dataF[i] > 0 ? SHRT_MAX : -SHRT_MIN));
-
-            delete[] dataF;
             }
 
       return resFrames;

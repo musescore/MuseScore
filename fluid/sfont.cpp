@@ -147,24 +147,29 @@ Preset::~Preset()
 
 void Preset::loadSamples()
       {
-      bool locked = sfont->synth->mutex.tryLock();
+      QMutexLocker locker(&sfont->synth->mutex);
+
       if (_global_zone && _global_zone->instrument) {
             Instrument* i = _global_zone->instrument;
             if (i->global_zone && i->global_zone->sample)
                   i->global_zone->sample->load();
-            for(Zone* iz : i->zones)
+
+            for (Zone* iz : i->zones)
                   iz->sample->load();
             }
 
-      for(Zone* z : zones) {
+      for (Zone* z : zones) {
             Instrument* i = z->instrument;
             if (i->global_zone && i->global_zone->sample)
                   i->global_zone->sample->load();
-            for(Zone* iz : i->zones)
+
+            for (Zone* iz : i->zones) {
+                  if (sfont->synth->globalTerminate())
+                        return;
+
                   iz->sample->load();
+                  }
             }
-      if (locked)
-            sfont->synth->mutex.unlock();
       }
 
 //---------------------------------------------------------
@@ -633,14 +638,13 @@ void Sample::load()
 
       if (sampletype & FLUID_SAMPLETYPE_OGG_VORBIS) {
 #ifdef SOUNDFONT3
-            char* p = new char[size];
-            if (fd.read(p, size) != size) {
+            std::vector<char> p;
+            p.resize(size);
+            if (fd.read(p.data(), size) != size) {
                   printf("  read %d failed\n", size);
-                  delete[] p;
                   return;
                   }
-            decompressOggVorbis(p, size);
-            delete[] p;
+            decompressOggVorbis(p.data(), size);
 #endif
             }
       else {
