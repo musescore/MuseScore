@@ -4104,7 +4104,7 @@ bool ScoreView::searchRehearsalMark(const QString& s)
 
 void ScoreView::gotoMeasure(Measure* measure)
       {
-      adjustCanvasPosition(measure, true);
+      adjustCanvasPosition(measure, state != ViewState::NORMAL);
       int tracks = _score->nstaves() * VOICES;
       for (Segment* segment = measure->first(); segment; segment = segment->next()) {
             if (segment->segmentType() != SegmentType::ChordRest)
