@@ -2790,6 +2790,18 @@ void Score::selectSingle(Element* e, int staffIdx)
       }
 
 //---------------------------------------------------------
+//   switchToPageMode
+//---------------------------------------------------------
+
+void Score::switchToPageMode()
+      {
+            if (_layoutMode != LayoutMode::PAGE) {
+                  setLayoutMode(LayoutMode::PAGE);
+                  doLayout();
+            }
+      }
+
+//---------------------------------------------------------
 //   selectAdd
 //---------------------------------------------------------
 

@@ -115,8 +115,10 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
                   }
             }
 
-      if (_layoutMode == LayoutMode::LINE)
+      if (lineMode())
             xml.tag("layoutMode", "line");
+      if (systemMode())
+            xml.tag("layoutMode", "system");
 
 #ifdef OMR
       if (masterScore()->omr() && xml.writeOmr())
