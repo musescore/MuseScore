@@ -1396,8 +1396,8 @@ void PreferenceDialog::printShortcutsClicked()
       qreal col1Width = 0.0;
       while (isc.hasNext()) {
             isc.next();
-            Shortcut* s = isc.value();
-            col1Width = qMax(col1Width, QFontMetricsF(p.font()).width(s->descr()));
+            Shortcut* sc = isc.value();
+            col1Width = qMax(col1Width, QFontMetricsF(p.font()).width(sc->descr()));
             }
 
       int idx = 0;

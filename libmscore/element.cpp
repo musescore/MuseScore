@@ -1292,8 +1292,8 @@ void Element::undoSetVisible(bool v)
 QRectF Element::scriptBbox() const
       {
       qreal  _sp = spatium();
-      QRectF _bbox = bbox();
-      return QRectF(_bbox.x() / _sp, _bbox.y() / _sp, _bbox.width() / _sp, _bbox.height() / _sp);
+      QRectF bbox_ = bbox();
+      return QRectF(bbox_.x() / _sp, bbox_.y() / _sp, bbox_.width() / _sp, bbox_.height() / _sp);
       }
 
 //---------------------------------------------------------

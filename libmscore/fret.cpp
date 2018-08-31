@@ -447,12 +447,12 @@ void FretDiagram::read(XmlReader& e)
             else if (tag == "string") {
                   int no = e.intAttribute("no");
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "dot")
+                        const QStringRef& t(e.name());
+                        if (t == "dot")
                               setDot(no, e.readInt());
-                        else if (tag == "marker")
+                        else if (t == "marker")
                               setMarker(no, e.readInt());
-                        else if (tag == "fingering")
+                        else if (t == "fingering")
                               setFingering(no, e.readInt());
                         else
                               e.unknown();
@@ -591,14 +591,14 @@ void FretDiagram::scanElements(void* data, void (*func)(void*, Element*), bool a
 void FretDiagram::writeMusicXML(XmlWriter& xml) const
       {
       qDebug("FretDiagram::writeMusicXML() this %p harmony %p", this, _harmony);
-      int _strings = strings();
+      int strings_ = strings();
       xml.stag("frame");
-      xml.tag("frame-strings", _strings);
+      xml.tag("frame-strings", strings_);
       xml.tag("frame-frets", frets());
       QString strDots = "'";
       QString strMarker = "'";
       QString strFingering = "'";
-      for (int i = 0; i < _strings; ++i) {
+      for (int i = 0; i < strings_; ++i) {
             // TODO print frame note
             if (_dots)
                   strDots += QString("%1'").arg(static_cast<int>(_dots[i]));
@@ -608,7 +608,7 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
                   strFingering += QString("%1'").arg(static_cast<int>(_fingering[i]));
             if (_marker[i] != 88) {
                   xml.stag("frame-note");
-                  xml.tag("string", _strings - i);
+                  xml.tag("string", strings_ - i);
                   if (_dots)
                         xml.tag("fret", _dots[i]);
                   else

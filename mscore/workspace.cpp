@@ -411,8 +411,8 @@ void Workspace::read(XmlReader& e)
                   QString name = e.attribute("name");
                   std::list<const char*> l;
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "action") {
+                        const QStringRef& t(e.name());
+                        if (t == "action") {
                               QString s = e.readElementText();
                               for (auto k : mscore->allNoteInputMenuEntries()) {
                                     if (k == s) {
@@ -523,12 +523,12 @@ QList<Workspace*>& Workspace::refreshWorkspaces()
 
 Workspace* Workspace::createNewWorkspace(const QString& name)
       {
-      Workspace* p = new Workspace;
-      p->setName(name);
-      p->setPath("");
-      p->setDirty(false);
-      p->setReadOnly(false);
-      p->write();
+      Workspace* w = new Workspace;
+      w->setName(name);
+      w->setPath("");
+      w->setDirty(false);
+      w->setReadOnly(false);
+      w->write();
 
       // all palettes in new workspace are editable
 
@@ -540,8 +540,8 @@ Workspace* Workspace::createNewWorkspace(const QString& name)
                   p->setCellReadOnly(i, false);
             }
 
-      _workspaces.append(p);
-      return p;
+      _workspaces.append(w);
+      return w;
       }
 
 }

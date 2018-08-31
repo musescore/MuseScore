@@ -619,8 +619,8 @@ MasterScore* MuseScore::getNewFile()
                                           KeySig* keysig = new KeySig(score);
                                           keysig->setTrack(staffIdx * VOICES);
                                           keysig->setKeySigEvent(nKey);
-                                          Segment* s = measure->getSegment(SegmentType::KeySig, 0);
-                                          s->add(keysig);
+                                          Segment* ss = measure->getSegment(SegmentType::KeySig, 0);
+                                          ss->add(keysig);
                                           }
                                     }
                               }

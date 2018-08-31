@@ -954,10 +954,8 @@ void ScoreView::paintPageBorder(QPainter& p, Page* page)
             QRectF f(page->canvasBoundingRect());
             f.adjust(page->lm(), page->tm(), -page->rm(), -page->bm());
             p.drawRect(f);
-            if (!page->isOdd()) {
-                  QRectF f(page->canvasBoundingRect());
+            if (!page->isOdd())
                   p.drawLine(f.right(), 0.0, f.right(), f.bottom());
-                  }
             }
       }
 
@@ -1651,8 +1649,8 @@ void ScoreView::normalSwap()
       const QMimeData* ms = QApplication::clipboard()->mimeData();
       if (mimeType == mimeStaffListFormat) { // determine size of clipboard selection
             int tickLen = 0, staves = 0;
-            QByteArray data(ms->data(mimeStaffListFormat));
-            XmlReader e(data);
+            QByteArray d(ms->data(mimeStaffListFormat));
+            XmlReader e(d);
             e.readNextStartElement();
             if (e.name() == "StaffList") {
                   tickLen         = e.intAttribute("len", 0);
@@ -1678,10 +1676,10 @@ void ScoreView::normalSwap()
                   ms = QApplication::clipboard()->mimeData();
                   }
             }
-      QByteArray data(_score->selection().mimeData());
+      QByteArray d(_score->selection().mimeData());
       if (this->normalPaste()) {
             QMimeData* mimeData = new QMimeData;
-            mimeData->setData(mimeType, data);
+            mimeData->setData(mimeType, d);
             QApplication::clipboard()->setMimeData(mimeData);
             }
       }
@@ -1919,9 +1917,9 @@ void ScoreView::cmd(const char* s)
                   score()->endCmd();
                   }
             else {
-                  Element* el = _score->move(cmd);
-                  if (el)
-                        adjustCanvasPosition(el, false);
+                  Element* ele = _score->move(cmd);
+                  if (ele)
+                        adjustCanvasPosition(ele, false);
                   updateAll();
                   }
             }
@@ -2578,9 +2576,9 @@ QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
                         return QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
                   }
             }
-      QVariant data = QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
-//      qDebug() << "   " << data;
-      return data;
+      QVariant d = QWidget::inputMethodQuery(query); // fall back to QWidget's version as default
+//      qDebug() << "   " << d;
+      return d;
       }
 
 //---------------------------------------------------------
@@ -3992,8 +3990,8 @@ void ScoreView::cmdRepeatSelection()
             qDebug("cmdRepeatSelection: <%s>", mimeData->data(mimeType).data());
       QApplication::clipboard()->setMimeData(mimeData);
 
-      QByteArray data(mimeData->data(mimeType));
-      XmlReader xml(data);
+      QByteArray d(mimeData->data(mimeType));
+      XmlReader xml(d);
       xml.setPasteMode(true);
 
       int dStaff = selection.staffStart();

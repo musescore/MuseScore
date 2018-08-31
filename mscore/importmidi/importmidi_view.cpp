@@ -265,20 +265,20 @@ void TracksView::setItemDelegate(SeparatorDelegate *delegate)
       _frozenCornerTableView->setItemDelegate(delegate);
       }
 
-void TracksView::restoreHHeaderState(const QByteArray &data)
+void TracksView::restoreHHeaderState(const QByteArray &d)
       {
-      horizontalHeader()->restoreState(data);
-      _frozenHTableView->horizontalHeader()->restoreState(data);
-      _frozenVTableView->horizontalHeader()->restoreState(data);
-      _frozenCornerTableView->horizontalHeader()->restoreState(data);
+      horizontalHeader()->restoreState(d);
+      _frozenHTableView->horizontalHeader()->restoreState(d);
+      _frozenVTableView->horizontalHeader()->restoreState(d);
+      _frozenCornerTableView->horizontalHeader()->restoreState(d);
       }
 
-void TracksView::restoreVHeaderState(const QByteArray &data)
+void TracksView::restoreVHeaderState(const QByteArray &d)
       {
-      verticalHeader()->restoreState(data);
-      _frozenHTableView->verticalHeader()->restoreState(data);
-      _frozenVTableView->verticalHeader()->restoreState(data);
-      _frozenCornerTableView->verticalHeader()->restoreState(data);
+      verticalHeader()->restoreState(d);
+      _frozenHTableView->verticalHeader()->restoreState(d);
+      _frozenVTableView->verticalHeader()->restoreState(d);
+      _frozenCornerTableView->verticalHeader()->restoreState(d);
       }
 
 void TracksView::setHHeaderResizeMode(QHeaderView::ResizeMode mode)
