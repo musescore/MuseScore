@@ -193,6 +193,8 @@ void LayoutContext::layoutLinear()
       {
       System* system = score->systems().front();
 
+      computeMeasureShape(system);
+      
       //
       // layout
       //    - beams
