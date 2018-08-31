@@ -1032,6 +1032,7 @@ class Score : public QObject, public ScoreElement {
       bool floatMode() const                { return layoutMode() == LayoutMode::FLOAT; }
       bool pageMode() const                 { return layoutMode() == LayoutMode::PAGE; }
       bool lineMode() const                 { return layoutMode() == LayoutMode::LINE; }
+      bool systemMode() const               { return layoutMode() == LayoutMode::SYSTEM; }
 
       Tuplet* searchTuplet(XmlReader& e, int id);
       void cmdSelectAll();
@@ -1130,6 +1131,8 @@ class Score : public QObject, public ScoreElement {
 
       bool checkKeys();
       bool checkClefs();
+
+      void switchToPageMode();
 
       virtual QVariant getProperty(Pid) const override;
       virtual bool setProperty(Pid, const QVariant&) override;
