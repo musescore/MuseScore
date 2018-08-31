@@ -187,213 +187,38 @@ void Score::layoutLinear(bool layoutAll, LayoutContext& lc)
 
 //---------------------------------------------------------
 //   layoutLinear
+//
+// layout
+//    - beams
+//    - RehearsalMark, StaffText
+//    - Dynamic
+//    - update the segment shape + measure shape
+//
+//
 //---------------------------------------------------------
 
 void LayoutContext::layoutLinear()
       {
       System* system = score->systems().front();
 
+      _stick = system->measures().front()->tick();
+      _etick = system->measures().back()->endTick();
+
       computeMeasureShape(system);
       
-      //
-      // layout
-      //    - beams
-      //    - RehearsalMark, StaffText
-      //    - Dynamic
-      //    - update the segment shape + measure shape
-      //
-      //
-      int stick = system->measures().front()->tick();
-      int etick = system->measures().back()->endTick();
+      layoutSlurs(system);
 
-      //
-      // layout slurs
-      //
-      if (etick > stick) {    // ignore vbox
-            auto spanners = score->spannerMap().findOverlapping(stick, etick);
+      layoutBeamAndArticulation(system);
 
-            std::vector<Spanner*> spanner;
-            for (auto interval : spanners) {
-                  Spanner* sp = interval.value;
-                  if (sp->tick() < etick && sp->tick2() >= stick) {
-                        if (sp->isSlur())
-                              spanner.push_back(sp);
-                        }
-                  }
-            processLines(system, spanner, false);
-            }
+      layoutTuplet(system);
 
-      std::vector<Dynamic*> dynamics;
-      for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure())
-                  continue;
-            SegmentType st = SegmentType::ChordRest;
-            Measure* m = toMeasure(mb);
-            for (Segment* s = m->first(st); s; s = s->next(st)) {
-                  for (Element* e : s->elist()) {
-                        if (!e)
-                              continue;
-                        if (e->isChordRest()) {
-                              ChordRest* cr = toChordRest(e);
-                              if (isTopBeam(cr))
-                                    cr->beam()->layout();
-                              if (e->isChord()) {
-                                    Chord* c = toChord(e);
-                                    for (Chord* ch : c->graceNotes())
-                                          layoutTies(ch, system, stick);
-                                    layoutTies(c, system, stick);
-                                    c->layoutArticulations2();
-                                    }
-                              }
-                        }
-                  for (Element* e : s->annotations()) {
-                        if (e->visible() && e->isDynamic()) {
-                              Dynamic* d = toDynamic(e);
-                              d->layout();
-                              }
-                        else if (e->isFiguredBass())
-                              e->layout();
-                        }
-                  }
-            }
+      layoutSpannerSegments(system);
 
-      //
-      // layout tuplet
-      //
+      layoutTempoTextAndFermata(system);
 
-      for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure())
-                  continue;
-            Measure* m = toMeasure(mb);
-            static const SegmentType st { SegmentType::ChordRest };
-            for (int track = 0; track < score->ntracks(); ++track) {
-                  if (!score->staff(track / VOICES)->show()) {
-                        track += VOICES-1;
-                        continue;
-                        }
-                  for (Segment* s = m->first(st); s; s = s->next(st)) {
-                        ChordRest* cr = s->cr(track);
-                        if (!cr)
-                              continue;
-                        DurationElement* de = cr;
-                        while (de->tuplet() && de->tuplet()->elements().front() == de) {
-                              Tuplet* t = de->tuplet();
-                              t->layout();
-                              de = de->tuplet();
-                              }
-                        }
-                  }
-            }
+      layoutJumpAndMarker(system);
 
-      //
-      //    layout SpannerSegments for current system
-      //
-
-      if (etick > stick) {    // ignore vbox
-            auto spanners = score->spannerMap().findOverlapping(stick, etick);
-
-            std::vector<Spanner*> ottavas;
-            std::vector<Spanner*> spanner;
-            std::vector<Spanner*> pedal;
-
-            for (auto interval : spanners) {
-                  Spanner* sp = interval.value;
-                  if (sp->tick() < etick && sp->tick2() > stick) {
-                        if (sp->isOttava())
-                              ottavas.push_back(sp);
-                        else if (sp->isPedal())
-                              pedal.push_back(sp);
-                        else if (!sp->isSlur())             // slurs are already handled
-                              spanner.push_back(sp);
-                        }
-                  }
-            processLines(system, ottavas, false);
-            processLines(system, pedal, true);
-            processLines(system, spanner, false);
-
-            //
-            // vertical align volta segments
-            //
-            std::vector<SpannerSegment*> voltaSegments;
-            for (SpannerSegment* ss : system->spannerSegments()) {
-                  if (ss->isVoltaSegment())
-                       voltaSegments.push_back(ss);
-                 }
-            if (voltaSegments.size() > 1) {
-                  qreal y = 0;
-                  for (SpannerSegment* ss : voltaSegments)
-                        y = qMin(y, ss->userOff().y());
-                  for (SpannerSegment* ss : voltaSegments)
-                        ss->setUserYoffset(y);
-                  }
-            for (Spanner* sp : score->unmanagedSpanners()) {
-                  if (sp->tick() >= etick || sp->tick2() < stick)
-                        continue;
-                  sp->layout();
-                  }
-            }
-
-      //
-      // TempoText, Fermata
-      //
-
-      for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure())
-                  continue;
-            SegmentType st = SegmentType::ChordRest;
-            Measure* m = toMeasure(mb);
-            for (Segment* s = m->first(st); s; s = s->next(st)) {
-                  for (Element* e : s->annotations()) {
-                        if (e->isTempoText()) {
-                              TempoText* tt = toTempoText(e);
-                              score->setTempo(tt->segment(), tt->tempo());
-                              tt->layout();
-                              }
-                        else if (e->isFermata())
-                              e->layout();
-                        }
-                  }
-            }
-
-      //
-      // Jump, Marker
-      //
-
-      for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure())
-                  continue;
-            Measure* m = toMeasure(mb);
-            for (Element* e : m->el()) {
-                  if (e->visible() && (e->isJump() || e->isMarker()))
-                        e->layout();
-                  }
-            }
-
-      //
-      // RehearsalMark, StaffText, FretDiagram
-      //
-
-      for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure())
-                  continue;
-            SegmentType st = SegmentType::ChordRest;
-            Measure* m = toMeasure(mb);
-            for (Segment* s = m->first(st); s; s = s->next(st)) {
-                  // layout in specific order
-                  for (Element* e : s->annotations()) {
-                        if (e->visible() && e->isFretDiagram())
-                              e->layout();
-                        }
-                  for (Element* e : s->annotations()) {
-                        if (e->visible() && (e->isStaffText() || e->isHarmony()))
-                              e->layout();
-                        }
-                  for (Element* e : s->annotations()) {
-                        if (e->visible() && e->isRehearsalMark())
-                              e->layout();
-                        }
-                  }
-            }
+      layoutRehearsalMarkAndStaffTextAndFretDiagram(system);
 
       score->layoutLyrics(system);
 
