@@ -174,10 +174,10 @@ void AccidentalState::init(Key key)
             for (int i = 0; i < int(key); ++i) {
                   int idx = tpc2step(20 + i);
                   for (int octave = 0; octave < (11 * 7); octave += 7) {
-                        int i = idx + octave;
-                        if (i >= MAX_ACC_STATE)
+                        int j = idx + octave;
+                        if (j >= MAX_ACC_STATE)
                               break;
-                        state[i] = 1 + 2;
+                        state[j] = 1 + 2;
                         }
                   }
             }
@@ -185,10 +185,10 @@ void AccidentalState::init(Key key)
             for (int i = 0; i > int(key); --i) {
                   int idx = tpc2step(12 + i);
                   for (int octave = 0; octave < (11 * 7); octave += 7) {
-                        int i = idx + octave ;
-                        if (i >= MAX_ACC_STATE)
+                        int j = idx + octave ;
+                        if (j >= MAX_ACC_STATE)
                               break;
-                        state[i] = -1 + 2;
+                        state[j] = -1 + 2;
                         }
                   }
             }

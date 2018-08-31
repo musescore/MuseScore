@@ -117,9 +117,9 @@ PluginCreator::PluginCreator(QWidget* parent)
 
 QString PluginCreator::manualPath()
       {
-      QString path = mscoreGlobalShare;
-      path += "/manual/plugins/plugins.html";
-      return path;
+      QString _path = mscoreGlobalShare;
+      _path += "/manual/plugins/plugins.html";
+      return _path;
       }
 
 //---------------------------------------------------------

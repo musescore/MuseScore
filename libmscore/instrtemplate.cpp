@@ -92,8 +92,8 @@ void InstrumentGroup::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "instrument" || tag == "Instrument") {
-                  QString id = e.attribute("id");
-                  InstrumentTemplate* t = searchTemplate(id);
+                  QString sid = e.attribute("id");
+                  InstrumentTemplate* t = searchTemplate(sid);
                   if (t == 0) {
                         t = new InstrumentTemplate;
                         t->articulation.append(articulation);     // init with global articulation

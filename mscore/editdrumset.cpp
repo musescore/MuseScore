@@ -294,22 +294,20 @@ void EditDrumset::setEnabledPitchControls(bool enable)
 //   nameChanged
 //---------------------------------------------------------
 
-void EditDrumset::nameChanged(const QString& name)
+void EditDrumset::nameChanged(const QString& n)
       {
       QTreeWidgetItem* item = pitchList->currentItem();
       if (item) {
-            item->setText(Column::NAME, name);
+            item->setText(Column::NAME, n);
             int pitch = item->data(Column::PITCH, Qt::UserRole).toInt();
-            if (!name.isEmpty()) {
+            if (!n.isEmpty()) {
                   if (!nDrumset.isValid(pitch))
                         noteHead->setCurrentIndex(0);
                   }
-            else {
-                  int pitch = item->data(Column::PITCH, Qt::UserRole).toInt();
+            else
                   nDrumset.drum(pitch).name.clear();
-                  }
             }
-      setEnabledPitchControls(!name.isEmpty());
+      setEnabledPitchControls(!n.isEmpty());
       }
 
 //---------------------------------------------------------
@@ -527,24 +525,24 @@ void EditDrumset::updateExample()
             return;
             }
       int line      = nDrumset.line(pitch);
-      NoteHead::Group noteHead = nDrumset.noteHead(pitch);
-      int voice     = nDrumset.voice(pitch);
+      NoteHead::Group nh = nDrumset.noteHead(pitch);
+      int v         = nDrumset.voice(pitch);
       Direction dir = nDrumset.stemDirection(pitch);
       bool up = (Direction::UP == dir) || (Direction::AUTO == dir && line > 4);
       Chord* chord = new Chord(gscore);
       chord->setDurationType(TDuration::DurationType::V_QUARTER);
       chord->setStemDirection(dir);
-      chord->setTrack(voice);
+      chord->setTrack(v);
       chord->setUp(up);
       Note* note = new Note(gscore);
       note->setParent(chord);
-      note->setTrack(voice);
+      note->setTrack(v);
       note->setPitch(pitch);
       note->setTpcFromPitch();
       note->setLine(line);
       note->setPos(0.0, gscore->spatium() * .5 * line);
       note->setHeadType(NoteHead::Type::HEAD_QUARTER);
-      note->setHeadGroup(noteHead);
+      note->setHeadGroup(nh);
       note->setCachedNoteheadSym(Sym::name2id(quarterCmb->currentData().toString()));
       chord->add(note);
       Stem* stem = new Stem(gscore);
@@ -559,11 +557,11 @@ void EditDrumset::updateExample()
 
 void EditDrumset::load()
       {
-      QString name = mscore->getDrumsetFilename(true);
-      if (name.isEmpty())
+      QString fname = mscore->getDrumsetFilename(true);
+      if (fname.isEmpty())
             return;
 
-      QFile fp(name);
+      QFile fp(fname);
       if (!fp.open(QIODevice::ReadOnly))
             return;
 
@@ -593,11 +591,11 @@ void EditDrumset::load()
 
 void EditDrumset::save()
       {
-      QString name = mscore->getDrumsetFilename(false);
-      if (name.isEmpty())
+      QString fname = mscore->getDrumsetFilename(false);
+      if (fname.isEmpty())
             return;
 
-      QFile f(name);
+      QFile f(fname);
       if (!f.open(QIODevice::WriteOnly)) {
             QString s = tr("Open File\n%1\nfailed: %1").arg(strerror(errno));
             QMessageBox::critical(mscore, tr("Open File"), s.arg(f.fileName()));

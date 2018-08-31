@@ -316,8 +316,8 @@ QString Page::replaceTextMacros(const QString& s) const
       for (int i = 0, n = s.size(); i < n; ++i) {
             QChar c = s[i];
             if (c == '$' && (i < (n-1))) {
-                  QChar c = s[i+1];
-                  switch(c.toLatin1()) {
+                  QChar nc = s[i+1];
+                  switch(nc.toLatin1()) {
                         case 'p': // not on first page 1
                               if (_no) // FALLTHROUGH
                         case 'N': // on page 1 only if there are multiple pages
@@ -392,7 +392,7 @@ QString Page::replaceTextMacros(const QString& s) const
                               break;
                         default:
                               d += '$';
-                              d += c;
+                              d += nc;
                               break;
                         }
                   ++i;

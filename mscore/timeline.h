@@ -212,7 +212,7 @@ class Timeline : public QGraphicsView {
       unsigned int nmetas();
 
       bool collapsed() { return collapsed_meta; }
-      void setCollapsed(bool state) { collapsed_meta = state; }
+      void setCollapsed(bool st) { collapsed_meta = st; }
 
       Staff* numToStaff(int staff);
       void toggleShow(int staff);

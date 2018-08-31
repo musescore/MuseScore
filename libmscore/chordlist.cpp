@@ -1147,7 +1147,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
       {
       QString kind = rawKind;
       QString kindText = rawKindText;
-      bool symbols = (useSymbols == "yes");
+      bool syms = (useSymbols == "yes");
       bool parens = (useParens == "yes");
       bool implied = false;
       bool extend = false;
@@ -1182,7 +1182,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
             _quality = "augmented";
       else if (kind == "half-diminished") {
             _quality = "half-diminished";
-            if (symbols) {
+            if (syms) {
                   extension = 7;
                   extend = true;
                   }
@@ -1327,15 +1327,15 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
             _name = _extension;
       else {
             if (_quality == "major")
-                  _name = symbols ? "^" : "maj";
+                  _name = syms ? "^" : "maj";
             else if (_quality == "minor")
-                  _name = symbols ? "-" : "m";
+                  _name = syms ? "-" : "m";
             else if (_quality == "augmented")
-                  _name = symbols ? "+" : "aug";
+                  _name = syms ? "+" : "aug";
             else if (_quality == "diminished")
-                  _name = symbols ? "o" : "dim";
+                  _name = syms ? "o" : "dim";
             else if (_quality == "half-diminished")
-                  _name = symbols ? "0" : "m7b5";
+                  _name = syms ? "0" : "m7b5";
             else
                   _name = _quality;
             _name += _extension;
@@ -1677,8 +1677,8 @@ void ChordList::write(XmlWriter& xml) const
             writeRenderList(xml, &renderListRoot, "renderRoot");
       if (!renderListBase.empty())
             writeRenderList(xml, &renderListBase, "renderBase");
-      foreach(const ChordDescription& d, *this)
-            d.write(xml);
+      for (const ChordDescription& cd : *this)
+            cd.write(xml);
       }
 
 //---------------------------------------------------------

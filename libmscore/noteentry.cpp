@@ -572,14 +572,14 @@ void Score::localInsertChord(const Position& pos)
                         continue;
                         }
                   Segment* seg1 = 0;
-                  for (Segment* s = fs; s; s = s->next(SegmentType::ChordRest)) {
-                        if (s->element(track)) {
-                              ChordRest* cr = toChordRest(s->element(track));
-                              if (s->tick() > tick)
+                  for (Segment* ns = fs; ns; ns = ns->next(SegmentType::ChordRest)) {
+                        if (ns->element(track)) {
+                              ChordRest* cr = toChordRest(ns->element(track));
+                              if (ns->tick() > tick)
                                     break;
-                              if (s->tick() + cr->duration().ticks() < tick)
+                              if (ns->tick() + cr->duration().ticks() < tick)
                                     continue;
-                              seg1 = s;
+                              seg1 = ns;
                               break;
                               }
                         }

@@ -4472,14 +4472,14 @@ bool MuseScore::restoreSession(bool always)
                               QString name;
                               bool created = false;
                               while (e.readNextStartElement()) {
-                                    const QStringRef& tag(e.name());
-                                    if (tag == "name")
+                                    const QStringRef& t(e.name());
+                                    if (t == "name")
                                           name = e.readElementText();
-                                    else if (tag == "created")
+                                    else if (t == "created")
                                           created = e.readInt();
-                                    else if (tag == "dirty")
+                                    else if (t == "dirty")
                                           /*int dirty =*/ e.readInt();
-                                    else if (tag == "path") {
+                                    else if (t == "path") {
                                           MasterScore* score = readScore(e.readElementText());
                                           if (score) {
                                                 if (!name.isEmpty()) {
@@ -4509,18 +4509,18 @@ bool MuseScore::restoreSession(bool always)
                               int tab       = 0;
                               int idx       = 0;
                               while (e.readNextStartElement()) {
-                                    const QStringRef& tag(e.name());
-                                    if (tag == "tab")
+                                    const QStringRef& t(e.name());
+                                    if (t == "tab")
                                           tab = e.readInt();
-                                    else if (tag == "idx")
+                                    else if (t == "idx")
                                           idx = e.readInt();
-                                    else if (tag == "mag")
+                                    else if (t == "mag")
                                           vmag = e.readDouble();
-                                    else if (tag == "magIdx")
+                                    else if (t == "magIdx")
                                           magIdx = MagIdx(e.readInt());
-                                    else if (tag == "x")
+                                    else if (t == "x")
                                           x = e.readDouble() * DPMM;
-                                    else if (tag == "y")
+                                    else if (t == "y")
                                           y = e.readDouble() * DPMM;
                                     else {
                                           e.unknown();
@@ -5936,8 +5936,8 @@ QFileInfoList MuseScore::recentScores() const
             QFileInfo fi(s);
             bool alreadyLoaded = false;
             QString fp = fi.canonicalFilePath();
-            for (Score* s : mscore->scores()) {
-                  if ((s->masterScore()->fileInfo()->canonicalFilePath() == fp) || (s->importedFilePath() == fp)) {
+            for (Score* sc : mscore->scores()) {
+                  if ((sc->masterScore()->fileInfo()->canonicalFilePath() == fp) || (sc->importedFilePath() == fp)) {
                         alreadyLoaded = true;
                         break;
                         }
