@@ -3192,26 +3192,8 @@ System* Score::collectSystem(LayoutContext& lc)
             }
       system->setWidth(pos.x());
 
-      //
-      // compute measure shape
-      //
+      lc.computeMeasureShape(system);
 
-      for (int si = 0; si < score()->nstaves(); ++si) {
-            for (MeasureBase* mb : system->measures()) {
-                  if (!mb->isMeasure())
-                        continue;
-                  Measure* m = toMeasure(mb);
-                  Shape& ss  = m->staffShape(si);
-                  ss.clear();
-
-                  for (Segment& s : m->segments()) {
-                        if (s.isTimeSigType())       // hack: ignore time signatures
-                              continue;
-                        ss.add(s.staffShape(si).translated(s.pos()));
-                        }
-                  ss.add(m->staffLines(si)->bbox());
-                  }
-            }
       //
       // layout
       //    - beams
@@ -3488,6 +3470,30 @@ System* Score::collectSystem(LayoutContext& lc)
             }
 
       return system;
+      }
+
+//---------------------------------------------------------
+//   computeMeasureShape
+//---------------------------------------------------------
+
+void LayoutContext::computeMeasureShape(System* system)
+      {
+      for (int si = 0; si < score->nstaves(); ++si) {
+            for (MeasureBase* mb : system->measures()) {
+                  if (!mb->isMeasure())
+                        continue;
+                  Measure* m = toMeasure(mb);
+                  Shape& ss  = m->staffShape(si);
+                  ss.clear();
+
+                  for (Segment& s : m->segments()) {
+                        if (s.isTimeSigType())       // hack: ignore time signatures
+                              continue;
+                        ss.add(s.staffShape(si).translated(s.pos()));
+                        }
+                  ss.add(m->staffLines(si)->bbox());
+                  }
+            }
       }
 
 //---------------------------------------------------------
