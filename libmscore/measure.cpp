@@ -4016,7 +4016,8 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         bool disable = true;
                         for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
                               Element* e = kSegment->element(staffIdx * VOICES);
-                              if (e && (!e->generated() || toKeySig(e)->key() != Key::C)) {
+                              Key key = score()->staff(staffIdx)->key(tick());
+                              if ((e && !e->generated()) || (key != keyIdx.key())) {
                                     disable = false;
                                     break;
                                     }
