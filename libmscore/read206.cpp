@@ -1887,8 +1887,6 @@ static void readRest(Rest* rest, XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Articulation") {
-                  Articulation* atr = new Articulation(rest->score());
-                  atr->setTrack(rest->track());
                   Element* el = readArticulation(rest, e);
                   if (el->isFermata())
                         rest->segment()->add(el);
