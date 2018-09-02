@@ -1696,7 +1696,7 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
                               }
                         }
                   else
-                        qDebug("ChordRest::read300(): unknown Slur type <%s>", qPrintable(atype));
+                        qDebug("readChordRestProperties206(): unknown Slur type <%s>", qPrintable(atype));
                   }
             e.readNext();
             }
@@ -3267,7 +3267,7 @@ static bool readScore(Score* score, XmlReader& e)
                               score->excerpts().append(ex);
                               }
                         else {
-                              qDebug("Score::read300(): part cannot have parts");
+                              qDebug("read206: readScore(): part cannot have parts");
                               e.skipCurrentElement();
                               }
                         }
@@ -3284,7 +3284,6 @@ static bool readScore(Score* score, XmlReader& e)
                         ex->setPartScore(s);
                         ex->setTracks(e.tracks());
                         e.setLastMeasure(nullptr);
-                        // s->read300(e);
                         readScore(s, e);
                         m->addExcerpt(ex);
                         }
