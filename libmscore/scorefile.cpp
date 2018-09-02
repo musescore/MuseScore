@@ -934,6 +934,8 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                               return FileError::FILE_TOO_NEW;
                         if (mscVersion() < 114)
                               return FileError::FILE_TOO_OLD;
+                        if (mscVersion() == 300)
+                              return FileError::FILE_OLD_300_FORMAT;
                         }
                   Score::FileError error;
                   if (mscVersion() <= 114)
