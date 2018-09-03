@@ -1120,7 +1120,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                                                             QPointF pt(s->pos().x() + m->pos().x() + system->pos().x(),
                                                                system->staffYpage(i));
                                                             p.translate(pt);
-                                                            s->shapes().at(i).draw(&p);
+                                                            s->shapes().at(i).paint(p);
                                                             p.translate(-pt);
                                                             }
                                                       }
@@ -1137,16 +1137,25 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                                                 p.setBrush(QBrush(QColor(0, 0, 255, 60)));
                                                 for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
                                                       Staff* staff = score()->staff(staffIdx);
-//                                                      if (staff->show() && staff->part()->show()) {
                                                       if (staff->show()) {
                                                             QPointF pt(m->pos().x() + system->pos().x(), 0);
                                                             p.translate(pt);
                                                             QPointF o(0.0, m->system()->staffYpage(staffIdx));
-                                                            m->staffShape(staffIdx).translated(o).draw(&p);
+                                                            m->staffShape(staffIdx).translated(o).paint(p);
                                                             p.translate(-pt);
                                                             }
                                                       }
                                                 }
+                                          }
+                                    }
+                              }
+                        if (MScore::showSkylines) {
+                              for (const System* system : page->systems()) {
+                                    for (SysStaff* ss : *system->staves()) {
+                                          QPointF pt(system->ipos().x(), system->ipos().y() + ss->y());
+                                          p.translate(pt);
+                                          ss->skyline().paint(p);
+                                          p.translate(-pt);
                                           }
                                     }
                               }
