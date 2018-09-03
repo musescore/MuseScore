@@ -1075,7 +1075,6 @@ qreal System::minDistance(System* s2) const
                               dist = qMax(dist, sp->gap());
                         }
                   }
-
             for (MeasureBase* mb1 : ml) {
                   if (!mb1->isMeasure())
                         continue;

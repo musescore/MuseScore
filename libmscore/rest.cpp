@@ -999,7 +999,11 @@ Shape Rest::shape() const
                   shape.add(r);
                   }
             else
+#ifndef NDEBUG
+                  shape.add(bbox(), name());
+#else
                   shape.add(bbox());
+#endif
             for (NoteDot* dot : _dots)
                   shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
             }

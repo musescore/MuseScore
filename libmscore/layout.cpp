@@ -3461,6 +3461,25 @@ System* Score::collectSystem(LayoutContext& lc)
 
       layoutLyrics(system);
 
+      //-------------------------------------------------------------
+      //    create skylines for test
+      //-------------------------------------------------------------
+
+      if (!system->staves()->empty()) {                 // ignore vbox
+            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                  SysStaff* ss = system->staff(staffIdx);
+                  ss->skyline().clear();
+                  ss->skyline().add(QRectF(0.0, 0.0, system->width(), ss->bbox().height()), "staff");
+                  for (MeasureBase* mb : system->measures()) {
+                        if (!mb->isMeasure())
+                              continue;
+                        Measure* m = toMeasure(mb);
+                        ss->skyline().add(m->staffShape(staffIdx).translated(m->pos()));
+                        }
+//                  ss->skyline().dump("skyline");
+                  }
+            }
+
       system->layout2();   // compute staff distances
 
       Measure* lm  = system->lastMeasure();

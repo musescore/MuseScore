@@ -1622,6 +1622,9 @@ MuseScore::MuseScore()
       a = getAction("show-measure-shapes");
       a->setCheckable(true);
       menuDebug->addAction(a);
+      a = getAction("show-skylines");
+      a->setCheckable(true);
+      menuDebug->addAction(a);
       a = getAction("show-bounding-rect");
       a->setCheckable(true);
       menuDebug->addAction(a);
@@ -5568,6 +5571,13 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             }
       else if (cmd == "show-measure-shapes") {
             MScore::showMeasureShapes = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "show-skylines") {
+            MScore::showSkylines = a->isChecked();
             if (cs) {
                   cs->setLayoutAll();
                   cs->update();
