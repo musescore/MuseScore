@@ -20,7 +20,7 @@ if (NOT MSVC)
 else (NOT MSVC)
    set_target_properties ( beatroot
       PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE}"
+         COMPILE_FLAGS "${PCH_INCLUDE} /wd4267"
       )
 endif (NOT MSVC)   
 
