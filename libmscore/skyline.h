@@ -89,9 +89,7 @@ class Skyline {
       bool intersects(const QRectF& rr) const;
       void paint(QPainter&) const;
 
-#ifndef NDEBUG
       void dump(const char*) const;
-#endif
       };
 
 } // namespace Ms
