@@ -369,6 +369,7 @@ void Harmony::read(XmlReader& e)
 
       // render chord from description (or _textName)
       render();
+      setXmlText(harmonyName());
       }
 
 //---------------------------------------------------------
@@ -707,6 +708,8 @@ void Harmony::startEdit(EditData& ed)
       {
       if (!textList.empty())
             setXmlText(harmonyName());
+
+      layoutInvalid = false;
       TextBase::startEdit(ed);
       }
 
@@ -737,7 +740,8 @@ bool Harmony::edit(EditData& ed)
 void Harmony::endEdit(EditData& ed)
       {
       TextBase::endEdit(ed);
-      layout();
+      if (isLayoutInvalid())
+            layout();
       if (links()) {
             for (ScoreElement* e : *links()) {
                   if (e == this)
