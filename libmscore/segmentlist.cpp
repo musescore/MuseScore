@@ -122,7 +122,6 @@ void SegmentList::insert(Segment* e, Segment* el)
 
 void SegmentList::remove(Segment* e)
       {
-#ifndef NDEBUG
       check();
       bool found = false;
       for (Segment* s = _first; s; s = s->next()) {
@@ -132,25 +131,26 @@ void SegmentList::remove(Segment* e)
                   }
             }
       if (!found) {
-            qFatal("segment %p %s not in list", e, e->subTypeName());
-            }
-#endif
-      --_size;
-      if (e == _first) {
-            _first = _first->next();
-            if (_first)
-                  _first->setPrev(0);
-            if (e == _last)
-                  _last = 0;
-            }
-      else if (e == _last) {
-            _last = _last->prev();
-            if (_last)
-                  _last->setNext(0);
+            qDebug("Warning: segment %p %s not in list", e, e->subTypeName());
             }
       else {
-            e->prev()->setNext(e->next());
-            e->next()->setPrev(e->prev());
+            --_size;
+            if (e == _first) {
+                  _first = _first->next();
+                  if (_first)
+                        _first->setPrev(0);
+                  if (e == _last)
+                        _last = 0;
+                  }
+            else if (e == _last) {
+                  _last = _last->prev();
+                  if (_last)
+                        _last->setNext(0);
+                  }
+            else {
+                  e->prev()->setNext(e->next());
+                  e->next()->setPrev(e->prev());
+                  }
             }
       }
 
