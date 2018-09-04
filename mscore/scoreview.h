@@ -176,7 +176,6 @@ class ScoreView : public QWidget, public MuseScoreView {
       void drawElements(QPainter& p,QList<Element*>& el, Element* editElement);
       bool dragTimeAnchorElement(const QPointF& pos);
       bool dragMeasureAnchorElement(const QPointF& pos);
-      void updateGrips();
       virtual void lyricsTab(bool back, bool end, bool moveOnly) override;
       virtual void lyricsReturn() override;
       virtual void lyricsEndEdit() override;
@@ -399,6 +398,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual const QRect geometry() const override { return QWidget::geometry(); }
 
       bool clickOffElement;
+      void updateGrips();
       };
 
 } // namespace Ms
