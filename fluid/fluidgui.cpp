@@ -281,7 +281,7 @@ void FluidGui::loadSf()
                   _loadedSfPath = sfPath;
                   QFuture<bool> future = QtConcurrent::run(fluid(), &FluidS::Fluid::addSoundFont, sfPath);
                   _futureWatcher.setFuture(future);
-                  _progressTimer->start(1);
+                  _progressTimer->start(1000);
                   _progressDialog->exec();
                 }
       }
