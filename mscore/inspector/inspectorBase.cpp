@@ -23,6 +23,7 @@
 #include "offsetSelect.h"
 #include "scaleSelect.h"
 #include "sizeSelect.h"
+#include "scoreview.h"
 
 namespace Ms {
 
@@ -396,6 +397,9 @@ void InspectorBase::valueChanged(int idx, bool reset)
       if (id == Pid::SUB_STYLE)
             setElement();
       recursion = false;
+
+      ScoreView* cv = mscore->currentScoreView();
+      cv->updateGrips();
       }
 
 //---------------------------------------------------------
