@@ -443,6 +443,7 @@ class Score : public QObject, public ScoreElement {
 
       QMap<QString, QString> _metaTags;
 
+      constexpr static double defaultTempo = 2.0; //defautl tempo is equal 120 bpm
 
       Selection _selection;
       SelectionFilter _selectionFilter;
@@ -510,6 +511,7 @@ class Score : public QObject, public ScoreElement {
 
       void resetSystems(bool layoutAll, LayoutContext& lc);
       void collectLinearSystem(LayoutContext& lc);
+      void resetTempo();
 
    protected:
       int _fileDivision; ///< division of current loading *.msc file

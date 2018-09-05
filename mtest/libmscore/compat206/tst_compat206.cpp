@@ -44,6 +44,7 @@ class TestCompat206 : public QObject, public MTest
       void brlines()          { compat("barlines");         }
       void lidEmptyText()     { compat("lidemptytext");     }
       void intrumentNameAlign() {compat("intrumentNameAlign"); }
+      void fermata()          { compat("fermata");          }
       };
 
 //---------------------------------------------------------
