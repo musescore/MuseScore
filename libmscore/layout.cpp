@@ -3406,7 +3406,8 @@ System* Score::collectSystem(LayoutContext& lc)
                   for (Element* e : s->annotations()) {
                         if (e->isTempoText()) {
                               TempoText* tt = toTempoText(e);
-                              setTempo(tt->segment(), tt->tempo());
+                              if (score()->isMaster())
+                                    setTempo(tt->segment(), tt->tempo());
                               tt->layout();
                               }
                         else if (e->isFermata()) {
