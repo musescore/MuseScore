@@ -44,7 +44,7 @@ void Skyline::add(const Shape& s)
 
 void SkylineLine::add(qreal x, qreal y, qreal w)
       {
-//      Q_ASSERT(w >= 0.0);
+      Q_ASSERT(w >= 0.0);
       if (x < 0.0)
             return;
 
@@ -63,7 +63,7 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
                   continue;
                   }
             if ((x >= cx) && ((x+w) < (cx+i->w))) {                     // (E) insert segment
-//                  printf("    insert at %f %f   x:%f w:%f\n", cx, i->w, x, w);
+                  printf("    insert at %f %f   x:%f w:%f\n", cx, i->w, x, w);
                   qreal w1 = x - cx;
                   qreal w2 = w;
                   qreal w3 = i->w - (w1 + w2);
@@ -81,13 +81,13 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
                   return;
                   }
             else if ((x <= cx) && ((x + w) >= (cx + i->w))) {               // F
-//                  printf("    change(F) cx %f y %f\n", cx, y);
+                  printf("    change(F) cx %f y %f\n", cx, y);
                   i->y = y;
                   }
             else if (x < cx) {                                          // C
                   qreal w1 = x + w - cx;
                   i->w    -= w1;
-//                  printf("    add(C) cx %f y %f w %f w1 %f\n", cx, y, w1, i->w);
+                  printf("    add(C) cx %f y %f w %f w1 %f\n", cx, y, w1, i->w);
                   insert(i, SkylineSegment(y, w1));
                   return;
                   }
@@ -96,7 +96,7 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
                   qreal w2 = i->w - w1;
                   i->w = w1;
                   cx  += w1;
-//                  printf("    add(D) %f %f\n", y, w2);
+                  printf("    add(D) %f %f\n", y, w2);
                   ++i;
                   i = insert(i, SkylineSegment(y, w2));
                   }
@@ -105,10 +105,10 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
       if (x >= cx) {
             if (x > cx) {
                   cy = 0.0;
-//                  printf("    append1 %f %f\n", cy, x - cx);
+                  printf("    append1 %f %f\n", cy, x - cx);
                   push_back(SkylineSegment(cy, x - cx));
                   }
-//            printf("    append2 %f %f\n", y, w);
+            printf("    append2 %f %f\n", y, w);
             push_back(SkylineSegment(y, w));
             }
       }
@@ -163,42 +163,9 @@ Skyline Skyline::translated(const QPointF&) const
 //    Calculates the minimum distance between two skylines
 //-------------------------------------------------------------------
 
-qreal Skyline::minDistance(const Skyline& s) const
-      {
-      return south.minDistance(s.north);
-      }
-
-qreal SkylineLine::minDistance(const SkylineLine& sl) const
+qreal Skyline::minDistance(const Skyline&) const
       {
       qreal dist = -1000000.0;      // min real
-
-      qreal x1 = 0.0;
-      qreal x2 = 0.0;
-      auto k   = sl.begin();
-      for (auto i = begin(); i != end(); ++i) {
-            while (k != sl.end() && (x2 + k->w) < x1) {
-                  x2 += k->w;
-                  ++k;
-                  }
-            if (k == sl.end())
-                  break;
-            for (;;) {
-                  if ((x1+i->w > x2) && (x1 < x2+k->w))
-                        dist = qMax(dist, i->y - k->y);
-                  if (x2 + k->w < x1 + i->w) {
-                        x2 += k->w;
-                        ++k;
-                        if (k == sl.end())
-                              break;
-                        }
-                  else
-                        break;
-                  }
-            if (k == sl.end())
-                  break;
-            x1 += i->w;
-            }
-  //    printf("dist %f\n", dist);
       return dist;
       }
 

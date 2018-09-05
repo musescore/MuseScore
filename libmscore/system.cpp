@@ -416,6 +416,7 @@ void System::layout2()
                         break;
                   }
             dist += staff2->userDist();
+
             for (MeasureBase* mb : ml) {
                   if (!mb->isMeasure())
                         continue;
@@ -1074,8 +1075,29 @@ qreal System::minDistance(System* s2) const
                               dist = qMax(dist, sp->gap());
                         }
                   }
-            dist = qMax(dist, staff(lastStaff)->skyline().minDistance(s2->staff(firstStaff)->skyline()));
-            dist = dist - staff(lastStaff)->bbox().height() + minVerticalDistance;
+            for (MeasureBase* mb1 : ml) {
+                  if (!mb1->isMeasure())
+                        continue;
+                  Measure* m1 = toMeasure(mb1);
+                  qreal bx1 = m1->x();
+                  qreal bx2 = m1->x() + m1->width();
+
+                  for (MeasureBase* mb2 : s2->measures()) {
+                        if (!mb2->isMeasure())
+                              continue;
+                        Measure* m2 = toMeasure(mb2);
+                        qreal ax1 = mb2->x();
+                        if (ax1 >= bx2)
+                              break;
+                        qreal ax2 = mb2->x() + mb2->width();
+                        if (ax2 < bx1)
+                              continue;
+                        Shape sh1 = m1->staffShape(lastStaff).translated(m1->pos());
+                        Shape sh2 = m2->staffShape(firstStaff).translated(m2->pos());
+                        qreal d   = (score()->lineMode() ? 0.0 : sh1.minVerticalDistance(sh2)) + minVerticalDistance;
+                        dist = qMax(dist, d - m1->staffLines(lastStaff)->height());
+                        }
+                  }
             }
       return dist;
       }
