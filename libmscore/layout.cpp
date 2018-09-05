@@ -3564,12 +3564,6 @@ void LayoutContext::collectPage()
 
             y += distance;
             curSystem->setPos(page->lm(), y);
-#ifndef NDEBUG
-            for (System* s : page->systems()) {
-                  if (s == curSystem)
-                        qDebug("bad system %d", k);
-                  }
-#endif
             page->appendSystem(curSystem);
             y += curSystem->height();
 
