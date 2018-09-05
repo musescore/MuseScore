@@ -24,6 +24,21 @@ class Page;
 //---------------------------------------------------------
 
 struct LayoutContext {
+
+   private:
+      int _stick;
+      int _etick;
+
+      void layoutSlurs(System* system);
+      void layoutBeamAndArticulation(System* system);
+      void layoutTuplet(System* system);
+      void layoutSpannerSegments(System* system);
+      void layoutTempoTextAndFermata(System* system);
+      void layoutJumpAndMarker(System* system);
+      void layoutRehearsalMarkAndStaffTextAndFretDiagram(System* system);
+      void layoutGraceNote(System* system);
+
+   public:
       Score* score             { 0    };
       bool startWithLongNames  { true };
       bool firstSystem         { true };
@@ -48,6 +63,8 @@ struct LayoutContext {
 
       void layoutLinear();
       void layoutMeasureLinear(MeasureBase*);
+
+      void layoutPageMode(System* system);
 
       void layout();
       int adjustMeasureNo(MeasureBase*);

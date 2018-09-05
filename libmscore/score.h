@@ -974,6 +974,7 @@ class Score : public QObject, public ScoreElement {
       void doLayout();
       void doLayoutRange(int, int);
       void layoutLinear(bool layoutAll, LayoutContext& lc);
+      void layoutPageMode(bool layoutAll, LayoutContext& lc, MeasureBase* measure);
 
       void layoutSystemsUndoRedo();
       void layoutPagesUndoRedo();
