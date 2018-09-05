@@ -3645,9 +3645,11 @@ void LayoutContext::collectPage()
                   }
             }
 
+      qreal height = 0;
       int stick = -1;
       for (System* s : page->systems()) {
             Score* currentScore = s->score();
+            height += s->rypos();
             for (MeasureBase* mb : s->measures()) {
                   if (!mb->isMeasure())
                         continue;
@@ -3701,6 +3703,10 @@ void LayoutContext::collectPage()
                   m->layout2();
                   }
             }
+      
+      if (score->systemMode())
+            page->bbox().setRect(0.0, 0.0, score->loWidth(), height);
+      
       page->rebuildBspTree();
       }
 
