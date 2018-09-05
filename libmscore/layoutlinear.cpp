@@ -346,7 +346,8 @@ void LayoutContext::layoutLinear()
                   for (Element* e : s->annotations()) {
                         if (e->isTempoText()) {
                               TempoText* tt = toTempoText(e);
-                              score->setTempo(tt->segment(), tt->tempo());
+                              if (score->isMaster())
+                                    score->setTempo(tt->segment(), tt->tempo());
                               tt->layout();
                               }
                         else if (e->isFermata())
