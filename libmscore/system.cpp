@@ -416,7 +416,6 @@ void System::layout2()
                         break;
                   }
             dist += staff2->userDist();
-#if 0
             for (MeasureBase* mb : ml) {
                   if (!mb->isMeasure())
                         continue;
@@ -440,31 +439,6 @@ void System::layout2()
                   if (sp)
                         dist = qMax(dist, sp->gap());
                   }
-#else
-            bool fixedSpace = false;
-            for (MeasureBase* mb : ml) {
-                  if (!mb->isMeasure())
-                        continue;
-                  Measure* m = toMeasure(mb);
-                  Spacer* sp = m->vspacerDown(si1);
-                  if (sp) {
-                        if (sp->spacerType() == SpacerType::FIXED) {
-                              dist = staff->height() + sp->gap();
-                              fixedSpace = true;
-                              break;
-                              }
-                        else
-                              dist = qMax(dist, staff->height() + sp->gap());
-                        }
-                  sp = m->vspacerUp(si2);
-                  if (sp)
-                        dist = qMax(dist, sp->gap());
-                  }
-            if (!fixedSpace) {
-                  qreal d = score()->lineMode() ? 0.0 : ss->skyline().minDistance(System::staff(si2)->skyline());
-                  dist = qMax(dist, d + minVerticalDistance);
-                  }
-#endif
 
             ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag(0) : 0.0);
             ss->bbox().setRect(_leftMargin, y, width() - _leftMargin, h);
