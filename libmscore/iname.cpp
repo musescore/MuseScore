@@ -44,7 +44,6 @@ InstrumentName::InstrumentName(Score* s)
    : TextBase(s, ElementFlag::NOTHING | ElementFlag::NOT_SELECTABLE)
       {
       setInstrumentNameType(InstrumentNameType::SHORT);
-      setAlign(Align::RIGHT);
       }
 
 //---------------------------------------------------------
