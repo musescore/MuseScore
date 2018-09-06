@@ -632,6 +632,7 @@ void System::setInstrumentNames(bool longName)
                         iname->setTrack(staffIdx * VOICES);
                         iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
                         iname->setLayoutPos(sn.pos());
+                        iname->setProperty(Pid::ALIGN, int(Align::RIGHT));
                         score()->addElement(iname);
                         }
                   iname->setXmlText(sn.name());
