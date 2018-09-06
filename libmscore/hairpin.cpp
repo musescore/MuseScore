@@ -146,6 +146,11 @@ void HairpinSegment::layout()
                         }
                   else
                         ed->doAutoplace();
+                  int si = ed->staffIdx();
+                  Segment* s = ed->segment();
+                  s->staffShape(si).add(ed->shape().translated(ed->pos()));
+                  Measure* m = s->measure();
+                  m->staffShape(si).add(ed->shape().translated(s->pos() + ed->pos()));
                   }
             }
 
