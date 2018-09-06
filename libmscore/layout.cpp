@@ -2350,6 +2350,11 @@ void Score::getNextMeasure(LayoutContext& lc)
       //-----------------------------------------
 
       Measure* measure = toMeasure(lc.curMeasure);
+      for (int si = 0; si < nstaves(); ++si) {
+            Shape& ss  = measure->staffShape(si);
+            ss.clear();
+            }
+
       measure->moveTicks(lc.tick - measure->tick());
 
       //
@@ -3504,7 +3509,7 @@ void LayoutContext::computeMeasureShape(System* system)
                         continue;
                   Measure* m = toMeasure(mb);
                   Shape& ss  = m->staffShape(si);
-                  ss.clear();
+//                  ss.clear();
 
                   for (Segment& s : m->segments()) {
                         if (s.isTimeSigType())       // hack: ignore time signatures
