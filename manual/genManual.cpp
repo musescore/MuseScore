@@ -12,13 +12,6 @@
 
 #include <stdio.h>
 #include <QString>
-// Load replacement for getopt() for VS
-#if (defined (_MSCVER) || defined (_MSC_VER))
-   #define STATIC_GETOPT 1
-   #undef _UNICODE
-   #include "getopt/getopt.h"
-#endif
-
 
 QString srcPath;
 QString dstPath;
@@ -396,18 +389,7 @@ static void copyAssets(QString& lSrcPath, QString& lDstPath)
 static void usage(const char* program, const char* hint)
       {
       fprintf(stderr, "%s: %s\n", program, hint);
-      fprintf(stderr, "usage: %s [options] srcPath dstPath\n", program);
-      fprintf(stderr, "options: -v        print version\n"
-            );
-      }
-
-//---------------------------------------------------------
-//   printVersion
-//---------------------------------------------------------
-
-static void printVersion(const char* program)
-      {
-      printf("this is %s, version 0.1\n", program);
+      fprintf(stderr, "usage: %s srcPath dstPath\n", program);
       }
 
 //---------------------------------------------------------
@@ -416,27 +398,12 @@ static void printVersion(const char* program)
 
 int main(int argc, char* argv[])
       {
-      char* prog = argv[0];
-      int c;
-
-      while ((c = getopt(argc, argv, "v")) != EOF) {
-            switch (c) {
-                  case 'v':
-                        printVersion(argv[0]);
-                        return 0;
-                  default:
-                        usage(prog, "bad argument");
-                        return -1;
-                  }
-            }
-      argc -= optind;
-      argv += optind;
-      if (argc != 2) {
-            usage(prog, "bad arguments");
+      if (argc != 3) {
+            usage(argv[0], "bad arguments");
             return -1;
             }
-      srcPath = argv[0];
-      dstPath = argv[1];
+      srcPath = argv[1];
+      dstPath = argv[2];
       QStringList files;
       files << "mscore/qmlplugin.h";
       files << "mscore/svggenerator.h";
