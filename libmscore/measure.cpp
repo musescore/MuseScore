@@ -2390,7 +2390,7 @@ void Measure::read300(XmlReader& e, int staffIdx)
                   //  EndBarLine:         at the end of a measure
                   //  BeginBarLine:       first segment of a measure, systemic barline
 
-                  SegmentType st;
+                  SegmentType st = SegmentType::Invalid;
                   int t = e.tick() - tick();
                   if (t && (t != ticks()))
                         st = SegmentType::BarLine;
@@ -3100,7 +3100,7 @@ bool Measure::empty() const
       if (irregular())
             return false;
       int n = 0;
-      int tracks = _mstaves.size() * VOICES;
+      int tracks = int(_mstaves.size()) * VOICES;
       static const SegmentType st = SegmentType::ChordRest ;
       for (const Segment* s = first(st); s; s = s->next(st)) {
             bool restFound = false;

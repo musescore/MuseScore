@@ -2143,7 +2143,7 @@ bool TextBase::validateText(QString& s)
                         if (t.startsWith(k)) {
                               d.append(c);
                               d.append(k);
-                              i += strlen(k);
+                              i += int(strlen(k));
                               found = true;
                               break;
                               }
@@ -2159,7 +2159,7 @@ bool TextBase::validateText(QString& s)
                         if (t.startsWith(k)) {
                               d.append(c);
                               d.append(k);
-                              i += strlen(k);
+                              i += int(strlen(k));
                               found = true;
                               break;
                               }
@@ -2506,12 +2506,10 @@ void TextBase::initElementStyle(const ElementStyle* ss)
 void TextBase::initTid(Tid tid)
       {
       setTid(tid);
-      int i = _elementStyle->size();
       for (const StyledProperty& p : *textStyle(tid)) {
             Pid pid    = p.pid;
             QVariant v = propertyDefault(pid);
             setProperty(pid, v);
-            ++i;
             }
       }
 

@@ -870,7 +870,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                               }
                         }
                   else {
-                        for (int i = dList.size() - 1; i >= 0; --i) {
+                        for (int i = int(dList.size()) - 1; i >= 0; --i) {
                               if (ltuplet) {
                                     // take care not to recreate tuplet we just deleted
                                     Rest* r = setRest(tick, track, dList[i].fraction(), false, 0, false);
@@ -1220,7 +1220,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                               }
                         }
                   else {
-                        for (int i = dList.size() - 1; i >= 0; --i) {
+                        for (int i = int(dList.size()) - 1; i >= 0; --i) {
                               bool genTie;
                               Chord* cc;
                               if (oc) {
@@ -2014,7 +2014,7 @@ Element* Score::move(const QString& cmd)
                                     return 0;
                               }
                         // segment for sure contains chords/rests,
-                        int size = seg->elist().size();
+                        int size = int(seg->elist().size());
                         // if segment has a chord/rest in original element track, use it
                         if (track > -1 && track < size && seg->element(track)) {
                               trg  = seg->element(track);
@@ -2442,7 +2442,7 @@ void Score::cmdExplode()
                         if (e && e->type() == ElementType::CHORD) {
                               Chord* c = toChord(e);
                               std::vector<Note*> notes = c->notes();
-                              int nnotes = notes.size();
+                              int nnotes = int(notes.size());
                               // keep note "i" from top, which is backwards from nnotes - 1
                               // reuse notes if there are more instruments than notes
                               int stavesPerNote = qMax((lastStaff - srcStaff) / nnotes, 1);

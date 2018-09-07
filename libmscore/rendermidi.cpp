@@ -1110,9 +1110,9 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
       int ontime    = 0;
 
       int gnb = note->chord()->graceNotesBefore().size();
-      int p = prefix.size();
-      int b = body.size();
-      int s = suffix.size();
+      int p = int(prefix.size());
+      int b = int(body.size());
+      int s = int(suffix.size());
       int gna = note->chord()->graceNotesAfter().size();
 
       int ticksPerNote = 0;
@@ -1175,7 +1175,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
       // of a different pitch.
       // The total duration of the tied note is returned, and the index is modified.
       auto tieForward = [millespernote] (int & j, const vector<int> & vec) {
-            int size = vec.size();
+            int size = int(vec.size());
             int duration = millespernote;
             while ( j < size-1 && vec[j] == vec[j+1] ) {
                   duration += millespernote;
@@ -1722,7 +1722,7 @@ void Score::createPlayEvents(Chord* chord)
             chord->score()->undo(new ChangeEventList(chord, el));
             }
       else if (chord->playEventType() == PlayEventType::Auto) {
-            int n = chord->notes().size();
+            int n = int(chord->notes().size());
             for (int i = 0; i < n; ++i)
                   chord->notes()[i]->setPlayEvents(el[i]);
             }
