@@ -275,7 +275,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         // overlap (possibly unison)
 
                         // build list of overlapping notes
-                        for (int i = 0, n = upStemNotes.size(); i < n; ++i) {
+                        for (size_t i = 0, n = upStemNotes.size(); i < n; ++i) {
                               if (upStemNotes[i]->line() >= topDownNote->line() - 1)
                                     overlapNotes.append(upStemNotes[i]);
                               else
@@ -1178,8 +1178,8 @@ void Score::layoutSpanner()
       for (int track = 0; track < tracks; ++track) {
             for (Segment* segment = firstSegment(SegmentType::All); segment; segment = segment->next1()) {
                   if (track == tracks-1) {
-                        int n = segment->annotations().size();
-                        for (int i = 0; i < n; ++i)
+                        size_t n = segment->annotations().size();
+                        for (size_t i = 0; i < n; ++i)
                               segment->annotations().at(i)->layout();
                         }
                   Element* e = segment->element(track);

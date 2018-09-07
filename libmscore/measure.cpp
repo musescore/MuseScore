@@ -259,7 +259,7 @@ void Measure::layoutStaffLines()
 
 void Measure::createStaves(int staffIdx)
       {
-      for (int n = _mstaves.size(); n <= staffIdx; ++n) {
+      for (int n = int(_mstaves.size()); n <= staffIdx; ++n) {
             Staff* staff = score()->staff(n);
             MStaff* s    = new MStaff;
             s->setLines(new StaffLines(score()));
@@ -1849,7 +1849,7 @@ void Measure::read(XmlReader& e, int staffIdx)
       int nextTrack = staffIdx * VOICES;
       e.setTrack(nextTrack);
 
-      for (int n = _mstaves.size(); n <= staffIdx; ++n) {
+      for (int n = int(_mstaves.size()); n <= staffIdx; ++n) {
             Staff* staff = score()->staff(n);
             MStaff* s    = new MStaff;
             s->setLines(new StaffLines(score()));
@@ -2341,7 +2341,7 @@ void Measure::read300(XmlReader& e, int staffIdx)
       e.tuplets().clear();
       e.setTrack(staffIdx * VOICES);
 
-      for (int n = _mstaves.size(); n <= staffIdx; ++n) {
+      for (int n = int(_mstaves.size()); n <= staffIdx; ++n) {
             Staff* staff = score()->staff(n);
             MStaff* s    = new MStaff;
             s->setLines(new StaffLines(score()));
@@ -3230,8 +3230,8 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
                         if (oe->isChord()) {
                               Chord* och = toChord(ocr);
                               Chord* nch = toChord(ncr);
-                              int n = och->notes().size();
-                              for (int i = 0; i < n; ++i) {
+                              size_t n = och->notes().size();
+                              for (size_t i = 0; i < n; ++i) {
                                     Note* on = och->notes().at(i);
                                     Note* nn = nch->notes().at(i);
                                     if (on->tieFor()) {
