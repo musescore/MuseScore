@@ -412,7 +412,7 @@
            <item>
             <widget class="QCheckBox" name="hideEmptyStaves">
              <property name="text">
-              <string>Hide empty staves</string>
+              <string>Hide empty staves within systems</string>
              </property>
             </widget>
            </item>
@@ -11039,6 +11039,13 @@
            <property name="spacing">
             <number>2</number>
            </property>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_189">
+             <property name="text">
+              <string>Dash thickness:</string>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_122">
              <property name="text">
@@ -11123,7 +11130,7 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item row="6" column="0">
             <widget class="QCheckBox" name="lyricsDashForce">
              <property name="text">
               <string>Always force dash</string>
@@ -11181,13 +11188,113 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="2">
+           <item row="6" column="2">
             <widget class="QToolButton" name="resetLyricsDashForce">
              <property name="toolTip">
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
               <string>Reset 'Always force dash' setting</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QToolButton" name="resetLyricsDashLineThickness">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Dash thickness' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QDoubleSpinBox" name="lyricsDashPad">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="maximum">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_195">
+             <property name="text">
+              <string>Dash pad:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QDoubleSpinBox" name="lyricsDashLineThickness">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="maximum">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QToolButton" name="resetLyricsDashPad">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Dash pad' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_196">
+             <property name="text">
+              <string>Dash Y position ratio:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QDoubleSpinBox" name="lyricsDashYposRatio"/>
+           </item>
+           <item row="5" column="2">
+            <widget class="QToolButton" name="resetLyricsDashYposRatio">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Dash Y position ratio' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -11220,7 +11327,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Melisma thickness' value</string>
+              <string>Reset 'Melisma pad' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -11292,13 +11399,6 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_189">
-             <property name="text">
-              <string>Dash thickness:</string>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="lyricsMelismaPad">
              <property name="suffix">
@@ -11312,106 +11412,6 @@
              </property>
              <property name="value">
               <double>0.100000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_195">
-             <property name="text">
-              <string>Dash pad:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_196">
-             <property name="text">
-              <string>Dash Y position ratio:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="QDoubleSpinBox" name="lyricsDashYposRatio"/>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="lyricsDashLineThickness">
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="maximum">
-              <double>1.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.010000000000000</double>
-             </property>
-             <property name="value">
-              <double>0.100000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QDoubleSpinBox" name="lyricsDashPad">
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="maximum">
-              <double>1.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.010000000000000</double>
-             </property>
-             <property name="value">
-              <double>0.100000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QToolButton" name="resetLyricsDashLineThickness">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Melisma thickness' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QToolButton" name="resetLyricsDashPad">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Melisma thickness' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QToolButton" name="resetLyricsDashYposRatio">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Melisma thickness' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -11895,7 +11895,7 @@
            <item row="1" column="3">
             <widget class="QLabel" name="label_171">
              <property name="text">
-              <string>size:</string>
+              <string>Size:</string>
              </property>
              <property name="indent">
               <number>10</number>
@@ -11905,7 +11905,7 @@
            <item row="1" column="6">
             <widget class="QLabel" name="label_172">
              <property name="text">
-              <string>style:</string>
+              <string>Style:</string>
              </property>
              <property name="indent">
               <number>11</number>
@@ -12091,7 +12091,7 @@
            <item row="0" column="6">
             <widget class="QLabel" name="label_175">
              <property name="text">
-              <string>style:</string>
+              <string>Style:</string>
              </property>
              <property name="indent">
               <number>11</number>
@@ -12135,7 +12135,7 @@
            <item row="0" column="3">
             <widget class="QLabel" name="label_174">
              <property name="text">
-              <string>size:</string>
+              <string>Size:</string>
              </property>
              <property name="indent">
               <number>10</number>
