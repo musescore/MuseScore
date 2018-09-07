@@ -159,7 +159,6 @@ class Measure final : public MeasureBase {
       void setUserStretch(qreal v)              { _userStretch = v; }
 
       void stretchMeasure(qreal stretch);
-      int computeTicks();
       void layout2();
 
       Chord* findChord(int tick, int track);
