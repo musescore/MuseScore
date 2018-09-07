@@ -2454,6 +2454,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                   }
             }
 
+      measure->computeTicks();
       for (Segment& segment : measure->segments()) {
             if (segment.isBreathType()) {
                   qreal length = 0.0;
@@ -3857,6 +3858,9 @@ void Score::doLayoutRange(int stick, int etick)
 
       lc.prevMeasure = 0;
 
+      // we need to reset tempo because fermata is setted 
+      //inside getNextMeasure and it lead to twice timeStretch
+      fixTicks();
       getNextMeasure(lc);
       lc.curSystem = collectSystem(lc);
 
