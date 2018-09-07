@@ -19,7 +19,7 @@
 <h3 id="instructions">Instructions</h3>
 <ol>
 <li>Download one of the "MuseScoreNightly" files from the Download section below. (The first is the most recent.)</li>
-<li>After the download finishes, uncompress the file using <a href="http://7-zip.org/">7-Zip</a>. (If you have not used 7-Zip before then you need to download and install it from their website first)</li>
+<li>After the download finishes, uncompress the file using default Windows unzip tool.</li>
 <li>After the file uncompresses, open the folder you just uncompressed</li>
 <li>Open the "bin" folder and double-click on "nightly.exe" to start MuseScore</li>
 </ol>
