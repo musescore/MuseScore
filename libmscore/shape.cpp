@@ -259,7 +259,7 @@ void Shape::paint(QPainter& p) const
 
 void Shape::dump(const char* p) const
       {
-      qDebug("Shape dump: %p %s size %zu\n", this, p, size());
+      qDebug("Shape dump: %p %s size %d\n", this, p, size());
       for (const ShapeElement& r : *this) {
             r.dump();
             }

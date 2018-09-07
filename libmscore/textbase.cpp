@@ -1121,9 +1121,9 @@ TextBase::TextBase(const TextBase& st)
       _offset                      = st._offset;
       _offsetType                  = st._offsetType;
 
-      int n = _elementStyle->size() + TEXT_STYLE_SIZE;
+      size_t n = _elementStyle->size() + TEXT_STYLE_SIZE;
       _propertyFlagsList = new PropertyFlags[n];
-      for (int i = 0; i < n; ++i)
+      for (size_t i = 0; i < n; ++i)
             _propertyFlagsList[i] = st._propertyFlagsList[i];
       _links = 0;
       }
@@ -2478,13 +2478,13 @@ void TextBase::styleChanged()
 void TextBase::initElementStyle(const ElementStyle* ss)
       {
       _elementStyle = ss;
-      int n     = _elementStyle->size() + TEXT_STYLE_SIZE;
+      size_t n      = _elementStyle->size() + TEXT_STYLE_SIZE;
 
 //      printf("<%s> initElementStyle n=%d + %d\n", name(), int(_elementStyle->size()), TEXT_STYLE_SIZE);
 
       delete[] _propertyFlagsList;
       _propertyFlagsList = new PropertyFlags[n];
-      for (int i = 0; i < n; ++i)
+      for (size_t i = 0; i < n; ++i)
             _propertyFlagsList[i] = PropertyFlags::STYLED;
       for (const StyledProperty& p : *_elementStyle) {
             QVariant v = propertyType(p.pid) == P_TYPE::SP_REAL ? score()->styleP(p.sid) : score()->styleV(p.sid);
