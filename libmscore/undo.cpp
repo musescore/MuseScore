@@ -1960,10 +1960,10 @@ ChangeEventList::ChangeEventList(Chord* c, const QList<NoteEventList> l)
 
 void ChangeEventList::flip(EditData*)
       {
-      int n = chord->notes().size();
-      for (int i = 0; i < n; ++i) {
+      size_t n = chord->notes().size();
+      for (size_t i = 0; i < n; ++i) {
             Note* note = chord->notes()[i];
-            note->playEvents().swap(events[i]);
+            note->playEvents().swap(events[int(i)]);
             }
       PlayEventType t = chord->playEventType();
       chord->setPlayEventType(eventListType);

@@ -95,7 +95,7 @@ void splitChords(
 
       int splitPoint = findLastSplitPoint(splits);
 
-      for (int pos = splits.size() - 1; ; --pos) {
+      for (size_t pos = splits.size() - 1; ; --pos) {
             MidiChord &oldChord = splits[pos].chord->second;
             MidiChord newChord(oldChord);
 

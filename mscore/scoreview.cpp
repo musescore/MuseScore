@@ -3477,7 +3477,7 @@ void ScoreView::cmdCreateTuplet(ChordRest* cr, Tuplet* tuplet)
       _score->cmdCreateTuplet(cr, tuplet);
 
       const std::vector<DurationElement*>& cl = tuplet->elements();
-      int ne = cl.size();
+      size_t ne = cl.size();
       DurationElement* el = 0;
       if (ne && cl[0]->type() == ElementType::REST)
             el  = cl[0];
