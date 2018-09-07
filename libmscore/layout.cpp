@@ -2625,34 +2625,31 @@ static qreal findLyricsMaxY(Segment& s, int staffIdx)
       if (!s.isChordRestType())
             return yMax;
 
+      qreal lyricsMinTopDistance = s.score()->styleP(Sid::lyricsMinTopDistance);
+
       for (int voice = 0; voice < VOICES; ++voice) {
             ChordRest* cr = s.cr(staffIdx * VOICES + voice);
             if (cr && !cr->lyrics().empty()) {
-                  Shape sh;
+                  SkylineLine sk(true);
+
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeBelow()) {
                               l->rUserYoffset() = 0.0;
-                              sh.add(l->bbox().translated(l->pos() + s.pos()));
+                              QPointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
+                              QRectF r = l->bbox().translated(offset);
+                              sk.add(r.x(), r.top(), r.width());
                               }
                         }
-                  qreal lyricsMinTopDistance = s.score()->styleP(Sid::lyricsMinTopDistance);
+                  SysStaff* ss = s.measure()->system()->staff(staffIdx);
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeBelow()) {
-                              qreal y = s.measure()->staffShape(staffIdx).minVerticalDistance(sh);
+                              qreal y = ss->skyline().south().minDistance(sk);
                               if (y > -lyricsMinTopDistance)
                                     yMax = qMax(yMax, y + lyricsMinTopDistance);
                               }
                         }
                   }
             }
-      return yMax;
-      }
-
-static qreal findLyricsMaxY(Measure* m, int staffIdx)
-      {
-      qreal yMax = 0.0;
-      for (Segment& s : m->segments())
-            yMax = qMax(yMax, findLyricsMaxY(s, staffIdx));
       return yMax;
       }
 
@@ -2665,27 +2662,39 @@ static qreal findLyricsMinY(Segment& s, int staffIdx)
       qreal yMin = 0.0;
       if (!s.isChordRestType())
             return yMin;
+      qreal lyricsMinTopDistance = s.score()->styleP(Sid::lyricsMinTopDistance);
       for (int voice = 0; voice < VOICES; ++voice) {
             ChordRest* cr = s.cr(staffIdx * VOICES + voice);
             if (cr && !cr->lyrics().empty()) {
-                  Shape sh;
+                  SkylineLine sk(false);
+
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeAbove()) {
                               l->rUserYoffset() = 0.0;
-                              sh.add(l->bbox().translated(l->pos() + s.pos()));
+                              QRectF r = l->bbox().translated(l->pos() + cr->pos() + s.pos() + s.measure()->pos());
+                              sk.add(r.x(), r.bottom(), r.width());
                               }
                         }
-                  qreal lyricsMinTopDistance = s.score()->styleP(Sid::lyricsMinTopDistance);
+                  SysStaff* ss = s.measure()->system()->staff(staffIdx);
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeAbove()) {
-                              qreal y = sh.minVerticalDistance(s.measure()->staffShape(staffIdx));
+                              qreal y = sk.minDistance(ss->skyline().north());
                               if (y > -lyricsMinTopDistance)
                                     yMin = qMin(yMin, -y -lyricsMinTopDistance);
+//printf("dist %f > %f yMin %f\n", y, -lyricsMinTopDistance, yMin);
                               }
                         }
                   }
             }
       return yMin;
+      }
+
+static qreal findLyricsMaxY(Measure* m, int staffIdx)
+      {
+      qreal yMax = 0.0;
+      for (Segment& s : m->segments())
+            yMax = qMax(yMax, findLyricsMaxY(s, staffIdx));
+      return yMax;
       }
 
 static qreal findLyricsMinY(Measure* m, int staffIdx)
@@ -2704,19 +2713,18 @@ static void applyLyricsMax(Segment& s, int staffIdx, qreal yMax)
       {
       if (!s.isChordRestType())
             return;
+      Skyline& sk = s.measure()->system()->staff(staffIdx)->skyline();
       for (int voice = 0; voice < VOICES; ++voice) {
             ChordRest* cr = s.cr(staffIdx * VOICES + voice);
             if (cr && !cr->lyrics().empty()) {
-                  Shape sh;
                   qreal lyricsMinBottomDistance = s.score()->styleP(Sid::lyricsMinBottomDistance);
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeBelow()) {
                               l->rUserYoffset() = yMax;
-                              sh.add(l->bbox().translated(l->pos()+cr->pos()).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
+                              QPointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
+                              sk.add(l->bbox().translated(offset).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
                               }
                         }
-                  s.staffShape(staffIdx).add(sh);
-                  s.measure()->staffShape(staffIdx).add(sh.translated(s.pos()));
                   }
             }
       }
@@ -2733,16 +2741,16 @@ static void applyLyricsMax(Measure* m, int staffIdx, qreal yMax)
 
 static void applyLyricsMin(ChordRest* cr, int staffIdx, qreal yMin)
       {
-      Shape sh;
+      Skyline& sk = cr->measure()->system()->staff(staffIdx)->skyline();
       qreal lyricsMinBottomDistance = cr->score()->styleP(Sid::lyricsMinBottomDistance);
       for (Lyrics* l : cr->lyrics()) {
             if (l->autoplace() && l->placeAbove()) {
                   l->rUserYoffset() = yMin;
-                  sh.add(l->bbox().translated(l->pos()).adjusted(0.0, -lyricsMinBottomDistance, 0.0, 0.0));
+                  QPointF offset = l->pos() + cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
+//                  sk.add(l->bbox().translated(offset).adjusted(0.0, -lyricsMinBottomDistance, 0.0, 0.0));
+                  sk.add(l->bbox().translated(offset));
                   }
             }
-      cr->segment()->staffShape(staffIdx).add(sh);
-      cr->measure()->staffShape(staffIdx).add(sh.translated(cr->pos() + cr->segment()->pos()));
       }
 
 static void applyLyricsMin(Measure* m, int staffIdx, qreal yMin)
@@ -3466,7 +3474,6 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
             }
 
-      layoutLyrics(system);
 
       //-------------------------------------------------------------
       //    create skylines for test
@@ -3476,17 +3483,17 @@ System* Score::collectSystem(LayoutContext& lc)
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                   SysStaff* ss = system->staff(staffIdx);
                   ss->skyline().clear();
-                  ss->skyline().add(QRectF(0.0, 0.0, system->width(), ss->bbox().height()), "staff");
+                  ss->skyline().add(QRectF(0.0, 0.0, system->width(), ss->bbox().height()));
                   for (MeasureBase* mb : system->measures()) {
                         if (!mb->isMeasure())
                               continue;
                         Measure* m = toMeasure(mb);
                         ss->skyline().add(m->staffShape(staffIdx).translated(m->pos()));
                         }
-//                  ss->skyline().dump("skyline");
                   }
             }
 
+      layoutLyrics(system);
       system->layout2();   // compute staff distances
 
       Measure* lm  = system->lastMeasure();
@@ -3710,10 +3717,10 @@ void LayoutContext::collectPage()
                   m->layout2();
                   }
             }
-      
+
       if (score->systemMode())
             page->bbox().setRect(0.0, 0.0, score->loWidth(), height);
-      
+
       page->rebuildBspTree();
       }
 
