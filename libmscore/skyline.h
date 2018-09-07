@@ -38,14 +38,15 @@ struct SkylineSegment {
 //---------------------------------------------------------
 
 struct SkylineLine : public std::vector<SkylineSegment> {
-      bool north;
+      const bool north;
 
    public:
+      SkylineLine(bool n) : north(n) {}
       void add(qreal x, qreal y, qreal w);
       void paint(QPainter&) const;
       void dump() const;
-      void setNorth(bool v) { north = v; }
       qreal minDistance(const SkylineLine&) const;
+      bool valid(const SkylineSegment& s) const;
       };
 
 //---------------------------------------------------------
@@ -53,44 +54,25 @@ struct SkylineLine : public std::vector<SkylineSegment> {
 //---------------------------------------------------------
 
 class Skyline {
-      SkylineLine north;
-      SkylineLine south;
+      SkylineLine _north;
+      SkylineLine _south;
 
    public:
-      Skyline() {
-            north.setNorth(true);
-            south.setNorth(false);
-            }
-      Skyline(const QRectF& r) {
-            north.setNorth(true);
-            south.setNorth(false);
-            add(r);
-            }
+      Skyline() : _north(true), _south(false) {}
 
+      void clear();
       void add(const Shape& s);
       void add(const QRectF& r);
-      void add(const QRectF& r, const char*);
-      void remove(const QRectF&);
-
-      void translate(const QPointF&);
-      void translateX(qreal);
-      void translateY(qreal);
-      Skyline translated(const QPointF&) const;
 
       qreal minDistance(const Skyline&) const;
-      qreal topDistance(const QPointF&) const;
-      qreal bottomDistance(const QPointF&) const;
-      qreal top() const;
-      qreal bottom() const;
 
-      bool empty() const;
-      void clear();
+      SkylineLine& north()             { return _north; }
+      SkylineLine& south()             { return _south; }
+      const SkylineLine& north() const { return _north; }
+      const SkylineLine& south() const { return _south; }
 
-      bool contains(const QPointF&) const;
-      bool intersects(const QRectF& rr) const;
       void paint(QPainter&) const;
-
-      void dump(const char*) const;
+      void dump(const char*, bool north = false) const;
       };
 
 } // namespace Ms
