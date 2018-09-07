@@ -39,7 +39,7 @@ SET ARTIFACT_NAME=%FILENAME%
 goto :UPLOAD
 
 :UNSTABLE_LABEL
-echo "Unstable: build 7z package"
+echo "Unstable: build zip package"
 CD C:\MuseScore
 RENAME C:\MuseScore\msvc.install_x64\bin\musescore.exe nightly.exe
 RENAME C:\MuseScore\msvc.install_x64 MuseScoreNightly
@@ -52,7 +52,7 @@ SET hh0=%time:~0,2%
 SET /a hh1=%hh0%+100
 SET hh=%hh1:~1,2%
 SET BUILD_DATE=%Date:~10,4%-%Date:~4,2%-%Date:~7,2%-%hh%%time:~3,2%
-SET ARTIFACT_NAME=MuseScoreNightly-%BUILD_DATE%-%APPVEYOR_REPO_BRANCH%-%MSversion%.7z
+SET ARTIFACT_NAME=MuseScoreNightly-%BUILD_DATE%-%APPVEYOR_REPO_BRANCH%-%MSversion%.zip
 7z a C:\MuseScore\%ARTIFACT_NAME% C:\MuseScore\MuseScoreNightly
 
 :: create update file for S3
