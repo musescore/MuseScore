@@ -344,7 +344,7 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
                               }
                         }
                   else {
-                        for (int i = dList.size() - 1; i >= 0; --i) {
+                        for (size_t i = dList.size() - 1; i == 0; --i) {
                               rest = addRest(tick, track, dList[i], tuplet);
                               if (r == 0)
                                     r = rest;
