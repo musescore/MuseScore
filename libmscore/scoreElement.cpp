@@ -138,12 +138,12 @@ static const ElementName elementNames[] = {
 
 ScoreElement::ScoreElement(const ScoreElement& se)
       {
-      _score      = se._score;
-      _elementStyle   = se._elementStyle;
+      _score        = se._score;
+      _elementStyle = se._elementStyle;
       if (_elementStyle) {
-            int n       = _elementStyle->size();
+            size_t n = _elementStyle->size();
             _propertyFlagsList = new PropertyFlags[n];
-            for (int i = 0; i < n; ++i)
+            for (size_t i = 0; i < n; ++i)
                   _propertyFlagsList[i] = se._propertyFlagsList[i];
             }
       _links = 0;
@@ -205,12 +205,12 @@ QVariant ScoreElement::propertyDefault(Pid pid) const
 void ScoreElement::initElementStyle(const ElementStyle* ss)
       {
       _elementStyle = ss;
-      int n     = _elementStyle->size();
+      size_t n = _elementStyle->size();
       if (isTextBase())                               // HACK
             n += TEXT_STYLE_SIZE;
       delete[] _propertyFlagsList;
       _propertyFlagsList = new PropertyFlags[n];
-      for (int i = 0; i < n; ++i)
+      for (size_t i = 0; i < n; ++i)
             _propertyFlagsList[i] = PropertyFlags::STYLED;
       int i = 0;
       for (const StyledProperty& spp : *_elementStyle) {
