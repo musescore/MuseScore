@@ -41,19 +41,26 @@ goto :UPLOAD
 :UNSTABLE_LABEL
 echo "Unstable: build zip package"
 CD C:\MuseScore
-RENAME C:\MuseScore\msvc.install_x64\bin\musescore.exe nightly.exe
-RENAME C:\MuseScore\msvc.install_x64 MuseScoreNightly
-XCOPY C:\MuseScore\build\appveyor\special C:\MuseScore\MuseScoreNightly\special /I /E /Y /Q
-COPY C:\MuseScore\build\appveyor\support\README.txt C:\MuseScore\MuseScoreNightly\README.txt /Y
-COPY C:\MuseScore\build\appveyor\support\nightly.bat C:\MuseScore\MuseScoreNightly\nightly.bat /Y
-COPY C:\MuseScore\mscore\revision.h C:\MuseScore\MuseScoreNightly\revision.h
+
+SET PACKAGE_NAME="MuseScore 3.0 alpha"
+RENAME C:\MuseScore\msvc.install_x64 %PACKAGE_NAME%
+XCOPY C:\MuseScore\build\appveyor\special C:\MuseScore\%PACKAGE_NAME%\special /I /E /Y /Q
+
+:: sign dlls and exe files
+CD C:\MuseScore
+SET dSource=%PACKAGE_NAME%
+for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') do (
+    echo "Signing %%f"
+    "C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe" sign /f "C:\MuseScore\build\appveyor\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p "%CERTIFICATE_PASSWORD%" "%%f"
+    )
+
 :: get hour with a trailing 0 if necessary (add 100)
 SET hh0=%time:~0,2%
 SET /a hh1=%hh0%+100
 SET hh=%hh1:~1,2%
-SET BUILD_DATE=%Date:~10,4%-%Date:~4,2%-%Date:~7,2%-%hh%%time:~3,2%
-SET ARTIFACT_NAME=MuseScoreNightly-%BUILD_DATE%-%APPVEYOR_REPO_BRANCH%-%MSversion%.zip
-7z a C:\MuseScore\%ARTIFACT_NAME% C:\MuseScore\MuseScoreNightly
+SET BUILD_DATE=%Date:~10,4%-%Date:~4,2%-%Date:~7,2%
+SET ARTIFACT_NAME=MuseScore-%BUILD_DATE%-%APPVEYOR_REPO_BRANCH%-%MSversion%.zip
+7z a C:\MuseScore\%ARTIFACT_NAME% C:\MuseScore\%PACKAGE_NAME%
 
 :: create update file for S3
 SET SHORT_DATE=%Date:~10,4%-%Date:~4,2%-%Date:~7,2%
