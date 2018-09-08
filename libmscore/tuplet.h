@@ -58,8 +58,6 @@ class Tuplet final : public DurationElement {
       QPointF bracketL[4];
       QPointF bracketR[3];
 
-      void resetNumberProperty();
-
    public:
       Tuplet(Score*);
       Tuplet(const Tuplet&);
@@ -73,6 +71,7 @@ class Tuplet final : public DurationElement {
 
       Text* number() const    { return _number; }
       void setNumber(Text* t) { _number = t; }
+      void resetNumberProperty();
 
       virtual bool isEditable() const override;
       virtual void startEdit(EditData&) override;
