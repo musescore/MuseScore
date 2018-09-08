@@ -20,22 +20,14 @@ include_directories(
 
 if (APPLE)
         file(GLOB_RECURSE INCS "*.h")
-        set(GETOPT_REPLACE "")
 else (APPLE)
         set(INCS "")
-        if (MSVC)
-            set(GETOPT_REPLACE "getopt/getopt.c")
-            include_directories("getopt")
-        else (MSVC)
-            set(GETOPT_REPLACE "")
-        endif (MSVC)
 endif (APPLE)
 
 add_executable(
       genManual
       ${INCS}
       genManual.cpp
-      ${GETOPT_REPLACE}
       )
 target_link_libraries(
       genManual
@@ -59,7 +51,7 @@ else(APPLE)
       set_target_properties (
          genManual
          PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -DSTATIC_GETOPT"
+         COMPILE_FLAGS "${PCH_INCLUDE} -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\""
          )
 
    endif (NOT MSVC)
