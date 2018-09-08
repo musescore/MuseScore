@@ -384,7 +384,7 @@ QVariant TempoText::propertyDefault(Pid id) const
             case Pid::TEMPO:
                   return 2.0;
             case Pid::TEMPO_FOLLOW_TEXT:
-                  return false;
+                  return true;
             default:
                   return TextBase::propertyDefault(id);
             }
