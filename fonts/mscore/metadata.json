@@ -1483,11 +1483,11 @@
         "noteheadSlashHorizontalEnds": {
             "stemDownNW": [
                 0.0,
-                -1.0
+                -1.25
             ],
             "stemUpSE": [
                 2.12,
-                1.0
+                1.25
             ]
         },
         "noteheadSlashHorizontalEndsMuted": {
@@ -1533,11 +1533,11 @@
         "noteheadSlashWhiteHalf": {
             "stemDownNW": [
                 0.0,
-                -1.0
+                -1.25
             ],
             "stemUpSE": [
                 3.12,
-                1.0
+                1.25
             ]
         },
         "noteheadSlashWhiteMuted": {

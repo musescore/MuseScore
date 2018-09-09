@@ -5231,21 +5231,21 @@
         "noteheadSlashHorizontalEnds": {
             "stemDownNW": [
                 0.0,
-                -0.8
+                -1.0
             ],
             "stemUpSE": [
                 2.152,
-                0.788
+                1.0
             ]
         },
         "noteheadSlashWhiteHalf": {
             "stemDownNW": [
                 0.0,
-                -1.024
+                -1.3
             ],
             "stemUpSE": [
                 3.356,
-                0.932
+                1.2
             ]
         },
         "noteheadTriangleDownBlack": {
