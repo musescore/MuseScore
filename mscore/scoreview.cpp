@@ -3011,11 +3011,11 @@ void ScoreView::cmdEnterRest()
 
 void ScoreView::cmdEnterRest(const TDuration& d)
       {
-//TODO      if (!noteEntryMode())
-//            sm->postEvent(new CommandEvent("note-input"));
-//      if (_score->usingNoteEntryMethod(NoteEntryMethod::RHYTHM))
-//            _score->cmd(getAction("pad-rest"));
-//      else
+      if (!noteEntryMode())
+            cmd("note-input");
+      if (_score->usingNoteEntryMethod(NoteEntryMethod::RHYTHM))
+            _score->cmd(getAction("pad-rest"), editData);
+      else
             _score->cmdEnterRest(d);
 #if 0
       expandVoice();
