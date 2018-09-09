@@ -495,6 +495,8 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     // lay out just past right edge of all notes for this segment on this staff
 
                                     Segment* s = cr->segment();
+                                    // If this is how ottava line length is calculated,
+                                    // then beams and tuplets cannot be added to the segment shape.
                                     qreal width = s->staffShape(staffIdx()).right();
                                     x = width + sp;
 

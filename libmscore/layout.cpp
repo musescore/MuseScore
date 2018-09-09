@@ -3250,7 +3250,9 @@ System* Score::collectSystem(LayoutContext& lc)
                               if (isTopBeam(cr)) {
                                     cr->beam()->layout();
                                     Shape shape(cr->beam()->shape().translated(-(cr->segment()->pos()+mb->pos())));
-                                    s->staffShape(cr->staffIdx()).add(shape);
+                                    // If beams are added to the segment shape,
+                                    // then ottava lines will be drawn too long.
+                                    // s->staffShape(cr->staffIdx()).add(shape);
                                     m->staffShape(cr->staffIdx()).add(shape.translated(s->pos()));
                                     }
                               if (e->isChord()) {
@@ -3319,7 +3321,9 @@ System* Score::collectSystem(LayoutContext& lc)
                         while (de->tuplet() && de->tuplet()->elements().front() == de) {
                               Tuplet* t = de->tuplet();
                               t->layout();
-                              s->staffShape(t->staffIdx()).add(t->shape().translated(-s->pos()));
+                              // If tuplets are added to the segment shape,
+                              // then ottava lines will be drawn too long.
+                              // s->staffShape(t->staffIdx()).add(t->shape().translated(-s->pos()));
                               m->staffShape(t->staffIdx()).add(t->shape());
                               de = de->tuplet();
                               }
