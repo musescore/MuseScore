@@ -47,11 +47,12 @@ RENAME C:\MuseScore\msvc.install_x64 %PACKAGE_NAME%
 XCOPY C:\MuseScore\build\appveyor\special C:\MuseScore\%PACKAGE_NAME%\special /I /E /Y /Q
 
 :: sign dlls and exe files
-CD C:\MuseScore
-for /f "delims=" %%f in ('dir /a-d /b /s "%PACKAGE_NAME%\*.dll" "%PACKAGE_NAME%\*.exe"') do (
+CD C:\MuseScore\%PACKAGE_NAME%
+for /f "delims=" %%f in ('dir /a-d /b /s "*.dll" "*.exe"') do (
     echo "Signing %%f"
     "C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe" sign /f "C:\MuseScore\build\appveyor\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p "%CERTIFICATE_PASSWORD%" "%%f"
     )
+CD C:\MuseScore
 
 :: get hour with a trailing 0 if necessary (add 100)
 SET hh0=%time:~0,2%
