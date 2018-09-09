@@ -565,6 +565,17 @@ void Preferences::read()
 //      s.endGroup();
 
       readPluginList();
+
+      // store preferences with locale-dependent default values
+      // so that the values from first start will be used later
+      s.setValue("myScoresPath", myScoresPath);
+      s.setValue("myStylesPath", myStylesPath);
+      s.setValue("myImagesPath", myImagesPath);
+      s.setValue("myTemplatesPath", myTemplatesPath);
+      s.setValue("myPluginsPath", myPluginsPath);
+      s.setValue("mySoundfontsPath", mySoundfontsPath);
+      s.setValue("myExtensionsPath", myExtensionsPath);
+      s.remove("sfPath");
       }
 
 //---------------------------------------------------------
