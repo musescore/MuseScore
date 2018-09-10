@@ -2146,7 +2146,7 @@ void ScoreView::cmd(const char* s)
                         }
                   }
             }
-      else if (cmd == "insert-fretframe")
+      else if (cmd == "insert-fretframe" && enableExperimental)
             cmdInsertMeasure(ElementType::FBOX);
       else if (cmd == "move-left")
             cmdMoveCR(true);
