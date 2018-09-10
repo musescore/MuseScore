@@ -97,10 +97,10 @@ void PageSettings::hideEvent(QHideEvent* ev)
 //   setScore
 //---------------------------------------------------------
 
-void PageSettings::setScore(MasterScore* s)
+void PageSettings::setScore(Score* s)
       {
-      cs  = s;
-      MasterScore* sl = s->clone();
+	  cs = static_cast<MasterScore*>(s);
+      MasterScore* sl = static_cast<MasterScore*>(s)->clone();
       preview->setScore(sl);
       buttonApplyToAllParts->setEnabled(!s->isMaster());
       updateValues();

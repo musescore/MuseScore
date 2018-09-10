@@ -1241,7 +1241,7 @@ MuseScore::MuseScore()
             "album" }) {
             if (!*i)
                   menuFile->addSeparator();
-            else if (enableExperimental || strcmp(i,"file-save-online") != 0)
+            else if ((MuseScore::unstable() && enableExperimental) || strcmp(i,"file-save-online") != 0)
                   menuFile->addAction(getAction(i));
             }
       if (enableExperimental)
@@ -1620,6 +1620,9 @@ MuseScore::MuseScore()
       a->setCheckable(true);
       menuDebug->addAction(a);
       a = getAction("show-measure-shapes");
+      a->setCheckable(true);
+      menuDebug->addAction(a);
+      a = getAction("show-skylines");
       a->setCheckable(true);
       menuDebug->addAction(a);
       a = getAction("show-bounding-rect");
@@ -2457,7 +2460,7 @@ void MuseScore::showPageSettings()
       {
       if (pageSettings == 0)
             pageSettings = new PageSettings();
-      pageSettings->setScore(cs->masterScore());
+      pageSettings->setScore(cs);
       pageSettings->show();
       pageSettings->raise();
       }
@@ -5088,6 +5091,24 @@ void MuseScore::cmd(QAction* a)
                tr("Command %1 not valid in current state").arg(cmdn));
             return;
             }
+      if (cmdn == "toggle-palette") {
+            showPalette(a->isChecked());
+            PaletteBox* pb = mscore->getPaletteBox();
+            QLineEdit* sb = pb->searchBox();
+            if (a->isChecked()) {
+                  lastFocusWidget = QApplication::focusWidget();
+                  sb->setFocus();
+                  if (pb->noSelection())
+                        pb->setKeyboardNavigation(false);
+                  else
+                        pb->setKeyboardNavigation(true);
+                  }
+            else {
+                  if (lastFocusWidget)
+                        lastFocusWidget->setFocus();
+                  }
+            return;
+            }
       if (cmdn == "palette-search") {
             PaletteBox* pb = getPaletteBox();
             QLineEdit* sb = pb->searchBox();
@@ -5297,7 +5318,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             loadFiles();
       else if (cmd == "file-save")
             saveFile();
-      else if (cmd == "file-save-online")
+      else if (cmd == "file-save-online" && MuseScore::unstable() && enableExperimental)
             showUploadScoreDialog();
       else if (cmd == "file-export")
             exportFile();
@@ -5337,7 +5358,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             startDebugger();
       else if (cmd == "album")
             showAlbumManager();
-      else if (cmd == "layer")
+      else if (cmd == "layer" && enableExperimental)
             showLayerManager();
       else if (cmd == "backspace") {
             if (_sstate != STATE_NORMAL )
@@ -5365,8 +5386,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             undoRedo(true);
       else if (cmd == "redo")
             undoRedo(false);
-      else if (cmd == "toggle-palette")
-            showPalette(a->isChecked());
       else if (cmd == "startcenter")
             showStartcenter(a->isChecked());
       else if (cmd == "inspector")
@@ -5409,7 +5428,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             splitWindow(true);
       else if (cmd == "split-v")
             splitWindow(false);
-      else if (cmd == "edit-harmony")
+      else if (cmd == "edit-harmony" && enableExperimental)
             editChordStyle();
       else if (cmd == "parts")
             startExcerptsDialog();
@@ -5440,7 +5459,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             ResourceManager r(0);
             r.exec();
             }
-      else if (cmd == "media")
+      else if (cmd == "media" && enableExperimental)
             showMediaDialog();
       else if (cmd == "page-settings")
             showPageSettings();
@@ -5568,6 +5587,13 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             }
       else if (cmd == "show-measure-shapes") {
             MScore::showMeasureShapes = a->isChecked();
+            if (cs) {
+                  cs->setLayoutAll();
+                  cs->update();
+                  }
+            }
+      else if (cmd == "show-skylines") {
+            MScore::showSkylines = a->isChecked();
             if (cs) {
                   cs->setLayoutAll();
                   cs->update();
