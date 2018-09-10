@@ -1241,7 +1241,7 @@ MuseScore::MuseScore()
             "album" }) {
             if (!*i)
                   menuFile->addSeparator();
-            else if (enableExperimental || strcmp(i,"file-save-online") != 0)
+            else if ((MuseScore::unstable() && enableExperimental) || strcmp(i,"file-save-online") != 0)
                   menuFile->addAction(getAction(i));
             }
       if (enableExperimental)
@@ -5318,7 +5318,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             loadFiles();
       else if (cmd == "file-save")
             saveFile();
-      else if (cmd == "file-save-online")
+      else if (cmd == "file-save-online" && MuseScore::unstable() && enableExperimental)
             showUploadScoreDialog();
       else if (cmd == "file-export")
             exportFile();
@@ -5358,7 +5358,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             startDebugger();
       else if (cmd == "album")
             showAlbumManager();
-      else if (cmd == "layer")
+      else if (cmd == "layer" && enableExperimental)
             showLayerManager();
       else if (cmd == "backspace") {
             if (_sstate != STATE_NORMAL )
@@ -5428,7 +5428,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             splitWindow(true);
       else if (cmd == "split-v")
             splitWindow(false);
-      else if (cmd == "edit-harmony")
+      else if (cmd == "edit-harmony" && enableExperimental)
             editChordStyle();
       else if (cmd == "parts")
             startExcerptsDialog();
@@ -5459,7 +5459,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             ResourceManager r(0);
             r.exec();
             }
-      else if (cmd == "media")
+      else if (cmd == "media" && enableExperimental)
             showMediaDialog();
       else if (cmd == "page-settings")
             showPageSettings();
