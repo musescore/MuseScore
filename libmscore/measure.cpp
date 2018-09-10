@@ -3572,7 +3572,7 @@ void Measure::stretchMeasure(qreal targetWidth)
       if (targetWidth > minimumWidth) {
             qreal force = 0;
             qreal c     = 0.0;
-            for (auto i = springs.begin();;) {
+            for (auto i = springs.begin(); i != springs.end();) {
                   c            += i->second->stretch();
                   minimumWidth -= i->second->width();
                   qreal f       = (targetWidth - minimumWidth) / c;
