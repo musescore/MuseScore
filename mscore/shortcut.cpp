@@ -3572,6 +3572,16 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
+         "show-skylines",
+         "Show staff skylines",
+         "Show staff skylines",
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
          "show-bounding-rect",
          "Show Bounding Rectangles",
          "Show bounding rectangles for selected elements",

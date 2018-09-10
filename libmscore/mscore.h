@@ -367,6 +367,7 @@ class MScore : public QObject {
       static bool noHorizontalStretch;
       static bool noVerticalStretch;
       static bool showSegmentShapes;
+      static bool showSkylines;
       static bool showMeasureShapes;
       static bool showBoundingRect;
       static bool showCorruptedMeasures;

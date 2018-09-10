@@ -416,7 +416,7 @@ void System::layout2()
                         break;
                   }
             dist += staff2->userDist();
-
+#if 0
             for (MeasureBase* mb : ml) {
                   if (!mb->isMeasure())
                         continue;
@@ -440,6 +440,31 @@ void System::layout2()
                   if (sp)
                         dist = qMax(dist, sp->gap());
                   }
+#else
+            bool fixedSpace = false;
+            for (MeasureBase* mb : ml) {
+                  if (!mb->isMeasure())
+                        continue;
+                  Measure* m = toMeasure(mb);
+                  Spacer* sp = m->vspacerDown(si1);
+                  if (sp) {
+                        if (sp->spacerType() == SpacerType::FIXED) {
+                              dist = staff->height() + sp->gap();
+                              fixedSpace = true;
+                              break;
+                              }
+                        else
+                              dist = qMax(dist, staff->height() + sp->gap());
+                        }
+                  sp = m->vspacerUp(si2);
+                  if (sp)
+                        dist = qMax(dist, sp->gap());
+                  }
+            if (!fixedSpace) {
+                  qreal d = score()->lineMode() ? 0.0 : ss->skyline().minDistance(System::staff(si2)->skyline());
+                  dist = qMax(dist, d + minVerticalDistance);
+                  }
+#endif
 
             ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag(0) : 0.0);
             ss->bbox().setRect(_leftMargin, y, width() - _leftMargin, h);
@@ -607,6 +632,7 @@ void System::setInstrumentNames(bool longName)
                         iname->setTrack(staffIdx * VOICES);
                         iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
                         iname->setLayoutPos(sn.pos());
+                        iname->setProperty(Pid::ALIGN, int(Align::RIGHT));
                         score()->addElement(iname);
                         }
                   iname->setXmlText(sn.name());
@@ -1075,30 +1101,8 @@ qreal System::minDistance(System* s2) const
                               dist = qMax(dist, sp->gap());
                         }
                   }
-
-            for (MeasureBase* mb1 : ml) {
-                  if (!mb1->isMeasure())
-                        continue;
-                  Measure* m1 = toMeasure(mb1);
-                  qreal bx1 = m1->x();
-                  qreal bx2 = m1->x() + m1->width();
-
-                  for (MeasureBase* mb2 : s2->measures()) {
-                        if (!mb2->isMeasure())
-                              continue;
-                        Measure* m2 = toMeasure(mb2);
-                        qreal ax1 = mb2->x();
-                        if (ax1 >= bx2)
-                              break;
-                        qreal ax2 = mb2->x() + mb2->width();
-                        if (ax2 < bx1)
-                              continue;
-                        Shape sh1 = m1->staffShape(lastStaff).translated(m1->pos());
-                        Shape sh2 = m2->staffShape(firstStaff).translated(m2->pos());
-                        qreal d   = (score()->lineMode() ? 0.0 : sh1.minVerticalDistance(sh2)) + minVerticalDistance;
-                        dist = qMax(dist, d - m1->staffLines(lastStaff)->height());
-                        }
-                  }
+            dist = qMax(dist, staff(lastStaff)->skyline().minDistance(s2->staff(firstStaff)->skyline()));
+            dist = dist - staff(lastStaff)->bbox().height() + minVerticalDistance;
             }
       return dist;
       }

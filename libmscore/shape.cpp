@@ -56,19 +56,6 @@ Shape Shape::translated(const QPointF& pt) const
       return s;
       }
 
-//---------------------------------------------------------
-//   draw
-//    Draw outline of shape. For testing only.
-//---------------------------------------------------------
-
-void Shape::draw(QPainter* p) const
-      {
-      p->save();
-      for (const QRectF& r : *this)
-            p->drawRect(r);
-      p->restore();
-      }
-
 //-------------------------------------------------------------------
 //   minHorizontalDistance
 //    a is located right of this shape.
@@ -259,7 +246,7 @@ bool Shape::intersects(const QRectF& rr) const
 //   paint
 //---------------------------------------------------------
 
-void Shape::paint(QPainter& p)
+void Shape::paint(QPainter& p) const
       {
       for (const QRectF& r : *this)
             p.drawRect(r);

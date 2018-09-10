@@ -3287,7 +3287,7 @@ void Chord::layoutArticulations()
                         if (beam())
                               y -= score()->styleS(Sid::beamWidth).val() * _spatium * .5;
                         int line   = lrint((y-0.5*_spStaff) / _spStaff);
-                        if (line >= 0)    // align between staff lines
+                        if (line >= 0)  // align between staff lines
                               y = line * _spStaff - _spatium * .5;
                         else
                               y -= _spatium;
@@ -3308,7 +3308,7 @@ void Chord::layoutArticulations()
                   y += a->height() * .5;        // center symbol
                   }
             a->setPos(x, y);
-            measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos()));
+            measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
             }
       }
 

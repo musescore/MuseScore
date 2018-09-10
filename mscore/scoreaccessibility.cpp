@@ -86,7 +86,8 @@ ScoreAccessibility* ScoreAccessibility::inst = 0;
 ScoreAccessibility::ScoreAccessibility(QMainWindow* mainWindow) : QObject(mainWindow)
       {
       this->mainWindow = mainWindow;
-      statusBarLabel = 0;
+      statusBarLabel = new QLabel(mainWindow->statusBar());
+      mainWindow->statusBar()->addWidget(statusBarLabel);
       }
 
 void ScoreAccessibility::createInstance(QMainWindow* mainWindow)
@@ -102,18 +103,13 @@ ScoreAccessibility::~ScoreAccessibility()
 
 void ScoreAccessibility::clearAccessibilityInfo()
       {
-      if(statusBarLabel != 0) {
-            mainWindow->statusBar()->removeWidget(statusBarLabel);
-            delete statusBarLabel;
-            statusBarLabel = 0;
-            static_cast<MuseScore*>(mainWindow)->currentScoreView()->score()->setAccessibleInfo(tr("No selection"));
-            }
+      statusBarLabel->setText("");
+      static_cast<MuseScore*>(mainWindow)->currentScoreView()->score()->setAccessibleInfo(tr("No selection"));
       }
 
 void ScoreAccessibility::currentInfoChanged()
       {
       clearAccessibilityInfo();
-      statusBarLabel  = new QLabel(mainWindow->statusBar());
       ScoreView* scoreView =  static_cast<MuseScore*>(mainWindow)->currentScoreView();
       Score* score = scoreView->score();
       if (score->selection().isSingle()) {
@@ -184,7 +180,6 @@ void ScoreAccessibility::currentInfoChanged()
             statusBarLabel->setText(tr("List Selection"));
             score->setAccessibleInfo(tr("List Selection"));
             }
-      mainWindow->statusBar()->addWidget(statusBarLabel);
       }
 
 ScoreAccessibility* ScoreAccessibility::instance()

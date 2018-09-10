@@ -81,9 +81,7 @@ bool SFont::read(const QString& s)
             return false;
 
       synth->setLoadProgress(0);
-      int currentInstument = 0;
       for (auto instrument : instruments) {
-            synth->setLoadProgress(currentInstument++ * 100 / instruments.count() / 2);
             if (synth->loadWasCanceled())
                   return false;
 
@@ -92,7 +90,6 @@ bool SFont::read(const QString& s)
             }
 
       for (auto preset : presets) {
-            synth->setLoadProgress(currentInstument++ * 100 / instruments.count() / 2);
             if (synth->loadWasCanceled())
                   return false;
 
@@ -147,7 +144,7 @@ Preset::~Preset()
 
 void Preset::loadSamples()
       {
-      QMutexLocker locker(&sfont->synth->mutex);
+      bool locked = sfont->synth->mutex.tryLock();
 
       if (_global_zone && _global_zone->instrument) {
             Instrument* i = _global_zone->instrument;
@@ -158,18 +155,28 @@ void Preset::loadSamples()
                   iz->sample->load();
             }
 
+      int currentInstrZone = 0;
+      float instrSize = (float)zones.size(); //float is used to properly calculate progress
       for (Zone* z : zones) {
+            sfont->synth->setLoadProgress(currentInstrZone++ / instrSize * 100);
             Instrument* i = z->instrument;
             if (i->global_zone && i->global_zone->sample)
                   i->global_zone->sample->load();
 
+            int instrZonesSize = i->zones.size();
             for (Zone* iz : i->zones) {
-                  if (sfont->synth->globalTerminate())
+                  if (sfont->synth->globalTerminate()) {
+                        if (locked)
+                              sfont->synth->mutex.unlock();
                         return;
+                  }
 
                   iz->sample->load();
                   }
             }
+
+      if (locked)
+            sfont->synth->mutex.unlock();
       }
 
 //---------------------------------------------------------

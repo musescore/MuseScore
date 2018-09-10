@@ -1824,7 +1824,11 @@ void Segment::createShape(int staffIdx)
             BarLine* bl = toBarLine(element(0));
             if (bl) {
                   qreal w = BarLine::layoutWidth(score(), bl->barLineType());
+#ifndef NDEBUG
+                  s.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos()), bl->name());
+#else
                   s.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos()));
+#endif
                   }
             return;
             }

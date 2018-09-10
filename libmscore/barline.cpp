@@ -567,7 +567,7 @@ printf("may drop\n");
                && segment()
                && segment()->isEndBarLineType());
             }
-      // Prevent unreachable code warning 
+      // Prevent unreachable code warning
       // return false;
       }
 
@@ -1047,8 +1047,11 @@ void BarLine::layout2()
 Shape BarLine::shape() const
       {
       Shape shape;
-//      shape.add(QRectF(0.0, 0.0, width(), height()).translated(pos()));
+#ifndef NDEBUG
+      shape.add(bbox(), name());
+#else
       shape.add(bbox());
+#endif
       return shape;
       }
 
