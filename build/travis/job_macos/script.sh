@@ -33,7 +33,7 @@ unzip musescore_dependencies_macos.zip -d applebuild/mscore.app/Contents/Resourc
 if [ "$(grep '^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)' CMakeLists.txt)" ]
 then # Build is marked UNSTABLE inside CMakeLists.txt
 build/package_mac $BRANCH-$REVISION
-PACKAGE_NAME=MuseScoreNightly
+PACKAGE_NAME=MuseScore
 else
 build/package_mac
 PACKAGE_NAME=MuseScore
