@@ -252,6 +252,7 @@ void ScoreView::mouseReleaseEvent(QMouseEvent*)
                   if (editData.startMove == editData.pos && clickOffElement) {
                         _score->deselectAll();
                         _score->update();
+                        mscore->updateInspector();
                         }
             case ViewState::EDIT:
             case ViewState::NOTE_ENTRY:
