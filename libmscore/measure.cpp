@@ -516,7 +516,7 @@ void Measure::layout2()
                && !irregular()
                && (no() || score()->styleB(Sid::showMeasureNumberOne))) {
                   if (score()->styleB(Sid::measureNumberSystem))
-                        smn = system()->firstMeasure() == this;
+                        smn = (system()->firstMeasure() == this) || (prevMeasure() && prevMeasure()->irregular() && system()->firstMeasure() == prevMeasure());
                   else {
                         smn = (no() == 0 && score()->styleB(Sid::showMeasureNumberOne)) ||
                               ( ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0) ) ||
