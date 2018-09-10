@@ -5,8 +5,8 @@ LONG_NAME=MuseScore
 
 if [[ $1 ]]
 then
-    LONG_NAME=MuseScoreNightly
-    LONGER_NAME=MuseScoreNightly
+    LONG_NAME=MuseScore
+    LONGER_NAME="MuseScore 3.0 alpha"
     VERSION=$1
 else
     LONG_NAME=MuseScore
