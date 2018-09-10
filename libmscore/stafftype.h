@@ -78,7 +78,7 @@ class XmlWriter;
 //   TablatureFont
 //---------------------------------------------------------
 
-#define NUM_OF_DIGITFRETS                 25    // the max fret number which can be rendered with numbers
+#define NUM_OF_DIGITFRETS                 100   // the max fret number which can be rendered with numbers
 #define NUM_OF_LETTERFRETS                17    // the max fret number which can be rendered with letters
 #define NUM_OF_BASSSTRING_SLASHES         5     // the max number of slashes supported for French bass strings notation
                                                 // (currently, only 3 slashes are used at most; another two are
