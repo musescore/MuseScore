@@ -3820,9 +3820,6 @@ void Score::doLayoutRange(int stick, int etick)
 
       lc.prevMeasure = 0;
 
-      // we need to reset tempo because fermata is setted
-      //inside getNextMeasure and it lead to twice timeStretch
-      fixTicks();
       getNextMeasure(lc);
       lc.curSystem = collectSystem(lc);
 

@@ -3674,38 +3674,6 @@ void Measure::stretchMeasure(qreal targetWidth)
             }
       }
 
-#if 0
-//---------------------------------------------------
-//    computeTicks
-//    set ticks for all segments
-//       return minTick
-//---------------------------------------------------
-
-int Measure::computeTicks() {
-      int minTick = ticks();
-      if (minTick <= 0) {
-            qDebug("=====minTick %d measure %p", minTick, this);
-            }
-      Q_ASSERT(minTick > 0);
-
-      Segment* ns = first();
-      while (ns && !ns->enabled())
-            ns = ns->next();
-      while (ns) {
-            Segment* s = ns;
-            ns         = s->nextEnabled();
-            int nticks = (ns ? ns->rtick() : ticks()) - s->rtick();
-            if (nticks) {
-                  if (nticks < minTick)
-                        minTick = nticks;
-                  }
-            s->setTicks(nticks);
-            }
-
-      return minTick;
-}
-#endif
-
 //---------------------------------------------------------
 //   endBarLine
 //      return the first one
