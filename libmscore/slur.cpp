@@ -1014,11 +1014,11 @@ void Slur::write(XmlWriter& xml) const
 
 static bool chordsHaveTie(Chord* c1, Chord* c2)
       {
-      int n1 = c1->notes().size();
-      for (int i1 = 0; i1 < n1; ++i1) {
+      size_t n1 = c1->notes().size();
+      for (size_t i1 = 0; i1 < n1; ++i1) {
             Note* n1 = c1->notes().at(i1);
-            int n2 = c2->notes().size();
-            for (int i2 = 0; i2 < n2; ++i2) {
+            size_t n2 = c2->notes().size();
+            for (size_t i2 = 0; i2 < n2; ++i2) {
                   Note* n2 = c2->notes().at(i2);
                   if (n1->tieFor() && n1->tieFor() == n2->tieBack())
                         return true;

@@ -1115,7 +1115,7 @@ void quantizeOnTimesInRange(
                  "Quantize::quantizeOnTimesInRange",
                  "Sizes of quant data and chords are not equal");
 
-      for (int chordIndex = quantData.size() - 1; ; --chordIndex) {
+      for (size_t chordIndex = quantData.size() - 1; ; --chordIndex) {
             const QuantPos &p = quantData[chordIndex].positions[posIndex];
             const auto onTime = p.time;
             const auto chordIt = chords[chordIndex];

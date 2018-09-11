@@ -199,7 +199,7 @@ void SkylineLine::paint(QPainter& p) const
       {
       qreal x1 = 0.0;
       qreal x2;
-      qreal y;
+      qreal y = 0.0;
 
       bool pvalid = false;
       for (const SkylineSegment& s : *this) {
