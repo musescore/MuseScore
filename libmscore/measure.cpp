@@ -87,7 +87,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class MStaff {
-      Shape _shape;
+//      Shape _shape;
       Text* _noText         { 0 };         ///< Measure number text object
       StaffLines*  _lines   { 0 };
       Spacer* _vspacerUp    { 0 };
@@ -108,8 +108,8 @@ class MStaff {
       void setScore(Score*);
       void setTrack(int);
 
-      Shape shape() const            { return _shape; }
-      Shape& shape()                 { return _shape; }
+//      Shape shape() const            { return _shape; }
+//      Shape& shape()                 { return _shape; }
 
       Text* noText() const           { return _noText;     }
       void setNoText(Text* t)        { _noText = t;        }
@@ -294,8 +294,8 @@ void Measure::setCorrupted(int staffIdx, bool val)              { _mstaves[staff
 #endif
 void Measure::setNoText(int staffIdx, Text* t)                  { _mstaves[staffIdx]->setNoText(t); }
 Text* Measure::noText(int staffIdx) const                       { return _mstaves[staffIdx]->noText(); }
-const Shape& Measure::staffShape(int staffIdx) const            { return _mstaves[staffIdx]->shape(); }
-Shape& Measure::staffShape(int staffIdx)                        { return _mstaves[staffIdx]->shape(); }
+// const Shape& Measure::staffShape(int staffIdx) const            { return _mstaves[staffIdx]->shape(); }
+// Shape& Measure::staffShape(int staffIdx)                        { return _mstaves[staffIdx]->shape(); }
 
 //---------------------------------------------------------
 //   Measure
@@ -3673,6 +3673,38 @@ void Measure::stretchMeasure(qreal targetWidth)
                   }
             }
       }
+
+#if 0
+//---------------------------------------------------
+//    computeTicks
+//    set ticks for all segments
+//       return minTick
+//---------------------------------------------------
+
+int Measure::computeTicks() {
+      int minTick = ticks();
+      if (minTick <= 0) {
+            qDebug("=====minTick %d measure %p", minTick, this);
+            }
+      Q_ASSERT(minTick > 0);
+
+      Segment* ns = first();
+      while (ns && !ns->enabled())
+            ns = ns->next();
+      while (ns) {
+            Segment* s = ns;
+            ns         = s->nextEnabled();
+            int nticks = (ns ? ns->rtick() : ticks()) - s->rtick();
+            if (nticks) {
+                  if (nticks < minTick)
+                        minTick = nticks;
+                  }
+            s->setTicks(nticks);
+            }
+
+      return minTick;
+}
+#endif
 
 //---------------------------------------------------------
 //   endBarLine

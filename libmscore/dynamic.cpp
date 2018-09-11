@@ -209,27 +209,27 @@ void Dynamic::doAutoplace()
             return;
 
       setUserOff(QPointF());
-
       qreal minDistance = score()->styleP(Sid::dynamicsMinDistance);
-      const Shape& s1   = s->measure()->staffShape(staffIdx());
-      Shape s2          = shape().translated(s->pos() + pos());
-
-#if 0
-      bool val = s1.intersects(bbox().translated(s->pos() + pos()));
-      if (!val)
-            return;
-#endif
+      QRectF r          = bbox().translated(pos() + s->pos() + s->measure()->pos());
+      Skyline& sl       = s->measure()->system()->staff(staffIdx())->skyline();
 
       if (placeAbove()) {
-            qreal d = s2.minVerticalDistance(s1);
+            SkylineLine sk(false);
+            sk.add(r.x(), r.bottom(), r.width());
+
+            qreal d = sk.minDistance(sl.north());
             if (d > -minDistance)
                   rUserYoffset() = -d - minDistance;
             }
       else {
-            qreal d = s1.minVerticalDistance(s2);
+            SkylineLine sk(true);
+            sk.add(r.x(), r.top(), r.width());
+
+            qreal d = sl.south().minDistance(sk);
             if (d > -minDistance)
                   rUserYoffset() = d + minDistance;
             }
+      sl.add(r);
       }
 
 //---------------------------------------------------------

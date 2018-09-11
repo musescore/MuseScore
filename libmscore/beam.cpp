@@ -2465,10 +2465,11 @@ QVariant Beam::propertyDefault(Pid id) const
       }
 
 //---------------------------------------------------------
-//   shape
+//   addSkyline
+//    add beam shape to skyline
 //---------------------------------------------------------
 
-Shape Beam::shape() const
+void Beam::addSkyline(Skyline& sk)
       {
       qreal lw2 = score()->styleP(Sid::beamWidth) * .5 * mag();
       const QLineF* bs = beamSegments.front();
@@ -2478,30 +2479,31 @@ Shape Beam::shape() const
       double ww      = lw2 / sin(M_PI_2 - atan(d));
       qreal _spatium = spatium();
 
-      Shape shape;
       for (const QLineF* beamSegment : beamSegments) {
             qreal x = beamSegment->x1();
             qreal y = beamSegment->y1();
             qreal w = beamSegment->x2() - x;
-            int n   = int(ceil(w / _spatium));
+            int n   = (d < 0.01) ? 1 : int(ceil(w / _spatium));
+
             qreal s = (beamSegment->y2() - y) / w;
             w /= n;
-            for (int i = 1; i < n; ++i) {
-                  qreal xx = beamSegment->x1() + i * w;
-                  qreal yy = beamSegment->y1() + i * w * s;
-                  if (yy > y)
-                        shape.add(QRectF(x, y-ww, w, yy - y + ww*2));
-                  else
-                        shape.add(QRectF(x, yy-ww, w, y - yy + ww*2));
-                  x = xx;
-                  y = yy;
+            for (int i = 1; i <= n; ++i) {
+                  qreal y2 = y + w * s;
+                  qreal yn, ys;
+                  if (y2 > y) {
+                        yn = y;
+                        ys = y2;
+                        }
+                  else {
+                        yn = y2;
+                        ys = y;
+                        }
+                  sk.north().add(x, yn - ww, w);
+                  sk.south().add(x, ys + ww, w);
+                  x += w;
+                  y = y2;
                   }
-            if (y > beamSegment->y2())
-                  shape.add(QRectF(x, beamSegment->y2()-ww, w, y - beamSegment->y2() + ww*2));
-            else
-                  shape.add(QRectF(x, y-ww, w, beamSegment->y2() - y + ww*2));
             }
-      return shape;
       }
 
 //---------------------------------------------------------

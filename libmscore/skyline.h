@@ -43,10 +43,13 @@ struct SkylineLine : public std::vector<SkylineSegment> {
    public:
       SkylineLine(bool n) : north(n) {}
       void add(qreal x, qreal y, qreal w);
+      void add(const Shape& s);
       void paint(QPainter&) const;
       void dump() const;
       qreal minDistance(const SkylineLine&) const;
+      qreal max() const;
       bool valid(const SkylineSegment& s) const;
+      bool isNorth() const { return north; }
       };
 
 //---------------------------------------------------------

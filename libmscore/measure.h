@@ -132,8 +132,8 @@ class Measure final : public MeasureBase {
       void setNoText(int staffIdx, Text*);
       Text* noText(int staffIdx) const;
 
-      const Shape& staffShape(int staffIdx) const;
-      Shape& staffShape(int staffIdx);
+//      const Shape& staffShape(int staffIdx) const;
+//      Shape& staffShape(int staffIdx);
       void createStaves(int);
 
       MeasureNumberMode measureNumberMode() const     { return _noMode;      }

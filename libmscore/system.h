@@ -62,6 +62,7 @@ class SysStaff {
 
       bool show() const             { return _show; }
       void setShow(bool v)          { _show = v; }
+
       const Skyline& skyline() const { return _skyline; }
       Skyline& skyline()             { return _skyline; }
 
@@ -154,8 +155,8 @@ class System final : public Element {
       virtual Element* prevSegmentElement() override;
 
       qreal minDistance(System*) const;
-      qreal topDistance(int staffIdx, const Shape&) const;
-      qreal bottomDistance(int staffIdx, const Shape&) const;
+      qreal topDistance(int staffIdx, const SkylineLine&) const;
+      qreal bottomDistance(int staffIdx, const SkylineLine&) const;
       qreal minTop() const;
       qreal minBottom() const;
 

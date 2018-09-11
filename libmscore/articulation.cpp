@@ -543,7 +543,7 @@ void Articulation::doAutoplace()
             return;
 
       setUserOff(QPointF());
-
+#if 0
       qreal minDistance = score()->styleP(Sid::dynamicsMinDistance);
       const Shape& s1   = s->measure()->staffShape(staffIdx());
       Shape s2          = shape().translated(s->pos() + pos());
@@ -558,6 +558,7 @@ void Articulation::doAutoplace()
             if (d > -minDistance)
                   rUserYoffset() = d + minDistance;
             }
+#endif
       }
 
 }

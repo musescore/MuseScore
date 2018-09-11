@@ -53,8 +53,6 @@ struct LayoutContext {
       int adjustMeasureNo(MeasureBase*);
       void getEmptyPage();
       void collectPage();
-
-      void computeMeasureShape(System* system);
       };
 
 //---------------------------------------------------------
