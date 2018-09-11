@@ -400,7 +400,7 @@ bool badLevelCondition(int startLevelDiff, int endLevelDiff, int tol)
 int noteCount(const ReducedFraction &duration,
               bool useDots)
       {
-      return toDurationList(duration.fraction(), useDots, 1, false).size();
+      return int(toDurationList(duration.fraction(), useDots, 1, false).size());
       }
 
 bool isLessNoteCount(const ReducedFraction &t1,

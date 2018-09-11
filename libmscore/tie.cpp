@@ -362,7 +362,7 @@ void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             // for two-note chords, it looks better to have notes on spaces tied outside the lines
 
             if (sc) {
-                  int notes = sc->notes().size();
+                  size_t notes = sc->notes().size();
                   bool onLine = !(sn->line() & 1);
                   if ((onLine && notes > 1) || (!onLine && notes > 2))
                         reverseAdjust = true;
@@ -537,7 +537,7 @@ void Tie::calculateDirection()
 
       if (_slurDirection == Direction::AUTO) {
             std::vector<Note*> notes = c1->notes();
-            int n = notes.size();
+            size_t n = notes.size();
             if (m1->hasVoices(c1->staffIdx()) || m2->hasVoices(c2->staffIdx())) {
                   // in polyphonic passage, ties go on the stem side
                   _up = c1->up();
@@ -560,12 +560,12 @@ void Tie::calculateDirection()
                   QList<int> ties;
                   int idx = 0;
                   int noteIdx = -1;
-                  for (int i = 0; i < n; ++i) {
+                  for (size_t i = 0; i < n; ++i) {
                         if (notes[i]->tieFor()) {
                               ties.append(notes[i]->line());
                               if (notes[i] == startNote()) {
                                     idx = ties.size() - 1;
-                                    noteIdx = i;
+                                    noteIdx = int(i);
                                     }
                               }
                         }

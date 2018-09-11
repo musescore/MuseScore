@@ -587,8 +587,8 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                                       Chord* och = toChord(ocr);
                                                       Chord* nch = toChord(ncr);
 
-                                                      int n = och->notes().size();
-                                                      for (int i = 0; i < n; ++i) {
+                                                      size_t n = och->notes().size();
+                                                      for (size_t i = 0; i < n; ++i) {
                                                             Note* on = och->notes().at(i);
                                                             Note* nn = nch->notes().at(i);
                                                             if (on->tieFor()) {
@@ -899,8 +899,8 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               if (oe->isChord()) {
                                     Chord* och = toChord(ocr);
                                     Chord* nch = toChord(ncr);
-                                    int n = och->notes().size();
-                                    for (int i = 0; i < n; ++i) {
+                                    size_t n = och->notes().size();
+                                    for (size_t i = 0; i < n; ++i) {
                                           Note* on = och->notes().at(i);
                                           Note* nn = nch->notes().at(i);
                                           if (on->tieFor()) {
@@ -1106,8 +1106,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick
                               if (oe->isChord()) {
                                     Chord* och = toChord(ocr);
                                     Chord* nch = toChord(ncr);
-                                    int n = och->notes().size();
-                                    for (int i = 0; i < n; ++i) {
+                                    size_t n = och->notes().size();
+                                    for (size_t i = 0; i < n; ++i) {
                                           Note* on = och->notes().at(i);
                                           Note* nn = nch->notes().at(i);
                                           if (on->tieFor()) {

@@ -827,7 +827,7 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
       {
       Segment* seg = chord->segment();
       Tremolo* tremolo = chord->tremolo();
-      int notes = chord->notes().size();
+      int notes = int(chord->notes().size());
 
       // check if tremolo was rendered before for drum staff
       const Drumset* ds = getDrumset(chord);
@@ -853,7 +853,7 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
                   seg2 = seg2->next(st);
             Chord* c2 = seg2 ? toChord(seg2->element(track)) : 0;
             if (c2 && c2->type() == ElementType::CHORD) {
-                  int notes2 = c2->notes().size();
+                  int notes2 = int(c2->notes().size());
                   int tnotes = qMax(notes, notes2);
                   int tticks = chord->actualTicks() * 2; // use twice the size
                   int n = tticks / t;
@@ -926,7 +926,7 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
 
 void renderArpeggio(Chord *chord, QList<NoteEventList> & ell)
       {
-      int notes = chord->notes().size();
+      int notes = int(chord->notes().size());
       int l = 64;
       while (l && (l * notes > chord->upNote()->playTicks()))
             l = 2*l / 3;
@@ -1110,9 +1110,9 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
       int ontime    = 0;
 
       int gnb = note->chord()->graceNotesBefore().size();
-      int p = prefix.size();
-      int b = body.size();
-      int s = suffix.size();
+      int p = int(prefix.size());
+      int b = int(body.size());
+      int s = int(suffix.size());
       int gna = note->chord()->graceNotesAfter().size();
 
       int ticksPerNote = 0;
@@ -1175,7 +1175,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
       // of a different pitch.
       // The total duration of the tied note is returned, and the index is modified.
       auto tieForward = [millespernote] (int & j, const vector<int> & vec) {
-            int size = vec.size();
+            int size = int(vec.size());
             int duration = millespernote;
             while ( j < size-1 && vec[j] == vec[j+1] ) {
                   duration += millespernote;
@@ -1531,8 +1531,8 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, 
       if (chord->notes().empty())
             return ell;
 
-      int notes = chord->notes().size();
-      for (int i = 0; i < notes; ++i)
+      size_t notes = chord->notes().size();
+      for (size_t i = 0; i < notes; ++i)
             ell.append(NoteEventList());
 
       if (chord->tremolo()) {
@@ -1548,7 +1548,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, 
       //
       //    apply gateTime
       //
-      for (int i = 0; i < notes; ++i) {
+      for (int i = 0; i < int(notes); ++i) {
             NoteEventList* el = &ell[i];
             if (el->size() == 0 && chord->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
                   el->append(NoteEvent(0, ontime, 1000 - ontime - trailtime));
@@ -1632,8 +1632,8 @@ void Score::createGraceNotesPlayEvents(int tick, Chord* chord, int &ontime, int 
       for (int i = 0; i < nb; ++i) {
             QList<NoteEventList> el;
             Chord* gc = gnb.at(i);
-            int nn = gc->notes().size();
-            for (int ii = 0; ii < nn; ++ii) {
+            size_t nn = gc->notes().size();
+            for (size_t ii = 0; ii < nn; ++ii) {
                   NoteEventList nel;
                   nel.append(NoteEvent(0, on, graceDuration));
                   el.append(nel);
@@ -1642,7 +1642,7 @@ void Score::createGraceNotesPlayEvents(int tick, Chord* chord, int &ontime, int 
             if (gc->playEventType() == PlayEventType::InvalidUser)
                   gc->score()->undo(new ChangeEventList(gc, el));
             else if (gc->playEventType() == PlayEventType::Auto) {
-                  for (int ii = 0; ii < nn; ++ii)
+                  for (int ii = 0; ii < int(nn); ++ii)
                         gc->notes()[ii]->setPlayEvents(el[ii]);
                   }
             on += graceDuration;
@@ -1659,8 +1659,8 @@ void Score::createGraceNotesPlayEvents(int tick, Chord* chord, int &ontime, int 
             for (int i = 0; i < na; ++i) {
                   QList<NoteEventList> el;
                   Chord* gc = gna.at(i);
-                  int nn = gc->notes().size();
-                  for (int ii = 0; ii < nn; ++ii) {
+                  size_t nn = gc->notes().size();
+                  for (size_t ii = 0; ii < nn; ++ii) {
                         NoteEventList nel;
                         nel.append(NoteEvent(0, on, graceDuration)); // NoteEvent(pitch,ontime,len)
                         el.append(nel);
@@ -1669,7 +1669,7 @@ void Score::createGraceNotesPlayEvents(int tick, Chord* chord, int &ontime, int 
                   if (gc->playEventType() == PlayEventType::InvalidUser)
                         gc->score()->undo(new ChangeEventList(gc, el));
                   else if (gc->playEventType() == PlayEventType::Auto) {
-                        for (int ii = 0; ii < nn; ++ii)
+                        for (int ii = 0; ii < int(nn); ++ii)
                               gc->notes()[ii]->setPlayEvents(el[ii]);
                         }
                   on += graceDuration;
@@ -1722,7 +1722,7 @@ void Score::createPlayEvents(Chord* chord)
             chord->score()->undo(new ChangeEventList(chord, el));
             }
       else if (chord->playEventType() == PlayEventType::Auto) {
-            int n = chord->notes().size();
+            int n = int(chord->notes().size());
             for (int i = 0; i < n; ++i)
                   chord->notes()[i]->setPlayEvents(el[i]);
             }
