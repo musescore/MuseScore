@@ -3758,7 +3758,7 @@ bool Score::hasHarmonies()
 
 int Score::lyricCount()
       {
-      int count = 0;
+      size_t count = 0;
       SegmentType st = SegmentType::ChordRest;
       for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             for (int i = 0; i < ntracks(); ++i) {
@@ -3767,7 +3767,7 @@ int Score::lyricCount()
                         count += cr->lyrics().size();
                   }
             }
-      return count;
+      return int(count);
       }
 
 //---------------------------------------------------------
@@ -3799,7 +3799,7 @@ QString Score::extractLyrics()
       SegmentType st = SegmentType::ChordRest;
       for (int track = 0; track < ntracks(); track += VOICES) {
             bool found = false;
-            unsigned maxLyrics = 1;
+            size_t maxLyrics = 1;
             for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
                   m->setPlaybackCount(0);
                   }
@@ -4033,7 +4033,7 @@ void Score::changeVoice(int voice)
                   if (chord->voice() != voice) {
                         Segment* s       = chord->segment();
                         Measure* m       = s->measure();
-                        int notes        = chord->notes().size();
+                        size_t notes     = chord->notes().size();
                         int dstTrack     = chord->staffIdx() * VOICES + voice;
                         ChordRest* dstCR = toChordRest(s->element(dstTrack));
                         Chord* dstChord  = nullptr;

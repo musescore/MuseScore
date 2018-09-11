@@ -163,7 +163,6 @@ void Preset::loadSamples()
             if (i->global_zone && i->global_zone->sample)
                   i->global_zone->sample->load();
 
-            int instrZonesSize = i->zones.size();
             for (Zone* iz : i->zones) {
                   if (sfont->synth->globalTerminate()) {
                         if (locked)

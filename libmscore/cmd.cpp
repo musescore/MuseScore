@@ -628,8 +628,8 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   dl = toRhythmicDurationList(dd, isRest, segment->rtick(), sigmap()->timesig(tick).nominal(), measure, 1);
             else
                   dl = toDurationList(dd, true);
-            int n = dl.size();
-            for (int i = 0; i < n; ++i) {
+            size_t n = dl.size();
+            for (size_t i = 0; i < n; ++i) {
                   const TDuration& d = dl[i];
                   ChordRest* ncr;
                   Note* note = 0;
@@ -870,7 +870,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                               }
                         }
                   else {
-                        for (int i = dList.size() - 1; i >= 0; --i) {
+                        for (int i = int(dList.size()) - 1; i >= 0; --i) {
                               if (ltuplet) {
                                     // take care not to recreate tuplet we just deleted
                                     Rest* r = setRest(tick, track, dList[i].fraction(), false, 0, false);
@@ -959,7 +959,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
             Fraction srcF = cr1->duration();
             Fraction dstF = Fraction::fromTicks(tick - cr1->tick());
             std::vector<TDuration> dList = toDurationList(dstF, true);
-            int n = dList.size();
+            size_t n = dList.size();
             undoChangeChordRestLen(cr1, TDuration(dList[0]));
             if (n > 1) {
                   int crtick = cr1->tick() + cr1->actualTicks();
@@ -967,7 +967,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
                   if (cr1->type() == ElementType::CHORD) {
                         // split Chord
                         Chord* c = toChord(cr1);
-                        for (int i = 1; i < n; ++i) {
+                        for (size_t i = 1; i < n; ++i) {
                               TDuration d = dList[i];
                               Chord* c2 = addChord(crtick, d, c, true, c->tuplet());
                               c = c2;
@@ -978,7 +978,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, int tick)
                   else {
                         // split Rest
                         Rest* r       = toRest(cr1);
-                        for (int i = 1; i < n; ++i) {
+                        for (size_t i = 1; i < n; ++i) {
                               TDuration d = dList[i];
                               Rest* r2      = toRest(r->clone());
                               r2->setDuration(d.fraction());
@@ -1220,7 +1220,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                               }
                         }
                   else {
-                        for (int i = dList.size() - 1; i >= 0; --i) {
+                        for (int i = int(dList.size()) - 1; i >= 0; --i) {
                               bool genTie;
                               Chord* cc;
                               if (oc) {
@@ -2014,7 +2014,7 @@ Element* Score::move(const QString& cmd)
                                     return 0;
                               }
                         // segment for sure contains chords/rests,
-                        int size = seg->elist().size();
+                        int size = int(seg->elist().size());
                         // if segment has a chord/rest in original element track, use it
                         if (track > -1 && track < size && seg->element(track)) {
                               trg  = seg->element(track);
@@ -2442,7 +2442,7 @@ void Score::cmdExplode()
                         if (e && e->type() == ElementType::CHORD) {
                               Chord* c = toChord(e);
                               std::vector<Note*> notes = c->notes();
-                              int nnotes = notes.size();
+                              int nnotes = int(notes.size());
                               // keep note "i" from top, which is backwards from nnotes - 1
                               // reuse notes if there are more instruments than notes
                               int stavesPerNote = qMax((lastStaff - srcStaff) / nnotes, 1);

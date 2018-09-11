@@ -73,7 +73,7 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
 //    which contains one system
 //---------------------------------------------------------
 
- void Score::resetSystems(bool layoutAll, LayoutContext& lc)
+ void Score::resetSystems(bool /*layoutAll*/, LayoutContext& lc)
       {
 // if (layoutAll) {
       qDeleteAll(systems());

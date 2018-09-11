@@ -275,13 +275,13 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         // overlap (possibly unison)
 
                         // build list of overlapping notes
-                        for (int i = 0, n = upStemNotes.size(); i < n; ++i) {
+                        for (size_t i = 0, n = upStemNotes.size(); i < n; ++i) {
                               if (upStemNotes[i]->line() >= topDownNote->line() - 1)
                                     overlapNotes.append(upStemNotes[i]);
                               else
                                     break;
                               }
-                        for (int i = downStemNotes.size() - 1; i >= 0; --i) {
+                        for (int i = int(downStemNotes.size()) - 1; i >= 0; --i) {
                               if (downStemNotes[i]->line() <= bottomUpNote->line() + 1)
                                     overlapNotes.append(downStemNotes[i]);
                               else
@@ -535,12 +535,12 @@ qreal Score::layoutChords2(std::vector<Note*>& notes, bool up)
       if (up) {
             // loop bottom up
             startIdx = 0;
-            endIdx = notes.size();
+            endIdx = int(notes.size());
             incIdx = 1;
             }
       else {
             // loop top down
-            startIdx = notes.size() - 1;
+            startIdx = int(notes.size()) - 1;
             endIdx = -1;
             incIdx = -1;
             }
@@ -778,7 +778,7 @@ void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segm
       qreal upDotPosX    = 0.0;
       qreal downDotPosX  = 0.0;
 
-      int nNotes = notes.size();
+      int nNotes = int(notes.size());
       int nAcc = 0;
       for (int i = nNotes-1; i >= 0; --i) {
             Note* note     = notes[i];
@@ -1178,8 +1178,8 @@ void Score::layoutSpanner()
       for (int track = 0; track < tracks; ++track) {
             for (Segment* segment = firstSegment(SegmentType::All); segment; segment = segment->next1()) {
                   if (track == tracks-1) {
-                        int n = segment->annotations().size();
-                        for (int i = 0; i < n; ++i)
+                        size_t n = segment->annotations().size();
+                        for (size_t i = 0; i < n; ++i)
                               segment->annotations().at(i)->layout();
                         }
                   Element* e = segment->element(track);
@@ -1564,7 +1564,7 @@ void Score::respace(std::vector<ChordRest*>* elements)
       {
       ChordRest* cr1 = elements->front();
       ChordRest* cr2 = elements->back();
-      int n          = elements->size();
+      int n          = int(elements->size());
       qreal x1       = cr1->segment()->pos().x();
       qreal x2       = cr2->segment()->pos().x();
 
