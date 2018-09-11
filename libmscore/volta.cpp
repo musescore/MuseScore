@@ -59,13 +59,7 @@ void VoltaSegment::layout()
       if (!parent())
             return;
       rypos() = score()->styleP(Sid::voltaY) * mag();
-      if (autoplace()) {
-            qreal minDistance = spatium() * .7;
-            Shape s1 = shape().translated(pos());
-            qreal d  = system()->topDistance(staffIdx(), s1);
-            if (d > -minDistance)
-                  rUserYoffset() = -d - minDistance;
-            }
+      autoplaceSpannerSegment(spatium() * .7);
       }
 
 //---------------------------------------------------------

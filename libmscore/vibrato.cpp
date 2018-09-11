@@ -126,22 +126,8 @@ void VibratoSegment::layout()
             symbolLine(SymId::wiggleVibrato, SymId::wiggleVibrato);
 
       if (parent()) {
-            qreal yo = score()->styleP(vibrato()->placeBelow() ? Sid::vibratoPosBelow : Sid::vibratoPosAbove);
-            rypos() = yo;
-            if (autoplace()) {
-                  qreal minDistance = spatium();
-                  Shape s1 = shape().translated(pos());
-                  if (vibrato()->placeAbove()) {
-                        qreal d  = system()->topDistance(staffIdx(), s1);
-                        if (d > -minDistance)
-                              rUserYoffset() = -d - minDistance;
-                        }
-                  else {
-                        qreal d  = system()->bottomDistance(staffIdx(), s1);
-                        if (d > -minDistance)
-                              rUserYoffset() = d + minDistance;
-                        }
-                  }
+            rypos() = score()->styleP(vibrato()->placeBelow() ? Sid::vibratoPosBelow : Sid::vibratoPosAbove);
+            autoplaceSpannerSegment(spatium() * 1.0);
             }
       }
 

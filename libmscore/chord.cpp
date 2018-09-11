@@ -3308,7 +3308,7 @@ void Chord::layoutArticulations()
                   y += a->height() * .5;        // center symbol
                   }
             a->setPos(x, y);
-            measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
+//            measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
             }
       }
 
@@ -3374,7 +3374,7 @@ void Chord::layoutArticulations2()
             qreal y = a->up() ? chordTopY - dy : chordBotY + dy;
             a->setPos(x, y);
             a->doAutoplace();
-            measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
+//            measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
             }
       //
       //    now place all articulations with staff top or bottom anchor
@@ -3393,7 +3393,7 @@ void Chord::layoutArticulations2()
                         staffBotY += distance0;
                         }
                   a->doAutoplace();
-                  measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
+//                  measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
                   }
             }
       }

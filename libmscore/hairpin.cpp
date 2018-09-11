@@ -97,13 +97,13 @@ static void moveDynamic(Dynamic* d, qreal y)
       {
       if (d && d->autoplace()) {
             int staffIdx = d->staffIdx();
-            Shape& ss    = d->segment()->staffShape(staffIdx);
-            Shape& ms    = d->measure()->staffShape(staffIdx);
+//            Shape& ss    = d->segment()->staffShape(staffIdx);
+//            Shape& ms    = d->measure()->staffShape(staffIdx);
             QPointF spos = d->segment()->pos();
 
             d->rUserYoffset() = y;
-            ss.add(d->shape());
-            ms.add(d->shape().translated(spos));
+//            ss.add(d->shape());
+//            ms.add(d->shape().translated(spos));
             }
       }
 
@@ -149,8 +149,8 @@ void HairpinSegment::layout()
                   int si = ed->staffIdx();
                   Segment* s = ed->segment();
                   s->staffShape(si).add(ed->shape().translated(ed->pos()));
-                  Measure* m = s->measure();
-                  m->staffShape(si).add(ed->shape().translated(s->pos() + ed->pos()));
+//                  Measure* m = s->measure();
+//                  m->staffShape(si).add(ed->shape().translated(s->pos() + ed->pos()));
                   }
             }
 
@@ -247,22 +247,23 @@ void HairpinSegment::layout()
             setbbox(r.adjusted(-w*.5, -w*.5, w, w));
             }
       if (parent()) {
-            qreal yo = score()->styleP(hairpin()->placeBelow() ? Sid::hairpinPosBelow : Sid::hairpinPosAbove);
-            rypos() += yo;
+            rypos() += score()->styleP(hairpin()->placeBelow() ? Sid::hairpinPosBelow : Sid::hairpinPosAbove);
             if (autoplace()) {
                   qreal minDistance = spatium() * .7;
-                  Shape s1 = shape().translated(pos());
                   qreal ymax = pos().y();
+
+                  SkylineLine sl(!hairpin()->placeAbove());
+                  sl.add(shape().translated(pos()));
                   if (hairpin()->placeAbove()) {
-                        qreal d  = system()->topDistance(staffIdx(), s1);
+                        qreal d  = system()->topDistance(staffIdx(), sl);
                         if (d > -minDistance)
                               ymax -= d + minDistance;
                         }
                   else {
-                        qreal d  = system()->bottomDistance(staffIdx(), s1);
-
+                        qreal d  = system()->bottomDistance(staffIdx(), sl);
                         if (d > -minDistance)
                               ymax += d + minDistance;
+
                         qreal sdy = 0.0;
                         if (sd) {
                               sdy = -sd->bbox().top() * .4;

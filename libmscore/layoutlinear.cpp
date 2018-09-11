@@ -115,15 +115,15 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
  void Score::collectLinearSystem(LayoutContext& lc)
       {
       System* system = systems().front();
-      
+
       QPointF pos;
       bool firstMeasure = true;
-      
-      //set first measure to lc.nextMeasures for following 
+
+      //set first measure to lc.nextMeasures for following
       //utilizing in getNextMeasure()
       lc.nextMeasure = _measures.first();
       getNextMeasure(lc);
-      
+
       while (lc.curMeasure) {
             qreal ww = 0.0;
             if (lc.curMeasure->isVBox() || lc.curMeasure->isTBox()) {
@@ -179,7 +179,7 @@ void Score::layoutLinear(bool layoutAll, LayoutContext& lc)
       resetSystems(layoutAll, lc);
 
       collectLinearSystem(lc);
-      
+
       hideEmptyStaves(systems().front(), true);
 
       lc.layoutLinear();
@@ -193,8 +193,6 @@ void LayoutContext::layoutLinear()
       {
       System* system = score->systems().front();
 
-      computeMeasureShape(system);
-      
       //
       // layout
       //    - beams
