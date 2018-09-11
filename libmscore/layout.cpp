@@ -2895,6 +2895,29 @@ void Score::layoutLyrics(System* system)
                   lls->rUserYoffset() = lls->lyrics()->rUserYoffset();
                   }
             }
+
+      // need to restore ry position of lyrics relates to the first measure of next System
+      // because collectSystem could be not called but ry position is reseted in Score::getNextMeasure
+      Measure* lastMeasure = system->lastMeasure();
+      if (!lastMeasure)
+            return;
+      Measure* firstMeasureNextSystem = lastMeasure->nextMeasure();
+      if (!firstMeasureNextSystem)
+            return;
+      for (int staffIdx : visibleStaves) {
+            for (Segment& s : firstMeasureNextSystem->segments()) {
+                  if (s.isChordRestType()) {
+                        for (int voice = 0; voice < VOICES; ++voice) {
+                              ChordRest* cr = s.cr(staffIdx * VOICES + voice);
+                              if (cr) {
+                                    for (Lyrics* l : cr->lyrics()) 
+                                          l->setOldryPos();
+                                    }
+                              }
+                        }
+                  }
+            }
+            
       }
 
 //---------------------------------------------------------

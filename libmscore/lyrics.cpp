@@ -46,6 +46,7 @@ Lyrics::Lyrics(Score* s)
       _ticks      = 0;
       _syllabic   = Syllabic::SINGLE;
       _separator  = 0;
+      _oldrypos   = qreal(0);
       }
 
 Lyrics::Lyrics(const Lyrics& l)
@@ -282,6 +283,7 @@ void Lyrics::layout()
             styleChanged();
 
       QPointF o(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
+      _oldrypos = rypos(); // store current position to restore it in Score::lyricLayout
       setPos(o);
       qreal x = pos().x();
       TextBase::layout1();

@@ -45,6 +45,8 @@ class Lyrics final : public TextBase {
       Syllabic _syllabic;
       LyricsLine* _separator;
 
+      qreal _oldrypos;
+
       bool isMelisma() const;
       virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
 
@@ -87,6 +89,7 @@ class Lyrics final : public TextBase {
       void setTicks(int tick)                         { _ticks = tick;    }
       int endTick() const;
       void removeFromScore();
+      void setOldryPos()                             { rypos() = _oldrypos; }
 
       using ScoreElement::undoChangeProperty;
       using TextBase::paste;
