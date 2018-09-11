@@ -135,7 +135,7 @@ BestTrack findBestTrack(
 
 bool isTitlePrefix(const QString &text)
       {
-      return (text.left(TEXT_PREFIX.size()) == QString::fromUtf8(TEXT_PREFIX.data(), TEXT_PREFIX.size())); 
+      return (text.left(int(TEXT_PREFIX.size())) == QString::fromUtf8(TEXT_PREFIX.data(), int(TEXT_PREFIX.size()))); 
       }
 
 void addTitleToScore(Score *score, const QString &string, int textCounter)
@@ -147,7 +147,7 @@ void addTitleToScore(Score *score, const QString &string, int textCounter)
             ssid = Tid::COMPOSER;
 
       Text* text = new Text(score, ssid);
-      text->setPlainText(string.right(string.size() - TEXT_PREFIX.size()));
+      text->setPlainText(string.right(string.size() - int(TEXT_PREFIX.size())));
 
       MeasureBase* measure = score->first();
       if (!measure->isVBox()) {

@@ -649,7 +649,7 @@ void changeAllTpcs(Note* n, int tpc1)
 
 void Score::spellNotelist(std::vector<Note*>& notes)
       {
-      int n = notes.size();
+      int n = int(notes.size());
 
       int start = 0;
       while (start < n) {
