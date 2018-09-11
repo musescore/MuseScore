@@ -50,13 +50,8 @@ static const ElementStyle palmMuteStyle {
 
 void PalmMuteSegment::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
       TextLineBaseSegment::layout();
-      if (parent()) {     // for palette
-            rypos() += score()->styleP(palmMute()->placeBelow() ? Sid::palmMutePosBelow : Sid::palmMutePosAbove);
-            autoplaceSpannerSegment(spatium() * .7);
-            }
+      autoplaceSpannerSegment(spatium() * .7, Sid::palmMutePosBelow, Sid::palmMutePosAbove);
       }
 
 //---------------------------------------------------------

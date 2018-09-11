@@ -50,13 +50,8 @@ static const ElementStyle letRingStyle {
 
 void LetRingSegment::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
       TextLineBaseSegment::layout();
-      if (parent()) {     // for palette
-            rypos() += score()->styleP(letRing()->placeBelow() ? Sid::letRingPosBelow : Sid::letRingPosAbove);
-            autoplaceSpannerSegment(spatium() * .7);
-            }
+      autoplaceSpannerSegment(spatium() * .7, Sid::letRingPosBelow, Sid::letRingPosAbove);
       }
 
 //---------------------------------------------------------

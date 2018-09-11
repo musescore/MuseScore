@@ -96,14 +96,10 @@ Dynamic* lookupDynamic(Element* e)
 static void moveDynamic(Dynamic* d, qreal y)
       {
       if (d && d->autoplace()) {
-//            int staffIdx = d->staffIdx();
-//            Shape& ss    = d->segment()->staffShape(staffIdx);
-//            Shape& ms    = d->measure()->staffShape(staffIdx);
-            QPointF spos = d->segment()->pos();
-
             d->rUserYoffset() = y;
-//            ss.add(d->shape());
-//            ms.add(d->shape().translated(spos));
+            Skyline& sk = d->measure()->system()->staff(d->staffIdx())->skyline();
+            Segment* s = d->segment();
+            sk.add(d->shape().translated(s->pos() + s->measure()->pos()));
             }
       }
 

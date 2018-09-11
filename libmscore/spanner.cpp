@@ -27,6 +27,7 @@ namespace Ms {
 //   @@ SpannerWriter
 ///   Helper class for writing Spanners
 //-----------------------------------------------------------------------------
+
 class SpannerWriter : public ConnectorInfoWriter {
    protected:
       const char* tagName() const override { return "Spanner"; }
@@ -1115,8 +1116,14 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
 //   autoplaceSpannerSegment
 //---------------------------------------------------------
 
-void SpannerSegment::autoplaceSpannerSegment(qreal minDistance)
+void SpannerSegment::autoplaceSpannerSegment(qreal minDistance, Sid posBelow, Sid posAbove)
       {
+      if (!parent())
+            return;
+      if (spanner()->placeBelow())
+            rypos() = score()->styleP(posBelow) + (staff() ? staff()->height() : 0.0);
+      else
+            rypos() = score()->styleP(posAbove);
       if (autoplace()) {
             setUserOff(QPointF());
 

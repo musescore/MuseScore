@@ -53,13 +53,8 @@ static const ElementStyle voltaStyle {
 
 void VoltaSegment::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
       TextLineBaseSegment::layout();
-      if (!parent())
-            return;
-      rypos() = score()->styleP(Sid::voltaY) * mag();
-      autoplaceSpannerSegment(spatium() * .7);
+      autoplaceSpannerSegment(spatium() * .7, Sid::voltaY, Sid::voltaY);
       }
 
 //---------------------------------------------------------
