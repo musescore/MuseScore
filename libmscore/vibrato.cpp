@@ -101,9 +101,6 @@ void VibratoSegment::symbolLine(SymId start, SymId fill, SymId end)
 
 void VibratoSegment::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
-
       if (staff())
             setMag(staff()->mag(tick()));
       if (isSingleType() || isBeginType()) {
@@ -125,10 +122,7 @@ void VibratoSegment::layout()
       else
             symbolLine(SymId::wiggleVibrato, SymId::wiggleVibrato);
 
-      if (parent()) {
-            rypos() = score()->styleP(vibrato()->placeBelow() ? Sid::vibratoPosBelow : Sid::vibratoPosAbove);
-            autoplaceSpannerSegment(spatium() * 1.0);
-            }
+      autoplaceSpannerSegment(spatium() * 1.0, Sid::vibratoPosBelow, Sid::vibratoPosAbove);
       }
 
 //---------------------------------------------------------

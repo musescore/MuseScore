@@ -65,18 +65,7 @@ static const ElementStyle ottavaElementStyle {
 void OttavaSegment::layout()
       {
       TextLineBaseSegment::layout();
-      if (parent()) {
-            qreal y;
-            if (placeAbove()) {
-                  y = score()->styleP(Sid::ottavaPosAbove);
-                  }
-            else {
-                  qreal sh = ottava()->staff() ? ottava()->staff()->height() : 0;
-                  y = score()->styleP(Sid::ottavaPosBelow) + sh;
-                  }
-            rypos() = y;
-            autoplaceSpannerSegment(spatium() * .7);
-            }
+      autoplaceSpannerSegment(spatium() * .7, Sid::ottavaPosBelow, Sid::ottavaPosAbove);
       }
 
 //---------------------------------------------------------

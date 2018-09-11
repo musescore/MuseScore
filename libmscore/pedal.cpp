@@ -56,13 +56,7 @@ static const ElementStyle pedalStyle {
 void PedalSegment::layout()
       {
       TextLineBaseSegment::layout();
-      if (parent()) {     // for palette
-            if (pedal()->placeBelow())
-                  rypos() = score()->styleP(Sid::pedalPosBelow) + (staff() ? staff()->height() : 0.0);
-            else
-                  rypos() = score()->styleP(Sid::pedalPosAbove);
-            autoplaceSpannerSegment(spatium() * .7);
-            }
+      autoplaceSpannerSegment(spatium() * .7, Sid::pedalPosBelow, Sid::pedalPosAbove);
       }
 
 
