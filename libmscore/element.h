@@ -455,6 +455,7 @@ class Element : public ScoreElement {
       virtual void drawEditMode(QPainter*, EditData&);
 
       void autoplaceSegmentElement(qreal minDistance);      // helper function
+      void autoplaceMeasureElement(qreal minDistance);
       qreal styleP(Sid idx) const;
       };
 

@@ -103,32 +103,7 @@ void Jump::layout()
       setPos(QPointF(0.0, score()->styleP(Sid::jumpPosAbove)));
       TextBase::layout1();
 
-      if (parent() && autoplace()) {
-            setUserOff(QPointF());
-#if 0
-            int si             = staffIdx();
-            qreal minDistance  = 0.5 * spatium(); // score()->styleP(Sid::tempoMinDistance);
-            Shape& s1          = measure()->staffShape(si);
-            Shape s2           = shape().translated(pos());
-            if (placeAbove()) {
-                  qreal d = s2.minVerticalDistance(s1);
-                  if (d > -minDistance) {
-                        qreal yd       = -d - minDistance;
-                        rUserYoffset() = yd;
-                        s2.translate(QPointF(0.0, yd));
-                        }
-                  }
-            else {
-                  qreal d = s1.minVerticalDistance(s2);
-                  if (d > -minDistance) {
-                        qreal yd       = d + minDistance;
-                        rUserYoffset() = yd;
-                        s2.translate(QPointF(0.0, yd));
-                        }
-                  }
-            s1.add(s2);
-#endif
-            }
+      autoplaceMeasureElement(0.5 * spatium());
       }
 
 //---------------------------------------------------------
