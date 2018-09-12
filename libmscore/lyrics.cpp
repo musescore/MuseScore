@@ -323,6 +323,7 @@ void Lyrics::layout()
                   _separator = 0;
                   }
             }
+      printf("lyrics %f %f %f %f\n", bbox().x(), bbox().y(), bbox().width(), bbox().height());
       }
 
 //---------------------------------------------------------

@@ -2168,4 +2168,39 @@ void Element::autoplaceSegmentElement(qreal minDistance)
             ss->skyline().add(r);
             }
       }
+
+//---------------------------------------------------------
+//   autoplaceMeasureElement
+//---------------------------------------------------------
+
+void Element::autoplaceMeasureElement(qreal minDistance)
+      {
+      if (autoplace() && parent()) {
+            setUserOff(QPointF());
+            Measure* m = toMeasure(parent());
+            int si     = staffIdx();
+
+            SysStaff* ss = m->system()->staff(si);
+            QRectF r = bbox().translated(m->pos() + pos());
+
+            SkylineLine sk(!placeAbove());
+            qreal d;
+            if (placeAbove()) {
+                  sk.add(r.x(), r.bottom(), r.width());
+                  d = sk.minDistance(ss->skyline().north());
+                  }
+            else {
+                  sk.add(r.x(), r.top(), r.width());
+                  d = ss->skyline().south().minDistance(sk);
+                  }
+            if (d > -minDistance) {
+                  qreal yd = d + minDistance;
+                  if (placeAbove())
+                        yd *= -1.0;
+                  rUserYoffset() = yd;
+                  r.translate(QPointF(0.0, yd));
+                  }
+            ss->skyline().add(r);
+            }
+      }
 }
