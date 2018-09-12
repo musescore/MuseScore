@@ -3234,6 +3234,29 @@ System* Score::collectSystem(LayoutContext& lc)
 
 
       //-------------------------------------------------------------
+      // layout tuplet
+      //-------------------------------------------------------------
+
+      for (Segment* s : sl) {
+            for (int track = 0; track < score()->ntracks(); ++track) {
+                  if (!score()->staff(track / VOICES)->show()) {
+                        track += VOICES-1;
+                        continue;
+                        }
+                  ChordRest* cr = s->cr(track);
+                  if (!cr)
+                        continue;
+                  DurationElement* de = cr;
+                  while (de->tuplet() && de->tuplet()->elements().front() == de) {
+                        Tuplet* t = de->tuplet();
+                        t->layout();
+                        system->staff(t->staffIdx())->skyline().add(t->shape().translated(t->measure()->pos()));
+                        de = de->tuplet();
+                        }
+                  }
+            }
+
+      //-------------------------------------------------------------
       // layout slurs
       //-------------------------------------------------------------
 
@@ -3303,29 +3326,6 @@ System* Score::collectSystem(LayoutContext& lc)
                         }
                   else if (e->isFiguredBass())
                         e->layout();
-                  }
-            }
-
-      //-------------------------------------------------------------
-      // layout tuplet
-      //-------------------------------------------------------------
-
-      for (Segment* s : sl) {
-            for (int track = 0; track < score()->ntracks(); ++track) {
-                  if (!score()->staff(track / VOICES)->show()) {
-                        track += VOICES-1;
-                        continue;
-                        }
-                  ChordRest* cr = s->cr(track);
-                  if (!cr)
-                        continue;
-                  DurationElement* de = cr;
-                  while (de->tuplet() && de->tuplet()->elements().front() == de) {
-                        Tuplet* t = de->tuplet();
-                        t->layout();
-                        system->staff(t->staffIdx())->skyline().add(t->shape());
-                        de = de->tuplet();
-                        }
                   }
             }
 
