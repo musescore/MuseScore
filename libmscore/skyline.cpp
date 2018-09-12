@@ -192,9 +192,10 @@ void Skyline::paint(QPainter& p) const
       p.save();
 
       p.setBrush(Qt::NoBrush);
-      p.setPen(QPen(QBrush(Qt::darkYellow), 0.8));
+      QMatrix matrix = p.matrix();
+      p.setPen(QPen(QBrush(Qt::darkYellow), 2.0 / matrix.m11()));
       _north.paint(p);
-      p.setPen(QPen(QBrush(Qt::green), 0.8));
+      p.setPen(QPen(QBrush(Qt::green), 2.0 / matrix.m11()));
       _south.paint(p);
       p.restore();
       }
