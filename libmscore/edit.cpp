@@ -1418,7 +1418,7 @@ void Score::cmdFlip()
                         tuplet->undoChangeProperty(Pid::DIRECTION, QVariant::fromValue<Direction>(dir));
                         });
                   }
-            else if (e->isNoteDot()) {
+            else if (e->isNoteDot() && e->parent()->isNote()) {
                   Note* note = toNote(e->parent());
                   Direction d = note->dotIsUp() ? Direction::DOWN : Direction::UP;
                   note->undoChangeProperty(Pid::DOT_POSITION, QVariant::fromValue<Direction>(d));
