@@ -2350,12 +2350,6 @@ void Score::getNextMeasure(LayoutContext& lc)
       //-----------------------------------------
 
       Measure* measure = toMeasure(lc.curMeasure);
-#if 0
-      for (int si = 0; si < nstaves(); ++si) {
-            Shape& ss  = measure->staffShape(si);
-            ss.clear();
-            }
-#endif
       measure->moveTicks(lc.tick - measure->tick());
 
       //

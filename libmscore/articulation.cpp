@@ -538,27 +538,37 @@ QString Articulation::accessibleInfo() const
 
 void Articulation::doAutoplace()
       {
-      Segment* s = segment();
-      if (!(s && autoplace()))
-            return;
-
-      setUserOff(QPointF());
-#if 0
       qreal minDistance = score()->styleP(Sid::dynamicsMinDistance);
-      const Shape& s1   = s->measure()->staffShape(staffIdx());
-      Shape s2          = shape().translated(s->pos() + pos());
+      if (autoplace() && parent()) {
+            setUserOff(QPointF());
+            Segment* s = segment();
+            Measure* m = measure();
+            int si     = staffIdx();
 
-      if (up()) {
-            qreal d = s2.minVerticalDistance(s1);
-            if (d > -minDistance)
-                  rUserYoffset() = -d - minDistance;
+            SysStaff* ss = m->system()->staff(si);
+            QRectF r = bbox().translated(chordRest()->pos() + m->pos() + s->pos() + pos());
+
+            qreal d;
+            bool above = up(); // (anchor() == ArticulationAnchor::TOP_STAFF || anchor() == ArticulationAnchor::TOP_CHORD);
+            SkylineLine sk(!above);
+            if (above) {
+                  sk.add(r.x(), r.bottom(), r.width());
+                  d = sk.minDistance(ss->skyline().north());
+                  }
+            else {
+                  sk.add(r.x(), r.top(), r.width());
+                  d = ss->skyline().south().minDistance(sk);
+                  }
+
+            if (d > -minDistance) {
+                  qreal yd = d + minDistance;
+                  if (above)
+                        yd *= -1.0;
+                  rUserYoffset() = yd;
+                  r.translate(QPointF(0.0, yd));
+                  }
+//            ss->skyline().add(r);
             }
-      else {
-            qreal d = s1.minVerticalDistance(s2);
-            if (d > -minDistance)
-                  rUserYoffset() = d + minDistance;
-            }
-#endif
       }
 
 }
