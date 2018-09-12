@@ -98,8 +98,8 @@ void StaffLines::layoutForWidth(qreal w)
             dist         *= st->lineDistance().val();
             _lines        = st->lines();
             rypos()       = st->yoffset().val() * _spatium;
-            if (_lines == 1)
-                  rypos() = 2 * _spatium;
+//            if (_lines == 1)
+//                  rypos() = 2 * _spatium;
             }
       else {
             _lines = 5;

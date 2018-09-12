@@ -165,10 +165,8 @@ void Dynamic::layout()
       qreal y;
       if (placeAbove())
             y = score()->styleP(Sid::dynamicsPosAbove);
-      else {
-            qreal sh = staff() ? staff()->height() : 0;
-            y = score()->styleP(Sid::dynamicsPosBelow) + sh + lineSpacing();
-            }
+      else
+            y = score()->styleP(Sid::dynamicsPosBelow) + (staff() ? staff()->height() : 0.0);
       setPos(QPointF(0.0, y));
       TextBase::layout1();
 
@@ -212,24 +210,20 @@ void Dynamic::doAutoplace()
       qreal minDistance = score()->styleP(Sid::dynamicsMinDistance);
       QRectF r          = bbox().translated(pos() + s->pos() + s->measure()->pos());
       Skyline& sl       = s->measure()->system()->staff(staffIdx())->skyline();
+      SkylineLine sk(!placeAbove());
+      sk.add(r);
 
       if (placeAbove()) {
-            SkylineLine sk(false);
-            sk.add(r.x(), r.bottom(), r.width());
-
             qreal d = sk.minDistance(sl.north());
             if (d > -minDistance)
-                  rUserYoffset() = -d - minDistance;
+                  rUserYoffset() = -(d + minDistance);
             }
       else {
-            SkylineLine sk(true);
-            sk.add(r.x(), r.top(), r.width());
-
             qreal d = sl.south().minDistance(sk);
             if (d > -minDistance)
                   rUserYoffset() = d + minDistance;
             }
-      sl.add(r);
+//      sl.add(r);      do later
       }
 
 //---------------------------------------------------------

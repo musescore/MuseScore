@@ -4204,7 +4204,7 @@ Element* ScoreView::elementNear(QPointF p)
       qSort(ll.begin(), ll.end(), elementLower);
 
 #if 0
-      qDebug("elementNear");
+      qDebug("==");
       for (const Element* e : ll)
             qDebug("  %s selected %d z %d", e->name(), e->selected(), e->z());
 #endif
