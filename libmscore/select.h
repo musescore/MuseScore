@@ -42,6 +42,7 @@ struct ElementPattern {
       int voice;
       const System* system;
       bool subtypeValid;
+      int durationTicks;
       };
 
 //---------------------------------------------------------

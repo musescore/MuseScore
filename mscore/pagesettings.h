@@ -71,7 +71,7 @@ class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
    public:
       PageSettings(QWidget* parent = 0);
       ~PageSettings();
-      void setScore(MasterScore*);
+      void setScore(Score*);
       };
 
 

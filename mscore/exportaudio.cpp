@@ -232,7 +232,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
         }
 
         virtual qint64 writeData(const char *data, qint64 len) override final {
-            int trueFrames = len / sizeof(float) / 2;
+            size_t trueFrames = len / sizeof(float) / 2;
             sf_writef_float(sf, reinterpret_cast<const float*>(data), trueFrames);
             return trueFrames * 2 * sizeof(float);
         }

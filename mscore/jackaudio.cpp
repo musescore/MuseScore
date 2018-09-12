@@ -380,7 +380,7 @@ int JackAudio::processAudio(jack_nframes_t frames, void* p)
                               jack_midi_event_t event;
                               if (jack_midi_event_get(&event, portBuffer, i) != 0)
                                     continue;
-                              int nn = event.size;
+                              size_t nn = event.size;
                               int type = event.buffer[0];
                               if (nn && (type == ME_CLOCK || type == ME_SENSE))
                                     continue;

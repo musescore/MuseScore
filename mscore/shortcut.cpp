@@ -3562,9 +3562,9 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
-         "show-measure-shapes",
-         "Show Measure Shapes",
-         "Show measure shapes",
+         "show-skylines",
+         "Show Skylines",
+         "Show Skylines",
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut

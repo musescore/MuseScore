@@ -231,8 +231,8 @@ Chord* Score::addChord(int tick, TDuration d, Chord* oc, bool genTie, Tuplet* tu
       // (have segments as parent) we can add ties:
       //
       if (genTie) {
-            int n = oc->notes().size();
-            for(int i = 0; i < n; ++i) {
+            size_t n = oc->notes().size();
+            for(size_t i = 0; i < n; ++i) {
                   Note* n1  = oc->notes()[i];
                   Note* n2 = chord->notes()[i];
                   Tie* tie = new Tie(this);
@@ -344,7 +344,7 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
                               }
                         }
                   else {
-                        for (int i = dList.size() - 1; i >= 0; --i) {
+                        for (int i = int(dList.size()) - 1; i >= 0; --i) {
                               rest = addRest(tick, track, dList[i], tuplet);
                               if (r == 0)
                                     r = rest;
@@ -970,20 +970,19 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                         continue; // this voice is empty here (CR overlaps with CR in other track)
                   if (seg->tick() + curr->actualTicks() > maxTick)
                         break; // outside range
-                  if (curr->isRest()) {
+                  if (curr->isRest() && !(curr->tuplet()) && !(toRest(curr)->isGap())) {
                         // combine consecutive rests
                         ChordRest* lastRest = curr;
                         for (Segment* s = seg->next(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                               ChordRest* cr = s->cr(track);
                               if (!cr)
                                     continue; // this voice is empty here
-                              if (!cr->isRest() || s->tick() + cr->actualTicks() > maxTick)
-                                    break;
+                              if (!cr->isRest() || s->tick() + cr->actualTicks() > maxTick || toRest(cr)->isGap())
+                                    break; // next element in the same voice is not a rest, or it exceeds the selection, or it is a gap
                               lastRest = cr;
                               }
                         int restTicks = lastRest->tick() + lastRest->duration().ticks() - curr->tick();
-                        if (restTicks > curr->duration().ticks())
-                              seg = setNoteRest(seg, curr->track(), NoteVal(), Fraction::fromTicks(restTicks), Direction::AUTO, true);
+                        seg = setNoteRest(seg, curr->track(), NoteVal(), Fraction::fromTicks(restTicks), Direction::AUTO, true);
                         }
                   else if (curr->isChord()) {
                         // combine tied chords
@@ -995,9 +994,9 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                         if (!lastTiedChord)
                               lastTiedChord = chord;
                         int noteTicks = lastTiedChord->tick() + lastTiedChord->duration().ticks() - chord->tick();
-                        if (noteTicks > chord->duration().ticks()) {
+                        if (!(curr->tuplet())) {
                               // store start/end note for backward/forward ties ending/starting on the group of notes being rewritten
-                              int numNotes = chord->notes().size();
+                              size_t numNotes = chord->notes().size();
 #if (!defined (_MSCVER) && !defined (_MSC_VER))
                               Note* tieBack[numNotes];
                               Note* tieFor[numNotes];
@@ -1007,7 +1006,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                               std::vector<Note *> tieBack(numNotes);
                               std::vector<Note *> tieFor(numNotes);
 #endif
-                              for (int i = 0; i < numNotes; i++) {
+                              for (size_t i = 0; i < numNotes; i++) {
                                     Note* n = chord->notes()[i];
                                     Note* nn = lastTiedChord->notes()[i];
                                     if (n->tieBack())
@@ -1026,7 +1025,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                               Segment* segment = seg;
                               ChordRest* cr = toChordRest(segment->element(tr));
                               Chord* nchord = toChord(chord->clone());
-                              for (int i = 0; i < numNotes; i++) { // strip ties from cloned chord
+                              for (size_t i = 0; i < numNotes; i++) { // strip ties from cloned chord
                                     Note* n = nchord->notes()[i];
                                     n->setTieFor(0);
                                     n->setTieBack(0);
@@ -1044,8 +1043,8 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                                     measure = segment->measure();
                                     std::vector<TDuration> dl;
                                     dl = toRhythmicDurationList(dd, false, segment->rtick(), sigmap()->timesig(tick).nominal(), measure, 1);
-                                    int n = dl.size();
-                                    for (int i = 0; i < n; ++i) {
+                                    size_t n = dl.size();
+                                    for (size_t i = 0; i < n; ++i) {
                                           const TDuration& d = dl[i];
                                           Chord* nchord2 = toChord(nchord->clone());
                                           if (!firstpart)
@@ -1055,7 +1054,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                                           std::vector<Note*> nl1 = nchord->notes();
                                           std::vector<Note*> nl2 = nchord2->notes();
                                           if (!firstpart)
-                                                for (unsigned j = 0; j < nl1.size(); ++j) {
+                                                for (size_t j = 0; j < nl1.size(); ++j) {
                                                       tie = new Tie(this);
                                                       tie->setStartNote(nl1[j]);
                                                       tie->setEndNote(nl2[j]);
@@ -1099,7 +1098,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                                           }
                                     }
                               // recreate previously stored pending ties
-                              for (int i = 0; i < numNotes; i++) {
+                              for (size_t i = 0; i < numNotes; i++) {
                                     Note* n = startChord->notes()[i];
                                     Note* nn = nchord->notes()[i];
                                     if (tieBack[i]) {
@@ -2336,7 +2335,7 @@ Lyrics* Score::addLyrics()
       else
             return 0;
 
-      int no = cr->lyrics().size();
+      int no = int(cr->lyrics().size());
       Lyrics* lyrics = new Lyrics(this);
       lyrics->setTrack(cr->track());
       lyrics->setParent(cr);
@@ -3148,8 +3147,8 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link
                               Chord* och = toChord(ocr);
                               Chord* nch = toChord(ncr);
 
-                              int n = och->notes().size();
-                              for (int i = 0; i < n; ++i) {
+                              size_t n = och->notes().size();
+                              for (size_t i = 0; i < n; ++i) {
                                     Note* on = och->notes().at(i);
                                     Note* nn = nch->notes().at(i);
                                     Interval v = staff(dtrack) ? staff(dtrack)->part()->instrument(dtrack)->transpose() : Interval();

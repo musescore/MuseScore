@@ -799,7 +799,7 @@ int TracksModel::rowCount(const QModelIndex &/*parent*/) const
 
 int TracksModel::columnCount(const QModelIndex &/*parent*/) const
       {
-      return _columns.size();
+      return int(_columns.size());
       }
 
 bool TracksModel::editableSingleTrack(int trackIndex, int column) const

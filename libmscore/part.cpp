@@ -598,7 +598,7 @@ int Part::lyricCount()
       {
       if (!score())
             return 0;
-      int count = 0;
+      size_t count = 0;
       SegmentType st = SegmentType::ChordRest;
       for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             for (int i = startTrack(); i < endTrack() ; ++i) {
@@ -607,7 +607,7 @@ int Part::lyricCount()
                         count += cr->lyrics().size();
                   }
             }
-      return count;
+      return int(count);
       }
 
 //---------------------------------------------------------

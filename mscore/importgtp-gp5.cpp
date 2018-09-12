@@ -243,7 +243,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
             while (txt.size() && txt[txt.size() - 1] == '-')
                   txt.resize(txt.size() - 1);
 //		  gpLyrics.lyrics.append(txt);
-            gpLyrics.lyrics.append(QString::fromUtf8(txt.data(), txt.size()));
+            gpLyrics.lyrics.append(QString::fromUtf8(txt.data(), int(txt.size())));
 		gpLyrics.segments.push_back(segment);
             }
 #if 0
@@ -664,7 +664,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
                                           text = str;
                                     if (pos == std::string::npos)
                                           str.resize(0);
-                                    lyr->setPlainText(QString::fromUtf8(text.data(), text.size()));
+                                    lyr->setPlainText(QString::fromUtf8(text.data(), int(text.size())));
                                     cr->add(lyr);
                                     }
                               else {

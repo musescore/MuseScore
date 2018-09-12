@@ -40,6 +40,7 @@ struct ShapeElement : public QRectF {
 //---------------------------------------------------------
 
 class Shape : public std::vector<ShapeElement> {
+// class Shape : std::vector<ShapeElement> {
    public:
       Shape() {}
 #ifndef NDEBUG
@@ -47,8 +48,6 @@ class Shape : public std::vector<ShapeElement> {
 #else
       Shape(const QRectF& r) { add(r); }
 #endif
-      void draw(QPainter*) const;
-
       void add(const Shape& s)            { insert(end(), s.begin(), s.end()); }
 #ifndef NDEBUG
       void add(const QRectF& r, const char* t = 0);
@@ -72,13 +71,13 @@ class Shape : public std::vector<ShapeElement> {
       qreal top() const;
       qreal bottom() const;
 
-      int size() const   { return std::vector<ShapeElement>::size(); }
-      bool empty() const { return std::vector<ShapeElement>::empty(); }
-      void clear()       { std::vector<ShapeElement>::clear();       }
+      size_t size() const { return std::vector<ShapeElement>::size();  }
+      bool empty() const  { return std::vector<ShapeElement>::empty(); }
+      void clear()        { std::vector<ShapeElement>::clear();        }
 
       bool contains(const QPointF&) const;
       bool intersects(const QRectF& rr) const;
-      void paint(QPainter&);
+      void paint(QPainter&) const;
 
 #ifndef NDEBUG
       void dump(const char*) const;

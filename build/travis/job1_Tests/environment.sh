@@ -39,7 +39,7 @@ export TRAVIS_BUILD_DIR=vtest/html
 #compatibility between ruby travis artifact and GO one
 export ARTIFACTS_KEY=$ARTIFACTS_AWS_ACCESS_KEY_ID
 export ARTIFACTS_SECRET=$ARTIFACTS_AWS_SECRET_ACCESS_KEY
-artifacts -v || curl -sL https://raw.githubusercontent.com/meatballhat/artifacts/master/install | bash
+artifacts -v || curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash
 
 # IMPORTANT: Must now return shell to it's initial state:
 set +x

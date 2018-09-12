@@ -401,7 +401,9 @@ void Fluid::update_presets()
 void Fluid::process(unsigned len, float* out, float* effect1, float* effect2)
       {
       if (mutex.tryLock()) {
-            for (Voice* v : activeVoices)
+            //we have to copy voices array for proper output sound processing in for loop
+            auto tempVoices = activeVoices;
+            for (Voice* v : tempVoices)
                   v->write(len, out, effect1, effect2);
             mutex.unlock();
             }
