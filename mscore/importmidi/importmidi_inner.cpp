@@ -240,7 +240,7 @@ QString convertToCharset(const std::string &text)
       if (codec)
             return codec->toUnicode(text.c_str());
       else
-            return QString::fromUtf8(text.data(), text.size());
+            return QString::fromUtf8(text.data(), int(text.size()));
       }
 
 QString defaultCharset()

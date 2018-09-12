@@ -196,7 +196,7 @@ void findAllTupletsForDrums(
       for (size_t voice = 0; voice < drumVoiceCount; ++voice) {
             for (auto &chord: chords[voice]) {
                         // correct voice because it can be changed during tuplet detection
-                  setChordVoice(chord.second, voice);
+                  setChordVoice(chord.second, int(voice));
                   mtrack.chords.insert({chord.first, chord.second});
                   }
             }

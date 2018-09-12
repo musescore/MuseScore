@@ -73,7 +73,7 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
 //    which contains one system
 //---------------------------------------------------------
 
- void Score::resetSystems(bool layoutAll, LayoutContext& lc)
+ void Score::resetSystems(bool /*layoutAll*/, LayoutContext& lc)
       {
 // if (layoutAll) {
       qDeleteAll(systems());
@@ -115,15 +115,15 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
  void Score::collectLinearSystem(LayoutContext& lc)
       {
       System* system = systems().front();
-      
+
       QPointF pos;
       bool firstMeasure = true;
-      
-      //set first measure to lc.nextMeasures for following 
+
+      //set first measure to lc.nextMeasures for following
       //utilizing in getNextMeasure()
       lc.nextMeasure = _measures.first();
       getNextMeasure(lc);
-      
+
       while (lc.curMeasure) {
             qreal ww = 0.0;
             if (lc.curMeasure->isVBox() || lc.curMeasure->isTBox()) {
@@ -179,7 +179,7 @@ void Score::layoutLinear(bool layoutAll, LayoutContext& lc)
       resetSystems(layoutAll, lc);
 
       collectLinearSystem(lc);
-      
+
       hideEmptyStaves(systems().front(), true);
 
       lc.layoutLinear();
@@ -193,8 +193,6 @@ void LayoutContext::layoutLinear()
       {
       System* system = score->systems().front();
 
-      computeMeasureShape(system);
-      
       //
       // layout
       //    - beams
@@ -346,7 +344,8 @@ void LayoutContext::layoutLinear()
                   for (Element* e : s->annotations()) {
                         if (e->isTempoText()) {
                               TempoText* tt = toTempoText(e);
-                              score->setTempo(tt->segment(), tt->tempo());
+                              if (score->isMaster())
+                                    score->setTempo(tt->segment(), tt->tempo());
                               tt->layout();
                               }
                         else if (e->isFermata())

@@ -21,6 +21,7 @@
 #include "element.h"
 #include "spatium.h"
 #include "symbol.h"
+#include "skyline.h"
 
 namespace Ms {
 
@@ -40,11 +41,12 @@ class BarLine;
 
 //---------------------------------------------------------
 //   SysStaff
-///  One staff of a System.
+///  One staff in a System.
 //---------------------------------------------------------
 
 class SysStaff {
       QRectF _bbox;                 // Bbox of StaffLines.
+      Skyline _skyline;
       qreal _yOff { 0    };         // offset of top staff line within bbox
       bool _show  { true };         // derived from Staff or false if empty
                                     // staff is hidden
@@ -60,6 +62,9 @@ class SysStaff {
 
       bool show() const             { return _show; }
       void setShow(bool v)          { _show = v; }
+
+      const Skyline& skyline() const { return _skyline; }
+      Skyline& skyline()             { return _skyline; }
 
       SysStaff() {}
       ~SysStaff();
@@ -82,7 +87,7 @@ class System final : public Element {
 
       qreal _leftMargin              { 0.0    };     ///< left margin for instrument name, brackets etc.
       mutable bool fixedDownDistance { false  };
-      qreal _distance;                                 // temp. variable used during layout
+      qreal _distance;                               // temp. variable used during layout
 
    public:
       System(Score*);
@@ -150,8 +155,8 @@ class System final : public Element {
       virtual Element* prevSegmentElement() override;
 
       qreal minDistance(System*) const;
-      qreal topDistance(int staffIdx, const Shape&) const;
-      qreal bottomDistance(int staffIdx, const Shape&) const;
+      qreal topDistance(int staffIdx, const SkylineLine&) const;
+      qreal bottomDistance(int staffIdx, const SkylineLine&) const;
       qreal minTop() const;
       qreal minBottom() const;
 

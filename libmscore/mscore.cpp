@@ -57,6 +57,7 @@
 #include "excerpt.h"
 #include "spatium.h"
 #include "barline.h"
+#include "skyline.h"
 
 namespace Ms {
 
@@ -65,6 +66,7 @@ bool MScore::testMode = false;
 
 // #ifndef NDEBUG
 bool MScore::showSegmentShapes   = false;
+bool MScore::showSkylines        = true;
 bool MScore::showMeasureShapes   = false;
 bool MScore::noHorizontalStretch = false;
 bool MScore::noVerticalStretch   = false;

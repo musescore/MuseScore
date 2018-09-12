@@ -192,3 +192,8 @@ add_library(mscore_freetype
 ###-###  set_target_properties(freetype PROPERTIES
 ###-###    COMPILE_FLAGS /Fd"$(IntDir)$(TargetName).pdb")
 ###-###endif ()
+if (MSVC)
+  set_target_properties( mscore_freetype PROPERTIES
+    COMPILE_FLAGS "/wd4244 /wd4267"
+  )
+endif (MSVC)

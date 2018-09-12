@@ -1071,7 +1071,7 @@ static Bm beamMetric1(bool up, char l1, char l2)
 
 static int adjust(qreal _spatium4, int slant, const std::vector<ChordRest*>& cl)
       {
-      int n = cl.size();
+      size_t n = cl.size();
       const ChordRest* c1 = cl[0];
       const ChordRest* c2 = cl[n-1];
 
@@ -1079,7 +1079,7 @@ static int adjust(qreal _spatium4, int slant, const std::vector<ChordRest*>& cl)
       qreal slope = (slant * _spatium4) / (c2->stemPosBeam().x() - p1.x());
       int ml = -1000;
       if (c1->up()) {
-            for (int i = 1; i < n; ++i) {
+            for (size_t i = 1; i < n; ++i) {
                   QPointF p3(cl[i]->stemPosBeam());
                   qreal yUp   = p1.y() + (p3.x() - p1.x()) * slope;
                   int l       = lrint((yUp - p3.y()) / (_spatium4));
@@ -1087,7 +1087,7 @@ static int adjust(qreal _spatium4, int slant, const std::vector<ChordRest*>& cl)
                   }
             }
       else {
-            for (int i = 1; i < n; ++i) {
+            for (size_t i = 1; i < n; ++i) {
                   const ChordRest* c = cl[i];
                   QPointF p3(c->stemPosBeam());
                   qreal yUp   = p1.y() + (p3.x() - p1.x()) * slope;
@@ -1519,7 +1519,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
 
       _beamDist *= mag();
       _beamDist *= c1->staff()->mag(c1->tick());
-      int n = crl.size();
+      size_t n = crl.size();
 
       StaffType* tab = 0;
       if (staff()->isTabStaff(0) )
@@ -1552,7 +1552,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   // set stem direction for every chord
                   //
                   bool relayoutGrace = false;
-                  for (int i = 0; i < n; ++i) {
+                  for (size_t i = 0; i < n; ++i) {
                         Chord* c = toChord(crl.at(i));
                         if (c->isRest())
                               continue;
@@ -1583,7 +1583,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   qreal beamY   = 0.0;  // y position of main beam start
                   qreal y1   = -200000;
                   qreal y2   = 200000;
-                  for (int i = 0; i < n; ++i) {
+                  for (size_t i = 0; i < n; ++i) {
                         Chord* c = toChord(crl.at(i));
                         qreal y;
                         if (c->isRest())
@@ -1672,7 +1672,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
 
             // loop through the different groups for this beam level
             // inner loop will advance through chordrests within each group
-            for (int i = 0; i < n;) {
+            for (size_t i = 0; i < n;) {
                   ChordRest* cr1 = crl[i];
                   int l1 = cr1->durationType().hooks() - 1;
 
@@ -1683,7 +1683,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
 
                   // at the beginning of a group
                   // loop through chordrests looking for end
-                  int currentChordRestIndex = i;
+                  size_t currentChordRestIndex = i;
                   ++i;
                   bool b32 = false, b64 = false;
                   for (; i < n; ++i) {
@@ -1704,7 +1704,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
 
                   // found end of group
-                  int chordRestEndGroupIndex = i;
+                  size_t chordRestEndGroupIndex = i;
                   ChordRest* cr2 = crl[chordRestEndGroupIndex - 1];
 
                   // if group covers whole beam, we are still at base level
@@ -1748,7 +1748,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   // if there are more beam levels,
                   // record current beam offsets for all notes of this group for re-use
                   if (beamLevel < beamLevels - 1) {
-                        for (int i1 = currentChordRestIndex; i1 < chordRestEndGroupIndex; ++i1)
+                        for (size_t i1 = currentChordRestIndex; i1 < chordRestEndGroupIndex; ++i1)
                               crBase[i1] = bl;
                         }
 
@@ -1777,7 +1777,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                         if (cr1->type() == ElementType::REST)
                               continue;
 
-                        int sizeChordRests = crl.size();
+                        size_t sizeChordRests = crl.size();
                         qreal len = beamMinLen;
                         //
                         // find direction (by default, segment points to right)
@@ -2465,10 +2465,11 @@ QVariant Beam::propertyDefault(Pid id) const
       }
 
 //---------------------------------------------------------
-//   shape
+//   addSkyline
+//    add beam shape to skyline
 //---------------------------------------------------------
 
-Shape Beam::shape() const
+void Beam::addSkyline(Skyline& sk)
       {
       qreal lw2 = score()->styleP(Sid::beamWidth) * .5 * mag();
       const QLineF* bs = beamSegments.front();
@@ -2478,30 +2479,31 @@ Shape Beam::shape() const
       double ww      = lw2 / sin(M_PI_2 - atan(d));
       qreal _spatium = spatium();
 
-      Shape shape;
       for (const QLineF* beamSegment : beamSegments) {
             qreal x = beamSegment->x1();
             qreal y = beamSegment->y1();
             qreal w = beamSegment->x2() - x;
-            int n   = int(ceil(w / _spatium));
+            int n   = (d < 0.01) ? 1 : int(ceil(w / _spatium));
+
             qreal s = (beamSegment->y2() - y) / w;
             w /= n;
-            for (int i = 1; i < n; ++i) {
-                  qreal xx = beamSegment->x1() + i * w;
-                  qreal yy = beamSegment->y1() + i * w * s;
-                  if (yy > y)
-                        shape.add(QRectF(x, y-ww, w, yy - y + ww*2));
-                  else
-                        shape.add(QRectF(x, yy-ww, w, y - yy + ww*2));
-                  x = xx;
-                  y = yy;
+            for (int i = 1; i <= n; ++i) {
+                  qreal y2 = y + w * s;
+                  qreal yn, ys;
+                  if (y2 > y) {
+                        yn = y;
+                        ys = y2;
+                        }
+                  else {
+                        yn = y2;
+                        ys = y;
+                        }
+                  sk.north().add(x, yn - ww, w);
+                  sk.south().add(x, ys + ww, w);
+                  x += w;
+                  y = y2;
                   }
-            if (y > beamSegment->y2())
-                  shape.add(QRectF(x, beamSegment->y2()-ww, w, y - beamSegment->y2() + ww*2));
-            else
-                  shape.add(QRectF(x, y-ww, w, beamSegment->y2() - y + ww*2));
             }
-      return shape;
       }
 
 //---------------------------------------------------------

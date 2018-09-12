@@ -75,21 +75,7 @@ void OttavaSegment::layout()
                   y = score()->styleP(Sid::ottavaPosBelow) + sh;
                   }
             rypos() = y;
-            if (autoplace()) {
-                  setUserOff(QPointF());
-                  qreal minDistance = spatium() * .7;
-                  Shape s1 = shape().translated(pos());
-                  if (ottava()->placeAbove()) {
-                        qreal d  = system()->topDistance(staffIdx(), s1);
-                        if (d > -minDistance)
-                              rUserYoffset() = -d - minDistance;
-                        }
-                  else {
-                        qreal d  = system()->bottomDistance(staffIdx(), s1);
-                        if (d > -minDistance)
-                              rUserYoffset() = d + minDistance;
-                        }
-                  }
+            autoplaceSpannerSegment(spatium() * .7);
             }
       }
 

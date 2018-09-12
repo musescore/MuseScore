@@ -99,7 +99,7 @@ add_library (
       bracketItem.cpp
       lyricsline.cpp
       layoutlinear.cpp
-      connector.cpp location.cpp
+      connector.cpp location.cpp skyline.cpp
       )
 
 ##

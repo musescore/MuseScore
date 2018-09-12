@@ -174,6 +174,7 @@ void Marker::layout()
 
       if (parent() && autoplace()) {
             setUserOff(QPointF());
+#if 0
             int si            = staffIdx();
             qreal minDistance = 0.5 * spatium(); // score()->styleP(Sid::tempoMinDistance);
             Shape& s1         = measure()->staffShape(si);
@@ -195,6 +196,7 @@ void Marker::layout()
                         }
                   }
             s1.add(s2);
+#endif
             }
       }
 

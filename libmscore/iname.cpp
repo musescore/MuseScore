@@ -41,7 +41,7 @@ static const ElementStyle shortInstrumentStyle {
 //---------------------------------------------------------
 
 InstrumentName::InstrumentName(Score* s)
-   : TextBase(s, ElementFlag::NOTHING | ElementFlag::NOT_SELECTABLE)
+   : TextBase(s, Tid::INSTRUMENT_LONG, ElementFlag::NOTHING | ElementFlag::NOT_SELECTABLE)
       {
       setInstrumentNameType(InstrumentNameType::SHORT);
       }
@@ -76,6 +76,7 @@ void InstrumentName::setInstrumentNameType(const QString& s)
 void InstrumentName::setInstrumentNameType(InstrumentNameType st)
       {
       _instrumentNameType = st;
+      setTid(st == InstrumentNameType::SHORT ? Tid::INSTRUMENT_SHORT : Tid::INSTRUMENT_LONG);
       initElementStyle(st == InstrumentNameType::SHORT ? &shortInstrumentStyle : &longInstrumentStyle);
       }
 

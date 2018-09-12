@@ -417,7 +417,7 @@ void Rest::layoutDots()
 
 void Rest::checkDots()
       {
-      int n = dots() - _dots.size();
+      int n = dots() - int(_dots.size());
       for (int i = 0; i < n; ++i) {
             NoteDot* dot = new NoteDot(score());
             dot->setParent(this);
@@ -999,7 +999,11 @@ Shape Rest::shape() const
                   shape.add(r);
                   }
             else
+#ifndef NDEBUG
+                  shape.add(bbox(), name());
+#else
                   shape.add(bbox());
+#endif
             for (NoteDot* dot : _dots)
                   shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
             }
