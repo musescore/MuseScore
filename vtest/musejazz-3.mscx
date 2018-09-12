@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <programVersion>3.0.0</programVersion>
+  <programRevision>3543170</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -8,11 +9,25 @@
       </Synthesizer>
     <Division>480</Division>
     <Style>
+      <pageWidth>3.93701</pageWidth>
+      <pageHeight>1.96851</pageHeight>
+      <pagePrintableWidth>3.77953</pagePrintableWidth>
+      <pageEvenLeftMargin>0.0787403</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.0787403</pageOddLeftMargin>
+      <pageEvenTopMargin>0</pageEvenTopMargin>
+      <pageEvenBottomMargin>0</pageEvenBottomMargin>
+      <pageOddTopMargin>0</pageOddTopMargin>
+      <pageOddBottomMargin>0</pageOddBottomMargin>
+      <pageTwosided>0</pageTwosided>
       <staffUpperBorder>6</staffUpperBorder>
       <staffLowerBorder>4</staffLowerBorder>
       <minSystemDistance>9</minSystemDistance>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
       <lyricsLineThickness>0.3</lyricsLineThickness>
+      <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
+      <lyricsOddOffset x="0" y="6"/>
+      <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
+      <lyricsEvenOffset x="0" y="6"/>
       <barWidth>0.3</barWidth>
       <doubleBarWidth>0.3</doubleBarWidth>
       <endBarWidth>0.6</endBarWidth>
@@ -30,6 +45,9 @@
       <lastSystemFillLimit>0.25</lastSystemFillLimit>
       <hairpinWidth>0.2</hairpinWidth>
       <pedalLineWidth>0.2</pedalLineWidth>
+      <chordSymbolAFontFace>MuseJazz Text</chordSymbolAFontFace>
+      <chordSymbolAFontSize>15</chordSymbolAFontSize>
+      <chordSymbolAAlign>left,baseline</chordSymbolAAlign>
       <showMeasureNumber>0</showMeasureNumber>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
@@ -43,418 +61,74 @@
       <oddFooterR></oddFooterR>
       <voltaY>-6</voltaY>
       <voltaLineWidth>0.2</voltaLineWidth>
+      <voltaFontFace>MuseJazz Text</voltaFontFace>
+      <voltaFontBold>0</voltaFontBold>
       <ottavaLineWidth>0.2</ottavaLineWidth>
+      <ottavaFontFace>MuseJazz Text</ottavaFontFace>
+      <ottavaFontSize>10</ottavaFontSize>
+      <ottavaFontItalic>1</ottavaFontItalic>
       <tupletBracketWidth>0.2</tupletBracketWidth>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <offsetType>spatium</offsetType>
-        <family>FreeSerif</family>
-        <size>10</size>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>top</valign>
-        <offsetType>absolute</offsetType>
-        <name>Title</name>
-        <family>MuseJazz Text</family>
-        <size>28</size>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>top</valign>
-        <xoffset>0</xoffset>
-        <yoffset>10</yoffset>
-        <offsetType>absolute</offsetType>
-        <name>Subtitle</name>
-        <family>MuseJazz Text</family>
-        <size>14</size>
-        </TextStyle>
-      <TextStyle>
-        <halign>right</halign>
-        <valign>bottom</valign>
-        <offsetType>absolute</offsetType>
-        <name>Composer</name>
-        <family>MuseJazz Text</family>
-        <size>12</size>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>bottom</valign>
-        <offsetType>absolute</offsetType>
-        <name>Lyricist</name>
-        <family>MuseJazz Text</family>
-        <size>12</size>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>6</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Lyrics Odd Lines</name>
-        <family>MuseJazz Text</family>
-        <size>11</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>6</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Lyrics Even Lines</name>
-        <family>MuseJazz Text</family>
-        <size>11</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>center</valign>
-        <offsetType>absolute</offsetType>
-        <name>Fingering</name>
-        <family>MuseJazz Text</family>
-        <size>8</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>right</halign>
-        <valign>center</valign>
-        <xoffset>-0.5</xoffset>
-        <yoffset>0</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>LH Guitar Fingering</name>
-        <family>FreeSerif</family>
-        <size>8</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>center</valign>
-        <offsetType>spatium</offsetType>
-        <name>RH Guitar Fingering</name>
-        <family>FreeSerif</family>
-        <size>8</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>center</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-5</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>String Number</name>
-        <family>MuseJazz Text</family>
-        <size>8</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <frameWidthS>0.1</frameWidthS>
-        <paddingWidthS>0.2</paddingWidthS>
-        <frameRound>0</frameRound>
-        <frameColor r="0" g="0" b="0" a="255"/>
-        <circle>1</circle>
-        </TextStyle>
-      <TextStyle>
-        <halign>right</halign>
-        <valign>center</valign>
-        <offsetType>absolute</offsetType>
-        <name>Instrument Name (Long)</name>
-        <family>MuseJazz Text</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>right</halign>
-        <valign>center</valign>
-        <offsetType>absolute</offsetType>
-        <name>Instrument Name (Short)</name>
-        <family>MuseJazz Text</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>top</valign>
-        <offsetType>absolute</offsetType>
-        <name>Instrument Name (Part)</name>
-        <family>MuseJazz Text</family>
-        <size>18</size>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>8</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Dynamics</name>
-        <family>MuseJazz Text</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-4</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Tempo</name>
-        <family>MuseJazz Text</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <systemFlag>1</systemFlag>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>top</valign>
-        <offsetType>spatium</offsetType>
-        <name>Metronome</name>
-        <family>MuseJazz Text</family>
-        <size>12</size>
-        <bold>1</bold>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>bottom</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-2</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Measure Number</name>
-        <family>MuseJazz Text</family>
-        <size>8</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>top</valign>
-        <xoffset>0</xoffset>
-        <yoffset>6</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Translator</name>
-        <family>MuseJazz Text</family>
-        <size>11</size>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>center</valign>
-        <offsetType>absolute</offsetType>
-        <name>Tuplet</name>
-        <family>MuseJazz Text</family>
-        <size>10</size>
-        <italic>1</italic>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-2</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>System</name>
-        <family>MuseJazz Text</family>
-        <size>11</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <systemFlag>1</systemFlag>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>top</valign>
-        <xoffset>0</xoffset>
-        <yoffset>5.5</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Staff</name>
-        <family>MuseJazz Text</family>
-        <size>11</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <offsetType>spatium</offsetType>
-        <name>Chord Symbol</name>
-        <family>MuseJazz Text</family>
-        <size>15</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>right</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-3</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Rehearsal Mark</name>
-        <family>MuseJazz Text</family>
-        <size>14</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <frameWidthS>0.2</frameWidthS>
-        <paddingWidthS>0.2</paddingWidthS>
-        <frameRound>20</frameRound>
-        <frameColor r="0" g="0" b="0" a="255"/>
-        <systemFlag>1</systemFlag>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-3</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Repeat Text Left</name>
-        <family>MuseJazz Text</family>
-        <size>20</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <systemFlag>1</systemFlag>
-        </TextStyle>
-      <TextStyle>
-        <halign>right</halign>
-        <valign>top</valign>
-        <xoffset>0</xoffset>
-        <yoffset>5.5</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Repeat Text Right</name>
-        <family>MuseJazz Text</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <systemFlag>1</systemFlag>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <xoffset>0.5</xoffset>
-        <yoffset>1.9</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Volta</name>
-        <family>MuseJazz Text</family>
-        <size>8</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>top</valign>
-        <offsetType>spatium</offsetType>
-        <name>Frame</name>
-        <family>MuseJazz Text</family>
-        <size>12</size>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>center</valign>
-        <offsetType>spatium</offsetType>
-        <name>Text Line</name>
-        <family>MuseJazz Text</family>
-        <size>10</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>baseline</valign>
-        <offsetType>spatium</offsetType>
-        <name>Glissando</name>
-        <family>MuseJazz Text</family>
-        <size>8</size>
-        <italic>1</italic>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>center</valign>
-        <offsetType>spatium</offsetType>
-        <name>Ottava</name>
-        <family>MuseJazz Text</family>
-        <size>10</size>
-        <italic>1</italic>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>0.15</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Pedal</name>
-        <family>FreeSerif</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <offsetType>spatium</offsetType>
-        <name>Hairpin</name>
-        <family>FreeSerif</family>
-        <size>12</size>
-        <italic>1</italic>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>center</valign>
-        <offsetType>spatium</offsetType>
-        <name>Bend</name>
-        <family>MuseJazz Text</family>
-        <size>8</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>top</valign>
-        <offsetType>spatium</offsetType>
-        <name>Header</name>
-        <family>MuseJazz Text</family>
-        <size>8</size>
-        </TextStyle>
-      <TextStyle>
-        <halign>center</halign>
-        <valign>bottom</valign>
-        <xoffset>0</xoffset>
-        <yoffset>5</yoffset>
-        <offsetType>absolute</offsetType>
-        <name>Footer</name>
-        <family>MuseJazz Text</family>
-        <size>8</size>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>bottom</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-3</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Instrument Change</name>
-        <family>MuseJazz Text</family>
-        <size>12</size>
-        <bold>1</bold>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        </TextStyle>
-      <TextStyle>
-        <halign>left</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-2</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Technique</name>
-        <family>MuseJazz Text</family>
-        <size>12</size>
-        <italic>1</italic>
-        </TextStyle>
-      <TextStyle>
-        <halign>right</halign>
-        <valign>baseline</valign>
-        <xoffset>0</xoffset>
-        <yoffset>-2</yoffset>
-        <offsetType>spatium</offsetType>
-        <name>Repeat Text</name>
-        <family>MuseJazz Text</family>
-        <size>12</size>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <systemFlag>1</systemFlag>
-        </TextStyle>
-      <page-layout>
-        <page-height>283.465</page-height>
-        <page-width>566.929</page-width>
-        <page-margins type="both">
-          <left-margin>11.3386</left-margin>
-          <right-margin>11.3386</right-margin>
-          <top-margin>0</top-margin>
-          <bottom-margin>0</bottom-margin>
-          </page-margins>
-        </page-layout>
+      <tupletFontFace>MuseJazz Text</tupletFontFace>
+      <defaultAlign>center,bottom</defaultAlign>
+      <defaultFramePadding>0</defaultFramePadding>
+      <defaultFrameWidth>0</defaultFrameWidth>
+      <defaultOffset x="0" y="-2"/>
+      <titleFontFace>MuseJazz Text</titleFontFace>
+      <titleFontSize>28</titleFontSize>
+      <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
+      <subTitleFontFace>MuseJazz Text</subTitleFontFace>
+      <subTitleFontSpatiumDependent>1</subTitleFontSpatiumDependent>
+      <composerFontFace>MuseJazz Text</composerFontFace>
+      <composerFontSpatiumDependent>1</composerFontSpatiumDependent>
+      <lyricistFontFace>MuseJazz Text</lyricistFontFace>
+      <fingeringFontFace>MuseJazz Text</fingeringFontFace>
+      <fingeringFramePadding>0</fingeringFramePadding>
+      <fingeringFrameWidth>0</fingeringFrameWidth>
+      <lhGuitarFingeringFramePadding>0</lhGuitarFingeringFramePadding>
+      <lhGuitarFingeringFrameWidth>0</lhGuitarFingeringFrameWidth>
+      <rhGuitarFingeringFramePadding>0</rhGuitarFingeringFramePadding>
+      <rhGuitarFingeringFrameWidth>0</rhGuitarFingeringFrameWidth>
+      <stringNumberFontFace>MuseJazz Text</stringNumberFontFace>
+      <stringNumberOffset x="0" y="-5"/>
+      <longInstrumentFontFace>MuseJazz Text</longInstrumentFontFace>
+      <shortInstrumentFontFace>MuseJazz Text</shortInstrumentFontFace>
+      <partInstrumentFontFace>MuseJazz Text</partInstrumentFontFace>
+      <dynamicsFontFace>MuseJazz Text</dynamicsFontFace>
+      <dynamicsFontItalic>0</dynamicsFontItalic>
+      <expressionFontFace>MuseJazz Text</expressionFontFace>
+      <expressionFontSize>12</expressionFontSize>
+      <tempoFontFace>MuseJazz Text</tempoFontFace>
+      <tempoFontBold>0</tempoFontBold>
+      <tempoPosAbove>-4</tempoPosAbove>
+      <metronomeFontFace>MuseJazz Text</metronomeFontFace>
+      <measureNumberFontFace>MuseJazz Text</measureNumberFontFace>
+      <measureNumberAlign>center,bottom</measureNumberAlign>
+      <translatorFontFace>MuseJazz Text</translatorFontFace>
+      <systemFontFace>MuseJazz Text</systemFontFace>
+      <systemFontSize>11</systemFontSize>
+      <systemOffset x="0" y="-2"/>
+      <staffFontFace>MuseJazz Text</staffFontFace>
+      <staffFontSize>11</staffFontSize>
+      <staffAlign>left,top</staffAlign>
+      <staffTextPosAbove>5.5</staffTextPosAbove>
+      <rehearsalMarkFontFace>MuseJazz Text</rehearsalMarkFontFace>
+      <rehearsalMarkFontBold>0</rehearsalMarkFontBold>
+      <rehearsalMarkAlign>right,baseline</rehearsalMarkAlign>
+      <rehearsalMarkFramePadding>0.2</rehearsalMarkFramePadding>
+      <repeatLeftFontFace>MuseJazz Text</repeatLeftFontFace>
+      <repeatLeftFontSize>12</repeatLeftFontSize>
+      <repeatLeftAlign>right,baseline</repeatLeftAlign>
+      <repeatRightFontFace>MuseJazz Text</repeatRightFontFace>
+      <repeatRightAlign>right,top</repeatRightAlign>
+      <frameFontFace>MuseJazz Text</frameFontFace>
+      <textLineFontFace>MuseJazz Text</textLineFontFace>
+      <textLineFontSize>10</textLineFontSize>
+      <glissandoFontFace>MuseJazz Text</glissandoFontFace>
+      <bendFontFace>MuseJazz Text</bendFontFace>
+      <headerFontFace>MuseJazz Text</headerFontFace>
+      <footerFontFace>MuseJazz Text</footerFontFace>
+      <instrumentChangeFontFace>MuseJazz Text</instrumentChangeFontFace>
+      <instrumentChangeAlign>left,bottom</instrumentChangeAlign>
       <Spatium>1.85</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -479,7 +153,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <Staff id="2">
         <StaffType group="pitched">
@@ -520,141 +193,144 @@ p, li { white-space: pre-wrap; }
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure number="1">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
-        <TimeSig>
-          <sigN>5</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>0</showCourtesySig>
-          </TimeSig>
-        <StaffText>
-          <pos x="-5.09429" y="-5.1223"/>
-          <text>Emmentaler - Articulation 2</text>
-          </StaffText>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>articStaccatoBelow</subtype>
-            </Articulation>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>articStaccatissimoBelow</subtype>
-            </Articulation>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>articMarcatoBelow</subtype>
-            </Articulation>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>articAccentBelow</subtype>
-            </Articulation>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>articTenutoBelow</subtype>
-            </Articulation>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>5</sigN>
+            <sigD>4</sigD>
+            <showCourtesy>0</showCourtesy>
+            </TimeSig>
+          <StaffText>
+            <text>MuseJazz - Articulation 2</text>
+            </StaffText>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articMarcatoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articAccentBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articTenutoBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="2">
-      <Measure number="1">
-        <Clef>
-          <concertClefType>F</concertClefType>
-          <transposingClefType>F</transposingClefType>
-          </Clef>
-        <TimeSig>
-          <sigN>5</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>0</showCourtesySig>
-          </TimeSig>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>articStaccatoAbove</subtype>
-            </Articulation>
-          <Note>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>articStaccatissimoAbove</subtype>
-            </Articulation>
-          <Note>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>articMarcatoAbove</subtype>
-            </Articulation>
-          <Note>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>articAccentAbove</subtype>
-            </Articulation>
-          <Note>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>articTenutoAbove</subtype>
-            </Articulation>
-          <Note>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>5</sigN>
+            <sigD>4</sigD>
+            <showCourtesy>0</showCourtesy>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articStaccatissimoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articMarcatoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articAccentAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>articTenutoAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     </Score>
