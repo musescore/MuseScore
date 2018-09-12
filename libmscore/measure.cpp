@@ -87,7 +87,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class MStaff {
-      Shape _shape;
+//      Shape _shape;
       Text* _noText         { 0 };         ///< Measure number text object
       StaffLines*  _lines   { 0 };
       Spacer* _vspacerUp    { 0 };
@@ -108,8 +108,8 @@ class MStaff {
       void setScore(Score*);
       void setTrack(int);
 
-      Shape shape() const            { return _shape; }
-      Shape& shape()                 { return _shape; }
+//      Shape shape() const            { return _shape; }
+//      Shape& shape()                 { return _shape; }
 
       Text* noText() const           { return _noText;     }
       void setNoText(Text* t)        { _noText = t;        }
@@ -259,7 +259,7 @@ void Measure::layoutStaffLines()
 
 void Measure::createStaves(int staffIdx)
       {
-      for (int n = _mstaves.size(); n <= staffIdx; ++n) {
+      for (int n = int(_mstaves.size()); n <= staffIdx; ++n) {
             Staff* staff = score()->staff(n);
             MStaff* s    = new MStaff;
             s->setLines(new StaffLines(score()));
@@ -294,8 +294,8 @@ void Measure::setCorrupted(int staffIdx, bool val)              { _mstaves[staff
 #endif
 void Measure::setNoText(int staffIdx, Text* t)                  { _mstaves[staffIdx]->setNoText(t); }
 Text* Measure::noText(int staffIdx) const                       { return _mstaves[staffIdx]->noText(); }
-const Shape& Measure::staffShape(int staffIdx) const            { return _mstaves[staffIdx]->shape(); }
-Shape& Measure::staffShape(int staffIdx)                        { return _mstaves[staffIdx]->shape(); }
+// const Shape& Measure::staffShape(int staffIdx) const            { return _mstaves[staffIdx]->shape(); }
+// Shape& Measure::staffShape(int staffIdx)                        { return _mstaves[staffIdx]->shape(); }
 
 //---------------------------------------------------------
 //   Measure
@@ -1849,7 +1849,7 @@ void Measure::read(XmlReader& e, int staffIdx)
       int nextTrack = staffIdx * VOICES;
       e.setTrack(nextTrack);
 
-      for (int n = _mstaves.size(); n <= staffIdx; ++n) {
+      for (int n = int(_mstaves.size()); n <= staffIdx; ++n) {
             Staff* staff = score()->staff(n);
             MStaff* s    = new MStaff;
             s->setLines(new StaffLines(score()));
@@ -2341,7 +2341,7 @@ void Measure::read300(XmlReader& e, int staffIdx)
       e.tuplets().clear();
       e.setTrack(staffIdx * VOICES);
 
-      for (int n = _mstaves.size(); n <= staffIdx; ++n) {
+      for (int n = int(_mstaves.size()); n <= staffIdx; ++n) {
             Staff* staff = score()->staff(n);
             MStaff* s    = new MStaff;
             s->setLines(new StaffLines(score()));
@@ -2390,7 +2390,7 @@ void Measure::read300(XmlReader& e, int staffIdx)
                   //  EndBarLine:         at the end of a measure
                   //  BeginBarLine:       first segment of a measure, systemic barline
 
-                  SegmentType st;
+                  SegmentType st = SegmentType::Invalid;
                   int t = e.tick() - tick();
                   if (t && (t != ticks()))
                         st = SegmentType::BarLine;
@@ -3100,7 +3100,7 @@ bool Measure::empty() const
       if (irregular())
             return false;
       int n = 0;
-      int tracks = _mstaves.size() * VOICES;
+      int tracks = int(_mstaves.size()) * VOICES;
       static const SegmentType st = SegmentType::ChordRest ;
       for (const Segment* s = first(st); s; s = s->next(st)) {
             bool restFound = false;
@@ -3230,8 +3230,8 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
                         if (oe->isChord()) {
                               Chord* och = toChord(ocr);
                               Chord* nch = toChord(ncr);
-                              int n = och->notes().size();
-                              for (int i = 0; i < n; ++i) {
+                              size_t n = och->notes().size();
+                              for (size_t i = 0; i < n; ++i) {
                                     Note* on = och->notes().at(i);
                                     Note* nn = nch->notes().at(i);
                                     if (on->tieFor()) {

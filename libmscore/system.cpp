@@ -632,7 +632,6 @@ void System::setInstrumentNames(bool longName)
                         iname->setTrack(staffIdx * VOICES);
                         iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
                         iname->setLayoutPos(sn.pos());
-                        iname->setProperty(Pid::ALIGN, int(Align::RIGHT));
                         score()->addElement(iname);
                         }
                   iname->setXmlText(sn.name());
@@ -860,7 +859,7 @@ int System::snapNote(int tick, const QPointF p, int staff) const
 
 Measure* System::firstMeasure() const
       {
-      auto i = std::find_if(ml.begin(), ml.end(), [](MeasureBase* mb){return mb->isMeasure();});
+      auto i = std::find_if(ml.begin(), ml.end(), [](MeasureBase* mb){ return mb->isMeasure(); });
       return i != ml.end() ? toMeasure(*i) : 0;
       }
 
@@ -1109,37 +1108,29 @@ qreal System::minDistance(System* s2) const
 
 //---------------------------------------------------------
 //   topDistance
-//    return minimum distance to the shape above
+//    return minimum distance to the above south skyline
 //---------------------------------------------------------
 
-qreal System::topDistance(int staffIdx, const Shape& s) const
+qreal System::topDistance(int staffIdx, const SkylineLine& s) const
       {
       Q_ASSERT(!vbox());
-      qreal dist = -1000000.0;
-      for (MeasureBase* mb1 : ml) {
-            if (!mb1->isMeasure())
-                  continue;
-            Measure* m1 = toMeasure(mb1);
-            dist = qMax(dist, score()->lineMode() ? 0.0 : s.minVerticalDistance(m1->staffShape(staffIdx).translated(m1->pos())));
-            }
-      return dist;
+      Q_ASSERT(!s.isNorth());
+      if (score()->lineMode())
+            return 0.0;
+      return s.minDistance(staff(staffIdx)->skyline().north());
       }
 
 //---------------------------------------------------------
 //   bottomDistance
 //---------------------------------------------------------
 
-qreal System::bottomDistance(int staffIdx, const Shape& s) const
+qreal System::bottomDistance(int staffIdx, const SkylineLine& s) const
       {
       Q_ASSERT(!vbox());
-      qreal dist = -1000000.0;
-      for (MeasureBase* mb1 : ml) {
-            if (!mb1->isMeasure())
-                  continue;
-            Measure* m1 = toMeasure(mb1);
-            dist = qMax(dist, score()->lineMode() ? 0.0 : m1->staffShape(staffIdx).translated(m1->pos()).minVerticalDistance(s));
-            }
-      return dist;
+      Q_ASSERT(s.isNorth());
+      if (score()->lineMode())
+            return 0.0;
+      return staff(staffIdx)->skyline().south().minDistance(s);
       }
 
 //---------------------------------------------------------
@@ -1149,13 +1140,7 @@ qreal System::bottomDistance(int staffIdx, const Shape& s) const
 
 qreal System::minTop() const
       {
-      qreal dist = 0.0;
-      for (MeasureBase* mb : ml) {
-            if (!mb->isMeasure())
-                  continue;
-            dist = qMax(dist, -toMeasure(mb)->staffShape(0).top());
-            }
-      return dist;
+      return -staff(0)->skyline().north().max();
       }
 
 //---------------------------------------------------------
@@ -1165,16 +1150,7 @@ qreal System::minTop() const
 
 qreal System::minBottom() const
       {
-      qreal dist = 0.0;
-      int staffIdx = score()->nstaves() - 1;
-      for (MeasureBase* mb : ml) {
-            if (!mb->isMeasure())
-                  continue;
-//            for (Segment* s = toMeasure(mb)->first(); s; s = s->next())
-//                  dist = qMax(dist, s->staffShape(staffIdx).bottom());
-            dist = qMax(dist, toMeasure(mb)->staffShape(staffIdx).bottom() + mb->pos().y());
-            }
-      return dist - spatium() * 4;
+      return -staves()->back()->skyline().south().max();
       }
 
 //---------------------------------------------------------

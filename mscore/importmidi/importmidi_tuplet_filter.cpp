@@ -198,7 +198,7 @@ std::vector<TupletCommon> findTupletCommons(const std::vector<TupletInfo> &tuple
       for (size_t i = 0; i != tuplets.size() - 1; ++i) {
             for (size_t j = i + 1; j != tuplets.size(); ++j) {
                   if (areInCommons(tuplets[i], tuplets[j]))
-                        tupletCommons[i].commonIndexes.insert(j);
+                        tupletCommons[i].commonIndexes.insert(int(j));
                   }
             }
       return tupletCommons;
@@ -237,7 +237,7 @@ TupletErrorResult findTupletError(
       {
       ReducedFraction sumError{0, 1};
       ReducedFraction sumLengthOfRests{0, 1};
-      int sumChordCount = 0;
+      size_t sumChordCount = 0;
       int sumChordPlaces = 0;
       std::set<std::pair<const ReducedFraction, MidiChord> *> usedChords;
       std::vector<char> usedIndexes(tuplets.size(), 0);
@@ -498,7 +498,7 @@ class ValidTuplets
             int prev = indexes_[index].first;
             int next = indexes_[index].second;
             indexes_[index].first = -1;
-            indexes_[index].second = indexes_.size();
+            indexes_[index].second = int(indexes_.size());
             if (prev >= first_)
                   indexes_[prev].second = next;
             if (next < (int)indexes_.size())
@@ -518,8 +518,8 @@ class ValidTuplets
 
       void restore(const std::vector<std::pair<int, int>> &indexes)
             {
-            first_ = indexes_.size() - indexes.size();
-            for (int i = 0; i != (int)indexes.size(); ++i)
+            first_ = int(indexes_.size() - indexes.size());
+            for (int i = 0; i != int(indexes.size()); ++i)
                   indexes_[i + first_] = indexes[i];
             }
 
@@ -546,10 +546,10 @@ void findNextTuplet(
             bool isCommonGroupBegins = (selectedTuplets.empty() && index == commonsSize);
             if (isCommonGroupBegins) {      // first level
                   for (size_t i = index; i < tuplets.size(); ++i)
-                        selectedTuplets.push_back(i);
+                        selectedTuplets.push_back(int(i));
                   }
             else {
-                  selectedTuplets.push_back(index);
+                  selectedTuplets.push_back(int(index));
                   }
 
             Q_ASSERT_X(validateSelectedTuplets(selectedTuplets.begin(), selectedTuplets.end(), tuplets),
@@ -566,8 +566,8 @@ void findNextTuplet(
             if (isCommonGroupBegins) {
                   bool canAddMoreIndexes = false;
                   for (size_t i = 0; i != commonsSize; ++i) {
-                        if (!isInCommonIndexes(i, selectedTuplets, tupletCommons)
-                                    && canUseIndex(i, tuplets, tupletIntervals,
+                        if (!isInCommonIndexes(int(i), selectedTuplets, tupletCommons)
+                                    && canUseIndex(int(i), tuplets, tupletIntervals,
                                                    voiceIntervals, usedFirstChords)) {
                               canAddMoreIndexes = true;
                               break;
@@ -580,7 +580,7 @@ void findNextTuplet(
                   return;
                   }
 
-            validTuplets.exclude(index);
+            validTuplets.exclude(int(index));
             const auto savedTuplets = validTuplets.save();
                         // check tuplets for compatibility
             if (!validTuplets.empty()) {
@@ -626,7 +626,7 @@ void findNextTuplet(
 
 void moveUncommonTupletsToEnd(std::vector<TupletInfo> &tuplets, std::set<int> &uncommons)
       {
-      int swapWith = tuplets.size() - 1;
+      int swapWith = int(tuplets.size()) - 1;
       for (int i = swapWith; i >= 0; --i) {
             auto it = uncommons.find(i);
             if (it != uncommons.end()) {
@@ -652,7 +652,7 @@ std::vector<int> findBestTuplets(
       TupletErrorResult minCurrentError;
       const auto tupletIntervals = findTupletIntervals(tuplets, basicQuant);
 
-      ValidTuplets validTuplets(tuplets.size());
+      ValidTuplets validTuplets(int(tuplets.size()));
 
       findNextTuplet(selectedTuplets, validTuplets, bestTupletIndexes, minCurrentError,
                      tupletCommons, tuplets, tupletIntervals, commonsSize, basicQuant);

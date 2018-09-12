@@ -2015,6 +2015,7 @@ qreal Element::styleP(Sid idx) const
 //   autoplaceSegmentElement
 //---------------------------------------------------------
 
+#if 0
 void Element::autoplaceSegmentElement(qreal minDistance)
       {
       if (autoplace() && parent()) {
@@ -2071,7 +2072,7 @@ void Element::autoplaceSegmentElement(qreal minDistance)
                         }
 
                   // margin of 5 to stop slight overlap, hardcoded for now
-                  qreal textMarginBottom = 5;  
+                  qreal textMarginBottom = 5;
                   s2.translateY(-textMarginBottom);
                   rUserYoffset() = totalYOff - textMarginBottom;
 
@@ -2129,5 +2130,42 @@ void Element::autoplaceSegmentElement(qreal minDistance)
                   }
             }
       }
+#endif
 
+//---------------------------------------------------------
+//   autoplaceSegmentElement
+//---------------------------------------------------------
+
+void Element::autoplaceSegmentElement(qreal minDistance)
+      {
+      if (autoplace() && parent()) {
+            setUserOff(QPointF());
+            Segment* s        = toSegment(parent());
+            Measure* m        = s->measure();
+            int si            = staffIdx();
+
+            SysStaff* ss = m->system()->staff(si);
+            QRectF r = bbox().translated(m->pos() + s->pos() + pos());
+
+            SkylineLine sk(!placeAbove());
+            qreal d;
+            if (placeAbove()) {
+                  sk.add(r.x(), r.bottom(), r.width());
+                  d = sk.minDistance(ss->skyline().north());
+                  }
+            else {
+                  sk.add(r.x(), r.top(), r.width());
+                  d = ss->skyline().south().minDistance(sk);
+                  }
+
+            if (d > -minDistance) {
+                  qreal yd = d + minDistance;
+                  if (placeAbove())
+                        yd *= -1.0;
+                  rUserYoffset() = yd;
+                  r.translate(QPointF(0.0, yd));
+                  }
+            ss->skyline().add(r);
+            }
+      }
 }

@@ -365,10 +365,10 @@ void Tuplet::layout()
                   }
 
             // check for collisions
-            int n = _elements.size();
+            size_t n = _elements.size();
             if (n >= 3) {
                   d = (p2.y() - p1.y())/(p2.x() - p1.x());
-                  for (int i = 1; i < (n-1); ++i) {
+                  for (size_t i = 1; i < (n-1); ++i) {
                         Element* e = _elements[i];
                         if (e->isChord()) {
                               const Chord* chord = toChord(e);
@@ -475,10 +475,10 @@ void Tuplet::layout()
                   }
 
             // check for collisions
-            int n = _elements.size();
+            size_t n = _elements.size();
             if (n >= 3) {
                   qreal d  = (p2.y() - p1.y())/(p2.x() - p1.x());
-                  for (int i = 1; i < (n-1); ++i) {
+                  for (size_t i = 1; i < (n-1); ++i) {
                         Element* e = _elements[i];
                         if (e->isChord()) {
                               const Chord* chord = toChord(e);

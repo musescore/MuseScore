@@ -28,6 +28,20 @@ void Skyline::add(const QRectF& r)
       _south.add(r.x(), r.bottom(), r.width());
       }
 
+//---------------------------------------------------------
+//   add
+//---------------------------------------------------------
+
+void SkylineLine::add(const Shape& s)
+      {
+      for (const auto& r : s) {
+            if (north)
+                  add(r.x(), r.top(), r.width());
+            else
+                  add(r.x(), r.bottom(), r.width());
+            }
+      }
+
 void Skyline::add(const Shape& s)
       {
       for (const auto& r : s)
@@ -66,6 +80,7 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
                         }
                   else {
                         i->w = w2;
+                        i->y = y;
 //                        printf("       B w2 %f\n", w2);
                         }
                   if (w3 > 0.0000001) {
@@ -146,11 +161,8 @@ qreal SkylineLine::minDistance(const SkylineLine& sl) const
             if (k == sl.end())
                   break;
             for (;;) {
-                  if ((x1 + i->w > x2) && (x1 < x2 + k->w)) {
-                        qreal odist = dist;
+                  if ((x1 + i->w > x2) && (x1 < x2 + k->w))
                         dist = qMax(dist, i->y - k->y);
-//                        printf("%f = Max (%f. %f - %f)\n", dist, odist, i->y, k->y);
-                        }
                   if (x2 + k->w < x1 + i->w) {
                         x2 += k->w;
                         ++k;
@@ -187,7 +199,7 @@ void SkylineLine::paint(QPainter& p) const
       {
       qreal x1 = 0.0;
       qreal x2;
-      qreal y;
+      qreal y = 0.0;
 
       bool pvalid = false;
       for (const SkylineSegment& s : *this) {
@@ -231,6 +243,27 @@ void SkylineLine::dump() const
             x += s.w;
             }
       }
+
+//---------------------------------------------------------
+//   max
+//---------------------------------------------------------
+
+qreal SkylineLine::max() const
+      {
+      qreal val;
+      if (north) {
+            val = MAXIMUM_Y;
+            for (const SkylineSegment& s : *this)
+                  val = qMin(val, s.y);
+            }
+      else {
+            val = MINIMUM_Y;
+            for (const SkylineSegment& s : *this)
+                  val = qMax(val, s.y);
+            }
+      return val;
+      }
+
 
 } // namespace Ms
 

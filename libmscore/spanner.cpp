@@ -1111,5 +1111,29 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
             }
       }
 
+//---------------------------------------------------------
+//   autoplaceSpannerSegment
+//---------------------------------------------------------
+
+void SpannerSegment::autoplaceSpannerSegment(qreal minDistance)
+      {
+      if (autoplace()) {
+            setUserOff(QPointF());
+
+            SkylineLine sl(!spanner()->placeAbove());
+            sl.add(shape().translated(pos()));
+            if (spanner()->placeAbove()) {
+                  qreal d  = system()->topDistance(staffIdx(), sl);
+                  if (d > -minDistance)
+                        rUserYoffset() = -(d + minDistance);
+                  }
+            else {
+                  qreal d  = system()->bottomDistance(staffIdx(), sl);
+                  if (d > -minDistance)
+                        rUserYoffset() = d + minDistance;
+                  }
+            }
+      }
+
 }
 

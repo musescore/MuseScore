@@ -168,8 +168,8 @@ int Chord::upString() const
       int                     noteLine;
       // scan each note: if TAB strings are not in sequential order,
       // visual order of notes might not correspond to pitch order
-      int n = _notes.size();
-      for (int i = 0; i < n; ++i) {
+      size_t n = _notes.size();
+      for (size_t i = 0; i < n; ++i) {
             noteLine = tab->physStringToVisual(_notes.at(i)->string());
             if (noteLine < line)
                   line = noteLine;
@@ -184,10 +184,10 @@ int Chord::downString() const
       if (!staff()->isTabStaff(tick()))                // if staff not a TAB, return bottom line
             return staff()->lines(tick())-1;
       StaffType* tab = staff()->staffType(tick());
-      int       line = 0;         // start at top line
-      int        noteLine;
-      int n = _notes.size();
-      for (int i = 0; i < n; ++i) {
+      int line = 0;         // start at top line
+      int noteLine;
+      size_t n = _notes.size();
+      for (size_t i = 0; i < n; ++i) {
             noteLine = tab->physStringToVisual(_notes.at(i)->string());
             if (noteLine > line)
                   line = noteLine;
@@ -658,8 +658,8 @@ void Chord::addLedgerLines()
       // NOTE: notes are sorted from bottom to top (line no. decreasing)
       // notes are scanned twice from outside (bottom or top) toward the staff
       // each pass stops at the first note without ledger lines
-      int n = _notes.size();
-      for (int j = 0; j < 2; j++) {             // notes are scanned twice...
+      size_t n = _notes.size();
+      for (size_t j = 0; j < 2; j++) {             // notes are scanned twice...
             int from, delta;
             vector<LedgerLineData> vecLines;
             minX  = maxX = 0;
@@ -670,10 +670,10 @@ void Chord::addLedgerLines()
                   delta = +1;
                   }
             else {
-                  from = n-1;                   // ...once from highest down
+                  from = int(n)-1;                   // ...once from highest down
                   delta = -1;
                   }
-            for (int i = from; i < n && i >=0 ; i += delta) {
+            for (int i = from; i < int(n) && i >= 0 ; i += delta) {
                   Note* note = _notes.at(i);
                   int l = note->line();
 
@@ -861,8 +861,8 @@ void Chord::computeUp()
                   // if extrema symmetrical, average directions of intermediate notes
                   if (-ud == dd) {
                         int up = 0;
-                        int n = _notes.size();
-                        for (int i = 0; i < n; ++i) {
+                        size_t n = _notes.size();
+                        for (size_t i = 0; i < n; ++i) {
                               const Note* currentNote = _notes.at(i);
                               int l = tabStaff ? currentNote->string() * 2 : currentNote->line();
                               if (l <= dnMaxLine)
@@ -886,8 +886,8 @@ void Chord::computeUp()
 Note* Chord::selectedNote() const
       {
       Note* note = 0;
-      int n = _notes.size();
-      for (int i = 0; i < n; ++i) {
+      size_t n = _notes.size();
+      for (size_t i = 0; i < n; ++i) {
             Note* currentNote = _notes.at(i);
             if (currentNote->selected()) {
                   if (note)
@@ -1128,8 +1128,8 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
       if ((st && st->showLedgerLines(tick())) || !st)       // also for palette
             for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
                   func(data, ll);
-      int n = _notes.size();
-      for (int i = 0; i < n; ++i)
+      size_t n = _notes.size();
+      for (size_t i = 0; i < n; ++i)
             _notes.at(i)->scanElements(data, func, all);
       for (Chord* chord : _graceNotes)
             chord->scanElements(data, func, all);
@@ -1752,8 +1752,8 @@ void Chord::layoutPitched()
             //
             // hack for use in palette
             //
-            int n = _notes.size();
-            for (int i = 0; i < n; i++) {
+            size_t n = _notes.size();
+            for (size_t i = 0; i < n; i++) {
                   Note* note = _notes.at(i);
                   note->layout();
                   qreal x = 0.0;
@@ -2087,9 +2087,9 @@ void Chord::layoutTablature()
       int   ledgerLines = 0;
       qreal llY         = 0.0;
 
-      int   numOfNotes  = _notes.size();
+      size_t numOfNotes = _notes.size();
       qreal minY        = 1000.0;               // just a very large value
-      for (int i = 0; i < numOfNotes; ++i) {
+      for (size_t i = 0; i < numOfNotes; ++i) {
             Note* note = _notes.at(i);
             note->layout();
             // set headWidth to max fret text width
@@ -2390,7 +2390,7 @@ void Chord::layoutTablature()
                   }
             }
 
-      for (int i = 0; i < numOfNotes; ++i)
+      for (size_t i = 0; i < numOfNotes; ++i)
             _notes.at(i)->layout2();
       QRectF bb;
       processSiblings([&bb] (Element* e) { bb |= e->bbox().translated(e->pos()); } );
@@ -2489,8 +2489,8 @@ void Chord::layoutArpeggio2()
 
 Note* Chord::findNote(int pitch) const
       {
-      int ns = _notes.size();
-      for (int i = 0; i < ns; ++i) {
+      size_t ns = _notes.size();
+      for (size_t i = 0; i < ns; ++i) {
             Note* n = _notes.at(i);
             if (n->pitch() == pitch)
                   return n;
@@ -2748,8 +2748,8 @@ void Chord::setSlash(bool flag, bool stemless)
                   head = NoteHead::Group::HEAD_NORMAL;
             }
 
-      int ns = _notes.size();
-      for (int i = 0; i < ns; ++i) {
+      size_t ns = _notes.size();
+      for (size_t i = 0; i < ns; ++i) {
             Note* n = _notes[i];
             n->undoChangeProperty(Pid::HEAD_GROUP, static_cast<int>(head));
             n->undoChangeProperty(Pid::FIXED, true);
@@ -3308,7 +3308,7 @@ void Chord::layoutArticulations()
                   y += a->height() * .5;        // center symbol
                   }
             a->setPos(x, y);
-            measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
+//            measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
             }
       }
 
@@ -3374,7 +3374,7 @@ void Chord::layoutArticulations2()
             qreal y = a->up() ? chordTopY - dy : chordBotY + dy;
             a->setPos(x, y);
             a->doAutoplace();
-            measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
+//            measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
             }
       //
       //    now place all articulations with staff top or bottom anchor
@@ -3393,7 +3393,7 @@ void Chord::layoutArticulations2()
                         staffBotY += distance0;
                         }
                   a->doAutoplace();
-                  measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
+//                  measure()->staffShape(staffIdx()).add(a->shape().translated(segment()->pos() + a->pos()));
                   }
             }
       }

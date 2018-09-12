@@ -1128,27 +1128,6 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                                           }
                                     }
                               }
-                        if (MScore::showMeasureShapes) {
-                              for (const System* system : page->systems()) {
-                                    for (const MeasureBase* mb : system->measures()) {
-                                          if (mb->isMeasure()) {
-                                                const Measure* m = toMeasure(mb);
-                                                p.setPen(Qt::NoPen);
-                                                p.setBrush(QBrush(QColor(0, 0, 255, 60)));
-                                                for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-                                                      Staff* staff = score()->staff(staffIdx);
-                                                      if (staff->show()) {
-                                                            QPointF pt(m->pos().x() + system->pos().x(), 0);
-                                                            p.translate(pt);
-                                                            QPointF o(0.0, m->system()->staffYpage(staffIdx));
-                                                            m->staffShape(staffIdx).translated(o).paint(p);
-                                                            p.translate(-pt);
-                                                            }
-                                                      }
-                                                }
-                                          }
-                                    }
-                              }
                         if (MScore::showSkylines) {
                               for (const System* system : page->systems()) {
                                     for (SysStaff* ss : *system->staves()) {
@@ -3477,7 +3456,7 @@ void ScoreView::cmdCreateTuplet(ChordRest* cr, Tuplet* tuplet)
       _score->cmdCreateTuplet(cr, tuplet);
 
       const std::vector<DurationElement*>& cl = tuplet->elements();
-      int ne = cl.size();
+      size_t ne = cl.size();
       DurationElement* el = 0;
       if (ne && cl[0]->type() == ElementType::REST)
             el  = cl[0];
