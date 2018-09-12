@@ -3231,7 +3231,6 @@ void Note::setAccidentalType(AccidentalType type)
 
 Shape Note::shape() const
       {
-//      printf("===note %f %f %f %f posy %f\n", bbox().x(), bbox().y(), bbox().width(), bbox().height(), pos().y());
 #ifndef NDEBUG
       Shape shape(bbox(), name());
       for (NoteDot* dot : _dots)

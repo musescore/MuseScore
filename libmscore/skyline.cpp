@@ -18,6 +18,15 @@ namespace Ms {
 static const qreal MAXIMUM_Y = 1000000.0;
 static const qreal MINIMUM_Y = -1000000.0;
 
+// #define SKL_DEBUG
+
+#ifdef SKL_DEBUG
+#define DP(...)   printf(__VA_ARGS__)
+#else
+#define DP(...)
+#endif
+
+
 //---------------------------------------------------------
 //   add
 //---------------------------------------------------------
@@ -58,6 +67,7 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
       if (x < 0.0)
             return;
 
+      DP("===add  %f %f %f\n", x, y, w);
       qreal cx = 0.0;
       for (auto i = begin(); i != end(); ++i) {
             qreal cy = i->y;
@@ -72,7 +82,7 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
                   continue;
                   }
             if ((x >= cx) && ((x+w) < (cx+i->w))) {                     // (E) insert segment
-//                  printf("    insert at %f %f   x:%f w:%f\n", cx, i->w, x, w);
+                  DP("    insert at %f %f   x:%f w:%f\n", cx, i->w, x, w);
                   qreal w1 = x - cx;
                   qreal w2 = w;
                   qreal w3 = i->w - (w1 + w2);
@@ -80,28 +90,28 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
                         i->w = w1;
                         ++i;
                         i = insert(i, SkylineSegment(y, w2));
-//                        printf("       A w1 %f w2 %f\n", w1, w2);
+                        DP("       A w1 %f w2 %f\n", w1, w2);
                         }
                   else {
                         i->w = w2;
                         i->y = y;
-//                        printf("       B w2 %f\n", w2);
+                        DP("       B w2 %f\n", w2);
                         }
                   if (w3 > 0.0000001) {
                         ++i;
-//                        printf("       C w3 %f\n", w3);
+                        DP("       C w3 %f\n", w3);
                         insert(i, SkylineSegment(cy, w3));
                         }
                   return;
                   }
             else if ((x <= cx) && ((x + w) >= (cx + i->w))) {               // F
-//                  printf("    change(F) cx %f y %f\n", cx, y);
+                  DP("    change(F) cx %f y %f\n", cx, y);
                   i->y = y;
                   }
             else if (x < cx) {                                          // C
                   qreal w1 = x + w - cx;
                   i->w    -= w1;
-//                  printf("    add(C) cx %f y %f w %f w1 %f\n", cx, y, w1, i->w);
+                  DP("    add(C) cx %f y %f w %f w1 %f\n", cx, y, w1, i->w);
                   insert(i, SkylineSegment(y, w1));
                   return;
                   }
@@ -111,7 +121,7 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
                   if (w2 > 0.0000001) {
                         i->w = w1;
                         cx  += w1;
-//                        printf("    add(D) %f %f\n", y, w2);
+                        DP("    add(D) %f %f\n", y, w2);
                         ++i;
                         i = insert(i, SkylineSegment(y, w2));
                         }
@@ -121,12 +131,14 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
       if (x >= cx) {
             if (x > cx) {
                   qreal cy = north ? MAXIMUM_Y : MINIMUM_Y;
-//                  printf("    append1 %f %f\n", cy, x - cx);
+                  DP("    append1 %f %f\n", cy, x - cx);
                   push_back(SkylineSegment(cy, x - cx));
                   }
-//            printf("    append2 %f %f\n", y, w);
+            DP("    append2 %f %f\n", y, w);
             push_back(SkylineSegment(y, w));
             }
+      else if (x + w > cx)
+            push_back(SkylineSegment(y, x + w - cx));
       }
 
 //---------------------------------------------------------
