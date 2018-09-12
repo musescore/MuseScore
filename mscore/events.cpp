@@ -27,6 +27,7 @@
 #include "libmscore/shadownote.h"
 #include "libmscore/repeatlist.h"
 #include "libmscore/select.h"
+#include "libmscore/staff.h"
 
 namespace Ms {
 
@@ -318,10 +319,17 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
             // special case: chacke if measure is selected
             int staffIdx;
             Measure* m = _score->pos2measure(editData.startMove, &staffIdx, 0, 0, 0);
-            if (m && m->staffLines(staffIdx)->canvasBoundingRect().contains(editData.startMove)) {
-                  _score->select(m, st, staffIdx);
-                  _score->setUpdateAll();
-                  clickOffElement = false;
+            if (m) {
+                  QRectF r = m->staffLines(staffIdx)->canvasBoundingRect();
+                  if (_score->staff(staffIdx)->lines(m->tick()) == 1) {
+                        r.setHeight(m->spatium() * 2);
+                        r.translate(0.0, -m->spatium());
+                        }
+                  if (r.contains(editData.startMove)) {
+                        _score->select(m, st, staffIdx);
+                        _score->setUpdateAll();
+                        clickOffElement = false;
+                        }
                   }
             else if (st != SelectType::ADD)
                   clickOffElement = true;
@@ -344,7 +352,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
       editData.modifiers = qApp->keyboardModifiers();
 
       Element* e         = elementNear(editData.startMove);
-//      qDebug("element %s", e ? e->name() : "--");
+//       qDebug("element %s", e ? e->name() : "--");
 
       switch (state) {
             case ViewState::NORMAL:

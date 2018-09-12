@@ -750,7 +750,8 @@ bool Staff::readProperties(XmlReader& e)
 qreal Staff::height() const
       {
       int tick = 0;     // TODO
-      return (lines(tick) == 1 ? 2 : lines(tick)-1) * spatium(tick) * staffType(tick)->lineDistance().val();
+//      return (lines(tick) == 1 ? 2 : lines(tick)-1) * spatium(tick) * staffType(tick)->lineDistance().val();
+      return (lines(tick)-1) * spatium(tick) * staffType(tick)->lineDistance().val();
       }
 
 //---------------------------------------------------------

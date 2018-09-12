@@ -34,12 +34,16 @@ void Skyline::add(const QRectF& r)
 
 void SkylineLine::add(const Shape& s)
       {
-      for (const auto& r : s) {
-            if (north)
-                  add(r.x(), r.top(), r.width());
-            else
-                  add(r.x(), r.bottom(), r.width());
-            }
+      for (const auto& r : s)
+            add(r);
+      }
+
+void SkylineLine::add(const QRectF& r)
+      {
+      if (north)
+            add(r.x(), r.top(), r.width());
+      else
+            add(r.x(), r.bottom(), r.width());
       }
 
 void Skyline::add(const Shape& s)

@@ -87,7 +87,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 class MStaff {
-//      Shape _shape;
       Text* _noText         { 0 };         ///< Measure number text object
       StaffLines*  _lines   { 0 };
       Spacer* _vspacerUp    { 0 };
@@ -107,9 +106,6 @@ class MStaff {
 
       void setScore(Score*);
       void setTrack(int);
-
-//      Shape shape() const            { return _shape; }
-//      Shape& shape()                 { return _shape; }
 
       Text* noText() const           { return _noText;     }
       void setNoText(Text* t)        { _noText = t;        }

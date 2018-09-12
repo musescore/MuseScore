@@ -272,13 +272,16 @@ void System::layoutSystem(qreal xo1)
                   }
             ++nVisible;
             qreal staffMag = staff->mag(0);     // ??? TODO
-            qreal h;
-            if (staff->lines(0) == 1)
-                  h = 2;
-            else
-                  h = (staff->lines(0)-1) * staff->lineDistance(0);
-            h = h * staffMag * spatium();
-            s->bbox().setRect(_leftMargin + xo1, 0.0, 0.0, h);
+            int staffLines = staff->lines(0);
+            if (staffLines == 1) {
+                  qreal h = staff->lineDistance(0) * staffMag * spatium();
+                  s->bbox().setRect(_leftMargin + xo1, -h, 0.0, 2 * h);
+                  }
+            else {
+                  qreal h = (staffLines - 1) * staff->lineDistance(0);
+                  h = h * staffMag * spatium();
+                  s->bbox().setRect(_leftMargin + xo1, 0.0, 0.0, h);
+                  }
             }
 
       //---------------------------------------------------
@@ -395,7 +398,8 @@ void System::layout2()
 
             qreal h = staff->height();
             if (ni == visibleStaves.end()) {
-                  ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag(0) : 0.0);
+//                  ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag(0) : 0.0);
+                  ss->setYOff(0.0);
                   ss->bbox().setRect(_leftMargin, y, width() - _leftMargin, h);
                   break;
                   }
@@ -466,7 +470,8 @@ void System::layout2()
                   }
 #endif
 
-            ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag(0) : 0.0);
+//            ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag(0) : 0.0);
+            ss->setYOff(0.0);
             ss->bbox().setRect(_leftMargin, y, width() - _leftMargin, h);
             y += dist;
             }
@@ -577,7 +582,7 @@ void System::layout2()
                                     break;
                               }
                         // t->rypos() = y1 + (y2 - y1) * .5 + t->offset(t->spatium()).y();
-                        t->rypos() = y1 + (y2 - y1) * .5;
+                        t->rypos() = y1 + (y2 - y1 - t->bbox().height()) * .5;
                         }
                   }
             staffIdx += nstaves;

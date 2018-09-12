@@ -44,6 +44,7 @@ struct SkylineLine : public std::vector<SkylineSegment> {
       SkylineLine(bool n) : north(n) {}
       void add(qreal x, qreal y, qreal w);
       void add(const Shape& s);
+      void add(const QRectF& r);
       void paint(QPainter&) const;
       void dump() const;
       qreal minDistance(const SkylineLine&) const;

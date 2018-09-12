@@ -1835,13 +1835,12 @@ void Segment::createShape(int staffIdx)
 
       for (int track = staffIdx * VOICES; track < (staffIdx + 1) * VOICES; ++track) {
             Element* e = _elist[track];
-            if (e) {
+            if (e)
                   s.add(e->shape().translated(e->pos()));
-                  }
             }
 
       for (Element* e : _annotations) {
-            if (e->staffIdx() == staffIdx
+            if (e->staffIdx() == staffIdx             // whats left?
                && !e->isRehearsalMark()
                && !e->isFretDiagram()
                && !e->isHarmony()
