@@ -1220,7 +1220,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset Music top margin' value</string>
+              <string>Reset 'Music top margin' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -2712,7 +2712,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Font size' value</string>
+                 <string>Reset 'Align' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -2971,7 +2971,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Font size' value</string>
+                 <string>Reset 'Align' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
