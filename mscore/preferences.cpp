@@ -359,7 +359,7 @@ bool Preferences::isThemeDark() const
       return globalStyle() == MuseScoreStyleType::DARK_FUSION;
       }
 
-void Preferences::revertToDefaultValue(const QString key)
+void Preferences::setToDefaultValue(const QString key)
       {
       set(key, defaultValue(key));
       }
