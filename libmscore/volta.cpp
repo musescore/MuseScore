@@ -255,6 +255,9 @@ QVariant Volta::propertyDefault(Pid propertyId) const
             case Pid::END_TEXT_PLACE:
                   return int(PlaceText::ABOVE);
 
+            case Pid::PLACEMENT:
+                  return int(Placement::ABOVE);
+
             default:
                   return TextLineBase::propertyDefault(propertyId);
             }
