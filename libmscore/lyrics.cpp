@@ -584,16 +584,16 @@ void Lyrics::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
             }
       if (id == Pid::PLACEMENT) {
             if (Placement(v.toInt()) == Placement::ABOVE) {
-                  // change placment of all verse upto this one to ABOVE
+                  // change placment of all verse for the same voice upto this one to ABOVE
                   score()->forAllLyrics([this,id,v,ps](Lyrics* l) {
-                        if (l->no() <= no())
+                        if (l->no() <= no() && l->voice() == voice())
                               l->TextBase::undoChangeProperty(id, v, ps);
                         });
                   }
             else {
-                  // change placment of all verse starting from this one to BELOW
+                  // change placment of all verse for the same voce starting from this one to BELOW
                   score()->forAllLyrics([this,id,v,ps](Lyrics* l) {
-                        if (l->no() >= no())
+                        if (l->no() >= no() && l->voice() == voice())
                               l->TextBase::undoChangeProperty(id, v, ps);
                         });
                   }
