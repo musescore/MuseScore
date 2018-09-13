@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1115</width>
-    <height>931</height>
+    <height>962</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -194,7 +194,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>32</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -2696,6 +2696,33 @@
                 </property>
                </widget>
               </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_190">
+                <property name="text">
+                 <string>Align:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="Ms::AlignSelect" name="longInstrumentAlign" native="true"/>
+              </item>
+              <item row="4" column="2">
+               <widget class="QToolButton" name="resetLongInstrumentAlign">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Font size' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
              </layout>
             </widget>
            </item>
@@ -2925,6 +2952,33 @@
                <widget class="QLabel" name="label_155">
                 <property name="text">
                  <string>Font size:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_197">
+                <property name="text">
+                 <string>Align:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="Ms::AlignSelect" name="shortInstrumentAlign" native="true"/>
+              </item>
+              <item row="3" column="2">
+               <widget class="QToolButton" name="resetShortInstrumentAlign">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Font size' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                 </property>
                </widget>
               </item>
@@ -12205,6 +12259,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::AlignSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/alignSelect.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>pageList</tabstop>
   <tabstop>musicalSymbolFont</tabstop>
