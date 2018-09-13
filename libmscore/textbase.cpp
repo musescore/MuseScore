@@ -2480,8 +2480,6 @@ void TextBase::initElementStyle(const ElementStyle* ss)
       _elementStyle = ss;
       size_t n      = _elementStyle->size() + TEXT_STYLE_SIZE;
 
-//      printf("<%s> initElementStyle n=%d + %d\n", name(), int(_elementStyle->size()), TEXT_STYLE_SIZE);
-
       delete[] _propertyFlagsList;
       _propertyFlagsList = new PropertyFlags[n];
       for (size_t i = 0; i < n; ++i)
@@ -2490,12 +2488,9 @@ void TextBase::initElementStyle(const ElementStyle* ss)
             QVariant v = propertyType(p.pid) == P_TYPE::SP_REAL ? score()->styleP(p.sid) : score()->styleV(p.sid);
             setProperty(p.pid, v);
             }
-//      int i = 0;
       for (const StyledProperty& p : *textStyle(tid())) {
-//            printf("   set %d pid %d<%s>\n", i, int(p.pid), propertyName(p.pid));
             QVariant v = propertyType(p.pid) == P_TYPE::SP_REAL ? score()->styleP(p.sid) : score()->styleV(p.sid);
             setProperty(p.pid, v);
-//            ++i;
             }
       }
 

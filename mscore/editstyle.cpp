@@ -27,6 +27,7 @@
 #include "libmscore/excerpt.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/layout.h"
+#include "inspector/alignSelect.h"
 
 namespace Ms {
 
@@ -299,12 +300,14 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::shortInstrumentFontBold,      false, shortInstrumentFontBold,      resetShortInstrumentFontBold },
       { Sid::shortInstrumentFontItalic,    false, shortInstrumentFontItalic,    resetShortInstrumentFontItalic },
       { Sid::shortInstrumentFontUnderline, false, shortInstrumentFontUnderline, resetShortInstrumentFontUnderline },
+      { Sid::shortInstrumentAlign,         false, shortInstrumentAlign,         resetShortInstrumentAlign },
 
       { Sid::longInstrumentFontFace,      false, longInstrumentFontFace,        resetLongInstrumentFontFace },
       { Sid::longInstrumentFontSize,      false, longInstrumentFontSize,        resetLongInstrumentFontSize },
       { Sid::longInstrumentFontBold,      false, longInstrumentFontBold,        resetLongInstrumentFontBold },
       { Sid::longInstrumentFontItalic,    false, longInstrumentFontItalic,      resetLongInstrumentFontItalic },
       { Sid::longInstrumentFontUnderline, false, longInstrumentFontUnderline,   resetLongInstrumentFontUnderline },
+      { Sid::longInstrumentAlign,         false, longInstrumentAlign,           resetLongInstrumentAlign },
 
       { Sid::headerFontFace,      false, headerFontFace,        resetHeaderFontFace },
       { Sid::headerFontSize,      false, headerFontSize,        resetHeaderFontSize },
@@ -367,7 +370,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::MusicalSymbolFont,       false, musicalSymbolFont,            0 },
       { Sid::MusicalTextFont,         false, musicalTextFont,              0 },
       { Sid::autoplaceHairpinDynamicsDistance, false, autoplaceHairpinDynamicsDistance, resetAutoplaceHairpinDynamicsDistance },
-
 
       { Sid::dynamicsPlacement,       false, dynamicsPlacement,          resetDynamicsPlacement },
       { Sid::dynamicsPosAbove,        false, dynamicsPosAbove,           resetDynamicsPosAbove },
@@ -574,6 +576,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
                   connect(qobject_cast<QTextEdit*>(sw.widget), SIGNAL(textChanged()), mapper2, SLOT(map()));
             else if (qobject_cast<QButtonGroup*>(sw.widget))
                   connect(qobject_cast<QButtonGroup*>(sw.widget), SIGNAL(buttonClicked(int)), mapper2, SLOT(map()));
+            else if (qobject_cast<AlignSelect*>(sw.widget))
+                  connect(qobject_cast<AlignSelect*>(sw.widget), SIGNAL(alignChanged(Align)), mapper2, SLOT(map()));
             else {
                   qFatal("unhandled gui widget type %s valueType %s",
                      sw.widget->metaObject()->className(),
@@ -674,7 +678,6 @@ QVariant EditStyle::getValue(Sid idx)
             QDoubleSpinBox* sb = qobject_cast<QDoubleSpinBox*>(sw.widget);
             return QVariant(Spatium(sb->value() * (sw.showPercent ? 0.01 : 1.0)));
             }
-
       else if (!strcmp("double", type)) {
             QVariant v = sw.widget->property("value");
             if (!v.isValid())
@@ -725,6 +728,10 @@ QVariant EditStyle::getValue(Sid idx)
                   return cb->currentIndex();
             else
                   qFatal("unhandled Direction");
+            }
+      else if (!strcmp("Ms::Align", type)) {
+            AlignSelect* as = qobject_cast<Ms::AlignSelect*>(sw.widget);
+            return QVariant::fromValue(as->align());
             }
       else {
             qFatal("EditStyle::getValue: unhandled type <%s>", type);
@@ -807,6 +814,10 @@ void EditStyle::setValues()
                         cb->setCurrentIndex(int(val.value<Direction>()));
                   else
                         unhandledType(&sw);
+                  }
+            else if (!strcmp("Ms::Align", type)) {
+                  AlignSelect* as = qobject_cast<Ms::AlignSelect*>(sw.widget);
+                  as->setAlign(val.value<Align>());
                   }
             else
                   unhandledType(&sw);
