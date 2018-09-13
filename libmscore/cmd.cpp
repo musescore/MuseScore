@@ -3245,8 +3245,11 @@ void Score::cmdToggleHideEmpty()
 
 void Score::cmdSetVisible()
       {
-      for (Element* e : selection().elements())
+      for (Element* e : selection().elements()) {
             undo(new ChangeProperty(e, Pid::VISIBLE, true));
+            if (e->isRest())
+                  e->triggerLayout();
+            }
       }
 
 //---------------------------------------------------------
@@ -3255,8 +3258,11 @@ void Score::cmdSetVisible()
 
 void Score::cmdUnsetVisible()
       {
-      for (Element* e : selection().elements())
+      for (Element* e : selection().elements()) {
             undo(new ChangeProperty(e, Pid::VISIBLE, false));
+            if (e->isRest())
+                  e->triggerLayout();
+            }
       }
 
 //---------------------------------------------------------
@@ -3418,6 +3424,8 @@ void Score::cmdToggleVisible()
       for (Element* e : selection().elements()) {
             if (e->isBracket())     // ignore
                   continue;
+            if (e->isRest()) 
+                  e->triggerLayout();
             bool spannerSegment = e->isSpannerSegment();
             if (!spannerSegment || !spanners.contains(toSpannerSegment(e)->spanner()))
                   e->undoChangeProperty(Pid::VISIBLE, !e->getProperty(Pid::VISIBLE).toBool());
