@@ -276,6 +276,7 @@ void Bracket::draw(QPainter* painter) const
 void Bracket::startEdit(EditData& ed)
       {
       Element::startEdit(ed);
+      ay1 = pagePos().y();
       ed.grips   = 1;
       ed.curGrip = Grip::START;
       }
@@ -315,7 +316,6 @@ void Bracket::editDrag(EditData& ed)
 
 void Bracket::endEditDrag(EditData&)
       {
-      qreal ay1 = pagePos().y();
       qreal ay2 = ay1 + h2 * 2;
 
       int staffIdx1 = staffIdx();
