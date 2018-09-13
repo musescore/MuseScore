@@ -313,7 +313,7 @@ void PreferenceDialog::updateRemote()
 void PreferenceDialog::updateValues(bool useDefaultValues)
       {
       if (useDefaultValues)
-            preferences.setReturnDefaultValues(true);
+            preferences.setReturnDefaultValuesMode(true);
 
       advancedWidget->updatePreferences();
 
@@ -547,7 +547,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       pageVertical->setChecked(MScore::verticalOrientation());
 
       if (useDefaultValues)
-            preferences.setReturnDefaultValues(false);
+            preferences.setReturnDefaultValuesMode(false);
 }
 
 //---------------------------------------------------------
@@ -709,12 +709,12 @@ void PreferenceDialog::filterAdvancedPreferences(const QString& query)
 
 void PreferenceDialog::resetAdvancedPreferenceToDefault()
       {
-      preferences.setReturnDefaultValues(true);
+      preferences.setReturnDefaultValuesMode(true);
       for (QTreeWidgetItem* item : advancedWidget->selectedItems()) {
             PreferenceItem* pref = static_cast<PreferenceItem*>(item);
             pref->setDefaultValue();
             }
-      preferences.setReturnDefaultValues(false);
+      preferences.setReturnDefaultValuesMode(false);
       }
 
 //---------------------------------------------------------

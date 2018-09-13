@@ -6802,6 +6802,18 @@ int main(int argc, char* av[])
                               }
                         }
                   delete sw;
+
+                  // reinitialize preferences so some default values are calculated based on chosen language
+                  preferences.init();
+                  // store preferences with locale-dependent default values
+                  // so that the values from first start will be used later
+                  preferences.setToDefaultValue(PREF_APP_PATHS_MYSCORES);
+                  preferences.setToDefaultValue(PREF_APP_PATHS_MYSTYLES);
+                  preferences.setToDefaultValue(PREF_APP_PATHS_MYIMAGES);
+                  preferences.setToDefaultValue(PREF_APP_PATHS_MYTEMPLATES);
+                  preferences.setToDefaultValue(PREF_APP_PATHS_MYPLUGINS);
+                  preferences.setToDefaultValue(PREF_APP_PATHS_MYSOUNDFONTS);
+                  preferences.setToDefaultValue(PREF_APP_PATHS_MYEXTENSIONS);
                   }
             QString keyboardLayout = preferences.getString(PREF_APP_KEYBOARDLAYOUT);
             StartupWizard::autoSelectShortcuts(keyboardLayout);
