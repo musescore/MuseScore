@@ -42,7 +42,7 @@ AlignSelect::AlignSelect(QWidget* parent)
       alignVCenter->setIcon(*icons[int(Icons::textVCenter_ICON)]);
       alignTop->setIcon(*icons[int(Icons::textTop_ICON)]);
       alignBaseline->setIcon(*icons[int(Icons::textBaseline_ICON)]);
-      alignBottom->setIcon(*icons[int(Icons::textBaseline_ICON)]);
+      alignBottom->setIcon(*icons[int(Icons::textBottom_ICON)]);
 
       connect(g1, SIGNAL(buttonToggled(int,bool)), SLOT(_alignChanged()));
       connect(g2, SIGNAL(buttonToggled(int,bool)), SLOT(_alignChanged()));
