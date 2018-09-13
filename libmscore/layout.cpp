@@ -3364,17 +3364,19 @@ System* Score::collectSystem(LayoutContext& lc)
       //
       // vertical align volta segments
       //
-      std::vector<SpannerSegment*> voltaSegments;
-      for (SpannerSegment* ss : system->spannerSegments()) {
-            if (ss->isVoltaSegment())
-                 voltaSegments.push_back(ss);
-           }
-      if (voltaSegments.size() > 1) {
-            qreal y = 0;
-            for (SpannerSegment* ss : voltaSegments)
-                  y = qMin(y, ss->userOff().y());
-            for (SpannerSegment* ss : voltaSegments)
-                  ss->setUserYoffset(y);
+      for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+            std::vector<SpannerSegment*> voltaSegments;
+            for (SpannerSegment* ss : system->spannerSegments()) {
+                  if (ss->isVoltaSegment() && ss->staffIdx() == staffIdx)
+                        voltaSegments.push_back(ss);
+                  }
+            if (voltaSegments.size() > 1) {
+                  qreal y = 0;
+                  for (SpannerSegment* ss : voltaSegments)
+                        y = qMin(y, ss->userOff().y());
+                  for (SpannerSegment* ss : voltaSegments)
+                        ss->setUserYoffset(y);
+                  }
             }
       for (Spanner* sp : _unmanagedSpanner) {
             if (sp->tick() >= etick || sp->tick2() < stick)

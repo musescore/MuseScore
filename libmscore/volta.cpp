@@ -48,13 +48,21 @@ static const ElementStyle voltaStyle {
       };
 
 //---------------------------------------------------------
+//   VoltaSegment
+//---------------------------------------------------------
+
+VoltaSegment::VoltaSegment(Score* s) : TextLineBaseSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+      {
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void VoltaSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * .7, Sid::voltaY, Sid::voltaY);
+      autoplaceSpannerSegment(spatium() * 1.0, Sid::voltaY, Sid::voltaY);
       }
 
 //---------------------------------------------------------
@@ -75,6 +83,7 @@ Element* VoltaSegment::propertyDelegate(Pid pid)
 Volta::Volta(Score* s)
    : TextLineBase(s, ElementFlag::SYSTEM)
       {
+      setPlacement(Placement::ABOVE);
       initElementStyle(&voltaStyle);
 
       setBeginTextPlace(PlaceText::BELOW);
