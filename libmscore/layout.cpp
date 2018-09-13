@@ -3744,10 +3744,6 @@ void Score::doLayoutRange(int stick, int etick)
 //      qDebug("start <%s> tick %d, system %p", m->name(), m->tick(), m->system());
       lc.score        = m->score();
 
-      if (lineMode()) {
-            layoutLinear(layoutAll, lc);
-            return;
-            }
       std::vector<std::pair<int, BracketItem*>> selectedBrackets;
 
       if (!layoutAll && m->system()) {
@@ -3812,6 +3808,11 @@ void Score::doLayoutRange(int stick, int etick)
             pages().clear();
 
             lc.nextMeasure = _measures.first();
+            }
+
+      if (lineMode()) {
+            layoutLinear(layoutAll, lc);
+            return;
             }
 
       lc.prevMeasure = 0;
