@@ -1664,6 +1664,10 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
                               el->readProperties300(e);
                         }
                   }
+            else if (tag == "timeStretch") {
+                  if (el && el->isFermata())
+                        el->setProperty(Pid::TIME_STRETCH ,e.readDouble()); 
+                  }
             else {
                   if (!el) {
                         qDebug("not handled <%s>", qPrintable(tag.toString()));
