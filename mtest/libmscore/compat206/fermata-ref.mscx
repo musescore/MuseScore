@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.01">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <pageWidth>8.27</pageWidth>
+      <pageHeight>11.69</pageHeight>
+      <pagePrintableWidth>7.4826</pagePrintableWidth>
+      <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.393701</pageOddLeftMargin>
+      <pageEvenTopMargin>0.393701</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
+      <pageOddTopMargin>0.393701</pageOddTopMargin>
+      <pageOddBottomMargin>0.787403</pageOddBottomMargin>
+      <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <clefLeftMargin>0.64</clefLeftMargin>
+      <clefKeyRightMargin>1.75</clefKeyRightMargin>
+      <barNoteDistance>1.2</barNoteDistance>
+      <pedalPosBelow>0</pedalPosBelow>
+      <trillPosAbove>0</trillPosAbove>
+      <dynamicsFontItalic>0</dynamicsFontItalic>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">ideas</metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <trackName>Violoncello</trackName>
+      <Instrument>
+        <longName>Violoncello</longName>
+        <shortName>Vc.</shortName>
+        <trackName>Violoncello</trackName>
+        <minPitchP>36</minPitchP>
+        <maxPitchP>90</maxPitchP>
+        <minPitchA>36</minPitchA>
+        <maxPitchA>67</maxPitchA>
+        <instrumentId>strings.cello</instrumentId>
+        <clef>F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <controller ctrl="0" value="2"/>
+          <controller ctrl="32" value="2"/>
+          <program value="42"/>
+          <controller ctrl="7" value="127"/>
+          <controller ctrl="10" value="89"/>
+          </Channel>
+        <Channel name="pizzicato">
+          <program value="45"/>
+          <controller ctrl="7" value="127"/>
+          <controller ctrl="10" value="90"/>
+          </Channel>
+        <Channel name="tremolo">
+          <program value="44"/>
+          <controller ctrl="7" value="127"/>
+          <controller ctrl="10" value="92"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <stretch>0.9</stretch>
+        <voice>
+          <KeySig>
+            <accidental>6</accidental>
+            </KeySig>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Fermata>
+            <subtype>fermataBelow</subtype>
+            <placement>below</placement>
+            </Fermata>
+          <Beam>
+            <l1>21</l1>
+            <l2>21</l2>
+            </Beam>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataBelow</subtype>
+            <placement>below</placement>
+            </Fermata>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>51</pitch>
+              <tpc>23</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <timeStretch>3</timeStretch>
+            <offset x="-2.05234" y="-4.89487"/>
+            </Fermata>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>54</pitch>
+              <tpc>20</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            </Fermata>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Beam>
+            <l1>-5</l1>
+            <l2>0</l2>
+            </Beam>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>51</pitch>
+              <tpc>23</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            </Fermata>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataBelow</subtype>
+            <placement>below</placement>
+            </Fermata>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>46</pitch>
+              <tpc>24</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <stretch>0.9</stretch>
+        <voice>
+          <Fermata>
+            <subtype>fermataBelow</subtype>
+            <timeStretch>1.5</timeStretch>
+            <placement>below</placement>
+            </Fermata>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>51</pitch>
+              <tpc>23</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <stretch>0.9</stretch>
+        <voice>
+          <Beam>
+            <l1>21</l1>
+            <l2>21</l2>
+            </Beam>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            </Fermata>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>51</pitch>
+              <tpc>23</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>54</pitch>
+              <tpc>20</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            </Fermata>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            </Fermata>
+          <Beam>
+            <l1>-5</l1>
+            <l2>0</l2>
+            </Beam>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>51</pitch>
+              <tpc>23</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            </Fermata>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>46</pitch>
+              <tpc>24</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
