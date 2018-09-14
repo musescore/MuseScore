@@ -316,7 +316,7 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
             clickOffElement = false;
             }
       else {
-            // special case: chacke if measure is selected
+            // special case: check if measure is selected
             int staffIdx;
             Measure* m = _score->pos2measure(editData.startMove, &staffIdx, 0, 0, 0);
             if (m) {
@@ -330,6 +330,8 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                         _score->setUpdateAll();
                         clickOffElement = false;
                         }
+                  else
+                        clickOffElement = true;
                   }
             else if (st != SelectType::ADD)
                   clickOffElement = true;
