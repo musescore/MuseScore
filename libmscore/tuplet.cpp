@@ -120,9 +120,8 @@ void Tuplet::setVisible(bool f)
 
 void Tuplet::resetNumberProperty()
       {
-      for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_UNDERLINE, Pid::ALIGN })
+      for (auto p : { Pid::FONT_FACE, Pid::FONT_ITALIC, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_UNDERLINE, Pid::ALIGN })
             _number->resetProperty(p);
-      _number->setProperty(Pid::FONT_ITALIC, true);
       }
 
 //---------------------------------------------------------
@@ -145,7 +144,7 @@ void Tuplet::layout()
       qreal _spatium = spatium();
       if (_numberType != TupletNumberType::NO_TEXT) {
             if (_number == 0) {
-                  _number = new Text(score());
+                  _number = new Text(score(), Tid::TUPLET);
                   _number->setComposition(true);
                   _number->setTrack(track());
                   _number->setParent(this);
@@ -520,7 +519,7 @@ void Tuplet::layout()
             _number->layout();
             numberWidth = _number->bbox().width();
 
-            qreal y3 = p1.y() + (p2.y() - p1.y()) * .5 - l1 * (_isUp ? 1.0 : -1.0) - _number->bbox().height() / 2;
+            qreal y3 = p1.y() + (p2.y() - p1.y()) * .5 - l1 * (_isUp ? 1.0 : -1.0);
             //
             // for beamed tuplets, center number on beam
             //
@@ -551,12 +550,13 @@ void Tuplet::layout()
                         bracketL[0] = QPointF(p1.x(), p1.y());
                         bracketL[1] = QPointF(p1.x(), p1.y() - l1);
                         //set width of bracket hole
-                        qreal x     = x3 - numberWidth * .25 - _spatium * .5;
+                        qreal x     = x3 - numberWidth * .5 - _spatium * .5;
+
                         qreal y     = p1.y() + (x - p1.x()) * slope;
                         bracketL[2] = QPointF(x,   y - l1);
 
-                        //set width of bracket hole, use 1.25 for symmetry
-                        x           = x3 + numberWidth * 1.25 + _spatium * .5;
+                        //set width of bracket hole
+                        x           = x3 + numberWidth * .5 + _spatium * .5;
                         y           = p1.y() + (x - p1.x()) * slope;
                         bracketR[0] = QPointF(x,   y - l1);
                         bracketR[1] = QPointF(p2.x(), p2.y() - l1);
@@ -574,12 +574,12 @@ void Tuplet::layout()
                         bracketL[0] = QPointF(p1.x(), p1.y());
                         bracketL[1] = QPointF(p1.x(), p1.y() + l1);
                         //set width of bracket hole
-                        qreal x     = x3 - numberWidth * .25 - _spatium * .5;
+                        qreal x     = x3 - numberWidth * .5 - _spatium * .5;
                         qreal y     = p1.y() + (x - p1.x()) * slope;
                         bracketL[2] = QPointF(x,   y + l1);
 
-                        //set width of bracket hole, use 1.25 for symmetry
-                        x           = x3 + numberWidth * 1.25 + _spatium * .5;
+                        //set width of bracket hole
+                        x           = x3 + numberWidth * .5 + _spatium * .5;
                         y           = p1.y() + (x - p1.x()) * slope;
                         bracketR[0] = QPointF(x,   y + l1);
                         bracketR[1] = QPointF(p2.x(), p2.y() + l1);
@@ -763,12 +763,10 @@ bool Tuplet::readProperties(XmlReader& e)
       else if (tag == "baseNote")
             _baseLen = TDuration(e.readElementText());
       else if (tag == "Number") {
-            _number = new Text(score());
+            _number = new Text(score(), Tid::TUPLET);
             _number->setComposition(true);
             _number->setParent(this);
-            // _number reads property defaults from parent tuplet as "composition" is set:
-            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
-                  _number->resetProperty(p);
+            resetNumberProperty();
             _number->read(e);
             _number->setVisible(visible());     //?? override saved property
             _number->setTrack(track());
@@ -1091,6 +1089,18 @@ QVariant Tuplet::propertyDefault(Pid id) const
             case Pid::P1:
             case Pid::P2:
                   return QPointF();
+            case Pid::ALIGN:
+                  return score()->styleV(Sid::tupletAlign);
+            case Pid::FONT_FACE:
+                  return score()->styleV(Sid::tupletFontFace);
+            case Pid::FONT_SIZE:
+                  return score()->styleV(Sid::tupletFontSize);
+            case Pid::FONT_BOLD:
+                  return score()->styleV(Sid::tupletFontBold);
+            case Pid::FONT_ITALIC:
+                  return score()->styleV(Sid::tupletFontItalic);
+            case Pid::FONT_UNDERLINE:
+                  return score()->styleV(Sid::tupletFontUnderline);
             default:
                   {
                   QVariant v = ScoreElement::propertyDefault(id, Tid::DEFAULT);
