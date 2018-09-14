@@ -3603,8 +3603,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "autoplace-slurs",
-         "autoplace slurs",
-         "autoplace slurs",
+         "Autoplace Slurs",
+         "Autoplace slurs",
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
