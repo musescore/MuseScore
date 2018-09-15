@@ -463,18 +463,19 @@ void updateExternalValuesFromPreferences() {
       MScore::setNudgeStep10(1.0);      // Ctrl + cursor key (default 1.0)
       MScore::setNudgeStep50(0.01);     // Alt  + cursor key (default 0.01)
 
-      //Create directories if they are missing
-      QDir dir;
-      dir.mkpath(preferences.getString(PREF_APP_PATHS_MYSCORES));
-      dir.mkpath(preferences.getString(PREF_APP_PATHS_MYSTYLES));
-      dir.mkpath(preferences.getString(PREF_APP_PATHS_MYIMAGES));
-      dir.mkpath(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
-      dir.mkpath(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
-      dir.mkpath(preferences.getString(PREF_APP_PATHS_MYPLUGINS));
-      foreach (QString path, preferences.getString(PREF_APP_PATHS_MYSOUNDFONTS).split(";"))
-            dir.mkpath(path);
-
-      }
+      if (!preferences.getBool(PREF_APP_STARTUP_FIRSTSTART)) {
+            //Create directories if they are missing
+            QDir dir;
+            dir.mkpath(preferences.getString(PREF_APP_PATHS_MYSCORES));
+            dir.mkpath(preferences.getString(PREF_APP_PATHS_MYSTYLES));
+            dir.mkpath(preferences.getString(PREF_APP_PATHS_MYIMAGES));
+            dir.mkpath(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
+            dir.mkpath(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
+            dir.mkpath(preferences.getString(PREF_APP_PATHS_MYPLUGINS));
+            foreach (QString path, preferences.getString(PREF_APP_PATHS_MYSOUNDFONTS).split(";"))
+                  dir.mkpath(path);
+                  }
+            }
 
 //---------------------------------------------------------
 //   preferencesChanged
@@ -6814,6 +6815,7 @@ int main(int argc, char* av[])
                   preferences.setToDefaultValue(PREF_APP_PATHS_MYPLUGINS);
                   preferences.setToDefaultValue(PREF_APP_PATHS_MYSOUNDFONTS);
                   preferences.setToDefaultValue(PREF_APP_PATHS_MYEXTENSIONS);
+                  updateExternalValuesFromPreferences();
                   }
             QString keyboardLayout = preferences.getString(PREF_APP_KEYBOARDLAYOUT);
             StartupWizard::autoSelectShortcuts(keyboardLayout);
