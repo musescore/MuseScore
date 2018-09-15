@@ -512,7 +512,7 @@ void Measure::layout2()
                && !irregular()
                && (no() || score()->styleB(Sid::showMeasureNumberOne))) {
                   if (score()->styleB(Sid::measureNumberSystem))
-                        smn = system()->firstMeasure() == this;
+                        smn = (system()->firstMeasure() == this) || (prevMeasure() && prevMeasure()->irregular() && system()->firstMeasure() == prevMeasure());
                   else {
                         smn = (no() == 0 && score()->styleB(Sid::showMeasureNumberOne)) ||
                               ( ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0) ) ||
@@ -3514,29 +3514,7 @@ void Measure::stretchMeasure(qreal targetWidth)
       {
       bbox().setWidth(targetWidth);
 
-      //---------------------------------------------------
-      //    compute minTick and set ticks for all segments
-      //---------------------------------------------------
-
-      int minTick = ticks();
-      if (minTick <= 0) {
-            qDebug("=====minTick %d measure %p", minTick, this);
-            }
-      Q_ASSERT(minTick > 0);
-
-      Segment* ns = first();
-      while (ns && !ns->enabled())
-            ns = ns->next();
-      while (ns) {
-            Segment* s = ns;
-            ns         = s->nextEnabled();
-            int nticks = (ns ? ns->rtick() : ticks()) - s->rtick();
-            if (nticks) {
-                  if (nticks < minTick)
-                        minTick = nticks;
-                  }
-            s->setTicks(nticks);
-            }
+      int minTick = computeTicks();
 
       //---------------------------------------------------
       //    compute stretch
@@ -3669,6 +3647,36 @@ void Measure::stretchMeasure(qreal targetWidth)
                   }
             }
       }
+
+//---------------------------------------------------
+//    computeTicks
+//    set ticks for all segments
+//       return minTick 
+//---------------------------------------------------
+
+int Measure::computeTicks() {
+      int minTick = ticks();
+      if (minTick <= 0) {
+            qDebug("=====minTick %d measure %p", minTick, this);
+            }
+      Q_ASSERT(minTick > 0);
+
+      Segment* ns = first();
+      while (ns && !ns->enabled())
+            ns = ns->next();
+      while (ns) {
+            Segment* s = ns;
+            ns         = s->nextEnabled();
+            int nticks = (ns ? ns->rtick() : ticks()) - s->rtick();
+            if (nticks) {
+                  if (nticks < minTick)
+                        minTick = nticks;
+                  }
+            s->setTicks(nticks);
+            }
+
+      return minTick;
+}
 
 //---------------------------------------------------------
 //   endBarLine
