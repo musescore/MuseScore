@@ -428,7 +428,7 @@ static const StyleType styleTypes[] {
 
       { Sid::dynamicsPlacement,       "dynamicsPlacement",       int(Placement::BELOW)  },
       { Sid::dynamicsPosAbove,        "dynamicsPosAbove",        Spatium(-2.0) },
-      { Sid::dynamicsPosBelow,        "dynamicsPosBelow",        Spatium(1.0) },
+      { Sid::dynamicsPosBelow,        "dynamicsPosBelow",        Spatium(4.0) },
 
       { Sid::dynamicsMinDistance,         "dynamicsMinDistance",               Spatium(0.5) },
       { Sid::autoplaceVerticalAlignRange, "autoplaceVerticalAlignRange",     int(VerticalAlignRange::SYSTEM) },
