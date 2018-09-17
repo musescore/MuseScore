@@ -2717,7 +2717,7 @@ static void applyLyricsMax(Segment& s, int staffIdx, qreal yMax)
             if (cr && !cr->lyrics().empty()) {
                   qreal lyricsMinBottomDistance = s.score()->styleP(Sid::lyricsMinBottomDistance);
                   for (Lyrics* l : cr->lyrics()) {
-                        if (l->autoplace() && l->placeBelow()) {
+                        if (l->visible() && l->autoplace() && l->placeBelow()) {
                               l->rUserYoffset() = yMax;
                               QPointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
                               sk.add(l->bbox().translated(offset).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
@@ -2741,7 +2741,7 @@ static void applyLyricsMin(ChordRest* cr, int staffIdx, qreal yMin)
       {
       Skyline& sk = cr->measure()->system()->staff(staffIdx)->skyline();
       for (Lyrics* l : cr->lyrics()) {
-            if (l->autoplace() && l->placeAbove()) {
+            if (l->visible() && l->autoplace() && l->placeAbove()) {
                   l->rUserYoffset() = yMin;
                   QPointF offset = l->pos() + cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
                   sk.add(l->bbox().translated(offset));
@@ -2923,7 +2923,7 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
       std::vector<SpannerSegment*> segments;
       for (Spanner* sp : lines) {
             SpannerSegment* ss = sp->layoutSystem(system);     // create/layout spanner segment for this system
-            if (ss->autoplace())
+            if (ss->visible() && ss->autoplace())
                   segments.push_back(ss);
             }
 
@@ -3304,11 +3304,11 @@ System* Score::collectSystem(LayoutContext& lc)
                         }
                   }
             for (Element* e : s->annotations()) {
-                  if (e->visible() && e->isDynamic()) {
+                  if (e->isDynamic()) {
                         Dynamic* d = toDynamic(e);
                         d->layout();
 
-                        if (d->autoplace()) {
+                        if (e->visible() && d->autoplace()) {
                               // If dynamic is at start or end of a hairpin
                               // don't autoplace. This is done later on layout of hairpin
                               // and allows horizontal alignment of dynamic and hairpin.
@@ -3412,16 +3412,14 @@ System* Score::collectSystem(LayoutContext& lc)
 
       for (const Segment* s : sl) {
             for (Element* e : s->annotations()) {
-                  if (e->visible()) {
-                        if (e->isTempoText()) {
-                              TempoText* tt = toTempoText(e);
-                              if (score()->isMaster())
-                                    setTempo(tt->segment(), tt->tempo());
-                              tt->layout();
-                              }
-                        else if (e->isFermata())
-                              e->layout();
+                  if (e->isTempoText()) {
+                        TempoText* tt = toTempoText(e);
+                        if (score()->isMaster())
+                              setTempo(tt->segment(), tt->tempo());
+                        tt->layout();
                         }
+                  else if (e->isFermata())
+                        e->layout();
                   }
             }
 
@@ -3434,7 +3432,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   continue;
             Measure* m = toMeasure(mb);
             for (Element* e : m->el()) {
-                  if (e->visible() && (e->isJump() || e->isMarker()))
+                  if (e->isJump() || e->isMarker())
                         e->layout();
                   }
             }
@@ -3445,7 +3443,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       for (const Segment* s : sl) {
             for (Element* e : s->annotations()) {
-                  if (e->visible() && e->isFretDiagram())
+                  if (e->isFretDiagram())
                         e->layout();
                   }
             }
@@ -3456,7 +3454,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       for (const Segment* s : sl) {
             for (Element* e : s->annotations()) {
-                  if (e->visible() && (e->isStaffText() || e->isHarmony()))
+                  if (e->isStaffText() || e->isHarmony())
                         e->layout();
                   }
             }
@@ -3467,7 +3465,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       for (const Segment* s : sl) {
             for (Element* e : s->annotations()) {
-                  if (e->visible() && e->isRehearsalMark())
+                  if (e->isRehearsalMark())
                         e->layout();
                   }
             }

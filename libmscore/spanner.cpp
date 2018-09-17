@@ -1124,7 +1124,7 @@ void SpannerSegment::autoplaceSpannerSegment(qreal minDistance, Sid posBelow, Si
             rypos() = score()->styleP(posBelow) + (staff() ? staff()->height() : 0.0);
       else
             rypos() = score()->styleP(posAbove);
-      if (autoplace()) {
+      if (visible() && autoplace()) {
             setUserOff(QPointF());
 
             SkylineLine sl(!spanner()->placeAbove());

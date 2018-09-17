@@ -254,7 +254,7 @@ static void countElements(void* data, Element* /*e*/)
 void Page::doRebuildBspTree()
       {
       int n = 0;
-      scanElements(&n, countElements, false);
+      scanElements(&n, countElements, true);
 
       QRectF r;
       if (score()->layoutMode() == LayoutMode::LINE) {
@@ -273,7 +273,7 @@ void Page::doRebuildBspTree()
             r = abbox();
 
       bspTree.initialize(r, n);
-      scanElements(&bspTree, &bspInsert, false);
+      scanElements(&bspTree, &bspInsert, true);
       bspTreeValid = true;
       }
 #endif
