@@ -3263,11 +3263,14 @@ void Score::removeTempo(int tick)
 //   resetTempo
 //---------------------------------------------------------
 
-void Score::resetTempo() {
+void Score::resetTempo()
+      {
       tempomap()->clear();
       tempomap()->setTempo(0, defaultTempo);
       sigmap()->clear();
-      sigmap()->add(0, SigEvent(firstMeasure()->len(),  firstMeasure()->timesig(), 0));
+      Measure* m = firstMeasure();
+      if (m)
+            sigmap()->add(0, SigEvent(m->len(),  m->timesig(), 0));
       }
 
 //---------------------------------------------------------

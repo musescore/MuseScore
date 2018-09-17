@@ -419,8 +419,8 @@ void Tuplet::layout()
                   if (stem && !chord2->up()) {
                         // if (chord2->beam())
                         //      p2.setX(stem->abbox().x());
-                        if (followBeam)
-                              p2.ry() = stem->abbox().bottom() + beamAdjust;
+                        if (followBeam)                                          //??
+                              p2.ry() = stem->abbox().bottom() + beamAdjust;     //??
                         if (chord2->beam())
                               p2.ry() = chord2->beam()->abbox().bottom();
                         else
