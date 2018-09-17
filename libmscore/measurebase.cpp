@@ -581,7 +581,7 @@ int MeasureBase::measureIndex() const
             if (m == this)
                   return idx;
             m = m->next();
-            if (m->isMeasure())
+            if (m && m->isMeasure())
                   ++idx;
             }
       return  -1;
