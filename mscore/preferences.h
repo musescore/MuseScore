@@ -286,7 +286,7 @@ class Preferences {
       void init(bool storeInMemoryOnly = false);
       void save();
       // set to true to let getters return default values instead of values from QSettings
-      void setReturnDefaultValues(bool returnDefaultValues) {_returnDefaultValues = returnDefaultValues;}
+      void setReturnDefaultValuesMode(bool returnDefaultValues) {_returnDefaultValues = returnDefaultValues;}
 
       const prefs_map_t& allPreferences() const {return _allPreferences;}
 
@@ -299,7 +299,7 @@ class Preferences {
       double getDouble(const QString key) const;
 
       // general setters
-      void revertToDefaultValue(const QString key);
+      void setToDefaultValue(const QString key);
       void setPreference(const QString key, QVariant value);
 
       // A temporary preference is stored "in memory" only and not written to file.
