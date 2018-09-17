@@ -3235,19 +3235,32 @@ System* Score::collectSystem(LayoutContext& lc)
 
 
       //-------------------------------------------------------------
+      // layout beams
+      //-------------------------------------------------------------
+
+      for (Segment* s : sl) {
+            for (Element* e : s->elist()) {
+                  if (!e || !score()->staff(e->staffIdx())->show())
+                        continue;
+                  if (e->isChordRest()) {
+                        ChordRest* cr = toChordRest(e);
+                        if (isTopBeam(cr)) {
+                              cr->beam()->layout();
+                              cr->beam()->addSkyline(system->staff(cr->staffIdx())->skyline());
+                              }
+                        }
+                  }
+            }
+
+      //-------------------------------------------------------------
       // layout tuplet
       //-------------------------------------------------------------
 
       for (Segment* s : sl) {
-            for (int track = 0; track < score()->ntracks(); ++track) {
-                  if (!score()->staff(track / VOICES)->show()) {
-                        track += VOICES-1;
+            for (Element* e : s->elist()) {
+                  if (!e || !e->isChordRest() || !score()->staff(e->staffIdx())->show())
                         continue;
-                        }
-                  ChordRest* cr = s->cr(track);
-                  if (!cr)
-                        continue;
-                  DurationElement* de = cr;
+                  DurationElement* de = toChordRest(e);
                   while (de->tuplet() && de->tuplet()->elements().front() == de) {
                         Tuplet* t = de->tuplet();
                         t->layout();
@@ -3280,20 +3293,12 @@ System* Score::collectSystem(LayoutContext& lc)
             for (Element* e : s->elist()) {
                   if (!e)
                         continue;
-                  if (e->isChordRest()) {
-                        ChordRest* cr = toChordRest(e);
-                        if (isTopBeam(cr)) {
-                              cr->beam()->layout();
-                              cr->beam()->addSkyline(system->staff(cr->staffIdx())->skyline());
-                              //system->staff(cr->staffIdx())->skyline().add(cr->beam()->shape());
-                              }
-                        if (e->isChord()) {
-                              Chord* c = toChord(e);
-                              for (Chord* ch : c->graceNotes())
-                                    layoutTies(ch, system, stick);
-                              layoutTies(c, system, stick);
-                              c->layoutArticulations2();
-                              }
+                  if (e->isChord()) {
+                        Chord* c = toChord(e);
+                        for (Chord* ch : c->graceNotes())
+                              layoutTies(ch, system, stick);
+                        layoutTies(c, system, stick);
+                        c->layoutArticulations2();
                         }
                   }
             for (Element* e : s->annotations()) {
@@ -3818,7 +3823,7 @@ void Score::doLayoutRange(int stick, int etick)
 
       lc.prevMeasure = 0;
 
-      // we need to reset tempo because fermata is setted 
+      // we need to reset tempo because fermata is setted
       //inside getNextMeasure and it lead to twice timeStretch
       if (isMaster())
             resetTempo();
