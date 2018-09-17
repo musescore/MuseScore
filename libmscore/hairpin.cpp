@@ -145,8 +145,6 @@ void HairpinSegment::layout()
                   int si = ed->staffIdx();
                   Segment* s = ed->segment();
                   s->staffShape(si).add(ed->shape().translated(ed->pos()));
-//                  Measure* m = s->measure();
-//                  m->staffShape(si).add(ed->shape().translated(s->pos() + ed->pos()));
                   }
             }
 
@@ -242,45 +240,50 @@ void HairpinSegment::layout()
             qreal w  = score()->styleP(Sid::hairpinLineWidth);
             setbbox(r.adjusted(-w*.5, -w*.5, w, w));
             }
-      if (parent()) {
-            rypos() += score()->styleP(hairpin()->placeBelow() ? Sid::hairpinPosBelow : Sid::hairpinPosAbove);
-            if (autoplace()) {
-                  qreal minDistance = spatium() * .7;
-                  qreal ymax = pos().y();
+      if (!parent())
+            return;
 
-                  SkylineLine sl(!hairpin()->placeAbove());
-                  sl.add(shape().translated(pos()));
-                  if (hairpin()->placeAbove()) {
-                        qreal d  = system()->topDistance(staffIdx(), sl);
-                        if (d > -minDistance)
-                              ymax -= d + minDistance;
-                        }
-                  else {
-                        qreal d  = system()->bottomDistance(staffIdx(), sl);
-                        if (d > -minDistance)
-                              ymax += d + minDistance;
+      if (spanner()->placeBelow())
+            rypos() = score()->styleP(Sid::hairpinPosBelow) + (staff() ? staff()->height() : 0.0);
+      else
+            rypos() = score()->styleP(Sid::hairpinPosAbove);
+//      rypos() = score()->styleP(hairpin()->placeBelow() ? Sid::hairpinPosBelow : Sid::hairpinPosAbove);
+      if (autoplace()) {
+            qreal minDistance = spatium() * .7;
+            qreal ymax = pos().y();
 
-                        qreal sdy = 0.0;
-                        if (sd) {
-                              sdy = -sd->bbox().top() * .4;
-                              sd->doAutoplace();
-                              if (sd->pos().y() - sdy > ymax)
-                                    ymax = sd->pos().y() - sdy;
-                              }
-                        qreal edy = 0.0;
-                        if (ed) {
-                              edy = -ed->bbox().top() * .4;
-                              ed->doAutoplace();
-                              if (ed->pos().y() - edy > ymax)
-                                    ymax = ed->pos().y() - edy;
-                              }
-                        if (sd)
-                              moveDynamic(sd, ymax - sd->ipos().y() + sdy);
-                        if (ed)
-                              moveDynamic(ed, ymax - ed->ipos().y() + edy);
-                        }
-                  rUserYoffset() = ymax - pos().y();
+            SkylineLine sl(!hairpin()->placeAbove());
+            sl.add(shape().translated(pos()));
+            if (hairpin()->placeAbove()) {
+                  qreal d  = system()->topDistance(staffIdx(), sl);
+                  if (d > -minDistance)
+                        ymax -= d + minDistance;
                   }
+            else {
+                  qreal d  = system()->bottomDistance(staffIdx(), sl);
+                  if (d > -minDistance)
+                        ymax += d + minDistance;
+
+                  qreal sdy = 0.0;
+                  if (sd) {
+                        sdy = -sd->bbox().top() * .4;
+                        sd->doAutoplace();
+                        if (sd->pos().y() - sdy > ymax)
+                              ymax = sd->pos().y() - sdy;
+                        }
+                  qreal edy = 0.0;
+                  if (ed) {
+                        edy = -ed->bbox().top() * .4;
+                        ed->doAutoplace();
+                        if (ed->pos().y() - edy > ymax)
+                              ymax = ed->pos().y() - edy;
+                        }
+                  if (sd)
+                        moveDynamic(sd, ymax - sd->ipos().y() + sdy);
+                  if (ed)
+                        moveDynamic(ed, ymax - ed->ipos().y() + edy);
+                  }
+            rUserYoffset() = ymax - pos().y();
             }
       }
 
