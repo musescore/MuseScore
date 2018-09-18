@@ -3402,7 +3402,7 @@ System* Score::collectSystem(LayoutContext& lc)
             for (SpannerSegment* ss : system->spannerSegments()) {
                   Spanner* sp = ss->spanner();
                   if (sp->tick() < m->endTick() && sp->tick2() > m->tick())
-                        system->staff(sp->staffIdx())->skyline().add(ss->shape().translated(ss->pos()));
+                        system->staff(sp->staffIdx())->skyline().add(ss->shape().translated(ss->ipos()));
                   }
             }
 
