@@ -116,6 +116,7 @@
             </TimeSig>
           <Fermata>
             <subtype>fermataBelow</subtype>
+            <play>0</play>
             <placement>below</placement>
             </Fermata>
           <Beam>
@@ -131,6 +132,7 @@
             </Chord>
           <Fermata>
             <subtype>fermataBelow</subtype>
+            <play>0</play>
             <placement>below</placement>
             </Fermata>
           <Chord>
@@ -263,6 +265,7 @@
             </Chord>
           <Fermata>
             <subtype>fermataAbove</subtype>
+            <play>0</play>
             </Fermata>
           <Beam>
             <l1>-5</l1>
