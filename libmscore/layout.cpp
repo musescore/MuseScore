@@ -3612,7 +3612,7 @@ void LayoutContext::collectPage()
                   }
             if (breakPage) {
                   Box* vbox = prevSystem->vbox();
-                  qreal dist = vbox ? vbox->bottomGap() : qMax(prevSystem->minBottom(), slb);
+                  qreal dist = vbox ? vbox->bottomGap() : qMax(-prevSystem->minBottom(), slb);
                   layoutPage(page, ey - (y + dist));
                   break;
                   }

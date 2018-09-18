@@ -1063,6 +1063,7 @@ void Harmony::layout()
             layoutFrame();
 //            setbbox(saveBbox);
             }
+
       autoplaceSegmentElement(styleP(Sid::minHarmonyDistance));
       }
 
