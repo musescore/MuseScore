@@ -2774,7 +2774,7 @@ static void restoreBeams(Measure* m)
                         ChordRest* cr = toChordRest(e);
                         if (isTopBeam(cr)) {
                               cr->beam()->layout();
-                              s->staffShape(cr->staffIdx()).add(cr->beam()->shape().translated(-(cr->segment()->pos()+m->pos())));
+                              cr->beam()->addSkyline(m->system()->staff(cr->beam()->staffIdx())->skyline());
                               }
                         }
                   }
@@ -3246,7 +3246,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         ChordRest* cr = toChordRest(e);
                         if (isTopBeam(cr)) {
                               cr->beam()->layout();
-                              cr->beam()->addSkyline(system->staff(cr->staffIdx())->skyline());
+                              cr->beam()->addSkyline(system->staff(cr->beam()->staffIdx())->skyline());
                               }
                         }
                   }
@@ -3259,6 +3259,8 @@ System* Score::collectSystem(LayoutContext& lc)
       for (Segment* s : sl) {
             for (Element* e : s->elist()) {
                   if (!e || !e->isChordRest() || !score()->staff(e->staffIdx())->show())
+                        continue;
+                  if (notTopBeam(toChordRest(e)))
                         continue;
                   DurationElement* de = toChordRest(e);
                   while (de->tuplet() && de->tuplet()->elements().front() == de) {
@@ -3637,8 +3639,18 @@ void LayoutContext::collectPage()
                                     if (!currentScore->staff(track2staff(track))->show())
                                           continue;
                                     ChordRest* cr = toChordRest(e);
-                                    if (notTopBeam(cr))                   // layout cross staff beams
+                                    if (notTopBeam(cr)) {                   // layout cross staff beams
                                           cr->beam()->layout();
+
+                                          // fix layout of tuplets
+                                          DurationElement* de = cr;
+                                          while (de->tuplet() && de->tuplet()->elements().front() == de) {
+                                                Tuplet* t = de->tuplet();
+                                                t->layout();
+                                                m->system()->staff(t->staffIdx())->skyline().add(t->shape().translated(t->measure()->pos()));
+                                                de = de->tuplet();
+                                                }
+                                          }
 
                                     if (cr->isChord()) {
                                           Chord* c = toChord(cr);

@@ -174,8 +174,9 @@ void Tuplet::layout()
                         const Chord* c = toChord(e);
                         if (c->stemDirection() != Direction::AUTO)
                               up += c->stemDirection() == Direction::UP ? 1000 : -1000;
-                        else
+                        else {
                               up += c->up() ? 1 : -1;
+                              }
                         }
                   else if (e->isTuplet()) {
                         // TODO
@@ -247,8 +248,10 @@ void Tuplet::layout()
       if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
             // account for staff move when adjusting bracket to avoid staff
             // but don't attempt adjustment unless both endpoints are in same staff
-            if (toChordRest(cr1)->staffMove() == toChordRest(cr2)->staffMove())
+            if (toChordRest(cr1)->staffMove() == toChordRest(cr2)->staffMove()) {
                   move = toChordRest(cr1)->staffMove();
+                  setTrack(cr1->vStaffIdx() * VOICES + voice());
+                  }
             else
                   outOfStaff = false;
             }
@@ -262,6 +265,7 @@ void Tuplet::layout()
 
       p1      = cr1->pagePos();
       p2      = cr2->pagePos();
+
       p1.rx() -= noteLeft;
       p2.rx() += score()->noteHeadWidth() + noteRight;
       p1.ry() += vHeadDistance;        // TODO: Direction ?
