@@ -82,7 +82,9 @@ class SpannerSegment : public Element {
       qreal& rUserYoffset2()                { return _userOff2.ry();  }
 
       void setPos2(const QPointF& p)        { _p2 = p;                }
+      //TODO: rename to spanSegPosWithUserOffset()
       QPointF pos2() const                  { return _p2 + _userOff2; }
+      //TODO: rename to spanSegPos()
       const QPointF& ipos2() const          { return _p2;             }
       qreal& rxpos2()                       { return _p2.rx();        }
       qreal& rypos2()                       { return _p2.ry();        }
