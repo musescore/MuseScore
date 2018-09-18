@@ -247,7 +247,6 @@ void HairpinSegment::layout()
             rypos() = score()->styleP(Sid::hairpinPosBelow) + (staff() ? staff()->height() : 0.0);
       else
             rypos() = score()->styleP(Sid::hairpinPosAbove);
-//      rypos() = score()->styleP(hairpin()->placeBelow() ? Sid::hairpinPosBelow : Sid::hairpinPosAbove);
       if (autoplace()) {
             qreal minDistance = spatium() * .7;
             qreal ymax = pos().y();
