@@ -4276,7 +4276,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
    </item>
   </layout>
  </widget>
- <pixmapfunction>getPixmap</pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>Awl::ColorLabel</class>

@@ -52,7 +52,7 @@ EditStringData::EditStringData(QWidget *parent, QList<instrString> * strings, in
                   strg = (*_strings)[numOfStrings - i - 1];
                   _stringsLoc.append(strg);
                   QTableWidgetItem *newCheck = new QTableWidgetItem();
-                  newCheck->setFlags(Qt::ItemFlag(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));
+                  newCheck->setFlags(Qt::ItemFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));
                   newCheck->setCheckState(strg.open ? Qt::Checked : Qt::Unchecked);
                   stringList->setItem(i, 0, newCheck);
                   QTableWidgetItem *newPitch = new QTableWidgetItem(midiCodeToStr(strg.pitch));
@@ -168,7 +168,7 @@ void EditStringData::newStringClicked()
             _stringsLoc.insert(i, strg);
             stringList->insertRow(i);
             QTableWidgetItem *newCheck = new QTableWidgetItem();
-            newCheck->setFlags(Qt::ItemFlag(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));
+            newCheck->setFlags(Qt::ItemFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));
             newCheck->setCheckState(strg.open ? Qt::Checked : Qt::Unchecked);
             stringList->setItem(i, 0, newCheck);
             QTableWidgetItem *newPitch = new QTableWidgetItem(midiCodeToStr(strg.pitch));
