@@ -2891,8 +2891,8 @@ void Score::layoutLyrics(System* system)
       for (SpannerSegment* ss : system->spannerSegments()) {
             if (ss->isLyricsLineSegment()) {
                   LyricsLineSegment* lls = toLyricsLineSegment(ss);
-                  lls->rUserYoffset() = lls->lyrics()->rUserYoffset();
                   lls->layout();
+                  lls->rUserYoffset() = lls->lyrics()->rUserYoffset();
                   }
             }
       }
@@ -3390,20 +3390,6 @@ System* Score::collectSystem(LayoutContext& lc)
             if (sp->tick() >= etick || sp->tick2() < stick)
                   continue;
             sp->layout();
-            }
-      //
-      // add SpannerSegment shapes to staff shapes
-      //
-
-      for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure())
-                  continue;
-            Measure* m = toMeasure(mb);
-            for (SpannerSegment* ss : system->spannerSegments()) {
-                  Spanner* sp = ss->spanner();
-                  if (sp->tick() < m->endTick() && sp->tick2() > m->tick())
-                        system->staff(sp->staffIdx())->skyline().add(ss->shape().translated(ss->ipos()));
-                  }
             }
 
       //-------------------------------------------------------------
