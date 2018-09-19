@@ -240,6 +240,8 @@ LyricsLineSegment::LyricsLineSegment(Score* s)
 
 void LyricsLineSegment::layout()
       {
+      rUserYoffset() = 0.0;
+
       bool        endOfSystem       = false;
       bool        isEndMelisma      = lyricsLine()->lyrics()->ticks() > 0;
       Lyrics*     lyr               = 0;
@@ -298,9 +300,9 @@ void LyricsLineSegment::layout()
             // use Y position of *next* syllable if there is one on same system
             Lyrics* nextLyr = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
             if (nextLyr && nextLyr->segment()->system() == system())
-                  rypos() = nextLyr->y();
+                  rypos() = nextLyr->ipos().y();
             else
-                  rypos() = lyr->y();
+                  rypos() = lyr->ipos().y();
             }
 
       // MELISMA vs. DASHES
