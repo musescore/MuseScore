@@ -3420,7 +3420,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   continue;
             Measure* m = toMeasure(mb);
             for (Element* e : m->el()) {
-                  if (e->isJump() || e->isMarker())
+                  if (e->visible() && (e->isJump() || e->isMarker()))
                         e->layout();
                   }
             }
@@ -3431,7 +3431,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       for (const Segment* s : sl) {
             for (Element* e : s->annotations()) {
-                  if (e->isFretDiagram())
+                  if (e->visible() && e->isFretDiagram())
                         e->layout();
                   }
             }
@@ -3442,7 +3442,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       for (const Segment* s : sl) {
             for (Element* e : s->annotations()) {
-                  if (e->isStaffText() || e->isHarmony())
+                  if (e->visible() && (e->isStaffText() || e->isHarmony()))
                         e->layout();
                   }
             }
@@ -3453,7 +3453,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       for (const Segment* s : sl) {
             for (Element* e : s->annotations()) {
-                  if (e->isRehearsalMark())
+                  if (e->visible() && e->isRehearsalMark())
                         e->layout();
                   }
             }
