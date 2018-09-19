@@ -2138,7 +2138,7 @@ void Element::autoplaceSegmentElement(qreal minDistance)
 
 void Element::autoplaceSegmentElement(qreal minDistance)
       {
-      if (autoplace() && parent()) {
+      if (visible() && autoplace() && parent()) {
             setUserOff(QPointF());
             Segment* s        = toSegment(parent());
             Measure* m        = s->measure();
@@ -2175,7 +2175,7 @@ void Element::autoplaceSegmentElement(qreal minDistance)
 
 void Element::autoplaceMeasureElement(qreal minDistance)
       {
-      if (autoplace() && parent()) {
+      if (visible() && autoplace() && parent()) {
             setUserOff(QPointF());
             Measure* m = toMeasure(parent());
             int si     = staffIdx();
