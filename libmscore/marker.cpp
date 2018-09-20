@@ -164,8 +164,7 @@ Marker::Type Marker::markerType(const QString& s) const
 
 void Marker::layout()
       {
-      setPos(QPointF(0.0, score()->styleP(Sid::markerPosAbove)));
-      TextBase::layout1();
+      layout2(Sid::markerPosAbove, Sid::markerPosAbove);
 
       // although normally laid out to parent (measure) width,
       // force to center over barline if left-aligned

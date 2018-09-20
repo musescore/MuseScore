@@ -43,11 +43,7 @@ StaffText::StaffText(Score* s, Tid tid)
 
 void StaffText::layout()
       {
-      Staff* s = staff();
-      qreal y = placeAbove() ? styleP(Sid::staffTextPosAbove) : styleP(Sid::staffTextPosBelow) + (s ? s->height() : 0.0);
-      QPointF o(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
-      setPos(o + QPointF(0.0, y));
-      TextBase::layout1();
+      layout2(Sid::staffTextPosAbove, Sid::staffTextPosBelow);
       autoplaceSegmentElement(styleP(Sid::staffTextMinDistance));
       }
 

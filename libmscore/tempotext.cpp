@@ -397,10 +397,7 @@ QVariant TempoText::propertyDefault(Pid id) const
 
 void TempoText::layout()
       {
-      qreal y = placeAbove() ? styleP(Sid::tempoPosAbove) : styleP(Sid::tempoPosBelow) + staff()->height();
-      QPointF o(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
-      setPos(QPointF(0.0, y) + o);
-      TextBase::layout1();
+      layout2(Sid::tempoPosAbove, Sid::tempoPosBelow);
 
       Segment* s = segment();
       if (!s)                       // for use in palette
