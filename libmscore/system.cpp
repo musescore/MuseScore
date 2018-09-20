@@ -1079,6 +1079,7 @@ qreal System::minDistance(System* s2) const
                   break;
             }
 
+      dist = qMax(dist, score()->staff(firstStaff)->userDist());
       fixedDownDistance = false;
 
       for (MeasureBase* mb1 : ml) {
