@@ -167,7 +167,9 @@ void Dynamic::layout()
             y = score()->styleP(Sid::dynamicsPosAbove);
       else
             y = score()->styleP(Sid::dynamicsPosBelow) + (staff() ? staff()->height() : 0.0);
-      setPos(QPointF(0.0, y));
+
+      QPointF o(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
+      setPos(QPointF(0.0, y) + o);
       TextBase::layout1();
 
       Segment* s = segment();
