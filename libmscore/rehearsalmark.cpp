@@ -54,9 +54,8 @@ RehearsalMark::RehearsalMark(Score* s)
 
 void RehearsalMark::layout()
       {
-      qreal y = placeAbove() ? styleP(Sid::rehearsalMarkPosAbove) : styleP(Sid::rehearsalMarkPosBelow) + staff()->height();
-      setPos(QPointF(0.0, y));
-      TextBase::layout1();
+      layout2(Sid::rehearsalMarkPosAbove, Sid::rehearsalMarkPosBelow);
+
       Segment* s = segment();
       if (s) {
             if (!s->rtick()) {

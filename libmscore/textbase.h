@@ -245,7 +245,7 @@ class TextBase : public Element {
 
    protected:
       bool layoutInvalid            { true  };
-      
+
       QColor textColor() const;
       QRectF frame;           // calculated in layout()
       void layoutFrame();
@@ -274,6 +274,7 @@ class TextBase : public Element {
 
       virtual void layout() override;
       virtual void layout1();
+      void layout2(Sid placeAbove, Sid placeBelow);       // helper function
       qreal lineSpacing() const;
       qreal lineHeight() const;
       virtual qreal baseLine() const override;
