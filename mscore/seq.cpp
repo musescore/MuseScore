@@ -318,8 +318,10 @@ void Seq::start()
                   }
             }
       if ((mscore->loop())) {
-            if (cs->selection().isRange())
-                  setLoopSelection();
+            if (preferences.getBool(PREF_APP_PLAYBACK_LOOPTOSELECTIONONPLAY)) {
+                  if (cs->selection().isRange())
+                        setLoopSelection();
+                  }
             if (!preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) || (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && state == Transport::STOP))
                   seek(cs->repeatList()->tick2utick(cs->loopInTick()));
             }
@@ -417,7 +419,7 @@ void Seq::unmarkNotes()
       markedNotes.clear();
       PianoTools* piano = mscore->pianoTools();
       if (piano && piano->isVisible())
-            piano->heartBeat(markedNotes);
+            piano->setPlaybackNotes(markedNotes);
       }
 
 //---------------------------------------------------------
@@ -1133,7 +1135,7 @@ void Seq::seekRT(int utick)
 
 void Seq::startNote(int channel, int pitch, int velo, double nt)
       {
-      if (state != Transport::STOP)
+      if (state != Transport::STOP && state != Transport::PLAY)
             return;
       NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
       ev.setTuning(nt);
@@ -1518,7 +1520,7 @@ void Seq::heartBeatTimeout()
 
       PianoTools* piano = mscore->pianoTools();
       if (piano && piano->isVisible())
-            piano->heartBeat(markedNotes);
+            piano->setPlaybackNotes(markedNotes);
 
       cv->update(cv->toPhysical(r));
       }
