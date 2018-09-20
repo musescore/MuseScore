@@ -246,22 +246,11 @@ void Ottava::read(XmlReader& e)
       {
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
+      if (score()->mscVersion() < 301)
+            e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement())
             readProperties(e);
       updateStyledProperties();
-      }
-
-//---------------------------------------------------------
-//   Ottava::read300
-//---------------------------------------------------------
-
-void Ottava::read300(XmlReader& e)
-      {
-      qDeleteAll(spannerSegments());
-      spannerSegments().clear();
-      e.addSpanner(e.intAttribute("id", -1), this);
-      while (e.readNextStartElement())
-            readProperties300(e);
       }
 
 //---------------------------------------------------------
@@ -296,44 +285,6 @@ bool Ottava::readProperties(XmlReader& e)
       else  if (readStyledProperty(e, tag))
             return true;
       else if (!TextLineBase::readProperties(e)) {
-            e.unknown();
-            return false;
-            }
-      return true;
-      }
-
-//---------------------------------------------------------
-//   Ottava::readProperties300
-//---------------------------------------------------------
-
-bool Ottava::readProperties300(XmlReader& e)
-      {
-      const QStringRef& tag(e.name());
-      if (tag == "subtype") {
-            QString s = e.readElementText();
-            bool ok;
-            int idx = s.toInt(&ok);
-            if (!ok) {
-                  _ottavaType = OttavaType::OTTAVA_8VA;
-                  for (unsigned i = 0; i < sizeof(ottavaDefault)/sizeof(*ottavaDefault); ++i) {
-                        if (s == ottavaDefault[i].name) {
-                              _ottavaType = ottavaDefault[i].type;
-                              break;
-                              }
-                        }
-                  }
-            else if (score()->mscVersion() <= 114) {
-                  //subtype are now in a different order...
-                  if (idx == 1)
-                        idx = 2;
-                  else if (idx == 2)
-                        idx = 1;
-                  _ottavaType = OttavaType(idx);
-                  }
-            }
-      else  if (readStyledProperty(e, tag))
-            return true;
-      else if (!TextLineBase::readProperties300(e)) {
             e.unknown();
             return false;
             }

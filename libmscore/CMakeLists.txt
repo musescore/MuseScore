@@ -94,7 +94,6 @@ add_library (
       shape.cpp systemdivider.cpp midimapping.cpp stafflines.cpp
       read114.cpp
       read206.cpp
-      read300.cpp
       read301.cpp stafftypelist.cpp stafftypechange.cpp
       bracketItem.cpp
       lyricsline.cpp

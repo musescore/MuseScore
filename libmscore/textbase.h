@@ -297,12 +297,10 @@ class TextBase : public Element {
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
-      virtual void read300(XmlReader&) override;
       virtual void writeProperties(XmlWriter& xml) const { writeProperties(xml, true, true); }
       void writeProperties(XmlWriter& xml, bool writeText) const { writeProperties(xml, writeText, true); }
       void writeProperties(XmlWriter&, bool, bool) const;
       bool readProperties(XmlReader&);
-      bool readProperties300(XmlReader&);
 
       virtual void paste(EditData&);
 

@@ -409,7 +409,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element*)
       else if (tag == "systemFlag") {       // TODO
             e.readElementText();
             }
-      else if (!t->readProperties300(e))
+      else if (!t->readProperties(e))
             return false;
       t->setUserOff(QPointF());     // ignore user offsets
       t->setAutoplace(true);
@@ -583,7 +583,7 @@ static void readAccidental(Accidental* a, XmlReader& e)
                   a->setSmall(e.readInt());
             else if (tag == "offset")
                   e.skipCurrentElement(); // ignore manual layout in older scores
-            else if (a->Element::readProperties300(e))
+            else if (a->Element::readProperties(e))
                   ;
             else
                   e.unknown();
@@ -840,7 +840,7 @@ static void readNote(Note* note, XmlReader& e)
                         }
                   note->setHeadType(val);
                   }
-            else if (note->readProperties300(e))
+            else if (readNoteProperties206(note, e))
                   ;
             else
                   e.unknown();
@@ -882,7 +882,7 @@ static void readNote(Note* note, XmlReader& e)
             }
 
       // check consistency of pitch, tpc1, tpc2, and transposition
-      // see note in InstrumentChange::read300() about a known case of tpc corruption produced in 2.0.x
+      // see note in InstrumentChange::read() about a known case of tpc corruption produced in 2.0.x
       // but since there are other causes of tpc corruption (eg, https://musescore.org/en/node/74746)
       // including perhaps some we don't know about yet,
       // we will attempt to fix some problems here regardless of version
@@ -955,7 +955,7 @@ static void readClef(Clef* clef, XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "subtype")
                   clef->setClefType(readClefType(e.readElementText()));
-            else if (!clef->readProperties300(e))
+            else if (!clef->readProperties(e))
                   e.unknown();
             }
       if (clef->clefType() == ClefType::INVALID)
@@ -985,7 +985,7 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
                   bl = e.readInt();
             else if (tag == "tick")
                   tuplet->setTick(e.readInt());
-            else if (!tuplet->readProperties300(e))
+            else if (!readTupletProperties206(e, tuplet))
                   e.unknown();
             }
       Fraction r = (tuplet->ratio() == 1) ? tuplet->ratio() : tuplet->ratio().reduced();
@@ -1031,7 +1031,7 @@ static void readTremolo(Tremolo* tremolo, XmlReader& e)
                         }
                   tremolo->setTremoloType(st);
                   }
-            else if (!tremolo->Element::readProperties300(e))
+            else if (!tremolo->Element::readProperties(e))
                   e.unknown();
             }
       }
@@ -1069,7 +1069,7 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e)
                   readTremolo(tremolo, e);
                   tremolo->setParent(chord);
                   }
-            else if (chord->readProperties300(e))
+            else if (readChordProperties206(e, chord))
                   ;
             else
                   e.unknown();
@@ -1094,7 +1094,7 @@ static void readRest(Measure* m, Rest* rest, XmlReader& e)
                   else
                         rest->add(el);
                   }
-            else if (rest->readProperties300(e))
+            else if (readChordRestProperties206(e, rest))
                   ;
             else
                   e.unknown();
@@ -1139,7 +1139,7 @@ static void readLineSegment114(XmlReader& e, LineSegment* ls)
             if (tag == "off1")
                   ls->setUserOff(e.readPoint() * ls->spatium());
             else
-                  ls->readProperties300(e);
+                  ls->readProperties(e);
             }
       }
 
@@ -1190,7 +1190,7 @@ static bool readTextLineProperties114(XmlReader& e, TextLineBase* tl)
             ls->setAutoplace(true);
             tl->add(ls);
             }
-      else if (tl->readProperties300(e))
+      else if (tl->readProperties(e))
             return true;
       return true;
       }
@@ -1585,7 +1585,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                                     }
                               barLine->setBarLineType(t);
                               }
-                        else if (!barLine->Element::readProperties300(e))
+                        else if (!barLine->Element::readProperties(e))
                               e.unknown();
                         }
 
@@ -1690,7 +1690,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   Breath* breath = new Breath(m->score());
                   breath->setTrack(e.track());
                   int tick = e.tick();
-                  breath->read300(e);
+                  breath->read(e);
                   // older scores placed the breath segment right after the chord to which it applies
                   // rather than before the next chordrest segment with an element for the staff
                   // result would be layout too far left if there are other segments due to notes in other staves
@@ -1735,7 +1735,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Slur") {
                   Slur *sl = new Slur(m->score());
                   sl->setTick(e.tick());
-                  sl->read300(e);
+                  readSlur206(e, sl);
                   //
                   // check if we already saw "endSpanner"
                   //
@@ -1775,7 +1775,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "RepeatMeasure") {
                   RepeatMeasure* rm = new RepeatMeasure(m->score());
                   rm->setTrack(e.track());
-                  rm->read300(e);
+                  readRest(m, rm, e);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(rm);
                   if (rm->actualDuration().isZero()) { // might happen with 1.3 scores
@@ -1826,7 +1826,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "TimeSig") {
                   TimeSig* ts = new TimeSig(m->score());
                   ts->setTrack(e.track());
-                  ts->read300(e);
+                  ts->read(e);
                   // if time sig not at beginning of measure => courtesy time sig
                   int currTick = e.tick();
                   bool courtesySig = (currTick > m->tick());
@@ -1847,7 +1847,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "KeySig") {
                   KeySig* ks = new KeySig(m->score());
                   ks->setTrack(e.track());
-                  ks->read300(e);
+                  ks->read(e);
                   int curTick = e.tick();
                   if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick == 0) {
                         // ignore empty key signature
@@ -1899,7 +1899,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               l->setTicks(e.readInt());
                         else if (t == "Number") {                           // obsolete
                               _verseNumber = new Text(l->score());
-                              _verseNumber->read300(e);
+                              readText114(e, _verseNumber, l);
                               _verseNumber->setParent(l);
                               }
                         else if (!readTextProperties(e, l, l))
@@ -1941,7 +1941,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Dynamic") {
                   Dynamic* dyn = new Dynamic(m->score());
                   dyn->setTrack(e.track());
-                  dyn->read300(e);
+                  dyn->read(e);
                   dyn->setDynamicType(dyn->xmlText());
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(dyn);
@@ -1982,7 +1982,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   if (el->type() == ElementType::SYMBOL)
                         el->setParent(m);    // this will get reset when adding to segment
                   el->setTrack(e.track());
-                  el->read300(e);
+                  el->read(e);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
                   }
@@ -2001,7 +2001,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               j->setPlayRepeats(e.readBool());
                         else if (t == "subtype")
                               e.readInt();
-                        else if (!j->TextBase::readProperties300(e))
+                        else if (!j->TextBase::readProperties(e))
                               e.unknown();
                         }
                   m->add(j);
@@ -2018,7 +2018,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               a->setLabel(s);
                               mt = a->markerType(s);
                               }
-                        else if (!a->TextBase::readProperties300(e))
+                        else if (!a->TextBase::readProperties(e))
                               e.unknown();
                         }
                   a->setMarkerType(mt);
@@ -2038,7 +2038,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   else {
                         Element* el = Element::name2Element(tag, m->score());
                         el->setTrack(e.track());
-                        el->read300(e);
+                        el->read(e);
                         segment = m->getSegment(SegmentType::ChordRest, e.tick());
                         segment->add(el);
                         }
@@ -2106,12 +2106,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Beam") {
                   Beam* beam = new Beam(m->score());
                   beam->setTrack(e.track());
-                  beam->read300(e);
+                  beam->read(e);
                   beam->setParent(0);
                   e.addBeam(beam);
                   }
             else if (tag == "Segment") {
-                  segment->read300(e);
+                  segment->read(e);
                   while (e.readNextStartElement()) {
                         const QStringRef& t(e.name());
                         if (t == "off1") {
@@ -2124,7 +2124,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   }
             else if (tag == "MeasureNumber") {
                   Text* noText = new Text(m->score(), Tid::MEASURE_NUMBER);
-                  noText->read300(e);
+                  readText114(e, noText, m);
                   noText->setFlag(ElementFlag::ON_STAFF, true);
                   // noText->setFlag(ElementFlag::MOVABLE, false); ??
                   noText->setTrack(e.track());
@@ -2137,7 +2137,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   m->setTick(e.lastMeasure()->tick());
                   e.initTick(e.lastMeasure()->tick());
                   }
-            else if (m->MeasureBase::readProperties300(e))
+            else if (m->MeasureBase::readProperties(e))
                   ;
             else
                   e.unknown();
@@ -2219,7 +2219,7 @@ static bool readBoxProperties(XmlReader& e, Box* b)
             }
       else if (tag == "Symbol") {
             Symbol* s = new Symbol(b->score());
-            s->read300(e);
+            s->read(e);
             b->add(s);
             }
       else if (tag == "Image") {
@@ -2228,7 +2228,7 @@ static bool readBoxProperties(XmlReader& e, Box* b)
             else {
                   Image* image = new Image(b->score());
                   image->setTrack(e.track());
-                  image->read300(e);
+                  image->read(e);
                   b->add(image);
                   }
             }
@@ -2242,7 +2242,7 @@ static bool readBoxProperties(XmlReader& e, Box* b)
             readBox(e, vb);
             b->add(vb);
             }
-//      else if (MeasureBase::readProperties300(e))
+//      else if (MeasureBase::readProperties(e))
 //            ;
       else
             return false;
@@ -2672,7 +2672,7 @@ static void readStyle(MStyle* style, XmlReader& e)
 
             if (tag == "TextStyle") {
 //                  TextStyle s;
-//TODO                  s.read300(e);
+//TODO                  s.read(e);
 //                  style->setTextStyle(s);
                   e.skipCurrentElement();
                   }
@@ -2824,7 +2824,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   readStaffContent(this, e);
             else if (tag == "KeySig") {               // not supported
                   KeySig* ks = new KeySig(this);
-                  ks->read300(e);
+                  ks->read(e);
                   delete ks;
                   }
             else if (tag == "siglist")
@@ -2894,7 +2894,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   e.skipCurrentElement();
 #if 0 // TODO
                   TextStyle s;
-                  s.read300(e);
+                  s.read(e);
 
                   qreal spMM = spatium() / DPMM;
                   if (s.frameWidthMM() != 0.0)
@@ -2944,7 +2944,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   }
             else if (tag == "Slur") {
                   Slur* slur = new Slur(this);
-                  slur->read300(e);
+                  readSlur206(e, slur);
                   addSpanner(slur);
                   }
             else if ((tag == "HairPin")
@@ -2962,8 +2962,12 @@ Score::FileError MasterScore::read114(XmlReader& e)
                         readTextLine114(e, toTextLine(s));
                   else if (tag == "Pedal")
                          readPedal114(e, toPedal(s));
-                  else
-                        s->read300(e);
+                  else if (tag == "Trill")
+                        readTrill206(e, toTrill(s));
+                  else {
+                        Q_ASSERT(tag == "HairPin");
+                        readHairpin206(e, toHairpin(s));
+                        }
                   if (s->track() == -1)
                         s->setTrack(e.track());
                   else
@@ -2993,7 +2997,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   }
             else if (tag == "Beam") {
                   Beam* beam = new Beam(this);
-                  beam->read300(e);
+                  beam->read(e);
                   beam->setParent(0);
                   // _beams.append(beam);
                   }

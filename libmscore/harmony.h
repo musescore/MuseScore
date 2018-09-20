@@ -154,7 +154,6 @@ class Harmony final : public TextBase {
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
-      virtual void read300(XmlReader&) override;
       QString harmonyName() const;
       void render();
 

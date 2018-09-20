@@ -62,8 +62,6 @@ class Box : public MeasureBase {
       virtual void writeProperties(XmlWriter&) const override;
       virtual bool readProperties(XmlReader&) override;
       virtual void read(XmlReader&) override;
-      virtual bool readProperties300(XmlReader&) override;
-      virtual void read300(XmlReader&) override;
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
       virtual void add(Element* e) override;

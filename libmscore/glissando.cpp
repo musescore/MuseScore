@@ -390,6 +390,9 @@ void Glissando::read(XmlReader& e)
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
 
+      if (score()->mscVersion() < 301)
+            e.addSpanner(e.intAttribute("id", -1), this);
+
       _showText = false;
       while (e.readNextStartElement()) {
             const QStringRef& tag = e.name();
