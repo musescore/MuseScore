@@ -1069,7 +1069,8 @@ QList<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
       Segment* s = cr->segment();
       while (gap > Fraction(0)) {
             Measure* m    = s->measure();
-            Fraction rest = Fraction::fromTicks(m->ticks() - s->rtick());
+            Fraction timeStretch = cr->staff()->timeStretch(s->tick());
+            Fraction rest = (m->len() - s->rfrac()) * timeStretch;
             if (rest >= gap) {
                   flist.append(gap);
                   return flist;
