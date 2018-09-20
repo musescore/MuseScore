@@ -159,9 +159,6 @@ void Dynamic::read(XmlReader& e)
 
 void Dynamic::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
-
       qreal y;
       if (placeAbove())
             y = score()->styleP(Sid::dynamicsPosAbove);
