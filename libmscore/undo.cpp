@@ -77,6 +77,7 @@
 #include "stafflines.h"
 #include "bracket.h"
 #include "fret.h"
+#include "textedit.h"
 
 namespace Ms {
 
@@ -365,6 +366,13 @@ void UndoStack::setClean()
 void UndoStack::undo(EditData* ed)
       {
       qCDebug(undoRedo) << "===";
+      // Are we currently editing text?
+      if (ed && ed->element && ed->element->isTextBase()) {
+            TextEditData* ted = static_cast<TextEditData*>(ed->getData(ed->element));
+            if (ted && ted->startUndoIdx == curIdx)
+                  // No edits to undo, so do nothing
+                  return;
+            }
       if (curIdx) {
             --curIdx;
             Q_ASSERT(curIdx >= 0);
