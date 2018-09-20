@@ -260,7 +260,9 @@ void ScoreView::mouseReleaseEvent(QMouseEvent*)
             case ViewState::PLAY:
             case ViewState::ENTRY_PLAY:
             case ViewState::FOTO:
+                  break;
             case ViewState::FOTO_LASSO:
+                  changeState(ViewState::FOTO);
                   break;
             }
       }
@@ -379,10 +381,13 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                               break;
                               }
                         }
+
                   if (gripClicked)
                         changeState(ViewState::FOTO_DRAG_EDIT);
                   else if (_foto->canvasBoundingRect().contains(editData.startMove))
                         changeState(ViewState::FOTO_DRAG_OBJECT);
+                  else if (ev->modifiers() & Qt::ShiftModifier)
+                        changeState(ViewState::FOTO_LASSO);
                   else
                         changeState(ViewState::FOTO_DRAG);
                   }
@@ -511,6 +516,10 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
             case ViewState::PLAY:
                   if (drag && !editData.element)
                         dragScoreView(me);
+                  break;
+
+            case ViewState::FOTO_LASSO:
+                  doDragFoto(me);
                   break;
 
             default:
@@ -825,6 +834,9 @@ void ScoreView::changeState(ViewState s)
             case ViewState::LASSO:
                   endLasso();
                   break;
+            case ViewState::FOTO_LASSO:
+                  endFotoDrag();
+                  break;
             case ViewState::PLAY:
                   seq->stop();
                   break;
@@ -878,7 +890,9 @@ void ScoreView::changeState(ViewState s)
                   seq->start();
                   break;
             case ViewState::ENTRY_PLAY:
+                  break;
             case ViewState::FOTO_LASSO:
+                  startFotoDrag();
                   break;
             }
 
