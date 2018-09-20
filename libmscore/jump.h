@@ -57,7 +57,6 @@ class Jump final : public TextBase {
       Measure* measure() const                  { return toMeasure(parent()); }
 
       virtual void read(XmlReader&) override;
-      virtual void read300(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
 
       virtual void layout() override;

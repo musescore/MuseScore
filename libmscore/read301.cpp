@@ -297,7 +297,7 @@ void MasterScore::addMovement(MasterScore* score)
       }
 
 //---------------------------------------------------------
-//   read300
+//   read301
 //---------------------------------------------------------
 
 Score::FileError MasterScore::read301(XmlReader& e)

@@ -60,7 +60,6 @@ class Volta final : public TextLineBase {
 
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader& e) override;
-      virtual void read300(XmlReader&) override;
 
       QList<int> endings() const           { return _endings; }
       QList<int>& endings()                { return _endings; }

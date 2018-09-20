@@ -150,7 +150,6 @@ class Clef final : public Element {
       virtual void layout();
       virtual void draw(QPainter*) const;
       virtual void read(XmlReader&);
-      virtual void read300(XmlReader&);
       virtual void write(XmlWriter&) const;
 
       virtual bool isEditable() const                    { return false; }
