@@ -369,7 +369,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                         break;
                   editData.element = _foto;
                   bool gripClicked = false;
-                  qreal a = editData.grip[0].width() * 1.0;
+                  qreal a = editData.grip[0].width() * 0.5;
                   for (int i = 0; i < editData.grips; ++i) {
                         if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
                               editData.curGrip = Grip(i);
@@ -399,7 +399,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
 
             case ViewState::EDIT: {
                   if (editData.grips) {
-                        qreal a = editData.grip[0].width() * 1.0;
+                        qreal a = editData.grip[0].width() * 0.5;
                         bool gripFound = false;
                         for (int i = 0; i < editData.grips; ++i) {
                               if (editData.grip[i].adjusted(-a, -a, a, a).contains(editData.startMove)) {
