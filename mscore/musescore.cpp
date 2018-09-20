@@ -3663,6 +3663,8 @@ void MuseScore::changeState(ScoreState val)
                   break;
             case STATE_NOTE_ENTRY_STAFF_DRUM:
                   {
+                  if (getAction("note-input-repitch")->isChecked())
+                        cs->setNoteEntryMethod(NoteEntryMethod::REPITCH);
                   showModeText(tr("Drum input mode"));
                   InputState& is = cs->inputState();
                   showDrumTools(is.drumset(), cs->staff(is.track() / VOICES));
