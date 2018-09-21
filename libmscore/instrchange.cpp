@@ -28,13 +28,14 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const ElementStyle instrumentChangeStyle {
-      { Sid::instrumentChangeFontFace,           Pid::FONT_FACE              },
+/*      { Sid::instrumentChangeFontFace,           Pid::FONT_FACE              },
       { Sid::instrumentChangeFontSize,           Pid::FONT_SIZE              },
       { Sid::instrumentChangeFontBold,           Pid::FONT_BOLD              },
       { Sid::instrumentChangeFontItalic,         Pid::FONT_ITALIC            },
       { Sid::instrumentChangeFontUnderline,      Pid::FONT_UNDERLINE         },
       { Sid::instrumentChangeAlign,              Pid::ALIGN                  },
       { Sid::instrumentChangeOffset,             Pid::OFFSET                 },
+*/
       { Sid::instrumentChangePlacement,          Pid::PLACEMENT              },
       };
 
@@ -114,15 +115,6 @@ void InstrumentChange::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
-QVariant InstrumentChange::getProperty(Pid propertyId) const
-      {
-      return TextBase::getProperty(propertyId);
-      }
-
-//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
@@ -137,12 +129,13 @@ QVariant InstrumentChange::propertyDefault(Pid propertyId) const
       }
 
 //---------------------------------------------------------
-//   setProperty
+//   layout
 //---------------------------------------------------------
 
-bool InstrumentChange::setProperty(Pid propertyId, const QVariant& v)
+void InstrumentChange::layout()
       {
-      return TextBase::setProperty(propertyId, v);
+      layout2(Sid::instrumentChangePosAbove, Sid::instrumentChangePosBelow);
+      autoplaceSegmentElement(styleP(Sid::instrumentChangeMinDistance));
       }
 
 }

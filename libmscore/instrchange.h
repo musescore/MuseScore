@@ -35,6 +35,7 @@ class InstrumentChange final : public TextBase  {
       virtual ElementType type() const override        { return ElementType::INSTRUMENT_CHANGE; }
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
+      virtual void layout() override;
 
       Instrument* instrument() const        { return _instrument;  }
       void setInstrument(Instrument* i)     { _instrument = i;     }
@@ -43,8 +44,6 @@ class InstrumentChange final : public TextBase  {
 
       Segment* segment() const              { return toSegment(parent()); }
 
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
       };
 

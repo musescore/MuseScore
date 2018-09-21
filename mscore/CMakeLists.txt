@@ -124,6 +124,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_accidental.ui
       inspector/inspector_tempotext.ui
       inspector/inspector_dynamic.ui
+      inspector/inspector_instrchange.ui
       inspector/inspector_lyric.ui
       inspector/inspector_line.ui
       inspector/inspector_textline.ui
@@ -365,6 +366,7 @@ add_executable ( ${ExecutableName}
       inspector/inspectorPalmMute.cpp
       inspector/inspectorPedal.cpp
       inspector/inspectorDynamic.cpp
+      inspector/inspectorInstrchange.cpp
       inspector/inspectorElementBase.cpp
       enableplayforwidget.cpp
       editelement.cpp
@@ -898,7 +900,7 @@ else (MINGW)
             DESTINATION bin/webengineresources/translations
             )
       endif (USE_WEBENGINE)
-      
+
       install(DIRECTORY
          ${QT_INSTALL_PREFIX}/qml
          DESTINATION .

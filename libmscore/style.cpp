@@ -732,8 +732,11 @@ static const StyleType styleTypes[] {
       { Sid::instrumentChangeFontItalic,    "instrumentChangeFontItalic",   false },
       { Sid::instrumentChangeFontUnderline, "instrumentChangeFontUnderline",false },
       { Sid::instrumentChangeAlign,         "instrumentChangeAlign",        QVariant::fromValue(Align::LEFT | Align::BASELINE) },
-      { Sid::instrumentChangeOffset,        "instrumentChangeOffset",       QPointF(0, -3.0) },
+      { Sid::instrumentChangeOffset,        "instrumentChangeOffset",       QPointF() },
       { Sid::instrumentChangePlacement,     "instrumentChangePlacement",    int(Placement::ABOVE)  },
+      { Sid::instrumentChangePosAbove,      "instrumentChangePosAbove",     Spatium(-2.0) },
+      { Sid::instrumentChangePosBelow,      "instrumentChangePosBelow",     Spatium(3.5)  },
+      { Sid::instrumentChangeMinDistance,   "instrumentChangeMinDistance",  Spatium(0.5)  },
 
       { Sid::figuredBassFontFace,           "figuredBassFontFace",          "MScoreBC" },
       { Sid::figuredBassFontSize,           "figuredBassFontSize",          8.0 },
