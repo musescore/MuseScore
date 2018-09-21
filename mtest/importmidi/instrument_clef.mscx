@@ -79,6 +79,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <volume>78.7402</volume>
           <program value="33"/>
           </Channel>
         <Channel name="slap">

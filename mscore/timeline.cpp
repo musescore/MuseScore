@@ -2803,7 +2803,7 @@ void Timeline::requestInstrumentDialog()
       QAction* act = getAction("instruments");
       mscore->cmd(act);
       if (mscore->getMixer())
-            mscore->getMixer()->updateAll(_score->masterScore());
+            mscore->getMixer()->setScore(_score->masterScore());
       }
 
 }

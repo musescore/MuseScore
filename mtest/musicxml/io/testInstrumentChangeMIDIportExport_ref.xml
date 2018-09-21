@@ -23,8 +23,6 @@
       <midi-instrument id="P1-I1">
         <midi-channel>1</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P2">
@@ -37,8 +35,6 @@
       <midi-instrument id="P2-I1">
         <midi-channel>2</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P3">
@@ -51,8 +47,6 @@
       <midi-instrument id="P3-I1">
         <midi-channel>3</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P4">
@@ -65,8 +59,6 @@
       <midi-instrument id="P4-I1">
         <midi-channel>4</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P5">
@@ -79,8 +71,6 @@
       <midi-instrument id="P5-I1">
         <midi-channel>5</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P6">
@@ -93,8 +83,6 @@
       <midi-instrument id="P6-I1">
         <midi-channel>6</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P7">
@@ -107,8 +95,6 @@
       <midi-instrument id="P7-I1">
         <midi-channel>7</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P8">
@@ -121,8 +107,6 @@
       <midi-instrument id="P8-I1">
         <midi-channel>8</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P9">
@@ -135,8 +119,6 @@
       <midi-instrument id="P9-I1">
         <midi-channel>9</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P10">
@@ -149,8 +131,6 @@
       <midi-instrument id="P10-I1">
         <midi-channel>11</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P11">
@@ -163,8 +143,6 @@
       <midi-instrument id="P11-I1">
         <midi-channel>12</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P12">
@@ -177,8 +155,6 @@
       <midi-instrument id="P12-I1">
         <midi-channel>13</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P13">
@@ -191,8 +167,6 @@
       <midi-instrument id="P13-I1">
         <midi-channel>14</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P14">
@@ -205,8 +179,6 @@
       <midi-instrument id="P14-I1">
         <midi-channel>15</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P15">
@@ -222,15 +194,11 @@
       <midi-instrument id="P15-I1">
         <midi-channel>16</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       <midi-device id="P15-I2" port="2"></midi-device>
       <midi-instrument id="P15-I2">
         <midi-channel>1</midi-channel>
         <midi-program>53</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
         </midi-instrument>
       </score-part>
     </part-list>

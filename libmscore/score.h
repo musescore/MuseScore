@@ -82,7 +82,7 @@ class UndoCommand;
 class UndoStack;
 class Volta;
 class XmlWriter;
-struct Channel;
+class Channel;
 struct Interval;
 struct TEvent;
 struct LayoutContext;

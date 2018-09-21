@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="mixer-dial.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   id="svg4649"
+   version="1.1"
+   viewBox="0 0 32 32"
+   height="32"
+   width="32">
+  <sodipodi:namedview
+     viewbox-height="32"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-8"
+     inkscape:window-x="-8"
+     inkscape:window-height="1017"
+     inkscape:window-width="1920"
+     inkscape:snap-grids="false"
+     units="px"
+     showgrid="false"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="px"
+     inkscape:cy="11.996111"
+     inkscape:cx="-5.4001146"
+     inkscape:zoom="8"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base">
+    <inkscape:grid
+       empspacing="4"
+       id="grid4651"
+       type="xygrid" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4643">
+    <linearGradient
+       id="linearGradient823"
+       inkscape:collect="always">
+      <stop
+         id="stop819"
+         offset="0"
+         style="stop-color:#878787;stop-opacity:1" />
+      <stop
+         id="stop821"
+         offset="1"
+         style="stop-color:#353535;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.4995922,0,0,2.4919021,-2.5414783,-691.63044)"
+       r="4.6579642"
+       fy="288.55579"
+       fx="6.1641054"
+       cy="288.55579"
+       cx="6.1641054"
+       id="radialGradient825"
+       xlink:href="#linearGradient823"
+       inkscape:collect="always" />
+  </defs>
+  <metadata
+     id="metadata4646">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-13.714286)"
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <path
+       id="grip"
+       d="M14.604574 15.679912C14.539094 15.687312 14.47361 15.697412 14.40824 15.705662C14.40824 15.705662 13.547465 17.012374 13.547465 17.012374C13.180411 17.569583 12.213426 17.82984 11.616955 17.530739C11.616955 17.530739 10.225988 16.8332 10.225988 16.8332C9.2523578 17.257831 8.3287385 17.788919 7.4720087 18.416817C7.4720087 18.416817 7.1172299 19.056837 7.3780687 19.973937C7.560697 20.616008 6.5958152 21.562053 5.9541101 21.378083C5.0414896 21.116427 4.4084342 21.472313 4.4084342 21.472313C3.7761742 22.324298 3.2400766 23.243598 2.8099202 24.21344C2.8099202 24.21344 3.5143202 25.616111 3.5143202 25.616111C3.813656 26.21219 3.5467542 27.178006 2.989161 27.544047C2.989161 27.544047 1.6817936 28.402307 1.6817936 28.402307C1.5693633 29.389694 1.5595262 30.386033 1.6524296 31.375446C1.8123764 31.872385 2.5340375 32.135367 2.9849914 32.432424C3.5422122 32.799489 3.8024672 33.766481 3.503357 34.362934C3.503357 34.362934 2.8058158 35.753908 2.8058158 35.753908C3.2304286 36.727548 3.761542 37.651172 4.3894457 38.507883C4.3894457 38.507883 5.94655 38.60187 5.94655 38.60187C6.6129298 38.64211 7.3100418 39.35952 7.3506833 40.025862C7.3506833 40.025862 7.4449603 41.571535 7.4449603 41.571535C8.2969362 42.203807 9.216226 42.739893 10.186063 43.170049C10.186063 43.170049 11.588759 42.465638 11.588759 42.465638C12.184844 42.166288 13.150705 42.433148 13.516698 42.990779C13.516698 42.990779 14.374937 44.29819 14.374937 44.29819C15.36232 44.410667 16.358668 44.420671 17.348088 44.32768C17.413568 44.32008 17.479046 44.31018 17.54442 44.30193C17.54442 44.30193 18.405191 42.995243 18.405191 42.995243C18.77225 42.438034 19.739231 42.177777 20.335703 42.476877C20.335703 42.476877 21.726671 43.174414 21.726671 43.174414C22.7003 42.74979 23.623923 42.218676 24.480652 41.59078C24.480652 41.59078 24.574592 40.03366 24.574592 40.03366C24.614782 39.367368 25.332233 38.670157 25.998552 38.629538C25.998552 38.629538 27.544227 38.535308 27.544227 38.535308C28.176491 37.683298 29.504554 36.514663 29.142742 35.79418C29.142742 35.79418 28.438341 34.391509 28.438341 34.391509C28.139005 33.795432 28.405891 32.829614 28.9635 32.463573C28.9635 32.463573 30.27087 31.605314 30.27087 31.605314C30.372822 30.475909 30.37062 29.414183 30.27437 28.435955C30.27437 28.435955 28.967679 27.575196 28.967679 27.575196C28.410454 27.208131 28.150203 26.241139 28.449313 25.644686C28.449313 25.644686 29.146853 24.253713 29.146853 24.253713C28.722241 23.280073 28.191128 22.356449 27.563222 21.499713C27.563222 21.499713 26.006119 21.405723 26.006119 21.405723C25.339741 21.365473 24.642627 20.648097 24.601985 19.981757C24.601985 19.981757 24.507715 18.436084 24.507715 18.436084C23.655741 17.803812 22.736449 17.267724 21.766611 16.837569C21.766611 16.837569 20.363913 17.541955 20.363913 17.541955C19.767827 17.841281 18.801973 17.574445 18.435978 17.016816C18.435978 17.016816 17.577739 15.709429 17.577739 15.709429C16.590367 15.596696 15.594007 15.586948 14.604588 15.679939C14.604588 15.679939 14.604595 15.679914 14.604595 15.679914"
+       style="stroke-linejoin:round;stroke-opacity:1;fill-opacity:1;stroke:#000000;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-width:1;fill:#444444" />
+    <ellipse
+       ry="10.607352"
+       rx="10.643174"
+       cy="29.927521"
+       cx="15.872563"
+       id="path5206-6"
+       style="stroke-opacity:1;fill-opacity:1;stroke:#b8b8b8;stroke-dasharray:none;stroke-miterlimit:4;stroke-width:2.82796569515;fill:url(#radialGradient825)" />
+    <path
+       id="pointer"
+       d="M13.330931 30.0038C13.330931 30.0038 13.330931 19.422202 13.330931 19.422202C13.330931 19.422202 15.976333 15.454099 15.976333 15.454099C15.976333 15.454099 18.621734 19.422202 18.621734 19.422202C18.621734 19.422202 18.621734 30.0038 18.621734 30.0038C18.621734 30.0038 13.330931 30.0038 13.330931 30.0038"
+       style="stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1;stroke:#000000;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-width:1;fill:#ffffff" />
+  </g>
+</svg>

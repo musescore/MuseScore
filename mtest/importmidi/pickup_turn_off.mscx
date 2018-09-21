@@ -66,8 +66,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <volume>100</volume>
           <program value="52"/>
-          <controller ctrl="7" value="127"/>
           </Channel>
         </Instrument>
       </Part>

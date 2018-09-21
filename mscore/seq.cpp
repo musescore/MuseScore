@@ -517,7 +517,7 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
                   Staff* staff      = note->staff();
                   Instrument* instr = staff->part()->instrument(note->chord()->tick());
                   const Channel* a = instr->channel(note->subchannel());
-                  mute = a->mute || a->soloMute || !staff->playbackVoice(note->voice());
+                  mute = a->mute() || a->soloMute() || !staff->playbackVoice(note->voice());
                   }
             if (!mute)
                   putEvent(event, framePos);
@@ -964,7 +964,7 @@ void Seq::initInstruments(bool realTime)
             for (const MidiCoreEvent& e : channel->init) {
                   if (e.type() == ME_INVALID)
                         continue;
-                  NPlayEvent event(e.type(), channel->channel, e.dataA(), e.dataB());
+                  NPlayEvent event(e.type(), channel->channel(), e.dataA(), e.dataB());
                   if (realTime)
                         putEvent(event);
                   else
@@ -973,18 +973,18 @@ void Seq::initInstruments(bool realTime)
             // Setting pitch bend sensitivity to 12 semitones for external synthesizers
             if ((preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO)) && mm.channel != 9) {
                   if (realTime) {
-                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 0));
-                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 0));
-                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HDATA,12));
-                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 127));
-                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 127));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_LRPN, 0));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HRPN, 0));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HDATA,12));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_LRPN, 127));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HRPN, 127));
                         }
                   else {
-                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 0));
-                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 0));
-                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HDATA,12));
-                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 127));
-                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 127));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_LRPN, 0));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HRPN, 0));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HDATA,12));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_LRPN, 127));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HRPN, 127));
                         }
                   }
             }
@@ -1420,7 +1420,7 @@ void Seq::putEvent(const NPlayEvent& event, unsigned framePos)
             }
 
       // audio
-      int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti);
+      int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti());
       _synti->play(event, syntiIdx);
 
       // midi

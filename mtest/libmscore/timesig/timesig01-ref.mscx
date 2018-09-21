@@ -53,8 +53,6 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <controller ctrl="93" value="30"/>
-          <controller ctrl="91" value="30"/>
           </Channel>
         </Instrument>
       </Part>

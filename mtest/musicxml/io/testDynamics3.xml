@@ -27,8 +27,8 @@
       <midi-instrument id="P1-I1">
         <midi-channel>1</midi-channel>
         <midi-program>53</midi-program>
-        <volume>78.7402</volume>
-        <pan>0</pan>
+        <volume>100</volume>
+        <pan>35</pan>
         </midi-instrument>
       </score-part>
     <score-part id="P2">
@@ -40,7 +40,7 @@
       <midi-instrument id="P2-I1">
         <midi-channel>2</midi-channel>
         <midi-program>1</midi-program>
-        <volume>78.7402</volume>
+        <volume>100</volume>
         <pan>0</pan>
         </midi-instrument>
       </score-part>

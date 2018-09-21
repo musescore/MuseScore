@@ -50,57 +50,57 @@
         <midi-channel>10</midi-channel>
         <midi-program>1</midi-program>
         <midi-unpitched>36</midi-unpitched>
-        <volume>78.7402</volume>
-        <pan>0</pan>
+        <volume>100</volume>
+        <pan>35</pan>
         </midi-instrument>
       <midi-instrument id="P1-I41">
         <midi-channel>10</midi-channel>
         <midi-program>1</midi-program>
         <midi-unpitched>41</midi-unpitched>
-        <volume>78.7402</volume>
-        <pan>0</pan>
+        <volume>100</volume>
+        <pan>35</pan>
         </midi-instrument>
       <midi-instrument id="P1-I42">
         <midi-channel>10</midi-channel>
         <midi-program>1</midi-program>
         <midi-unpitched>42</midi-unpitched>
-        <volume>78.7402</volume>
-        <pan>0</pan>
+        <volume>100</volume>
+        <pan>35</pan>
         </midi-instrument>
       <midi-instrument id="P1-I46">
         <midi-channel>10</midi-channel>
         <midi-program>1</midi-program>
         <midi-unpitched>46</midi-unpitched>
-        <volume>78.7402</volume>
-        <pan>0</pan>
+        <volume>100</volume>
+        <pan>35</pan>
         </midi-instrument>
       <midi-instrument id="P1-I47">
         <midi-channel>10</midi-channel>
         <midi-program>1</midi-program>
         <midi-unpitched>47</midi-unpitched>
-        <volume>78.7402</volume>
-        <pan>0</pan>
+        <volume>100</volume>
+        <pan>35</pan>
         </midi-instrument>
       <midi-instrument id="P1-I49">
         <midi-channel>10</midi-channel>
         <midi-program>1</midi-program>
         <midi-unpitched>49</midi-unpitched>
-        <volume>78.7402</volume>
-        <pan>0</pan>
+        <volume>100</volume>
+        <pan>35</pan>
         </midi-instrument>
       <midi-instrument id="P1-I64">
         <midi-channel>10</midi-channel>
         <midi-program>1</midi-program>
         <midi-unpitched>64</midi-unpitched>
-        <volume>78.7402</volume>
-        <pan>0</pan>
+        <volume>100</volume>
+        <pan>35</pan>
         </midi-instrument>
       <midi-instrument id="P1-I65">
         <midi-channel>10</midi-channel>
         <midi-program>1</midi-program>
         <midi-unpitched>65</midi-unpitched>
-        <volume>78.7402</volume>
-        <pan>0</pan>
+        <volume>100</volume>
+        <pan>35</pan>
         </midi-instrument>
       </score-part>
     </part-list>

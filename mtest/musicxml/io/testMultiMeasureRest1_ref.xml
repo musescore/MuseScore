@@ -28,7 +28,7 @@
         <midi-channel>1</midi-channel>
         <midi-program>1</midi-program>
         <volume>0</volume>
-        <pan>0</pan>
+        <pan>35</pan>
         </midi-instrument>
       </score-part>
     </part-list>

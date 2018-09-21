@@ -1901,7 +1901,7 @@ bool Score::processMidiInput()
                               ev.pitch += p->instrument(selection().tickStart())->transpose().chromatic;
                               }
                         MScore::seq->startNote(
-                                          p->instrument()->channel(0)->channel,
+                                          p->instrument()->channel(0)->channel(),
                                           ev.pitch,
                                           ev.velocity,
                                           0.0);

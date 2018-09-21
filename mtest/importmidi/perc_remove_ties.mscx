@@ -249,9 +249,9 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <volume>82.6772</volume>
           <controller ctrl="0" value="1"/>
           <program value="0"/>
-          <controller ctrl="7" value="105"/>
           </Channel>
         </Instrument>
       </Part>

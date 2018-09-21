@@ -2207,7 +2207,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       if (selectionWindow)
             selectionWindow->setScore(cs);
       if (mixer)
-            mixer->updateAll(cs ? cs->masterScore() : nullptr);
+            mixer->setScore(cs ? cs->masterScore() : nullptr);
 #ifdef OMR
       if (omrPanel) {
             if (cv && cv->omrView())
@@ -3957,7 +3957,7 @@ void MuseScore::play(Element* e) const
             Instrument* instr = part->instrument(tick);
             for (Note* n : c->notes()) {
                   const Channel* channel = instr->channel(n->subchannel());
-                  seq->startNote(channel->channel, n->ppitch(), 80, n->tuning());
+                  seq->startNote(channel->channel(), n->ppitch(), 80, n->tuning());
                   }
             seq->startNoteTimer(MScore::defaultPlayDuration);
             }
@@ -3974,7 +3974,7 @@ void MuseScore::play(Element* e, int pitch) const
                   tick = 0;
             Instrument* instr = note->part()->instrument(tick);
             const Channel* channel = instr->channel(note->subchannel());
-            seq->startNote(channel->channel, pitch, 80, MScore::defaultPlayDuration, note->tuning());
+            seq->startNote(channel->channel(), pitch, 80, MScore::defaultPlayDuration, note->tuning());
             }
       }
 
@@ -5286,7 +5286,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       if (cmd == "instruments") {
             editInstrList();
             if (mixer)
-                  mixer->updateAll(cs->masterScore());
+                  mixer->setScore(cs->masterScore());
             }
       else if (cmd == "rewind") {
             if (cs) {
@@ -5738,7 +5738,7 @@ void MuseScore::noteTooShortForTupletDialog()
 void MuseScore::instrumentChanged()
       {
       if (mixer)
-            mixer->updateAll(cs->masterScore());
+            mixer->setScore(cs->masterScore());
       }
 
 //---------------------------------------------------------
@@ -6152,8 +6152,8 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               for (MidiCoreEvent e : a->init) {
                                     if (e.type() == ME_INVALID)
                                           continue;
-                                    e.setChannel(a->channel);
-                                    int syntiIdx= synth->index(score->masterScore()->midiMapping(a->channel)->articulation->synti);
+                                    e.setChannel(a->channel());
+                                    int syntiIdx= synth->index(score->masterScore()->midiMapping(a->channel())->articulation->synti());
 									synth->play(e, syntiIdx);
                                     }
                               }
@@ -6204,8 +6204,8 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                         if (e.isChannelEvent()) {
                               int channelIdx = e.channel();
                               Channel* c = score->masterScore()->midiMapping(channelIdx)->articulation;
-                              if (!c->mute) {
-                                    synth->play(e, synth->index(c->synti));
+                              if (!c->mute()) {
+                                    synth->play(e, synth->index(c->synti()));
                                     }
                               }
                         }

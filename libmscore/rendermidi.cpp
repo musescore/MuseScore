@@ -378,7 +378,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   Staff* st    = chord->staff();
                   int velocity = st->velocities().velo(seg->tick());
                   Instrument* instr = chord->part()->instrument(tick);
-                  int channel = instr->channel(chord->upNote()->subchannel())->channel;
+                  int channel = instr->channel(chord->upNote()->subchannel())->channel();
 
                   for (Articulation* a : chord->articulations())
                         instr->updateVelocity(&velocity,channel, a->articulationName());
@@ -411,7 +411,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
 
                   Instrument* instr = e->part()->instrument(tick);
                   for (const ChannelActions& ca : *st->channelActions()) {
-                        int channel = instr->channel().at(ca.channel)->channel;
+                        int channel = instr->channel().at(ca.channel)->channel();
                         for (const QString& ma : ca.midiActionNames) {
                               NamedEventList* nel = instr->midiAction(ma, ca.channel);
                               if (!nel)
@@ -669,7 +669,7 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                         continue;
 
                   int idx = s->staff()->channel(s->tick(), 0);
-                  int channel = s->part()->instrument(s->tick())->channel(idx)->channel;
+                  int channel = s->part()->instrument(s->tick())->channel(idx)->channel();
 
                   if (s->isPedal() || s->isLetRing()) {
                         channelPedalEvents.insert({channel, std::vector<std::pair<int, bool>>()});

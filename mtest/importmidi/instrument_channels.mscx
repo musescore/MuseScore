@@ -66,8 +66,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <volume>39.3701</volume>
           <program value="48"/>
-          <controller ctrl="7" value="50"/>
           <midiPort>0</midiPort>
           <midiChannel>0</midiChannel>
           </Channel>
@@ -129,8 +129,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <volume>25.9843</volume>
           <program value="56"/>
-          <controller ctrl="7" value="33"/>
           <midiPort>1</midiPort>
           <midiChannel>0</midiChannel>
           </Channel>
@@ -187,8 +187,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <volume>29.1339</volume>
           <program value="57"/>
-          <controller ctrl="7" value="37"/>
           <midiPort>1</midiPort>
           <midiChannel>2</midiChannel>
           </Channel>

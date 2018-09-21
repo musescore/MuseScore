@@ -68,6 +68,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <volume>78.7402</volume>
           <program value="60"/>
           </Channel>
         </Instrument>
