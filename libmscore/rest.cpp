@@ -943,6 +943,7 @@ bool Rest::setProperty(Pid propertyId, const QVariant& v)
                   setVisible(v.toBool());
                   for (NoteDot* dot : _dots)
                         dot->setVisible(visible());
+                  score()->setLayout(tick());
                   break;
             case Pid::USER_OFF:
                   score()->addRefresh(canvasBoundingRect());
