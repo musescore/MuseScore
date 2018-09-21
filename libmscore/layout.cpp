@@ -3435,12 +3435,12 @@ System* Score::collectSystem(LayoutContext& lc)
             }
 
       //-------------------------------------------------------------
-      // StaffText, Harmony
+      // StaffText, Harmony, InstrumentChange
       //-------------------------------------------------------------
 
       for (const Segment* s : sl) {
             for (Element* e : s->annotations()) {
-                  if (e->isStaffText() || e->isHarmony())
+                  if (e->isStaffText() || e->isHarmony() || e->isInstrumentChange())
                         e->layout();
                   }
             }

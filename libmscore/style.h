@@ -713,6 +713,9 @@ enum class Sid {
       instrumentChangeAlign,
       instrumentChangeOffset,
       instrumentChangePlacement,
+      instrumentChangePosAbove,
+      instrumentChangePosBelow,
+      instrumentChangeMinDistance,
 
       figuredBassFontFace,
       figuredBassFontSize,

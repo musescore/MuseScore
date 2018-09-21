@@ -39,6 +39,7 @@
 #include "inspectorPalmMute.h"
 #include "inspectorVibrato.h"
 #include "inspectorNoteDot.h"
+#include "inspectorInstrchange.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "bendproperties.h"
@@ -344,6 +345,9 @@ void Inspector::update(Score* s)
                               break;
                         case ElementType::NOTEDOT:
                               ie = new InspectorNoteDot(this);
+                              break;
+                        case ElementType::INSTRUMENT_CHANGE:
+                              ie = new InspectorInstrumentChange(this);
                               break;
                         default:
                               if (element()->isText())
