@@ -1349,7 +1349,7 @@ void TextBase::layout()
 
 void TextBase::layout2(Sid posAbove, Sid posBelow)
       {
-      qreal y = placeAbove() ? styleP(posAbove) : styleP(posBelow) + staff()->height();
+      qreal y = placeAbove() ? styleP(posAbove) : styleP(posBelow) + (staff() ? staff()->height() : 0.0);
 
       QPointF o(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
       setPos(QPointF(0.0, y) + o);
