@@ -1406,7 +1406,7 @@ const TextStyle textLineTextStyle {{
       { Sid::textLineFontBold,                   Pid::BEGIN_FONT_BOLD         },
       { Sid::textLineFontItalic,                 Pid::BEGIN_FONT_ITALIC       },
       { Sid::textLineFontUnderline,              Pid::BEGIN_FONT_UNDERLINE    },
-      { Sid::defaultAlign,                       Pid::ALIGN                  },
+      { Sid::textLineTextAlign,                  Pid::ALIGN                  },
       { Sid::defaultOffset,                      Pid::OFFSET                 },
       { Sid::defaultOffsetType,                  Pid::OFFSET_TYPE            },
       { Sid::defaultFrameType,                   Pid::FRAME_TYPE             },
@@ -2085,9 +2085,8 @@ void MStyle::load(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-            if (tag == "TextStyle") {
+            if (tag == "TextStyle")
                   readTextStyle206(this, e);        // obsolete
-                  }
             else if (tag == "ottavaHook") {           // obsolete, for 3.0dev bw. compatibility, should be removed in final release
                   qreal y = qAbs(e.readDouble());
                   set(Sid::ottavaHookAbove, y);
