@@ -40,7 +40,7 @@ class Measure;
 class Fraction;
 class Driver;
 class Part;
-struct Channel;
+class Channel;
 class ScoreView;
 class MasterSynthesizer;
 class Segment;

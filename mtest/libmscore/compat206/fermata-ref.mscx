@@ -88,18 +88,12 @@
           <controller ctrl="0" value="2"/>
           <controller ctrl="32" value="2"/>
           <program value="42"/>
-          <controller ctrl="7" value="127"/>
-          <controller ctrl="10" value="89"/>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
-          <controller ctrl="7" value="127"/>
-          <controller ctrl="10" value="90"/>
           </Channel>
         <Channel name="tremolo">
           <program value="44"/>
-          <controller ctrl="7" value="127"/>
-          <controller ctrl="10" value="92"/>
           </Channel>
         </Instrument>
       </Part>

@@ -247,8 +247,8 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportR
                   // "normal", "pizzicato", "tremolo" for Strings,
                   // "normal", "mute" for Trumpet
                   foreach(const Channel* ch, j->second->channel()) {
-                        char port    = part->masterScore()->midiPort(ch->channel);
-                        char channel = part->masterScore()->midiChannel(ch->channel);
+                        char port    = part->masterScore()->midiPort(ch->channel());
+                        char channel = part->masterScore()->midiChannel(ch->channel());
 
                         if (staff->isTop()) {
                               track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_RESET_ALL_CTRL, 0));
@@ -271,12 +271,12 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportR
                                     track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 127));
                               }
 
-                              if (ch->program != -1)
-                                    track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_PROGRAM, ch->program));
-                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_VOLUME, ch->volume));
-                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_PANPOT, ch->pan));
-                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_REVERB_SEND, ch->reverb));
-                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_CHORUS_SEND, ch->chorus));
+                              if (ch->program() != -1)
+                                    track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_PROGRAM, ch->program()));
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_VOLUME, ch->volumeMIDI()));
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_PANPOT, ch->panMIDI()));
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_REVERB_SEND, ch->reverbMIDI()));
+                              track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_CHORUS_SEND, ch->chorusMIDI()));
                               }
 
                         // Export port to MIDI META event

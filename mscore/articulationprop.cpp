@@ -58,13 +58,13 @@ ArticulationProperties::ArticulationProperties(Articulation* na, QWidget* parent
 //      const QList<Channel>& channel() const;
 
             for (const Channel* a : instrument->channel()) {
-                  if (a->name.isEmpty() || a->name == "normal") {
-                        channelList->addItem(tr("normal"));
-                        channelList->item(channelList->count() - 1)->setData(Qt::UserRole, "normal");
+                  if (a->name().isEmpty() || a->name() == Channel::DEFAULT_NAME) {
+                        channelList->addItem(tr(Channel::DEFAULT_NAME));
+                        channelList->item(channelList->count() - 1)->setData(Qt::UserRole, Channel::DEFAULT_NAME);
                         }
                   else {
-                        channelList->addItem(qApp->translate("InstrumentsXML", a->name.toUtf8().data()));
-                        channelList->item(channelList->count() - 1)->setData(Qt::UserRole, a->name);
+                        channelList->addItem(qApp->translate("InstrumentsXML", a->name().toUtf8().data()));
+                        channelList->item(channelList->count() - 1)->setData(Qt::UserRole, a->name());
                         }
                   }
             for (const NamedEventList& el : instrument->midiActions()) {

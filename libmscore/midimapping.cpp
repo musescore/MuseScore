@@ -141,11 +141,11 @@ void MasterScore::reorderMidiMapping()
                   for (Channel* channel : instr->channel()) {
                         if (!(_midiMapping[sequenceNumber].part == part
                               && _midiMapping[sequenceNumber].articulation == channel)) {
-                              int shouldBe = channel->channel;
+                              int shouldBe = channel->channel();
                               _midiMapping.swap(sequenceNumber, shouldBe);
-                              _midiMapping[sequenceNumber].articulation->channel = sequenceNumber;
-                              channel->channel = sequenceNumber;
-                              _midiMapping[shouldBe].articulation->channel = shouldBe;
+                              _midiMapping[sequenceNumber].articulation->setChannel(sequenceNumber);
+                              channel->setChannel(sequenceNumber);
+                              _midiMapping[shouldBe].articulation->setChannel(shouldBe);
                               }
                         sequenceNumber++;
                         }
@@ -173,7 +173,7 @@ void MasterScore::removeDeletedMidiMapping()
             const InstrumentList* il = p->instruments();
             for (auto i = il->begin(); i != il->end() && !channelExists; ++i) {
                   const Instrument* instr = i->second;
-                  channelExists = (_midiMapping[index].articulation->channel != -1 && instr->channel().contains(_midiMapping[index].articulation)
+                  channelExists = (_midiMapping[index].articulation->channel() != -1 && instr->channel().contains(_midiMapping[index].articulation)
                       && !(_midiMapping[index].port == -1 && _midiMapping[index].channel == -1));
                   if (channelExists)
                         break;
@@ -185,7 +185,9 @@ void MasterScore::removeDeletedMidiMapping()
             // Let's do a left shift by 'removeOffset' items if necessary
             if (index != 0 && removeOffset != 0) {
                   _midiMapping[index-removeOffset] = _midiMapping[index];
-                  _midiMapping[index-removeOffset].articulation->channel -= removeOffset;
+
+                  int chanVal = _midiMapping[index-removeOffset].articulation->channel();
+                  _midiMapping[index-removeOffset].articulation->setChannel(chanVal - removeOffset);
                   }
             }
       // We have 'removeOffset' deleted instruments, let's remove their mappings
@@ -221,26 +223,26 @@ int MasterScore::updateMidiMapping()
                   for (Channel* channel : instr->channel()) {
                         bool channelExists = false;
                         for (MidiMapping mapping: _midiMapping) {
-                              if (channel == mapping.articulation && channel->channel != -1) {
+                              if (channel == mapping.articulation && channel->channel() != -1) {
                                     channelExists = true;
                                     break;
                                     }
                               }
                         // Channel could already exist, but have unassigned port or channel. Repair and continue
                         if (channelExists) {
-                              if (_midiMapping[channel->channel].port == -1) {
-                                    int nm = getNextFreeMidiMapping(-1, _midiMapping[channel->channel].channel);
-                                    _midiMapping[channel->channel].port = nm / 16;
+                              if (_midiMapping[channel->channel()].port == -1) {
+                                    int nm = getNextFreeMidiMapping(-1, _midiMapping[channel->channel()].channel);
+                                    _midiMapping[channel->channel()].port = nm / 16;
                                     }
-                              else if (_midiMapping[channel->channel].channel == -1) {
+                              else if (_midiMapping[channel->channel()].channel == -1) {
                                     if (drum) {
-                                          _midiMapping[channel->channel].port = getNextFreeDrumMidiMapping() / 16;
-                                          _midiMapping[channel->channel].channel = 9;
+                                          _midiMapping[channel->channel()].port = getNextFreeDrumMidiMapping() / 16;
+                                          _midiMapping[channel->channel()].channel = 9;
                                           continue;
                                           }
-                                    int nm = getNextFreeMidiMapping(_midiMapping[channel->channel].port);
-                                    _midiMapping[channel->channel].port    = nm / 16;
-                                    _midiMapping[channel->channel].channel = nm % 16;
+                                    int nm = getNextFreeMidiMapping(_midiMapping[channel->channel()].port);
+                                    _midiMapping[channel->channel()].port    = nm / 16;
+                                    _midiMapping[channel->channel()].channel = nm % 16;
                                     }
                               continue;
                               }
@@ -263,7 +265,7 @@ int MasterScore::updateMidiMapping()
                         mm.articulation = channel;
 
                         _midiMapping.append(mm);
-                        channel->channel = _midiMapping.size()-1;
+                        channel->setChannel(_midiMapping.size() - 1);
                         }
                   }
             }

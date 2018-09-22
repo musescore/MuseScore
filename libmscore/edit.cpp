@@ -4320,7 +4320,7 @@ void Score::undoAddElement(Element* element)
                         Part* part = nis->part();
                         Interval oldV = nis->part()->instrument(tickStart)->transpose();
                         // ws: instrument should not be changed here
-                        if (is->instrument()->channel().empty() || is->instrument()->channel(0)->program == -1)
+                        if (is->instrument()->channel().empty() || is->instrument()->channel(0)->program() == -1)
                               nis->setInstrument(*staff->part()->instrument(s1->tick()));
                         else if (nis != is)
                               nis->setInstrument(*is->instrument());

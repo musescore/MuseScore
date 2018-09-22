@@ -37,6 +37,7 @@ AbstractSlider::AbstractSlider(QWidget* parent)
       _lineStep   = 0.1;
       _pageStep   = 0.2;
       _center     = false;
+      _enableMouseWheel = true;
       _invert     = false;
       _scaleWidth = 4;
       _log        = false;
@@ -54,6 +55,15 @@ void AbstractSlider::setEnabled(bool val)
       {
       QWidget::setEnabled(val);
       update();
+      }
+
+//---------------------------------------------------------
+//   setEnableMouseWheel
+//---------------------------------------------------------
+
+void AbstractSlider::setEnableMouseWheel(bool enabled)
+      {
+            _enableMouseWheel = enabled;
       }
 
 //---------------------------------------------------------
@@ -112,6 +122,9 @@ void AbstractSlider::setScaleValueColor(const QColor& c)
 
 void AbstractSlider::wheelEvent(QWheelEvent* ev)
       {
+      if (!_enableMouseWheel)
+            return;
+
       int div = 50;
       if (ev->modifiers() & Qt::ShiftModifier)
             div = 15;
@@ -183,6 +196,8 @@ void AbstractSlider::setValue(double val)
             }
       else
             _value = val;
+
+      emit valueChanged(val, _id);
       update();
       }
 

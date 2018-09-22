@@ -42,9 +42,9 @@
           <string>64</string>
           </StringData>
         <Channel>
+          <volume>95</volume>
+          <pan>63</pan>
           <program value="12"/>
-          <controller ctrl="7" value="95"/>
-          <controller ctrl="10" value="63"/>
           <midiPort>0</midiPort>
           <midiChannel>8</midiChannel>
           </Channel>
@@ -223,9 +223,9 @@
             <string>64</string>
             </StringData>
           <Channel>
+            <volume>95</volume>
+            <pan>63</pan>
             <program value="12"/>
-            <controller ctrl="7" value="95"/>
-            <controller ctrl="10" value="63"/>
             </Channel>
           </Instrument>
         </Part>

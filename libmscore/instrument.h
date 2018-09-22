@@ -18,6 +18,8 @@
 #include "synthesizer/event.h"
 #include "interval.h"
 #include "clef.h"
+#include <QtGlobal>
+#include <QString>
 
 namespace Ms {
 
@@ -26,6 +28,7 @@ class XmlWriter;
 class XmlReader;
 class Drumset;
 class StringData;
+class ChannelListener;
 
 //---------------------------------------------------------
 //   StaffName
@@ -87,43 +90,117 @@ struct MidiArticulation {
       bool operator==(const MidiArticulation& i) const;
       };
 
+
 //---------------------------------------------------------
 //   Channel
 //---------------------------------------------------------
 
-struct Channel {
+class Channel {
       // this are the indexes of controllers which are always present in
       // Channel init EventList (maybe zero)
+      QString _name;
+      QString _descr;
+
+      static const int DEFAULT_COLOR = 0x3399ff;
+      int _color;  //rgb
+
+      QString _synti;
+
+      double _volume; //0 - 100
+      double _pan; //-180 - 180
+
+      double _chorus; //0 - 100
+      double _reverb; //0 - 100
+
+      int _program;     // current values as shown in mixer
+      int _bank;        // initialized from "init"
+      int _channel { 0 };      // mscore channel number, mapped to midi port/channel
+
+      bool _soloMute;
+      bool _mute;
+      bool _solo;
+
+      QList<ChannelListener *> listeners;
+
+public:
+      static const char* DEFAULT_NAME;
 
       enum class A : char {
             HBANK, LBANK, PROGRAM, VOLUME, PAN, CHORUS, REVERB,
             INIT_COUNT
             };
-      QString name;
-      QString descr;
-      int channel { 0 };      // mscore channel number, mapped to midi port/channel
+
+      enum class Prop : char {
+            VOLUME, PAN, CHORUS, REVERB, NAME, DESCR, PROGRAM, BANK, COLOR,
+            SOLOMUTE, SOLO, MUTE, SYNTI, CHANNEL
+            };
+
+private:
+      void firePropertyChanged(Channel::Prop prop);
+
+public:
+
       mutable std::vector<MidiCoreEvent> init;
 
-      QString synti;
-      int program;     // current values as shown in mixer
-      int bank;        // initialized from "init"
-      char volume;
-      char pan;
-      char chorus;
-      char reverb;
 
-      bool mute;
-      bool solo;
-      bool soloMute;
+      QString name() const { return _name; }
+      void setName(const QString& value);
+      QString descr() const { return _descr; }
+      void setDescr(const QString& value);
+      QString synti() const { return _synti; }
+      void setSynti(const QString& value);
+      int color() const { return _color; }
+      void setColor(int value);
+
+      double volume() const { return _volume; }
+      void setVolume(double value);
+      double pan() const { return _pan; }
+      void setPan(double value);
+      double chorus() const { return _chorus; }
+      void setChorus(double value);
+      double reverb() const { return _reverb; }
+      void setReverb(double value);
+
+      char volumeMIDI() const { return (char)qBound(0, (int)(_volume / 100.0 * 128), 127); }
+      char panMIDI() const { return (char)qBound(0, (int)((_pan + 180.0) / 360.0 * 128), 127); }
+      char chorusMIDI() const { return (char)qBound(0, (int)(_chorus / 100.0 * 128), 127); }
+      char reverbMIDI() const { return (char)qBound(0, (int)(_reverb / 100.0 * 128), 127); }
+
+      int program() const { return _program; }
+      void setProgram(int value);
+      int bank() const { return _bank; }
+      void setBank(int value);
+      int channel() const { return _channel; }
+      void setChannel(int value);
+
+      bool soloMute() const { return _soloMute; }
+      void setSoloMute(bool value);
+      bool mute() const { return _mute; }
+      void setMute(bool value);
+      bool solo() const { return _solo; }
+      void setSolo(bool value);
 
       QList<NamedEventList> midiActions;
       QList<MidiArticulation> articulation;
 
       Channel();
+      ~Channel();
       void write(XmlWriter&, Part *part) const;
       void read(XmlReader&, Part *part);
       void updateInitList() const;
-      bool operator==(const Channel& c) { return (name == c.name) && (channel == c.channel); }
+      bool operator==(const Channel& c) { return (_name == c._name) && (_channel == c._channel); }
+
+      void addListener(ChannelListener *l) { listeners.append(l); }
+      void removeListener(ChannelListener *l) { listeners.removeOne(l); }
+      };
+
+//---------------------------------------------------------
+//   ChannelListener
+//---------------------------------------------------------
+
+class ChannelListener {
+public:
+      virtual void propertyChanged(Channel::Prop property) = 0;
       };
 
 //---------------------------------------------------------

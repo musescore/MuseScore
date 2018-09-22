@@ -40,11 +40,11 @@
           <string>43</string>
           </StringData>
         <Channel>
+          <volume>127</volume>
+          <pan>63</pan>
+          <reverb>255</reverb>
+          <chorus>255</chorus>
           <program value="33"/>
-          <controller ctrl="7" value="127"/>
-          <controller ctrl="10" value="63"/>
-          <controller ctrl="93" value="255"/>
-          <controller ctrl="91" value="255"/>
           </Channel>
         </Instrument>
       </Part>
@@ -245,11 +245,11 @@
             <string>43</string>
             </StringData>
           <Channel>
+            <volume>127</volume>
+            <pan>63</pan>
+            <reverb>255</reverb>
+            <chorus>255</chorus>
             <program value="33"/>
-            <controller ctrl="7" value="127"/>
-            <controller ctrl="10" value="63"/>
-            <controller ctrl="93" value="255"/>
-            <controller ctrl="91" value="255"/>
             </Channel>
           </Instrument>
         </Part>

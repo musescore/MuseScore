@@ -30,7 +30,7 @@
       <midi-instrument id="P1-I1">
         <midi-channel>1</midi-channel>
         <midi-program>48</midi-program>
-        <volume>78.7402</volume>
+        <volume>100</volume>
         <pan>0</pan>
         </midi-instrument>
       </score-part>

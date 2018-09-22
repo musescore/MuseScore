@@ -1267,13 +1267,13 @@ void EditText::undoRedo()
 void ChangePatch::flip(EditData*)
       {
       MidiPatch op;
-      op.prog          = channel->program;
-      op.bank          = channel->bank;
-      op.synti         = channel->synti;
+      op.prog          = channel->program();
+      op.bank          = channel->bank();
+      op.synti         = channel->synti();
 
-      channel->program = patch.prog;
-      channel->bank    = patch.bank;
-      channel->synti   = patch.synti;
+      channel->setProgram(patch.prog);
+      channel->setBank(patch.bank);
+      channel->setSynti(patch.synti);
 
       patch            = op;
 
@@ -1284,10 +1284,10 @@ void ChangePatch::flip(EditData*)
 
       NPlayEvent event;
       event.setType(ME_CONTROLLER);
-      event.setChannel(channel->channel);
+      event.setChannel(channel->channel());
 
-      int hbank = (channel->bank >> 7) & 0x7f;
-      int lbank = channel->bank & 0x7f;
+      int hbank = (channel->bank() >> 7) & 0x7f;
+      int lbank = channel->bank() & 0x7f;
 
       event.setController(CTRL_HBANK);
       event.setValue(hbank);
@@ -1298,7 +1298,7 @@ void ChangePatch::flip(EditData*)
       MScore::seq->sendEvent(event);
 
       event.setController(CTRL_PROGRAM);
-      event.setValue(channel->program);
+      event.setValue(channel->program());
 
       score->setInstrumentsChanged(true);
 

@@ -891,10 +891,10 @@ static void readInstrument(Instrument *i, Part* p, XmlReader& e)
       {
       int program = -1;
       int bank    = 0;
-      int chorus  = 30;
-      int reverb  = 30;
       int volume  = 100;
       int pan     = 60;
+      int chorus  = 30;
+      int reverb  = 30;
       bool customDrumset = false;
       i->clearChannels();       // remove default channel
       while (e.readNextStartElement()) {
@@ -918,18 +918,18 @@ static void readInstrument(Instrument *i, Part* p, XmlReader& e)
             }
       if (i->channel().empty()) {      // for backward compatibility
             Channel* a = new Channel;
-            a->chorus  = chorus;
-            a->reverb  = reverb;
-            a->name    = "normal";
-            a->program = program;
-            a->bank    = bank;
-            a->volume  = volume;
-            a->pan     = pan;
+            a->setName(Channel::DEFAULT_NAME);
+            a->setProgram(program);
+            a->setBank(bank);
+            a->setVolume((double)volume / 127.0);
+            a->setPan((((double)pan / 63.5 - 1) * 180.0));
+            a->setReverb((double)reverb / 127.0);
+            a->setChorus((double)chorus / 127.0);
             i->appendChannel(a);
             }
       if (i->useDrumset()) {
-            if (i->channel()[0]->bank == 0)
-                  i->channel()[0]->bank = 128;
+            if (i->channel()[0]->bank() == 0)
+                  i->channel()[0]->setBank(128);
             i->channel()[0]->updateInitList();
             }
       }

@@ -86,8 +86,6 @@
           </Articulation>
         <Channel>
           <program value="24"/>
-          <controller ctrl="93" value="30"/>
-          <controller ctrl="91" value="30"/>
           </Channel>
         </Instrument>
       </Part>

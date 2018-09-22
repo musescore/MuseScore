@@ -474,7 +474,7 @@ void PianorollEditor::velocityChanged(int val)
 
 void PianorollEditor::keyPressed(int pitch)
       {
-      seq->startNote(staff->part()->instrument()->channel(0)->channel, pitch, 80, 0, 0.0);
+      seq->startNote(staff->part()->instrument()->channel(0)->channel(), pitch, 80, 0, 0.0);
       }
 
 //---------------------------------------------------------

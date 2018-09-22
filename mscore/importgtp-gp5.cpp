@@ -574,17 +574,17 @@ bool GuitarPro5::readTracks()
 
             Channel* ch = instr->channel(0);
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
-                  ch->program = 0;
-                  ch->bank    = 128;
+                  ch->setProgram(0);
+                  ch->setBank(128);
                   }
             else {
-                  ch->program = patch;
-                  ch->bank    = 0;
+                  ch->setProgram(patch);
+                  ch->setBank(0);
                   }
-            ch->volume  = channelDefaults[midiChannel].volume;
-            ch->pan     = channelDefaults[midiChannel].pan;
-            ch->chorus  = channelDefaults[midiChannel].chorus;
-            ch->reverb  = channelDefaults[midiChannel].reverb;
+            ch->setVolume(channelDefaults[midiChannel].volume * 100.0 / 127.0);
+            ch->setPan(((channelDefaults[midiChannel].pan / 127.0) - .5) * 360);
+            ch->setChorus(channelDefaults[midiChannel].chorus * 100.0 / 127.0);
+            ch->setReverb(channelDefaults[midiChannel].reverb * 100.0 / 127.0);
             staff->part()->setMidiChannel(midiChannel, midiPort);
 
             //qDebug("default2: %d", channelDefaults[i].reverb);

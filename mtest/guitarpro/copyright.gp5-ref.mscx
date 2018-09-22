@@ -42,9 +42,9 @@
           <string>64</string>
           </StringData>
         <Channel>
+          <volume>103</volume>
+          <pan>63</pan>
           <program value="24"/>
-          <controller ctrl="7" value="103"/>
-          <controller ctrl="10" value="63"/>
           </Channel>
         </Instrument>
       </Part>
@@ -154,9 +154,9 @@
             <string>64</string>
             </StringData>
           <Channel>
+            <volume>103</volume>
+            <pan>63</pan>
             <program value="24"/>
-            <controller ctrl="7" value="103"/>
-            <controller ctrl="10" value="63"/>
             </Channel>
           </Instrument>
         </Part>

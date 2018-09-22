@@ -486,7 +486,7 @@ void GuitarPro6::readTracks(QDomNode* track)
                               auto prog = currentNode.firstChildElement("Program");
                               if (!prog.isNull()) {
                                     auto p = prog.text().toInt();
-                                    part->instrument(0)->channel(0)->program = p;
+                                    part->instrument(0)->channel(0)->setProgram(p);
                                     }
                               int midiChannel = currentNode.firstChildElement("PrimaryChannel").text().toInt();
                               //if (!prog.isNull() && midiChannel != GP_DEFAULT_PERCUSSION_CHANNEL)
