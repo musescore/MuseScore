@@ -454,6 +454,7 @@ void LayoutContext::layoutLinear()
       page->setPos(0, 0);
       system->setPos(page->lm(), page->tm() + score->styleP(Sid::staffUpperBorder));
       page->setWidth(system->width() + system->pos().x());
+      page->setHeight(system->height() + system->pos().y());
       page->rebuildBspTree();
       }
 
