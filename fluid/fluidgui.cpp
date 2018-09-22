@@ -111,6 +111,7 @@ FluidGui::FluidGui(Synthesizer* s)
    : SynthesizerGui(s)
       {
       setupUi(this);
+      connect(soundFontTop,    SIGNAL(clicked()), SLOT(soundFontTopClicked()));
       connect(soundFontUp,     SIGNAL(clicked()), SLOT(soundFontUpClicked()));
       connect(soundFontDown,   SIGNAL(clicked()), SLOT(soundFontDownClicked()));
       connect(soundFontAdd,    SIGNAL(clicked()), SLOT(soundFontAddClicked()));
@@ -136,6 +137,25 @@ void FluidGui::synthesizerChanged()
       soundFonts->clear();
       soundFonts->addItems(sfonts);
       updateUpDownButtons();
+      emit sfChanged();
+      }
+
+//---------------------------------------------------------
+//   soundFontTopClicked
+//---------------------------------------------------------
+
+void FluidGui::soundFontTopClicked()
+      {
+      int row = soundFonts->currentRow();
+      if (row <= 0)
+            return;
+      QStringList sfonts = fluid()->soundFonts();
+      sfonts.move(row, 0);
+      fluid()->loadSoundFonts(sfonts);
+      sfonts = fluid()->soundFonts();
+      soundFonts->clear();
+      soundFonts->addItems(sfonts);
+      soundFonts->setCurrentRow(0);
       emit sfChanged();
       }
 
@@ -204,6 +224,7 @@ void FluidGui::updateUpDownButtons()
       {
       int rows = soundFonts->count();
       int row = soundFonts->currentRow();
+      soundFontTop->setEnabled(row > 0);
       soundFontUp->setEnabled(row > 0);
       soundFontDown->setEnabled((row != -1) && (row < (rows-1)));
       soundFontDelete->setEnabled(row != -1);

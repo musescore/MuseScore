@@ -95,6 +95,7 @@ ZerberusGui::ZerberusGui(Ms::Synthesizer* s)
    : SynthesizerGui(s)
       {
       setupUi(this);
+      connect(soundFontTop,    SIGNAL(clicked()), SLOT(soundFontTopClicked()));
       connect(soundFontUp,     SIGNAL(clicked()), SLOT(soundFontUpClicked()));
       connect(soundFontDown,   SIGNAL(clicked()), SLOT(soundFontDownClicked()));
       connect(soundFontAdd, SIGNAL(clicked()), SLOT(soundFontAddClicked()));
@@ -107,6 +108,22 @@ ZerberusGui::ZerberusGui(Ms::Synthesizer* s)
       connect(_progressTimer, SIGNAL(timeout()), this, SLOT(updateProgress()));
       connect(files, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtons()));
       updateButtons();
+      }
+
+void ZerberusGui::soundFontTopClicked()
+      {
+      int row = files->currentRow();
+      if (row <= 0)
+            return;
+
+      QStringList sfonts = zerberus()->soundFonts();
+      sfonts.move(row, 0);
+
+      zerberus()->removeSoundFonts(zerberus()->soundFonts());
+
+      loadSoundFontsAsync(sfonts);
+      files->setCurrentRow(0);
+      emit sfChanged();
       }
 
 void ZerberusGui::soundFontUpClicked()
@@ -281,10 +298,12 @@ void ZerberusGui::updateProgress()
 
 void ZerberusGui::updateButtons()
       {
+      int rows = zerberus()->soundFonts().count();
       int row = files->currentRow();
+      soundFontTop->setEnabled(row > 0);
+      soundFontUp->setEnabled(row > 0);
+      soundFontDown->setEnabled((row != -1) && (row < (rows-1)));
       soundFontDelete->setEnabled(row != -1);
-      soundFontUp->setEnabled(row != -1);
-      soundFontDown->setEnabled(row != -1);
       }
 
 //---------------------------------------------------------
