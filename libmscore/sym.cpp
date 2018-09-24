@@ -2920,8 +2920,7 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       QT_TRANSLATE_NOOP("symUserNames", "Push"),
       QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, 8' stop + upper tremolo 8' stop + 16' stop (accordion)"),
       QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, lower tremolo 8' stop + 8' stop + upper tremolo 8' stop (authentic musette)"),
-      //QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, 8' stop + 16' stop (bandone\\u00f3n)"),
-      QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, 8' stop + 16' stop (bandoneón)"), // workaround for Qt lupdate bug https://bugreports.qt.io/browse/QTBUG-35164
+      QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, 8' stop + 16' stop (bandone\\u00f3n)"),
       QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, 16' stop (bassoon)"),
       QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, 8' stop (clarinet)"),
       QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, lower tremolo 8' stop + 8' stop + upper tremolo 8' stop + 16' stop"),
@@ -2970,10 +2969,8 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       "Bakiye (sharp)",
       "Accidental bracket, left",
       "Accidental bracket, right",
-      //QT_TRANSLATE_NOOP("symUserNames", "B\u00fcy\u00fck m\u00fccenneb (flat)"),
-      QT_TRANSLATE_NOOP("symUserNames", "Büyük mücenneb (flat)"),  // workaround for Qt lupdate bug https://bugreports.qt.io/browse/QTBUG-35164
-      //QT_TRANSLATE_NOOP("symUserNames", "B\u00fcy\u00fck m\u00fccenneb (sharp)"),
-      QT_TRANSLATE_NOOP("symUserNames", "Büyük mücenneb (sharp)"), // workaround for Qt lupdate bug https://bugreports.qt.io/browse/QTBUG-35164
+      QT_TRANSLATE_NOOP("symUserNames", "B\u00fcy\u00fck m\u00fccenneb (flat)"),
+      QT_TRANSLATE_NOOP("symUserNames", "B\u00fcy\u00fck m\u00fccenneb (sharp)"),
       "Combining close curly brace",
       "Combining lower by one 17-limit schisma",
       "Combining lower by one 19-limit schisma",
@@ -3046,8 +3043,7 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       "Koma (sharp)",
       QT_TRANSLATE_NOOP("symUserNames", "Koron (quarter tone flat)"),
       "K\u00fc\u00e7\u00fck m\u00fccenneb (flat)",
-      //QT_TRANSLATE_NOOP("symUserNames", "K\u00fc\u00e7\u00fck m\u00fccenneb (sharp)"),
-      QT_TRANSLATE_NOOP("symUserNames", "Küçük mücenneb (sharp)"), // workaround for Qt lupdate bug https://bugreports.qt.io/browse/QTBUG-35164
+      QT_TRANSLATE_NOOP("symUserNames", "K\u00fc\u00e7\u00fck m\u00fccenneb (sharp)"),
       "Large double sharp",
       "Lower by one septimal comma",
       "Lower by one tridecimal quartertone",
@@ -3270,10 +3266,8 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       QT_TRANSLATE_NOOP("symUserNames", "Tenuto-accent above"),
       QT_TRANSLATE_NOOP("symUserNames", "Tenuto-accent below"),
       QT_TRANSLATE_NOOP("symUserNames", "Tenuto below"),
-      //QT_TRANSLATE_NOOP("symUserNames", "Lour\\u00e9 (tenuto-staccato) above"),
-      QT_TRANSLATE_NOOP("symUserNames", "Louré (tenuto-staccato) above"), // workaround for Qt lupdate bug https://bugreports.qt.io/browse/QTBUG-35164
-      //QT_TRANSLATE_NOOP("symUserNames", "Lour\\u00e9 (tenuto-staccato) below"),
-      QT_TRANSLATE_NOOP("symUserNames", "Louré (tenuto-staccato) below"), // workaround for Qt lupdate bug https://bugreports.qt.io/browse/QTBUG-35164
+      QT_TRANSLATE_NOOP("symUserNames", "Lour\\u00e9 (tenuto-staccato) above"),
+      QT_TRANSLATE_NOOP("symUserNames", "Lour\\u00e9 (tenuto-staccato) below"),
       QT_TRANSLATE_NOOP("symUserNames", "Unstress above"),
       QT_TRANSLATE_NOOP("symUserNames", "Unstress below"),
       "Augmentation dot",
