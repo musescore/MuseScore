@@ -267,17 +267,11 @@ void Lyrics::layout()
             _even             = false;
             styleDidChange    = true;
             }
-#if 0
-      if (isMelisma() || hasNumber) {
+
+      if (isMelisma() || hasNumber)
             if (isStyled(Pid::ALIGN)) {
-                  // setAlign(score()->styleI(Sid::lyricsMelismaAlign));
-                  }
+                  setAlign(score()->styleV(Sid::lyricsMelismaAlign).value<Align>());
             }
-      else {
-            }
-#else
-      Q_UNUSED(hasNumber);
-#endif
       if (styleDidChange)
             styleChanged();
 
