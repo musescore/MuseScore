@@ -3409,6 +3409,8 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
             }
 
+      layoutLyrics(system);
+
       //-------------------------------------------------------------
       // Jump, Marker
       //-------------------------------------------------------------
@@ -3456,7 +3458,6 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
             }
 
-      layoutLyrics(system);
       system->layout2();   // compute staff distances
 
       Measure* lm  = system->lastMeasure();
