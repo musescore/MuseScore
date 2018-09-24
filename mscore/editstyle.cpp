@@ -121,6 +121,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::lyricsAlignVerseNumber,  false, lyricsAlignVerseNumber,  resetLyricsAlignVerseNumber  },
       { Sid::lyricsLineThickness,     false, lyricsLineThickness,     resetLyricsLineThickness     },
       { Sid::lyricsMelismaPad,        false, lyricsMelismaPad,        resetLyricsMelismaPad        },
+      { Sid::lyricsMelismaAlign,      false, lyricsMelismaAlign,      resetLyricsMelismaAlign      },
       { Sid::lyricsDashPad,           false, lyricsDashPad,           resetLyricsDashPad           },
       { Sid::lyricsDashLineThickness, false, lyricsDashLineThickness, resetLyricsDashLineThickness },
       { Sid::lyricsDashYposRatio,     false, lyricsDashYposRatio,     resetLyricsDashYposRatio     },
@@ -130,12 +131,14 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::lyricsOddFontBold,       false, lyricsOddFontBold,       resetLyricsOddFontBold       },
       { Sid::lyricsOddFontItalic,     false, lyricsOddFontItalic,     resetLyricsOddFontItalic     },
       { Sid::lyricsOddFontUnderline,  false, lyricsOddFontUnderline,  resetLyricsOddFontUnderline  },
+      { Sid::lyricsOddAlign,          false, lyricsOddAlign,          resetLyricsOddAlign          },
 
       { Sid::lyricsEvenFontFace,      false, lyricsEvenFontFace,      resetLyricsEvenFontFace      },
       { Sid::lyricsEvenFontSize,      false, lyricsEvenFontSize,      resetLyricsEvenFontSize      },
       { Sid::lyricsEvenFontBold,      false, lyricsEvenFontBold,      resetLyricsEvenFontBold      },
       { Sid::lyricsEvenFontItalic,    false, lyricsEvenFontItalic,    resetLyricsEvenFontItalic    },
       { Sid::lyricsEvenFontUnderline, false, lyricsEvenFontUnderline, resetLyricsEvenFontUnderline },
+      { Sid::lyricsEvenAlign,         false, lyricsEvenAlign,         resetLyricsEvenAlign         },
 
       { Sid::systemFrameDistance,     false, systemFrameDistance,     resetSystemFrameDistance },
       { Sid::frameSystemDistance,     false, frameSystemDistance,     resetFrameSystemDistance },
