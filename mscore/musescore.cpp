@@ -6697,7 +6697,8 @@ int main(int argc, char* av[])
             dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 
       if (deletePreferences) {
-            QDir(dataPath).removeRecursively();
+            if (useFactorySettings)
+                  QDir(dataPath).removeRecursively();
             QSettings settings;
             QFile::remove(settings.fileName() + ".lock"); //forcibly remove lock
             QFile::remove(settings.fileName());
