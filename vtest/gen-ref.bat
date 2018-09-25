@@ -1,7 +1,7 @@
 
 rem create reference
 
-set MSCORE=..\win32install\bin\musescore.exe
+set MSCORE=..\msvc.install_x64\bin\musescore.exe
 set DPI=130
 
 %MSCORE% %1.mscz -r %DPI% -o %1.png
