@@ -14,6 +14,10 @@
 
 namespace Ms {
 
+//---------------------------------------------------------
+//   systemStyle
+//---------------------------------------------------------
+
 static const ElementStyle systemStyle {
       { Sid::systemTextPlacement,                Pid::PLACEMENT              },
       };

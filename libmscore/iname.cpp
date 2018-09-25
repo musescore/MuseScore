@@ -18,22 +18,18 @@
 
 namespace Ms {
 
+//---------------------------------------------------------
+//   longInstrumentStyle
+//---------------------------------------------------------
+
 static const ElementStyle longInstrumentStyle {
-//      { Sid::longInstrumentFontFace,             Pid::FONT_FACE              },
-//      { Sid::longInstrumentFontSize,             Pid::FONT_SIZE              },
-//      { Sid::longInstrumentFontBold,             Pid::FONT_BOLD              },
-//      { Sid::longInstrumentFontItalic,           Pid::FONT_ITALIC            },
-//      { Sid::longInstrumentFontUnderline,        Pid::FONT_UNDERLINE         },
-//      { Sid::longInstrumentAlign,                Pid::ALIGN                  },
       };
 
+//---------------------------------------------------------
+//   shortInstrumentStyle
+//---------------------------------------------------------
+
 static const ElementStyle shortInstrumentStyle {
-//      { Sid::shortInstrumentFontFace,            Pid::FONT_FACE              },
-//      { Sid::shortInstrumentFontSize,            Pid::FONT_SIZE              },
-//      { Sid::shortInstrumentFontBold,            Pid::FONT_BOLD              },
-//      { Sid::shortInstrumentFontItalic,          Pid::FONT_ITALIC            },
-//      { Sid::shortInstrumentFontUnderline,       Pid::FONT_UNDERLINE         },
-//      { Sid::shortInstrumentAlign,               Pid::ALIGN                  },
       };
 
 //---------------------------------------------------------

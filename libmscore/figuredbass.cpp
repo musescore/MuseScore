@@ -27,6 +27,10 @@
 
 namespace Ms {
 
+//---------------------------------------------------------
+//   figuredBassTextStyle
+//---------------------------------------------------------
+
 static const std::vector<StyledProperty> figuredBassTextStyle {
       { Sid::figuredBassFontFace,                Pid::FONT_FACE              },
       { Sid::figuredBassFontSize,                Pid::FONT_SIZE              },

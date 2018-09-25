@@ -28,14 +28,6 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const ElementStyle instrumentChangeStyle {
-/*      { Sid::instrumentChangeFontFace,           Pid::FONT_FACE              },
-      { Sid::instrumentChangeFontSize,           Pid::FONT_SIZE              },
-      { Sid::instrumentChangeFontBold,           Pid::FONT_BOLD              },
-      { Sid::instrumentChangeFontItalic,         Pid::FONT_ITALIC            },
-      { Sid::instrumentChangeFontUnderline,      Pid::FONT_UNDERLINE         },
-      { Sid::instrumentChangeAlign,              Pid::ALIGN                  },
-      { Sid::instrumentChangeOffset,             Pid::OFFSET                 },
-*/
       { Sid::instrumentChangePlacement,          Pid::PLACEMENT              },
       };
 
