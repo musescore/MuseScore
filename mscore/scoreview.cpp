@@ -2285,7 +2285,7 @@ void ScoreView::showOmr(bool flag)
       if (t->view() != this)
             t = mscore->getTab2();
       if (t->view() == this)
-            t->setCurrent(t->currentIndex());
+            t->setCurrentIndex(t->currentIndex());
       else
             qDebug("view not found");
       }

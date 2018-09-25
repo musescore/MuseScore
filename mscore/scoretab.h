@@ -58,10 +58,12 @@ class ScoreTab : public QWidget {
       void tabCloseRequested(int);
       void actionTriggered(QAction*);
 
+   private slots:
+      void setCurrent(int);
+
    public slots:
       void updateExcerpts();
       void setExcerpt(int);
-      void setCurrent(int);
       void tabMoved(int, int);
 
    public:
