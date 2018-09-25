@@ -509,6 +509,13 @@ bool Articulation::isAccent() const
           || _symId == SymId::articAccentStaccatoAbove  || _symId == SymId::articAccentStaccatoBelow;
       }
 
+bool Articulation::isMarcato() const
+      {
+      return _symId == SymId::articMarcatoAbove         || _symId == SymId::articMarcatoBelow
+          || _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
+          || _symId == SymId::articMarcatoTenutoAbove   || _symId == SymId::articMarcatoTenutoBelow;
+      }
+
 //---------------------------------------------------------
 //   isLuteFingering
 //---------------------------------------------------------

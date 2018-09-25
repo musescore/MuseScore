@@ -33,6 +33,7 @@ class TestCompat206 : public QObject, public MTest
       void accidentals()      { compat("accidentals");      }
       void ambitus()          { compat("ambitus");          }
       void articulations()    { compat("articulations");    }
+      void articulationsDouble() { compat("articulations-double"); }
       void breath()           { compat("breath");           }
       void clefs()            { compat("clefs");            }
       void drumset()          { compat("drumset");          }
