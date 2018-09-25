@@ -41,7 +41,7 @@ MidiPanKnob::MidiPanKnob(QWidget* parent)
 
 void MidiPanKnob::valueChange()
       {
-      emit valueChanged(_value + 64.0f, _id);
+      emit valueChanged(_value + 64.0f, __id);
       update();
       }
 

@@ -505,11 +505,11 @@ void PianoView::setStaff(Staff* s, Pos* l)
 //   addChord
 //---------------------------------------------------------
 
-void PianoView::addChord(Chord* chord)
+void PianoView::addChord(Chord* crd)
       {
-      for (Chord* c : chord->graceNotes())
+      for (Chord* c : crd->graceNotes())
             addChord(c);
-      for (Note* note : chord->notes()) {
+      for (Note* note : crd->notes()) {
             if (note->tieBack())
                   continue;
             for (NoteEvent& e : note->playEvents())

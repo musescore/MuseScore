@@ -69,7 +69,7 @@ bool GuitarPro4::readMixChange(Measure* measure)
       signed char reverb  = readChar();
       signed char phase   = readChar();
       signed char tremolo = readChar();
-      int tempo    = readInt();
+      int temp    = readInt();
 
       bool tempoEdited = false;
 
@@ -85,14 +85,14 @@ bool GuitarPro4::readMixChange(Measure* measure)
             readChar();
       if (tremolo >= 0)
             readChar();
-      if (tempo >= 0) {
+      if (temp >= 0) {
             if (last_segment) {
-                  score->setTempo(last_segment->tick(), double(tempo) / 60.0f);
+                  score->setTempo(last_segment->tick(), double(temp) / 60.0f);
                   last_segment = nullptr;
                   }
-            if (tempo != previousTempo) {
-                  previousTempo = tempo;
-                  setTempo(tempo, measure);
+            if (temp != previousTempo) {
+                  previousTempo = temp;
+                  setTempo(temp, measure);
                   }
             readChar();
             tempoEdited = true;
@@ -235,7 +235,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
       if (noteBits & NOTE_FINGERING) {          // 0x80
             int leftFinger  = readUChar();
             int rightFinger = readUChar();
-            Fingering* f    = new Fingering(score);
+            Fingering* fi   = new Fingering(score);
             QString finger;
             // if there is a valid left hand fingering
             if (leftFinger < 5) {
@@ -262,9 +262,9 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                   else if (rightFinger == 4)
                         finger = "O";
                   }
-            f->setPlainText(finger);
-            note->add(f);
-            f->reset();
+            fi->setPlainText(finger);
+            note->add(fi);
+            fi->reset();
             }
       bool slur = false;
       uchar modMask2{ 0 };
@@ -583,9 +583,9 @@ void GuitarPro4::readInfo()
 //   convertGP4SlideNum
 //---------------------------------------------------------
 
-int GuitarPro4::convertGP4SlideNum(int slide)
+int GuitarPro4::convertGP4SlideNum(int sl)
       {
-      switch (slide) {
+      switch (sl) {
             case 1:
                   return SHIFT_SLIDE;
             case 2:
@@ -599,7 +599,7 @@ int GuitarPro4::convertGP4SlideNum(int slide)
             case 255:   // slide in from below
                   return SLIDE_IN_BELOW;
             }
-      return slide;
+      return sl;
       }
 
 //---------------------------------------------------------
@@ -615,7 +615,7 @@ bool GuitarPro4::read(QFile* fp)
       readUChar();      // triplet feeling
       readLyrics();
 
-      int tempo  = readInt();
+      int temp   = readInt();
       key        = readInt();
       /*int octave =*/ readUChar();    // octave
 
@@ -690,7 +690,7 @@ bool GuitarPro4::read(QFile* fp)
 
       createMeasures();
 
-      setTempo(tempo, score->firstMeasure());
+      setTempo(temp, score->firstMeasure());
 
       for (int i = 0; i < staves; ++i) {
             int tuning[GP_MAX_STRING_NUMBER];
@@ -1063,7 +1063,7 @@ bool GuitarPro4::read(QFile* fp)
                   }
 
             if (bar == 1 && !mixChange)
-                  setTempo(tempo, score->firstMeasure());
+                  setTempo(temp, score->firstMeasure());
             }
 
       for (auto n : slideList) {

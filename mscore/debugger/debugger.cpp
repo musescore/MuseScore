@@ -466,10 +466,10 @@ void Debugger::updateList(Score* s)
                   }
             }
 
-      foreach (Page* page, cs->pages()) {
-            ElementItem* pi = new ElementItem(list, page);
+      foreach (Page* pg, cs->pages()) {
+            ElementItem* pi = new ElementItem(list, pg);
 
-            for (System* system : page->systems()) {
+            for (System* system : pg->systems()) {
                   ElementItem* si = new ElementItem(pi, system);
                   for (Bracket* b : system->brackets())
                         new ElementItem(si, b);
@@ -811,11 +811,11 @@ void MeasureView::setElement(Element* e)
       mb.hasCourtesyKeySig->setChecked(m->hasCourtesyKeySig());
       mb.hasVoices->setChecked(m->hasVoices(0));
       mb.sel->clear();
-      for (const Element* el : m->el()) {
+      for (const Element* elm : m->el()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, el->name());
-//            item->setText(1, QString("%1").arg(el->subtype()));
-            void* p = (void*) el;
+            item->setText(0, elm->name());
+//            item->setText(1, QString("%1").arg(elm->subtype()));
+            void* p = (void*) elm;
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
             mb.sel->addTopLevelItem(item);
             }
@@ -1168,8 +1168,8 @@ void ShowNoteWidget::setElement(Element* e)
             nb.fingering->addItem(item);
             }
       nb.noteEvents->clear();
-      for (const NoteEvent& el : note->playEvents()) {
-            QString s = QString("%1 %2 %3").arg(el.pitch()).arg(el.ontime()).arg(el.len());
+      for (const NoteEvent& elm : note->playEvents()) {
+            QString s = QString("%1 %2 %3").arg(elm.pitch()).arg(elm.ontime()).arg(elm.len());
             QListWidgetItem* item = new QListWidgetItem(s);
             nb.noteEvents->addItem(item);
             }
@@ -1568,10 +1568,10 @@ void SpannerView::setElement(Element* e)
       sp.track2->setValue(spanner->track2());
 
       sp.segments->clear();
-      for (const Element* el : spanner->spannerSegments()) {
+      for (const Element* elm : spanner->spannerSegments()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, el->name());
-            void* p = (void*) el;
+            item->setText(0, elm->name());
+            void* p = (void*) elm;
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
             sp.segments->addTopLevelItem(item);
             }
@@ -1741,12 +1741,12 @@ void TupletView::setElement(Element* e)
       tb.duration->setText(tuplet->duration().print());
 
       tb.elements->clear();
-      for (DurationElement* el : tuplet->elements()) {
+      for (DurationElement* elm : tuplet->elements()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, el->name());
-            item->setText(1, QString("%1").arg(el->tick()));
-            item->setText(2, QString("%1").arg(el->actualTicks()));
-            void* p = (void*) el;
+            item->setText(0, elm->name());
+            item->setText(1, QString("%1").arg(elm->tick()));
+            item->setText(2, QString("%1").arg(elm->actualTicks()));
+            void* p = (void*) elm;
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
             tb.elements->addTopLevelItem(item);
             }
@@ -2119,8 +2119,8 @@ void VoltaView::setElement(Element* e)
 //      lb.rightElement->setText(QString("%1").arg((unsigned long)volta->endElement(), 8, 16));
 
       sp.segments->clear();
-      const QList<SpannerSegment*>& el = volta->spannerSegments();
-      for (const SpannerSegment* elm : el) {
+      const QList<SpannerSegment*>& ele = volta->spannerSegments();
+      for (const SpannerSegment* elm : ele) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
             item->setText(0, QString("%1").arg((quintptr)elm, 8, 16));
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>((void*)elm));
@@ -2780,10 +2780,10 @@ void SystemView::setElement(Element* e)
       System* vs = (System*)e;
       ShowElementBase::setElement(e);
       mb.spanner->clear();
-      for (const Element* el : vs->spannerSegments()) {
+      for (const Element* elm : vs->spannerSegments()) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
-            item->setText(0, el->name());
-            void* p = (void*) el;
+            item->setText(0, elm->name());
+            void* p = (void*) elm;
             item->setData(0, Qt::UserRole, QVariant::fromValue<void*>(p));
             mb.spanner->addTopLevelItem(item);
             }

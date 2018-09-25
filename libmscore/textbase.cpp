@@ -1558,18 +1558,18 @@ class XmlNesting : public QStack<QString> {
 void TextBase::genText()
       {
       _text.clear();
-      bool _bold      = false;
-      bool _italic    = false;
-      bool _underline = false;
+      bool bold_      = false;
+      bool italic_    = false;
+      bool underline_ = false;
 
       for (const TextBlock& block : _layout) {
             for (const TextFragment& f : block.fragments()) {
                   if (!f.format.bold() && bold())
-                        _bold = true;
+                        bold_ = true;
                   if (!f.format.italic() && italic())
-                        _italic = true;
+                        italic_ = true;
                   if (!f.format.underline() && underline())
-                        _underline = true;
+                        underline_ = true;
                   }
             }
       CharFormat fmt;
@@ -1582,11 +1582,11 @@ void TextBase::genText()
       fmt.setValign(VerticalAlignment::AlignNormal);
 
       XmlNesting xmlNesting(&_text);
-      if (_bold)
+      if (bold_)
             xmlNesting.pushB();
-      if (_italic)
+      if (italic_)
             xmlNesting.pushI();
-      if (_underline)
+      if (underline_)
             xmlNesting.pushU();
 
       for (const TextBlock& block : _layout) {
@@ -1912,8 +1912,8 @@ QString TextBase::convertFromHtml(const QString& ss) const
       doc.setHtml(ss);
 
       QString s;
-      qreal _size = size();
-      QString _family = family();
+      qreal size_ = size();
+      QString family_ = family();
       for (auto b = doc.firstBlock(); b.isValid() ; b = b.next()) {
             if (!s.isEmpty())
                   s += "\n";
@@ -1926,13 +1926,13 @@ QString TextBase::convertFromHtml(const QString& ss) const
                         // html font sizes may have spatium adjustments; need to undo this
                         if (sizeIsSpatiumDependent())
                               htmlSize *= SPATIUM20 / spatium();
-                        if (fabs(_size - htmlSize) > 0.1) {
-                              _size = htmlSize;
-                              s += QString("<font size=\"%1\"/>").arg(_size);
+                        if (fabs(size_ - htmlSize) > 0.1) {
+                              size_ = htmlSize;
+                              s += QString("<font size=\"%1\"/>").arg(size_);
                               }
-                        if (_family != font.family()) {
-                              _family = font.family();
-                              s += QString("<font face=\"%1\"/>").arg(_family);
+                        if (family_ != font.family()) {
+                              family_ = font.family();
+                              s += QString("<font face=\"%1\"/>").arg(family_);
                               }
                         if (font.bold())
                               s += "<b>";

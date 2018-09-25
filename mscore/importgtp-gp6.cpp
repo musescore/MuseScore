@@ -648,14 +648,14 @@ int GuitarPro6::findNumMeasures(GPPartInfo* partInfo)
                   break;
             masterBar = masterBar.nextSibling();
             }
-      QString bars = masterBar.lastChildElement("Bars").toElement().text();
+      QString b = masterBar.lastChildElement("Bars").toElement().text();
       //work out the number of measures (add 1 as couning from 0, and divide by number of parts)
-      int numMeasures = (bars.split(" ").last().toInt() + 1) / score->parts().length();
+      int numMeasures = (b.split(" ").last().toInt() + 1) / score->parts().length();
 
-      if (numMeasures > bars.size()) {
-            qDebug("GuitarPro6:findNumMeasures: bars %d < numMeasures %d\n", bars.size(), numMeasures);
+      if (numMeasures > b.size()) {
+            qDebug("GuitarPro6:findNumMeasures: bars %d < numMeasures %d\n", b.size(), numMeasures);
             // HACK (ws)
-            numMeasures = bars.size();
+            numMeasures = b.size();
             }
       return numMeasures;
       }
@@ -832,9 +832,9 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
       bool startSlur = false;
       bool endSlur = false;
       for (auto currentBeat = currentBeatList.begin(); currentBeat != currentBeatList.end(); currentBeat++) {
-            int slide = -1;
+            int sl = -1;
             if (slides->contains(staffIdx * VOICES + voiceNum))
-                  slide = slides->take(staffIdx * VOICES + voiceNum);
+                  sl = slides->take(staffIdx * VOICES + voiceNum);
 
             Fraction l;
             int dotted           = 0;
@@ -1434,7 +1434,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                           if (!leftFingeringNode.isNull() || !rightFingeringNode.isNull()) {
                                                 QDomNode fingeringNode = leftFingeringNode.isNull() ? rightFingeringNode : leftFingeringNode;
                                                 QString finger         = fingeringNode.toElement().text();
-                                                Fingering* f           = new Fingering(score);
+                                                Fingering* fi          = new Fingering(score);
                                                 if (!leftFingeringNode.isNull()) {
                                                       if (!finger.compare("Open"))
                                                             finger = "O";
@@ -1449,9 +1449,9 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       else if (!finger.compare("C"))
                                                             finger = "4";
                                                       }
-                                                f->setPlainText(finger);
-                                                note->add(f);
-                                                f->reset();
+                                                fi->setPlainText(finger);
+                                                note->add(fi);
+                                                fi->reset();
                                                 }
                                           QDomNode arpeggioNode = currentNode.parentNode().firstChildElement("Arpeggio");
                                           if (!arpeggioNode.isNull()) {
@@ -1535,8 +1535,8 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                                       addVibrato(note, Vibrato::Type::GUITAR_VIBRATO_WIDE);
                                                 }
 
-                                          if (cr && (cr->type() == ElementType::CHORD) && slide > 0)
-                                                createSlide(slide, cr, staffIdx);
+                                          if (cr && (cr->type() == ElementType::CHORD) && sl > 0)
+                                                createSlide(sl, cr, staffIdx);
                                           note->setTpcFromPitch();
 
                                           /* if the ottava is a continuation (need to end old one), or we don't
@@ -1620,9 +1620,9 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                         }
                   else if (currentNode.nodeName() == "Dynamic") {}
                   else if (!currentNode.nodeName().compare("Chord")) {
-                        int key = currentNode.toElement().text().toInt();
-                        if (fretDiagrams[key])
-                              segment->add(fretDiagrams[key]);
+                        int k = currentNode.toElement().text().toInt();
+                        if (fretDiagrams[k])
+                              segment->add(fretDiagrams[k]);
                         }
                   else if (currentNode.nodeName() == "Timer") {
                         //int time    = currentNode.toElement().text().toInt();
@@ -2455,15 +2455,15 @@ void GuitarPro6::readGpif(QByteArray* data)
       // MasterBars node
       GPPartInfo partInfo;
       QDomNode masterBars = eachTrack.nextSibling();
-      QDomNode bars       = masterBars.nextSibling();
-      QDomNode voices     = bars.nextSibling();
+      QDomNode b          = masterBars.nextSibling();
+      QDomNode voices     = b.nextSibling();
       QDomNode beats      = voices.nextSibling();
       QDomNode notes      = beats.nextSibling();
       QDomNode rhythms    = notes.nextSibling();
 
       // set up the partInfo struct to contain information from the file
       partInfo.masterBars = masterBars.firstChild();
-      partInfo.bars       = bars.firstChild();
+      partInfo.bars       = b.firstChild();
       partInfo.voices     = voices.firstChild();
       partInfo.beats      = beats.firstChild();
       partInfo.notes      = notes.firstChild();

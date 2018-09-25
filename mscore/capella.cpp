@@ -1595,11 +1595,11 @@ void VoltaObj::read()
       y  = cap->readInt();
       color = cap->readColor();
 
-      unsigned char flags = cap->readByte();
-      bLeft      = (flags & 1) != 0; // links abgeknickt
-      bRight     = (flags & 2) != 0; // rechts abgeknickt
-      bDotted    = (flags & 4) != 0;
-      allNumbers = (flags & 8) != 0;
+      unsigned char f = cap->readByte();
+      bLeft      = (f & 1) != 0; // links abgeknickt
+      bRight     = (f & 2) != 0; // rechts abgeknickt
+      bDotted    = (f & 4) != 0;
+      allNumbers = (f & 8) != 0;
 
       unsigned char numbers = cap->readByte();
       from = numbers & 0x0F;

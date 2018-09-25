@@ -452,7 +452,7 @@ bool GuitarPro5::readMixChange(Measure* measure)
       signed char tremolo = readChar();
       readDelphiString();                 // tempo name
 
-      int tempo = readInt();
+      int temp = readInt();
       bool editedTempo = false;
       if (volume >= 0)
             readChar();
@@ -467,14 +467,14 @@ bool GuitarPro5::readMixChange(Measure* measure)
             readChar();
       if (tremolo >= 0)
             readChar();
-      if (tempo >= 0) {
+      if (temp >= 0) {
             if (last_segment) {
-                  score->setTempo(last_segment->tick(), double(tempo) / 60.0);
+                  score->setTempo(last_segment->tick(), double(temp) / 60.0);
 			last_segment = nullptr;
 		      }
-            if (tempo != previousTempo) {
-                  previousTempo = tempo;
-                  setTempo(tempo, measure);
+            if (temp != previousTempo) {
+                  previousTempo = temp;
+                  setTempo(temp, measure);
                   editedTempo = true;
                   }
             readChar();
@@ -1375,7 +1375,7 @@ bool GuitarPro5::readNote(int string, Note* note)
       if (noteBits & NOTE_FINGERING) {
             int leftFinger = readUChar();
             int rightFinger = readUChar();
-            Fingering* f = new Fingering(score);
+            Fingering* fi = new Fingering(score);
             QString finger;
             // if there is a valid left hand fingering
             if (leftFinger < 5) {
@@ -1402,9 +1402,9 @@ bool GuitarPro5::readNote(int string, Note* note)
                   else if (rightFinger == 4)
                         finger = "O";
                   }
-            f->setPlainText(finger);
-            note->add(f);
-            f->reset();
+            fi->setPlainText(finger);
+            note->add(fi);
+            fi->reset();
             }
 
       if (noteBits & 0x1)     // Time independent duration

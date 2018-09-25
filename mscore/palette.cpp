@@ -1736,8 +1736,8 @@ void PaletteScrollArea::resizeEvent(QResizeEvent* re)
 
 void Palette::dragEnterEvent(QDragEnterEvent* event)
       {
-      const QMimeData* data = event->mimeData();
-      if (data->hasUrls()) {
+      const QMimeData* dta = event->mimeData();
+      if (dta->hasUrls()) {
             QList<QUrl>ul = event->mimeData()->urls();
             QUrl u = ul.front();
             if (MScore::debugMode) {
@@ -1756,7 +1756,7 @@ void Palette::dragEnterEvent(QDragEnterEvent* event)
                         }
                   }
             }
-      else if (data->hasFormat(mimeSymbolFormat)) {
+      else if (dta->hasFormat(mimeSymbolFormat)) {
             event->accept();
             update();
             }
@@ -1820,8 +1820,8 @@ void Palette::dropEvent(QDropEvent* event)
                   }
             }
       else if (datap->hasFormat(mimeSymbolFormat)) {
-            QByteArray data(event->mimeData()->data(mimeSymbolFormat));
-            XmlReader xml(data);
+            QByteArray dta(event->mimeData()->data(mimeSymbolFormat));
+            XmlReader xml(dta);
             QPointF dragOffset;
             Fraction duration;
             ElementType type = Element::readType(xml, &dragOffset, &duration);

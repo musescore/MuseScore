@@ -76,8 +76,8 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
 void InspectorHairpin::updateLineType()
       {
       HairpinSegment* hs = toHairpinSegment(inspector->element());
-      Hairpin* h = hs->hairpin();
-      bool userDash = h->lineStyle() == Qt::CustomDashLine;
+      Hairpin* hp = hs->hairpin();
+      bool userDash = hp->lineStyle() == Qt::CustomDashLine;
 
       l.dashLineLength->setVisible(userDash);
       l.dashGapLength->setVisible(userDash);

@@ -2106,9 +2106,9 @@ void MuseScore::openRecentMenu()
       bool one = false;
       for (const QFileInfo& fi : recentScores()) {
             QAction* action = openRecent->addAction(fi.fileName().replace("&", "&&"));  // show filename only
-            QString data(fi.canonicalFilePath());
-            action->setData(data);
-            action->setToolTip(data);
+            QString dta(fi.canonicalFilePath());
+            action->setData(dta);
+            action->setToolTip(dta);
             one = true;
             }
       if (one) {
@@ -2392,8 +2392,8 @@ void MuseScore::showMidiImportPanel()
 
 void MuseScore::dragEnterEvent(QDragEnterEvent* event)
       {
-      const QMimeData* data = event->mimeData();
-      if (data->hasUrls()) {
+      const QMimeData* dta = event->mimeData();
+      if (dta->hasUrls()) {
             QList<QUrl>ul = event->mimeData()->urls();
             foreach(const QUrl& u, ul) {
                   if (MScore::debugMode)
@@ -2413,8 +2413,8 @@ void MuseScore::dragEnterEvent(QDragEnterEvent* event)
 
 void MuseScore::dropEvent(QDropEvent* event)
       {
-      const QMimeData* data = event->mimeData();
-      if (data->hasUrls()) {
+      const QMimeData* dta = event->mimeData();
+      if (dta->hasUrls()) {
             int view = -1;
             foreach(const QUrl& u, event->mimeData()->urls()) {
                   if (u.scheme() == "file") {
@@ -2577,7 +2577,7 @@ bool MuseScore::midiinEnabled() const
 //    return if midi remote command detected
 //---------------------------------------------------------
 
-bool MuseScore::processMidiRemote(MidiRemoteType type, int data, int value)
+bool MuseScore::processMidiRemote(MidiRemoteType type, int dta, int value)
       {
       if (!preferences.getBool(PREF_IO_MIDI_USEREMOTECONTROL))
             return false;
@@ -2586,11 +2586,11 @@ bool MuseScore::processMidiRemote(MidiRemoteType type, int data, int value)
             // be triggered by an "On" event, so we need to check if this is one of those.
             if (!preferences.getBool(PREF_IO_MIDI_ADVANCEONRELEASE)
                     || type != preferences.midiRemote(RMIDI_REALTIME_ADVANCE).type
-                    || data != preferences.midiRemote(RMIDI_REALTIME_ADVANCE).data)
+                    || dta != preferences.midiRemote(RMIDI_REALTIME_ADVANCE).data)
                   return false;
             }
       for (int i = 0; i < MIDI_REMOTES; ++i) {
-            if (preferences.midiRemote(i).type == type && preferences.midiRemote(i).data == data) {
+            if (preferences.midiRemote(i).type == type && preferences.midiRemote(i).data == dta) {
                   if (cv == 0)
                         return false;
                   QAction* a = 0;
@@ -4803,11 +4803,11 @@ void MuseScore::networkFinished()
       qDebug("header <%s>", qPrintable(s));
       qDebug("name <%s>", qPrintable(name));
 
-      QByteArray data = reply->readAll();
+      QByteArray dta = reply->readAll();
       QString tmpName = QDir::tempPath () + "/"+ name;
       QFile f(tmpName);
       f.open(QIODevice::WriteOnly);
-      f.write(data);
+      f.write(dta);
       f.close();
 
       reply->deleteLater();
@@ -5952,7 +5952,6 @@ QFileInfoList MuseScore::recentScores() const
       for (const QString& s : _recentScores) {
             if (s.isEmpty())
                   continue;
-            QString data(s);
             QFileInfo fi(s);
             bool alreadyLoaded = false;
             QString fp = fi.canonicalFilePath();
@@ -6035,8 +6034,8 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       MP3Exporter exporter;
       if (!exporter.loadLibrary(MP3Exporter::AskUser::MAYBE)) {
-            QSettings settings;
-            settings.setValue("/Export/lameMP3LibPath", "");
+            QSettings set;
+            set.setValue("/Export/lameMP3LibPath", "");
             if(!MScore::noGui)
                   QMessageBox::warning(0,
                                tr("Error Opening LAME library"),
@@ -6047,8 +6046,8 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
             }
 
       if (!exporter.validLibraryLoaded()) {
-            QSettings settings;
-            settings.setValue("/Export/lameMP3LibPath", "");
+            QSettings set;
+            set.setValue("/Export/lameMP3LibPath", "");
             if(!MScore::noGui)
                   QMessageBox::warning(0,
                                tr("Error Opening LAME library"),
