@@ -22,20 +22,11 @@
 
 namespace Ms {
 
+//---------------------------------------------------------
+//   fingeringStyle
+//---------------------------------------------------------
+
 static const ElementStyle fingeringStyle {
-      { Sid::fingeringFontFace,                  Pid::FONT_FACE              },
-      { Sid::fingeringFontSize,                  Pid::FONT_SIZE              },
-      { Sid::fingeringFontBold,                  Pid::FONT_BOLD              },
-      { Sid::fingeringFontItalic,                Pid::FONT_ITALIC            },
-      { Sid::fingeringFontUnderline,             Pid::FONT_UNDERLINE         },
-      { Sid::fingeringAlign,                     Pid::ALIGN                  },
-      { Sid::fingeringFrameType,                 Pid::FRAME_TYPE             },
-      { Sid::fingeringFramePadding,              Pid::FRAME_PADDING          },
-      { Sid::fingeringFrameWidth,                Pid::FRAME_WIDTH            },
-      { Sid::fingeringFrameRound,                Pid::FRAME_ROUND            },
-      { Sid::fingeringFrameFgColor,              Pid::FRAME_FG_COLOR         },
-      { Sid::fingeringFrameBgColor,              Pid::FRAME_BG_COLOR         },
-      { Sid::fingeringOffset,                    Pid::OFFSET                 },
       };
 
 //---------------------------------------------------------
