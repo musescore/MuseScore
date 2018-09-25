@@ -22,19 +22,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const ElementStyle rehearsalMarkStyle {
-      { Sid::rehearsalMarkFontFace,              Pid::FONT_FACE              },
-      { Sid::rehearsalMarkFontSize,              Pid::FONT_SIZE              },
-      { Sid::rehearsalMarkFontBold,              Pid::FONT_BOLD              },
-      { Sid::rehearsalMarkFontItalic,            Pid::FONT_ITALIC            },
-      { Sid::rehearsalMarkFontUnderline,         Pid::FONT_UNDERLINE         },
-      { Sid::rehearsalMarkAlign,                 Pid::ALIGN                  },
-      { Sid::rehearsalMarkFrameType,             Pid::FRAME_TYPE             },
-      { Sid::rehearsalMarkFramePadding,          Pid::FRAME_PADDING          },
-      { Sid::rehearsalMarkFrameWidth,            Pid::FRAME_WIDTH            },
-      { Sid::rehearsalMarkFrameRound,            Pid::FRAME_ROUND            },
-      { Sid::rehearsalMarkFrameFgColor,          Pid::FRAME_FG_COLOR         },
-      { Sid::rehearsalMarkFrameBgColor,          Pid::FRAME_BG_COLOR         },
-      { Sid::rehearsalMarkPlacement,             Pid::PLACEMENT              },
+      { Sid::rehearsalMarkPlacement, Pid::PLACEMENT },
       };
 
 //---------------------------------------------------------

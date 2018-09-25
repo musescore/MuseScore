@@ -185,7 +185,7 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
       int stick = system->firstMeasure()->tick();
       int etick = system->lastMeasure()->endTick();
 
-      qDebug("%s %p %d-%d %d-%d", name(), this, stick, etick, tick(), tick2());
+//      qDebug("%s %p %d-%d %d-%d", name(), this, stick, etick, tick(), tick2());
 
       LyricsLineSegment* lineSegm = 0;
       for (SpannerSegment* ss : segments) {

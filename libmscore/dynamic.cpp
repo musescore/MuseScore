@@ -80,12 +80,7 @@ static Dyn dynList[] = {
 //---------------------------------------------------------
 
 static const ElementStyle dynamicsStyle {
-      { Sid::dynamicsFontFace,                   Pid::FONT_FACE              },
-      { Sid::dynamicsFontSize,                   Pid::FONT_SIZE              },
-      { Sid::dynamicsFontBold,                   Pid::FONT_BOLD              },
-      { Sid::dynamicsFontItalic,                 Pid::FONT_ITALIC            },
-      { Sid::dynamicsFontUnderline,              Pid::FONT_UNDERLINE         },
-      { Sid::dynamicsAlign,                      Pid::ALIGN                  },
+      { Sid::dynamicsPlacement, Pid::PLACEMENT },
       };
 
 //---------------------------------------------------------
@@ -96,8 +91,8 @@ Dynamic::Dynamic(Score* s)
    : TextBase(s, Tid::DYNAMICS, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       initElementStyle(&dynamicsStyle);
-      _velocity = -1;
-      _dynRange = Range::PART;
+      _velocity    = -1;
+      _dynRange    = Range::PART;
       _dynamicType = Type::OTHER;
       }
 
