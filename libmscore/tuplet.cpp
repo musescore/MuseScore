@@ -480,7 +480,7 @@ void Tuplet::layout()
             // check for collisions
             size_t n = _elements.size();
             if (n >= 3) {
-                  qreal d  = (p2.y() - p1.y())/(p2.x() - p1.x());
+                  d  = (p2.y() - p1.y())/(p2.x() - p1.x());
                   for (size_t i = 1; i < (n-1); ++i) {
                         Element* e = _elements[i];
                         if (e->isChord()) {

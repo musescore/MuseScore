@@ -1423,8 +1423,8 @@ void Palette::write(const QString& p)
       xml.stag(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString("palette.xml")));
       xml.etag();
       foreach (ImageStoreItem* ip, images) {
-            QString path = QString("Pictures/") + ip->hashName();
-            xml.tag("file", path);
+            QString ipath = QString("Pictures/") + ip->hashName();
+            xml.tag("file", ipath);
             }
       xml.etag();
       xml.etag();
@@ -1435,19 +1435,19 @@ void Palette::write(const QString& p)
 
       // save images
       foreach(ImageStoreItem* ip, images) {
-            QString path = QString("Pictures/") + ip->hashName();
-            f.addFile(path, ip->buffer());
+            QString ipath = QString("Pictures/") + ip->hashName();
+            f.addFile(ipath, ip->buffer());
             }
       {
-      QBuffer cbuf;
-      cbuf.open(QIODevice::ReadWrite);
-      XmlWriter xml(gscore, &cbuf);
-      xml.header();
-      xml.stag("museScore version=\"" MSC_VERSION "\"");
-      write(xml);
-      xml.etag();
-      cbuf.close();
-      f.addFile("palette.xml", cbuf.data());
+      QBuffer cbuf1;
+      cbuf1.open(QIODevice::ReadWrite);
+      XmlWriter xml1(gscore, &cbuf1);
+      xml1.header();
+      xml1.stag("museScore version=\"" MSC_VERSION "\"");
+      write(xml1);
+      xml1.etag();
+      cbuf1.close();
+      f.addFile("palette.xml", cbuf1.data());
       }
       f.close();
       if (f.status() != MQZipWriter::NoError)
@@ -1481,19 +1481,19 @@ void Palette::read(XmlReader& e)
                   cell->name = e.attribute("name");
                   bool add = true;
                   while (e.readNextStartElement()) {
-                        const QStringRef& t(e.name());
-                        if (t == "staff")
+                        const QStringRef& t1(e.name());
+                        if (t1 == "staff")
                               cell->drawStaff = e.readInt();
-                        else if (t == "xoffset")
+                        else if (t1 == "xoffset")
                               cell->xoffset = e.readDouble();
-                        else if (t == "yoffset")
+                        else if (t1 == "yoffset")
                               cell->yoffset = e.readDouble();
-                        else if (t == "mag")
+                        else if (t1 == "mag")
                               cell->mag = e.readDouble();
-                        else if (t == "tag")
+                        else if (t1 == "tag")
                               cell->tag = e.readElementText();
                         else {
-                              cell->element = Element::name2Element(t, gscore);
+                              cell->element = Element::name2Element(t1, gscore);
                               if (cell->element == 0) {
                                     e.unknown();
                                     delete cell;
@@ -1805,8 +1805,8 @@ void Palette::dropEvent(QDropEvent* event)
       Element* e = 0;
       QString name;
 
-      const QMimeData* data = event->mimeData();
-      if (data->hasUrls()) {
+      const QMimeData* datap = event->mimeData();
+      if (datap->hasUrls()) {
             QList<QUrl>ul = event->mimeData()->urls();
             QUrl u = ul.front();
             if (u.scheme() == "file") {
@@ -1819,7 +1819,7 @@ void Palette::dropEvent(QDropEvent* event)
                   name = f.completeBaseName();
                   }
             }
-      else if (data->hasFormat(mimeSymbolFormat)) {
+      else if (datap->hasFormat(mimeSymbolFormat)) {
             QByteArray data(event->mimeData()->data(mimeSymbolFormat));
             XmlReader xml(data);
             QPointF dragOffset;

@@ -1088,17 +1088,17 @@ bool GuitarPro5::readNoteEffects(Note* note)
             else if (transition == 1) {
 			}
 	      else if (transition == 3) {
-		      Slur* slur = new Slur(score);
-			slur->setAnchor(Spanner::Anchor::CHORD);
-			slur->setStartElement(gnote->chord());
-			slur->setEndElement(note->chord());
-			slur->setParent(0);
-			slur->setTrack(note->staffIdx());
-			slur->setTrack2(note->staffIdx());
-			slur->setTick(gnote->chord()->tick());
-			slur->setTick2(note->chord()->tick());
+		      Slur* slur1 = new Slur(score);
+			slur1->setAnchor(Spanner::Anchor::CHORD);
+			slur1->setStartElement(gnote->chord());
+			slur1->setEndElement(note->chord());
+			slur1->setParent(0);
+			slur1->setTrack(note->staffIdx());
+			slur1->setTrack2(note->staffIdx());
+			slur1->setTick(gnote->chord()->tick());
+			slur1->setTick2(note->chord()->tick());
 //TODO-ws		note->chord()->has_slur = true;
-			score->addElement(slur);
+			score->addElement(slur1);
                   //TODO: Add a 'slide' guitar effect when implemented
 			//note->setSlideNote(gn);
                   }
@@ -1139,8 +1139,8 @@ bool GuitarPro5::readNoteEffects(Note* note)
             Articulation* a = new Articulation(chord->score());
             a->setSymId(SymId::articStaccatoAbove);
 		bool add = true;
-		for (auto a : chord->articulations()) {
-		      if (a->symId() == SymId::articStaccatoAbove) {
+		for (auto a1 : chord->articulations()) {
+		      if (a1->symId() == SymId::articStaccatoAbove) {
 			      add = false;
 				break;
 				}
@@ -1495,10 +1495,10 @@ bool GuitarPro5::readNote(int string, Note* note)
             if (true_note && chords.size()) {
                   Note* end_note = note;
 			for (unsigned int i = 0; i < chords.size(); ++i) {
-                        Chord* chord = nullptr;
+                        Chord* chord1 = nullptr;
 				auto cr = chords.at(i);
 				if (cr->isChord())
-                              chord = toChord(cr);
+                              chord1 = toChord(cr);
                         else {
 				      auto rest = toRest(cr);
 					auto dur = rest->duration();
@@ -1509,13 +1509,13 @@ bool GuitarPro5::readNote(int string, Note* note)
 					if (tuplet)
                                     tuplet->remove(rest);
 					delete rest;
-					chord = new Chord(score);
-					chord->setTrack(note->track());
-					chord->setDuration(dur);
-					chord->setDurationType(dut);
-					seg->add(chord);
+					chord1 = new Chord(score);
+					chord1->setTrack(note->track());
+					chord1->setDuration(dur);
+					chord1->setDurationType(dut);
+					seg->add(chord1);
 					if (tuplet)
-                                    tuplet->add(chord);
+                                    tuplet->add(chord1);
 					}
 
 			      Note* note2 = new Note(score);
@@ -1523,8 +1523,8 @@ bool GuitarPro5::readNote(int string, Note* note)
 				note2->setFret(true_note->fret());
 				note2->setPitch(true_note->pitch());
 				note2->setTpcFromPitch();
-				chord->setNoteType(true_note->noteType());
-				chord->add(note2);
+				chord1->setNoteType(true_note->noteType());
+				chord1->add(note2);
 				Tie* tie = new Tie(score);
 				tie->setEndNote(end_note);
 //TODO-ws			end_note->setHarmonic(true_note->harmonic());

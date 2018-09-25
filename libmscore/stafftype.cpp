@@ -1044,16 +1044,16 @@ bool TablatureFretFont::read(XmlReader& e)
             else if (tag == "defaultYOffset")
                   defYOffset = e.readDouble();
             else if (tag == "mark") {
-                  QString     val = e.attribute("value");
-                  int         num = e.intAttribute("number", 1);
+                  QString     sval = e.attribute("value");
+                  int         num  = e.intAttribute("number", 1);
                   QString     txt(e.readElementText());
-                  if (val.size() < 1)
+                  if (sval.size() < 1)
                         return false;
-                  if (val == "x")
+                  if (sval == "x")
                         xChar = txt[0];
-                  else if (val == "ghost")
+                  else if (sval == "ghost")
                         ghostChar = txt[0];
-                  else if (val == "slash") {
+                  else if (sval == "slash") {
                         // limit within legal range
                         if (num < 1)
                               num = 1;
@@ -1209,16 +1209,16 @@ bool StaffType::readConfigFile(const QString& fileName)
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "fretFont") {
-                              TablatureFretFont f;
-                              if (f.read(e))
-                                    _fretFonts.append(f);
+                              TablatureFretFont ff;
+                              if (ff.read(e))
+                                    _fretFonts.append(ff);
                               else
                                     continue;
                               }
                         else if (tag == "durationFont") {
-                              TablatureDurationFont f;
-                              if (f.read(e))
-                                    _durationFonts.append(f);
+                              TablatureDurationFont df;
+                              if (df.read(e))
+                                    _durationFonts.append(df);
                               else
                                     continue;
                               }

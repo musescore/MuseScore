@@ -302,9 +302,6 @@ void Workspace::write()
             f.addFile(dstPath, ip->buffer());
             }
       {
-      QBuffer cbuf;
-      cbuf.open(QIODevice::ReadWrite);
-      XmlWriter xml(gscore, &cbuf);
       xml.setClipboardmode(true);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");

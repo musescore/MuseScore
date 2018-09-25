@@ -354,16 +354,16 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                         ChordRest* cr1 = toChord(gc);
                         ChordRest* cr2 = toChord(note->chord());
 
-                        Slur* slur = new Slur(score);
-                        slur->setAnchor(Spanner::Anchor::CHORD);
-                        slur->setStartElement(cr1);
-                        slur->setEndElement(cr2);
-                        slur->setTick(cr1->tick());
-                        slur->setTick2(cr2->tick());
-                        slur->setTrack(cr1->track());
-                        slur->setTrack2(cr2->track());
+                        Slur* slur1 = new Slur(score);
+                        slur1->setAnchor(Spanner::Anchor::CHORD);
+                        slur1->setStartElement(cr1);
+                        slur1->setEndElement(cr2);
+                        slur1->setTick(cr1->tick());
+                        slur1->setTick2(cr2->tick());
+                        slur1->setTrack(cr1->track());
+                        slur1->setTrack2(cr2->track());
                         // this case specifies only two-note slurs, don't set a parent
-                        score->undoAddElement(slur);
+                        score->undoAddElement(slur1);
                         }
                   }
             if (modMask2 & EFFECT_STACATTO) {   // staccato
@@ -508,10 +508,10 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             if (true_note && chords.size()) {
                   Note* end_note = note;
                   for (unsigned int i = 0; i < chords.size(); ++i) {
-                        Chord* chord = nullptr;
+                        Chord* chord1 = nullptr;
                         auto cr = chords.at(i);
                         if (cr->isChord())
-                              chord = toChord(cr);
+                              chord1 = toChord(cr);
                         else {
                               Rest* rest = toRest(cr);
                               auto dur = rest->duration();
@@ -522,13 +522,13 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                               if (tuplet)
                                     tuplet->remove(rest);
                               delete rest;
-                              chord = new Chord(score);
-                              chord->setTrack(note->track());
-                              chord->setDuration(dur);
-                              chord->setDurationType(dut);
-                              seg->add(chord);
+                              chord1 = new Chord(score);
+                              chord1->setTrack(note->track());
+                              chord1->setDuration(dur);
+                              chord1->setDurationType(dut);
+                              seg->add(chord1);
                               if (tuplet)
-                                    tuplet->add(chord);
+                                    tuplet->add(chord1);
                               }
 
                         Note* note2 = new Note(score);
@@ -536,8 +536,8 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                         note2->setFret(true_note->fret());
                         note2->setPitch(true_note->pitch());
                         note2->setTpcFromPitch();
-                        chord->setNoteType(true_note->noteType());
-                        chord->add(note2);
+                        chord1->setNoteType(true_note->noteType());
+                        chord1->add(note2);
                         Tie* tie = new Tie(score);
                         tie->setEndNote(end_note);
                         //TODO-ws			end_note->setHarmonic(true_note->harmonic());
@@ -1018,9 +1018,9 @@ bool GuitarPro4::read(QFile* fp)
                                                 break;//seg = mes->last();
                                           if (seg->segmentType() == SegmentType::ChordRest) {
                                                 bool br = false;
-                                                Chord* cr = toChord(seg->cr(chord->track()));
-                                                if (cr) {
-                                                      for (auto n : cr->notes()) {
+                                                Chord* cr1 = toChord(seg->cr(chord->track()));
+                                                if (cr1) {
+                                                      for (auto n : cr1->notes()) {
                                                             if (n->string() == last->string()) {
                                                                   Glissando* s = new Glissando(score);
                                                                   s->setAnchor(Spanner::Anchor::NOTE);
@@ -1035,7 +1035,7 @@ bool GuitarPro4::read(QFile* fp)
                                                                   score->addElement(s);
                                                                   if (slide == 2 || effect == SLIDE_OUT_UP) {
                                                                         if (!lastSlurAdd) {
-                                                                              createSlur(true, chord->staffIdx(), cr);
+                                                                              createSlur(true, chord->staffIdx(), cr1);
                                                                               createSlur(false, chord->staffIdx(), chord);
                                                                               }
                                                                         }
@@ -1068,9 +1068,9 @@ bool GuitarPro4::read(QFile* fp)
 
       for (auto n : slideList) {
             Segment* segment = n->chord()->segment();
-            Measure* measure = segment->measure();
+            Measure* measure1 = segment->measure();
             int segment_counter = 0;
-            while ((segment = segment->next1(SegmentType::ChordRest)) || ((measure = measure->nextMeasure()) && (segment = measure->first()))) {
+            while ((segment = segment->next1(SegmentType::ChordRest)) || ((measure1 = measure1->nextMeasure()) && (segment = measure1->first()))) {
                   if (!segment->isChordRestType())
                         continue;
                   bool br = false;

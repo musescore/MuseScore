@@ -348,16 +348,16 @@ bool BBFile::read(const QString& name)
                         note.setPitch(a[idx + 5]);
                         note.setVelo(a[idx + 6]);
                         note.setChannel(channel);
-                        int len = a[idx+8] + (a[idx+9]<<8) + (a[idx+10]<<16) + (a[idx+11]<<24);
-                        if (len == 0) {
+                        int len1 = a[idx+8] + (a[idx+9]<<8) + (a[idx+10]<<16) + (a[idx+11]<<24);
+                        if (len1 == 0) {
                               if (lastLen == 0) {
                                     qDebug("note event of len 0 at idx %04x", idx);
                                     continue;
                                     }
-                              len = lastLen;
+                              len1 = lastLen;
                               }
-                        lastLen = len;
-                        note.setDuration((len * MScore::division) / bbDivision);
+                        lastLen = len1;
+                        note.setDuration((len1 * MScore::division) / bbDivision);
                         track->append(note);
                         }
                   else if (type == 0xb0 || type == 0xc0) {
@@ -454,8 +454,8 @@ Score::FileError importBB(MasterScore* score, const QString& name)
                   Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
                   rest->setDuration(measure->len());
                   rest->setTrack(0);
-                  Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-                  s->add(rest);
+                  Segment* s1 = measure->getSegment(SegmentType::ChordRest, measure->tick());
+                  s1->add(rest);
                   }
             }
 
@@ -468,14 +468,14 @@ Score::FileError importBB(MasterScore* score, const QString& name)
       Text* text = new Text(score, Tid::TITLE);
       text->setPlainText(bb.title());
 
-      MeasureBase* measure = score->first();
-      if (measure->type() != ElementType::VBOX) {
-            measure = new VBox(score);
-            measure->setTick(0);
-            measure->setNext(score->first());
-            score->measures()->add(measure);
+      MeasureBase* measureB = score->first();
+      if (measureB->type() != ElementType::VBOX) {
+            measureB = new VBox(score);
+            measureB->setTick(0);
+            measureB->setNext(score->first());
+            score->measures()->add(measureB);
             }
-      measure->add(text);
+      measureB->add(text);
 
       //---------------------------------------------------
       //    create chord symbols
@@ -808,7 +808,7 @@ void BBTrack::quantize(int startTick, int endTick, EventList* dst)
       //
       //  quantize onset
       //
-      for (iEvent i = si; i != _events.end(); ++i) {
+      for (i = si; i != _events.end(); ++i) {
             Event e = *i;
             if (e.ontime() >= endTick)
                   break;
@@ -825,7 +825,7 @@ void BBTrack::quantize(int startTick, int endTick, EventList* dst)
       //
       //  quantize duration
       //
-      for (iEvent i = dst->begin(); i != dst->end(); ++i) {
+      for (i = dst->begin(); i != dst->end(); ++i) {
             Event& e = *i;
             if (e.type() != ME_NOTE)
                   continue;

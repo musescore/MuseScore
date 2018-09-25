@@ -3124,15 +3124,15 @@ System* Score::collectSystem(LayoutContext& lc)
       //    (cautionary time/key signatures etc)
       //-------------------------------------------------------
 
-      Measure* m  = system->lastMeasure();
-      if (m) {
-            Measure* nm = m->nextMeasure();
+      Measure* lm  = system->lastMeasure();
+      if (lm) {
+            Measure* nm = lm->nextMeasure();
             if (nm) {
-                  qreal w = m->width();
-                  m->addSystemTrailer(nm);
-                  if (m->trailer())
-                        m->computeMinWidth();
-                  minWidth += m->width() - w;
+                  qreal w = lm->width();
+                  lm->addSystemTrailer(nm);
+                  if (lm->trailer())
+                        lm->computeMinWidth();
+                  minWidth += lm->width() - w;
                   }
             }
 
@@ -3468,7 +3468,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       system->layout2();   // compute staff distances
 
-      Measure* lm  = system->lastMeasure();
+      lm  = system->lastMeasure();
       if (lm) {
             lc.firstSystem        = lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
             lc.startWithLongNames = lc.firstSystem && lm->sectionBreakElement()->startWithLongNames();

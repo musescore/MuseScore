@@ -481,9 +481,9 @@ void Selection::updateSelectedElements()
                         continue;
                   if (e->isChordRest()) {
                         ChordRest* cr = toChordRest(e);
-                        for (Element* e : cr->lyrics()) {
-                              if (e)
-                                    appendFiltered(e);
+                        for (Element* el : cr->lyrics()) {
+                              if (el)
+                                    appendFiltered(el);
                               }
                         }
                   if (e->isChord()) {
@@ -752,7 +752,6 @@ QByteArray Selection::symbolListMimeData() const
       int         firstTick   = 0x7FFFFFFF;
       MAPDATA     mapData;
       Segment*    seg         = nullptr;
-      int         track;
       std::multimap<qint64, MAPDATA> map;
 
       // scan selection element list, inserting relevant elements in a tick-sorted map
@@ -878,7 +877,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   default:
                         continue;
                   }
-            track = e->track();
+            int track = e->track();
             if (track < topTrack)
                   topTrack = track;
             if (track > bottomTrack)
