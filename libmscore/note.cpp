@@ -1532,31 +1532,29 @@ QRectF Note::drag(EditData& ed)
             int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
             int nFret   = strData->fret(_pitch, nString, staff(), _tick);
             if (nFret >= 0) {                      // no fret?
-                  bool refret = false;
-                  if (fret() != nFret) {
-                        _fret = nFret;
-                        refret = true;
-                        }
-                  if (string() != nString) {
-                        _string = nString;
-                        refret = true;
-                        }
-                  if (refret) {
-                        strData->fretChords(chord());
-                        triggerLayout();
+                  if (fret() != nFret || string() != nString) {
+                        for (Note* nn : tiedNotes()) {
+                              nn->setFret(nFret);
+                              nn->setString(nString);
+                              strData->fretChords(nn->chord());
+                              nn->triggerLayout();
+                              }
                         }
                   }
             }
       else {
             Key key = staff()->key(_tick);
-            _pitch = line2pitch(ned->line + lineOffset, staff()->clef(_tick), key);
+            int newPitch = line2pitch(ned->line + lineOffset, staff()->clef(_tick), key);
             if (!concertPitch()) {
                   Interval interval = staff()->part()->instrument(_tick)->transpose();
-                  _pitch += interval.chromatic;
+                  newPitch += interval.chromatic;
                   }
-            _tpc[0] = pitch2tpc(_pitch, key, Prefer::NEAREST);
-            _tpc[1] = pitch2tpc(_pitch - transposition(), key, Prefer::NEAREST);
-            triggerLayout();
+            int newTpc1 = pitch2tpc(newPitch, key, Prefer::NEAREST);
+            int newTpc2 = pitch2tpc(newPitch - transposition(), key, Prefer::NEAREST);
+            for (Note* nn : tiedNotes()) {
+                  nn->setPitch(newPitch, newTpc1, newTpc2);
+                  nn->triggerLayout();
+                  }
             }
       return QRectF();
       }
