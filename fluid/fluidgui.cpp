@@ -259,31 +259,31 @@ void FluidGui::loadSf()
       if (_sfToLoad.empty())
             return;
 
-            struct SfNamePath item = _sfToLoad.front();
-            QString sfName = item.name;
-            QString sfPath = item.path;
-            _sfToLoad.pop_front();
+      struct SfNamePath item = _sfToLoad.front();
+      QString sfName = item.name;
+      QString sfPath = item.path;
+      _sfToLoad.pop_front();
 
-            QStringList sl;
-            for (int i = 0; i < soundFonts->count(); ++i) {
-                  QListWidgetItem* widgetItem = soundFonts->item(i);
-                  sl.append(widgetItem->text());
-                  }
+      QStringList sl;
+      for (int i = 0; i < soundFonts->count(); ++i) {
+            QListWidgetItem* widgetItem = soundFonts->item(i);
+            sl.append(widgetItem->text());
+            }
 
-            if (sl.contains(sfPath)) {
-                  QMessageBox::warning(this,
-                  tr("MuseScore"),
-                  tr("SoundFont %1 already loaded").arg(sfPath));
-                  }
-            else {
+      if (sl.contains(sfPath)) {
+            QMessageBox::warning(this,
+                                 tr("MuseScore"),
+                                 tr("SoundFont %1 already loaded").arg(sfPath));
+            }
+      else {
 
-                  _loadedSfName = sfName;
-                  _loadedSfPath = sfPath;
-                  QFuture<bool> future = QtConcurrent::run(fluid(), &FluidS::Fluid::addSoundFont, sfPath);
-                  _futureWatcher.setFuture(future);
-                  _progressTimer->start(1000);
-                  _progressDialog->exec();
-                }
+            _loadedSfName = sfName;
+            _loadedSfPath = sfPath;
+            QFuture<bool> future = QtConcurrent::run(fluid(), &FluidS::Fluid::addSoundFont, sfPath);
+            _futureWatcher.setFuture(future);
+            _progressTimer->start(1000);
+            _progressDialog->exec();
+            }
       }
 
 //---------------------------------------------------------
