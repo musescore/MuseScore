@@ -6516,14 +6516,14 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"D", "monitor-resolution"}, "Specify monitor resolution", "DPI"));
       parser.addOption(QCommandLineOption({"S", "style"}, "Load style file", "style"));
       parser.addOption(QCommandLineOption({"p", "plugin"}, "Execute named plugin", "name"));
-      parser.addOption(QCommandLineOption(      "template-mode", "Save template mode, no page size"));
-      parser.addOption(QCommandLineOption({"F", "factory-settings"}, "Use factory settings"));
+      parser.addOption(QCommandLineOption(      "template-mode", "Save template mode, no page size")); // and no platform and creationDate tags
+      parser.addOption(QCommandLineOption({"F", "factory-settings"}, "Use factory settings"));  // this includes -R, --revert-settimngs
       parser.addOption(QCommandLineOption({"R", "revert-settings"}, "Revert to default preferences"));
       parser.addOption(QCommandLineOption({"i", "load-icons"}, "Load icons from INSTALLPATH/icons"));
       parser.addOption(QCommandLineOption({"j", "job"}, "Process a conversion job", "file"));
       parser.addOption(QCommandLineOption({"e", "experimental"}, "Enable experimental features"));
       parser.addOption(QCommandLineOption({"c", "config-folder"}, "Override configuration and settings folder", "dir"));
-      parser.addOption(QCommandLineOption({"t", "test-mode"}, "Set test mode flag for all files"));
+      parser.addOption(QCommandLineOption({"t", "test-mode"}, "Set test mode flag for all files")); // this includes --template-mode
       parser.addOption(QCommandLineOption({"M", "midi-operations"}, "Specify MIDI import operations file", "file"));
       parser.addOption(QCommandLineOption({"w", "no-webview"}, "No web view in start center"));
       parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Used with '-o <file>.pdf', export score and parts"));
@@ -6732,7 +6732,7 @@ int main(int argc, char* av[])
 
       // initialize current page size from default printer
 #ifndef QT_NO_PRINTER
-      if (!MScore::testMode) {
+      if (!MScore::testMode && !MScore::saveTemplateMode) {
             QPrinter p;
             if (p.isValid()) {
 //                  qDebug("set paper size from default printer");

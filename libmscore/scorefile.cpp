@@ -163,8 +163,8 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
       QMapIterator<QString, QString> i(_metaTags);
       while (i.hasNext()) {
             i.next();
-            // do not output "platform" and "creationDate" in test mode
-            if ((!MScore::testMode  && !MScore::saveTemplateMode) || (i.key() != "platform" && i.key() != "creationDate"))
+            // do not output "platform" and "creationDate" in test and save template mode
+            if ((!MScore::testMode && !MScore::saveTemplateMode) || (i.key() != "platform" && i.key() != "creationDate"))
                   xml.tag(QString("metaTag name=\"%1\"").arg(i.key().toHtmlEscaped()), i.value());
             }
 
