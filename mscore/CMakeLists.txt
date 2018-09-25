@@ -231,6 +231,10 @@ if (APPLE)
       set (MACOSX_BUNDLE_BUNDLE_NAME MuseScore)
       set (MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION})
       set (MACOSX_BUNDLE_BUNDLE_VERSION ${MUSESCORE_VERSION_FULL})
+      if(CMAKE_BUILD_NUMBER)
+        set (MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION_FULL}.${CMAKE_BUILD_NUMBER})
+        set (MACOSX_BUNDLE_BUNDLE_VERSION ${MUSESCORE_VERSION_FULL}.${CMAKE_BUILD_NUMBER})
+      endif(CMAKE_BUILD_NUMBER)
       set (MACOSX_BUNDLE_COPYRIGHT musescore.org)
 else (APPLE)
       set (ExecutableName mscore)
@@ -243,9 +247,13 @@ endif (OMR)
 if (APPLE)
       file(GLOB_RECURSE INCS "*.h")
       set(COCOABRIDGE "macos/cocoabridge.mm")
+      if (SPARKLE_FOUND)
+            set(MAC_SPARKLE_FILES "macos/SparkleAutoUpdater.mm")
+      endif(SPARKLE_FOUND)
 else (APPLE)
       set(INCS "")
       set(COCOABRIDGE "")
+      set(MAC_SPARKLE_FILES  "")
 endif (APPLE)
 
 if (NOT MSVC)
@@ -415,9 +423,12 @@ add_executable ( ${ExecutableName}
       ${OMR_FILES}
       ${AUDIO}
       ${SCRIPT_FILES}
+      ${MAC_SPARKLE_FILES}
       driver.h
       tremolobarcanvas.h bendcanvas.h fretcanvas.h keycanvas.h harmonycanvas.h
       )
+
+
 
 if (MSVC)
 	target_link_libraries(mscore vorbisfiledll)

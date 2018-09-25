@@ -118,14 +118,17 @@
 #ifdef USE_LAME
 #include "exportmp3.h"
 #endif
-
 #ifdef Q_OS_MAC
 #include "macos/cocoabridge.h"
+#ifdef MAC_SPARKLE_ENABLED
+#include "macos/SparkleAutoUpdater.h"
+#endif
 #endif
 
 #ifdef AEOLUS
 extern Ms::Synthesizer* createAeolus();
 #endif
+
 #ifdef ZERBERUS
 extern Ms::Synthesizer* createZerberus();
 #endif
@@ -3400,10 +3403,14 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
 
 bool MuseScore::hasToCheckForUpdate()
       {
+#ifdef MAC_SPARKLE_ENABLED
+      return false; // On Mac, sparkle take cares of the scheduling for now. On windows too probably.
+#else
       if (ucheck)
             return ucheck->hasToCheck();
       else
             return false;
+#endif
       }
 
 //---------------------------------------------------------
@@ -3421,8 +3428,13 @@ bool MuseScore::hasToCheckForExtensionsUpdate()
 
 void MuseScore::checkForUpdate()
       {
+#ifdef MAC_SPARKLE_ENABLED
+      SparkleAutoUpdater::checkForUpdatesNow();
+#else
       if (ucheck)
             ucheck->check(version(), sender() != 0);
+
+#endif
       }
 
 //---------------------------------------------------------
