@@ -2886,13 +2886,16 @@ void Score::layoutLyrics(System* system)
                         }
                   break;
             }
-
       // align lyrics line segments
       for (SpannerSegment* ss : system->spannerSegments()) {
             if (ss->isLyricsLineSegment()) {
                   LyricsLineSegment* lls = toLyricsLineSegment(ss);
                   lls->layout();
-                  lls->rUserYoffset() = lls->lyrics()->rUserYoffset();
+                  if (ss->isSingleBeginType())
+                        lls->rUserYoffset() = lls->lyrics()->rUserYoffset();
+                  else {
+                        ;// how to align?
+                        }
                   }
             }
       }
@@ -3386,10 +3389,11 @@ System* Score::collectSystem(LayoutContext& lc)
                         ss->setUserYoffset(y);
                   }
             }
+
       for (Spanner* sp : _unmanagedSpanner) {
-            if (sp->tick() >= etick || sp->tick2() < stick)
+            if (sp->tick() >= etick || sp->tick2() <= stick)
                   continue;
-            sp->layout();
+            sp->layoutSystem(system);
             }
 
       //-------------------------------------------------------------

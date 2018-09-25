@@ -21,6 +21,7 @@
 #include "segment.h"
 #include "undo.h"
 #include "textedit.h"
+#include "measure.h"
 
 namespace Ms {
 
@@ -164,13 +165,144 @@ void LyricsLine::layout()
             // do layout with non-0 duration
             if (tempMelismaTicks)
                   lyrics()->setTicks(Lyrics::TEMP_MELISMA_TICKS);
+#if 0
             SLine::layout();
             // if temp melisma and there is a first line segment,
             // extend it to be after the lyrics syllable (otherwise
             // the melisma segment will be often covered by the syllable itself)
             if (tempMelismaTicks && segments.size() > 0)
                   segmentAt(0)->rxpos2() += lyrics()->width();
+#endif
             }
+      }
+
+//---------------------------------------------------------
+//   layoutSystem
+//---------------------------------------------------------
+
+SpannerSegment* LyricsLine::layoutSystem(System* system)
+      {
+      int stick = system->firstMeasure()->tick();
+      int etick = system->lastMeasure()->endTick();
+
+      qDebug("%s %p %d-%d %d-%d", name(), this, stick, etick, tick(), tick2());
+
+      LyricsLineSegment* lineSegm = 0;
+      for (SpannerSegment* ss : segments) {
+            if (!ss->system()) {
+                  lineSegm = toLyricsLineSegment(ss);
+                  break;
+                  }
+            }
+      if (!lineSegm) {
+            lineSegm = toLyricsLineSegment(createLineSegment());
+            add(lineSegm);
+            }
+      lineSegm->setSystem(system);
+      lineSegm->setSpanner(this);
+
+      SpannerSegmentType sst;
+      if (tick() >= stick) {
+            layout();
+            if (!ticks())                 // only do layout if some time span
+                  return 0;
+            SLine::layout();
+            //
+            // this is the first call to layoutSystem,
+            // processing the first line segment
+            //
+            computeStartElement();
+            computeEndElement();
+            sst = tick2() <= etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
+            }
+      else if (tick() < stick && tick2() > etick) {
+            sst = SpannerSegmentType::MIDDLE;
+            }
+      else {
+            //
+            // this is the last call to layoutSystem
+            // processing the last line segment
+            //
+            sst = SpannerSegmentType::END;
+            }
+      lineSegm->setSpannerSegmentType(sst);
+
+      switch (sst) {
+            case SpannerSegmentType::SINGLE: {
+                  System* s;
+                  QPointF p1 = linePos(Grip::START, &s);
+                  QPointF p2 = linePos(Grip::END,   &s);
+                  qreal len = p2.x() - p1.x();
+                  lineSegm->setPos(p1);
+                  lineSegm->setPos2(QPointF(len, p2.y() - p1.y()));
+                  }
+                  break;
+            case SpannerSegmentType::BEGIN: {
+                  System* s;
+                  QPointF p1 = linePos(Grip::START, &s);
+                  lineSegm->setPos(p1);
+                  qreal x2 = system->bbox().right();
+                  lineSegm->setPos2(QPointF(x2 - p1.x(), 0.0));
+                  }
+                  break;
+            case SpannerSegmentType::MIDDLE: {
+                  Measure* firstMeasure = system->firstMeasure();
+                  Segment* firstCRSeg   = firstMeasure->first(SegmentType::ChordRest);
+                  qreal x1              = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeasure->pos().x();
+                  qreal x2              = system->bbox().right();
+                  System* s;
+                  QPointF p1 = linePos(Grip::START, &s);
+                  lineSegm->setPos(QPointF(x1, p1.y()));
+                  lineSegm->setPos2(QPointF(x2 - x1, 0.0));
+                  }
+                  break;
+            case SpannerSegmentType::END: {
+                  qreal offset = 0.0;
+                  System* s;
+                  QPointF p2 = linePos(Grip::END,   &s);
+                  Measure* firstMeas  = system->firstMeasure();
+                  Segment* firstCRSeg = firstMeas->first(SegmentType::ChordRest);
+                  if (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE) {
+                        // start line just after previous element (eg, key signature)
+                        firstCRSeg = firstCRSeg->prev();
+                        Element* e = firstCRSeg ? firstCRSeg->element(staffIdx() * VOICES) : nullptr;
+                        if (e)
+                              offset = e->width();
+                        }
+                  qreal x1  = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeas->pos().x() + offset;
+                  qreal len = p2.x() - x1;
+                  lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
+                  lineSegm->setPos2(QPointF(len, 0.0));
+#if 1
+                  QList<SpannerSegment*> sl;
+                  for (SpannerSegment* ss : segments) {
+                        if (ss->system())
+                              sl.push_back(ss);
+                        else {
+                              qDebug("delete spanner segment %s", ss->name());
+                              score()->selection().remove(ss);
+                              delete ss;
+                              }
+                        }
+                  segments.swap(sl);
+#endif
+                  }
+                  break;
+            }
+      lineSegm->layout();
+#if 0
+      QList<SpannerSegment*> sl;
+      for (SpannerSegment* ss : segments) {
+            if (ss->system())
+                  sl.push_back(ss);
+            else {
+                  qDebug("delete spanner segment %s", ss->name());
+                  delete ss;
+                  }
+            }
+      segments.swap(sl);
+#endif
+      return lineSegm;
       }
 
 //---------------------------------------------------------
