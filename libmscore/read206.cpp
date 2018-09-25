@@ -1587,8 +1587,11 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
             ch->setBeamMode(bm);
             }
       else if (tag == "Articulation") {
-            Element* a = readArticulation(ch, e);
-            ch->add(a);
+            Element* el = readArticulation(ch, e);
+            if (el->isFermata())
+                  ch->segment()->add(el);
+            else
+                  ch->add(el);
             }
       else if (tag == "leadingSpace" || tag == "trailingSpace") {
             qDebug("ChordRest: %s obsolete", tag.toLocal8Bit().data());
@@ -1832,6 +1835,65 @@ bool readChordProperties206(XmlReader& e, Chord* ch)
       }
 
 //---------------------------------------------------------
+//   convertDoubleArticulations
+//    Replace double articulations with proper SMuFL
+//    symbols which were not available for use prior to 3.0
+//---------------------------------------------------------
+
+static void convertDoubleArticulations(Chord* chord)
+      {
+      std::vector<Articulation*> pairableArticulations;
+      for (Articulation* a : chord->articulations()) {
+            if (a->isStaccato() || a->isTenuto()
+               || a->isAccent() || a->isMarcato()) {
+                  pairableArticulations.push_back(a);
+                  };
+            }
+      if (pairableArticulations.size() != 2)
+            // Do not replace triple articulation if this happens
+            return;
+
+      SymId newSymId = SymId::noSym;
+      for (int i = 0; i < 2; ++i) {
+            if (newSymId != SymId::noSym)
+                  break;
+            Articulation* ai = pairableArticulations[i];
+            Articulation* aj = pairableArticulations[(i == 0) ? 1 : 0];
+            if (ai->isStaccato()) {
+                  if (aj->isAccent())
+                        newSymId = SymId::articAccentStaccatoAbove;
+                  else if (aj->isMarcato())
+                        newSymId = SymId::articMarcatoStaccatoAbove;
+                  else if (aj->isTenuto())
+                        newSymId = SymId::articTenutoStaccatoAbove;
+                  }
+            else if (ai->isTenuto()) {
+                  if (aj->isAccent())
+                        newSymId = SymId::articTenutoAccentAbove;
+                  else if (aj->isMarcato())
+                        newSymId = SymId::articMarcatoTenutoAbove;
+                  }
+            }
+
+      if (newSymId != SymId::noSym) {
+            // We reuse old articulation and change symbol ID
+            // rather than constructing a new articulation
+            // in order to preserve its other properties.
+            Articulation* newArtic = pairableArticulations[0];
+            for (Articulation* a : pairableArticulations) {
+                  chord->remove(a);
+                  if (a != newArtic)
+                        delete a;
+                  }
+
+            ArticulationAnchor anchor = newArtic->anchor();
+            newArtic->setSymId(newSymId);
+            newArtic->setAnchor(anchor);
+            chord->add(newArtic);
+            }
+      }
+
+//---------------------------------------------------------
 //   readChord
 //---------------------------------------------------------
 
@@ -1846,13 +1908,6 @@ static void readChord(Chord* chord, XmlReader& e)
                   note->setChord(chord);
                   readNote(note, e);
                   chord->add(note);
-                  }
-            else if (tag == "Articulation") {
-                  Element* el = readArticulation(chord, e);
-                  if (el->isFermata())
-                        chord->segment()->add(el);
-                  else
-                        chord->add(el);
                   }
             else if (tag == "Stem") {
                   Stem* stem = new Stem(chord->score());
@@ -1876,6 +1931,7 @@ static void readChord(Chord* chord, XmlReader& e)
             else
                   e.unknown();
             }
+      convertDoubleArticulations(chord);
       }
 
 //---------------------------------------------------------
@@ -1885,17 +1941,7 @@ static void readChord(Chord* chord, XmlReader& e)
 static void readRest(Rest* rest, XmlReader& e)
       {
       while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "Articulation") {
-                  Element* el = readArticulation(rest, e);
-                  if (el->isFermata())
-                        rest->segment()->add(el);
-                  else
-                        rest->add(el);
-                  }
-            else if (readChordRestProperties206(e, rest))
-                  ;
-            else
+            if (!readChordRestProperties206(e, rest))
                   e.unknown();
             }
       }
