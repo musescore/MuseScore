@@ -2357,7 +2357,7 @@ QVariant TextBase::propertyDefault(Pid id) const
             if (p.pid == id)
                   return score()->styleV(p.sid);
             }
-      for (const StyledProperty& p : *styledProperties()) {
+      for (const StyledProperty& p : *_elementStyle) {
             if (p.pid == id) {
                   if (propertyType(id) == P_TYPE::SP_REAL)
                         return score()->styleP(p.sid);

@@ -967,8 +967,6 @@ void SLine::layout()
                         //if (type() != ElementType::PEDAL)
                         //      minLen = 1.0 * spatium();
                         }
-//                  qreal firstCRSegX = firstCRSeg ? firstCRSeg->pos().x() : 0;       // DEBUG
-//                  qreal firstMeasX  = firstMeas  ? firstMeas->pos().x()  : 0;
                   qreal x1 = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeas->pos().x() + offset;
                   qreal len = qMax(minLen, p2.x() - x1);
                   lineSegm->setSpannerSegmentType(SpannerSegmentType::END);
