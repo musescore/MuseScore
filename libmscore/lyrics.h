@@ -119,6 +119,7 @@ class LyricsLine final : public SLine {
       Lyrics* lyrics() const                          { return toLyrics(parent());   }
       Lyrics* nextLyrics() const                      { return _nextLyrics;         }
       virtual bool setProperty(Pid propertyId, const QVariant& v) override;
+      virtual SpannerSegment* layoutSystem(System*) override;
       };
 
 //---------------------------------------------------------
