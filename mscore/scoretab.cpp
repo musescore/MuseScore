@@ -169,6 +169,9 @@ void ScoreTab::tabMoved(int from, int to)
 
 //---------------------------------------------------------
 //   setCurrent
+//    Sets current view to the content of n-th tab.
+//    You will rarely need to call this function directly,
+//    consider using setCurrentIndex instead.
 //---------------------------------------------------------
 
 void ScoreTab::setCurrent(int n)
@@ -289,7 +292,7 @@ void ScoreTab::updateExcerpts()
             }
       else {
             tab2->setVisible(false);
-            setCurrent(0);
+            setExcerpt(0);
             }
       blockSignals(true);
       setExcerpt(0);
@@ -300,6 +303,10 @@ void ScoreTab::updateExcerpts()
 
 //---------------------------------------------------------
 //   setExcerpt
+//    Sets the currently selected excerpt tab to the n-th
+//    excerpt tab (where 0 is a tab for a master score).
+//    For selecting the current score see
+//    ScoreTab::setCurrentIndex
 //---------------------------------------------------------
 
 void ScoreTab::setExcerpt(int n)
@@ -370,6 +377,10 @@ int ScoreTab::currentIndex() const
 
 //---------------------------------------------------------
 //   setCurrentIndex
+//    Sets the currently selected score tab to the tab
+//    number idx.
+//    For selecting the current excerpt see
+//    ScoreTab::setExcerpt.
 //---------------------------------------------------------
 
 void ScoreTab::setCurrentIndex(int idx)
