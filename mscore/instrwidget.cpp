@@ -918,9 +918,9 @@ void InstrumentsWidget::on_instrumentGenreFilter_currentIndexChanged(int index)
 //   filterInstrumentsByGenre
 //---------------------------------------------------------
 
-void InstrumentsWidget::filterInstrumentsByGenre(QTreeWidget *instrumentList, QString genre)
+void InstrumentsWidget::filterInstrumentsByGenre(QTreeWidget *instrList, QString genre)
       {
-      QTreeWidgetItemIterator iList(instrumentList);
+      QTreeWidgetItemIterator iList(instrList);
       while (*iList) {
             (*iList)->setHidden(true);
             InstrumentTemplateListItem* itli = static_cast<InstrumentTemplateListItem*>(*iList);

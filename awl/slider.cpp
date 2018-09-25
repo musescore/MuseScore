@@ -142,7 +142,7 @@ void Slider::mousePressEvent(QMouseEvent* ev)
       {
       startDrag = ev->pos();
 //      if (points->boundingRect().toRect().contains(startDrag)) {
-            emit sliderPressed(_id);
+            emit sliderPressed(__id);
             dragMode = true;
             int pixel = (orient == Qt::Vertical) ? height() - _sliderSize.height() : width() - _sliderSize.width();
             dragppos = int(pixel * (_value - minValue()) / (maxValue() - minValue()));
@@ -158,7 +158,7 @@ void Slider::mousePressEvent(QMouseEvent* ev)
 void Slider::mouseReleaseEvent(QMouseEvent*)
       {
       if (dragMode) {
-            emit sliderReleased(_id);
+            emit sliderReleased(__id);
             dragMode = false;
             }
       }

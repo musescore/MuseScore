@@ -136,10 +136,10 @@ void TrackList::append(Element* e)
 
             if (s && !s->score()->isSpannerStartEnd(s->tick(), e->track()) && !s->annotations().size()) {
                   // akkumulate rests
-                  Rest* rest = toRest(back());
-                  Fraction d = rest->duration();
-                  d += toRest(e)->duration();
-                  rest->setDuration(d);
+                  Rest* rest  = toRest(back());
+                  Fraction du = rest->duration();
+                  du += toRest(e)->duration();
+                  rest->setDuration(du);
                   }
             else {
                   Element* element = 0;
@@ -173,10 +173,10 @@ void TrackList::append(Element* e)
                                           }
                                    }
                               if (akkumulateChord && back()->isChord()) {
-                                    Chord* bc = toChord(back());
-                                    Fraction d = bc->duration();
-                                    d += bc->duration();
-                                    bc->setDuration(d);
+                                    Chord* bc   = toChord(back());
+                                    Fraction du = bc->duration();
+                                    du += bc->duration();
+                                    bc->setDuration(du);
 
                                     // forward ties
                                     int idx = 0;
@@ -206,23 +206,23 @@ void TrackList::append(Element* e)
 //   appendGap
 //---------------------------------------------------------
 
-void TrackList::appendGap(const Fraction& d)
+void TrackList::appendGap(const Fraction& du)
       {
-      if (d.isZero())
+      if (du.isZero())
             return;
       Element* e = empty() ? 0 : back();
       if (e && e->isRest()) {
             Rest* rest  = toRest(back());
             Fraction dd = rest->duration();
-            dd          += d;
-            _duration   += d;
+            dd          += du;
+            _duration   += du;
             rest->setDuration(dd);
             }
       else {
             Rest* rest = new Rest(0);
-            rest->setDuration(d);
+            rest->setDuration(du);
             QList<Element*>::append(rest);
-            _duration   += d;
+            _duration   += du;
             }
       }
 
@@ -352,10 +352,10 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
       Score* score = measure->score();
       Tuplet* dt   = tuplet->clone();
       dt->setParent(measure);
-      Fraction d   = tuplet->duration();
-      if (d > rest) {
+      Fraction du  = tuplet->duration();
+      if (du > rest) {
             // we must split the tuplet
-            dt->setDuration(d * Fraction(1, 2));
+            dt->setDuration(du * Fraction(1, 2));
             dt->setBaseLen(tuplet->baseLen().shift(1));
             }
       if (parent)
@@ -505,11 +505,11 @@ bool TrackList::write(Score* score, int tick) const
                               remains.set(0, 1);
                               }
                         else if (e->isChordRest()) {
-                              Fraction d = qMin(remains, duration);
-                              std::vector<TDuration> dl = toDurationList(d, e->isChord());
+                              Fraction du = qMin(remains, duration);
+                              std::vector<TDuration> dl = toDurationList(du, e->isChord());
 
                               if (dl.empty())
-                                    qDebug("duration d %d/%d", d.numerator(), d.denominator());
+                                    qDebug("duration d %d/%d", du.numerator(), du.denominator());
                               Q_ASSERT(!dl.empty());
                               for (const TDuration& k : dl) {
                                     segment       = m->undoGetSegment(SegmentType::ChordRest, m->len() - remains);
@@ -770,8 +770,8 @@ void TrackList::dump() const
       qDebug("elements %d, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
       for (Element* e : *this) {
             if (e->isDurationElement()) {
-                  Fraction d = toDurationElement(e)->duration();
-                  qDebug("   %s  %d/%d", e->name(), d.numerator(), d.denominator());
+                  Fraction du = toDurationElement(e)->duration();
+                  qDebug("   %s  %d/%d", e->name(), du.numerator(), du.denominator());
                   }
             else
                   qDebug("   %s", e->name());

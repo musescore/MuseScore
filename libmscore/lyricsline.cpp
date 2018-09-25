@@ -430,15 +430,9 @@ void LyricsLineSegment::layout()
             rypos() = lyr->ipos().y();
       else {
             // use Y position of *next* syllable if there is one on same system
-<<<<<<< HEAD
-            Lyrics* nextLyr = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
-            if (nextLyr && nextLyr->segment()->system() == system())
-                  rypos() = nextLyr->ipos().y();
-=======
             Lyrics* nextLyr1 = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
             if (nextLyr1 && nextLyr1->segment()->system() == system())
-                  rypos() = nextLyr1->y();
->>>>>>> fix #275218: fix C4456 warnings
+                  rypos() = nextLyr1->ipos().y();
             else
                   rypos() = lyr->ipos().y();
             }

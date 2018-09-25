@@ -30,7 +30,7 @@ namespace Awl {
 AbstractSlider::AbstractSlider(QWidget* parent)
    : QWidget(parent), _scaleColor(Qt::darkGray), _scaleValueColor(QColor("#2456aa"))
       {
-      _id         = 0;
+      __id         = 0;
       _value      = 0.5;
       _minValue   = 0.0;
       _maxValue   = 1.0;
@@ -192,7 +192,7 @@ void AbstractSlider::setValue(double val)
 
 void AbstractSlider::valueChange()
       {
-      emit valueChanged(value(), _id);
+      emit valueChanged(value(), __id);
       update();
       }
 

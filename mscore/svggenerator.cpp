@@ -1110,7 +1110,7 @@ void SvgPaintEngine::drawImage(const QRectF  &r, const QImage &image,
              << data.toBase64() << SVG_QUOTE << SVG_ELEMENT_END << endl;
 }
 
-void SvgPaintEngine::updateState(const QPaintEngineState &state)
+void SvgPaintEngine::updateState(const QPaintEngineState &s)
 {
     // Always start fresh
     stateString.clear();
@@ -1121,20 +1121,20 @@ void SvgPaintEngine::updateState(const QPaintEngineState &state)
     stateStream << SVG_CLASS << getClass(_element) << SVG_QUOTE;
 
     // Brush and Pen attributes
-    stateStream << qbrushToSvg(state.brush());
-    stateStream <<   qpenToSvg(state.pen());
+    stateStream << qbrushToSvg(s.brush());
+    stateStream <<   qpenToSvg(s.pen());
 
 // TBD:  "opacity" attribute: Is it ever used?
 //       Or is opacity determined by fill-opacity & stroke-opacity instead?
 // PLUS: qFuzzyIsNull() is not officially supported in Qt.
 //       Should probably use QFuzzyCompare() instead.
-    if (!qFuzzyIsNull(state.opacity() - 1))
-        stateStream << SVG_OPACITY << state.opacity() << SVG_QUOTE;
+    if (!qFuzzyIsNull(s.opacity() - 1))
+        stateStream << SVG_OPACITY << s.opacity() << SVG_QUOTE;
 
     // Translations, SVG transform="translate()", are handled separately from
     // other transformations such as rotation. Qt translates everything, but
     // other transformations do occur, and must be handled here.
-    QTransform t = state.transform();
+    QTransform t = s.transform();
 
     // Tablature Note Text:
     // m11 and m22 have floating point flotsam, for example: 1.000000629

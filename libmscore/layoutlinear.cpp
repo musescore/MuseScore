@@ -499,8 +499,8 @@ void LayoutContext::layoutMeasureLinear(MeasureBase* mb)
                         KeySig* ks = toKeySig(segment.element(staffIdx * VOICES));
                         if (!ks)
                               continue;
-                        int tick = segment.tick();
-                        as.init(staff->keySigEvent(tick), staff->clef(tick));
+                        int t = segment.tick();
+                        as.init(staff->keySigEvent(t), staff->clef(t));
                         ks->layout();
                         }
                   else if (segment.isChordRestType()) {
@@ -578,7 +578,7 @@ void LayoutContext::layoutMeasureLinear(MeasureBase* mb)
       for (Segment& segment : measure->segments()) {
             if (segment.isBreathType()) {
                   qreal length = 0.0;
-                  int tick = segment.tick();
+                  int t = segment.tick();
                   // find longest pause
                   for (int i = 0, n = score->ntracks(); i < n; ++i) {
                         Element* e = segment.element(i);
@@ -589,7 +589,7 @@ void LayoutContext::layoutMeasureLinear(MeasureBase* mb)
                               }
                         }
                   if (length != 0.0)
-                        score->setPause(tick, length);
+                        score->setPause(t, length);
                   }
             else if (segment.isTimeSigType()) {
                   for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {

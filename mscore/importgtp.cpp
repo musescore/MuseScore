@@ -755,10 +755,10 @@ void GuitarPro::readLyrics()
 //   createSlide
 //---------------------------------------------------------
 
-void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx, Note* /*note*/)
+void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* /*note*/)
       {
       // shift / legato slide
-      if (slide == SHIFT_SLIDE || slide == LEGATO_SLIDE) {
+      if (sl == SHIFT_SLIDE || sl == LEGATO_SLIDE) {
             Glissando* s = new Glissando(score);
             //s->setXmlText("");
             s->setGlissandoType(GlissandoType::STRAIGHT);
@@ -779,7 +779,7 @@ void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx, Note* /*note
                         s->setParent(prevChord->upNote());
                         s->setText("");
                         s->setGlissandoType(GlissandoType::STRAIGHT);
-                        if (slide == LEGATO_SLIDE)
+                        if (sl == LEGATO_SLIDE)
                               createSlur(true, staffIdx, prevChord);
                         }
                   }
@@ -792,11 +792,11 @@ void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx, Note* /*note
             s->setTick2(chord->segment()->tick());
             s->setTrack2(staffIdx);
             score->addElement(s);
-            if (slide == LEGATO_SLIDE)
+            if (sl == LEGATO_SLIDE)
                   createSlur(false, staffIdx, cr);
             }
       // slide out downwards (fall)
-      if (slide & SLIDE_OUT_DOWN) {
+      if (sl & SLIDE_OUT_DOWN) {
             ChordLine* cl = new ChordLine(score);
             cl->setChordLineType(ChordLineType::FALL);
             cl->setStraight(true);
@@ -804,7 +804,7 @@ void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx, Note* /*note
             cr->add(cl);
             }
       // slide out upwards (doit)
-      if (slide & SLIDE_OUT_UP) {
+      if (sl & SLIDE_OUT_UP) {
             ChordLine* cl = new ChordLine(score);
             cl->setChordLineType(ChordLineType::DOIT);
             cl->setStraight(true);
@@ -812,7 +812,7 @@ void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx, Note* /*note
             cr->add(cl);
             }
       // slide in from below (plop)
-      if (slide & SLIDE_IN_BELOW) {
+      if (sl & SLIDE_IN_BELOW) {
             ChordLine* cl = new ChordLine(score);
             cl->setChordLineType(ChordLineType::PLOP);
             cl->setStraight(true);
@@ -820,7 +820,7 @@ void GuitarPro::createSlide(int slide, ChordRest* cr, int staffIdx, Note* /*note
             cr->add(cl);
             }
       // slide in from above (scoop)
-      if (slide & SLIDE_IN_ABOVE) {
+      if (sl & SLIDE_IN_ABOVE) {
             ChordLine* cl = new ChordLine(score);
             cl->setChordLineType(ChordLineType::SCOOP);
             cl->setStraight(true);
@@ -894,7 +894,7 @@ bool GuitarPro::readMixChange(Measure* measure)
       signed char reverb  = readChar();
       signed char phase   = readChar();
       signed char tremolo = readChar();
-      int tempo    = readInt();
+      int temp    = readInt();
 
       if (volume >= 0)
             readChar();
@@ -908,10 +908,10 @@ bool GuitarPro::readMixChange(Measure* measure)
             readChar();
       if (tremolo >= 0)
             readChar();
-      if (tempo >= 0) {
-            if (tempo != previousTempo) {
-                  previousTempo = tempo;
-                  setTempo(tempo, measure);
+      if (temp >= 0) {
+            if (temp != previousTempo) {
+                  previousTempo = temp;
+                  setTempo(temp, measure);
                   }
             readChar();
             }
@@ -1050,7 +1050,7 @@ bool GuitarPro1::read(QFile* fp)
       artist = readDelphiString();
       readDelphiString();
 
-      int tempo = readInt();
+      int temp = readInt();
       /*uchar num =*/ readUChar();      // Shuffle rhythm feel
 
       // int octave = 0;
@@ -1124,7 +1124,7 @@ bool GuitarPro1::read(QFile* fp)
             ts = nts;
             }
 
-      previousTempo = tempo;
+      previousTempo = temp;
       Measure* measure = score->firstMeasure();
       bool mixChange = false;
       for (int bar = 0; bar < measures; ++bar, measure = measure->nextMeasure()) {
@@ -1242,7 +1242,7 @@ bool GuitarPro1::read(QFile* fp)
                         }
                   }
             if (bar == 1 && !mixChange)
-                  setTempo(tempo, score->firstMeasure());
+                  setTempo(temp, score->firstMeasure());
             }
 
             return true;
@@ -1252,17 +1252,17 @@ bool GuitarPro1::read(QFile* fp)
 //   setTempo
 //---------------------------------------------------------
 
-void GuitarPro::setTempo(int tempo, Measure* measure)
+void GuitarPro::setTempo(int temp, Measure* measure)
       {
 	if (!last_measure) {
 		last_measure = measure;
-		last_tempo = tempo;
+		last_tempo = temp;
 	      }
 	else if (last_measure == measure) {
-		last_tempo = tempo;
+		last_tempo = temp;
 	      }
 	else {
-		std::swap(last_tempo, tempo);
+		std::swap(last_tempo, temp);
 		std::swap(last_measure, measure);
 
 		Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
@@ -1274,13 +1274,13 @@ void GuitarPro::setTempo(int tempo, Measure* measure)
       		}
 
 		TempoText* tt = new TempoText(score);
-		tt->setTempo(double(tempo) / 60.0);
-		tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempo));
+		tt->setTempo(double(temp) / 60.0);
+		tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(temp));
 		tt->setTrack(0);
 
 		segment->add(tt);
 		score->setTempo(measure->tick(), tt->tempo());
-		previousTempo = tempo;
+		previousTempo = temp;
       	}
       }
 
@@ -1436,7 +1436,7 @@ bool GuitarPro2::read(QFile* fp)
 
       /*uchar num =*/ readUChar();      // Shuffle rhythm feel
 
-      int tempo = readInt();
+      int temp = readInt();
 
       // int octave = 0;
       /*int key =*/ readInt();    // key
@@ -1611,7 +1611,7 @@ bool GuitarPro2::read(QFile* fp)
             ch->updateInitList();
             }
 
-      previousTempo = tempo;
+      previousTempo = temp;
       Measure* measure = score->firstMeasure();
       bool mixChange = false;
       for (int bar = 0; bar < measures; ++bar, measure = measure->nextMeasure()) {
@@ -1731,7 +1731,7 @@ bool GuitarPro2::read(QFile* fp)
                         }
                   }
             if (bar == 1 && !mixChange)
-                  setTempo(tempo, score->firstMeasure());
+                  setTempo(temp, score->firstMeasure());
             }
 
             return true;
@@ -2087,7 +2087,7 @@ bool GuitarPro3::read(QFile* fp)
 
       /*uchar num =*/ readUChar();      // Shuffle rhythm feel
 
-      int tempo = readInt();
+      int temp = readInt();
 
       // int octave = 0;
       key = readInt();    // key
@@ -2302,7 +2302,7 @@ bool GuitarPro3::read(QFile* fp)
             ch->updateInitList();
             }
 
-      previousTempo = tempo;
+      previousTempo = temp;
       Measure* measure = score->firstMeasure();
       bool mixChange = false;
       for (int bar = 0; bar < measures; ++bar, measure = measure->nextMeasure()) {
@@ -2542,7 +2542,7 @@ bool GuitarPro3::read(QFile* fp)
 				  }
                   }
             if (bar == 1 && !mixChange)
-                  setTempo(tempo, score->firstMeasure());
+                  setTempo(temp, score->firstMeasure());
             }
       for (auto n : slideList) {
             auto segment = n->chord()->segment();

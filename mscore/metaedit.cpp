@@ -52,11 +52,11 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
       QGridLayout* grid = static_cast<QGridLayout*>(scrollWidget->layout());
       while (i.hasNext()) {
             i.next();
-            QLabel* label = new QLabel;
-            label->setText(i.key());
+            QLabel* l = new QLabel;
+            l->setText(i.key());
             QLineEdit* text = new QLineEdit(i.value(), 0);
             connect(text, SIGNAL(textChanged(const QString&)), SLOT(setDirty()));
-            grid->addWidget(label, idx, 0);
+            grid->addWidget(l, idx, 0);
             grid->addWidget(text, idx, 1);
             ++idx;
             }
@@ -77,10 +77,10 @@ void MetaEditDialog::newClicked()
       QGridLayout* grid = static_cast<QGridLayout*>(scrollWidget->layout());
       if (!s.isEmpty()) {
             int idx = grid->rowCount();
-            QLabel* label = new QLabel;
-            label->setText(s);
+            QLabel* l = new QLabel;
+            l->setText(s);
             QLineEdit* text = new QLineEdit;
-            grid->addWidget(label, idx, 0);
+            grid->addWidget(l, idx, 0);
             grid->addWidget(text, idx, 1);
             }
       dirty = true;
@@ -100,9 +100,9 @@ void MetaEditDialog::accept()
                   QLayoutItem* labelItem = grid->itemAtPosition(i, 0);
                   QLayoutItem* dataItem  = grid->itemAtPosition(i, 1);
                   if (labelItem && dataItem) {
-                        QLabel* label = static_cast<QLabel*>(labelItem->widget());
+                        QLabel* l = static_cast<QLabel*>(labelItem->widget());
                         QLineEdit* le = static_cast<QLineEdit*>(dataItem->widget());
-                        m.insert(label->text(), le->text());
+                        m.insert(l->text(), le->text());
                         }
                   }
             score->undo(new ChangeMetaTags(score, m));
