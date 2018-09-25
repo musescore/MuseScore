@@ -258,6 +258,29 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
       }
 
 //---------------------------------------------------------
+//   getDropTarget
+//---------------------------------------------------------
+
+Element* ScoreView::getDropTarget(EditData& ed)
+      {
+      QList<Element*> el = elementsAt(ed.pos);
+      setDropTarget(0);
+      for (Element* e : el) {
+            if (e->isStaffLines()) {
+                  if (el.size() > 2)      // is not first class drop target
+                        continue;
+                  e = toStaffLines(e)->measure();
+                  }
+            if (e->acceptDrop(ed)) {
+                  if (!e->isMeasure())
+                        setDropTarget(e);
+                  return e;
+                  }
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
 //   dragMoveEvent
 //---------------------------------------------------------
 
@@ -364,20 +387,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case ElementType::LYRICS:
                   case ElementType::FRET_DIAGRAM:
                   case ElementType::STAFFTYPE_CHANGE: {
-                        QList<Element*> el = elementsAt(pos);
-                        bool found = false;
-                        setDropTarget(0);
-                        for (const Element* e : el) {
-                              if (e->isStaffLines())
-                                    e = toStaffLines(e)->measure();
-                              if (e->acceptDrop(dropData)) {
-                                    if (!e->isMeasure())
-                                          setDropTarget(e);
-                                    found = true;
-                                    break;
-                                    }
-                              }
-                        if (found)
+                        if (getDropTarget(dropData))
                               event->accept();
                         else
                               event->ignore();
@@ -577,18 +587,8 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::TREMOLOBAR:
                   case ElementType::FIGURED_BASS:
                   case ElementType::LYRICS:
-                  case ElementType::STAFFTYPE_CHANGE:
-                        {
-                        QList<Element*> elist = elementsAt(pos);
-                        Element* el = 0;
-                        for (const Element* e : elist) {
-                              if (e->isStaffLines())
-                                    e = toStaffLines(e)->measure();
-                              if (e->acceptDrop(dropData)) {
-                                    el = const_cast<Element*>(e);
-                                    break;
-                                    }
-                              }
+                  case ElementType::STAFFTYPE_CHANGE: {
+                        Element* el = getDropTarget(dropData);
                         if (!el) {
                               if (!dropCanvas(editData.element)) {
                                     qDebug("cannot drop %s(%p) to canvas", editData.element->name(), editData.element);

@@ -238,6 +238,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void endNoteEntry();
 
       void endLasso();
+      Element* getDropTarget(EditData&);
 
    private slots:
       void posChanged(POS pos, unsigned tick);
