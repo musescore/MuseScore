@@ -395,7 +395,7 @@ void Score::fixTicks()
             for (Segment* s = m->first(); s; s = s->next()) {
                   if (isMaster() && s->segmentType() == SegmentType::Breath) {
                         qreal length = 0.0;
-                        int tick = s->tick();
+                        int tick1 = s->tick();
                         // find longest pause
                         for (int i = 0, n = ntracks(); i < n; ++i) {
                               Element* e = s->element(i);
@@ -405,7 +405,7 @@ void Score::fixTicks()
                                     }
                               }
                         if (length != 0.0)
-                              setPause(tick, length);
+                              setPause(tick1, length);
                         }
                   else if (s->segmentType() == SegmentType::TimeSig) {
                         for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
@@ -544,10 +544,10 @@ Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** se
             if (!ns || (pppp.x() < (segment->x() + (ns->x() - segment->x())/2.0))) {
                   *rst = i;
                   if (pitch) {
-                        Staff* s = _staves[i];
-                        int tick = segment->tick();
-                        ClefType clef = s->clef(tick);
-                        *pitch = y2pitch(pppp.y() - sstaff->bbox().y(), clef, s->spatium(tick));
+                        Staff* s1 = _staves[i];
+                        int tick  = segment->tick();
+                        ClefType clef = s1->clef(tick);
+                        *pitch = y2pitch(pppp.y() - sstaff->bbox().y(), clef, s1->spatium(tick));
                         }
                   if (offset)
                         *offset = pppp - QPointF(segment->x(), sstaff->bbox().y());
@@ -907,10 +907,10 @@ QList<System*> Score::searchSystem(const QPointF& pos) const
                   }
             if (y < y2) {
                   systems.append(s);
-                  for (int ii = i+1; ii < n; ++ii) {
-                        if (sl->at(ii)->y() != s->y())
+                  for (int iii = i+1; ii < n; ++iii) {
+                        if (sl->at(iii)->y() != s->y())
                               break;
-                        systems.append(sl->at(ii));
+                        systems.append(sl->at(iii));
                         }
                   return systems;
                   }
@@ -1028,8 +1028,8 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
 
             // find next visible staff
             for (int i = pos->staffIdx + 1; i < nstaves(); ++i) {
-                  Staff* st = staff(i);
-                  if (!st->part()->show())
+                  Staff* sti = staff(i);
+                  if (!sti->part()->show())
                         continue;
                   nstaff = system->staff(i);
                   if (!nstaff->show()) {
@@ -1407,15 +1407,15 @@ void Score::removeElement(Element* element)
                         // Remove this page, since it is now empty.
                         // This involves renumbering and repositioning all subsequent pages.
                         QPointF pos = page->pos();
-                        auto i = std::find(pages().begin(), pages().end(), page);
-                        pages().erase(i);
-                        while (i != pages().end()) {
-                              page = *i;
+                        auto ii = std::find(pages().begin(), pages().end(), page);
+                        pages().erase(ii);
+                        while (ii != pages().end()) {
+                              page = *ii;
                               page->setNo(page->no() - 1);
                               QPointF p = page->pos();
                               page->setPos(pos);
                               pos = p;
-                              i++;
+                              ii++;
                               }
                         }
                   }
@@ -2065,8 +2065,8 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       //
       // create second staff
       //
-      Staff* s  = staff(staffIdx);
-      Part*  p  = s->part();
+      Staff* st = staff(staffIdx);
+      Part*  p  = st->part();
       Staff* ns = new Staff(this);
       ns->setPart(p);
       // convert staffIdx from score-relative to part-relative
@@ -2081,7 +2081,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       undoAddElement(clef);
       clef->layout();
 
-      undoChangeKeySig(ns, 0, s->keySigEvent(0));
+      undoChangeKeySig(ns, 0, st->keySigEvent(0));
 
       masterScore()->rebuildMidiMapping();
       cmdState()._instrumentsChanged = true;
@@ -2161,8 +2161,8 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                   int rest = s->tick() - ctick;
                   if (rest) {
                         // insert Rest
-                        Segment* s = tick2segment(ctick);
-                        if (s == 0) {
+                        Segment* s1 = tick2segment(ctick);
+                        if (s1 == 0) {
                               qDebug("no segment at %d", ctick);
                               continue;
                               }
@@ -2188,8 +2188,8 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                   int rest = s->tick() - ctick;
                   if (rest) {
                         // insert Rest
-                        Segment* s = tick2segment(ctick);
-                        if (s == 0) {
+                        Segment* s1 = tick2segment(ctick);
+                        if (s1 == 0) {
                               qDebug("no segment at %d", ctick);
                               continue;
                               }
@@ -2423,13 +2423,13 @@ void Score::cmdRemoveStaff(int staffIdx)
 
       QList<Spanner*> sl;
       for (auto i = _spanner.cbegin(); i != _spanner.cend(); ++i) {
-            Spanner* s = i->second;
-            if (s->staffIdx() == staffIdx && (staffIdx != 0 || !s->systemFlag()))
-                  sl.append(s);
+            Spanner* sp = i->second;
+            if (sp->staffIdx() == staffIdx && (staffIdx != 0 || !sp->systemFlag()))
+                  sl.append(sp);
             }
-      for (Spanner* s : _unmanagedSpanner) {
-            if (s->staffIdx() == staffIdx && (staffIdx != 0 || !s->systemFlag()))
-                  sl.append(s);
+      for (Spanner* sp : _unmanagedSpanner) {
+            if (sp->staffIdx() == staffIdx && (staffIdx != 0 || !sp->systemFlag()))
+                  sl.append(sp);
             }
       for (auto i : sl) {
 printf("remove %p <%s>\n", i, i->name());
@@ -2543,10 +2543,10 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                         Harmony* h  = toHarmony(e);
                         int rootTpc = transposeTpc(h->rootTpc(), interval, true);
                         int baseTpc = transposeTpc(h->baseTpc(), interval, true);
-                        for (ScoreElement* e : h->linkList()) {
+                        for (ScoreElement* se : h->linkList()) {
                               // don't transpose all links
                               // just ones resulting from mmrests
-                              Harmony* he = toHarmony(e);    // toHarmony() does not work as e is an ScoreElement
+                              Harmony* he = toHarmony(se);    // toHarmony() does not work as e is an ScoreElement
                               if (he->staff() == h->staff())
                                     undoTransposeHarmony(he, rootTpc, baseTpc);
                               }

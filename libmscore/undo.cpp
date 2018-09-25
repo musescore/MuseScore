@@ -1667,10 +1667,10 @@ void InsertRemoveMeasures::removeMeasures()
                   Page* page = s->page();
                   if (page) {
                         // erase system from page
-                        QList<System*>& systemList = page->systems();
-                        auto i = std::find(systemList.begin(), systemList.end(), s);
-                        if (i != systemList.end())
-                              systemList.erase(i);
+                        QList<System*>& sl = page->systems();
+                        auto i = std::find(sl.begin(), sl.end(), s);
+                        if (i != sl.end())
+                              sl.erase(i);
                         // erase system from score
                         auto k = std::find(score->systems().begin(), score->systems().end(), s);
                         if (k != score->systems().end())

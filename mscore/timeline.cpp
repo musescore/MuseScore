@@ -949,16 +949,16 @@ void Timeline::drawGrid(int global_rows, int global_cols)
       bool no_key = true;
       std::get<4>(repeat_info) = false;
 
-      for (Measure* curr_measure = _score->firstMeasure(); curr_measure; curr_measure = curr_measure->nextMeasure()) {
-            for (Segment* curr_seg = curr_measure->first(); curr_seg; curr_seg = curr_seg->next()) {
+      for (Measure* cm = _score->firstMeasure(); cm; cm = cm->nextMeasure()) {
+            for (Segment* curr_seg = cm->first(); curr_seg; curr_seg = curr_seg->next()) {
                   //Toggle no_key if initial key signature is found
-                  if (curr_seg->isKeySigType() && curr_measure == _score->firstMeasure()) {
+                  if (curr_seg->isKeySigType() && cm == _score->firstMeasure()) {
                         if (no_key && curr_seg->tick() == 0)
                               no_key = false;
                         }
 
                   //If no initial key signature is found, add key signature
-                  if (curr_measure == _score->firstMeasure() && no_key &&
+                  if (cm == _score->firstMeasure() && no_key &&
                       (curr_seg->isTimeSigType() || curr_seg->isChordRestType())) {
 
                         if (getMetaRow(tr("Key Signature")) != num_metas) {
@@ -984,7 +984,7 @@ void Timeline::drawGrid(int global_rows, int global_cols)
                   }
             //Handle all jumps here
             if (getMetaRow(tr("Jumps and Markers")) != num_metas) {
-                  ElementList measure_elements_list = curr_measure->el();
+                  ElementList measure_elements_list = cm->el();
                   for (Element* element : measure_elements_list) {
                         std::get<3>(repeat_info) = element;
                         if (element->isMarker())
@@ -1708,8 +1708,8 @@ void Timeline::drawSelection()
       std::set<std::tuple<Measure*, int, ElementType>> meta_labels_set;
 
       const Selection selection = _score->selection();
-      QList<Element*> element_list = selection.elements();
-      for (Element* element : element_list) {
+      QList<Element*> el = selection.elements();
+      for (Element* element : el) {
             if (element->tick() == -1)
                   continue;
             else {
@@ -1891,10 +1891,10 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                       scene_pt.y() < bottom_of_meta) {
 
                         QRectF tmp(scene_pt.x(), 0, 3, nmeta * grid_height + nstaves() * grid_height);
-                        QList<QGraphicsItem*> graphics_item_list = scene()->items(tmp);
+                        QList<QGraphicsItem*> gl = scene()->items(tmp);
                         Measure* measure = nullptr;
 
-                        for (QGraphicsItem* graphics_item : graphics_item_list) {
+                        for (QGraphicsItem* graphics_item : gl) {
                               measure = static_cast<Measure*>(graphics_item->data(2).value<void*>());
                               //-3 z value is the grid square values
                               if (graphics_item->zValue() == -3 && measure)
@@ -1906,8 +1906,8 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                   if (scene_pt.y() < bottom_of_meta)
                         return;
 
-                  QList<QGraphicsItem*> graphics_item_list = items(event->pos());
-                  for (QGraphicsItem* graphics_item : graphics_item_list) {
+                  QList<QGraphicsItem*> gl = items(event->pos());
+                  for (QGraphicsItem* graphics_item : gl) {
                         curr_measure = static_cast<Measure*>(graphics_item->data(2).value<void*>());
                         stave = graphics_item->data(0).value<int>();
                         if (curr_measure)

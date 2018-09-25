@@ -1079,8 +1079,6 @@ bool GuitarPro1::read(QFile* fp)
             score->appendPart(part);
             }
 
-      int tick = 0;
-      Fraction ts;
 
       for (int i = 0; i < staves; ++i) {
             int tuning[GP_MAX_STRING_NUMBER];
@@ -1103,7 +1101,8 @@ bool GuitarPro1::read(QFile* fp)
 
       measures = readInt();
 
-      for (int i = 0; i < measures; ++i) {
+      Fraction ts;
+      for (int i = 0, tick = 0; i < measures; ++i) {
             Fraction nts = bars[i].timesig;
             Measure* m = new Measure(score);
             m->setTick(tick);
@@ -1506,9 +1505,8 @@ bool GuitarPro2::read(QFile* fp)
             score->appendPart(part);
             }
 
-      int tick = 0;
       Fraction ts;
-      for (int i = 0; i < measures; ++i) {
+      for (int i = 0, tick = 0; i < measures; ++i) {
             Fraction nts = bars[i].timesig;
             Measure* m = new Measure(score);
             m->setTick(tick);
@@ -1887,14 +1885,14 @@ bool GuitarPro1::readNote(int string, Note* note)
 					  score->addElement(glis);
 					  //HammerOn here??? Maybe version...
 
-					  Slur* slur = new Slur(score);
-					  slur->setStartElement(gc);
-					  slur->setEndElement(note->chord());
-					  slur->setTick(gc->tick());
-					  slur->setTick2(note->chord()->tick());
-					  slur->setTrack(gc->track());
-					  slur->setTrack2(note->track());
-					  score->addElement(slur);
+					  Slur* slur1 = new Slur(score);
+					  slur1->setStartElement(gc);
+					  slur1->setEndElement(note->chord());
+					  slur1->setTick(gc->tick());
+					  slur1->setTick2(note->chord()->tick());
+					  slur1->setTrack(gc->track());
+					  slur1->setTrack2(note->track());
+					  score->addElement(slur1);
 
                         //TODO: Add a 'slide' guitar effect when implemented
                         }
@@ -1916,14 +1914,14 @@ bool GuitarPro1::readNote(int string, Note* note)
                          ChordRest* cr1 = static_cast<Chord*>(gc);
                          ChordRest* cr2 = static_cast<Chord*>(note->chord());
 
-                         Slur* slur = new Slur(score);
-                         slur->setStartElement(cr1);
-                         slur->setEndElement(cr2);
-                         slur->setTick(cr1->tick());
-                         slur->setTick2(cr2->tick());
-                         slur->setTrack(cr1->track());
-                         slur->setTrack2(cr2->track());
-                         score->addElement(slur);
+                         Slur* slur1 = new Slur(score);
+                         slur1->setStartElement(cr1);
+                         slur1->setEndElement(cr2);
+                         slur1->setTick(cr1->tick());
+                         slur1->setTick2(cr2->tick());
+                         slur1->setTrack(cr1->track());
+                         slur1->setTrack2(cr2->track());
+                         score->addElement(slur1);
                          }
                   }
             if (modMask1 & EFFECT_HAMMER)       // hammer on / pull off
@@ -2084,8 +2082,7 @@ bool GuitarPro3::read(QFile* fp)
 
       transcriber  = readDelphiString();
       instructions = readDelphiString();
-      int n = readInt();
-      for (int i = 0; i < n; ++i)
+      for (int i = 0, n = readInt(); i < n; ++i)
             comments.append(readDelphiString());
 
       /*uchar num =*/ readUChar();      // Shuffle rhythm feel
@@ -2174,9 +2171,8 @@ bool GuitarPro3::read(QFile* fp)
             score->appendPart(part);
             }
 
-      int tick = 0;
       Fraction ts;
-      for (int i = 0; i < measures; ++i) {
+      for (int i = 0, tick =0; i < measures; ++i) {
             Fraction nts = bars[i].timesig;
             Measure* m = new Measure(score);
             m->setTick(tick);
@@ -2550,8 +2546,8 @@ bool GuitarPro3::read(QFile* fp)
             }
       for (auto n : slideList) {
             auto segment = n->chord()->segment();
-		auto measure = segment->measure();
-		while ((segment = segment->next1(SegmentType::ChordRest)) || ((measure = measure->nextMeasure()) && (segment = measure->first()))) {
+		auto measure1 = segment->measure();
+		while ((segment = segment->next1(SegmentType::ChordRest)) || ((measure1 = measure1->nextMeasure()) && (segment = measure1->first()))) {
 		      // bool br = false;
 			auto crest = segment->cr(n->track());
 			if (!crest)
@@ -2823,11 +2819,11 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             }
       int idx = 0;
 
-      for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure(), ++idx) {
+      for (Measure* m1 = score->firstMeasure(); m1; m1 = m1->nextMeasure(), ++idx) {
             const GpBar& bar = gp->bars[idx];
             //TODO            if (bar.barLine != BarLineType::NORMAL && bar.barLine != BarLineType::END_REPEAT && bar.barLine != BarLineType::START_REPEAT && bar.barLine != BarLineType::END_START_REPEAT)
             if (bar.barLine != BarLineType::NORMAL && bar.barLine != BarLineType::END_REPEAT && bar.barLine != BarLineType::START_REPEAT)
-                  m->setEndBarLineType(bar.barLine, 0);
+                  m1->setEndBarLineType(bar.barLine, 0);
             }
       if (score->lastMeasure() && score->lastMeasure()->endBarLineType() != BarLineType::NORMAL)
             score->lastMeasure()->setEndBarLineType(BarLineType::END, false);
@@ -2886,8 +2882,8 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
                   StaffTypes sts = StaffTypes::TAB_DEFAULT;
                   if (lines == 4)
                         sts = StaffTypes::TAB_4COMMON;
-                  StaffType st = *StaffType::preset(sts);
-                  s1->setStaffType(0, &st);
+                  StaffType st1 = *StaffType::preset(sts);
+                  s1->setStaffType(0, &st1);
                   s1->setLines(0, lines);
                   Excerpt::cloneStaff(s,s1);
                   p->staves()->front()->addBracket(new BracketItem(pscore, BracketType::NORMAL, 2));

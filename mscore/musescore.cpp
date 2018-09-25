@@ -2997,16 +2997,16 @@ static bool doConvert(Score* cs, QString fn, QString plugin = "")
             }
       if (!plugin.isEmpty()) {
             mscore->setCurrentScore(cs);
-            LayoutMode layoutMode = cs->layoutMode();
-            if (layoutMode != LayoutMode::PAGE) {
+            LayoutMode layoutMode1 = cs->layoutMode();
+            if (layoutMode1 != LayoutMode::PAGE) {
                   cs->setLayoutMode(LayoutMode::PAGE);
                   cs->doLayout();
                   }
             if (mscore->loadPlugin(plugin))
                   mscore->pluginTriggered(0);
             mscore->unloadPlugins();
-            if (layoutMode != cs->layoutMode()) {
-                  cs->setLayoutMode(layoutMode);
+            if (layoutMode1 != cs->layoutMode()) {
+                  cs->setLayoutMode(layoutMode1);
                   cs->doLayout();
                   }
             }
@@ -4510,14 +4510,14 @@ bool MuseScore::restoreSession(bool always)
                               qreal y       = .0;
                               qreal vmag    = 1.0;
                               MagIdx magIdx = MagIdx::MAG_FREE;
-                              int tab       = 0;
-                              int idx       = 0;
+                              int tab3      = 0;
+                              int idx1      = 0;
                               while (e.readNextStartElement()) {
                                     const QStringRef& t(e.name());
                                     if (t == "tab")
-                                          tab = e.readInt();
+                                          tab3 = e.readInt();
                                     else if (t == "idx")
-                                          idx = e.readInt();
+                                          idx1 = e.readInt();
                                     else if (t == "mag")
                                           vmag = e.readDouble();
                                     else if (t == "magIdx")
@@ -4531,7 +4531,7 @@ bool MuseScore::restoreSession(bool always)
                                           return false;
                                           }
                                     }
-                              (tab == 0 ? tab1 : tab2)->initScoreView(idx, vmag, magIdx, x, y);
+                              (tab3 == 0 ? tab1 : tab2)->initScoreView(idx1, vmag, magIdx, x, y);
                               }
                         else if (tag == "tab")
                               tab = e.readInt();
@@ -5180,12 +5180,12 @@ void MuseScore::endCmd()
             bool samePitch = true;
             int pitch    = -1;
             float tuning = 0;
-            for (Element* e : cs->selection().elements()) {
-                  if (!e->isNote()) {
+            for (Element* ee : cs->selection().elements()) {
+                  if (!ee->isNote()) {
                         samePitch = false;
                         break;
                         }
-                  Note* note = toNote(e);
+                  Note* note = toNote(ee);
                   if (pitch == -1) {
                         pitch = note->ppitch();
                         tuning = note->tuning();

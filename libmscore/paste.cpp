@@ -765,15 +765,15 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                     if (!el->onNote()) {
                                           FiguredBass* onNoteFB = nullptr;
                                           Segment*     prevSegm = currSegm;
-                                          bool         done = false;
+                                          bool         done1    = false;
                                           while (prevSegm) {
-                                                if (done)
+                                                if (done1)
                                                       break;
                                                 prevSegm = prevSegm->prev1(SegmentType::ChordRest);
                                                 // if there is a ChordRest in the dest. track
                                                 // this segment is a (potential) f.b. location
                                                 if (prevSegm->element(destTrack) != nullptr) {
-                                                      done = true;
+                                                      done1 = true;
                                                       }
                                                 // in any case, look for a f.b. in annotations:
                                                 // if there is a f.b. element in the right track,
@@ -781,7 +781,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                                 foreach (Element* a, prevSegm->annotations()) {
                                                       if (a->isFiguredBass() && a->track() == destTrack) {
                                                             onNoteFB = toFiguredBass(a);
-                                                            done = true;
+                                                            done1 = true;
                                                             }
                                                       }
                                                 }
@@ -791,17 +791,17 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                                 continue;
                                                 }
                                           // by default, split on-note duration in half: half on-note and half off-note
-                                          int totTicks = currSegm->tick() - prevSegm->tick();
-                                          int destTick = prevSegm->tick() + totTicks / 2;
-                                          ticks        = totTicks / 2;
+                                          int totTicks  = currSegm->tick() - prevSegm->tick();
+                                          int destTick1 = prevSegm->tick() + totTicks / 2;
+                                          ticks         = totTicks / 2;
                                           if (onNoteFB)
                                                 onNoteFB->setTicks(totTicks / 2);
                                           // look for a segment at this tick; if none, create one
                                           Segment * nextSegm = prevSegm;
-                                          while (nextSegm && nextSegm->tick() < destTick)
+                                          while (nextSegm && nextSegm->tick() < destTick1)
                                                 nextSegm = nextSegm->next1(SegmentType::ChordRest);
-                                          if (!nextSegm || nextSegm->tick() > destTick) {      // no ChordRest segm at this tick
-                                                nextSegm = new Segment(prevSegm->measure(), SegmentType::ChordRest, destTick);
+                                          if (!nextSegm || nextSegm->tick() > destTick1) {      // no ChordRest segm at this tick
+                                                nextSegm = new Segment(prevSegm->measure(), SegmentType::ChordRest, destTick1);
                                                 if (!nextSegm) {
                                                       qDebug("PasteSymbols: can't find or create destination segment for FiguredBass");
                                                       delete el;

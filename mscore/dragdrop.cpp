@@ -297,11 +297,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
       // convert window to canvas position
       QPointF pos(imatrix.map(QPointF(event->pos())));
 
-      EditData dropData(this);
-      dropData.pos        = pos;
-      dropData.element    = editData.element;
-      dropData.modifiers  = event->keyboardModifiers();
-
       if (editData.element) {
             switch (editData.element->type()) {
                   case ElementType::IMAGE:
@@ -387,6 +382,11 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case ElementType::LYRICS:
                   case ElementType::FRET_DIAGRAM:
                   case ElementType::STAFFTYPE_CHANGE: {
+                        EditData dropData(this);
+                        dropData.pos = pos;
+                        dropData.element = editData.element;
+                        dropData.modifiers = event->keyboardModifiers();
+
                         if (getDropTarget(dropData))
                               event->accept();
                         else

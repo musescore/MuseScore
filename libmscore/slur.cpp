@@ -315,8 +315,8 @@ void SlurSegment::computeBezier(QPointF p6o)
             QPointF point = p.pointAtPercent(i/float(nbShapes));
             QRectF re     = QRectF(start, point).normalized();
             if (re.height() < minH) {
-                  qreal d = (minH - re.height()) * .5;
-                  re.adjust(0.0, -d, 0.0, d);
+                  qreal d1 = (minH - re.height()) * .5;
+                  re.adjust(0.0, -d1, 0.0, d1);
                   }
             _shape.add(re);
             start = point;
@@ -1014,13 +1014,13 @@ void Slur::write(XmlWriter& xml) const
 
 static bool chordsHaveTie(Chord* c1, Chord* c2)
       {
-      size_t n1 = c1->notes().size();
-      for (size_t i1 = 0; i1 < n1; ++i1) {
+      size_t n = c1->notes().size();
+      for (size_t i1 = 0; i1 < n; ++i1) {
             Note* n1 = c1->notes().at(i1);
             size_t n2 = c2->notes().size();
             for (size_t i2 = 0; i2 < n2; ++i2) {
-                  Note* n2 = c2->notes().at(i2);
-                  if (n1->tieFor() && n1->tieFor() == n2->tieBack())
+                  Note* n3 = c2->notes().at(i2);
+                  if (n1->tieFor() && n1->tieFor() == n3->tieBack())
                         return true;
                   }
             }

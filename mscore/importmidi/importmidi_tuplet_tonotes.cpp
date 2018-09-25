@@ -100,8 +100,8 @@ bool haveTupletsEnoughElements(const Staff *staff)
                                     }
                               int chordCount = 0;
                               for (const auto &e: tuplet->elements()) {
-                                    const ChordRest *cr = static_cast<ChordRest *>(e);
-                                    if (cr && cr->isChord())
+                                    const ChordRest *cr1 = static_cast<ChordRest *>(e);
+                                    if (cr1 && cr1->isChord())
                                           ++chordCount;
                                     }
                               if (chordCount == 0) {
