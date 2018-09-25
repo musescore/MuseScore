@@ -1652,10 +1652,10 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
                         if (spanner->type() == ElementType::SLUR)
                               spanner->setStartElement(ch);
                         if (e.pasteMode()) {
-                              for (ScoreElement* e : spanner->linkList()) {
-                                    if (e == spanner)
+                              for (ScoreElement* el : spanner->linkList()) {
+                                    if (el == spanner)
                                           continue;
-                                    Spanner* ls = static_cast<Spanner*>(e);
+                                    Spanner* ls = static_cast<Spanner*>(el);
                                     ls->setTick(spanner->tick());
                                     for (ScoreElement* ee : ch->linkList()) {
                                           ChordRest* cr = toChordRest(ee);
@@ -1678,10 +1678,10 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
                         if (start)
                               spanner->setTrack(start->track());
                         if (e.pasteMode()) {
-                              for (ScoreElement* e : spanner->linkList()) {
-                                    if (e == spanner)
+                              for (ScoreElement* el : spanner->linkList()) {
+                                    if (el == spanner)
                                           continue;
-                                    Spanner* ls = static_cast<Spanner*>(e);
+                                    Spanner* ls = static_cast<Spanner*>(el);
                                     ls->setTick2(spanner->tick2());
                                     for (ScoreElement* ee : ch->linkList()) {
                                           ChordRest* cr = toChordRest(ee);
