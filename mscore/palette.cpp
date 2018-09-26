@@ -325,7 +325,7 @@ void Palette::mousePressEvent(QMouseEvent* ev)
       // Take out of edit mode to prevent crashes when adding
       // elements from palette
       ScoreView* cv = mscore->currentScoreView();
-      if (cv->editMode())
+      if (cv && cv->editMode())
             cv->changeState(ViewState::NORMAL);
 
       if (dragIdx == -1)
