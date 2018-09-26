@@ -385,6 +385,7 @@ extern Pid propertyIdQml(const QString& qmlName);
 extern Pid propertyIdQml(const QStringRef& qmlName);
 extern Pid propertyIdName(const QString& name);
 extern Pid propertyIdName(const QStringRef& name);
+extern QString propertyUserName(Pid);
 
 }     // namespace Ms
 #endif
