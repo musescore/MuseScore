@@ -455,6 +455,19 @@ bool TextLineBase::readProperties(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   TextLineBase::propertyId
+//---------------------------------------------------------
+
+Pid TextLineBase::propertyId(const QStringRef& name) const
+      {
+      for (Pid pid : pids) {
+            if (propertyName(pid) == name)
+                  return pid;
+            }
+      return SLine::propertyId(name);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

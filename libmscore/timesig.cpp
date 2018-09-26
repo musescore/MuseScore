@@ -218,6 +218,23 @@ void TimeSig::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid TimeSig::propertyId(const QStringRef& name) const
+      {
+      if (name == "subtype")
+            return Pid::TIMESIG_TYPE;
+      if (name == "sigN" || name == "sigD")
+            return Pid::TIMESIG;
+      if (name == "stretchN" || name == "stretchD")
+            return Pid::TIMESIG_STRETCH;
+      if (name == "Groups")
+            return Pid::GROUPS;
+      return Element::propertyId(name);
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 

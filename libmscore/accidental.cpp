@@ -441,6 +441,20 @@ bool Accidental::setProperty(Pid propertyId, const QVariant& v)
       }
 
 //---------------------------------------------------------
+//   propertyUserValue
+//---------------------------------------------------------
+
+QString Accidental::propertyUserValue(Pid pid) const
+      {
+      switch(pid) {
+            case Pid::SUBTYPE:
+                  return subtypeUserName();
+            default:
+                  return Element::propertyUserValue(pid);
+            }
+      }
+
+//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
