@@ -159,7 +159,7 @@ void SlurTieSegment::editDrag(EditData& ed)
                                     if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
                                           Chord* c = note->chord();
                                           ed.view->setDropTarget(note);
-                                          if (c != spanner->endChord())
+                                          if (c != spanner->endCR())
                                                 changeAnchor(ed, c);
                                           }
                                     }
