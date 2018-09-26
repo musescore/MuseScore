@@ -138,8 +138,7 @@ qDebug("ResolveDegreeList: not found in table");
 //---------------------------------------------------------
 
 const ElementStyle chordSymbolStyle {
-      { Sid::chordSymbolAPosAbove,   Pid::POS_ABOVE  },
-      { Sid::harmonyPlacement,       Pid::PLACEMENT  },
+      { Sid::harmonyPlacement, Pid::PLACEMENT  },
       };
 
 //---------------------------------------------------------
@@ -163,7 +162,6 @@ Harmony::Harmony(Score* s)
 Harmony::Harmony(const Harmony& h)
    : TextBase(h)
       {
-      _posAbove   = h._posAbove;
       _rootTpc    = h._rootTpc;
       _baseTpc    = h._baseTpc;
       _rootCase   = h._rootCase;
@@ -1011,11 +1009,14 @@ void Harmony::layout()
             return;
             }
 
-      qreal yy = 0.0;
+      qreal yy;
+      qreal xx = 0.0; // offset(_spatium).x();
 
       if (parent()->isSegment()) {
-            // yy -= score()->styleP(Sid::harmonyY);
-            yy = _posAbove;
+            yy = score()->styleP(Sid::chordSymbolPosAbove);
+            QPointF o(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
+            xx += o.x();
+            yy += o.y();
             }
       else if (parent()->isFretDiagram()) {
             qDebug("Harmony %s with fret diagram as parent", qPrintable(_textName)); // not possible?
@@ -1036,8 +1037,6 @@ void Harmony::layout()
             yy += height();
             }
 
-      qreal xx = 0.0; // offset(_spatium).x();
-
       qreal cw = symWidth(SymId::noteheadBlack);
       if (align() & Align::RIGHT) {
             xx += cw;
@@ -1057,12 +1056,8 @@ void Harmony::layout()
 //            mstaff->distanceUp = qMax(mstaff->distanceUp, dist + _spatium);
             }
 
-      if (hasFrame()) {
-//            QRectF saveBbox = bbox();
-//            setbbox(bboxtight());
+      if (hasFrame())
             layoutFrame();
-//            setbbox(saveBbox);
-            }
 
       autoplaceSegmentElement(styleP(Sid::minHarmonyDistance));
       }
@@ -1616,8 +1611,6 @@ Element* Harmony::drop(EditData& data)
 QVariant Harmony::getProperty(Pid pid) const
       {
       switch (pid) {
-            case Pid::POS_ABOVE:
-                  return QVariant(_posAbove);
             default:
                   return TextBase::getProperty(pid);
             }
@@ -1629,11 +1622,6 @@ QVariant Harmony::getProperty(Pid pid) const
 
 bool Harmony::setProperty(Pid pid, const QVariant& v)
       {
-      if (pid == Pid::POS_ABOVE) {
-            _posAbove = v.toReal();
-            triggerLayout();
-            return true;
-            }
       if (TextBase::setProperty(pid, v)) {
             render();
             return true;

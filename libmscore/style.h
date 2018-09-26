@@ -206,7 +206,8 @@ enum class Sid {
       maxHarmonyBarDistance,
       harmonyPlacement,
 
-      chordSymbolAPosAbove,
+      chordSymbolPosAbove,
+
       chordSymbolAFontFace,
       chordSymbolAFontSize,
       chordSymbolAFontBold,
@@ -214,7 +215,6 @@ enum class Sid {
       chordSymbolAFontUnderline,
       chordSymbolAAlign,
 
-      chordSymbolBPosAbove,
       chordSymbolBFontFace,
       chordSymbolBFontSize,
       chordSymbolBFontBold,

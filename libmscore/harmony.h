@@ -64,7 +64,6 @@ struct RenderAction;
 class HDegree;
 
 class Harmony final : public TextBase {
-      qreal _posAbove;
       int _rootTpc;                       // root note for chord
       int _baseTpc;                       // bass note or chord base; used for "slash" chords
                                           // or notation of base note in chord
@@ -101,11 +100,8 @@ class Harmony final : public TextBase {
       virtual Harmony* clone() const override     { return new Harmony(*this); }
       virtual ElementType type() const override   { return ElementType::HARMONY; }
 
-      qreal posAbove() const                   { return _posAbove; }
-      void setPosAbove(qreal v)                { _posAbove = v; }
-
-      void setId(int d)                        { _id = d; }
-      int id() const                           { return _id;           }
+      void setId(int d)                        { _id = d;       }
+      int id() const                           { return _id;    }
 
       void setBaseCase(NoteCaseType c)         { _baseCase = c; }
       void setRootCase(NoteCaseType c)         { _rootCase = c; }
