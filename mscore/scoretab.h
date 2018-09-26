@@ -79,6 +79,7 @@ class ScoreTab : public QWidget {
       void setTabText(int, const QString&);
       int currentIndex() const;
       void setCurrentIndex(int);
+      bool setCurrentScore(Score* s);
       void removeTab(int, bool noCurrentChangedSignal = false);
       int count() const       { return scoreList->size(); }
       ScoreView* view(int) const;

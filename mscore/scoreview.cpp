@@ -2754,7 +2754,7 @@ void ScoreView::pageEnd()
 
 void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff )
       {
-      if (this != mscore->currentScoreView())
+      if (this != mscore->currentScoreView() && !_moveWhenInactive)
             return;
       // TODO: change icon, or add panning options
       if (!mscore->panDuringPlayback())
@@ -4228,7 +4228,7 @@ Element* ScoreView::elementNear(QPointF p)
 
 void ScoreView::posChanged(POS pos, unsigned tick)
       {
-      if (this != mscore->currentScoreView())
+      if (this != mscore->currentScoreView() && !_moveWhenInactive)
             return;
       switch (pos) {
             case POS::CURRENT:

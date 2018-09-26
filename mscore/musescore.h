@@ -96,6 +96,7 @@ class SynthesizerState;
 class Driver;
 class Seq;
 class ImportMidiPanel;
+class ScoreComparisonTool;
 class Startcenter;
 class HelpBrowser;
 class ToolbarEditor;
@@ -246,6 +247,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ImportMidiPanel* importmidiPanel     { 0 };
       QFrame* importmidiShowPanel;
       QSplitter* mainWindow;
+
+      ScoreComparisonTool* scoreCmpTool    { 0 };
 
       MagBox* mag;
       QComboBox* viewModeCombo;
@@ -539,6 +542,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void handleMessage(const QString& message);
       void setCurrentScoreView(ScoreView*);
       void setCurrentScoreView(int);
+      void setCurrentScores(Score* s1, Score* s2 = nullptr);
       void setNormalState()    { changeState(STATE_NORMAL); }
       void setPlayState()      { changeState(STATE_PLAY); }
       void setNoteEntryState() { changeState(STATE_NOTE_ENTRY); }
@@ -606,6 +610,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void writeSessionFile(bool);
       bool restoreSession(bool);
       bool splitScreen() const { return _splitScreen; }
+      void setSplitScreen(bool val);
       virtual void setCurrentView(int tabIdx, int idx);
       void loadPlugins();
       void unloadPlugins();
@@ -623,8 +628,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       MasterScore* getNewFile();
       Q_INVOKABLE void loadFile(const QString& url);
       void loadFile(const QUrl&);
+      QTemporaryFile* getTemporaryScoreFileCopy(const QFileInfo& info, const QString& baseNameTemplate);
       QNetworkAccessManager* networkManager();
-      virtual Score* openScore(const QString& fn);
+      virtual Score* openScore(const QString& fn, bool switchTab = true);
       bool hasToCheckForUpdate();
       bool hasToCheckForExtensionsUpdate();
       static bool unstable();
@@ -639,7 +645,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreTab* getTab2() const { return tab2; }
       QList<LanguageItem>& languages() { return _languages; }
 
-      QStringList getOpenScoreNames(const QString& filter, const QString& title);
+      QStringList getOpenScoreNames(const QString& filter, const QString& title, bool singleFile = false);
       QString getSaveScoreName(const QString& title, QString& name, const QString& filter, bool folder = false);
       QString getStyleFilename(bool open, const QString& title = QString());
       QString getFotoFilename(QString& filter, QString *selectedFilter);
@@ -711,7 +717,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool countIn() const           { return countInAction->isChecked(); }
       bool panDuringPlayback() const { return panAction->isChecked(); }
       void noteTooShortForTupletDialog();
-      void loadFiles();
+      void loadFiles(bool switchTab = true, bool singleFile = false);
                   // midi panel functions
       void midiPanelOnSwitchToFile(const QString &file);
       void midiPanelOnCloseFile(const QString &file);

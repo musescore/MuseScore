@@ -395,6 +395,28 @@ void ScoreTab::setCurrentIndex(int idx)
       }
 
 //---------------------------------------------------------
+//   setCurrentScore
+//    Changes the currently selected score tab and excerpt
+//    tab to display the given score.
+//    Returns true on success.
+//---------------------------------------------------------
+
+bool ScoreTab::setCurrentScore(Score* s)
+      {
+      MasterScore* ms = s->masterScore();
+      const int idx = scoreList->indexOf(ms);
+      if (idx == -1)
+            return false;
+      const int exIdx = (ms == s) ? 0 : ms->scoreList().indexOf(s);
+      if (exIdx == -1)
+            return false;
+
+      setCurrentIndex(idx);
+      setExcerpt(exIdx);
+      return true;
+      }
+
+//---------------------------------------------------------
 //   removeTab
 //---------------------------------------------------------
 

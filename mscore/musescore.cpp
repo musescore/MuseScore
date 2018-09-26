@@ -58,6 +58,8 @@
 #include "timeline.h"
 #include "importmidi/importmidi_panel.h"
 #include "importmidi/importmidi_operations.h"
+#include "scorecmp/scorecmp.h"
+#include "libmscore/scorediff.h"
 #include "libmscore/chord.h"
 #include "libmscore/segment.h"
 #include "editraster.h"
@@ -1058,6 +1060,17 @@ MuseScore::MuseScore()
       scorePageLayoutChanged();
       showTimeline(false);
 
+      scoreCmpTool = new ScoreComparisonTool;
+      scoreCmpTool->setVisible(false);
+      {
+      QAction* a = getAction("toggle-scorecmp-tool");
+      connect(
+         scoreCmpTool, &ScoreComparisonTool::visibilityChanged,
+         a,            &QAction::setChecked
+         );
+      }
+      addDockWidget(Qt::BottomDockWidgetArea, scoreCmpTool);
+
       mainWindow->setStretchFactor(0, 1);
       mainWindow->setStretchFactor(1, 0);
       mainWindow->setSizes(QList<int>({500, 50}));
@@ -1366,6 +1379,10 @@ MuseScore::MuseScore()
       menuView->addAction(a);
 
       a = getAction("toggle-piano");
+      a->setCheckable(true);
+      menuView->addAction(a);
+
+      a = getAction("toggle-scorecmp-tool");
       a->setCheckable(true);
       menuView->addAction(a);
 
@@ -2316,6 +2333,30 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             timeline()->setScoreView(view);
             }
       ScoreAccessibility::instance()->updateAccessibilityInfo();
+      }
+
+//---------------------------------------------------------
+//   setCurrentScores
+//---------------------------------------------------------
+
+void MuseScore::setCurrentScores(Score* s1, Score* s2)
+      {
+      if (s1)
+            tab1->setCurrentScore(s1);
+      if (s2) {
+            setSplitScreen(true);
+            tab2->setCurrentScore(s2);
+            }
+      }
+
+//---------------------------------------------------------
+//   setSplitScreen
+//---------------------------------------------------------
+
+void MuseScore::setSplitScreen(bool val)
+      {
+      if (splitScreen() != val)
+            splitWindow(_horizontalSplit);
       }
 
 //---------------------------------------------------------
@@ -4647,15 +4688,11 @@ void MuseScore::splitWindow(bool horizontal)
                   }
             else {
                   _horizontalSplit = horizontal;
-                  QAction* a;
-                  if (_horizontalSplit)
-                        a = getAction("split-v");
-                  else
-                        a = getAction("split-h");
-                  a->setChecked(false);
                   splitter->setOrientation(_horizontalSplit ? Qt::Horizontal : Qt::Vertical);
                   }
             }
+      getAction("split-h")->setChecked(_splitScreen && _horizontalSplit);
+      getAction("split-v")->setChecked(_splitScreen && !_horizontalSplit);
       }
 
 //---------------------------------------------------------
@@ -5235,6 +5272,7 @@ void MuseScore::endCmd()
             updateInputState(cs);
             updateUndoRedo();
             dirtyChanged(cs);
+            scoreCmpTool->updateDiff();
             Element* e = cs->selection().element();
 
             // For multiple notes selected check if they all have same pitch and tuning
@@ -5529,6 +5567,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             ;
       else if (cmd == "toggle-piano")
             showPianoKeyboard(a->isChecked());
+      else if (cmd == "toggle-scorecmp-tool")
+            scoreCmpTool->setVisible(a->isChecked());
       else if (cmd == "plugin-creator")
             showPluginCreator(a);
       else if (cmd == "plugin-manager")

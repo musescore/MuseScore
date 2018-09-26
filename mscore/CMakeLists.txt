@@ -56,6 +56,8 @@ QT5_WRAP_UI (ui_headers
 
       importmidi/importmidi_panel.ui
 
+      scorecmp/scorecmp_tool.ui
+
       debugger/barline.ui
       debugger/harmony.ui
       debugger/box.ui
@@ -404,6 +406,7 @@ add_executable ( ${ExecutableName}
       importmidi/importmidi_voice.cpp importmidi/importmidi_view.cpp importmidi/importmidi_key.cpp
       importmidi/importmidi_tempo.cpp importmidi/importmidi_instrument.cpp
       importmidi/importmidi_chordname.cpp
+      scorecmp/scorecmp.cpp scorecmp/scorediffmodel.cpp scorecmp/scorelistmodel.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
       startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp

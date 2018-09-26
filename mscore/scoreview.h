@@ -135,6 +135,10 @@ class ScoreView : public QWidget, public MuseScoreView {
       QPixmap* _bgPixmap;
       QPixmap* _fgPixmap;
 
+      // By default when the view will prevent viewpoint changes if
+      // it is inactive. Set this flag to true to change this behaviour.
+      bool _moveWhenInactive = false;
+
       virtual void paintEvent(QPaintEvent*);
       void paint(const QRect&, QPainter&);
 
@@ -400,6 +404,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       bool clickOffElement;
       void updateGrips();
+      bool moveWhenInactive() const { return _moveWhenInactive; }
+      bool moveWhenInactive(bool move) { bool m = _moveWhenInactive; _moveWhenInactive = move; return m; }
       };
 
 } // namespace Ms
