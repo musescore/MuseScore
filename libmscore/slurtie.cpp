@@ -337,7 +337,18 @@ void SlurTieSegment::drawEditMode(QPainter* p, EditData& ed)
 
       p->setPen(QPen(MScore::defaultColor, 0.0));
       for (int i = 0; i < ed.grips; ++i) {
-            p->setBrush(Grip(i) == ed.curGrip ? MScore::frameMarginColor : Qt::NoBrush);
+            // This must be done with an if-else statement rather than a ternary operator.
+            // This is because there are two setBrush methods that take different types
+            // of argument, either a Qt::BrushStyle or a QBrush. Since a QBrush can be
+            // constructed from a QColour, passing Mscore::frameMarginColor works.
+            // Qt::NoBrush is a Qt::BrushStyle, however, so if it is passed in a ternary
+            // operator with a QColor, a new QColor will be created from it, and from that
+            // a QBrush. Instead, what we really want to do is pass Qt::NoBrush as a
+            // Qt::BrushStyle, therefore this requires two seperate function calls:
+            if (Grip(i) == ed.curGrip)
+                  p->setBrush(MScore::frameMarginColor);
+            else
+                  p->setBrush(Qt::NoBrush);
             p->drawRect(ed.grip[i]);
             }
       }
