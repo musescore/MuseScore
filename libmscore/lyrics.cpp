@@ -278,7 +278,7 @@ void Lyrics::layout()
             styleChanged();
 
       QPointF o(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
-      setPos(o);
+      rxpos() = o.x();
       qreal x = pos().x();
       TextBase::layout1();
 
