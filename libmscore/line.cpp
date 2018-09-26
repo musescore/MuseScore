@@ -495,7 +495,26 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     // lay out just past right edge of all notes for this segment on this staff
 
                                     Segment* s = cr->segment();
-                                    qreal width = s->staffShape(staffIdx()).right();
+
+                                    int startTrack = staffIdx() * VOICES;
+                                    int endTrack   = startTrack + VOICES;
+                                    qreal width    = 0.0;
+
+                                    // dont consider full measure rests, which are centered
+                                    // (TODO: what if there is only a full measure rest?)
+
+                                    for (int track = startTrack; track < endTrack; ++track) {
+                                          ChordRest* cr = toChordRest(s->element(track));
+                                          if (!cr)
+                                                continue;
+                                          if (cr->isChord()) {
+                                                for (Note* n : toChord(cr)->notes())
+                                                      width = qMax(width, n->shape().right() + n->pos().x() + cr->pos().x());
+                                                }
+                                          else if (cr->isRest() && (cr->actualDurationType() != TDuration::DurationType::V_MEASURE))
+                                                width = qMax(width, cr->bbox().right() + cr->pos().x());
+                                          }
+
                                     x = width + sp;
 
                                     // extend past chord/rest
