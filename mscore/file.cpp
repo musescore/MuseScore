@@ -74,6 +74,7 @@
 #include "synthesizer/msynthesizer.h"
 #include "svggenerator.h"
 #include "scorePreview.h"
+#include "scorecmp/scorecmp.h"
 #include "extension.h"
 
 #ifdef OMR
@@ -272,7 +273,7 @@ bool MuseScore::checkDirty(MasterScore* s)
  Handles the GUI's file-open action.
  */
 
-void MuseScore::loadFiles()
+void MuseScore::loadFiles(bool switchTab, bool singleFile)
       {
       QStringList files = getOpenScoreNames(
 #ifdef OMR
@@ -292,17 +293,18 @@ void MuseScore::loadFiles()
          tr("Overture / Score Writer Files <experimental>") + " (*.ove *.scw);;" +
          tr("Bagpipe Music Writer Files <experimental>") + " (*.bww);;" +
          tr("Guitar Pro") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx)",
-         tr("Load Score")
+         tr("Load Score"),
+         singleFile
          );
       for (const QString& s : files)
-            openScore(s);
+            openScore(s, switchTab);
       }
 
 //---------------------------------------------------------
 //   openScore
 //---------------------------------------------------------
 
-Score* MuseScore::openScore(const QString& fn)
+Score* MuseScore::openScore(const QString& fn, bool switchTab)
       {
       //
       // make sure we load a file only once
@@ -317,7 +319,9 @@ Score* MuseScore::openScore(const QString& fn)
       MasterScore* score = readScore(fn);
       if (score) {
             score->updateCapo();
-            setCurrentScoreView(appendScore(score));
+            const int tabIdx = appendScore(score);
+            if (switchTab)
+                  setCurrentScoreView(tabIdx);
             writeSessionFile(false);
             }
       return score;
@@ -435,6 +439,7 @@ bool MuseScore::saveFile(MasterScore* score)
             }
       score->setCreated(false);
       updateWindowTitle(score);
+      scoreCmpTool->updateScoreVersions(score);
       int idx = scoreList.indexOf(score->masterScore());
       tab1->setTabText(idx, score->fileInfo()->completeBaseName());
       if (tab2)
@@ -782,6 +787,61 @@ void MuseScore::newFile()
       }
 
 //---------------------------------------------------------
+//   copy
+//    Copy content of src file do dest file overwriting it.
+//    Implemented manually as QFile::copy refuses to
+//    overwrite existing files.
+//---------------------------------------------------------
+
+static bool copy(QFile& src, QFile& dest)
+      {
+      src.open(QIODevice::ReadOnly);
+      dest.open(QIODevice::WriteOnly);
+      constexpr qint64 size = 1024 * 1024;
+      char* buf = new char[size];
+      bool err = false;
+      while (qint64 r = src.read(buf, size)) {
+            if (r < 0) {
+                  err = true;
+                  break;
+                  }
+            qint64 w = dest.write(buf, r);
+            if (w < r) {
+                  err = true;
+                  break;
+                  }
+            }
+      dest.close();
+      src.close();
+      delete[] buf;
+      return !err;
+      }
+
+//---------------------------------------------------------
+//   getTemporaryScoreFileCopy
+//    baseNameTemplate is the template to be passed to
+//    QTemporaryFile constructor but without suffix and
+//    directory --- they are defined automatically.
+//---------------------------------------------------------
+
+QTemporaryFile* MuseScore::getTemporaryScoreFileCopy(const QFileInfo& info, const QString& baseNameTemplate)
+      {
+      QString suffix(info.suffix());
+      if (suffix.endsWith(",")) // some backup files created by MuseScore
+            suffix.chop(1);
+      QTemporaryFile* f = new QTemporaryFile(
+         QDir::temp().absoluteFilePath(baseNameTemplate + '.' + suffix),
+         this
+         );
+      QFile src(info.absoluteFilePath());
+      if (!copy(src, *f)) {
+            delete f;
+            return nullptr;
+            }
+      return f;
+      }
+
+//---------------------------------------------------------
 //   addScorePreview
 //    add a score preview to the file dialog
 //---------------------------------------------------------
@@ -815,7 +875,7 @@ static QList<QUrl> sidebarUrls()
 //   getOpenScoreNames
 //---------------------------------------------------------
 
-QStringList MuseScore::getOpenScoreNames(const QString& filter, const QString& title)
+QStringList MuseScore::getOpenScoreNames(const QString& filter, const QString& title, bool singleFile)
       {
       QSettings set;
       QString dir = set.value("lastOpenPath", preferences.getString(PREF_APP_PATHS_MYSCORES)).toString();
@@ -834,7 +894,7 @@ QStringList MuseScore::getOpenScoreNames(const QString& filter, const QString& t
 
       if (loadScoreDialog == 0) {
             loadScoreDialog = new QFileDialog(this);
-            loadScoreDialog->setFileMode(QFileDialog::ExistingFiles);
+            loadScoreDialog->setFileMode(singleFile ? QFileDialog::ExistingFile : QFileDialog::ExistingFiles);
             loadScoreDialog->setOption(QFileDialog::DontUseNativeDialog, true);
             loadScoreDialog->setWindowTitle(title);
             addScorePreview(loadScoreDialog);
@@ -1879,6 +1939,7 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
                   cs_->undoStack()->setClean();
                   dirtyChanged(cs_);
                   cs_->setCreated(false);
+                  scoreCmpTool->updateScoreVersions(cs_);
                   addRecentScore(cs_);
                   writeSessionFile(false);
                   }
