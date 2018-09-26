@@ -230,7 +230,8 @@ static const StyleType styleTypes[] {
       { Sid::maxHarmonyBarDistance,    "maxHarmonyBarDistance",    Spatium(3.0) },
       { Sid::harmonyPlacement,         "harmonyPlacement",         int(Placement::ABOVE) },
 
-      { Sid::chordSymbolAPosAbove,      "chordSymbolAPosAbove",      Spatium(-2.5) },
+      { Sid::chordSymbolPosAbove,       "chordSymbolPosAbove",       Spatium(-2.5) },
+
       { Sid::chordSymbolAFontFace,      "chordSymbolAFontFace",      "FreeSerif" },
       { Sid::chordSymbolAFontSize,      "chordSymbolAFontSize",      12.0 },
       { Sid::chordSymbolAFontBold,      "chordSymbolAFontBold",      false },
@@ -238,7 +239,6 @@ static const StyleType styleTypes[] {
       { Sid::chordSymbolAFontUnderline, "chordSymbolAFontUnderline", false },
       { Sid::chordSymbolAAlign,         "chordSymbolAAlign",         QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
 
-      { Sid::chordSymbolBPosAbove,      "chordSymbolBPosAbove",      Spatium(-2.5) },
       { Sid::chordSymbolBFontFace,      "chordSymbolBFontFace",      "FreeSerif" },
       { Sid::chordSymbolBFontSize,      "chordSymbolBFontSize",      18.0 },
       { Sid::chordSymbolBFontBold,      "chordSymbolBFontBold",      false },
