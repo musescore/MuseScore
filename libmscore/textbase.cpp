@@ -1687,28 +1687,28 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
             xml.writeXml("text", xmlText());
       }
 
+static constexpr std::array<Pid, 18> pids { {
+      Pid::SUB_STYLE,
+      Pid::FONT_FACE,
+      Pid::FONT_SIZE,
+      Pid::FONT_BOLD,
+      Pid::FONT_ITALIC,
+      Pid::FONT_UNDERLINE,
+      Pid::FRAME_TYPE,
+      Pid::FRAME_WIDTH,
+      Pid::FRAME_PADDING,
+      Pid::FRAME_ROUND,
+      Pid::FRAME_FG_COLOR,
+      Pid::FRAME_BG_COLOR,
+      Pid::ALIGN,
+      } };
+
 //---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------
 
 bool TextBase::readProperties(XmlReader& e)
       {
-      static const std::array<Pid, 18> pids { {
-            Pid::SUB_STYLE,
-            Pid::FONT_FACE,
-            Pid::FONT_SIZE,
-            Pid::FONT_BOLD,
-            Pid::FONT_ITALIC,
-            Pid::FONT_UNDERLINE,
-            Pid::FRAME_TYPE,
-            Pid::FRAME_WIDTH,
-            Pid::FRAME_PADDING,
-            Pid::FRAME_ROUND,
-            Pid::FRAME_FG_COLOR,
-            Pid::FRAME_BG_COLOR,
-            Pid::ALIGN,
-            } };
-
       const QStringRef& tag(e.name());
       for (Pid i :pids) {
             if (readProperty(tag, e, i))
@@ -1719,6 +1719,21 @@ bool TextBase::readProperties(XmlReader& e)
       else if (!Element::readProperties(e))
             return false;
       return true;
+      }
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid TextBase::propertyId(const QStringRef& name) const
+      {
+      if (name == "text")
+            return Pid::TEXT;
+      for (Pid pid : pids) {
+            if (propertyName(pid) == name)
+                  return pid;
+            }
+      return Element::propertyId(name);
       }
 
 //---------------------------------------------------------

@@ -418,6 +418,34 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid id) const
       }
 
 //---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid ScoreElement::propertyId(const QStringRef& xmlName) const
+      {
+      return propertyIdName(xmlName);
+      }
+
+//---------------------------------------------------------
+//   propertyUserValue
+//---------------------------------------------------------
+
+QString ScoreElement::propertyUserValue(Pid id) const
+      {
+      QVariant val = getProperty(id);
+      switch (propertyType(id)) {
+            case P_TYPE::POINT_SP:
+                  {
+                  QPointF p = val.toPointF();
+                  return QString("(%1, %2)").arg(p.x()).arg(p.y());
+                  }
+            default:
+                  break;
+            }
+      return val.toString();
+      }
+
+//---------------------------------------------------------
 //   readStyledProperty
 //---------------------------------------------------------
 

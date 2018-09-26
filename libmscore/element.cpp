@@ -1182,6 +1182,31 @@ QVariant Element::propertyDefault(Pid pid) const
       }
 
 //---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid Element::propertyId(const QStringRef& name) const
+      {
+      if (name == "pos" || name == "offset")
+            return Pid::OFFSET;
+      return ScoreElement::propertyId(name);
+      }
+
+//---------------------------------------------------------
+//   propertyUserValue
+//---------------------------------------------------------
+
+QString Element::propertyUserValue(Pid pid) const
+      {
+      switch(pid) {
+            case Pid::SUBTYPE:
+                  return subtypeName();
+            default:
+                  return ScoreElement::propertyUserValue(pid);
+            }
+      }
+
+//---------------------------------------------------------
 //   custom
 //    check if property is != default
 //---------------------------------------------------------
