@@ -38,6 +38,10 @@ else (NOT MSVC)
    set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
 endif (NOT MSVC)
 
+include_directories(
+      ${PROJECT_SOURCE_DIR}/thirdparty/diff
+      )
+
 add_library (
       libmscore STATIC
       ${_all_h_file}
@@ -99,6 +103,11 @@ add_library (
       lyricsline.cpp
       layoutlinear.cpp
       connector.cpp location.cpp skyline.cpp
+      scorediff.cpp
+      )
+
+target_link_libraries(libmscore
+      diff_match_patch
       )
 
 ##

@@ -280,7 +280,7 @@ class diff_match_patch {
    * @param diffs LinkedList of Diff objects.
    * @param lineArray List of unique strings.
    */
- private:
+ protected: // changed for usage in scorediff
   void diff_charsToLines(QList<Diff> &diffs, const QStringList &lineArray);
 
   /**
