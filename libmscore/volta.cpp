@@ -151,7 +151,7 @@ void Volta::read(XmlReader& e)
 
 void Volta::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       TextLineBase::writeProperties(xml);
       QString s;
       for (int i : _endings) {

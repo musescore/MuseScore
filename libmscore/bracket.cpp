@@ -446,16 +446,16 @@ void Bracket::write(XmlWriter& xml) const
       {
       switch (_bi->bracketType()) {
             case BracketType::BRACE:
-                  xml.stag("Bracket type=\"Brace\"");
+                  xml.stag(this, "type=\"Brace\"");
                   break;
             case BracketType::NORMAL:
-                  xml.stag("Bracket");
+                  xml.stag(this);
                   break;
             case BracketType::SQUARE:
-                  xml.stag("Bracket type=\"Square\"");
+                  xml.stag(this, "type=\"Square\"");
                   break;
             case BracketType::LINE:
-                  xml.stag("Bracket type=\"Line\"");
+                  xml.stag(this, "type=\"Line\"");
                   break;
             case BracketType::NO_BRACKET:
                   break;

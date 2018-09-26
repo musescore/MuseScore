@@ -395,7 +395,7 @@ void TextLineBase::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(name());
+      xml.stag(this);
       writeProperties(xml);
       xml.etag();
       }

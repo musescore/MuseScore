@@ -85,7 +85,7 @@ void Lyrics::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag("Lyrics");
+      xml.stag(this);
       writeProperty(xml, Pid::VERSE);
       if (_syllabic != Syllabic::SINGLE) {
             static const char* sl[] = {

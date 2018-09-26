@@ -808,7 +808,7 @@ void Segment::write(XmlWriter& xml) const
       setWritten(true);
       if (_extraLeadingSpace.isZero())
             return;
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("leadingSpace", _extraLeadingSpace.val());
       xml.etag();
       }

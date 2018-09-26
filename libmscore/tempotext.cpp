@@ -56,7 +56,7 @@ TempoText::TempoText(Score* s)
 
 void TempoText::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("tempo", _tempo);
       if (_followText)
             xml.tag("followText", _followText);

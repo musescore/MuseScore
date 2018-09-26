@@ -143,7 +143,7 @@ void Articulation::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag("Articulation");
+      xml.stag(this);
       if (!_channelName.isEmpty())
             xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
       writeProperty(xml, Pid::DIRECTION);

@@ -370,7 +370,7 @@ void Glissando::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(name());
+      xml.stag(this);
       if (_showText && !_text.isEmpty())
             xml.tag("text", _text);
 

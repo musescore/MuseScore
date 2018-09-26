@@ -357,7 +357,7 @@ noteList BagpipeEmbellishment::getNoteList() const
 
 void BagpipeEmbellishment::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("subtype", _embelType);
       xml.etag();
       }

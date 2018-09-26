@@ -131,7 +131,7 @@ void Jump::read(XmlReader& e)
 
 void Jump::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       TextBase::writeProperties(xml);
       xml.tag("jumpTo", _jumpTo);
       xml.tag("playUntil", _playUntil);

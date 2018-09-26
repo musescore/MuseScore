@@ -668,7 +668,7 @@ bool Element::readProperties(XmlReader& e)
 
 void Element::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       writeProperties(xml);
       xml.etag();
       }

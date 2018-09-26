@@ -94,6 +94,34 @@ void XmlWriter::stag(const QString& s)
       }
 
 //---------------------------------------------------------
+//   stag
+//    <mops attribute="value">
+//---------------------------------------------------------
+
+void XmlWriter::stag(const ScoreElement* se, const QString& attributes)
+      {
+      stag(se->name(), se, attributes);
+      }
+
+//---------------------------------------------------------
+//   stag
+//    <mops attribute="value">
+//---------------------------------------------------------
+
+void XmlWriter::stag(const QString& name, const ScoreElement* se, const QString& attributes)
+      {
+      putLevel();
+      *this << '<' << name;
+      if (!attributes.isEmpty())
+            *this << ' ' << attributes;
+      *this << '>' << endl;
+      stack.append(name);
+
+      if (_recordElements)
+            _elements.emplace_back(se, name);
+      }
+
+//---------------------------------------------------------
 //   etag
 //    </mops>
 //---------------------------------------------------------

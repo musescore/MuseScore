@@ -49,7 +49,7 @@ StaffState::~StaffState()
 
 void StaffState::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("subtype", int(_staffStateType));
       if (staffStateType() == StaffStateType::INSTRUMENT)
             _instrument->write(xml, nullptr);

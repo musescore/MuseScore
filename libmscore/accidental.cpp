@@ -187,7 +187,7 @@ void Accidental::read(XmlReader& e)
 
 void Accidental::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       writeProperty(xml, Pid::ACCIDENTAL_BRACKET);
       writeProperty(xml, Pid::ROLE);
       writeProperty(xml, Pid::SMALL);
