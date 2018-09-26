@@ -151,6 +151,8 @@ QString dataPath;
 QString iconPath;
 
 bool converterMode = false;
+static bool rawDiffMode = false;
+static bool diffMode = false;
 bool processJob = false;
 bool externalIcons = false;
 bool pluginMode = false;
@@ -3296,6 +3298,7 @@ static bool processNonGui(const QStringList& argv)
             else
                   return convert(argv[0], outFileName);
             }
+
       if (!extensionName.isEmpty()) {
             QFileInfo fi(extensionName);
             QString suffix = fi.suffix().toLower();
@@ -3306,6 +3309,25 @@ static bool processNonGui(const QStringList& argv)
                   return false;
                   }
             }
+
+      if (rawDiffMode || diffMode) {
+            if (argv.size() != 2)
+                  return false;
+            MasterScore* s1 = mscore->readScore(argv[0]);
+            MasterScore* s2 = mscore->readScore(argv[1]);
+            if (!s1 || !s2)
+                  return false;
+            ScoreDiff diff(s1, s2, /* textDiffOnly */ !diffMode);
+
+            if (rawDiffMode)
+                  QTextStream(stdout) << diff.rawDiff() << endl;
+            if (diffMode)
+                  QTextStream(stdout) << diff.userDiff() << endl;
+
+            delete s1;
+            delete s2;
+            }
+
       return true;
       }
 
@@ -6564,6 +6586,8 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"f", "force"}, "Used with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
       parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
       parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless if -e is passed too", "extension file"));
+      parser.addOption(QCommandLineOption("raw-diff", "Print a raw diff for the given scores"));
+      parser.addOption(QCommandLineOption("diff", "Print a diff for the given scores"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -6701,6 +6725,14 @@ int main(int argc, char* av[])
             else
                   fprintf(stderr, "MP3 bitrate value '%s' not recognized, using default setting from preferences instead.\n", qPrintable(temp));
            }
+      if (parser.isSet("raw-diff")) {
+            MScore::noGui = true;
+            rawDiffMode = true;
+            }
+      if (parser.isSet("diff")) {
+            MScore::noGui = true;
+            diffMode = true;
+            }
 
       QStringList argv = parser.positionalArguments();
 
@@ -6724,6 +6756,10 @@ int main(int argc, char* av[])
             else
                   if (app->sendMessage(QString("")))
                       return 0;
+            }
+      if (rawDiffMode || diffMode) {
+            if (argv.size() != 2)
+                  qFatal("Only two scores are needed for performing a comparison");
             }
 
       if (dataPath.isEmpty())
