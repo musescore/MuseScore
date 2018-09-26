@@ -37,7 +37,7 @@ void StaffTextBase::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(name());
+      xml.stag(this);
 
       for (ChannelActions s : _channelActions) {
             int channel = s.channel;

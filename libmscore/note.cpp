@@ -1177,7 +1177,7 @@ void Note::draw(QPainter* painter) const
 
 void Note::write(XmlWriter& xml) const
       {
-      xml.stag("Note");
+      xml.stag(this);
       Element::writeProperties(xml);
 
       if (_accidental)

@@ -196,7 +196,7 @@ void Vibrato::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("subtype", vibratoTypeName());
       writeProperty(xml, Pid::PLAY);
       SLine::writeProperties(xml);

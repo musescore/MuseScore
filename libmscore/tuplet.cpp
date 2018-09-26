@@ -707,7 +707,7 @@ void Tuplet::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 void Tuplet::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       Element::writeProperties(xml);
 
       writeProperty(xml, Pid::DIRECTION);
@@ -722,7 +722,7 @@ void Tuplet::write(XmlWriter& xml) const
       xml.tag("baseNote", _baseLen.name());
 
       if (_number) {
-            xml.stag("Number");
+            xml.stag("Number", _number);
             _number->writeProperties(xml);
             xml.etag();
             }

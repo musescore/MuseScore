@@ -91,7 +91,7 @@ void TBox::layout()
 
 void TBox::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       Box::writeProperties(xml);
       _text->write(xml);
       xml.etag();

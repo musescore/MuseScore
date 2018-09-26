@@ -329,7 +329,7 @@ void KeySig::setKey(Key key)
 
 void KeySig::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       Element::writeProperties(xml);
       if (_sig.isAtonal()) {
             xml.tag("custom", 1);

@@ -255,7 +255,7 @@ void Ottava::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("subtype", ottavaDefault[int(ottavaType())].name);
 //      for (const StyledProperty& spp : *styledProperties())
 //            writeProperty(xml, spp.pid);

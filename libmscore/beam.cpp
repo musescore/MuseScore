@@ -1989,7 +1989,7 @@ void Beam::write(XmlWriter& xml) const
       {
       if (_elements.empty())
             return;
-      xml.stag(name());
+      xml.stag(this);
       Element::writeProperties(xml);
 
       writeProperty(xml, Pid::STEM_DIRECTION);

@@ -102,7 +102,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
                   p->setShow(false);
             }
 
-      xml.stag("Score");
+      xml.stag(this);
       if (excerpt()) {
             Excerpt* e = excerpt();
             QMultiMap<int, int> trackList = e->tracks();
@@ -208,7 +208,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
       xml.setTrackDiff(-staffStart * VOICES);
       if (measureStart) {
             for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
-                  xml.stag(QString("Staff id=\"%1\"").arg(staffIdx + 1 - staffStart));
+                  xml.stag(staff(staffIdx), QString("id=\"%1\"").arg(staffIdx + 1 - staffStart));
                   xml.setCurTick(measureStart->tick());
                   xml.setTickDiff(xml.curTick());
                   xml.setCurTrack(staffIdx * VOICES);

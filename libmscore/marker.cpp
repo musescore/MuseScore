@@ -204,7 +204,7 @@ void Marker::read(XmlReader& e)
 
 void Marker::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       TextBase::writeProperties(xml);
       xml.tag("label", _label);
       xml.etag();

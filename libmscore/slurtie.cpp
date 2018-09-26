@@ -283,7 +283,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
       if (autoplace() && visible() && (color() == Qt::black))
             return;
 
-      xml.stag(QString("%1 no=\"%2\"").arg(name()).arg(no));
+      xml.stag(this, QString("no=\"%1\"").arg(no));
 
       qreal _spatium = spatium();
       xml.tag("o1", ups(Grip::START).off   / _spatium);

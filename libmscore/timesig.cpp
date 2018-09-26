@@ -125,7 +125,7 @@ void TimeSig::setDenominatorString(const QString& a)
 
 void TimeSig::write(XmlWriter& xml) const
       {
-      xml.stag("TimeSig");
+      xml.stag(this);
       writeProperty(xml, Pid::TIMESIG_TYPE);
       Element::writeProperties(xml);
 

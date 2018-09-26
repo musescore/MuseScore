@@ -222,6 +222,9 @@ class XmlWriter : public QTextStream {
       LinksIndexer _linksIndexer;
       QMap<int, int> _lidLocalIndices;
 
+      std::vector<std::pair<const ScoreElement*, QString>> _elements;
+      bool _recordElements = false;
+
       void putLevel();
 
    public:
@@ -262,6 +265,9 @@ class XmlWriter : public QTextStream {
       void setLidLocalIndex(int lid, int localIndex) { _lidLocalIndices.insert(lid, localIndex); }
       int lidLocalIndex(int lid) const { return _lidLocalIndices[lid]; }
 
+      const std::vector<std::pair<const ScoreElement*, QString>>& elements() const { return _elements; }
+      void setRecordElements(bool record) { _recordElements = record; }
+
       void sTag(const char* name, Spatium sp) { XmlWriter::tag(name, QVariant(sp.val())); }
       void pTag(const char* name, PlaceText);
 
@@ -269,6 +275,9 @@ class XmlWriter : public QTextStream {
 
       void stag(const QString&);
       void etag();
+
+      void stag(const ScoreElement* se, const QString& attributes = QString());
+      void stag(const QString& name, const ScoreElement* se, const QString& attributes = QString());
 
       void tagE(const QString&);
       void tagE(const char* format, ...);

@@ -207,7 +207,7 @@ void ChordLine::read(XmlReader& e)
 
 void ChordLine::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("subtype", int(_chordLineType));
       xml.tag("straight", _straight, false);
       xml.tag("lengthX", _lengthX, 0.0);
