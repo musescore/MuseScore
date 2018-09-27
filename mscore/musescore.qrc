@@ -164,5 +164,6 @@
         <file>data/icons/edit-swap.svg</file>
         <file>data/icons/mail.svg</file>
         <file>data/icons/bug.svg</file>
+        <file>data/icons/note_timewise.svg</file>
     </qresource>
 </RCC>

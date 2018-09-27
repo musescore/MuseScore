@@ -300,6 +300,17 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
+         "note-input-timewise",
+         QT_TRANSLATE_NOOP("action","Timewise"),
+         QT_TRANSLATE_NOOP("action","Insert notes increasing measure duration"),
+         0,
+         Icons::noteTimewise_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "pitch-spell",
          QT_TRANSLATE_NOOP("action","Respell Pitches"),
          QT_TRANSLATE_NOOP("action","Respell pitches"),
