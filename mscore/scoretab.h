@@ -32,9 +32,9 @@ enum class MagIdx : char;
 //---------------------------------------------------------
 
 struct TabScoreView {
-      Score* score;
+      MasterScore* score;
       int part;
-      TabScoreView(Score* s) {
+      TabScoreView(MasterScore* s) {
             score   = s;
             part    = 0;
             }
