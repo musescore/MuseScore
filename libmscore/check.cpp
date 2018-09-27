@@ -20,6 +20,7 @@
 #include "staff.h"
 #include "keysig.h"
 #include "clef.h"
+#include "excerpt.h"
 #include "utils.h"
 
 namespace Ms {
@@ -248,6 +249,34 @@ bool Score::sanityCheck(const QString& name)
             MScore::lastError = error;
             }
       return result;
+      }
+
+//---------------------------------------------------------
+//   isInvalid
+///    Performes a simple check to check whether the score
+///    contains critical errors which will likely cause
+///    crashes or other serious errors on operating on it.
+//---------------------------------------------------------
+
+bool Score::isInvalid() const
+      {
+      if (!first()) // no measures?
+            return true;
+      for (MeasureBase* mb = first(); mb; mb = mb->next()) {
+            if (mb->isMeasure()) {
+                  // Check that it has at least one segment
+                  if (!toMeasure(mb)->first())
+                        return true;
+                  }
+            }
+      if (isMaster()) {
+            const MasterScore* ms = masterScore();
+            for (const Excerpt* ex : ms->excerpts()) {
+                  if (ex->partScore()->isInvalid())
+                        return true;
+                  }
+            }
+      return false;
       }
 
 //---------------------------------------------------------

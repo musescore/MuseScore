@@ -2225,6 +2225,9 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
             score->setCreated(true); // force save as for imported files
             }
 
+      if (score->isInvalid())
+            return Score::FileError::FILE_BAD_FORMAT;
+
       {
       Score::isScoreLoaded() = true;
       score->rebuildMidiMapping();
