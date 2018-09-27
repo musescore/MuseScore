@@ -315,6 +315,10 @@ Score::~Score()
       // deselectAll();
       for (MeasureBase* m = _measures.first(); m;) {
             MeasureBase* nm = m->next();
+            if (m->system()) {
+                  auto i = std::find(m->system()->measures().begin(), m->system()->measures().end(), m);
+                  m->system()->measures().erase(i);
+                  }
             delete m;
             m = nm;
             }

@@ -604,6 +604,8 @@ void XmlReader::removeConnector(const ConnectorInfoReader& cref)
             c = c->prev();
       while (c) {
             ConnectorInfoReader* next = c->next();
+            if (next)
+                  next->resetPrev();
             removeConnectorInfo(*c);
             c = next;
             }

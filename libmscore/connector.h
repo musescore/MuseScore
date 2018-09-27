@@ -74,6 +74,7 @@ class ConnectorInfo {
       // for reconnection of broken connectors
       int connectionDistance(const ConnectorInfo& c2) const;
       void forceConnect(ConnectorInfo* c2);
+      void resetPrev() { _prev = nullptr; }
 
       bool hasPrevious() const      { return (_prevLoc.measure() != INT_MIN); }
       bool hasNext() const          { return (_nextLoc.measure() != INT_MIN); }

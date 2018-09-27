@@ -304,6 +304,12 @@ Spanner::Spanner(const Spanner& s)
 
 Spanner::~Spanner()
       {
+      for (SpannerSegment* ss : segments)
+            if (ss->system())
+                  ss->system()->remove(ss);
+      for (SpannerSegment* ss : unusedSegments)
+            if (ss->system())
+                  ss->system()->remove(ss);
       qDeleteAll(segments);
       qDeleteAll(unusedSegments);
       }
