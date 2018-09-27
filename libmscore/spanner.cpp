@@ -307,6 +307,7 @@ void Spanner::add(Element* e)
       ls->setSpanner(this);
       ls->setSelected(selected());
       ls->setTrack(track());
+      ls->setAutoplace(autoplace());
       segments.append(ls);
       }
 

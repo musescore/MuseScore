@@ -308,7 +308,6 @@ void TieSegment::computeBezier(QPointF p6o)
 
       QPainterPath p;
       p.moveTo(QPointF());
-//      p.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
       p.cubicTo(p3 + p3o, p4 + p4o, p2);
       _shape.clear();
       QPointF start;
@@ -323,7 +322,6 @@ void TieSegment::computeBezier(QPointF p6o)
                   d = (minH - re.height()) * .5;
                   re.adjust(0.0, -d, 0.0, d);
                   }
-//            re.translate(staffOffset);
             _shape.add(re);
             start = point;
             }
@@ -597,7 +595,7 @@ void Tie::calculateDirection()
 //    layout the first SpannerSegment of a slur
 //---------------------------------------------------------
 
-void Tie::layoutFor(System* system)
+TieSegment* Tie::layoutFor(System* system)
       {
       //
       //    show short bow
@@ -605,7 +603,7 @@ void Tie::layoutFor(System* system)
       if (startNote() == 0 || endNote() == 0) {
             if (startNote() == 0) {
                   qDebug("no start note");
-                  return;
+                  return 0;
                   }
             Chord* c1 = startNote()->chord();
             if (_slurDirection == Direction::AUTO) {
@@ -625,7 +623,7 @@ void Tie::layoutFor(System* system)
             SlurPos sPos;
             slurPos(&sPos);
             segment->layoutSegment(sPos.p1, sPos.p2);
-            return;
+            return segment;
             }
       calculateDirection();
 
@@ -647,6 +645,7 @@ void Tie::layoutFor(System* system)
       segment->setSystem(system); // Needed to populate System.spannerSegments
       segment->layoutSegment(sPos.p1, sPos.p2);
       segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
+      return segment;
       }
 
 //---------------------------------------------------------
@@ -654,7 +653,7 @@ void Tie::layoutFor(System* system)
 //    layout the second SpannerSegment of a split slur
 //---------------------------------------------------------
 
-void Tie::layoutBack(System* system)
+TieSegment* Tie::layoutBack(System* system)
       {
       SlurPos sPos;
       slurPos(&sPos);
@@ -683,6 +682,7 @@ void Tie::layoutBack(System* system)
 
       segment->layoutSegment(QPointF(x, sPos.p2.y()), sPos.p2);
       segment->setSpannerSegmentType(SpannerSegmentType::END);
+      return segment;
       }
 
 #if 0
