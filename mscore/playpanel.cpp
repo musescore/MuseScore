@@ -33,7 +33,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 PlayPanel::PlayPanel(QWidget* parent)
-    : QDockWidget("PlayPanel", parent)
+    : QDockWidget("Play Panel", parent)
       {
       cachedTickPosition = -1;
       cachedTimePosition = -1;
