@@ -52,6 +52,8 @@ class ScoreTab : public QWidget {
       QStackedLayout* stack;
       MuseScore* mainWindow;
       void clearTab2();
+      TabScoreView* tabScoreView(int idx) { return static_cast<TabScoreView*>(tab->tabData(idx).value<void*>()); }
+      const TabScoreView* tabScoreView(int idx) const { return const_cast<ScoreTab*>(this)->tabScoreView(idx); }
 
    signals:
       void currentScoreViewChanged(ScoreView*);
