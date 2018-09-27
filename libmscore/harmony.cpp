@@ -1009,7 +1009,7 @@ void Harmony::layout()
             return;
             }
 
-      qreal yy;
+      qreal yy = 0.0;
       qreal xx = 0.0; // offset(_spatium).x();
 
       if (parent()->isSegment()) {
@@ -1610,10 +1610,7 @@ Element* Harmony::drop(EditData& data)
 
 QVariant Harmony::getProperty(Pid pid) const
       {
-      switch (pid) {
-            default:
-                  return TextBase::getProperty(pid);
-            }
+      return TextBase::getProperty(pid);
       }
 
 //---------------------------------------------------------

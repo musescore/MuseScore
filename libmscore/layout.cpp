@@ -2912,8 +2912,8 @@ void layoutTies(Chord* ch, System* system, int stick)
                   TieSegment* ts = t->layoutFor(system);
                   system->staff(ch->staffIdx())->skyline().add(ts->shape().translated(ts->pos()));
                   }
-            if (note->tieBack()) {
-                  Tie* t = note->tieBack();
+            t = note->tieBack();
+            if (t) {
                   if (t->startNote()->tick() < stick) {
                         TieSegment* ts = t->layoutBack(system);
                         system->staff(ch->staffIdx())->skyline().add(ts->shape().translated(ts->pos()));
