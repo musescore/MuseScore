@@ -1,12 +1,13 @@
 /* pmwinmm.c -- system specific definitions */
-
 #ifndef _WIN32_WINNT
     /* without this define, InitializeCriticalSectionAndSpinCount is 
      * undefined. This version level means "Windows 2000 and higher" 
      */
     #define _WIN32_WINNT 0x0500
+
 #endif
 
+#include <stdint.h>
 // Undefine UNICODE to get the char-based library functions
 #ifdef UNICODE
 #undef UNICODE
@@ -31,6 +32,7 @@
     for portability, however */
 #define STRING_MAX 80
 #include "stdio.h"
+
 #endif
 
 #define streql(x, y) (strcmp(x, y) == 0)
@@ -40,14 +42,14 @@
 
 /* callback routines */
 static void CALLBACK winmm_in_callback(HMIDIIN hMidiIn,
-                                       WORD wMsg, DWORD dwInstance, 
-                                       DWORD dwParam1, DWORD dwParam2);
+										WORD wMsg, DWORD_PTR dwInstance,
+										DWORD_PTR dwParam1, DWORD_PTR dwParam2);
 static void CALLBACK winmm_streamout_callback(HMIDIOUT hmo, UINT wMsg,
-                                              DWORD dwInstance, DWORD dwParam1, 
-                                              DWORD dwParam2);
+												DWORD_PTR dwInstance, DWORD_PTR dwParam1,
+												DWORD_PTR dwParam2);
 static void CALLBACK winmm_out_callback(HMIDIOUT hmo, UINT wMsg,
-                                        DWORD dwInstance, DWORD dwParam1, 
-                                        DWORD dwParam2);
+										DWORD_PTR dwInstance, DWORD_PTR dwParam1,
+										DWORD_PTR dwParam2);
 
 extern pm_fns_node pm_winmm_in_dictionary;
 extern pm_fns_node pm_winmm_out_dictionary;
@@ -604,8 +606,8 @@ static PmError winmm_in_open(PmInternal *midi, void *driverInfo)
     /* open device */
     pm_hosterror = midiInOpen(&(m->handle.in),  /* input device handle */
                               dwDevice,  /* device ID */
-                              (DWORD) winmm_in_callback,  /* callback address */
-                              (DWORD) midi,  /* callback instance data */
+							  (DWORD_PTR)winmm_in_callback,  /* callback address */
+                              (DWORD_PTR)midi,  /* callback instance data */
                               CALLBACK_FUNCTION); /* callback is a procedure */
     if (pm_hosterror) goto free_descriptor;
 
@@ -691,12 +693,12 @@ static PmError winmm_in_close(PmInternal *midi)
 static void FAR PASCAL winmm_in_callback(
     HMIDIIN hMidiIn,    /* midiInput device Handle */
     WORD wMsg,          /* midi msg */
-    DWORD dwInstance,   /* application data */
-    DWORD dwParam1,     /* MIDI data */
-    DWORD dwParam2)    /* device timestamp (wrt most recent midiInStart) */
+	DWORD_PTR dwInstance,   /* application data */
+	DWORD_PTR dwParam1,     /* MIDI data */
+	DWORD_PTR dwParam2)    /* device timestamp (wrt most recent midiInStart) */
 {
     static int entry = 0;
-    PmInternal *midi = (PmInternal *) dwInstance;
+	PmInternal *midi = (PmInternal *) dwInstance;
     midiwinmm_type m = (midiwinmm_type) midi->descriptor;
 
     /* NOTE: we do not just EnterCriticalSection() here because an
@@ -898,16 +900,16 @@ static PmError winmm_out_open(PmInternal *midi, void *driverInfo)
         pm_hosterror = midiOutOpen((LPHMIDIOUT) & m->handle.out,  /* device Handle */
                                    dwDevice,  /* device ID  */
                                    /* note: same callback fn as for StreamOpen: */
-                                   (DWORD) winmm_streamout_callback, /* callback fn */
-                                   (DWORD) midi,  /* callback instance data */
+                                   (DWORD_PTR)winmm_streamout_callback, /* callback fn */
+                                   (DWORD_PTR)midi,  /* callback instance data */
                                    CALLBACK_FUNCTION); /* callback type */
     } else {
         /* use stream-based midi output (schedulable in future) */
         pm_hosterror = midiStreamOpen(&m->handle.stream,  /* device Handle */
                                       (LPUINT) & dwDevice,  /* device ID pointer */
                                       1,  /* reserved, must be 1 */
-                                      (DWORD) winmm_streamout_callback,
-                                      (DWORD) midi,  /* callback instance data */
+                                      (DWORD_PTR) winmm_streamout_callback,
+                                      (DWORD_PTR) midi,  /* callback instance data */
                                       CALLBACK_FUNCTION);
     }
     if (pm_hosterror != MMSYSERR_NOERROR) {
@@ -1333,8 +1335,8 @@ static PmTimestamp winmm_synchronize(PmInternal *midi)
 #ifdef USE_SYSEX_BUFFERS
 /* winmm_out_callback -- recycle sysex buffers */
 static void CALLBACK winmm_out_callback(HMIDIOUT hmo, UINT wMsg,
-                                        DWORD dwInstance, DWORD dwParam1, 
-                                        DWORD dwParam2)
+										DWORD_PTR dwInstance, DWORD_PTR dwParam1,
+										DWORD_PTR dwParam2)
 {
     PmInternal *midi = (PmInternal *) dwInstance;
     midiwinmm_type m = (midiwinmm_type) midi->descriptor;
@@ -1359,7 +1361,7 @@ static void CALLBACK winmm_out_callback(HMIDIOUT hmo, UINT wMsg,
 
 /* winmm_streamout_callback -- unprepare (free) buffer header */
 static void CALLBACK winmm_streamout_callback(HMIDIOUT hmo, UINT wMsg,
-        DWORD dwInstance, DWORD dwParam1, DWORD dwParam2)
+										DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD dwParam2)
 {
 #if (defined (_MSCVER) || defined (_MSC_VER))
     UNREFERENCED_PARAMETER(dwParam2);
