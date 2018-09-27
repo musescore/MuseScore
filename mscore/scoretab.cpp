@@ -263,11 +263,11 @@ void ScoreTab::updateExcerpts()
       int idx = currentIndex();
       if (idx == -1)
             return;
-      ScoreView* v = view(idx);
-      if (!v)
+      TabScoreView* tsv = tabScoreView(idx);
+      MasterScore* score = tsv->score;
+      if (!score->excerptsChanged())
             return;
 
-      MasterScore* score = v->score()->masterScore();
       clearTab2();
       //delete all scoreviews for parts, especially for the deleted ones
       int n = stack->count() - 1;
@@ -292,11 +292,8 @@ void ScoreTab::updateExcerpts()
             }
       else {
             tab2->setVisible(false);
-            setExcerpt(0);
             }
-      blockSignals(true);
       setExcerpt(0);
-      blockSignals(false);
 
       getAction("file-part-export")->setEnabled(excerpts.size() > 0);
       }
