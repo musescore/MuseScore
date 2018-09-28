@@ -75,7 +75,9 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void systemMaxDistanceValueChanged(double);
       void resetStyleValue(int);
       void valueChanged(int);
-
+      void textStyleChanged(int);
+      void resetTextStyle(Pid);
+      void textStyleValueChanged(Pid, QVariant);
       void on_comboFBFont_currentIndexChanged(int index);
 
 public:
