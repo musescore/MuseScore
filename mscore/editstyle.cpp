@@ -28,6 +28,7 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/layout.h"
 #include "inspector/alignSelect.h"
+#include "inspector/offsetSelect.h"
 
 namespace Ms {
 
@@ -132,6 +133,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::lyricsOddFontItalic,     false, lyricsOddFontItalic,     resetLyricsOddFontItalic     },
       { Sid::lyricsOddFontUnderline,  false, lyricsOddFontUnderline,  resetLyricsOddFontUnderline  },
       { Sid::lyricsOddAlign,          false, lyricsOddAlign,          resetLyricsOddAlign          },
+      { Sid::lyricsOddOffset,         false, lyricsOddOffset,         resetLyricsOddOffset         },
 
       { Sid::lyricsEvenFontFace,      false, lyricsEvenFontFace,      resetLyricsEvenFontFace      },
       { Sid::lyricsEvenFontSize,      false, lyricsEvenFontSize,      resetLyricsEvenFontSize      },
@@ -139,6 +141,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::lyricsEvenFontItalic,    false, lyricsEvenFontItalic,    resetLyricsEvenFontItalic    },
       { Sid::lyricsEvenFontUnderline, false, lyricsEvenFontUnderline, resetLyricsEvenFontUnderline },
       { Sid::lyricsEvenAlign,         false, lyricsEvenAlign,         resetLyricsEvenAlign         },
+      { Sid::lyricsEvenOffset,        false, lyricsEvenOffset,        resetLyricsEvenOffset        },
 
       { Sid::systemFrameDistance,     false, systemFrameDistance,     resetSystemFrameDistance },
       { Sid::frameSystemDistance,     false, frameSystemDistance,     resetFrameSystemDistance },
@@ -580,6 +583,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
                   connect(qobject_cast<QButtonGroup*>(sw.widget), SIGNAL(buttonClicked(int)), mapper2, SLOT(map()));
             else if (qobject_cast<AlignSelect*>(sw.widget))
                   connect(qobject_cast<AlignSelect*>(sw.widget), SIGNAL(alignChanged(Align)), mapper2, SLOT(map()));
+            else if (qobject_cast<OffsetSelect*>(sw.widget))
+                  connect(qobject_cast<OffsetSelect*>(sw.widget), SIGNAL(offsetChanged(const QPointF&)), mapper2, SLOT(map()));
             else {
                   qFatal("unhandled gui widget type %s valueType %s",
                      sw.widget->metaObject()->className(),
@@ -592,10 +597,120 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       connect(mapper,  SIGNAL(mapped(int)), SLOT(resetStyleValue(int)));
       connect(mapper2, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
+      textStyles->clear();
+      for (auto ss : {
+         Tid::SYSTEM,
+         Tid::STAFF,
+         Tid::TEMPO,
+         Tid::METRONOME,
+         Tid::REHEARSAL_MARK,
+         Tid::EXPRESSION,
+         Tid::REPEAT_LEFT,
+         Tid::REPEAT_RIGHT,
+         Tid::FRAME,
+         Tid::TITLE,
+         Tid::SUBTITLE,
+         Tid::COMPOSER,
+         Tid::POET,
+         Tid::INSTRUMENT_EXCERPT,
+         Tid::TRANSLATOR,
+         Tid::HEADER,
+         Tid::FOOTER,
+         Tid::USER1,
+         Tid::USER2,
+         Tid::USER3,
+         Tid::USER4,
+         Tid::USER5,
+         Tid::USER6
+         } )
+            {
+            QListWidgetItem* item = new QListWidgetItem(textStyleUserName(ss));
+            item->setData(Qt::UserRole, int(ss));
+            textStyles->addItem(item);
+            }
+
+      // font face
+      resetTextStyleFontFace->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleFontFace, &QToolButton::clicked,
+         [=](){ resetTextStyle(Pid::FONT_FACE); }
+         );
+      connect(textStyleFontFace, &QFontComboBox::currentFontChanged,
+         [=](){ textStyleValueChanged(Pid::FONT_FACE, QVariant(textStyleFontFace->currentFont().family())); }
+         );
+
+      // font size
+      resetTextStyleFontSize->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleFontSize, &QToolButton::clicked,
+         [=](){ resetTextStyle(Pid::FONT_SIZE); }
+         );
+      connect(textStyleFontSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+         [=](){ textStyleValueChanged(Pid::FONT_SIZE, QVariant(textStyleFontSize->value())); }
+         );
+
+      // font bold
+      resetTextStyleFontBold->setIcon(*icons[int(Icons::reset_ICON)]);
+      textStyleFontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
+      connect(resetTextStyleFontBold, &QToolButton::clicked,
+         [=](){ resetTextStyle(Pid::FONT_BOLD); }
+         );
+      connect(textStyleFontBold, &QCheckBox::toggled,
+         [=](){ textStyleValueChanged(Pid::FONT_BOLD, QVariant(textStyleFontBold->isChecked())); }
+         );
+
+      // font italic
+      resetTextStyleFontItalic->setIcon(*icons[int(Icons::reset_ICON)]);
+      textStyleFontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
+      connect(resetTextStyleFontItalic, &QToolButton::clicked,
+         [=](){ resetTextStyle(Pid::FONT_ITALIC); }
+         );
+      connect(textStyleFontItalic, &QCheckBox::toggled,
+         [=](){ textStyleValueChanged(Pid::FONT_ITALIC, QVariant(textStyleFontItalic->isChecked())); }
+         );
+
+      // font underline
+      resetTextStyleFontUnderline->setIcon(*icons[int(Icons::reset_ICON)]);
+      textStyleFontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
+      connect(resetTextStyleFontUnderline, &QToolButton::clicked,
+         [=](){ resetTextStyle(Pid::FONT_UNDERLINE); }
+         );
+      connect(textStyleFontUnderline, &QCheckBox::toggled,
+         [=](){ textStyleValueChanged(Pid::FONT_UNDERLINE, QVariant(textStyleFontUnderline->isChecked())); }
+         );
+
+      // align
+      resetTextStyleAlign->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleAlign, &QToolButton::clicked, [=](){ resetTextStyle(Pid::ALIGN); });
+      connect(textStyleAlign, &AlignSelect::alignChanged,
+         [=](){ textStyleValueChanged(Pid::ALIGN, QVariant::fromValue(textStyleAlign->align())); }
+         );
+
+      // offset
+      resetTextStyleOffset->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleOffset, &QToolButton::clicked, [=](){ resetTextStyle(Pid::OFFSET); });
+      connect(textStyleOffset, &OffsetSelect::offsetChanged,
+         [=](){ textStyleValueChanged(Pid::OFFSET, QVariant(textStyleOffset->offset())); }
+         );
+
+      connect(textStyles, SIGNAL(currentRowChanged(int)), SLOT(textStyleChanged(int)));
+      textStyles->setCurrentRow(0);
 
       MuseScore::restoreGeometry(this);
       cs->startCmd();
       }
+#if 0
+      // missing for textStyle:
+      { Sid::defaultFontSpatiumDependent,        Pid::FONT_SPATIUM_DEPENDENT },
+      { Sid::user1Align,                         Pid::ALIGN                  },
+      { Sid::user1Offset,                        Pid::OFFSET                 },
+      { Sid::user1OffsetType,                    Pid::OFFSET_TYPE            },
+      { Sid::user1FrameType,                     Pid::FRAME_TYPE             },
+      { Sid::user1FramePadding,                  Pid::FRAME_PADDING          },
+      { Sid::user1FrameWidth,                    Pid::FRAME_WIDTH            },
+      { Sid::user1FrameRound,                    Pid::FRAME_ROUND            },
+      { Sid::user1FrameFgColor,                  Pid::FRAME_FG_COLOR         },
+      { Sid::user1FrameBgColor,                  Pid::FRAME_BG_COLOR         },
+      }};
+#endif
 
 //---------------------------------------------------------
 //   hideEvent
@@ -663,7 +778,7 @@ void EditStyle::applyToAllParts()
 static void unhandledType(const StyleWidget* sw)
       {
       const char* type = MStyle::valueType(sw->idx);
-      qFatal("unhandled %s <%s>: widget: %s\n", type, MStyle::valueName(sw->idx), sw->widget->metaObject()->className());
+      qFatal("%s <%s>: widget: %s\n", type, MStyle::valueName(sw->idx), sw->widget->metaObject()->className());
       }
 
 //---------------------------------------------------------
@@ -723,6 +838,13 @@ QVariant EditStyle::getValue(Sid idx)
                sw.widget->metaObject()->className(),
                MStyle::valueName(idx));
 
+            }
+      else if (!strcmp("QPointF", type)) {
+            OffsetSelect* cb = qobject_cast<Ms::OffsetSelect*>(sw.widget);
+            if (cb)
+                  return cb->offset();
+            else
+                  qFatal("unhandled QPointF");
             }
       else if (!strcmp("Ms::Direction", type)) {
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
@@ -820,6 +942,10 @@ void EditStyle::setValues()
             else if (!strcmp("Ms::Align", type)) {
                   AlignSelect* as = qobject_cast<Ms::AlignSelect*>(sw.widget);
                   as->setAlign(val.value<Align>());
+                  }
+            else if (!strcmp("QPointF", type)) {
+                  OffsetSelect* as = qobject_cast<Ms::OffsetSelect*>(sw.widget);
+                  as->setOffset(val.value<QPointF>());
                   }
             else
                   unhandledType(&sw);
@@ -1121,5 +1247,96 @@ void EditStyle::resetStyleValue(int i)
       cs->update();
       }
 
+//---------------------------------------------------------
+//   textStyleChanged
+//---------------------------------------------------------
+
+void EditStyle::textStyleChanged(int row)
+      {
+      Tid tid = Tid(textStyles->item(row)->data(Qt::UserRole).toInt());
+      const TextStyle* ts = textStyle(tid);
+
+      for (const StyledProperty& a : *ts) {
+            switch (a.pid) {
+                  case Pid::FONT_FACE: {
+                        QVariant val = cs->styleV(a.sid);
+                        textStyleFontFace->setCurrentFont(QFont(val.toString()));
+                        resetTextStyleFontFace->setEnabled(val != MScore::defaultStyle().value(a.sid));
+                        }
+                        break;
+
+                  case Pid::FONT_SIZE:
+                        textStyleFontSize->setValue(cs->styleD(a.sid));
+                        resetTextStyleFontSize->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
+
+                  case Pid::FONT_BOLD:
+                        textStyleFontBold->setChecked(cs->styleB(a.sid));
+                        resetTextStyleFontBold->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
+
+                  case Pid::FONT_ITALIC:
+                        textStyleFontItalic->setChecked(cs->styleB(a.sid));
+                        resetTextStyleFontItalic->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
+
+                  case Pid::FONT_UNDERLINE:
+                        textStyleFontUnderline->setChecked(cs->styleB(a.sid));
+                        resetTextStyleFontUnderline->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
+
+                  case Pid::ALIGN:
+                        textStyleAlign->setAlign(cs->styleV(a.sid).value<Align>());
+                        resetTextStyleAlign->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
+
+                  case Pid::OFFSET:
+                        textStyleOffset->setOffset(cs->styleV(a.sid).toPointF());
+                        resetTextStyleOffset->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
+
+                  default:
+                        break;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   textStyleValueChanged
+//---------------------------------------------------------
+
+void EditStyle::textStyleValueChanged(Pid pid, QVariant value)
+      {
+      Tid tid = Tid(textStyles->item(textStyles->currentRow())->data(Qt::UserRole).toInt());
+      const TextStyle* ts = textStyle(tid);
+
+      for (const StyledProperty& a : *ts) {
+            if (a.pid == pid) {
+                  cs->undoChangeStyleVal(a.sid, value);
+                  break;
+                  }
+            }
+      textStyleChanged(textStyles->currentRow());     // update GUI (reset buttons)
+      cs->update();
+      }
+
+//---------------------------------------------------------
+//   resetTextStyle
+//---------------------------------------------------------
+
+void EditStyle::resetTextStyle(Pid pid)
+      {
+      Tid tid = Tid(textStyles->item(textStyles->currentRow())->data(Qt::UserRole).toInt());
+      const TextStyle* ts = textStyle(tid);
+
+      for (const StyledProperty& a : *ts) {
+            if (a.pid == pid) {
+                  cs->undoChangeStyleVal(a.sid, MScore::defaultStyle().value(a.sid));
+                  break;
+                  }
+            }
+      textStyleChanged(textStyles->currentRow());     // update GUI
+      cs->update();
+      }
 }
 
