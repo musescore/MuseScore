@@ -567,7 +567,6 @@ void Articulation::doAutoplace()
                   rUserYoffset() = yd;
                   r.translate(QPointF(0.0, yd));
                   }
-//            ss->skyline().add(r);
             }
       }
 
