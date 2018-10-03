@@ -3232,7 +3232,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         continue;
                   Measure* m = toMeasure(mb);
                   for (Segment& s : m->segments()) {
-                        if (s.isTimeSigType())       // hack: ignore time signatures
+                        if (!s.enabled() || s.isTimeSigType())       // hack: ignore time signatures
                               continue;
                         ss->skyline().add(s.staffShape(staffIdx).translated(s.pos() + m->pos()));
                         }
