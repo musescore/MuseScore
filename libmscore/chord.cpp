@@ -3395,10 +3395,12 @@ void Chord::layoutArticulations2()
                   }
             }
       for (Articulation* a : _articulations) {
-            Segment* s = segment();
-            Measure* m = s->measure();
-            QRectF r = a->bbox().translated(a->pos() + pos() + s->pos() + m->pos());
-            m->system()->staff(a->staffIdx())->skyline().add(r);
+            if (a->autoplace()) {
+                  Segment* s = segment();
+                  Measure* m = s->measure();
+                  QRectF r = a->bbox().translated(a->pos() + pos() + s->pos() + m->pos());
+                  m->system()->staff(a->staffIdx())->skyline().add(r);
+                  }
             }
       }
 
