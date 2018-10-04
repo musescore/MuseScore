@@ -338,6 +338,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                            || tag == "StaffText"
                            || tag == "TempoText"
                            || tag == "FiguredBass"
+                           || tag == "Fermata"
                            ) {
                               Element* el = Element::name2Element(tag, this);
                               el->setTrack(e.track());      // a valid track might be necessary for el->read() to work
