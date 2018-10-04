@@ -753,9 +753,8 @@ bool GuitarPro4::read(QFile* fp)
                   Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
                   StaffText* st = new StaffText(score);
                   st->setPlainText(QString("Capo. fret ") + QString::number(capo));
-                  st->setParent(s);
                   st->setTrack(i * VOICES);
-                  measure->add(st);
+                  s->add(st);
                   }
 
             Channel* ch = instr->channel(0);
