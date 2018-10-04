@@ -322,7 +322,7 @@ void Glissando::layout()
 
       // initial note dots / ledger line / notehead
       offs1 *= -1.0;          // discount changes already applied
-      int dots = cr1->dots();
+      int dots = anchor1->dots().size();
       LedgerLine * ledLin = cr1->ledgerLines();
       // if dots, start at right of last dot
       // if no dots, from right of ledger line, if any; from right of notehead, if no ledger line
