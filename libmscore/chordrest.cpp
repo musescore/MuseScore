@@ -445,6 +445,7 @@ Element* ChordRest::drop(EditData& data)
                               l->setScore(score);
                               l->setParent(seg);
                               score->undoAddElement(l);
+                              l->layout();
                               }
                         }
                   delete e;
