@@ -31,7 +31,7 @@ class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
 
       Navigator* preview;
       bool mmUnit;
-      MasterScore* cs;
+      Score* cs;
 
       virtual void hideEvent(QHideEvent*);
       void updateValues();
