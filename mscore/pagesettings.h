@@ -31,7 +31,7 @@ class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
 
       Navigator* preview;
       bool mmUnit;
-      MasterScore* cs;
+      Score* cs;
 
       virtual void hideEvent(QHideEvent*);
       void updateValues();
@@ -71,7 +71,7 @@ class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
    public:
       PageSettings(QWidget* parent = 0);
       ~PageSettings();
-      void setScore(MasterScore*);
+      void setScore(Score*);
       };
 
 

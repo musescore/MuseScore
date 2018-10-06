@@ -2460,7 +2460,7 @@ void MuseScore::showPageSettings()
       {
       if (pageSettings == 0)
             pageSettings = new PageSettings();
-      pageSettings->setScore(cs->masterScore());
+      pageSettings->setScore(cs);
       pageSettings->show();
       pageSettings->raise();
       }
