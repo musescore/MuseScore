@@ -146,7 +146,7 @@ void TrackList::append(Element* e)
                   Element* element = 0;
                   if (e->isTuplet()) {
                         Tuplet* src = toTuplet(e);
-                        if (src->generated() && back()->isTuplet()) {
+                        if (src->generated() && !empty() && back()->isTuplet()) {
                               Tuplet* b = toTuplet(back());
                               combineTuplet(b, src);
                               }
