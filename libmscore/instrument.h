@@ -37,7 +37,7 @@ class StaffName {
 
    public:
       StaffName() {}
-      StaffName(const QString& s, int p=0) : _name(s), _pos(p) {}
+      StaffName(const QString& s, int p=0);
 
       bool operator==(const StaffName&) const;
       void read(XmlReader&);
