@@ -137,7 +137,7 @@ class Palette : public QWidget {
       virtual void leaveEvent(QEvent*) override;
       virtual bool event(QEvent*) override;
       virtual void resizeEvent(QResizeEvent*) override;
-      void applyPaletteElement(PaletteCell* cell);
+      void applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modifiers = 0);
 
       virtual void dragEnterEvent(QDragEnterEvent*) override;
       virtual void dragMoveEvent(QDragMoveEvent*) override;
