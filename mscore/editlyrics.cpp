@@ -30,9 +30,10 @@ bool ScoreView::editKeyLyrics()
       {
       Q_ASSERT(editData.element->isLyrics());
 
+      const bool textEditing = true;
       switch (editData.key) {
             case Qt::Key_Space:
-                  if (!editData.control()) {
+                  if (!editData.control(textEditing)) {
                         if (editData.s == "_")
                               lyricsUnderscore();
                         else // TODO: shift+tab events are filtered by qt
@@ -44,7 +45,7 @@ bool ScoreView::editKeyLyrics()
 
             case Qt::Key_Left:
             case Qt::Key_Right:
-                  if (!editData.control() && editData.element->edit(editData))
+                  if (!editData.control(textEditing) && editData.element->edit(editData))
                         mscore->textTools()->updateTools(editData);
                   else {
                         bool kl = editData.key == Qt::Key_Left;
@@ -62,7 +63,7 @@ bool ScoreView::editKeyLyrics()
                   break;
 
             case Qt::Key_Minus:
-                  if (editData.control()) {
+                  if (editData.control(textEditing)) {
                         // change into normal minus
                         editData.modifiers &= ~CONTROL_MODIFIER;
                         return false;
@@ -72,7 +73,7 @@ bool ScoreView::editKeyLyrics()
                   break;
 
             case Qt::Key_Underscore:
-                  if (editData.control()) {
+                  if (editData.control(textEditing)) {
                         // change into normal underscore
                         editData.modifiers = 0; // &= ~CONTROL_MODIFIER;
                         return false;
