@@ -1945,11 +1945,9 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                               // deal with possible anacrusis
                               if (ticks < measure->ticks() && voiceNum == 0) {
                                     int mticks = measure->ticks();
-                                    measure->setLen(Fraction::fromTicks(ticks));
-                                    int offset = mticks - measure->ticks();
-                                    for (Measure* m = measure->nextMeasure(); m; m = m->nextMeasure()) {
-                                          m->setTick(m->tick() - offset);
-                                          }
+                                    int tickOffSet = mticks - ticks;
+                                    int track            = staffIdx * VOICES + voiceNum;
+                                    score->setRest(ticks + measure->tick(), track, Fraction::fromTicks(tickOffSet), true, nullptr, true);
                                     }
                               }
                         }
