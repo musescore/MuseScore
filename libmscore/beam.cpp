@@ -1553,9 +1553,10 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   //
                   bool relayoutGrace = false;
                   for (size_t i = 0; i < n; ++i) {
-                        Chord* c = toChord(crl.at(i));
-                        if (c->isRest())
+                        ChordRest* cr = crl.at(i);
+                        if (!cr->isChord())
                               continue;
+                        Chord* c = toChord(cr);
                         QPointF p = c->upNote()->pagePos();
                         qreal y1  = beamY + (p.x() - px1) * slope;
                         bool nup  = y1 < p.y();
