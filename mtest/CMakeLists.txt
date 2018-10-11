@@ -203,6 +203,7 @@ subdirs (
         libmscore/midi                 # one disabled
 #        libmscore/midimapping
         libmscore/note
+        libmscore/remove
         libmscore/repeat
         libmscore/rhythmicGrouping
         libmscore/selectionfilter
