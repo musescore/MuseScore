@@ -1426,12 +1426,10 @@ Palette* MuseScore::newTextPalette()
       rhm->setXmlText("B1");
       sp->append(rhm, tr("Rehearsal mark"));
 
-#if 0
-      st = new StaffText(Tid::TEMPO, gscore);
+      st = new StaffText(gscore, Tid::TEMPO);
       st->setXmlText(tr("Swing"));
       st->setSwing(true);
       sp->append(st, tr("Swing"));
-#endif
 
       SystemText* stxt = new SystemText(gscore);
       stxt->setXmlText(tr("System Text"));
