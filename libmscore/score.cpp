@@ -2421,22 +2421,6 @@ void Score::cmdRemoveStaff(int staffIdx)
       Staff* s = staff(staffIdx);
       adjustBracketsDel(staffIdx, staffIdx+1);
 
-      QList<Spanner*> sl;
-      for (auto i = _spanner.cbegin(); i != _spanner.cend(); ++i) {
-            Spanner* sp = i->second;
-            if (sp->staffIdx() == staffIdx && (staffIdx != 0 || !sp->systemFlag()))
-                  sl.append(sp);
-            }
-      for (Spanner* sp : _unmanagedSpanner) {
-            if (sp->staffIdx() == staffIdx && (staffIdx != 0 || !sp->systemFlag()))
-                  sl.append(sp);
-            }
-      for (auto i : sl) {
-printf("remove %p <%s>\n", i, i->name());
-            i->undoUnlink();
-            undo(new RemoveElement(i));
-            }
-
       undoRemoveStaff(s);
 
       // remove linked staff and measures in linked staves in excerpts

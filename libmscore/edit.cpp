@@ -3803,8 +3803,24 @@ void Score::undoInsertPart(Part* part, int idx)
 
 void Score::undoRemoveStaff(Staff* staff)
       {
-      int idx = staff->idx();
+      const int idx = staff->idx();
       Q_ASSERT(idx >= 0);
+
+      std::vector<Spanner*> toRemove;
+      for (auto i = _spanner.cbegin(); i != _spanner.cend(); ++i) {
+            Spanner* s = i->second;
+            if (s->staffIdx() == idx && (idx != 0 || !s->systemFlag()))
+                  toRemove.push_back(s);
+            }
+      for (Spanner* s : _unmanagedSpanner) {
+            if (s->staffIdx() == idx && (idx != 0 || !s->systemFlag()))
+                  toRemove.push_back(s);
+            }
+      for (Spanner* s : toRemove) {
+            s->undoUnlink();
+            undo(new RemoveElement(s));
+            }
+
       //
       //    adjust measures
       //
