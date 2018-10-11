@@ -1242,11 +1242,12 @@ static void updateStyles(Score* score,
                          const QString& lyricFamily, const QString& lyricSize)
       {
 //TODO:ws       const float fWordSize = wordSize.toFloat();   // note conversion error results in value 0.0
-      const float fLyricSize = lyricSize.toFloat(); // but avoid comparing float with exact value later
+      const auto dblLyricSize = lyricSize.toDouble(); // but avoid comparing float with exact value later
 
       // loop over all text styles (except the empty, always hidden, first one)
       // set all text styles to the MusicXML defaults
 #if 0 // TODO:ws
+      // TODO: check if fWordSize must be a double too (issue #277029)
       for (int i = int(Tid::DEFAULT) + 1; i < int(Tid::TEXT_STYLES); ++i) {
             TextStyle ts = score->style().textStyle(TextStyleType(i));
             if (i == int(Tid::LYRIC1) || i == int(Tid::LYRIC2)) {
@@ -1268,9 +1269,9 @@ static void updateStyles(Score* score,
             score->style().set(Sid::lyricsOddFontFace, lyricFamily);
             score->style().set(Sid::lyricsEvenFontFace, lyricFamily);
             }
-      if (fLyricSize > 0.001) {
-            score->style().set(Sid::lyricsOddFontSize, QVariant(fLyricSize));
-            score->style().set(Sid::lyricsEvenFontSize, QVariant(fLyricSize));
+      if (dblLyricSize > 0.001) {
+            score->style().set(Sid::lyricsOddFontSize, QVariant(dblLyricSize));
+            score->style().set(Sid::lyricsEvenFontSize, QVariant(dblLyricSize));
             }
       }
 
