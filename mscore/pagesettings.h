@@ -31,13 +31,15 @@ class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
 
       Navigator* preview;
       bool mmUnit;
-      MasterScore* cs;
+      bool changeFlag;
+      Score* cs;
 
       virtual void hideEvent(QHideEvent*);
       void updateValues();
-      void updatePreview(int);
+      void updatePreview(bool);
       void blockSignals(bool);
       void applyToScore(Score*);
+      void setButtonsEnabled(bool, bool);
       void setMarginsMax(double);
 
    private slots:
@@ -71,7 +73,7 @@ class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
    public:
       PageSettings(QWidget* parent = 0);
       ~PageSettings();
-      void setScore(MasterScore*);
+      void setScore(Score*);
       };
 
 

@@ -543,7 +543,8 @@ class Score : public QObject, public ScoreElement {
       Score(MasterScore*);
       Score(MasterScore*, const MStyle&);
       virtual ~Score();
-
+      MasterScore* promote();
+	  
       virtual bool isMaster() const  { return false;        }
 
       virtual inline QList<Excerpt*>& excerpts();
