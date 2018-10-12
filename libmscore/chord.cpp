@@ -2650,7 +2650,15 @@ bool Chord::setProperty(Pid propertyId, const QVariant& v)
 
 Articulation* Chord::hasArticulation(const Articulation* aa)
       {
-      SymId id = aa->symId();
+      return hasArticulation(aa->symId());
+      }
+
+//---------------------------------------------------------
+//   hasArticulation
+//---------------------------------------------------------
+
+Articulation* Chord::hasArticulation(SymId id)
+      {
       for (Articulation* a : _articulations) {
             if (id == a->symId())
                   return a;
