@@ -366,9 +366,9 @@ void DrumrollEditor::velocityChanged(int val)
 //   keyPressed
 //---------------------------------------------------------
 
-void DrumrollEditor::keyPressed(int pitch)
+void DrumrollEditor::keyPressed(int p)
       {
-      seq->startNote(staff->part()->instrument()->channel(0)->channel, pitch, 80, 0, 0.0);
+      seq->startNote(staff->part()->instrument()->channel(0)->channel, p, 80, 0, 0.0);
       }
 
 //---------------------------------------------------------

@@ -504,15 +504,15 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     // (TODO: what if there is only a full measure rest?)
 
                                     for (int track = startTrack; track < endTrack; ++track) {
-                                          ChordRest* cr = toChordRest(s->element(track));
-                                          if (!cr)
+                                          ChordRest* cr1 = toChordRest(s->element(track));
+                                          if (!cr1)
                                                 continue;
-                                          if (cr->isChord()) {
-                                                for (Note* n : toChord(cr)->notes())
-                                                      width = qMax(width, n->shape().right() + n->pos().x() + cr->pos().x());
+                                          if (cr1->isChord()) {
+                                                for (Note* n : toChord(cr1)->notes())
+                                                      width = qMax(width, n->shape().right() + n->pos().x() + cr1->pos().x());
                                                 }
-                                          else if (cr->isRest() && (cr->actualDurationType() != TDuration::DurationType::V_MEASURE))
-                                                width = qMax(width, cr->bbox().right() + cr->pos().x());
+                                          else if (cr1->isRest() && (cr1->actualDurationType() != TDuration::DurationType::V_MEASURE))
+                                                width = qMax(width, cr1->bbox().right() + cr1->pos().x());
                                           }
 
                                     x = width + sp;

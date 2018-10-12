@@ -32,7 +32,6 @@ add_library(bww STATIC
    lexer.cpp
    parser.cpp
    symbols.cpp
-   writer.cpp
    )
 
 if (MSVC)

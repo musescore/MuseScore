@@ -1203,8 +1203,8 @@ bool readNoteProperties206(Note* note, XmlReader& e)
       else if (tag == "Events") {
             note->playEvents().clear();    // remove default event
             while (e.readNextStartElement()) {
-                  const QStringRef& tag(e.name());
-                  if (tag == "Event") {
+                  const QStringRef& etag(e.name());
+                  if (etag == "Event") {
                         NoteEvent ne;
                         ne.read(e);
                         note->playEvents().append(ne);
@@ -1236,9 +1236,9 @@ bool readNoteProperties206(Note* note, XmlReader& e)
                   // Create a place-holder spanner with end data
                   // (a TextLine is used only because both Spanner or SLine are abstract,
                   // the actual class does not matter, as long as it is derived from Spanner)
-                  int id = e.intAttribute("id", -1);
+                  int id1 = e.intAttribute("id", -1);
                   Staff* staff = note->staff();
-                  if (id != -1 &&
+                  if (id1 != -1 &&
                               // DISABLE if pasting into a staff with linked staves
                               // because the glissando is not properly cloned into the linked staves
                               staff && (!e.pasteMode() || !staff->links() || staff->links()->empty())) {
@@ -1248,7 +1248,7 @@ bool readNoteProperties206(Note* note, XmlReader& e)
                         placeholder->setTrack2(note->track());
                         placeholder->setTick(0);
                         placeholder->setTick2(e.tick());
-                        e.addSpanner(id, placeholder);
+                        e.addSpanner(id1, placeholder);
                         }
                   }
             e.readNext();
@@ -1652,10 +1652,10 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
                         if (spanner->type() == ElementType::SLUR)
                               spanner->setStartElement(ch);
                         if (e.pasteMode()) {
-                              for (ScoreElement* e : spanner->linkList()) {
-                                    if (e == spanner)
+                              for (ScoreElement* el : spanner->linkList()) {
+                                    if (el == spanner)
                                           continue;
-                                    Spanner* ls = static_cast<Spanner*>(e);
+                                    Spanner* ls = static_cast<Spanner*>(el);
                                     ls->setTick(spanner->tick());
                                     for (ScoreElement* ee : ch->linkList()) {
                                           ChordRest* cr = toChordRest(ee);
@@ -1678,10 +1678,10 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
                         if (start)
                               spanner->setTrack(start->track());
                         if (e.pasteMode()) {
-                              for (ScoreElement* e : spanner->linkList()) {
-                                    if (e == spanner)
+                              for (ScoreElement* el : spanner->linkList()) {
+                                    if (el == spanner)
                                           continue;
-                                    Spanner* ls = static_cast<Spanner*>(e);
+                                    Spanner* ls = static_cast<Spanner*>(el);
                                     ls->setTick2(spanner->tick2());
                                     for (ScoreElement* ee : ch->linkList()) {
                                           ChordRest* cr = toChordRest(ee);

@@ -75,8 +75,8 @@ void MuseData::musicalAttribute(QString s, Part* part)
                         TimeSig* ts = new TimeSig(score);
                         Staff* staff = part->staff(0);
                         ts->setTrack(staff->idx() * VOICES);
-                        Measure* measure = score->tick2measure(curTick);
-                        Segment* seg = measure->getSegment(SegmentType::TimeSig, curTick);
+                        Measure* mes = score->tick2measure(curTick);
+                        Segment* seg = mes->getSegment(SegmentType::TimeSig, curTick);
                         seg->add(ts);
                         }
                   }
@@ -156,7 +156,7 @@ void MuseData::readChord(Part*, const QString& s)
 //   openSlur
 //---------------------------------------------------------
 
-void MuseData::openSlur(int idx, int tick, Staff* staff, int voice)
+void MuseData::openSlur(int idx, int tick, Staff* staff, int voc)
       {
       int staffIdx = staff->idx();
       if (slur[idx]) {
@@ -165,7 +165,7 @@ void MuseData::openSlur(int idx, int tick, Staff* staff, int voice)
             }
       slur[idx] = new Slur(score);
       slur[idx]->setTick(tick);
-      slur[idx]->setTrack(staffIdx * VOICES + voice);
+      slur[idx]->setTrack(staffIdx * VOICES + voc);
       score->addElement(slur[idx]);
       }
 
@@ -173,12 +173,12 @@ void MuseData::openSlur(int idx, int tick, Staff* staff, int voice)
 //   closeSlur
 //---------------------------------------------------------
 
-void MuseData::closeSlur(int idx, int tick, Staff* staff, int voice)
+void MuseData::closeSlur(int idx, int tick, Staff* staff, int voc)
       {
       int staffIdx = staff->idx();
       if (slur[idx]) {
             slur[idx]->setTick2(tick);
-            slur[idx]->setTrack2(staffIdx * VOICES + voice);
+            slur[idx]->setTrack2(staffIdx * VOICES + voc);
             slur[idx] = 0;
             }
       else
@@ -526,20 +526,20 @@ Measure* MuseData::createMeasure()
                   return 0;
                   }
             }
-      Measure* measure  = new Measure(score);
-      measure->setTick(curTick);
+      Measure* mes  = new Measure(score);
+      mes->setTick(curTick);
 
 #if 0
       foreach(Staff* s, score->staves()) {
             if (s->isTop()) {
                   BarLine* barLine = new BarLine(score);
                   barLine->setStaff(s);
-                  measure->setEndBarLine(barLine);
+                  mes->setEndBarLine(barLine);
                   }
             }
 #endif
-      score->measures()->add(measure);
-      return measure;
+      score->measures()->add(mes);
+      return mes;
       }
 
 //---------------------------------------------------------

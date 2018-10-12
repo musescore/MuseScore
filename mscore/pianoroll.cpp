@@ -472,9 +472,9 @@ void PianorollEditor::velocityChanged(int val)
 //   keyPressed
 //---------------------------------------------------------
 
-void PianorollEditor::keyPressed(int pitch)
+void PianorollEditor::keyPressed(int p)
       {
-      seq->startNote(staff->part()->instrument()->channel(0)->channel, pitch, 80, 0, 0.0);
+      seq->startNote(staff->part()->instrument()->channel(0)->channel, p, 80, 0, 0.0);
       }
 
 //---------------------------------------------------------
@@ -506,10 +506,10 @@ void PianorollEditor::heartBeat(Seq* s)
 //   moveLocator
 //---------------------------------------------------------
 
-void PianorollEditor::moveLocator(int i, const Pos& pos)
+void PianorollEditor::moveLocator(int i, const Pos& p)
       {
       if (locator[i].valid())
-            score()->setPos(POS(i), pos.tick());
+            score()->setPos(POS(i), p.tick());
       }
 
 //---------------------------------------------------------
@@ -678,14 +678,14 @@ void PianorollEditor::showWaveView(bool val)
 //    position in score has changed
 //---------------------------------------------------------
 
-void PianorollEditor::posChanged(POS pos, unsigned tick)
+void PianorollEditor::posChanged(POS p, unsigned tick)
       {
-      if (locator[int(pos)].tick() == unsigned(tick))
+      if (locator[int(p)].tick() == unsigned(tick))
             return;
-      setLocator(pos, tick);
-      gv->moveLocator(int(pos));
+      setLocator(p, tick);
+      gv->moveLocator(int(p));
       if (waveView)
-            waveView->moveLocator(int(pos));
+            waveView->moveLocator(int(p));
       ruler->update();
       }
 

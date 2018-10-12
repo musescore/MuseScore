@@ -198,17 +198,17 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
       double _spatium = score()->spatium();
       editData.element = 0;
 
-      const QMimeData* data = event->mimeData();
+      const QMimeData* dta = event->mimeData();
 
-      if (data->hasFormat(mimeSymbolListFormat) || data->hasFormat(mimeStaffListFormat)) {
+      if (dta->hasFormat(mimeSymbolListFormat) || dta->hasFormat(mimeStaffListFormat)) {
             event->accept();
             return;
             }
 
-      if (data->hasFormat(mimeSymbolFormat)) {
+      if (dta->hasFormat(mimeSymbolFormat)) {
             event->accept();
 
-            QByteArray a = data->data(mimeSymbolFormat);
+            QByteArray a = dta->data(mimeSymbolFormat);
 
             if (MScore::debugMode)
                   qDebug("ScoreView::dragEnterEvent Symbol: <%s>", a.data());
@@ -230,8 +230,8 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
             return;
             }
 
-      if (data->hasUrls()) {
-            QList<QUrl>ul = data->urls();
+      if (dta->hasUrls()) {
+            QList<QUrl>ul = dta->urls();
             for (const QUrl& u : ul) {
                   if (MScore::debugMode)
                         qDebug("drag Url: %s", qPrintable(u.toString()));
@@ -252,7 +252,7 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
             return;
             }
       qDebug("unknown drop format: formats:");
-      for (const QString& s : data->formats())
+      for (const QString& s : dta->formats())
             qDebug("  <%s>", qPrintable(s));
       event->ignore();
       }
@@ -296,11 +296,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 
       // convert window to canvas position
       QPointF pos(imatrix.map(QPointF(event->pos())));
-
-      EditData dropData(this);
-      dropData.pos        = pos;
-      dropData.element    = editData.element;
-      dropData.modifiers  = event->keyboardModifiers();
 
       if (editData.element) {
             switch (editData.element->type()) {
@@ -387,6 +382,11 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case ElementType::LYRICS:
                   case ElementType::FRET_DIAGRAM:
                   case ElementType::STAFFTYPE_CHANGE: {
+                        EditData dropData(this);
+                        dropData.pos = pos;
+                        dropData.element = editData.element;
+                        dropData.modifiers = event->keyboardModifiers();
+
                         if (getDropTarget(dropData))
                               event->accept();
                         else
@@ -428,15 +428,15 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 //            _score->update();
             return;
             }
-      QByteArray data;
+      QByteArray dta;
       ElementType etype;
       if (md->hasFormat(mimeSymbolListFormat)) {
             etype = ElementType::ELEMENT_LIST;
-            data = md->data(mimeSymbolListFormat);
+            dta = md->data(mimeSymbolListFormat);
             }
       else if (md->hasFormat(mimeStaffListFormat)) {
             etype = ElementType::STAFF_LIST;
-            data = md->data(mimeStaffListFormat);
+            dta = md->data(mimeStaffListFormat);
             }
       else {
 //            _score->update();
@@ -698,15 +698,15 @@ void ScoreView::dropEvent(QDropEvent* event)
 
       editData.element = 0;
       const QMimeData* md = event->mimeData();
-      QByteArray data;
+      QByteArray dta;
       ElementType etype;
       if (md->hasFormat(mimeSymbolListFormat)) {
             etype = ElementType::ELEMENT_LIST;
-            data = md->data(mimeSymbolListFormat);
+            dta = md->data(mimeSymbolListFormat);
             }
       else if (md->hasFormat(mimeStaffListFormat)) {
             etype = ElementType::STAFF_LIST;
-            data = md->data(mimeStaffListFormat);
+            dta = md->data(mimeStaffListFormat);
             }
       else {
             qDebug("cannot drop this object: unknown mime type");
@@ -731,7 +731,7 @@ void ScoreView::dropEvent(QDropEvent* event)
             }
       else if (etype == ElementType::MEASURE_LIST || etype == ElementType::STAFF_LIST) {
             _score->startCmd();
-            XmlReader xml(data);
+            XmlReader xml(dta);
             System* s = measure->system();
             int idx   = s->y2staff(pos.y());
             if (idx != -1) {

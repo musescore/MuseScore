@@ -170,12 +170,12 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
       pos1.mbt(&bar1, &beat, &tick);
       pos2.mbt(&bar2, &beat, &tick);
 
-      int n = mag[magStep < 0 ? 0 : magStep];
+      int mi = mag[magStep < 0 ? 0 : magStep];
 
-      bar1 = (bar1 / n) * n;           // round down
-      if (bar1 && n >= 2)
+      bar1 = (bar1 / mi) * mi;           // round down
+      if (bar1 && mi >= 2)
             bar1 -= 1;
-      bar2 = ((bar2 + n - 1) / n) * n; // round up
+      bar2 = ((bar2 + mi - 1) / mi) * mi; // round up
 
       for (int bar = bar1; bar <= bar2;) {
             Pos stick(_score->tempomap(), _score->sigmap(), bar, 0, 0);
@@ -192,14 +192,14 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
                   }
             else {
                   int z = stick.timesig().timesig().numerator();
-                  for (int beat = 0; beat < z; beat++) {
+                  for (int b = 0; b < z; b++) {
                         if (magStep == 0) {
-                              Pos xx(_score->tempomap(), _score->sigmap(), bar, beat, 0);
+                              Pos xx(_score->tempomap(), _score->sigmap(), bar, b, 0);
                               int xp = pos2pix(xx);
                               if (xp < 0)
                                     continue;
                               if (xp > 0) {
-                                    p->setPen(QPen(beat == 0 ? Qt::lightGray : Qt::gray, 0.0));
+                                    p->setPen(QPen(b == 0 ? Qt::lightGray : Qt::gray, 0.0));
                                     p->drawLine(xp, y1, xp, y2);
                                     }
                               else {
@@ -222,12 +222,12 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
 
                               int n = (MScore::division * 4) / stick.timesig().timesig().denominator();
                               for (int i = 0; i < k; ++i) {
-                                    Pos xx(_score->tempomap(), _score->sigmap(), bar, beat, (n * i)/ k);
+                                    Pos xx(_score->tempomap(), _score->sigmap(), bar, b, (n * i)/ k);
                                     int xp = pos2pix(xx);
                                     if (xp < 0)
                                           continue;
                                     if (xp > 0) {
-                                          p->setPen(QPen(i == 0 && beat == 0 ? Qt::lightGray : Qt::gray, 0.0));
+                                          p->setPen(QPen(i == 0 && b == 0 ? Qt::lightGray : Qt::gray, 0.0));
                                           p->drawLine(xp, y1, xp, y2);
                                           }
                                     else {
@@ -238,10 +238,10 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
                               }
                         }
                   }
-            if (bar == 0 && n >= 2)
-                  bar += (n-1);
+            if (bar == 0 && mi >= 2)
+                  bar += (mi-1);
             else
-                  bar += n;
+                  bar += mi;
             }
       }
 
@@ -505,11 +505,11 @@ void PianoView::setStaff(Staff* s, Pos* l)
 //   addChord
 //---------------------------------------------------------
 
-void PianoView::addChord(Chord* chord)
+void PianoView::addChord(Chord* crd)
       {
-      for (Chord* c : chord->graceNotes())
+      for (Chord* c : crd->graceNotes())
             addChord(c);
-      for (Note* note : chord->notes()) {
+      for (Note* note : crd->notes()) {
             if (note->tieBack())
                   continue;
             for (NoteEvent& e : note->playEvents())

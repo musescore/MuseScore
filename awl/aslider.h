@@ -59,7 +59,7 @@ class AbstractSlider : public QWidget {
       Q_PROPERTY(double dclickValue2 READ dclickValue2 WRITE setDclickValue2)
 
    protected:
-      int _id;
+      int __id;
       double _value;
       double _minValue, _maxValue, _lineStep, _pageStep;
       double _dclickValue1;
@@ -106,8 +106,8 @@ class AbstractSlider : public QWidget {
       virtual void setInvertedAppearance(bool val) { _invert = val; }
       bool invertedAppearance() const              { return _invert; }
 
-      int id() const { return _id; }
-      void setId(int i) { _id = i; }
+      int id() const { return __id; }
+      void setId(int i) { __id = i; }
 
       virtual double value() const;
       virtual QString userValue() const;

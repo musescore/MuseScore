@@ -360,10 +360,10 @@ int System::firstVisibleStaff() const
 
 void System::layout2()
       {
-      Box* b = vbox();
-      if (b) {
-            b->layout();
-            setbbox(b->bbox());
+      Box* vb = vbox();
+      if (vb) {
+            vb->layout();
+            setbbox(vb->bbox());
             return;
             }
 
@@ -548,9 +548,9 @@ void System::layout2()
                                     y1 = s->bbox().top();
                                     s2 = staff(staffIdx);
                                     for (int i = staffIdx + nstaves - 1; i > 0; --i) {
-                                          SysStaff* s = staff(i);
+                                          SysStaff* s3 = staff(i);
                                           if (s->show()) {
-                                                s2 = s;
+                                                s2 = s3;
                                                 break;
                                                 }
                                           }

@@ -790,24 +790,24 @@ void PowerTab::addToScore(ptSection& sec)
                   score->appendPart(part);
                   }
             }
-      auto bar = sec.bars.front();
-      while (bar->denominator == 0) {
+      auto bar1 = sec.bars.front();
+      while (bar1->denominator == 0) {
             if (sec.bars.size() == 1)
                   break;
             sec.bars.pop_front();
-            bar = sec.bars.front();
+            bar1 = sec.bars.front();
             }
-      if (bar->denominator == 0) {
-            bar->denominator = 4;
-            bar->numerator = 4;
+      if (bar1->denominator == 0) {
+            bar1->denominator = 4;
+            bar1->numerator = 4;
             }
-      auto measure = createMeasure(bar.get(), tick);
+      auto measure = createMeasure(bar1.get(), tick);
       if (repeatCount) {
             measure->setRepeatEnd(true);
             measure->setRepeatCount(repeatCount);
             }
-      repeatCount = bar->repeatClose;
-      if (bar->repeatStart) {
+      repeatCount = bar1->repeatClose;
+      if (bar1->repeatStart) {
             measure->setRepeatStart(true);
             }
       if (sec.bars.size() > 1) {
@@ -1318,8 +1318,8 @@ Score::FileError PowerTab::read()
                   StaffTypes sts = StaffTypes::TAB_DEFAULT;
                   if (lines == 4)
                         sts = StaffTypes::TAB_4COMMON;
-                  StaffType st = *StaffType::preset(sts);
-                  s1->setStaffType(0, &st);
+                  StaffType st1 = *StaffType::preset(sts);
+                  s1->setStaffType(0, &st1);
                   s1->setLines(0, lines);
                   Excerpt::cloneStaff(s, s1);
                   BracketItem* bi = new BracketItem(pscore, BracketType::NORMAL, 2);

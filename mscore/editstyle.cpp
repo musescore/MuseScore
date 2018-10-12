@@ -55,14 +55,14 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       fretNumGroup->addButton(radioFretNumLeft, 0);
       fretNumGroup->addButton(radioFretNumRight, 1);
 
-      QButtonGroup* keySigNatGroup = new QButtonGroup(this);
-      keySigNatGroup->addButton(radioKeySigNatNone, int(KeySigNatural::NONE));
-      keySigNatGroup->addButton(radioKeySigNatBefore, int(KeySigNatural::BEFORE));
-      keySigNatGroup->addButton(radioKeySigNatAfter, int(KeySigNatural::AFTER));
+      QButtonGroup* ksng = new QButtonGroup(this);
+      ksng->addButton(radioKeySigNatNone, int(KeySigNatural::NONE));
+      ksng->addButton(radioKeySigNatBefore, int(KeySigNatural::BEFORE));
+      ksng->addButton(radioKeySigNatAfter, int(KeySigNatural::AFTER));
 
-      QButtonGroup* clefTypeGroup = new QButtonGroup(this);
-      clefTypeGroup->addButton(clefTab1, int(ClefType::TAB));
-      clefTypeGroup->addButton(clefTab2, int(ClefType::TAB_SERIF));
+      QButtonGroup* ctg = new QButtonGroup(this);
+      ctg->addButton(clefTab1, int(ClefType::TAB));
+      ctg->addButton(clefTab2, int(ClefType::TAB_SERIF));
 
       QButtonGroup* fbAlign = new QButtonGroup(this);
       fbAlign->addButton(radioFBTop, 0);
@@ -80,24 +80,24 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             QT_TRANSLATE_NOOP("EditStyleBase", "Dash-dotted"),
             QT_TRANSLATE_NOOP("EditStyleBase", "Dash-dot-dotted")
             };
-      int data = 1;
+      int dta = 1;
       voltaLineStyle->clear();
       ottavaLineStyle->clear();
       pedalLineStyle->clear();
       for (const char* p : styles) {
             QString trs = qApp->translate("EditStyleBase", p);
-            voltaLineStyle->addItem(trs, data);
-            ottavaLineStyle->addItem(trs, data);
-            pedalLineStyle->addItem(trs, data);
-            ++data;
+            voltaLineStyle->addItem(trs, dta);
+            ottavaLineStyle->addItem(trs, dta);
+            pedalLineStyle->addItem(trs, dta);
+            ++dta;
             }
 
       styleWidgets = {
       //   idx                --- showPercent      --- widget          --- resetButton
       { Sid::figuredBassAlignment,    false, fbAlign,                 0                    },
       { Sid::figuredBassStyle,        false, fbStyle,                 0                    },
-      { Sid::tabClef,                 false, clefTypeGroup,           0                    },
-      { Sid::keySigNaturals,          false, keySigNatGroup,          0                    },
+      { Sid::tabClef,                 false, ctg,                     0                    },
+      { Sid::keySigNaturals,          false, ksng,                    0                    },
       { Sid::voltaLineStyle,          false, voltaLineStyle,          resetVoltaLineStyle  },
       { Sid::ottavaLineStyle,         false, ottavaLineStyle,         resetOttavaLineStyle },
       { Sid::pedalLineStyle,          false, pedalLineStyle,          resetPedalLineStyle  },

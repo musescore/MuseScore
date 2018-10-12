@@ -200,7 +200,6 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
       {
       if (!note->play() || note->hidden())      // do not play overlapping notes
             return;
-      int pitch = note->ppitch();
       Chord* chord = note->chord();
 
       int ticks;
@@ -246,7 +245,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
 
       NoteEventList nel = note->playEvents();
       int nels = nel.size();
-      for (int i = 0; i < nels; ++i) {
+      for (int i = 0, pitch = note->ppitch(); i < nels; ++i) {
             const NoteEvent& e = nel[i]; // we make an explicit const ref, not a const copy.  no need to copy as we won't change the original object.
 
             // skip if note has a tie into it and only one NoteEvent
@@ -375,8 +374,8 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                         continue;
 
                   Chord* chord = toChord(cr);
-                  Staff* st    = chord->staff();
-                  int velocity = st->velocities().velo(seg->tick());
+                  Staff* st1   = chord->staff();
+                  int velocity = st1->velocities().velo(seg->tick());
                   Instrument* instr = chord->part()->instrument(tick);
                   int channel = instr->channel(chord->upNote()->subchannel())->channel;
 
@@ -406,11 +405,11 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
             for (Element* e : s->annotations()) {
                   if (!e->isStaffTextBase() || e->staffIdx() < firstStaffIdx || e->staffIdx() >= nextStaffIdx)
                         continue;
-                  const StaffTextBase* st = toStaffTextBase(e);
+                  const StaffTextBase* st1 = toStaffTextBase(e);
                   int tick = s->tick() + tickOffset;
 
                   Instrument* instr = e->part()->instrument(tick);
-                  for (const ChannelActions& ca : *st->channelActions()) {
+                  for (const ChannelActions& ca : *st1->channelActions()) {
                         int channel = instr->channel().at(ca.channel)->channel;
                         for (const QString& ma : ca.midiActionNames) {
                               NamedEventList* nel = instr->midiAction(ma, ca.channel);
@@ -418,23 +417,23 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                                     continue;
                               for (MidiCoreEvent event : nel->events) {
                                     event.setChannel(channel);
-                                    NPlayEvent e(event);
-                                    if (e.dataA() == CTRL_PROGRAM)
-                                          events->insert(std::pair<int, NPlayEvent>(tick-1, e));
+                                    NPlayEvent e1(event);
+                                    if (e1.dataA() == CTRL_PROGRAM)
+                                          events->insert(std::pair<int, NPlayEvent>(tick-1, e1));
                                     else
-                                          events->insert(std::pair<int, NPlayEvent>(tick, e));
+                                          events->insert(std::pair<int, NPlayEvent>(tick, e1));
                                     }
                               }
                         }
-                  if (st->setAeolusStops()) {
-                        Staff* s = st->staff();
+                  if (st1->setAeolusStops()) {
+                        Staff* s1 = st1->staff();
                         int voice   = 0;
-                        int channel = s->channel(tick, voice);
+                        int channel = s1->channel(tick, voice);
 
                         for (int i = 0; i < 4; ++i) {
                               static int num[4] = { 12, 13, 16, 16 };
                               for (int k = 0; k < num[i]; ++k)
-                                    aeolusSetStop(tick, channel, i, k, st->getAeolusStop(i, k), events);
+                                    aeolusSetStop(tick, channel, i, k, st1->getAeolusStop(i, k), events);
                               }
                         }
                   }
@@ -1628,8 +1627,7 @@ void Score::createGraceNotesPlayEvents(int tick, Chord* chord, int &ontime, int 
             graceDuration = ontime / nb;
             }
 
-      int on = 0;
-      for (int i = 0; i < nb; ++i) {
+      for (int i = 0, on = 0; i < nb; ++i) {
             QList<NoteEventList> el;
             Chord* gc = gnb.at(i);
             size_t nn = gc->notes().size();
@@ -1654,7 +1652,7 @@ void Score::createGraceNotesPlayEvents(int tick, Chord* chord, int &ontime, int 
                   trailtime = floor(571 * weighta);
             else
                   trailtime = floor(500 * weighta);
-            int graceDuration = trailtime / na;
+            int graceDuration1 = trailtime / na;
             int on = 1000 - trailtime;
             for (int i = 0; i < na; ++i) {
                   QList<NoteEventList> el;
@@ -1662,7 +1660,7 @@ void Score::createGraceNotesPlayEvents(int tick, Chord* chord, int &ontime, int 
                   size_t nn = gc->notes().size();
                   for (size_t ii = 0; ii < nn; ++ii) {
                         NoteEventList nel;
-                        nel.append(NoteEvent(0, on, graceDuration)); // NoteEvent(pitch,ontime,len)
+                        nel.append(NoteEvent(0, on, graceDuration1)); // NoteEvent(pitch,ontime,len)
                         el.append(nel);
                         }
 
@@ -1672,7 +1670,7 @@ void Score::createGraceNotesPlayEvents(int tick, Chord* chord, int &ontime, int 
                         for (int ii = 0; ii < int(nn); ++ii)
                               gc->notes()[ii]->setPlayEvents(el[ii]);
                         }
-                  on += graceDuration;
+                  on += graceDuration1;
                   }
             }
       }

@@ -450,7 +450,7 @@ void ChordView::mousePressEvent(QMouseEvent* event)
             QPointF p(mapToScene(event->pos()));
             int pitch = y2pitch(int(p.y()));
             int tick  = int(p.x()) - CHORD_MAP_OFFSET;
-            int ticks = 1000 - tick;
+            int tcks = 1000 - tick;
             foreach(const NoteEvent& e, _curNote->playEvents()) {
                   if (e.pitch() != pitch)
                         continue;
@@ -459,13 +459,13 @@ void ChordView::mousePressEvent(QMouseEvent* event)
                         }
                   int nticks = e.ontime() - tick;
                   if (nticks > 0)
-                        ticks = qMin(ticks, nticks);
+                        tcks = qMin(tcks, nticks);
                   }
 
             NoteEvent ne;
             ne.setPitch(pitch);
             ne.setOntime(tick);
-            ne.setLen(ticks);
+            ne.setLen(tcks);
             _curNote->playEvents().append(ne);
             NoteEvent* pne = &_curNote->playEvents()[_curNote->playEvents().size()-1];
             ChordItem* item = new ChordItem(this, _curNote, pne);
