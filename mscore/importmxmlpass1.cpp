@@ -1242,7 +1242,7 @@ static void updateStyles(Score* score,
                          const QString& lyricFamily, const QString& lyricSize)
       {
 //TODO:ws       const float fWordSize = wordSize.toFloat();   // note conversion error results in value 0.0
-      const auto dblLyricSize = lyricSize.toDouble(); // but avoid comparing float with exact value later
+      const auto dblLyricSize = lyricSize.toDouble(); // but avoid comparing floating point number with exact value later
 
       // loop over all text styles (except the empty, always hidden, first one)
       // set all text styles to the MusicXML defaults
