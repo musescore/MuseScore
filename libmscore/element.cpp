@@ -581,19 +581,19 @@ bool Element::readProperties(XmlReader& e)
                   bool locationRead = false;
                   int localIndexDiff = 0;
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
+                        const QStringRef& ntag(e.name());
 
-                        if (tag == "score") {
+                        if (ntag == "score") {
                               QString val(e.readElementText());
                               if (val == "same")
                                     linkedIsMaster = score()->isMaster();
                               }
-                        else if (tag == "location") {
+                        else if (ntag == "location") {
                               mainLoc.read(e);
                               mainLoc.toAbsolute(loc);
                               locationRead = true;
                               }
-                        else if (tag == "indexDiff")
+                        else if (ntag == "indexDiff")
                               localIndexDiff = e.readInt();
                         else
                               e.unknown();
@@ -1878,7 +1878,6 @@ QRectF Element::drag(EditData& ed)
             //
             // restrict move to page boundaries
             //
-            QRectF r(canvasBoundingRect());
             Page* p = 0;
             Element* e = this;
             while (e) {

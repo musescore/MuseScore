@@ -628,7 +628,7 @@ void Chord::addLedgerLines()
       // the line pos corresponding to the bottom line of the staff
       int lineBelow      = 8;                   // assuming 5-lined "staff"
       qreal lineDistance = 1;
-      qreal _mag         = 1;
+      qreal mag         = 1;
       bool staffVisible  = true;
 
       if (segment()) { //not palette
@@ -638,7 +638,7 @@ void Chord::addLedgerLines()
             Staff* st    = score()->staff(idx);
             lineBelow    = (st->lines(tick) - 1) * 2;
             lineDistance = st->lineDistance(tick);
-            _mag         = staff()->mag(tick);
+            mag         = staff()->mag(tick);
             staffVisible = !staff()->invisible();
             }
 
@@ -647,7 +647,7 @@ void Chord::addLedgerLines()
             return;
 
       // the extra length of a ledger line with respect to notehead (half of it on each side)
-      qreal extraLen = score()->styleP(Sid::ledgerLineLength) * _mag * 0.5;
+      qreal extraLen = score()->styleP(Sid::ledgerLineLength) * mag * 0.5;
       qreal hw = _notes[0]->headWidth();
       qreal minX, maxX;                         // note extrema in raster units
       int   minLine, maxLine;
@@ -1494,7 +1494,7 @@ void Chord::layout2()
             c->layout2();
 
       qreal _spatium = spatium();
-      qreal _mag = staff()->mag(tick());
+      qreal mag = staff()->mag(tick());
 
       //
       // Experimental:
@@ -1552,7 +1552,7 @@ void Chord::layout2()
 
       QVector<Chord*> gna = graceNotesAfter();
       if (!gna.empty()) {
-            qreal minNoteDist = score()->styleP(Sid::minNoteDistance) * _mag * score()->styleD(Sid::graceNoteMag);
+            qreal minNoteDist = score()->styleP(Sid::minNoteDistance) * mag * score()->styleD(Sid::graceNoteMag);
             // position grace notes from the rightmost to the leftmost
             // get segment (of whatever type) at the end of this chord; if none, get measure last segment
             Segment* s = measure()->tick2segment(segment()->tick() + actualTicks(), SegmentType::All);
@@ -1566,7 +1566,7 @@ void Chord::layout2()
             // final distance: if near to another chord, leave minNoteDist at right of last grace
             // else leave note-to-barline distance;
             xOff -= (s != nullptr && s->segmentType() != SegmentType::ChordRest)
-                  ? score()->styleP(Sid::noteBarDistance) * _mag
+                  ? score()->styleP(Sid::noteBarDistance) * mag
                   : minNoteDist;
             // scan grace note list from the end
             int n = gna.size();
@@ -1725,11 +1725,11 @@ void Chord::layoutPitched()
             c->layoutPitched();
 
       qreal _spatium         = spatium();
-      qreal _mag             = staff() ? staff()->mag(tick()) : 1.0;    // palette elements do not have a staff
-      qreal dotNoteDistance  = score()->styleP(Sid::dotNoteDistance)  * _mag;
-      qreal minNoteDistance  = score()->styleP(Sid::minNoteDistance)  * _mag;
-      qreal minTieLength     = score()->styleP(Sid::MinTieLength)     * _mag;
-      qreal ledgerLineLength = score()->styleP(Sid::ledgerLineLength) * _mag;
+      qreal mag_             = staff() ? staff()->mag(tick()) : 1.0;    // palette elements do not have a staff
+      qreal dotNoteDistance  = score()->styleP(Sid::dotNoteDistance)  * mag_;
+      qreal minNoteDistance  = score()->styleP(Sid::minNoteDistance)  * mag_;
+      qreal minTieLength     = score()->styleP(Sid::MinTieLength)     * mag_;
+      qreal ledgerLineLength = score()->styleP(Sid::ledgerLineLength) * mag_;
 
       qreal graceMag         = score()->styleD(Sid::graceNoteMag);
       qreal chordX           = (_noteType == NoteType::NORMAL) ? ipos().x() : 0.0;
@@ -1790,7 +1790,7 @@ void Chord::layoutPitched()
                   qreal x = accidental->pos().x() + note->pos().x() + chordX;
                   // distance from accidental to note already taken into account
                   // but here perhaps we create more padding in *front* of accidental?
-                  x -= score()->styleP(Sid::accidentalDistance) * _mag;
+                  x -= score()->styleP(Sid::accidentalDistance) * mag_;
                   lll = qMax(lll, -x);
                   }
 
@@ -1852,7 +1852,7 @@ void Chord::layoutPitched()
       addLedgerLines();
 
       if (_arpeggio) {
-            qreal arpeggioDistance = score()->styleP(Sid::ArpeggioNoteDistance) * _mag;
+            qreal arpeggioDistance = score()->styleP(Sid::ArpeggioNoteDistance) * mag_;
             _arpeggio->layout();    // only for width() !
             lll        += _arpeggio->width() + arpeggioDistance + chordX;
             qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
@@ -1874,7 +1874,7 @@ void Chord::layoutPitched()
 
       if (dots()) {
             qreal x = dotPosX() + dotNoteDistance
-               + (dots()-1) * score()->styleP(Sid::dotDotDistance) * _mag;
+               + (dots()-1) * score()->styleP(Sid::dotDotDistance) * mag_;
             x += symWidth(SymId::augmentationDot);
             rrr = qMax(rrr, x);
             }

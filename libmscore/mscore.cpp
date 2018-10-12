@@ -346,10 +346,10 @@ void MScore::init()
             };
 
       for (unsigned i = 0; i < sizeof(fonts)/sizeof(*fonts); ++i) {
-            QString s(fonts[i]);
-            if (-1 == QFontDatabase::addApplicationFont(s)) {
+            QString str(fonts[i]);
+            if (-1 == QFontDatabase::addApplicationFont(str)) {
                   if (!MScore::testMode)
-                        qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(s));
+                        qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(str));
                   if (!MScore::debugMode && !MScore::testMode)
                         exit(-1);
                   }

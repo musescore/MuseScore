@@ -1255,8 +1255,6 @@ void Score::cmdAddTie()
 void Score::cmdAddOttava(OttavaType type)
       {
       Selection sel = selection();
-      ChordRest* cr1;
-      ChordRest* cr2;
       // add on each staff if possible
       if (sel.isRange() && sel.staffStart() != sel.staffEnd() - 1) {
             for (int staffIdx = sel.staffStart() ; staffIdx < sel.staffEnd(); ++staffIdx) {
@@ -1276,6 +1274,8 @@ void Score::cmdAddOttava(OttavaType type)
                   }
             }
       else {
+            ChordRest* cr1;
+            ChordRest* cr2;
             getSelectedChordRest2(&cr1, &cr2);
             if (!cr1)
                   return;
@@ -1565,9 +1565,9 @@ void Score::deleteItem(Element* el)
                   if (el->voice() != 0) {
                         rest->undoChangeProperty(Pid::GAP, true);
                         for (ScoreElement* r : el->linkList()) {
-                              Rest* rest = toRest(r);
-                              if (rest->track() % VOICES)
-                                    rest->undoChangeProperty(Pid::GAP, true);
+                              Rest* rr = toRest(r);
+                              if (rr->track() % VOICES)
+                                    rr->undoChangeProperty(Pid::GAP, true);
                               }
 
                         // delete them really when only gap rests are in the actual measure.
@@ -1640,12 +1640,12 @@ void Score::deleteItem(Element* el)
                                           break;
 
                                     for (const TDuration& d : dList) {
-                                          Rest* rest = new Rest(this);
-                                          rest->setDuration(d.fraction());
-                                          rest->setDurationType(d);
-                                          rest->setTrack(track);
-                                          rest->setGap(true);
-                                          undoAddCR(rest, m, stick);
+                                          Rest* rr = new Rest(this);
+                                          rr->setDuration(d.fraction());
+                                          rr->setDurationType(d);
+                                          rr->setTrack(track);
+                                          rr->setGap(true);
+                                          undoAddCR(rr, m, stick);
                                           }
                                     }
                               }
@@ -1731,7 +1731,6 @@ void Score::deleteItem(Element* el)
                   else {
                         if (clef->generated()) {
                               // find the real clef if this is a cautionary one
-                              Measure* m = clef->measure();
                               if (m && m->prevMeasure()) {
                                     int tick = m->tick();
                                     m = m->prevMeasure();
@@ -2039,11 +2038,11 @@ void Score::cmdDeleteSelection()
                                     undoRemoveElement(e);
                               continue;
                               }
-                        ChordRest* cr = toChordRest(e);
+                        ChordRest* cr1 = toChordRest(e);
                         if (tick == -1) {
                               // first ChordRest found:
-                              int offset = cr->rtick();
-                              if (cr->measure()->tick() >= s1->tick() && offset) {
+                              int offset = cr1->rtick();
+                              if (cr1->measure()->tick() >= s1->tick() && offset) {
                                     f = Fraction::fromTicks(offset);
                                     tick = s->measure()->tick();
                                     }
@@ -2051,11 +2050,11 @@ void Score::cmdDeleteSelection()
                                     tick   = s->tick();
                                     f      = Fraction();
                                     }
-                              tuplet = cr->tuplet();
+                              tuplet = cr1->tuplet();
                               if (tuplet && (tuplet->tick() == tick) && ((tuplet->tick() + tuplet->actualTicks()) <= tick2) ) {
                                     // remove complete top level tuplet
 
-                                    Tuplet* t = cr->tuplet();
+                                    Tuplet* t = cr1->tuplet();
                                     while (t->tuplet())
                                           t = t->tuplet();
                                     cmdDeleteTuplet(t, false);
@@ -2064,8 +2063,8 @@ void Score::cmdDeleteSelection()
                                     continue;
                                     }
                               }
-                        if (tuplet != cr->tuplet()) {
-                              Tuplet* t = cr->tuplet();
+                        if (tuplet != cr1->tuplet()) {
+                              Tuplet* t = cr1->tuplet();
                               if (t && (((t->tick() + t->actualTicks()) <= tick2) || fullMeasure)) {
                                     // remove complete top level tuplet
 
@@ -2078,14 +2077,14 @@ void Score::cmdDeleteSelection()
                                     }
                               if (f.isValid())
                                     setRest(tick, track, f, false, tuplet);
-                              tick = cr->tick();
-                              tuplet = cr->tuplet();
-                              removeChordRest(cr, true);
-                              f = cr->duration();
+                              tick = cr1->tick();
+                              tuplet = cr1->tuplet();
+                              removeChordRest(cr1, true);
+                              f = cr1->duration();
                               }
                         else {
-                              removeChordRest(cr, true);
-                              f += cr->duration();
+                              removeChordRest(cr1, true);
+                              f += cr1->duration();
                               }
                         }
                   if (f.isValid() && !f.isZero()) {
@@ -2094,9 +2093,9 @@ void Score::cmdDeleteSelection()
                               // fix broken measures:
                               Staff* staff = Score::staff(track / VOICES);
                               for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
-                                    int tick    = m->tick();
+                                    int tick3   = m->tick();
                                     Fraction ff = m->stretchedLen(staff);
-                                    Rest* r = setRest(tick, track, ff, false, 0);
+                                    Rest* r = setRest(tick3, track, ff, false, 0);
                                     if (!cr)
                                           cr = r;
                                     if (s2 && (m == s2->measure()))
@@ -3113,20 +3112,20 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link
 
                               Tuplet* nt1 = nt;
                               while (ot->tuplet()) {
-                                    Tuplet* nt = tupletMap.findNew(ot->tuplet());
-                                    if (nt == 0) {
+                                    Tuplet* nt2 = tupletMap.findNew(ot->tuplet());
+                                    if (nt2 == 0) {
                                           if (link)
-                                                nt = toTuplet(ot->tuplet()->linkedClone());
+                                                nt2 = toTuplet(ot->tuplet()->linkedClone());
                                           else
-                                                nt = toTuplet(ot->tuplet()->clone());
-                                          nt->setTrack(dtrack);
-                                          nt->setParent(dm);
-                                          tupletMap.add(ot->tuplet(), nt);
+                                                nt2 = toTuplet(ot->tuplet()->clone());
+                                          nt2->setTrack(dtrack);
+                                          nt2->setParent(dm);
+                                          tupletMap.add(ot->tuplet(), nt2);
                                           }
-                                    nt->add(nt1);
-                                    nt1->setTuplet(nt);
+                                    nt2->add(nt1);
+                                    nt1->setTuplet(nt2);
                                     ot = ot->tuplet();
-                                    nt1 = nt;
+                                    nt1 = nt2;
                                     }
                               }
                         nt->add(ncr);
@@ -4439,25 +4438,25 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                                     Tuplet* t2  = t;
                                     Tuplet* nt2 = nt;
                                     while (t2->tuplet()) {
-                                          Tuplet* t = t2->tuplet();
+                                          Tuplet* t3  = t2->tuplet();
                                           Tuplet* nt3 = 0;
 
-                                          for (auto i : t->linkList()) {
+                                          for (auto i : t3->linkList()) {
                                                 Tuplet* tt = toTuplet(i);
-                                                if (tt != t && tt->score() == score && tt->track() == t2->track()) {
+                                                if (tt != t3 && tt->score() == score && tt->track() == t2->track()) {
                                                       nt3 = tt;
                                                       break;
                                                       }
                                                 }
                                           if (nt3 == 0) {
-                                                nt3 = toTuplet(t->linkedClone());
+                                                nt3 = toTuplet(t3->linkedClone());
                                                 nt3->setScore(score);
                                                 nt3->setTrack(nt2->track());
                                                 }
                                           nt3->add(nt2);
                                           nt2->setTuplet(nt3);
 
-                                          t2 = t;
+                                          t2 = t3;
                                           nt2 = nt3;
                                           }
 

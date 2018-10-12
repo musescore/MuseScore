@@ -705,8 +705,6 @@ void OveToMScore::convertTrackElements(int track) {
                               }
                         } else if (octave->getOctaveShiftPosition() == OVE::OctaveShiftPosition::Stop) {
                         if(ottava != 0) {
-                              int absTick = mtt_->getTick(i, octave->getEndTick());
-
                               ottava->setTick2(absTick);
                               score_->addSpanner(ottava);
                               ottava->staff()->updateOttava();

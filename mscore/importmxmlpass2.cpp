@@ -3246,7 +3246,6 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure)
                   int track = _pass1.trackForPart(partId);
                   if (barStyle == "tick") {
                         BarLine* b = new BarLine(measure->score());
-                        int track = _pass1.trackForPart(partId);
                         b->setTrack(track);
                         b->setBarLineType(BarLineType::NORMAL);
                         b->setSpanStaff(false);
@@ -3257,7 +3256,6 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure)
                         }
                   else if (barStyle == "short") {
                         BarLine* b = new BarLine(measure->score());
-                        int track = _pass1.trackForPart(partId);
                         b->setTrack(track);
                         b->setBarLineType(BarLineType::NORMAL);
                         b->setSpanStaff(0);

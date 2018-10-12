@@ -728,9 +728,9 @@ void InspectorRest::tupletClicked()
       Rest* rest = toRest(inspector->element());
       if (rest == 0)
             return;
-      Tuplet* tuplet = rest->tuplet();
-      if (tuplet) {
-            rest->score()->select(tuplet);
+      Tuplet* t = rest->tuplet();
+      if (t) {
+            rest->score()->select(t);
             rest->score()->update();
             inspector->update();
             }
@@ -1055,17 +1055,17 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       {
       s.setupUi(addWidget());
 
-      Element* e = inspector->element();
+      Element* el = inspector->element();
       bool sameTypes = true;
 
       for (const auto& ee : *inspector->el()) {
-            if (e->isSystemText() != ee->isSystemText()) {
+            if (el->isSystemText() != ee->isSystemText()) {
                   sameTypes = false;
                   break;
                   }
             }
       if (sameTypes)
-            s.title->setText(e->isSystemText() ? tr("System Text") : tr("Staff Text"));
+            s.title->setText(el->isSystemText() ? tr("System Text") : tr("Staff Text"));
 
       const std::vector<InspectorItem> il = {
             { Pid::PLACEMENT,  0, s.placement, s.resetPlacement },
@@ -1118,17 +1118,17 @@ InspectorSlurTie::InspectorSlurTie(QWidget* parent)
       {
       s.setupUi(addWidget());
 
-      Element* e = inspector->element();
+      Element* el = inspector->element();
       bool sameTypes = true;
 
       for (const auto& ee : *inspector->el()) {
-            if (ee->accessibleInfo() != e->accessibleInfo()) {
+            if (ee->accessibleInfo() != el->accessibleInfo()) {
                   sameTypes = false;
                   break;
                   }
             }
       if (sameTypes)
-            s.title->setText(e->accessibleInfo());
+            s.title->setText(el->accessibleInfo());
 
       const std::vector<InspectorItem> iiList = {
             { Pid::LINE_TYPE,       0, s.lineType,      s.resetLineType      },

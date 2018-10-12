@@ -1523,7 +1523,7 @@ Element* Segment::nextElement(int activeStaff)
                         return s->spannerSegments().front();
                   Segment* nextSegment =  seg->next1();
                   while (nextSegment) {
-                        Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
+                        nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
                         if (nextEl)
                               return nextEl;
                         nextSegment = nextSegment->next1();

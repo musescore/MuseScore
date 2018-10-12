@@ -571,11 +571,11 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               ticks = ft * o->fullMeasures;
                               if (!o->invisible) {
                                     for (unsigned i = 0; i < o->fullMeasures; ++i) {
-                                          Measure* m = score->getCreateMeasure(tick + i * ft);
-                                          Segment* s = m->getSegment(SegmentType::ChordRest, tick + i * ft);
+                                          Measure* m1 = score->getCreateMeasure(tick + i * ft);
+                                          Segment* s = m1->getSegment(SegmentType::ChordRest, tick + i * ft);
                                           Rest* rest = new Rest(score);
                                           rest->setDurationType(TDuration(TDuration::DurationType::V_MEASURE));
-                                          rest->setDuration(m->len());
+                                          rest->setDuration(m1->len());
                                           rest->setTrack(staffIdx * VOICES + voice);
                                           s->add(rest);
                                           }
@@ -588,16 +588,16 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     rest->setTuplet(tuplet);
                                     tuplet->add(rest);
                                     }
-                              TDuration d;
+                              TDuration d1;
                               if (o->fullMeasures) {
-                                    d.setType(TDuration::DurationType::V_MEASURE);
+                                    d1.setType(TDuration::DurationType::V_MEASURE);
                                     rest->setDuration(m->len());
                                     }
                               else {
-                                    d.setVal(ticks);
-                                    rest->setDuration(d.fraction());
+                                    d1.setVal(ticks);
+                                    rest->setDuration(d1.fraction());
                                     }
-                              rest->setDurationType(d);
+                              rest->setDurationType(d1);
                               rest->setTrack(track);
                               rest->setVisible(!o->invisible);
                               s->add(rest);
@@ -1595,11 +1595,11 @@ void VoltaObj::read()
       y  = cap->readInt();
       color = cap->readColor();
 
-      unsigned char flags = cap->readByte();
-      bLeft      = (flags & 1) != 0; // links abgeknickt
-      bRight     = (flags & 2) != 0; // rechts abgeknickt
-      bDotted    = (flags & 4) != 0;
-      allNumbers = (flags & 8) != 0;
+      unsigned char f = cap->readByte();
+      bLeft      = (f & 1) != 0; // links abgeknickt
+      bRight     = (f & 2) != 0; // rechts abgeknickt
+      bDotted    = (f & 4) != 0;
+      allNumbers = (f & 8) != 0;
 
       unsigned char numbers = cap->readByte();
       from = numbers & 0x0F;
@@ -2122,8 +2122,8 @@ QColor Capella::readColor()
             Q_ASSERT(b == 255);
             int r = readByte();
             int g = readByte();
-            int b = readByte();
-            c = QColor(r, g, b);
+            int bi = readByte();
+            c = QColor(r, g, bi);
             }
       else {
             c = QColor(colors[b]);
@@ -2292,12 +2292,12 @@ void Capella::readLayout()
       // system brackets:
       unsigned n = readUnsigned();  // number of brackets
       for (unsigned int i = 0; i < n; i++) {
-            CapBracket b;
-            b.from   = readInt();
-            b.to     = readInt();
-            b.curly = readByte();
+            CapBracket cb;
+            cb.from   = readInt();
+            cb.to     = readInt();
+            cb.curly = readByte();
             // qDebug("Bracket%d %d-%d curly %d", i, b.from, b.to, b.curly);
-            brackets.append(b);
+            brackets.append(cb);
             }
       // qDebug("Capella::readLayout(): done");
       }

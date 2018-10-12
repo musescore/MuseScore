@@ -2107,9 +2107,9 @@ void MuseScore::openRecentMenu()
       bool one = false;
       for (const QFileInfo& fi : recentScores()) {
             QAction* action = openRecent->addAction(fi.fileName().replace("&", "&&"));  // show filename only
-            QString data(fi.canonicalFilePath());
-            action->setData(data);
-            action->setToolTip(data);
+            QString dta(fi.canonicalFilePath());
+            action->setData(dta);
+            action->setToolTip(dta);
             one = true;
             }
       if (one) {
@@ -2393,8 +2393,8 @@ void MuseScore::showMidiImportPanel()
 
 void MuseScore::dragEnterEvent(QDragEnterEvent* event)
       {
-      const QMimeData* data = event->mimeData();
-      if (data->hasUrls()) {
+      const QMimeData* dta = event->mimeData();
+      if (dta->hasUrls()) {
             QList<QUrl>ul = event->mimeData()->urls();
             foreach(const QUrl& u, ul) {
                   if (MScore::debugMode)
@@ -2414,8 +2414,8 @@ void MuseScore::dragEnterEvent(QDragEnterEvent* event)
 
 void MuseScore::dropEvent(QDropEvent* event)
       {
-      const QMimeData* data = event->mimeData();
-      if (data->hasUrls()) {
+      const QMimeData* dta = event->mimeData();
+      if (dta->hasUrls()) {
             int view = -1;
             foreach(const QUrl& u, event->mimeData()->urls()) {
                   if (u.scheme() == "file") {
@@ -2579,7 +2579,7 @@ bool MuseScore::midiinEnabled() const
 //    return if midi remote command detected
 //---------------------------------------------------------
 
-bool MuseScore::processMidiRemote(MidiRemoteType type, int data, int value)
+bool MuseScore::processMidiRemote(MidiRemoteType type, int dta, int value)
       {
       if (!preferences.getBool(PREF_IO_MIDI_USEREMOTECONTROL))
             return false;
@@ -2588,11 +2588,11 @@ bool MuseScore::processMidiRemote(MidiRemoteType type, int data, int value)
             // be triggered by an "On" event, so we need to check if this is one of those.
             if (!preferences.getBool(PREF_IO_MIDI_ADVANCEONRELEASE)
                     || type != preferences.midiRemote(RMIDI_REALTIME_ADVANCE).type
-                    || data != preferences.midiRemote(RMIDI_REALTIME_ADVANCE).data)
+                    || dta != preferences.midiRemote(RMIDI_REALTIME_ADVANCE).data)
                   return false;
             }
       for (int i = 0; i < MIDI_REMOTES; ++i) {
-            if (preferences.midiRemote(i).type == type && preferences.midiRemote(i).data == data) {
+            if (preferences.midiRemote(i).type == type && preferences.midiRemote(i).data == dta) {
                   if (cv == 0)
                         return false;
                   QAction* a = 0;
@@ -2999,16 +2999,16 @@ static bool doConvert(Score* cs, QString fn, QString plugin = "")
             }
       if (!plugin.isEmpty()) {
             mscore->setCurrentScore(cs);
-            LayoutMode layoutMode = cs->layoutMode();
-            if (layoutMode != LayoutMode::PAGE) {
+            LayoutMode layoutMode1 = cs->layoutMode();
+            if (layoutMode1 != LayoutMode::PAGE) {
                   cs->setLayoutMode(LayoutMode::PAGE);
                   cs->doLayout();
                   }
             if (mscore->loadPlugin(plugin))
                   mscore->pluginTriggered(0);
             mscore->unloadPlugins();
-            if (layoutMode != cs->layoutMode()) {
-                  cs->setLayoutMode(layoutMode);
+            if (layoutMode1 != cs->layoutMode()) {
+                  cs->setLayoutMode(layoutMode1);
                   cs->doLayout();
                   }
             }
@@ -4512,14 +4512,14 @@ bool MuseScore::restoreSession(bool always)
                               qreal y       = .0;
                               qreal vmag    = 1.0;
                               MagIdx magIdx = MagIdx::MAG_FREE;
-                              int tab       = 0;
-                              int idx       = 0;
+                              int tab3      = 0;
+                              int idx1      = 0;
                               while (e.readNextStartElement()) {
                                     const QStringRef& t(e.name());
                                     if (t == "tab")
-                                          tab = e.readInt();
+                                          tab3 = e.readInt();
                                     else if (t == "idx")
-                                          idx = e.readInt();
+                                          idx1 = e.readInt();
                                     else if (t == "mag")
                                           vmag = e.readDouble();
                                     else if (t == "magIdx")
@@ -4533,7 +4533,7 @@ bool MuseScore::restoreSession(bool always)
                                           return false;
                                           }
                                     }
-                              (tab == 0 ? tab1 : tab2)->initScoreView(idx, vmag, magIdx, x, y);
+                              (tab3 == 0 ? tab1 : tab2)->initScoreView(idx1, vmag, magIdx, x, y);
                               }
                         else if (tag == "tab")
                               tab = e.readInt();
@@ -4805,11 +4805,11 @@ void MuseScore::networkFinished()
       qDebug("header <%s>", qPrintable(s));
       qDebug("name <%s>", qPrintable(name));
 
-      QByteArray data = reply->readAll();
+      QByteArray dta = reply->readAll();
       QString tmpName = QDir::tempPath () + "/"+ name;
       QFile f(tmpName);
       f.open(QIODevice::WriteOnly);
-      f.write(data);
+      f.write(dta);
       f.close();
 
       reply->deleteLater();
@@ -5182,12 +5182,12 @@ void MuseScore::endCmd()
             bool samePitch = true;
             int pitch    = -1;
             float tuning = 0;
-            for (Element* e : cs->selection().elements()) {
-                  if (!e->isNote()) {
+            for (Element* ee : cs->selection().elements()) {
+                  if (!ee->isNote()) {
                         samePitch = false;
                         break;
                         }
-                  Note* note = toNote(e);
+                  Note* note = toNote(ee);
                   if (pitch == -1) {
                         pitch = note->ppitch();
                         tuning = note->tuning();
@@ -5954,7 +5954,6 @@ QFileInfoList MuseScore::recentScores() const
       for (const QString& s : _recentScores) {
             if (s.isEmpty())
                   continue;
-            QString data(s);
             QFileInfo fi(s);
             bool alreadyLoaded = false;
             QString fp = fi.canonicalFilePath();
@@ -6037,8 +6036,8 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       MP3Exporter exporter;
       if (!exporter.loadLibrary(MP3Exporter::AskUser::MAYBE)) {
-            QSettings settings;
-            settings.setValue("/Export/lameMP3LibPath", "");
+            QSettings set;
+            set.setValue("/Export/lameMP3LibPath", "");
             if(!MScore::noGui)
                   QMessageBox::warning(0,
                                tr("Error Opening LAME library"),
@@ -6049,8 +6048,8 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
             }
 
       if (!exporter.validLibraryLoaded()) {
-            QSettings settings;
-            settings.setValue("/Export/lameMP3LibPath", "");
+            QSettings set;
+            set.setValue("/Export/lameMP3LibPath", "");
             if(!MScore::noGui)
                   QMessageBox::warning(0,
                                tr("Error Opening LAME library"),

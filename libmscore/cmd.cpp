@@ -712,8 +712,8 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                   //
                   Chord* chord = toNote(nr)->chord();
                   _is.slur()->undoChangeProperty(Pid::SPANNER_TICKS, chord->tick() - _is.slur()->tick());
-                  for (ScoreElement* e : _is.slur()->linkList()) {
-                        Slur* slur = toSlur(e);
+                  for (ScoreElement* se : _is.slur()->linkList()) {
+                        Slur* slur = toSlur(se);
                         for (ScoreElement* ee : chord->linkList()) {
                               Element* e = static_cast<Element*>(ee);
                               if (e->score() == slur->score() && e->track() == slur->track2()) {
@@ -1654,11 +1654,11 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
             else if (forceAdd) {
                   if (a)
                         undoRemoveElement(a);
-                  Accidental* a = new Accidental(lns);
-                  a->setParent(ln);
-                  a->setAccidentalType(accidental);
-                  a->setRole(AccidentalRole::USER);
-                  lns->undoAddElement(a);
+                  Accidental* a1 = new Accidental(lns);
+                  a1->setParent(ln);
+                  a1->setAccidentalType(accidental);
+                  a1->setRole(AccidentalRole::USER);
+                  lns->undoAddElement(a1);
                   }
             changeAccidental2(ln, pitch, tpc);
             }
@@ -2147,8 +2147,7 @@ Element* Score::move(const QString& cmd)
             if (noteEntryMode()) {
                   // if cursor moved into a gap, selection cannot follow
                   // only select & play el if it was not already selected (does not normally happen)
-                  ChordRest* cr = _is.cr();
-                  if (cr || !el->selected())
+                  if (_is.cr() || !el->selected())
                         select(el, SelectType::SINGLE, 0);
                   else
                         setPlayNote(false);
@@ -2776,8 +2775,8 @@ void Score::cmdSlashRhythm()
             if (e->voice() >= 2 && e->type() == ElementType::REST) {
                   Rest* r = toRest(e);
                   if (r->links()) {
-                        for (ScoreElement* e : *r->links()) {
-                              Rest* lr = toRest(e);
+                        for (ScoreElement* se : *r->links()) {
+                              Rest* lr = toRest(se);
                               lr->setAccent(!lr->accent());
                               }
                         }
@@ -2796,8 +2795,8 @@ void Score::cmdSlashRhythm()
                   chords.append(c);
                   // toggle slash setting
                   if (c->links()) {
-                        for (ScoreElement* e : *c->links()) {
-                              Chord* lc = toChord(e);
+                        for (ScoreElement* se : *c->links()) {
+                              Chord* lc = toChord(se);
                               lc->setSlash(!lc->slash(), false);
                               }
                         }

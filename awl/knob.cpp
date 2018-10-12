@@ -107,7 +107,7 @@ void Knob::setBorder(int val)
 void Knob::mousePressEvent(QMouseEvent* ev)
       {
       startY = ev->y();
-      emit sliderPressed(_id);
+      emit sliderPressed(__id);
       if (_center) {
             QRect r(points->boundingRect().toRect());
             if (r.contains(ev->pos())) {
@@ -123,7 +123,7 @@ void Knob::mousePressEvent(QMouseEvent* ev)
 
 void Knob::mouseReleaseEvent(QMouseEvent*)
       {
-      emit sliderReleased(_id);
+      emit sliderReleased(__id);
       }
 
 //---------------------------------------------------------

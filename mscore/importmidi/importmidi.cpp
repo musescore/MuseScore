@@ -619,12 +619,12 @@ void MTrack::createNotes(const ReducedFraction &lastTick)
                               // collect all midiChords on current tick position
                   startChordTick = nextChordTick;       // debug
                   for ( ; it != chords.end(); ++it) {
-                        const MidiChord& midiChord = it->second;
+                        const MidiChord& midiChord1 = it->second;
                         if (it->first != startChordTick)
                               break;
-                        if (midiChord.voice != voice)
+                        if (midiChord1.voice != voice)
                               continue;
-                        midiChords.append(midiChord);
+                        midiChords.append(midiChord1);
                         }
                   if (midiChords.isEmpty())
                         break;

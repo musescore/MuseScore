@@ -225,15 +225,15 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             }
         }
 
-        virtual qint64 readData(char *data, qint64 maxlen) override final {
-            Q_UNUSED(data);
+        virtual qint64 readData(char *dta, qint64 maxlen) override final {
+            Q_UNUSED(dta);
             qDebug() << "Error: No write supported!";
             return maxlen;
         }
 
-        virtual qint64 writeData(const char *data, qint64 len) override final {
+        virtual qint64 writeData(const char *dta, qint64 len) override final {
             size_t trueFrames = len / sizeof(float) / 2;
-            sf_writef_float(sf, reinterpret_cast<const float*>(data), trueFrames);
+            sf_writef_float(sf, reinterpret_cast<const float*>(dta), trueFrames);
             return trueFrames * 2 * sizeof(float);
         }
 

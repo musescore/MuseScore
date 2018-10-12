@@ -135,8 +135,8 @@ void MuseScore::createNewWorkspace()
             Workspace::currentWorkspace->save();
       Workspace::currentWorkspace = Workspace::createNewWorkspace(s);
       preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
-      PaletteBox* paletteBox = mscore->getPaletteBox();
-      paletteBox->updateWorkspaces();
+      PaletteBox* pb = mscore->getPaletteBox();
+      pb->updateWorkspaces();
       }
 
 //---------------------------------------------------------
@@ -174,13 +174,13 @@ void MuseScore::deleteWorkspace()
       QFile f(workspace->path());
       f.remove();
       delete workspace;
-      PaletteBox* paletteBox = mscore->getPaletteBox();
-      paletteBox->clear();
+      PaletteBox* pb = mscore->getPaletteBox();
+      pb->clear();
       Workspace::currentWorkspace = Workspace::workspaces().first();
       preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
       changeWorkspace(Workspace::currentWorkspace);
-      paletteBox = mscore->getPaletteBox();
-      paletteBox->updateWorkspaces();
+      pb = mscore->getPaletteBox();
+      pb->updateWorkspaces();
       }
 
 //---------------------------------------------------------
@@ -193,8 +193,8 @@ void MuseScore::changeWorkspace(QAction* a)
             if (qApp->translate("Ms::Workspace", p->name().toUtf8()) == a->text()) {
                   changeWorkspace(p);
                   preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
-                  PaletteBox* paletteBox = mscore->getPaletteBox();
-                  paletteBox->updateWorkspaces();
+                  PaletteBox* pb = mscore->getPaletteBox();
+                  pb->updateWorkspaces();
                   return;
                   }
             }
@@ -302,9 +302,6 @@ void Workspace::write()
             f.addFile(dstPath, ip->buffer());
             }
       {
-      QBuffer cbuf;
-      cbuf.open(QIODevice::ReadWrite);
-      XmlWriter xml(gscore, &cbuf);
       xml.setClipboardmode(true);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");

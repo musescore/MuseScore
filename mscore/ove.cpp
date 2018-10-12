@@ -7343,9 +7343,9 @@ QByteArray getByteArray(const Block& block) {
       }
 
 bool TitleChunkParse::parse() {
-      Block* dataBlock = chunk_->getDataBlock();
+      Block* dataBlockP = chunk_->getDataBlock();
       unsigned int blockSize = chunk_->getSizeBlock()->toSize();
-      StreamHandle handle(dataBlock->data(), blockSize);
+      StreamHandle handle(dataBlockP->data(), blockSize);
       Block typeBlock;
       unsigned int titleType;
 

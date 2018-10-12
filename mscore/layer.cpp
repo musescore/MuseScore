@@ -199,8 +199,8 @@ void LayerManager:: accept()
             l.name           = layers->item(i, 0)->text();
             l.tags           = 1;
             QString ts       = layers->item(i, 1)->text();
-            QStringList tags = ts.split(",");
-            foreach (QString tag, tags) {
+            QStringList tgs  = ts.split(",");
+            foreach (QString tag, tgs) {
                   for (int idx = 0; idx < 32; ++idx) {
                         if (tag == score->layerTags()[idx]) {
                               l.tags |= 1 << idx;
