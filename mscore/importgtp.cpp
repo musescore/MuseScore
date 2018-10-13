@@ -1589,10 +1589,9 @@ bool GuitarPro2::read(QFile* fp)
                   StaffText* st = new StaffText(score);
 //                  st->setTextStyleType(TextStyleType::STAFF);
                   st->setPlainText(QString("Capo. fret ") + QString::number(capo));
-                  st->setParent(s);
                   st->setTrack(i * VOICES);
-                  measure->add(st);
-            }
+                  s->add(st);
+                  }
 
             Channel* ch = instr->channel(0);
             if (midiChannel == int(StaffTypes::PERC_DEFAULT)) {
@@ -2280,9 +2279,8 @@ bool GuitarPro3::read(QFile* fp)
                   StaffText* st = new StaffText(score);
 //                  st->setTextStyleType(TextStyleType::STAFF);
                   st->setPlainText(QString("Capo. fret ") + QString::number(capo));
-                  st->setParent(s);
                   st->setTrack(i * VOICES);
-                  measure->add(st);
+                  s->add(st);
                   }
 
             Channel* ch = instr->channel(0);
