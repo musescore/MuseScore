@@ -202,7 +202,6 @@ class Chord final : public ChordRest {
       QVector<Articulation*>& articulations()             { return _articulations; }
       const QVector<Articulation*>& articulations() const { return _articulations; }
       Articulation* hasArticulation(const Articulation*);
-      Articulation* hasArticulation(SymId id);
       bool hasSingleArticulation() const                  { return _articulations.size() == 1; }
 
       virtual void crossMeasureSetup(bool on);
