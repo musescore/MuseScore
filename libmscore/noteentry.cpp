@@ -290,7 +290,9 @@ void Score::putNote(const QPointF& pos, bool replace, bool insert)
             return;
             }
       Score* score = p.segment->score();
-      if (score->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH))
+      // it is not safe to call Score::repitchNote() if p is on a TAB staff
+      bool isTablature = staff(p.staffIdx)->isTabStaff(p.segment->tick());
+      if (score->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH) && !isTablature)
             score->repitchNote(p, replace);
       else {
             if (insert)
