@@ -1787,6 +1787,18 @@ void EditData::init()
       }
 
 //---------------------------------------------------------
+//   control
+//---------------------------------------------------------
+
+bool EditData::control(bool textEditing) const
+      {
+      if (textEditing)
+            return modifiers & CONTROL_MODIFIER;
+      else
+            return modifiers & Qt::ControlModifier;
+      }
+
+//---------------------------------------------------------
 //   clearData
 //---------------------------------------------------------
 

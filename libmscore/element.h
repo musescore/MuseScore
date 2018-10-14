@@ -131,7 +131,7 @@ class EditData {
 
       ElementEditData* getData(const Element*) const;
       void addData(ElementEditData*);
-      bool control() const  { return modifiers & CONTROL_MODIFIER; }
+      bool control(bool textEditing = false) const;
       bool shift() const    { return modifiers & Qt::ShiftModifier; }
       bool isStartEndGrip() { return curGrip == Grip::START || curGrip == Grip::END; }
       };
