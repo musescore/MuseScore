@@ -120,7 +120,7 @@ void CmdState::setUpdateMode(UpdateMode m)
 //---------------------------------------------------------
 //   startCmd
 ///   Start a GUI command by clearing the redraw area
-///   and starting a user-visble undo.
+///   and starting a user-visible undo.
 //---------------------------------------------------------
 
 void Score::startCmd()
