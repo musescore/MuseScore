@@ -853,6 +853,11 @@ Note* searchTieNote(Note* note)
                   if (e == 0 || !e->isChord())
                         continue;
                   Chord* c = toChord(e);
+                  const int staffIdx = c->staffIdx() + c->staffMove();
+                  if (staffIdx != chord->staffIdx() + chord->staffMove()) {
+                        // this check is needed as we are iterating over all staves to capture cross-staff chords
+                        continue;
+                        }
                   // if there are grace notes before, try to tie to first one
                   QVector<Chord*> gnb = c->graceNotesBefore();
                   if (!gnb.empty()) {
@@ -861,9 +866,6 @@ Note* searchTieNote(Note* note)
                         if (gn2)
                               return gn2;
                         }
-                  int staffIdx = c->staffIdx() + c->staffMove();
-                  if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?
-                        continue;
                   for (Note* n : c->notes()) {
                         if (n->pitch() == note->pitch()) {
                               if (note2 == 0 || c->track() == chord->track())
