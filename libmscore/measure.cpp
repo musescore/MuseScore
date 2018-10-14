@@ -3551,9 +3551,16 @@ void Measure::addSystemHeader(bool isFirstSystem)
                               Key key = score()->staff(i)->key(tick());
                               if ((e && !e->generated()) || (key != keyIdx.key())) {
                                     disable = false;
-                                    break;
+                                    }
+                              else if (e && e->generated() && key == keyIdx.key() && keyIdx.key() == Key::C){
+                                    // If a key sig segment is disabled, it may be re-enabled if there is
+                                    // a transposing instrument using a different key sig.
+                                    // To prevent this from making the wrong key sig display, remove any key
+                                    // sigs on staves where the key in this measure is C.
+                                    score()->undo(new RemoveElement(e));
                                     }
                               }
+
                         if (disable)
                               kSegment->setEnabled(false);
                         else {
