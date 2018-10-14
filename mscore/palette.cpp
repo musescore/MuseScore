@@ -401,13 +401,13 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
 //   applyDrop
 //---------------------------------------------------------
 
-static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element* e, QPointF pt = QPointF())
+static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element* e, Qt::KeyboardModifiers modifiers, QPointF pt = QPointF())
       {
       EditData dropData = viewer->getEditData();
 //      EditData dropData;
       dropData.pos        = pt.isNull() ? target->pagePos() : pt;
       dropData.dragOffset = QPointF();
-      dropData.modifiers  = 0;
+      dropData.modifiers  = modifiers;
       dropData.element    = e;
 
       if (target->acceptDrop(dropData)) {
@@ -435,7 +435,7 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
 //   applyPaletteElement
 //---------------------------------------------------------
 
-void Palette::applyPaletteElement(PaletteCell* cell)
+void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modifiers)
       {
       Score* score = mscore->currentScore();
       if (score == 0)
@@ -481,7 +481,7 @@ void Palette::applyPaletteElement(PaletteCell* cell)
                               e = toChord(e)->upNote();
                         // use voice of element being added to (otherwise we can might corrupt the measure)
                         element->setTrack(e->voice());
-                        applyDrop(score, viewer, e, element);
+                        applyDrop(score, viewer, e, element, modifiers);
                         // continue in same track
                         score->inputState().setTrack(e->track());
                         }
@@ -515,7 +515,7 @@ void Palette::applyPaletteElement(PaletteCell* cell)
                   }
             else {
                   for (Element* e : sel.elements())
-                        applyDrop(score, viewer, e, element);
+                        applyDrop(score, viewer, e, element, modifiers);
                   }
             }
       else if (sel.isRange()) {
@@ -539,7 +539,7 @@ void Palette::applyPaletteElement(PaletteCell* cell)
                         QRectF r = m->staffabbox(sel.staffStart());
                         QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                         pt += m->system()->page()->pos();
-                        applyDrop(score, viewer, m, element, pt);
+                        applyDrop(score, viewer, m, element, modifiers, pt);
                         if (m == last)
                               break;
                         }
@@ -619,26 +619,26 @@ void Palette::applyPaletteElement(PaletteCell* cell)
                                     }
                               if (oelement) {
                                     if (e2) {
-                                          applyDrop(score, viewer, e2, oelement);
+                                          applyDrop(score, viewer, e2, oelement, modifiers);
                                           }
                                     else {
                                           QRectF r = m2->staffabbox(i);
                                           QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                                           pt += m2->system()->page()->pos();
-                                          applyDrop(score, viewer, m2, oelement, pt);
+                                          applyDrop(score, viewer, m2, oelement, modifiers, pt);
                                           }
                                     delete oelement;
                                     }
                               }
                         // apply new clef/keysig/timesig
                         if (e1) {
-                              applyDrop(score, viewer, e1, element);
+                              applyDrop(score, viewer, e1, element, modifiers);
                               }
                         else {
                               QRectF r = m1->staffabbox(i);
                               QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                               pt += m1->system()->page()->pos();
-                              applyDrop(score, viewer, m1, element, pt);
+                              applyDrop(score, viewer, m1, element, modifiers, pt);
                               }
                         }
                   }
@@ -668,12 +668,12 @@ void Palette::applyPaletteElement(PaletteCell* cell)
                               if (e->isChord()) {
                                     Chord* chord = toChord(e);
                                     for (Note* n : chord->notes())
-                                          applyDrop(score, viewer, n, element);
+                                          applyDrop(score, viewer, n, element, modifiers);
                                     }
                               else {
                                     // do not apply articulation to barline in a range selection
                                     if (!e->isBarLine() || !element->isArticulation())
-                                          applyDrop(score, viewer, e, element);
+                                          applyDrop(score, viewer, e, element, modifiers);
                                     }
                               }
                         }
@@ -746,7 +746,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       if (sel.isNone())
             return;
 
-      applyPaletteElement(cellAt(i));
+      applyPaletteElement(cellAt(i), ev->modifiers());
       }
 
 //---------------------------------------------------------
