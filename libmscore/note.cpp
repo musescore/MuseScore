@@ -1677,8 +1677,8 @@ Element* Note::drop(EditData& data)
                   return 0;
 
             case ElementType::SLUR:
-                  delete e;
                   data.view->cmdAddSlur(chord(), nullptr);
+                  delete e;
                   return 0;
 
             case ElementType::HAIRPIN:
