@@ -1624,35 +1624,44 @@ void Score::respace(std::vector<ChordRest*>* elements)
       }
 
 //---------------------------------------------------------
-//   getEmptyPage
+//   getNextPage
 //---------------------------------------------------------
 
-void LayoutContext::getEmptyPage()
+void LayoutContext::getNextPage()
       {
-      if (curPage >= score->npages()) {
-            Page* newPage = new Page(score);
-            newPage->setNo(score->pages().size());
-            score->pages().push_back(newPage);
+      if (!page || curPage >= score->npages()) {
+            page = new Page(score);
+            score->pages().push_back(page);
+            prevSystem = nullptr;
             }
       else {
             page = score->pages()[curPage];
+            QList<System*>& systems = page->systems();
+            const int i = systems.indexOf(curSystem);
+            if (i <= -1) // system is not on the current page
+                  systems.clear();
+            else {
+                  // system is on the current page,
+                  // erase only the current and the following systems
+                  systems.erase(systems.begin() + i, systems.end());
+                  }
+            prevSystem = systems.empty() ? nullptr : systems.back();
             }
+      page->bbox().setRect(0.0, 0.0, score->loWidth(), score->loHeight());
       page->setNo(curPage);
-      page->layout();
-      qreal x, y;
-      if (MScore::verticalOrientation()) {
-            x = 0.0;
-            y = (curPage == 0) ? 0.0 : score->pages()[curPage - 1]->pos().y() + page->height() + MScore::verticalPageGap;
-            }
-      else {
-            y = 0.0;
-            x = (curPage == 0) ? 0.0 : score->pages()[curPage - 1]->pos().x()
-               + page->width()
-               + (((curPage+score->pageNumberOffset()) & 1) ? MScore::horizontalPageGapOdd : MScore::horizontalPageGapEven);
+      qreal x = 0.0;
+      qreal y = 0.0;
+      if (curPage) {
+            Page* prevPage = score->pages()[curPage - 1];
+            if (MScore::verticalOrientation())
+                  y = prevPage->pos().y() + page->height() + MScore::verticalPageGap;
+            else {
+                  qreal gap = (curPage + score->pageNumberOffset()) & 1 ? MScore::horizontalPageGapOdd : MScore::horizontalPageGapEven;
+                  x = prevPage->pos().x() + page->width() + gap;
+                  }
             }
       ++curPage;
       page->setPos(x, y);
-      page->systems().clear();
       }
 
 //---------------------------------------------------------
@@ -3836,38 +3845,6 @@ void Score::doLayoutRange(int stick, int etick)
       getNextMeasure(lc);
       lc.curSystem = collectSystem(lc);
 
-      if (!lc.page) {
-            lc.page = new Page(this);
-            pages().push_back(lc.page);
-            lc.prevSystem  = 0;
-            }
-      else {
-            QList<System*>& systems = lc.page->systems();
-            int i = systems.indexOf(lc.curSystem);
-//            qDebug("clear page systems from %d", i);
-            if (i <= -1)
-                  systems.clear();
-            else {
-                  systems.erase(systems.begin() + i, systems.end());
-                  lc.prevSystem  = systems.empty() ? 0 : systems.back();
-                  }
-            }
-      lc.page->bbox().setRect(0.0, 0.0, loWidth(), loHeight());
-      lc.page->setNo(lc.curPage);
-      qreal x = 0.0;
-      qreal y = 0.0;
-      if (lc.curPage) {
-            Page* prevPage = pages()[lc.curPage-1];
-            if (MScore::verticalOrientation())
-                  y = prevPage->pos().y() + lc.page->height() + MScore::verticalPageGap;
-            else {
-                  qreal gap = (lc.curPage + pageNumberOffset()) & 1 ? MScore::horizontalPageGapOdd : MScore::horizontalPageGapEven;
-                  x = prevPage->pos().x() + lc.page->width() + gap;
-                  }
-            }
-      ++lc.curPage;
-      lc.page->setPos(x, y);
-
       lc.layout();
 
       for (MuseScoreView* v : viewer)
@@ -3894,37 +3871,10 @@ void Score::doLayoutRange(int stick, int etick)
 
 void LayoutContext::layout()
       {
-      for (;;) {
+      do {
+            getNextPage();
             collectPage();
-            System* s      = page->system(0);
-            MeasureBase* m = s->measures().back();
-            if (!curSystem || (rangeDone && m->tick() > endTick))
-                  break;
-            Page* prevPage = page;
-            if (curPage >= score->npages()) {
-                  page = new Page(score);
-                  score->pages().push_back(page);
-                  }
-            else {
-                  page = score->pages()[curPage];
-                  page->systems().clear();
-                  }
-            page->bbox().setRect(0.0, 0.0, score->loWidth(), score->loHeight());
-            page->setNo(curPage);
-            qreal x = 0.0;
-            qreal y = 0.0;
-            if (curPage) {
-                  if (MScore::verticalOrientation())
-                        y = prevPage->pos().y() + page->height() + MScore::verticalPageGap;
-                  else {
-                        qreal gap = (curPage + score->pageNumberOffset()) & 1 ? MScore::horizontalPageGapOdd : MScore::horizontalPageGapEven;
-                        x = prevPage->pos().x() + page->width() + gap;
-                        }
-                  }
-            ++curPage;
-            page->setPos(x, y);
-            prevSystem  = 0;
-            }
+            } while (curSystem && !(rangeDone && page->system(0)->measures().back()->tick() > endTick)); // FIXME: perhaps the first measure was meant? Or last system?
       if (!curSystem) {
             while (score->npages() > curPage)        // Remove not needed pages. TODO: make undoable:
                   score->pages().takeLast();
