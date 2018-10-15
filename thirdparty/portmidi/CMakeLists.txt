@@ -52,6 +52,14 @@ if (MSVC)
   set_target_properties( portmidi PROPERTIES
     COMPILE_FLAGS "/wd4028 /wd4057 /wd4100 /wd4133 /wd4189 /wd4206 /wd4244 /wd4267 /wd4311 /wd4312 /wd4456 /wd4706"
   )
+else (MSVC)
+  if (MINGW)
+    if (BUILD_64)
+      set_target_properties( portmidi PROPERTIES
+        COMPILE_FLAGS "-Wno-int-to-pointer-cast -Wno-pointer-to-int-cast -Wno-incompatible-pointer-types"
+      )
+    endif (BUILD_64)
+  endif (MINGW)
 endif (MSVC)
 
 include_directories(
