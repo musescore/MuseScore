@@ -3755,8 +3755,6 @@ void Score::doLayoutRange(int stick, int etick)
 //      qDebug("start <%s> tick %d, system %p", m->name(), m->tick(), m->system());
       lc.score        = m->score();
 
-      std::vector<std::pair<int, BracketItem*>> selectedBrackets;
-
       if (!layoutAll && m->system()) {
             System* system  = m->system();
             int systemIndex = _systems.indexOf(system);
@@ -3796,8 +3794,6 @@ void Score::doLayoutRange(int stick, int etick)
             for (System* s : _systems) {
                   for (Bracket* b : s->brackets()) {
                         if (b->selected()) {
-                              auto bracket = make_pair(_systems.indexOf(s), b->bracketItem());
-                              selectedBrackets.push_back(bracket);
                               _selection.elements().removeOne(b);
                               _selection.updateState();
                               setSelectionChanged(true);
@@ -3872,20 +3868,6 @@ void Score::doLayoutRange(int stick, int etick)
 
       for (MuseScoreView* v : viewer)
             v->layoutChanged();
-
-      for (auto bracket : selectedBrackets) {
-            int systemIndex = bracket.first;
-            BracketItem* bi = bracket.second;
-            if (systemIndex < _systems.size()) {
-                  System* system = _systems[systemIndex];
-                  for (Bracket* b : system->brackets()) {
-                        if (b->bracketItem() == bi) {
-                              selectAdd(b);
-                              break;
-                              }
-                        }
-                  }
-            }
       }
 
 //---------------------------------------------------------
