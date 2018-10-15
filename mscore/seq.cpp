@@ -511,9 +511,9 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
       int type = event.type();
       if (type == ME_NOTEON) {
             bool mute = false;
-            const Note* note = event.note();
 
-            if (note) {
+            if (!event.notes.empty()) {
+                  const Note* note  = event.notes[0];
                   Staff* staff      = note->staff();
                   Instrument* instr = staff->part()->instrument(note->chord()->tick());
                   const Channel* a = instr->channel(note->subchannel());
@@ -1486,20 +1486,18 @@ void Seq::heartBeatTimeout()
                         break;
             const NPlayEvent& n = guiPos->second;
             if (n.type() == ME_NOTEON) {
-                  const Note* note1 = n.note();
-                  if (n.velo()) {
+                  for (auto it = n.notes.cbegin(); it != n.notes.cend(); ++it) {
+                        const Note* note1 = *it;
                         while (note1) {
-                              note1->setMark(true);
-                              markedNotes.append(note1);
+                              if (n.velo()) {
+                                    note1->setMark(true);
+                                    markedNotes.append(note1);
+                                    }
+                              else {
+                                    note1->setMark(false);
+                                    markedNotes.removeOne(note1);
+                                    }
                               r |= note1->canvasBoundingRect();
-                              note1 = note1->tieFor() ? note1->tieFor()->endNote() : 0;
-                              }
-                        }
-                  else {
-                        while (note1) {
-                              note1->setMark(false);
-                              r |= note1->canvasBoundingRect();
-                              markedNotes.removeOne(note1);
                               note1 = note1->tieFor() ? note1->tieFor()->endNote() : 0;
                               }
                         }

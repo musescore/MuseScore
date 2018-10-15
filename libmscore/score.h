@@ -443,10 +443,6 @@ class Score : public QObject, public ScoreElement {
 
       int _pos[3];                    ///< 0 - current, 1 - left loop, 2 - right loop
 
-      bool _foundPlayPosAfterRepeats; ///< Temporary used during playback rendering
-                                      ///< indicating if playPos after expanded repeats
-                                      ///< has been calculated.
-
       int _mscVersion { MSCVERSION };   ///< version of current loading *.msc file
 
       QMap<QString, QString> _metaTags;
@@ -523,6 +519,11 @@ class Score : public QObject, public ScoreElement {
       void collectLinearSystem(LayoutContext& lc);
       void resetTempo();
       void resetTempoRange(int tick1, int tick2);
+
+      void renderStaff(EventMap* events, Staff*);
+      void renderSpanners(EventMap* events);
+      void renderMetronome(EventMap* events, Measure* m, int tickOffset);
+      void updateVelo();
 
    protected:
       int _fileDivision; ///< division of current loading *.msc file
@@ -875,10 +876,7 @@ class Score : public QObject, public ScoreElement {
       void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events);
-      void renderStaff(EventMap* events, Staff*);
-      void renderSpanners(EventMap* events, int staffIdx);
-      void renderMetronome(EventMap* events, Measure* m, int tickOffset);
-      void updateVelo();
+      void renderMidi(EventMap* events, bool metronome, bool expandRepeats);
 
       BeatType tick2beatType(int tick);
 
