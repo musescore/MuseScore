@@ -1882,6 +1882,13 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
+         "toggle-feedback",
+         QT_TRANSLATE_NOOP("action","Feedback"),
+         QT_TRANSLATE_NOOP("action","Toggle 'Feedback' toolbar"),
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
          "toggle-statusbar",
          QT_TRANSLATE_NOOP("action","Status Bar"),
          QT_TRANSLATE_NOOP("action","Toggle 'Status Bar'")
@@ -3526,6 +3533,26 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Toggle 'Insert Mode'"),
          0,
          Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "report-bug",
+         QT_TRANSLATE_NOOP("action", "Report a Bug"),
+         QT_TRANSLATE_NOOP("action", "Report a bug"),
+         0,
+         Icons::bug_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "leave-feedback",
+         QT_TRANSLATE_NOOP("action", "Leave Feedback"),
+         QT_TRANSLATE_NOOP("action", "Leave feedback"),
+         0,
+         Icons::mail_ICON,
          Qt::ApplicationShortcut
          },
 #ifndef NDEBUG
