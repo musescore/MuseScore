@@ -618,7 +618,7 @@ else (MINGW)
 
    if ( NOT MSVC )
 ## install qwebengine core
-      if (NOT APPLE AND USE_WEBENGINE)
+      if (NOT APPLE AND NOT LN_EXECUTABLE AND USE_WEBENGINE)
          install(FILES
             ${QT_INSTALL_PREFIX}/libexec/QtWebEngineProcess
             DESTINATION bin
@@ -631,7 +631,7 @@ else (MINGW)
             ${QT_INSTALL_PREFIX}/translations/qtwebengine_locales
             DESTINATION lib/qt5/translations
             )
-      endif(NOT APPLE AND USE_WEBENGINE)
+      endif(NOT APPLE AND NOT LN_EXECUTABLE AND USE_WEBENGINE)
 
       target_link_libraries(mscore
          ${ALSA_LIB}
