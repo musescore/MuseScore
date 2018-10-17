@@ -564,10 +564,10 @@ Palette* MuseScore::newFingeringPalette()
             }
 
       static const std::vector<SymId> lute {
-         SymId::stringsThumbPosition,
-         SymId::luteFingeringRHThumb, SymId::luteFingeringRHFirst,
-         SymId::luteFingeringRHSecond, SymId::luteFingeringRHThird
-         };
+            SymId::stringsThumbPosition,
+            SymId::luteFingeringRHThumb, SymId::luteFingeringRHFirst,
+            SymId::luteFingeringRHSecond, SymId::luteFingeringRHThird
+            };
       // include additional symbol-based fingerings (temporarily?) implemented as articulations
       for (auto i : lute) {
             Articulation* s = new Articulation(i, gscore);
@@ -1426,12 +1426,12 @@ Palette* MuseScore::newTextPalette()
       rhm->setXmlText("B1");
       sp->append(rhm, tr("Rehearsal mark"));
 
-      st = new StaffText(gscore, Tid::TEMPO);
-      st->setXmlText(tr("Swing"));
-      st->setSwing(true);
-      sp->append(st, tr("Swing"));
+      SystemText* stxt = new SystemText(gscore, Tid::TEMPO);
+      stxt->setXmlText(tr("Swing"));
+      stxt->setSwing(true);
+      sp->append(stxt, tr("Swing"));
 
-      SystemText* stxt = new SystemText(gscore);
+      stxt = new SystemText(gscore);
       stxt->setXmlText(tr("System Text"));
       sp->append(stxt, tr("System text"));
 
