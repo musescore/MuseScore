@@ -639,7 +639,7 @@ bool Element::readProperties(XmlReader& e)
             if (val >= 0)
                   e.initTick(score()->fileDivision(val));
             }
-      else if (tag == "pos") {
+      else if (tag == "pos") {            // obsolete
             Pid pid = Pid::OFFSET;
             QPointF p = Ms::getProperty(pid, e).toPointF() * score()->spatium();
             setProperty(pid, p);
@@ -657,8 +657,8 @@ bool Element::readProperties(XmlReader& e)
                         }
                   }
             }
-      else if (tag == "placement")
-            setPlacement(Placement(Ms::getProperty(Pid::PLACEMENT, e).toInt()));
+      else if (readProperty(tag, e, Pid::PLACEMENT))
+            ;
       else if (tag == "z")
             setZ(e.readInt());
       else if (ScoreElement::readProperty(tag, e, Pid::OFFSET))
