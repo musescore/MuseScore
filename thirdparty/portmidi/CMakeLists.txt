@@ -50,7 +50,7 @@ endif (APPLE)
 
 if (MSVC)
   set_target_properties( portmidi PROPERTIES
-    COMPILE_FLAGS "/wd4028 /wd4267 /wd4311 /wd4312"
+    COMPILE_FLAGS "/wd4028 /wd4057 /wd4100 /wd4133 /wd4189 /wd4206 /wd4244 /wd4267 /wd4311 /wd4312 /wd4456 /wd4706"
   )
 endif (MSVC)
 
