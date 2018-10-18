@@ -205,7 +205,7 @@
               <linkedMain/>
               <Fingering>
                 <linkedMain/>
-                <pos x="1.05809" y="-4.67501"/>
+                <offset x="1.05809" y="-4.67501"/>
                 <text>2</text>
                 </Fingering>
               <pitch>67</pitch>
@@ -233,7 +233,7 @@
             <root>15</root>
             <name>7</name>
             <linkedMain/>
-            <pos x="0" y="-3.22581"/>
+            <offset x="0" y="-3.22581"/>
             </Harmony>
           <Chord>
             <linkedMain/>
@@ -1252,7 +1252,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <pos x="1.05809" y="-4.67501"/>
+                  <offset x="1.05809" y="-4.67501"/>
                   <text>2</text>
                   </Fingering>
                 <pitch>67</pitch>

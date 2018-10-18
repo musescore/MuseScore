@@ -2967,7 +2967,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
             // TBD: what happens when an unknown pedal type is found ?
             Symbol* s = new Symbol(_score);
             s->setAlign(Align::LEFT | Align::BASELINE);
-            s->setOffsetType(OffsetType::SPATIUM);
+            //s->setOffsetType(OffsetType::SPATIUM);
             if (type == "start")
                   s->setSym(SymId::keyboardPedalPed);
             else if (type == "stop")
@@ -4046,7 +4046,7 @@ static void handleDisplayStep(ChordRest* cr, int step, int octave, int tick, qre
             //qDebug(" clef=%hhd po=%d step=%d", clef, po, step);
             int dp = 7 * (octave + 2) + step;
             //qDebug(" dp=%d po-dp=%d", dp, po-dp);
-            cr->setUserYoffset((po - dp + 3) * spatium / 2);
+            cr->ryoffset() = (po - dp + 3) * spatium / 2;
             }
       }
 

@@ -477,6 +477,19 @@
           </property>
          </widget>
         </item>
+        <item row="2" column="2">
+         <widget class="QCheckBox" name="spatiumSize">
+          <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="accessibleDescription">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string notr="true">spatiumSize</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>

@@ -482,7 +482,7 @@ void Trill::undoSetTrillType(Type val)
 
 void Trill::setYoff(qreal val)
       {
-      rUserYoffset() += val * spatium() - score()->styleP(Sid::trillPosAbove);
+      ryoffset() += val * spatium() - score()->styleP(Sid::trillPosAbove);
       }
 
 //---------------------------------------------------------

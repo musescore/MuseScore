@@ -9,8 +9,8 @@
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <lastSystemFillLimit>0</lastSystemFillLimit>
-      <pedalPosBelow>0</pedalPosBelow>
-      <trillPosAbove>0</trillPosAbove>
+      <pedalPosBelow x="0" y="0"/>
+      <trillPosAbove x="0" y="0"/>
       <minMMRestWidth>0</minMMRestWidth>
       <Spatium>1.76389</Spatium>
       </Style>
@@ -111,7 +111,6 @@
               </Note>
             </Chord>
           <Tuplet>
-            <pos x="0.659334" y="-3.16481"/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -128,7 +127,6 @@
               </Note>
             </Chord>
           <Tuplet>
-            <pos x="-1.05493" y="-1.71427"/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>16th</baseNote>
@@ -192,7 +190,6 @@
       <Measure>
         <voice>
           <Tuplet>
-            <pos x="0.659334" y="-3.16481"/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -202,7 +199,6 @@
               </Number>
             </Tuplet>
           <Tuplet>
-            <pos x="-1.05493" y="-1.71427"/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>16th</baseNote>

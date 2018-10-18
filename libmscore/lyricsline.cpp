@@ -372,7 +372,7 @@ LyricsLineSegment::LyricsLineSegment(Score* s)
 
 void LyricsLineSegment::layout()
       {
-      rUserYoffset() = 0.0;
+      ryoffset() = 0.0;
 
       bool        endOfSystem       = false;
       bool        isEndMelisma      = lyricsLine()->lyrics()->ticks() > 0;

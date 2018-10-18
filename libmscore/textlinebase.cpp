@@ -155,7 +155,7 @@ void TextLineBaseSegment::layout()
       qreal _spatium = spatium();
 
       if (!tl->diagonal())
-            _userOff2.setY(0);
+            _offset2.setY(0);
 
       switch (spannerSegmentType()) {
             case SpannerSegmentType::SINGLE:
@@ -163,7 +163,7 @@ void TextLineBaseSegment::layout()
                   _text->setXmlText(tl->beginText());
                   _text->setFamily(tl->beginFontFamily());
                   _text->setSize(tl->beginFontSize());
-                  _text->setOffset(tl->beginTextOffset());
+//TODO-offset                  _text->setOffset(tl->beginTextOffset());
                   _text->setAlign(tl->beginTextAlign());
                   _text->setBold(tl->beginFontBold());
                   _text->setItalic(tl->beginFontItalic());
@@ -174,7 +174,7 @@ void TextLineBaseSegment::layout()
                   _text->setXmlText(tl->continueText());
                   _text->setFamily(tl->continueFontFamily());
                   _text->setSize(tl->continueFontSize());
-                  _text->setOffset(tl->continueTextOffset());
+//TODO-offset                  _text->setOffset(tl->continueTextOffset());
                   _text->setAlign(tl->continueTextAlign());
                   _text->setBold(tl->continueFontBold());
                   _text->setItalic(tl->continueFontItalic());
@@ -188,7 +188,7 @@ void TextLineBaseSegment::layout()
             _endText->setXmlText(tl->endText());
             _endText->setFamily(tl->endFontFamily());
             _endText->setSize(tl->endFontSize());
-            _endText->setOffset(tl->endTextOffset());
+//TODO-offset            _endText->setOffset(tl->endTextOffset());
             _endText->setAlign(tl->endTextAlign());
             _endText->setBold(tl->endFontBold());
             _endText->setItalic(tl->endFontItalic());

@@ -3321,7 +3321,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link
 //    return true if an property was actually changed
 //---------------------------------------------------------
 
-bool Score::undoPropertyChanged(Element* e, Pid t, const QVariant& st)
+bool Score::undoPropertyChanged(Element* e, Pid t, const QVariant& st, PropertyFlags ps)
       {
       bool changed = false;
 
@@ -3329,7 +3329,7 @@ bool Score::undoPropertyChanged(Element* e, Pid t, const QVariant& st)
             for (ScoreElement* ee : *e->links()) {
                   if (ee == e) {
                         if (ee->getProperty(t) != st) {
-                              undoStack()->push1(new ChangeProperty(ee, t, st));
+                              undoStack()->push1(new ChangeProperty(ee, t, st, ps));
                               changed = true;
                               }
                         }
@@ -3337,25 +3337,27 @@ bool Score::undoPropertyChanged(Element* e, Pid t, const QVariant& st)
                         // property in linked element has not changed yet
                         // push() calls redo() to change it
                         if (ee->getProperty(t) != e->getProperty(t)) {
-                              undoStack()->push(new ChangeProperty(ee, t, e->getProperty(t)), 0);
+                              undoStack()->push(new ChangeProperty(ee, t, e->getProperty(t), ps), 0);
                               changed = true;
                               }
                         }
                   }
             }
       else {
-            if (e->getProperty(t) != st) {
-                  undoStack()->push1(new ChangeProperty(e, t, st));
+            PropertyFlags po = e->propertyFlags(t);
+            if ((e->getProperty(t) != st) || (ps != po)) {
+                  e->setPropertyFlags(t, ps);
+                  undoStack()->push1(new ChangeProperty(e, t, st, po));
                   changed = true;
                   }
             }
       return changed;
       }
 
-void Score::undoPropertyChanged(ScoreElement* e, Pid t, const QVariant& st)
+void Score::undoPropertyChanged(ScoreElement* e, Pid t, const QVariant& st, PropertyFlags ps)
       {
       if (e->getProperty(t) != st)
-            undoStack()->push1(new ChangeProperty(e, t, st));
+            undoStack()->push1(new ChangeProperty(e, t, st, ps));
       }
 
 //---------------------------------------------------------

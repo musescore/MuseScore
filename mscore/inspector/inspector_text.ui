@@ -63,7 +63,7 @@
    </item>
    <item>
     <widget class="QWidget" name="panel" native="true">
-     <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0">
+     <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
       <property name="leftMargin">
        <number>3</number>
       </property>
@@ -82,31 +82,14 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="19" column="0" colspan="4">
+      <item row="18" column="0" colspan="3">
        <widget class="QPushButton" name="resetToStyle">
         <property name="text">
          <string>Reset Text to Style</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="3">
-       <widget class="QToolButton" name="resetFontSize">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font size' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="3">
+      <item row="6" column="2">
        <widget class="QToolButton" name="resetAlign">
         <property name="toolTip">
          <string>Reset to default</string>
@@ -123,7 +106,24 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
+      <item row="1" column="2">
+       <widget class="QToolButton" name="resetFontSize">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Font size' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
        <widget class="QToolButton" name="resetFontFace">
         <property name="toolTip">
          <string>Reset to default</string>
@@ -140,7 +140,7 @@
         </property>
        </widget>
       </item>
-      <item row="17" column="0" colspan="4">
+      <item row="16" column="0" colspan="3">
        <widget class="QWidget" name="frameWidget" native="true">
         <layout class="QGridLayout" name="gridLayout_2">
          <property name="leftMargin">
@@ -376,14 +376,14 @@
         </layout>
        </widget>
       </item>
-      <item row="6" column="0" colspan="3">
+      <item row="6" column="0" colspan="2">
        <widget class="Ms::AlignSelect" name="align" native="true">
         <property name="toolTip">
          <string>Text Alignment</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" colspan="3">
+      <item row="1" column="0" colspan="2">
        <widget class="QSpinBox" name="fontSize">
         <property name="toolTip">
          <string>Font Size</string>
@@ -396,7 +396,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0" colspan="3">
+      <item row="0" column="0" colspan="2">
        <widget class="QFontComboBox" name="fontFace">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
@@ -412,7 +412,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0" colspan="4">
+      <item row="2" column="0" colspan="3">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QPushButton" name="bold">
@@ -550,7 +550,7 @@
         </item>
        </layout>
       </item>
-      <item row="9" column="0" colspan="4">
+      <item row="8" column="0" colspan="3">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QLabel" name="label">
@@ -588,48 +588,12 @@
         </item>
        </layout>
       </item>
-      <item row="7" column="3">
-       <widget class="QToolButton" name="resetTextOffset">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Alignment' values</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="label_15">
-        <property name="text">
-         <string>Offset:</string>
-        </property>
-        <property name="buddy">
-         <cstring>textOffset</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="1" colspan="2">
-       <widget class="Ms::OffsetSelect" name="textOffset" native="true"/>
-      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>Ms::OffsetSelect</class>
-   <extends>QWidget</extends>
-   <header>inspector/offsetSelect.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>Ms::AlignSelect</class>
    <extends>QWidget</extends>

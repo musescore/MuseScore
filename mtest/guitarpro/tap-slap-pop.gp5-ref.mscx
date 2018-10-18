@@ -81,7 +81,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>T</text>
                 </Text>
               <pitch>60</pitch>
@@ -97,7 +96,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>S</text>
                 </Text>
               <pitch>60</pitch>
@@ -113,7 +111,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>P</text>
                 </Text>
               <pitch>60</pitch>
@@ -237,7 +234,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>T</text>
                   </Text>
                 <pitch>60</pitch>
@@ -256,7 +252,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>60</pitch>
@@ -275,7 +270,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>60</pitch>
@@ -314,7 +308,6 @@
                   <linked>
                     <indexDiff>4</indexDiff>
                     </linked>
-                  <align>center,center</align>
                   <text>T</text>
                   </Text>
                 <pitch>60</pitch>
@@ -333,7 +326,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>60</pitch>
@@ -352,7 +344,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>60</pitch>

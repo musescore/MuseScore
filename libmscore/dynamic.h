@@ -74,6 +74,7 @@ class Dynamic final : public TextBase {
       Range _dynRange;   // STAFF, PART, SYSTEM
 
       virtual QRectF drag(EditData&) override;
+      virtual Sid getPropertyStyle(Pid) const override;
 
    public:
       Dynamic(Score*);
@@ -112,6 +113,8 @@ class Dynamic final : public TextBase {
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;
       void doAutoplace();
+
+      using ScoreElement::undoChangeProperty;
       };
 
 }     // namespace Ms

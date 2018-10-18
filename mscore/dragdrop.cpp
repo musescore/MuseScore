@@ -524,7 +524,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                                     editData.element->setTrack(staffIdx * VOICES);
                                     editData.element->setParent(seg);
                                     if (applyUserOffset)
-                                          editData.element->setUserOff(offset);
+                                          editData.element->setOffset(offset);
                                     score()->undoAddElement(editData.element);
                                     }
                               else {

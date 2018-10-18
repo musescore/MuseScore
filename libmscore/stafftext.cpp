@@ -43,7 +43,7 @@ StaffText::StaffText(Score* s, Tid tid)
 
 void StaffText::layout()
       {
-      layout2(Sid::staffTextPosAbove, Sid::staffTextPosBelow);
+      TextBase::layout();
       autoplaceSegmentElement(styleP(Sid::staffTextMinDistance));
       }
 
@@ -57,8 +57,19 @@ QVariant StaffText::propertyDefault(Pid id) const
             case Pid::SUB_STYLE:
                   return int(Tid::STAFF);
             default:
-                  return TextBase::propertyDefault(id);
+                  return StaffTextBase::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid StaffText::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::staffTextPosAbove : Sid::staffTextPosBelow;
+      return TextBase::getPropertyStyle(pid);
       }
 
 }

@@ -124,7 +124,7 @@ FretDiagram* FretDiagram::fromString(Score* score, const QString &s)
                   }
             }
       if (offset > 0) {
-            fd->setOffset(offset);
+            fd->setFretOffset(offset);
             for (int i = 0; i < fd->strings(); i++)
                   if (fd->dot(i))
                         fd->setDot(i, fd->dot(i) - offset);
@@ -199,15 +199,6 @@ QLineF FretDiagram::dragAnchor() const
             }
       return QLineF(parent()->pagePos(), abbox().topLeft());
 #endif
-      }
-
-//---------------------------------------------------------
-//   setOffset
-//---------------------------------------------------------
-
-void FretDiagram::setOffset(int offset)
-      {
-      _fretOffset = offset;
       }
 
 //---------------------------------------------------------
@@ -669,7 +660,7 @@ bool FretDiagram::setProperty(Pid propertyId, const QVariant& v)
                   setBarre(v.toInt());
                   break;
             case Pid::FRET_OFFSET:
-                  setOffset(v.toInt());
+                  setFretOffset(v.toInt());
                   break;
             case Pid::FRET_NUM_POS:
                   _numPos = v.toInt();

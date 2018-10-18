@@ -298,7 +298,7 @@ bool Ottava::readProperties(XmlReader& e)
 
 void Ottava::setYoff(qreal val)
       {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow);
+      ryoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow);
       }
 
 //---------------------------------------------------------

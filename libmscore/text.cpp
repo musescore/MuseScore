@@ -21,7 +21,6 @@ namespace Ms {
 
 static const ElementStyle defaultStyle {
       { Sid::defaultSystemFlag, Pid::SYSTEM_FLAG },
-//      { Sid::defaultText,       Pid::TEXT        },
       };
 
 //---------------------------------------------------------

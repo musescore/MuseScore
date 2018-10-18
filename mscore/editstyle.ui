@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1099</width>
-    <height>876</height>
+    <width>1532</width>
+    <height>877</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -225,7 +225,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>33</number>
+       <number>20</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -5948,25 +5948,6 @@
              <property name="text">
               <string>Position above:</string>
              </property>
-             <property name="buddy">
-              <cstring>hairpinPosAbove</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="hairpinPosAbove">
-             <property name="suffix">
-              <string extracomment="spatium unit">sp</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>-5.000000000000000</double>
-             </property>
             </widget>
            </item>
            <item row="1" column="2">
@@ -6166,25 +6147,6 @@
              <property name="text">
               <string>Position below:</string>
              </property>
-             <property name="buddy">
-              <cstring>hairpinPosBelow</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="hairpinPosBelow">
-             <property name="suffix">
-              <string extracomment="spatium unit">sp</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>-5.000000000000000</double>
-             </property>
             </widget>
            </item>
            <item row="2" column="2">
@@ -6209,6 +6171,12 @@
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="Ms::OffsetSelect" name="hairpinPosAbove" native="true"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="Ms::OffsetSelect" name="hairpinPosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -6238,22 +6206,6 @@
               </size>
              </property>
             </spacer>
-           </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="voltaY">
-             <property name="suffix">
-              <string extracomment="spatium unit">sp</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>-5.000000000000000</double>
-             </property>
-            </widget>
            </item>
            <item row="4" column="0">
             <spacer name="verticalSpacer_13">
@@ -6344,15 +6296,12 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_40">
              <property name="text">
-              <string>Default vertical position:</string>
-             </property>
-             <property name="buddy">
-              <cstring>voltaY</cstring>
+              <string>Default position:</string>
              </property>
             </widget>
            </item>
            <item row="0" column="2">
-            <widget class="QToolButton" name="resetVoltaY">
+            <widget class="QToolButton" name="resetVoltaPosAbove">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -6443,6 +6392,9 @@
              </property>
             </widget>
            </item>
+           <item row="0" column="1">
+            <widget class="Ms::OffsetSelect" name="voltaPosAbove" native="true"/>
+           </item>
           </layout>
          </widget>
         </item>
@@ -6495,19 +6447,6 @@
              </property>
              <property name="buddy">
               <cstring>ottavaLineWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="ottavaPosAbove">
-             <property name="suffix">
-              <string extracomment="spatium unit">sp</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
              </property>
             </widget>
            </item>
@@ -6568,9 +6507,6 @@
             <widget class="QLabel" name="label_81">
              <property name="text">
               <string>Position Above:</string>
-             </property>
-             <property name="buddy">
-              <cstring>ottavaPosAbove</cstring>
              </property>
             </widget>
            </item>
@@ -6714,25 +6650,6 @@
              <property name="text">
               <string>Position Below:</string>
              </property>
-             <property name="buddy">
-              <cstring>hairpinPosAbove</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="ottavaPosBelow">
-             <property name="suffix">
-              <string extracomment="spatium unit">sp</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>-5.000000000000000</double>
-             </property>
             </widget>
            </item>
            <item row="1" column="2">
@@ -6798,6 +6715,12 @@
              </property>
             </widget>
            </item>
+           <item row="0" column="1">
+            <widget class="Ms::OffsetSelect" name="ottavaPosAbove" native="true"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="Ms::OffsetSelect" name="ottavaPosBelow" native="true"/>
+           </item>
           </layout>
          </widget>
         </item>
@@ -6811,13 +6734,39 @@
            <string>Pedal Line</string>
           </property>
           <layout class="QGridLayout" name="gridLayout11">
+           <item row="4" column="1">
+            <widget class="QComboBox" name="pedalLineStyle">
+             <item>
+              <property name="text">
+               <string>Continuous</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Dashed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Dotted</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Dash-dotted</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Dash-dot-dotted</string>
+              </property>
+             </item>
+            </widget>
+           </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_96">
              <property name="text">
               <string>Position above:</string>
-             </property>
-             <property name="buddy">
-              <cstring>pedalLinePosAbove</cstring>
              </property>
             </widget>
            </item>
@@ -6834,7 +6783,7 @@
              </property>
             </spacer>
            </item>
-           <item row="5" column="0">
+           <item row="4" column="0">
             <widget class="QLabel" name="label_106">
              <property name="text">
               <string>Line style:</string>
@@ -6844,7 +6793,7 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
+           <item row="3" column="0">
             <widget class="QLabel" name="label_107">
              <property name="text">
               <string>Line thickness:</string>
@@ -6854,7 +6803,7 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="0">
+           <item row="5" column="0">
             <spacer name="verticalSpacer_19">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -6867,7 +6816,7 @@
              </property>
             </spacer>
            </item>
-           <item row="5" column="3">
+           <item row="4" column="3">
             <widget class="QToolButton" name="resetPedalLineStyle">
              <property name="toolTip">
               <string>Reset to default</string>
@@ -6901,7 +6850,7 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="3">
+           <item row="3" column="3">
             <widget class="QToolButton" name="resetPedalLineWidth">
              <property name="toolTip">
               <string>Reset to default</string>
@@ -6959,7 +6908,7 @@
              </item>
             </widget>
            </item>
-           <item row="4" column="1">
+           <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="pedalLineWidth">
              <property name="suffix">
               <string>sp</string>
@@ -6969,78 +6918,14 @@
              </property>
             </widget>
            </item>
-           <item row="5" column="1">
-            <widget class="QComboBox" name="pedalLineStyle">
-             <item>
-              <property name="text">
-               <string>Continuous</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Dashed</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Dotted</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Dash-dotted</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Dash-dot-dotted</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="1" column="1" rowspan="2">
-            <widget class="QDoubleSpinBox" name="pedalLinePosAbove">
-             <property name="suffix">
-              <string extracomment="spatium unit">sp</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>-5.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
+           <item row="2" column="0">
             <widget class="QLabel" name="label_139">
              <property name="text">
               <string>Position below:</string>
              </property>
-             <property name="buddy">
-              <cstring>pedalLinePosBelow</cstring>
-             </property>
             </widget>
            </item>
-           <item row="3" column="1">
-            <widget class="QDoubleSpinBox" name="pedalLinePosBelow">
-             <property name="suffix">
-              <string extracomment="spatium unit">sp</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>-5.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="3">
+           <item row="2" column="3">
             <widget class="QToolButton" name="resetPedalLinePosBelow">
              <property name="toolTip">
               <string>Reset to default</string>
@@ -7056,6 +6941,12 @@
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QWidget" name="pedalLinePosAbove" native="true"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="QWidget" name="pedalLinePosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -7087,25 +6978,6 @@
             <widget class="QLabel" name="label_97">
              <property name="text">
               <string>Position above:</string>
-             </property>
-             <property name="buddy">
-              <cstring>trillLinePosAbove</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="trillLinePosAbove">
-             <property name="suffix">
-              <string extracomment="spatium unit">sp</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>-5.000000000000000</double>
              </property>
             </widget>
            </item>
@@ -7185,25 +7057,6 @@
              <property name="text">
               <string>Position below:</string>
              </property>
-             <property name="buddy">
-              <cstring>trillLinePosBelow</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="trillLinePosBelow">
-             <property name="suffix">
-              <string extracomment="spatium unit">sp</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>-5.000000000000000</double>
-             </property>
             </widget>
            </item>
            <item row="2" column="2">
@@ -7222,6 +7075,12 @@
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="Ms::OffsetSelect" name="trillLinePosAbove" native="true"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="Ms::OffsetSelect" name="trillLinePosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -7253,25 +7112,6 @@
             <widget class="QLabel" name="label_971">
              <property name="text">
               <string>Position above:</string>
-             </property>
-             <property name="buddy">
-              <cstring>vibratoLinePosAbove</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="vibratoLinePosAbove">
-             <property name="suffix">
-              <string extracomment="spatium unit">sp</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>-5.000000000000000</double>
              </property>
             </widget>
            </item>
@@ -7351,25 +7191,6 @@
              <property name="text">
               <string>Position below:</string>
              </property>
-             <property name="buddy">
-              <cstring>vibratoLinePosBelow</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="vibratoLinePosBelow">
-             <property name="suffix">
-              <string extracomment="spatium unit">sp</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>-5.000000000000000</double>
-             </property>
             </widget>
            </item>
            <item row="2" column="2">
@@ -7388,6 +7209,12 @@
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QWidget" name="vibratoLinePosAbove" native="true"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="QWidget" name="vibratoLinePosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -7474,22 +7301,6 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="dynamicsPosAbove">
-             <property name="suffix">
-              <string extracomment="spatium unit">sp</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>-5.000000000000000</double>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="2">
             <widget class="QToolButton" name="resetDynamicsPosAbove">
              <property name="toolTip">
@@ -7562,22 +7373,6 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="dynamicsPosBelow">
-             <property name="suffix">
-              <string extracomment="spatium unit">sp</string>
-             </property>
-             <property name="minimum">
-              <double>-1000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>-5.000000000000000</double>
-             </property>
-            </widget>
-           </item>
            <item row="2" column="2">
             <widget class="QToolButton" name="resetDynamicsPosBelow">
              <property name="toolTip">
@@ -7594,6 +7389,12 @@
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="Ms::OffsetSelect" name="dynamicsPosAbove" native="true"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="Ms::OffsetSelect" name="dynamicsPosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -7636,22 +7437,6 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QDoubleSpinBox" name="fermataPosAbove">
-               <property name="suffix">
-                <string extracomment="spatium unit">sp</string>
-               </property>
-               <property name="minimum">
-                <double>-1000.000000000000000</double>
-               </property>
-               <property name="maximum">
-                <double>0.000000000000000</double>
-               </property>
-               <property name="value">
-                <double>-1.000000000000000</double>
-               </property>
-              </widget>
-             </item>
              <item row="0" column="2">
               <widget class="QToolButton" name="resetFermataPosAbove">
                <property name="toolTip">
@@ -7673,22 +7458,6 @@
               <widget class="QLabel" name="label_167">
                <property name="text">
                 <string>Position Below:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QDoubleSpinBox" name="fermataPosBelow">
-               <property name="suffix">
-                <string extracomment="spatium unit">sp</string>
-               </property>
-               <property name="minimum">
-                <double>0.000000000000000</double>
-               </property>
-               <property name="maximum">
-                <double>1000.000000000000000</double>
-               </property>
-               <property name="value">
-                <double>1.000000000000000</double>
                </property>
               </widget>
              </item>
@@ -7755,6 +7524,12 @@
                </property>
               </widget>
              </item>
+             <item row="0" column="1">
+              <widget class="QWidget" name="fermataPosAbove" native="true"/>
+             </item>
+             <item row="1" column="1">
+              <widget class="QWidget" name="fermataPosBelow" native="true"/>
+             </item>
             </layout>
            </item>
            <item row="0" column="1">
@@ -7793,9 +7568,6 @@
              </property>
              <property name="text">
               <string>Position below:</string>
-             </property>
-             <property name="buddy">
-              <cstring>textLinePosBelow</cstring>
              </property>
             </widget>
            </item>
@@ -7843,28 +7615,6 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="textLinePosBelow">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>1</number>
-             </property>
-             <property name="minimum">
-              <double>-100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
            <item row="2" column="2">
             <widget class="QToolButton" name="resetTextLinePosBelow">
              <property name="toolTip">
@@ -7893,9 +7643,6 @@
              <property name="text">
               <string>Position above:</string>
              </property>
-             <property name="buddy">
-              <cstring>textLinePosAbove</cstring>
-             </property>
             </widget>
            </item>
            <item row="1" column="2">
@@ -7912,28 +7659,6 @@
              <property name="icon">
               <iconset resource="musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="textLinePosAbove">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>1</number>
-             </property>
-             <property name="minimum">
-              <double>-100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
              </property>
             </widget>
            </item>
@@ -7959,6 +7684,12 @@
               </size>
              </property>
             </spacer>
+           </item>
+           <item row="1" column="1">
+            <widget class="QWidget" name="textLinePosAbove" native="true"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="QWidget" name="textLinePosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -8010,9 +7741,6 @@
              </property>
              <property name="text">
               <string>Position below:</string>
-             </property>
-             <property name="buddy">
-              <cstring>textLinePosBelow</cstring>
              </property>
             </widget>
            </item>
@@ -8084,31 +7812,6 @@
              <property name="text">
               <string>Position above:</string>
              </property>
-             <property name="buddy">
-              <cstring>textLinePosAbove</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="staffTextPosBelow">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>1</number>
-             </property>
-             <property name="minimum">
-              <double>-100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
             </widget>
            </item>
            <item row="2" column="2">
@@ -8125,28 +7828,6 @@
              <property name="icon">
               <iconset resource="musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="staffTextPosAbove">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>1</number>
-             </property>
-             <property name="minimum">
-              <double>-100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
              </property>
             </widget>
            </item>
@@ -8196,6 +7877,12 @@
              </property>
             </widget>
            </item>
+           <item row="1" column="1">
+            <widget class="QWidget" name="staffTextPosAbove" native="true"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="QWidget" name="staffTextPosBelow" native="true"/>
+           </item>
           </layout>
          </widget>
         </item>
@@ -8226,9 +7913,6 @@
              </property>
              <property name="text">
               <string>Position below:</string>
-             </property>
-             <property name="buddy">
-              <cstring>textLinePosBelow</cstring>
              </property>
             </widget>
            </item>
@@ -8276,28 +7960,6 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="tempoTextPosBelow">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>1</number>
-             </property>
-             <property name="minimum">
-              <double>-100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
            <item row="2" column="2">
             <widget class="QToolButton" name="resetTempoTextPosBelow">
              <property name="toolTip">
@@ -8326,9 +7988,6 @@
              <property name="text">
               <string>Position above:</string>
              </property>
-             <property name="buddy">
-              <cstring>textLinePosAbove</cstring>
-             </property>
             </widget>
            </item>
            <item row="1" column="2">
@@ -8345,28 +8004,6 @@
              <property name="icon">
               <iconset resource="musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="tempoTextPosAbove">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>1</number>
-             </property>
-             <property name="minimum">
-              <double>-100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
              </property>
             </widget>
            </item>
@@ -8432,6 +8069,12 @@
              </property>
             </widget>
            </item>
+           <item row="1" column="1">
+            <widget class="QWidget" name="tempoTextPosAbove" native="true"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="QWidget" name="tempoTextPosBelow" native="true"/>
+           </item>
           </layout>
          </widget>
         </item>
@@ -8462,9 +8105,6 @@
              </property>
              <property name="text">
               <string>Position Below:</string>
-             </property>
-             <property name="buddy">
-              <cstring>textLinePosBelow</cstring>
              </property>
             </widget>
            </item>
@@ -8512,28 +8152,6 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="rehearsalMarkPosBelow">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>1</number>
-             </property>
-             <property name="minimum">
-              <double>-100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
            <item row="2" column="2">
             <widget class="QToolButton" name="resetRehearsalMarkPosBelow">
              <property name="toolTip">
@@ -8562,9 +8180,6 @@
              <property name="text">
               <string>Position Above:</string>
              </property>
-             <property name="buddy">
-              <cstring>textLinePosAbove</cstring>
-             </property>
             </widget>
            </item>
            <item row="1" column="2">
@@ -8581,28 +8196,6 @@
              <property name="icon">
               <iconset resource="musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="rehearsalMarkPosAbove">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>1</number>
-             </property>
-             <property name="minimum">
-              <double>-100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
              </property>
             </widget>
            </item>
@@ -8667,6 +8260,12 @@
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QWidget" name="rehearsalMarkPosAbove" native="true"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="QWidget" name="rehearsalMarkPosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -8930,28 +8529,6 @@
                 <property name="text">
                  <string>Default vertical position:</string>
                 </property>
-                <property name="buddy">
-                 <cstring>chordSymbolPosAbove</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QDoubleSpinBox" name="chordSymbolPosAbove">
-                <property name="suffix">
-                 <string extracomment="spatium unit">sp</string>
-                </property>
-                <property name="minimum">
-                 <double>-10000.000000000000000</double>
-                </property>
-                <property name="maximum">
-                 <double>10000.000000000000000</double>
-                </property>
-                <property name="singleStep">
-                 <double>0.500000000000000</double>
-                </property>
-                <property name="value">
-                 <double>2.500000000000000</double>
-                </property>
                </widget>
               </item>
               <item row="1" column="0">
@@ -9073,6 +8650,9 @@
                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                 </property>
                </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="Ms::OffsetSelect" name="chordSymbolPosAbove" native="true"/>
               </item>
              </layout>
             </widget>
@@ -11657,28 +11237,6 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="lyricsPosAbove">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>1</number>
-             </property>
-             <property name="minimum">
-              <double>-100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="2">
             <widget class="QToolButton" name="resetLyricsPosAbove">
              <property name="toolTip">
@@ -11707,35 +11265,10 @@
              <property name="text">
               <string>Position below:</string>
              </property>
-             <property name="buddy">
-              <cstring>lyricsPosBelow</cstring>
-             </property>
             </widget>
            </item>
            <item row="4" column="1">
             <widget class="QDoubleSpinBox" name="lyricsMinTopDistance">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>1</number>
-             </property>
-             <property name="minimum">
-              <double>-100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="lyricsPosBelow">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -11798,9 +11331,6 @@
              <property name="text">
               <string>Position above:</string>
              </property>
-             <property name="buddy">
-              <cstring>lyricsPosAbove</cstring>
-             </property>
             </widget>
            </item>
            <item row="6" column="0">
@@ -11815,6 +11345,12 @@
               </size>
              </property>
             </spacer>
+           </item>
+           <item row="1" column="1">
+            <widget class="Ms::OffsetSelect" name="lyricsPosAbove" native="true"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="Ms::OffsetSelect" name="lyricsPosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -12039,33 +11575,6 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_186">
-             <property name="text">
-              <string>Offset:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="Ms::OffsetSelect" name="lyricsEvenOffset" native="true"/>
-           </item>
-           <item row="3" column="2">
-            <widget class="QToolButton" name="resetLyricsEvenOffset">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
-            </widget>
-           </item>
           </layout>
          </widget>
         </item>
@@ -12262,7 +11771,7 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item row="2" column="0">
             <spacer name="verticalSpacer_17">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -12287,33 +11796,6 @@
            </item>
            <item row="1" column="2">
             <widget class="QToolButton" name="resetLyricsOddAlign">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_201">
-             <property name="text">
-              <string>Offset:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="Ms::OffsetSelect" name="lyricsOddOffset" native="true"/>
-           </item>
-           <item row="2" column="2">
-            <widget class="QToolButton" name="resetLyricsOddOffset">
              <property name="toolTip">
               <string>Reset to default</string>
              </property>
@@ -12359,6 +11841,37 @@
            <property name="spacing">
             <number>0</number>
            </property>
+           <item row="5" column="1">
+            <widget class="QComboBox" name="textStyleFrame"/>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="label_204">
+             <property name="text">
+              <string>Background:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_202">
+             <property name="text">
+              <string>Frame:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0">
+            <widget class="QLabel" name="label_206">
+             <property name="text">
+              <string>Text margin:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="label_205">
+             <property name="text">
+              <string>Border:</string>
+             </property>
+            </widget>
+           </item>
            <item row="3" column="1">
             <layout class="QHBoxLayout" name="horizontalLayout_27">
              <item>
@@ -12543,6 +12056,13 @@
              </property>
             </widget>
            </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_208">
+             <property name="text">
+              <string>Font face:</string>
+             </property>
+            </widget>
+           </item>
            <item row="1" column="1">
             <widget class="QFontComboBox" name="textStyleFontFace">
              <property name="sizePolicy">
@@ -12556,15 +12076,60 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_208">
-             <property name="text">
-              <string>Font face:</string>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="textStyleFontSize">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="minimum">
+              <double>1.000000000000000</double>
              </property>
             </widget>
            </item>
-           <item row="5" column="2">
-            <widget class="QToolButton" name="resetTextStyleOffset">
+           <item row="11" column="1">
+            <spacer name="verticalSpacer_32">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="9" column="1">
+            <widget class="QDoubleSpinBox" name="textStyleFrameMargin"/>
+           </item>
+           <item row="8" column="1">
+            <widget class="QDoubleSpinBox" name="textStyleFrameBorder"/>
+           </item>
+           <item row="6" column="1">
+            <widget class="Awl::ColorLabel" name="textStyleFrameForeground"/>
+           </item>
+           <item row="7" column="1">
+            <widget class="Awl::ColorLabel" name="textStyleFrameBackground"/>
+           </item>
+           <item row="10" column="0">
+            <widget class="QLabel" name="label_212">
+             <property name="text">
+              <string>Border radius:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="label_203">
+             <property name="text">
+              <string>Foreground:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="1">
+            <widget class="QDoubleSpinBox" name="textStyleFrameBorderRadius"/>
+           </item>
+           <item row="6" column="2">
+            <widget class="QToolButton" name="resetTextStyleFrameForeground">
              <property name="toolTip">
               <string>Reset to default</string>
              </property>
@@ -12580,38 +12145,90 @@
              </property>
             </widget>
            </item>
-           <item row="5" column="1">
-            <widget class="Ms::OffsetSelect" name="textStyleOffset" native="true"/>
-           </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="label_211">
+           <item row="7" column="2">
+            <widget class="QToolButton" name="resetTextStyleFrameBackground">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Font face' value</string>
+             </property>
              <property name="text">
-              <string>Offset:</string>
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="textStyleFontSize">
-             <property name="suffix">
-              <string>sp</string>
+           <item row="8" column="2">
+            <widget class="QToolButton" name="resetTextStyleFrameBorder">
+             <property name="toolTip">
+              <string>Reset to default</string>
              </property>
-             <property name="minimum">
-              <double>1.000000000000000</double>
+             <property name="accessibleName">
+              <string>Reset 'Font face' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
-           <item row="6" column="1">
-            <spacer name="verticalSpacer_32">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
+           <item row="9" column="2">
+            <widget class="QToolButton" name="resetTextStyleFrameMargin">
+             <property name="toolTip">
+              <string>Reset to default</string>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
+             <property name="accessibleName">
+              <string>Reset 'Font face' value</string>
              </property>
-            </spacer>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="2">
+            <widget class="QToolButton" name="resetTextStyleFrameBorderRadius">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Font face' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QToolButton" name="resetTextStyleFrame">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Font face' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -12634,6 +12251,12 @@
    <class>Ms::OffsetSelect</class>
    <extends>QWidget</extends>
    <header>inspector/offsetSelect.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Awl::ColorLabel</class>
+   <extends>QFrame</extends>
+   <header>awl/colorlabel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -12781,9 +12404,7 @@
   <tabstop>smallClefSize</tabstop>
   <tabstop>hairpinPlacement</tabstop>
   <tabstop>resetHairpinPlacement</tabstop>
-  <tabstop>hairpinPosAbove</tabstop>
   <tabstop>resetHairpinPosAbove</tabstop>
-  <tabstop>hairpinPosBelow</tabstop>
   <tabstop>resetHairpinPosBelow</tabstop>
   <tabstop>hairpinLineWidth</tabstop>
   <tabstop>resetHairpinLineWidth</tabstop>
@@ -12795,9 +12416,7 @@
   <tabstop>resetAutoplaceHairpinDynamicsDistance</tabstop>
   <tabstop>pedalLinePlacement</tabstop>
   <tabstop>resetPedalLinePlacement</tabstop>
-  <tabstop>pedalLinePosAbove</tabstop>
   <tabstop>resetPedalLinePosAbove</tabstop>
-  <tabstop>pedalLinePosBelow</tabstop>
   <tabstop>resetPedalLinePosBelow</tabstop>
   <tabstop>pedalLineWidth</tabstop>
   <tabstop>resetPedalLineWidth</tabstop>
@@ -12805,9 +12424,7 @@
   <tabstop>resetPedalLineStyle</tabstop>
   <tabstop>textLinePlacement</tabstop>
   <tabstop>resetTextLinePlacement</tabstop>
-  <tabstop>textLinePosAbove</tabstop>
   <tabstop>resetTextLinePosAbove</tabstop>
-  <tabstop>textLinePosBelow</tabstop>
   <tabstop>resetTextLinePosBelow</tabstop>
   <tabstop>chordsStandard</tabstop>
   <tabstop>chordsJazz</tabstop>
@@ -12824,7 +12441,6 @@
   <tabstop>lowerCaseMinorChords</tabstop>
   <tabstop>lowerCaseBassNotes</tabstop>
   <tabstop>allCapsNoteNames</tabstop>
-  <tabstop>chordSymbolPosAbove</tabstop>
   <tabstop>harmonyFretDist</tabstop>
   <tabstop>minHarmonyDistance</tabstop>
   <tabstop>maxHarmonyBarDistance</tabstop>
@@ -12870,9 +12486,7 @@
   <tabstop>resetTupletBracketType</tabstop>
   <tabstop>lyricsPlacement</tabstop>
   <tabstop>resetLyricsPlacement</tabstop>
-  <tabstop>lyricsPosAbove</tabstop>
   <tabstop>resetLyricsPosAbove</tabstop>
-  <tabstop>lyricsPosBelow</tabstop>
   <tabstop>resetLyricsPosBelow</tabstop>
   <tabstop>resetLyricsLineHeight</tabstop>
   <tabstop>lyricsMinTopDistance</tabstop>

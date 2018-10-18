@@ -547,7 +547,7 @@ void Articulation::doAutoplace()
       {
       qreal minDistance = score()->styleP(Sid::dynamicsMinDistance);
       if (autoplace() && parent()) {
-            setUserOff(QPointF());
+            setOffset(QPointF());
             Segment* s = segment();
             Measure* m = measure();
             int si     = staffIdx();
@@ -571,7 +571,7 @@ void Articulation::doAutoplace()
                   qreal yd = d + minDistance;
                   if (above)
                         yd *= -1.0;
-                  rUserYoffset() = yd;
+                  ryoffset() = yd;
                   r.translate(QPointF(0.0, yd));
                   }
             }

@@ -53,7 +53,7 @@ class SpannerSegment : public Element {
 
    protected:
       QPointF _p2;
-      QPointF _userOff2;
+      QPointF _offset2;
 
    public:
       SpannerSegment(Score* s, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
@@ -75,17 +75,18 @@ class SpannerSegment : public Element {
       void setSystem(System* s);
       System* system() const;
 
-      const QPointF& userOff2() const       { return _userOff2;       }
-      void setUserOff2(const QPointF& o)    { _userOff2 = o;          }
-      void setUserXoffset2(qreal x)         { _userOff2.setX(x);      }
-      qreal& rUserXoffset2()                { return _userOff2.rx();  }
-      qreal& rUserYoffset2()                { return _userOff2.ry();  }
+      const QPointF& userOff2() const       { return _offset2;       }
+      void setUserOff2(const QPointF& o)    { _offset2 = o;          }
+      void setUserXoffset2(qreal x)         { _offset2.setX(x);      }
+      qreal& rUserXoffset2()                { return _offset2.rx();  }
+      qreal& rUserYoffset2()                { return _offset2.ry();  }
 
       void setPos2(const QPointF& p)        { _p2 = p;                }
       //TODO: rename to spanSegPosWithUserOffset()
-      QPointF pos2() const                  { return _p2 + _userOff2; }
+      QPointF pos2() const                  { return _p2 + _offset2; }
       //TODO: rename to spanSegPos()
       const QPointF& ipos2() const          { return _p2;             }
+      QPointF& rpos2()                      { return _p2;             }
       qreal& rxpos2()                       { return _p2.rx();        }
       qreal& rypos2()                       { return _p2.ry();        }
 

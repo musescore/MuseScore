@@ -119,13 +119,13 @@ void Rest::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   setUserOff, overridden from Element
+//   setOffset, overridden from Element
 //    (- raster vertical position in spatium units) -> no
 //    - half rests and whole rests outside the staff are
 //      replaced by special symbols with ledger lines
 //---------------------------------------------------------
 
-void Rest::setUserOff(const QPointF& o)
+void Rest::setOffset(const QPointF& o)
       {
       qreal _spatium = spatium();
       int line = lrint(o.y()/_spatium);
@@ -139,7 +139,7 @@ void Rest::setUserOff(const QPointF& o)
       else if (_sym == SymId::restHalfLegerLine && (line > -3 && line < 3))
             _sym = SymId::restHalf;
 
-      Element::setUserOff(o);
+      Element::setOffset(o);
       }
 
 //---------------------------------------------------------
@@ -155,7 +155,7 @@ QRectF Rest::drag(EditData& ed)
       static const qreal xDragRange = spatium() * 5;
       if (fabs(s.x()) > xDragRange)
             s.rx() = xDragRange * (s.x() < 0 ? -1.0 : 1.0);
-      setUserOff(QPointF(s.x(), s.y()));
+      setOffset(QPointF(s.x(), s.y()));
       layout();
       score()->rebuildBspTree();
       return abbox() | r;
@@ -379,7 +379,7 @@ void Rest::layout()
 
       dotline = Rest::getDotline(durationType().type());
 
-      qreal yOff     = userOff().y();
+      qreal yOff     = offset().y();
       Staff* stf     = staff();
       StaffType*  st = stf->staffType(tick());
       qreal lineDist = st ? st->lineDistance().val() : 1.0;
@@ -768,10 +768,10 @@ void Rest::setAccent(bool flag)
                   qreal yOffset = -(bbox().bottom());
                   if (durationType() >= TDuration::DurationType::V_HALF)
                         yOffset -= staff()->spatium(tick()) * 0.5;
-                  undoChangeProperty(Pid::USER_OFF, QPointF(0.0, yOffset));
+                  undoChangeProperty(Pid::OFFSET, QPointF(0.0, yOffset));
                   }
             else {
-                  undoChangeProperty(Pid::USER_OFF, QPointF());
+                  undoChangeProperty(Pid::OFFSET, QPointF());
                   }
             }
       }
@@ -854,7 +854,7 @@ void Rest::write(XmlWriter& xml) const
       el().write(xml);
       bool write_dots = false;
       for (NoteDot* dot : _dots)
-            if (!dot->userOff().isNull() || !dot->visible() || dot->color() != Qt::black || dot->visible() != visible()) {
+            if (!dot->offset().isNull() || !dot->visible() || dot->color() != Qt::black || dot->visible() != visible()) {
                   write_dots = true;
                   break;
                   }
@@ -945,9 +945,9 @@ bool Rest::setProperty(Pid propertyId, const QVariant& v)
                         dot->setVisible(visible());
                   score()->setLayout(tick());
                   break;
-            case Pid::USER_OFF:
+            case Pid::OFFSET:
                   score()->addRefresh(canvasBoundingRect());
-                  setUserOff(v.toPointF());
+                  setOffset(v.toPointF());
                   layout();
                   score()->addRefresh(canvasBoundingRect());
                   if (beam())

@@ -37,6 +37,7 @@ static const ElementStyle fingeringStyle {
 Fingering::Fingering(Score* s, Tid tid, ElementFlags ef)
    : TextBase(s, tid, ef)
       {
+      setPlacement(Placement::ABOVE);
       initElementStyle(&fingeringStyle);
       }
 
@@ -102,7 +103,7 @@ void Fingering::layout()
             else {
                   x -= spatium();
                   }
-            setUserOff(QPointF(x, y));
+            rpos() += QPointF(x, y);
             }
       }
 
@@ -134,6 +135,8 @@ QString Fingering::accessibleInfo() const
 QVariant Fingering::propertyDefault(Pid id) const
       {
       switch (id) {
+            case Pid::PLACEMENT:
+                  return int(Placement::ABOVE);
             case Pid::SUB_STYLE:
                   return int(Tid::FINGERING);
             default:

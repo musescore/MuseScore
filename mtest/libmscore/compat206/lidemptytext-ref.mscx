@@ -9,8 +9,8 @@
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <barNoteDistance>1.2</barNoteDistance>
-      <pedalPosBelow>0</pedalPosBelow>
-      <trillPosAbove>0</trillPosAbove>
+      <pedalPosBelow x="0" y="0"/>
+      <trillPosAbove x="0" y="0"/>
       <dynamicsFontItalic>0</dynamicsFontItalic>
       <Spatium>1.76389</Spatium>
       </Style>
@@ -237,8 +237,8 @@
         <clefLeftMargin>0.64</clefLeftMargin>
         <clefKeyRightMargin>1.75</clefKeyRightMargin>
         <barNoteDistance>1.2</barNoteDistance>
-        <pedalPosBelow>0</pedalPosBelow>
-        <trillPosAbove>0</trillPosAbove>
+        <pedalPosBelow x="0" y="0"/>
+        <trillPosAbove x="0" y="0"/>
         <dynamicsFontItalic>0</dynamicsFontItalic>
         <Spatium>1.76389</Spatium>
         </Style>
@@ -308,7 +308,6 @@
           <height>8</height>
           <bottomGap>6</bottomGap>
           <Text>
-            <offset x="0.362523" y="-2.94812"/>
             <style>Instrument Name (Part)</style>
             <text>Bass</text>
             </Text>

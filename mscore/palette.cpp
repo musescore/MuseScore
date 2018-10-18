@@ -504,7 +504,7 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
                   int idx = cr1->staffIdx();
 
                   QByteArray a = element->mimeData(QPointF());
-// printf("<<%s>>\n", a.data());
+//printf("<<%s>>\n", a.data());
                   XmlReader e(a);
                   Fraction duration;  // dummy
                   QPointF dragOffset;
@@ -930,7 +930,7 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
       {
       if (s) {
             s->setPos(0.0, 0.0);
-            s->setUserOff(QPointF());
+            s->setOffset(QPointF());
             }
 
       PaletteCell* cell = new PaletteCell;

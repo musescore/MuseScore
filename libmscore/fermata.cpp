@@ -26,12 +26,21 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   fermataStyle
+//---------------------------------------------------------
+
+static const ElementStyle fermataStyle {
+      { Sid::fermataPosAbove, Pid::OFFSET },
+      };
+
+//---------------------------------------------------------
 //   Fermata
 //---------------------------------------------------------
 
 Fermata::Fermata(Score* s)
    : Element(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
+      initElementStyle(&fermataStyle);
       setPlacement(Placement::ABOVE);
       _symId         = SymId::noSym;
       _timeStretch   = 1.0;
@@ -202,18 +211,15 @@ void Fermata::layout()
             else
                   x = e->x() + e->width() * staff()->mag(0) * .5;
             }
-      qreal y = placeAbove() ? styleP(Sid::fermataPosAbove) : styleP(Sid::fermataPosBelow) + staff()->height();
-
-      setPos(QPointF(x, y));
-
-      // check used symbol
 
       QString name = Sym::id2name(_symId);
       if (placeAbove()) {
+            rpos() = score()->styleValue(Pid::OFFSET, Sid::fermataPosAbove).toPointF() + QPointF(x, 0.0);
             if (name.endsWith("Below"))
                   _symId = Sym::name2id(name.left(name.size() - 5) + "Above");
             }
       else {
+            rpos() = score()->styleValue(Pid::OFFSET, Sid::fermataPosBelow).toPointF() + QPointF(x, staff()->height());
             if (name.endsWith("Above"))
                   _symId = Sym::name2id(name.left(name.size() - 5) + "Below");
             }
@@ -310,15 +316,6 @@ QVariant Fermata::propertyDefault(Pid propertyId) const
       }
 
 //---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid Fermata::getPropertyStyle(Pid /*id*/) const
-      {
-      return Sid::NOSTYLE;
-      }
-
-//---------------------------------------------------------
 //   resetProperty
 //---------------------------------------------------------
 
@@ -333,6 +330,17 @@ void Fermata::resetProperty(Pid id)
                   break;
             }
       Element::resetProperty(id);
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid Fermata::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::fermataPosAbove : Sid::fermataPosBelow;
+      return ScoreElement::getPropertyStyle(pid);
       }
 
 //---------------------------------------------------------

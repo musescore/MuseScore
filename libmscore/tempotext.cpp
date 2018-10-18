@@ -397,7 +397,7 @@ QVariant TempoText::propertyDefault(Pid id) const
 
 void TempoText::layout()
       {
-      layout2(Sid::tempoPosAbove, Sid::tempoPosBelow);
+      TextBase::layout();
 
       Segment* s = segment();
       if (!s)                       // for use in palette

@@ -36,8 +36,6 @@ namespace Ms {
 LineSegment::LineSegment(const LineSegment& s)
    : SpannerSegment(s)
       {
-      _p2       = s._p2;
-      _userOff2 = s._userOff2;
       }
 
 //---------------------------------------------------------
@@ -66,7 +64,7 @@ bool LineSegment::readProperties(XmlReader& e)
                   setAutoplace(false);
             }
       else if (tag == "pos") {
-            setUserOff(QPointF());
+            setOffset(QPointF());
             setAutoplace(false);
             e.readNext();
             }
@@ -149,8 +147,8 @@ QPointF LineSegment::gripAnchor(Grip grip) const
 void LineSegment::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
-      eed->pushProperty(Pid::USER_OFF);
-      eed->pushProperty(Pid::USER_OFF2);
+      eed->pushProperty(Pid::OFFSET);
+      eed->pushProperty(Pid::OFFSET2);
       }
 
 //---------------------------------------------------------
@@ -339,18 +337,18 @@ void LineSegment::editDrag(EditData& ed)
 
       switch (ed.curGrip) {
             case Grip::START: // Resize the begin of element (left grip)
-                  setUserOff(userOff() + deltaResize);
-                  _userOff2 -= deltaResize;
+                  setOffset(offset() + deltaResize);
+                  _offset2 -= deltaResize;
                   undoChangeProperty(Pid::AUTOPLACE, false);
                   break;
             case Grip::END: // Resize the end of element (right grip)
-                  _userOff2 += deltaResize;
+                  _offset2 += deltaResize;
                   undoChangeProperty(Pid::AUTOPLACE, false);
                   break;
             case Grip::MIDDLE: { // Move the element (middle grip)
                   // Only for moving, no y limitaion
                   QPointF deltaMove(ed.delta.x(), ed.delta.y());
-                  setUserOff(userOff() + deltaMove);
+                  setOffset(offset() + deltaMove);
                   undoChangeProperty(Pid::AUTOPLACE, false);
                   }
                   break;
@@ -375,7 +373,7 @@ void LineSegment::editDrag(EditData& ed)
                               noteNew->addSpannerBack(l);
                               l->setEndElement(noteNew);
 
-                              _userOff2 += noteOld->canvasPos() - noteNew->canvasPos();
+                              _offset2 += noteOld->canvasPos() - noteNew->canvasPos();
                               }
                         }
                   else if (ed.curGrip == Grip::START && e != l->startElement())
@@ -392,7 +390,7 @@ void LineSegment::editDrag(EditData& ed)
 void LineSegment::spatiumChanged(qreal ov, qreal nv)
       {
       Element::spatiumChanged(ov, nv);
-      _userOff2 *= nv / ov;
+      _offset2 *= nv / ov;
       }
 
 //---------------------------------------------------------
@@ -402,7 +400,7 @@ void LineSegment::spatiumChanged(qreal ov, qreal nv)
 void LineSegment::localSpatiumChanged(qreal ov, qreal nv)
       {
       Element::localSpatiumChanged(ov, nv);
-      _userOff2 *= nv / ov;
+      _offset2 *= nv / ov;
       }
 
 //---------------------------------------------------------
@@ -912,9 +910,9 @@ void SLine::layout()
                         add(lineSegm);
                         // set user offset to previous segment's offset
                         if (segCount > 0)
-                              lineSegm->setUserOff(QPointF(0, segmentAt(segCount+i-1)->userOff().y()));
+                              lineSegm->setOffset(QPointF(0, segmentAt(segCount+i-1)->offset().y()));
                         else
-                              lineSegm->setUserOff(QPointF(0, userOff().y()));
+                              lineSegm->setOffset(QPointF(0, offset().y()));
                         }
                   }
             else {

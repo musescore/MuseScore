@@ -87,7 +87,7 @@ InspectorNote::InspectorNote(QWidget* parent)
             { Pid::FIXED,          0, n.fixed,         n.resetFixed         },
             { Pid::FIXED_LINE,     0, n.fixedLine,     n.resetFixedLine     },
 
-            { Pid::USER_OFF,       1, c.offset,        c.resetOffset        },
+            { Pid::OFFSET,         1, c.offset,        c.resetOffset        },
             { Pid::SMALL,          1, c.small,         c.resetSmall         },
             { Pid::NO_STEM,        1, c.stemless,      c.resetStemless      },
             { Pid::STEM_DIRECTION, 1, c.stemDirection, c.resetStemDirection },

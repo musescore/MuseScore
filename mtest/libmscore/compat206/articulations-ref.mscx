@@ -10,8 +10,6 @@
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <barNoteDistance>1.2</barNoteDistance>
       <lastSystemFillLimit>0</lastSystemFillLimit>
-      <pedalPosBelow>0</pedalPosBelow>
-      <trillPosAbove>0</trillPosAbove>
       <dynamicsFontItalic>0</dynamicsFontItalic>
       <Spatium>1.76389</Spatium>
       </Style>
@@ -125,7 +123,6 @@
             </Chord>
           <Fermata>
             <subtype>fermataBelow</subtype>
-            <placement>below</placement>
             </Fermata>
           <Chord>
             <durationType>quarter</durationType>
@@ -170,7 +167,6 @@
             </Chord>
           <Fermata>
             <subtype>fermataShortBelow</subtype>
-            <placement>below</placement>
             </Fermata>
           <Chord>
             <durationType>quarter</durationType>
@@ -215,7 +211,6 @@
             </Chord>
           <Fermata>
             <subtype>fermataLongBelow</subtype>
-            <placement>below</placement>
             </Fermata>
           <Chord>
             <durationType>quarter</durationType>
@@ -263,7 +258,6 @@
             </Chord>
           <Fermata>
             <subtype>fermataVeryLongBelow</subtype>
-            <placement>below</placement>
             </Fermata>
           <Chord>
             <durationType>quarter</durationType>

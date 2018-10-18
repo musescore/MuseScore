@@ -56,20 +56,9 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <pos x="25" y="-17"/>
-            <family>Arial</family>
-            <size>24</size>
-            <bold>1</bold>
-            <align>center,baseline</align>
-            <layoutOffset x="0" y="2"/>
             <text>Test text 1</text>
             </StaffText>
           <StaffText>
-            <pos x="25" y="-12"/>
-            <family>Arial</family>
-            <bold>1</bold>
-            <align>center,baseline</align>
-            <layoutOffset x="0" y="2"/>
             <text>This is the subtitle</text>
             </StaffText>
           <Chord>
@@ -186,11 +175,6 @@
               </Note>
             </Chord>
           <StaffText>
-            <pos x="5" y="-8"/>
-            <family>Arial</family>
-            <bold>1</bold>
-            <align>center,baseline</align>
-            <layoutOffset x="0" y="2"/>
             <text>MuseScore testfile
 Leon Vinken</text>
             </StaffText>

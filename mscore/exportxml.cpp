@@ -345,7 +345,7 @@ static QString addPositioningAttributes(Element const* const el, bool isSpanStar
             return "";
 
       //qDebug("single el %p _pos x,y %f %f _userOff x,y %f %f spatium %f",
-      //       el, el->ipos().x(), el->ipos().y(), el->userOff().x(), el->userOff().y(), el->spatium());
+      //       el, el->ipos().x(), el->ipos().y(), el->offset().x(), el->offset().y(), el->spatium());
 
       const float positionElipson = 0.1f;
       float defaultX = 0;
@@ -361,18 +361,18 @@ static QString addPositioningAttributes(Element const* const el, bool isSpanStar
       if (span && !span->spannerSegments().isEmpty()) {
             if (isSpanStart) {
                   const auto seg = span->spannerSegments().first();
-                  const auto userOff = seg->userOff();
+                  const auto offset = seg->offset();
                   const auto p = seg->pos();
-                  relativeX = userOff.x();
+                  relativeX = offset.x();
                   defaultY = p.y();
 
                   //qDebug("sline start seg %p seg->pos x,y %f %f seg->userOff x,y %f %f spatium %f",
-                  //       seg, p.x(), p.y(), seg->userOff().x(), seg->userOff().y(), seg->spatium());
+                  //       seg, p.x(), p.y(), seg->offset().x(), seg->offset().y(), seg->spatium());
 
                   }
             else {
                   const auto seg = span->spannerSegments().last();
-                  const auto userOff = seg->userOff(); // This is the offset accessible from the inspector
+                  const auto userOff = seg->offset(); // This is the offset accessible from the inspector
                   const auto userOff2 = seg->userOff2(); // Offset of the actual dragged anchor, which doesn't affect the inspector offset
                   //auto pos = seg->pos();
                   //auto pos2 = seg->pos2();
@@ -391,8 +391,8 @@ static QString addPositioningAttributes(Element const* const el, bool isSpanStar
       else {
             defaultX = el->ipos().x();   // Note: for some elements, Finale Notepad seems to work slightly better w/o default-x
             defaultY = el->ipos().y();
-            relativeX = el->userOff().x();
-            relativeY = el->userOff().y();
+            relativeX = el->offset().x();
+            relativeY = el->offset().y();
             }
 
       // convert into spatium tenths for MusicXML
@@ -2896,7 +2896,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
       // as no display-step or display-octave should be written for a tablature staff,
 
       if (clef != ClefType::TAB && clef != ClefType::TAB_SERIF && clef != ClefType::TAB4 && clef != ClefType::TAB4_SERIF) {
-            double yOffsSp = rest->userOff().y() / rest->spatium();              // y offset in spatium (negative = up)
+            double yOffsSp = rest->offset().y() / rest->spatium();              // y offset in spatium (negative = up)
             yOffsSt = -2 * int(yOffsSp > 0.0 ? yOffsSp + 0.5 : yOffsSp - 0.5); // same rounded to int (positive = up)
 
             po -= 4;    // pitch middle staff line (two lines times two steps lower than top line)
@@ -3005,7 +3005,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
                     el->x(), el->y(),
                     el->x()/el->spatium(), el->y()/el->spatium(),
                     el->width(), el->height(),
-                    el->userOff().y()
+                    el->offset().y()
                    );
              */
             const Element* pel = 0;
@@ -3022,7 +3022,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
                                 seg, seg->x(), seg->y(),
                                 seg->width(), seg->height(),
                                 seg->pagePos().x(), seg->pagePos().y(),
-                                seg->userOff().y());
+                                seg->offset().y());
                          */
                         pel = seg->parent();
                         }
@@ -3050,7 +3050,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
                     pel->name(),
                     pel->x(), pel->y(),
                     pel->width(), pel->height(),
-                    pel->userOff().y());
+                    pel->offset().y());
                   }
              */
 
@@ -3380,7 +3380,7 @@ void ExportMusicXml::words(Text const* const text, int staff)
       {
       /*
       qDebug("ExportMusicXml::words userOff.x=%f userOff.y=%f xmlText='%s' plainText='%s'",
-             text->userOff().x(), text->userOff().y(),
+             text->offset().x(), text->offset().y(),
              qPrintable(text->xmlText()),
              qPrintable(text->plainText()));
       */
@@ -3642,7 +3642,7 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
             hook       = tl->beginHookType() != HookType::NONE;
             hookHeight = tl->beginHookHeight().val();
             if (!tl->spannerSegments().empty())
-                  p = tl->spannerSegments().first()->userOff();
+                  p = tl->spannerSegments().first()->offset();
             // offs = tl->mxmlOff();
             type = "start";
             }
@@ -5460,7 +5460,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
       // since we now support placement of chord symbols over "empty" beats directly,
       // and wedon't generally export position info for other elements
       // it's just as well to not bother doing so here
-      //double rx = h->userOff().x()*10;
+      //double rx = h->offset().x()*10;
       //QString relative;
       //if (rx > 0) {
       //      relative = QString(" relative-x=\"%1\"").arg(QString::number(rx,'f',2));

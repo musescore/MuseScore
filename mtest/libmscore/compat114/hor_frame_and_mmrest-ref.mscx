@@ -26,7 +26,7 @@
       <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
       <createMultiMeasureRests>1</createMultiMeasureRests>
       <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
-      <voltaY>0</voltaY>
+      <voltaPosAbove x="0" y="-2"/>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
       <Spatium>1.764</Spatium>

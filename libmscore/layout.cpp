@@ -1900,7 +1900,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       cs = m->findSegmentR(SegmentType::ChordRest, 0);
       if (cs) {
             for (Element* e : cs->annotations()) {
-                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText()))
+                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()))
                         continue;
 
                   bool found = false;
@@ -1919,7 +1919,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
             }
 
       for (Element* e : s->annotations()) {
-            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText()))
+            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()))
                   continue;
             bool found = false;
             for (Element* ee : cs->annotations()) {
@@ -1951,7 +1951,7 @@ static bool validMMRestMeasure(Measure* m)
       int n = 0;
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
-                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText()))
+                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()))
                         return false;
                   }
             if (s->isChordRestType()) {
@@ -2040,7 +2040,7 @@ static bool breakMultiMeasureRest(Measure* m)
             for (Element* e : s->annotations()) {
                   if (e->isRehearsalMark() ||
                       e->isTempoText() ||
-                      ((e->isHarmony() || e->isStaffText()) && (e->systemFlag() || m->score()->staff(e->staffIdx())->show())))
+                      ((e->isHarmony() || e->isStaffText() || e->isSystemText()) && (e->systemFlag() || m->score()->staff(e->staffIdx())->show())))
                         return true;
                   }
             for (int staffIdx = 0; staffIdx < m->score()->nstaves(); ++staffIdx) {
@@ -2633,7 +2633,7 @@ static qreal findLyricsMaxY(Segment& s, int staffIdx)
 
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeBelow()) {
-                              l->rUserYoffset() = 0.0;
+                              l->ryoffset() = 0.0;
                               QPointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
                               QRectF r = l->bbox().translated(offset);
                               sk.add(r.x(), r.top(), r.width());
@@ -2669,7 +2669,7 @@ static qreal findLyricsMinY(Segment& s, int staffIdx)
 
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeAbove()) {
-                              l->rUserYoffset() = 0.0;
+                              l->ryoffset() = 0.0;
                               QRectF r = l->bbox().translated(l->pos() + cr->pos() + s.pos() + s.measure()->pos());
                               sk.add(r.x(), r.bottom(), r.width());
                               }
@@ -2718,7 +2718,7 @@ static void applyLyricsMax(Segment& s, int staffIdx, qreal yMax)
                   qreal lyricsMinBottomDistance = s.score()->styleP(Sid::lyricsMinBottomDistance);
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->visible() && l->autoplace() && l->placeBelow()) {
-                              l->rUserYoffset() = yMax;
+                              l->ryoffset() = yMax;
                               QPointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
                               sk.add(l->bbox().translated(offset).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
                               }
@@ -2742,7 +2742,7 @@ static void applyLyricsMin(ChordRest* cr, int staffIdx, qreal yMin)
       Skyline& sk = cr->measure()->system()->staff(staffIdx)->skyline();
       for (Lyrics* l : cr->lyrics()) {
             if (l->visible() && l->autoplace() && l->placeAbove()) {
-                  l->rUserYoffset() = yMin;
+                  l->ryoffset() = yMin;
                   QPointF offset = l->pos() + cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
                   sk.add(l->bbox().translated(offset));
                   }
@@ -2892,7 +2892,7 @@ void Score::layoutLyrics(System* system)
                   LyricsLineSegment* lls = toLyricsLineSegment(ss);
                   lls->layout();
                   if (ss->isSingleBeginType())
-                        lls->rUserYoffset() = lls->lyrics()->rUserYoffset();
+                        lls->ryoffset() = lls->lyrics()->ryoffset();
                   else {
                         ;// how to align?
                         }
@@ -2936,11 +2936,11 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
             }
 
       if (align && segments.size() > 1) {
-            qreal y = segments[0]->userOff().y();
+            qreal y = segments[0]->offset().y();
             for (unsigned i = 1; i < segments.size(); ++i)
-                  y = qMax(y, segments[i]->userOff().y());
+                  y = qMax(y, segments[i]->offset().y());
             for (auto ss : segments)
-                  ss->rUserYoffset() = y;
+                  ss->ryoffset() = y;
             }
 
       //
@@ -3388,9 +3388,9 @@ System* Score::collectSystem(LayoutContext& lc)
             if (voltaSegments.size() > 1) {
                   qreal y = 0;
                   for (SpannerSegment* ss : voltaSegments)
-                        y = qMin(y, ss->userOff().y());
+                        y = qMin(y, ss->offset().y());
                   for (SpannerSegment* ss : voltaSegments)
-                        ss->setUserYoffset(y);
+                        ss->ryoffset() = y;
                   }
             }
 
@@ -3450,7 +3450,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       for (const Segment* s : sl) {
             for (Element* e : s->annotations()) {
-                  if (e->isStaffText() || e->isHarmony() || e->isInstrumentChange())
+                  if (e->isStaffText() || e->isSystemText() || e->isHarmony() || e->isInstrumentChange())
                         e->layout();
                   }
             }

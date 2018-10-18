@@ -666,6 +666,7 @@ void Debugger::updateElement(Element* el)
                   case ElementType::JUMP:
                   case ElementType::TEXT:
                   case ElementType::STAFF_TEXT:
+                  case ElementType::SYSTEM_TEXT:
                   case ElementType::REHEARSAL_MARK:
                         ew = new TextView;
                         break;
@@ -1431,9 +1432,6 @@ void TextView::setElement(Element* e)
 
       ShowElementBase::setElement(e);
       tb.text->setPlainText(te->xmlText());
-      tb.xoffset->setValue(te->offset().x());
-      tb.yoffset->setValue(te->offset().y());
-      tb.offsetType->setCurrentIndex(int(te->offsetType()));
       tb.layoutToParentWidth->setChecked(te->layoutToParentWidth());
       Align a = te->align();
       const char* h;
@@ -1669,9 +1667,9 @@ void DynamicView::setElement(Element* e)
       Dynamic* dynamic = toDynamic(e);
 
       tb.text->setPlainText(dynamic->xmlText());
-      tb.xoffset->setValue(dynamic->offset().x());
-      tb.yoffset->setValue(dynamic->offset().y());
-      tb.offsetType->setCurrentIndex(int(dynamic->offsetType()));
+//      tb.xoffset->setValue(dynamic->offset().x());
+//      tb.yoffset->setValue(dynamic->offset().y());
+//      tb.offsetType->setCurrentIndex(int(dynamic->offsetType()));
       tb.layoutToParentWidth->setChecked(dynamic->layoutToParentWidth());
 
       ShowElementBase::setElement(e);
@@ -1862,14 +1860,16 @@ void ShowElementBase::setElement(Element* e)
       eb.enabled->setChecked(e->enabled());
       eb.header->setChecked(e->header());
       eb.trailer->setChecked(e->trailer());
+      eb.spatiumSize->setChecked(e->sizeIsSpatiumDependent());
+
       eb.track->setValue(e->track());
       eb.z->setValue(e->z());
       eb.posx->setValue(e->ipos().x());
       eb.posy->setValue(e->ipos().y());
       eb.cposx->setValue(e->pagePos().x());
       eb.cposy->setValue(e->pagePos().y());
-      eb.offsetx->setValue(e->userOff().x());
-      eb.offsety->setValue(e->userOff().y());
+      eb.offsetx->setValue(e->offset().x());
+      eb.offsety->setValue(e->offset().y());
       eb.autoplace->setChecked(e->autoplace());
       eb.placement->setCurrentIndex(int(e->placement()));
 
@@ -1954,7 +1954,7 @@ void ShowElementBase::link3Clicked()
 void ShowElementBase::offsetxChanged(double val)
       {
       QRectF r(el->abbox());
-      el->setUserXoffset(val);
+      el->rxoffset() = val;
 //      Element* e = el;
 //TODO      while ((e = e->parent()))
       el->score()->addRefresh(r | el->abbox());
@@ -1967,7 +1967,7 @@ void ShowElementBase::offsetxChanged(double val)
 void ShowElementBase::offsetyChanged(double val)
       {
       QRectF r(el->abbox());
-      el->setUserYoffset(val);
+      el->ryoffset() = val;
       el->score()->addRefresh(r | el->abbox());
       }
 

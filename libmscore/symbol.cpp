@@ -59,7 +59,20 @@ void Symbol::layout()
       // foreach(Element* e, leafs())     done in BSymbol::layout() ?
       //      e->layout();
       setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
-      ElementLayout::layout(this);
+      QPointF o(offset());
+      qreal w = width();
+      QPointF p;
+      if (align() & Align::BOTTOM)
+            p.setY(- height());
+      else if (align() & Align::VCENTER)
+            p.setY((- height()) * .5);
+      else if (align() & Align::BASELINE)
+            p.setY(-baseLine());
+      if (align() & Align::RIGHT)
+            p.setX(-w);
+      else if (align() & Align::HCENTER)
+            p.setX(-(w * .5));
+      setPos(p + o);
       BSymbol::layout();
       }
 

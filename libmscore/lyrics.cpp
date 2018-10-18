@@ -277,7 +277,7 @@ void Lyrics::layout()
       if (styleDidChange)
             styleChanged();
 
-      QPointF o(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
+      QPointF o(propertyDefault(Pid::OFFSET).toPointF());
       rxpos() = o.x();
       qreal x = pos().x();
       TextBase::layout1();
@@ -329,14 +329,16 @@ void Lyrics::layout()
 void Lyrics::layout2(int nAbove)
       {
       qreal lh = lineSpacing() * score()->styleD(Sid::lyricsLineHeight);
-      qreal y;
 
-      if (placeBelow())
-            y  = lh * (_no - nAbove) + score()->styleP(Sid::lyricsPosBelow) + segment()->measure()->system()->staff(staffIdx())->bbox().height();
-      else
-            y = -lh * (nAbove - _no - 1) + score()->styleP(Sid::lyricsPosAbove);
-
-      rypos() = y;
+      if (placeBelow()) {
+            qreal yo = segment()->measure()->system()->staff(staffIdx())->bbox().height();
+            rypos()  = lh * (_no - nAbove) + yo;
+            rpos()  += score()->styleValue(Pid::OFFSET, Sid::lyricsPosBelow).toPointF();
+            }
+      else {
+            rypos() = -lh * (nAbove - _no - 1);
+            rpos() += score()->styleValue(Pid::OFFSET, Sid::lyricsPosAbove).toPointF();
+            }
       }
 
 //---------------------------------------------------------

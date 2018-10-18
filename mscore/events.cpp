@@ -466,13 +466,12 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
 
       switch (state) {
             case ViewState::NORMAL:
+                   if (!drag)
+                        return;
                   if (!editData.element && (me->modifiers() & Qt::ShiftModifier))
                         changeState(ViewState::LASSO);
-                  else if (editData.element && !(me->modifiers()) && editData.element->isMovable()) {
-                        if (!drag)
-                              return;
+                  else if (editData.element && !(me->modifiers()) && editData.element->isMovable())
                         changeState(ViewState::DRAG_OBJECT);
-                        }
                   else
                         changeState(ViewState::DRAG);
                   break;
@@ -793,8 +792,6 @@ void ScoreView::seqStopped()
 
 void ScoreView::changeState(ViewState s)
       {
-      qDebug("changeState %s  -> %s", stateName(state), stateName(s));
-
 //      if (state == ViewState::EDIT && s == ViewState::EDIT) {
 //            startEdit();
 //            return;
@@ -803,6 +800,8 @@ void ScoreView::changeState(ViewState s)
             return;
       if (s == state)
             return;
+
+      qDebug("changeState %s  -> %s", stateName(state), stateName(s));
       //
       //    end current state
       //

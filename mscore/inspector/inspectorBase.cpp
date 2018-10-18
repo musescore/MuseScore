@@ -84,6 +84,14 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
             case P_TYPE::POINT_SP:
                   v = v.toPointF() * inspector->element()->score()->spatium();
                   break;
+            case P_TYPE::POINT_SP_MM: {
+                  Element* e = inspector->element();
+                  if (e->sizeIsSpatiumDependent())
+                        v = v.toPointF() * e->score()->spatium();
+                  else
+                        v = v.toPointF() * DPMM;
+                  }
+                  break;
             case P_TYPE::SP_REAL:
                   v = v.toDouble() * inspector->element()->score()->spatium();
                   break;
@@ -135,6 +143,14 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
       switch (propertyType(id)) {
             case P_TYPE::POINT_SP:
                   val = val.toPointF() / inspector->element()->score()->spatium();
+                  break;
+            case P_TYPE::POINT_SP_MM: {
+                  Element* e = inspector->element();
+                  if (e->sizeIsSpatiumDependent())
+                        val = val.toPointF() / e->score()->spatium();
+                  else
+                        val = val.toPointF() / DPMM;
+                  }
                   break;
             case P_TYPE::SP_REAL:
                   val = val.toDouble() / inspector->element()->score()->spatium();
@@ -427,10 +443,18 @@ void InspectorBase::setStyleClicked(int i)
       e->score()->startCmd();
       QVariant val = getValue(ii);
       e->undoChangeProperty(ii.t, val, PropertyFlags::STYLED);
-      Pid id      = ii.t;
-      P_TYPE t     = propertyType(id);
+      Pid id   = ii.t;
+      P_TYPE t = propertyType(id);
       if (t == P_TYPE::SP_REAL)
             val = val.toDouble() / e->score()->spatium();
+      else if (t == P_TYPE::POINT_SP)
+            val = val.toPointF() / e->score()->spatium();
+      else if (t == P_TYPE::POINT_SP_MM) {
+            if (e->sizeIsSpatiumDependent())
+                  val = val.toPointF() / e->score()->spatium();
+            else
+                  val = val.toPointF() / DPMM;
+            }
       e->score()->undo(new ChangeStyleVal(e->score(), sidx, val));
       checkDifferentValues(ii);
       e->score()->endCmd();

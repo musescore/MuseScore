@@ -74,7 +74,6 @@ enum class Sid {
       lyricsOddFontItalic,
       lyricsOddFontUnderline,
       lyricsOddAlign,
-      lyricsOddOffset,
 
       lyricsEvenFontFace,
       lyricsEvenFontSize,
@@ -82,7 +81,6 @@ enum class Sid {
       lyricsEvenFontItalic,
       lyricsEvenFontUnderline,
       lyricsEvenAlign,
-      lyricsEvenOffset,
 
       figuredBassFontFamily,
 //      figuredBassFontSize,
@@ -315,7 +313,7 @@ enum class Sid {
       oddFooterC,
       oddFooterR,
 
-      voltaY,
+      voltaPosAbove,
       voltaHook,
       voltaLineWidth,
       voltaLineStyle,
@@ -610,7 +608,6 @@ enum class Sid {
       systemTextFontItalic,
       systemTextFontUnderline,
       systemTextAlign,
-      systemTextOffset,
       systemTextOffsetType,
       systemTextPlacement,
       systemTextPosAbove,
@@ -623,7 +620,6 @@ enum class Sid {
       staffTextFontItalic,
       staffTextFontUnderline,
       staffTextAlign,
-      staffTextOffset,
       staffTextOffsetType,
       staffTextPlacement,
       staffTextPosAbove,
@@ -956,7 +952,8 @@ struct StyledProperty {
 
 typedef std::vector<StyledProperty> ElementStyle;
 
-#define TEXT_STYLE_SIZE 15
+#define TEXT_STYLE_SIZE 14
+
 typedef std::array<StyledProperty, TEXT_STYLE_SIZE> TextStyle;
 
 

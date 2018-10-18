@@ -15,7 +15,6 @@
       <beamWidth>0.48</beamWidth>
       <beamMinLen>1.25</beamMinLen>
       <propertyDistanceStem>0.5</propertyDistanceStem>
-      <voltaY>-2</voltaY>
       <Spatium>1.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>

@@ -97,7 +97,7 @@ enum class Pid {
       BARLINE_SPAN,
       BARLINE_SPAN_FROM,
       BARLINE_SPAN_TO,
-      USER_OFF,
+      OFFSET,
       FRET,
       STRING,
       GHOST,
@@ -199,7 +199,7 @@ enum class Pid {
       SPANNER_TICK,
       SPANNER_TICKS,
       SPANNER_TRACK2,
-      USER_OFF2,
+      OFFSET2,
       BREAK_MMR,
       REPEAT_COUNT,
 
@@ -284,10 +284,8 @@ enum class Pid {
       FRAME_ROUND,
       FRAME_FG_COLOR,
       FRAME_BG_COLOR,
-      FONT_SPATIUM_DEPENDENT,
+      SIZE_SPATIUM_DEPENDENT,
       ALIGN,
-      OFFSET,
-      OFFSET_TYPE,
       SYSTEM_FLAG,
       BEGIN_TEXT,
 
@@ -337,8 +335,9 @@ enum class P_TYPE : char {
       SP_REAL,          // real (point) value saved in (score) spatium units
       FRACTION,
       POINT,
-      POINT_SP,         // point units values saved in (score) spatium units
+      POINT_SP,         // point units, value saved in (score) spatium units
       POINT_MM,
+      POINT_SP_MM,      // point units, value saved as mm or spatium depending on Element->sizeIsSpatiumDependent()
       SIZE,
       SIZE_MM,
       STRING,
