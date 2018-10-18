@@ -135,7 +135,7 @@ void ScoreView::startFotoDrag()
 
 void ScoreView::doDragFoto(QMouseEvent* ev)
       {
-      _foto->setUserOff(QPointF(0.0, 0.0));
+      _foto->setOffset(QPointF(0.0, 0.0));
       QPointF p = toLogical(ev->pos());
       QPointF sm = editData.startMove;
 
