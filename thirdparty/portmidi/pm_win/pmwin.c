@@ -1,7 +1,7 @@
 /* pmwin.c -- PortMidi os-dependent code */
 
 /* This file only needs to implement:
-       pm_init(), which calls various routines to register the
+       pm_init(), which calls various routines to register the 
            available midi devices,
        Pm_GetDefaultInputDeviceID(), and
        Pm_GetDefaultOutputDeviceID().
@@ -9,6 +9,7 @@
    be separate from the main portmidi.c file because it is system
    dependent, and it is separate from, say, pmwinmm.c, because it
    might need to register devices for winmm, directx, and others.
+
  */
 
 #include "stdlib.h"
@@ -19,6 +20,7 @@
 #ifdef DEBUG
 #include "stdio.h"
 #endif
+#include <windows.h>
 
 /* pm_exit is called when the program exits.
    It calls pm_term to make sure PortMidi is properly closed.
@@ -42,17 +44,9 @@ static void pm_exit(void) {
 /* pm_init is the windows-dependent initialization.*/
 void pm_init(void)
 {
-#ifdef DEBUG
-    printf("registered pm_term with cleanup DLL\n");
-#endif
-
-#if 0
-      // ??WS
-#else
     atexit(pm_exit);
 #ifdef DEBUG
     printf("registered pm_exit with atexit()\n");
-#endif
 #endif
     pm_winmm_init();
     /* initialize other APIs (DirectX?) here */
@@ -64,47 +58,87 @@ void pm_term(void) {
 }
 
 
-PmDeviceID Pm_GetDefaultInputDeviceID() {
-    /* This routine should check the environment and the registry
-       as specified in portmidi.h, but for now, it just returns
-       the first device of the proper input/output flavor.
-     */
-    int i;
+static PmDeviceID pm_get_default_device_id(int is_input, char *key) {
+    HKEY hkey;
+#define PATTERN_MAX 256
+    char pattern[PATTERN_MAX];
+    long pattern_max = PATTERN_MAX;
+    DWORD dwType;
+    /* Find first input or device -- this is the default. */
+    PmDeviceID id = pmNoDevice;
+    int i, j;
     Pm_Initialize(); /* make sure descriptors exist! */
     for (i = 0; i < pm_descriptor_index; i++) {
-        if (descriptors[i].pub.input) {
-            return i;
+        if (descriptors[i].pub.input == is_input) {
+            id = i;
+            break;
         }
     }
-    return pmNoDevice;
+    /* Look in registry for a default device name pattern. */
+    if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software", 0, KEY_READ, &hkey) != 
+        ERROR_SUCCESS) {
+        return id;
+    }
+    if (RegOpenKeyEx(hkey, "JavaSoft", 0, KEY_READ, &hkey) !=
+        ERROR_SUCCESS) {
+        return id;
+    }
+    if (RegOpenKeyEx(hkey, "Prefs", 0, KEY_READ, &hkey) !=
+        ERROR_SUCCESS) {
+        return id;
+    }
+    if (RegOpenKeyEx(hkey, "/Port/Midi", 0, KEY_READ, &hkey) !=
+        ERROR_SUCCESS) {
+        return id;
+    }
+    if (RegQueryValueEx(hkey, key, NULL, &dwType, (BYTE *) pattern, 
+                        (DWORD *) &pattern_max) != 
+	ERROR_SUCCESS) {
+        return id;
+    }
+
+    /* decode pattern: upper case encoded with "/" prefix */
+    i = j = 0;
+    while (pattern[i]) {
+        if (pattern[i] == '/' && pattern[i + 1]) {
+            pattern[j++] = toupper(pattern[++i]);
+	} else {
+            pattern[j++] = tolower(pattern[i]);
+	}
+        i++;
+    }
+    pattern[j] = 0; /* end of string */
+
+    /* now pattern is the string from the registry; search for match */
+    i = pm_find_default_device(pattern, is_input);
+    if (i != pmNoDevice) {
+        id = i;
+    }
+    return id;
 }
+
+
+PmDeviceID Pm_GetDefaultInputDeviceID() {
+    return pm_get_default_device_id(TRUE, 
+           "/P/M_/R/E/C/O/M/M/E/N/D/E/D_/I/N/P/U/T_/D/E/V/I/C/E");
+}
+
 
 PmDeviceID Pm_GetDefaultOutputDeviceID() {
-    /* This routine should check the environment and the registry
-       as specified in portmidi.h, but for now, it just returns
-       the first device of the proper input/output flavor.
-     */
-    int i;
-    Pm_Initialize(); /* make sure descriptors exist! */
-    for (i = 0; i < pm_descriptor_index; i++) {
-        if (descriptors[i].pub.output) {
-            return i;
-        }
-    }
-    return pmNoDevice;
-
-    // Prevent "unreachable code" warning
-    // return 0;
+  return pm_get_default_device_id(FALSE,
+          "/P/M_/R/E/C/O/M/M/E/N/D/E/D_/O/U/T/P/U/T_/D/E/V/I/C/E");
 }
 
-#include "stdio.h"
+
+#include "stdio.h" 
 
 void *pm_alloc(size_t s) {
-    return malloc(s);
+    return malloc(s); 
 }
 
 
-void pm_free(void *ptr) {
-    free(ptr);
+void pm_free(void *ptr) { 
+    free(ptr); 
 }
+
 

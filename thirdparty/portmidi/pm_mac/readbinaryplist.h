@@ -3,14 +3,14 @@
    Roger B. Dannenberg, Jun 2008
 */
 
+#include <stdint.h> /* for uint8_t ... */
+
 #ifndef TRUE
     #define TRUE 1
     #define FALSE 0
 #endif
 
 #define MAX_KEY_SIZE 256
-
-#include <stdint.h>
 
 enum
 {
