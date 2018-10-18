@@ -105,8 +105,8 @@ namespace Ms {
 
 void Element::spatiumChanged(qreal oldValue, qreal newValue)
       {
-      _userOff *= (newValue / oldValue);
-//      _readPos *= (newValue / oldValue);
+      if (sizeIsSpatiumDependent())
+            _offset *= (newValue / oldValue);
       }
 
 //---------------------------------------------------------
@@ -116,7 +116,8 @@ void Element::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Element::localSpatiumChanged(qreal oldValue, qreal newValue)
       {
-      _userOff *= (newValue / oldValue);
+      if (sizeIsSpatiumDependent())
+            _offset *= (newValue / oldValue);
       }
 
 //---------------------------------------------------------
@@ -155,7 +156,6 @@ Element::Element(Score* s, ElementFlags f)
    : ScoreElement(s)
       {
       _flags         = f;
-      _placement     = Placement::BELOW;
       _track         = -1;
       _color         = MScore::defaultColor;
       _mag           = 1.0;
@@ -167,13 +167,12 @@ Element::Element(const Element& e)
    : ScoreElement(e)
       {
       _parent     = e._parent;
-      _flags      = e._flags;
-      _placement  = e._placement;
-      _track      = e._track;
+      _bbox       = e._bbox;
       _mag        = e._mag;
       _pos        = e._pos;
-      _userOff    = e._userOff;
-      _bbox       = e._bbox;
+      _offset     = e._offset;
+      _track      = e._track;
+      _flags      = e._flags;
       _tag        = e._tag;
       _z          = e._z;
       _color      = e._color;
@@ -507,17 +506,6 @@ void Element::writeProperties(XmlWriter& xml) const
                   xml.etag(); // </linked>
                   }
             }
-      if (!autoplace() && !userOff().isNull()) {      // TODO: remove pos of offset
-            if (isFingering() || isHarmony() || isTuplet() || isStaffText()) {
-                  QPointF p = userOff() / score()->spatium();
-                  if (isStaffText())
-                        xml.tag("pos", p + QPointF(0.0, -2.0));
-                  else
-                        xml.tag("pos", p);
-                  }
-            else
-                  xml.tag("offset", userOff() / score()->spatium());
-            }
       if ((track() != xml.curTrack()) && (track() != -1) && !isBeam()) {
             // Writing track number for beams is redundant as it is calculated
             // during layout.
@@ -533,10 +521,10 @@ void Element::writeProperties(XmlWriter& xml) const
                         }
                   }
             }
-      writeProperty(xml, Pid::COLOR);
-      writeProperty(xml, Pid::VISIBLE);
-      writeProperty(xml, Pid::Z);
-      writeProperty(xml, Pid::PLACEMENT);
+      for (Pid pid : { Pid::OFFSET, Pid::COLOR, Pid::VISIBLE, Pid::Z, Pid::PLACEMENT}) {
+            if (propertyFlags(pid) == PropertyFlags::NOSTYLE && !autoplace())
+                  writeProperty(xml, pid);
+            }
       }
 
 //---------------------------------------------------------
@@ -547,7 +535,11 @@ bool Element::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
 
-      if (tag == "track")
+      if (readProperty(tag, e, Pid::SIZE_SPATIUM_DEPENDENT))
+            ;
+      else if (readProperty(tag, e, Pid::OFFSET))
+            ;
+      else if (tag == "track")
             setTrack(e.readInt() + e.trackOffset());
       else if (tag == "color")
             setColor(e.readColor());
@@ -644,9 +636,12 @@ bool Element::readProperties(XmlReader& e)
             if (val >= 0)
                   e.initTick(score()->fileDivision(val));
             }
-      else if (tag == "offset" || tag == "pos") {
-            setUserOff(e.readPoint() * score()->spatium());
-            setAutoplace(false);
+      else if (tag == "pos") {
+            Pid pid = Pid::OFFSET;
+            QPointF p = Ms::getProperty(pid, e).toPointF() * score()->spatium();
+            setProperty(pid, p);
+            if (propertyFlags(pid) == PropertyFlags::STYLED)
+                  setPropertyFlags(pid, PropertyFlags::UNSTYLED);
             }
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + e.readInt());
@@ -660,9 +655,11 @@ bool Element::readProperties(XmlReader& e)
                   }
             }
       else if (tag == "placement")
-            _placement = Placement(Ms::getProperty(Pid::PLACEMENT, e).toInt());
+            setPlacement(Placement(Ms::getProperty(Pid::PLACEMENT, e).toInt()));
       else if (tag == "z")
             setZ(e.readInt());
+      else if (ScoreElement::readProperty(tag, e, Pid::OFFSET))
+            ;
       else
             return false;
       return true;
@@ -1088,8 +1085,8 @@ QVariant Element::getProperty(Pid propertyId) const
                   return visible();
             case Pid::SELECTED:
                   return selected();
-            case Pid::USER_OFF:
-                  return _userOff;
+            case Pid::OFFSET:
+                  return _offset;
             case Pid::PLACEMENT:
                   return int(placement());
             case Pid::AUTOPLACE:
@@ -1098,6 +1095,8 @@ QVariant Element::getProperty(Pid propertyId) const
                   return z();
             case Pid::SYSTEM_FLAG:
                   return systemFlag();
+            case Pid::SIZE_SPATIUM_DEPENDENT:
+                  return sizeIsSpatiumDependent();
             default:
                   return QVariant();
             }
@@ -1125,10 +1124,10 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
             case Pid::SELECTED:
                   setSelected(v.toBool());
                   break;
-            case Pid::USER_OFF:
+            case Pid::OFFSET:
                   score()->addRefresh(canvasBoundingRect());
-                  _userOff = v.toPointF();
-                  break;
+                  _offset = v.toPointF();
+                  return true;                  // no triggerLayout()
             case Pid::PLACEMENT:
                   setPlacement(Placement(v.toInt()));
                   break;
@@ -1141,13 +1140,15 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
             case Pid::SYSTEM_FLAG:
                   setSystemFlag(v.toBool());
                   break;
+            case Pid::SIZE_SPATIUM_DEPENDENT:
+                  setSizeIsSpatiumDependent(v.toBool());
+                  break;
             default:
 //                  qFatal("<%s> unknown <%s>(%d), data <%s>", name(), propertyQmlName(propertyId), int(propertyId), qPrintable(v.toString()));
                   qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyQmlName(propertyId), int(propertyId), qPrintable(v.toString()));
                   return false;
             }
       triggerLayout();
-//      setGenerated(false);
       return true;
       }
 
@@ -1168,8 +1169,14 @@ QVariant Element::propertyDefault(Pid pid) const
                   return int(Placement::BELOW);
             case Pid::SELECTED:
                   return false;
-            case Pid::USER_OFF:
+            case Pid::OFFSET: {
+                  if (isStyled(pid)) {
+                        QVariant v = ScoreElement::propertyDefault(pid);
+                        if (v.isValid())
+                              return v;
+                        }
                   return QPointF();
+                  }
             case Pid::AUTOPLACE:
                   return true;
             case Pid::Z:
@@ -1282,54 +1289,6 @@ void Element::undoSetVisible(bool v)
       {
       undoChangeProperty(Pid::VISIBLE, v);
       }
-
-//---------------------------------------------------------
-//   bbox() function for scripts
-//
-//    use spatium units rather than raster units
-//---------------------------------------------------------
-
-QRectF Element::scriptBbox() const
-      {
-      qreal  _sp = spatium();
-      QRectF bbox_ = bbox();
-      return QRectF(bbox_.x() / _sp, bbox_.y() / _sp, bbox_.width() / _sp, bbox_.height() / _sp);
-      }
-
-//---------------------------------------------------------
-//   positioning functions for scripts
-//
-//    use spatium units rather than raster units
-//    are undoable
-//    route pos changes to usefOff
-//---------------------------------------------------------
-
-QPointF Element::scriptPagePos() const
-      {
-      return pagePos() / spatium();
-      }
-
-QPointF Element::scriptPos() const
-      {
-      return (_pos + _userOff) / spatium();
-      }
-
-void Element::scriptSetPos(const QPointF& p)
-      {
-      undoChangeProperty(Pid::USER_OFF, p*spatium() - ipos());
-      }
-
-QPointF Element::scriptUserOff() const
-      {
-      return _userOff / spatium();
-      }
-
-void Element::scriptSetUserOff(const QPointF& o)
-      {
-      undoChangeProperty(Pid::USER_OFF, o * spatium());
-      }
-
-//void Element::draw(SymId id, QPainter* p) const { score()->scoreFont()->draw(id, p, magS()); }
 
 //---------------------------------------------------------
 //   drawSymbol
@@ -1678,7 +1637,7 @@ bool Element::isUserModified() const
                         return true;
                   }
             }
-      return !visible() || !userOff().isNull() || (color() != MScore::defaultColor);
+      return !visible() || !offset().isNull() || (color() != MScore::defaultColor);
       }
 
 //---------------------------------------------------------
@@ -1855,7 +1814,7 @@ void Element::startDrag(EditData& ed)
       {
       ElementEditData* eed = new ElementEditData();
       eed->e = this;
-      eed->pushProperty(Pid::USER_OFF);
+      eed->pushProperty(Pid::OFFSET);
       ed.addData(eed);
       }
 
@@ -1883,7 +1842,7 @@ QRectF Element::drag(EditData& ed)
             y = vRaster * n;
             }
 
-      setUserOff(QPointF(x, y));
+      setOffset(QPointF(x, y));
 //      setGenerated(false);
 
       if (isTextBase()) {         // TODO: check for other types
@@ -1919,7 +1878,7 @@ QRectF Element::drag(EditData& ed)
                         move = true;
                         }
                   if (move)
-                        setUserOff(QPointF(x, y));
+                        setOffset(QPointF(x, y));
                   }
             }
       return canvasBoundingRect() | r;
@@ -1932,8 +1891,12 @@ QRectF Element::drag(EditData& ed)
 void Element::endDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
-      for (PropertyData pd : eed->propertyData)
-            score()->undoPropertyChanged(this, pd.id, pd.data);
+      for (PropertyData pd : eed->propertyData) {
+            PropertyFlags f = propertyFlags(pd.id);
+            if (f == PropertyFlags::STYLED)
+                  f = PropertyFlags::UNSTYLED;
+            score()->undoPropertyChanged(this, pd.id, pd.data, f);
+            }
       undoChangeProperty(Pid::AUTOPLACE, false);
       }
 
@@ -1956,7 +1919,7 @@ void Element::startEdit(EditData& ed)
 bool Element::edit(EditData& ed)
       {
       if (ed.key ==  Qt::Key_Home) {
-            setUserOff(QPoint());
+            setOffset(QPoint());
             return true;
             }
       return false;
@@ -1969,7 +1932,7 @@ bool Element::edit(EditData& ed)
 void Element::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
-      eed->pushProperty(Pid::USER_OFF);
+      eed->pushProperty(Pid::OFFSET);
       }
 
 //---------------------------------------------------------
@@ -1979,7 +1942,7 @@ void Element::startEditDrag(EditData& ed)
 void Element::editDrag(EditData& ed)
       {
       score()->addRefresh(canvasBoundingRect());
-      setUserOff(userOff() + ed.delta);
+      setOffset(offset() + ed.delta);
       undoChangeProperty(Pid::AUTOPLACE, false);
       score()->addRefresh(canvasBoundingRect());
       }
@@ -2030,7 +1993,7 @@ qreal Element::styleP(Sid idx) const
 void Element::autoplaceSegmentElement(qreal minDistance)
       {
       if (visible() && autoplace() && parent()) {
-            setUserOff(QPointF());
+            setOffset(QPointF());
             Segment* s        = toSegment(parent());
             Measure* m        = s->measure();
             int si            = staffIdx();
@@ -2150,10 +2113,12 @@ void Element::autoplaceSegmentElement(qreal minDistance)
 void Element::autoplaceSegmentElement(qreal minDistance)
       {
       if (visible() && autoplace() && parent()) {
-            setUserOff(QPointF());
             Segment* s        = toSegment(parent());
             Measure* m        = s->measure();
             int si            = staffIdx();
+
+            if (m->system() == nullptr)
+                  printf("=== no system for <%s>\n", name());
 
             SysStaff* ss = m->system()->staff(si);
             QRectF r = bbox().translated(m->pos() + s->pos() + pos());
@@ -2173,7 +2138,7 @@ void Element::autoplaceSegmentElement(qreal minDistance)
                   qreal yd = d + minDistance;
                   if (placeAbove())
                         yd *= -1.0;
-                  rUserYoffset() = yd;
+                  rypos() += yd;
                   r.translate(QPointF(0.0, yd));
                   }
             ss->skyline().add(r);
@@ -2187,7 +2152,6 @@ void Element::autoplaceSegmentElement(qreal minDistance)
 void Element::autoplaceMeasureElement(qreal minDistance)
       {
       if (visible() && autoplace() && parent()) {
-            setUserOff(QPointF());
             Measure* m = toMeasure(parent());
             int si     = staffIdx();
 
@@ -2208,10 +2172,11 @@ void Element::autoplaceMeasureElement(qreal minDistance)
                   qreal yd = d + minDistance;
                   if (placeAbove())
                         yd *= -1.0;
-                  rUserYoffset() = yd;
+                  rypos() += yd;
                   r.translate(QPointF(0.0, yd));
                   }
             ss->skyline().add(r);
             }
       }
+
 }

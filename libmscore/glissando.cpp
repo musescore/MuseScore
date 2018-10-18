@@ -332,9 +332,9 @@ void Glissando::layout()
       // final note arpeggio / accidental / ledger line / accidental / arpeggio (i.e. from outermost to innermost)
       offs2 *= -1.0;          // discount changes already applied
       if (Arpeggio* ap = cr2->arpeggio())
-            offs2.rx() += ap->pos().x() + ap->userOff().x();
+            offs2.rx() += ap->pos().x() + ap->offset().x();
       else if (Accidental* ac = anchor2->accidental())
-            offs2.rx() += ac->pos().x() + ac->userOff().x();
+            offs2.rx() += ac->pos().x() + ac->offset().x();
       else if ( (ledLin = cr2->ledgerLines()) != nullptr)
             offs2.rx() += ledLin->pos().x();
 

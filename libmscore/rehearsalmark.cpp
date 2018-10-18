@@ -42,7 +42,7 @@ RehearsalMark::RehearsalMark(Score* s)
 
 void RehearsalMark::layout()
       {
-      layout2(Sid::rehearsalMarkPosAbove, Sid::rehearsalMarkPosBelow);
+      TextBase::layout();
 
       Segment* s = segment();
       if (s) {

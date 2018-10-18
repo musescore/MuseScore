@@ -79,7 +79,6 @@
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <offset x="-4" y="0"/>
             <durationType>16th</durationType>
             <grace16after/>
             <Note>
@@ -105,7 +104,6 @@
             <l2>-9</l2>
             </Beam>
           <Chord>
-            <offset x="-4" y="0"/>
             <durationType>16th</durationType>
             <grace16after/>
             <Note>

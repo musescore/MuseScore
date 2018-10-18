@@ -126,7 +126,7 @@ QVariant InstrumentChange::propertyDefault(Pid propertyId) const
 
 void InstrumentChange::layout()
       {
-      layout2(Sid::instrumentChangePosAbove, Sid::instrumentChangePosBelow);
+      TextBase::layout();
       autoplaceSegmentElement(styleP(Sid::instrumentChangeMinDistance));
       }
 

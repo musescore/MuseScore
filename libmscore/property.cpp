@@ -76,7 +76,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::BARLINE_SPAN,            "barline_span",            false, "span",                  P_TYPE::BOOL            },
       { Pid::BARLINE_SPAN_FROM,       "barline_span_from",       false, "spanFromOffset",        P_TYPE::INT             },
       { Pid::BARLINE_SPAN_TO,         "barline_span_to",         false, "spanToOffset",          P_TYPE::INT             },
-      { Pid::USER_OFF,                "offset",                  false, "offset",                P_TYPE::POINT_SP         },
+      { Pid::OFFSET,                  "offset",                  false, "offset",                P_TYPE::POINT_SP_MM     },
       { Pid::FRET,                    "fret",                    true,  "fret",                  P_TYPE::INT             },
       { Pid::STRING,                  "string",                  true,  "string",                P_TYPE::INT             },
       { Pid::GHOST,                   "ghost",                   true,  "ghost",                 P_TYPE::BOOL            },
@@ -178,7 +178,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::SPANNER_TICK,            "spanner_tick",            true,  "tick",                  P_TYPE::INT             },
       { Pid::SPANNER_TICKS,           "spanner_ticks",           true,  "ticks",                 P_TYPE::INT             },
       { Pid::SPANNER_TRACK2,          "spanner_track2",          true,  "track2",                P_TYPE::INT             },
-      { Pid::USER_OFF2,               "user_off2",               false, "userOff2",              P_TYPE::POINT_SP        },
+      { Pid::OFFSET2,                 "user_off2",               false, "userOff2",              P_TYPE::POINT_SP        },
       { Pid::BREAK_MMR,               "break_mmr",               false, "breakMultiMeasureRest", P_TYPE::BOOL            },
       { Pid::REPEAT_COUNT,            "repeat_count",            true,  "endRepeat",             P_TYPE::INT             },
 
@@ -263,10 +263,8 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::FRAME_ROUND,             "frame_round",             false, "frameRound",            P_TYPE::INT             },
       { Pid::FRAME_FG_COLOR,          "frame_fg_color",          false, "frameFgColor",          P_TYPE::COLOR           },
       { Pid::FRAME_BG_COLOR,          "frame_bg_color",          false, "frameBgColor",          P_TYPE::COLOR           },
-      { Pid::FONT_SPATIUM_DEPENDENT,  "font_spatium_dependent",  false, "sizeIsSpatiumDependent",P_TYPE::BOOL            },
+      { Pid::SIZE_SPATIUM_DEPENDENT,  "size_spatium_dependent",  false, "sizeIsSpatiumDependent",P_TYPE::BOOL            },
       { Pid::ALIGN,                   "align",                   false, "align",                 P_TYPE::ALIGN           },
-      { Pid::OFFSET,                  "layoutOffset",            false, "layoutOffset",          P_TYPE::POINT           },
-      { Pid::OFFSET_TYPE,             "offset_type",             false, "offsetType",            P_TYPE::INT             },
       { Pid::SYSTEM_FLAG,             "system_flag",             false, "systemFlag",            P_TYPE::BOOL            },
       { Pid::BEGIN_TEXT,              "begin_text",              false, "beginText",             P_TYPE::STRING          },
 
@@ -379,6 +377,8 @@ QVariant getProperty(Pid id, XmlReader& e)
             case P_TYPE::COLOR:
                   return QVariant(e.readColor());
             case P_TYPE::POINT:
+            case P_TYPE::POINT_SP:
+            case P_TYPE::POINT_SP_MM:
                   return QVariant(e.readPoint());
             case P_TYPE::SCALE:
             case P_TYPE::SIZE:

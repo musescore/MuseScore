@@ -1013,8 +1013,10 @@ void Harmony::layout()
       qreal xx = 0.0; // offset(_spatium).x();
 
       if (parent()->isSegment()) {
-            yy = score()->styleP(Sid::chordSymbolPosAbove);
-            QPointF o(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
+            QPointF p = score()->styleValue(Pid::OFFSET, Sid::chordSymbolPosAbove).toPointF();
+            yy = p.y();
+            xx = p.x();
+            QPointF o(offset());
             xx += o.x();
             yy += o.y();
             }

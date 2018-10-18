@@ -45,7 +45,6 @@
 #include "read206.h"
 #include "excerpt.h"
 #include "articulation.h"
-#include "elementlayout.h"
 #include "volta.h"
 #include "pedal.h"
 #include "hairpin.h"
@@ -148,14 +147,14 @@ struct StyleVal2 {
       { Sid::propertyDistance,            QVariant(1.0) },
       { Sid::articulationMag,             QVariant(1.0) },
       { Sid::lastSystemFillLimit,         QVariant(0.3) },
-      { Sid::hairpinPosBelow,             QVariant(3.5) },
+      { Sid::hairpinPosBelow,             QPointF(0.0, 3.5) },
       { Sid::hairpinHeight,               QVariant(1.2) },
       { Sid::hairpinContHeight,           QVariant(0.5) },
       { Sid::hairpinLineWidth,            QVariant(0.13) },
-      { Sid::pedalPosBelow,               QVariant(4) },
+      { Sid::pedalPosBelow,               QPointF(0.0, 4) },
       { Sid::pedalLineWidth,              QVariant(.15) },
       { Sid::pedalLineStyle,              QVariant(int(Qt::SolidLine)) },
-      { Sid::trillPosAbove,               QVariant(-1) },
+      { Sid::trillPosAbove,               QPointF(0.0, -1) },
       { Sid::harmonyFretDist,             QVariant(0.5) },
       { Sid::minHarmonyDistance,          QVariant(0.5) },
       { Sid::maxHarmonyBarDistance,       QVariant(3.0) },
@@ -233,11 +232,11 @@ struct StyleVal2 {
       { Sid::oddFooterL,                  QVariant(QString()) },
       { Sid::oddFooterC,                  QVariant(QString("$:copyright:")) },
       { Sid::oddFooterR,                  QVariant(QString("$p")) },
-      { Sid::voltaY,                      QVariant(-3.0) },
+      { Sid::voltaPosAbove,               QPointF(0.0, -3.0) },
       { Sid::voltaHook,                   QVariant(1.9) },
       { Sid::voltaLineWidth,              QVariant(.1) },
       { Sid::voltaLineStyle,              QVariant(int(Qt::SolidLine)) },
-      { Sid::ottavaPosAbove,              QVariant(-3.0) },
+      { Sid::ottavaPosAbove,              QPointF(0.0, -3.0) },
       { Sid::ottavaHookAbove,             QVariant(1.9) },
       { Sid::ottavaHookBelow,             QVariant(-1.9) },
       { Sid::ottavaLineWidth,             QVariant(.1) },
@@ -585,7 +584,7 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                   case Pid::FRAME_BG_COLOR:
                         value = backgroundColor;
                         break;
-                  case Pid::FONT_SPATIUM_DEPENDENT:
+                  case Pid::SIZE_SPATIUM_DEPENDENT:
                         value = sizeIsSpatiumDependent;
                         break;
                   case Pid::BEGIN_TEXT_ALIGN:
@@ -594,6 +593,7 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                   case Pid::ALIGN:
                         value = QVariant::fromValue(align);
                         break;
+#if 0  //TODO-offset
                   case Pid::OFFSET:
                         if (offsetValid) {
                               if (ss == Tid::TEMPO) {
@@ -614,6 +614,7 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                   case Pid::OFFSET_TYPE:
                         value = int(offsetType);
                         break;
+#endif
                   case Pid::SYSTEM_FLAG:
                         value = systemFlag;
                         break;
@@ -1456,8 +1457,8 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e)
             delete _verseNumber;
             }
       lyrics->setAutoplace(true);
-      lyrics->setUserOff(QPointF());
       lyrics->setOffset(QPointF());
+//TODO-offset      lyrics->setOffset(QPointF());
       }
 
 //---------------------------------------------------------
@@ -1711,7 +1712,7 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
             }
       else if (tag == "pos") {
             QPointF pt = e.readPoint();
-            ch->setUserOff(pt * ch->spatium());
+            ch->setOffset(pt * ch->spatium());
             }
       else if (!readDurationProperties206(e, ch))
             return false;
@@ -2105,7 +2106,7 @@ void readHairpin206(XmlReader& e, Hairpin* h)
       h->spannerSegments().clear();
 #if 0
       for (auto ss : h->spannerSegments()) {
-            ss->setUserOff(QPointF());
+            ss->setOffset(QPointF());
             ss->setUserOff2(QPointF());
             }
 #endif
@@ -2289,7 +2290,7 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
                   }
             else if (tag == "timeStretch") {
                   if (el && el->isFermata())
-                        el->setProperty(Pid::TIME_STRETCH ,e.readDouble()); 
+                        el->setProperty(Pid::TIME_STRETCH ,e.readDouble());
                   }
             else {
                   if (!el) {
@@ -2374,7 +2375,7 @@ void readTie206(XmlReader& e, Tie* t)
             ss->ups(Grip::BEZIER1).off   = zeroP;
             ss->ups(Grip::BEZIER2).off   = zeroP;
             ss->ups(Grip::END).off       = zeroP;
-            ss->setUserOff(zeroP);
+            ss->setOffset(zeroP);
             ss->setUserOff2(zeroP);
             }
       }
@@ -2749,11 +2750,11 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   else {
                         if (!t->autoplace()) {
                               // adjust position
-                              qreal userY = t->userOff().y() / t->spatium();
+                              qreal userY = t->offset().y() / t->spatium();
                               qreal yo = -(-2.0 - userY) * t->spatium();
                               t->layout();
                               t->setAlign(Align::LEFT | Align::TOP);
-                              t->rUserYoffset() = yo;
+                              t->ryoffset() = yo;
                               }
                         segment = m->getSegment(SegmentType::ChordRest, e.tick());
                         segment->add(t);
@@ -2774,8 +2775,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   RehearsalMark* el = new RehearsalMark(score);
                   el->setTrack(e.track());
                   readText206(e, el, el);
-                  el->setUserOff(el->userOff() - QPointF(0.0, el->score()->styleP(Sid::rehearsalMarkPosAbove)));
-                  if (el->userOff().isNull())
+                  el->setOffset(el->offset() - el->score()->styleValue(Pid::OFFSET, Sid::rehearsalMarkPosAbove).toPointF());
+                  if (el->offset().isNull())
                         el->setAutoplace(true);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
@@ -3116,11 +3117,11 @@ static void readStyle(MStyle* style, XmlReader& e)
                   style->set(Sid::concertPitch, QVariant(bool(e.readInt())));
             else if (tag == "pedalY") {
                   qreal y = e.readDouble();
-                  style->set(Sid::pedalPosBelow, QVariant(Spatium(y)));
+                  style->set(Sid::pedalPosBelow, QPointF(0.0, y));
                   }
             else if (tag == "lyricsDistance") {
                   qreal y = e.readDouble();
-                  style->set(Sid::lyricsPosBelow, QVariant(Spatium(y)));
+                  style->set(Sid::lyricsPosBelow, QPointF(0.0, y));
                   }
             else if (tag == "ottavaHook") {
                   qreal y = qAbs(e.readDouble());

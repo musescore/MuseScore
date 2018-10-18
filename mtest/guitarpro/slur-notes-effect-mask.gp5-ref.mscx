@@ -181,7 +181,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>S</text>
                 </Text>
               <pitch>38</pitch>
@@ -199,7 +198,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>P</text>
                 </Text>
               <pitch>52</pitch>
@@ -236,7 +234,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>S</text>
                 </Text>
               <pitch>33</pitch>
@@ -254,7 +251,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>P</text>
                 </Text>
               <pitch>52</pitch>
@@ -270,7 +266,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>S</text>
                 </Text>
               <pitch>33</pitch>
@@ -288,7 +283,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>P</text>
                 </Text>
               <pitch>52</pitch>
@@ -520,7 +514,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>38</pitch>
@@ -541,7 +534,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>52</pitch>
@@ -584,7 +576,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>33</pitch>
@@ -605,7 +596,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>52</pitch>
@@ -624,7 +614,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>33</pitch>
@@ -645,7 +634,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>52</pitch>
@@ -791,7 +779,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>38</pitch>
@@ -812,7 +799,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>52</pitch>
@@ -855,7 +841,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>33</pitch>
@@ -876,7 +861,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>52</pitch>
@@ -895,7 +879,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S</text>
                   </Text>
                 <pitch>33</pitch>
@@ -916,7 +899,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P</text>
                   </Text>
                 <pitch>52</pitch>

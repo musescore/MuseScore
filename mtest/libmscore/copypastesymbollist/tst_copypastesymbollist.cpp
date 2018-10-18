@@ -104,7 +104,7 @@ void TestCopyPasteSymbolList::copypastecommon(MasterScore* score, const char* na
 void TestCopyPasteSymbolList::copypaste(const char* name, ElementType type)
       {
       MasterScore* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
-      score->doLayout();
+      // score->doLayout();
 
       Element* el = Element::create(type, score);
       score->selectSimilar(el, false);

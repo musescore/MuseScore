@@ -411,7 +411,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element*)
             }
       else if (!t->readProperties(e))
             return false;
-      t->setUserOff(QPointF());     // ignore user offsets
+      t->setOffset(QPointF());     // ignore user offsets
       t->setAutoplace(true);
       return true;
       }
@@ -658,7 +658,7 @@ static void readFingering114(XmlReader& e, Fingering* fing)
                   auto htmlDdata = QTextDocumentFragment::fromHtml(e.readXml()).toPlainText();
                   htmlDdata.replace(" ", "");
                   fing->setPlainText(htmlDdata);
-                  } 
+                  }
             else if (tag == "subtype") {
                   auto subtype = e.readElementText();
                   if (subtype == "StringNumber") {
@@ -666,12 +666,12 @@ static void readFingering114(XmlReader& e, Fingering* fing)
                         fing->setProperty(Pid::SUB_STYLE, QVariant(10));
                         fing->setPropertyFlags(Pid::SUB_STYLE, PropertyFlags::UNSTYLED);
                         }
-                  } 
+                  }
             else if (tag == "frame") {
                   auto frame = e.readInt();
                   if (frame)
                         if (isStringNumber) //default value is circle for stringnumber, square is setted in tag circle
-                              fing->setFrameType(FrameType::CIRCLE); 
+                              fing->setFrameType(FrameType::CIRCLE);
                         else //default value is square for stringnumber, circle is setted in tag circle
                               fing->setFrameType(FrameType::SQUARE);
                   else
@@ -1137,7 +1137,7 @@ static void readLineSegment114(XmlReader& e, LineSegment* ls)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "off1")
-                  ls->setUserOff(e.readPoint() * ls->spatium());
+                  ls->setOffset(e.readPoint() * ls->spatium());
             else
                   ls->readProperties(e);
             }
@@ -1186,7 +1186,7 @@ static bool readTextLineProperties114(XmlReader& e, TextLineBase* tl)
             // That's why the visibility is set after adding the segment
             // to the corresponding spanner
             ls->setVisible(ls->visible());
-            ls->setUserOff(QPointF());        // ignore offsets
+            ls->setOffset(QPointF());        // ignore offsets
             ls->setAutoplace(true);
             tl->add(ls);
             }
@@ -1221,7 +1221,7 @@ static void readVolta114(XmlReader& e, Volta* volta)
             else if (!readTextLineProperties114(e, volta))
                   e.unknown();
             }
-      volta->setUserOff(QPointF());        // ignore offsets
+      volta->setOffset(QPointF());        // ignore offsets
       volta->setAutoplace(true);
       }
 
@@ -1307,13 +1307,13 @@ static void readTextLine114(XmlReader& e, TextLine* textLine)
             const QStringRef& tag(e.name());
 
             if (tag == "lineVisible")
-                  textLine->setLineVisible(e.readBool());     
+                  textLine->setLineVisible(e.readBool());
             else if (tag == "beginHookHeight") {
                   textLine->setBeginHookHeight(Spatium(e.readDouble()));
-                  } 
+                  }
             else if (tag == "endHookHeight" || tag == "hookHeight") { // hookHeight is obsolete
                   textLine->setEndHookHeight(Spatium(e.readDouble()));
-                  } 
+                  }
             else if (tag == "hookUp") // obsolete
                   textLine->setEndHookHeight(Spatium(qreal(-1.0)));
             else if (tag == "beginSymbol" || tag == "symbol") { // "symbol" is obsolete
@@ -1322,21 +1322,21 @@ static void readTextLine114(XmlReader& e, TextLine* textLine)
                         text[0].isNumber()
                               ? resolveSymCompatibility(SymId(text.toInt()), textLine->score()->mscoreVersion())
                               : text));
-                  } 
+                  }
             else if (tag == "continueSymbol") {
                   QString text(e.readElementText());
                   textLine->setContinueText(QString("<sym>%1</sym>").arg(
                         text[0].isNumber()
                               ? resolveSymCompatibility(SymId(text.toInt()), textLine->score()->mscoreVersion())
                               : text));
-                  } 
+                  }
             else if (tag == "endSymbol") {
                   QString text(e.readElementText());
                   textLine->setEndText(QString("<sym>%1</sym>").arg(
                         text[0].isNumber()
                               ? resolveSymCompatibility(SymId(text.toInt()), textLine->score()->mscoreVersion())
                               : text));
-                  } 
+                  }
             else if (tag == "beginSymbolOffset") // obsolete
                   e.readPoint();
             else if (tag == "continueSymbolOffset") // obsolete
@@ -1362,22 +1362,22 @@ static void readPedal114(XmlReader& e, Pedal* pedal)
       {
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
-            if (tag == "beginSymbol" 
-                  || tag == "beginSymbolOffset" 
-                  || tag == "endSymbol" 
+            if (tag == "beginSymbol"
+                  || tag == "beginSymbolOffset"
+                  || tag == "endSymbol"
                   || tag == "endSymbolOffset"
                   || tag == "subtype"
                   )
                   e.skipCurrentElement();
             else if (tag == "endHookHeight" || tag == "hookHeight") { // hookHeight is obsolete
                   pedal->setEndHookHeight(Spatium(e.readDouble()));
-                  } 
+                  }
             else if (tag == "lineWidth") {
                   pedal->setLineWidth(qreal(e.readDouble()));
-                  } 
+                  }
             else if (tag == "lineStyle") {
                   pedal->setLineStyle(Qt::PenStyle(e.readInt()));
-                  } 
+                  }
             else if (!readTextLineProperties114(e, pedal))
                   e.unknown();
             }
@@ -1789,7 +1789,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   clef->setTrack(e.track());
                   readClef(clef, e);
                   if (m->score()->mscVersion() < 113)
-                        clef->setUserOff(QPointF());
+                        clef->setOffset(QPointF());
                   clef->setGenerated(false);
                   // MS3 doesn't support wrong clef for staff type: Default to G
                   bool isDrumStaff = staff->isDrumStaff(e.tick());
@@ -2199,7 +2199,7 @@ static bool readBoxProperties(XmlReader& e, Box* b)
       else if (tag == "bottomMargin")
             b->setBottomMargin(e.readDouble());
       else if (tag == "offset")
-            b->setUserOff(e.readPoint() * b->spatium());
+            b->setOffset(e.readPoint() * b->spatium());
       else if (tag == "pos")
             e.readPoint();
       else if (tag == "Text") {
@@ -3089,27 +3089,27 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   qreal yo = 0;
                   if (s->isOttava()) {
                       // fix ottava position
-                      yo = styleP(Sid::ottavaPosAbove);
+                      yo = styleValue(Pid::OFFSET, Sid::ottavaPosAbove).toPointF().y();
                       if (s->placeBelow())
                             yo = -yo + s->staff()->height();
                       }
                   else if (s->isPedal()) {
-                        yo = styleP(Sid::pedalPosBelow);
+                        yo = styleValue(Pid::OFFSET, Sid::pedalPosBelow).toPointF().y();
                         }
                   else if (s->isTrill()) {
-                        yo = styleP(Sid::trillPosAbove);
+                        yo = styleValue(Pid::OFFSET, Sid::trillPosAbove).toPointF().y();
                         }
                   else if (s->isTextLine()) {
                         yo = -5.0 * spatium();
                   }
                   if (!s->spannerSegments().isEmpty()) {
                         for (SpannerSegment* seg : s->spannerSegments()) {
-                              if (!seg->userOff().isNull())
-                                    seg->setUserYoffset(seg->userOff().y() - yo);
+                              if (!seg->offset().isNull())
+                                    seg->ryoffset() = seg->offset().y() - yo;
                               }
                         }
                   else {
-                        s->setUserYoffset(-yo);
+                        s->ryoffset() = -yo;
                         }
                   }
             }
@@ -3132,7 +3132,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
 #if 0 // TODO
                               if (cr->isRest()) {
                                     Rest* r = toRest(cr);
-                                    if (!r->userOff().isNull()) {
+                                    if (!r->offset().isNull()) {
                                           int lineOffset = r->computeLineOffset();
                                           qreal lineDist = r->staff() ? r->staff()->staffType(cr->tick())->lineDistance().val() : 1.0;
                                           r->rUserYoffset() -= (lineOffset * .5 * lineDist * r->spatium());
@@ -3247,8 +3247,9 @@ Score::FileError MasterScore::read114(XmlReader& e)
       // volta offsets in older scores are hardcoded to be relative to a voltaY of -2.0sp
       // we'll force this and live with it for the score
       // but we wait until now to do it so parts don't have this issue
-      if (styleV(Sid::voltaY) == MScore::baseStyle().value(Sid::voltaY))
-            style().set(Sid::voltaY, -2.0f);
+
+      if (styleV(Sid::voltaPosAbove) == MScore::baseStyle().value(Sid::voltaPosAbove))
+            style().set(Sid::voltaPosAbove, QPointF(0.0, -2.0f));
 
       fixTicks();
       rebuildMidiMapping();

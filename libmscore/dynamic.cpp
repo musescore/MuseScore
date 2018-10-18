@@ -22,6 +22,7 @@
 #include "chord.h"
 #include "undo.h"
 #include "sym.h"
+#include "musescoreCore.h"
 
 namespace Ms {
 
@@ -154,7 +155,7 @@ void Dynamic::read(XmlReader& e)
 
 void Dynamic::layout()
       {
-      layout2(Sid::dynamicsPosAbove, Sid::dynamicsPosBelow);
+      TextBase::layout();
 
       Segment* s = segment();
       if (s) {
@@ -192,7 +193,6 @@ void Dynamic::doAutoplace()
       if (!(s && autoplace()))
             return;
 
-      setUserOff(QPointF());
       qreal minDistance = score()->styleP(Sid::dynamicsMinDistance);
       QRectF r          = bbox().translated(pos() + s->pos() + s->measure()->pos());
       Skyline& sl       = s->measure()->system()->staff(staffIdx())->skyline();
@@ -202,14 +202,13 @@ void Dynamic::doAutoplace()
       if (placeAbove()) {
             qreal d = sk.minDistance(sl.north());
             if (d > -minDistance)
-                  rUserYoffset() = -(d + minDistance);
+                  rypos() += -(d + minDistance);
             }
       else {
             qreal d = sl.south().minDistance(sk);
             if (d > -minDistance)
-                  rUserYoffset() = d + minDistance;
+                  rypos() += d + minDistance;
             }
-//      sl.add(r);      do later
       }
 
 //---------------------------------------------------------
@@ -288,10 +287,10 @@ QRectF Dynamic::drag(EditData& ed)
             if (seg != segment() || staffIdx() != si) {
                   QPointF pos1(canvasPos());
                   score()->undo(new ChangeParent(this, seg, si));
-                  setUserOff(QPointF());
+                  setOffset(QPointF());
                   layout();
                   QPointF pos2(canvasPos());
-                  setUserOff(pos1 - pos2);
+                  setOffset(pos1 - pos2);
                   ed.startMove = pos2;
                   }
             }
@@ -369,6 +368,17 @@ QVariant Dynamic::propertyDefault(Pid id) const
       }
 
 //---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid Dynamic::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::dynamicsPosAbove : Sid::dynamicsPosBelow;
+      return TextBase::getPropertyStyle(pid);
+      }
+
+//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
@@ -404,6 +414,5 @@ QString Dynamic::screenReaderInfo() const
             }
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(s);
       }
-
 }
 

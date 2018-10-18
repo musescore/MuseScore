@@ -339,7 +339,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         p = p / 32.0 * score->spatium();
                         // text->setUserOff(st->pos());
                         text->setAutoplace(false);
-                        text->setUserOff(p);
+                        text->setOffset(p);
                         // qDebug("setText %s (%f %f)(%f %f) <%s>",
                         //            qPrintable(st->font().family()),
                         //            st->pos().x(), st->pos().y(), p.x(), p.y(), qPrintable(st->text()));

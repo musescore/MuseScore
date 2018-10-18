@@ -133,7 +133,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::lyricsOddFontItalic,     false, lyricsOddFontItalic,     resetLyricsOddFontItalic     },
       { Sid::lyricsOddFontUnderline,  false, lyricsOddFontUnderline,  resetLyricsOddFontUnderline  },
       { Sid::lyricsOddAlign,          false, lyricsOddAlign,          resetLyricsOddAlign          },
-      { Sid::lyricsOddOffset,         false, lyricsOddOffset,         resetLyricsOddOffset         },
 
       { Sid::lyricsEvenFontFace,      false, lyricsEvenFontFace,      resetLyricsEvenFontFace      },
       { Sid::lyricsEvenFontSize,      false, lyricsEvenFontSize,      resetLyricsEvenFontSize      },
@@ -141,7 +140,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::lyricsEvenFontItalic,    false, lyricsEvenFontItalic,    resetLyricsEvenFontItalic    },
       { Sid::lyricsEvenFontUnderline, false, lyricsEvenFontUnderline, resetLyricsEvenFontUnderline },
       { Sid::lyricsEvenAlign,         false, lyricsEvenAlign,         resetLyricsEvenAlign         },
-      { Sid::lyricsEvenOffset,        false, lyricsEvenOffset,        resetLyricsEvenOffset        },
 
       { Sid::systemFrameDistance,     false, systemFrameDistance,     resetSystemFrameDistance },
       { Sid::frameSystemDistance,     false, frameSystemDistance,     resetFrameSystemDistance },
@@ -235,7 +233,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::propertyDistanceHead,    false, propertyDistanceHead,    0 },
       { Sid::propertyDistanceStem,    false, propertyDistanceStem,    0 },
       { Sid::propertyDistance,        false, propertyDistance,        0 },
-      { Sid::voltaY,                  false, voltaY,                  resetVoltaY },
+      { Sid::voltaPosAbove,           false, voltaPosAbove,           resetVoltaPosAbove },
       { Sid::voltaHook,               false, voltaHook,               resetVoltaHook },
       { Sid::voltaLineWidth,          false, voltaLineWidth,          resetVoltaLineWidth  },
 
@@ -683,14 +681,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(textStyleAlign, &AlignSelect::alignChanged,
          [=](){ textStyleValueChanged(Pid::ALIGN, QVariant::fromValue(textStyleAlign->align())); }
          );
-
-      // offset
-      resetTextStyleOffset->setIcon(*icons[int(Icons::reset_ICON)]);
-      connect(resetTextStyleOffset, &QToolButton::clicked, [=](){ resetTextStyle(Pid::OFFSET); });
-      connect(textStyleOffset, &OffsetSelect::offsetChanged,
-         [=](){ textStyleValueChanged(Pid::OFFSET, QVariant(textStyleOffset->offset())); }
-         );
-
       connect(textStyles, SIGNAL(currentRowChanged(int)), SLOT(textStyleChanged(int)));
       textStyles->setCurrentRow(0);
 
@@ -701,8 +691,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       // missing for textStyle:
       { Sid::defaultFontSpatiumDependent,        Pid::FONT_SPATIUM_DEPENDENT },
       { Sid::user1Align,                         Pid::ALIGN                  },
-      { Sid::user1Offset,                        Pid::OFFSET                 },
-      { Sid::user1OffsetType,                    Pid::OFFSET_TYPE            },
       { Sid::user1FrameType,                     Pid::FRAME_TYPE             },
       { Sid::user1FramePadding,                  Pid::FRAME_PADDING          },
       { Sid::user1FrameWidth,                    Pid::FRAME_WIDTH            },
@@ -945,7 +933,12 @@ void EditStyle::setValues()
                   }
             else if (!strcmp("QPointF", type)) {
                   OffsetSelect* as = qobject_cast<Ms::OffsetSelect*>(sw.widget);
-                  as->setOffset(val.value<QPointF>());
+                  if (as)
+                        as->setOffset(val.value<QPointF>());
+                  else {
+                        printf("no widget for QPointF <%s><%s>\n",
+                           sw.widget->metaObject()->className(), MStyle::valueName(sw.idx));
+                        }
                   }
             else
                   unhandledType(&sw);
@@ -1288,11 +1281,6 @@ void EditStyle::textStyleChanged(int row)
                   case Pid::ALIGN:
                         textStyleAlign->setAlign(cs->styleV(a.sid).value<Align>());
                         resetTextStyleAlign->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
-                        break;
-
-                  case Pid::OFFSET:
-                        textStyleOffset->setOffset(cs->styleV(a.sid).toPointF());
-                        resetTextStyleOffset->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
                         break;
 
                   default:

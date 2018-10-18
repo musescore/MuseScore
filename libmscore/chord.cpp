@@ -2692,7 +2692,7 @@ void Chord::setSlash(bool flag, bool stemless)
             // restore to normal
             undoChangeProperty(Pid::NO_STEM, false);
             undoChangeProperty(Pid::SMALL, false);
-            undoChangeProperty(Pid::USER_OFF, QPointF());
+            undoChangeProperty(Pid::OFFSET, QPointF());
             for (Note* n : _notes) {
                   n->undoChangeProperty(Pid::HEAD_GROUP, int(NoteHead::Group::HEAD_NORMAL));
                   n->undoChangeProperty(Pid::FIXED, false);
@@ -2742,7 +2742,7 @@ void Chord::setSlash(bool flag, bool stemless)
             // for non-drum staves, add an additional offset
             // for drum staves, no offset, but use normal head
             if (!staff()->isDrumStaff(tick()))
-                  undoChangeProperty(Pid::USER_OFF, QPointF(0.0, y));
+                  undoChangeProperty(Pid::OFFSET, QPointF(0.0, y));
             else
                   head = NoteHead::Group::HEAD_NORMAL;
             }

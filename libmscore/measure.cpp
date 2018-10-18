@@ -1349,7 +1349,7 @@ Element* Measure::drop(EditData& data)
                   e->layout();
                   {
                   QPointF uo(data.pos - e->canvasPos() - data.dragOffset);
-                  e->setUserOff(uo);
+                  e->setOffset(uo);
                   }
                   score()->undoAddElement(e);
                   return e;
@@ -2743,7 +2743,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
                               continue;
                         Element* ne = e->clone();
                         ne->setTrack(track);
-                        ne->setUserOff(e->userOff());
+                        ne->setOffset(e->offset());
                         ne->setScore(sc);
                         s->add(ne);
                         }
@@ -2793,7 +2793,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
                                     }
                               }
                         }
-                  ne->setUserOff(oe->userOff());
+                  ne->setOffset(oe->offset());
                   ne->setScore(sc);
                   s->add(ne);
                   }
@@ -2801,7 +2801,7 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
       foreach(Element* e, el()) {
             Element* ne = e->clone();
             ne->setScore(sc);
-            ne->setUserOff(e->userOff());
+            ne->setOffset(e->offset());
             m->add(ne);
             }
       return m;
@@ -3194,7 +3194,7 @@ void Measure::stretchMeasure(qreal targetWidth)
 //---------------------------------------------------
 //    computeTicks
 //    set ticks for all segments
-//       return minTick 
+//       return minTick
 //---------------------------------------------------
 
 int Measure::computeTicks() {

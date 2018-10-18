@@ -414,7 +414,7 @@ void GuitarPro6::readChord(QDomNode* diagram, int track)
 
       // set the fret offset
       int baseFret = diagramNode.attributes().namedItem("baseFret").toAttr().value().toInt();
-      fretDiagram->setOffset(baseFret);
+      fretDiagram->setFretOffset(baseFret);
 
       QDomNode diagramEntity = diagramNode.firstChild();
       int counter            = 0;

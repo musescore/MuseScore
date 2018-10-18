@@ -1080,12 +1080,9 @@ TextBase::TextBase(Score* s, Tid tid, ElementFlags f)
       _frameColor             = QColor(0, 0, 0, 255);
       _align                  = Align::LEFT;
       _frameType              = FrameType::NO_FRAME;
-      _sizeIsSpatiumDependent = true;
       _frameWidth             = Spatium(0.1);
       _paddingWidth           = Spatium(0.2);
       _frameRound             = 0;
-      _offset                 = QPointF();
-      _offsetType             = OffsetType::SPATIUM;
       }
 
 TextBase::TextBase(Score* s, ElementFlags f)
@@ -1114,14 +1111,12 @@ TextBase::TextBase(const TextBase& st)
       _frameColor                  = st._frameColor;
       _align                       = st._align;
       _frameType                   = st._frameType;
-      _sizeIsSpatiumDependent      = st._sizeIsSpatiumDependent;
       _frameWidth                  = st._frameWidth;
       _paddingWidth                = st._paddingWidth;
       _frameRound                  = st._frameRound;
-      _offset                      = st._offset;
-      _offsetType                  = st._offsetType;
 
       size_t n = _elementStyle->size() + TEXT_STYLE_SIZE;
+      delete[] _propertyFlagsList;
       _propertyFlagsList = new PropertyFlags[n];
       for (size_t i = 0; i < n; ++i)
             _propertyFlagsList[i] = st._propertyFlagsList[i];
@@ -1337,23 +1332,11 @@ void TextBase::createLayout()
 
 void TextBase::layout()
       {
-      QPointF o(_offset * (_offsetType == OffsetType::SPATIUM ? spatium() : DPI));
-
-      setPos(o);
-      layout1();
-      }
-
-//---------------------------------------------------------
-//   layout2
-//---------------------------------------------------------
-
-void TextBase::layout2(Sid posAbove, Sid posBelow)
-      {
-      qreal y = placeAbove() ? styleP(posAbove) : styleP(posBelow) + (staff() ? staff()->height() : 0.0);
-
-      QPointF o(offset() * (offsetType() == OffsetType::SPATIUM ? spatium() : DPI));
-      setPos(QPointF(0.0, y) + o);
-
+      setPos(QPointF());
+      if (isStyled(Pid::OFFSET))
+            setOffset(propertyDefault(Pid::OFFSET).toPointF());
+      if (placeBelow())
+            rypos() = staff() ? staff()->height() : 0.0;
       layout1();
       }
 
@@ -1690,11 +1673,14 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
       Element::writeProperties(xml);
       writeProperty(xml, Pid::SUB_STYLE);
 
-      for (const StyledProperty& spp : *_elementStyle)
-            writeProperty(xml, spp.pid);
-      for (const StyledProperty& spp : *textStyle(tid()))
-            writeProperty(xml, spp.pid);
-
+      for (const StyledProperty& spp : *_elementStyle) {
+            if (!isStyled(spp.pid))
+                  writeProperty(xml, spp.pid);
+            }
+      for (const StyledProperty& spp : *textStyle(tid())) {
+            if (!isStyled(spp.pid))
+                  writeProperty(xml, spp.pid);
+            }
       if (writeText)
             xml.writeXml("text", xmlText());
       }
@@ -1718,10 +1704,7 @@ bool TextBase::readProperties(XmlReader& e)
             Pid::FRAME_ROUND,
             Pid::FRAME_FG_COLOR,
             Pid::FRAME_BG_COLOR,
-            Pid::FONT_SPATIUM_DEPENDENT,
             Pid::ALIGN,
-            Pid::OFFSET,
-            Pid::OFFSET_TYPE
             } };
 
       const QStringRef& tag(e.name());
@@ -2207,7 +2190,7 @@ bool TextBase::validateText(QString& s)
 QFont TextBase::font() const
       {
       qreal m = _size;
-      if (_sizeIsSpatiumDependent)
+      if (sizeIsSpatiumDependent())
             m *= spatium() / SPATIUM20;
       QFont f(_family, m, _bold ? QFont::Bold : QFont::Normal, _italic);
       if (_underline)
@@ -2237,8 +2220,6 @@ QVariant TextBase::getProperty(Pid propertyId) const
                   return family();
             case Pid::FONT_SIZE:
                   return size();
-            case Pid::FONT_SPATIUM_DEPENDENT:
-                  return sizeIsSpatiumDependent();
             case Pid::FONT_BOLD:
                   return bold();
             case Pid::FONT_ITALIC:
@@ -2259,10 +2240,6 @@ QVariant TextBase::getProperty(Pid propertyId) const
                   return bgColor();
             case Pid::ALIGN:
                   return QVariant::fromValue(align());
-            case Pid::OFFSET:
-                  return offset();
-            case Pid::OFFSET_TYPE:
-                  return int(offsetType());
             case Pid::TEXT:
                   return xmlText();
             default:
@@ -2316,20 +2293,11 @@ bool TextBase::setProperty(Pid pid, const QVariant& v)
             case Pid::FRAME_BG_COLOR:
                   setBgColor(v.value<QColor>());
                   break;
-            case Pid::FONT_SPATIUM_DEPENDENT:
-                  setSizeIsSpatiumDependent(v.toBool());
-                  break;
             case Pid::TEXT:
                   setXmlText(v.toString());
                   break;
             case Pid::ALIGN:
                   setAlign(v.value<Align>());
-                  break;
-            case Pid::OFFSET:
-                  setOffset(v.toPointF());
-                  break;
-            case Pid::OFFSET_TYPE:
-                  setOffsetType(OffsetType(v.toInt()));
                   break;
             default:
                   rv = Element::setProperty(pid, v);
@@ -2353,17 +2321,9 @@ QVariant TextBase::propertyDefault(Pid id) const
             if (v.isValid())
                   return v;
             }
-      for (const StyledProperty& p : *textStyle(tid())) {
-            if (p.pid == id)
-                  return score()->styleV(p.sid);
-            }
-      for (const StyledProperty& p : *_elementStyle) {
-            if (p.pid == id) {
-                  if (propertyType(id) == P_TYPE::SP_REAL)
-                        return score()->styleP(p.sid);
-                  return score()->styleV(p.sid);
-                  }
-            }
+      Sid sid = getPropertyStyle(id);
+      if (sid != Sid::NOSTYLE)
+            return score()->styleValue(id, sid);
       QVariant v;
       switch (id) {
             case Pid::SUB_STYLE:
@@ -2374,11 +2334,8 @@ QVariant TextBase::propertyDefault(Pid id) const
                   break;
             default:
                   for (const StyledProperty& p : *textStyle(Tid::DEFAULT)) {
-                        if (p.pid == id) {
-                              if (propertyType(id) == P_TYPE::SP_REAL)
-                                    return score()->styleP(p.sid);
-                              return score()->styleV(p.sid);
-                              }
+                        if (p.pid == id)
+                              return score()->styleValue(id, p.sid);
                         }
                   return Element::propertyDefault(id);
             }
@@ -2403,32 +2360,6 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
             ++i;
             }
       return -1;
-      }
-
-//---------------------------------------------------------
-//   propertyFlags
-//---------------------------------------------------------
-
-PropertyFlags TextBase::propertyFlags(Pid id) const
-      {
-      static PropertyFlags f = PropertyFlags::NOSTYLE;
-
-      int i = getPropertyFlagsIdx(id);
-      if (i == -1)
-            return f;
-      return _propertyFlagsList[i];
-      }
-
-//---------------------------------------------------------
-//   setPropertyFlags
-//---------------------------------------------------------
-
-void TextBase::setPropertyFlags(Pid id, PropertyFlags f)
-      {
-      int i = getPropertyFlagsIdx(id);
-      if (i == -1)
-            return;
-      _propertyFlagsList[i] = f;
       }
 
 //---------------------------------------------------------
@@ -2492,20 +2423,16 @@ void TextBase::styleChanged()
 void TextBase::initElementStyle(const ElementStyle* ss)
       {
       _elementStyle = ss;
-      size_t n      = _elementStyle->size() + TEXT_STYLE_SIZE;
+      size_t n      = ss->size() + TEXT_STYLE_SIZE;
 
       delete[] _propertyFlagsList;
       _propertyFlagsList = new PropertyFlags[n];
       for (size_t i = 0; i < n; ++i)
             _propertyFlagsList[i] = PropertyFlags::STYLED;
-      for (const StyledProperty& p : *_elementStyle) {
-            QVariant v = propertyType(p.pid) == P_TYPE::SP_REAL ? score()->styleP(p.sid) : score()->styleV(p.sid);
-            setProperty(p.pid, v);
-            }
-      for (const StyledProperty& p : *textStyle(tid())) {
-            QVariant v = propertyType(p.pid) == P_TYPE::SP_REAL ? score()->styleP(p.sid) : score()->styleV(p.sid);
-            setProperty(p.pid, v);
-            }
+      for (const StyledProperty& p : *_elementStyle)
+            setPidFromSid(p.pid, p.sid);
+      for (const StyledProperty& p : *textStyle(tid()))
+            setPidFromSid(p.pid, p.sid);
       }
 
 //---------------------------------------------------------

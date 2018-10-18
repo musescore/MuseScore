@@ -180,7 +180,7 @@ void TieSegment::editDrag(EditData& ed)
             }
       else if (g == Grip::DRAG) {
             ups(Grip::DRAG).off = QPointF();
-            setUserOff(userOff() + ed.delta);
+            roffset() += ed.delta;
             }
 
       // if this SlurSegment was automatically adjusted to avoid collision
@@ -189,7 +189,7 @@ void TieSegment::editDrag(EditData& ed)
       QPointF offset = getAutoAdjust();
       if (!offset.isNull()) {
             setAutoAdjust(0.0, 0.0);
-            setUserOff(userOff() + offset);
+            roffset() += offset;
             }
       undoChangeProperty(Pid::AUTOPLACE, false);
       }

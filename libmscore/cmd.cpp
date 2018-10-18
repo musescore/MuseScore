@@ -2311,12 +2311,12 @@ void Score::cmdAddBracket()
 
 void Score::cmdMoveRest(Rest* rest, Direction dir)
       {
-      QPointF pos(rest->userOff());
+      QPointF pos(rest->offset());
       if (dir == Direction::UP)
             pos.ry() -= spatium();
       else if (dir == Direction::DOWN)
             pos.ry() += spatium();
-      rest->undoChangeProperty(Pid::USER_OFF, pos);
+      rest->undoChangeProperty(Pid::OFFSET, pos);
       }
 
 //---------------------------------------------------------
@@ -2940,7 +2940,7 @@ void Score::cmdPitchUp()
       if (el && el->isLyrics())
             cmdMoveLyrics(toLyrics(el), Direction::UP);
       else if (el && (el->isArticulation() || el->isTextBase()))
-            el->undoChangeProperty(Pid::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
+            el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, -MScore::nudgeStep * el->spatium()));
       else if (el && el->isRest())
             cmdMoveRest(toRest(el), Direction::UP);
       else
@@ -2957,7 +2957,7 @@ void Score::cmdPitchDown()
       if (el && el->isLyrics())
             cmdMoveLyrics(toLyrics(el), Direction::DOWN);
       else if (el && (el->isArticulation() || el->isTextBase()))
-            el->undoChangeProperty(Pid::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
+            el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, MScore::nudgeStep * el->spatium()));
       else if (el && el->isRest())
             cmdMoveRest(toRest(el), Direction::DOWN);
       else
@@ -2991,7 +2991,7 @@ void Score::cmdPitchUpOctave()
       {
       Element* el = selection().element();
       if (el && (el->isArticulation() || el->isTextBase()))
-            el->undoChangeProperty(Pid::USER_OFF, el->userOff() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()));
+            el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()));
       else
             upDown(true, UpDownMode::OCTAVE);
       }
@@ -3004,7 +3004,7 @@ void Score::cmdPitchDownOctave()
       {
       Element* el = selection().element();
       if (el && (el->isArticulation() || el->isTextBase()))
-            el->undoChangeProperty(Pid::USER_OFF, el->userOff() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()));
+            el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()));
       else
             upDown(false, UpDownMode::OCTAVE);
       }

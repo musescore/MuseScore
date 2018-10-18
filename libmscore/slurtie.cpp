@@ -118,7 +118,7 @@ void SlurTieSegment::endEdit(EditData&)
 void SlurTieSegment::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
-      for (auto i : { Pid::SLUR_UOFF1, Pid::SLUR_UOFF2, Pid::SLUR_UOFF3, Pid::SLUR_UOFF4, Pid::USER_OFF })
+      for (auto i : { Pid::SLUR_UOFF1, Pid::SLUR_UOFF2, Pid::SLUR_UOFF3, Pid::SLUR_UOFF4, Pid::OFFSET })
             eed->pushProperty(i);
       }
 
@@ -178,7 +178,7 @@ void SlurTieSegment::editDrag(EditData& ed)
                   break;
             case Grip::DRAG:
                   ups(g).off = QPointF();
-                  setUserOff(userOff() + ed.delta);
+                  setOffset(offset() + ed.delta);
                   break;
             case Grip::NO_GRIP:
             case Grip::GRIPS:

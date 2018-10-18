@@ -111,7 +111,7 @@ LineSegment* PalmMute::createLineSegment()
 
 void PalmMute::setYoff(qreal val)
       {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow);
+      ryoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow);
       }
 
 //---------------------------------------------------------

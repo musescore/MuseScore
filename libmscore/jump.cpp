@@ -100,7 +100,7 @@ QString Jump::jumpTypeUserName() const
 
 void Jump::layout()
       {
-      layout2(Sid::jumpPosAbove, Sid::jumpPosAbove);
+      TextBase::layout();
       autoplaceMeasureElement(0.5 * spatium());
       }
 

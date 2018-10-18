@@ -104,6 +104,8 @@ class Ottava final : public TextLineBase {
       void setOttavaType(OttavaType val);
       OttavaType ottavaType() const             { return _ottavaType; }
 
+      virtual const ElementStyle* styledProperties() const override { return &_ottavaStyle; }
+
       bool numbersOnly() const                  { return _numbersOnly; }
       void setNumbersOnly(bool val);
 

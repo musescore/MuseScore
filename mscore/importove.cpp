@@ -693,7 +693,7 @@ void OveToMScore::convertTrackElements(int track) {
                                     }
 
                               if(y_off != 0) {
-                                    ottava->setUserOff(QPointF(0, y_off * score_->spatium()));
+                                    ottava->setOffset(QPointF(0, y_off * score_->spatium()));
                                     }
 
                               ottava->setTick(absTick);
@@ -1462,7 +1462,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               int lineOffset = static_cast<Ms::Rest*>(cr)->computeLineOffset(5);
                               yOffset -= qreal(lineOffset + stepOffset);
                               yOffset *= score_->spatium()/2.0;
-                              cr->setUserYoffset(yOffset);
+                              cr->ryoffset() = yOffset;
                               cr->setAutoplace(false);
                               }
                         }
@@ -1876,14 +1876,14 @@ void OveToMScore::convertArticulation(
             case OVE::ArticulationType::Up_Bow_Inverted :{
                   Articulation* a = new Articulation(score_);
                   a->setSymId(SymId::stringsUpBow);
-                  a->setUserYoffset(5.3);
+                  a->ryoffset() = 5.3;
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Down_Bow_Inverted :{
                   Articulation* a = new Articulation(score_);
                   a->setSymId(SymId::stringsDownBow);
-                  a->setUserYoffset(5.3);
+                  a->ryoffset() = 5.3;
                   cr->add(a);
                   break;
                   }

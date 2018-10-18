@@ -51,8 +51,10 @@ SpannerSegment::SpannerSegment(Score* s, ElementFlags f)
 SpannerSegment::SpannerSegment(const SpannerSegment& s)
    : Element(s)
       {
-      _spanner = s._spanner;
+      _spanner            = s._spanner;
       _spannerSegmentType = s._spannerSegmentType;
+      _p2                 = s._p2;
+      _offset2            = s._offset2;
       }
 
 //---------------------------------------------------------
@@ -100,8 +102,8 @@ QVariant SpannerSegment::getProperty(Pid pid) const
       if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid))
             return e->getProperty(pid);
       switch (pid) {
-            case Pid::USER_OFF2:
-                  return _userOff2;
+            case Pid::OFFSET2:
+                  return _offset2;
             default:
                   return Element::getProperty(pid);
             }
@@ -116,8 +118,8 @@ bool SpannerSegment::setProperty(Pid pid, const QVariant& v)
       if (Element* e = propertyDelegate(pid))
             return e->setProperty(pid, v);
       switch (pid) {
-            case Pid::USER_OFF2:
-                  _userOff2 = v.toPointF();
+            case Pid::OFFSET2:
+                  _offset2 = v.toPointF();
                   score()->setLayoutAll();
                   break;
             default:
@@ -135,7 +137,7 @@ QVariant SpannerSegment::propertyDefault(Pid pid) const
       if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid))
             return e->propertyDefault(pid);
       switch (pid) {
-            case Pid::USER_OFF2:
+            case Pid::OFFSET2:
                   return QVariant();
             default:
                   return Element::propertyDefault(pid);
@@ -190,7 +192,7 @@ void SpannerSegment::styleChanged()
 
 void SpannerSegment::reset()
       {
-      undoChangeProperty(Pid::USER_OFF2, QPointF());
+      undoChangeProperty(Pid::OFFSET2, QPointF());
       Element::reset();
       spanner()->reset();
       }
@@ -1122,23 +1124,23 @@ void SpannerSegment::autoplaceSpannerSegment(qreal minDistance, Sid posBelow, Si
       if (!parent())
             return;
       if (spanner()->placeBelow())
-            rypos() = score()->styleP(posBelow) + (staff() ? staff()->height() : 0.0);
+            rpos() = score()->styleValue(Pid::OFFSET, posBelow).toPointF() + QPointF(rxpos(), (staff() ? staff()->height() : 0.0));
       else
-            rypos() = score()->styleP(posAbove);
+            rpos() = score()->styleValue(Pid::OFFSET, posAbove).toPointF() + QPoint(rxpos(), 0.0);
       if (visible() && autoplace()) {
-            setUserOff(QPointF());
+            setOffset(QPointF());
 
             SkylineLine sl(!spanner()->placeAbove());
             sl.add(shape().translated(pos()));
             if (spanner()->placeAbove()) {
                   qreal d  = system()->topDistance(staffIdx(), sl);
                   if (d > -minDistance)
-                        rUserYoffset() = -(d + minDistance);
+                        ryoffset() = -(d + minDistance);
                   }
             else {
                   qreal d  = system()->bottomDistance(staffIdx(), sl);
                   if (d > -minDistance)
-                        rUserYoffset() = d + minDistance;
+                        ryoffset() = d + minDistance;
                   }
             }
       }

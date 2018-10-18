@@ -11,7 +11,7 @@
 //=============================================================================
 
 #include "alignSelect.h"
-#include "libmscore/elementlayout.h"
+#include "libmscore/types.h"
 #include "icons.h"
 
 namespace Ms {

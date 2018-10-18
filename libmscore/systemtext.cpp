@@ -26,14 +26,8 @@ static const ElementStyle systemStyle {
 //   SystemText
 //---------------------------------------------------------
 
-SystemText::SystemText(Score* s)
-   : StaffTextBase(s, Tid::SYSTEM, ElementFlag::SYSTEM)
-      {
-      initElementStyle(&systemStyle);
-      }
-
-SystemText::SystemText(Score* s, Tid tid, ElementFlags flags)
-   : StaffTextBase(s, tid, flags)
+SystemText::SystemText(Score* s, Tid tid)
+   : StaffTextBase(s, tid, ElementFlag::SYSTEM | ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       initElementStyle(&systemStyle);
       }
@@ -58,8 +52,19 @@ QVariant SystemText::propertyDefault(Pid id) const
 
 void SystemText::layout()
       {
-      layout2(Sid::systemTextPosAbove, Sid::systemTextPosBelow);
+      TextBase::layout();
       autoplaceSegmentElement(styleP(Sid::systemTextMinDistance));
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid SystemText::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::systemTextPosAbove : Sid::systemTextPosBelow;
+      return TextBase::getPropertyStyle(pid);
       }
 
 } // namespace Ms

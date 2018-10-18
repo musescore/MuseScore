@@ -354,7 +354,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       if (autoplace()) {
             for (UP& up : _ups)
                   up.off = QPointF();
-            rUserYoffset() = 0;
+            ryoffset() = 0;
             }
       ups(Grip::START).p = p1;
       ups(Grip::END).p   = p2;
@@ -511,7 +511,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       if (autoplace()) {
             for (UP& up : _ups)
                   up.off = QPointF();
-            rUserYoffset() = 0;
+            ryoffset() = 0;
             }
       ups(Grip::START).p = p1;
       ups(Grip::END).p   = p2;
@@ -549,10 +549,10 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                   }
             if (gdist > 0.0) {
                   if (up) {
-                        rUserYoffset() -= (gdist + spatium() * .5);
+                        ryoffset() -= (gdist + spatium() * .5);
                         }
                   else
-                        rUserYoffset() += (gdist + spatium() * .5);
+                        ryoffset() += (gdist + spatium() * .5);
                   }
             }
       setbbox(path.boundingRect());

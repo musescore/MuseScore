@@ -611,7 +611,7 @@ QRectF HBox::drag(EditData& data)
       {
       QRectF r(canvasBoundingRect());
       qreal diff = data.delta.x();
-      qreal x1   = userOff().x() + diff;
+      qreal x1   = offset().x() + diff;
       if (parent()->type() == ElementType::VBOX) {
             VBox* vb = toVBox(parent());
             qreal x2 = parent()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
@@ -620,7 +620,7 @@ QRectF HBox::drag(EditData& data)
             else if (x1 > x2)
                   x1 = x2;
             }
-      setUserOff(QPointF(x1, 0.0));
+      setOffset(QPointF(x1, 0.0));
 //      setStartDragPosition(data.delta);
       return canvasBoundingRect() | r;
       }

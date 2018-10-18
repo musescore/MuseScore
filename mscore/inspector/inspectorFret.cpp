@@ -31,7 +31,7 @@ InspectorFretDiagram::InspectorFretDiagram(QWidget* parent)
       const std::vector<InspectorItem> iiList = {
             { Pid::COLOR,        0, e.color,       e.resetColor       },
             { Pid::VISIBLE,      0, e.visible,     e.resetVisible     },
-            { Pid::USER_OFF,     0, e.offset,      e.resetOffset      },
+            { Pid::OFFSET,       0, e.offset,      e.resetOffset      },
             { Pid::MAG,          0, f.mag,         f.resetMag         },
             { Pid::PLACEMENT,    0, f.placement,   f.resetPlacement   },
             { Pid::FRET_STRINGS, 0, f.strings,     f.resetStrings     },

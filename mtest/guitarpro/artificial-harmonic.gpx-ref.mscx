@@ -128,7 +128,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>Fdbk.</text>
                 </Text>
               <pitch>62</pitch>
@@ -152,7 +151,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>S.H.</text>
                 </Text>
               <pitch>69</pitch>
@@ -176,7 +174,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>P.H.</text>
                 </Text>
               <pitch>74</pitch>
@@ -203,7 +200,6 @@
                 </Accidental>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>T.H.</text>
                 </Text>
               <pitch>92</pitch>
@@ -231,7 +227,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>A.H.</text>
                 </Text>
               <pitch>81</pitch>
@@ -255,7 +250,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>Fdbk.</text>
                 </Text>
               <pitch>89</pitch>
@@ -279,7 +273,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>Fdbk.</text>
                 </Text>
               <pitch>86</pitch>
@@ -303,7 +296,6 @@
               <linkedMain/>
               <Text>
                 <linkedMain/>
-                <align>center,center</align>
                 <text>Fdbk.</text>
                 </Text>
               <pitch>86</pitch>
@@ -473,7 +465,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>Fdbk.</text>
                   </Text>
                 <pitch>62</pitch>
@@ -501,7 +492,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S.H.</text>
                   </Text>
                 <pitch>69</pitch>
@@ -529,7 +519,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P.H.</text>
                   </Text>
                 <pitch>74</pitch>
@@ -560,7 +549,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>T.H.</text>
                   </Text>
                 <pitch>92</pitch>
@@ -592,7 +580,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>A.H.</text>
                   </Text>
                 <pitch>81</pitch>
@@ -620,7 +607,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>Fdbk.</text>
                   </Text>
                 <pitch>89</pitch>
@@ -648,7 +634,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>Fdbk.</text>
                   </Text>
                 <pitch>86</pitch>
@@ -676,7 +661,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>Fdbk.</text>
                   </Text>
                 <pitch>86</pitch>
@@ -720,7 +704,6 @@
                   <linked>
                     <indexDiff>5</indexDiff>
                     </linked>
-                  <align>center,center</align>
                   <text>Fdbk.</text>
                   </Text>
                 <pitch>62</pitch>
@@ -748,7 +731,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>S.H.</text>
                   </Text>
                 <pitch>69</pitch>
@@ -776,7 +758,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>P.H.</text>
                   </Text>
                 <pitch>74</pitch>
@@ -804,7 +785,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>T.H.</text>
                   </Text>
                 <pitch>92</pitch>
@@ -836,7 +816,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>A.H.</text>
                   </Text>
                 <pitch>81</pitch>
@@ -864,7 +843,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>Fdbk.</text>
                   </Text>
                 <pitch>89</pitch>
@@ -892,7 +870,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>Fdbk.</text>
                   </Text>
                 <pitch>86</pitch>
@@ -920,7 +897,6 @@
                 <Text>
                   <linked>
                     </linked>
-                  <align>center,center</align>
                   <text>Fdbk.</text>
                   </Text>
                 <pitch>86</pitch>

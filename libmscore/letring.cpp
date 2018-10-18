@@ -111,7 +111,7 @@ LineSegment* LetRing::createLineSegment()
 
 void LetRing::setYoff(qreal val)
       {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::letRingPosAbove : Sid::letRingPosBelow);
+      ryoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::letRingPosAbove : Sid::letRingPosBelow);
       }
 
 //---------------------------------------------------------

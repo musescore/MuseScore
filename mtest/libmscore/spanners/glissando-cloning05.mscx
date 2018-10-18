@@ -8,8 +8,6 @@
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
-      <pedalPosBelow>0</pedalPosBelow>
-      <trillPosAbove>0</trillPosAbove>
       <minMMRestWidth>0</minMMRestWidth>
       <Spatium>1.76389</Spatium>
       </Style>

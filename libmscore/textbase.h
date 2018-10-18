@@ -14,7 +14,6 @@
 #define __TEXTBASE_H__
 
 #include "element.h"
-#include "elementlayout.h"
 #include "property.h"
 #include "style.h"
 
@@ -212,9 +211,6 @@ class TextBase : public Element {
       M_PROPERTY(bool,       underline,              setUnderline)
       M_PROPERTY(Align,      align,                  setAlign)
       M_PROPERTY(FrameType,  frameType,              setFrameType)
-      M_PROPERTY(bool,       sizeIsSpatiumDependent, setSizeIsSpatiumDependent)
-      M_PROPERTY(OffsetType, offsetType,             setOffsetType)
-
       M_PROPERTY(QString,    family,                 setFamily)
       M_PROPERTY(qreal,      size,                   setSize)
       M_PROPERTY(QColor,     bgColor,                setBgColor)
@@ -222,7 +218,6 @@ class TextBase : public Element {
       M_PROPERTY(Spatium,    frameWidth,             setFrameWidth)
       M_PROPERTY(Spatium,    paddingWidth,           setPaddingWidth)
       M_PROPERTY(int,        frameRound,             setFrameRound)
-      M_PROPERTY(QPointF,    offset,                 setOffset)            // inch or spatium
 
       // there are two representations of text; only one
       // might be valid and the other can be constructed from it
@@ -241,7 +236,7 @@ class TextBase : public Element {
 
       void insert(TextCursor*, uint code);
       void genText();
-      int getPropertyFlagsIdx(Pid id) const;
+      virtual int getPropertyFlagsIdx(Pid id) const override;
 
    protected:
       bool layoutInvalid            { true  };
@@ -274,7 +269,6 @@ class TextBase : public Element {
 
       virtual void layout() override;
       virtual void layout1();
-      void layout2(Sid placeAbove, Sid placeBelow);       // helper function
       qreal lineSpacing() const;
       qreal lineHeight() const;
       virtual qreal baseLine() const override;
@@ -342,8 +336,6 @@ class TextBase : public Element {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(Pid id) const override;
-      virtual PropertyFlags propertyFlags(Pid) const;
-      virtual void setPropertyFlags(Pid, PropertyFlags);
       virtual Sid getPropertyStyle(Pid) const;
       virtual void styleChanged();
 

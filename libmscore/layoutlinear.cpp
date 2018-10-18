@@ -59,11 +59,11 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
             }
 
       if (align && segments.size() > 1) {
-            qreal y = segments[0]->userOff().y();
+            qreal y = segments[0]->offset().y();
             for (unsigned i = 1; i < segments.size(); ++i)
-                  y = qMax(y, segments[i]->userOff().y());
+                  y = qMax(y, segments[i]->offset().y());
             for (auto ss : segments)
-                  ss->rUserYoffset() = y;
+                  ss->ryoffset() = y;
             }
       }
 
@@ -115,7 +115,7 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
  void Score::collectLinearSystem(LayoutContext& lc)
       {
       System* system = systems().front();
-      // we need to reset tempo because fermata is setted 
+      // we need to reset tempo because fermata is setted
       //inside getNextMeasure and it lead to twice timeStretch
       resetTempo();
 
@@ -323,9 +323,9 @@ void LayoutContext::layoutLinear()
             if (voltaSegments.size() > 1) {
                   qreal y = 0;
                   for (SpannerSegment* ss : voltaSegments)
-                        y = qMin(y, ss->userOff().y());
+                        y = qMin(y, ss->offset().y());
                   for (SpannerSegment* ss : voltaSegments)
-                        ss->setUserYoffset(y);
+                        ss->ryoffset() = y;
                   }
             for (Spanner* sp : score->unmanagedSpanners()) {
                   if (sp->tick() >= etick || sp->tick2() < stick)

@@ -17,6 +17,7 @@
 #include "bracket.h"
 #include "bracketItem.h"
 #include "spanner.h"
+#include "musescoreCore.h"
 
 namespace Ms {
 
@@ -187,15 +188,20 @@ QVariant ScoreElement::propertyDefault(Pid pid, Tid tid) const
 
 QVariant ScoreElement::propertyDefault(Pid pid) const
       {
-      for (const StyledProperty& spp : *_elementStyle) {
-            if (spp.pid == pid) {
-                  if (propertyType(pid) == P_TYPE::SP_REAL)
-                        return score()->styleP(spp.sid);
-                  return score()->styleV(spp.sid);
-                  }
-            }
+      Sid sid = getPropertyStyle(pid);
+      if (sid != Sid::NOSTYLE)
+            return score()->styleValue(pid, sid);
       qDebug("<%s>(%d) not found in <%s>", propertyQmlName(pid), int(pid), name());
       return QVariant();
+      }
+
+//---------------------------------------------------------
+//   setPidFromSid
+//---------------------------------------------------------
+
+void ScoreElement::setPidFromSid(Pid pid, Sid sid)
+      {
+      setProperty(pid, score()->styleValue(pid, sid));
       }
 
 //---------------------------------------------------------
@@ -205,21 +211,13 @@ QVariant ScoreElement::propertyDefault(Pid pid) const
 void ScoreElement::initElementStyle(const ElementStyle* ss)
       {
       _elementStyle = ss;
-      size_t n = _elementStyle->size();
-      if (isTextBase())                               // HACK
-            n += TEXT_STYLE_SIZE;
+      size_t n      = _elementStyle->size();
       delete[] _propertyFlagsList;
       _propertyFlagsList = new PropertyFlags[n];
       for (size_t i = 0; i < n; ++i)
             _propertyFlagsList[i] = PropertyFlags::STYLED;
-      int i = 0;
-      for (const StyledProperty& spp : *_elementStyle) {
-            Pid pid    = spp.pid;
-            QVariant v = propertyType(pid) == P_TYPE::SP_REAL ? score()->styleP(spp.sid) : score()->styleV(spp.sid);
-            setProperty(pid, v);
-            _propertyFlagsList[i] = PropertyFlags::STYLED;
-            ++i;
-            }
+      for (const StyledProperty& spp : *_elementStyle)
+            setPidFromSid(spp.pid, spp.sid);
       }
 
 //---------------------------------------------------------
@@ -301,6 +299,7 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v)
 
 void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
       {
+      bool doUpdateInspector = false;
       if (isBracket()) {
             // brackets do not survive layout() and therefore cannot be on
             // the undo stack; delegate to BracketItem:
@@ -309,18 +308,14 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
             bi->undoChangeProperty(id, v, ps);
             return;
             }
-      if (id == Pid::AUTOPLACE && v.toBool() && !getProperty(id).toBool()) {
-            // special case: if we switch to autoplace, we must save
-            // user offset values
-            undoResetProperty(Pid::USER_OFF);
-            if (isSlurSegment()) {
-                  undoResetProperty(Pid::SLUR_UOFF1);
-                  undoResetProperty(Pid::SLUR_UOFF2);
-                  undoResetProperty(Pid::SLUR_UOFF3);
-                  undoResetProperty(Pid::SLUR_UOFF4);
-                  }
+      if (id == Pid::PLACEMENT) {
+            // first set placment, then set offset for above/below if styled
+            changeProperties(this, id, v, ps);
+            if (isStyled(Pid::OFFSET))
+                  ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).toPointF() * score()->spatium());
+            doUpdateInspector = true;
             }
-      else if (id == Pid::SUB_STYLE) {
+      if (id == Pid::SUB_STYLE) {
             //
             // change a list of properties
             //
@@ -335,6 +330,8 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
       changeProperties(this, id, v, ps);
       if (id != Pid::GENERATED)
             changeProperties(this, Pid::GENERATED, QVariant(false), PropertyFlags::NOSTYLE);
+      if (doUpdateInspector)
+            MuseScoreCore::mscoreCore->updateInspector();
       }
 
 //---------------------------------------------------------
@@ -355,9 +352,18 @@ bool ScoreElement::readProperty(const QStringRef& s, XmlReader& e, Pid id)
       {
       if (s == propertyName(id)) {
             QVariant v = Ms::getProperty(id, e);
-            if (propertyType(id) == P_TYPE::SP_REAL) {
-                  qreal _spatium = score()->spatium();
-                  v = v.toReal() * _spatium;
+            switch (propertyType(id)) {
+                  case P_TYPE::SP_REAL:
+                        v = v.toReal() * score()->spatium();
+                        break;
+                  case P_TYPE::POINT_SP_MM:
+                        if (sizeIsSpatiumDependent())
+                              v = v.toPointF() * score()->spatium();
+                        else
+                              v = v.toPointF() * DPMM;
+                        break;
+                  default:
+                        break;
                   }
             setProperty(id, v);
             setPropertyFlags(id, PropertyFlags::UNSTYLED);
@@ -384,14 +390,31 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid id) const
             xml.tag(id, val, defaultValue);
             }
       else if (propertyType(id) == P_TYPE::POINT_SP) {
-            qreal _spatium = score()->spatium();
-            QPointF p1       = getProperty(id).toPoint();
-            QPointF p2       = propertyDefault(id).toPoint();
+            QPointF p1 = getProperty(id).toPointF();
+            QPointF p2 = propertyDefault(id).toPointF();
             if ( (qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001))
                   return;
+            qreal _spatium = score()->spatium();
             QVariant val          = QVariant(p1/_spatium);
             QVariant defaultValue = QVariant(p2/_spatium);
             xml.tag(id, val, defaultValue);
+            }
+      else if (propertyType(id) == P_TYPE::POINT_SP_MM) {
+            QPointF p1 = getProperty(id).toPointF();
+            QPointF p2 = propertyDefault(id).toPointF();
+            if ((qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001))
+                  return;
+            if (sizeIsSpatiumDependent()) {
+                  qreal _spatium        = score()->spatium();
+                  QVariant val          = QVariant(p1/_spatium);
+                  QVariant defaultValue = QVariant(p2/_spatium);
+                  xml.tag(id, val, defaultValue);
+                  }
+            else {
+                  QVariant val          = QVariant(p1/DPMM);
+                  QVariant defaultValue = QVariant(p2/DPMM);
+                  xml.tag(id, val, defaultValue);
+                  }
             }
       else {
             if (getProperty(id).isValid())

@@ -96,7 +96,7 @@ Dynamic* lookupDynamic(Element* e)
 static void moveDynamic(Dynamic* d, qreal y)
       {
       if (d && d->autoplace()) {
-            d->rUserYoffset() = y;
+            d->ryoffset() = y;
             Skyline& sk = d->measure()->system()->staff(d->staffIdx())->skyline();
             Segment* s = d->segment();
             sk.add(d->shape().translated(s->pos() + s->measure()->pos()));
@@ -113,10 +113,6 @@ void HairpinSegment::layout()
       Dynamic* ed = 0;
       qreal _spatium = spatium();
 
-      if (autoplace()) {
-            setUserOff(QPointF());
-            setUserOff2(QPointF());
-            }
       if (isSingleType() || isBeginType()) {
             sd = lookupDynamic(hairpin()->startElement());
             if (sd) {
@@ -124,8 +120,8 @@ void HairpinSegment::layout()
                         qreal dx        = sd->bbox().right() + sd->pos().x()
                                              + sd->segment()->pos().x() + sd->measure()->pos().x();
                         qreal dist      = dx - pos().x() + score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
-                        rUserXoffset()  = dist;
-                        rUserXoffset2() = -dist;
+                        rxpos()  = dist;
+                        rxpos2() = -dist;
                         }
                   else
                         sd->doAutoplace();
@@ -135,10 +131,10 @@ void HairpinSegment::layout()
             ed = lookupDynamic(hairpin()->endElement());
             if (ed) {
                   if (autoplace()) {
-                        rUserXoffset2() -= ed->bbox().width();
-                        qreal dx         = ed->bbox().left() + ed->pos().x()
-                                           + ed->segment()->pos().x() + ed->measure()->pos().x();
-                        ed->rUserXoffset() = pos2().x() + pos().x() - dx + score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
+                        rxpos2() -= ed->bbox().width();
+                        qreal dx = ed->bbox().left() + ed->pos().x()
+                                    + ed->segment()->pos().x() + ed->measure()->pos().x();
+                        ed->rxpos() = pos2().x() + pos().x() - dx + score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
                         }
                   else
                         ed->doAutoplace();
@@ -244,9 +240,10 @@ void HairpinSegment::layout()
             return;
 
       if (spanner()->placeBelow())
-            rypos() = score()->styleP(Sid::hairpinPosBelow) + (staff() ? staff()->height() : 0.0);
+            rpos() = score()->styleValue(Pid::OFFSET, Sid::hairpinPosBelow).toPointF() + QPointF(0.0, (staff() ? staff()->height() : 0.0));
       else
-            rypos() = score()->styleP(Sid::hairpinPosAbove);
+            rpos() = score()->styleValue(Pid::OFFSET, Sid::hairpinPosAbove).toPointF();
+
       if (autoplace()) {
             qreal minDistance = spatium() * .7;
             qreal ymax = pos().y();
@@ -282,7 +279,7 @@ void HairpinSegment::layout()
                   if (ed)
                         moveDynamic(ed, ymax - ed->ipos().y() + edy);
                   }
-            rUserYoffset() = ymax - pos().y();
+            ryoffset() = ymax - pos().y();
             }
       }
 
@@ -677,7 +674,7 @@ QVariant Hairpin::propertyDefault(Pid id) const
 
 void Hairpin::setYoff(qreal val)
       {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::hairpinPosAbove : Sid::hairpinPosBelow);
+      ryoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::hairpinPosAbove : Sid::hairpinPosBelow);
       }
 
 //---------------------------------------------------------

@@ -175,7 +175,7 @@ class ScoreElement {
       const ElementStyle* _elementStyle { &emptyStyle };
       PropertyFlags* _propertyFlagsList { 0 };
       LinkedElements* _links            { 0 };
-      int getPropertyFlagsIdx(Pid id) const;
+      virtual int getPropertyFlagsIdx(Pid id) const;
 
    public:
       ScoreElement(Score* s) : _score(s)   {}
@@ -198,6 +198,8 @@ class ScoreElement {
       virtual QVariant propertyDefault(Pid) const;
       virtual void resetProperty(Pid id);
       QVariant propertyDefault(Pid pid, Tid tid) const;
+      void setPidFromSid(Pid pid, Sid sid);
+      virtual bool sizeIsSpatiumDependent() const { return true; }
 
       virtual void reset();                     // reset all properties & position to default
 

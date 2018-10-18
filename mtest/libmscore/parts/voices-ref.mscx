@@ -295,7 +295,7 @@
               <linkedMain/>
               <Fingering>
                 <linkedMain/>
-                <pos x="1.05809" y="-4.67501"/>
+                <offset x="1.05809" y="-4.67501"/>
                 <text>2</text>
                 </Fingering>
               <pitch>63</pitch>
@@ -329,7 +329,7 @@
           <Harmony>
             <root>11</root>
             <name>7</name>
-            <pos x="0" y="-3.22581"/>
+            <offset x="0" y="-3.22581"/>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
@@ -711,7 +711,7 @@
               <linkedMain/>
               <Fingering>
                 <linkedMain/>
-                <pos x="1.05809" y="-4.67501"/>
+                <offset x="1.05809" y="-4.67501"/>
                 <text>2</text>
                 </Fingering>
               <pitch>43</pitch>
@@ -1221,7 +1221,7 @@
                       <voices>1</voices>
                       </location>
                     </linked>
-                  <pos x="1.05809" y="-4.67501"/>
+                  <offset x="1.05809" y="-4.67501"/>
                   <text>2</text>
                   </Fingering>
                 <pitch>63</pitch>
@@ -1913,7 +1913,7 @@
                       <voices>3</voices>
                       </location>
                     </linked>
-                  <pos x="1.05809" y="-4.67501"/>
+                  <offset x="1.05809" y="-4.67501"/>
                   <text>2</text>
                   </Fingering>
                 <pitch>43</pitch>

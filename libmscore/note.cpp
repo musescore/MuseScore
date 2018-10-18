@@ -1185,7 +1185,7 @@ void Note::write(XmlWriter& xml) const
       _el.write(xml);
       bool write_dots = false;
       for (NoteDot* dot : _dots)
-            if (!dot->userOff().isNull() || !dot->visible() || dot->color() != Qt::black || dot->visible() != visible()) {
+            if (!dot->offset().isNull() || !dot->visible() || dot->color() != Qt::black || dot->visible() != visible()) {
                   write_dots = true;
                   break;
                   }
@@ -2078,7 +2078,7 @@ void Note::layout2()
                         }
 /*                  if (sym->sym() == SymId::noteheadParenthesisLeft || sym->sym() == SymId::noteheadParenthesisRight) {
                         if (!rp.isNull())
-                              e->setUserOff(QPointF());
+                              e->setOffset(QPointF());
                         }
  */
                   }
@@ -2273,8 +2273,8 @@ void Note::setTrack(int val)
 
 void Note::reset()
       {
-      undoChangeProperty(Pid::USER_OFF, QPointF());
-      chord()->undoChangeProperty(Pid::USER_OFF, QPointF());
+      undoChangeProperty(Pid::OFFSET, QPointF());
+      chord()->undoChangeProperty(Pid::OFFSET, QPointF());
       chord()->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
       }
 
@@ -2387,11 +2387,11 @@ void Note::editDrag(EditData& ed)
       if (ch->notes().size() == 1) {
             // if the chord contains only this note, then move the whole chord
             // including stem, flag etc.
-            ch->undoChangeProperty(Pid::USER_OFF, ch->userOff() + userOff() + ed.delta);
-            setUserOff(QPointF());
+            ch->undoChangeProperty(Pid::OFFSET, ch->offset() + offset() + ed.delta);
+            setOffset(QPointF());
             }
       else {
-            setUserOff(userOff() + ed.delta);
+            setOffset(offset() + ed.delta);
             undoChangeProperty(Pid::AUTOPLACE, false);
             }
       triggerLayout();

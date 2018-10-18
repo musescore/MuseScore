@@ -290,7 +290,7 @@ bool ChordRest::readProperties(XmlReader& e)
             }
       else if (tag == "pos") {
             QPointF pt = e.readPoint();
-            setUserOff(pt * spatium());
+            setOffset(pt * spatium());
             }
       else if (tag == "offset")
             DurationElement::readProperties(e);
@@ -836,7 +836,7 @@ QVariant ChordRest::propertyDefault(Pid propertyId) const
             default:
                   return DurationElement::propertyDefault(propertyId);
             }
-      // Prevent unreachable code warning 
+      // Prevent unreachable code warning
       // triggerLayout();
       }
 
