@@ -3401,7 +3401,7 @@ System* Score::collectSystem(LayoutContext& lc)
             }
 
       //-------------------------------------------------------------
-      // TempoText, Fermata
+      // TempoText, Fermata, TremoloBar
       //-------------------------------------------------------------
 
       for (const Segment* s : sl) {
@@ -3412,7 +3412,7 @@ System* Score::collectSystem(LayoutContext& lc)
                               setTempo(tt->segment(), tt->tempo());
                         tt->layout();
                         }
-                  else if (e->isFermata())
+                  else if (e->isFermata() || e->isTremoloBar())
                         e->layout();
                   }
             }
