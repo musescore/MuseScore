@@ -115,6 +115,7 @@
           <Fermata>
             <subtype>fermataBelow</subtype>
             <play>0</play>
+            <placement>below</placement>
             </Fermata>
           <Beam>
             <l1>21</l1>
@@ -130,6 +131,7 @@
           <Fermata>
             <subtype>fermataBelow</subtype>
             <play>0</play>
+            <placement>below</placement>
             </Fermata>
           <Chord>
             <durationType>eighth</durationType>
@@ -189,6 +191,7 @@
             </Chord>
           <Fermata>
             <subtype>fermataBelow</subtype>
+            <placement>below</placement>
             </Fermata>
           <Chord>
             <durationType>eighth</durationType>
@@ -205,6 +208,7 @@
           <Fermata>
             <subtype>fermataBelow</subtype>
             <timeStretch>1.5</timeStretch>
+            <placement>below</placement>
             </Fermata>
           <Chord>
             <durationType>whole</durationType>

@@ -84,6 +84,7 @@
             <topTpc>14</topTpc>
             <bottomPitch>47</bottomPitch>
             <bottomTpc>19</bottomTpc>
+            <color r="0" g="255" b="0" a="255"/>
             </Ambitus>
           <TimeSig>
             <sigN>4</sigN>

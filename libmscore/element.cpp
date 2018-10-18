@@ -521,8 +521,11 @@ void Element::writeProperties(XmlWriter& xml) const
                         }
                   }
             }
-      for (Pid pid : { Pid::OFFSET, Pid::COLOR, Pid::VISIBLE, Pid::Z, Pid::PLACEMENT}) {
-            if (propertyFlags(pid) == PropertyFlags::NOSTYLE && !autoplace())
+      if (propertyFlags(Pid::OFFSET) == PropertyFlags::NOSTYLE && !autoplace())
+            writeProperty(xml, Pid::OFFSET);
+
+      for (Pid pid : { Pid::COLOR, Pid::VISIBLE, Pid::Z, Pid::PLACEMENT}) {
+            if (propertyFlags(pid) == PropertyFlags::NOSTYLE)
                   writeProperty(xml, pid);
             }
       }
