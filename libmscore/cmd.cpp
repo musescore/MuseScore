@@ -1101,6 +1101,11 @@ void Score::changeCRlen(ChordRest* cr, const TDuration& d)
 
 void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
       {
+      if (cr->isRepeatMeasure()) {
+            // it is not clear what should this
+            // operation mean for measure repeats.
+            return;
+            }
       Fraction srcF(cr->duration());
       if (srcF == dstF)
             return;
