@@ -1720,7 +1720,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                                           if (cr->durationType() == TDuration::DurationType::V_MEASURE) {
                                                 int actualTicks = cr->actualTicks();
                                                 n += actualTicks;
-                                                cr->setDurationType(TDuration(actualTicks));
+                                                cr->setDurationType(TDuration(Fraction::fromTicks(actualTicks)));
                                                 }
                                           else
                                                 n += cr->actualTicks();
