@@ -84,7 +84,7 @@ void InputState::update(Element* e)
             setNoteType(note->noteType());
             setBeamMode(chord->beamMode());
             }
-      else if (e->isRest()) {
+      else if (e->isRest() || e->isRepeatMeasure()) {
             Rest* rest = toRest(e);
             if (rest->durationType().type() == TDuration::DurationType::V_MEASURE)
                   setDuration(TDuration::DurationType::V_QUARTER);
