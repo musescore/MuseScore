@@ -444,7 +444,7 @@ class Score : public QObject, public ScoreElement {
 
       QMap<QString, QString> _metaTags;
 
-      constexpr static double defaultTempo = 2.0; //defautl tempo is equal 120 bpm
+      constexpr static double _defaultTempo = 2.0; //defautl tempo is equal 120 bpm
 
       Selection _selection;
       SelectionFilter _selectionFilter;
@@ -1163,6 +1163,8 @@ class Score : public QObject, public ScoreElement {
       void hideEmptyStaves(System* system, bool isFirstSystem);
       void layoutLyrics(System*);
       void createBeams(Measure*);
+
+      constexpr static double defaultTempo()  { return _defaultTempo; }
 
       friend class ChangeSynthesizerState;
       friend class Chord;

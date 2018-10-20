@@ -464,7 +464,7 @@ void Score::fixTicks()
             }
       // Now done in getNextMeasure(), do we keep?
       if (tempomap()->empty())
-            tempomap()->setTempo(0, defaultTempo);
+            tempomap()->setTempo(0, _defaultTempo);
       }
 
 //---------------------------------------------------------
@@ -3266,7 +3266,7 @@ void Score::removeTempo(int tick)
 void Score::resetTempo()
       {
       tempomap()->clear();
-      tempomap()->setTempo(0, defaultTempo);
+      tempomap()->setTempo(0, _defaultTempo);
       sigmap()->clear();
       Measure* m = firstMeasure();
       if (m)
