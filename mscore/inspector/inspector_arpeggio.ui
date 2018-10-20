@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>76</width>
-    <height>69</height>
+    <width>284</width>
+    <height>180</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -32,7 +32,7 @@
    <item>
     <widget class="QToolButton" name="title">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -76,7 +76,7 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="0" column="0">
+      <item row="1" column="0" colspan="2">
        <widget class="QCheckBox" name="playArpeggio">
         <property name="accessibleName">
          <string>Play</string>
@@ -89,7 +89,17 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Stretch:</string>
+        </property>
+        <property name="buddy">
+         <cstring>Ratio</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
        <widget class="QToolButton" name="resetPlayArpeggio">
         <property name="toolTip">
          <string>Reset to default</string>
@@ -106,11 +116,36 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="2">
+       <widget class="QToolButton" name="resetStretch">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QDoubleSpinBox" name="stretch"/>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>title</tabstop>
+  <tabstop>resetStretch</tabstop>
+  <tabstop>playArpeggio</tabstop>
+ </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>
