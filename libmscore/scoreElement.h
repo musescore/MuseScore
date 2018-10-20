@@ -427,6 +427,14 @@ static inline const DurationElement* toDurationElement(const ScoreElement* e) {
          || e->type() == ElementType::REPEAT_MEASURE || e->type() == ElementType::TUPLET);
       return (const DurationElement*)e;
       }
+static inline Rest* toRest(ScoreElement* e) {
+      Q_ASSERT(!e || e->isRest() || e->isRepeatMeasure());
+      return (Rest*)e;
+      }
+static inline const Rest* toRest(const ScoreElement* e) {
+      Q_ASSERT(!e || e->isRest() || e->isRepeatMeasure());
+      return (const Rest*)e;
+      }
 static inline SlurTieSegment* toSlurTieSegment(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
       return (SlurTieSegment*)e;
@@ -481,7 +489,6 @@ static inline a* to##a(ScoreElement* e)             { Q_ASSERT(e == 0 || e->is##
 static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##a()); return (const a*)e; }
 
       CONVERT(Note)
-      CONVERT(Rest)
       CONVERT(Chord)
       CONVERT(BarLine)
       CONVERT(Articulation)
