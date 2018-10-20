@@ -1815,6 +1815,8 @@ void Element::drawEditMode(QPainter* p, EditData& ed)
 
 void Element::startDrag(EditData& ed)
       {
+      if (!isMovable())
+            return;
       ElementEditData* eed = new ElementEditData();
       eed->e = this;
       eed->pushProperty(Pid::OFFSET);
@@ -1828,6 +1830,9 @@ void Element::startDrag(EditData& ed)
 
 QRectF Element::drag(EditData& ed)
       {
+      if (!isMovable())
+            return QRectF();
+
       QRectF r(canvasBoundingRect());
 
       qreal x = ed.delta.x();
@@ -1893,6 +1898,8 @@ QRectF Element::drag(EditData& ed)
 
 void Element::endDrag(EditData& ed)
       {
+      if (!isMovable())
+            return;
       ElementEditData* eed = ed.getData(this);
       for (PropertyData pd : eed->propertyData) {
             PropertyFlags f = propertyFlags(pd.id);
