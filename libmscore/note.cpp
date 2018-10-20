@@ -1573,7 +1573,6 @@ void Note::endDrag(EditData& ed)
                   score()->undoPropertyChanged(nn, pd.id, pd.data);
                   }
             }
-      score()->select(this, SelectType::SINGLE, 0);
       }
 
 //---------------------------------------------------------
