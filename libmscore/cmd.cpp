@@ -1324,7 +1324,7 @@ static void setTpc(Note* oNote, int tpc, int& newTpc1, int& newTpc2)
 ///   Increment/decrement pitch of note by one or by an octave.
 //---------------------------------------------------------
 
-void Score::upDown(bool up, UpDownMode mode)
+void Score::upDown(bool up, UpDownMode mode, bool updateSelection)
       {
       QList<Note*> el = selection().uniqueNotes();
 
@@ -1347,7 +1347,7 @@ void Score::upDown(bool up, UpDownMode mode)
                         {
                         const Drumset* ds = part->instrument()->drumset();
                         if (ds) {
-                              newPitch = up ? ds->prevPitch(pitch) : ds->nextPitch(pitch);
+                              newPitch = up ? ds->nextPitch(pitch) : ds->prevPitch(pitch);
                               newTpc1 = pitch2tpc(newPitch, Key::C, Prefer::NEAREST);
                               newTpc2 = newTpc1;
                               }
@@ -1493,9 +1493,29 @@ void Score::upDown(bool up, UpDownMode mode)
             setPlayNote(true);
             }
 
-      _selection.clear();
-      for (Note* note : el)
-            _selection.add(note);
+      if (updateSelection) {
+            _selection.clear();
+            for (Note* note : el)
+                  _selection.add(note);
+            }
+      }
+
+//---------------------------------------------------------
+//   upDownDelta
+///   Add the delta to the pitch of note.
+//---------------------------------------------------------
+
+void Score::upDownDelta(int pitchDelta, bool updateSelection)
+      {
+      while (pitchDelta > 0) {
+            upDown(true, UpDownMode::CHROMATIC, updateSelection);
+            pitchDelta--;
+            }
+
+      while (pitchDelta < 0) {
+            upDown(false, UpDownMode::CHROMATIC, updateSelection);
+            pitchDelta++;
+            }
       }
 
 //---------------------------------------------------------
