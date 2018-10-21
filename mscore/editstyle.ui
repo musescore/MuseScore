@@ -6943,10 +6943,10 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QWidget" name="pedalLinePosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="pedalLinePosAbove" native="true"/>
            </item>
            <item row="2" column="1">
-            <widget class="QWidget" name="pedalLinePosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="pedalLinePosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -7211,10 +7211,10 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QWidget" name="vibratoLinePosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="vibratoLinePosAbove" native="true"/>
            </item>
            <item row="2" column="1">
-            <widget class="QWidget" name="vibratoLinePosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="vibratoLinePosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -7525,10 +7525,10 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QWidget" name="fermataPosAbove" native="true"/>
+              <widget class="Ms::OffsetSelect" name="fermataPosAbove" native="true"/>
              </item>
              <item row="1" column="1">
-              <widget class="QWidget" name="fermataPosBelow" native="true"/>
+              <widget class="Ms::OffsetSelect" name="fermataPosBelow" native="true"/>
              </item>
             </layout>
            </item>
@@ -7686,10 +7686,10 @@
             </spacer>
            </item>
            <item row="1" column="1">
-            <widget class="QWidget" name="textLinePosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="textLinePosAbove" native="true"/>
            </item>
            <item row="2" column="1">
-            <widget class="QWidget" name="textLinePosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="textLinePosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -7878,10 +7878,10 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QWidget" name="staffTextPosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="staffTextPosAbove" native="true"/>
            </item>
            <item row="2" column="1">
-            <widget class="QWidget" name="staffTextPosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="staffTextPosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -8070,10 +8070,10 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QWidget" name="tempoTextPosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="tempoTextPosAbove" native="true"/>
            </item>
            <item row="2" column="1">
-            <widget class="QWidget" name="tempoTextPosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="tempoTextPosBelow" native="true"/>
            </item>
           </layout>
          </widget>
@@ -8262,10 +8262,10 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QWidget" name="rehearsalMarkPosAbove" native="true"/>
+            <widget class="Ms::OffsetSelect" name="rehearsalMarkPosAbove" native="true"/>
            </item>
            <item row="2" column="1">
-            <widget class="QWidget" name="rehearsalMarkPosBelow" native="true"/>
+            <widget class="Ms::OffsetSelect" name="rehearsalMarkPosBelow" native="true"/>
            </item>
           </layout>
          </widget>
