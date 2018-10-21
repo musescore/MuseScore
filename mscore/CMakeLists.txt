@@ -278,7 +278,9 @@ add_executable ( ${ExecutableName}
       measureproperties.h mediadialog.h metaedit.h miconengine.h mididriver.h mixer.h musedata.h
       musescore.h musicxml.h musicxmlfonthandler.h musicxmlsupport.h navigator.h newwizard.h noteGroups.h
       omrpanel.h ove.h pa.h pagesettings.h palette.h palettebox.h paletteBoxButton.h partedit.h
-      pathlistdialog.h piano.h pianoroll.h pianotools.h pianoview.h playpanel.h pluginCreator.h
+      pathlistdialog.h piano.h pianolevels.h pianolevelschooser.h  pianolevelsfilter.h
+      pianokeyboard.h pianoroll.h pianoruler.h pianotools.h pianoview.h
+      playpanel.h pluginCreator.h
       pluginManager.h pm.h preferences.h preferenceslistwidget.h prefsdialog.h qmledit.h
       qmlplugin.h recordbutton.h resourceManager.h revision.h ruler.h scoreaccessibility.h
       scoreBrowser.h scoreInfo.h scorePreview.h scoretab.h scoreview.h searchComboBox.h
@@ -309,7 +311,8 @@ add_executable ( ${ExecutableName}
       excerptsdialog.cpp metaedit.cpp magbox.cpp
       capella.cpp capxml.cpp exportaudio.cpp palettebox.cpp
       synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
-      pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
+      pianokeyboard.cpp pianolevels.cpp pianolevelschooser.cpp pianolevelsfilter.cpp
+      pianoruler.cpp pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
       updatechecker.cpp
       importove.cpp
       ove.cpp

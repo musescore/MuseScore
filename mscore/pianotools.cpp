@@ -246,6 +246,10 @@ PianoKeyItem::PianoKeyItem(HPiano* _piano, int p)
       _selected = false;
       _highlighted = false;
       type = -1;
+
+      QString pitchNames[] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+      QString text = pitchNames[_pitch % 12] + QString::number((_pitch / 12) - 1);
+      setToolTip(text);
       }
 
 //---------------------------------------------------------
@@ -395,11 +399,12 @@ void PianoKeyItem::paint(QPainter* p, const QStyleOptionGraphicsItem* /*o*/, QWi
       else
             p->setBrush(type >= 7 ? Qt::black : Qt::white);
       p->drawPath(path());
-      if (_pitch == 60) {
-            QFont f("FreeSerif", 8);
+      if (_pitch % 12 == 0) {
+            QFont f("FreeSerif", 6);
             p->setFont(f);
+            QString text = "C" + QString::number((_pitch / 12) - 1);
             p->drawText(QRectF(KEY_WIDTH / 2, KEY_HEIGHT - 8, 0, 0),
-               Qt::AlignCenter | Qt::TextDontClip, "c'");
+               Qt::AlignCenter | Qt::TextDontClip, text);
             }
       }
 
