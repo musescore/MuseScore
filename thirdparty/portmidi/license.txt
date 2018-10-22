@@ -6,7 +6,7 @@
  * Latest version available at: http://sourceforge.net/projects/portmedia
  *
  * Copyright (c) 1999-2000 Ross Bencina and Phil Burk
- * Copyright (c) 2001-2006 Roger B. Dannenberg
+ * Copyright (c) 2001-2009 Roger B. Dannenberg
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files
