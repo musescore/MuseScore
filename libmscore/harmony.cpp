@@ -1006,6 +1006,7 @@ void Harmony::layout()
 
       if (!parent()) {
             setPos(0.0, 0.0);
+            setOffset(0.0, 0.0);
             return;
             }
       if (isStyled(Pid::OFFSET))

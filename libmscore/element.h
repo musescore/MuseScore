@@ -223,6 +223,7 @@ class Element : public ScoreElement {
 
       const QPointF& offset() const            { return _offset;  }
       virtual void setOffset(const QPointF& o) { _offset = o;     }
+      void setOffset(qreal x, qreal y) { _offset.rx() = x, _offset.ry() = y; }
       QPointF& roffset()                       { return _offset; }
       qreal& rxoffset()                        { return _offset.rx(); }
       qreal& ryoffset()                        { return _offset.ry(); }

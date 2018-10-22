@@ -158,6 +158,10 @@ void BSymbol::layout()
       {
       if (staff())
             setMag(staff()->mag(tick()));
+      if (!parent()) {
+            setOffset(.0, .0);
+            setPos(.0, .0);
+            }
       for (Element* e : _leafs)
             e->layout();
       }
@@ -204,7 +208,6 @@ QLineF BSymbol::dragAnchor() const
       if (parent() && parent()->type() == ElementType::SEGMENT) {
             System* system = segment()->measure()->system();
             qreal y        = system->staffCanvasYpage(staffIdx());
-//            QPointF anchor(segment()->pageX(), y);
             QPointF anchor(segment()->canvasPos().x(), y);
             return QLineF(canvasPos(), anchor);
             }
