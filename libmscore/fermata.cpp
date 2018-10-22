@@ -196,45 +196,37 @@ Page* Fermata::page() const
 void Fermata::layout()
       {
       Segment* s = segment();
+      setPos(QPointF());
       if (!s) {          // for use in palette
-            setPos(QPointF());
+            setOffset(0.0, 0.0);
             QRectF b(symBbox(_symId));
             setbbox(b.translated(-0.5 * b.width(), 0.0));
             return;
             }
 
-      qreal x = 0.0;
+      if (isStyled(Pid::OFFSET))
+            setOffset(propertyDefault(Pid::OFFSET).toPointF());
       Element* e = s->element(track());
       if (e) {
             if (e->isChord())
-                  x = score()->noteHeadWidth() * staff()->mag(0) * .5;
+                  rxpos() += score()->noteHeadWidth() * staff()->mag(0) * .5;
             else
-                  x = e->x() + e->width() * staff()->mag(0) * .5;
+                  rxpos() += e->x() + e->width() * staff()->mag(0) * .5;
             }
 
       QString name = Sym::id2name(_symId);
       if (placeAbove()) {
-            rpos() = score()->styleValue(Pid::OFFSET, Sid::fermataPosAbove).toPointF() + QPointF(x, 0.0);
             if (name.endsWith("Below"))
                   _symId = Sym::name2id(name.left(name.size() - 5) + "Above");
             }
       else {
-            rpos() = score()->styleValue(Pid::OFFSET, Sid::fermataPosBelow).toPointF() + QPointF(x, staff()->height());
+            rypos() += staff()->height();
             if (name.endsWith("Above"))
                   _symId = Sym::name2id(name.left(name.size() - 5) + "Below");
             }
       QRectF b(symBbox(_symId));
       setbbox(b.translated(-0.5 * b.width(), 0.0));
       autoplaceSegmentElement(styleP(Sid::fermataMinDistance));
-      }
-
-//---------------------------------------------------------
-//   reset
-//---------------------------------------------------------
-
-void Fermata::reset()
-      {
-      Element::reset();
       }
 
 //---------------------------------------------------------

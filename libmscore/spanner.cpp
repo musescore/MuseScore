@@ -271,7 +271,8 @@ QString SpannerSegment::accessibleInfo() const
 
 void SpannerSegment::triggerLayout() const
       {
-      _spanner->triggerLayout();
+      if (_spanner)
+            _spanner->triggerLayout();
       }
 
 //---------------------------------------------------------

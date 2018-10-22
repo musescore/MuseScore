@@ -151,6 +151,7 @@ static QString createDefaultFileName(QString fn)
 
 static bool readScoreError(const QString& name, Score::FileError error, bool ask)
       {
+printf("<%s> %d\n", qPrintable(name), int(error));
       QString msg = QObject::tr("Cannot read file %1:\n").arg(name);
       QString detailedMsg;
       bool canIgnore = false;
@@ -188,6 +189,10 @@ static bool readScoreError(const QString& name, Score::FileError error, bool ask
             case Score::FileError::FILE_CORRUPTED:
                   msg = QObject::tr("File \"%1\" corrupted.").arg(name);
                   detailedMsg = MScore::lastError;
+                  canIgnore = true;
+                  break;
+            case Score::FileError::FILE_OLD_300_FORMAT:
+                  msg += QObject::tr("It was last saved with a developer version of 3.0.\n");
                   canIgnore = true;
                   break;
             case Score::FileError::FILE_ERROR:
@@ -1932,7 +1937,7 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
             }
       if (!rv && !MScore::noGui)
             QMessageBox::critical(this, tr("MuseScore:"), tr("Cannot write into %1").arg(fn));
-      
+
       if (layoutMode != cs_->layoutMode()) {
             cs_->setLayoutMode(layoutMode);
             cs_->doLayout();
