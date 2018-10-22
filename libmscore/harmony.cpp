@@ -1008,19 +1008,13 @@ void Harmony::layout()
             setPos(0.0, 0.0);
             return;
             }
+      if (isStyled(Pid::OFFSET))
+            setOffset(propertyDefault(Pid::OFFSET).toPointF());
 
       qreal yy = 0.0;
-      qreal xx = 0.0; // offset(_spatium).x();
+      qreal xx = 0.0;
 
-      if (parent()->isSegment()) {
-            QPointF p = score()->styleValue(Pid::OFFSET, Sid::chordSymbolPosAbove).toPointF();
-            yy = p.y();
-            xx = p.x();
-            QPointF o(offset());
-            xx += o.x();
-            yy += o.y();
-            }
-      else if (parent()->isFretDiagram()) {
+      if (parent()->isFretDiagram()) {
             qDebug("Harmony %s with fret diagram as parent", qPrintable(_textName)); // not possible?
             yy = -score()->styleP(Sid::harmonyFretDist);
             }
