@@ -173,11 +173,8 @@ ScoreElement::~ScoreElement()
 QVariant ScoreElement::propertyDefault(Pid pid, Tid tid) const
       {
       for (const StyledProperty& spp : *textStyle(tid)) {
-            if (spp.pid == pid) {
-                  if (propertyType(pid) == P_TYPE::SP_REAL)
-                        return score()->styleP(spp.sid);
-                  return score()->styleV(spp.sid);
-                  }
+            if (spp.pid == pid)
+                  return score()->styleValue(pid, spp.sid);
             }
       return QVariant();
       }

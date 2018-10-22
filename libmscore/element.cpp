@@ -1128,9 +1128,8 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
                   setSelected(v.toBool());
                   break;
             case Pid::OFFSET:
-                  score()->addRefresh(canvasBoundingRect());
                   _offset = v.toPointF();
-                  return true;                  // no triggerLayout()
+                  break;
             case Pid::PLACEMENT:
                   setPlacement(Placement(v.toInt()));
                   break;
@@ -1173,11 +1172,9 @@ QVariant Element::propertyDefault(Pid pid) const
             case Pid::SELECTED:
                   return false;
             case Pid::OFFSET: {
-                  if (isStyled(pid)) {
-                        QVariant v = ScoreElement::propertyDefault(pid);
-                        if (v.isValid())
-                              return v;
-                        }
+                  QVariant v = ScoreElement::propertyDefault(pid);
+                  if (v.isValid())        // if its a styled property
+                        return v;
                   return QPointF();
                   }
             case Pid::AUTOPLACE:
