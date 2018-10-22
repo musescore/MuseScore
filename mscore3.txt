@@ -370,3 +370,18 @@ Functions which must be implemented for any new ScoreElement:
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
 
+
+==============================================================
+      Element position
+==============================================================
+
+The position of an element is notated relative to its parent element so it has
+a local coordinate system starting with zero. The draw position of an element is the
+sum of Element->_pos + Element->_offset.
+
+For some element types _offset is styled. The style value gives the default position of an
+element. Each element can separatly moved by the user by changing the _offset value.
+
+If an element is "autoplaced" then Element->_pos is changed to move the element to a position without
+colliding with other element.
+
