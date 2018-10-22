@@ -612,9 +612,9 @@ static const StyleType styleTypes[] {
       { Sid::measureNumberFontBold,         "measureNumberFontBold",        false },
       { Sid::measureNumberFontItalic,       "measureNumberFontItalic",      false },
       { Sid::measureNumberFontUnderline,    "measureNumberFontUnderline",   false },
-      { Sid::measureNumberOffset,           "measureNumberOffset",          QPointF(0.0, -2.0) },
+      { Sid::measureNumberOffset,           "measureNumberOffset",          QPointF(0.0, -6.0) },
       { Sid::measureNumberOffsetType,       "measureNumberOffsetType",      int(OffsetType::SPATIUM)   },
-      { Sid::measureNumberAlign,            "measureNumberAlign",           QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+      { Sid::measureNumberAlign,            "measureNumberAlign",           QVariant::fromValue(Align::HCENTER | Align::BOTTOM) },
 
       { Sid::translatorFontFace,            "translatorFontFace",           "FreeSerif" },
       { Sid::translatorFontSize,            "translatorFontSize",           11.0 },
