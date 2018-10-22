@@ -80,5 +80,16 @@ QVariant RehearsalMark::propertyDefault(Pid id) const
             }
       }
 
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid RehearsalMark::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::rehearsalMarkPosAbove : Sid::rehearsalMarkPosBelow;
+      return TextBase::getPropertyStyle(pid);
+      }
+
 } // namespace Ms
 
