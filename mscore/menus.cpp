@@ -437,7 +437,11 @@ Palette* MuseScore::newRepeatsPalette()
             if(markerTypeTable[i].type == Marker::Type::CODETTA) //not in smufl
                   continue;
 
-            Marker* mk = new Marker(gscore);
+            Marker* mk;
+            if (markerTypeTable[i].type == Marker::Type::FINE || markerTypeTable[i].type == Marker::Type::TOCODA)
+                  mk = new Marker(gscore, Tid::REPEAT_RIGHT);
+            else
+                  mk = new Marker(gscore);
             mk->setMarkerType(markerTypeTable[i].type);
             sp->append(mk, qApp->translate("markerType", markerTypeTable[i].name.toUtf8().constData()));
             }
