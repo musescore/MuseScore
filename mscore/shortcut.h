@@ -115,11 +115,15 @@ class Shortcut {
       QKeySequence::StandardKey _standardKey { QKeySequence::UnknownKey };
       mutable QAction* _action               { 0 };             //! cached action
 
+      static QString source;
+
       static Shortcut _sc[];
       static QHash<QByteArray, Shortcut*> _shortcuts;
       void translateAction(QAction* action) const;
 
    public:
+
+      static constexpr const char* defaultFileName = ":/data/shortcuts.xml";
 
       Shortcut() {}
       Shortcut(
@@ -171,6 +175,7 @@ class Shortcut {
       static void saveToNewFile(QString fileLocation);
       static void resetToDefault();
       static bool dirty;
+      static bool customSource() { return source != defaultFileName; }
       static Shortcut* getShortcut(const char* key);
       static const QHash<QByteArray, Shortcut*>& shortcuts() { return _shortcuts; }
       static QActionGroup* getActionGroupForWidget(MsWidget w);
