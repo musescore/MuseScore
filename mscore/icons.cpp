@@ -155,7 +155,9 @@ static const char* iconNames[] = {
       "edit-reset.svg",
       "window-close.svg",
       "arrow_up.svg",
-      "arrow_down.svg"
+      "arrow_down.svg",
+      "mail.svg",
+      "bug.svg"
       };
 
 //---------------------------------------------------------

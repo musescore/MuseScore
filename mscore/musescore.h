@@ -258,6 +258,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QAction* checkForUpdateAction        { 0 };
       QAction* askForHelpAction;
       QAction* reportBugAction;
+      QAction* leaveFeedbackAction;
       QAction* revertToFactoryAction;
 
       QProgressBar* _progressBar           { 0 };
@@ -267,6 +268,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QToolBar* fileTools;
       QToolBar* transportTools;
       QToolBar* entryTools;
+      QToolBar* feedbackTools;
       TextTools* _textTools                { 0 };
       PianoTools* _pianoTools              { 0 };
       MediaDialog* _mediaDialog            { 0 };
@@ -464,6 +466,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void switchLayoutMode(LayoutMode);
       void setPlayRepeats(bool repeat);
 
+      QString getUtmParameters(QString medium) const;
+
    private slots:
       void cmd(QAction* a, const QString& cmd);
       void autoSaveTimerTimeout();
@@ -472,8 +476,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void about();
       void aboutQt();
       void aboutMusicXML();
-      void reportBug();
+      void reportBug(QString medium);
       void askForHelp();
+      void leaveFeedback(QString medium);
       void openRecentMenu();
       void selectScore(QAction*);
       void startPreferenceDialog();
