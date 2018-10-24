@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+  <programRevision>c07ed54</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -63,7 +63,7 @@
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="0">
-          <head>custom</head>
+          <head>normal</head>
           <noteheads>
             <whole>noteheadRoundBlackSlashedLarge</whole>
             <half>noteheadRoundBlackDoubleSlashed</half>
@@ -294,79 +294,85 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure number="1">
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Chord>
-          <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <pitch>0</pitch>
-            <tpc>14</tpc>
-            <head>custom</head>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>half</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <pitch>0</pitch>
-            <tpc>14</tpc>
-            <head>custom</head>
-            </Note>
-          </Chord>
-        <Rest>
-          <durationType>quarter</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <head>custom</head>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <head>custom</head>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Chord>
-          <durationType>quarter</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <pitch>37</pitch>
-            <tpc>21</tpc>
-            <head>cross</head>
-            </Note>
-          <Note>
-            <pitch>0</pitch>
-            <tpc>14</tpc>
-            <head>custom</head>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>eighth</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <pitch>37</pitch>
-            <tpc>21</tpc>
-            <head>cross</head>
-            </Note>
-          <Note>
-            <pitch>0</pitch>
-            <tpc>14</tpc>
-            <head>custom</head>
-            </Note>
-          </Chord>
-        <Rest>
-          <durationType>eighth</durationType>
-          </Rest>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>37</pitch>
+              <tpc>21</tpc>
+              <head>cross</head>
+              </Note>
+            <Note>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <head>custom</head>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>37</pitch>
+              <tpc>21</tpc>
+              <head>cross</head>
+              </Note>
+            <Note>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <head>custom</head>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <Chord>
-          <durationType>whole</durationType>
-          <StemDirection>up</StemDirection>
-          <Note>
-            <pitch>0</pitch>
-            <tpc>14</tpc>
-            <head>custom</head>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <head>custom</head>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
       </Staff>
     </Score>
