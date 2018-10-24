@@ -1906,7 +1906,6 @@ void Element::endDrag(EditData& ed)
                   f = PropertyFlags::UNSTYLED;
             score()->undoPropertyChanged(this, pd.id, pd.data, f);
             }
-      undoChangeProperty(Pid::AUTOPLACE, false);
       }
 
 //---------------------------------------------------------
@@ -1952,7 +1951,6 @@ void Element::editDrag(EditData& ed)
       {
       score()->addRefresh(canvasBoundingRect());
       setOffset(offset() + ed.delta);
-      undoChangeProperty(Pid::AUTOPLACE, false);
       score()->addRefresh(canvasBoundingRect());
       }
 
@@ -1972,7 +1970,6 @@ void Element::endEditDrag(EditData& ed)
             eed->propertyData.clear();
             }
       if (changed) {
-            undoChangeProperty(Pid::AUTOPLACE, false);
             undoChangeProperty(Pid::GENERATED, false);
             }
       }

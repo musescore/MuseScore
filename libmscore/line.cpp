@@ -339,17 +339,14 @@ void LineSegment::editDrag(EditData& ed)
             case Grip::START: // Resize the begin of element (left grip)
                   setOffset(offset() + deltaResize);
                   _offset2 -= deltaResize;
-                  undoChangeProperty(Pid::AUTOPLACE, false);
                   break;
             case Grip::END: // Resize the end of element (right grip)
                   _offset2 += deltaResize;
-                  undoChangeProperty(Pid::AUTOPLACE, false);
                   break;
             case Grip::MIDDLE: { // Move the element (middle grip)
                   // Only for moving, no y limitaion
                   QPointF deltaMove(ed.delta.x(), ed.delta.y());
                   setOffset(offset() + deltaMove);
-                  undoChangeProperty(Pid::AUTOPLACE, false);
                   }
                   break;
             default:

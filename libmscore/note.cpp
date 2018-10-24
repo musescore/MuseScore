@@ -2391,7 +2391,6 @@ void Note::editDrag(EditData& ed)
             }
       else {
             setOffset(offset() + ed.delta);
-            undoChangeProperty(Pid::AUTOPLACE, false);
             }
       triggerLayout();
       }
