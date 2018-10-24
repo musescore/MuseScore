@@ -338,7 +338,6 @@ void readTextStyle206(MStyle* style, XmlReader& e)
       Align align = Align::LEFT;
       QPointF offset;
       OffsetType offsetType = OffsetType::SPATIUM;
-      bool offsetValid = false;
 
       FrameType frameType = FrameType::NO_FRAME;
       Spatium paddingWidth(0.0);
@@ -404,14 +403,12 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                   if (offsetType == OffsetType::ABS)
                         xo /= INCH;
                   offset.setX(xo);
-                  offsetValid = true;
                   }
             else if (tag == "yoffset") {
                   qreal yo = e.readDouble();
                   if (offsetType == OffsetType::ABS)
                         yo /= INCH;
                   offset.setY(yo);
-                  offsetValid = true;
                   }
             else if (tag == "rxoffset" || tag == "ryoffset")         // obsolete
                   e.readDouble();

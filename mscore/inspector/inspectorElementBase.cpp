@@ -55,7 +55,7 @@ void InspectorElementBase::setElement()
 //   autoplaceChanged
 //---------------------------------------------------------
 
-void InspectorElementBase::autoplaceChanged(bool val)
+void InspectorElementBase::autoplaceChanged(bool /*val*/)
       {
 //      for (auto i : std::vector<QWidget*>{ e.offsetLabel, e.offset, e.resetOffset }) {
 //            i->setVisible(!val);
