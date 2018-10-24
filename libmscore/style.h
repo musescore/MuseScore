@@ -162,6 +162,7 @@ enum class Sid {
       propertyDistanceStem,
       propertyDistance,
       articulationMag,
+      articulationPosAbove,
       lastSystemFillLimit,
 
       hairpinPlacement,

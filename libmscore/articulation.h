@@ -90,7 +90,6 @@ class Articulation final : public Element {
       virtual void write(XmlWriter& xml) const override;
       virtual bool readProperties(XmlReader&) override;
 
-      virtual void reset() override;
       virtual QLineF dragAnchor() const override;
 
       virtual QVariant getProperty(Pid propertyId) const override;
