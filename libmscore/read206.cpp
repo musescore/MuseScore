@@ -63,6 +63,7 @@
 #include "undo.h"
 #include "lyrics.h"
 #include "tempotext.h"
+#include "measurenumber.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -2912,10 +2913,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Segment")
                   segment->read(e);
             else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(score, Tid::MEASURE_NUMBER);
+                  MeasureNumber* noText = new MeasureNumber(score);
                   readText206(e, noText, m);
-                  noText->setFlag(ElementFlag::ON_STAFF, true);
-                  // noText->setFlag(ElementFlag::MOVABLE, false); ??
                   noText->setTrack(e.track());
                   noText->setParent(m);
                   m->setNoText(noText->staffIdx(), noText);

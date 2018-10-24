@@ -340,6 +340,7 @@ add_executable ( ${ExecutableName}
       inspector/inspectorHarmony.cpp
       inspector/inspectorFret.cpp
       inspector/inspectorText.cpp
+      inspector/inspectorMeasureNumber.cpp
       inspector/inspectorLasso.cpp
       inspector/inspectorBarline.cpp
       inspector/inspectorVolta.cpp

@@ -29,7 +29,7 @@ class Beam;
 class Tuplet;
 class Staff;
 class Chord;
-class Text;
+class MeasureNumber;
 class ChordRest;
 class Score;
 class MuseScoreView;
@@ -127,11 +127,9 @@ class Measure final : public MeasureBase {
       void setStaffSlashStyle(int staffIdx, bool slashStyle);
       bool corrupted(int staffIdx) const;
       void setCorrupted(int staffIdx, bool val);
-      void setNoText(int staffIdx, Text*);
-      Text* noText(int staffIdx) const;
+      void setNoText(int staffIdx, MeasureNumber*);
+      MeasureNumber* noText(int staffIdx) const;
 
-//      const Shape& staffShape(int staffIdx) const;
-//      Shape& staffShape(int staffIdx);
       void createStaves(int);
 
       MeasureNumberMode measureNumberMode() const     { return _noMode;      }

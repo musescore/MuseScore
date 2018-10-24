@@ -40,6 +40,7 @@
 #include "inspectorVibrato.h"
 #include "inspectorNoteDot.h"
 #include "inspectorInstrchange.h"
+#include "inspectorMeasureNumber.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "bendproperties.h"
@@ -321,6 +322,9 @@ void Inspector::update(Score* s)
                         case ElementType::SYSTEM_TEXT:
                         case ElementType::REHEARSAL_MARK:
                               ie = new InspectorStaffText(this);
+                              break;
+                        case ElementType::MEASURE_NUMBER:
+                              ie = new InspectorMeasureNumber(this);
                               break;
                         case ElementType::STAFFTYPE_CHANGE:
                               ie = new InspectorStaffTypeChange(this);

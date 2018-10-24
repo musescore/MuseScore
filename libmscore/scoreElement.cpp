@@ -34,6 +34,7 @@ static const ElementName elementNames[] = {
       { ElementType::SCORE,                "Score",                QT_TRANSLATE_NOOP("elementName", "Score") },
       { ElementType::SYMBOL,               "Symbol",               QT_TRANSLATE_NOOP("elementName", "Symbol") },
       { ElementType::TEXT,                 "Text",                 QT_TRANSLATE_NOOP("elementName", "Text") },
+      { ElementType::MEASURE_NUMBER,       "MeasureNumber",        QT_TRANSLATE_NOOP("elementName", "Measure Number") },
       { ElementType::INSTRUMENT_NAME,      "InstrumentName",       QT_TRANSLATE_NOOP("elementName", "Instrument Name") },
       { ElementType::SLUR_SEGMENT,         "SlurSegment",          QT_TRANSLATE_NOOP("elementName", "Slur Segment") },
       { ElementType::TIE_SEGMENT,          "TieSegment",           QT_TRANSLATE_NOOP("elementName", "Tie Segment") },
@@ -740,6 +741,7 @@ bool ScoreElement::isTextBase() const
          || type() == ElementType::FIGURED_BASS
          || type() == ElementType::TEMPO_TEXT
          || type() == ElementType::INSTRUMENT_NAME
+         || type() == ElementType::MEASURE_NUMBER
          ;
       }
 }

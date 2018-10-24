@@ -56,7 +56,7 @@ add_library (
       segmentlist.h select.h sequencer.h shadownote.h shape.h sig.h slur.h slurtie.h spacer.h spanner.h spannermap.h spatium.h
       staff.h stafflines.h staffstate.h stafftext.h stafftextbase.h stafftype.h stafftypechange.h stafftypelist.h stem.h
       stemslash.h stringdata.h style.h sym.h symbol.h synthesizerstate.h system.h systemdivider.h systemtext.h tempo.h
-      tempotext.h text.h textbase.h textedit.h textframe.h textline.h textlinebase.h tie.h tiemap.h timesig.h
+      tempotext.h text.h measurenumber.h textbase.h textedit.h textframe.h textline.h textlinebase.h tie.h tiemap.h timesig.h
       tremolo.h tremolobar.h trill.h tuplet.h tupletmap.h types.h undo.h utils.h velo.h vibrato.h volta.h xml.h
 
       segmentlist.cpp fingering.cpp accidental.cpp arpeggio.cpp
@@ -76,7 +76,7 @@ add_library (
       score.cpp segment.cpp select.cpp shadownote.cpp slur.cpp tie.cpp slurtie.cpp
       spacer.cpp spanner.cpp staff.cpp staffstate.cpp
       stafftextbase.cpp stafftext.cpp systemtext.cpp stafftype.cpp stem.cpp style.cpp symbol.cpp
-      sym.cpp system.cpp stringdata.cpp tempotext.cpp text.cpp textbase.cpp textedit.cpp
+      sym.cpp system.cpp stringdata.cpp tempotext.cpp text.cpp measurenumber.cpp textbase.cpp textedit.cpp
       textframe.cpp textline.cpp textlinebase.cpp timesig.cpp
       tremolobar.cpp tremolo.cpp trill.cpp tuplet.cpp
       utils.cpp velo.cpp volta.cpp xmlreader.cpp xmlwriter.cpp mscore.cpp

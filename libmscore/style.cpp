@@ -614,7 +614,7 @@ static const StyleType styleTypes[] {
       { Sid::measureNumberFontUnderline,    "measureNumberFontUnderline",   false },
       { Sid::measureNumberOffset,           "measureNumberOffset",          QPointF(0.0, -2.0) },
       { Sid::measureNumberOffsetType,       "measureNumberOffsetType",      int(OffsetType::SPATIUM)   },
-      { Sid::measureNumberAlign,            "measureNumberAlign",           QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+      { Sid::measureNumberAlign,            "measureNumberAlign",           QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
 
       { Sid::translatorFontFace,            "translatorFontFace",           "FreeSerif" },
       { Sid::translatorFontSize,            "translatorFontSize",           11.0 },
