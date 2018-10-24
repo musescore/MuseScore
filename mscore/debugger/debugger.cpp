@@ -69,6 +69,7 @@
 #include "libmscore/trill.h"
 #include "libmscore/timesig.h"
 #include "libmscore/systemdivider.h"
+#include "libmscore/measurenumber.h"
 
 namespace Ms {
 
@@ -665,6 +666,7 @@ void Debugger::updateElement(Element* el)
                   case ElementType::MARKER:
                   case ElementType::JUMP:
                   case ElementType::TEXT:
+                  case ElementType::MEASURE_NUMBER:
                   case ElementType::STAFF_TEXT:
                   case ElementType::SYSTEM_TEXT:
                   case ElementType::REHEARSAL_MARK:

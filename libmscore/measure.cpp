@@ -62,7 +62,7 @@
 #include "sym.h"
 #include "system.h"
 #include "tempotext.h"
-#include "text.h"
+#include "measurenumber.h"
 #include "tie.h"
 #include "tiemap.h"
 #include "timesig.h"
@@ -87,16 +87,16 @@ namespace Ms {
 //---------------------------------------------------------
 
 class MStaff {
-      Text* _noText         { 0 };         ///< Measure number text object
-      StaffLines*  _lines   { 0 };
-      Spacer* _vspacerUp    { 0 };
-      Spacer* _vspacerDown  { 0 };
-      bool _hasVoices       { false };    ///< indicates that MStaff contains more than one voice,
+      MeasureNumber* _noText { 0 };         ///< Measure number text object
+      StaffLines*  _lines    { 0 };
+      Spacer* _vspacerUp     { 0 };
+      Spacer* _vspacerDown   { 0 };
+      bool _hasVoices        { false };    ///< indicates that MStaff contains more than one voice,
                                           ///< this changes some layout rules
-      bool _visible         { true  };
-      bool _slashStyle      { false };
+      bool _visible          { true  };
+      bool _slashStyle       { false };
 #ifndef NDEBUG
-      bool _corrupted       { false };
+      bool _corrupted        { false };
 #endif
 
    public:
@@ -107,8 +107,8 @@ class MStaff {
       void setScore(Score*);
       void setTrack(int);
 
-      Text* noText() const           { return _noText;     }
-      void setNoText(Text* t)        { _noText = t;        }
+      MeasureNumber* noText() const   { return _noText;     }
+      void setNoText(MeasureNumber* t) { _noText = t;        }
 
       StaffLines* lines() const      { return _lines; }
       void setLines(StaffLines* l)   { _lines = l;    }
@@ -284,14 +284,14 @@ Spacer* Measure::vspacerDown(int staffIdx) const                { return _mstave
 Spacer* Measure::vspacerUp(int staffIdx) const                  { return _mstaves[staffIdx]->vspacerUp(); }
 void Measure::setStaffVisible(int staffIdx, bool visible)       { _mstaves[staffIdx]->setVisible(visible); }
 void Measure::setStaffSlashStyle(int staffIdx, bool slashStyle) { _mstaves[staffIdx]->setSlashStyle(slashStyle); }
+
 #ifndef NDEBUG
 bool Measure::corrupted(int staffIdx) const                     { return _mstaves[staffIdx]->corrupted(); }
 void Measure::setCorrupted(int staffIdx, bool val)              { _mstaves[staffIdx]->setCorrupted(val); }
 #endif
-void Measure::setNoText(int staffIdx, Text* t)                  { _mstaves[staffIdx]->setNoText(t); }
-Text* Measure::noText(int staffIdx) const                       { return _mstaves[staffIdx]->noText(); }
-// const Shape& Measure::staffShape(int staffIdx) const            { return _mstaves[staffIdx]->shape(); }
-// Shape& Measure::staffShape(int staffIdx)                        { return _mstaves[staffIdx]->shape(); }
+
+void Measure::setNoText(int staffIdx, MeasureNumber* t)         { _mstaves[staffIdx]->setNoText(t); }
+MeasureNumber* Measure::noText(int staffIdx) const                       { return _mstaves[staffIdx]->noText(); }
 
 //---------------------------------------------------------
 //   Measure
@@ -540,13 +540,12 @@ void Measure::layout2()
             }
       for (int staffIdx = 0; staffIdx < int(_mstaves.size()); ++staffIdx) {
             MStaff* ms = _mstaves[staffIdx];
-            Text* t = ms->noText();
+            MeasureNumber* t = ms->noText();
             if (t)
                   t->setTrack(staffIdx * VOICES);
             if (smn && ((staffIdx == nn) || nas)) {
                   if (t == 0) {
-                        t = new Text(score(), Tid::MEASURE_NUMBER);
-                        t->setFlag(ElementFlag::ON_STAFF, true);
+                        t = new MeasureNumber(score());
                         t->setTrack(staffIdx * VOICES);
                         t->setGenerated(true);
                         t->setParent(this);
@@ -817,9 +816,9 @@ void Measure::add(Element* e)
                   }
                   break;
 
-            case ElementType::TEXT:
+            case ElementType::MEASURE_NUMBER:
                   if (e->staffIdx() < int(_mstaves.size()))
-                        _mstaves[e->staffIdx()]->setNoText(toText(e));
+                        _mstaves[e->staffIdx()]->setNoText(toMeasureNumber(e));
                   break;
 
             case ElementType::SPACER:
@@ -1947,9 +1946,8 @@ void Measure::read(XmlReader& e, int staffIdx)
                   e.initTick(e.lastMeasure()->tick());
                   }
             else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(score(), Tid::MEASURE_NUMBER);
+                  MeasureNumber* noText = new MeasureNumber(score());
                   noText->read(e);
-                  noText->setFlag(ElementFlag::ON_STAFF, true);
                   noText->setTrack(e.track());
                   noText->setParent(this);
                   _mstaves[noText->staffIdx()]->setNoText(noText);

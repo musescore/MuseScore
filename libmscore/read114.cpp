@@ -24,6 +24,7 @@
 #include "ottava.h"
 #include "stafftype.h"
 #include "text.h"
+#include "measurenumber.h"
 #include "part.h"
 #include "sig.h"
 #include "box.h"
@@ -420,7 +421,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element*)
 //   readText114
 //---------------------------------------------------------
 
-static void readText114(XmlReader& e, Text* t, Element* be)
+static void readText114(XmlReader& e, TextBase* t, Element* be)
       {
       while (e.readNextStartElement()) {
             if (!readTextProperties(e, t, be))
@@ -2123,10 +2124,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         }
                   }
             else if (tag == "MeasureNumber") {
-                  Text* noText = new Text(m->score(), Tid::MEASURE_NUMBER);
+                  MeasureNumber* noText = new MeasureNumber(m->score());
                   readText114(e, noText, m);
-                  noText->setFlag(ElementFlag::ON_STAFF, true);
-                  // noText->setFlag(ElementFlag::MOVABLE, false); ??
                   noText->setTrack(e.track());
                   noText->setParent(m);
                   m->setNoText(noText->staffIdx(), noText);

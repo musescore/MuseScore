@@ -30,6 +30,7 @@ enum class ElementType {
       SCORE,
       SYMBOL,
       TEXT,
+      MEASURE_NUMBER,
       INSTRUMENT_NAME,
       SLUR_SEGMENT,
       TIE_SEGMENT,
