@@ -11,7 +11,9 @@
 //=============================================================================
 
 #include "measurenumber.h"
-#include "xml.h"
+// #include "xml.h"
+#include "measure.h"
+#include "staff.h"
 
 namespace Ms {
 
@@ -47,6 +49,29 @@ QVariant MeasureNumber::propertyDefault(Pid id) const
             default:
                   return TextBase::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void MeasureNumber::layout()
+      {
+      setPos(QPointF());
+      if (!parent())
+            setOffset(0.0, 0.0);
+      else if (isStyled(Pid::OFFSET))
+            setOffset(propertyDefault(Pid::OFFSET).toPointF());
+
+      StaffType* st = staff()->staffType(measure()->tick());
+      if (st->lines() == 1 && staff()) {
+            rypos() = (placeBelow() ? 2.0 : -2.0) * spatium();
+            }
+      else {
+            if (placeBelow())
+                  rypos() = staff() ? staff()->height() : 0.0;
+            }
+      TextBase::layout1();
       }
 
 }

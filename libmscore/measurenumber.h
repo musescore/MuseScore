@@ -29,6 +29,9 @@ class MeasureNumber final : public TextBase {
       virtual ElementType type() const override       { return ElementType::MEASURE_NUMBER; }
       virtual MeasureNumber* clone() const override   { return new MeasureNumber(*this); }
       virtual QVariant propertyDefault(Pid id) const override;
+
+      virtual void layout() override;
+      Measure* measure() const { return toMeasure(parent()); }
       };
 
 }     // namespace Ms
