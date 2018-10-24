@@ -3669,6 +3669,17 @@ void Shortcut::setStandardKey(QKeySequence::StandardKey k)
       }
 
 //---------------------------------------------------------
+//   setKeys
+//    Copies keys from the other Shortcut object
+//---------------------------------------------------------
+
+void Shortcut::setKeys(const Shortcut& sc)
+      {
+      setKeys(sc._keys);
+      setStandardKey(sc._standardKey);
+      }
+
+//---------------------------------------------------------
 //   descr
 //---------------------------------------------------------
 
@@ -3846,7 +3857,7 @@ bool Shortcut::compareKeys(const Shortcut& sc) const
             if (sc._keys[i] != _keys[i])
                   return false;
             }
-      return true;
+      return _standardKey == sc._standardKey;
       }
 
 //---------------------------------------------------------

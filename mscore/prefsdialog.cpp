@@ -1053,7 +1053,7 @@ void PreferenceDialog::apply()
                   Shortcut* os = Shortcut::getShortcut(s->key());
                   if (os) {
                         if (!os->compareKeys(*s))
-                              os->setKeys(s->keys());
+                              os->setKeys(*s);
                         }
                   }
             Shortcut::dirty = true;
