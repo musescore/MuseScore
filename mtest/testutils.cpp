@@ -322,6 +322,7 @@ bool MTest::saveCompareMimeData(QByteArray mimeData, const QString& saveName, co
 
 void MTest::initMTest()
       {
+      qputenv("QML_DISABLE_DISK_CACHE", "true");
       qSetMessagePattern("%{function}: %{message}");
       initMyResources();
 //      DPI  = 120;
