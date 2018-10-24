@@ -191,7 +191,6 @@ void TieSegment::editDrag(EditData& ed)
             setAutoAdjust(0.0, 0.0);
             roffset() += offset;
             }
-      undoChangeProperty(Pid::AUTOPLACE, false);
       }
 
 //---------------------------------------------------------
