@@ -1202,6 +1202,26 @@ MuseScore::MuseScore()
 
       populateNoteInputMenu();
 
+      //-------------------------------
+      //    Feedback Tool Bar
+      //-------------------------------
+
+      feedbackTools = new QToolBar("", this);
+      feedbackTools->setObjectName("feedback-tools");
+      // Add the toolbar to the bottom and forbid to move it...
+      feedbackTools->setMovable(false);
+      feedbackTools->setFloatable(false);
+      addToolBar(Qt::BottomToolBarArea, feedbackTools);
+      // Add a spacer to align the buttons to the right side.
+      QWidget* spacer = new QWidget(feedbackTools);
+      spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+      feedbackTools->addWidget(spacer);
+      // And, finally, add the buttons themselves.
+      feedbackTools->addWidget(new AccessibleToolButton(feedbackTools, getAction("report-bug")));
+      AccessibleToolButton* feedbackButton = new AccessibleToolButton(feedbackTools, getAction("leave-feedback"));
+      feedbackButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+      feedbackTools->addWidget(feedbackButton);
+
       //---------------------
       //    Menus
       //---------------------
@@ -1384,6 +1404,12 @@ MuseScore::MuseScore()
       a->setCheckable(true);
       a->setChecked(entryTools->isVisible());
       connect(entryTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
+      menuToolbars->addAction(a);
+
+      a = getAction("toggle-feedback");
+      a->setCheckable(true);
+      a->setChecked(feedbackTools->isVisible());
+      connect(feedbackTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
       menuToolbars->addAction(a);
 
       menuToolbars->addSeparator();
@@ -1683,7 +1709,8 @@ MuseScore::MuseScore()
 #endif
       menuHelp->addSeparator();
       askForHelpAction = menuHelp->addAction("", this, SLOT(askForHelp()));
-      reportBugAction = menuHelp->addAction("", this, SLOT(reportBug()));
+      reportBugAction = menuHelp->addAction("", this, [this]{ reportBug("menu"); });
+      leaveFeedbackAction = menuHelp->addAction("", this, [this]{ leaveFeedback("menu"); });
 
       menuHelp->addSeparator();
       menuHelp->addAction(getAction("resource-manager"));
@@ -1787,6 +1814,7 @@ void MuseScore::retranslate(bool firstStart)
             checkForUpdateAction->setText(tr("Check for &Update"));
       askForHelpAction->setText(tr("Ask for Help"));
       reportBugAction->setText(tr("Report a Bug"));
+      leaveFeedbackAction->setText(tr("Leave feedback"));
       revertToFactoryAction->setText(tr("Revert to Factory Settings"));
 
       fileTools->setWindowTitle(tr("File Operations"));
@@ -1794,6 +1822,7 @@ void MuseScore::retranslate(bool firstStart)
       cpitchTools->setWindowTitle(tr("Concert Pitch"));
       fotoTools->setWindowTitle(tr("Image Capture"));
       entryTools->setWindowTitle(tr("Note Input"));
+      feedbackTools->setWindowTitle(tr("Feedback"));
 
       viewModeCombo->setAccessibleName(tr("View Mode"));
       viewModeCombo->setItemText(viewModeCombo->findData(int(LayoutMode::PAGE)), tr("Page View"));
@@ -1885,7 +1914,8 @@ void MuseScore::helpBrowser1() const
             }
 
       //track visits. see: http://www.google.com/support/googleanalytics/bin/answer.py?answer=55578
-      help += QString("&utm_source=desktop&utm_medium=menu&utm_content=%1&utm_campaign=MuseScore%2").arg(rev.trimmed()).arg(QString(VERSION));
+      help += '&';
+      help += getUtmParameters("menu");
       QDesktopServices::openUrl(QUrl(help));
       }
 
@@ -3984,9 +4014,12 @@ void MuseScore::play(Element* e, int pitch) const
 //   reportBug
 //---------------------------------------------------------
 
-void MuseScore::reportBug()
+void MuseScore::reportBug(QString medium)
       {
-      QString url = QString("https://musescore.org/redirect/post/bug-report?sha=%1&locale=%2").arg(revision()).arg(getLocaleISOCode());
+      QString url = QString("https://musescore.org/redirect/post/bug-report?sha=%1&locale=%2&%3")
+         .arg(revision())
+         .arg(getLocaleISOCode())
+         .arg(getUtmParameters(medium));
       QDesktopServices::openUrl(QUrl(url.trimmed()));
       }
 
@@ -3998,6 +4031,31 @@ void MuseScore::askForHelp()
       {
       QString url = QString("https://musescore.org/redirect/post/question?locale=%1").arg(getLocaleISOCode());
       QDesktopServices::openUrl(QUrl(url.trimmed()));
+      }
+
+//---------------------------------------------------------
+//   leaveFeedback
+//---------------------------------------------------------
+
+void MuseScore::leaveFeedback(QString medium)
+      {
+      QString url = QString("https://musescore.com/content/editor-feedback?%1")
+         .arg(getUtmParameters(medium));
+      QDesktopServices::openUrl(QUrl(url.trimmed()));
+      }
+
+//---------------------------------------------------------
+//   getUtmParameters
+//    Get UTM labels to track visits.
+//    See: https://www.google.com/support/googleanalytics/bin/answer.py?answer=55578
+//---------------------------------------------------------
+
+QString MuseScore::getUtmParameters(QString medium) const
+      {
+      return QString("utm_source=desktop&utm_medium=%1&utm_content=%2&utm_campaign=MuseScore%3")
+         .arg(medium)
+         .arg(rev.trimmed())
+         .arg(QString(VERSION));
       }
 
 //---------------------------------------------------------
@@ -5423,6 +5481,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             fotoTools->setVisible(!fotoTools->isVisible());
       else if (cmd == "toggle-noteinput")
             entryTools->setVisible(!entryTools->isVisible());
+      else if (cmd == "toggle-feedback")
+            feedbackTools->setVisible(!feedbackTools->isVisible());
       else if (cmd == "help")
             showContextHelp();
       else if (cmd == "follow")
@@ -5566,6 +5626,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                         switchLayoutMode(LayoutMode::PAGE);
                   }
             }
+      else if (cmd == "report-bug")
+            reportBug("panel");
+      else if (cmd == "leave-feedback")
+            leaveFeedback("panel");
 #ifndef NDEBUG
       else if (cmd == "no-horizontal-stretch") {
             MScore::noHorizontalStretch = a->isChecked();
