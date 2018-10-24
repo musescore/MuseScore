@@ -185,6 +185,7 @@ static const StyleType styleTypes[] {
       { Sid::propertyDistance,        "propertyDistance",        Spatium(1.0) },
 
       { Sid::articulationMag,         "articulationMag",         QVariant(1.0) },
+      { Sid::articulationPosAbove,    "articulationPosAbove",    QPointF(0.0, 0.0) },
       { Sid::lastSystemFillLimit,     "lastSystemFillLimit",     QVariant(0.3) },
 
       { Sid::hairpinPlacement,        "hairpinPlacement",        int(Placement::BELOW)  },

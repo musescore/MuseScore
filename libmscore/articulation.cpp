@@ -26,12 +26,21 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   articulationStyle
+//---------------------------------------------------------
+
+static const ElementStyle articulationStyle {
+//      { Sid::articulationOffset, Pid::OFFSET },
+      };
+
+//---------------------------------------------------------
 //   Articulation
 //---------------------------------------------------------
 
 Articulation::Articulation(Score* s)
    : Element(s, ElementFlag::MOVABLE)
       {
+      initElementStyle(&articulationStyle);
       _symId         = SymId::noSym;
       _anchor        = ArticulationAnchor::TOP_STAFF;
       _direction     = Direction::AUTO;
@@ -233,22 +242,6 @@ void Articulation::layout()
       {
       QRectF b(symBbox(_symId));
       setbbox(b.translated(-0.5 * b.width(), 0.0));
-      }
-
-//---------------------------------------------------------
-//   reset
-//---------------------------------------------------------
-
-void Articulation::reset()
-      {
-#if 0
-      if (_direction != Direction::AUTO)
-            undoChangeProperty(Pid::DIRECTION, Direction::AUTO);
-      ArticulationAnchor a = score()->style()->articulationAnchor(int(articulationType()));
-      if (_anchor != a)
-            undoChangeProperty(Pid::ARTICULATION_ANCHOR, int(a));
-#endif
-      Element::reset();
       }
 
 //---------------------------------------------------------
@@ -547,7 +540,6 @@ void Articulation::doAutoplace()
       {
       qreal minDistance = score()->styleP(Sid::dynamicsMinDistance);
       if (autoplace() && parent()) {
-            setOffset(QPointF());
             Segment* s = segment();
             Measure* m = measure();
             int si     = staffIdx();
@@ -571,7 +563,7 @@ void Articulation::doAutoplace()
                   qreal yd = d + minDistance;
                   if (above)
                         yd *= -1.0;
-                  ryoffset() = yd;
+                  rypos() += yd;
                   r.translate(QPointF(0.0, yd));
                   }
             }
