@@ -2773,9 +2773,9 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   RehearsalMark* el = new RehearsalMark(score);
                   el->setTrack(e.track());
                   readText206(e, el, el);
-                  el->setOffset(el->offset() - el->score()->styleValue(Pid::OFFSET, Sid::rehearsalMarkPosAbove).toPointF());
-                  if (el->offset().isNull())
-                        el->setAutoplace(true);
+//                  el->setOffset(el->offset() - el->score()->styleValue(Pid::OFFSET, Sid::rehearsalMarkPosAbove).toPointF());
+//                  if (el->offset().isNull())
+//                        el->setAutoplace(true);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
                   }
