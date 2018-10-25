@@ -360,6 +360,7 @@ void HairpinSegment::startEdit(EditData& ed)
 void HairpinSegment::startEditDrag(EditData& ed)
       {
       TextLineBaseSegment::startEditDrag(ed);
+      setAutoplace(false);
       ElementEditData* eed = ed.getData(this);
 
       eed->pushProperty(Pid::HAIRPIN_HEIGHT);
