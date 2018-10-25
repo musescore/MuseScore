@@ -114,7 +114,6 @@ class Hairpin final : public TextLineBase {
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid id) const override;
 
-      virtual void setYoff(qreal) override;
       virtual QString accessibleInfo() const override;
       };
 

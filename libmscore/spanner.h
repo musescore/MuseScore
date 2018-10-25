@@ -192,7 +192,6 @@ class Spanner : public Element {
       bool removeSpannerBack();
       virtual void removeUnmanaged();
       virtual void undoInsertTimeUnmanaged(int tick, int len);
-      virtual void setYoff(qreal) {}    // used in musicxml import
 
       QVariant getProperty(Pid propertyId) const;
       bool setProperty(Pid propertyId, const QVariant& v);

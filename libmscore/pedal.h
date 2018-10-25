@@ -55,7 +55,6 @@ class Pedal final : public TextLineBase {
       virtual void read(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
       LineSegment* createLineSegment();
-      virtual void setYoff(qreal) override;
       virtual QVariant propertyDefault(Pid propertyId) const override;
 
       friend class PedalLine;

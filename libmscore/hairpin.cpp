@@ -674,15 +674,6 @@ QVariant Hairpin::propertyDefault(Pid id) const
       }
 
 //---------------------------------------------------------
-//   setYoff
-//---------------------------------------------------------
-
-void Hairpin::setYoff(qreal val)
-      {
-      ryoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::hairpinPosAbove : Sid::hairpinPosBelow);
-      }
-
-//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 

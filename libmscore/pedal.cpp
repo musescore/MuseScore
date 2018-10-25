@@ -158,16 +158,6 @@ LineSegment* Pedal::createLineSegment()
       }
 
 //---------------------------------------------------------
-//   setYoff
-//---------------------------------------------------------
-
-void Pedal::setYoff(qreal val)
-      {
-      qDebug("================??");
-      ryoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::pedalPosAbove : Sid::pedalPosBelow);
-      }
-
-//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 

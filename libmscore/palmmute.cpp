@@ -131,15 +131,6 @@ LineSegment* PalmMute::createLineSegment()
       }
 
 //---------------------------------------------------------
-//   setYoff
-//---------------------------------------------------------
-
-void PalmMute::setYoff(qreal val)
-      {
-      ryoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow);
-      }
-
-//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 

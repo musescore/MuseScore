@@ -328,15 +328,6 @@ void Vibrato::undoSetVibratoType(Type val)
       }
 
 //---------------------------------------------------------
-//   setYoff
-//---------------------------------------------------------
-
-void Vibrato::setYoff(qreal val)
-      {
-      ryoffset() += val * spatium() - score()->styleP(Sid::vibratoPosAbove);
-      }
-
-//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 

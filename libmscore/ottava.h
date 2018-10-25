@@ -124,8 +124,6 @@ class Ottava final : public TextLineBase {
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
 
-      virtual void setYoff(qreal) override;
-
       virtual QString accessibleInfo() const override;
       };
 

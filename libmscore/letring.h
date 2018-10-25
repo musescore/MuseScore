@@ -49,7 +49,6 @@ class LetRing final : public TextLineBase {
       virtual void read(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
       LineSegment* createLineSegment();
-      virtual void setYoff(qreal) override;
       virtual QVariant propertyDefault(Pid propertyId) const override;
       virtual Sid getPropertyStyle(Pid) const override;
       };

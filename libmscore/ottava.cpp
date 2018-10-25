@@ -317,16 +317,6 @@ bool Ottava::readProperties(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   setYoff
-//    used in musicxml import
-//---------------------------------------------------------
-
-void Ottava::setYoff(qreal val)
-      {
-      ryoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow);
-      }
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
