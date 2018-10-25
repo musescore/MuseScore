@@ -457,7 +457,6 @@
         </Measure>
       <Measure number="5">
         <Tuplet id="7">
-          <pos x="0" y="-3.32255"/>
           <direction>up</direction>
           <normalNotes>6</normalNotes>
           <actualNotes>11</actualNotes>
@@ -466,7 +465,6 @@
             <style>Tuplet</style>
             <text>11</text>
             </Number>
-          <offset x="0" y="-3.32255"/>
           </Tuplet>
         <Chord>
           <Tuplet>7</Tuplet>

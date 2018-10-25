@@ -24,9 +24,9 @@ if (OMR)
 set(OMR_SRC ${PROJECT_SOURCE_DIR}/omr/importpdf.cpp)
 endif (OMR)
 
-if (MSVC) 
-   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h") 
-endif (MSVC) 
+if (MSVC)
+   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
+endif (MSVC)
 
 QT5_ADD_RESOURCES(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-MScore.qrc
@@ -112,7 +112,7 @@ set (SOURCE_LIB
 if (MSVC)
 	add_library(
       testutils STATIC
-	  ${_all_h_file} 
+	  ${_all_h_file}
 	  ${PCH}
 	  ${SOURCE_LIB}
 	  )
@@ -174,7 +174,7 @@ add_custom_target(reporthtml
       )
 
 subdirs (
-        libmscore/compat114
+#        libmscore/compat114
         libmscore/compat206
 #        libmscore/album            # obsolete
         libmscore/barline

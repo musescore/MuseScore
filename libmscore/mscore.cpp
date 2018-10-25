@@ -66,7 +66,7 @@ bool MScore::testMode = false;
 
 // #ifndef NDEBUG
 bool MScore::showSegmentShapes   = false;
-bool MScore::showSkylines        = true;
+bool MScore::showSkylines        = false;
 bool MScore::showMeasureShapes   = false;
 bool MScore::noHorizontalStretch = false;
 bool MScore::noVerticalStretch   = false;

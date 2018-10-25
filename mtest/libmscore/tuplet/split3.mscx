@@ -108,7 +108,6 @@
               </Note>
             </Chord>
           <Tuplet>
-            <pos x="0.3956" y="-1.84614"/>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>quarter</baseNote>

@@ -522,7 +522,7 @@ void Element::writeProperties(XmlWriter& xml) const
                         }
                   }
             }
-      if (propertyFlags(Pid::OFFSET) == PropertyFlags::NOSTYLE && !autoplace())
+      if (propertyFlags(Pid::OFFSET) == PropertyFlags::NOSTYLE)
             writeProperty(xml, Pid::OFFSET);
 
       for (Pid pid : { Pid::COLOR, Pid::VISIBLE, Pid::Z, Pid::PLACEMENT}) {
@@ -662,8 +662,6 @@ bool Element::readProperties(XmlReader& e)
             ;
       else if (tag == "z")
             setZ(e.readInt());
-      else if (ScoreElement::readProperty(tag, e, Pid::OFFSET))
-            ;
       else
             return false;
       return true;
@@ -1062,15 +1060,6 @@ void collectElements(void* data, Element* e)
       {
       QList<Element*>* el = static_cast<QList<Element*>*>(data);
       el->append(e);
-      }
-
-//---------------------------------------------------------
-//   undoSetPlacement
-//---------------------------------------------------------
-
-void Element::undoSetPlacement(Placement v)
-      {
-      undoChangeProperty(Pid::PLACEMENT, int(v));
       }
 
 //---------------------------------------------------------
@@ -2122,9 +2111,6 @@ void Element::autoplaceSegmentElement(qreal minDistance)
             Segment* s        = toSegment(parent());
             Measure* m        = s->measure();
             int si            = staffIdx();
-
-            if (m->system() == nullptr)
-                  printf("=== no system for <%s>\n", name());
 
             SysStaff* ss = m->system()->staff(si);
             QRectF r = bbox().translated(m->pos() + s->pos() + pos());

@@ -258,6 +258,22 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
                               break;
                         }
                   break;
+            case P_TYPE::TEXT_PLACE:
+                  switch (PlaceText(data.toInt())) {
+                        case PlaceText::AUTO:
+                              tag(name, QVariant("auto"));
+                              break;
+                        case PlaceText::ABOVE:
+                              tag(name, QVariant("above"));
+                              break;
+                        case PlaceText::BELOW:
+                              tag(name, QVariant("below"));
+                              break;
+                        case PlaceText::LEFT:
+                              tag(name, QVariant("left"));
+                              break;
+                        }
+                  break;
             case P_TYPE::SYMID:
                   tag(name, Sym::id2name(SymId(data.toInt())));
                   break;

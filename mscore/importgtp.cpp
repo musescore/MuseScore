@@ -559,8 +559,10 @@ void GuitarPro::setupTupletStyle(Tuplet* tuplet)
             case 13: real = (tuplet->ratio().denominator() == 8); break;
             default: real = false;
             }
-      if (!real)
+      if (!real) {
             tuplet->setNumberType(TupletNumberType::SHOW_RELATION);
+            tuplet->setPropertyFlags(Pid::NUMBER_TYPE, PropertyFlags::UNSTYLED);
+            }
       }
 
 //---------------------------------------------------------

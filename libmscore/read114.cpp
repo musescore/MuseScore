@@ -1156,18 +1156,21 @@ static bool readTextLineProperties114(XmlReader& e, TextLineBase* tl)
             Text* text = new Text(tl->score());
             readText114(e, text, tl);
             tl->setBeginText(text->xmlText());
+            tl->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
             delete text;
             }
       else if (tag == "continueText") {
             Text* text = new Text(tl->score());
             readText114(e, text, tl);
             tl->setContinueText(text->xmlText());
+            tl->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
             delete text;
             }
       else if (tag == "endText") {
             Text* text = new Text(tl->score());
             readText114(e, text, tl);
             tl->setEndText(text->xmlText());
+            tl->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
             delete text;
             }
       else if (tag == "beginHook")
@@ -1218,6 +1221,7 @@ static void readVolta114(XmlReader& e, Volta* volta)
                   }
             else if (tag == "lineWidth") {
                   volta->setLineWidth(e.readDouble() * volta->spatium());
+                  volta->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
                   }
             else if (!readTextLineProperties114(e, volta))
                   e.unknown();
@@ -1261,9 +1265,11 @@ static void readOttava114(XmlReader& e, Ottava* ottava)
                   }
             else if (tag == "lineWidth") {
                   ottava->setLineWidth(e.readDouble() * ottava->spatium());
+                  ottava->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
                   }
             else if (tag == "lineStyle") {
                   ottava->setLineStyle(Qt::PenStyle(e.readInt()));
+                  ottava->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
                   }
             else if (tag == "beginSymbol") {                      // obsolete
                   }
@@ -1314,6 +1320,7 @@ static void readTextLine114(XmlReader& e, TextLine* textLine)
                   }
             else if (tag == "endHookHeight" || tag == "hookHeight") { // hookHeight is obsolete
                   textLine->setEndHookHeight(Spatium(e.readDouble()));
+                  textLine->setPropertyFlags(Pid::END_HOOK_HEIGHT, PropertyFlags::UNSTYLED);
                   }
             else if (tag == "hookUp") // obsolete
                   textLine->setEndHookHeight(Spatium(qreal(-1.0)));
@@ -1372,12 +1379,15 @@ static void readPedal114(XmlReader& e, Pedal* pedal)
                   e.skipCurrentElement();
             else if (tag == "endHookHeight" || tag == "hookHeight") { // hookHeight is obsolete
                   pedal->setEndHookHeight(Spatium(e.readDouble()));
+                  pedal->setPropertyFlags(Pid::END_HOOK_HEIGHT, PropertyFlags::UNSTYLED);
                   }
             else if (tag == "lineWidth") {
                   pedal->setLineWidth(qreal(e.readDouble()));
+                  pedal->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
                   }
             else if (tag == "lineStyle") {
                   pedal->setLineStyle(Qt::PenStyle(e.readInt()));
+                  pedal->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
                   }
             else if (!readTextLineProperties114(e, pedal))
                   e.unknown();

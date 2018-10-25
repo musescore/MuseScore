@@ -47,6 +47,7 @@ static const ElementStyle pedalStyle {
       { Sid::pedalBeginTextOffset,               Pid::CONTINUE_TEXT_OFFSET    },
       { Sid::pedalBeginTextOffset,               Pid::END_TEXT_OFFSET         },
       { Sid::pedalPlacement,                     Pid::PLACEMENT               },
+      { Sid::pedalPosBelow,                      Pid::OFFSET                  },
       };
 
 //---------------------------------------------------------
@@ -59,6 +60,23 @@ void PedalSegment::layout()
       autoplaceSpannerSegment(spatium() * .7, Sid::pedalPosBelow, Sid::pedalPosAbove);
       }
 
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid PedalSegment::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return spanner()->placeAbove() ? Sid::pedalPosAbove : Sid::pedalPosBelow;
+      return TextLineBaseSegment::getPropertyStyle(pid);
+      }
+
+Sid Pedal::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::pedalPosAbove : Sid::pedalPosBelow;
+      return TextLineBase::getPropertyStyle(pid);
+      }
 
 //---------------------------------------------------------
 //   Pedal
@@ -128,9 +146,15 @@ void Pedal::write(XmlWriter& xml) const
 //   createLineSegment
 //---------------------------------------------------------
 
+static const ElementStyle pedalSegmentStyle {
+      { Sid::pedalPosBelow, Pid::OFFSET },
+      };
+
 LineSegment* Pedal::createLineSegment()
       {
-      return new PedalSegment(score());
+      PedalSegment* p = new PedalSegment(score());
+      p->initElementStyle(&pedalSegmentStyle);
+      return p;
       }
 
 //---------------------------------------------------------
@@ -139,6 +163,7 @@ LineSegment* Pedal::createLineSegment()
 
 void Pedal::setYoff(qreal val)
       {
+      qDebug("================??");
       ryoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::pedalPosAbove : Sid::pedalPosBelow);
       }
 

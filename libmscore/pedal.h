@@ -24,6 +24,9 @@ class Pedal;
 //---------------------------------------------------------
 
 class PedalSegment final : public TextLineBaseSegment {
+
+      virtual Sid getPropertyStyle(Pid) const override;
+
    public:
       PedalSegment(Score* s) : TextLineBaseSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
       virtual ElementType type() const override       { return ElementType::PEDAL_SEGMENT; }
@@ -39,6 +42,9 @@ class PedalSegment final : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class Pedal final : public TextLineBase {
+
+      virtual Sid getPropertyStyle(Pid) const override;
+
    protected:
       QPointF linePos(Grip, System**) const override;
 

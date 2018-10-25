@@ -20,6 +20,7 @@
 #include "sym.h"
 #include "text.h"
 #include "mscore.h"
+#include "staff.h"
 
 namespace Ms {
 
@@ -72,7 +73,6 @@ void TextLineBaseSegment::setSelected(bool f)
 void TextLineBaseSegment::draw(QPainter* painter) const
       {
       TextLineBase* tl   = textLineBase();
-//      qreal _spatium = spatium();
 
       if (!_text->empty()) {
             painter->translate(_text->pos());
@@ -154,6 +154,9 @@ void TextLineBaseSegment::layout()
       TextLineBase* tl = textLineBase();
       qreal _spatium = spatium();
 
+      if (spanner()->placeBelow())
+            rypos() = staff() ? staff()->height() : 0.0;
+
       if (!tl->diagonal())
             _offset2.setY(0);
 
@@ -163,7 +166,7 @@ void TextLineBaseSegment::layout()
                   _text->setXmlText(tl->beginText());
                   _text->setFamily(tl->beginFontFamily());
                   _text->setSize(tl->beginFontSize());
-//TODO-offset                  _text->setOffset(tl->beginTextOffset());
+                  _text->setOffset(tl->beginTextOffset());
                   _text->setAlign(tl->beginTextAlign());
                   _text->setBold(tl->beginFontBold());
                   _text->setItalic(tl->beginFontItalic());
@@ -174,13 +177,14 @@ void TextLineBaseSegment::layout()
                   _text->setXmlText(tl->continueText());
                   _text->setFamily(tl->continueFontFamily());
                   _text->setSize(tl->continueFontSize());
-//TODO-offset                  _text->setOffset(tl->continueTextOffset());
+                  _text->setOffset(tl->continueTextOffset());
                   _text->setAlign(tl->continueTextAlign());
                   _text->setBold(tl->continueFontBold());
                   _text->setItalic(tl->continueFontItalic());
                   _text->setUnderline(tl->continueFontUnderline());
                   break;
             }
+      _text->setPlacement(Placement::ABOVE);
       _text->setTrack(track());
       _text->layout();
 
@@ -188,11 +192,12 @@ void TextLineBaseSegment::layout()
             _endText->setXmlText(tl->endText());
             _endText->setFamily(tl->endFontFamily());
             _endText->setSize(tl->endFontSize());
-//TODO-offset            _endText->setOffset(tl->endTextOffset());
+            _endText->setOffset(tl->endTextOffset());
             _endText->setAlign(tl->endTextAlign());
             _endText->setBold(tl->endFontBold());
             _endText->setItalic(tl->endFontItalic());
             _endText->setUnderline(tl->endFontUnderline());
+            _endText->setPlacement(Placement::ABOVE);
             _endText->setTrack(track());
             _endText->layout();
             }
@@ -322,8 +327,7 @@ void TextLineBaseSegment::spatiumChanged(qreal ov, qreal nv)
       _endText->spatiumChanged(ov, nv);
       }
 
-static constexpr std::array<Pid, 34> pids = { {
-      Pid::LINE_WIDTH,
+static constexpr std::array<Pid, 32> pids = { {
       Pid::LINE_VISIBLE,
       Pid::BEGIN_HOOK_TYPE,
       Pid::BEGIN_HOOK_HEIGHT,
@@ -356,7 +360,7 @@ static constexpr std::array<Pid, 34> pids = { {
       Pid::END_FONT_ITALIC,
       Pid::END_FONT_UNDERLINE,
       Pid::END_TEXT_OFFSET,
-      Pid::PLACEMENT,
+//      Pid::PLACEMENT
       } };
 
 //---------------------------------------------------------
@@ -638,22 +642,6 @@ bool TextLineBase::setProperty(Pid id, const QVariant& v)
       triggerLayout();
       return true;
       }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant TextLineBase::propertyDefault(Pid pid) const
-      {
-      for (const StyledProperty& p : *styledProperties()) {
-            if (p.pid == pid) {
-                  if (propertyType(pid) == P_TYPE::SP_REAL)
-                        return score()->styleP(p.sid);
-                  return score()->styleV(p.sid);
-                  }
-            }
-       return SLine::propertyDefault(pid);
-       }
 
  }
 
