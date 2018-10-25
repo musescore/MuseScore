@@ -36,6 +36,7 @@
 #include "libmscore/marker.h"
 #include "texttools.h"
 #include "mixer.h"
+#include "tourhandler.h"
 
 namespace Ms {
 
@@ -59,6 +60,8 @@ void MuseScore::showTimeline(bool visible)
       _timeline->setVisible(visible);
 
       getAction("toggle-timeline")->setChecked(visible);
+      if (visible)
+            TourHandler::startTour("timeline-tour");
       }
 
 //---------------------------------------------------------

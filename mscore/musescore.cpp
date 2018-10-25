@@ -85,6 +85,7 @@
 #include "resourceManager.h"
 #include "scoreaccessibility.h"
 #include "startupWizard.h"
+#include "tourhandler.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/system.h"
@@ -596,6 +597,7 @@ void MuseScore::populateNoteInputMenu()
                            getAction("note-input"),
                            noteEntryMethods,
                            this);
+                        w->setObjectName("note-entry-methods");
                         }
                   else if (strncmp(s, "voice-", 6) == 0) {
                         AccessibleToolButton* tb = new AccessibleToolButton(this, a);
@@ -611,8 +613,10 @@ void MuseScore::populateNoteInputMenu()
                         // tb->setDefaultAction(a);
                         w = tb;
                         }
-                  else
+                  else {
                         w = new AccessibleToolButton(entryTools, a);
+                        w->setObjectName(s);
+                        }
                   entryTools->addWidget(w);
                   }
             }
@@ -920,6 +924,10 @@ bool MuseScore::isInstalledExtension(QString extensionId)
 MuseScore::MuseScore()
    : QMainWindow()
       {
+      _tourHandler = new TourHandler(this);
+      qApp->installEventFilter(_tourHandler);
+      _tourHandler->loadTours();
+
       QScreen* screen = QGuiApplication::primaryScreen();
       if (userDPI == 0.0) {
 #if defined(Q_OS_WIN)
@@ -3885,6 +3893,8 @@ void MuseScore::writeSettings()
             drumrollEditor->writeSettings();
       if (startcenter)
             startcenter->writeSettings();
+
+      _tourHandler->writeCompletedTours();
       }
 
 //---------------------------------------------------------
@@ -5214,6 +5224,7 @@ void MuseScore::cmd(QAction* a)
       if (lastShortcut->isCmd())
             cs->endCmd();
       endCmd();
+      TourHandler::startTour(cmdn);
       }
 
 //---------------------------------------------------------
@@ -6860,6 +6871,7 @@ int main(int argc, char* av[])
                               mscore->getPaletteBox()->updateWorkspaces();
                               }
                         }
+                  preferences.setPreference(PREF_UI_APP_STARTUP_SHOWTOURS, sw->showTours());
                   delete sw;
 
                   // reinitialize preferences so some default values are calculated based on chosen language
@@ -6966,6 +6978,10 @@ int main(int argc, char* av[])
             getAction("startcenter")->setChecked(true);
             mscore->showStartcenter(true);
 #endif
+            }
+      else {
+            mscore->tourHandler()->startTour("welcome");
+            //otherwise, welcome tour will appear on closing StartCenter
             }
 
       if (sc) {

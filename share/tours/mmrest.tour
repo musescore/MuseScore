@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tour name="mmrest">
+  <Shortcut>toggle-mmrest</Shortcut>
+  <Message>
+    <Text>You have activate multimeasure rests.</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  <Message>
+    <Text>This will replace multiple measures of rests into a multimeasure rest of the same length.</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  <Message>
+    <Text>To undo this, click the multimeasure shortcut "M".</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  </Tour>

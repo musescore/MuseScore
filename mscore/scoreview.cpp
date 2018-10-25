@@ -30,6 +30,7 @@
 #include "textpalette.h"
 #include "texttools.h"
 #include "fotomode.h"
+#include "tourhandler.h"
 
 #include "inspector/inspector.h"
 
@@ -99,6 +100,7 @@ extern QErrorMessage* errorMessage;
 ScoreView::ScoreView(QWidget* parent)
    : QWidget(parent), editData(this)
       {
+      setObjectName("scoreview");
       setStatusTip("scoreview");
       setAcceptDrops(true);
 #ifndef Q_OS_MAC
