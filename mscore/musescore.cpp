@@ -1206,12 +1206,11 @@ MuseScore::MuseScore()
       //    Feedback Tool Bar
       //-------------------------------
 
-      feedbackTools = new QToolBar("", this);
+      feedbackTools = addToolBar("");
       feedbackTools->setObjectName("feedback-tools");
-      // Add the toolbar to the bottom and forbid to move it...
+	  // Forbid to move or undock the toolbar...
       feedbackTools->setMovable(false);
       feedbackTools->setFloatable(false);
-      addToolBar(Qt::BottomToolBarArea, feedbackTools);
       // Add a spacer to align the buttons to the right side.
       QWidget* spacer = new QWidget(feedbackTools);
       spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
