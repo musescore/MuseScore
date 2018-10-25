@@ -269,7 +269,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::BEGIN_TEXT,              "begin_text",              false, "beginText",             P_TYPE::STRING          },
 
       { Pid::BEGIN_TEXT_ALIGN,        "begin_text_align",        false, "beginTextAlign",        P_TYPE::ALIGN           },
-      { Pid::BEGIN_TEXT_PLACE,        "begin_text_place",        false, "beginTextPlace",        P_TYPE::INT             },
+      { Pid::BEGIN_TEXT_PLACE,        "begin_text_place",        false, "beginTextPlace",        P_TYPE::TEXT_PLACE      },
       { Pid::BEGIN_HOOK_TYPE,         "begin_hook_type",         false, "beginHookType",         P_TYPE::INT             },
       { Pid::BEGIN_HOOK_HEIGHT,       "begin_hook_height",       false, "beginHookHeight",       P_TYPE::SPATIUM         },
       { Pid::BEGIN_FONT_FACE,         "begin_font_face",         false, "beginFontFace",         P_TYPE::FONT            },
@@ -277,21 +277,21 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::BEGIN_FONT_BOLD,         "begin_font_bold",         false, "beginFontBold",         P_TYPE::BOOL            },
       { Pid::BEGIN_FONT_ITALIC,       "begin_font_italic",       false, "beginFontItalic",       P_TYPE::BOOL            },
       { Pid::BEGIN_FONT_UNDERLINE,    "begin_font_underline",    false, "beginFontUnderline",    P_TYPE::BOOL            },
-      { Pid::BEGIN_TEXT_OFFSET,       "begin_text_offset",       false, "beginTextOffset",       P_TYPE::POINT           },
+      { Pid::BEGIN_TEXT_OFFSET,       "begin_text_offset",       false, "beginTextOffset",       P_TYPE::POINT_SP        },
 
       { Pid::CONTINUE_TEXT,           "continue_text",           false, "continueText",          P_TYPE::STRING          },
       { Pid::CONTINUE_TEXT_ALIGN,     "continue_text_align",     false, "continueTextAlign",     P_TYPE::ALIGN           },
-      { Pid::CONTINUE_TEXT_PLACE,     "continue_text_place",     false, "continueTextPlace",     P_TYPE::INT             },
+      { Pid::CONTINUE_TEXT_PLACE,     "continue_text_place",     false, "continueTextPlace",     P_TYPE::TEXT_PLACE      },
       { Pid::CONTINUE_FONT_FACE,      "continue_font_face",      false, "continueFontFace",      P_TYPE::FONT            },
       { Pid::CONTINUE_FONT_SIZE,      "continue_font_size",      false, "continueFontSize",      P_TYPE::REAL            },
       { Pid::CONTINUE_FONT_BOLD,      "continue_font_bold",      false, "continueFontBold",      P_TYPE::BOOL            },
       { Pid::CONTINUE_FONT_ITALIC,    "continue_font_italic",    false, "continueFontItalic",    P_TYPE::BOOL            },
       { Pid::CONTINUE_FONT_UNDERLINE, "continue_font_underline", false, "continueFontUnderline", P_TYPE::BOOL            },
-      { Pid::CONTINUE_TEXT_OFFSET,    "continue_text_offset",    false, "continueTextOffset",    P_TYPE::POINT           },
+      { Pid::CONTINUE_TEXT_OFFSET,    "continue_text_offset",    false, "continueTextOffset",    P_TYPE::POINT_SP        },
       { Pid::END_TEXT,                "end_text",                false, "endText",               P_TYPE::STRING          },
 
       { Pid::END_TEXT_ALIGN,          "end_text_align",          false, "endTextAlign",          P_TYPE::ALIGN           },
-      { Pid::END_TEXT_PLACE,          "end_text_place",          false, "endTextPlace",          P_TYPE::INT             },
+      { Pid::END_TEXT_PLACE,          "end_text_place",          false, "endTextPlace",          P_TYPE::TEXT_PLACE      },
       { Pid::END_HOOK_TYPE,           "end_hook_type",           false, "endHookType",           P_TYPE::INT             },
       { Pid::END_HOOK_HEIGHT,         "end_hook_height",         false, "endHookHeight",         P_TYPE::SPATIUM         },
       { Pid::END_FONT_FACE,           "end_font_face",           false, "endFontFace",           P_TYPE::FONT            },
@@ -299,7 +299,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::END_FONT_BOLD,           "end_font_bold",           false, "endFontBold",           P_TYPE::BOOL            },
       { Pid::END_FONT_ITALIC,         "end_font_italic",         false, "endFontItalic",         P_TYPE::BOOL            },
       { Pid::END_FONT_UNDERLINE,      "end_font_underline",      false, "endFontUnderline",      P_TYPE::BOOL            },
-      { Pid::END_TEXT_OFFSET,         "end_text_offset",         false, "endTextOffset",         P_TYPE::POINT           },
+      { Pid::END_TEXT_OFFSET,         "end_text_offset",         false, "endTextOffset",         P_TYPE::POINT_SP        },
 
       { Pid::POS_ABOVE,               "pos_above",               false, "posAbove",              P_TYPE::SP_REAL         },
 
@@ -446,6 +446,18 @@ QVariant getProperty(Pid id, XmlReader& e)
                         return QVariant(int(Placement::ABOVE));
                   else if (value == "below")
                         return QVariant(int(Placement::BELOW));
+                  }
+                  break;
+            case P_TYPE::TEXT_PLACE: {
+                  QString value(e.readElementText());
+                  if (value == "auto")
+                        return QVariant(int(PlaceText::AUTO));
+                  else if (value == "above")
+                        return QVariant(int(PlaceText::ABOVE));
+                  else if (value == "below")
+                        return QVariant(int(PlaceText::BELOW));
+                  else if (value == "left")
+                        return QVariant(int(PlaceText::LEFT));
                   }
                   break;
             case P_TYPE::BARLINE_TYPE: {

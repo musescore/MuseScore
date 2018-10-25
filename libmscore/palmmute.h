@@ -25,6 +25,8 @@ class PalmMute;
 
 class PalmMuteSegment final : public TextLineBaseSegment {
 
+      virtual Sid getPropertyStyle(Pid) const override;
+
    public:
       PalmMuteSegment(Score* s) : TextLineBaseSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)  { }
       virtual ElementType type() const override       { return ElementType::PALM_MUTE_SEGMENT; }
@@ -41,6 +43,8 @@ class PalmMuteSegment final : public TextLineBaseSegment {
 
 class PalmMute final : public TextLineBase {
 
+      virtual Sid getPropertyStyle(Pid) const override;
+
    protected:
       QPointF linePos(Grip, System**) const override;
 
@@ -53,7 +57,6 @@ class PalmMute final : public TextLineBase {
       LineSegment* createLineSegment();
       virtual void setYoff(qreal) override;
       virtual QVariant propertyDefault(Pid propertyId) const override;
-      virtual Sid getPropertyStyle(Pid) const override;
 
       friend class PalmMuteLine;
       };

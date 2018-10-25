@@ -45,6 +45,7 @@ static const ElementStyle voltaStyle {
       { Sid::voltaLineStyle,                     Pid::LINE_STYLE              },
       { Sid::voltaHook,                          Pid::BEGIN_HOOK_HEIGHT       },
       { Sid::voltaHook,                          Pid::END_HOOK_HEIGHT         },
+      { Sid::voltaPosAbove,                      Pid::OFFSET                  },
       };
 
 //---------------------------------------------------------
@@ -166,9 +167,15 @@ void Volta::write(XmlWriter& xml) const
 //   createLineSegment
 //---------------------------------------------------------
 
+static const ElementStyle voltaSegmentStyle {
+      { Sid::voltaPosAbove,                      Pid::OFFSET                  },
+      };
+
 LineSegment* Volta::createLineSegment()
       {
-      return new VoltaSegment(score());
+      VoltaSegment* vs = new VoltaSegment(score());
+      vs->initElementStyle(&voltaSegmentStyle);
+      return vs;
       }
 
 //---------------------------------------------------------

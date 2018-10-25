@@ -768,10 +768,11 @@ void Rest::setAccent(bool flag)
                   qreal yOffset = -(bbox().bottom());
                   if (durationType() >= TDuration::DurationType::V_HALF)
                         yOffset -= staff()->spatium(tick()) * 0.5;
-                  undoChangeProperty(Pid::OFFSET, QPointF(0.0, yOffset));
+                  // undoChangeProperty(Pid::OFFSET, QPointF(0.0, yOffset));
+                  rypos() += yOffset;
                   }
             else {
-                  undoChangeProperty(Pid::OFFSET, QPointF());
+                  // undoChangeProperty(Pid::OFFSET, QPointF());  TODO::check
                   }
             }
       }

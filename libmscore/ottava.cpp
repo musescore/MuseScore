@@ -55,6 +55,7 @@ static const ElementStyle ottavaElementStyle {
       { Sid::ottavaTextAlign,                    Pid::END_TEXT_ALIGN          },
       { Sid::ottavaLineWidth,                    Pid::LINE_WIDTH              },
       { Sid::ottavaLineStyle,                    Pid::LINE_STYLE              },
+      { Sid::ottavaPosAbove,                     Pid::OFFSET                  },
       };
 
 
@@ -176,6 +177,24 @@ void OttavaSegment::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags 
       }
 
 //---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid OttavaSegment::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return spanner()->placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow;
+      return TextLineBaseSegment::getPropertyStyle(pid);
+      }
+
+Sid Ottava::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow;
+      return TextLineBase::getPropertyStyle(pid);
+      }
+
+//---------------------------------------------------------
 //   Ottava
 //---------------------------------------------------------
 
@@ -189,6 +208,8 @@ Ottava::Ottava(Score* s)
       setContinueTextPlace(PlaceText::LEFT);
       setEndHookType(HookType::HOOK_90);
       setLineVisible(true);
+      setBeginHookHeight(Spatium(.0));
+      setEndText("");
 
       initElementStyle(&_ottavaStyle);
       }
@@ -215,9 +236,15 @@ int Ottava::pitchShift() const
 //   createLineSegment
 //---------------------------------------------------------
 
+static const ElementStyle ottavaSegmentStyle {
+      { Sid::pedalPosBelow, Pid::OFFSET },
+      };
+
 LineSegment* Ottava::createLineSegment()
       {
-      return new OttavaSegment(score());
+      OttavaSegment* os = new OttavaSegment(score());
+      os->initElementStyle(&ottavaSegmentStyle);
+      return os;
       }
 
 //---------------------------------------------------------
@@ -230,11 +257,9 @@ void Ottava::write(XmlWriter& xml) const
             return;
       xml.stag(name());
       xml.tag("subtype", ottavaDefault[int(ottavaType())].name);
-
-      for (const StyledProperty& spp : *styledProperties())
-            writeProperty(xml, spp.pid);
-
-      Element::writeProperties(xml);
+//      for (const StyledProperty& spp : *styledProperties())
+//            writeProperty(xml, spp.pid);
+      TextLineBase::writeProperties(xml);
       xml.etag();
       }
 
@@ -314,6 +339,9 @@ QVariant Ottava::getProperty(Pid propertyId) const
             case Pid::NUMBERS_ONLY:
                   return _numbersOnly;
 
+            case Pid::END_TEXT_PLACE:                 // HACK
+                  return int(PlaceText::LEFT);
+
             default:
                   break;
             }
@@ -367,6 +395,21 @@ QVariant Ottava::propertyDefault(Pid pid) const
                   return int(HookType::HOOK_90);
             case Pid::LINE_VISIBLE:
                   return true;
+            case Pid::BEGIN_TEXT_OFFSET:
+            case Pid::CONTINUE_TEXT_OFFSET:
+            case Pid::END_TEXT_OFFSET:
+                  return QPointF();
+            case Pid::BEGIN_TEXT_PLACE:
+            case Pid::CONTINUE_TEXT_PLACE:
+            case Pid::END_TEXT_PLACE:
+                  return int(PlaceText::LEFT);
+            case Pid::BEGIN_HOOK_TYPE:
+                  return int(HookType::NONE);
+            case Pid::BEGIN_HOOK_HEIGHT:
+                  return Spatium(.0);
+            case Pid::END_TEXT:
+                  return QString("");
+
             default:
                   return TextLineBase::propertyDefault(pid);
             }

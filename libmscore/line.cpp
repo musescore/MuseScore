@@ -1027,7 +1027,7 @@ void SLine::writeProperties(XmlWriter& xml) const
       //
       bool modified = false;
       for (const SpannerSegment* seg : spannerSegments()) {
-            if (!seg->autoplace() || !seg->visible()) {
+            if (!seg->autoplace() || !seg->visible() || (!seg->isStyled(Pid::OFFSET) && !seg->offset().isNull())) {
                   modified = true;
                   break;
                   }
@@ -1042,6 +1042,7 @@ void SLine::writeProperties(XmlWriter& xml) const
       for (const SpannerSegment* seg : spannerSegments()) {
             xml.stag("Segment");
             xml.tag("subtype", int(seg->spannerSegmentType()));
+            xml.tag("offset", seg->offset() / _spatium);
             xml.tag("off2", seg->userOff2() / _spatium);
             seg->Element::writeProperties(xml);
             xml.etag();

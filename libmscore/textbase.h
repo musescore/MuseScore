@@ -316,7 +316,6 @@ class TextBase : public Element {
       static QString unEscape(QString s);
       static QString escape(QString s);
 
-      void undoSetText(const QString& s) { undoChangeProperty(Pid::TEXT, s); }
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;
 

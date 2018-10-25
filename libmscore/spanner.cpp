@@ -20,6 +20,7 @@
 #include "measure.h"
 #include "undo.h"
 #include "staff.h"
+#include "musescoreCore.h"
 
 namespace Ms {
 
@@ -1122,28 +1123,49 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
 
 void SpannerSegment::autoplaceSpannerSegment(qreal minDistance, Sid posBelow, Sid posAbove)
       {
-      if (!parent())
-            return;
-      if (spanner()->placeBelow())
-            rpos() = score()->styleValue(Pid::OFFSET, posBelow).toPointF() + QPointF(rxpos(), (staff() ? staff()->height() : 0.0));
-      else
-            rpos() = score()->styleValue(Pid::OFFSET, posAbove).toPointF() + QPoint(rxpos(), 0.0);
-      if (visible() && autoplace()) {
+      if (!parent()) {
             setOffset(QPointF());
+            return;
+            }
+      if (isStyled(Pid::OFFSET))
+            setOffset(spanner()->propertyDefault(Pid::OFFSET).toPointF());
 
+      if (visible() && autoplace()) {
             SkylineLine sl(!spanner()->placeAbove());
             sl.add(shape().translated(pos()));
             if (spanner()->placeAbove()) {
                   qreal d  = system()->topDistance(staffIdx(), sl);
                   if (d > -minDistance)
-                        ryoffset() = -(d + minDistance);
+                        rypos() += -(d + minDistance);
                   }
             else {
                   qreal d  = system()->bottomDistance(staffIdx(), sl);
                   if (d > -minDistance)
-                        ryoffset() = d + minDistance;
+                        rypos() += d + minDistance;
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void Spanner::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+      {
+      if (id == Pid::PLACEMENT) {
+            ScoreElement::undoChangeProperty(id, v, ps);
+            // change offset of all segments if styled
+
+            for (SpannerSegment* s : segments) {
+                  if (s->isStyled(Pid::OFFSET)) {
+                        s->setOffset(s->propertyDefault(Pid::OFFSET).toPointF());
+                        s->triggerLayout();
+                        }
+                  }
+            MuseScoreCore::mscoreCore->updateInspector();
+            return;
+            }
+      ScoreElement::undoChangeProperty(id, v, ps);
       }
 
 }

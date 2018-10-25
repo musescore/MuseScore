@@ -196,7 +196,6 @@ class Element : public ScoreElement {
 
       Placement placement() const             { return Placement(!flag(ElementFlag::PLACE_ABOVE));  }
       void setPlacement(Placement val)        { setFlag(ElementFlag::PLACE_ABOVE, !bool(val)); }
-      void undoSetPlacement(Placement val);
       bool placeAbove() const                 { return placement() == Placement::ABOVE; }
       bool placeBelow() const                 { return placement() == Placement::BELOW; }
 

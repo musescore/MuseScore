@@ -351,6 +351,7 @@ enum class P_TYPE : char {
       VALUE_TYPE,
       BEAM_MODE,
       PLACEMENT,
+      TEXT_PLACE,
       TEMPO,
       GROUPS,
       SYMID,

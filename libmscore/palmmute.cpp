@@ -42,6 +42,7 @@ static const ElementStyle palmMuteStyle {
       { Sid::palmMuteTextAlign,                     Pid::END_TEXT_ALIGN         },
       { Sid::palmMuteHookHeight,                    Pid::BEGIN_HOOK_HEIGHT      },
       { Sid::palmMuteHookHeight,                    Pid::END_HOOK_HEIGHT        },
+      { Sid::palmMutePosBelow,                      Pid::OFFSET                 },
       };
 
 //---------------------------------------------------------
@@ -52,6 +53,24 @@ void PalmMuteSegment::layout()
       {
       TextLineBaseSegment::layout();
       autoplaceSpannerSegment(spatium() * .7, Sid::palmMutePosBelow, Sid::palmMutePosAbove);
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid PalmMuteSegment::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return spanner()->placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow;
+      return TextLineBaseSegment::getPropertyStyle(pid);
+      }
+
+Sid PalmMute::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow;
+      return TextLineBase::getPropertyStyle(pid);
       }
 
 //---------------------------------------------------------
@@ -100,9 +119,15 @@ void PalmMute::write(XmlWriter& xml) const
 //   createLineSegment
 //---------------------------------------------------------
 
+static const ElementStyle palmMuteSegmentStyle {
+      { Sid::palmMutePosBelow,                      Pid::OFFSET                 },
+      };
+
 LineSegment* PalmMute::createLineSegment()
       {
-      return new PalmMuteSegment(score());
+      PalmMuteSegment* pms = new PalmMuteSegment(score());
+      pms->initElementStyle(&palmMuteSegmentStyle);
+      return pms;
       }
 
 //---------------------------------------------------------
@@ -158,41 +183,6 @@ QVariant PalmMute::propertyDefault(Pid propertyId) const
                   return TextLineBase::propertyDefault(propertyId);
             }
       }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid PalmMute::getPropertyStyle(Pid id) const
-      {
-      switch (id) {
-            case Pid::PLACEMENT:
-                  return Sid::pedalPlacement;
-            case Pid::BEGIN_FONT_FACE:
-                  return Sid::pedalFontFace;
-            case Pid::BEGIN_FONT_SIZE:
-                  return Sid::pedalFontSize;
-            case Pid::BEGIN_FONT_BOLD:
-                  return Sid::pedalFontBold;
-            case Pid::BEGIN_FONT_ITALIC:
-                  return Sid::pedalFontItalic;
-            case Pid::BEGIN_FONT_UNDERLINE:
-                  return Sid::pedalFontUnderline;
-            case Pid::BEGIN_TEXT_ALIGN:
-            case Pid::CONTINUE_TEXT_ALIGN:
-            case Pid::END_TEXT_ALIGN:
-                  return Sid::pedalTextAlign;
-            case Pid::BEGIN_HOOK_HEIGHT:
-            case Pid::END_HOOK_HEIGHT:
-                  return Sid::pedalHookHeight;
-            case Pid::BEGIN_TEXT:
-                  return Sid::palmMuteText;
-            default:
-                  break;
-            }
-      return Sid::NOSTYLE;
-      }
-
 
 //---------------------------------------------------------
 //   linePos

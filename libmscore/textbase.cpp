@@ -1335,8 +1335,8 @@ void TextBase::layout()
       setPos(QPointF());
       if (!parent())
             setOffset(0.0, 0.0);
-      else if (isStyled(Pid::OFFSET))
-            setOffset(propertyDefault(Pid::OFFSET).toPointF());
+//      else if (isStyled(Pid::OFFSET))                                   // TODO: should be set already
+//            setOffset(propertyDefault(Pid::OFFSET).toPointF());
       if (placeBelow())
             rypos() = staff() ? staff()->height() : 0.0;
       layout1();

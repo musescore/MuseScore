@@ -189,7 +189,7 @@ QVariant ScoreElement::propertyDefault(Pid pid) const
       Sid sid = getPropertyStyle(pid);
       if (sid != Sid::NOSTYLE)
             return score()->styleValue(pid, sid);
-      qDebug("<%s>(%d) not found in <%s>", propertyQmlName(pid), int(pid), name());
+//      qDebug("<%s>(%d) not found in <%s>", propertyQmlName(pid), int(pid), name());
       return QVariant();
       }
 
@@ -364,7 +364,8 @@ bool ScoreElement::readProperty(const QStringRef& s, XmlReader& e, Pid id)
                         break;
                   }
             setProperty(id, v);
-            setPropertyFlags(id, PropertyFlags::UNSTYLED);
+            if (isStyled(id))
+                  setPropertyFlags(id, PropertyFlags::UNSTYLED);
             return true;
             }
       return false;
@@ -376,6 +377,8 @@ bool ScoreElement::readProperty(const QStringRef& s, XmlReader& e, Pid id)
 
 void ScoreElement::writeProperty(XmlWriter& xml, Pid id) const
       {
+      if (isStyled(id))
+            return;
       if (propertyType(id) == P_TYPE::SP_REAL) {
             qreal _spatium = score()->spatium();
             qreal f1       = getProperty(id).toReal();
@@ -418,7 +421,7 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid id) const
             if (getProperty(id).isValid())
                   xml.tag(id, getProperty(id), propertyDefault(id));
             else
-                  qDebug("%s invalid property <%s>", name(), propertyName(id));
+                  qDebug("%s invalid property <%s><%s>", name(), propertyName(id), propertyQmlName(id));
             }
       }
 

@@ -233,9 +233,9 @@ void TrillSegment::scanElements(void* data, void (*func)(void*, Element*), bool 
 Trill::Trill(Score* s)
   : SLine(s)
       {
-      _trillType = Type::TRILL_LINE;
-      _accidental = 0;
-      _ornamentStyle    = MScore::OrnamentStyle::DEFAULT;
+      _trillType     = Type::TRILL_LINE;
+      _accidental    = 0;
+      _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
       setPlayArticulation(true);
       setPlacement(Placement::ABOVE);
       }

@@ -2742,7 +2742,8 @@ void Chord::setSlash(bool flag, bool stemless)
             // for non-drum staves, add an additional offset
             // for drum staves, no offset, but use normal head
             if (!staff()->isDrumStaff(tick()))
-                  undoChangeProperty(Pid::OFFSET, QPointF(0.0, y));
+                  // undoChangeProperty(Pid::OFFSET, QPointF(0.0, y));
+                  rypos() += y;
             else
                   head = NoteHead::Group::HEAD_NORMAL;
             }
