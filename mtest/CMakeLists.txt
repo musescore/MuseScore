@@ -197,6 +197,7 @@ subdirs (
         libmscore/join
         libmscore/keysig
         libmscore/layout
+        libmscore/layout_elements
         libmscore/links
         libmscore/parts
         libmscore/measure
