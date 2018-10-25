@@ -81,7 +81,10 @@ class TourHandler : public QObject
       static QMap<QString, QMap<QString, QString>*> eventNameLookup;
       static QList<QWidget*> getWidgetsByNames(Tour* tour, QList<QString> names);
 
-   public:
+public slots:
+      void showWelcomeTour(bool);
+
+public:
       TourHandler(QObject* parent) : QObject(parent) {}
       void loadTours();
       void readCompletedTours();
