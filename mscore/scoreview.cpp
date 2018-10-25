@@ -357,12 +357,14 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
 //   measurePopup
 //---------------------------------------------------------
 
-void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
+void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       {
       int staffIdx;
       int pitch;
       Segment* seg;
 
+      QPoint gpos = ev->globalPos();
+      
       if (!_score->pos2measure(editData.startMove, &staffIdx, &pitch, &seg, 0))
             return;
       if (staffIdx == -1) {
@@ -449,7 +451,10 @@ void ScoreView::measurePopup(const QPoint& gpos, Measure* obj)
             }
       else if (cmd == "pianoroll") {
             _score->endCmd();
-            mscore->editInPianoroll(staff);
+            QPointF p = toLogical(ev->pos());
+            Position pp;
+            bool foundPos = _score->getPosition(&pp, p, 0);
+            mscore->editInPianoroll(staff, foundPos ? &pp : 0);
             }
       else if (cmd == "staff-properties") {
             int tick = obj ? obj->tick() : -1;
@@ -4163,6 +4168,8 @@ static bool elementLower(const Element* e1, const Element* e2)
             }
       return e1->z() < e2->z();
       }
+
+
 
 //---------------------------------------------------------
 //   elementNear

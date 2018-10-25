@@ -174,7 +174,23 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_SCORE_VOICE3_COLOR,                           new ColorPreference(QColor("#c04400"))},    // orange
             {PREF_UI_SCORE_VOICE4_COLOR,                           new ColorPreference(QColor("#70167a"))},    // purple
             {PREF_UI_THEME_ICONWIDTH,                              new IntPreference(28, false)},
-            {PREF_UI_THEME_ICONHEIGHT,                             new IntPreference(24, false)}
+            {PREF_UI_THEME_ICONHEIGHT,                             new IntPreference(24, false)},
+            {PREF_UI_PIANOROLL_DARK_SELECTION_BOX_COLOR,           new ColorPreference(QColor("#0cebff"))},
+            {PREF_UI_PIANOROLL_DARK_NOTE_UNSEL_COLOR,              new ColorPreference(QColor("#1dcca0"))},
+            {PREF_UI_PIANOROLL_DARK_NOTE_SEL_COLOR,                new ColorPreference(QColor("#ffff00"))},
+            {PREF_UI_PIANOROLL_DARK_BG_BASE_COLOR,                 new ColorPreference(QColor("#3a3a3a"))},
+            {PREF_UI_PIANOROLL_DARK_BG_KEY_WHITE_COLOR,            new ColorPreference(QColor("#3a3a3a"))},
+            {PREF_UI_PIANOROLL_DARK_BG_KEY_BLACK_COLOR,            new ColorPreference(QColor("#262626"))},
+            {PREF_UI_PIANOROLL_DARK_BG_GRIDLINE_COLOR,             new ColorPreference(QColor("#111111"))},
+            {PREF_UI_PIANOROLL_DARK_BG_TEXT_COLOR,                 new ColorPreference(QColor("#999999"))},
+            {PREF_UI_PIANOROLL_DARK_SELECTION_BOX_COLOR,           new ColorPreference(QColor("#0cebff"))},
+            {PREF_UI_PIANOROLL_LIGHT_NOTE_UNSEL_COLOR,             new ColorPreference(QColor("#1dcca0"))},
+            {PREF_UI_PIANOROLL_LIGHT_NOTE_SEL_COLOR,               new ColorPreference(QColor("#ffff00"))},
+            {PREF_UI_PIANOROLL_LIGHT_BG_BASE_COLOR,                new ColorPreference(QColor("#e0e0e7"))},
+            {PREF_UI_PIANOROLL_LIGHT_BG_KEY_WHITE_COLOR,           new ColorPreference(QColor("#ffffff"))},
+            {PREF_UI_PIANOROLL_LIGHT_BG_KEY_BLACK_COLOR,           new ColorPreference(QColor("#e6e6e6"))},
+            {PREF_UI_PIANOROLL_LIGHT_BG_GRIDLINE_COLOR,            new ColorPreference(QColor("#a2a2a6"))},
+            {PREF_UI_PIANOROLL_LIGHT_BG_TEXT_COLOR,                new ColorPreference(QColor("#111111"))},
       });
 
       _initialized = true;
