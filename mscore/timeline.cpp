@@ -1753,7 +1753,8 @@ void Timeline::drawSelection()
                   if (barline &&
                       (barline->barLineType() == BarLineType::END_REPEAT || barline->barLineType() == BarLineType::DOUBLE || barline->barLineType() == BarLineType::END) &&
                       measure != _score->lastMeasure()) {
-                        measure = measure->prevMeasure();
+                        if (measure->prevMeasure())
+                              measure = measure->prevMeasure();
                         }
                   }
 
@@ -2216,7 +2217,6 @@ void Timeline::updateGrid()
             mouseOver(mapToScene(mapFromGlobal(QCursor::pos())));
             row_names->updateLabels(getLabels(), grid_height);
             }
-
       viewport()->update();
       }
 
