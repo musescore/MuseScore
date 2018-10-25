@@ -411,7 +411,7 @@ void TourHandler::displayTour(Tour* tour)
 
             mbox->addButton(tr("Close"), QMessageBox::RejectRole);
             if (i != 0)
-                  backButton = mbox->addButton(tr("< Back"), QMessageBox::NoRole);
+                  backButton = mbox->addButton(tr("< Back"), QMessageBox::YesRole);
             if (i != tourMessages.size() - 1)
                   nextButton = mbox->addButton(tr("Next >"), QMessageBox::YesRole);
             else
