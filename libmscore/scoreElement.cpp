@@ -194,15 +194,6 @@ QVariant ScoreElement::propertyDefault(Pid pid) const
       }
 
 //---------------------------------------------------------
-//   setPidFromSid
-//---------------------------------------------------------
-
-void ScoreElement::setPidFromSid(Pid pid, Sid sid)
-      {
-      setProperty(pid, score()->styleValue(pid, sid));
-      }
-
-//---------------------------------------------------------
 //   initElementStyle
 //---------------------------------------------------------
 
@@ -215,7 +206,7 @@ void ScoreElement::initElementStyle(const ElementStyle* ss)
       for (size_t i = 0; i < n; ++i)
             _propertyFlagsList[i] = PropertyFlags::STYLED;
       for (const StyledProperty& spp : *_elementStyle)
-            setPidFromSid(spp.pid, spp.sid);
+            setProperty(spp.pid, score()->styleValue(spp.pid, spp.sid));
       }
 
 //---------------------------------------------------------
@@ -661,14 +652,8 @@ void ScoreElement::styleChanged()
       {
       for (const StyledProperty& spp : *_elementStyle) {
             PropertyFlags f = propertyFlags(spp.pid);
-            if (f == PropertyFlags::STYLED) {
-                  if (propertyType(spp.pid) == P_TYPE::SP_REAL) {
-                        qreal val = score()->styleP(spp.sid);
-                        setProperty(spp.pid, val);
-                        }
-                  else
-                        setProperty(spp.pid, score()->styleV(spp.sid));
-                  }
+            if (f == PropertyFlags::STYLED)
+                  setProperty(spp.pid, score()->styleValue(spp.pid, spp.sid));
             }
       }
 

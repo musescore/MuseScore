@@ -23,6 +23,7 @@ namespace Ms {
 
 static const ElementStyle rehearsalMarkStyle {
       { Sid::rehearsalMarkPlacement, Pid::PLACEMENT },
+      { Sid::rehearsalMarkPosAbove, Pid::OFFSET },
       };
 
 //---------------------------------------------------------

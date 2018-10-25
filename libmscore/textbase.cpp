@@ -2394,26 +2394,14 @@ void TextBase::styleChanged()
       int i = 0;
       for (const StyledProperty& spp : *_elementStyle) {
             PropertyFlags f = _propertyFlagsList[i];
-            if (f == PropertyFlags::STYLED) {
-                  if (propertyType(spp.pid) == P_TYPE::SP_REAL) {
-                        qreal val = score()->styleP(spp.sid);
-                        setProperty(spp.pid, val);
-                        }
-                  else
-                        setProperty(spp.pid, score()->styleV(spp.sid));
-                  }
+            if (f == PropertyFlags::STYLED)
+                  setProperty(spp.pid, score()->styleValue(spp.pid, spp.sid));
             ++i;
             }
       for (const StyledProperty& spp : *textStyle(tid())) {
             PropertyFlags f = _propertyFlagsList[i];
-            if (f == PropertyFlags::STYLED) {
-                  if (propertyType(spp.pid) == P_TYPE::SP_REAL) {
-                        qreal val = score()->styleP(spp.sid);
-                        setProperty(spp.pid, val);
-                        }
-                  else
-                        setProperty(spp.pid, score()->styleV(spp.sid));
-                  }
+            if (f == PropertyFlags::STYLED)
+                  setProperty(spp.pid, score()->styleValue(spp.pid, spp.sid));
             ++i;
             }
       }
@@ -2432,9 +2420,9 @@ void TextBase::initElementStyle(const ElementStyle* ss)
       for (size_t i = 0; i < n; ++i)
             _propertyFlagsList[i] = PropertyFlags::STYLED;
       for (const StyledProperty& p : *_elementStyle)
-            setPidFromSid(p.pid, p.sid);
+            setProperty(p.pid, score()->styleValue(p.pid, p.sid));
       for (const StyledProperty& p : *textStyle(tid()))
-            setPidFromSid(p.pid, p.sid);
+            setProperty(p.pid, score()->styleValue(p.pid, p.sid));
       }
 
 //---------------------------------------------------------
