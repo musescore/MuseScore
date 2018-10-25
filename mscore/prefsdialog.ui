@@ -3995,6 +3995,9 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
          <property name="accessibleDescription">
           <string>Here you can configure shortcuts for actions</string>
          </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
          <property name="alternatingRowColors">
           <bool>true</bool>
          </property>

@@ -254,7 +254,7 @@ void PreferenceDialog::hideEvent(QHideEvent* ev)
 
 void PreferenceDialog::recordButtonClicked(int val)
       {
-      foreach(QAbstractButton* b, recordButtons->buttons()) {
+      for (QAbstractButton* b : recordButtons->buttons()) {
             b->setChecked(recordButtons->id(b) == val);
             }
       mscore->setMidiRecordId(val);
@@ -409,7 +409,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       //
       qDeleteAll(localShortcuts);
       localShortcuts.clear();
-      foreach(const Shortcut* s, Shortcut::shortcuts())
+      for(const Shortcut* s : Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       updateSCListView();
 
@@ -499,7 +499,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
       int idx = 0;
       importCharsetListOve->clear();
       importCharsetListGP->clear();
-      foreach (QByteArray charset, charsets) {
+      for (QByteArray charset : charsets) {
             importCharsetListOve->addItem(charset);
             importCharsetListGP->addItem(charset);
             if (charset == preferences.getString(PREF_IMPORT_OVERTURE_CHARSET))
@@ -586,7 +586,7 @@ bool ShortcutItem::operator<(const QTreeWidgetItem& item) const
 void PreferenceDialog::updateSCListView()
       {
       shortcutList->clear();
-      foreach (Shortcut* s, localShortcuts) {
+      for (Shortcut* s : localShortcuts) {
             if (!s)
                   continue;
             ShortcutItem* newItem = new ShortcutItem;
@@ -1051,7 +1051,7 @@ void PreferenceDialog::apply()
 
       if (shortcutsChanged) {
             shortcutsChanged = false;
-            foreach(const Shortcut* s, localShortcuts) {
+            for(const Shortcut* s : localShortcuts) {
                   Shortcut* os = Shortcut::getShortcut(s->key());
                   if (os) {
                         if (!os->compareKeys(*s))
@@ -1131,7 +1131,7 @@ void PreferenceDialog::resetAllValues()
       qDeleteAll(localShortcuts);
       localShortcuts.clear();
       Shortcut::resetToDefault();
-      foreach(const Shortcut* s, Shortcut::shortcuts())
+      for (const Shortcut* s : Shortcut::shortcuts())
             localShortcuts[s->key()] = new Shortcut(*s);
       updateSCListView();
       }
