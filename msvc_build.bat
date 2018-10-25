@@ -51,52 +51,52 @@ IF NOT "%3"=="" (
    SET BUILD_NUMBER=%3
    )
 
-IF "%1"=="release" (
+IF /I "%1"=="release" (
    SET CONFIGURATION_STR="release"
    GOTO :BUILD
 )
 
-IF "%1"=="debug" (
+IF /I "%1"=="debug" (
    SET CONFIGURATION_STR="debug"
    GOTO :BUILD
 )
 
-IF "%1"=="relwithdebinfo" (
+IF /I "%1"=="relwithdebinfo" (
    SET CONFIGURATION_STR="relwithdebinfo"
    GOTO :BUILD
    )
 
-IF "%1"=="install" (
+IF /I "%1"=="install" (
    SET BUILD_FOLDER=%BUILD_FOLDER%_%ARCH%
    SET CONFIGURATION_STR="release"
    GOTO :INSTALL
    )
 
-IF "%1"=="installdebug" (
+IF /I "%1"=="installdebug" (
    SET BUILD_FOLDER=%BUILD_FOLDER%_%ARCH%
    SET CONFIGURATION_STR="debug"
    GOTO :INSTALL
    )
 
-IF "%1"=="installrelwithdebinfo" (
+IF /I "%1"=="installrelwithdebinfo" (
    SET BUILD_FOLDER=%BUILD_FOLDER%_%ARCH%
    SET CONFIGURATION_STR="relwithdebinfo"
    GOTO :INSTALL
    )
 
-IF "%1"=="package" (
+IF /I "%1"=="package" (
    cd %BUILD_FOLDER%_%ARCH%
    cmake --build . --config release --target package
    GOTO :END
    )
 
-IF "%1"=="revision" (
+IF /I "%1"=="revision" (
    echo revisionStep
    git rev-parse --short=7 HEAD > mscore/revision.h
    GOTO :END
    )
 
-IF "%1"=="clean" (
+IF /I "%1"=="clean" (
    for /d %%G in ("msvc.*") do rd /s /q "%%~G"
    GOTO :END
    ) ELSE (
