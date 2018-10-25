@@ -221,6 +221,7 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportR
       for (int i = 0; i < cs->nstaves(); ++i)
             tracks.append(MidiTrack());
 
+      cs->updateCapo();
       cs->updateSwing();
       cs->createPlayEvents();
       cs->updateRepeatList(midiExpandRepeats);
