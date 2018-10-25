@@ -84,8 +84,6 @@ class Vibrato final : public SLine {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
-      virtual void setYoff(qreal) override;
-
       virtual QString accessibleInfo() const override;
       };
 
