@@ -3096,7 +3096,7 @@ void ScoreView::addSlur()
                               continue;
                         if (e->isNote())
                               e = toNote(e)->chord();
-                        if (!e->isChordRest())
+                        if (!e->isChord())
                               continue;
                         ChordRest* cr = toChordRest(e);
                         if (!cr1 || cr1->tick() > cr->tick())
@@ -3114,7 +3114,7 @@ void ScoreView::addSlur()
             for (Element* e : el) {
                   if (e->isNote())
                         e = toNote(e)->chord();
-                  if (!e->isChordRest())
+                  if (!e->isChord())
                         continue;
                   ChordRest* cr = toChordRest(e);
                   if (!cr1 || cr->isBefore(cr1))
