@@ -3704,7 +3704,7 @@ void Score::doLayoutRange(int stick, int etick)
       {
       if (stick == -1 && etick == -1)
             abort();
-      if (!last()) {
+      if (!last() || (lineMode() && !firstMeasure())) {
             qDeleteAll(_systems);
             _systems.clear();
             qDeleteAll(pages());
