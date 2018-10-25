@@ -48,15 +48,12 @@ int markerTypeTableSize()
 //---------------------------------------------------------
 
 Marker::Marker(Score* s)
-   : TextBase(s, Tid::REPEAT_LEFT, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
+   : Marker(s, Tid::REPEAT_LEFT)
       {
-      initElementStyle(&markerStyle);
-      _markerType = Type::FINE;
-      setLayoutToParentWidth(true);
       }
 
 Marker::Marker(Score* s, Tid tid)
-   : TextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+   : TextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
       {
       initElementStyle(&markerStyle);
       _markerType = Type::FINE;
@@ -99,13 +96,13 @@ void Marker::setMarkerType(Type t)
 
             case Type::FINE:
                   txt = "Fine";
-//TODO-ws                  initElementStyle(Tid::REPEAT_RIGHT);
+                  initTid(Tid::REPEAT_RIGHT);
                   setLabel("fine");
                   break;
 
             case Type::TOCODA:
                   txt = "To Coda";
-//TODO-ws                  initElementStyle(ElementStyle::REPEAT_RIGHT);
+                  initTid(Tid::REPEAT_RIGHT);
                   setLabel("coda");
                   break;
 
@@ -120,6 +117,10 @@ void Marker::setMarkerType(Type t)
             setXmlText(txt);
       }
 
+//---------------------------------------------------------
+//   markerTypeUserName
+//---------------------------------------------------------
+
 QString Marker::markerTypeUserName() const
       {
       return qApp->translate("markerType", markerTypeTable[static_cast<int>(_markerType)].name.toUtf8().constData());
@@ -132,6 +133,7 @@ QString Marker::markerTypeUserName() const
 void Marker::styleChanged()
       {
       setMarkerType(_markerType);
+      TextBase::styleChanged();
       }
 
 //---------------------------------------------------------
@@ -168,6 +170,7 @@ void Marker::layout()
 
       // although normally laid out to parent (measure) width,
       // force to center over barline if left-aligned
+
       if (layoutToParentWidth() && !(align() & (Align::RIGHT | Align::HCENTER)))
             rxpos() -= width() * 0.5;
 

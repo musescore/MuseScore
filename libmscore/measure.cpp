@@ -1321,16 +1321,7 @@ Element* Measure::drop(EditData& data)
             case ElementType::JUMP:
                   e->setParent(this);
                   e->setTrack(0);
-                  {
-                  // code borrowed from ChordRest::drop()
-//                  Text* t = toText(e);
-//                  StyledPropertyListIdx st = t->textStyleType();
-                  // for palette items, we want to use current score text style settings
-                  // except where the source element had explicitly overridden these via text properties
-                  // palette text style will be relative to baseStyle, so rebase this to score
-//                  if (st >= StyledPropertyListIdx::DEFAULT && fromPalette)
-//                        t->textStyle().restyle(MScore::baseStyle().textStyle(st), score()->textStyle(st));
-                  }
+printf("drop marker %f %f\n", offset().x(), offset().y());
                   score()->undoAddElement(e);
                   return e;
 

@@ -2433,9 +2433,8 @@ void TextBase::initTid(Tid tid)
       {
       setTid(tid);
       for (const StyledProperty& p : *textStyle(tid)) {
-            Pid pid    = p.pid;
-            QVariant v = propertyDefault(pid);
-            setProperty(pid, v);
+            if (isStyled(p.pid))
+                  setProperty(p.pid, score()->styleValue(p.pid, p.sid));
             }
       }
 

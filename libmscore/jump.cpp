@@ -22,7 +22,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const ElementStyle jumpStyle {
-      { Sid::repeatRightPlacement,               Pid::PLACEMENT              },
+      { Sid::repeatRightPlacement, Pid::PLACEMENT },
       };
 
 //---------------------------------------------------------
