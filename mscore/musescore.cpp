@@ -6915,6 +6915,10 @@ int main(int argc, char* av[])
             mscore->showStartcenter(true);
 #endif
             }
+      else {
+            mscore->tourHandler()->startTour("welcome");
+            //otherwise, welcome tour will appear on closing StartCenter
+            }
 
       if (sc) {
             sc->close();
@@ -6927,8 +6931,6 @@ int main(int argc, char* av[])
             mscore->showSynthControl(true);
       if (settings.value("mixerVisible", false).toBool())
             mscore->showMixer(true);
-
-      mscore->tourHandler()->startTour("welcome");
 
       return qApp->exec();
       }
