@@ -183,6 +183,22 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_UI_SCORE_VOICE4_COLOR                          "ui/score/voice4/color"
 #define PREF_UI_THEME_ICONHEIGHT                            "ui/theme/iconHeight"
 #define PREF_UI_THEME_ICONWIDTH                             "ui/theme/iconWidth"
+#define PREF_UI_PIANOROLL_DARK_SELECTION_BOX_COLOR          "ui/pianoroll/dark/selectionBox/color"
+#define PREF_UI_PIANOROLL_DARK_NOTE_UNSEL_COLOR             "ui/pianoroll/dark/note/unselected/color"
+#define PREF_UI_PIANOROLL_DARK_NOTE_SEL_COLOR               "ui/pianoroll/dark/note/selected/color"
+#define PREF_UI_PIANOROLL_DARK_BG_BASE_COLOR                "ui/pianoroll/dark/background/base/color"
+#define PREF_UI_PIANOROLL_DARK_BG_KEY_WHITE_COLOR           "ui/pianoroll/dark/background/keys/white/color"
+#define PREF_UI_PIANOROLL_DARK_BG_KEY_BLACK_COLOR           "ui/pianoroll/dark/background/keys/black/color"
+#define PREF_UI_PIANOROLL_DARK_BG_GRIDLINE_COLOR            "ui/pianoroll/dark/background/gridLine/color"
+#define PREF_UI_PIANOROLL_DARK_BG_TEXT_COLOR                "ui/pianoroll/dark/background/text/color"
+#define PREF_UI_PIANOROLL_LIGHT_SELECTION_BOX_COLOR         "ui/pianoroll/light/selectionBox/color"
+#define PREF_UI_PIANOROLL_LIGHT_NOTE_UNSEL_COLOR            "ui/pianoroll/light/note/unselected/color"
+#define PREF_UI_PIANOROLL_LIGHT_NOTE_SEL_COLOR              "ui/pianoroll/light/note/selected/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_BASE_COLOR               "ui/pianoroll/light/background/base/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_KEY_WHITE_COLOR          "ui/pianoroll/light/background/keys/white/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_KEY_BLACK_COLOR          "ui/pianoroll/light/background/keys/black/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_GRIDLINE_COLOR           "ui/pianoroll/light/background/gridLine/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_TEXT_COLOR               "ui/pianoroll/light/background/text/color"
 
 
 class PreferenceVisitor;
