@@ -55,6 +55,7 @@ class TestMidi : public QObject, public MTest
       void midiBendsExport1() { midiExportTestRef("testBends1"); }
       void midiBendsExport2() { midiExportTestRef("testBends2"); }      // Play property test
       void midiPortExport()   { midiExportTestRef("testMidiPort"); }
+      void midiArpeggio()     { midiExportTestRef("testArpeggio"); }
       void midi184376ExportMidiInitialKeySig()
             {
             midiExportTestRef("testInitialKeySigThenRepeatToMeas2");    // tick 0 has Bb keysig.  Meas 2 has no key sig. Meas 2 repeats back to start of Meas 2.  Result should have initial Bb keysig
