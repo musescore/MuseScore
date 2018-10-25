@@ -543,6 +543,7 @@ class Score : public QObject, public ScoreElement {
       Score(MasterScore*);
       Score(MasterScore*, const MStyle&);
       virtual ~Score();
+      Score* clone();
 
       virtual bool isMaster() const  { return false;        }
 
