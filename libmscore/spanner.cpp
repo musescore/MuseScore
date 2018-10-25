@@ -1123,6 +1123,8 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
 
 void SpannerSegment::autoplaceSpannerSegment(qreal minDistance, Sid posBelow, Sid posAbove)
       {
+      Q_UNUSED(posBelow);
+      Q_UNUSED(posAbove);
       if (!parent()) {
             setOffset(QPointF());
             return;
