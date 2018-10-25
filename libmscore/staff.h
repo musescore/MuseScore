@@ -91,6 +91,7 @@ class Staff final : public ScoreElement {
 //      LinkedStaves* _linkedStaves { 0 };
       QMap<int,int> _channelList[VOICES];
       QMap<int,SwingParameters> _swingList;
+      QMap<int,int> _capoList;
       bool _playbackVoice[VOICES] { true, true, true, true };
 
       VeloList _velocities;         ///< cached value
@@ -181,10 +182,18 @@ class Staff final : public ScoreElement {
       void setBarLineFrom(int val)   { _barLineFrom = val;  }
       void setBarLineTo(int val)     { _barLineTo = val;    }
       qreal height() const;
+
       int channel(int tick, int voice) const;
-      QMap<int,int>* channelList(int voice) { return  &_channelList[voice]; }
+      void clearChannelList(int voice)                               { _channelList[voice].clear(); }
+      void insertIntoChannelList(int voice, int tick, int channelId) { _channelList[voice].insert(tick, channelId); }
+
       SwingParameters swing(int tick)  const;
-      QMap<int,SwingParameters>* swingList() { return &_swingList; }
+      void clearSwingList()                                  { _swingList.clear(); }
+      void insertIntoSwingList(int tick, SwingParameters sp) { _swingList.insert(tick, sp); }
+
+      int capo(int tick) const;
+      void clearCapoList()                             { _capoList.clear(); }
+      void insertIntoCapoList(int tick, int fretId)    { _capoList.insert(tick, fretId); }
 
       //==== staff type
       const StaffType* staffType(int tick) const;

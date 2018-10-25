@@ -837,6 +837,21 @@ SwingParameters Staff::swing(int tick) const
       }
 
 //---------------------------------------------------------
+//   capo
+//---------------------------------------------------------
+
+int Staff::capo(int tick) const
+      {
+      if (_capoList.empty())
+            return 0;
+      QMap<int, int>::const_iterator i = _capoList.upperBound(tick);
+      if (i == _capoList.begin())
+            return 0;
+      --i;
+      return i.value();
+      }
+
+//---------------------------------------------------------
 //   channel
 //---------------------------------------------------------
 
