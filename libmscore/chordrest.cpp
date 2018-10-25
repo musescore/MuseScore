@@ -45,6 +45,7 @@
 #include "keysig.h"
 #include "page.h"
 #include "hook.h"
+#include "rehearsalmark.h"
 
 namespace Ms {
 
@@ -525,19 +526,10 @@ Element* ChordRest::drop(EditData& data)
                   e->setParent(segment());
                   e->setTrack((track() / VOICES) * VOICES);
                   {
-                  TextBase* t = toTextBase(e);
-#if 0
-                  Tid st = t->subStyleId();           { Tid::EMPTY };
-                  // for palette items, we want to use current score text style settings
-                  // except where the source element had explicitly overridden these via text properties
-                  // palette text style will be relative to baseStyle, so rebase this to score
-                  if (st >= Tid::DEFAULT && fromPalette)
-                        t->textStyle().restyle(MScore::baseStyle()->textStyle(st), score()->textStyle(st));
-#endif
-                  if (e->isRehearsalMark() && fromPalette)
-                        t->setXmlText(score()->createRehearsalMarkText(toRehearsalMark(e)));
+                  RehearsalMark* m = toRehearsalMark(e);
+                  if (fromPalette)
+                        m->setXmlText(score()->createRehearsalMarkText(m));
                   }
-
                   score()->undoAddElement(e);
                   return e;
 

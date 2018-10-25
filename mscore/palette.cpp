@@ -405,7 +405,6 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
 static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element* e, Qt::KeyboardModifiers modifiers, QPointF pt = QPointF())
       {
       EditData dropData = viewer->getEditData();
-//      EditData dropData;
       dropData.pos        = pt.isNull() ? target->pagePos() : pt;
       dropData.dragOffset = QPointF();
       dropData.modifiers  = modifiers;
