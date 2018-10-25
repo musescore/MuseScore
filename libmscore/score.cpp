@@ -1453,23 +1453,16 @@ void Score::removeElement(Element* element)
                   Spanner* spanner = toSpanner(element);
                   if (et == ElementType::TEXTLINE && spanner->anchor() == Spanner::Anchor::NOTE)
                         break;
+                  setLayout(spanner->tick2());
                   removeSpanner(spanner);
-//TODO: system is not valid anymore after removing measure
-//                  for (SpannerSegment* ss : spanner->spannerSegments()) {
-//                        if (ss->system())
-//                              ss->system()->remove(ss);
-//                        }
                   }
                   break;
 
             case ElementType::OTTAVA:
                   {
                   Ottava* o = toOttava(element);
+                  setLayout(o->tick2());
                   removeSpanner(o);
-                  foreach(SpannerSegment* ss, o->spannerSegments()) {
-                        if (ss->system())
-                              ss->system()->remove(ss);
-                        }
                   o->staff()->updateOttava();
                   cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   _playlistDirty = true;
