@@ -99,6 +99,7 @@ class ImportMidiPanel;
 class Startcenter;
 class HelpBrowser;
 class ToolbarEditor;
+class TourHandler;
 
 struct PluginDescription;
 enum class SelState : char;
@@ -414,6 +415,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       qreal _physicalDotsPerInch;
 
       QMessageBox* infoMsgBox;
+      TourHandler* _tourHandler { 0 };
+
       //---------------------
 
       virtual void closeEvent(QCloseEvent*);
@@ -744,6 +747,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showHelp(QString);
       void showContextHelp();
       void showHelp(const QUrl&);
+
+      TourHandler* tourHandler()       { return _tourHandler; }
 
       void registerPlugin(PluginDescription*);
       void unregisterPlugin(PluginDescription*);

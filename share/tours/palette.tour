@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tour name="show-palette">
+  <Message>
+    <Text>These are palettes.</Text>
+    <Widget>palette-box</Widget>
+    </Message>
+  <Message>
+    <Text>Each palette contains elements that can be added to the score.</Text>
+    <Widget>palette</Widget>
+    </Message>
+  <Message>
+    <Text>To use them, select an element in the score and double click on the palette element.</Text>
+    <Widget>palette-cells</Widget>
+    </Message>
+  </Tour>

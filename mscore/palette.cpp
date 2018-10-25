@@ -98,6 +98,7 @@ Palette::Palette(QWidget* parent)
       setSystemPalette(false);
       _moreElements = false;
       setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Ignored);
+      setObjectName("palette-cells");
       }
 
 Palette::~Palette()

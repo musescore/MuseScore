@@ -31,6 +31,7 @@ void MuseScore::showStartcenter(bool val)
             startcenter->readSettings();
             connect(startcenter, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             connect(startcenter, SIGNAL(rejected()), a, SLOT(toggle()));
+            connect(startcenter, SIGNAL(closed(bool)), reinterpret_cast<QObject*>(tourHandler()), SLOT(showWelcomeTour(bool)));
             }
       startcenter->setVisible(val);
       }
