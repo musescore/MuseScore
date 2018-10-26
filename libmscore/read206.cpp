@@ -498,7 +498,6 @@ void readTextStyle206(MStyle* style, XmlReader& e)
             { "Staff",                   Tid::STAFF },
             { "Chord Symbol",            Tid::HARMONY_A },
             { "Rehearsal Mark",          Tid::REHEARSAL_MARK },
-            { "Repeat Text",             Tid::REPEAT_LEFT },
             { "Repeat Text Left",        Tid::REPEAT_LEFT },
             { "Repeat Text Right",       Tid::REPEAT_RIGHT },
             { "Frame",                   Tid::FRAME },
