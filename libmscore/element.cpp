@@ -640,13 +640,8 @@ bool Element::readProperties(XmlReader& e)
             if (val >= 0)
                   e.initTick(score()->fileDivision(val));
             }
-      else if (tag == "pos") {            // obsolete
-            Pid pid = Pid::OFFSET;
-            QPointF p = Ms::getProperty(pid, e).toPointF() * score()->spatium();
-            setProperty(pid, p);
-            if (propertyFlags(pid) == PropertyFlags::STYLED)
-                  setPropertyFlags(pid, PropertyFlags::UNSTYLED);
-            }
+      else if (tag == "pos")             // obsolete
+            readProperty(e, Pid::OFFSET);
       else if (tag == "voice")
             setTrack((_track/VOICES)*VOICES + e.readInt());
       else if (tag == "tag") {

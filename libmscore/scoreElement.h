@@ -214,6 +214,7 @@ class ScoreElement {
 
       virtual Sid getPropertyStyle(Pid) const;
       bool readProperty(const QStringRef&, XmlReader&, Pid);
+      void readProperty(XmlReader&, Pid);
       bool readStyledProperty(XmlReader& e, const QStringRef& tag);
 
       virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode);

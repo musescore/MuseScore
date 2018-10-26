@@ -116,10 +116,10 @@ bool Articulation::readProperties(XmlReader& e)
             }
       else if (tag == "anchor")
             _anchor = ArticulationAnchor(e.readInt());
-      else if (readProperty(tag, e, Pid::DIRECTION))
-            ;
+      else if (tag == "direction")
+            readProperty(e, Pid::DIRECTION);
       else if ( tag == "ornamentStyle")
-            setProperty(Pid::ORNAMENT_STYLE, Ms::getProperty(Pid::ORNAMENT_STYLE, e));
+            readProperty(e, Pid::ORNAMENT_STYLE);
       else if ( tag == "play")
             setPlayArticulation(e.readBool());
       else if (tag == "offset") {

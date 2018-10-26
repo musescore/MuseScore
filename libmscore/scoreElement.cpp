@@ -337,26 +337,31 @@ void ScoreElement::undoPushProperty(Pid id)
 //   readProperty
 //---------------------------------------------------------
 
+void ScoreElement::readProperty(XmlReader& e, Pid id)
+      {
+      QVariant v = Ms::readProperty(id, e);
+      switch (propertyType(id)) {
+            case P_TYPE::SP_REAL:
+                  v = v.toReal() * score()->spatium();
+                  break;
+            case P_TYPE::POINT_SP_MM:
+                  if (sizeIsSpatiumDependent())
+                        v = v.toPointF() * score()->spatium();
+                  else
+                        v = v.toPointF() * DPMM;
+                  break;
+            default:
+                  break;
+            }
+      setProperty(id, v);
+      if (isStyled(id))
+            setPropertyFlags(id, PropertyFlags::UNSTYLED);
+      }
+
 bool ScoreElement::readProperty(const QStringRef& s, XmlReader& e, Pid id)
       {
       if (s == propertyName(id)) {
-            QVariant v = Ms::getProperty(id, e);
-            switch (propertyType(id)) {
-                  case P_TYPE::SP_REAL:
-                        v = v.toReal() * score()->spatium();
-                        break;
-                  case P_TYPE::POINT_SP_MM:
-                        if (sizeIsSpatiumDependent())
-                              v = v.toPointF() * score()->spatium();
-                        else
-                              v = v.toPointF() * DPMM;
-                        break;
-                  default:
-                        break;
-                  }
-            setProperty(id, v);
-            if (isStyled(id))
-                  setPropertyFlags(id, PropertyFlags::UNSTYLED);
+            readProperty(e, id);
             return true;
             }
       return false;

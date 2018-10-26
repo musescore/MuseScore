@@ -226,15 +226,15 @@ bool Ambitus::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
       if (tag == "head")
-            setProperty(Pid::HEAD_GROUP, Ms::getProperty(Pid::HEAD_GROUP, e));
+            readProperty(e, Pid::HEAD_GROUP);
       else if (tag == "headType")
-            setProperty(Pid::HEAD_TYPE, Ms::getProperty(Pid::HEAD_TYPE, e));
+            readProperty(e, Pid::HEAD_TYPE);
       else if (tag == "mirror")
-            setProperty(Pid::MIRROR_HEAD, Ms::getProperty(Pid::MIRROR_HEAD, e).toInt());
+            readProperty(e, Pid::MIRROR_HEAD);
       else if (tag == "hasLine")
             setHasLine(e.readInt());
       else if (tag == "lineWidth")
-            setProperty(Pid::LINE_WIDTH, Ms::getProperty(Pid::LINE_WIDTH, e));
+            readProperty(e, Pid::LINE_WIDTH);
       else if (tag == "topPitch")
             _topPitch = e.readInt();
       else if (tag == "bottomPitch")

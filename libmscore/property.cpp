@@ -356,10 +356,10 @@ const char* propertyQmlName(Pid id)
       }
 
 //---------------------------------------------------------
-//    getProperty
+//    readProperty
 //---------------------------------------------------------
 
-QVariant getProperty(Pid id, XmlReader& e)
+QVariant readProperty(Pid id, XmlReader& e)
       {
       switch (propertyType(id)) {
             case P_TYPE::BOOL:
