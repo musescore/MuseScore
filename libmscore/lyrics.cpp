@@ -243,7 +243,7 @@ void Lyrics::layout()
                   // actual lyric
                   //QString actualLyric = punctuationMatch.captured(2);
                   if (!lp.isEmpty() || !tp.isEmpty()) {
-                        qDebug("create leading, trailing <%s> -- <%s><%s>", qPrintable(s), qPrintable(lp), qPrintable(tp));
+//                        qDebug("create leading, trailing <%s> -- <%s><%s>", qPrintable(s), qPrintable(lp), qPrintable(tp));
                         Lyrics leading(*this);
                         leading.setPlainText(lp);
                         leading.layout1();
