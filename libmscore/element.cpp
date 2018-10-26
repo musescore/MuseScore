@@ -1889,6 +1889,7 @@ void Element::endDrag(EditData& ed)
             if (f == PropertyFlags::STYLED)
                   f = PropertyFlags::UNSTYLED;
             score()->undoPropertyChanged(this, pd.id, pd.data, f);
+            setGenerated(false);
             }
       }
 
