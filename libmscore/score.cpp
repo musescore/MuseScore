@@ -2832,15 +2832,12 @@ void Score::selectAdd(Element* e)
                   _selection.updateSelectedElements();
                   }
             }
-      else { // None or List
+      else if (!_selection.elements().contains(e)) {
             addRefresh(e->abbox());
-            if (_selection.elements().contains(e))
-                  _selection.remove(e);
-            else {
-                  selState = SelState::LIST;
-                  _selection.add(e);
-                  }
+            selState = SelState::LIST;
+            _selection.add(e);
             }
+
       _selection.setState(selState);
       }
 
