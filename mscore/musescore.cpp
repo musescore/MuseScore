@@ -2549,9 +2549,14 @@ void MuseScore::showPlayPanel(bool visible)
             playPanel->setGain(synti->gain());
             playPanel->setScore(cs);
             addDockWidget(Qt::RightDockWidgetArea, playPanel);
+
+            // The play panel must be set visible before being set floating for positioning
+            // and window geometry reasons.
+            playPanel->setVisible(visible);
+            playPanel->setFloating(false);
             }
-      playPanel->setVisible(visible);
-      playPanel->setFloating(false);
+      else
+            playPanel->setVisible(visible);
       playId->setChecked(visible);
       }
 
