@@ -6892,8 +6892,10 @@ int main(int argc, char* av[])
                   preferences.setToDefaultValue(PREF_APP_PATHS_MYEXTENSIONS);
                   updateExternalValuesFromPreferences();
                   }
-            QString keyboardLayout = preferences.getString(PREF_APP_KEYBOARDLAYOUT);
-            StartupWizard::autoSelectShortcuts(keyboardLayout);
+            if (!Shortcut::customSource()) {
+                  QString keyboardLayout = preferences.getString(PREF_APP_KEYBOARDLAYOUT);
+                  StartupWizard::autoSelectShortcuts(keyboardLayout);
+                  }
             }
 
       QApplication::instance()->installEventFilter(mscore);

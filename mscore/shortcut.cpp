@@ -20,6 +20,7 @@
 namespace Ms {
 
 bool Shortcut::dirty = false;
+QString Shortcut::source;
 QHash<QByteArray, Shortcut*> Shortcut::_shortcuts;
 extern QString dataPath;
 
@@ -3695,6 +3696,17 @@ void Shortcut::setStandardKey(QKeySequence::StandardKey k)
       }
 
 //---------------------------------------------------------
+//   setKeys
+//    Copies keys from the other Shortcut object
+//---------------------------------------------------------
+
+void Shortcut::setKeys(const Shortcut& sc)
+      {
+      setKeys(sc._keys);
+      setStandardKey(sc._standardKey);
+      }
+
+//---------------------------------------------------------
 //   descr
 //---------------------------------------------------------
 
@@ -3872,7 +3884,7 @@ bool Shortcut::compareKeys(const Shortcut& sc) const
             if (sc._keys[i] != _keys[i])
                   return false;
             }
-      return true;
+      return _standardKey == sc._standardKey;
       }
 
 //---------------------------------------------------------
@@ -4002,7 +4014,7 @@ void Shortcut::load()
       {
       QFile f(dataPath + "/shortcuts.xml");
       if (!f.exists())
-            f.setFileName(":/data/shortcuts.xml");
+            f.setFileName(defaultFileName);
       if (!f.open(QIODevice::ReadOnly)) {
             qDebug("Cannot open shortcuts <%s>", qPrintable(f.fileName()));
             return;
@@ -4048,6 +4060,7 @@ void Shortcut::load()
             else
                   e.unknown();
             }
+      source = f.fileName();
       dirty = false;
       }
 
@@ -4114,6 +4127,7 @@ void Shortcut::loadFromNewFile(QString fileLocation)
                   s->setStandardKey(sc.standardKey);
                   }
             }
+      source = fileLocation;
       dirty = true;
       }
 
@@ -4151,7 +4165,7 @@ QActionGroup* Shortcut::getActionGroupForWidget(MsWidget w, Qt::ShortcutContext 
 
 void Shortcut::resetToDefault()
       {
-      QList<Shortcut1> sl = loadShortcuts(":/data/shortcuts.xml");
+      QList<Shortcut1> sl = loadShortcuts(defaultFileName);
       for (const Shortcut1& sc : sl) {
             Shortcut* s = getShortcut(sc.key);
             if (s) {
@@ -4159,6 +4173,7 @@ void Shortcut::resetToDefault()
                   s->setStandardKey(sc.standardKey);
                   }
             }
+      source = defaultFileName;
       dirty = true;
       }
 
@@ -4170,7 +4185,7 @@ void Shortcut::reset()
       {
       _standardKey = QKeySequence::UnknownKey;
       _keys.clear();
-      QList<Shortcut1> sl = loadShortcuts(":/data/shortcuts.xml");
+      QList<Shortcut1> sl = loadShortcuts(defaultFileName);
       for (const Shortcut1& sc : sl) {
             if (sc.key == _key) {
                   setKeys(sc.keys);
