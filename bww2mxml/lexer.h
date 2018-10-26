@@ -19,8 +19,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef LEXER_H
-#define LEXER_H
+#ifndef BWW2MXML_LEXER_H
+#define BWW2MXML_LEXER_H
 
 /**
  \file
@@ -63,4 +63,4 @@ namespace Bww {
 
 } // namespace Bww
 
-#endif // LEXER_H
+#endif // BWW2MXML_LEXER_H

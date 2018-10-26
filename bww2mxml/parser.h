@@ -19,8 +19,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef PARSER_H
-#define PARSER_H
+#ifndef BWW2MXML_PARSER_H
+#define BWW2MXML_PARSER_H
 
 /**
  \file
@@ -116,4 +116,4 @@ namespace Bww {
 
 } // namespace Bww
 
-#endif // PARSER_H
+#endif // BWW2MXML_PARSER_H
