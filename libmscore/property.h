@@ -366,7 +366,7 @@ enum class P_TYPE : char {
       ALIGN,
       };
 
-extern QVariant getProperty(Pid type, XmlReader& e);
+extern QVariant readProperty(Pid type, XmlReader& e);
 extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
 extern const char* propertyQmlName(Pid);

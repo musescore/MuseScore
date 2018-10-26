@@ -72,7 +72,7 @@ static int g_celloStrings[]  = {36,43,50,57};
 //---------------------------------------------------------
 
 struct StyleVal2 {
-      Sid idx;
+      Sid sid;
       QVariant val;
       };
 
@@ -1251,26 +1251,19 @@ static void readOttava114(XmlReader& e, Ottava* ottava)
                                     }
                               }
                         }
-                  else if (ottava->score()->mscVersion() <= 114) {
-                        //subtype are now in a different order...
-                        if (idx == 1)
-                              idx = 2;
-                        else if (idx == 2)
-                              idx = 1;
-                        }
+                  //subtype are now in a different order...
+                  if (idx == 1)
+                        idx = 2;
+                  else if (idx == 2)
+                        idx = 1;
                   ottava->setOttavaType(OttavaType(idx));
                   }
-            else if (tag == "numbersOnly") {
+            else if (tag == "numbersOnly")
                   ottava->setNumbersOnly(e.readInt());
-                  }
-            else if (tag == "lineWidth") {
-                  ottava->setLineWidth(e.readDouble() * ottava->spatium());
-                  ottava->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
-                  }
-            else if (tag == "lineStyle") {
-                  ottava->setLineStyle(Qt::PenStyle(e.readInt()));
-                  ottava->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
-                  }
+            else if (tag == "lineWidth")
+                  ottava->readProperty(e, Pid::LINE_WIDTH);
+            else if (tag == "lineStyle")
+                  ottava->readProperty(e, Pid::LINE_STYLE);
             else if (tag == "beginSymbol") {                      // obsolete
                   }
             else if (tag == "continueSymbol") {                   // obsolete
@@ -2191,13 +2184,10 @@ static bool readBoxProperties(XmlReader& e, Box* b)
             b->setBoxHeight(Spatium(e.readDouble()));
       else if (tag == "width")
             b->setBoxWidth(Spatium(e.readDouble()));
-      else if (tag == "topGap") {
-            b->setTopGap(e.readDouble());
-            b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
-            }
+      else if (tag == "topGap")
+            b->readProperty(e, Pid::TOP_GAP);
       else if (tag == "bottomGap") {
-            b->setBottomGap(e.readDouble());
-            b->setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
+            b->readProperty(e, Pid::BOTTOM_GAP);
             }
       else if (tag == "leftMargin")
             b->setLeftMargin(e.readDouble());
@@ -2209,7 +2199,7 @@ static bool readBoxProperties(XmlReader& e, Box* b)
             b->setBottomMargin(e.readDouble());
       else if (tag == "offset")
             b->setOffset(e.readPoint() * b->spatium());
-      else if (tag == "pos")
+      else if (tag == "pos")        // ignore
             e.readPoint();
       else if (tag == "Text") {
             Text* t;
@@ -2808,10 +2798,8 @@ static void readStyle(MStyle* style, XmlReader& e)
 
 Score::FileError MasterScore::read114(XmlReader& e)
       {
-      qDebug("==");
-
       for (unsigned int i = 0; i < sizeof(style114)/sizeof(*style114); ++i)
-            style().set(style114[i].idx, style114[i].val);
+            style().set(style114[i].sid, style114[i].val);
 #if 0
       // old text style defaults
       TextStyle ts = style().textStyle("Chord Symbol");

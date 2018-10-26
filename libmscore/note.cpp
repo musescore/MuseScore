@@ -1326,15 +1326,15 @@ bool Note::readProperties(XmlReader& e)
       else if (tag == "small")
             setSmall(e.readInt());
       else if (tag == "mirror")
-            setProperty(Pid::MIRROR_HEAD, Ms::getProperty(Pid::MIRROR_HEAD, e));
+            readProperty(e, Pid::MIRROR_HEAD);
       else if (tag == "dotPosition")
-            setProperty(Pid::DOT_POSITION, Ms::getProperty(Pid::DOT_POSITION, e));
+            readProperty(e, Pid::DOT_POSITION);
       else if (tag == "fixed")
             setFixed(e.readBool());
       else if (tag == "fixedLine")
             setFixedLine(e.readInt());
       else if (tag == "head")
-            setProperty(Pid::HEAD_GROUP, Ms::getProperty(Pid::HEAD_GROUP, e));
+            readProperty(e, Pid::HEAD_GROUP);
       else if (tag == "velocity")
             setVeloOffset(e.readInt());
       else if (tag == "play")
@@ -1348,9 +1348,9 @@ bool Note::readProperties(XmlReader& e)
       else if (tag == "ghost")
             setGhost(e.readInt());
       else if (tag == "headType")
-            setProperty(Pid::HEAD_TYPE, Ms::getProperty(Pid::HEAD_TYPE, e));
+            readProperty(e, Pid::HEAD_TYPE);
       else if (tag == "veloType")
-            setProperty(Pid::VELO_TYPE, Ms::getProperty(Pid::VELO_TYPE, e));
+            readProperty(e, Pid::VELO_TYPE);
       else if (tag == "line")
             setLine(e.readInt());
       else if (tag == "Fingering") {
@@ -2346,7 +2346,7 @@ int Note::ppitch() const
       int capoFretId = staff()->capo(ch->segment()->tick());
       if (capoFretId != 0)
             capoFretId -= 1;
-      
+
       return _pitch + staff()->pitchOffset(ch->segment()->tick()) + capoFretId;
       }
 

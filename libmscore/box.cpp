@@ -707,7 +707,7 @@ VBox::VBox(Score* score)
 
 void VBox::layout()
       {
-      setPos(QPointF());      // !?
+      setPos(QPointF());
       if (system())
             bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
       else

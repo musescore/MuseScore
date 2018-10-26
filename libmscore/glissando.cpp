@@ -403,7 +403,7 @@ void Glissando::read(XmlReader& e)
             else if (tag == "subtype")
                   _glissandoType = GlissandoType(e.readInt());
             else if (tag == "glissandoStyle")
-                  setProperty(Pid::GLISSANDO_STYLE, Ms::getProperty(Pid::GLISSANDO_STYLE, e));
+                  readProperty(e, Pid::GLISSANDO_STYLE);
             else if (tag == "play")
                   setPlayGlissando(e.readBool());
             else if (readStyledProperty(e, tag))

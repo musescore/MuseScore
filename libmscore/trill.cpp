@@ -336,7 +336,7 @@ void Trill::read(XmlReader& e)
                   _accidental->setParent(this);
                   }
             else if ( tag == "ornamentStyle")
-                  setProperty(Pid::ORNAMENT_STYLE, Ms::getProperty(Pid::ORNAMENT_STYLE, e));
+                  readProperty(e, Pid::ORNAMENT_STYLE);
             else if ( tag == "play")
                   setPlayArticulation(e.readBool());
             else if (!SLine::readProperties(e))

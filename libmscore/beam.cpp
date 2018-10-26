@@ -2035,7 +2035,7 @@ void Beam::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "StemDirection") {
-                  setProperty(Pid::STEM_DIRECTION, Ms::getProperty(Pid::STEM_DIRECTION, e));
+                  readProperty(e, Pid::STEM_DIRECTION);
                   e.readNext();
                   }
             else if (tag == "distribute")

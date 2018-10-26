@@ -101,9 +101,9 @@
           <Spanner type="Ottava">
             <Ottava>
               <subtype>8va</subtype>
+              <endHookHeight>1.5</endHookHeight>
               <beginText>&lt;font size=&quot;12&quot;/&gt;&lt;font face=&quot;Times New Roman&quot;/&gt;&lt;i&gt;8va&lt;/i&gt;</beginText>
               <continueText>&lt;font size=&quot;12&quot;/&gt;&lt;font face=&quot;Times New Roman&quot;/&gt;&lt;i&gt;(8va)&lt;/i&gt;</continueText>
-              <endHookHeight>1.5</endHookHeight>
               <lineWidth>0.15</lineWidth>
               <lineStyle>1</lineStyle>
               </Ottava>
