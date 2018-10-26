@@ -93,7 +93,7 @@ void OverlayWidget::paintEvent(QPaintEvent *)
 //   showWelcomeTour
 //---------------------------------------------------------
 
-void TourHandler::showWelcomeTour(bool)
+void TourHandler::showWelcomeTour()
       {
       startTour("welcome");
       }
