@@ -442,6 +442,7 @@ bool Arpeggio::setProperty(Pid propertyId, const QVariant& val)
       switch(propertyId) {
             case Pid::TIME_STRETCH:
                   setStretch(val.toDouble());
+                  break;
             case Pid::ARP_USER_LEN1:
                   setUserLen1(val.toDouble());
                   break;
