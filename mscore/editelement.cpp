@@ -90,6 +90,8 @@ void ScoreView::startEditMode(Element* e)
             qDebug("The element cannot be edited");
             return;
             }
+      if (score()->undoStack()->active())
+            score()->endCmd();
       editData.element = e;
       changeState(ViewState::EDIT);
       }
