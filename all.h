@@ -156,6 +156,7 @@
 #include <QFontComboBox>
 #include <QApplication>
 #include <QStatusBar>
+#include <QStyle>
 #include <QStylePainter>
 #include <QStyleOptionButton>
 #include <QHeaderView>
