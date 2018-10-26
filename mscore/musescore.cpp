@@ -1199,17 +1199,6 @@ MuseScore::MuseScore()
       fotoTools->setObjectName("foto-tools");
       fotoTools->addWidget(new AccessibleToolButton(fotoTools, getAction("fotomode")));
 
-      addToolBarBreak();
-
-      //-------------------------------
-      //    Note Input Tool Bar
-      //-------------------------------
-
-      entryTools = addToolBar("");
-      entryTools->setObjectName("entry-tools");
-
-      populateNoteInputMenu();
-
       //-------------------------------
       //    Feedback Tool Bar
       //-------------------------------
@@ -1228,6 +1217,17 @@ MuseScore::MuseScore()
       AccessibleToolButton* feedbackButton = new AccessibleToolButton(feedbackTools, getAction("leave-feedback"));
       feedbackButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
       feedbackTools->addWidget(feedbackButton);
+
+      addToolBarBreak();
+
+      //-------------------------------
+      //    Note Input Tool Bar
+      //-------------------------------
+
+      entryTools = addToolBar("");
+      entryTools->setObjectName("entry-tools");
+
+      populateNoteInputMenu();
 
       //---------------------
       //    Menus
