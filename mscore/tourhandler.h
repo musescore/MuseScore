@@ -82,7 +82,7 @@ class TourHandler : public QObject
       static QList<QWidget*> getWidgetsByNames(Tour* tour, QList<QString> names);
 
 public slots:
-      void showWelcomeTour(bool);
+      void showWelcomeTour();
 
 public:
       TourHandler(QObject* parent) : QObject(parent) {}
