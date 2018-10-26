@@ -97,12 +97,12 @@ void PageSettings::hideEvent(QHideEvent* ev)
 //   setScore
 //---------------------------------------------------------
 
-void PageSettings::setScore(MasterScore* s)
+void PageSettings::setScore(Score* s)
       {
-      cs  = s;
-      MasterScore* sl = s->clone();
-      preview->setScore(sl);
-      buttonApplyToAllParts->setEnabled(!s->isMaster());
+      cs = s;
+      clonedScoreForNavigator.reset(s->clone());
+      preview->setScore(clonedScoreForNavigator.get());
+      buttonApplyToAllParts->setEnabled(!cs->isMaster());
       updateValues();
       updatePreview(0);
       }
