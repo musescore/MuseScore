@@ -1940,8 +1940,7 @@ void Measure::read(XmlReader& e, int staffIdx)
                   MeasureNumber* noText = new MeasureNumber(score());
                   noText->read(e);
                   noText->setTrack(e.track());
-                  noText->setParent(this);
-                  _mstaves[noText->staffIdx()]->setNoText(noText);
+                  add(noText);
                   }
             else if (MeasureBase::readProperties(e))
                   ;

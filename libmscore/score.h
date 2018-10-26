@@ -820,7 +820,6 @@ class Score : public QObject, public ScoreElement {
       bool saveStyle(const QString&);
 
       QVariant styleV(Sid idx) const  { return style().value(idx);   }
-      QVariant styleValue(Pid, Sid) const;
       Spatium  styleS(Sid idx) const  { Q_ASSERT(!strcmp(MStyle::valueType(idx),"Ms::Spatium")); return style().value(idx).value<Spatium>();  }
       qreal    styleP(Sid idx) const  { Q_ASSERT(!strcmp(MStyle::valueType(idx),"Ms::Spatium")); return style().pvalue(idx); }
       QString  styleSt(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx),"QString"));     return style().value(idx).toString(); }

@@ -209,6 +209,7 @@ class ScoreElement {
       virtual PropertyFlags* propertyFlagsList() const   { return _propertyFlagsList; }
       virtual PropertyFlags propertyFlags(Pid) const;
       bool isStyled(Pid pid) const;
+      QVariant styleValue(Pid, Sid) const;
 
       virtual void setPropertyFlags(Pid, PropertyFlags);
 

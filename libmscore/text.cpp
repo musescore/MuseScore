@@ -12,6 +12,7 @@
 
 #include "text.h"
 #include "xml.h"
+#include "score.h"
 
 namespace Ms {
 
@@ -65,6 +66,5 @@ QVariant Text::propertyDefault(Pid id) const
                   return TextBase::propertyDefault(id);
             }
       }
-
 }
 

@@ -349,7 +349,8 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       else {
             _score->startCmd();
             elementPropertyAction(cmd, obj);
-            _score->endCmd();
+            if (score()->undoStack()->active())
+                  _score->endCmd();
             }
       }
 
@@ -364,7 +365,7 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       Segment* seg;
 
       QPoint gpos = ev->globalPos();
-      
+
       if (!_score->pos2measure(editData.startMove, &staffIdx, &pitch, &seg, 0))
             return;
       if (staffIdx == -1) {

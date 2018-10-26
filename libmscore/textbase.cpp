@@ -2325,7 +2325,7 @@ QVariant TextBase::propertyDefault(Pid id) const
             }
       Sid sid = getPropertyStyle(id);
       if (sid != Sid::NOSTYLE)
-            return score()->styleValue(id, sid);
+            return styleValue(id, sid);
       QVariant v;
       switch (id) {
             case Pid::SUB_STYLE:
@@ -2337,7 +2337,7 @@ QVariant TextBase::propertyDefault(Pid id) const
             default:
                   for (const StyledProperty& p : *textStyle(Tid::DEFAULT)) {
                         if (p.pid == id)
-                              return score()->styleValue(id, p.sid);
+                              return styleValue(id, p.sid);
                         }
                   return Element::propertyDefault(id);
             }
@@ -2395,13 +2395,13 @@ void TextBase::styleChanged()
       for (const StyledProperty& spp : *_elementStyle) {
             PropertyFlags f = _propertyFlagsList[i];
             if (f == PropertyFlags::STYLED)
-                  setProperty(spp.pid, score()->styleValue(spp.pid, spp.sid));
+                  setProperty(spp.pid, styleValue(spp.pid, spp.sid));
             ++i;
             }
       for (const StyledProperty& spp : *textStyle(tid())) {
             PropertyFlags f = _propertyFlagsList[i];
             if (f == PropertyFlags::STYLED)
-                  setProperty(spp.pid, score()->styleValue(spp.pid, spp.sid));
+                  setProperty(spp.pid, styleValue(spp.pid, spp.sid));
             ++i;
             }
       }
@@ -2420,9 +2420,9 @@ void TextBase::initElementStyle(const ElementStyle* ss)
       for (size_t i = 0; i < n; ++i)
             _propertyFlagsList[i] = PropertyFlags::STYLED;
       for (const StyledProperty& p : *_elementStyle)
-            setProperty(p.pid, score()->styleValue(p.pid, p.sid));
+            setProperty(p.pid, styleValue(p.pid, p.sid));
       for (const StyledProperty& p : *textStyle(tid()))
-            setProperty(p.pid, score()->styleValue(p.pid, p.sid));
+            setProperty(p.pid, styleValue(p.pid, p.sid));
       }
 
 //---------------------------------------------------------
@@ -2433,8 +2433,7 @@ void TextBase::initTid(Tid tid)
       {
       setTid(tid);
       for (const StyledProperty& p : *textStyle(tid)) {
-            if (isStyled(p.pid))
-                  setProperty(p.pid, score()->styleValue(p.pid, p.sid));
+            setProperty(p.pid, styleValue(p.pid, p.sid));
             }
       }
 

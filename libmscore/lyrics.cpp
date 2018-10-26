@@ -333,11 +333,11 @@ void Lyrics::layout2(int nAbove)
       if (placeBelow()) {
             qreal yo = segment()->measure()->system()->staff(staffIdx())->bbox().height();
             rypos()  = lh * (_no - nAbove) + yo;
-            rpos()  += score()->styleValue(Pid::OFFSET, Sid::lyricsPosBelow).toPointF();
+            rpos()  += styleValue(Pid::OFFSET, Sid::lyricsPosBelow).toPointF();
             }
       else {
             rypos() = -lh * (nAbove - _no - 1);
-            rpos() += score()->styleValue(Pid::OFFSET, Sid::lyricsPosAbove).toPointF();
+            rpos() += styleValue(Pid::OFFSET, Sid::lyricsPosAbove).toPointF();
             }
       }
 

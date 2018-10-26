@@ -474,7 +474,7 @@ static const StyleType styleTypes[] {
       { Sid::subTitleFontItalic,            "subTtitleFontItalic",           false },
       { Sid::subTitleFontUnderline,         "subTitleFontUnderline",         false },
       { Sid::subTitleAlign,                 "subTitleAlign",                 QVariant::fromValue(Align::HCENTER | Align::TOP) },
-      { Sid::subTitleOffset,                "subTitleOffset",                QPointF(0.0, MM(10.0)) },
+      { Sid::subTitleOffset,                "subTitleOffset",                QPointF(0.0, 10.0) },
       { Sid::subTitleOffsetType,            "subTitleOffsetType",            int(OffsetType::ABS)   },
 
       { Sid::composerFontFace,              "composerFontFace",              "FreeSerif" },

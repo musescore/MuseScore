@@ -241,9 +241,9 @@ void HairpinSegment::layout()
 
       if (isStyled(Pid::OFFSET)) {
             if (spanner()->placeBelow())
-                  roffset() = score()->styleValue(Pid::OFFSET, Sid::hairpinPosBelow).toPointF() + QPointF(0.0, (staff() ? staff()->height() : 0.0));
+                  roffset() = styleValue(Pid::OFFSET, Sid::hairpinPosBelow).toPointF() + QPointF(0.0, (staff() ? staff()->height() : 0.0));
             else
-                  roffset() = score()->styleValue(Pid::OFFSET, Sid::hairpinPosAbove).toPointF();
+                  roffset() = styleValue(Pid::OFFSET, Sid::hairpinPosAbove).toPointF();
             }
       if (autoplace()) {
             qreal minDistance = spatium() * .7;
