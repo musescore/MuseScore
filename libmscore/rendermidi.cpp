@@ -1042,7 +1042,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
             return 0;
       Chord *chordL = noteL->chord();
       Chord *chordR = noteR->chord();
-      int pitchL = noteL->pitch();
+      int epitchL = noteL->epitch();
       int tickL = chordL->tick();
       // we canot use staffL = chord->staff() because that won't correspond to the noteL->line()
       //   in the case the user has pressed Shift-Cmd->Up or Shift-Cmd-Down.
@@ -1078,7 +1078,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
                   if (pc2 == pc) {
                         // e.g., if there is an F# note at this staff/tick, then force every F to be F#.
                         int octaves = (note->line() - lineL2) / 7;
-                        halfsteps = note->pitch() + 12 * octaves - pitchL;
+                        halfsteps = note->epitch() + 12 * octaves - epitchL;
                         done = true;
                         break;
                         }
@@ -1088,8 +1088,8 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
                         bool error = false;
                         AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->staff()->idx(), lineR2, error);
                         int acci2 = int(acciv2);
-                        // we have to add ( noteL->ppitch() - noteL->epitch() ) which is the delta for transposing instruments.
-                        halfsteps = line2pitch(lineL-deltastep, clefL, Key::C) + noteL->ppitch() - noteL->epitch() + acci2 - pitchL;
+                        // epitch (effective pitch) is a visible pitch so line2pitch returns exactly that.
+                        halfsteps = line2pitch(lineL-deltastep, clefL, Key::C) + acci2 - epitchL;
                         }
                   else {
                         // cannot rely on accidentals or key signatures
