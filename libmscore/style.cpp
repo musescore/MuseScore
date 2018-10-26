@@ -49,8 +49,6 @@ struct StyleType {
       const QVariant&  defaultValue() const { return _defaultValue; }
       };
 
-#define MM(x) ((x)/INCH)
-
 static const StyleType styleTypes[] {
       { Sid::pageWidth,               "pageWidth",               210.0/INCH },
       { Sid::pageHeight,              "pageHeight",              297.0/INCH }, // A4
@@ -864,7 +862,6 @@ static const StyleType styleTypes[] {
       { Sid::fermataPosBelow,               "fermataPosBelow",               QPointF(.0, 1.0)  },
       { Sid::fermataMinDistance,            "fermataMinDistance",            Spatium(0.4)  },
       };
-#undef MM
 
 MStyle  MScore::_baseStyle;
 MStyle  MScore::_defaultStyle;
