@@ -39,7 +39,7 @@ static const ElementStyle shortInstrumentStyle {
 InstrumentName::InstrumentName(Score* s)
    : TextBase(s, Tid::INSTRUMENT_LONG, ElementFlag::NOTHING | ElementFlag::NOT_SELECTABLE)
       {
-      setInstrumentNameType(InstrumentNameType::SHORT);
+      setInstrumentNameType(InstrumentNameType::LONG);
       }
 
 //---------------------------------------------------------
@@ -111,13 +111,6 @@ bool InstrumentName::setProperty(Pid id, const QVariant& v)
                   rv = TextBase::setProperty(id, v);
                   break;
             }
-#if 0
-      Sid sidx = getPropertyStyle(id);
-      if (sidx != Sid::NOSTYLE) {
-            score()->undoChangeStyleVal(sidx, getProperty(id));
-            }
-      score()->setLayoutAll();
-#endif
       return rv;
       }
 

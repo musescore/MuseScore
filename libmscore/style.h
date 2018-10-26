@@ -539,6 +539,7 @@ enum class Sid {
       longInstrumentFontItalic,
       longInstrumentFontUnderline,
       longInstrumentAlign,
+      longInstrumentOffset,
 
       shortInstrumentFontFace,
       shortInstrumentFontSize,
@@ -546,6 +547,7 @@ enum class Sid {
       shortInstrumentFontItalic,
       shortInstrumentFontUnderline,
       shortInstrumentAlign,
+      shortInstrumentOffset,
 
       partInstrumentFontFace,
       partInstrumentFontSize,

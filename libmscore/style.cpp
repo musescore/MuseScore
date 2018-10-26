@@ -559,6 +559,7 @@ static const StyleType styleTypes[] {
       { Sid::longInstrumentFontItalic,      "longInstrumentFontItalic",     false },
       { Sid::longInstrumentFontUnderline,   "longInstrumentFontUnderline",  false },
       { Sid::longInstrumentAlign,           "longInstrumentAlign",          QVariant::fromValue(Align::RIGHT | Align::VCENTER) },
+      { Sid::longInstrumentOffset,          "longInstrumentOffset",         QPointF(.0, .0) },
 
       { Sid::shortInstrumentFontFace,       "shortInstrumentFontFace",      "FreeSerif" },
       { Sid::shortInstrumentFontSize,       "shortInstrumentFontSize",      12.0 },
@@ -566,6 +567,7 @@ static const StyleType styleTypes[] {
       { Sid::shortInstrumentFontItalic,     "shortInstrumentFontItalic",    false },
       { Sid::shortInstrumentFontUnderline,  "shortInstrumentFontUnderline", false },
       { Sid::shortInstrumentAlign,          "shortInstrumentAlign",         QVariant::fromValue(Align::RIGHT | Align::VCENTER) },
+      { Sid::shortInstrumentOffset,         "shortInstrumentOffset",        QPointF(.0, .0) },
 
       { Sid::partInstrumentFontFace,        "partInstrumentFontFace",       "FreeSerif" },
       { Sid::partInstrumentFontSize,        "partInstrumentFontSize",       18.0 },
@@ -1068,7 +1070,7 @@ const TextStyle longInstrumentTextStyle {{
       { Sid::longInstrumentFontItalic,           Pid::FONT_ITALIC            },
       { Sid::longInstrumentFontUnderline,        Pid::FONT_UNDERLINE         },
       { Sid::longInstrumentAlign,                Pid::ALIGN                  },
-      { Sid::defaultOffset,                      Pid::OFFSET                 },
+      { Sid::longInstrumentOffset,               Pid::OFFSET                 },
       { Sid::defaultFrameType,                   Pid::FRAME_TYPE             },
       { Sid::defaultFramePadding,                Pid::FRAME_PADDING          },
       { Sid::defaultFrameWidth,                  Pid::FRAME_WIDTH            },
@@ -1085,7 +1087,7 @@ const TextStyle shortInstrumentTextStyle {{
       { Sid::shortInstrumentFontItalic,          Pid::FONT_ITALIC            },
       { Sid::shortInstrumentFontUnderline,       Pid::FONT_UNDERLINE         },
       { Sid::shortInstrumentAlign,               Pid::ALIGN                  },
-      { Sid::defaultOffset,                      Pid::OFFSET                 },
+      { Sid::shortInstrumentOffset,              Pid::OFFSET                 },
       { Sid::defaultFrameType,                   Pid::FRAME_TYPE             },
       { Sid::defaultFramePadding,                Pid::FRAME_PADDING          },
       { Sid::defaultFrameWidth,                  Pid::FRAME_WIDTH            },

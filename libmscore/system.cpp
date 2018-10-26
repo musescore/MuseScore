@@ -549,7 +549,7 @@ void System::layout2()
                                     s2 = staff(staffIdx);
                                     for (int i = staffIdx + nstaves - 1; i > 0; --i) {
                                           SysStaff* s3 = staff(i);
-                                          if (s->show()) {
+                                          if (s->show()) {        // ??
                                                 s2 = s3;
                                                 break;
                                                 }
@@ -581,8 +581,7 @@ void System::layout2()
                                     y2 = staff(staffIdx + 2)->bbox().bottom();
                                     break;
                               }
-                        // t->rypos() = y1 + (y2 - y1) * .5 + t->offset(t->spatium()).y();
-                        t->rypos() = y1 + (y2 - y1 - t->bbox().height()) * .5;
+                        t->rypos() = y1 + (y2 - y1) * .5 + t->offset().y();
                         }
                   }
             staffIdx += nstaves;
