@@ -2352,7 +2352,8 @@ int Note::ppitch() const
 
 //---------------------------------------------------------
 //   epitch
-//    effective pitch
+//    effective pitch, i.e. a pitch which is visible in the
+//    currently used written notation.
 //    honours transposing instruments
 //---------------------------------------------------------
 

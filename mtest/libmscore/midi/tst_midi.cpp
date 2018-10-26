@@ -110,6 +110,7 @@ void TestMidi::events_data()
       QTest::newRow("testTrillTempos") << "testTrillTempos";
 //      QTest::newRow("testTrillCrossStaff") << "testTrillCrossStaff";
       QTest::newRow("testOrnaments") << "testOrnaments";
+      QTest::newRow("testOrnamentsTrillsOttava") << "testOrnamentsTrillsOttava";
       QTest::newRow("testTieTrill") << "testTieTrill";
       // glissando
       QTest::newRow("testGlissando") << "testGlissando";
