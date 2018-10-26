@@ -326,6 +326,34 @@ Score::~Score()
       }
 
 //---------------------------------------------------------
+//   Score::clone
+//         To create excerpt clone to show when changing PageSettings
+//         Use MasterScore::clone() instead
+//---------------------------------------------------------
+      
+Score* Score::clone()
+      {
+      QBuffer buffer;
+      buffer.open(QIODevice::WriteOnly);
+      XmlWriter xml(this, &buffer);
+      xml.header();
+      
+      xml.stag("museScore version=\"" MSC_VERSION "\"");
+      write(xml, false);
+      xml.etag();
+      
+      buffer.close();
+      
+      XmlReader r(buffer.buffer());
+      MasterScore* score = new MasterScore(style());
+      score->read1(r, true);
+      
+      score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
+      score->doLayout();
+      return score;
+      }
+      
+//---------------------------------------------------------
 //   addMeasure
 //---------------------------------------------------------
 
