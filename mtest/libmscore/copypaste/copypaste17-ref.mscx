@@ -165,10 +165,10 @@
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <durationType>quarter</durationType>
+            <durationType>eighth</durationType>
             </Rest>
           <Rest>
-            <durationType>eighth</durationType>
+            <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
