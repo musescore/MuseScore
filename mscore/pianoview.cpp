@@ -423,8 +423,8 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
             //Round up to next power of 2
             beatSkip = (int)pow(2, ceil(log(beatSkip)/log(2)));
             
-            for (int beat = 0; beat < beatsInBar; beat += beatSkip) {
-                  Pos beatPos(_score->tempomap(), _score->sigmap(), bar, beat, 0);
+            for (int beat1 = 0; beat1 < beatsInBar; beat1 += beatSkip) {
+                  Pos beatPos(_score->tempomap(), _score->sigmap(), bar, beat1, 0);
                   double x = tickToPixelX(beatPos.time(TType::TICKS));
                   p->setPen(penLineMinor);
                   p->drawLine(x, y1, x, y2);
@@ -432,7 +432,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
                   int subbeats = _tuplet * (1 << _subdiv);
 
                   for (int sub = 1; sub < subbeats; ++sub) {
-                      Pos subBeatPos(_score->tempomap(), _score->sigmap(), bar, beat, sub * MScore::division / subbeats);
+                      Pos subBeatPos(_score->tempomap(), _score->sigmap(), bar, beat1, sub * MScore::division / subbeats);
                       x = tickToPixelX(subBeatPos.time(TType::TICKS));
 
                       p->setPen(penLineSub);
@@ -801,7 +801,6 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
 
       if (dragStarted) {
             if (dragStyle == DragStyle::MOVE_NOTES) {
-                  int mouseDownPitch = pixelYToPitch(mouseDownPos.y());
                   int curPitch = pixelYToPitch(lastMousePos.y());
                   if (curPitch != lastDragPitch) {
                         int pitchDelta = curPitch - lastDragPitch;
@@ -848,8 +847,8 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
 bool PianoView::cutChordRest(ChordRest* e, int track, int cutTick, ChordRest*& cr0, ChordRest*& cr1)
       {
       int startTick = e->segment()->tick();
-      int ticks = e->duration().ticks();
-      if (cutTick <= startTick || cutTick > startTick + ticks) {
+      int tcks = e->duration().ticks();
+      if (cutTick <= startTick || cutTick > startTick + tcks) {
             cr0 = e;
             cr1 = 0;
             return false;
@@ -881,7 +880,6 @@ bool PianoView::cutChordRest(ChordRest* e, int track, int cutTick, ChordRest*& c
       if (nextCR->isChord()) {
             //Copy chord into initial segment
             Chord* ch1 = toChord(nextCR);
-            int ch1StartTick = ch1->segment()->tick();
 
             for (Note* n: ch1->notes()) {
                   NoteVal nx = n->noteVal();
@@ -1084,11 +1082,11 @@ void PianoView::setStaff(Staff* s, Pos* l)
 //   addChord
 //---------------------------------------------------------
 
-void PianoView::addChord(Chord* chord, int voice)
+void PianoView::addChord(Chord* chrd, int voice)
       {
-      for (Chord* c : chord->graceNotes())
+      for (Chord* c : chrd->graceNotes())
             addChord(c, voice);
-      for (Note* note : chord->notes()) {
+      for (Note* note : chrd->notes()) {
             if (note->tieBack())
                   continue;
             noteList.append(new PianoItem(note, this));
