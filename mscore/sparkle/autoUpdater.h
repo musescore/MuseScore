@@ -9,10 +9,19 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
 //=============================================================================
+#ifndef __AUTO_UPDATER_H__
+#define __AUTO_UPDATER_H__
 
-class SparkleAutoUpdater
+namespace Ms
 {
-    public:
-         static void checkUpdates();
-         static void checkForUpdatesNow();
-};
+      class GeneralAutoUpdater
+      {
+      public:
+            virtual void checkUpdates() {}
+            virtual void checkForUpdatesNow() {}
+            virtual void cleanup() {}
+      };
+
+} //Ms
+
+#endif //__AUTO_UPDATER_H__

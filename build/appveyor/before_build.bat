@@ -19,21 +19,18 @@ CD include
 CD C:\MuseScore
 
 :: is MuseScore stable? Check here, no grep in PATH later on
-for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:\MuseScore\CMakeLists.txt') do set UNSTABLE=%%i
+for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:\MuseScore\CMakeLists.txt') do set NIGHTLY_BUILD=%%i
 
 :: add stable keys for musescore.com
-IF "%UNSTABLE%" == "" (
+IF "%NIGHTLY_BUILD%" == "" (
 python build/add-mc-keys.py %MC_CONSUMER_KEY% %MC_CONSUMER_SECRET%
 )
 
 :: get revision number
 SET PATH=C:\Qt\5.9\msvc2017_64\bin;%PATH%
 call C:\MuseScore\msvc_build.bat revision
-::git rev-parse --short=7 HEAD > mscore/revision.h
-SET /p MSversion=<mscore\revision.h
-
-:: CMake refuses to generate MinGW Makefiles if sh.exe is in the PATH (C:\Program Files\Git\usr\bin)
-SET PATH=C:\Qt\5.9\msvc2017_64\bin;C:\Program Files (x86)\CMake\bin;C:\Program Files\7-Zip;C:\ccache\bin;C:\Tools\curl\bin;%WIX%\bin;C:\Windows\system32;C:\Windows
+git rev-parse --short=7 HEAD > mscore/revision.h
+SET /p MSREVISION=<mscore\revision.h
 
 :: set ccache dir
 SET CCACHE_DIR=C:\ccache\cache

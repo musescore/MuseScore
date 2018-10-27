@@ -11,7 +11,7 @@ then
 else
     LONG_NAME=MuseScore
     LONGER_NAME="MuseScore 3"
-    VERSION=3.0
+    VERSION=3.0.0
 fi
 
 

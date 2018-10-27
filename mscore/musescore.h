@@ -102,6 +102,7 @@ class Startcenter;
 class HelpBrowser;
 class ToolbarEditor;
 class TourHandler;
+class GeneralAutoUpdater;
 
 struct PluginDescription;
 enum class SelState : char;
@@ -247,9 +248,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QSplitter* mainWindow;
 
       ScoreComparisonTool* scoreCmpTool    { 0 };
-#ifdef MSCORE_UNSTABLE
       ScriptRecorderWidget* scriptRecorder { nullptr };
-#endif
 
       MagBox* mag;
       QComboBox* viewModeCombo;
@@ -424,12 +423,15 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QMessageBox* infoMsgBox;
       TourHandler* _tourHandler { 0 };
 
+      std::unique_ptr<GeneralAutoUpdater> autoUpdater;
+
       //---------------------
 
       virtual void closeEvent(QCloseEvent*);
       virtual void dragEnterEvent(QDragEnterEvent*);
       virtual void dropEvent(QDropEvent*);
       virtual void changeEvent(QEvent *e);
+      virtual void showEvent(QShowEvent *event);
 
       void retranslate();
 
@@ -481,8 +483,11 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       QString getUtmParameters(QString medium) const;
 
+      void checkForUpdatesNoUI();
+
    signals:
       void windowSplit(bool);
+      void musescoreWindowWasShown();
 
    private slots:
       void cmd(QAction* a, const QString& cmd);
@@ -551,8 +556,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setNormalState()    { changeState(STATE_NORMAL); }
       void setPlayState()      { changeState(STATE_PLAY); }
       void setNoteEntryState() { changeState(STATE_NOTE_ENTRY); }
-      void checkForUpdate();
-      void checkForUpdateNow();
+      void checkForUpdatesUI();
       void checkForExtensionsUpdate();
       void midiNoteReceived(int channel, int pitch, int velo);
       void midiNoteReceived(int pitch, bool ctrl, int velo);
@@ -563,6 +567,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void editWorkspace();
       void changeWorkspace(Workspace* p, bool first=false);
       void mixerPreferencesChanged(bool showMidiControls);
+      void checkForUpdates();
 
    public:
       MuseScore();

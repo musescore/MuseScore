@@ -157,15 +157,43 @@ if (APPLE)
       find_library(CoreServicesFW        NAMES CoreServices)
       find_library(AppKit                NAMES AppKit)
       set(OsxFrameworks ${AudioToolboxFW} ${AudioUnitFW} ${CoreAudioFW} ${CoreMidiFW} ${SystemConfigurationFW} ${CoreServicesFW} ${AppKit})
-      if (BUILD_AUTOUPDATE)
-        find_package(Sparkle) #needed for SPARKLE_FOUND variable
-        if(SPARKLE_FOUND)
-          set(MAC_SPARKLE_ENABLED 1)
-          set(OsxFrameworks ${OsxFrameworks} ${SPARKLE_LIBRARY})
-          set(MAC_APPCAST_URL "https://sparkle.musescore.org/${MSCORE_RELEASE_CHANNEL}/3/macos/appcast.xml")
-        endif(SPARKLE_FOUND)
-      endif(BUILD_AUTOUPDATE)
 endif (APPLE)
+
+#
+# Set up Windows arch variables/paths
+#
+
+if (BUILD_64 STREQUAL "ON")
+      SET (ARCH_TYPE "_x64")
+      SET (DEPENDENCIES_DIR "${PROJECT_SOURCE_DIR}/dependencies/libx64")
+else (BUILD_64 STREQUAL "ON")
+      SET (ARCH_TYPE "_x86")
+      SET (DEPENDENCIES_DIR "${PROJECT_SOURCE_DIR}/dependencies/libx86")
+endif (BUILD_64 STREQUAL "ON")
+
+#
+#  Sparkle/WinSparkle routine
+#
+if (BUILD_AUTOUPDATE STREQUAL "ON")
+      if (APPLE)
+             find_package(Sparkle) #needed for SPARKLE_FOUND variable
+             if(SPARKLE_FOUND)
+                   set(MAC_SPARKLE_ENABLED 1)
+                   set(OsxFrameworks ${OsxFrameworks} ${SPARKLE_LIBRARY})
+                   set(MAC_APPCAST_URL "https://sparkle.musescore.org/${MSCORE_RELEASE_CHANNEL}/3/macos/appcast.xml")
+             endif(SPARKLE_FOUND)
+      elseif (MSVC)
+             if (NOT MSCORE_UNSTABLE)
+                   include(FindWinSparkle)
+                   add_library(winsparkledll SHARED IMPORTED)
+                   set_target_properties(winsparkledll PROPERTIES IMPORTED_IMPLIB ${WINSPARKLE_LIBRARY})
+                   set(WIN_SPARKLE_ENABLED 1)
+                   set(WIN_SPARKLE_APPCAST_URL "https://sparkle.musescore.org/${MSCORE_RELEASE_CHANNEL}/3/win/appcast.xml")
+             endif (NOT MSCORE_UNSTABLE)
+      else (APPLE)
+             message("Sparkle is not supported on your system.")
+      endif (APPLE)
+endif(BUILD_AUTOUPDATE STREQUAL "ON")
 
 #
 #     Check for gcc compiler >= 4.8
@@ -383,14 +411,6 @@ endif (BUILD_PULSEAUDIO)
 ##
 ## LAME
 ##
-
-if (BUILD_64 STREQUAL "ON")
-      SET (ARCH_TYPE "_x64")
-      SET (DEPENDENCIES_DIR "${PROJECT_SOURCE_DIR}/dependencies/libx64")
-else (BUILD_64 STREQUAL "ON")
-      SET (ARCH_TYPE "_x86")
-      SET (DEPENDENCIES_DIR "${PROJECT_SOURCE_DIR}/dependencies/libx86")
-endif (BUILD_64 STREQUAL "ON")
 
 if (APPLE OR MINGW)
       if (BUILD_LAME)

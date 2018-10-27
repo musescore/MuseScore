@@ -181,7 +181,8 @@ bool UpdateCheckerBase::hasToCheck()
       {
       if(!getUpdatePrefValue())
             return false;
-
+//disable embedded updating for both stable/unstable Mac builds and stable Win builds
+#if !defined(Q_OS_MAC) && (!defined(Q_OS_WIN) || defined(MSCORE_UNSTABLE))
       QSettings s;
       s.beginGroup("Update");
       QDateTime now = QDateTime::currentDateTime();
@@ -193,6 +194,9 @@ bool UpdateCheckerBase::hasToCheck()
             }
       s.endGroup();
       return now == lastUpdate || now > lastUpdate.addSecs(3600 * defaultPeriod()) ;
+#else
+      return true;
+#endif
       }
 
 ExtensionsUpdateChecker::ExtensionsUpdateChecker(QObject* parent)
