@@ -1911,7 +1911,7 @@ void Chord::layoutPitched()
                               // note this still leaves the possibility
                               // that this voice does not have conflict but another voice does
                               Element* e = s->element(track());
-                              if (e && e->type() == ElementType::CHORD)
+                              if (e && e->isChord())
                                     pc = toChord(e);
                               else {
                                     int startTrack = staffIdx() * VOICES;
@@ -1920,7 +1920,7 @@ void Chord::layoutPitched()
                                           if (t == track())  // already checked current voice
                                                 continue;
                                           e = s->element(t);
-                                          if (e && e->type() == ElementType::CHORD) {
+                                          if (e && e->isChord()) {
                                                 pc = toChord(e);
                                                 // prefer chord with ledger lines
                                                 if (pc->ledgerLines())
@@ -3202,6 +3202,8 @@ Shape Chord::shape() const
       for (Chord* chord : _graceNotes)    // process grace notes last, needed for correct shape calculation
             shape.add(chord->shape().translated(chord->pos()));
       shape.add(ChordRest::shape());      // add lyrics
+      for (LedgerLine* l = _ledgerLines; l; l = l->next())
+            shape.add(l->shape().translated(l->pos()));
       return shape;
       }
 
