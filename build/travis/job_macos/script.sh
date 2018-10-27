@@ -75,7 +75,7 @@ MUSESCORE_VERSION=${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${BUILD_NUM
 SHORT_DATE="$(date -u +%Y-%m-%d)"
 #date -R is not supporte !?
 RSS_DATE="$(LANG=C date +'%a, %d %b %Y %H:%M:%S %z')"
-FILESIZE="$(stat -f%z $DMGFILE)"
+FILESIZE="$(wc -c $DMGFILE | awk '{print $1}')"
 APPCAST_URL=$(defaults read `pwd`/applebuild/mscore.app/Contents/Info.plist SUFeedURL)
 GIT_LOG=$(./build/travis/job_macos/generateGitLog.sh)
 
@@ -126,13 +126,14 @@ ${GIT_LOG}
 </channel>
 </rss>" >> appcast.xml
 
+#invalidate both Win and Mac appcast.xml files
 export ARTIFACTS_KEY=$UPDATE_S3_KEY
 export ARTIFACTS_SECRET=$UPDATE_S3_SECRET
 export ARTIFACTS_REGION=us-east-1
 export ARTIFACTS_BUCKET=sparkle.musescore.org
 export ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
 export ARTIFACTS_PERMISSIONS=public-read
-export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3/macos/"
+export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3"
 export ARTIFACTS_PATHS=appcast.xml
 artifacts upload
 
@@ -140,7 +141,7 @@ pip install awscli
 export AWS_ACCESS_KEY_ID=$UPDATE_S3_KEY
 export AWS_SECRET_ACCESS_KEY=$UPDATE_S3_SECRET
 aws configure set preview.cloudfront true
-aws cloudfront create-invalidation --distribution-id E3VZY4YYZZG82P --paths "${ARTIFACTS_TARGET_PATHS}*"
+aws cloudfront create-invalidation --distribution-id E3VZY4YYZZG82P --paths "${ARTIFACTS_TARGET_PATHS}/*"
 
 
 
