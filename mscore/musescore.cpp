@@ -589,6 +589,7 @@ void MuseScore::populateNoteInputMenu()
                         noteEntryMethods->addAction(getAction("note-input-rhythm"));
                         noteEntryMethods->addAction(getAction("note-input-realtime-auto"));
                         noteEntryMethods->addAction(getAction("note-input-realtime-manual"));
+                        noteEntryMethods->addAction(getAction("note-input-timewise"));
 
                         connect(noteEntryMethods, SIGNAL(triggered(QAction*)), this, SLOT(cmd(QAction*)));
 
@@ -3698,6 +3699,11 @@ void MuseScore::changeState(ScoreState val)
                         showModeText(tr("Realtime (manual) note input mode"));
                         cs->setNoteEntryMethod(NoteEntryMethod::REALTIME_MANUAL);
                         val = STATE_NOTE_ENTRY_METHOD_REALTIME_MANUAL;
+                        }
+                  else if (getAction("note-input-timewise")->isChecked()) {
+                        showModeText(tr("Timewise input mode"));
+                        cs->setNoteEntryMethod(NoteEntryMethod::TIMEWISE);
+                        val = STATE_NOTE_ENTRY_METHOD_TIMEWISE;
                         }
                   else {
                         showModeText(tr("Steptime note input mode"));
