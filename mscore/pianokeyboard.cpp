@@ -85,8 +85,6 @@ void PianoKeyboard::paintEvent(QPaintEvent* /*event*/)
       //White keys
       p.setPen(QPen(Qt::black));
       for (int midiPitch = 0; midiPitch < 128; ++midiPitch) {
-            int midiOctave = midiPitch / 12;
-            int midiDegree = midiPitch % 12;
 
             int instrPitch = midiPitch - transp.chromatic;
 

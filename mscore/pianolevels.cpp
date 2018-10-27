@@ -189,13 +189,13 @@ void PianoLevels::paintEvent(QPaintEvent* e)
 
             SigEvent sig = stick.timesig();
             int z = sig.timesig().numerator();
-            for (int beat = 0; beat < z; beat += beatSkip) {
-                  Pos beatPos(_score->tempomap(), _score->sigmap(), bar, beat, 0);
+            for (int beat1 = 0; beat1 < z; beat1 += beatSkip) {
+                  Pos beatPos(_score->tempomap(), _score->sigmap(), bar, beat1, 0);
                   double xp = tickToPixelX(beatPos.time(TType::TICKS));
                   if (xp < 0)
                         continue;
 
-                  if (beat == 0) {
+                  if (beat1 == 0) {
                         p.setPen(penLineMajor);
                         }
                   else {
@@ -207,7 +207,7 @@ void PianoLevels::paintEvent(QPaintEvent* e)
                   int subbeats = _tuplet * (1 << _subdiv);
 
                   for (int sub = 1; sub < subbeats; ++sub) {
-                        Pos subBeatPos(_score->tempomap(), _score->sigmap(), bar, beat, sub * MScore::division / subbeats);
+                        Pos subBeatPos(_score->tempomap(), _score->sigmap(), bar, beat1, sub * MScore::division / subbeats);
                         xp = tickToPixelX(subBeatPos.time(TType::TICKS));
 
                         p.setPen(penLineSub);
@@ -248,10 +248,10 @@ void PianoLevels::paintEvent(QPaintEvent* e)
       for (int i = 0; i < noteList.size(); ++i) {
             Note* note = noteList[i];
             if (filter->isPerEvent()) {
-                  for (NoteEvent& e : note->playEvents()) {
-                        int x = tickToPixelX(noteStartTick(note, &e));
+                  for (NoteEvent& ne : note->playEvents()) {
+                        int x = tickToPixelX(noteStartTick(note, &ne));
 
-                        int val = filter->value(_staff, note, &e);
+                        int val = filter->value(_staff, note, &ne);
                         p.setPen(QPen(note->selected() ? noteSelected : noteDeselected, 2));
                         int pixY = valToPixelY(val);
                         p.drawLine(x, pix0, x, pixY);
