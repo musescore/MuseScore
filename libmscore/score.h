@@ -511,6 +511,8 @@ class Score : public QObject, public ScoreElement {
       void cmdAddFret(int fret);
       void cmdToggleVisible();
 
+      void putNote(const Position&, bool replace);
+
       void resetSystems(bool layoutAll, LayoutContext& lc);
       void collectLinearSystem(LayoutContext& lc);
       void resetTempo();
@@ -680,7 +682,6 @@ class Score : public QObject, public ScoreElement {
       void cmdFullMeasureRest();
 
       void putNote(const QPointF&, bool replace, bool insert);
-      void putNote(const Position&, bool replace);
       void insertChord(const Position&);
       void localInsertChord(const Position&);
       void globalInsertChord(const Position&);

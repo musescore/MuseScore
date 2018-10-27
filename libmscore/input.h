@@ -31,7 +31,7 @@ class Score;
 //---------------------------------------------------------
 
 enum class NoteEntryMethod : char {
-      STEPTIME, REPITCH, RHYTHM, REALTIME_AUTO, REALTIME_MANUAL
+      STEPTIME, REPITCH, RHYTHM, REALTIME_AUTO, REALTIME_MANUAL, TIMEWISE
       };
 
 //---------------------------------------------------------

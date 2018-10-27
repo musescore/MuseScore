@@ -70,6 +70,7 @@ enum ScoreState {
       STATE_PLAY                                = 1 << 13,
       STATE_FOTO                                = 1 << 14,
       STATE_LOCK                                = 1 << 15,
+      STATE_NOTE_ENTRY_METHOD_TIMEWISE          = 1 << 16,
 
       STATE_NEVER                               = 1 << 31,
 
@@ -77,7 +78,8 @@ enum ScoreState {
                                         | STATE_NOTE_ENTRY_METHOD_REPITCH
                                         | STATE_NOTE_ENTRY_METHOD_RHYTHM
                                         | STATE_NOTE_ENTRY_METHOD_REALTIME_AUTO
-                                        | STATE_NOTE_ENTRY_METHOD_REALTIME_MANUAL,
+                                        | STATE_NOTE_ENTRY_METHOD_REALTIME_MANUAL
+                                        | STATE_NOTE_ENTRY_METHOD_TIMEWISE,
       STATE_NOTE_ENTRY 		= STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM | STATE_NOTE_ENTRY_STAFF_TAB,
       STATE_ALLTEXTUAL_EDIT	= STATE_TEXT_EDIT | STATE_LYRICS_EDIT | STATE_HARMONY_FIGBASS_EDIT,
       STATE_ALL        		= -1

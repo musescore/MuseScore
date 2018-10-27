@@ -3398,6 +3398,7 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
 
 void Score::cmdAddPitch(int step, bool addFlag, bool insert)
       {
+      insert = insert || inputState().usingNoteEntryMethod(NoteEntryMethod::TIMEWISE);
       Position pos;
       if (addFlag) {
             Element* el = selection().element();
