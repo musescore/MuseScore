@@ -523,16 +523,17 @@ Element* ChordRest::drop(EditData& data)
                   // fall through
 
             case ElementType::REHEARSAL_MARK:
+                  {
                   e->setParent(segment());
                   e->setTrack((track() / VOICES) * VOICES);
-                  {
-                  RehearsalMark* m = toRehearsalMark(e);
-                  if (fromPalette)
-                        m->setXmlText(score()->createRehearsalMarkText(m));
-                  }
+                  if (e->isRehearsalMark()) {
+                        RehearsalMark* m = toRehearsalMark(e);
+                        if (fromPalette)
+                              m->setXmlText(score()->createRehearsalMarkText(m));
+                        }
                   score()->undoAddElement(e);
                   return e;
-
+                  }
             case ElementType::FIGURED_BASS:
                   {
                   bool bNew;
