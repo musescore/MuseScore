@@ -34,6 +34,7 @@
 #include "tremolo.h"
 #include "slur.h"
 #include "articulation.h"
+#include "sig.h"
 
 namespace Ms {
 
@@ -530,7 +531,7 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
       // we have already disallowed a tuplet from crossing the barline, so there is no problem here
       // but due to rounding, it might appear from actualTicks() that the last note is too long by a couple of ticks
 
-      if (!isGrace && !cr->tuplet() && (tick + cr->actualTicks() > measureEnd || convertMeasureRest)) {
+      if (!isGrace && !cr->tuplet() && (tick + cr->actualTicks() > measureEnd || (cr->durationTypeTicks() != cr->actualTicks()) || convertMeasureRest)) {
             if (cr->isChord()) {
                   // split Chord
                   Chord* c = toChord(cr);
@@ -543,7 +544,7 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                               c2->removeMarkings(true);
                         int mlen = measure->tick() + measure->ticks() - tick;
                         int len = mlen > rest ? rest : mlen;
-                        std::vector<TDuration> dl = toDurationList(Fraction::fromTicks(len), true);
+                        std::vector<TDuration> dl = toRhythmicDurationList(Fraction::fromTicks(len), false, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, MAX_DOTS);
                         TDuration d = dl[0];
                         c2->setDurationType(d);
                         c2->setDuration(d.fraction());
@@ -583,7 +584,7 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                         measure       = tick2measure(tick);
                         Fraction mlen = Fraction::fromTicks(measure->tick() + measure->ticks() - tick);
                         Fraction len  = rest > mlen ? mlen : rest;
-                        std::vector<TDuration> dl = toDurationList(len, false);
+                        std::vector<TDuration> dl = toRhythmicDurationList(len, true, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, MAX_DOTS);
                         TDuration d = dl[0];
                         r2->setDuration(d.fraction());
                         r2->setDurationType(d);
