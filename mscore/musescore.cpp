@@ -129,6 +129,10 @@
 #endif
 #endif
 
+#ifdef WIN_SPARKLE_ENABLED
+#include "winsparkle/winsparkle.h"
+#endif
+
 #ifdef AEOLUS
 extern Ms::Synthesizer* createAeolus();
 #endif
@@ -1856,6 +1860,9 @@ MuseScore::MuseScore()
 
 MuseScore::~MuseScore()
       {
+#ifdef WIN_SPARKLE_ENABLED
+      win_sparkle_cleanup();
+#endif
       delete synti;
       }
 
@@ -3653,12 +3660,13 @@ bool MuseScore::hasToCheckForExtensionsUpdate()
 
 void MuseScore::checkForUpdate()
       {
-#ifdef MAC_SPARKLE_ENABLED
+#if defined(MAC_SPARKLE_ENABLED)
       SparkleAutoUpdater::checkUpdates();
       return;
-#endif
+#else
       if (ucheck)
             ucheck->check(version(), sender() != 0);
+#endif
       }
 
 //---------------------------------------------------------
@@ -3667,12 +3675,16 @@ void MuseScore::checkForUpdate()
 //---------------------------------------------------------
 void MuseScore::checkForUpdateNow()
       {
-#ifdef MAC_SPARKLE_ENABLED
+#if defined(MAC_SPARKLE_ENABLED)
       SparkleAutoUpdater::checkForUpdatesNow();
       return;
-#endif
+#elif defined(WIN_SPARKLE_ENABLED)
+      win_sparkle_check_update_with_ui();
+      return;
+#else
       if (ucheck)
             ucheck->check(version(), sender() != 0);
+#endif
       }
 
 //---------------------------------------------------------
@@ -7218,6 +7230,14 @@ int main(int argc, char* av[])
 
       if (!restoredSession || files)
             loadScores(argv);
+
+#ifdef WIN_SPARKLE_ENABLED
+      // Initialize WinSparkle as soon as the app itself is initialized, right
+      // before entering the event loop:
+      win_sparkle_set_appcast_url(WIN_SPARKLE_APPCAST_URL);
+      win_sparkle_set_app_details(L"musescore.org", L"MuseScore 3.0", L"3.0");
+      win_sparkle_init();
+#endif
 
 #ifndef MSCORE_NO_UPDATE_CHECKER
       if (mscore->hasToCheckForUpdate())

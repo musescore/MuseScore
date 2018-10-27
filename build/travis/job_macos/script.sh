@@ -75,7 +75,7 @@ MUSESCORE_VERSION=${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${BUILD_NUM
 SHORT_DATE="$(date -u +%Y-%m-%d)"
 #date -R is not supporte !?
 RSS_DATE="$(LANG=C date +'%a, %d %b %Y %H:%M:%S %z')"
-FILESIZE="$(stat -f%z $DMGFILE)"
+FILESIZE="$(wc -c $DMGFILE | awk '{print $1}')"
 APPCAST_URL=$(defaults read `pwd`/applebuild/mscore.app/Contents/Info.plist SUFeedURL)
 GIT_LOG=$(./build/travis/job_macos/generateGitLog.sh)
 

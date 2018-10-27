@@ -447,6 +447,7 @@ add_executable ( ${ExecutableName}
 
 if (MSVC)
 	target_link_libraries(mscore vorbisfiledll)
+        target_link_libraries(mscore WinSparkle)
 else (MSVC)
 	target_link_libraries(mscore vorbisfile)
 endif (MSVC)
@@ -859,8 +860,9 @@ else (MINGW)
       find_library( dll_vorbis      NAMES "libvorbis"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_vorbisfile  NAMES "libvorbisfile"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_portaudio   NAMES "portaudio"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+      find_library( dll_winsparkle  NAMES "WinSparkle"     PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
 
-      list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} "$<TARGET_FILE_DIR:mscore>/${MUSESCORE_NAME}.exe")
+      list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} ${dll_winsparkle} "$<TARGET_FILE_DIR:mscore>/${MUSESCORE_NAME}.exe")
       set( output_dir_for_dlls "${PROJECT_BINARY_DIR}/../msvc.install${ARCH_TYPE}/bin")
 
       COPY_FILES_INTO_DIRECTORY_IF_CHANGED( "${dlls_to_copy}" ${output_dir_for_dlls}  mscore)
