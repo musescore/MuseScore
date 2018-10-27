@@ -226,31 +226,31 @@ void PianoRuler::paintEvent(QPaintEvent* e)
             
             SigEvent sig = stick.timesig();
             int z = sig.timesig().numerator();
-            for (int beat = 0; beat < z; beat += beatSkip) {
-                  Pos xx(_score->tempomap(), _score->sigmap(), bar, beat, 0);
+            for (int beat1 = 0; beat1 < z; beat1 += beatSkip) {
+                  Pos xx(_score->tempomap(), _score->sigmap(), bar, beat1, 0);
                   int xp = pos2pix(xx);
                   if (xp < 0)
                         continue;
                   QString s;
-                  QRect r(xp+2, y + 1, 1000, h);
+                  QRect r1(xp+2, y + 1, 1000, h);
                   int y3;
                   int num;
-                  if (beat == 0) {
+                  if (beat1 == 0) {
                         num = bar + 1;
                         y3  = y + 2;
                         p.setFont(_font2);
                         }
                   else {
-                        num = beat + 1;
+                        num = beat1 + 1;
                         y3  = y + 8;
                         p.setFont(_font1);
-                        r.moveTop(r.top() + 1);
+                        r1.moveTop(r1.top() + 1);
                         }
                   s.setNum(num);
                   p.setPen(Qt::black);
                   p.drawLine(xp, y3, xp, y+h);
-                  p.drawText(r, Qt::AlignLeft | Qt::AlignVCenter, s);
-                  p.setPen(beat == 0 ? Qt::lightGray : Qt::gray);
+                  p.drawText(r1, Qt::AlignLeft | Qt::AlignVCenter, s);
+                  p.setPen(beat1 == 0 ? Qt::lightGray : Qt::gray);
                   if (xp > 0)
                         p.drawLine(xp, y1, xp, y2);
                   }

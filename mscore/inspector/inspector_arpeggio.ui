@@ -95,7 +95,7 @@
          <string>Stretch:</string>
         </property>
         <property name="buddy">
-         <cstring>Ratio</cstring>
+         <cstring>stretch</cstring>
         </property>
        </widget>
       </item>
@@ -122,7 +122,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+         <string>Reset 'Stretch' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
