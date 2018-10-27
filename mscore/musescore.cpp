@@ -129,6 +129,10 @@
 #endif
 #endif
 
+#ifdef WIN_SPARKLE_ENABLED
+#include "winsparkle/winsparkle.h"
+#endif
+
 #ifdef AEOLUS
 extern Ms::Synthesizer* createAeolus();
 #endif
@@ -1856,6 +1860,7 @@ MuseScore::MuseScore()
 
 MuseScore::~MuseScore()
       {
+      win_sparkle_cleanup();
       delete synti;
       }
 
