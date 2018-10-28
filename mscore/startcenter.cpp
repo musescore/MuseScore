@@ -164,6 +164,17 @@ void Startcenter::readSettings()
       MuseScore::restoreGeometry(this);
       }
 
+//---------------------------------------------------------
+//   keyReleaseEvent
+//---------------------------------------------------------
+
+void Startcenter::keyReleaseEvent(QKeyEvent *event) 
+      {
+      if(event->key() == Qt::Key_Escape) {
+            close();
+            }
+      }
+
 #ifdef USE_WEBENGINE
  
 //---------------------------------------------------------
