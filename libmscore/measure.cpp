@@ -291,7 +291,7 @@ void Measure::setCorrupted(int staffIdx, bool val)              { _mstaves[staff
 #endif
 
 void Measure::setNoText(int staffIdx, MeasureNumber* t)         { _mstaves[staffIdx]->setNoText(t); }
-MeasureNumber* Measure::noText(int staffIdx) const                       { return _mstaves[staffIdx]->noText(); }
+MeasureNumber* Measure::noText(int staffIdx) const              { return _mstaves[staffIdx]->noText(); }
 
 //---------------------------------------------------------
 //   Measure
@@ -539,7 +539,7 @@ void Measure::layout2()
                   }
             }
       for (int staffIdx = 0; staffIdx < int(_mstaves.size()); ++staffIdx) {
-            MStaff* ms = _mstaves[staffIdx];
+            MStaff* ms       = _mstaves[staffIdx];
             MeasureNumber* t = ms->noText();
             if (t)
                   t->setTrack(staffIdx * VOICES);
@@ -884,7 +884,7 @@ void Measure::remove(Element* e)
                   }
                   break;
 
-            case ElementType::TEXT:
+            case ElementType::MEASURE_NUMBER:
                   _mstaves[e->staffIdx()]->setNoText(nullptr);
                   break;
 
