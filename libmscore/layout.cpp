@@ -3450,8 +3450,10 @@ System* Score::collectSystem(LayoutContext& lc)
 
       for (const Segment* s : sl) {
             for (Element* e : s->annotations()) {
-                  if (e->isStaffText() || e->isSystemText() || e->isHarmony() || e->isInstrumentChange())
+                  if (e->isStaffText() || e->isSystemText() || e->isInstrumentChange())
                         e->layout();
+                  if (e->isHarmony())
+                        toHarmony(e)->autoplaceSegmentElement(styleP(Sid::minHarmonyDistance));
                   }
             }
 

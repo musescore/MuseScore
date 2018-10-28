@@ -1056,7 +1056,7 @@ void Harmony::layout()
       if (hasFrame())
             layoutFrame();
 
-      autoplaceSegmentElement(styleP(Sid::minHarmonyDistance));
+//      autoplaceSegmentElement(styleP(Sid::minHarmonyDistance));
       }
 
 //---------------------------------------------------------
