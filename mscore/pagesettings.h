@@ -31,12 +31,13 @@ class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
 
       Navigator* preview;
       bool mmUnit;
+      bool _changeFlag;
       Score* cs;
       std::unique_ptr<Score> clonedScoreForNavigator;
 
       virtual void hideEvent(QHideEvent*);
       void updateValues();
-      void updatePreview(int);
+      void updatePreview();
       void blockSignals(bool);
       void applyToScore(Score*);
       void setMarginsMax(double);
