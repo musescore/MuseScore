@@ -75,6 +75,12 @@ namespace Ms {
 
 static void readText206(XmlReader& e, TextBase* t, Element* be);
 
+// These default values have been taken from the MS2 defaults
+// because some default values differ for frames.
+static const int defaultFrameRound206 = 25;
+static const Spatium defaultPaddingWidth206 = Spatium(0.5);
+static const Spatium defaultFrameWidth206 = Spatium(0.2);
+
 //---------------------------------------------------------
 //   StyleVal206
 //---------------------------------------------------------
@@ -1319,6 +1325,20 @@ static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
             e.skipCurrentElement();
       else if (tag == "frame")
             t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
+      else if (tag == "frameRound")
+            t->setFrameRound(e.readInt());
+      else if (tag == "circle") {
+            if (e.readBool())
+                  t->setFrameType(FrameType::CIRCLE);
+            }
+      else if (tag == "paddingWidthS")
+            t->setPaddingWidth(Spatium(e.readDouble()));
+      else if (tag == "frameWidthS")
+            t->setFrameWidth(Spatium(e.readDouble()));
+      else if (tag == "frameColor")
+            t->setFrameColor(e.readColor());
+      else if (tag == "backgroundColor")
+            t->setBgColor(e.readColor());
       else if (tag == "halign") {
             Align align = Align(int(t->align()) & int(~Align::HMASK));
             const QString& val(e.readElementText());
@@ -1358,9 +1378,21 @@ static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
 
 static void readText206(XmlReader& e, TextBase* t, Element* be)
       {
+      // Some default values differ from v2 to 3
+      t->setFrameRound(defaultFrameRound206);
+      t->setPaddingWidth(defaultPaddingWidth206);
+      t->setFrameWidth(defaultFrameWidth206);
       while (e.readNextStartElement()) {
             if (!readTextProperties206(e, t, be))
                   e.unknown();
+            }
+
+      // If there is no frame set, reset any changes made to prevent
+      // unnecessary writing of tags
+      if (!t->hasFrame()) {
+            t->setFrameRound(t->propertyDefault(Pid::FRAME_ROUND).toInt());
+            t->setPaddingWidth(Spatium(t->propertyDefault(Pid::FRAME_PADDING).toReal()));
+            t->setFrameWidth(Spatium(t->propertyDefault(Pid::FRAME_WIDTH).toReal()));
             }
       }
 
