@@ -42,6 +42,7 @@ PageSettings::PageSettings(QWidget* parent)
       static_cast<QVBoxLayout*>(previewGroup->layout())->insertWidget(0, sa);
 
       mmUnit = true;      // should be made a global configuration item
+      _changeFlag = false;
 
       if (mmUnit)
             mmButton->setChecked(true);
@@ -110,7 +111,8 @@ void PageSettings::setScore(Score* s)
       preview->setScore(clonedScore);
       buttonApplyToAllParts->setEnabled(!cs->isMaster());
       updateValues();
-      updatePreview(0);
+      updatePreview();
+      _changeFlag = false;
       }
 
 //---------------------------------------------------------
@@ -222,6 +224,7 @@ void PageSettings::updateValues()
       pageOffsetEntry->setValue(score->pageNumberOffset() + 1);
 
       blockSignals(false);
+      _changeFlag = true;
       }
 
 //---------------------------------------------------------
@@ -260,7 +263,7 @@ void PageSettings::orientationClicked()
       double f = mmUnit ? 1.0/INCH : 1.0;
       preview->score()->style().set(Sid::pagePrintableWidth, h - (oddPageLeftMargin->value() + oddPageRightMargin->value()) * f);
       updateValues();
-      updatePreview(0);
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -271,7 +274,7 @@ void PageSettings::twosidedToggled(bool flag)
       {
       preview->score()->style().set(Sid::pageTwosided, flag);
       updateValues();
-      updatePreview(1);
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -280,8 +283,13 @@ void PageSettings::twosidedToggled(bool flag)
 
 void PageSettings::apply()
       {
+      if (!_changeFlag)
+            return;
+      cs->startCmd();
       applyToScore(cs);
+      cs->endCmd();
       mscore->endCmd();
+      _changeFlag = false;
       }
 
 //---------------------------------------------------------
@@ -290,7 +298,6 @@ void PageSettings::apply()
 
 void PageSettings::applyToScore(Score* s)
       {
-      s->startCmd();
       double f  = mmUnit ? 1.0/INCH : 1.0;
       double f1 = mmUnit ? DPMM : DPI;
 
@@ -312,8 +319,6 @@ void PageSettings::applyToScore(Score* s)
             s->spatiumChanged(oldSpatium, newSpatium);
 
       s->undoChangePageNumberOffset(pageOffsetEntry->value() - 1);
-
-      s->endCmd();
       }
 
 //---------------------------------------------------------
@@ -322,8 +327,13 @@ void PageSettings::applyToScore(Score* s)
 
 void PageSettings::applyToAllParts()
       {
+      if (!_changeFlag)
+            return;
+      cs->startCmd();
       for (Excerpt* e : cs->excerpts())
             applyToScore(e->partScore());
+      cs->endCmd();
+      _changeFlag = false;
       }
 
 //---------------------------------------------------------
@@ -363,7 +373,7 @@ void PageSettings::pageFormatSelected(int size)
             double f  = mmUnit ? 1.0/INCH : 1.0;
             s->style().set(Sid::pagePrintableWidth, sz.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value())  * f);
             updateValues();
-            updatePreview(0);
+            updatePreview();
             }
       }
 
@@ -376,7 +386,7 @@ void PageSettings::otmChanged(double val)
       if (mmUnit)
             val /= INCH;
       preview->score()->style().set(Sid::pageOddTopMargin, val);
-      updatePreview(1);
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -402,7 +412,7 @@ void PageSettings::olmChanged(double val)
       s->style().set(Sid::pageOddLeftMargin, val);
       s->style().set(Sid::pagePrintableWidth, s->styleD(Sid::pageWidth) - s->styleD(Sid::pageEvenLeftMargin) - val);
 
-      updatePreview(0);
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -427,7 +437,7 @@ void PageSettings::ormChanged(double val)
             evenPageRightMargin->blockSignals(false);
             }
       s->style().set(Sid::pagePrintableWidth, s->styleD(Sid::pageWidth) - s->styleD(Sid::pageOddLeftMargin) - val);
-      updatePreview(0);
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -439,7 +449,7 @@ void PageSettings::obmChanged(double val)
       if (mmUnit)
             val /= INCH;
       preview->score()->style().set(Sid::pageOddBottomMargin, val);
-      updatePreview(1);
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -451,7 +461,7 @@ void PageSettings::etmChanged(double val)
       if (mmUnit)
             val /= INCH;
       preview->score()->style().set(Sid::pageEvenTopMargin, val);
-      updatePreview(1);
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -471,7 +481,7 @@ void PageSettings::elmChanged(double val)
       Score* s = preview->score();
       s->style().set(Sid::pageEvenLeftMargin, val);
       s->style().set(Sid::pagePrintableWidth, s->styleD(Sid::pageWidth) - evenPageRightMargin->value() * f - val);
-      updatePreview(0);
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -491,7 +501,7 @@ void PageSettings::ermChanged(double val)
       Score* s = preview->score();
       s->style().set(Sid::pagePrintableWidth, s->styleD(Sid::pageWidth) - s->styleD(Sid::pageEvenLeftMargin) - val);
       s->style().set(Sid::pageOddLeftMargin, val);
-      updatePreview(0);
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -503,7 +513,7 @@ void PageSettings::ebmChanged(double val)
       if (mmUnit)
             val /= INCH;
       preview->score()->style().set(Sid::pageEvenBottomMargin, val);
-      updatePreview(1);
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -516,7 +526,7 @@ void PageSettings::spatiumChanged(double val)
       double oldVal = preview->score()->spatium();
       preview->score()->setSpatium(val);
       preview->score()->spatiumChanged(oldVal, val);
-      updatePreview(0);
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -526,7 +536,7 @@ void PageSettings::spatiumChanged(double val)
 void PageSettings::pageOffsetChanged(int val)
       {
       preview->score()->setPageNumberOffset(val-1);
-      updatePreview(0);
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -544,7 +554,7 @@ void PageSettings::pageHeightChanged(double val)
       preview->score()->style().set(Sid::pageHeight, val);
       preview->score()->style().set(Sid::pageWidth, val2);
 
-      updatePreview(1);
+      updatePreview();
       }
 
 //---------------------------------------------------------
@@ -562,24 +572,17 @@ void PageSettings::pageWidthChanged(double val)
       preview->score()->style().set(Sid::pageWidth, val);
       preview->score()->style().set(Sid::pageHeight, val2);
       preview->score()->style().set(Sid::pagePrintableWidth, val - (oddPageLeftMargin->value() + evenPageLeftMargin->value()) * f);
-      updatePreview(0);
+      updatePreview();
       }
 
 //---------------------------------------------------------
 //   updatePreview
 //---------------------------------------------------------
 
-void PageSettings::updatePreview(int val)
+void PageSettings::updatePreview()
       {
       updateValues();
-      switch(val) {
-            case 0:
-                  preview->score()->doLayout();
-                  break;
-            case 1:
-                  preview->score()->doLayout();
-                  break;
-            }
+      preview->score()->doLayout();
       preview->layoutChanged();
       }
 }
