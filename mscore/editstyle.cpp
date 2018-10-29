@@ -681,24 +681,62 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(textStyleAlign, &AlignSelect::alignChanged,
          [=](){ textStyleValueChanged(Pid::ALIGN, QVariant::fromValue(textStyleAlign->align())); }
          );
+
+      // offset
+      resetTextStyleOffset->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleOffset, &QToolButton::clicked, [=](){ resetTextStyle(Pid::OFFSET); });
+      connect(textStyleOffset, &OffsetSelect::offsetChanged,
+         [=](){ textStyleValueChanged(Pid::OFFSET, QVariant(textStyleOffset->offset())); }
+         );
+
+      // spatium dependent
+      resetTextStyleSpatiumDependent->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleSpatiumDependent, &QToolButton::clicked, [=](){ resetTextStyle(Pid::SIZE_SPATIUM_DEPENDENT); });
+      connect(textStyleSpatiumDependent, &QCheckBox::toggled,
+         [=](){ textStyleValueChanged(Pid::SIZE_SPATIUM_DEPENDENT, textStyleSpatiumDependent->isChecked()); }
+         );
+
+      resetTextStyleFrameType->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleFrameType, &QToolButton::clicked, [=](){ resetTextStyle(Pid::FRAME_TYPE); });
+      connect(textStyleFrameType, QOverload<int>::of(&QComboBox::currentIndexChanged),
+         [=](){ textStyleValueChanged(Pid::FRAME_TYPE, textStyleFrameType->currentIndex()); }
+         );
+
+      resetTextStyleFramePadding->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleFramePadding, &QToolButton::clicked, [=](){ resetTextStyle(Pid::FRAME_PADDING); });
+      connect(textStyleFramePadding, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+         [=](){ textStyleValueChanged(Pid::FRAME_PADDING, textStyleFramePadding->value()); }
+         );
+
+      resetTextStyleFrameBorder->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleFrameBorder, &QToolButton::clicked, [=](){ resetTextStyle(Pid::FRAME_WIDTH); });
+      connect(textStyleFrameBorder, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+         [=](){ textStyleValueChanged(Pid::FRAME_WIDTH, textStyleFrameBorder->value()); }
+         );
+
+      resetTextStyleFrameBorderRadius->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleFrameBorderRadius, &QToolButton::clicked, [=](){ resetTextStyle(Pid::FRAME_ROUND); });
+      connect(textStyleFrameBorderRadius, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+         [=](){ textStyleValueChanged(Pid::FRAME_ROUND, textStyleFrameBorderRadius->value()); }
+         );
+
+      resetTextStyleFrameForeground->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleFrameForeground, &QToolButton::clicked, [=](){ resetTextStyle(Pid::FRAME_FG_COLOR); });
+      connect(textStyleFrameForeground, &Awl::ColorLabel::colorChanged,
+         [=](){ textStyleValueChanged(Pid::FRAME_FG_COLOR, textStyleFrameForeground->color()); }
+         );
+
+      resetTextStyleFrameBackground->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleFrameBackground, &QToolButton::clicked, [=](){ resetTextStyle(Pid::FRAME_BG_COLOR); });
+      connect(textStyleFrameBackground, &Awl::ColorLabel::colorChanged,
+         [=](){ textStyleValueChanged(Pid::FRAME_BG_COLOR, textStyleFrameBackground->color()); }
+         );
+
       connect(textStyles, SIGNAL(currentRowChanged(int)), SLOT(textStyleChanged(int)));
       textStyles->setCurrentRow(0);
-
       MuseScore::restoreGeometry(this);
       cs->startCmd();
       }
-#if 0
-      // missing for textStyle:
-      { Sid::defaultFontSpatiumDependent,        Pid::FONT_SPATIUM_DEPENDENT },
-      { Sid::user1Align,                         Pid::ALIGN                  },
-      { Sid::user1FrameType,                     Pid::FRAME_TYPE             },
-      { Sid::user1FramePadding,                  Pid::FRAME_PADDING          },
-      { Sid::user1FrameWidth,                    Pid::FRAME_WIDTH            },
-      { Sid::user1FrameRound,                    Pid::FRAME_ROUND            },
-      { Sid::user1FrameFgColor,                  Pid::FRAME_FG_COLOR         },
-      { Sid::user1FrameBgColor,                  Pid::FRAME_BG_COLOR         },
-      }};
-#endif
 
 //---------------------------------------------------------
 //   hideEvent
@@ -1282,6 +1320,47 @@ void EditStyle::textStyleChanged(int row)
                         textStyleAlign->setAlign(cs->styleV(a.sid).value<Align>());
                         resetTextStyleAlign->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
                         break;
+
+                  case Pid::OFFSET:
+                        textStyleOffset->setOffset(cs->styleV(a.sid).toPointF());
+                        resetTextStyleOffset->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
+
+                  case Pid::SIZE_SPATIUM_DEPENDENT:
+                        textStyleSpatiumDependent->setChecked(cs->styleV(a.sid).toBool());
+                        resetTextStyleSpatiumDependent->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
+
+                  case Pid::FRAME_TYPE:
+                        textStyleFrameType->setCurrentIndex(cs->styleV(a.sid).toInt());
+                        resetTextStyleFrameType->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
+
+                  case Pid::FRAME_PADDING:
+                        textStyleFramePadding->setValue(cs->styleV(a.sid).toDouble());
+                        resetTextStyleFramePadding->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
+
+                  case Pid::FRAME_WIDTH:
+                        textStyleFrameBorder->setValue(cs->styleV(a.sid).toDouble());
+                        resetTextStyleFrameBorder->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
+
+                  case Pid::FRAME_ROUND:
+                        textStyleFrameBorderRadius->setValue(cs->styleV(a.sid).toDouble());
+                        resetTextStyleFrameBorderRadius->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
+
+                  case Pid::FRAME_FG_COLOR:
+                        textStyleFrameForeground->setColor(cs->styleV(a.sid).value<QColor>());
+                        resetTextStyleFrameForeground->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
+
+                  case Pid::FRAME_BG_COLOR:
+                        textStyleFrameBackground->setColor(cs->styleV(a.sid).value<QColor>());
+                        resetTextStyleFrameBackground->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
+
 
                   default:
                         break;

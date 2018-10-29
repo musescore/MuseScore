@@ -225,7 +225,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>20</number>
+       <number>33</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -11841,31 +11841,31 @@
            <property name="spacing">
             <number>0</number>
            </property>
-           <item row="5" column="1">
-            <widget class="QComboBox" name="textStyleFrame"/>
+           <item row="7" column="1">
+            <widget class="QComboBox" name="textStyleFrameType"/>
            </item>
-           <item row="7" column="0">
+           <item row="9" column="0">
             <widget class="QLabel" name="label_204">
              <property name="text">
               <string>Background:</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="0">
+           <item row="7" column="0">
             <widget class="QLabel" name="label_202">
              <property name="text">
               <string>Frame:</string>
              </property>
             </widget>
            </item>
-           <item row="9" column="0">
+           <item row="11" column="0">
             <widget class="QLabel" name="label_206">
              <property name="text">
               <string>Text margin:</string>
              </property>
             </widget>
            </item>
-           <item row="8" column="0">
+           <item row="10" column="0">
             <widget class="QLabel" name="label_205">
              <property name="text">
               <string>Border:</string>
@@ -12086,7 +12086,7 @@
              </property>
             </widget>
            </item>
-           <item row="11" column="1">
+           <item row="13" column="1">
             <spacer name="verticalSpacer_32">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -12099,36 +12099,36 @@
              </property>
             </spacer>
            </item>
-           <item row="9" column="1">
-            <widget class="QDoubleSpinBox" name="textStyleFrameMargin"/>
+           <item row="11" column="1">
+            <widget class="QDoubleSpinBox" name="textStyleFramePadding"/>
            </item>
-           <item row="8" column="1">
+           <item row="10" column="1">
             <widget class="QDoubleSpinBox" name="textStyleFrameBorder"/>
            </item>
-           <item row="6" column="1">
+           <item row="8" column="1">
             <widget class="Awl::ColorLabel" name="textStyleFrameForeground"/>
            </item>
-           <item row="7" column="1">
+           <item row="9" column="1">
             <widget class="Awl::ColorLabel" name="textStyleFrameBackground"/>
            </item>
-           <item row="10" column="0">
+           <item row="12" column="0">
             <widget class="QLabel" name="label_212">
              <property name="text">
               <string>Border radius:</string>
              </property>
             </widget>
            </item>
-           <item row="6" column="0">
+           <item row="8" column="0">
             <widget class="QLabel" name="label_203">
              <property name="text">
               <string>Foreground:</string>
              </property>
             </widget>
            </item>
-           <item row="10" column="1">
+           <item row="12" column="1">
             <widget class="QDoubleSpinBox" name="textStyleFrameBorderRadius"/>
            </item>
-           <item row="6" column="2">
+           <item row="8" column="2">
             <widget class="QToolButton" name="resetTextStyleFrameForeground">
              <property name="toolTip">
               <string>Reset to default</string>
@@ -12145,7 +12145,7 @@
              </property>
             </widget>
            </item>
-           <item row="7" column="2">
+           <item row="9" column="2">
             <widget class="QToolButton" name="resetTextStyleFrameBackground">
              <property name="toolTip">
               <string>Reset to default</string>
@@ -12162,7 +12162,7 @@
              </property>
             </widget>
            </item>
-           <item row="8" column="2">
+           <item row="10" column="2">
             <widget class="QToolButton" name="resetTextStyleFrameBorder">
              <property name="toolTip">
               <string>Reset to default</string>
@@ -12179,8 +12179,8 @@
              </property>
             </widget>
            </item>
-           <item row="9" column="2">
-            <widget class="QToolButton" name="resetTextStyleFrameMargin">
+           <item row="11" column="2">
+            <widget class="QToolButton" name="resetTextStyleFramePadding">
              <property name="toolTip">
               <string>Reset to default</string>
              </property>
@@ -12196,7 +12196,7 @@
              </property>
             </widget>
            </item>
-           <item row="10" column="2">
+           <item row="12" column="2">
             <widget class="QToolButton" name="resetTextStyleFrameBorderRadius">
              <property name="toolTip">
               <string>Reset to default</string>
@@ -12213,8 +12213,59 @@
              </property>
             </widget>
            </item>
+           <item row="7" column="2">
+            <widget class="QToolButton" name="resetTextStyleFrameType">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Font face' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_186">
+             <property name="text">
+              <string>Offset:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="Ms::OffsetSelect" name="textStyleOffset" native="true"/>
+           </item>
            <item row="5" column="2">
-            <widget class="QToolButton" name="resetTextStyleFrame">
+            <widget class="QToolButton" name="resetTextStyleOffset">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Font face' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="QCheckBox" name="textStyleSpatiumDependent">
+             <property name="text">
+              <string>Size changes with spatium</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="2">
+            <widget class="QToolButton" name="resetTextStyleSpatiumDependent">
              <property name="toolTip">
               <string>Reset to default</string>
              </property>
