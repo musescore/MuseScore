@@ -549,7 +549,7 @@ void System::layout2()
                                     s2 = staff(staffIdx);
                                     for (int i = staffIdx + nstaves - 1; i > 0; --i) {
                                           SysStaff* s3 = staff(i);
-                                          if (s->show()) {        // ??
+                                          if (s3->show()) {
                                                 s2 = s3;
                                                 break;
                                                 }
