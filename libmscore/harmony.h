@@ -123,10 +123,6 @@ class Harmony final : public TextBase {
       void textChanged();
       virtual void layout() override;
 
-      const QRectF& bboxtight() const          { return _tbbox;        }
-      QRectF& bboxtight()                      { return _tbbox;        }
-      void setbboxtight(const QRectF& r) const { _tbbox = r;           }
-
       virtual bool isEditable() const override { return true; }
       virtual void startEdit(EditData&) override;
       virtual bool edit(EditData&) override;
