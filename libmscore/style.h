@@ -21,6 +21,7 @@ enum class Pid : int;
 class XmlWriter;
 struct ChordDescription;
 class Element;
+class Score;
 
 //---------------------------------------------------------
 //   Sid
@@ -1046,6 +1047,8 @@ class MStyle {
       void load(XmlReader& e);
       void save(XmlWriter& xml, bool optimize);
       bool readProperties(XmlReader&);
+
+      void reset(Score*);
 
       static const char* valueType(const Sid);
       static const char* valueName(const Sid);
