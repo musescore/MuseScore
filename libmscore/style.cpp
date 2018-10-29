@@ -2214,6 +2214,27 @@ void MStyle::save(XmlWriter& xml, bool optimize)
                   xml.tag(st.name(), value(idx).value<Spatium>().val());
             else if (!strcmp("Ms::Direction", type))
                   xml.tag(st.name(), value(idx).toInt());
+            else if (!strcmp("Ms::Align", type)) {
+                  Align a = Align(value(idx).toInt());
+                  // Don't write if it's the default value
+                  if (a == Align(st.defaultValue().toInt()))
+                        continue;
+                  QString horizontal = "left";
+                  QString vertical = "top";
+                  if (a & Align::HCENTER)
+                        horizontal = "center";
+                  else if (a & Align::RIGHT)
+                        horizontal = "right";
+
+                  if (a & Align::VCENTER)
+                        vertical = "center";
+                  else if (a & Align::BOTTOM)
+                        vertical = "bottom";
+                  else if (a & Align::BASELINE)
+                        vertical = "baseline";
+
+                  xml.tag(st.name(), horizontal+","+vertical);
+                  }
             else
                   xml.tag(st.name(), value(idx));
             }
