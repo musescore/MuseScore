@@ -1491,10 +1491,6 @@ void HarmonyView::setElement(Element* e)
 //TODO      tb.textStyle->setCurrentIndex(ts.textStyleType());
       tb.layoutToParentWidth->setChecked(harmony->layoutToParentWidth());
 
-      hb.tbboxx->setValue(harmony->bboxtight().x());
-      hb.tbboxy->setValue(harmony->bboxtight().y());
-      hb.tbboxw->setValue(harmony->bboxtight().width());
-      hb.tbboxh->setValue(harmony->bboxtight().height());
       hb.leftParen->setChecked(harmony->leftParen());
       hb.rightParen->setChecked(harmony->rightParen());
       hb.rootTpc->setValue(harmony->rootTpc());
