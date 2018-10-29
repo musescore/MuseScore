@@ -107,7 +107,18 @@ rvm get head
 wget -nv http://utils.musescore.org.s3.amazonaws.com/qt593_mac.zip
 mkdir -p $QT_MACOS
 unzip -qq qt593_mac.zip -d $QT_MACOS
-rm qt5100_mac.zip
+rm qt593_mac.zip
+
+#install sparkle
+export SPARKLE_VERSION=1.20.0
+mkdir Sparkle-${SPARKLE_VERSION}
+cd Sparkle-${SPARKLE_VERSION}
+wget -nv https://github.com/sparkle-project/Sparkle/releases/download/${SPARKLE_VERSION}/Sparkle-${SPARKLE_VERSION}.tar.bz2
+tar jxf Sparkle-${SPARKLE_VERSION}.tar.bz2
+cd ..
+mkdir -p ~/Library/Frameworks
+mv Sparkle-${SPARKLE_VERSION}/Sparkle.framework ~/Library/Frameworks/
+rm -rf Sparkle-${SPARKLE_VERSION}
 
 #install signing certificate
 if [ -n "$CERTIFICATE_OSX_PASSWORD" ]
@@ -123,6 +134,8 @@ then
     security set-keychain-settings -t 3600 -l $KEYCHAIN
     security import $CERTIFICATE_P12 -k $KEYCHAIN -P "$CERTIFICATE_OSX_PASSWORD" -T /usr/bin/codesign
 fi
+
+
 
 
 

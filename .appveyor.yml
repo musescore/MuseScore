@@ -6,6 +6,11 @@ clone_depth: 3                      # clone entire repository history if not def
 
 image: Visual Studio 2017
 
+branches:
+  only:
+  - master
+  - 3.0alpha
+
 # build cache to preserve files/folders between builds
 cache:
   - dependencies.7z
