@@ -85,7 +85,7 @@ ci: revision
 	mkdir build.release;     \
     cd build.release;            \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
-          -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"  \
+          -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" -DBUILD_AUTOUPDATE=ON  \
           .. -G Xcode;                                                  \
     xcodebuild -project ${XCODEPROJ} -target lrelease;                  \
     $(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target install $(FORMATTER_END);

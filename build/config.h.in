@@ -41,6 +41,8 @@
 #define VERSION                 "${MUSESCORE_VERSION_FULL}"
 #define BUILD_NUMBER            "${CMAKE_BUILD_NUMBER}"
 
+
+#cmakedefine MAC_SPARKLE_ENABLED
 #cmakedefine AEOLUS
 #cmakedefine ZERBERUS
 #cmakedefine OMR

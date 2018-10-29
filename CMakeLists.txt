@@ -75,6 +75,11 @@ include (CreatePrecompiledHeader)
 
 set(CMAKE_AUTOMOC     TRUE)
 set(MSCORE_UNSTABLE   TRUE)          # Mark as unstable
+
+#set(MSCORE_RELEASE_CHANNEL "devel")
+set(MSCORE_RELEASE_CHANNEL "testing")
+#set(MSCORE_RELEASE_CHANNEL "stable")
+
 set(USE_SSE           TRUE)
 set(SCRIPT_INTERFACE  TRUE)
 
@@ -123,6 +128,7 @@ option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
 option(BUILD_64 "Build 64 bit version of editor" ON)
+option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
@@ -140,6 +146,7 @@ if (APPLE)
 
       set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)      # Min version required
       set(HAS_AUDIOFILE TRUE)            # Requires libsndfile
+      set(MAC_APPCAST_URL "")
 
       find_library(AudioToolboxFW        NAMES AudioToolbox)
       find_library(AudioUnitFW           NAMES AudioUnit)
@@ -149,6 +156,14 @@ if (APPLE)
       find_library(CoreServicesFW        NAMES CoreServices)
       find_library(AppKit                NAMES AppKit)
       set(OsxFrameworks ${AudioToolboxFW} ${AudioUnitFW} ${CoreAudioFW} ${CoreMidiFW} ${SystemConfigurationFW} ${CoreServicesFW} ${AppKit})
+      if (BUILD_AUTOUPDATE)
+        find_package(Sparkle) #needed for SPARKLE_FOUND variable
+        if(SPARKLE_FOUND)
+          set(MAC_SPARKLE_ENABLED 1)
+          set(OsxFrameworks ${OsxFrameworks} ${SPARKLE_LIBRARY})
+          set(MAC_APPCAST_URL "https://sparkle.musescore.org/${MSCORE_RELEASE_CHANNEL}/3/macos/appcast.xml")
+        endif(SPARKLE_FOUND)
+      endif(BUILD_AUTOUPDATE)
 endif (APPLE)
 
 #
@@ -373,30 +388,30 @@ else (BUILD_64 STREQUAL "ON")
       SET (ARCH_TYPE "_x86")
       SET (DEPENDENCIES_DIR "${PROJECT_SOURCE_DIR}/dependencies/libx86")
 endif (BUILD_64 STREQUAL "ON")
- 
-if (APPLE OR MINGW) 
-      if (BUILD_LAME) 
-            include (FindLame) 
-            set (USE_LAME 1) 
-      endif (BUILD_LAME) 
+
+if (APPLE OR MINGW)
+      if (BUILD_LAME)
+            include (FindLame)
+            set (USE_LAME 1)
+      endif (BUILD_LAME)
 else (APPLE OR MINGW)
-      if (BUILD_LAME) 
+      if (BUILD_LAME)
             if (MSVC)
                include(FindLameMSVC)
-            else (MSVC) 
-               include (FindLame) 
-            endif (MSVC) 
-            if (LAME_FOUND) 
-                  set(USE_LAME 1) 
-                  MESSAGE("LAME found.") 
-            else (LAME_FOUND) 
-                  set(USE_LAME 0) 
-                  MESSAGE("LAME not found.") 
-            endif (LAME_FOUND) 
-      else (BUILD_LAME) 
-            MESSAGE(STATUS "LAME MP3 support disabled") 
-      endif (BUILD_LAME) 
-endif (APPLE OR MINGW) 
+            else (MSVC)
+               include (FindLame)
+            endif (MSVC)
+            if (LAME_FOUND)
+                  set(USE_LAME 1)
+                  MESSAGE("LAME found.")
+            else (LAME_FOUND)
+                  set(USE_LAME 0)
+                  MESSAGE("LAME not found.")
+            endif (LAME_FOUND)
+      else (BUILD_LAME)
+            MESSAGE(STATUS "LAME MP3 support disabled")
+      endif (BUILD_LAME)
+endif (APPLE OR MINGW)
 
 ##
 ## Find JACK >= JACK_MIN_VERSION
@@ -450,7 +465,7 @@ if (BUILD_PORTAUDIO)
         set ( USE_PORTAUDIO 1 )
         if (MSVC)
            include(FindPortAudio)
-           add_library(portaudiodll SHARED IMPORTED)	
+           add_library(portaudiodll SHARED IMPORTED)
            set_target_properties(portaudiodll PROPERTIES IMPORTED_IMPLIB ${PORTAUDIO_LIBRARY})
         endif(MSVC)
     else (MINGW OR MSVC)
@@ -765,7 +780,7 @@ if (MSVC)
    include_directories(${PORTAUDIO_INCLUDE_DIR})
    include_directories(${OGG_INCLUDE_DIR})
 endif (MSVC)
-   
+
 if (USE_SYSTEM_FREETYPE)
       include_directories(${FREETYPE_INCLUDE_DIRS})
 else (USE_SYSTEM_FREETYPE)
@@ -827,7 +842,7 @@ add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
 
 
 ##
-##  For MSVC: set the startup project to be mscore 
+##  For MSVC: set the startup project to be mscore
 ##     (requires CMake 3.6.3+ to work, but should be benign on other versions
 ##      as it is just setting the value for a property).
 ##
