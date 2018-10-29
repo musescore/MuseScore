@@ -156,6 +156,7 @@ private slots:
       void gp3CapoFret() { gpReadTest("capo-fret", "gp3"); }
       void gp4CapoFret() { gpReadTest("capo-fret", "gp4"); }
       void gp5CapoFret() { gpReadTest("capo-fret", "gp5"); }
+      void gp6UncompletedMeasure() { gpReadTest("UncompletedMeasure", "gpx"); }
       };
 
 //---------------------------------------------------------
