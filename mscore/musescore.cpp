@@ -236,7 +236,8 @@ const std::list<const char*> MuseScore::_allPlaybackControlEntries {
             "",
             "repeat",
             "pan",
-            "metronome"
+            "metronome",
+            "countin"
             };
 
 extern bool savePositions(Score*, const QString& name, bool segments );
