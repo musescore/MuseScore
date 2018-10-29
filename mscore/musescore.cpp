@@ -1583,6 +1583,7 @@ MuseScore::MuseScore()
       menuFormat->addMenu(menuStretch);
       menuFormat->addSeparator();
 
+      menuFormat->addAction(getAction("reset-style"));
       menuFormat->addAction(getAction("reset-beammode"));
       menuFormat->addAction(getAction("reset"));
       menuFormat->addSeparator();

@@ -705,6 +705,16 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
+         "reset-style",
+         QT_TRANSLATE_NOOP("action","Reset Style"),
+         QT_TRANSLATE_NOOP("action","Reset style"),
+         QT_TRANSLATE_NOOP("action","Reset all style values to default"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "reset-groupings",
          QT_TRANSLATE_NOOP("action","Regroup Rhythms"),
          QT_TRANSLATE_NOOP("action","Regroup rhythms"),

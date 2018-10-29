@@ -24,6 +24,7 @@
 #include "layout.h"
 #include "property.h"
 #include "read206.h"
+#include "undo.h"
 
 namespace Ms {
 
@@ -2245,6 +2246,16 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             }
       xml.tag("Spatium", value(Sid::spatium).toDouble() / DPMM);
       xml.etag();
+      }
+
+//---------------------------------------------------------
+//   reset
+//---------------------------------------------------------
+
+void MStyle::reset(Score* score)
+      {
+      for (const StyleType& st : styleTypes)
+            score->undo(new ChangeStyleVal(score, st.styleIdx(), MScore::defaultStyle().value(st.styleIdx())));
       }
 
 #ifndef NDEBUG
