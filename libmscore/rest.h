@@ -24,7 +24,6 @@ enum class SymId;
 //---------------------------------------------------------
 //    @@ Rest
 ///     This class implements a rest.
-//    @P isFullMeasure  bool  (read only)
 //---------------------------------------------------------
 
 class Rest : public ChordRest {

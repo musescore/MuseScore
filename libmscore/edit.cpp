@@ -2034,8 +2034,10 @@ void Score::cmdDeleteSelection()
                         if (!s->isChordRestType()) {
                               // do not delete TimeSig/KeySig,
                               // it doesn't make sense to do it, except on full system
-                              if (s->segmentType() != SegmentType::TimeSig && s->segmentType() != SegmentType::KeySig)
-                                    undoRemoveElement(e);
+                              if (s->segmentType() != SegmentType::TimeSig && s->segmentType() != SegmentType::KeySig) {
+                                    if (!(e->isBarLine() && e->generated()))
+                                          undoRemoveElement(e);
+                                    }
                               continue;
                               }
                         ChordRest* cr1 = toChordRest(e);
