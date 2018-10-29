@@ -337,7 +337,7 @@ void readTextStyle206(MStyle* style, XmlReader& e)
       {
       QString family = "FreeSerif";
       double size = 10;
-      bool sizeIsSpatiumDependent = true;
+      bool sizeIsSpatiumDependent = false;
       bool bold = false;
       bool italic = false;
       bool underline = false;
