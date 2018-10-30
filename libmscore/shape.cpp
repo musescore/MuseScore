@@ -59,7 +59,7 @@ Shape Shape::translated(const QPointF& pt) const
 //-------------------------------------------------------------------
 //   minHorizontalDistance
 //    a is located right of this shape.
-//    Calculates the minimum horizontal distance between the two shapes
+//    Calculates the minimum vertical distance between the two shapes
 //    so they dont touch.
 //-------------------------------------------------------------------
 
