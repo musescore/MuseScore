@@ -1198,6 +1198,57 @@ void Chord::setScore(Score* s)
       }
 
 //-----------------------------------------------------------------------------
+//   hookAdjustment
+//    Adjustment to the length of the stem in order to accomodate hooks
+//    This function replaces this bit of code:
+//      switch (hookIdx) {
+//            case 3: normalStemLen += small() ? .5  : 0.75; break; //32nd notes
+//            case 4: normalStemLen += small() ? 1.0 : 1.5;  break; //64th notes
+//            case 5: normalStemLen += small() ? 1.5 : 2.25; break; //128th notes
+//            }
+//    which was not sufficient for two reasons:
+//      1. It only lengthened the stem for 3, 4, or 5 hooks.
+//      2. It was too general to produce good results for all combinations of factors.
+//    This provides a way to take a number of factors into account. Further tweaking may be in order.
+//-----------------------------------------------------------------------------
+qreal hookAdjustment(QString font, int hooks, bool up, bool small)
+      {
+      bool fallback = MScore::useFallbackFont && (hooks > 5);
+
+      if (font == "Emmentaler" && !fallback) {
+            if (up) {
+                  if (hooks > 2)
+                        return (hooks - 2) * (small ? .75 : 1);
+                  }
+            else {
+                  if (hooks == 3)
+                        return (small ? .75 : 1);
+                  else if (hooks > 3)
+                        return (hooks - 2) * (small ? .5 : .75);
+                  }
+            }
+      else if (font == "Gonville" && !fallback) {
+            if (up) {
+                  if (hooks > 2)
+                        return (hooks - 2) * (small ? .5 : .75);
+                  }
+            else {
+                  if (hooks > 1)
+                        return (hooks - 1) * (small ? .5 : .75);
+                  }
+            }
+      else if (font == "MuseJazz") {
+            if (hooks > 2)
+                  return (hooks - 2) * (small ? .75 : 1);
+            }
+      else {
+            if (hooks > 2)
+                  return (hooks - 2) * (small ? .5 : .75);
+            }
+      return 0;
+      }
+
+//-----------------------------------------------------------------------------
 //   defaultStemLength
 ///   Get the default stem length for this chord
 //-----------------------------------------------------------------------------
@@ -1214,8 +1265,8 @@ qreal Chord::defaultStemLength()
       const Staff* st    = staff();
       qreal lineDistance = st ? st->lineDistance(tick()) : 1.0;
 
-      const StaffType* tab = st ? st->staffType(tick()) : 0;
-      if (tab && tab->isTabStaff()) {
+      const StaffType* tab = (st && st->isTabStaff(tick())) ? st->staffType(tick()) : nullptr;
+      if (tab) {
             // require stems only if TAB is not stemless and this chord has a stem
             if (!tab->slashStyle() && _stem) {
                   // if stems are beside staff, apply special formatting
@@ -1241,14 +1292,20 @@ qreal Chord::defaultStemLength()
 
       Spatium progression = score()->styleS(Sid::shortStemProgression);
       qreal shortest      = score()->styleS(Sid::shortestStem).val();
+      if (hookIdx) {
+            if (up()) {
+                  if (shortest < 3.0)
+                        shortest = 3.0;
+                  }
+            else {
+                  if (shortest < 3.5)
+                        shortest = 3.5;
+                  }
+            }
 
       qreal normalStemLen = small() ? 2.5 : 3.5;
-      switch (hookIdx) {
-            case 3: normalStemLen += small() ? .5  : 0.75; break; //32nd notes
-            case 4: normalStemLen += small() ? 1.0 : 1.5;  break; //64th notes
-            case 5: normalStemLen += small() ? 1.5 : 2.25; break; //128th notes
-            }
-      if (_hook && tab == 0) {
+      normalStemLen += hookAdjustment(score()->styleSt(Sid::MusicalSymbolFont), hookIdx, up(), small());
+      if (hookIdx && tab == 0) {
             if (up() && durationType().dots()) {
                   //
                   // avoid collision of dot with hook
@@ -1321,7 +1378,7 @@ qreal Chord::defaultStemLength()
                     }
                   };
             int odd = (up() ? upLine() : downLine()) & 1;
-            int n = tab1[_hook ? 1 : 0][up() ? 1 : 0][odd][_tremolo->lines()-1];
+            int n = tab1[hookIdx ? 1 : 0][up() ? 1 : 0][odd][_tremolo->lines()-1];
             stemLen += n * .5;
             }
       return stemLen * _spatium * lineDistance;
