@@ -1728,12 +1728,12 @@ MuseScore::MuseScore()
       Workspace::addActionAndString(askForHelpAction, "ask-help");
 
       reportBugAction = new QAction("", 0);
-      connect(reportBugAction, SIGNAL(triggered()), this, SLOT(reportBug("menu")));
+      connect(reportBugAction, &QAction::triggered, this, [this]{ reportBug("menu"); });
       menuHelp->addAction(reportBugAction);
       Workspace::addActionAndString(reportBugAction, "report-bug");
 
       leaveFeedbackAction = new QAction("", 0);
-      connect(leaveFeedbackAction, SIGNAL(triggered()), this, SLOT(leaveFeedback("menu")));
+      connect(leaveFeedbackAction, &QAction::triggered, this, [this]{ leaveFeedback("menu"); });
       menuHelp->addAction(leaveFeedbackAction);
       Workspace::addActionAndString(leaveFeedbackAction, "leave-feedback");
 
