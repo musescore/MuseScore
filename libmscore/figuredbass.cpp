@@ -405,7 +405,7 @@ QString FiguredBassItem::normalizedText() const
 
 void FiguredBassItem::write(XmlWriter& xml) const
       {
-      xml.stag("FiguredBassItem");
+      xml.stag("FiguredBassItem", this);
       xml.tagE(QString("brackets b0=\"%1\" b1=\"%2\" b2=\"%3\" b3=\"%4\" b4=\"%5\"")
                     .arg(int(parenth[0])) .arg(int(parenth[1])) .arg(int(parenth[2])) .arg(int(parenth[3])) .arg(int(parenth[4])) );
       if (_prefix != Modifier::NONE)
@@ -1016,7 +1016,7 @@ void FiguredBass::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag("FiguredBass");
+      xml.stag(this);
       if(!onNote())
             xml.tag("onNote", onNote());
       if (ticks() > 0)

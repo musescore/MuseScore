@@ -73,7 +73,7 @@ void InstrumentChange::setInstrument(const Instrument& i)
 
 void InstrumentChange::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       _instrument->write(xml, part());
       TextBase::writeProperties(xml);
       xml.etag();

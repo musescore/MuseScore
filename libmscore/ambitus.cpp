@@ -182,7 +182,7 @@ void Ambitus::setBottomTpc(int val)
 
 void Ambitus::write(XmlWriter& xml) const
       {
-      xml.stag("Ambitus");
+      xml.stag(this);
       xml.tag(Pid::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
       xml.tag(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
       xml.tag(Pid::MIRROR_HEAD,int(_dir),           int(DIR_DEFAULT));

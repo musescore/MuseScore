@@ -135,33 +135,12 @@ void Location::fillPositionForElement(const Element* e, bool absfrac)
             qWarning("Location::fillPositionForElement: element is nullptr");
             return;
             }
-      if (track() == absDefaults.track()) {
-            const int track = e->track();
-            setTrack(track);
-            if (track < 0) {
-                  const MeasureBase* mb = e->findMeasureBase();
-                  if (mb && !mb->isMeasure()) {
-                        // Such elements are written in the first staff,
-                        // see writeMeasure() in scorefile.cpp
-                        setTrack(0);
-                        }
-                  }
-            }
+      if (track() == absDefaults.track())
+            setTrack(track(e));
       if (frac() == absDefaults.frac())
             setFrac(absfrac ? e->afrac() : e->rfrac());
-      if (measure() == absDefaults.measure()) {
-            if (absfrac)
-                  setMeasure(0);
-            else {
-                  const Measure* m = toMeasure(e->findMeasure());
-                  if (m)
-                        setMeasure(m->measureIndex());
-                  else {
-                        qWarning("Location::fillFor: cannot find element's measure (%s)", e->name());
-                        setMeasure(0);
-                        }
-                  }
-            }
+      if (measure() == absDefaults.measure())
+            setMeasure(absfrac ? 0 : measure(e));
       }
 
 //---------------------------------------------------------
@@ -180,26 +159,8 @@ void Location::fillForElement(const Element* e, bool absfrac)
             }
 
       fillPositionForElement(e, absfrac);
-
-      if (e->isChord() || (e->parent() && e->parent()->isChord())) {
-            const Chord* ch = e->isChord() ? toChord(e) : toChord(e->parent());
-            if (ch->isGrace())
-                  setGraceIndex(ch->graceIndex());
-            }
-      if (e->isNote()) {
-            const Note* n = toNote(e);
-            const std::vector<Note*>& notes = n->chord()->notes();
-            if (notes.size() == 1)
-                  setNote(0);
-            else {
-                  int noteIdx;
-                  for (noteIdx = 0; noteIdx < int(notes.size()); ++noteIdx) {
-                        if (n == notes.at(noteIdx))
-                              break;
-                        }
-                  setNote(noteIdx);
-                  }
-            }
+      setGraceIndex(graceIndex(e));
+      setNote(note(e));
       }
 
 //---------------------------------------------------------
@@ -222,6 +183,96 @@ Location Location::positionForElement(const Element* e, bool absfrac)
       Location i = Location::absolute();
       i.fillPositionForElement(e, absfrac);
       return i;
+      }
+
+//---------------------------------------------------------
+//   Location::track
+//---------------------------------------------------------
+
+int Location::track(const Element* e)
+      {
+      int track = e->track();
+      if (track < 0) {
+            const MeasureBase* mb = e->findMeasureBase();
+            if (mb && !mb->isMeasure()) {
+                  // Such elements are written in the first staff,
+                  // see writeMeasure() in scorefile.cpp
+                  track = 0;
+                  }
+            }
+      return track;
+      }
+
+//---------------------------------------------------------
+//   Location::measure
+//---------------------------------------------------------
+
+int Location::measure(const Element* e)
+      {
+      const Measure* m = toMeasure(e->findMeasure());
+      if (m)
+            return m->measureIndex();
+      qWarning("Location::measure: cannot find element's measure (%s)", e->name());
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   Location::graceIndex
+//---------------------------------------------------------
+
+int Location::graceIndex(const Element* e)
+      {
+      if (e->isChord() || (e->parent() && e->parent()->isChord())) {
+            const Chord* ch = e->isChord() ? toChord(e) : toChord(e->parent());
+            if (ch->isGrace())
+                  return ch->graceIndex();
+            }
+      return absDefaults.graceIndex();
+      }
+
+//---------------------------------------------------------
+//   Location::note
+//---------------------------------------------------------
+
+int Location::note(const Element* e)
+      {
+      if (e->isNote()) {
+            const Note* n = toNote(e);
+            const std::vector<Note*>& notes = n->chord()->notes();
+            if (notes.size() == 1)
+                  return 0;
+            int noteIdx;
+            for (noteIdx = 0; noteIdx < int(notes.size()); ++noteIdx) {
+                  if (n == notes.at(noteIdx))
+                        break;
+                  }
+            return noteIdx;
+            }
+      return absDefaults.note();
+      }
+
+//---------------------------------------------------------
+//   Location::getLocationProperty
+//---------------------------------------------------------
+
+QVariant Location::getLocationProperty(Pid pid, const Element* start, const Element* end)
+      {
+      switch(pid) {
+            case Pid::LOCATION_STAVES:
+                  return (track(start) / VOICES) - (track(end) / VOICES);
+            case Pid::LOCATION_VOICES:
+                  return (track(start) % VOICES) - (track(end) / VOICES);
+            case Pid::LOCATION_MEASURES:
+                  return measure(end) - measure(start);
+            case Pid::LOCATION_FRACTIONS:
+                  return end->rfrac() - start->rfrac();
+            case Pid::LOCATION_GRACE:
+                  return graceIndex(end) - graceIndex(end);
+            case Pid::LOCATION_NOTE:
+                  return note(start) - note(end);
+            default:
+                  return QVariant();
+            }
       }
 
 //---------------------------------------------------------

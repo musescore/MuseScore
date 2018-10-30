@@ -216,11 +216,16 @@ class XmlWriter : public QTextStream {
       bool _clipboardmode = { false };   // used to modify write() behaviour
       bool _excerptmode   = { false };   // true when writing a part
       bool _writeOmr      = { true };    // false if writing into *.msc file
+      bool _writeTrack    = { false };
+      bool _writePosition = { false };
       int _tupletId       = { 1 };
       int _beamId         = { 1 };
 
       LinksIndexer _linksIndexer;
       QMap<int, int> _lidLocalIndices;
+
+      std::vector<std::pair<const ScoreElement*, QString>> _elements;
+      bool _recordElements = false;
 
       void putLevel();
 
@@ -238,12 +243,16 @@ class XmlWriter : public QTextStream {
       bool clipboardmode() const    { return _clipboardmode; }
       bool excerptmode() const      { return _excerptmode;   }
       bool writeOmr() const         { return _writeOmr;   }
+      bool writeTrack() const       { return _writeTrack;    }
+      bool writePosition() const    { return _writePosition; }
       int nextTupletId()            { return _tupletId++;   }
       int nextBeamId()              { return _beamId++; }
 
       void setClipboardmode(bool v) { _clipboardmode = v; }
       void setExcerptmode(bool v)   { _excerptmode = v;   }
       void setWriteOmr(bool v)      { _writeOmr = v;      }
+      void setWriteTrack(bool v)    { _writeTrack= v;     }
+      void setWritePosition(bool v) { _writePosition = v; }
       void setTupletId(int v)       { _tupletId = v;      }
       void setBeamId(int v)         { _beamId = v;        }
       void setSpannerId(int v)      { _spannerId = v; }
@@ -262,6 +271,9 @@ class XmlWriter : public QTextStream {
       void setLidLocalIndex(int lid, int localIndex) { _lidLocalIndices.insert(lid, localIndex); }
       int lidLocalIndex(int lid) const { return _lidLocalIndices[lid]; }
 
+      const std::vector<std::pair<const ScoreElement*, QString>>& elements() const { return _elements; }
+      void setRecordElements(bool record) { _recordElements = record; }
+
       void sTag(const char* name, Spatium sp) { XmlWriter::tag(name, QVariant(sp.val())); }
       void pTag(const char* name, PlaceText);
 
@@ -269,6 +281,9 @@ class XmlWriter : public QTextStream {
 
       void stag(const QString&);
       void etag();
+
+      void stag(const ScoreElement* se, const QString& attributes = QString());
+      void stag(const QString& name, const ScoreElement* se, const QString& attributes = QString());
 
       void tagE(const QString&);
       void tagE(const char* format, ...);

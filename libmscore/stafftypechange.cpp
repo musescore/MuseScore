@@ -42,7 +42,7 @@ StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
 
 void StaffTypeChange::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       if (_staffType)
             _staffType->write(xml);
       Element::writeProperties(xml);

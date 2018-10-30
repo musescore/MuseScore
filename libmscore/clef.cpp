@@ -310,7 +310,7 @@ void Clef::read(XmlReader& e)
 
 void Clef::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       if (_clefTypes._concertClef != ClefType::INVALID)
             xml.tag("concertClefType", ClefInfo::tag(_clefTypes._concertClef));
       if (_clefTypes._transposingClef != ClefType::INVALID)

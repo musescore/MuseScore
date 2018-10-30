@@ -1040,7 +1040,7 @@ void SLine::writeProperties(XmlWriter& xml) const
       //
       qreal _spatium = spatium();
       for (const SpannerSegment* seg : spannerSegments()) {
-            xml.stag("Segment");
+            xml.stag("Segment", seg);
             xml.tag("subtype", int(seg->spannerSegmentType()));
             xml.tag("offset", seg->offset() / _spatium);
             xml.tag("off2", seg->userOff2() / _spatium);
@@ -1128,7 +1128,7 @@ const QRectF& SLine::bbox() const
 
 void SLine::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       SLine::writeProperties(xml);
       xml.etag();
       }

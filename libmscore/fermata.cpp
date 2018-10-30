@@ -105,7 +105,7 @@ void Fermata::write(XmlWriter& xml) const
             qDebug("%s not written", name());
             return;
             }
-      xml.stag("Fermata");
+      xml.stag(this);
       xml.tag("subtype", Sym::id2name(_symId));
       writeProperty(xml, Pid::TIME_STRETCH);
       writeProperty(xml, Pid::PLAY);

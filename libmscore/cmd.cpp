@@ -147,6 +147,8 @@ void Score::startCmd()
 
 void Score::undoRedo(bool undo, EditData* ed)
       {
+      if (readOnly())
+            return;
       deselectAll();
       cmdState().reset();
       if (undo)
@@ -170,7 +172,7 @@ void Score::endCmd(bool rollback)
             update();
             return;
             }
-      if (MScore::_error != MS_NO_ERROR)
+      if (readOnly() || MScore::_error != MS_NO_ERROR)
             rollback = true;
 
       if (rollback)

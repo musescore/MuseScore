@@ -76,7 +76,7 @@ void Breath::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag("Breath");
+      xml.stag(this);
       writeProperty(xml, Pid::SYMBOL);
       writeProperty(xml, Pid::PAUSE);
       Element::writeProperties(xml);

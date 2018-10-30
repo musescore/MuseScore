@@ -505,7 +505,7 @@ void BarLine::drawEditMode(QPainter* p, EditData& ed)
 
 void BarLine::write(XmlWriter& xml) const
       {
-      xml.stag("BarLine");
+      xml.stag(this);
 
       writeProperty(xml, Pid::BARLINE_TYPE);
       writeProperty(xml, Pid::BARLINE_SPAN);

@@ -191,7 +191,7 @@ class ScoreElement {
       virtual QString userName() const;
       virtual ElementType type() const = 0;
 
-      static ElementType name2type(const QStringRef&);
+      static ElementType name2type(const QStringRef&, bool silent = false);
       static const char* name(ElementType);
 
       virtual QVariant getProperty(Pid) const = 0;
@@ -202,6 +202,9 @@ class ScoreElement {
       virtual bool sizeIsSpatiumDependent() const { return true; }
 
       virtual void reset();                     // reset all properties & position to default
+
+      virtual Pid propertyId(const QStringRef& xmlName) const;
+      virtual QString propertyUserValue(Pid) const;
 
       virtual void initElementStyle(const ElementStyle*);
       virtual const ElementStyle* styledProperties() const   { return _elementStyle; }
@@ -342,10 +345,13 @@ class ScoreElement {
       CONVERT(StaffText,     STAFF_TEXT)
       CONVERT(SystemText,    SYSTEM_TEXT)
       CONVERT(BracketItem,   BRACKET_ITEM)
+      CONVERT(Score,         SCORE)
       CONVERT(Staff,         STAFF)
+      CONVERT(Part,          PART)
       CONVERT(BagpipeEmbellishment, BAGPIPE_EMBELLISHMENT)
 #undef CONVERT
 
+      virtual bool isElement() const { return false; } // overriden in element.h
       bool isChordRest() const       { return isRest() || isChord() || isRepeatMeasure(); }
       bool isDurationElement() const { return isChordRest() || isTuplet(); }
       bool isSlurTieSegment() const  { return isSlurSegment() || isTieSegment(); }
@@ -491,6 +497,7 @@ static inline const StaffTextBase* toStaffTextBase(const ScoreElement* e) {
 static inline a* to##a(ScoreElement* e)             { Q_ASSERT(e == 0 || e->is##a()); return (a*)e; } \
 static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##a()); return (const a*)e; }
 
+      CONVERT(Element)
       CONVERT(Note)
       CONVERT(Chord)
       CONVERT(BarLine)
@@ -580,7 +587,9 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(Page)
       CONVERT(SystemText)
       CONVERT(BracketItem)
+      CONVERT(Score)
       CONVERT(Staff)
+      CONVERT(Part)
       CONVERT(BagpipeEmbellishment)
 #undef CONVERT
 

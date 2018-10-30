@@ -23,6 +23,8 @@ class Element;
 class XmlReader;
 class XmlWriter;
 
+enum class Pid;
+
 class Location {
       int _staff;
       int _voice;
@@ -31,6 +33,11 @@ class Location {
       int _graceIndex;
       int _note;
       bool _rel;
+
+      static int track(const Element* e);
+      static int measure(const Element* e);
+      static int graceIndex(const Element* e);
+      static int note(const Element* e);
 
    public:
       constexpr Location(int staff, int voice, int measure, Fraction frac, int graceIndex, int note, bool rel)
@@ -67,6 +74,7 @@ class Location {
       void fillPositionForElement(const Element* e, bool absfrac = true);
       static Location forElement(const Element* e, bool absfrac = true);
       static Location positionForElement(const Element* e, bool absfrac = true);
+      static QVariant getLocationProperty(Pid pid, const Element* start, const Element* end);
 
       bool operator==(const Location& other) const;
       bool operator!=(const Location& other) const { return !(*this == other); }

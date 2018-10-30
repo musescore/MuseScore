@@ -576,7 +576,7 @@ int Staff::currentKeyTick(int tick) const
 void Staff::write(XmlWriter& xml) const
       {
       int idx = this->idx();
-      xml.stag(QString("Staff id=\"%1\"").arg(idx + 1));
+      xml.stag(this, QString("id=\"%1\"").arg(idx + 1));
       if (links()) {
             Score* s = masterScore();
             for (auto le : *links()) {

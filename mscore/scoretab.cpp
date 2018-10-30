@@ -351,6 +351,7 @@ void ScoreTab::insertTab(MasterScore* s)
       tab->insertTab(idx, s->fileInfo()->completeBaseName().replace("&","&&"));
       tab->setTabData(idx, QVariant::fromValue<void*>(new TabScoreView(s)));
       tab->blockSignals(false);
+      emit tabInserted(idx);
       }
 
 //---------------------------------------------------------
@@ -364,6 +365,7 @@ void ScoreTab::setTabText(int idx, const QString& s)
       tab->setTabText(idx, text);
       if (tab2)
             tab2->setTabText(0, text);
+      emit tabRenamed(idx);
       }
 
 //---------------------------------------------------------
@@ -393,10 +395,32 @@ void ScoreTab::setCurrentIndex(int idx)
       }
 
 //---------------------------------------------------------
+//   setCurrentScore
+//    Changes the currently selected score tab and excerpt
+//    tab to display the given score.
+//    Returns true on success.
+//---------------------------------------------------------
+
+bool ScoreTab::setCurrentScore(Score* s)
+      {
+      MasterScore* ms = s->masterScore();
+      const int idx = scoreList->indexOf(ms);
+      if (idx == -1)
+            return false;
+      const int exIdx = (ms == s) ? 0 : ms->scoreList().indexOf(s);
+      if (exIdx == -1)
+            return false;
+
+      setCurrentIndex(idx);
+      setExcerpt(exIdx);
+      return true;
+      }
+
+//---------------------------------------------------------
 //   removeTab
 //---------------------------------------------------------
 
-void ScoreTab::removeTab(int idx)
+void ScoreTab::removeTab(int idx, bool noCurrentChangedSignal)
       {
       TabScoreView* tsv = static_cast<TabScoreView*>(tab->tabData(idx).value<void*>());
       Score* score = tsv->score;
@@ -423,12 +447,16 @@ void ScoreTab::removeTab(int idx)
                   }
             }
 
-      int cidx = currentIndex();
-      tab->removeTab(idx);
+      bool blocked;
+      if (noCurrentChangedSignal)
+            blocked = blockSignals(true);
 
-      if (cidx > idx)
-            cidx -= 1;
-      setCurrentIndex(cidx);
+      tab->removeTab(idx); // Will call setCurrent via a signal-slot connection
+
+      if (noCurrentChangedSignal)
+            blockSignals(blocked);
+
+      emit tabRemoved(idx);
       }
 
 //---------------------------------------------------------

@@ -258,6 +258,9 @@ void MScore::init()
 #endif
       qRegisterMetaType<Fraction>("Fraction");
 
+      if (!QMetaType::registerConverter<Fraction, QString>(&Fraction::toString))
+          qFatal("registerConverter Fraction::toString failed");
+
 #ifdef Q_OS_WIN
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
       _globalShare = dir.absolutePath() + "/";

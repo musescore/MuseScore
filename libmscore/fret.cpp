@@ -394,7 +394,7 @@ void FretDiagram::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag("FretDiagram");
+      xml.stag(this);
       Element::writeProperties(xml);
 
       writeProperty(xml, Pid::FRET_STRINGS);

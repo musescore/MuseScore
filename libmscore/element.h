@@ -179,6 +179,8 @@ class Element : public ScoreElement {
       MeasureBase* findMeasureBase();
       const MeasureBase* findMeasureBase() const;
 
+      virtual bool isElement() const override { return true;        }
+
       qreal spatium() const;
 
       inline void setFlag(ElementFlag f, bool v)       { if (v) _flags |= f; else _flags &= ~ElementFlags(f); }
@@ -407,6 +409,8 @@ class Element : public ScoreElement {
       virtual QVariant getProperty(Pid) const override;
       virtual bool setProperty(Pid, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
+      virtual QString propertyUserValue(Pid) const override;
       virtual Element* propertyDelegate(Pid) { return 0; }  // return Spanner for SpannerSegment for some properties
 
       bool custom(Pid) const;
