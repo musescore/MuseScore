@@ -83,10 +83,6 @@ static const Spatium defaultFrameWidth206 = Spatium(0.2);
 
 //---------------------------------------------------------
 //   StyleVal206
-//    this is a list of default style values which are
-//    different in 3.x
-//
-// TODO: remove style values which are equal
 //---------------------------------------------------------
 
 struct StyleVal2 {
@@ -279,23 +275,6 @@ struct StyleVal2 {
       { Sid::barGraceDistance,            QVariant(.6) },
       { Sid::rehearsalMarkFrameRound,     QVariant(20)    },
       { Sid::dynamicsFontItalic,          QVariant(false) },
-
-//      { Sid::staffTextFontFace,           "FreeSerif" },
-//      { Sid::staffTextFontSize,           10.0 },
-//      { Sid::staffTextFontBold,           false },
-//      { Sid::staffTextFontItalic,         false },
-//      { Sid::staffTextFontUnderline,      false },
-      { Sid::staffTextAlign,              QVariant::fromValue(Align::LEFT | Align::TOP) },      // different from 3.x
-//      { Sid::staffTextOffsetType,         int(OffsetType::SPATIUM)   },
-//      { Sid::staffTextPlacement,          int(Placement::ABOVE) },
-//      { Sid::staffTextPosAbove,           QPointF(.0, -2.0) },
-//      { Sid::staffTextMinDistance,        Spatium(0.5)  },
-//      { Sid::staffTextFrameType,          int(FrameType::NO_FRAME) },
-//      { Sid::staffTextFramePadding,       0.2 },
-//      { Sid::staffTextFrameWidth,         0.1 },
-//      { Sid::staffTextFrameRound,         0  },
-//      { Sid::staffTextFrameFgColor,       QColor(0, 0, 0, 255) },
-//      { Sid::staffTextFrameBgColor,       QColor(255, 255, 255, 0) },
       };
 
 //---------------------------------------------------------
@@ -351,7 +330,7 @@ void readPageFormat(MStyle* style, XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   readTextStyle206
+//   readTextStyle
 //---------------------------------------------------------
 
 void readTextStyle206(MStyle* style, XmlReader& e)
@@ -1325,7 +1304,7 @@ bool readNoteProperties206(Note* note, XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   readTextProperties206
+//   readTextProperties
 //---------------------------------------------------------
 
 static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
@@ -1387,11 +1366,6 @@ static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
             else
                   qDebug("unknown alignment: <%s>", qPrintable(val));
             t->setAlign(align);
-            }
-      else if (tag == "pos") {
-            t->readProperty(e, Pid::OFFSET);
-            if ((char(t->align()) & char(Align::VMASK)) == char(Align::TOP))
-                  t->ryoffset() += .5 * t->score()->spatium();     // HACK: bbox is different in 2.x
             }
       else if (!t->readProperties(e))
             return false;

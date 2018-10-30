@@ -1493,16 +1493,16 @@ void Chord::layout2()
       for (Chord* c : _graceNotes)
             c->layout2();
 
+      qreal _spatium = spatium();
       qreal mag = staff()->mag(tick());
 
-#if 0
       //
       // Experimental:
       //    look for colliding ledger lines
       //
 
-      qreal _spatium = spatium();
       const qreal minDist = _spatium * .17;
+
       Segment* ps = segment()->prev(SegmentType::ChordRest);
       if (ps) {
             int strack = staff2track(staffIdx());
@@ -1544,7 +1544,6 @@ void Chord::layout2()
                         }
                   }
             }
-#endif
 
       //
       // position after-chord grace notes
@@ -1730,6 +1729,7 @@ void Chord::layoutPitched()
       qreal dotNoteDistance  = score()->styleP(Sid::dotNoteDistance)  * mag_;
       qreal minNoteDistance  = score()->styleP(Sid::minNoteDistance)  * mag_;
       qreal minTieLength     = score()->styleP(Sid::MinTieLength)     * mag_;
+      qreal ledgerLineLength = score()->styleP(Sid::ledgerLineLength) * mag_;
 
       qreal graceMag         = score()->styleD(Sid::graceNoteMag);
       qreal chordX           = (_noteType == NoteType::NORMAL) ? ipos().x() : 0.0;
@@ -1892,11 +1892,9 @@ void Chord::layoutPitched()
                   }
             }
 
-#if 0
       if (_ledgerLines) {
             // we may need to increase distance to previous chord
             Chord* pc = 0;
-            qreal ledgerLineLength = score()->styleP(Sid::ledgerLineLength) * mag_;
 
             if (_noteType == NoteType::NORMAL) {
                   // normal note
@@ -2014,7 +2012,6 @@ void Chord::layoutPitched()
                   lll = qMax(llsp, lll);
                   }
             }
-#endif
 
       _spaceLw = lll;
       _spaceRw = rrr;
