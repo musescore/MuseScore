@@ -1896,7 +1896,7 @@ bool readChordProperties206(XmlReader& e, Chord* ch)
 //    symbols which were not available for use prior to 3.0
 //---------------------------------------------------------
 
-static void convertDoubleArticulations(Chord* chord)
+static void convertDoubleArticulations(Chord* chord, XmlReader& e)
       {
       std::vector<Articulation*> pairableArticulations;
       for (Articulation* a : chord->articulations()) {
@@ -1938,8 +1938,11 @@ static void convertDoubleArticulations(Chord* chord)
             Articulation* newArtic = pairableArticulations[0];
             for (Articulation* a : pairableArticulations) {
                   chord->remove(a);
-                  if (a != newArtic)
+                  if (a != newArtic) {
+                        if (LinkedElements* link = a->links())
+                              e.linkIds().remove(link->lid());
                         delete a;
+                        }
                   }
 
             ArticulationAnchor anchor = newArtic->anchor();
@@ -1987,7 +1990,7 @@ static void readChord(Chord* chord, XmlReader& e)
             else
                   e.unknown();
             }
-      convertDoubleArticulations(chord);
+      convertDoubleArticulations(chord, e);
       }
 
 //---------------------------------------------------------
