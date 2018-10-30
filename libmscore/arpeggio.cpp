@@ -56,7 +56,7 @@ void Arpeggio::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag("Arpeggio");
+      xml.stag(this);
       Element::writeProperties(xml);
       xml.tag("subtype", int(_arpeggioType));
       if (_userLen1 != 0.0)

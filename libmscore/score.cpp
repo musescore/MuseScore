@@ -738,12 +738,30 @@ void Score::setMarkIrregularMeasures(bool v)
       }
 
 //---------------------------------------------------------
+//   readOnly
+//---------------------------------------------------------
+
+bool Score::readOnly() const
+      {
+      return _masterScore->readOnly();
+      }
+
+//---------------------------------------------------------
 //   dirty
 //---------------------------------------------------------
 
 bool Score::dirty() const
       {
       return !undoStack()->isClean();
+      }
+
+//---------------------------------------------------------
+//   state
+//---------------------------------------------------------
+
+ScoreContentState Score::state() const
+      {
+      return std::make_pair(this, undoStack()->state());
       }
 
 //---------------------------------------------------------
@@ -1609,6 +1627,24 @@ MeasureBase* Score::measure(int idx) const
                   return 0;
             }
       return mb;
+      }
+
+//---------------------------------------------------------
+//   crMeasure
+//    Returns a measure containing chords an rests
+//    by its index skipping other MeasureBase descendants
+//---------------------------------------------------------
+
+Measure* Score::crMeasure(int idx) const
+      {
+      int i = -1;
+      for (MeasureBase* mb = _measures.first(); mb; mb = mb->next()) {
+            if (mb->isMeasure())
+                  ++i;
+            if (i == idx)
+                  return toMeasure(mb);
+            }
+      return nullptr;
       }
 
 //---------------------------------------------------------

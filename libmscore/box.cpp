@@ -189,7 +189,7 @@ void Box::updateGrips(EditData& ed) const
 
 void Box::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       writeProperties(xml);
       xml.etag();
       }

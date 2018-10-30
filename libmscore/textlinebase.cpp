@@ -395,7 +395,7 @@ void TextLineBase::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(name());
+      xml.stag(this);
       writeProperties(xml);
       xml.etag();
       }
@@ -452,6 +452,19 @@ bool TextLineBase::readProperties(XmlReader& e)
                   }
             }
       return SLine::readProperties(e);
+      }
+
+//---------------------------------------------------------
+//   TextLineBase::propertyId
+//---------------------------------------------------------
+
+Pid TextLineBase::propertyId(const QStringRef& name) const
+      {
+      for (Pid pid : pids) {
+            if (propertyName(pid) == name)
+                  return pid;
+            }
+      return SLine::propertyId(name);
       }
 
 //---------------------------------------------------------

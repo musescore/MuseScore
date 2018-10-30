@@ -324,6 +324,16 @@ enum class Pid {
 
       POS_ABOVE,
 
+      LOCATION_STAVES,
+      LOCATION_VOICES,
+      LOCATION_MEASURES,
+      LOCATION_FRACTIONS,
+      LOCATION_GRACE,
+      LOCATION_NOTE,
+
+      VOICE,
+      POSITION,
+
       END
       };
 
@@ -371,7 +381,11 @@ extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
 extern const char* propertyQmlName(Pid);
 extern bool propertyLink(Pid id);
-extern Pid propertyId(const QString&);
+extern Pid propertyIdQml(const QString& qmlName);
+extern Pid propertyIdQml(const QStringRef& qmlName);
+extern Pid propertyIdName(const QString& name);
+extern Pid propertyIdName(const QStringRef& name);
+extern QString propertyUserName(Pid);
 
 }     // namespace Ms
 #endif

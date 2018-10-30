@@ -335,6 +335,7 @@ class TextBase : public Element {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(Pid id) const override;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
       virtual Sid getPropertyStyle(Pid) const;
       virtual void styleChanged();
 

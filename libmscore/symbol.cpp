@@ -97,7 +97,7 @@ void Symbol::draw(QPainter* p) const
 
 void Symbol::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("name", Sym::id2name(_sym));
       if (_scoreFont)
             xml.tag("font", _scoreFont->name());
@@ -199,7 +199,7 @@ void FSymbol::draw(QPainter* painter) const
 
 void FSymbol::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("font",     _font.family());
       xml.tag("fontsize", _font.pointSizeF());
       xml.tag("code",     _code);

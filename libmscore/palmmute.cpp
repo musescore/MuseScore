@@ -106,7 +106,7 @@ void PalmMute::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(name());
+      xml.stag(this);
 
       for (const StyledProperty& spp : *styledProperties())
             writeProperty(xml, spp.pid);

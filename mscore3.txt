@@ -329,6 +329,11 @@ Serialization:
       bool Element::readProperty(const QStringRef&, XmlReader&, P_ID);
             This sets the property state to UNSTYLED if it is a styled property.
 
+Human-readable representation:
+
+      virtual QString propertyUserValue(Pid) const;
+            Returns the value of the property in a human-readable representation.
+
 Styled properties:
 
       virtual StyleIdx getPropertyStyle(P_ID) const;

@@ -500,7 +500,7 @@ void Hairpin::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("subtype", int(_hairpinType));
       writeProperty(xml, Pid::VELO_CHANGE);
       writeProperty(xml, Pid::HAIRPIN_CIRCLEDTIP);

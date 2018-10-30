@@ -519,7 +519,7 @@ Tie::Tie(Score* s)
 
 void Tie::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       SlurTie::writeProperties(xml);
       xml.etag();
       }

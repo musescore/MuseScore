@@ -437,6 +437,16 @@ QVariant Spanner::getProperty(Pid propertyId) const
                   return track2();
             case Pid::ANCHOR:
                   return int(anchor());
+            case Pid::LOCATION_STAVES:
+                  return (track2() / VOICES) - (track() / VOICES);
+            case Pid::LOCATION_VOICES:
+                  return (track2() % VOICES) - (track() / VOICES);
+            case Pid::LOCATION_FRACTIONS:
+                  return Fraction::fromTicks(_ticks);
+            case Pid::LOCATION_MEASURES:
+            case Pid::LOCATION_GRACE:
+            case Pid::LOCATION_NOTE:
+                  return Location::getLocationProperty(propertyId, startElement(), endElement());
             default:
                   break;
             }

@@ -122,7 +122,7 @@ void Dynamic::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag("Dynamic");
+      xml.stag(this);
       xml.tag("subtype", dynamicTypeName());
       writeProperty(xml, Pid::VELOCITY);
       writeProperty(xml, Pid::DYNAMIC_RANGE);

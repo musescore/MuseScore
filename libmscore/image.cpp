@@ -214,7 +214,7 @@ void Image::write(XmlWriter& xml) const
       if (relativeFilePath.isEmpty())
             relativeFilePath = _linkPath;
 
-      xml.stag("Image");
+      xml.stag(this);
       BSymbol::writeProperties(xml);
       // keep old "path" tag, for backward compatibility and because it is used elsewhere
       // (for instance by Box:read(), Measure:read(), Note:read(), ...)

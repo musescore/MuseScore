@@ -908,7 +908,7 @@ void Chord::write(XmlWriter& xml) const
             c->write(xml);
             }
       writeBeam(xml);
-      xml.stag("Chord");
+      xml.stag(this);
       ChordRest::writeProperties(xml);
       for (const Articulation* a : _articulations)
             a->write(xml);

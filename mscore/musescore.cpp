@@ -58,6 +58,8 @@
 #include "timeline.h"
 #include "importmidi/importmidi_panel.h"
 #include "importmidi/importmidi_operations.h"
+#include "scorecmp/scorecmp.h"
+#include "libmscore/scorediff.h"
 #include "libmscore/chord.h"
 #include "libmscore/segment.h"
 #include "editraster.h"
@@ -152,6 +154,8 @@ QString dataPath;
 QString iconPath;
 
 bool converterMode = false;
+static bool rawDiffMode = false;
+static bool diffMode = false;
 bool processJob = false;
 bool externalIcons = false;
 bool pluginMode = false;
@@ -1085,6 +1089,17 @@ MuseScore::MuseScore()
       scorePageLayoutChanged();
       showTimeline(false);
 
+      scoreCmpTool = new ScoreComparisonTool;
+      scoreCmpTool->setVisible(false);
+      {
+      QAction* a = getAction("toggle-scorecmp-tool");
+      connect(
+         scoreCmpTool, &ScoreComparisonTool::visibilityChanged,
+         a,            &QAction::setChecked
+         );
+      }
+      addDockWidget(Qt::BottomDockWidgetArea, scoreCmpTool);
+
       mainWindow->setStretchFactor(0, 1);
       mainWindow->setStretchFactor(1, 0);
       mainWindow->setSizes(QList<int>({500, 50}));
@@ -1118,19 +1133,11 @@ MuseScore::MuseScore()
       envelope->setSizes(QList<int>({550, 180}));
 
       splitter = new QSplitter;
-      tab1 = new ScoreTab(&scoreList, this);
-      tab1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-      connect(tab1, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
-      connect(tab1, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
-      connect(tab1, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
+      tab1 = createScoreTab();
       splitter->addWidget(tab1);
 
       if (splitScreen()) {
-            tab2 = new ScoreTab(&scoreList, this);
-            tab2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-            connect(tab2, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
-            connect(tab2, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
-            connect(tab2, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
+            tab2 = createScoreTab();
             splitter->addWidget(tab2);
             tab2->setVisible(false);
             }
@@ -1367,6 +1374,10 @@ MuseScore::MuseScore()
       menuView->addAction(a);
 
       a = getAction("toggle-piano");
+      a->setCheckable(true);
+      menuView->addAction(a);
+
+      a = getAction("toggle-scorecmp-tool");
       a->setCheckable(true);
       menuView->addAction(a);
 
@@ -2100,15 +2111,9 @@ int MuseScore::appendScore(MasterScore* score)
                   }
             }
       scoreList.insert(index, score);
-      tab1->blockSignals(true);
-      if (tab2)
-            tab2->blockSignals(true);
       tab1->insertTab(score);
       if (tab2)
             tab2->insertTab(score);
-      tab1->blockSignals(false);
-      if (tab2)
-            tab2->blockSignals(false);
       return index;
       }
 
@@ -2373,6 +2378,30 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             timeline()->setScoreView(view);
             }
       ScoreAccessibility::instance()->updateAccessibilityInfo();
+      }
+
+//---------------------------------------------------------
+//   setCurrentScores
+//---------------------------------------------------------
+
+void MuseScore::setCurrentScores(Score* s1, Score* s2)
+      {
+      if (s1)
+            tab1->setCurrentScore(s1);
+      if (s2) {
+            setSplitScreen(true);
+            tab2->setCurrentScore(s2);
+            }
+      }
+
+//---------------------------------------------------------
+//   setSplitScreen
+//---------------------------------------------------------
+
+void MuseScore::setSplitScreen(bool val)
+      {
+      if (splitScreen() != val)
+            splitWindow(_horizontalSplit);
       }
 
 //---------------------------------------------------------
@@ -2853,15 +2882,9 @@ void MuseScore::removeTab(int i)
       midiPanelOnCloseFile(score->importedFilePath());
       scoreList.removeAt(i);
 
-      tab1->blockSignals(true);
-      tab1->removeTab(i);
-      tab1->blockSignals(false);
-
-      if (tab2) {
-            tab2->blockSignals(true);
-            tab2->removeTab(i);
-            tab2->blockSignals(false);
-            }
+      tab1->removeTab(i, /* noCurrentChangedSignals */ true);
+      if (tab2)
+            tab2->removeTab(i, /* noCurrentChangedSignals */ true);
 
       cs = 0;
       cv = 0;
@@ -3318,6 +3341,7 @@ static bool processNonGui(const QStringList& argv)
             else
                   return convert(argv[0], outFileName);
             }
+
       if (!extensionName.isEmpty()) {
             QFileInfo fi(extensionName);
             QString suffix = fi.suffix().toLower();
@@ -3328,6 +3352,25 @@ static bool processNonGui(const QStringList& argv)
                   return false;
                   }
             }
+
+      if (rawDiffMode || diffMode) {
+            if (argv.size() != 2)
+                  return false;
+            MasterScore* s1 = mscore->readScore(argv[0]);
+            MasterScore* s2 = mscore->readScore(argv[1]);
+            if (!s1 || !s2)
+                  return false;
+            ScoreDiff diff(s1, s2, /* textDiffOnly */ !diffMode);
+
+            if (rawDiffMode)
+                  QTextStream(stdout) << diff.rawDiff() << endl;
+            if (diffMode)
+                  QTextStream(stdout) << diff.userDiff() << endl;
+
+            delete s1;
+            delete s2;
+            }
+
       return true;
       }
 
@@ -4694,11 +4737,7 @@ void MuseScore::splitWindow(bool horizontal)
       {
       if (!_splitScreen) {
             if (tab2 == 0) {
-                  tab2 = new ScoreTab(&scoreList, this);
-                  tab2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-                  connect(tab2, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
-                  connect(tab2, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
-                  connect(tab2, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
+                  tab2 = createScoreTab();
                   splitter->addWidget(tab2);
                   }
             tab2->setVisible(true);
@@ -4712,24 +4751,22 @@ void MuseScore::splitWindow(bool horizontal)
                   s->update();
                   setCurrentView(1, 0);
                   }
+            emit windowSplit(true);
             }
       else {
             if (_horizontalSplit == horizontal) {
                   _splitScreen = false;
                   tab2->setVisible(false);
                   setCurrentView(0, tab1->currentIndex());
+                  emit windowSplit(false);
                   }
             else {
                   _horizontalSplit = horizontal;
-                  QAction* a;
-                  if (_horizontalSplit)
-                        a = getAction("split-v");
-                  else
-                        a = getAction("split-h");
-                  a->setChecked(false);
                   splitter->setOrientation(_horizontalSplit ? Qt::Horizontal : Qt::Vertical);
                   }
             }
+      getAction("split-h")->setChecked(_splitScreen && _horizontalSplit);
+      getAction("split-v")->setChecked(_splitScreen && !_horizontalSplit);
       }
 
 //---------------------------------------------------------
@@ -5309,6 +5346,7 @@ void MuseScore::endCmd()
             updateInputState(cs);
             updateUndoRedo();
             dirtyChanged(cs);
+            scoreCmpTool->updateDiff();
             Element* e = cs->selection().element();
 
             // For multiple notes selected check if they all have same pitch and tuning
@@ -5410,6 +5448,20 @@ void MuseScore::setPlayRepeats(bool repeat)
             cs->updateRepeatList(repeat);
             emit cs->playlistChanged();
             }
+      }
+
+//---------------------------------------------------------
+//   createScoreTab
+//---------------------------------------------------------
+
+ScoreTab* MuseScore::createScoreTab()
+      {
+      ScoreTab* tab = new ScoreTab(&scoreList, this);
+      tab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+      connect(tab, SIGNAL(currentScoreViewChanged(ScoreView*)), SLOT(setCurrentScoreView(ScoreView*)));
+      connect(tab, SIGNAL(tabCloseRequested(int)), SLOT(removeTab(int)));
+      connect(tab, SIGNAL(actionTriggered(QAction*)), SLOT(cmd(QAction*)));
+      return tab;
       }
 
 //---------------------------------------------------------
@@ -5589,6 +5641,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             ;
       else if (cmd == "toggle-piano")
             showPianoKeyboard(a->isChecked());
+      else if (cmd == "toggle-scorecmp-tool")
+            scoreCmpTool->setVisible(a->isChecked());
       else if (cmd == "plugin-creator")
             showPluginCreator(a);
       else if (cmd == "plugin-manager")
@@ -6589,6 +6643,8 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"f", "force"}, "Used with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
       parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
       parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless if -e is passed too", "extension file"));
+      parser.addOption(QCommandLineOption("raw-diff", "Print a raw diff for the given scores"));
+      parser.addOption(QCommandLineOption("diff", "Print a diff for the given scores"));
 
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -6726,6 +6782,14 @@ int main(int argc, char* av[])
             else
                   fprintf(stderr, "MP3 bitrate value '%s' not recognized, using default setting from preferences instead.\n", qPrintable(temp));
            }
+      if (parser.isSet("raw-diff")) {
+            MScore::noGui = true;
+            rawDiffMode = true;
+            }
+      if (parser.isSet("diff")) {
+            MScore::noGui = true;
+            diffMode = true;
+            }
 
       QStringList argv = parser.positionalArguments();
 
@@ -6749,6 +6813,10 @@ int main(int argc, char* av[])
             else
                   if (app->sendMessage(QString("")))
                       return 0;
+            }
+      if (rawDiffMode || diffMode) {
+            if (argv.size() != 2)
+                  qFatal("Only two scores are needed for performing a comparison");
             }
 
       if (dataPath.isEmpty())

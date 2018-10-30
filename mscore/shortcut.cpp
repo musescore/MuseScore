@@ -2726,6 +2726,13 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_FOTO | STATE_EDIT,
+         "toggle-scorecmp-tool",
+         QT_TRANSLATE_NOOP("action","Score Comparison Tool"),
+         QT_TRANSLATE_NOOP("action","Score comparison tool")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY | STATE_FOTO,
          "media",
          QT_TRANSLATE_NOOP("action","Additional Media..."),

@@ -187,7 +187,7 @@ void Accidental::read(XmlReader& e)
 
 void Accidental::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       writeProperty(xml, Pid::ACCIDENTAL_BRACKET);
       writeProperty(xml, Pid::ROLE);
       writeProperty(xml, Pid::SMALL);
@@ -438,6 +438,20 @@ bool Accidental::setProperty(Pid propertyId, const QVariant& v)
             }
       triggerLayout();
       return true;
+      }
+
+//---------------------------------------------------------
+//   propertyUserValue
+//---------------------------------------------------------
+
+QString Accidental::propertyUserValue(Pid pid) const
+      {
+      switch(pid) {
+            case Pid::SUBTYPE:
+                  return subtypeUserName();
+            default:
+                  return Element::propertyUserValue(pid);
+            }
       }
 
 //---------------------------------------------------------

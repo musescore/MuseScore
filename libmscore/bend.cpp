@@ -280,7 +280,7 @@ void Bend::draw(QPainter* painter) const
 
 void Bend::write(XmlWriter& xml) const
       {
-      xml.stag("Bend");
+      xml.stag(this);
       for (const PitchValue& v : _points) {
             xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
                .arg(v.time).arg(v.pitch).arg(v.vibrato));

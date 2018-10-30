@@ -21,7 +21,7 @@ namespace Ms {
 
 void Icon::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("subtype", int(_iconType));
       if (!_action.isEmpty())
             xml.tag("action", _action.data());

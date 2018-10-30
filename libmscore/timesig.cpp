@@ -125,7 +125,7 @@ void TimeSig::setDenominatorString(const QString& a)
 
 void TimeSig::write(XmlWriter& xml) const
       {
-      xml.stag("TimeSig");
+      xml.stag(this);
       writeProperty(xml, Pid::TIMESIG_TYPE);
       Element::writeProperties(xml);
 
@@ -215,6 +215,23 @@ void TimeSig::read(XmlReader& e)
             _sig.set(z1+z2+z3+z4, n);
             }
       _stretch.reduce();
+      }
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid TimeSig::propertyId(const QStringRef& name) const
+      {
+      if (name == "subtype")
+            return Pid::TIMESIG_TYPE;
+      if (name == "sigN" || name == "sigD")
+            return Pid::TIMESIG;
+      if (name == "stretchN" || name == "stretchD")
+            return Pid::TIMESIG_STRETCH;
+      if (name == "Groups")
+            return Pid::GROUPS;
+      return Element::propertyId(name);
       }
 
 //---------------------------------------------------------
