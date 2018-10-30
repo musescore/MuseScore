@@ -36,6 +36,6 @@
     <Widget>palette-box</Widget>
     </Message>
   <Message>
-    <Text>That's the end! As you use MuseScore, more tours will pop up to further explain functionality. \nTo disable those, select "Do not show me tours" before closing this window. \nYou can also turn these off in Edit->Preferences</Text>
+    <Text>That's the end! As you use MuseScore, more tours will pop up to further explain functionality. \nTo disable those, select "Do not show me tours" before closing this window. \nYou can also turn these off in Preferences</Text>
     </Message>
   </Tour>
