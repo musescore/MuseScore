@@ -517,6 +517,7 @@ class Score : public QObject, public ScoreElement {
       void resetSystems(bool layoutAll, LayoutContext& lc);
       void collectLinearSystem(LayoutContext& lc);
       void resetTempo();
+      void resetTempoRange(int tick1, int tick2);
 
    protected:
       int _fileDivision; ///< division of current loading *.msc file
