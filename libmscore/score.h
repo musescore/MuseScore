@@ -280,6 +280,12 @@ class UpdateState {
       QList<ScoreElement*> _deleteList;
       };
 
+//---------------------------------------------------------
+//   ScoreContentState
+//---------------------------------------------------------
+
+typedef std::pair<const Score*, int> ScoreContentState;
+
 class MasterScore;
 
 //-----------------------------------------------------------------------------
@@ -550,6 +556,7 @@ class Score : public QObject, public ScoreElement {
       Score* clone();
 
       virtual bool isMaster() const  { return false;        }
+      virtual bool readOnly() const;
 
       virtual inline QList<Excerpt*>& excerpts();
       virtual inline const QList<Excerpt*>& excerpts() const;
@@ -796,6 +803,7 @@ class Score : public QObject, public ScoreElement {
       void setImportedFilePath(const QString& filePath);
 
       bool dirty() const;
+      ScoreContentState state() const;
       void setCreated(bool val)      { _created = val;        }
       bool created() const           { return _created;       }
       bool savedCapture() const      { return _savedCapture;  }
@@ -948,6 +956,7 @@ class Score : public QObject, public ScoreElement {
       Ms::Measure* lastMeasure() const;
       Ms::Measure* lastMeasureMM() const;
       MeasureBase* measure(int idx) const;
+      Measure* crMeasure(int idx) const;
 
       int endTick() const;
 
@@ -1191,6 +1200,8 @@ class MasterScore : public Score {
       MasterScore* _prev      { 0 };
       Movements* _movements   { 0 };
 
+      bool _readOnly          { false };
+
       CmdState _cmdState;     // modified during cmd processing
 
       Omr* _omr               { 0 };
@@ -1210,6 +1221,7 @@ class MasterScore : public Score {
       void removeDeletedMidiMapping();
       int updateMidiMapping();
 
+      QFileInfo _sessionStartBackupInfo;
       QFileInfo info;
 
       bool read(XmlReader&);
@@ -1223,6 +1235,8 @@ class MasterScore : public Score {
       MasterScore* clone();
 
       virtual bool isMaster() const override                          { return true;        }
+      virtual bool readOnly() const override                          { return _readOnly;   }
+      void setReadOnly(bool ro)                                       { _readOnly = ro;     }
       virtual UndoStack* undoStack() const override                   { return _movements->undo(); }
       virtual TimeSigMap* sigmap() const override                     { return _sigmap;     }
       virtual TempoMap* tempomap() const override                     { return _tempomap;   }
@@ -1295,6 +1309,8 @@ class MasterScore : public Score {
       QFileInfo* fileInfo()               { return &info; }
       const QFileInfo* fileInfo() const   { return &info; }
       void setName(const QString&);
+
+      const QFileInfo& sessionStartBackupInfo() const { return _sessionStartBackupInfo; }
 
       virtual QString title() const override;
 

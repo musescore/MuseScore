@@ -212,7 +212,7 @@ void Stem::draw(QPainter* painter) const
 
 void Stem::write(XmlWriter& xml) const
       {
-      xml.stag("Stem");
+      xml.stag(this);
       Element::writeProperties(xml);
       writeProperty(xml, Pid::USER_LEN);
       writeProperty(xml, Pid::LINE_WIDTH);

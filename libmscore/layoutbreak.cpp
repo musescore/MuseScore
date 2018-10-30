@@ -48,7 +48,7 @@ LayoutBreak::LayoutBreak(const LayoutBreak& lb)
 
 void LayoutBreak::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       Element::writeProperties(xml);
 
       writeProperty(xml, Pid::LAYOUT_BREAK);

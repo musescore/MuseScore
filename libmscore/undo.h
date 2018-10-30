@@ -119,8 +119,10 @@ class UndoCommand {
 class UndoStack {
       UndoCommand* curCmd;
       QList<UndoCommand*> list;
+      std::vector<int> stateList;
+      int nextState;
+      int cleanState;
       int curIdx;
-      int cleanIdx;
 
    public:
       UndoStack();
@@ -135,7 +137,8 @@ class UndoStack {
       void setClean();
       bool canUndo() const          { return curIdx > 0;           }
       bool canRedo() const          { return curIdx < list.size(); }
-      bool isClean() const          { return cleanIdx == curIdx;   }
+      int state() const             { return stateList[curIdx];    }
+      bool isClean() const          { return cleanState == state();     }
       int getCurIdx() const         { return curIdx; }
       void remove(int idx);
       bool empty() const            { return !canUndo() && !canRedo();  }

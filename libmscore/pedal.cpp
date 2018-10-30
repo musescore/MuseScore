@@ -122,7 +122,7 @@ void Pedal::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(name());
+      xml.stag(this);
 
       for (auto i : {
          Pid::END_HOOK_TYPE,

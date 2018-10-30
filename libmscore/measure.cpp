@@ -1760,10 +1760,10 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
             }
       if (_len != _timesig) {
             // this is an irregular measure
-            xml.stag(QString("Measure len=\"%1/%2\"").arg(_len.numerator()).arg(_len.denominator()));
+            xml.stag(this, QString("len=\"%1/%2\"").arg(_len.numerator()).arg(_len.denominator()));
             }
       else
-            xml.stag("Measure");
+            xml.stag(this);
 
       xml.setCurTick(tick());
       xml.setCurTrack(staff * VOICES);
@@ -1784,7 +1784,7 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
       qreal _spatium = spatium();
       MStaff* mstaff = _mstaves[staff];
       if (mstaff->noText() && !mstaff->noText()->generated()) {
-            xml.stag("MeasureNumber");
+            xml.stag("MeasureNumber", mstaff->noText());
             mstaff->noText()->writeProperties(xml);
             xml.etag();
             }

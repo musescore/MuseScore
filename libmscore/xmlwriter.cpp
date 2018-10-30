@@ -94,6 +94,34 @@ void XmlWriter::stag(const QString& s)
       }
 
 //---------------------------------------------------------
+//   stag
+//    <mops attribute="value">
+//---------------------------------------------------------
+
+void XmlWriter::stag(const ScoreElement* se, const QString& attributes)
+      {
+      stag(se->name(), se, attributes);
+      }
+
+//---------------------------------------------------------
+//   stag
+//    <mops attribute="value">
+//---------------------------------------------------------
+
+void XmlWriter::stag(const QString& name, const ScoreElement* se, const QString& attributes)
+      {
+      putLevel();
+      *this << '<' << name;
+      if (!attributes.isEmpty())
+            *this << ' ' << attributes;
+      *this << '>' << endl;
+      stack.append(name);
+
+      if (_recordElements)
+            _elements.emplace_back(se, name);
+      }
+
+//---------------------------------------------------------
 //   etag
 //    </mops>
 //---------------------------------------------------------
@@ -182,6 +210,7 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
             case P_TYPE::STRING:
             case P_TYPE::FONT:
             case P_TYPE::ALIGN:
+            case P_TYPE::FRACTION:
                   tag(name, data);
                   break;
             case P_TYPE::ORNAMENT_STYLE:
@@ -289,8 +318,6 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
             case P_TYPE::SUB_STYLE:
                   tag(name, textStyleName(Tid(data.toInt())));
                   break;
-            case P_TYPE::FRACTION:
-                  qFatal("unknown: FRACTION");
             case P_TYPE::POINT_MM:
                   qFatal("unknown: POINT_MM");
             case P_TYPE::SIZE_MM:

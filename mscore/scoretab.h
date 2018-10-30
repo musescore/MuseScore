@@ -57,6 +57,9 @@ class ScoreTab : public QWidget {
       void currentScoreViewChanged(ScoreView*);
       void tabCloseRequested(int);
       void actionTriggered(QAction*);
+      void tabInserted(int);
+      void tabRemoved(int);
+      void tabRenamed(int);
 
    private slots:
       void setCurrent(int);
@@ -76,7 +79,8 @@ class ScoreTab : public QWidget {
       void setTabText(int, const QString&);
       int currentIndex() const;
       void setCurrentIndex(int);
-      void removeTab(int);
+      bool setCurrentScore(Score* s);
+      void removeTab(int, bool noCurrentChangedSignal = false);
       int count() const       { return scoreList->size(); }
       ScoreView* view(int) const;
       QSplitter* viewSplitter(int n) const;
