@@ -19,6 +19,7 @@
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <barNoteDistance>1.2</barNoteDistance>
       <dynamicsFontItalic>0</dynamicsFontItalic>
+      <staffAlign>left,top</staffAlign>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>

@@ -22,6 +22,7 @@
       <defaultFrameWidth>0</defaultFrameWidth>
       <longInstrumentAlign>center,center</longInstrumentAlign>
       <dynamicsFontItalic>0</dynamicsFontItalic>
+      <staffAlign>left,top</staffAlign>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>

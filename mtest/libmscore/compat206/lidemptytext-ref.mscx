@@ -12,6 +12,7 @@
       <pedalPosBelow x="0" y="0"/>
       <trillPosAbove x="0" y="0"/>
       <dynamicsFontItalic>0</dynamicsFontItalic>
+      <staffAlign>left,top</staffAlign>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
