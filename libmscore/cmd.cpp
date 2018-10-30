@@ -1901,6 +1901,32 @@ void Score::cmdResetNoteAndRestGroupings()
       }
 
 //---------------------------------------------------------
+//   resetElementShapePosition
+//    For use with Score::scanElements.
+//    Reset positions and autoplacement for the given
+//    element.
+//---------------------------------------------------------
+
+static void resetElementPosition(void*, Element* e)
+      {
+      e->undoResetProperty(Pid::AUTOPLACE);
+      e->undoResetProperty(Pid::OFFSET);
+      if (e->isSpanner())
+            e->undoResetProperty(Pid::OFFSET2);
+      }
+
+//---------------------------------------------------------
+//   cmdResetAllPositions
+//---------------------------------------------------------
+
+void Score::cmdResetAllPositions()
+      {
+      startCmd();
+      scanElements(nullptr, resetElementPosition);
+      endCmd();
+      }
+
+//---------------------------------------------------------
 //   processMidiInput
 //---------------------------------------------------------
 

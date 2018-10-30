@@ -370,6 +370,7 @@ MasterScore* MuseScore::readScore(const QString& name)
       allowShowMidiPanel(name);
       if (score)
             addRecentScore(score);
+
       return score;
       }
 
