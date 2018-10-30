@@ -20,6 +20,7 @@
       <barNoteDistance>1.2</barNoteDistance>
       <lastSystemFillLimit>0</lastSystemFillLimit>
       <dynamicsFontItalic>0</dynamicsFontItalic>
+      <staffAlign>left,top</staffAlign>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
