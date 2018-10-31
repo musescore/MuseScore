@@ -447,7 +447,7 @@ void ScoreTab::removeTab(int idx, bool noCurrentChangedSignal)
                   }
             }
 
-      bool blocked;
+      bool blocked = false;
       if (noCurrentChangedSignal)
             blocked = blockSignals(true);
 

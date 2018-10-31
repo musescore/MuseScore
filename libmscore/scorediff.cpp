@@ -207,6 +207,7 @@ int MscxModeDiff::adjustSemanticsMscxOneDiff(std::vector<TextDiff>& diffs, int i
       int iScore;
       switch(diff->type) {
             case DiffType::EQUAL:
+                  /* FALLTROUGH */
             case DiffType::REPLACE:
                   // TODO: split a REPLACE diff, though they should not be here
                   return index;
@@ -214,6 +215,8 @@ int MscxModeDiff::adjustSemanticsMscxOneDiff(std::vector<TextDiff>& diffs, int i
                   iScore = 1;
                   break;
             case DiffType::DELETE:
+                  /* FALLTROUGH */
+            default:
                   iScore = 0;
                   break;
             }
@@ -379,6 +382,7 @@ int MscxModeDiff::performShiftDiff(std::vector<TextDiff>& diffs, int index, int 
       const int inc = down ? 1 : -1;
       for (int i = index; i != nextDiffIdx; i += inc) {
             TextDiff& d = diffs[i];
+            Q_UNUSED(d);
             Q_ASSERT(d.type != DiffType::EQUAL); // nextDiff should be the first EQUAL diff in that direction
             diff.start[0] += lines;
             diff.end[0] += lines;
@@ -1206,21 +1210,21 @@ static QString addLinePrefix(const QString& str, const QString& prefix)
 //    only deleted chunk for REPLACE diff item.
 //---------------------------------------------------------
 
-QString TextDiff::toString(DiffType type, bool prefixLines) const
+QString TextDiff::toString(DiffType dt, bool prefixLines) const
       {
-      if (type == DiffType::REPLACE) {
+      if (dt == DiffType::REPLACE) {
             QStringList l;
             l.push_back(toString(DiffType::DELETE, prefixLines));
             l.push_back(toString(DiffType::INSERT, prefixLines));
             return l.join('\n');
             }
 
-      int idx = (type == DiffType::INSERT) ? 1 : 0;
-      const char* prefix = (type == DiffType::INSERT) ? ">" : "<";
+      int idx = (dt == DiffType::INSERT) ? 1 : 0;
+      const char* prefix = (dt == DiffType::INSERT) ? ">" : "<";
 
       QString lines[2];
       for (int i = 0; i < 2; ++i) {
-            if ((i != idx && type != DiffType::EQUAL)
+            if ((i != idx && dt != DiffType::EQUAL)
                   || end[i] <= start[i]
                   ) {
                   lines[i] = QString::number(start[i]);
