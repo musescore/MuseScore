@@ -133,6 +133,8 @@ class TimeSigMap : public std::map<int, SigEvent > {
 
       void del(int tick);
 
+      void clearRange(int tick1, int tick2);
+
       void read(XmlReader&, int fileDiv);
       void write(XmlWriter&) const;
       void dump() const;
