@@ -53,6 +53,7 @@ class TempoMap : public std::map<int, TEvent> {
    public:
       TempoMap();
       void clear();
+      void clearRange(int tick1, int tick2);
 
       void dump() const;
 

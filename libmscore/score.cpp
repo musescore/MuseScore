@@ -3303,12 +3303,26 @@ void Score::removeTempo(int tick)
 
 void Score::resetTempo()
       {
-      tempomap()->clear();
-      tempomap()->setTempo(0, _defaultTempo);
-      sigmap()->clear();
-      Measure* m = firstMeasure();
-      if (m)
-            sigmap()->add(0, SigEvent(m->len(),  m->timesig(), 0));
+      resetTempoRange(0, std::numeric_limits<int>::max());
+      }
+
+//---------------------------------------------------------
+//   resetTempoRange
+//    Reset tempo and timesig maps in the given range.
+//    Start tick included, end tick excluded.
+//---------------------------------------------------------
+
+void Score::resetTempoRange(int tick1, int tick2)
+      {
+      tempomap()->clearRange(tick1, tick2);
+      if (tempomap()->empty())
+            tempomap()->setTempo(0, _defaultTempo);
+      sigmap()->clearRange(tick1, tick2);
+      if (sigmap()->empty()) {
+            Measure* m = firstMeasure();
+            if (m)
+                  sigmap()->add(0, SigEvent(m->len(),  m->timesig(), 0));
+            }
       }
 
 //---------------------------------------------------------
