@@ -15,7 +15,7 @@
 
 namespace Ms {
 
-class BaseDiff;
+struct BaseDiff;
 class ScoreDiff;
 struct TextDiff;
 

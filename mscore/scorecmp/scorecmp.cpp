@@ -240,7 +240,7 @@ void ScoreComparisonTool::updateDiff()
 
 Score* ScoreComparisonTool::openScoreVersion(const ScoreVersion& ver)
       {
-      Score* s;
+      Score* s = nullptr;
       if (ver.recent) {
             s = ver.score;
             if (!s)

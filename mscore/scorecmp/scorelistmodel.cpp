@@ -161,7 +161,7 @@ int ScoreVersionListModel::rowCount(const QModelIndex& parent) const
       {
       if (parent.isValid())
             return 0;
-      return _versions.size();
+      return int(_versions.size());
       }
 
 //---------------------------------------------------------
