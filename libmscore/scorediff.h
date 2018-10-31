@@ -36,7 +36,7 @@ enum class ItemType {
 //---------------------------------------------------------
 //   DiffType
 //---------------------------------------------------------
-
+#undef DELETE
 enum class DiffType {
       EQUAL,
       INSERT,

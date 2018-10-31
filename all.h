@@ -218,7 +218,6 @@
    // Undefined problematic #def'd macros in Microsoft headers
    #undef STRING_NONE
    #undef small
-   #undef DELETE
 #endif
 
 #endif  // __cplusplus

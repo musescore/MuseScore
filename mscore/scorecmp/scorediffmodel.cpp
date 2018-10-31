@@ -54,7 +54,7 @@ int RawScoreDiffModel::rowCount(const QModelIndex& parent) const
       {
       if (parent.isValid())
             return 0;
-      return _textDiffs.size();
+      return int(_textDiffs.size());
       }
 
 //---------------------------------------------------------
@@ -97,7 +97,7 @@ int ScoreDiffModel::rowCount(const QModelIndex& parent) const
       {
       if (parent.isValid())
             return 0;
-      return _diff->diffs().size();
+      return int(_diff->diffs().size());
       }
 
 //---------------------------------------------------------
