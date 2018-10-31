@@ -2397,10 +2397,9 @@ static void readStaff(Staff* staff, XmlReader& e)
             else if (tag == "keylist")
                   staff->keyList()->read(e, _score);
             else if (tag == "bracket") {
-                  BracketItem* b = new BracketItem(_score);
-                  b->setBracketType( BracketType(e.intAttribute("type", -1)));
-                  b->setBracketSpan(e.intAttribute("span", 0));
-                  staff->brackets().push_back(b);
+                  int col = staff->brackets().size();
+                  staff->setBracketType(col, BracketType(e.intAttribute("type", -1)));
+                  staff->setBracketSpan(col, e.intAttribute("span", 0));
                   e.readNext();
                   }
             else if (tag == "barLineSpan")
