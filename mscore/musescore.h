@@ -223,6 +223,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       QSettings settings;
       ScoreView* cv                        { 0 };
+      QMap<Score*, bool> scoreWasShown; // whether each score in scoreList has ever been shown
       ScoreState _sstate;
       UpdateChecker* ucheck;
       ExtensionsUpdateChecker* packUChecker = nullptr;
@@ -473,6 +474,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setPlayRepeats(bool repeat);
 
       ScoreTab* createScoreTab();
+      void askResetOldScorePositions(Score* score);
 
       QString getUtmParameters(QString medium) const;
 

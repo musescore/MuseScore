@@ -423,8 +423,10 @@ void MuseScore::closeEvent(QCloseEvent* ev)
 
       // remove all new created/not save score so they are
       // note saved as session data
-      for (MasterScore* score : removeList)
+      for (MasterScore* score : removeList) {
             scoreList.removeAll(score);
+            scoreWasShown.remove(score);
+            }
 
       writeSessionFile(true);
       for (MasterScore* score : scoreList) {
@@ -2071,6 +2073,7 @@ int MuseScore::appendScore(MasterScore* score)
                   }
             }
       scoreList.insert(index, score);
+      scoreWasShown[score] = false;
       tab1->insertTab(score);
       if (tab2)
             tab2->insertTab(score);
@@ -2188,6 +2191,27 @@ void MuseScore::reloadInstrumentTemplates()
             auto instFiles = extDir.entryInfoList(QDir::Files | QDir::NoSymLinks | QDir::Readable);
             for (auto instFile : instFiles)
                   loadInstrumentTemplates(instFile.absoluteFilePath());
+            }
+      }
+
+//---------------------------------------------------------
+//   askResetOldScorePositions
+//---------------------------------------------------------
+
+void MuseScore::askResetOldScorePositions(Score* score)
+      {
+      if (score->mscVersion() < 300 && score->mscVersion() > 114) {
+            QMessageBox msgBox;
+            QString question = tr("Reset all elements positions?");
+            msgBox.setWindowTitle(question);
+            msgBox.setText(tr("This score was created in older versions of MuseScore. For a better experience of using MuseScore 3.0 it is recommended to reset elements positions to their default values.") + "\n\n" + question);
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setStandardButtons(
+               QMessageBox::Yes | QMessageBox::No
+               );
+
+            if (msgBox.exec() == QMessageBox::Yes)
+                  score->cmdResetAllPositions();
             }
       }
 
@@ -2338,6 +2362,11 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             timeline()->setScoreView(view);
             }
       ScoreAccessibility::instance()->updateAccessibilityInfo();
+
+      if (!scoreWasShown[cs]) {
+            scoreWasShown[cs] = true;
+            askResetOldScorePositions(cs);
+            }
       }
 
 //---------------------------------------------------------
@@ -2841,6 +2870,7 @@ void MuseScore::removeTab(int i)
 
       midiPanelOnCloseFile(score->importedFilePath());
       scoreList.removeAt(i);
+      scoreWasShown.remove(score);
 
       tab1->removeTab(i, /* noCurrentChangedSignals */ true);
       if (tab2)
@@ -7024,8 +7054,6 @@ int main(int argc, char* av[])
             // TODO: delete old session backups
             //
             restoredSession = mscore->restoreSession((preferences.sessionStart() == SessionStart::LAST && (files == 0)));
-            if (!restoredSession || files)
-                  loadScores(argv);
             }
 
       errorMessage = new QErrorMessage(mscore);
@@ -7044,6 +7072,9 @@ int main(int argc, char* av[])
 
       mscore->changeState(mscore->noScore() ? STATE_DISABLED : STATE_NORMAL);
       mscore->show();
+
+      if (!restoredSession || files)
+            loadScores(argv);
 
 #ifndef MSCORE_NO_UPDATE_CHECKER
       if (mscore->hasToCheckForUpdate())
