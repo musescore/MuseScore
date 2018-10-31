@@ -941,6 +941,10 @@ void MuseScore::populatePlaybackControls()
                               QWidget* w = new AccessibleToolButton(transportTools, repeatAction);
                               transportTools->addWidget(w);
                         }
+                  else if (QString(s) == "play") {
+                        _playButton = new AccessibleToolButton(transportTools, getAction("play"));
+                        transportTools->addWidget(_playButton);
+                        }
                   else {
                         QWidget* w = new AccessibleToolButton(transportTools, getAction(s));
                         transportTools->addWidget(w);
