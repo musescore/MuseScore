@@ -1001,11 +1001,7 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
             { tt.title, tt.panel }
             };
       populatePlacement(tt.placement);
-
-      tt.style->clear();
-      for (auto ss : primaryTextStyles())
-            tt.style->addItem(textStyleUserName(ss), int(ss));
-
+      populateStyle(tt.style);
       mapSignals(il, ppList);
       connect(tt.followText, SIGNAL(toggled(bool)), tt.tempo, SLOT(setDisabled(bool)));
       }
@@ -1040,11 +1036,7 @@ InspectorLyric::InspectorLyric(QWidget* parent)
             { l.title, l.panel }
             };
       populatePlacement(l.placement);
-
-      l.style->clear();
-      for (auto ss : primaryTextStyles())
-            l.style->addItem(textStyleUserName(ss), int(ss));
-
+      populateStyle(l.style);
       mapSignals(il, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
@@ -1078,11 +1070,7 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
             { s.title, s.panel }
             };
       populatePlacement(s.placement);
-
-      s.style->clear();
-      for (auto ss : primaryTextStyles())
-            s.style->addItem(textStyleUserName(ss), int(ss));
-
+      populateStyle(s.style);
       mapSignals(il, ppList);
       }
 

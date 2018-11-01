@@ -34,10 +34,7 @@ InspectorText::InspectorText(QWidget* parent)
             { f.title, f.panel }
             };
 
-      f.style->clear();
-      for (auto ss : primaryTextStyles())
-            f.style->addItem(textStyleUserName(ss), int(ss));
-
+      populateStyle(f.style);
       mapSignals(iiList, ppList);
       }
 

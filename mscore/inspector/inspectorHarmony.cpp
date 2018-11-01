@@ -36,12 +36,8 @@ InspectorHarmony::InspectorHarmony(QWidget* parent)
             { h.title, h.panel }
             };
 
-      h.style->clear();
-      for (auto ss : primaryTextStyles())
-            h.style->addItem(textStyleUserName(ss), int(ss));
-
+      populateStyle(h.style);
       t.resetToStyle->setVisible(false);
-
       mapSignals(iiList, ppList);
       }
 

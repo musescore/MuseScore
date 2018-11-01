@@ -79,6 +79,9 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void textStyleValueChanged(Pid, QVariant);
       void on_comboFBFont_currentIndexChanged(int index);
       void on_buttonTogglePagelist_clicked();
+      void editUserStyleName();
+      void endEditUserStyleName();
+      void resetUserStyleName();
 
 public:
       static const int PAGE_NOTE = 6;
