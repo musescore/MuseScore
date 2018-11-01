@@ -15,6 +15,7 @@
 #include "libmscore/audio.h"
 #include "libmscore/score.h"
 
+#define OV_EXCLUDE_STATIC_CALLBACKS
 #include <vorbis/vorbisfile.h>
 
 namespace Ms {

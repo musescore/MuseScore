@@ -9,6 +9,8 @@ build.debug
 build.qtc
 win32build
 win32install
+win64build
+win64install
 build.xcode
 applebuild
 /*.config
