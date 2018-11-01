@@ -2104,7 +2104,7 @@ QString TextBase::accessibleInfo() const
             case Tid::POET:
             case Tid::TRANSLATOR:
             case Tid::MEASURE_NUMBER:
-                  rez = textStyleUserName(tid());
+                  rez = score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
                   break;
             default:
                   rez = Element::accessibleInfo();
@@ -2133,7 +2133,7 @@ QString TextBase::screenReaderInfo() const
             case Tid::POET:
             case Tid::TRANSLATOR:
             case Tid::MEASURE_NUMBER:
-                  rez = textStyleUserName(tid());
+                  rez = score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
                   break;
             default:
                   rez = Element::accessibleInfo();
@@ -2158,7 +2158,7 @@ int TextBase::subtype() const
 
 QString TextBase::subtypeName() const
       {
-      return textStyleUserName(tid());
+      return score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
       }
 
 //---------------------------------------------------------

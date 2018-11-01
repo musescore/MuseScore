@@ -10362,13 +10362,6 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="0" colspan="2">
-            <widget class="QCheckBox" name="textStyleSpatiumDependent">
-             <property name="text">
-              <string>Size changes with staff space setting</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </widget>
         </item>
@@ -10689,6 +10682,34 @@
            <property name="spacing">
             <number>0</number>
            </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="labelStyleName">
+             <property name="text">
+              <string>Name:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="styleName">
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="resetTextStyleName">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Name'</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
            <item row="7" column="1">
             <widget class="QComboBox" name="textStyleFrameType"/>
            </item>
@@ -10845,10 +10866,18 @@
             <widget class="QDoubleSpinBox" name="textStyleFrameBorder"/>
            </item>
            <item row="8" column="1">
-            <widget class="Awl::ColorLabel" name="textStyleFrameForeground"/>
+            <widget class="Awl::ColorLabel" name="textStyleFrameForeground">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+            </widget>
            </item>
            <item row="9" column="1">
-            <widget class="Awl::ColorLabel" name="textStyleFrameBackground"/>
+            <widget class="Awl::ColorLabel" name="textStyleFrameBackground">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+            </widget>
            </item>
            <item row="12" column="0">
             <widget class="QLabel" name="label_212">
@@ -10993,6 +11022,13 @@
              <property name="icon">
               <iconset resource="musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0" colspan="2">
+            <widget class="QCheckBox" name="textStyleSpatiumDependent">
+             <property name="text">
+              <string>Size changes with staff space setting</string>
              </property>
             </widget>
            </item>

@@ -886,6 +886,7 @@ static const StyleType styleTypes[] {
       { Sid::figuredBassFontSize,           "figuredBassFontSize",          8.0 },
       { Sid::figuredBassFontStyle,          "figuredBassFontStyle",         int(FontStyle::Normal) },
 
+      { Sid::user1Name,                     "user1Name",                    "" },
       { Sid::user1FontFace,                 "user1FontFace",                "FreeSerif" },
       { Sid::user1FontSize,                 "user1FontSize",                10.0 },
       { Sid::user1FontStyle,                "user1FontStyle",               int(FontStyle::Normal) },
@@ -899,6 +900,7 @@ static const StyleType styleTypes[] {
       { Sid::user1FrameFgColor,             "user1FrameFgColor",            QColor(0, 0, 0, 255) },
       { Sid::user1FrameBgColor,             "user1FrameBgColor",            QColor(255, 255, 255, 0) },
 
+      { Sid::user2Name,                     "user2Name",                    "" },
       { Sid::user2FontFace,                 "user2FontFace",                "FreeSerif" },
       { Sid::user2FontSize,                 "user2FontSize",                10.0 },
       { Sid::user2FontStyle,                "user2FontStyle",               int(FontStyle::Normal) },
@@ -912,6 +914,7 @@ static const StyleType styleTypes[] {
       { Sid::user2FrameFgColor,             "user2FrameFgColor",            QColor(0, 0, 0, 255) },
       { Sid::user2FrameBgColor,             "user2FrameBgColor",            QColor(255, 255, 255, 0) },
 
+      { Sid::user3Name,                     "user3Name",                    "" },
       { Sid::user3FontFace,                 "user3FontFace",                "FreeSerif" },
       { Sid::user3FontSize,                 "user3FontSize",                10.0 },
       { Sid::user3FontStyle,                "user3FontStyle",               int(FontStyle::Normal) },
@@ -925,6 +928,7 @@ static const StyleType styleTypes[] {
       { Sid::user3FrameFgColor,             "user3FrameFgColor",            QColor(0, 0, 0, 255) },
       { Sid::user3FrameBgColor,             "user3FrameBgColor",            QColor(255, 255, 255, 0) },
 
+      { Sid::user4Name,                     "user4Name",                    "" },
       { Sid::user4FontFace,                 "user4FontFace",                "FreeSerif" },
       { Sid::user4FontSize,                 "user4FontSize",                10.0 },
       { Sid::user4FontStyle,                "user4FontStyle",               int(FontStyle::Normal) },
@@ -938,6 +942,7 @@ static const StyleType styleTypes[] {
       { Sid::user4FrameFgColor,             "user4FrameFgColor",            QColor(0, 0, 0, 255) },
       { Sid::user4FrameBgColor,             "user4FrameBgColor",            QColor(255, 255, 255, 0) },
 
+      { Sid::user5Name,                     "user5Name",                    "" },
       { Sid::user5FontFace,                 "user5FontFace",                "FreeSerif" },
       { Sid::user5FontSize,                 "user5FontSize",                10.0 },
       { Sid::user5FontStyle,                "user5FontStyle",               int(FontStyle::Normal) },
@@ -951,6 +956,7 @@ static const StyleType styleTypes[] {
       { Sid::user5FrameFgColor,             "user5FrameFgColor",            QColor(0, 0, 0, 255) },
       { Sid::user5FrameBgColor,             "user5FrameBgColor",            QColor(255, 255, 255, 0) },
 
+      { Sid::user6Name,                     "user6Name",                    "" },
       { Sid::user6FontFace,                 "user6FontFace",                "FreeSerif" },
       { Sid::user6FontSize,                 "user6FontSize",                10.0 },
       { Sid::user6FontStyle,                "user6FontStyle",               int(FontStyle::Normal) },

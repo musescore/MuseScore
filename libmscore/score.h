@@ -843,6 +843,7 @@ class Score : public QObject, public ScoreElement {
       int      styleI(Sid idx) const  { Q_ASSERT(!strcmp(MStyle::valueType(idx),"int"));         return style().value(idx).toInt();  }
 
       void setStyleValue(Sid sid, QVariant value) { style().set(sid, value);     }
+      QString getTextStyleUserName(Tid tid);
       qreal spatium() const                    { return styleD(Sid::spatium);    }
       void setSpatium(qreal v)                 { setStyleValue(Sid::spatium, v); }
 

@@ -4302,6 +4302,23 @@ void Score::setStyle(const MStyle& s)
       }
 
 //---------------------------------------------------------
+//   getTextStyleUserName
+//---------------------------------------------------------
+
+QString Score::getTextStyleUserName(Tid tid)
+      {
+      QString name = "";
+      if (int(tid) >= int(Tid::USER1) && int(tid) <= int(Tid::USER6)) {
+            int idx = int(tid) - int(Tid::USER1);
+            Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name };
+            name = styleSt(sid[idx]);
+            }
+      if (name == "")
+            name = textStyleUserName(tid);
+      return name;
+      }
+
+//---------------------------------------------------------
 //   MasterScore
 //---------------------------------------------------------
 
