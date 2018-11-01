@@ -581,13 +581,25 @@ if (MINGW)
 
    install( TARGETS mscore RUNTIME DESTINATION bin )
 
+   if (BUILD_64)
+      install( FILES
+         ${MINGW_ROOT}/bin/libgcc_s_seh-1.dll
+         DESTINATION bin)
+      install( FILES
+         ${MINGW_ROOT}/lib/portaudio.dll RENAME libportaudio-x86_64-w64-mingw32.static.dll
+         DESTINATION bin)
+   else (BUILD_64)
+      install( FILES
+         ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
+         ${MINGW_ROOT}/lib/portaudio.dll
+         DESTINATION bin)
+   endif (BUILD_64)
+
    install( FILES
-      ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
       ${MINGW_ROOT}/bin/libstdc++-6.dll
       ${MINGW_ROOT}/bin/libwinpthread-1.dll
       ${MINGW_ROOT}/lib/libogg.dll
       ${MINGW_ROOT}/lib/libsndfile-1.dll
-      ${MINGW_ROOT}/lib/portaudio.dll
       ${MINGW_ROOT}/opt/bin/libeay32.dll
       ${MINGW_ROOT}/lib/libvorbis.dll
       ${MINGW_ROOT}/lib/libvorbisfile.dll
@@ -866,11 +878,6 @@ else (MINGW)
       add_dependencies(mscore lrelease)
 
       install( FILES
-#        ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
-#		 ${MINGW_ROOT}/bin/libstdc++-6.dll
-#		 ${MINGW_ROOT}/bin/libwinpthread-1.dll
-#		 ${MINGW_ROOT}/opt/bin/libeay32.dll
-#		 ${MINGW_ROOT}/opt/bin/ssleay32.dll
 		 ${dll_ogg}
 		 ${dll_lame}
 		 ${dll_sndfile}
