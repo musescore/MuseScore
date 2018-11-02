@@ -111,7 +111,7 @@ option(SOUNDFONT3    "Ogg Vorbis compressed fonts" ON)         # Enable Ogg Vorb
 option(HAS_AUDIOFILE "Enable audio export" ON)                 # Requires libsndfile
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
 option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF)          # requires freetype >= 2.5.2, does not work on win
-option(BUILD_LAME    "Enable MP3 export" ON)                   # Requires libmp3lame (non-free), call CMake with -DBUILD_LAME="OFF" to disable
+option(BUILD_LAME    "Enable MP3 export" ON)                   # Requires libmp3lame, call CMake with -DBUILD_LAME="OFF" to disable
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
 
 SET(JACK_LONGNAME "JACK (Jack Audio Connection Kit)")
