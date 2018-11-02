@@ -882,7 +882,7 @@ void ScoreView::changeState(ViewState s)
                         startEdit();
                   break;
             case ViewState::EDIT:
-                  if (state != ViewState::DRAG_EDIT)
+                  if ( !((mscoreState() & STATE_ALLTEXTUAL_EDIT) && state == ViewState::DRAG_EDIT) )
                         startEdit();
                   break;
             case ViewState::LASSO:
