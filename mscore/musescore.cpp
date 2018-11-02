@@ -225,8 +225,8 @@ const std::list<const char*> MuseScore::_allFileOperationEntries {
             "file-open",
             "file-save",
             "print",
-            "redo",
-            "undo"
+            "undo",
+            "redo"
             };
 
 const std::list<const char*> MuseScore::_allPlaybackControlEntries {
