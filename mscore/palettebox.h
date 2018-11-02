@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: palettebox.h 5576 2012-04-24 19:15:22Z wschweer $
 //
 //  Copyright (C) 2011-2016 Werner Schweer and others
 //

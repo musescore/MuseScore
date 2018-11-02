@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: editdrumset.h 4388 2011-06-18 13:17:58Z wschweer $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //

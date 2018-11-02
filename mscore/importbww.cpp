@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: importbww.cpp 5427 2012-03-07 12:41:34Z wschweer $
 //
 //  Copyright (C) 2010 Werner Schweer and others
 //

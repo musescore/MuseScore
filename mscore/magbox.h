@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: magbox.h 2460 2009-12-15 18:01:39Z wschweer $
 //
 //  Copyright (C) 2008-2009 Werner Schweer and others
 //

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: editstringdata.cpp 5392 2012-02-28 11:41:52Z miwarre $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //

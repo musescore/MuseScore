@@ -1,7 +1,6 @@
 #=============================================================================
 #  Mscore
 #  Linux Music Score Editor
-#  $Id:$
 #
 #  Copyright (C) 2009 by Werner Schweer and others
 #

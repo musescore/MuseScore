@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: playpanel.h 4722 2011-09-01 12:26:07Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //

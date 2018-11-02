@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: textpalette.cpp 3592 2010-10-18 17:24:18Z wschweer $
 //
 //  Copyright (C) 2002-2010 Werner Schweer and others
 //

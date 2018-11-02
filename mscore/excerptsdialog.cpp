@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: excerptsdialog.cpp 5497 2012-03-26 10:59:16Z lasconic $
 //
 //  Copyright (C) 2008 Werner Schweer and others
 //
