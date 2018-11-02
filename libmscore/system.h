@@ -89,6 +89,9 @@ class System final : public Element {
       mutable bool fixedDownDistance { false  };
       qreal _distance;                               // temp. variable used during layout
 
+      SysStaff* firstVisibleSysStaff() const;
+      SysStaff* lastVisibleSysStaff() const;
+
    public:
       System(Score*);
       ~System();

@@ -370,6 +370,7 @@ class MScore : public QObject {
       static bool showSkylines;
       static bool showMeasureShapes;
       static bool showBoundingRect;
+      static bool showSystemBoundingRect;
       static bool showCorruptedMeasures;
       static bool useFallbackFont;
       static bool autoplaceSlurs;

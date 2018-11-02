@@ -3638,6 +3638,16 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
+         "show-system-bounding-rect",
+         "Show System Bounding Rectangles",
+         "Show bounding rectangles for systems",
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
          "show-corrupted-measures",
          "Show Corrupted Measures",
          "Show corrupted measures",

@@ -1116,6 +1116,16 @@ void ScoreView::paint(const QRect& r, QPainter& p)
 
 #ifndef NDEBUG
                   if (!score()->printing()) {
+                        if (MScore::showSystemBoundingRect) {
+                              for (const System* system : page->systems()) {
+                                    QPointF pt(system->ipos());
+                                    qreal h = system->minBottom() + system->minTop();
+                                    p.translate(pt);
+                                    QRectF r(0.0, -system->minTop(), system->width(), h);
+                                    p.drawRect(r);
+                                    p.translate(-pt);
+                                    }
+                              }
                         if (MScore::showSegmentShapes) {
                               for (const System* system : page->systems()) {
                                     for (const MeasureBase* mb : system->measures()) {

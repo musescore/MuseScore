@@ -204,6 +204,7 @@ void Workspace::initWorkspace()
                   break;
                   }
             }
+      Q_ASSERT(!Workspace::workspaces().empty());
       if (currentWorkspace == 0)
             currentWorkspace = Workspace::workspaces().at(0);
       }

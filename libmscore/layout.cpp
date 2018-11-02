@@ -1428,12 +1428,14 @@ static void checkDivider(bool left, System* s, qreal yOffset)
 
 static void layoutPage(Page* page, qreal restHeight)
       {
-      Score* score  = page->score();
-      int nsystems  = page->systems().size() - 1;
+//      Q_ASSERT(restHeight >= 0);
+
+      Score* score = page->score();
+      int gaps     = page->systems().size() - 1;
 
       QList<System*> sList;
 
-      for (int i = 0; i < nsystems; ++i) {
+      for (int i = 0; i < gaps; ++i) {
             System* s1 = page->systems().at(i);
             System* s2 = page->systems().at(i+1);
             s1->setDistance(s2->y() - s1->y());
@@ -1465,14 +1467,12 @@ static void layoutPage(Page* page, qreal restHeight)
             }
 
       std::sort(sList.begin(), sList.end(), [](System* a, System* b) { return a->distance() < b->distance(); });
-
       qreal maxDist = score->styleP(Sid::maxSystemDistance);
 
       qreal dist = sList[0]->distance();
       for (int i = 1; i < sList.size(); ++i) {
             qreal ndist = sList[i]->distance();
-            qreal fill = ndist - dist;
-            dist       = ndist;
+            qreal fill  = ndist - dist;
             if (fill > 0.0) {
                   qreal totalFill = fill * i;
                   if (totalFill > restHeight) {
@@ -1490,11 +1490,12 @@ static void layoutPage(Page* page, qreal restHeight)
                   if (restHeight <= 0)
                         break;
                   }
+            dist = ndist;
             }
+
       if (restHeight > 0.0) {
             qreal fill = restHeight / sList.size();
-            for (int i = 0; i < sList.size(); ++i) {
-                  System* s = sList[i];
+            for (System* s : sList) {
                   qreal d = s->distance() + fill;
                   if ((d - s->height()) > maxDist)
                         d = qMax(maxDist + s->height(), s->distance());
@@ -1503,7 +1504,7 @@ static void layoutPage(Page* page, qreal restHeight)
             }
 
       qreal y = page->systems().at(0)->y();
-      for (int i = 0; i < nsystems; ++i) {
+      for (int i = 0; i < gaps; ++i) {
             System* s1  = page->systems().at(i);
             System* s2  = page->systems().at(i+1);
             s1->rypos() = y;
@@ -3603,11 +3604,11 @@ void LayoutContext::collectPage()
                         dist += vbox->bottomGap();
                   else if (!prevSystem->hasFixedDownDistance())
                         dist += qMax(curSystem->minBottom(), slb);
+
                   breakPage  = (y + dist) >= ey && breakPages;
                   }
             if (breakPage) {
-                  Box* vbox = prevSystem->vbox();
-                  qreal dist = vbox ? vbox->bottomGap() : qMax(-prevSystem->minBottom(), slb);
+                  qreal dist = qMax(prevSystem->minBottom(), slb);
                   layoutPage(page, ey - (y + dist));
                   break;
                   }
