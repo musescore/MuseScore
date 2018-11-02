@@ -105,7 +105,7 @@ ScoreView* ScoreTab::view(int n) const
 
 QSplitter* ScoreTab::viewSplitter(int n) const
       {
-      TabScoreView* tsv = static_cast<TabScoreView*>(tab->tabData(n).value<void*>());
+      const TabScoreView* tsv = tabScoreView(n);
       if (tsv == 0) {
             // qDebug("ScoreTab::viewSplitter %d is zero", n);
             return 0;
@@ -183,7 +183,7 @@ void ScoreTab::setCurrent(int n)
             emit currentScoreViewChanged(0);
             return;
             }
-      TabScoreView* tsv = static_cast<TabScoreView*>(tab->tabData(n).value<void*>());
+      TabScoreView* tsv = tabScoreView(n);
       QSplitter* vs = viewSplitter(n);
 
       ScoreView* v;
@@ -263,11 +263,11 @@ void ScoreTab::updateExcerpts()
       int idx = currentIndex();
       if (idx == -1)
             return;
-      ScoreView* v = view(idx);
-      if (!v)
+      TabScoreView* tsv = tabScoreView(idx);
+      MasterScore* score = tsv->score;
+      if (!score->excerptsChanged())
             return;
 
-      MasterScore* score = v->score()->masterScore();
       clearTab2();
       //delete all scoreviews for parts, especially for the deleted ones
       int n = stack->count() - 1;
@@ -292,11 +292,8 @@ void ScoreTab::updateExcerpts()
             }
       else {
             tab2->setVisible(false);
-            setExcerpt(0);
             }
-      blockSignals(true);
       setExcerpt(0);
-      blockSignals(false);
 
       getAction("file-part-export")->setEnabled(excerpts.size() > 0);
       }
@@ -314,7 +311,7 @@ void ScoreTab::setExcerpt(int n)
       if (n == -1)
             return;
       int idx           = tab->currentIndex();
-      TabScoreView* tsv = static_cast<TabScoreView*>(tab->tabData(idx).value<void*>());
+      TabScoreView* tsv = tabScoreView(idx);
       if (tsv == 0)
             return;
       tsv->part     = n;
@@ -422,7 +419,7 @@ bool ScoreTab::setCurrentScore(Score* s)
 
 void ScoreTab::removeTab(int idx, bool noCurrentChangedSignal)
       {
-      TabScoreView* tsv = static_cast<TabScoreView*>(tab->tabData(idx).value<void*>());
+      TabScoreView* tsv = tabScoreView(idx);
       Score* score = tsv->score;
 
       for (int i = 0; i < stack->count(); ++i) {
