@@ -716,7 +716,6 @@ subdirs(
       effects thirdparty/rtf2html thirdparty/diff thirdparty/beatroot
       thirdparty/qzip thirdparty/kQOAuth
       )
-#      thirdparty/xmlstream
 
 string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
