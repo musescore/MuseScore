@@ -96,13 +96,13 @@ void Marker::setMarkerType(Type t)
 
             case Type::FINE:
                   txt = "Fine";
-                  initTid(Tid::REPEAT_RIGHT);
+                  initTid(Tid::REPEAT_RIGHT, true);
                   setLabel("fine");
                   break;
 
             case Type::TOCODA:
                   txt = "To Coda";
-                  initTid(Tid::REPEAT_RIGHT);
+                  initTid(Tid::REPEAT_RIGHT, true);
                   setLabel("coda");
                   break;
 
