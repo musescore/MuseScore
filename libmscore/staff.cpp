@@ -708,20 +708,22 @@ bool Staff::readProperties(XmlReader& e)
             /*_userMag =*/ e.readDouble(0.1, 10.0);
       else if (tag == "linkedTo") {
             int v = e.readInt() - 1;
-            //
-            // if this is an excerpt, link staff to masterScore()
-            //
-            if (!score()->isMaster()) {
-                  Staff* st = masterScore()->staff(v);
-                  if (st)
-                        linkTo(st);
-                  else {
-                        qDebug("staff %d not found in parent", v);
-                        }
+            Staff* st = masterScore()->staff(v);
+            if (_links) {
+                  qDebug("Staff::readProperties: multiple <linkedTo> tags");
+                  if (!st || isLinked(st)) // maybe we don't need actually to relink...
+                        return true;
+                  // not using unlink() here as it may delete _links
+                  // a pointer to which is stored also in XmlReader.
+                  _links->removeOne(this);
+                  _links = nullptr;
                   }
-            else {
-                  if (v >= 0 && v < idx())
-                        linkTo(score()->staff(v));
+            if (st && st != this)
+                  linkTo(st);
+            else if (!score()->isMaster() && !st) {
+                  // if it is a master score it is OK not to find
+                  // a staff which is going after the current one.
+                  qDebug("staff %d not found in parent", v);
                   }
             }
       else if (tag == "color")
