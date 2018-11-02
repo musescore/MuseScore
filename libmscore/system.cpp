@@ -1060,7 +1060,7 @@ qreal System::minDistance(System* s2) const
       if (vbox() && !s2->vbox())
             return qMax(vbox()->bottomGap(), s2->minTop());
       else if (!vbox() && s2->vbox())
-            return qMax(s2->vbox()->topGap(), -minBottom());
+            return qMax(s2->vbox()->topGap(), minBottom());
       else if (vbox() && s2->vbox())
             return s2->vbox()->topGap() + vbox()->bottomGap();
 
@@ -1139,13 +1139,44 @@ qreal System::bottomDistance(int staffIdx, const SkylineLine& s) const
       }
 
 //---------------------------------------------------------
+//   firstVisibleSysStaff
+//---------------------------------------------------------
+
+SysStaff* System::firstVisibleSysStaff() const
+      {
+      for (SysStaff* s : _staves) {
+            if (s->show())
+                  return s;
+            }
+      qDebug("no sys staff");
+      return 0;
+      }
+
+//---------------------------------------------------------
+//   lastVisibleSysStaff
+//---------------------------------------------------------
+
+SysStaff* System::lastVisibleSysStaff() const
+      {
+      for (int i = _staves.size() - 1; i >= 0; --i) {
+            if (_staves[i]->show())
+                  return _staves[i];
+            }
+      qDebug("no sys staff");
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   minTop
 //    Return the minimum top margin.
 //---------------------------------------------------------
 
 qreal System::minTop() const
       {
-      return -staff(0)->skyline().north().max();
+      SysStaff* s = firstVisibleSysStaff();
+      if (s)
+            return -s->skyline().north().max();
+      return 0.0;
       }
 
 //---------------------------------------------------------
@@ -1155,7 +1186,12 @@ qreal System::minTop() const
 
 qreal System::minBottom() const
       {
-      return -staves()->back()->skyline().south().max();
+      if (vbox())
+            return vbox()->height() + vbox()->bottomGap();
+      SysStaff* s = lastVisibleSysStaff();
+      if (s)
+            return s->skyline().south().max();
+      return 0.0;
       }
 
 //---------------------------------------------------------

@@ -71,6 +71,7 @@ bool MScore::showMeasureShapes   = false;
 bool MScore::noHorizontalStretch = false;
 bool MScore::noVerticalStretch   = false;
 bool MScore::showBoundingRect    = false;
+bool MScore::showSystemBoundingRect    = false;
 bool MScore::showCorruptedMeasures = true;
 bool MScore::useFallbackFont       = true;
 bool MScore::autoplaceSlurs        = true;
