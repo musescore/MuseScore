@@ -2268,9 +2268,15 @@ void MuseScore::askResetOldScorePositions(Score* score)
 
 void MuseScore::setCurrentScoreView(int idx)
       {
+      tab1->blockSignals(ctab != tab1);
       setCurrentView(0, idx);
-      if (tab2)
+      tab1->blockSignals(false);
+
+      if (tab2) {
+            tab2->blockSignals(ctab != tab2);
             setCurrentView(1, idx);
+            tab2->blockSignals(false);
+            }
       }
 
 void MuseScore::setCurrentView(int tabIdx, int idx)
@@ -2292,6 +2298,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       {
       cv = view;
       if (cv) {
+            ctab = (tab2 && tab2->view() == view) ? tab2 : tab1;
             if (timeline())
                   timeline()->setScoreView(cv);
             if (cv->score() && (cs != cv->score())) {
@@ -5421,21 +5428,15 @@ void MuseScore::endCmd()
                   }
             MasterScore* ms = cs->masterScore();
             if (ms->excerptsChanged()) {
-                  if (tab2) {
-//                      ScoreView* v = tab2->view();
-//                      if (v && v->score() == ms) {
-                              tab2->updateExcerpts();
-//                            }
-                        }
                   if (tab1) {
-                        ScoreView* v = tab1->view();
-                        if (v && v->score()->masterScore() == ms) {
-                              tab1->updateExcerpts();
-                              }
-                        else if (v == 0) {
-                              tab1->setExcerpt(0);
-                              tab1->updateExcerpts();
-                              }
+                        tab1->blockSignals(ctab != tab1);
+                        tab1->updateExcerpts();
+                        tab1->blockSignals(false);
+                        }
+                  if (tab2) {
+                        tab2->blockSignals(ctab != tab2);
+                        tab2->updateExcerpts();
+                        tab2->blockSignals(false);
                         }
                   ms->setExcerptsChanged(false);
                   }

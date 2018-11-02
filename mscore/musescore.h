@@ -221,6 +221,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       QSettings settings;
       ScoreView* cv                        { 0 };
+      ScoreTab* ctab                       { 0 };
       QMap<Score*, bool> scoreWasShown; // whether each score in scoreList has ever been shown
       ScoreState _sstate;
       UpdateChecker* ucheck;
@@ -756,6 +757,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       Inspector* inspector()           { return _inspector; }
       PluginCreator* pluginCreator()   { return _pluginCreator; }
       ScoreView* currentScoreView() const { return cv; }
+      ScoreTab* currentScoreTab() const { return ctab; }
       QToolButton* playButton()        { return _playButton;    }
       void showMessage(const QString& s, int timeout);
       void showHelp(QString);
