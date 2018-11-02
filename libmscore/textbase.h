@@ -359,6 +359,7 @@ class TextBase : public Element {
       Tid tid() const                            { return _tid; }
       void setTid(Tid id)                        { _tid = id; }
       void initTid(Tid id);
+      void initTid(Tid id, bool preserveDifferent);
       virtual void initElementStyle(const ElementStyle*) override;
 
       friend class TextCursor;
