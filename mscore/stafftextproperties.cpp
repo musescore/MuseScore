@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: stafftext.cpp -1   $
 //
 //  Copyright (C) 2008-2010 Werner Schweer and others
 //

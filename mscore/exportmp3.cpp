@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: MP3Exporter.cpp 2992 2010-04-22 14:42:39Z lasconic $
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id:$
 //
 //  The webview is shown on startup with a local file inviting user
 //  to start connecting with the community. They can press start and

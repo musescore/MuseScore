@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: capella.cpp 5637 2012-05-16 14:23:09Z wschweer $
 //
 //  Copyright (C) 2009-2013 Werner Schweer and others
 //

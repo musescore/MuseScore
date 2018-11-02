@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: instrdialog.cpp 5580 2012-04-27 15:36:57Z wschweer $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //

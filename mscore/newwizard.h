@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: newwizard.h 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2008-2009 Werner Schweer and others
 //

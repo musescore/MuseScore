@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: file.h 5009 2011-11-18 21:46:17Z lasconic $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //

@@ -2,7 +2,6 @@
 #  BWW to MusicXML converter
 #  Part of MusE Score
 #  Linux Music Score Editor
-#  $Id: CMakeLists.txt 5560 2012-04-19 11:39:34Z lasconic $
 #
 #  Copyright (C) 2002-2010 by Werner Schweer and others
 #

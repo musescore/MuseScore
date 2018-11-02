@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: abstractdialog.h 4220 2011-04-22 10:31:26Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //

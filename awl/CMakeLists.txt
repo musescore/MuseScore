@@ -1,7 +1,6 @@
 #=============================================================================
 #  MusE
 #  Linux Music Editor
-#  $Id:$
 #
 #  Copyright (C) 2002-2016 by Werner Schweer and others
 #
