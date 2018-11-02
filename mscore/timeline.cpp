@@ -2230,6 +2230,7 @@ void Timeline::setScore(Score* s)
       scene()->clear();
 
       if (_score) {
+            connect(_score, &QObject::destroyed, this, &Timeline::objectDestroyed, Qt::UniqueConnection);
             drawGrid(nstaves(), _score->nmeasures());
             changeSelection(SelState::NONE);
             row_names->updateLabels(getLabels(), grid_height);
@@ -2257,10 +2258,23 @@ void Timeline::setScoreView(ScoreView* v)
       {
       _cv = v;
       if (_cv) {
-            connect(_cv, SIGNAL(sizeChanged()), this, SLOT(updateView()));
-            connect(_cv, SIGNAL(viewRectChanged()), this, SLOT(updateView()));
+            connect(_cv, &ScoreView::sizeChanged, this, &Timeline::updateView, Qt::UniqueConnection);
+            connect(_cv, &ScoreView::viewRectChanged, this, &Timeline::updateView, Qt::UniqueConnection);
+            connect(_cv, &QObject::destroyed, this, &Timeline::objectDestroyed, Qt::UniqueConnection);
             updateView();
             }
+      }
+
+//---------------------------------------------------------
+//   objectDestroyed
+//---------------------------------------------------------
+
+void Timeline::objectDestroyed(QObject* obj)
+      {
+      if (_cv == obj)
+            setScoreView(nullptr);
+      else if (_score == obj)
+            setScore(nullptr);
       }
 
 //---------------------------------------------------------
