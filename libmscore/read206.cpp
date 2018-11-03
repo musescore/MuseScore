@@ -64,6 +64,7 @@
 #include "lyrics.h"
 #include "tempotext.h"
 #include "measurenumber.h"
+#include "marker.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -74,12 +75,6 @@
 namespace Ms {
 
 static void readText206(XmlReader& e, TextBase* t, Element* be);
-
-// These default values have been taken from the MS2 defaults
-// because some default values differ for frames.
-static const int defaultFrameRound206 = 25;
-static const Spatium defaultPaddingWidth206 = Spatium(0.5);
-static const Spatium defaultFrameWidth206 = Spatium(0.2);
 
 //---------------------------------------------------------
 //   StyleVal206
@@ -296,6 +291,69 @@ struct StyleVal2 {
 //      { Sid::staffTextFrameRound,         0  },
 //      { Sid::staffTextFrameFgColor,       QColor(0, 0, 0, 255) },
 //      { Sid::staffTextFrameBgColor,       QColor(255, 255, 255, 0) },
+      { Sid::defaultFrameRound,           QVariant(25) },
+      { Sid::defaultFrameWidth,           Spatium(0.2) },
+      { Sid::defaultFramePadding,         Spatium(0.5) },
+
+      { Sid::titleFrameRound,             QVariant(25) },
+      { Sid::titleFrameWidth,             Spatium(0.2) },
+      { Sid::titleFramePadding,           Spatium(0.5) },
+
+      { Sid::subTitleFrameRound,          QVariant(25) },
+      { Sid::subTitleFrameWidth,          Spatium(0.2) },
+      { Sid::subTitleFramePadding,        Spatium(0.5) },
+
+      { Sid::composerFrameRound,          QVariant(25) },
+      { Sid::composerFrameWidth,          Spatium(0.2) },
+      { Sid::composerFramePadding,        Spatium(0.5) },
+
+      { Sid::lyricistFrameRound,          QVariant(25) },
+      { Sid::lyricistFrameWidth,          Spatium(0.2) },
+      { Sid::lyricistFramePadding,        Spatium(0.5) },
+
+      { Sid::fingeringFrameRound,          QVariant(25) },
+      { Sid::fingeringFrameWidth,          Spatium(0.2) },
+      { Sid::fingeringFramePadding,        Spatium(0.5) },
+
+      { Sid::lhGuitarFingeringFrameRound,       QVariant(25) },
+      { Sid::lhGuitarFingeringFrameWidth,       Spatium(0.2) },
+      { Sid::lhGuitarFingeringFramePadding,     Spatium(0.5) },
+
+      { Sid::rhGuitarFingeringFrameRound,       QVariant(25) },
+      { Sid::rhGuitarFingeringFrameWidth,       Spatium(0.2) },
+      { Sid::rhGuitarFingeringFramePadding,     Spatium(0.5) },
+
+      { Sid::partInstrumentFrameRound,    QVariant(25) },
+      { Sid::partInstrumentFrameWidth,    Spatium(0.2) },
+      { Sid::partInstrumentFramePadding,  Spatium(0.5) },
+
+      { Sid::tempoFrameRound,             QVariant(0)  },
+      { Sid::tempoFrameWidth,             Spatium(0.2) },
+      { Sid::tempoFramePadding,           Spatium(0.5) },
+
+      { Sid::tempoFrameRound,             QVariant(25) },
+      { Sid::tempoFrameWidth,             Spatium(0.2) },
+      { Sid::tempoFramePadding,           Spatium(0.5) },
+
+      { Sid::systemTextFrameRound,        QVariant(25) },
+      { Sid::systemTextFrameWidth,        Spatium(0.2) },
+      { Sid::systemTextFramePadding,      Spatium(0.5) },
+
+      { Sid::staffTextFrameRound,         QVariant(25) },
+      { Sid::staffTextFrameWidth,         Spatium(0.2) },
+      { Sid::staffTextFramePadding,       Spatium(0.5) },
+
+      { Sid::rehearsalMarkFrameRound,     QVariant(20) },
+      { Sid::rehearsalMarkFrameWidth,     Spatium(0.2) },
+      { Sid::rehearsalMarkFramePadding,   Spatium(0.5) },
+
+      { Sid::repeatLeftFrameRound,        QVariant(25) },
+      { Sid::repeatLeftFrameWidth,        Spatium(0.2) },
+      { Sid::repeatLeftFramePadding,      Spatium(0.5) },
+
+      { Sid::repeatRightFrameRound,       QVariant(25) },
+      { Sid::repeatRightFrameWidth,       Spatium(0.2) },
+      { Sid::repeatRightFramePadding,     Spatium(0.5) },
       };
 
 //---------------------------------------------------------
@@ -1351,6 +1409,10 @@ static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
       else if (tag == "circle") {
             if (e.readBool())
                   t->setFrameType(FrameType::CIRCLE);
+            else {
+                  if (t->circle())
+                        t->setFrameType(FrameType::SQUARE);
+                  }
             }
       else if (tag == "paddingWidthS")
             t->setPaddingWidth(Spatium(e.readDouble()));
@@ -1404,21 +1466,9 @@ static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
 
 static void readText206(XmlReader& e, TextBase* t, Element* be)
       {
-      // Some default values differ from v2 to 3
-      t->setFrameRound(defaultFrameRound206);
-      t->setPaddingWidth(defaultPaddingWidth206);
-      t->setFrameWidth(defaultFrameWidth206);
       while (e.readNextStartElement()) {
             if (!readTextProperties206(e, t, be))
                   e.unknown();
-            }
-
-      // If there is no frame set, reset any changes made to prevent
-      // unnecessary writing of tags
-      if (!t->hasFrame()) {
-            t->setFrameRound(t->propertyDefault(Pid::FRAME_ROUND).toInt());
-            t->setPaddingWidth(Spatium(t->propertyDefault(Pid::FRAME_PADDING).toReal()));
-            t->setFrameWidth(Spatium(t->propertyDefault(Pid::FRAME_WIDTH).toReal()));
             }
       }
 
@@ -1444,6 +1494,46 @@ static void readTempoText(TempoText* t, XmlReader& e)
             }
       else
             t->setXmlText(t->xmlText().replace("<sym>unicode", "<sym>met"));
+      }
+
+//---------------------------------------------------------
+//   readMarker
+//---------------------------------------------------------
+
+static void readMarker(Marker* m, XmlReader& e)
+      {
+      Marker::Type mt = Marker::Type::SEGNO;
+
+      while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "label") {
+                  QString s(e.readElementText());
+                  m->setLabel(s);
+                  mt = m->markerType(s);
+                  }
+            else if (!readTextProperties206(e, m, m))
+                  e.unknown();
+            }
+      m->setMarkerType(mt);
+      }
+
+//---------------------------------------------------------
+//   readDynamic
+//---------------------------------------------------------
+
+static void readDynamic(Dynamic* d, XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& tag = e.name();
+            if (tag == "subtype")
+                  d->setDynamicType(e.readElementText());
+            else if (tag == "velocity")
+                  d->setVelocity(e.readInt());
+            else if (tag == "dynType")
+                  d->setDynRange(Dynamic::Range(e.readInt()));
+            else if (!readTextProperties206(e, d, d))
+                  e.unknown();
+            }
       }
 
 //---------------------------------------------------------
@@ -2825,7 +2915,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Dynamic") {
                   Dynamic* dyn = new Dynamic(score);
                   dyn->setTrack(e.track());
-                  dyn->read(e);
+                  readDynamic(dyn, e);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(dyn);
                   }
@@ -2885,8 +2975,16 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Marker" || tag == "Jump") {
                   Element* el = Element::name2Element(tag, score);
                   el->setTrack(e.track());
-                  el->read(e);
-                  m->add(el);
+                  if (tag == "Marker") {
+                        Marker* ma = toMarker(el);
+                        readMarker(ma, e);
+                        Element* markerEl = toElement(ma);
+                        m->add(markerEl);
+                        }
+                  else {
+                        el->read(e);
+                        m->add(el);
+                        }
                   }
             else if (tag == "Image") {
                   if (MScore::noImages)

@@ -2444,6 +2444,20 @@ void TextBase::initElementStyle(const ElementStyle* ss)
 //   initTid
 //---------------------------------------------------------
 
+void TextBase::initTid(Tid tid, bool preserveDifferent)
+      {
+      if (! preserveDifferent)
+            initTid(tid);
+      else {
+            setTid(tid);
+            qDebug("preserving different");
+            for (const StyledProperty& p : *textStyle(tid)) {
+                  if (getProperty(p.pid) == propertyDefault(p.pid))
+                        setProperty(p.pid, styleValue(p.pid, p.sid));
+                  }
+            }
+      }
+
 void TextBase::initTid(Tid tid)
       {
       setTid(tid);
