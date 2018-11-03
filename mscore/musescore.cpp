@@ -2417,9 +2417,10 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             }
       ScoreAccessibility::instance()->updateAccessibilityInfo();
 
-      if (!scoreWasShown[cs]) {
-            scoreWasShown[cs] = true;
-            askResetOldScorePositions(cs);
+      MasterScore* master = cs->masterScore();
+      if (!scoreWasShown[master]) {
+            scoreWasShown[master] = true;
+            askResetOldScorePositions(master);
             }
       }
 
