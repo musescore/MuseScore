@@ -176,6 +176,7 @@ class Timeline : public QGraphicsView {
    private slots:
       void handle_scroll(int value);
       void updateView();
+      void objectDestroyed(QObject*);
 
    public slots:
       void changeSelection(SelState);
