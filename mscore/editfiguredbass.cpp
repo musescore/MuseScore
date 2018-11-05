@@ -98,7 +98,6 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
 
       changeState(ViewState::NORMAL);
 
-      _score->startCmd();
       bool bNew;
       // add a (new) FB element, using chord duration as default duration
       FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, 0, &bNew);
@@ -106,9 +105,11 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
             _score->undoAddElement(fbNew);
       _score->select(fbNew, SelectType::SINGLE, 0);
       startEdit(fbNew, Grip::NO_GRIP);
+
+      _score->startCmd();
       mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
-//TODO-edit      ((FiguredBass*)editData.element)->moveCursorToEnd();
+      fbNew->cursor(editData)->moveCursorToEnd();
 //      _score->update();                         // used by lyricsTab() but not by harmonyTab(): needed or not?
       }
 
