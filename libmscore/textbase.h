@@ -233,7 +233,6 @@ class TextBase : public Element {
       int  hexState                 { -1    };
 
       void drawSelection(QPainter*, const QRectF&) const;
-
       void insert(TextCursor*, uint code);
       void genText();
       virtual int getPropertyFlagsIdx(Pid id) const override;
