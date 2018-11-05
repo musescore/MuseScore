@@ -237,8 +237,11 @@ void HairpinSegment::layout()
             qreal w  = score()->styleP(Sid::hairpinLineWidth);
             setbbox(r.adjusted(-w*.5, -w*.5, w, w));
             }
-      if (!parent())
+      if (!parent()) {
+            rpos() = QPointF();
+            roffset() = QPointF();
             return;
+            }
 
       if (isStyled(Pid::OFFSET))
             roffset() = hairpin()->propertyDefault(Pid::OFFSET).toPointF();
