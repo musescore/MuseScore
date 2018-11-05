@@ -2210,6 +2210,9 @@ void Timeline::wheelEvent(QWheelEvent* event)
 
 void Timeline::updateGrid()
       {
+      if (!isVisible())
+            return;
+
       if (_score && _score->firstMeasure()) {
             drawGrid(nstaves(), _score->nmeasures());
             updateView();
