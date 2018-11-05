@@ -3811,7 +3811,7 @@ void Score::doLayoutRange(int stick, int etick)
                   if (mb->isMeasure() && toMeasure(mb)->mmRest())
                         toMeasure(mb)->mmRest()->setSystem(0);
                   }
-//            qDeleteAll(_systems);
+            qDeleteAll(_systems);
             _systems.clear();
 
             qDeleteAll(pages());
