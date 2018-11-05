@@ -2321,7 +2321,7 @@ void Score::cmdFullMeasureRest()
 Lyrics* Score::addLyrics()
       {
       Element* el = selection().element();
-      if (el == 0 || (!el->isNote() && !el->isLyrics())) {
+      if (el == 0 || (!el->isNote() && !el->isLyrics() && !el->isRest())) {
             MScore::setError(NO_LYRICS_SELECTED);
             return 0;
             }
@@ -2333,6 +2333,8 @@ Lyrics* Score::addLyrics()
             }
       else if (el->isLyrics())
             cr = toLyrics(el)->chordRest();
+      else if (el->isRest())
+            cr = toChordRest(el);
       else
             return 0;
 
