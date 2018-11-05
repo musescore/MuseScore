@@ -3708,6 +3708,7 @@ void Score::doLayoutRange(int stick, int etick)
       if (stick == -1 && etick == -1)
             abort();
       if (!last() || (lineMode() && !firstMeasure())) {
+            qDebug("empty score");
             qDeleteAll(_systems);
             _systems.clear();
             qDeleteAll(pages());
@@ -3758,6 +3759,12 @@ void Score::doLayoutRange(int stick, int etick)
 //      qDebug("start <%s> tick %d, system %p", m->name(), m->tick(), m->system());
       lc.score        = m->score();
 
+      if (lineMode()) {
+            lc.prevMeasure = 0;
+            lc.nextMeasure = _measures.first();
+            layoutLinear(layoutAll, lc);
+            return;
+            }
       if (!layoutAll && m->system()) {
             System* system  = m->system();
             int systemIndex = _systems.indexOf(system);
@@ -3786,7 +3793,7 @@ void Score::doLayoutRange(int stick, int etick)
                   }
             }
       else {
-//            qDebug("layoutAll, systems %p %d", &_systems, int(_systems.size()));
+//  qDebug("layoutAll, systems %p %d", &_systems, int(_systems.size()));
             //lc.measureNo   = 0;
             //lc.tick        = 0;
             // qDeleteAll(_systems);
@@ -3818,11 +3825,6 @@ void Score::doLayoutRange(int stick, int etick)
             pages().clear();
 
             lc.nextMeasure = _measures.first();
-            }
-
-      if (lineMode()) {
-            layoutLinear(layoutAll, lc);
-            return;
             }
 
       lc.prevMeasure = 0;

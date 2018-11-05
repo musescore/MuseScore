@@ -321,7 +321,7 @@ Score::~Score()
       qDeleteAll(_parts);
       qDeleteAll(_staves);
       qDeleteAll(_systems);
-//      qDeleteAll(_pages);
+//      qDeleteAll(_pages);         // TODO: check
       _masterScore = 0;
       }
 

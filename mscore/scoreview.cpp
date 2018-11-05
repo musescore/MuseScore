@@ -3236,7 +3236,7 @@ void ScoreView::cmdAddHairpin(HairpinType type)
             _score->startCmd();
             int tick2 = twoNotesSameStaff ? cr2->tick() : cr2->tick() + cr2->actualTicks();
             Hairpin* pin = _score->addHairpin(type, cr1->tick(), tick2, cr1->track());
-            pin->layout();
+//          pin->layout();
             _score->endCmd();
 
             const QList<SpannerSegment*>& el = pin->spannerSegments();
