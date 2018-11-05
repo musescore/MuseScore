@@ -167,7 +167,6 @@ void TextCursor::changeSelectionFormat(FormatId id, QVariant val)
                   qSwap(c1, c2);
             }
       int rows = _text->rows();
-      QList<TextBlock> toDelete;
       for (int row = 0; row < rows; ++row) {
             TextBlock& t = _text->_layout[row];
             if (row < r1)
@@ -194,6 +193,7 @@ void TextCursor::setFormat(FormatId id, QVariant val)
       {
       changeSelectionFormat(id, val);
       format()->setFormat(id, val);
+      text()->setTextInvalid();
       }
 
 //---------------------------------------------------------
