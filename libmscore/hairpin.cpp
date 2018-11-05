@@ -52,6 +52,7 @@ static const ElementStyle hairpinStyle {
       { Sid::hairpinHeight,                      Pid::HAIRPIN_HEIGHT             },
       { Sid::hairpinContHeight,                  Pid::HAIRPIN_CONT_HEIGHT        },
       { Sid::hairpinPlacement,                   Pid::PLACEMENT                  },
+      { Sid::hairpinPosAbove,                    Pid::OFFSET                     },
       };
 
 //---------------------------------------------------------
@@ -239,12 +240,8 @@ void HairpinSegment::layout()
       if (!parent())
             return;
 
-      if (isStyled(Pid::OFFSET)) {
-            if (spanner()->placeBelow())
-                  roffset() = styleValue(Pid::OFFSET, Sid::hairpinPosBelow).toPointF() + QPointF(0.0, (staff() ? staff()->height() : 0.0));
-            else
-                  roffset() = styleValue(Pid::OFFSET, Sid::hairpinPosAbove).toPointF();
-            }
+      if (isStyled(Pid::OFFSET))
+            roffset() = hairpin()->propertyDefault(Pid::OFFSET).toPointF();
       if (autoplace()) {
             qreal minDistance = spatium() * .7;
             qreal ymax = pos().y();
@@ -422,6 +419,24 @@ Element* HairpinSegment::propertyDelegate(Pid pid)
       }
 
 //---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid HairpinSegment::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return spanner()->placeAbove() ? Sid::hairpinPosAbove : Sid::hairpinPosBelow;
+      return TextLineBaseSegment::getPropertyStyle(pid);
+      }
+
+Sid Hairpin::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::hairpinPosAbove : Sid::hairpinPosBelow;
+      return TextLineBase::getPropertyStyle(pid);
+      }
+
+//---------------------------------------------------------
 //   Hairpin
 //---------------------------------------------------------
 
@@ -486,9 +501,14 @@ void Hairpin::layout()
 //   createLineSegment
 //---------------------------------------------------------
 
+static const ElementStyle hairpinSegmentStyle {
+      { Sid::hairpinPosBelow, Pid::OFFSET },
+      };
+
 LineSegment* Hairpin::createLineSegment()
       {
       HairpinSegment* h = new HairpinSegment(score());
+      h->initElementStyle(&hairpinSegmentStyle);
       return h;
       }
 

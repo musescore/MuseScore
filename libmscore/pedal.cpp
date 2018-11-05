@@ -57,7 +57,7 @@ static const ElementStyle pedalStyle {
 void PedalSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * .7, Sid::pedalPosBelow, Sid::pedalPosAbove);
+      autoplaceSpannerSegment(spatium() * .7);
       }
 
 //---------------------------------------------------------

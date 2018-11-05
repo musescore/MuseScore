@@ -52,7 +52,7 @@ static const ElementStyle palmMuteStyle {
 void PalmMuteSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * .7, Sid::palmMutePosBelow, Sid::palmMutePosAbove);
+      autoplaceSpannerSegment(spatium() * .7);
       }
 
 //---------------------------------------------------------

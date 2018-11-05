@@ -51,7 +51,7 @@ static const ElementStyle letRingStyle {
 void LetRingSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * .7, Sid::letRingPosBelow, Sid::letRingPosAbove);
+      autoplaceSpannerSegment(spatium() * .7);
       }
 
 //---------------------------------------------------------
