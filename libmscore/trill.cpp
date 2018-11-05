@@ -157,7 +157,7 @@ void TrillSegment::layout()
       else
             symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
 
-      autoplaceSpannerSegment(spatium() * 1.0, Sid::trillPosBelow, Sid::trillPosAbove);
+      autoplaceSpannerSegment(spatium() * 1.0);
       }
 
 //---------------------------------------------------------

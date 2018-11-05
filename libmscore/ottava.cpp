@@ -58,7 +58,6 @@ static const ElementStyle ottavaElementStyle {
       { Sid::ottavaPosAbove,                     Pid::OFFSET                  },
       };
 
-
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -66,7 +65,7 @@ static const ElementStyle ottavaElementStyle {
 void OttavaSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * .7, Sid::ottavaPosBelow, Sid::ottavaPosAbove);
+      autoplaceSpannerSegment(spatium() * .7);
       }
 
 //---------------------------------------------------------
@@ -237,7 +236,7 @@ int Ottava::pitchShift() const
 //---------------------------------------------------------
 
 static const ElementStyle ottavaSegmentStyle {
-      { Sid::pedalPosBelow, Pid::OFFSET },
+      { Sid::ottavaPosAbove, Pid::OFFSET },
       };
 
 LineSegment* Ottava::createLineSegment()

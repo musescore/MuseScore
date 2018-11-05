@@ -47,6 +47,7 @@ class HairpinSegment final : public TextLineBaseSegment {
       virtual void updateGrips(EditData&) const override;
 
       virtual void draw(QPainter*) const override;
+      virtual Sid getPropertyStyle(Pid) const override;
 
    public:
       HairpinSegment(Score* s);
@@ -76,6 +77,8 @@ class Hairpin final : public TextLineBase {
 
       Spatium _hairpinHeight;
       Spatium _hairpinContHeight;
+
+      virtual Sid getPropertyStyle(Pid) const override;
 
    public:
       Hairpin(Score* s);

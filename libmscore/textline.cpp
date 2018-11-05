@@ -59,7 +59,7 @@ TextLineSegment::TextLineSegment(Score* s)
 void TextLineSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * .7, Sid::textLinePosBelow, Sid::textLinePosAbove);
+      autoplaceSpannerSegment(spatium() * .7);
       }
 
 //---------------------------------------------------------
