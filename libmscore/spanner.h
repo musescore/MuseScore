@@ -73,7 +73,7 @@ class SpannerSegment : public Element {
       bool isEndType() const                           { return spannerSegmentType() == SpannerSegmentType::END;    }
 
       void setSystem(System* s);
-      System* system() const;
+      System* system() const                { return toSystem(parent()); }
 
       const QPointF& userOff2() const       { return _offset2;       }
       void setUserOff2(const QPointF& o)    { _offset2 = o;          }

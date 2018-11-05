@@ -307,7 +307,6 @@ Shape HairpinSegment::shape() const
 
 void HairpinSegment::updateGrips(EditData& ed) const
       {
-      QPointF pp(pagePos());
       qreal _spatium = spatium();
       qreal x = pos2().x();
       if (x < _spatium)             // minimum size of hairpin
@@ -333,12 +332,13 @@ void HairpinSegment::updateGrips(EditData& ed) const
       qreal lineApertureH = ( len - offsetX ) * h1/len; // Vertical position for y grip
       gripLineAperturePoint.setX( lineApertureX );
       gripLineAperturePoint.setY( lineApertureH );
-      gripLineAperturePoint = doRotation.map( gripLineAperturePoint );
+      gripLineAperturePoint = doRotation.map(gripLineAperturePoint);
 
       // End calc position grip aperture
-      ed.grip[int(Grip::START)].translate( pp );
-      ed.grip[int(Grip::END)].translate( p + pp );
-      ed.grip[int(Grip::MIDDLE)].translate( p * .5 + pp );
+      QPointF pp(pagePos());
+      ed.grip[int(Grip::START)].translate(pp);
+      ed.grip[int(Grip::END)].translate(p + pp);
+      ed.grip[int(Grip::MIDDLE)].translate(p * .5 + pp);
       ed.grip[int(Grip::APERTURE)].translate(gripLineAperturePoint + pp);
       }
 

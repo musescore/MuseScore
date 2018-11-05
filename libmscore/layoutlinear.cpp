@@ -73,37 +73,44 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
 //    which contains one system
 //---------------------------------------------------------
 
- void Score::resetSystems(bool /*layoutAll*/, LayoutContext& lc)
+void Score::resetSystems(bool /*layoutAll*/, LayoutContext& lc)
       {
 // if (layoutAll) {
-      qDeleteAll(systems());
-      systems().clear();
-      qDeleteAll(pages());
-      pages().clear();
-      if (!firstMeasure())
-            return;
+      Page* page = 0;
+      if (true) {
+            for (System* s : _systems) {
+                  for (SpannerSegment* ss : s->spannerSegments())
+                        ss->setParent(0);
+                  }
+            qDeleteAll(_systems);
+            _systems.clear();
+            qDeleteAll(pages());
+            pages().clear();
+            if (!firstMeasure()) {
+                  qDebug("no measures");
+                  return;
+                  }
 
-      for (MeasureBase* mb = first(); mb; mb = mb->next())
-            mb->setSystem(nullptr);
+            for (MeasureBase* mb = first(); mb; mb = mb->next())
+                  mb->setSystem(0);
 
-      auto page = new Page(this);
-      pages().push_back(page);
-      page->bbox().setRect(0.0, 0.0, loWidth(), loHeight());
-      page->setNo(0);
+            page = new Page(this);
+            pages().push_back(page);
+            page->bbox().setRect(0.0, 0.0, loWidth(), loHeight());
+            page->setNo(0);
 
-      auto system = new System(this);
-      systems().append(system);
-      page->appendSystem(system);
-      for (int i = 0; i < nstaves(); ++i)
-            system->insertStaff(i);
-//            }
-//      else {
-//            if (pages().isEmpty())
-//                  return;
-//            page = pages().front();
-//            system = systems().front();
-//            }
-
+            System* system = new System(this);
+            _systems.push_back(system);
+            page->appendSystem(system);
+            for (int i = 0; i < nstaves(); ++i)
+                  system->insertStaff(i);
+            }
+      else {
+            if (pages().isEmpty())
+                  return;
+            page = pages().front();
+            // system = systems().front();
+            }
       lc.page = page;
       }
 
@@ -179,10 +186,10 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
 
 void Score::layoutLinear(bool layoutAll, LayoutContext& lc)
       {
+      lc.score = this;
       resetSystems(layoutAll, lc);
 
       collectLinearSystem(lc);
-
       hideEmptyStaves(systems().front(), true);
 
       lc.layoutLinear();
