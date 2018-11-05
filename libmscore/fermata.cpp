@@ -114,6 +114,19 @@ void Fermata::write(XmlWriter& xml) const
       }
 
 //---------------------------------------------------------
+//   subtype
+//---------------------------------------------------------
+
+int Fermata::subtype() const
+      {
+      QString s = Sym::id2name(_symId);
+      if (s.endsWith("Below"))
+            return int(Sym::name2id(s.left(s.size() - 5) + "Above"));
+      else
+            return int(_symId);
+      }
+
+//---------------------------------------------------------
 //   userName
 //---------------------------------------------------------
 

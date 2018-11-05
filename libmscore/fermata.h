@@ -50,7 +50,7 @@ class Fermata final : public Element {
 
       SymId symId() const                   { return _symId; }
       void setSymId(SymId id)               { _symId  = id;  }
-      virtual int subtype() const override  { return int(_symId); }
+      virtual int subtype() const override;
       QString userName() const;
 
       virtual void layout() override;
