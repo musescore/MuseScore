@@ -34,6 +34,7 @@
           <name>Standard</name>
           <timesig>0</timesig>
           </StaffType>
+        <defaultClef>G8vbp</defaultClef>
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>

@@ -31,6 +31,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <defaultClef>G8vbp</defaultClef>
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>

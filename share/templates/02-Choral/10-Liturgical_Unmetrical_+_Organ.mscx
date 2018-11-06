@@ -9,6 +9,7 @@
       </Synthesizer>
     <Division>480</Division>
     <Style>
+      <barNoteDistance>1.2</barNoteDistance>
       <lastSystemFillLimit>0.18</lastSystemFillLimit>
       <Spatium>1.76389</Spatium>
       </Style>
@@ -33,6 +34,7 @@
           <name>Standard</name>
           <timesig>0</timesig>
           </StaffType>
+        <defaultClef>G8vbp</defaultClef>
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>

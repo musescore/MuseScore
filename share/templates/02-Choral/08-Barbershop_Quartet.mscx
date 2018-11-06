@@ -74,7 +74,11 @@ LEAD</longName>
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="TENOR">
+          <program value="52"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="LEAD">
           <program value="52"/>
           <synti>Fluid</synti>
           </Channel>
@@ -85,7 +89,8 @@ LEAD</longName>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <defaultClef>F</defaultClef>
+        <defaultConcertClef>G8vb</defaultConcertClef>
+        <defaultTransposingClef>F</defaultTransposingClef>
         </Staff>
       <trackName>BARITONE BASS</trackName>
       <Instrument>
@@ -126,7 +131,11 @@ BASS</longName>
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="BARI">
+          <program value="52"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="BASS">
           <program value="52"/>
           <synti>Fluid</synti>
           </Channel>
@@ -145,6 +154,14 @@ BASS</longName>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <StaffText>
+            <channelSwitch voice="0" name="TENOR"/>
+            <channelSwitch voice="1" name="LEAD"/>
+            <channelSwitch voice="2" name="TENOR"/>
+            <channelSwitch voice="3" name="LEAD"/>
+            <visible>0</visible>
+            <text>t/l</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -475,6 +492,14 @@ BASS</longName>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <StaffText>
+            <channelSwitch voice="0" name="BARI"/>
+            <channelSwitch voice="1" name="BASS"/>
+            <channelSwitch voice="2" name="BARI"/>
+            <channelSwitch voice="3" name="BASS"/>
+            <visible>0</visible>
+            <text>b/b</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
