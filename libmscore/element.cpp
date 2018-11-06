@@ -466,6 +466,7 @@ bool Element::intersects(const QRectF& rr) const
 
 void Element::writeProperties(XmlWriter& xml) const
       {
+      writeProperty(xml, Pid::AUTOPLACE);
       // copy paste should not keep links
       if (_links && (_links->size() > 1) && !xml.clipboardmode()) {
             if (MScore::debugMode)
@@ -525,10 +526,7 @@ void Element::writeProperties(XmlWriter& xml) const
                         }
                   }
             }
-      if (propertyFlags(Pid::OFFSET) == PropertyFlags::NOSTYLE)
-            writeProperty(xml, Pid::OFFSET);
-
-      for (Pid pid : { Pid::COLOR, Pid::VISIBLE, Pid::Z, Pid::PLACEMENT}) {
+      for (Pid pid : { Pid::OFFSET, Pid::COLOR, Pid::VISIBLE, Pid::Z, Pid::PLACEMENT}) {
             if (propertyFlags(pid) == PropertyFlags::NOSTYLE)
                   writeProperty(xml, pid);
             }
@@ -545,6 +543,8 @@ bool Element::readProperties(XmlReader& e)
       if (readProperty(tag, e, Pid::SIZE_SPATIUM_DEPENDENT))
             ;
       else if (readProperty(tag, e, Pid::OFFSET))
+            ;
+      else if (readProperty(tag, e, Pid::AUTOPLACE))
             ;
       else if (tag == "track")
             setTrack(e.readInt() + e.trackOffset());

@@ -56,9 +56,11 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
+            <autoplace>0</autoplace>
             <text>Test text 1</text>
             </StaffText>
           <StaffText>
+            <autoplace>0</autoplace>
             <text>This is the subtitle</text>
             </StaffText>
           <Chord>
@@ -175,6 +177,7 @@
               </Note>
             </Chord>
           <StaffText>
+            <autoplace>0</autoplace>
             <text>MuseScore testfile
 Leon Vinken</text>
             </StaffText>

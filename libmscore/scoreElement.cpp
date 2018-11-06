@@ -370,51 +370,56 @@ bool ScoreElement::readProperty(const QStringRef& s, XmlReader& e, Pid id)
       return false;
       }
 
-//---------------------------------------------------------
+//-----------------------------------------------------------------------------
 //   writeProperty
-//---------------------------------------------------------
+//
+//    - styled properties are never written
+//    - unstyled properties are always written regardless of value,
+//    - properties without style are written if different from default value
+//-----------------------------------------------------------------------------
 
-void ScoreElement::writeProperty(XmlWriter& xml, Pid id) const
+void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
       {
-      if (isStyled(id))
+      if (isStyled(pid))
             return;
-      if (propertyType(id) == P_TYPE::SP_REAL) {
-            qreal _spatium = score()->spatium();
-            qreal f1       = getProperty(id).toReal();
-            qreal f2       = propertyDefault(id).toReal();
+      QVariant p = getProperty(pid);
+      if (!p.isValid()) {
+            qDebug("%s invalid property <%s><%s>", name(), propertyName(pid), propertyQmlName(pid));
+            return;
+            }
+      PropertyFlags f = propertyFlags(pid);
 
-            if (qAbs(f1 - f2) < 0.0001)
+      QVariant d = (f == PropertyFlags::NOSTYLE) ? propertyDefault(pid) : QVariant();
+
+      if (propertyType(pid) == P_TYPE::SP_REAL) {
+            qreal f1 = p.toReal();
+            if (d.isValid() && qAbs(f1 - d.toReal()) < 0.0001)          // fuzzy compare
                   return;
-            QVariant val          = QVariant(f1/_spatium);
-            QVariant defaultValue = QVariant(f2/_spatium);
-            xml.tag(id, val, defaultValue);
+            p = QVariant(f1/score()->spatium());
+            d = QVariant();
             }
-      else if (propertyType(id) == P_TYPE::POINT_SP) {
-            QPointF p1 = getProperty(id).toPointF();
-            QPointF p2 = propertyDefault(id).toPointF();
-            if ( (qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001))
-                  return;
-            qreal _spatium = score()->spatium();
-            QVariant val          = QVariant(p1/_spatium);
-            QVariant defaultValue = QVariant(p2/_spatium);
-            xml.tag(id, val, defaultValue);
+      else if (propertyType(pid) == P_TYPE::POINT_SP) {
+            QPointF p1 = p.toPointF();
+            if (d.isValid()) {
+                  QPointF p2 = d.toPointF();
+                  if ( (qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001))
+                        return;
+                  }
+            p = QVariant(p1/score()->spatium());
+            d = QVariant();
             }
-      else if (propertyType(id) == P_TYPE::POINT_SP_MM) {
-            QPointF p1 = getProperty(id).toPointF();
-            QPointF p2 = propertyDefault(id).toPointF();
-            if ((qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001))
-                  return;
-            qreal q               = sizeIsSpatiumDependent() ? score()->spatium() : DPMM;
-            QVariant val          = QVariant(p1/q);
-            QVariant defaultValue = QVariant(p2/q);
-            xml.tag(id, val, defaultValue);
+      else if (propertyType(pid) == P_TYPE::POINT_SP_MM) {
+            QPointF p1 = p.toPointF();
+            if (d.isValid()) {
+                  QPointF p2 = d.toPointF();
+                  if ((qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001))
+                        return;
+                  }
+            qreal q = sizeIsSpatiumDependent() ? score()->spatium() : DPMM;
+            p = QVariant(p1/q);
+            d = QVariant();
             }
-      else {
-            if (getProperty(id).isValid())
-                  xml.tag(id, getProperty(id), propertyDefault(id));
-            else
-                  qDebug("%s invalid property <%s><%s>", name(), propertyName(id), propertyQmlName(id));
-            }
+      xml.tag(pid, p, d);
       }
 
 //---------------------------------------------------------
