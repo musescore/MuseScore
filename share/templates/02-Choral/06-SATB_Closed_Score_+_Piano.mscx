@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.01">
   <programVersion>3.0.0</programVersion>
-  <programRevision>6ca0ac5</programRevision>
+  <programRevision>3fdfab3</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -34,10 +34,10 @@
           </StaffType>
         <bracket type="0" span="2" col="0"/>
         </Staff>
-      <trackName>Soprano/Alto</trackName>
+      <trackName>Women</trackName>
       <Instrument>
         <longName>S A</longName>
-        <trackName>Soprano/Alto</trackName>
+        <trackName>Women</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>84</maxPitchP>
         <minPitchA>55</minPitchA>
@@ -71,7 +71,11 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="Soprano">
+          <program value="52"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="Alto">
           <program value="52"/>
           <synti>Fluid</synti>
           </Channel>
@@ -82,12 +86,13 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <defaultClef>F</defaultClef>
+        <defaultConcertClef>G8vb</defaultConcertClef>
+        <defaultTransposingClef>F</defaultTransposingClef>
         </Staff>
-      <trackName>Tenor/Bass</trackName>
+      <trackName>Men</trackName>
       <Instrument>
         <longName>T B</longName>
-        <trackName>Tenor/Bass</trackName>
+        <trackName>Men</trackName>
         <minPitchP>38</minPitchP>
         <maxPitchP>69</maxPitchP>
         <minPitchA>41</minPitchA>
@@ -122,7 +127,11 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="Tenor">
+          <program value="52"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="Bass">
           <program value="52"/>
           <synti>Fluid</synti>
           </Channel>
@@ -196,6 +205,14 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <StaffText>
+            <channelSwitch voice="0" name="Soprano"/>
+            <channelSwitch voice="1" name="Alto"/>
+            <channelSwitch voice="2" name="Soprano"/>
+            <channelSwitch voice="3" name="Alto"/>
+            <visible>0</visible>
+            <text>s/a</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -407,6 +424,14 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <StaffText>
+            <channelSwitch voice="0" name="Tenor"/>
+            <channelSwitch voice="1" name="Bass"/>
+            <channelSwitch voice="2" name="Tenor"/>
+            <channelSwitch voice="3" name="Bass"/>
+            <visible>0</visible>
+            <text>t/b</text>
+            </StaffText>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
