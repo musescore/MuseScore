@@ -39,7 +39,7 @@ else (NOT MSVC)
 endif (NOT MSVC)
 
 include_directories(
-      ${PROJECT_SOURCE_DIR}/thirdparty/diff
+      ${PROJECT_SOURCE_DIR}/thirdparty/dtl
       )
 
 add_library (
@@ -104,10 +104,6 @@ add_library (
       layoutlinear.cpp
       connector.cpp location.cpp skyline.cpp
       scorediff.cpp
-      )
-
-target_link_libraries(libmscore
-      diff_match_patch
       )
 
 ##

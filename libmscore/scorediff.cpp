@@ -18,7 +18,7 @@
 #include "staff.h"
 #include "xml.h"
 
-#include "diff_match_patch.h"
+#include "dtl/dtl.hpp"
 
 #include <algorithm>
 #include <utility>
@@ -29,7 +29,7 @@ namespace Ms {
 //   MscxModeDiff
 //---------------------------------------------------------
 
-class MscxModeDiff : private ::diff_match_patch {
+class MscxModeDiff {
       static constexpr const char* tagRegExpStr = "</?(?<name>[A-z_][A-z_0-9\\-.:]*)( [A-z_0-9\\-.:\\s=\"]*)?/?>";
       const QRegularExpression tagRegExp;
 
@@ -41,6 +41,8 @@ class MscxModeDiff : private ::diff_match_patch {
 
             Tag(int l, TagType t, const QString& n) : line(l), type(t), name(n) {}
             };
+
+      static DiffType fromDtlDiffType(dtl::edit_t dtlType);
 
       void adjustSemanticsMscx(std::vector<TextDiff>&);
       int adjustSemanticsMscxOneDiff(std::vector<TextDiff>& diffs, int index);
@@ -92,83 +94,85 @@ MscxModeDiff::MscxModeDiff()
       {}
 
 //---------------------------------------------------------
+//   MscxModeDiff::fromDtlDiffType
+//---------------------------------------------------------
+
+DiffType MscxModeDiff::fromDtlDiffType(dtl::edit_t dtlType)
+      {
+      switch(dtlType) {
+            case dtl::SES_DELETE:
+                  return DiffType::DELETE;
+            case dtl::SES_COMMON:
+                  return DiffType::EQUAL;
+            case dtl::SES_ADD:
+                  return DiffType::INSERT;
+            }
+      Q_ASSERT(false); // dtlType must have one of the values handled above.
+      return DiffType::EQUAL;
+      }
+
+//---------------------------------------------------------
 //   MscxModeDiff::lineModeDiff
 //---------------------------------------------------------
 
 std::vector<TextDiff> MscxModeDiff::lineModeDiff(const QString& s1, const QString& s2)
       {
-      QList<QVariant> l = diff_linesToChars(s1, s2);
-      QList<::Diff> diffLines = diff_main(l[0].toString(), l[1].toString(), false);
+      // type declarations for dtl library
+      typedef QStringRef elem;
+      typedef std::pair<elem, dtl::elemInfo> sesElem;
+      typedef std::vector<sesElem> sesElemVec;
 
-      std::vector<TextDiff> diffs(diffLines.size());
+      // QVector does not contain range constructor used inside dtl
+      // so we have to convert to std::vector.
+      std::vector<QStringRef> lines1 = s1.splitRef('\n').toStdVector();
+      std::vector<QStringRef> lines2 = s2.splitRef('\n').toStdVector();
+      dtl::Diff<QStringRef, std::vector<QStringRef>> diff(lines1, lines2);
+
+      diff.compose();
+
+      const sesElemVec changes = diff.getSes().getSequence();
+      std::vector<TextDiff> diffs;
       int line[2][2] {{1, 1}, {1, 1}}; // for correct assigning line numbers to
                                        // DELETE and INSERT diffs we need to
                                        // count lines separately for these diff
                                        // types (EQUAL can use both counters).
-      for (int i = 0; i < diffLines.size(); ++i) {
-            TextDiff& d = diffs[i];
-            ::Diff& ld = diffLines[i];
-            const int iThis = (ld.operation == DELETE) ? 0 : 1; // for EQUAL doesn't matter
-            const int iOther = (iThis == 1) ? 0 : 1;
 
-            if (ld.operation == EQUAL)
-                  line[iThis][iOther] = line[iOther][iOther];
+      for (const sesElem& ch : changes) {
+            DiffType type = fromDtlDiffType(ch.second.type);
+            const int iThis = (type == DiffType::DELETE) ? 0 : 1; // for EQUAL doesn't matter
 
-            d.start[0] = line[iThis][0];
-            d.start[1] = line[iThis][1];
-            // After diff_linesToChars call each line is represented by one
-            // Unicode character, so counting them we can count differing lines
-            const int lines = ld.text.size();
-            switch (ld.operation) {
-                  case DELETE:
-                        line[iThis][iThis] += lines;
-                        d.type = DiffType::DELETE;
-                        break;
-                  case INSERT:
-                        line[iThis][iThis] += lines;
-                        d.type = DiffType::INSERT;
-                        break;
-                  case EQUAL:
-                        line[iThis][0] += lines;
-                        line[iThis][1] += lines;
-                        d.type = DiffType::EQUAL;
-                        break;
+            if (diffs.empty() || diffs.back().type != type) {
+                  if (!diffs.empty()) {
+                        // sync line numbers
+                        DiffType prevType = diffs.back().type;
+                        const int prevThis = (prevType == DiffType::DELETE) ? 0 : 1;
+                        const int prevOther = (prevThis == 1) ? 0 : 1;
+                        if (prevType == DiffType::EQUAL)
+                              std::copy_n(line[prevThis], 2, line[prevOther]);
+                        else
+                              line[prevThis][prevOther] = line[prevOther][prevOther];
+
+                        if (type == DiffType::EQUAL) {
+                              const int iOther = (iThis == 1) ? 0 : 1;
+                              line[iThis][iOther] = line[iOther][iOther];
+                              }
+                        }
+
+                  diffs.emplace_back();
+                  TextDiff& d = diffs.back();
+                  d.type = type;
+                  std::copy_n(line[iThis], 2, d.start);
+                  d.end[0] = line[iThis][0] - 1; // equal line numbers would mean an actual change in that line.
+                  d.end[1] = line[iThis][1] - 1;
                   }
-            d.end[0] = line[iThis][0] - 1;
-            d.end[1] = line[iThis][1] - 1;
 
-            // sync line numbers
-            switch(ld.operation) {
-                  case DELETE:
-                  case INSERT:
-                        line[iThis][iOther] = line[iOther][iOther];
-                        // Do not update line[iOther], if the next diff has
-                        // other type (but not EQUAL), old values are correct.
-                        break;
-                  case EQUAL:
-                        std::copy(line[iThis], line[iThis] + 2, line[iOther]);
-                        break;
-                  }
-            }
-
-      // Update text in diffs to match actual content of MSCX code
-      diff_charsToLines(diffLines, l[2].toStringList());
-      for (int i = 0; i < diffLines.size(); ++i) {
-            TextDiff& diff = diffs[i];
-            QString& text = diffLines[i].text;
-            switch(diff.type) {
-                  case DiffType::DELETE:
-                        diff.text[0] = text;
-                        break;
-                  case DiffType::INSERT:
-                        diff.text[1] = text;
-                        break;
-                  case DiffType::EQUAL:
-                        diff.text[0] = text;
-                        diff.text[1] = text;
-                        break;
-                  default:
-                        break;
+            TextDiff& d = diffs.back();
+            d.end[iThis] = (line[iThis][iThis]++);
+            d.text[iThis].append(ch.first).append('\n');
+            if (type == DiffType::EQUAL) {
+                  const int iOther = (iThis == 1) ? 0 : 1;
+                  d.end[iOther] = (line[iThis][iOther]++);
+                  d.text[iOther].append(ch.first).append('\n');
                   }
             }
 

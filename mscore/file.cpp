@@ -83,7 +83,6 @@
 #include "omr/importpdf.h"
 #endif
 
-#include "diff/diff_match_patch.h"
 #include "libmscore/chordlist.h"
 #include "libmscore/mscore.h"
 #include "thirdparty/qzip/qzipreader_p.h"
