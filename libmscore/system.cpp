@@ -187,7 +187,6 @@ void System::layoutSystem(qreal xo1)
 
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* s = score()->staff(staffIdx);
-
             for (int i = 0; i < columns; ++i) {
                   for (auto bi : s->brackets()) {
                         if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET)
@@ -237,7 +236,7 @@ void System::layoutSystem(qreal xo1)
                               }
                         }
                   }
-            if (!s->show())
+            if (!staff(staffIdx)->show())
                   continue;
             for (InstrumentName* t : _staves[staffIdx]->instrumentNames) {
                   t->layout();
