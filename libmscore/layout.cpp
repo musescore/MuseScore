@@ -1211,7 +1211,6 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
 
       for (Staff* staff : _staves) {
             SysStaff* ss  = system->staff(staffIdx);
-//            bool oldShow = ss->show();
 
             Staff::HideMode hideMode = staff->hideWhenEmpty();
 
@@ -2982,6 +2981,7 @@ System* Score::collectSystem(LayoutContext& lc)
             if (lc.curMeasure->isMeasure()) {
                   Measure* m = toMeasure(lc.curMeasure);
                   if (firstMeasure) {
+                        hideEmptyStaves(system, lc.firstSystem);
                         system->layoutSystem(minWidth);
                         minWidth += system->leftMargin();
                         if (m->repeatStart()) {
@@ -3117,8 +3117,6 @@ System* Score::collectSystem(LayoutContext& lc)
             qreal w = toMeasure(lc.prevMeasure)->createEndBarLines(true);
             minWidth += w;
             }
-
-      hideEmptyStaves(system, lc.firstSystem);
 
       //-------------------------------------------------------
       //    add system trailer if needed

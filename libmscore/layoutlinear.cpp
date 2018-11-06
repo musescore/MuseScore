@@ -190,7 +190,7 @@ void Score::layoutLinear(bool layoutAll, LayoutContext& lc)
       resetSystems(layoutAll, lc);
 
       collectLinearSystem(lc);
-      hideEmptyStaves(systems().front(), true);
+//      hideEmptyStaves(systems().front(), true);     this does not make sense
 
       lc.layoutLinear();
       }
