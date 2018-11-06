@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.06">
-  <programVersion>2.0.3</programVersion>
-  <programRevision>3c7a69d</programRevision>
+<museScore version="3.01">
+  <programVersion>3.0.0</programVersion>
+  <programRevision>6ca0ac5</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -26,14 +26,6 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <PageList>
-      <Page>
-        <System>
-          </System>
-        <System>
-          </System>
-        </Page>
-      </PageList>
     <Part>
       <Staff id="1">
         <StaffType group="percussion">
@@ -41,8 +33,8 @@
           <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>
-        <bracket type="0" span="4"/>
-        <barLineSpan>4</barLineSpan>
+        <bracket type="0" span="4" col="0"/>
+        <barLineSpan>3</barLineSpan>
         </Staff>
       <trackName>Snare Drum</trackName>
       <Instrument>
@@ -52,7 +44,7 @@
         <instrumentId>drum.snare-drum</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="48">
-          <head>2</head>
+          <head>diamond</head>
           <line>4</line>
           <voice>0</voice>
           <name>Buzz</name>
@@ -60,7 +52,7 @@
           <shortcut>A</shortcut>
           </Drum>
         <Drum pitch="50">
-          <head>0</head>
+          <head>normal</head>
           <line>4</line>
           <voice>0</voice>
           <name>Battery Snare</name>
@@ -68,7 +60,7 @@
           <shortcut>B</shortcut>
           </Drum>
         <Drum pitch="52">
-          <head>1</head>
+          <head>cross</head>
           <line>4</line>
           <voice>0</voice>
           <name>Rim Shot</name>
@@ -76,7 +68,7 @@
           <shortcut>C</shortcut>
           </Drum>
         <Drum pitch="53">
-          <head>1</head>
+          <head>cross</head>
           <line>3</line>
           <voice>0</voice>
           <name>Rim Click</name>
@@ -84,7 +76,7 @@
           <shortcut>D</shortcut>
           </Drum>
         <Drum pitch="55">
-          <head>1</head>
+          <head>cross</head>
           <line>2</line>
           <voice>0</voice>
           <name>Stick Click</name>
@@ -92,7 +84,7 @@
           <shortcut>E</shortcut>
           </Drum>
         <Drum pitch="57">
-          <head>4</head>
+          <head>mi</head>
           <line>4</line>
           <voice>0</voice>
           <name>Stick Shot</name>
@@ -100,7 +92,7 @@
           <shortcut>F</shortcut>
           </Drum>
         <Drum pitch="59">
-          <head>5</head>
+          <head>slash</head>
           <line>5</line>
           <voice>0</voice>
           <name>Shell</name>
@@ -108,28 +100,28 @@
           <shortcut>G</shortcut>
           </Drum>
         <Drum pitch="60">
-          <head>3</head>
+          <head>triangle-down</head>
           <line>4</line>
           <voice>0</voice>
           <name>Visual (BS,X-Over,Etc)</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="72">
-          <head>1</head>
+          <head>cross</head>
           <line>1</line>
           <voice>2</voice>
           <name>Ride Cymbal</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="74">
-          <head>6</head>
+          <head>xcircle</head>
           <line>1</line>
           <voice>2</voice>
           <name>Open High Hat</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="76">
-          <head>1</head>
+          <head>cross</head>
           <line>1</line>
           <voice>2</voice>
           <name>Closed High Hat</name>
@@ -182,8 +174,7 @@
           <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>
-        <bracket type="-1" span="0"/>
-        <barLineSpan>0</barLineSpan>
+        <barLineSpan>2</barLineSpan>
         </Staff>
       <trackName>Tenor Drums</trackName>
       <Instrument>
@@ -193,7 +184,7 @@
         <instrumentId>drum.tenor-drum</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="24">
-          <head>0</head>
+          <head>normal</head>
           <line>7</line>
           <voice>0</voice>
           <name>Drum 4</name>
@@ -201,7 +192,7 @@
           <shortcut>A</shortcut>
           </Drum>
         <Drum pitch="25">
-          <head>1</head>
+          <head>cross</head>
           <line>7</line>
           <voice>0</voice>
           <name>Drum 4 Rim</name>
@@ -209,28 +200,28 @@
           <shortcut>B</shortcut>
           </Drum>
         <Drum pitch="26">
-          <head>2</head>
+          <head>diamond</head>
           <line>7</line>
           <voice>0</voice>
           <name>Drum 4 Buzz</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="27">
-          <head>6</head>
+          <head>xcircle</head>
           <line>7</line>
           <voice>0</voice>
           <name>Drum 4 Muted</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="28">
-          <head>5</head>
+          <head>slash</head>
           <line>7</line>
           <voice>0</voice>
           <name>Drum 4 Shell</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="48">
-          <head>0</head>
+          <head>normal</head>
           <line>5</line>
           <voice>0</voice>
           <name>Drum 3</name>
@@ -238,7 +229,7 @@
           <shortcut>C</shortcut>
           </Drum>
         <Drum pitch="49">
-          <head>1</head>
+          <head>cross</head>
           <line>5</line>
           <voice>0</voice>
           <name>Drum 3 Rim</name>
@@ -246,28 +237,28 @@
           <shortcut>D</shortcut>
           </Drum>
         <Drum pitch="50">
-          <head>2</head>
+          <head>diamond</head>
           <line>5</line>
           <voice>0</voice>
           <name>Drum 3 Buzz</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="51">
-          <head>6</head>
+          <head>xcircle</head>
           <line>5</line>
           <voice>0</voice>
           <name>Drum 3 Muted</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="52">
-          <head>5</head>
+          <head>slash</head>
           <line>5</line>
           <voice>0</voice>
           <name>Drum 3 Shell</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="72">
-          <head>0</head>
+          <head>normal</head>
           <line>3</line>
           <voice>0</voice>
           <name>Drum 2</name>
@@ -275,7 +266,7 @@
           <shortcut>E</shortcut>
           </Drum>
         <Drum pitch="73">
-          <head>1</head>
+          <head>cross</head>
           <line>3</line>
           <voice>0</voice>
           <name>Drum 2 Rim</name>
@@ -283,21 +274,21 @@
           <shortcut>F</shortcut>
           </Drum>
         <Drum pitch="74">
-          <head>2</head>
+          <head>diamond</head>
           <line>3</line>
           <voice>0</voice>
           <name>Drum 2 Buzz</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="75">
-          <head>6</head>
+          <head>xcircle</head>
           <line>3</line>
           <voice>0</voice>
           <name>Drum 2 Muted</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="96">
-          <head>0</head>
+          <head>normal</head>
           <line>1</line>
           <voice>0</voice>
           <name>Drum 1</name>
@@ -305,49 +296,49 @@
           <shortcut>G</shortcut>
           </Drum>
         <Drum pitch="97">
-          <head>1</head>
+          <head>cross</head>
           <line>1</line>
           <voice>0</voice>
           <name>Drum 1 Rim</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="98">
-          <head>2</head>
+          <head>diamond</head>
           <line>1</line>
           <voice>0</voice>
           <name>Drum 1 Buzz</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="99">
-          <head>6</head>
+          <head>xcircle</head>
           <line>1</line>
           <voice>0</voice>
           <name>Drum 1 Muted</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="120">
-          <head>0</head>
+          <head>normal</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Spock</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="121">
-          <head>1</head>
+          <head>cross</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Spock Rim</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="122">
-          <head>2</head>
+          <head>diamond</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Spock Buzz</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="123">
-          <head>1</head>
+          <head>cross</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Stick Click</name>
@@ -400,8 +391,7 @@
           <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>
-        <bracket type="-1" span="0"/>
-        <barLineSpan>0</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Bass Drums</trackName>
       <Instrument>
@@ -411,7 +401,7 @@
         <instrumentId>drum.bass-drum</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="1">
-          <head>0</head>
+          <head>normal</head>
           <line>7</line>
           <voice>0</voice>
           <name>Bass Drum 1</name>
@@ -419,7 +409,7 @@
           <shortcut>A</shortcut>
           </Drum>
         <Drum pitch="2">
-          <head>1</head>
+          <head>cross</head>
           <line>7</line>
           <voice>0</voice>
           <name>Bass Drum 1 Rim Knock</name>
@@ -427,7 +417,7 @@
           <shortcut>B</shortcut>
           </Drum>
         <Drum pitch="24">
-          <head>0</head>
+          <head>normal</head>
           <line>5</line>
           <voice>0</voice>
           <name>Bass Drum 2</name>
@@ -435,7 +425,7 @@
           <shortcut>C</shortcut>
           </Drum>
         <Drum pitch="26">
-          <head>1</head>
+          <head>cross</head>
           <line>5</line>
           <voice>0</voice>
           <name>Bass Drum 2 Rim Knock</name>
@@ -443,7 +433,7 @@
           <shortcut>D</shortcut>
           </Drum>
         <Drum pitch="48">
-          <head>0</head>
+          <head>normal</head>
           <line>3</line>
           <voice>0</voice>
           <name>Bass Drum 3</name>
@@ -451,7 +441,7 @@
           <shortcut>E</shortcut>
           </Drum>
         <Drum pitch="50">
-          <head>1</head>
+          <head>cross</head>
           <line>3</line>
           <voice>0</voice>
           <name>Bass Drum 3 Rim Knock</name>
@@ -459,7 +449,7 @@
           <shortcut>F</shortcut>
           </Drum>
         <Drum pitch="69">
-          <head>0</head>
+          <head>normal</head>
           <line>1</line>
           <voice>0</voice>
           <name>Bass Drum 4</name>
@@ -467,21 +457,21 @@
           <shortcut>G</shortcut>
           </Drum>
         <Drum pitch="71">
-          <head>1</head>
+          <head>cross</head>
           <line>1</line>
           <voice>0</voice>
           <name>Bass Drum 4 Rim Knock</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="96">
-          <head>0</head>
+          <head>normal</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Bass Drum 5</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="98">
-          <head>1</head>
+          <head>cross</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Bass Drum 5 Rim Knock</name>
@@ -534,8 +524,6 @@
           <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>
-        <bracket type="-1" span="0"/>
-        <barLineSpan>0</barLineSpan>
         </Staff>
       <trackName>Cymbals</trackName>
       <Instrument>
@@ -545,7 +533,7 @@
         <instrumentId>metal.cymbal.crash</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="72">
-          <head>0</head>
+          <head>normal</head>
           <line>4</line>
           <voice>0</voice>
           <name>Full Crash</name>
@@ -553,7 +541,7 @@
           <shortcut>A</shortcut>
           </Drum>
         <Drum pitch="74">
-          <head>0</head>
+          <head>normal</head>
           <line>4</line>
           <voice>0</voice>
           <name>Half Crash</name>
@@ -561,7 +549,7 @@
           <shortcut>B</shortcut>
           </Drum>
         <Drum pitch="76">
-          <head>1</head>
+          <head>cross</head>
           <line>4</line>
           <voice>0</voice>
           <name>High Hat</name>
@@ -569,7 +557,7 @@
           <shortcut>C</shortcut>
           </Drum>
         <Drum pitch="77">
-          <head>2</head>
+          <head>diamond</head>
           <line>4</line>
           <voice>0</voice>
           <name>Sizzle</name>
@@ -577,7 +565,7 @@
           <shortcut>D</shortcut>
           </Drum>
         <Drum pitch="79">
-          <head>0</head>
+          <head>normal</head>
           <line>4</line>
           <voice>0</voice>
           <name>Crash-Choke</name>
@@ -585,7 +573,7 @@
           <shortcut>E</shortcut>
           </Drum>
         <Drum pitch="81">
-          <head>7</head>
+          <head>do</head>
           <line>4</line>
           <voice>0</voice>
           <name>Normal Tap</name>
@@ -593,7 +581,7 @@
           <shortcut>F</shortcut>
           </Drum>
         <Drum pitch="83">
-          <head>7</head>
+          <head>do</head>
           <line>4</line>
           <voice>0</voice>
           <name>Normal Tap-Choke</name>
@@ -601,42 +589,42 @@
           <shortcut>G</shortcut>
           </Drum>
         <Drum pitch="84">
-          <head>7</head>
+          <head>do</head>
           <line>4</line>
           <voice>0</voice>
           <name>Bell Tap</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="86">
-          <head>7</head>
+          <head>do</head>
           <line>4</line>
           <voice>0</voice>
           <name>Bell Tap-Choke</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="88">
-          <head>7</head>
+          <head>do</head>
           <line>4</line>
           <voice>0</voice>
           <name>Muted Tap</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="89">
-          <head>2</head>
+          <head>diamond</head>
           <line>4</line>
           <voice>0</voice>
           <name>Smash</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="91">
-          <head>2</head>
+          <head>diamond</head>
           <line>4</line>
           <voice>0</voice>
           <name>Zing</name>
           <stem>1</stem>
           </Drum>
         <Drum pitch="93">
-          <head>2</head>
+          <head>diamond</head>
           <line>4</line>
           <voice>0</voice>
           <name>Roll</name>
@@ -683,803 +671,1397 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure number="1">
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="4">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="5">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="6">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="7">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="8">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="9">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="10">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="11">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="12">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="13">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="14">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="15">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="16">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="17">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="18">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="19">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="20">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="21">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="22">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="23">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="24">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="25">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="26">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="27">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="28">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="29">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="30">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="31">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="32">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>4</span>
-          </BarLine>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="2">
-      <Measure number="1">
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="4">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="5">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="6">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="7">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="8">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="9">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="10">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="11">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="12">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="13">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="14">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="15">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="16">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="17">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="18">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="19">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="20">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="21">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="22">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="23">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="24">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="25">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="26">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="27">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="28">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="29">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="30">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="31">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="32">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="3">
-      <Measure number="1">
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <BarLine>
+            </BarLine>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="4">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="5">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="6">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="7">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="8">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="9">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="10">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="11">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="12">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="13">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="14">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="15">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="16">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="17">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <BarLine>
+            </BarLine>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="18">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="19">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="20">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="21">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="22">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="23">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="24">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="25">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="26">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="27">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="28">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="29">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="30">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="31">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="32">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="4">
-      <Measure number="1">
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="4">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="5">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="6">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="7">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="8">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="9">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="10">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="11">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="12">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="13">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="14">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="15">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="16">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="17">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="18">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="19">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="20">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="21">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="22">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="23">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="24">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="25">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="26">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="27">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="28">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="29">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="30">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="31">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
-      <Measure number="32">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     </Score>
