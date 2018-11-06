@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.01">
   <programVersion>3.0.0</programVersion>
-  <programRevision>6ca0ac5</programRevision>
+  <programRevision>3543170</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -15,7 +15,6 @@
       <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
       <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
       <repeatBarTips>1</repeatBarTips>
-      <lastSystemFillLimit>0.25</lastSystemFillLimit>
       <showMeasureNumber>0</showMeasureNumber>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
@@ -1225,6 +1224,13 @@
         </Instrument>
       </Part>
     <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <Text>
+          <style>Title</style>
+          <text>Big Band</text>
+          </Text>
+        </VBox>
       <Measure>
         <voice>
           <BarLine>
