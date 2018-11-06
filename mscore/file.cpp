@@ -523,6 +523,8 @@ MasterScore* MuseScore::getNewFile()
                   delete score;
                   return 0;
                   }
+            score->setStyle(tscore->style());
+
             // create instruments from template
             for (Part* tpart : tscore->parts()) {
                   Part* part = new Part(score);
