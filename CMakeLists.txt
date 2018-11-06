@@ -716,7 +716,7 @@ endif (NOT MSVC)
 ##
 subdirs(
       mscore awl bww2mxml share midi audiofile fluid libmscore synthesizer
-      effects thirdparty/rtf2html thirdparty/diff thirdparty/beatroot
+      effects thirdparty/rtf2html thirdparty/beatroot
       thirdparty/qzip thirdparty/kQOAuth
       )
 

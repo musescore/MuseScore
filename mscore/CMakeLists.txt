@@ -446,7 +446,6 @@ endif (MSVC)
 
 target_link_libraries(mscore
       awl
-      diff_match_patch
       bww
       rtf2html
       ${QTSINGLEAPPLICATION_LIBRARIES}
