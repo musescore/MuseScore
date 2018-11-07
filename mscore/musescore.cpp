@@ -1141,6 +1141,7 @@ MuseScore::MuseScore()
       splitter = new QSplitter;
       tab1 = createScoreTab();
       splitter->addWidget(tab1);
+      ctab = tab1; // make tab1 active by default.
 
       if (splitScreen()) {
             tab2 = createScoreTab();
