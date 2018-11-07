@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: musedata.cpp 5497 2012-03-26 10:59:16Z lasconic $
 //
 //  Copyright (C) 2007 Werner Schweer and others
 //

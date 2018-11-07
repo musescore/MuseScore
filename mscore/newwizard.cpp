@@ -2,7 +2,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: newwizard.cpp 5626 2012-05-13 18:33:52Z lasconic $
 //
 //  Copyright (C) 2008 Werner Schweer and others
 //

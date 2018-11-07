@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: shortcutcapturedialog.cpp 5537 2012-04-16 07:55:10Z wschweer $
 //
 //  Copyright (C) 2002-2007 Werner Schweer and others
 //  Copyright (C) 2003 Mathias Lundgren (lunar_shuttle@users.sourceforge.net)

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id:$
 //
 //  Color notehead plugin
 //	Noteheads are colored according to pitch. User can change to color by

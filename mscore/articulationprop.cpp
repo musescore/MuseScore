@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: articulation.cpp -1   $
 //
 //  Copyright (C) 2002-2011 Werner Schweer and others
 //
