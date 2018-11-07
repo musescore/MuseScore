@@ -39,6 +39,7 @@
 #define INSTPREFIX              "${CMAKE_INSTALL_PREFIX}"
 #define VERSION                 "${MUSESCORE_VERSION_FULL}"
 #define BUILD_NUMBER            "${CMAKE_BUILD_NUMBER}"
+#define WIN_SPARKLE_APPCAST_URL "${WIN_SPARKLE_APPCAST_URL}"
 
 #cmakedefine WIN_SPARKLE_ENABLED
 #cmakedefine MAC_SPARKLE_ENABLED
