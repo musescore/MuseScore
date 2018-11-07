@@ -452,6 +452,7 @@ void MuseScore::preferencesChanged(bool fromWorkspace)
       _statusBar->setVisible(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
 
       MuseScore::updateUiStyleAndTheme();
+      updateIcons();
 
       QString fgWallpaper = preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER);
       for (int i = 0; i < tab1->count(); ++i) {
@@ -6975,8 +6976,6 @@ int main(int argc, char* av[])
             MuseScore::updateUiStyleAndTheme();
       else
             noSeq = true;
-
-      genIcons();
 
       // Do not create sequencer and audio drivers if run with '-s'
       if (!noSeq) {

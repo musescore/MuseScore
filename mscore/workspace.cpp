@@ -183,12 +183,13 @@ void MuseScore::changeWorkspace(Workspace* p, bool first)
 
 void MuseScore::updateIcons()
       {
-      mscore->setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling, preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
+      setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling, preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
       for (QAction* a : fileTools->actions()) {
             QWidget* widget = fileTools->widgetForAction(a);
             QString className = widget->metaObject()->className();
-            if (className != "Ms::AccessibleToolButton" || className != "QToolBarSeparator")
+            if (className != "Ms::AccessibleToolButton" && className != "QToolBarSeparator")
                   widget->setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
+                  // apparently needed for viewModeCombo, see MuseScore::populateFileOperations
             }
       }
 
@@ -975,14 +976,15 @@ QList<Workspace*>& Workspace::workspaces()
                               p = new Workspace;
                         p->setPath(s + "/" + entry);
                         p->setName(name);
-                        p->setTranslate(translate);
+                        if (translate)
+                              p->setTranslatableName(name);
                         p->setReadOnly(!fi.isWritable());
                         _workspaces.append(p);
                         }
                   }
             // hack
             for (int i = 0; i < _workspaces.size(); i++) {
-                  if (_workspaces[i]->name() == "Basic") {
+                  if (_workspaces[i]->translatableName() == "Basic") {
                         _workspaces.move(i, 0);
                         break;
                         }
@@ -1013,8 +1015,8 @@ void Workspace::retranslate(QList<Workspace*>* workspacesList)
       if (!workspacesList)
             workspacesList = &workspaces();
       for (auto w : *workspacesList) {
-            if (w->translate())
-                  w->setName(tr(w->name().toLatin1().data()));
+            if (!w->translatableName().isEmpty())
+                  w->setName(tr(w->translatableName().toLatin1().constData()));
             }
       }
 
