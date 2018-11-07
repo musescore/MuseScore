@@ -280,6 +280,15 @@ void SlurTieSegment::reset()
 
 void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
       {
+      if (visible()
+         && (color() == Qt::black)
+         && ups(Grip::START).off.isNull()
+         && ups(Grip::BEZIER1).off.isNull()
+         && ups(Grip::BEZIER2).off.isNull()
+         && ups(Grip::END).off.isNull()
+         )
+            return;
+
       xml.stag(this, QString("no=\"%1\"").arg(no));
 
       qreal _spatium = spatium();
