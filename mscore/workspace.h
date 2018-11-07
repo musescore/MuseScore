@@ -50,10 +50,10 @@ class Workspace : public QObject {
       static QString findStringFromMenu(QMenu* menu);
 
       QString _name;
+      QString _translatableName;
       QString _path;
       bool _dirty;
       bool _readOnly;
-      bool _translate;
 
       bool saveComponents;
       bool saveToolbars;
@@ -75,6 +75,8 @@ class Workspace : public QObject {
       void setPath(const QString& s) { _path = s;     }
       QString name() const           { return _name;  }
       void setName(const QString& s) { _name = s;     }
+      const QString& translatableName() const  { return _translatableName;    }
+      void setTranslatableName(QString trName) { _translatableName = trName;  }
       void rename(const QString& s);
       bool dirty() const             { return _dirty; }
 
@@ -84,8 +86,6 @@ class Workspace : public QObject {
       void read();
       bool readOnly() const          { return _readOnly;  }
       void setReadOnly(bool val)     { _readOnly = val;   }
-      bool translate() const         { return _translate; }
-      void setTranslate(bool val)    { _translate = val;  }
 
       static void initWorkspace();
       static Workspace* currentWorkspace;
