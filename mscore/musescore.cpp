@@ -1736,7 +1736,7 @@ MuseScore::MuseScore()
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
 #if !defined(FOR_WINSTORE)
       checkForUpdateAction = new QAction("", 0);
-      connect(checkForUpdateAction, SIGNAL(triggered()), this, SLOT(checkForUpdate()));
+      connect(checkForUpdateAction, SIGNAL(triggered()), this, SLOT(checkForUpdateNow()));
       menuHelp->addAction(checkForUpdateAction);
       Workspace::addActionAndString(checkForUpdateAction, "check-update");
 #endif
