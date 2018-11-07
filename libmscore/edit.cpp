@@ -3767,6 +3767,11 @@ void Score::undoExchangeVoice(Measure* measure, int v1, int v2, int staff1, int 
                         ChordRest* cr = toChordRest(s->element(track));
                         if (cr == 0)
                               continue;
+                        if (cr->isRest()) {
+                              Rest* r = toRest(cr);
+                              if (r->isGap())
+                                    r->undoChangeProperty(Pid::GAP, false);
+                              }
                         if (ctick < s->tick()) {
                               // fill gap
                               int ticks = s->tick() - ctick;
