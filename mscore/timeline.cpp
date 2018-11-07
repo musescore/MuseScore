@@ -878,7 +878,7 @@ void Timeline::drawGrid(int global_rows, int global_cols)
 
       //Draw grid
       Measure* curr_measure = _score->firstMeasure();
-      QList<Part*> part_list = _score->parts();
+      QList<Part*> part_list = getParts();
       for (int col = 0; col < global_cols; col++) {
             for (int row = 0; row < global_rows; row++) {
                   QGraphicsRectItem* graphics_rect_item = new QGraphicsRectItem(col * grid_width,
@@ -1599,9 +1599,25 @@ int Timeline::correctPart(int stave)
       //Find correct stave (skipping hidden staves)
       QList<Staff*> list = _score->staves();
       int count = correctStave(stave);
-      return _score->parts().indexOf(list.at(count)->part());
+      return getParts().indexOf(list.at(count)->part());
       }
 
+//---------------------------------------------------------
+//   getParts
+//---------------------------------------------------------
+
+QList<Part*> Timeline::getParts()
+      {
+      QList<Part*> realPartList = _score->parts();
+      QList<Part*> partList;
+      for (Part* p : realPartList) {
+            for (int i = 0; i < p->nstaves(); i++) {
+                  partList.append(p);
+                  }
+            }
+
+      return partList;
+      }
 
 //---------------------------------------------------------
 //   changeSelection
@@ -2448,7 +2464,7 @@ std::vector<std::pair<QString, bool>> Timeline::getLabels()
             std::vector<std::pair<QString, bool>> no_labels;
             return no_labels;
             }
-      QList<Part*> part_list = _score->parts();
+      QList<Part*> part_list = getParts();
       //transfer them into a vector of qstrings and then add the meta row names
       std::vector<std::pair<QString, bool>> row_labels;
       if (collapsed_meta) {
@@ -2472,9 +2488,9 @@ std::vector<std::pair<QString, bool>> Timeline::getLabels()
             QString part_name = "";
             doc.setHtml(part_list.at(stave)->longName());
             part_name = doc.toPlainText();
-
             if (part_name.isEmpty())
                   part_name = part_list.at(stave)->instrumentName();
+            
             std::pair<QString, bool> instrument_label(part_name, part_list.at(stave)->show());
             row_labels.push_back(instrument_label);
             }
@@ -2661,7 +2677,7 @@ void Timeline::toggleShow(int staff)
       {
       if (!_score)
             return;
-      QList<Part*> parts = _score->parts();
+      QList<Part*> parts = getParts();
       if (parts.size() > staff && staff >= 0) {
             parts.at(staff)->setShow(!parts.at(staff)->show());
             parts.at(staff)->undoChangeProperty(Pid::VISIBLE, parts.at(staff)->show());
