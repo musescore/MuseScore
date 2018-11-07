@@ -183,12 +183,13 @@ void MuseScore::changeWorkspace(Workspace* p, bool first)
 
 void MuseScore::updateIcons()
       {
-      mscore->setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling, preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
+      setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling, preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
       for (QAction* a : fileTools->actions()) {
             QWidget* widget = fileTools->widgetForAction(a);
             QString className = widget->metaObject()->className();
-            if (className != "Ms::AccessibleToolButton" || className != "QToolBarSeparator")
+            if (className != "Ms::AccessibleToolButton" && className != "QToolBarSeparator")
                   widget->setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
+                  // apparently needed for viewModeCombo, see MuseScore::populateFileOperations
             }
       }
 
