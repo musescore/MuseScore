@@ -3578,14 +3578,10 @@ bool MuseScore::eventFilter(QObject *obj, QEvent *event)
 
 bool MuseScore::hasToCheckForUpdate()
       {
-#ifdef MAC_SPARKLE_ENABLED
-      return false; // On Mac, sparkle take cares of the scheduling for now. On windows too probably.
-#else
       if (ucheck)
             return ucheck->hasToCheck();
       else
             return false;
-#endif
       }
 
 //---------------------------------------------------------
@@ -3599,19 +3595,33 @@ bool MuseScore::hasToCheckForExtensionsUpdate()
 
 //---------------------------------------------------------
 //   checkForUpdate
+//         Doesn't show any messages if software is up to date
 //---------------------------------------------------------
 
 void MuseScore::checkForUpdate()
       {
 #ifdef MAC_SPARKLE_ENABLED
-      SparkleAutoUpdater::checkForUpdatesNow();
-#else
+      SparkleAutoUpdater::checkUpdates();
+      return;
+#endif
       if (ucheck)
             ucheck->check(version(), sender() != 0);
-
-#endif
       }
 
+//---------------------------------------------------------
+//   checkForUpdateNow
+//          Show message like "Software is up to date" if software is up to date
+//---------------------------------------------------------
+void MuseScore::checkForUpdateNow()
+      {
+#ifdef MAC_SPARKLE_ENABLED
+      SparkleAutoUpdater::checkForUpdatesNow();
+      return;
+#endif
+      if (ucheck)
+            ucheck->check(version(), sender() != 0);
+      }
+      
 //---------------------------------------------------------
 //   checkForExtensionsUpdate
 //---------------------------------------------------------
@@ -7144,10 +7154,10 @@ int main(int argc, char* av[])
       if (mscore->hasToCheckForUpdate())
             mscore->checkForUpdate();
 #endif
-
       if (mscore->hasToCheckForExtensionsUpdate())
             mscore->checkForExtensionsUpdate();
 
+      
       if (!scoresOnCommandline && preferences.getBool(PREF_UI_APP_STARTUP_SHOWSTARTCENTER) && (!restoredSession || mscore->scores().size() == 0)) {
 #ifdef Q_OS_MAC
 // ugly, but on mac we get an event when a file is open.

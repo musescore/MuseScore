@@ -547,6 +547,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setPlayState()      { changeState(STATE_PLAY); }
       void setNoteEntryState() { changeState(STATE_NOTE_ENTRY); }
       void checkForUpdate();
+      void checkForUpdateNow();
       void checkForExtensionsUpdate();
       void midiNoteReceived(int channel, int pitch, int velo);
       void midiNoteReceived(int pitch, bool ctrl, int velo);
