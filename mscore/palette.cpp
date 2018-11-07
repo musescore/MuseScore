@@ -258,8 +258,11 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
 
       if (action == clearAction) {
             PaletteCell* cell = cellAt(i);
-            if (cell)
+            if (cell) {
+                  if(cell->tag == "ShowMore")
+                        _moreElements = false;
                   delete cell;
+            }
             cells[i] = 0;
             emit changed();
             }
