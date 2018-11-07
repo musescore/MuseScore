@@ -60,14 +60,12 @@ bool LineSegment::readProperties(XmlReader& e)
             setSpannerSegmentType(SpannerSegmentType(e.readInt()));
       else if (tag == "off2") {
             setUserOff2(e.readPoint() * spatium());
-            if (!userOff2().isNull())
-                  setAutoplace(false);
             }
-      else if (tag == "pos") {
+/*      else if (tag == "pos") {
             setOffset(QPointF());
-            setAutoplace(false);
             e.readNext();
             }
+      */
       else if (!SpannerSegment::readProperties(e)) {
             e.unknown();
             return false;

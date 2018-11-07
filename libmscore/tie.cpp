@@ -754,7 +754,6 @@ bool Tie::readProperties(XmlReader& e)
             for (int i = n; i < idx; ++i)
                   add(new TieSegment(score()));
             TieSegment* segment = new TieSegment(score());
-            segment->setAutoplace(false);
             segment->read(e);
             add(segment);
             }

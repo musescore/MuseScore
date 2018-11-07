@@ -1364,7 +1364,6 @@ bool Slur::readProperties(XmlReader& e)
             for (int i = n; i < idx; ++i)
                   add(new SlurSegment(score()));
             SlurSegment* segment = new SlurSegment(score());
-            segment->setAutoplace(false);
             segment->read(e);
             add(segment);
             }
