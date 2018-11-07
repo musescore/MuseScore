@@ -296,7 +296,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::measureNumberFontBold,      false, measureNumberBold,            resetMeasureNumberBold },
       { Sid::measureNumberFontItalic,    false, measureNumberItalic,          resetMeasureNumberItalic },
       { Sid::measureNumberFontUnderline, false, measureNumberUnderline,       resetMeasureNumberUnderline },
-//      { Sid::measureNumberOffset,           "measureNumberOffset",          QPointF(0.0, -2.0) },
+      { Sid::measureNumberAlign,         false, measureNumberAlign,           resetMeasureNumberAlign },
+      { Sid::measureNumberOffset,        false, measureNumberOffset,          resetMeasureNumberOffset },
 
       { Sid::shortInstrumentFontFace,      false, shortInstrumentFontFace,      resetShortInstrumentFontFace },
       { Sid::shortInstrumentFontSize,      false, shortInstrumentFontSize,      resetShortInstrumentFontSize },
