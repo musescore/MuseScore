@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 set -e
 
 options="--all -10"
