@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1532</width>
-    <height>877</height>
+    <width>1340</width>
+    <height>908</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -225,7 +225,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="currentIndex">
-       <number>33</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -4117,6 +4117,13 @@
              </property>
             </widget>
            </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_147">
+             <property name="text">
+              <string>Font style:</string>
+             </property>
+            </widget>
+           </item>
            <item row="3" column="1">
             <widget class="QFontComboBox" name="measureNumberFontFace">
              <property name="sizePolicy">
@@ -4127,13 +4134,6 @@
              </property>
              <property name="editable">
               <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="label_147">
-             <property name="text">
-              <string>Font style:</string>
              </property>
             </widget>
            </item>
@@ -4323,8 +4323,65 @@
              </property>
             </widget>
            </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="label_201">
+             <property name="text">
+              <string>Align:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="label_211">
+             <property name="text">
+              <string>Offset:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="Ms::AlignSelect" name="measureNumberAlign" native="true"/>
+           </item>
+           <item row="7" column="1">
+            <widget class="Ms::OffsetSelect" name="measureNumberOffset" native="true"/>
+           </item>
+           <item row="6" column="2">
+            <widget class="QToolButton" name="resetMeasureNumberAlign">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Font size' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="2">
+            <widget class="QToolButton" name="resetMeasureNumberOffset">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Font size' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
+        </item>
+        <item>
+         <widget class="QWidget" name="widget" native="true"/>
         </item>
         <item>
          <spacer name="verticalSpacer_27">
