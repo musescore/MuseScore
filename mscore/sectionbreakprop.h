@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: layoutbreak.h -1   $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: synti.h 4917 2011-10-29 13:30:40Z wschweer $
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //

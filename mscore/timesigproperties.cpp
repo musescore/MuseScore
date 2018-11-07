@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: restproperties.cpp 1840 2009-05-20 11:57:51Z wschweer $
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //

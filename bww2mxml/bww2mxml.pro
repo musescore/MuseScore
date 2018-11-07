@@ -2,7 +2,6 @@
 #  BWW to MusicXML converter
 #  Part of MusE Score
 #  Linux Music Score Editor
-#  $Id: bww2mxml.pro 3115 2010-05-30 14:17:03Z lvinken $
 #
 #  Copyright (C) 2002-2010 by Werner Schweer and others
 #

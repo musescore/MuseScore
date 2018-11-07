@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: synthcontrol.h 2047 2009-08-26 18:33:38Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: masterpalette.cpp
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //

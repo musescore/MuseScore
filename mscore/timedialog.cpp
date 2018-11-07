@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: timedialog.cpp 4391 2011-06-18 14:28:24Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer and others
 //
