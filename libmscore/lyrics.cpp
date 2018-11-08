@@ -308,6 +308,10 @@ void Lyrics::layout()
                   }
             _separator->setParent(this);
             _separator->setTick(cr->tick());
+            // HACK separator should have non-zero length to get its layout
+            // always triggered. A proper ticks length will be set later on the
+            // separator layout.
+            _separator->setTicks(1);
             _separator->setTrack(track());
             _separator->setTrack2(track());
             // bbox().setWidth(bbox().width());  // ??
