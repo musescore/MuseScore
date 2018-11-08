@@ -163,7 +163,8 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             for (Staff* staff : *part->staves()) {
                   Staff* s = new Staff(score);
                   s->setPart(p);
-                  s->setStaffType(0, staff->staffType(0));              // TODO
+//                  s->setStaffType(0, *staff->staffType(0));              // TODO
+                  s->init(staff);
                   s->setDefaultClefType(staff->defaultClefType());
                   // the order of staff - s matters as staff should be the first entry in the
                   // created link list to make primaryStaff() work
@@ -228,7 +229,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
       // handle transposing instruments
       if (oscore->styleB(Sid::concertPitch) != score->styleB(Sid::concertPitch)) {
-            for (Staff* staff : score->staves()) {
+            for (const Staff* staff : score->staves()) {
                   if (staff->staffType(0)->group() == StaffGroup::PERCUSSION)
                         continue;
 
@@ -840,7 +841,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               // only clone clef if it matches staff group and does not exists yet
                               Clef* clef = toClef(oe);
                               int   tick = seg->tick();
-                              if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->staffType(0)->group()
+                              if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->constStaffType(0)->group()
                                           && dstStaff->clefType(tick) != clef->clefTypeList()) {
                                     ne = oe->clone();
                                     }

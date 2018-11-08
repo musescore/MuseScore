@@ -1289,8 +1289,8 @@ Score::FileError PowerTab::read()
 
             Staff* s = new Staff(pscore);
             s->setPart(p);
-            StaffType* st = staff->staffType(0);
-            s->setStaffType(0, st);
+            const StaffType* st = staff->staffType(0);
+            s->setStaffType(0, *st);
 
             s->linkTo(staff);
             p->staves()->append(s);
@@ -1319,7 +1319,7 @@ Score::FileError PowerTab::read()
                   if (lines == 4)
                         sts = StaffTypes::TAB_4COMMON;
                   StaffType st1 = *StaffType::preset(sts);
-                  s1->setStaffType(0, &st1);
+                  s1->setStaffType(0, st1);
                   s1->setLines(0, lines);
                   Excerpt::cloneStaff(s, s1);
                   BracketItem* bi = new BracketItem(pscore, BracketType::NORMAL, 2);

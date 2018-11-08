@@ -861,7 +861,7 @@ Score::FileError MasterScore::loadMsc(QString name, bool ignoreVersionError)
 
 Score::FileError MasterScore::loadMsc(QString name, QIODevice* io, bool ignoreVersionError)
       {
-      Score::isScoreLoaded() = true;
+      ScoreLoad sl;
       fileInfo()->setFile(name);
 
       if (name.endsWith(".mscz"))

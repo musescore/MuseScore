@@ -130,7 +130,7 @@ MasterScore* MTest::readCreatedScore(const QString& name)
       score->setName(fi.completeBaseName());
       QString csl  = fi.suffix().toLower();
 
-      Score::isScoreLoaded() = true;
+      ScoreLoad sl;
       Score::FileError rv;
       if (csl == "cap") {
             rv = importCapella(score, name);
@@ -168,7 +168,6 @@ MasterScore* MTest::readCreatedScore(const QString& name)
             for (Score* s : score->scoreList())
                   s->doLayout();
             }
-      Score::isScoreLoaded() = false;
       return score;
       }
 

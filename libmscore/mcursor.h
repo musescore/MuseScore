@@ -38,7 +38,7 @@ class MCursor {
       void createMeasures();
 
    public:
-      MCursor(Score* s = 0);
+      MCursor(MasterScore* s = 0);
       void createScore(const QString& s);
       void saveScore();
 

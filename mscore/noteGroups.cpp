@@ -50,9 +50,7 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
             chord->setStemDirection(Direction::UP);
             chords->push_back(chord);
             }
-//      c.score()->style().set(Sid::pageEvenTopMargin, 16.0/INCH);
       c.score()->style().set(Sid::pageOddTopMargin, 16.0/INCH);
-//      c.score()->style().set(Sid::pageEvenLeftMargin, 0.0);
       c.score()->style().set(Sid::pageOddLeftMargin, 0.0);
 
       c.score()->parts().front()->setLongName("");
@@ -61,9 +59,10 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
       c.score()->style().set(Sid::MusicalTextFont, QString("Bravura Text"));
       c.score()->style().set(Sid::startBarlineSingle, true);
 
-      c.score()->staff(0)->setLines(0, 1); // single line only
-      c.score()->staff(0)->staffType(0)->setGenClef(false); // no clef
-      c.score()->staff(0)->staffType(0)->setGenTimesig(false); // don't display time sig since ExampleView is unable to reflect custom time sig text/symbols
+      StaffType* st = c.score()->staff(0)->staffType(0);
+      st->setLines(1);          // single line only
+      st->setGenClef(false);    // no clef
+      st->setGenTimesig(false); // don't display time sig since ExampleView is unable to reflect custom time sig text/symbols
 
       return c.score();
       }

@@ -91,7 +91,7 @@ void Score::rebuildBspTree()
 
 void Score::layoutChords1(Segment* segment, int staffIdx)
       {
-      Staff* staff = Score::staff(staffIdx);
+      const Staff* staff = Score::staff(staffIdx);
 
       if (staff->isTabStaff(segment->tick()))
             return;
@@ -754,7 +754,7 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
 //    - calculate positions of notes, accidentals, dots
 //---------------------------------------------------------
 
-void Score::layoutChords3(std::vector<Note*>& notes, Staff* staff, Segment* segment)
+void Score::layoutChords3(std::vector<Note*>& notes, const Staff* staff, Segment* segment)
       {
       //---------------------------------------------------
       //    layout accidentals
@@ -2265,7 +2265,7 @@ void Score::createBeams(Measure* measure)
 //   layoutDrumsetChord
 //---------------------------------------------------------
 
-void layoutDrumsetChord(Chord* c, const Drumset* drumset, StaffType* st, qreal spatium)
+void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType* st, qreal spatium)
       {
       for (Note* note : c->notes()) {
             int pitch = note->pitch();
@@ -2363,7 +2363,7 @@ void Score::getNextMeasure(LayoutContext& lc)
       // create stem and set stem direction
       //
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
-            Staff* staff           = Score::staff(staffIdx);
+            const Staff* staff     = Score::staff(staffIdx);
             const Drumset* drumset = staff->part()->instrument()->useDrumset() ? staff->part()->instrument()->drumset() : 0;
             AccidentalState as;      // list of already set accidentals for this measure
             as.init(staff->keySigEvent(measure->tick()), staff->clef(measure->tick()));
@@ -2378,7 +2378,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                         ks->layout();
                         }
                   else if (segment.isChordRestType()) {
-                        StaffType* st = staff->staffType(segment.tick());
+                        const StaffType* st = staff->staffType(segment.tick());
                         int track     = staffIdx * VOICES;
                         int endTrack  = track + VOICES;
 

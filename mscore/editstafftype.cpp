@@ -543,7 +543,7 @@ void EditStaffType::updatePreview()
       else if (staffType.group() == StaffGroup::STANDARD)
              preview = standardPreview;
       if (preview) {
-            preview->score()->staff(0)->setStaffType(0, &staffType);
+            preview->score()->staff(0)->setStaffType(0, staffType);
             preview->score()->doLayout();
             preview->updateAll();
             preview->update();

@@ -252,7 +252,7 @@ void TimeSig::layout()
       qreal lineDist;
       int   numOfLines;
       TimeSigType sigType = timeSigType();
-      Staff* _staff       = staff();
+      const Staff* _staff       = staff();
 
       if (_staff) {
             // if staff is without time sig, format as if no text at all

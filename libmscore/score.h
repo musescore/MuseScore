@@ -600,7 +600,6 @@ class Score : public QObject, public ScoreElement {
       bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
       bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
 
-      static bool& isScoreLoaded();
       bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
       void write(XmlWriter&, bool onlySelection);
@@ -999,7 +998,7 @@ class Score : public QObject, public ScoreElement {
 
       void layoutChords1(Segment* segment, int staffIdx);
       qreal layoutChords2(std::vector<Note*>& notes, bool up);
-      void layoutChords3(std::vector<Note*>&, Staff*, Segment*);
+      void layoutChords3(std::vector<Note*>&, const Staff*, Segment*);
 
       SynthesizerState& synthesizerState()     { return _synthesizerState; }
       void setSynthesizerState(const SynthesizerState& s);
@@ -1323,6 +1322,19 @@ class MasterScore : public Score {
 
       virtual MStyle& style() override                   { return movements()->style();       }
       virtual const MStyle& style() const override       { return movements()->style();       }
+      };
+
+//---------------------------------------------------------
+//   ScoreLoad
+//---------------------------------------------------------
+
+class ScoreLoad {
+      static bool _loading;
+
+   public:
+      ScoreLoad()  { _loading = true;  }
+      ~ScoreLoad() { _loading = false; }
+      static bool loading() { return _loading; }
       };
 
 inline UndoStack* Score::undoStack() const             { return _masterScore->undoStack();      }

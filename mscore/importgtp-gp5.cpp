@@ -552,7 +552,7 @@ bool GuitarPro5::readTracks()
                   clefId = ClefType::PERC;
                   // instr->setUseDrumset(DrumsetKind::GUITAR_PRO);
                   instr->setDrumset(gpDrumset);
-                  staff->setStaffType(0, StaffType::preset(StaffTypes::PERC_DEFAULT));
+                  staff->setStaffType(0, *StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else
                   clefId = defaultClef(patch);

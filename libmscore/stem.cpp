@@ -85,10 +85,10 @@ void Stem::layout()
       l         *= _up;
 
       qreal y1 = 0.0;                           // vertical displacement to match note attach point
-      Staff* stf = staff();
+      const Staff* stf = staff();
       if (chord()) {
             int tick = chord()->tick();
-            StaffType* st = stf ? stf->staffType(tick) : nullptr;
+            const StaffType* st = stf ? stf->staffType(tick) : nullptr;
             if (st && st->isTabStaff() ) {            // TAB staves
                   if (st->stemThrough()) {
                         // if stems through staves, gets Y pos. of stem-side note relative to chord other side
@@ -150,8 +150,8 @@ void Stem::draw(QPainter* painter) const
       if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND)
             return;
 
-      Staff* st      = staff();
-      StaffType* stt = st ? st->staffType(chord()->tick()) : 0;
+      const Staff* st      = staff();
+      const StaffType* stt = st ? st->staffType(chord()->tick()) : 0;
       bool useTab    = stt && stt->isTabStaff();
 
       painter->setPen(QPen(curColor(), _lineWidth, Qt::SolidLine, Qt::RoundCap));

@@ -494,7 +494,7 @@ void GuitarPro6::readTracks(QDomNode* track)
                               part->setMidiChannel(midiChannel);
                               if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                                     part->instrument()->setDrumset(gpDrumset);
-                                    s->setStaffType(0, StaffType::preset(StaffTypes::PERC_DEFAULT));
+                                    s->setStaffType(0, *StaffType::preset(StaffTypes::PERC_DEFAULT));
                                     }
                               }
                         }

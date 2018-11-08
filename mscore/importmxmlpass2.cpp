@@ -494,7 +494,7 @@ static void setStaffTypePercussion(Part* part, Drumset* drumset)
       {
       for (int j = 0; j < part->nstaves(); ++j)
             if (part->staff(j)->lines(0) == 5 && !part->staff(j)->isDrumStaff(0))
-                  part->staff(j)->setStaffType(0, StaffType::preset(StaffTypes::PERC_DEFAULT));
+                  part->staff(j)->setStaffType(0, *StaffType::preset(StaffTypes::PERC_DEFAULT));
       // set drumset for instrument
       part->instrument()->setDrumset(drumset);
       part->instrument()->channel(0)->bank = 128;
@@ -3641,7 +3641,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       int staffIdx = _score->staffIdx(part) + clefno;
       int lines = _score->staff(staffIdx)->lines(0);
       if (st == StaffTypes::TAB_DEFAULT || (_hasDrumset && st == StaffTypes::PERC_DEFAULT)) {
-            _score->staff(staffIdx)->setStaffType(0, StaffType::preset(st));
+            _score->staff(staffIdx)->setStaffType(0, *StaffType::preset(st));
             _score->staff(staffIdx)->setLines(0, lines); // preserve previously set staff lines
             _score->staff(staffIdx)->setBarLineTo(0);    // default
             }

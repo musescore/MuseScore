@@ -63,7 +63,7 @@ void MeasureNumber::layout()
       else if (isStyled(Pid::OFFSET))
             setOffset(propertyDefault(Pid::OFFSET).toPointF());
 
-      StaffType* st = staff()->staffType(measure()->tick());
+      const StaffType* st = staff()->constStaffType(measure()->tick());
       if (st->lines() == 1 && staff())
             rypos() = (placeBelow() ? 2.0 : -2.0) * spatium();
       else {

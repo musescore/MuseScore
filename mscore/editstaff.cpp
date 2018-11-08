@@ -94,7 +94,7 @@ void EditStaff::setStaff(Staff* s)
       staff->setInvisible(orgStaff->invisible());
       staff->setUserDist(orgStaff->userDist());
       staff->setColor(orgStaff->color());
-      staff->setStaffType(0, orgStaff->staffType(0));
+      staff->setStaffType(0, *orgStaff->staffType(0));
       staff->setPart(part);
       staff->setCutaway(orgStaff->cutaway());
       staff->setHideWhenEmpty(orgStaff->hideWhenEmpty());
@@ -150,7 +150,7 @@ void EditStaff::hideEvent(QHideEvent* ev)
 
 void EditStaff::updateStaffType()
       {
-      StaffType* staffType = staff->staffType(0);
+      const StaffType* staffType = staff->staffType(0);
       lines->setValue(staffType->lines());
       lineDistance->setValue(staffType->lineDistance().val());
       showClef->setChecked(staffType->genClef());
@@ -555,7 +555,7 @@ void EditStaff::showStaffTypeDialog()
       EditStaffType editor(this, staff);
       editor.setWindowModality(Qt::WindowModal);
       if (editor.exec()) {
-            staff->setStaffType(0, editor.getStaffType());
+            staff->setStaffType(0, *editor.getStaffType());
             updateStaffType();
             }
       }
