@@ -3911,8 +3911,12 @@ void LayoutContext::layout()
             prevSystem  = 0;
             }
       if (!curSystem) {
-            while (score->npages() > curPage)        // Remove not needed pages. TODO: make undoable:
-                  score->pages().takeLast();
+            // The end of the score. The remaining systems are not needed...
+            qDeleteAll(systemList);
+            systemList.clear();
+            // ...and the remaining pages too
+            while (score->npages() > curPage)
+                  delete score->pages().takeLast();
             }
       else {
             Page* p = curSystem->page();
