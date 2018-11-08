@@ -1536,17 +1536,16 @@ printf("drop marker %f %f\n", offset().x(), offset().y());
                   StaffTypeChange* stc = toStaffTypeChange(e);
                   e->setParent(this);
                   e->setTrack(staffIdx * VOICES);
-                  StaffType* st = stc->staffType();
-
+                  const StaffType* st = stc->staffType();
                   StaffType* nst;
                   if (st) {
-                        nst = staff->setStaffType(tick(), st);
+                        nst = staff->setStaffType(tick(), *st);
                         delete st;
                         }
                   else {
                         // dragged from palette
                         st  = staff->staffType(tick());
-                        nst = staff->setStaffType(tick(), st);
+                        nst = staff->setStaffType(tick(), *st);
                         }
                   stc->setStaffType(nst);
                   score()->undoAddElement(e);
@@ -2334,7 +2333,7 @@ bool Measure::visible(int staffIdx) const
 
 bool Measure::slashStyle(int staffIdx) const
       {
-      Staff* staff = score()->staff(staffIdx);
+      const Staff* staff = score()->staff(staffIdx);
       return staff->slashStyle(tick()) || _mstaves[staffIdx]->slashStyle() || staff->staffType(tick())->slashStyle();
       }
 
@@ -3489,7 +3488,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
       Segment* kSegment = findFirst(SegmentType::KeySig, 0);
       Segment* cSegment = findFirst(SegmentType::HeaderClef, 0);
 
-      for (Staff* staff : score()->staves()) {
+      for (const Staff* staff : score()->staves()) {
             const int track = staffIdx * VOICES;
 
             // keep key sigs in TABs: TABs themselves should hide them

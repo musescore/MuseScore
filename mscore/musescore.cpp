@@ -3622,7 +3622,7 @@ void MuseScore::checkForUpdateNow()
       if (ucheck)
             ucheck->check(version(), sender() != 0);
       }
-      
+
 //---------------------------------------------------------
 //   checkForExtensionsUpdate
 //---------------------------------------------------------
@@ -4621,7 +4621,7 @@ void MuseScore::autoSaveTimerTimeout()
       {
       bool sessionChanged = false;
 
-      Score::isScoreLoaded() = true;           //disable debug message "no active command"
+      ScoreLoad sl;           //disable debug message "no active command"
 
       for (MasterScore* s : scoreList) {
             if (s->autosaveDirty()) {
@@ -4650,8 +4650,6 @@ void MuseScore::autoSaveTimerTimeout()
                   s->setAutosaveDirty(false);
                   }
             }
-      Score::isScoreLoaded() = false;
-
       if (sessionChanged)
             writeSessionFile(false);
       if (preferences.getBool(PREF_APP_AUTOSAVE_USEAUTOSAVE)) {
@@ -7156,7 +7154,7 @@ int main(int argc, char* av[])
       if (mscore->hasToCheckForExtensionsUpdate())
             mscore->checkForExtensionsUpdate();
 
-      
+
       if (!scoresOnCommandline && preferences.getBool(PREF_UI_APP_STARTUP_SHOWSTARTCENTER) && (!restoredSession || mscore->scores().size() == 0)) {
 #ifdef Q_OS_MAC
 // ugly, but on mac we get an event when a file is open.

@@ -61,7 +61,7 @@ void StaffTypeChange::read(XmlReader& e)
                   StaffType st;
                   st.read(e);
                   if (staff())
-                        _staffType = staff()->setStaffType(measure()->tick(), &st);
+                        _staffType = staff()->setStaffType(measure()->tick(), st);
                   else
                         _staffType = new StaffType(st);     // drag&drop operation
                   }

@@ -294,8 +294,8 @@ class Note final : public Element {
 
       qreal headWidth() const;
       qreal headHeight() const;
-      qreal tabHeadWidth(StaffType* tab = 0) const;
-      qreal tabHeadHeight(StaffType* tab = 0) const;
+      qreal tabHeadWidth(const StaffType* tab = 0) const;
+      qreal tabHeadHeight(const StaffType* tab = 0) const;
       QPointF stemDownNW() const;
       QPointF stemUpSE() const;
       qreal bboxXShift() const;

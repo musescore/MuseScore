@@ -42,8 +42,8 @@ namespace Ms {
 
 extern bool isTopBeam(ChordRest* cr);
 extern bool notTopBeam(ChordRest* cr);
-void layoutTies(Chord* ch, System* system, int stick);
-void layoutDrumsetChord(Chord* c, const Drumset* drumset, StaffType* st, qreal spatium);
+extern void layoutTies(Chord* ch, System* system, int stick);
+extern void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType* st, qreal spatium);
 
 //---------------------------------------------------------
 //   processLines
@@ -511,7 +511,7 @@ void LayoutContext::layoutMeasureLinear(MeasureBase* mb)
                         ks->layout();
                         }
                   else if (segment.isChordRestType()) {
-                        StaffType* st = staff->staffType(segment.tick());
+                        const StaffType* st = staff->staffType(segment.tick());
                         int track     = staffIdx * VOICES;
                         int endTrack  = track + VOICES;
 

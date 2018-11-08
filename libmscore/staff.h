@@ -88,7 +88,6 @@ class Staff final : public ScoreElement {
 
       StaffTypeList _staffTypeList;
 
-//      LinkedStaves* _linkedStaves { 0 };
       QMap<int,int> _channelList[VOICES];
       QMap<int,SwingParameters> _swingList;
       QMap<int,int> _capoList;
@@ -102,7 +101,7 @@ class Staff final : public ScoreElement {
       void cleanBrackets();
 
    public:
-      Staff(Score* score = 0) : ScoreElement(score) {}
+      Staff(Score* score = 0);
       ~Staff();
       void init(const InstrumentTemplate*, const StaffType *staffType, int);
       void initFromStaffType(const StaffType* staffType);
@@ -197,8 +196,9 @@ class Staff final : public ScoreElement {
 
       //==== staff type
       const StaffType* staffType(int tick) const;
+      const StaffType* constStaffType(int tick) const;
       StaffType* staffType(int tick);
-      StaffType* setStaffType(int tick, const StaffType*);
+      StaffType* setStaffType(int tick, const StaffType&);
       void staffTypeListChanged(int tick);
 
       bool isPitchedStaff(int tick) const;
@@ -240,7 +240,7 @@ class Staff final : public ScoreElement {
 
       void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
       bool genKeySig();
-      bool showLedgerLines(int tick);
+      bool showLedgerLines(int tick) const;
 
       QColor color() const                { return _color; }
       void setColor(const QColor& val)    { _color = val;    }

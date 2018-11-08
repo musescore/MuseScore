@@ -1521,7 +1521,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
       _beamDist *= c1->staff()->mag(c1->tick());
       size_t n = crl.size();
 
-      StaffType* tab = 0;
+      const StaffType* tab = 0;
       if (staff()->isTabStaff(0) )
             tab = staff()->staffType(0);
       if (tab && !tab->stemThrough()) {

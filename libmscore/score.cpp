@@ -1955,16 +1955,6 @@ void Score::removeAudio()
       }
 
 //---------------------------------------------------------
-//   isScoreLoaded
-//---------------------------------------------------------
-
-bool& Score::isScoreLoaded()
-      {
-      static bool scoreLoaded = false;
-      return scoreLoaded;
-      }
-
-//---------------------------------------------------------
 //   appendScore
 //---------------------------------------------------------
 
@@ -4488,6 +4478,17 @@ Movements::~Movements()
       qDeleteAll(_pages);
       delete _undo;
       }
+
+//---------------------------------------------------------
+//   ScoreLoad::_loading
+//    If the _loading flag is set pushes and pops to
+//    the undo stack do not emit a warning.
+//    Usually pushes and pops to the undo stack are only
+//    valid inside a startCmd() - endCmd(). Exceptions
+//    occure during score loading.
+//---------------------------------------------------------
+
+bool ScoreLoad::_loading = false;
 
 }
 

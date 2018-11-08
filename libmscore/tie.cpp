@@ -435,7 +435,7 @@ bool TieSegment::isEdited() const
 void Tie::slurPos(SlurPos* sp)
       {
       bool useTablature = staff() && staff()->isTabStaff(tick());
-      StaffType* stt    = useTablature ? staff()->staffType(tick()) : 0;
+      const StaffType* stt = useTablature ? staff()->staffType(tick()) : 0;
       qreal _spatium    = spatium();
       qreal hw          = startNote()->tabHeadWidth(stt);   // if stt == 0, defaults to headWidth()
       qreal __up        = _up ? -1.0 : 1.0;

@@ -43,6 +43,16 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   Staff
+//---------------------------------------------------------
+
+Staff::Staff(Score* score)
+   : ScoreElement(score)
+      {
+//      initFromStaffType(0);
+      }
+
+//---------------------------------------------------------
 //   idx
 //---------------------------------------------------------
 
@@ -289,7 +299,7 @@ ClefTypeList Staff::clefType(int tick) const
       {
       ClefTypeList ct = clefs.clef(tick);
       if (ct._concertClef == ClefType::INVALID) {
-            switch(staffType(tick)->group()) {
+            switch (staffType(tick)->group()) {
                   case StaffGroup::TAB:
                         {
                         ClefType sct = ClefType(score()->styleI(Sid::tabClef));
@@ -659,7 +669,7 @@ bool Staff::readProperties(XmlReader& e)
       if (tag == "StaffType") {
             StaffType st;
             st.read(e);
-            _staffTypeList.setStaffType(0, &st);
+            setStaffType(0, st);
             }
       else if (tag == "defaultClef") {           // sets both default transposing and concert clef
             QString val(e.readElementText());
@@ -787,7 +797,7 @@ qreal Staff::userMag(int tick) const
 
 void Staff::setUserMag(int tick, qreal m)
       {
-      return staffType(tick)->setUserMag(m);
+      staffType(tick)->setUserMag(m);
       }
 
 //---------------------------------------------------------
@@ -904,69 +914,6 @@ void Staff::setSlashStyle(int tick, bool val)
       staffType(tick)->setSlashStyle(val);
       }
 
-#if 0
-//---------------------------------------------------------
-//   linkTo
-//---------------------------------------------------------
-
-void Staff::linkTo(Staff* staff)
-      {
-      if (!_linkedStaves) {
-            if (staff->linkedStaves()) {
-                  _linkedStaves = staff->linkedStaves();
-                  }
-            else {
-                  _linkedStaves = new LinkedStaves;
-                  _linkedStaves->add(staff);
-                  staff->setLinkedStaves(_linkedStaves);
-                  }
-            _linkedStaves->add(this);
-            }
-      else {
-            _linkedStaves->add(staff);
-            if (!staff->_linkedStaves)
-                  staff->_linkedStaves = _linkedStaves;
-            }
-      }
-
-//---------------------------------------------------------
-//   unlink
-//---------------------------------------------------------
-
-void Staff::unlink(Staff* staff)
-      {
-      if (!_linkedStaves)
-            return;
-      if (!_linkedStaves->staves().contains(staff))
-            return;
-      _linkedStaves->remove(staff);
-      if (_linkedStaves->staves().size() <= 1) {
-            delete _linkedStaves;
-            _linkedStaves = 0;
-            }
-      staff->_linkedStaves = 0;
-      }
-
-//---------------------------------------------------------
-//   add
-//---------------------------------------------------------
-
-void LinkedStaves::add(Staff* staff)
-      {
-      if (!_staves.contains(staff))
-            _staves.append(staff);
-      }
-
-//---------------------------------------------------------
-//   remove
-//---------------------------------------------------------
-
-void LinkedStaves::remove(Staff* staff)
-      {
-      _staves.removeOne(staff);
-      }
-#endif
-
 //---------------------------------------------------------
 //   primaryStaff
 ///   if there are linked staves, the primary staff is
@@ -1004,6 +951,11 @@ const StaffType* Staff::staffType(int tick) const
       return &_staffTypeList.staffType(tick);
       }
 
+const StaffType* Staff::constStaffType(int tick) const
+      {
+      return &_staffTypeList.staffType(tick);
+      }
+
 StaffType* Staff::staffType(int tick)
       {
       return &_staffTypeList.staffType(tick);
@@ -1030,7 +982,7 @@ void Staff::staffTypeListChanged(int tick)
 //   setStaffType
 //---------------------------------------------------------
 
-StaffType* Staff::setStaffType(int tick, const StaffType* nst)
+StaffType* Staff::setStaffType(int tick, const StaffType& nst)
       {
       auto i = _staffTypeList.find(tick);
       if (i != _staffTypeList.end()) {
@@ -1059,7 +1011,7 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
       if (!pst)
             pst = StaffType::getDefaultPreset(t->staffGroup);
 
-      setStaffType(0, pst);
+      setStaffType(0, *pst);
       setDefaultClefType(t->clefType(cidx));
       }
 
@@ -1100,7 +1052,7 @@ void Staff::initFromStaffType(const StaffType* staffType)
             staffType = StaffType::getDefaultPreset(StaffGroup::STANDARD);
 
       // use selected staff type
-      setStaffType(0, staffType);
+      setStaffType(0, *staffType);
       }
 
 //---------------------------------------------------------
@@ -1127,17 +1079,17 @@ bool Staff::show() const
 
 bool Staff::genKeySig()
       {
-      if (staffType(0)->group() == StaffGroup::TAB)
+      if (constStaffType(0)->group() == StaffGroup::TAB)
             return false;
       else
-            return staffType(0)->genKeysig();
+            return constStaffType(0)->genKeysig();
       }
 
 //---------------------------------------------------------
 //   showLedgerLines
 //---------------------------------------------------------
 
-bool Staff::showLedgerLines(int tick)
+bool Staff::showLedgerLines(int tick) const
       {
       return staffType(tick)->showLedgerLines();
       }
@@ -1454,7 +1406,7 @@ int Staff::lines(int tick) const
 
 void Staff::setLines(int tick, int val)
       {
-      staffType(tick)->setLines(val);     // TODO: make undoable
+      staffType(tick)->setLines(val);
       }
 
 //---------------------------------------------------------

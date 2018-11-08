@@ -2566,12 +2566,12 @@ static void readPart(Part* part, XmlReader& e)
                   int lines = staff->lines(0);
                   int bf    = staff->barLineFrom();
                   int bt    = staff->barLineTo();
-                  staff->setStaffType(0, StaffType::getDefaultPreset(StaffGroup::PERCUSSION));
+                  staff->setStaffType(0, *StaffType::getDefaultPreset(StaffGroup::PERCUSSION));
 
                   // this allows 2/3-line percussion staves to keep the double spacing they had in 1.3
 
                   if (lines == 2 || lines == 3)
-                        staff->staffType(0)->setLineDistance(Spatium(2.0));
+                        ((StaffType*)(staff->staffType(0)))->setLineDistance(Spatium(2.0));
 
                   staff->setLines(0, lines);       // this also sets stepOffset
                   staff->setBarLineFrom(bf);

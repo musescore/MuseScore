@@ -224,8 +224,8 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
       {
       if (!curCmd) {
             // this can happen for layout() outside of a command (load)
-            if (!Score::isScoreLoaded())
-                  qWarning("no active command, UndoStack");
+            if (!ScoreLoad::loading())
+                  qDebug("no active command, UndoStack");
 
             cmd->redo(ed);
             delete cmd;
@@ -251,7 +251,7 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
 void UndoStack::push1(UndoCommand* cmd)
       {
       if (!curCmd) {
-              if (!Score::isScoreLoaded())
+            if (!ScoreLoad::loading())
                   qWarning("no active command, UndoStack %p", this);
             return;
             }
@@ -290,7 +290,7 @@ void UndoStack::remove(int idx)
 void UndoStack::pop()
       {
       if (!curCmd) {
-              if (!Score::isScoreLoaded())
+            if (!ScoreLoad::loading())
                   qWarning("no active command");
             return;
             }
@@ -1379,7 +1379,7 @@ void ChangeStaffType::flip(EditData*)
       {
       StaffType st = *staff->staffType(0);      // TODO
 
-      staff->setStaffType(0, &staffType);
+      staff->setStaffType(0, staffType);
 
       staffType = st;
 

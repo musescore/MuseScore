@@ -247,6 +247,8 @@ static Score::FileError doValidateAndImport(Score* score, const QString& name, Q
 
 Score::FileError importMusicXml(MasterScore* score, const QString& name)
       {
+      ScoreLoad sl;     // suppress warnings for undo push/pop
+
       //qDebug("importMusicXml(%p, %s)", score, qPrintable(name));
 
       // open the MusicXML file

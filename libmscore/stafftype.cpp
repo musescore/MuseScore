@@ -411,7 +411,7 @@ void StaffType::setOnLines(bool val)
 //    checks whether the internally computed metrics are is still valid and re-computes them, if not
 //---------------------------------------------------------
 
-void StaffType::setDurationMetrics()
+void StaffType::setDurationMetrics() const
       {
       if (_durationMetricsValid && _refDPI == DPI)           // metrics are still valid
             return;
@@ -440,7 +440,7 @@ void StaffType::setDurationMetrics()
       _durationMetricsValid = true;
       }
 
-void StaffType::setFretMetrics()
+void StaffType::setFretMetrics() const
       {
       if (_fretMetricsValid && _refDPI == DPI)
             return;
@@ -519,7 +519,7 @@ void StaffType::setFretFontName(const QString& name)
 //   durationBoxH / durationBoxY
 //---------------------------------------------------------
 
-qreal StaffType::durationBoxH()
+qreal StaffType::durationBoxH() const
       {
       if (!_genDurations && !_slashStyle)
             return 0.0;
@@ -527,7 +527,7 @@ qreal StaffType::durationBoxH()
       return _durationBoxH;
       }
 
-qreal StaffType::durationBoxY()
+qreal StaffType::durationBoxY() const
       {
       if (!_genDurations && !_slashStyle)
             return 0.0;
@@ -865,7 +865,7 @@ TabDurationSymbol::TabDurationSymbol(Score* s)
       _text       = QString();
       }
 
-TabDurationSymbol::TabDurationSymbol(Score* s, StaffType* tab, TDuration::DurationType type, int dots)
+TabDurationSymbol::TabDurationSymbol(Score* s, const StaffType* tab, TDuration::DurationType type, int dots)
    : Element(s, ElementFlag::NOT_SELECTABLE)
       {
       setGenerated(true);

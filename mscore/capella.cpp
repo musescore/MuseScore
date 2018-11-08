@@ -1184,6 +1184,8 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             midiPatch = cl->sound;
 
             Staff* s = new Staff(score);
+            s->initFromStaffType(0);
+
             s->setPart(part);
             if (cl->bPercussion)
                   part->setMidiProgram(0, 128);
@@ -1202,10 +1204,10 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   }
             ++span;
             if (cl->barlineMode == 1) {
-//                  bstaff->setBarLineSpan(span);
                   bstaff->setBarLineSpan(span != 0);
                   bstaff = 0;
                   }
+
             s->setSmall(0, cl->bSmall);
             part->insertStaff(s, -1);
             Interval interval;
@@ -1215,7 +1217,6 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             interval.chromatic = cl->transp;
             s->part()->instrument()->setTranspose(interval);
             score->staves().push_back(s);
-            // _parts.push_back(part);
             }
       if (bstaff)
             bstaff->setBarLineSpan(span != 0);

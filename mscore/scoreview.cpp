@@ -645,7 +645,7 @@ void ScoreView::moveCursor()
       qreal mag               = _spatium / SPATIUM20;
       double w                = _spatium * 2.0 + score()->scoreFont()->width(SymId::noteheadBlack, mag);
       Staff* staff            = score()->staff(staffIdx);
-      StaffType* staffType    = staff->staffType(is.tick());
+      const StaffType* staffType    = staff->staffType(is.tick());
       double lineDist         = staffType->lineDistance().val() * _spatium;
       int lines               = staffType->lines();
       int strg                = is.string();          // strg refers to an instrument physical string
