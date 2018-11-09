@@ -165,14 +165,6 @@ void LyricsLine::layout()
             // do layout with non-0 duration
             if (tempMelismaTicks)
                   lyrics()->setTicks(Lyrics::TEMP_MELISMA_TICKS);
-#if 0
-            SLine::layout();
-            // if temp melisma and there is a first line segment,
-            // extend it to be after the lyrics syllable (otherwise
-            // the melisma segment will be often covered by the syllable itself)
-            if (tempMelismaTicks && segments.size() > 0)
-                  segmentAt(0)->rxpos2() += lyrics()->width();
-#endif
             }
       }
 
@@ -290,6 +282,12 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
                   break;
             }
       lineSegm->layout();
+      // if temp melisma extend the first line segment to be
+      // after the lyrics syllable (otherwise the melisma segment
+      // will be too short).
+      const bool tempMelismaTicks = (lyrics()->ticks() == Lyrics::TEMP_MELISMA_TICKS);
+      if (tempMelismaTicks && segments.size() > 0 && segments.front() == lineSegm)
+            lineSegm->rxpos2() += lyrics()->width();
 #if 0
       QList<SpannerSegment*> sl;
       for (SpannerSegment* ss : segments) {
