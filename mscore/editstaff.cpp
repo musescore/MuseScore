@@ -90,11 +90,11 @@ void EditStaff::setStaff(Staff* s)
       instrument        = *part->instrument(/*tick*/);
       Score* score      = part->score();
       staff             = new Staff(score);
+      staff->setStaffType(0, *orgStaff->staffType(0));
       staff->setSmall(0, orgStaff->small(0));
       staff->setInvisible(orgStaff->invisible());
       staff->setUserDist(orgStaff->userDist());
       staff->setColor(orgStaff->color());
-      staff->setStaffType(0, *orgStaff->staffType(0));
       staff->setPart(part);
       staff->setCutaway(orgStaff->cutaway());
       staff->setHideWhenEmpty(orgStaff->hideWhenEmpty());
