@@ -998,6 +998,11 @@ StaffType* Staff::setStaffType(int tick, const StaffType& nst)
 void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int cidx)
       {
       // set staff-type-independent parameters
+      const StaffType* pst = staffType ? staffType : t->staffTypePreset;
+      if (!pst)
+            pst = StaffType::getDefaultPreset(t->staffGroup);
+
+      setStaffType(0, *pst);
       if (cidx >= MAX_STAVES) {
             setSmall(0, false);
             }
@@ -1007,11 +1012,6 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
             setBracketSpan(0, t->bracketSpan[cidx]);
             setBarLineSpan(t->barlineSpan[cidx]);
             }
-      const StaffType* pst = staffType ? staffType : t->staffTypePreset;
-      if (!pst)
-            pst = StaffType::getDefaultPreset(t->staffGroup);
-
-      setStaffType(0, *pst);
       setDefaultClefType(t->clefType(cidx));
       }
 
