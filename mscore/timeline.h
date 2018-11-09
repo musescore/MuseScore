@@ -172,6 +172,8 @@ class Timeline : public QGraphicsView {
       unsigned int correctMetaRow(unsigned int row);
       int correctStave(int stave);
 
+      QList<Part*> getParts();
+
    private slots:
       void handle_scroll(int value);
       void updateView();
