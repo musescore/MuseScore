@@ -100,6 +100,8 @@ void SelectDialog::setPattern(ElementPattern* p)
             const Rest* r = toRest(e);
             p->durationTicks = r->actualTicks();
             }
+      else
+            p->durationTicks = -1;
 
       p->voice   = sameVoice->isChecked() ? e->voice() : -1;
       p->subtypeValid = sameSubtype->isChecked();
