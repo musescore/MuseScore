@@ -53,6 +53,8 @@ TimeDialog::TimeDialog(QWidget* parent)
       connect(sp,        SIGNAL(boxClicked(int)),   SLOT(paletteChanged(int)));
       connect(sp,        SIGNAL(changed()),         SLOT(setDirty()));
       connect(addButton, SIGNAL(clicked()),         SLOT(addClicked()));
+      connect(zText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
+      connect(nText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
 
       _timePalette = new PaletteScrollArea(sp);
       QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -65,7 +67,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
       if (useFactorySettings || !sp->read(dataPath + "/timesigs")) {
             Fraction sig(4,4);
-            groups->setSig(sig, Groups::endings(sig));
+            groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
             }
       for (int i = 0; i < sp->size(); ++i)      // cells can be changed
             sp->setCellReadOnly(i, false);
@@ -117,7 +119,7 @@ void TimeDialog::zChanged(int val)
       {
       zText->setText(QString("%1").arg(val));
       Fraction sig(zNominal->value(), denominator());
-      groups->setSig(sig, Groups::endings(sig));
+      groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
       }
 
 //---------------------------------------------------------
@@ -128,7 +130,7 @@ void TimeDialog::nChanged(int /*val*/)
       {
       nText->setText(QString("%1").arg(denominator()));
       Fraction sig(zNominal->value(), denominator());
-      groups->setSig(sig, Groups::endings(sig));
+      groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
       }
 
 //---------------------------------------------------------
@@ -200,8 +202,19 @@ void TimeDialog::paletteChanged(int idx)
       nNominal->setCurrentIndex(denominator2Idx(sig.denominator()));
       zText->setText(e->numeratorString());
       nText->setText(e->denominatorString());
-      groups->setSig(sig, g);
+      groups->setSig(sig, g, zText->text(), nText->text());
       }
+
+//---------------------------------------------------------
+//   textChanged
+//---------------------------------------------------------
+
+void TimeDialog::textChanged()
+      {
+      Fraction sig(zNominal->value(), denominator());
+      groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
+      }
+
 
 }
 

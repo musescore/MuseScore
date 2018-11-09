@@ -38,6 +38,10 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
       c.move(0, 0);
       c.addKeySig(Key::C);
       TimeSig* nts = c.addTimeSig(_sig);
+      if (!_z.isEmpty())
+            nts->setNumeratorString(_z);
+      if (!_n.isEmpty())
+            nts->setDenominatorString(_n);
       GroupNode node {0, 0};
       Groups ng;
       ng.push_back(node);
@@ -62,7 +66,7 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
       StaffType* st = c.score()->staff(0)->staffType(0);
       st->setLines(1);          // single line only
       st->setGenClef(false);    // no clef
-      st->setGenTimesig(false); // don't display time sig since ExampleView is unable to reflect custom time sig text/symbols
+//      st->setGenTimesig(false); // don't display time sig since ExampleView is unable to reflect custom time sig text/symbols
 
       return c.score();
       }
@@ -103,20 +107,22 @@ NoteGroups::NoteGroups(QWidget* parent)
 //   setSig
 //---------------------------------------------------------
 
-void NoteGroups::setSig(Fraction sig, const Groups& g)
+void NoteGroups::setSig(Fraction sig, const Groups& g, const QString& z, const QString& n)
       {
       _sig    = sig;
+      _z      = z;
+      _n      = n;
       _groups = g;
       chords8.clear();
       chords16.clear();
       chords32.clear();
       Fraction f = _sig.reduced();
-      int n   = f.numerator() * (8 / f.denominator());
-      view8->setScore(createScore(n, TDuration::DurationType::V_EIGHTH, &chords8));
-      n   = f.numerator() * (16 / f.denominator());
-      view16->setScore(createScore(n, TDuration::DurationType::V_16TH, &chords16));
-      n   = f.numerator() * (32 / f.denominator());
-      view32->setScore(createScore(n, TDuration::DurationType::V_32ND, &chords32));
+      int nn   = f.numerator() * (8 / f.denominator());
+      view8->setScore(createScore(nn, TDuration::DurationType::V_EIGHTH, &chords8));
+      nn   = f.numerator() * (16 / f.denominator());
+      view16->setScore(createScore(nn, TDuration::DurationType::V_16TH, &chords16));
+      nn   = f.numerator() * (32 / f.denominator());
+      view32->setScore(createScore(nn, TDuration::DurationType::V_32ND, &chords32));
       view8->resetMatrix();
       view16->resetMatrix();
       view32->resetMatrix();
@@ -144,7 +150,7 @@ Groups NoteGroups::groups()
 
 void NoteGroups::resetClicked()
       {
-      setSig(_sig, _groups);
+      setSig(_sig, _groups, _z, _n);
       }
 
 //---------------------------------------------------------

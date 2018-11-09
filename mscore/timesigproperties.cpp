@@ -123,7 +123,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       Groups g = t->groups();
       if (g.empty())
             g = Groups::endings(timesig->sig());     // initialize with default
-      groups->setSig(timesig->sig(), g);
+      groups->setSig(timesig->sig(), g, timesig->numeratorString(), timesig->denominatorString());
 
       MuseScore::restoreGeometry(this);
       }
