@@ -274,7 +274,7 @@ void BarLine::getY() const
                   }
             }
 
-      System* system   = measure->system();
+      System* system = measure->system();
       if (!system)
             return;
 
@@ -293,7 +293,7 @@ void BarLine::getY() const
       int oneLine = st1->lines() == 1;
       if (oneLine && _spanFrom == 0) {
             from = BARLINE_SPAN_1LINESTAFF_FROM;
-            if (!_spanStaff)
+            if (!_spanStaff || nstaves == 1)
                   to = BARLINE_SPAN_1LINESTAFF_TO;
             }
       SysStaff* sysStaff1  = system->staff(staffIdx1);
