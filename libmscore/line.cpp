@@ -545,31 +545,36 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     if (e)
                                           cr = toChordRest(e);
                                     }
+
                               // layout to right edge of CR
-                              // if next segment is not a chord with lyrics which spans to the left
-                              if (cr) {
-                                    bool extendToRight = true;
+                              bool extendToEnd = true; // extend to end or start element?
+                              if (cr == toChordRest(startElement()))
+                                    extendToEnd = false;
+                              else if (cr) {
+                                    // if next segment is a chord with lyrics which spans to the left
+                                    // then do not extend to the right edge of end element.
                                     Segment* seg = cr->segment();
                                     seg = seg->next(SegmentType::ChordRest);
                                     if (seg) {
                                           ChordRest* cr2 = seg->cr(cr->track());
                                           if (cr2 && !cr2->lyrics().empty())
-                                                extendToRight = false;
+                                                extendToEnd = false;
                                           }
-                                    if (extendToRight) {
-                                          qreal maxRight = 0.0;
-                                          if (cr->isChord()) {
-                                                // chord bbox() is unreliable, look at notes
-                                                // this also allows us to more easily ignore ledger lines
-                                                for (Note* n : toChord(cr)->notes())
-                                                      maxRight = qMax(maxRight, cr->x() + n->x() + n->bboxRightPos());
-                                                }
-                                          else {
-                                                // rest - won't normally happen
-                                                maxRight = cr->x() + cr->width();
-                                                }
-                                          x = maxRight; // cr->width()
+                                    }
+                              ChordRest* right = extendToEnd ? cr : toChordRest(startElement());
+                              if (right) {
+                                    qreal maxRight = 0.0;
+                                    if (right->isChord()) {
+                                          // chord bbox() is unreliable, look at notes
+                                          // this also allows us to more easily ignore ledger lines
+                                          for (Note* n : toChord(right)->notes())
+                                                maxRight = qMax(maxRight, right->x() + n->x() + n->bboxRightPos());
                                           }
+                                    else {
+                                          // rest - won't normally happen
+                                          maxRight = right->x() + right->width();
+                                          }
+                                    x = maxRight;
                                     }
                              }
                         else if (isHairpin() || isTrill() || isVibrato() || isTextLine() || isLyricsLine()) {
