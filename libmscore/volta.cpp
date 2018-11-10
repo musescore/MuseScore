@@ -16,6 +16,11 @@
 #include "score.h"
 #include "text.h"
 #include "system.h"
+#include "measure.h"
+#include "score.h"
+#include"tempo.h"
+#include "velo.h"
+#include "staff.h"
 
 namespace Ms {
 
@@ -267,6 +272,82 @@ QVariant Volta::propertyDefault(Pid propertyId) const
 
             default:
                   return TextLineBase::propertyDefault(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   layoutSystem
+//---------------------------------------------------------
+
+SpannerSegment * Volta::layoutSystem(System * system) {
+      SpannerSegment* voltaSegment= SLine::layoutSystem(system);
+
+      // we need set tempo in layout because all tempos of score is set in layout
+      // so fermata in seconda volta works correct because fermata apply itself tempo during layouting
+      setTempo();
+
+      return voltaSegment;
+      }
+
+//---------------------------------------------------------
+//   setVelocity
+//---------------------------------------------------------
+
+void Volta::setVelocity() const {
+      Measure* startMeasure = Spanner::startMeasure();
+      Measure* endMeasure = Spanner::endMeasure();
+      
+      if (startMeasure && endMeasure) {
+            if (!endMeasure->repeatEnd())
+            return;
+
+            auto startTick = startMeasure->tick() - 1;
+            auto endTick = endMeasure->tick() + endMeasure->ticks() - 1;
+            Staff* st = staff();
+            VeloList& velo = st->velocities();
+            auto prevVelo = velo.velo(startTick);
+            velo.setVelo(endTick, prevVelo);
+            }
+      }
+
+//---------------------------------------------------------
+//   setChannel
+//---------------------------------------------------------
+
+void Volta::setChannel() const {
+      Measure* startMeasure = Spanner::startMeasure();
+      Measure* endMeasure = Spanner::endMeasure();
+
+      if (startMeasure && endMeasure) {
+            if (!endMeasure->repeatEnd())
+            return;
+
+            auto startTick = startMeasure->tick() - 1;
+            auto endTick = endMeasure->tick() + endMeasure->ticks() - 1;
+            Staff* st = staff();
+            for (int voice = 0; voice < VOICES; ++voice) {
+                  int channel = st->channel(startTick, voice);
+                  st->insertIntoChannelList(voice, endTick, channel);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   setTempo
+//---------------------------------------------------------
+
+void Volta::setTempo() const {
+      Measure* startMeasure = Spanner::startMeasure();
+      Measure* endMeasure = Spanner::endMeasure();
+
+      if (startMeasure && endMeasure) {
+            if (!endMeasure->repeatEnd())
+            return;
+
+            auto startTick = startMeasure->tick() - 1;
+            auto endTick = endMeasure->tick() + endMeasure->ticks() - 1;
+            qreal tempoBeforeVolta = score()->tempomap()->tempo(startTick);
+            score()->setTempo(endTick, tempoBeforeVolta);
             }
       }
 
