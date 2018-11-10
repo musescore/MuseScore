@@ -506,6 +506,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void inputMethodLocaleChanged();
       void endSearch();
       void saveScoreDialogFilterSelected(const QString&);
+      void toggleSearchDialog();
 #ifdef OSC
       void oscIntMessage(int);
       void oscVolume(int val);

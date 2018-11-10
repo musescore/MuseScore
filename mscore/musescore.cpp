@@ -5781,7 +5781,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   changeState(STATE_LOCK);
             }
       else if (cmd == "find")
-            showSearchDialog();
+            toggleSearchDialog();
       else if (cmd == "text-b") {
             if (_textTools)
                   _textTools->toggleBold();
@@ -6140,7 +6140,17 @@ void MuseScore::showSearchDialog()
       _searchDialog->show();
       }
 
+//---------------------------------------------------------
+//   toggleSearchDialog
+//---------------------------------------------------------
 
+void MuseScore::toggleSearchDialog()
+      {
+      if (_searchDialog && searchCombo->hasFocus())
+            endSearch();
+      else
+            showSearchDialog();
+      }
 
 #ifndef SCRIPT_INTERFACE
 void MuseScore::pluginTriggered(int) {}
