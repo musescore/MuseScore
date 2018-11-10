@@ -61,6 +61,12 @@ class TestMidi : public QObject, public MTest
             midiExportTestRef("testRepeatsWithKeySigs");                // 5 measures, with a key sig on every measure. Meas 3-4 are repeated.
             midiExportTestRef("testRepeatsWithKeySigsExceptFirstMeas"); // 5 measures, with a key sig on every measure except meas 0.  Meas 3-4 are repeated.
             }
+      void midiVolta()
+          {
+          midiExportTestRef("testVoltaTemp"); // test changing temp in prima and seconda volta 
+          midiExportTestRef("testVoltaDynamic"); // test changing Dynamic in prima and seconda volta 
+          midiExportTestRef("testVoltaStaffText"); // test changing StaffText in prima and seconda volta 
+          }
       };
 
 //---------------------------------------------------------
