@@ -327,7 +327,7 @@ void Volta::setChannel() const {
             Staff* st = staff();
             for (int voice = 0; voice < VOICES; ++voice) {
                   int channel = st->channel(startTick, voice);
-                  st->channelList(voice)->insert(endTick, channel);
+                  st->insertIntoChannelList(voice, endTick, channel);
                   }
             }
       }
