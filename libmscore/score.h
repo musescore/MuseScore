@@ -503,7 +503,6 @@ class Score : public QObject, public ScoreElement {
 
       bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, int staffIdx);
       bool rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx);
-      void updateVelo();
       void swingAdjustParams(Chord*, int&, int&, int, int);
       bool isSubdivided(ChordRest*, int);
       void addAudioTrack();
@@ -879,6 +878,7 @@ class Score : public QObject, public ScoreElement {
       void renderStaff(EventMap* events, Staff*);
       void renderSpanners(EventMap* events, int staffIdx);
       void renderMetronome(EventMap* events, Measure* m, int tickOffset);
+      void updateVelo();
 
       BeatType tick2beatType(int tick);
 
@@ -1302,7 +1302,7 @@ class MasterScore : public Score {
       void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
       void updateChannel();
       void setSoloMute();
-
+      
       void addExcerpt(Excerpt*);
       void removeExcerpt(Excerpt*);
       void deleteExcerpt(Excerpt*);
