@@ -171,6 +171,14 @@ void MasterScore::updateChannel()
                         }
                   }
             }
+      
+      for (auto it = spanner().cbegin(); it != spanner().cend(); ++it) {
+            Spanner* spanner = (*it).second;
+            if (!spanner->isVolta())
+                  continue;
+            Volta* volta = toVolta(spanner);
+            volta->setChannel();
+            }
 
       for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             for (Staff* st : staves()) {
@@ -648,6 +656,14 @@ void Score::updateVelo()
                   Hairpin* h = toHairpin(s);
                   updateHairpin(h);
                   }
+            }
+      
+      for (auto it = spanner().cbegin(); it != spanner().cend(); ++it) {
+            Spanner* spanner = (*it).second;
+            if (!spanner->isVolta())
+                  continue;
+            Volta* volta = toVolta(spanner);
+            volta->setVelocity();
             }
       }
 

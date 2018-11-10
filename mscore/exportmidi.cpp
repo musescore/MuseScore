@@ -225,6 +225,8 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportR
       cs->updateSwing();
       cs->createPlayEvents();
       cs->updateRepeatList(midiExpandRepeats);
+      cs->masterScore()->updateChannel();
+      cs->updateVelo();
       pauseMap.calculate(cs);
       writeHeader();
 
