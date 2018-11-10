@@ -85,6 +85,9 @@ private slots:
       void figuredBass2() { mxmlIoTest("testFiguredBass2"); }
       void figuredBass3() { mxmlIoTest("testFiguredBass3"); }
       void formattedThings() { mxmlIoTest("testFormattedThings"); }
+      void fractionMinus() { mxmlIoTestRef("testFractionMinus"); }
+      void fractionPlus() { mxmlIoTestRef("testFractionPlus"); }
+      void fractionTicks() { mxmlIoTestRef("testFractionTicks"); }
       void grace1() { mxmlIoTest("testGrace1"); }
       void grace2() { mxmlIoTest("testGrace2"); }
       void harmony1() { mxmlIoTest("testHarmony1"); }
