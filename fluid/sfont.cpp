@@ -777,7 +777,7 @@ bool SFont::load()
             fixup_pgen();
             fixup_igen();
             }
-      catch (const QString& s) {
+      catch (QString s) {
             qDebug("fluid: error loading sound font: %s", qPrintable(s));
             f.close();
             return false;
