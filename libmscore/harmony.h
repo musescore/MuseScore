@@ -79,6 +79,7 @@ class Harmony final : public TextBase {
       QList<TextSegment*> textList;       // rendered chord
 
       bool _leftParen, _rightParen;       // include opening and/or closing parenthesis
+      bool _needAutoplace            {true}; //in some cases we don't need call autoplaceSegmentElement, see startEdit()
 
       mutable QRectF _tbbox;
 
