@@ -3636,13 +3636,12 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       s->add(clefs);
 
       // set the correct staff type
-      // note that this overwrites the staff lines value set in pass 1
-      // also note that clef handling should probably done in pass1
+      // note that clef handling should probably done in pass1
       int staffIdx = _score->staffIdx(part) + clefno;
       int lines = _score->staff(staffIdx)->lines(0);
-      if (st == StaffTypes::TAB_DEFAULT || (_hasDrumset && st == StaffTypes::PERC_DEFAULT)) {
-            _score->staff(staffIdx)->setStaffType(0, *StaffType::preset(st));
-            _score->staff(staffIdx)->setLines(0, lines); // preserve previously set staff lines
+      if (tick == 0) { // changing staff type not supported (yet ?)
+            _score->staff(staffIdx)->setStaffType(tick, *StaffType::preset(st));
+            _score->staff(staffIdx)->setLines(tick, lines); // preserve previously set staff lines
             _score->staff(staffIdx)->setBarLineTo(0);    // default
             }
       }
