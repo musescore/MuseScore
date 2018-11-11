@@ -2129,11 +2129,10 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
 
 /**
  Parse the /score-partwise/part/measure/attributes/clef node.
- Set the staff type based on clef type
- TODO: check if staff type setting could be simplified
+ TODO: Store the clef type, to simplify staff type setting in pass 2.
  */
 
-void MusicXMLParserPass1::clef(const QString& partId)
+void MusicXMLParserPass1::clef(const QString& /* partId */)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "clef");
       _logger->logDebugTrace("MusicXMLParserPass1::clef", &_e);
@@ -2165,16 +2164,6 @@ void MusicXMLParserPass1::clef(const QString& partId)
             else
                   skipLogCurrElem();
             }
-
-      Part* part = getPart(partId);
-      Q_ASSERT(part);
-      int staves = part->nstaves();
-      int staffIdx = _score->staffIdx(part);
-
-      // TODO: changed for #55501, but now staff type init is shared between pass 1 and 2
-      // old code: if (0 <= n && n < staves && staffType != StaffTypes::STANDARD)
-      if (0 <= n && n < staves && staffType == StaffTypes::TAB_DEFAULT)
-            _score->staff(staffIdx + n)->setStaffType(0, *StaffType::preset(staffType));
       }
 
 //---------------------------------------------------------
