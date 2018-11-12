@@ -382,6 +382,7 @@ add_executable ( ${ExecutableName}
       inspector/inspectorDynamic.cpp
       inspector/inspectorInstrchange.cpp
       inspector/inspectorElementBase.cpp
+      inspector/resetButton.cpp
       enableplayforwidget.cpp
       editelement.cpp
       qmlplugin.cpp

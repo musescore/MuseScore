@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>497</width>
-    <height>344</height>
+    <width>464</width>
+    <height>319</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -96,40 +96,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Alignment' values</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="resetFontSize">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font size' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetFontFace">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font face' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -532,19 +498,12 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="resetUnderline">
-          <property name="toolTip">
-           <string>Reset to default</string>
-          </property>
-          <property name="accessibleName">
-           <string>Reset 'Underline' value</string>
-          </property>
-          <property name="text">
-           <string notr="true"/>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+         <widget class="Ms::ResetButton" name="resetUnderline" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -588,6 +547,12 @@
         </item>
        </layout>
       </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetFontFace" native="true"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetFontSize" native="true"/>
+      </item>
      </layout>
     </widget>
    </item>
@@ -606,19 +571,22 @@
    <header>awl/colorlabel.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>fontFace</tabstop>
-  <tabstop>resetFontFace</tabstop>
   <tabstop>fontSize</tabstop>
-  <tabstop>resetFontSize</tabstop>
   <tabstop>bold</tabstop>
   <tabstop>resetBold</tabstop>
   <tabstop>italic</tabstop>
   <tabstop>resetItalic</tabstop>
   <tabstop>underline</tabstop>
-  <tabstop>resetUnderline</tabstop>
   <tabstop>resetAlign</tabstop>
   <tabstop>resetFrameType</tabstop>
   <tabstop>resetFrameColor</tabstop>

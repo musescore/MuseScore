@@ -13,6 +13,7 @@
 #ifndef __RESET_BUTTON_H__
 #define __RESET_BUTTON_H__
 
+namespace Ms {
 
 //---------------------------------------------------------
 //   ResetButton
@@ -20,17 +21,21 @@
 
 class ResetButton : public QWidget {
       Q_OBJECT
+      QToolButton* reset;
+      QToolButton* setStyle;
 
    private slots:
-      void _sizeChanged();
 
    signals:
-      void valueChanged(const QVariant&);
+      void resetClicked();
+      void setStyleClicked();
 
    public:
-      ResetButton(QWdiget* parent = 0);
+      ResetButton(QWidget* parent = 0);
+      void enableSetStyle(bool);
       };
 
+} // namespace
 
 #endif
 
