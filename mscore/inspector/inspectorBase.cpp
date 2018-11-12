@@ -23,6 +23,7 @@
 #include "scaleSelect.h"
 #include "sizeSelect.h"
 #include "scoreview.h"
+#include "resetButton.h"
 
 namespace Ms {
 
@@ -499,17 +500,29 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
             iList.push_back(i);
       int i = 0;
       for (const InspectorItem& ii : iList) {
-            QToolButton* resetButton = ii.r;
-            if (resetButton) {
-                  resetButton->setIcon(*icons[int(Icons::reset_ICON)]);
-                  connect(resetButton, &QToolButton::clicked, [=] { resetClicked(i); });
-                  Sid sidx = inspector->element()->getPropertyStyle(ii.t);
-                  if (sidx != Sid::NOSTYLE) {
-                        QMenu* menu = new QMenu(this);
-                        resetButton->setMenu(menu);
-                        resetButton->setPopupMode(QToolButton::MenuButtonPopup);
-                        QAction* a = menu->addAction(tr("Set as style"));
-                        connect(a, &QAction::triggered, [=] { setStyleClicked(i); });
+            QWidget* rw = ii.r;
+            if (rw) {
+                  if (qobject_cast<QToolButton*>(rw)) {
+                        QToolButton* resetButton = qobject_cast<QToolButton*>(rw);
+                        resetButton->setIcon(*icons[int(Icons::reset_ICON)]);
+                        connect(resetButton, &QToolButton::clicked, [=] { resetClicked(i); });
+                        Sid sidx = inspector->element()->getPropertyStyle(ii.t);
+                        if (sidx != Sid::NOSTYLE) {
+                              QMenu* menu = new QMenu(this);
+                              resetButton->setMenu(menu);
+                              resetButton->setPopupMode(QToolButton::MenuButtonPopup);
+                              QAction* a = menu->addAction(tr("Set as style"));
+                              connect(a, &QAction::triggered, [=] { setStyleClicked(i); });
+                              }
+                        }
+                  else {
+                        ResetButton* b = qobject_cast<ResetButton*>(rw);
+                        connect(b, &ResetButton::resetClicked, [=] { resetClicked(i); });
+                        Sid sidx = inspector->element()->getPropertyStyle(ii.t);
+                        if (sidx != Sid::NOSTYLE) {
+                              b->enableSetStyle(true);
+                              connect(b, &ResetButton::setStyleClicked, [=] { setStyleClicked(i); });
+                              }
                         }
                   }
             QWidget* w = ii.w;
