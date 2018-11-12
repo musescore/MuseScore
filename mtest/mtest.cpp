@@ -55,6 +55,7 @@ const char* tests[] = {
       "importmidi/tst_importmidi",
       "libmscore/selectionrangedelete/tst_selectionrangedelete",
       "libmscore/parts/tst_parts",
+      "testscript/tst_runscripts",
 #endif
 #if 0
       "libmscore/spanners/tst_spanners",              // FAIL

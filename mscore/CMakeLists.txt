@@ -57,6 +57,7 @@ QT5_WRAP_UI (ui_headers
       importmidi/importmidi_panel.ui
 
       scorecmp/scorecmp_tool.ui
+      script/script_recorder.ui
 
       debugger/barline.ui
       debugger/harmony.ui
@@ -426,6 +427,7 @@ add_executable ( ${ExecutableName}
       preferenceslistwidget.cpp preferenceslistwidget.h
       extension.cpp extension.h
       tourhandler.cpp
+      script/script.cpp script/scriptentry.cpp script/testscript.cpp script/recorderwidget.cpp
 
       ${COCOABRIDGE}
       ${OMR_FILES}

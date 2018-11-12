@@ -1130,6 +1130,19 @@ void ScoreDiff::editPropertyDiffs()
       }
 
 //---------------------------------------------------------
+//   ScoreDiff::equal
+//---------------------------------------------------------
+
+bool ScoreDiff::equal() const
+      {
+      for (const TextDiff& td : _textDiffs) {
+            if (td.type != DiffType::EQUAL)
+                  return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
 //   ScoreDiff::rawDiff
 //---------------------------------------------------------
 

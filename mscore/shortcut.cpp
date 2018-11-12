@@ -3583,6 +3583,18 @@ Shortcut Shortcut::_sc[] = {
          Icons::mail_ICON,
          Qt::ApplicationShortcut
          },
+#ifdef MSCORE_UNSTABLE
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL,
+         "toggle-script-recorder",
+         "Script Recorder",
+         "Script recorder",
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+#endif
 #ifndef NDEBUG
       {
          MsWidget::MAIN_WINDOW,
