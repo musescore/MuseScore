@@ -3,7 +3,7 @@
 
 cd build.debug/mtest
 
-# vnc is the only tested planform that allowed to run
+# vnc is the only tested platform plugin that allows to run
 # mscore executable in the used Travis environment.
 export QT_QPA_PLATFORM=vnc
 
