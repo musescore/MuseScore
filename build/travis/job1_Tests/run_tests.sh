@@ -3,6 +3,10 @@
 
 cd build.debug/mtest
 
+# vnc is the only tested planform that allowed to run
+# mscore executable in the used Travis environment.
+export QT_QPA_PLATFORM=vnc
+
 xvfb-run -a ctest -j2 --output-on-failure
 
 PROC_RET=$?
