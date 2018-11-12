@@ -603,6 +603,8 @@ if (MINGW)
       ${MINGW_ROOT}/lib/libvorbis.dll
       ${MINGW_ROOT}/lib/libvorbisfile.dll
       ${MINGW_ROOT}/opt/bin/ssleay32.dll
+      ${QT_INSTALL_PREFIX}/bin/libEGL.dll
+      ${QT_INSTALL_PREFIX}/bin/libGLESv2.dll
       ${QtInstallLibraries}
       ${PROJECT_SOURCE_DIR}/build/qt.conf
       DESTINATION bin)
@@ -836,6 +838,7 @@ else (MINGW)
                   "${QT_INSTALL_PREFIX}/bin/Qt5XmlPatterns.dll"
                   "${QT_INSTALL_PREFIX}/bin/Qt5WebChannel.dll"
                   "${QT_INSTALL_PREFIX}/bin/Qt5QuickWidgets.dll" "${QT_INSTALL_PREFIX}/bin/Qt5Positioning.dll"
+                  "${QT_INSTALL_PREFIX}/bin/libEGL.dll" "${QT_INSTALL_PREFIX}/bin/libGLESv2.dll"
                   )
       if (USE_WEBENGINE)
          list(APPEND dlls_to_copy "${QT_INSTALL_PREFIX}/bin/Qt5WebEngineWidgets.dll" "${QT_INSTALL_PREFIX}/bin/Qt5WebEngineCore.dll")
