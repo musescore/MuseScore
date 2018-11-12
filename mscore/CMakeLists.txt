@@ -316,7 +316,7 @@ add_executable ( ${ExecutableName}
       scoreBrowser.h scoreInfo.h scorePreview.h scoretab.h scoreview.h searchComboBox.h
       sectionbreakprop.h selectdialog.h selectionwindow.h selectnotedialog.h selinstrument.h
       seq.h shortcut.h shortcutcapturedialog.h simplebutton.h splitstaff.h stafftextproperties.h
-      startcenter.h startupWizard.h stringutils.h svggenerator.h symboldialog.h synthcontrol.h
+      startcenter.h startupWizard.h stringutils.h svggenerator.h svgrenderer.h symboldialog.h synthcontrol.h
       templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
       toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h tremolobarprop.h
       tupletdialog.h updatechecker.h uploadscoredialog.h waveview.h webpage.h workspace.h
@@ -364,6 +364,7 @@ add_executable ( ${ExecutableName}
       layer.cpp selectdialog.cpp selectnotedialog.cpp propertymenu.cpp shortcut.cpp bb.cpp
       dragelement.cpp startupWizard.cpp
       svggenerator.cpp
+      svgrenderer.cpp
       masterpalette.cpp
       dragdrop.cpp
       waveview.cpp helpBrowser.cpp
@@ -778,34 +779,24 @@ else (MINGW)
                )
         endif (LN_EXECUTABLE)
         # Install MuseScore icons (use SVGs where possible, but install PNGs as backup for systems that don't support SVG)
-        set(MSCORE_ICON_BASE ../assets/musescore-icon-round)
-        install(FILES ${MSCORE_ICON_BASE}.svg RENAME mscore${MSCORE_INSTALL_SUFFIX}.svg DESTINATION share/icons/hicolor/scalable/apps)
-        install(FILES ${MSCORE_ICON_BASE}-16.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/16x16/apps)
-        install(FILES ${MSCORE_ICON_BASE}-24.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/24x24/apps)
-        install(FILES ${MSCORE_ICON_BASE}-32.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/32x32/apps)
-        install(FILES ${MSCORE_ICON_BASE}-48.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/48x48/apps)
-        install(FILES ${MSCORE_ICON_BASE}-64.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/64x64/apps)
-        install(FILES ${MSCORE_ICON_BASE}-96.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/96x96/apps)
-        install(FILES ${MSCORE_ICON_BASE}-128.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/128x128/apps)
-        install(FILES ${MSCORE_ICON_BASE}-512.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/512x512/apps)
-        # Install MIME (filetype) icons for each mimetype on Linux
-        install( FILES   ../assets/mscz-icon.svg RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.svg
-           DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCZ files
-        install( FILES   ../assets/mscz-icon-48.png RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}.png
-           DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MSCZ files
-        install( FILES   ../assets/mscx-icon.svg RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}+xml.svg
-           DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MSCX files
-        install( FILES   ../assets/mscx-icon-48.png RENAME application-x-musescore${MSCORE_INSTALL_SUFFIX}+xml.png
-           DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MSCX files
+        set(ASSETS_ICONS_DIR "${PROJECT_BINARY_DIR}/assets/icons")
+        if (MSCORE_UNSTABLE)
+            set(MSCORE_ICON_BASE "app/musescore-icon-square") # Square icons on development builds
+        else (MSCORE_UNSTABLE)
+            set(MSCORE_ICON_BASE "app/musescore-icon-round") # Round icons on stable releases
+        endif (MSCORE_UNSTABLE)
+        function(install_icon_freedesktop BASEPATH_IN NAME_OUT DIR_OUT)
+          install(FILES "${ASSETS_ICONS_DIR}/${BASEPATH_IN}.svg" RENAME "${NAME_OUT}.svg" DESTINATION "share/icons/hicolor/scalable/${DIR_OUT}")
+          foreach(SIZE 16 22 24 32 48 64 96 128 256 512)
+            install(FILES "${ASSETS_ICONS_DIR}/${BASEPATH_IN}-${SIZE}.png" RENAME "${NAME_OUT}.png" DESTINATION "share/icons/hicolor/${SIZE}x${SIZE}/${DIR_OUT}")
+          endforeach(SIZE)
+        endfunction(install_icon_freedesktop)
+        install_icon_freedesktop("${MSCORE_ICON_BASE}" "mscore${MSCORE_INSTALL_SUFFIX}" "apps")
+        install_icon_freedesktop("file/mscx" "application-x-musescore${MSCORE_INSTALL_SUFFIX}+xml" "mimetypes")
+        install_icon_freedesktop("file/mscz" "application-x-musescore${MSCORE_INSTALL_SUFFIX}"     "mimetypes")
         # use a custom icon for MusicXML files (there isn't a standard icon for MusicXML files)
-        install( FILES   ../assets/mxl-icon.svg RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}.svg
-           DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .MXL (compressed MusicXML) files
-        install( FILES   ../assets/mxl-icon-48.png RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}.png
-           DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .MXL (compressed MusicXML) files
-        install( FILES   ../assets/xml-icon.svg RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml.svg
-           DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .XML (MusicXML) files
-        install( FILES   ../assets/xml-icon-48.png RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml.png
-           DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .XML (MusicXML) files
+        install_icon_freedesktop("file/xml"  "application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml" "mimetypes")
+        install_icon_freedesktop("file/mxl"  "application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}"     "mimetypes")
         # Note: Must now run "gtk-update-icon-cache" to set the new icons. This is done in the Makefile.
       endif (APPLE)
    else ( NOT MSVC )

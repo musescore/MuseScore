@@ -61,7 +61,7 @@ Startcenter::Startcenter(QWidget* parent)
 #ifdef USE_WEBENGINE
       if (!noWebView) {
             _webView = new MyWebView(this);
-            _webView->setMaximumWidth(200);  
+            _webView->setMaximumWidth(200);
 
             MyWebEnginePage* page = new MyWebEnginePage(this);
             MyWebUrlRequestInterceptor* wuri = new MyWebUrlRequestInterceptor(page);
@@ -198,7 +198,7 @@ void Startcenter::keyReleaseEvent(QKeyEvent *event)
       }
 
 #ifdef USE_WEBENGINE
- 
+
 //---------------------------------------------------------
 //   MyWebView
 //---------------------------------------------------------
@@ -255,4 +255,3 @@ bool MyWebEnginePage::acceptNavigationRequest(const QUrl & url, QWebEnginePage::
 
 #endif //USE_WEBENGINE
 }
-

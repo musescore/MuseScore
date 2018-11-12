@@ -37,7 +37,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="musescore.qrc">:/data/mscore.png</pixmap>
+        <pixmap resource="musescore.qrc">:/data/mscore.svg</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

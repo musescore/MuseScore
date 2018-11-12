@@ -41,6 +41,16 @@ export ARTIFACTS_KEY=$ARTIFACTS_AWS_ACCESS_KEY_ID
 export ARTIFACTS_SECRET=$ARTIFACTS_AWS_SECRET_ACCESS_KEY
 artifacts -v || curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash
 
+# Install dependencies for assets build
+sudo add-apt-repository -y ppa:inkscape.dev/stable
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - # node.js
+sudo apt-get install -y inkscape nodejs
+sudo npm install -g svgo
+
+export DISPLAY=:99.0
+sh -e /etc/init.d/xvfb start # fake display for GUI programs (inkscape)
+sleep 3 # give xvfb some time to start
+
 # IMPORTANT: Must now return shell to it's initial state:
 set +x
 set +e

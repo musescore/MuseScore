@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 512 512">
+  <use xlink:href="../../resources/musicxml-logo.svg#musicxml-logo" transform="translate(135,128)"/>
+  <text x="255" y="456" font-size="96" font-weight="bold" font-family="Roboto" text-anchor="middle" fill="#989898">@TYPE@</text>
+</svg>

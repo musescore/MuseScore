@@ -367,7 +367,7 @@ static void copyAssets(QString& lSrcPath, QString& lDstPath)
       QString assetDstPath = lDstPath + "/plugins/";
       QString assetSrcPath = lSrcPath + "/manual/";
 //      QStringList files = {"manual.css", "manual-dark.css", "mscore.png" };
-      QStringList files = {"mscore.png" };
+      QStringList files = {};
 
       // copy files from source to destination path
       for (QString f : files) {

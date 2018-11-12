@@ -178,6 +178,7 @@
 
 #include <QSvgRenderer>
 #include <QSvgGenerator>
+#include <QSvgWidget> // use in preference to QPixmap and QLabel where possible
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>

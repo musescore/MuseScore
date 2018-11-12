@@ -39,7 +39,7 @@ vtest/Pictures
 .vs
 dependencies
 
-# Downloaded files during build process
+# Files From Build Process
 MS_General.sf3
 MS_General-License.md
 MS_General-changelog.txt
@@ -49,3 +49,5 @@ MuseScore_General-changelog.txt
 VERSION
 /mscore/data/mscore.aps
 /msvc.*
+/mscore/data/splash.svg
+/mscore/data/icons/mscore.svg

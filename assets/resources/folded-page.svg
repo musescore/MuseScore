@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="lgrad-shadow">
+      <stop offset="0" stop-opacity="0.5"/>
+      <stop offset="0.01" stop-opacity="0.3452"/>
+      <stop offset="0.02" stop-opacity="0.3056"/>
+      <stop offset="0.04" stop-opacity="0.2567"/>
+      <stop offset="0.08" stop-opacity="0.1976"/>
+      <stop offset="0.16" stop-opacity="0.1294"/>
+      <stop offset="0.32" stop-opacity="0.0591"/>
+      <stop offset="0.64" stop-opacity="0.0079"/>
+      <stop offset="1" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="lgrad-page"
+      x1="1" x2="0" y1="0" y2="1"
+      gradientTransform="scale(0.90910,0.66667) translate(-0.2,0.2)"
+      xlink:href="#lgrad-shadow"/>
+
+    <linearGradient id="lgrad-fold"
+        x1="1" x2="0" y1="0" y2="1"
+        gradientTransform="scale(0.33333) translate(-0.50,0.50)"
+        xlink:href="#lgrad-shadow"/>
+
+    <filter id="filter-page">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="-2" dy="2"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="filter-fold">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+      <feOffset dx="-5" dy="5"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <path id="page" d="m 80,16 0,464 352,0 0,-224 c 0,-48 1,-81 -19,-101 l -120,-120 c -20,-20 -53,-19 -101,-19 z"/>
+    <path id="fold" d="m 293,35 c 20,20 19,53 19,101 c 48,0 81,-1 101,19 z"/>
+    
+    <g id="folded-page-background">
+      <use xlink:href="#page" fill="#FFF" filter="url(#filter-page)"/>
+      <use xlink:href="#page" fill="url(#lgrad-page)"/>
+    </g>
+
+    <g id="folded-page-foreground">
+      <use xlink:href="#fold" fill="#FFF" filter="url(#filter-fold)"/>
+      <use xlink:href="#fold" fill="url(#lgrad-fold)"/>
+    </g>
+  </defs>
+
+  <use xlink:href="#folded-page-background"/>
+
+<!-- @YOUR_CONTENT_HERE@ -->
+
+  <use xlink:href="#folded-page-foreground"/>
+</svg>

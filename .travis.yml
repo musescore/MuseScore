@@ -48,6 +48,12 @@ matrix:
             - libpulse-dev
             - libgtk2.0-bin
             - expect
+            # assets build
+            - imagemagick
+            - pngcrush
+            - libxml2-utils # xmllint
+            - icnsutils # png2icns
+            - fonts-roboto
       cache:
         directories:
           - $HOME/.ccache

@@ -15,15 +15,13 @@
         <file alias="themes/style_dark_fusion.css">../share/themes/style_dark_fusion.css</file>
         <file alias="themes/palette_light_fusion.json">../share/themes/palette_light_fusion.json</file>
         <file alias="themes/palette_dark_fusion.json">../share/themes/palette_dark_fusion.json</file>
-        <file>data/splash.png</file>
-        <file>data/splash@2x.png</file>
         <file alias="data/My_First_Score.mscz">../share/templates/My_First_Score.mscz</file>
         <file alias="data/Create_New_Score.mscz">../share/templates/Create_New_Score.mscz</file>
         <file alias="data/Empty_Score.mscx">../share/templates/01-General/00-Blank.mscx</file>
         <file>data/tab_sample.mscx</file>
         <file>data/std_sample.mscx</file>
         <file>data/style.qss</file>
-        <file>data/mscore.png</file>
+        <file>data/mscore.svg</file>
         <file>data/icons/window-close.svg</file>
         <file>data/icons/png/window-close.png</file>
         <file>data/icons/png/window-close@2x.png</file>
@@ -56,7 +54,7 @@
         <file>data/icons/grace16after.svg</file>
         <file>data/icons/grace32after.svg</file>
         <file>data/icons/clef.svg</file>
-        <file>data/icons/mscore.png</file>
+        <file>data/icons/mscore.svg</file>
         <file>data/icons/raster-horizontal.svg</file>
         <file>data/icons/raster-vertical.svg</file>
         <file>data/icons/edit-reset.svg</file>
