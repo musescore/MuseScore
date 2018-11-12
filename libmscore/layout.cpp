@@ -841,7 +841,12 @@ void Score::layoutChords3(std::vector<Note*>& notes, const Staff* staff, Segment
             else if (_up)
                   x = chord->stemPosX() - note->headBodyWidth();
 
-            note->rypos()  = (note->line() + stepOffset) * stepDistance;
+            qreal ny = (note->line() + stepOffset) * stepDistance;
+            if (note->rypos() != ny) {
+                  note->rypos() = ny;
+                  if (chord->stem())
+                        chord->stem()->layout();
+                  }
             note->rxpos()  = x;
 
             // find leftmost non-mirrored note to set as X origin for accidental layout
