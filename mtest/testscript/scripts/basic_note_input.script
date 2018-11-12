@@ -1,0 +1,12 @@
+init init/Treble.mscx
+cmd note-input
+cmd note-a
+cmd note-b
+cmd note-c
+cmd note-d
+cmd note-e
+cmd note-f
+cmd note-g
+cmd note-a
+cmd escape
+test score basic_note_input.mscx

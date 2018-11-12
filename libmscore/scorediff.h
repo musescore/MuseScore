@@ -162,6 +162,8 @@ class ScoreDiff {
       const Score* score1() const { return _s1; }
       const Score* score2() const { return _s2; }
 
+      bool equal() const;
+
       QString rawDiff(bool skipEqual = true) const;
       QString userDiff() const;
       };
