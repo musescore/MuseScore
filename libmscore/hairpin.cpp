@@ -534,7 +534,7 @@ void Hairpin::write(XmlWriter& xml) const
             if (!isStyled(spp.pid))
                   writeProperty(xml, spp.pid);
             }
-      Element::writeProperties(xml);
+      SLine::writeProperties(xml);
       xml.etag();
       }
 
