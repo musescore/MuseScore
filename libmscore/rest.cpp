@@ -167,7 +167,7 @@ QRectF Rest::drag(EditData& ed)
 
 bool Rest::acceptDrop(EditData& data) const
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       ElementType type = e->type();
       if (
             (type == ElementType::ICON && toIcon(e)->iconType() == IconType::SBEAM)
@@ -209,7 +209,7 @@ bool Rest::acceptDrop(EditData& data) const
 
 Element* Rest::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       switch (e->type()) {
             case ElementType::ARTICULATION:
                   {

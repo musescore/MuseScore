@@ -556,7 +556,7 @@ void BarLine::read(XmlReader& e)
 
 bool BarLine::acceptDrop(EditData& data) const
       {
-      ElementType type = data.element->type();
+      ElementType type = data.dropElement->type();
       if (type == ElementType::BAR_LINE) {
             return true;
             }
@@ -575,7 +575,7 @@ bool BarLine::acceptDrop(EditData& data) const
 
 Element* BarLine::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
 
       if (e->isBarLine()) {
             BarLine* bl    = toBarLine(e);

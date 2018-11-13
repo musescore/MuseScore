@@ -1585,17 +1585,17 @@ void Note::endDrag(EditData& ed)
 
 bool Note::acceptDrop(EditData& data) const
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       ElementType type = e->type();
       if (type == ElementType::GLISSANDO) {
             for (auto ee : _spannerFor)
-                  if (ee->type() == ElementType::GLISSANDO) {
+                  if (ee->isGlissando()) {
                         return false;
                   }
             return true;
             }
-      const Staff* st = staff();
-      bool isTablature = st->isTabStaff(tick());
+      const Staff* st   = staff();
+      bool isTablature  = st->isTabStaff(tick());
       bool tabFingering = st->staffType(tick())->showTabFingering();
       return (type == ElementType::ARTICULATION
          || type == ElementType::FERMATA
@@ -1654,7 +1654,7 @@ bool Note::acceptDrop(EditData& data) const
 
 Element* Note::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
 
       const Staff* st = staff();
       bool isTablature = st->isTabStaff(tick());

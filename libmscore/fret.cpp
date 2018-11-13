@@ -537,7 +537,7 @@ void FretDiagram::remove(Element* e)
 
 bool FretDiagram::acceptDrop(EditData& data) const
       {
-      return data.element->type() == ElementType::HARMONY;
+      return data.dropElement->type() == ElementType::HARMONY;
       }
 
 //---------------------------------------------------------
@@ -546,7 +546,7 @@ bool FretDiagram::acceptDrop(EditData& data) const
 
 Element* FretDiagram::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       if (e->isHarmony()) {
             Harmony* h = toHarmony(e);
             h->setParent(parent());

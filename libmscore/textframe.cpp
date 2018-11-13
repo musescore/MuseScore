@@ -130,7 +130,7 @@ void TBox::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 Element* TBox::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       switch (e->type()) {
             case ElementType::TEXT:
                   _text->undoChangeProperty(Pid::TEXT, toText(e)->xmlText());

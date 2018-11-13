@@ -24,8 +24,13 @@ void TextBase::editInsertText(TextCursor* cursor, const QString& s)
       Q_ASSERT(!layoutInvalid);
       textInvalid = true;
 
+      int col = 0;
+      for (const QChar& c : s) {
+            if (!c.isHighSurrogate())
+                  ++col;
+            }
       cursor->curLine().insert(cursor, s);
-      cursor->setColumn(cursor->column() + s.size());
+      cursor->setColumn(cursor->column() + col);
       cursor->clearSelection();
 
       triggerLayout();
@@ -130,7 +135,6 @@ void TextBase::insertSym(EditData& ed, SymId id)
 
       deleteSelectedText(ed);
       QString s = score()->scoreFont()->toString(id);
-
       CharFormat fmt = *_cursor->format();  // save format
 //      uint code = ScoreFont::fallbackFont()->sym(id).code();
       _cursor->format()->setFontFamily("ScoreText");
@@ -479,14 +483,14 @@ Element* TextBase::drop(EditData& ed)
       {
       TextCursor* _cursor = cursor(ed);
 
-      Element* e = ed.element;
+      Element* e = ed.dropElement;
+
       switch (e->type()) {
             case ElementType::SYMBOL:
                   {
                   SymId id = toSymbol(e)->sym();
                   delete e;
 
-                  deleteSelectedText(ed);
                   insertSym(ed, id);
                   }
                   break;
@@ -494,9 +498,8 @@ Element* TextBase::drop(EditData& ed)
             case ElementType::FSYMBOL:
                   {
                   uint code = toFSymbol(e)->code();
-                  delete e;
-
                   QString s = QString::fromUcs4(&code, 1);
+                  delete e;
 
                   deleteSelectedText(ed);
                   score()->undo(new InsertText(_cursor, s), &ed);
@@ -504,6 +507,7 @@ Element* TextBase::drop(EditData& ed)
                   break;
 
             default:
+                  qDebug("drop <%s> not handled", e->name());
                   break;
             }
       return 0;

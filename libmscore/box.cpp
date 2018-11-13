@@ -494,7 +494,7 @@ void HBox::layout2()
 
 bool Box::acceptDrop(EditData& data) const
       {
-      ElementType t = data.element->type();
+      ElementType t = data.dropElement->type();
       if (data.element->flag(ElementFlag::ON_STAFF))
             return false;
       switch (t) {
@@ -505,7 +505,7 @@ bool Box::acceptDrop(EditData& data) const
             case ElementType::SYMBOL:
                   return true;
             case ElementType::ICON:
-                  switch (toIcon(data.element)->iconType()) {
+                  switch (toIcon(data.dropElement)->iconType()) {
                         case IconType::VFRAME:
                         case IconType::TFRAME:
                         case IconType::FFRAME:
@@ -516,7 +516,7 @@ bool Box::acceptDrop(EditData& data) const
                         }
                   break;
             case ElementType::BAR_LINE:
-                  return type() == ElementType::HBOX;
+                  return isHBox();
             default:
                   break;
             }
@@ -529,7 +529,7 @@ bool Box::acceptDrop(EditData& data) const
 
 Element* Box::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       if (e->flag(ElementFlag::ON_STAFF))
             return 0;
       switch (e->type()) {

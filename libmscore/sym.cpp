@@ -5700,7 +5700,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, const QSizeF& mag, const QPoin
             FT_Bitmap* bm     = &gb->bitmap;
 
             if (bm->width == 0 || bm->rows == 0) {
-                  qDebug("zero glyph");
+                  qDebug("zero glyph, id %d", int(id));
                   return;
                   }
             QImage img(QSize(bm->width, bm->rows), QImage::Format_ARGB32);
@@ -5801,16 +5801,9 @@ void initScoreFonts()
 //   codeToString
 //---------------------------------------------------------
 
-static QString codeToString(int code)
+static QString codeToString(uint code)
       {
-      QString s;
-      if (code & 0xffff0000) {
-            s = QChar(QChar::highSurrogate(code));
-            s += QChar(QChar::lowSurrogate(code));
-            }
-      else
-            s = QChar(code);
-      return s;
+      return QString::fromUcs4(&code, 1);
       }
 
 //---------------------------------------------------------

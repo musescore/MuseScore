@@ -410,7 +410,7 @@ MasterScore* TestParts::doAddBreath()
       EditData dd(0);
       Breath* b = new Breath(score);
       b->setSymId(SymId::breathMarkComma);
-      dd.element = b;
+      dd.dropElement = b;
 
       score->startCmd();
       note->drop(dd);
@@ -531,7 +531,7 @@ MasterScore* TestParts::doAddFingering()
       EditData dd(0);
       Fingering* b = new Fingering(score);
       b->setXmlText("3");
-      dd.element = b;
+      dd.dropElement = b;
 
       score->startCmd();
       note->drop(dd);
@@ -654,7 +654,7 @@ MasterScore* TestParts::doAddSymbol()
       EditData dd(0);
       Symbol* b  = new Symbol(score);
       b->setSym(SymId::gClef);
-      dd.element = b;
+      dd.dropElement = b;
 
       score->startCmd();
       note->drop(dd);
@@ -777,7 +777,7 @@ MasterScore* TestParts::doAddChordline()
       EditData dd(0);
       ChordLine* b  = new ChordLine(score);
       b->setChordLineType(ChordLineType::FALL);
-      dd.element = b;
+      dd.dropElement = b;
 
       score->startCmd();
       note->drop(dd);
@@ -900,7 +900,7 @@ MasterScore* TestParts::doAddImage()
       EditData dd(0);
       RasterImage* b = new RasterImage(score);
       b->load(DIR + "schnee.png");
-      dd.element = b;
+      dd.dropElement = b;
 
       score->startCmd();
       note->drop(dd);

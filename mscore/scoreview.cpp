@@ -2560,8 +2560,8 @@ QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
       {
 //      qDebug("0x%x  %s", int(query), editData.element ? editData.element->name() : "-no element-");
       // if editing a text object, place the InputMethod popup window just below the text
-      if (editData.element && editData.element->isTextBase()) {
-            TextBase* text = toTextBase(editData.element);
+      if (editData.dropElement && editData.dropElement->isTextBase()) {
+            TextBase* text = toTextBase(editData.dropElement);
             switch (query) {
                   case Qt::ImCursorRectangle: {
                         QRectF r;
