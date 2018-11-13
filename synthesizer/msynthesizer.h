@@ -82,6 +82,7 @@ class MasterSynthesizer : public QObject {
       QString name(unsigned) const;
 
       QList<MidiPatch*> getPatchInfo() const;
+      MidiPatch* getPatchInfo(QString synti, int bank, int program);
 
       SynthesizerState state() const;
       bool setState(const SynthesizerState&);
