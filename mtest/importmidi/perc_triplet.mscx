@@ -27,7 +27,6 @@
         <StaffType group="percussion">
           <name>perc1Line</name>
           <lines>1</lines>
-          <stepOffset>-4</stepOffset>
           <keysig>0</keysig>
           </StaffType>
         <defaultClef>PERC</defaultClef>

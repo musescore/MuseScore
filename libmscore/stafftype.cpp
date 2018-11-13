@@ -278,6 +278,14 @@ void StaffType::read(XmlReader& e)
                   setLines(e.readInt());
             else if (tag == "lineDistance")
                   setLineDistance(Spatium(e.readDouble()));
+            else if (tag == "yoffset")
+                  _yoffset = Spatium(e.readDouble());
+            else if (tag == "mag")
+                  _userMag = e.readDouble();
+            else if (tag == "small")
+                  _small = e.readBool();
+            else if (tag == "stepOffset")
+                  _stepOffset = e.readInt();
             else if (tag == "clef")
                   setGenClef(e.readInt());
             else if (tag == "slashStyle") {
@@ -285,12 +293,6 @@ void StaffType::read(XmlReader& e)
                   setSlashStyle(val);
                   setShowBackTied(!val);  // for compatibility with 2.0.2 scores where this prop
                   }                       // was lacking and controlled by "slashStyle" instead
-            else if (tag == "yoffset")
-                  _yoffset = Spatium(e.readDouble());
-            else if (tag == "mag")
-                  _userMag = e.readDouble();
-            else if (tag == "small")
-                  _small = e.readBool();
             else if (tag == "barlines")
                   setShowBarlines(e.readInt());
             else if (tag == "timesig")
@@ -1387,7 +1389,8 @@ void StaffType::initStaffTypes()
       _presets = {
 //                       group,              xml-name,  human-readable-name,          lin stpOff  dist clef   bars stmless time  key    ledger
          StaffType(StaffGroup::STANDARD,   "stdNormal", QObject::tr("Standard"),        5, 0,     1,   true,  true, false, true, true,  true),
-         StaffType(StaffGroup::PERCUSSION, "perc1Line", QObject::tr("Perc. 1 line"),    1, -4,    1,   true,  true, false, true, false, true),
+//         StaffType(StaffGroup::PERCUSSION, "perc1Line", QObject::tr("Perc. 1 line"),    1, -4,    1,   true,  true, false, true, false, true),
+         StaffType(StaffGroup::PERCUSSION, "perc1Line", QObject::tr("Perc. 1 line"),    1, 0,     1,   true,  true, false, true, false, true),
          StaffType(StaffGroup::PERCUSSION, "perc3Line", QObject::tr("Perc. 3 lines"),   3, 0,     2,   true,  true, false, true, false, true),
          StaffType(StaffGroup::PERCUSSION, "perc5Line", QObject::tr("Perc. 5 lines"),   5, 0,     1,   true,  true, false, true, false, true),
 //                 group            xml-name,     human-readable-name                  lin stpOff dist clef   bars stemless time      duration font     size off genDur     fret font          size off  duration symbol repeat      thru       minim style              onLin  rests  stmDn  stmThr upsDn  sTFing nums  bkTied
