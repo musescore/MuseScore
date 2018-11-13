@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MixerTrackChannel</class>
+ <widget class="QWidget" name="MixerTrackChannel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>80</width>
+    <height>385</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>80</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>80</width>
+    <height>16777215</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MixerTrackChannel</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#controlWidget {
+    background: #444;
+    border-left: 2px solid #888;
+    border-top: 2px solid #888;
+    border-right: 2px solid #111;
+    border-bottom: 2px solid #111;
+}
+</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QWidget" name="controlWidget" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>2</number>
+      </property>
+      <property name="topMargin">
+       <number>2</number>
+      </property>
+      <property name="rightMargin">
+       <number>2</number>
+      </property>
+      <property name="bottomMargin">
+       <number>2</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="partLabel">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>28</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="2" column="0">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="soloBn">
+          <property name="toolTip">
+           <string>Solo</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">.QPushButton {
+    border: none;
+    background-color: none;
+}
+</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="musescore.qrc">
+            <normaloff>:/data/icons/mixer-solo-off.svg</normaloff>
+            <normalon>:/data/icons/mixer-solo-on.svg</normalon>:/data/icons/mixer-solo-off.svg</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="3" column="1">
+         <widget class="Awl::Knob" name="panSlider" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>40</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Pan</string>
+          </property>
+          <property name="maxValue" stdset="0">
+           <double>127.000000000000000</double>
+          </property>
+          <property name="scaleValueColor" stdset="0">
+           <color>
+            <red>51</red>
+            <green>170</green>
+            <blue>255</blue>
+           </color>
+          </property>
+          <property name="scaleColor" stdset="0">
+           <color>
+            <red>17</red>
+            <green>17</green>
+            <blue>17</blue>
+           </color>
+          </property>
+          <property name="knobIcon" stdset="0">
+           <iconset resource="musescore.qrc">
+            <normaloff>:/data/icons/mixer-dial.svg</normaloff>:/data/icons/mixer-dial.svg</iconset>
+          </property>
+          <property name="minValue" stdset="0">
+           <double>0.000000000000000</double>
+          </property>
+          <property name="value" stdset="0">
+           <double>63.500000000000000</double>
+          </property>
+          <property name="center" stdset="0">
+           <bool>true</bool>
+          </property>
+          <property name="lineStep" stdset="0">
+           <double>1.000000000000000</double>
+          </property>
+          <property name="pageStep" stdset="0">
+           <double>10.000000000000000</double>
+          </property>
+          <property name="enableMouseWheel" stdset="0">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="muteBn">
+          <property name="toolTip">
+           <string>Mute</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">.QPushButton {
+    border: none;
+    background-color: none;
+}
+</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="musescore.qrc">
+            <normaloff>:/data/icons/mixer-mute-off.svg</normaloff>
+            <normalon>:/data/icons/mixer-mute-on.svg</normalon>:/data/icons/mixer-mute-off.svg</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="Awl::StyledSlider" name="volumeSlider" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>200</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="trackLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>Channel Name</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">.QLabel {
+    border: 2px solid black;
+    background: red;
+	color: white;
+    padding: 6px 0px;
+    line-height:2px;
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Part Name</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Awl::StyledSlider</class>
+   <extends>QWidget</extends>
+   <header>awl/styledslider.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Awl::Knob</class>
+   <extends>QWidget</extends>
+   <header>awl/knob.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -64,7 +64,7 @@ class MeasureBase;
 class Dynamic;
 class Selection;
 class Text;
-struct Channel;
+class Channel;
 class Tuplet;
 class KeySig;
 class TimeSig;

@@ -29,7 +29,7 @@ namespace Awl {
 Knob::Knob(QWidget* parent)
    : AbstractSlider(parent)
       {
-      _scaleSize = 270;
+      _spanDegrees = 270;
       _markSize  = 6;
       _border    = 2;
       points     = 0;
@@ -65,10 +65,10 @@ void Knob::setText(const QString& s)
 //!   in degrees
 //---------------------------------------------------------
 
-void Knob::setScaleSize(int val)
+void Knob::setSpanDegrees(double val)
       {
-      if (val != _scaleSize) {
-            _scaleSize = val;
+      if (val != _spanDegrees) {
+            _spanDegrees = val;
             update();
             }
       }
@@ -97,6 +97,16 @@ void Knob::setBorder(int val)
             _border = val;
             update();
             }
+      }
+
+//---------------------------------------------------------
+//   setKnobIcon
+//---------------------------------------------------------
+
+void Knob::setKnobIcon(const QIcon& icon)
+      {
+      _knobIcon = icon;
+      update();
       }
 
 //---------------------------------------------------------
@@ -158,7 +168,7 @@ void Knob::paintEvent(QPaintEvent* /*ev*/)
       p.setRenderHint(QPainter::Antialiasing, true);
 
       int markSize2  = _markSize/2;
-      int restR      = 360      - _scaleSize;
+      int emptyDegrees      = 360      - _spanDegrees;
       int w          = width()  - _scaleWidth - 2 * _border;
       int h          = height() - _scaleWidth/2 - 2 * _border;
 
@@ -172,77 +182,57 @@ void Knob::paintEvent(QPaintEvent* /*ev*/)
             }
       else {
             xoffset = 0;
-            // yoffset = (h - w) / 2;     // center
             yoffset = h - w;              // top align
             h = w;
             }
 
       int x = xoffset + _scaleWidth / 2 + _border;
       int y = yoffset + _scaleWidth / 2 + _border + (_center ? _markSize+_scaleWidth/2 : 0);
-      QRectF ar(x, y, w, h);
+      QRectF dialArea(x, y, w, h);
 
-      QColor sc(isEnabled() ? _scaleColor : Qt::gray);
-      QColor svc(isEnabled() ? _scaleValueColor : Qt::gray);
+      QColor dialBgCol(isEnabled() ? _scaleColor : Qt::gray);
+      QColor dialCol(isEnabled() ? _scaleValueColor : Qt::lightGray);
 
       //-----------------------------------------
       // draw arc
       //-----------------------------------------
 
-      double dvalue = maxValue() - minValue();
-      if (_center) {
-            int size = _scaleSize * 8;
-            if (_value >= 0) {
-                  int offset = (restR-180) * 8;
-                  int r1 = int (size * _value / maxValue());
-                  int r2 = size - r1;
-                  p.setPen(QPen(sc, _scaleWidth));
-                  if (r2 > 1)
-                        p.drawArc(ar, offset, r2);
-                  if (size > 1)
-                        p.drawArc(ar, 90*16, size);
-                  if (r1 > 1) {
-                        p.setPen(QPen(svc, _scaleWidth));
-                        p.drawArc(ar, offset+r2, r1);
-                        }
-                  }
-            else {
-                  // int offset = (restR+180) * 8;
-                  int r1 = int(size * _value / minValue());
-                  int r2 = size - r1;
+      double maxVal = maxValue();
+      double minVal = minValue();
+      double val = value();
 
-                  p.setPen(QPen(sc, _scaleWidth));
-                  if (size > 1)
-                        p.drawArc(ar, (restR-180)*8, size);
-                  if (r2 > 1)
-                        p.drawArc(ar, 90 * 16 + r1, r2);
-                  if (r1 > 1) {
-                        p.setPen(QPen(svc, _scaleWidth));
-                        p.drawArc(ar, 90*16, r1);
-                        }
-                  }
+      double span = maxVal - minVal;
+
+      p.setPen(QPen(dialBgCol, _scaleWidth));
+      p.drawArc(dialArea, (90 + (_spanDegrees / 2)) * 16, -_spanDegrees * 16);
+
+      if (_center) {
+            double frac = (val - minVal) / span - 0.5;
+
+            p.setPen(QPen(dialCol, _scaleWidth));
+            p.drawArc(dialArea, 90 * 16, -frac * _spanDegrees * 16);
             }
       else {
-            int offset = (180-restR) * 8;
-            int size   = _scaleSize * 16;
-            int r1     = int(size * (_value - minValue()) / dvalue);
-            int r2     = size - r1;
-            if (r2 >= 1) {
-                  p.setPen(QPen(sc, _scaleWidth));
-                  p.drawArc(ar, -offset, r2);
-                  }
-            if (r1 >= 1) {
-                  p.setPen(QPen(svc, _scaleWidth));
-                  p.drawArc(ar, r2-offset, r1);
-                  }
+            double frac = (val - minVal) / span;
+
+            p.setPen(QPen(dialBgCol, _scaleWidth));
+            p.drawArc(dialArea, (90 + (_spanDegrees / 2)) * 16, frac * -_spanDegrees * 16);
             }
 
       //-----------------------------------------
       // draw pointer
       //-----------------------------------------
 
-      p.setPen(QPen(svc, _scaleWidth));
-      double r1 = double(_scaleSize) * (_value-minValue()) / dvalue + 90.0
-            + double(restR/2);
+      //knob image
+      if (!_knobIcon.isNull()) {
+            QRect r((int)dialArea.x(), (int)dialArea.y(), (int)dialArea.width(), (int)dialArea.height());
+            _knobIcon.paint(&p, r);
+            }
+
+      //indicator line
+      p.setPen(QPen(dialCol, _scaleWidth));
+      double r1 = double(_spanDegrees) * (_value - _minValue) / span + 90.0
+            + double(emptyDegrees / 2);
       r1     = r1 / 180.0 * M_PI;   // convert to radians
       int rd = w/2;
       int x1 = x + rd;
@@ -251,17 +241,18 @@ void Knob::paintEvent(QPaintEvent* /*ev*/)
       int y2 = y1 + lrint(sin(r1) * double(rd));
       p.drawLine(x1, y1, x2, y2);
 
+
       //-----------------------------------------
       // draw center mark
       //-----------------------------------------
 
-      p.setPen(QPen(svc, 0));
-      p.setBrush(svc);
+      p.setPen(QPen(dialCol, 0));
+      p.setBrush(dialCol);
       if (_center) {
             if (points)
                   delete points;
-            qreal x3 = ar.width() / 2 + ar.x();
-            qreal y3 = ar.y() - _markSize - _scaleWidth/2;
+            qreal x3 = dialArea.width() / 2 + dialArea.x();
+            qreal y3 = dialArea.y() - _markSize - _scaleWidth/2;
             points = new QPainterPath(QPointF(x3 - markSize2, y3));
             points->lineTo(x3 + markSize2, y3);
             points->lineTo(x3, _markSize + y3);
@@ -274,7 +265,7 @@ void Knob::paintEvent(QPaintEvent* /*ev*/)
       //-----------------------------------------
 
       if (!_text.isEmpty()) {
-            p.drawText(ar, Qt::AlignBottom | Qt::AlignHCenter, _text);
+            p.drawText(dialArea, Qt::AlignBottom | Qt::AlignHCenter, _text);
             }
       }
 }

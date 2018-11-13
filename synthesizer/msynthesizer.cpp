@@ -137,6 +137,21 @@ QList<MidiPatch*> MasterSynthesizer::getPatchInfo() const
       }
 
 //---------------------------------------------------------
+//   getPatchInfo
+//---------------------------------------------------------
+
+MidiPatch* MasterSynthesizer::getPatchInfo(QString synti, int bank, int program)
+      {
+      for (Synthesizer* s : _synthesizer) {
+            for (MidiPatch* p: s->getPatchInfo()) {
+                  if (p->synti == synti && p->bank == bank && p->prog == program)
+                        return p;
+                  }
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
 //   allSoundsOff
 //---------------------------------------------------------
 

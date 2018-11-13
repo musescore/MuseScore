@@ -3480,12 +3480,12 @@ void Score::appendPart(const QString& name)
 
       if (t->channel.empty()) {
             Channel a;
-            a.chorus = 0;
-            a.reverb = 0;
-            a.name   = "normal";
-            a.bank   = 0;
-            a.volume = 100;
-            a.pan    = 64; // actually 63.5 for center
+            a.setChorus(0);
+            a.setReverb(0);
+            a.setName(Channel::DEFAULT_NAME);
+            a.setBank(0);
+            a.setVolume(90);
+            a.setPan(0);
             t->channel.append(a);
             }
       Part* part = new Part(this);
@@ -3742,13 +3742,13 @@ void MasterScore::setSoloMute()
       {
       for (int i = 0; i < _midiMapping.size(); i++) {
             Channel* b = _midiMapping[i].articulation;
-            if (b->solo) {
-                  b->soloMute = false;
+            if (b->solo()) {
+                  b->setSoloMute(false);
                   for (int j = 0; j < _midiMapping.size(); j++) {
                         Channel* a = _midiMapping[j].articulation;
                         bool sameMidiMapping = _midiMapping[i].port == _midiMapping[j].port && _midiMapping[i].channel == _midiMapping[j].channel;
-                        a->soloMute = (i != j && !a->solo && !sameMidiMapping);
-                        a->solo     = (i == j || a->solo || sameMidiMapping);
+                        a->setSoloMute((i != j && !a->solo() && !sameMidiMapping));
+                        a->setSolo(i == j || a->solo() || sameMidiMapping);
                         }
                   }
             }
