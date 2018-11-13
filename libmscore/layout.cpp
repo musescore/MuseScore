@@ -3392,9 +3392,9 @@ System* Score::collectSystem(LayoutContext& lc)
             if (voltaSegments.size() > 1) {
                   qreal y = 0;
                   for (SpannerSegment* ss : voltaSegments)
-                        y = qMin(y, ss->offset().y());
+                        y = qMin(y, ss->rypos());
                   for (SpannerSegment* ss : voltaSegments)
-                        ss->ryoffset() = y;
+                        ss->rypos() = y;
                   }
             }
 
