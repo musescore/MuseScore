@@ -140,4 +140,4 @@ pip install awscli
 export AWS_ACCESS_KEY_ID=$UPDATE_S3_KEY
 export AWS_SECRET_ACCESS_KEY=$UPDATE_S3_SECRET
 aws configure set preview.cloudfront true
-aws cloudfront create-invalidation --distribution-id E15OTT2G07XS8C --paths "${ARTIFACTS_TARGET_PATHS}*"
+aws cloudfront create-invalidation --distribution-id E3VZY4YYZZG82P --paths "${ARTIFACTS_TARGET_PATHS}*"
