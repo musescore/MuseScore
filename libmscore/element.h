@@ -126,6 +126,7 @@ class EditData {
       // drop data:
       QPointF dragOffset;
       Element* element                 { 0     };
+      Element* dropElement             { 0     };
       Fraction duration                { Fraction(1,4) };
 
       EditData(MuseScoreView* v) : view(v) {}

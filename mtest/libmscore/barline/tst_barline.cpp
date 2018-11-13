@@ -363,7 +363,7 @@ void dropNormalBarline(Element* e)
       EditData dropData(0);
       BarLine* barLine = new BarLine(e->score());
       barLine->setBarLineType(BarLineType::NORMAL);
-      dropData.element = barLine;
+      dropData.dropElement = barLine;
 
       e->score()->startCmd();
       e->drop(dropData);

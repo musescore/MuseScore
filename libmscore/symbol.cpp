@@ -82,7 +82,7 @@ void Symbol::layout()
 
 void Symbol::draw(QPainter* p) const
       {
-      if (type() != ElementType::NOTEDOT || !staff()->isTabStaff(tick())) {
+      if (!isNoteDot() || !staff()->isTabStaff(tick())) {
             p->setPen(curColor());
             if (_scoreFont)
                   _scoreFont->draw(_sym, p, magS(), QPointF());

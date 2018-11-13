@@ -1226,8 +1226,7 @@ bool Measure::acceptDrop(EditData& data) const
       {
       MuseScoreView* viewer = data.view;
       QPointF pos           = data.pos;
-      Element* e            = data.element;
-
+      Element* e            = data.dropElement;
 
       int staffIdx;
       Segment* seg;
@@ -1295,7 +1294,7 @@ bool Measure::acceptDrop(EditData& data) const
 
 Element* Measure::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       int staffIdx = -1;
       Segment* seg;
       score()->pos2measure(data.pos, &staffIdx, 0, &seg, 0);
@@ -1321,7 +1320,6 @@ Element* Measure::drop(EditData& data)
             case ElementType::JUMP:
                   e->setParent(this);
                   e->setTrack(0);
-printf("drop marker %f %f\n", offset().x(), offset().y());
                   score()->undoAddElement(e);
                   return e;
 

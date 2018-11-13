@@ -2520,7 +2520,7 @@ Note* Chord::findNote(int pitch) const
 
 Element* Chord::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       switch (e->type()) {
             case ElementType::ARTICULATION:
                   {

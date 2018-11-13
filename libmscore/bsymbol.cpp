@@ -28,11 +28,13 @@ namespace Ms {
 BSymbol::BSymbol(Score* s, ElementFlags f)
    : Element(s, f)
       {
+      _align = Align::LEFT | Align::BASELINE;
       }
 
 BSymbol::BSymbol(const BSymbol& s)
    : Element(s)
       {
+      _align = s._align;
       for (Element* e : s._leafs) {
             Element* ee = e->clone();
             ee->setParent(this);
@@ -128,7 +130,7 @@ void BSymbol::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 bool BSymbol::acceptDrop(EditData& data) const
       {
-      return data.element->isSymbol() || data.element->isImage();
+      return data.dropElement->isSymbol() || data.dropElement->isImage();
       }
 
 //---------------------------------------------------------
@@ -137,7 +139,7 @@ bool BSymbol::acceptDrop(EditData& data) const
 
 Element* BSymbol::drop(EditData& data)
       {
-      Element* el = data.element;
+      Element* el = data.dropElement;
       if (el->isSymbol() || el->isImage()) {
             el->setParent(this);
             QPointF p = data.pos - pagePos() - data.dragOffset;

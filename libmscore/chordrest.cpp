@@ -393,7 +393,7 @@ void ChordRest::undoSetSmall(bool val)
 
 Element* ChordRest::drop(EditData& data)
       {
-      Element* e       = data.element;
+      Element* e       = data.dropElement;
       Measure* m       = measure();
       bool fromPalette = (e->track() == -1);
       switch (e->type()) {

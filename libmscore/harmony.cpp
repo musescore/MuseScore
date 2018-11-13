@@ -1571,7 +1571,7 @@ QString Harmony::screenReaderInfo() const
 
 bool Harmony::acceptDrop(EditData& data) const
       {
-      return data.element->isFretDiagram();
+      return data.dropElement->isFretDiagram();
       }
 
 //---------------------------------------------------------
@@ -1580,7 +1580,7 @@ bool Harmony::acceptDrop(EditData& data) const
 
 Element* Harmony::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       if (e->isFretDiagram()) {
             FretDiagram* fd = toFretDiagram(e);
             fd->setParent(parent());

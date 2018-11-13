@@ -236,8 +236,8 @@ void Clef::draw(QPainter* painter) const
 
 bool Clef::acceptDrop(EditData& data) const
       {
-      return (data.element->type() == ElementType::CLEF
-         || (/*!generated() &&*/ data.element->type() == ElementType::AMBITUS) );
+      return (data.dropElement->type() == ElementType::CLEF
+         || (/*!generated() &&*/ data.dropElement->type() == ElementType::AMBITUS) );
       }
 
 //---------------------------------------------------------
@@ -246,7 +246,7 @@ bool Clef::acceptDrop(EditData& data) const
 
 Element* Clef::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       Clef* c = 0;
       if (e->isClef()) {
             Clef* clef = toClef(e);

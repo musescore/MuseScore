@@ -384,7 +384,7 @@ void Arpeggio::spatiumChanged(qreal oldValue, qreal newValue)
 
 bool Arpeggio::acceptDrop(EditData& data) const
       {
-      return data.element->type() == ElementType::ARPEGGIO;
+      return data.dropElement->type() == ElementType::ARPEGGIO;
       }
 
 //---------------------------------------------------------
@@ -393,7 +393,7 @@ bool Arpeggio::acceptDrop(EditData& data) const
 
 Element* Arpeggio::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       switch(e->type()) {
             case ElementType::ARPEGGIO:
                   {

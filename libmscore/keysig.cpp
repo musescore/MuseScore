@@ -283,7 +283,7 @@ void KeySig::draw(QPainter* p) const
 
 bool KeySig::acceptDrop(EditData& data) const
       {
-      return data.element->type() == ElementType::KEYSIG;
+      return data.dropElement->type() == ElementType::KEYSIG;
       }
 
 //---------------------------------------------------------
@@ -292,7 +292,7 @@ bool KeySig::acceptDrop(EditData& data) const
 
 Element* KeySig::drop(EditData& data)
       {
-      KeySig* ks = toKeySig(data.element);
+      KeySig* ks = toKeySig(data.dropElement);
       if (ks->type() != ElementType::KEYSIG) {
             delete ks;
             return 0;

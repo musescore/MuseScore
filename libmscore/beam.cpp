@@ -2237,9 +2237,9 @@ void Beam::triggerLayout() const
 
 bool Beam::acceptDrop(EditData& data) const
       {
-      return (data.element->type() == ElementType::ICON)
-         && ((toIcon(data.element)->iconType() == IconType::FBEAM1)
-         || (toIcon(data.element)->iconType() == IconType::FBEAM2));
+      return (data.dropElement->type() == ElementType::ICON)
+         && ((toIcon(data.dropElement)->iconType() == IconType::FBEAM1)
+         || (toIcon(data.dropElement)->iconType() == IconType::FBEAM2));
       }
 
 //---------------------------------------------------------
@@ -2248,9 +2248,9 @@ bool Beam::acceptDrop(EditData& data) const
 
 Element* Beam::drop(EditData& data)
       {
-      if (!data.element->isIcon())
+      if (!data.dropElement->isIcon())
             return 0;
-      Icon* e = toIcon(data.element);
+      Icon* e = toIcon(data.dropElement);
       qreal g1;
       qreal g2;
 

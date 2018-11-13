@@ -155,12 +155,12 @@ bool ScoreView::dragTimeAnchorElement(const QPointF& pos)
             qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
             QPointF anchor(seg->canvasBoundingRect().x(), y);
             setDropAnchor(QLineF(pos, anchor));
-            editData.element->score()->addRefresh(editData.element->canvasBoundingRect());
-            editData.element->setTrack(track);
-            editData.element->score()->addRefresh(editData.element->canvasBoundingRect());
+            editData.dropElement->score()->addRefresh(editData.dropElement->canvasBoundingRect());
+            editData.dropElement->setTrack(track);
+            editData.dropElement->score()->addRefresh(editData.dropElement->canvasBoundingRect());
             return true;
             }
-      editData.element->score()->addRefresh(editData.element->canvasBoundingRect());
+      editData.dropElement->score()->addRefresh(editData.dropElement->canvasBoundingRect());
       setDropTarget(0);
       return false;
       }
@@ -183,7 +183,7 @@ bool ScoreView::dragMeasureAnchorElement(const QPointF& pos)
             setDropAnchor(QLineF(pos, anchor));
             return true;
             }
-      editData.element->score()->addRefresh(editData.element->canvasBoundingRect());
+      editData.dropElement->score()->addRefresh(editData.dropElement->canvasBoundingRect());
       setDropTarget(0);
       return false;
       }
@@ -195,7 +195,7 @@ bool ScoreView::dragMeasureAnchorElement(const QPointF& pos)
 void ScoreView::dragEnterEvent(QDragEnterEvent* event)
       {
       double _spatium = score()->spatium();
-      editData.element = 0;
+      editData.dropElement = 0;
 
       const QMimeData* dta = event->mimeData();
 
@@ -221,10 +221,10 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
             if (el) {
                   if (type == ElementType::BAR_LINE || type == ElementType::ARPEGGIO || type == ElementType::BRACKET)
                         el->setHeight(_spatium * 5);
-                  editData.element = el;
-                  editData.element->setParent(0);
-                  editData.element->read(e);
-                  editData.element->layout();
+                  editData.dropElement = el;
+                  editData.dropElement->setParent(0);
+                  editData.dropElement->read(e);
+                  editData.dropElement->layout();
                   }
             return;
             }
@@ -309,12 +309,10 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                               e = _score->pos2measure(pos, &staffIdx, 0, 0, 0);
                               }
                         if (e && (e->isNote() || e->isSymbol() || e->isImage() || e->isTextBase())) {
-                              EditData dropData(this);
-                              dropData.pos        = pos;
-                              dropData.element    = editData.element;
-                              dropData.modifiers  = 0;
+                              editData.pos         = pos;
+                              editData.modifiers  = 0;
 
-                              if (e->acceptDrop(dropData)) {
+                              if (e->acceptDrop(editData)) {
                                     setDropTarget(e);
                                     event->accept();
                                     }
@@ -381,12 +379,10 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case ElementType::LYRICS:
                   case ElementType::FRET_DIAGRAM:
                   case ElementType::STAFFTYPE_CHANGE: {
-                        EditData dropData(this);
-                        dropData.pos = pos;
-                        dropData.element = editData.element;
-                        dropData.modifiers = event->keyboardModifiers();
+                        editData.pos = pos;
+                        editData.modifiers = event->keyboardModifiers();
 
-                        if (getDropTarget(dropData))
+                        if (getDropTarget(editData))
                               event->accept();
                         else
                               event->ignore();
@@ -424,7 +420,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                         setDropTarget(0);
                   event->accept();
                   }
-//            _score->update();
             return;
             }
       QByteArray dta;
@@ -438,7 +433,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
             dta = md->data(mimeStaffListFormat);
             }
       else {
-//            _score->update();
             return;
             }
       Element* el = elementAt(pos);
@@ -461,34 +455,22 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 
 void ScoreView::dropEvent(QDropEvent* event)
       {
-      switch (state) {
-            case ViewState::PLAY:
-                  event->ignore();
-                  return;
-            case ViewState::EDIT:
-                  changeState(ViewState::NORMAL);
-                  break;
-
-            // TODO: check/handle more states
-
-            case ViewState::NORMAL:
-            default:
-                  break;
+      if (state == ViewState::PLAY) {
+            event->ignore();
+            return;
             }
       QPointF pos(imatrix.map(QPointF(event->pos())));
 
-      EditData dropData(this);
-      dropData.pos        = pos;
-      dropData.element    = editData.element;
-      dropData.modifiers  = event->keyboardModifiers();
+      editData.pos       = pos;
+      editData.modifiers = event->keyboardModifiers();
 
-      if (editData.element) {
+      if (editData.dropElement) {
             bool applyUserOffset = false;
-            editData.element->styleChanged();
+            editData.dropElement->styleChanged();
             _score->startCmd();
-            Q_ASSERT(editData.element->score() == score());
-            _score->addRefresh(editData.element->canvasBoundingRect());
-            switch (editData.element->type()) {
+            Q_ASSERT(editData.dropElement->score() == score());
+            _score->addRefresh(editData.dropElement->canvasBoundingRect());
+            switch (editData.dropElement->type()) {
                   case ElementType::VOLTA:
                   case ElementType::OTTAVA:
                   case ElementType::TRILL:
@@ -520,26 +502,26 @@ void ScoreView::dropEvent(QDropEvent* event)
                               QPointF offset;
                               el = _score->pos2measure(pos, &staffIdx, 0, &seg, &offset);
                               if (el && el->isMeasure()) {
-                                    editData.element->setTrack(staffIdx * VOICES);
-                                    editData.element->setParent(seg);
+                                    editData.dropElement->setTrack(staffIdx * VOICES);
+                                    editData.dropElement->setParent(seg);
                                     if (applyUserOffset)
-                                          editData.element->setOffset(offset);
-                                    score()->undoAddElement(editData.element);
+                                          editData.dropElement->setOffset(offset);
+                                    score()->undoAddElement(editData.dropElement);
                                     }
                               else {
                                     qDebug("cannot drop here");
-                                    delete editData.element;
+                                    delete editData.dropElement;
                                     }
                               }
                         else {
                               _score->addRefresh(el->canvasBoundingRect());
-                              _score->addRefresh(editData.element->canvasBoundingRect());
+                              _score->addRefresh(editData.dropElement->canvasBoundingRect());
 
-                              if (!el->acceptDrop(dropData)) {
-                                    qDebug("drop %s onto %s not accepted", editData.element->name(), el->name());
+                              if (!el->acceptDrop(editData)) {
+                                    qDebug("drop %s onto %s not accepted", editData.dropElement->name(), el->name());
                                     break;
                                     }
-                              Element* dropElement = el->drop(dropData);
+                              Element* dropElement = el->drop(editData);
                               _score->addRefresh(el->canvasBoundingRect());
                               if (dropElement) {
                                     _score->select(dropElement, SelectType::SINGLE, 0);
@@ -587,24 +569,24 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::FIGURED_BASS:
                   case ElementType::LYRICS:
                   case ElementType::STAFFTYPE_CHANGE: {
-                        Element* el = getDropTarget(dropData);
+                        Element* el = getDropTarget(editData);
                         if (!el) {
-                              if (!dropCanvas(editData.element)) {
-                                    qDebug("cannot drop %s(%p) to canvas", editData.element->name(), editData.element);
-                                    delete editData.element;
+                              if (!dropCanvas(editData.dropElement)) {
+                                    qDebug("cannot drop %s(%p) to canvas", editData.dropElement->name(), editData.element);
+                                    delete editData.dropElement;
                                     }
                               break;
                               }
                         _score->addRefresh(el->canvasBoundingRect());
 
                         // HACK ALERT!
-                        if (el->isMeasure() && editData.element->isLayoutBreak()) {
+                        if (el->isMeasure() && editData.dropElement->isLayoutBreak()) {
                               Measure* m = toMeasure(el);
                               if (m->isMMRest())
                                     el = m->mmRestLast();
                               }
 
-                        Element* dropElement = el->drop(dropData);
+                        Element* dropElement = el->drop(editData);
                         _score->addRefresh(el->canvasBoundingRect());
                         if (dropElement) {
                               if (!_score->noteEntryMode())
@@ -615,14 +597,10 @@ void ScoreView::dropEvent(QDropEvent* event)
                         }
                         break;
                   default:
-                        delete editData.element;
+                        delete editData.dropElement;
                         break;
                   }
-            // If the state was changed to ViewState::EDIT,
-            // (as a result of ScoreView::cmdAddSlur(), for example)
-            // then do not set editData.element to 0.
-            if (state != ViewState::EDIT)
-                  editData.element = 0;
+            editData.dropElement = 0;
             setDropTarget(0); // this also resets dropRectangle and dropAnchor
             score()->endCmd();
             // update input cursor position (must be done after layout)
@@ -644,10 +622,9 @@ void ScoreView::dropEvent(QDropEvent* event)
 
                   Element* el = elementAt(pos);
                   if (el) {
-                        dropData.element = s;
-                        if (el->acceptDrop(dropData)) {
-                              dropData.element = s;
-                              el->drop(dropData);
+                        editData.dropElement = s;
+                        if (el->acceptDrop(editData)) {
+                              el->drop(editData);
                               }
                         }
                   event->acceptProposedAction();
@@ -681,10 +658,9 @@ void ScoreView::dropEvent(QDropEvent* event)
 
                   Element* el = elementAt(pos);
                   if (el) {
-                        dropData.element = s;
-                        if (el->acceptDrop(dropData)) {
-                              dropData.element = s;
-                              el->drop(dropData);
+                        editData.dropElement = s;
+                        if (el->acceptDrop(editData)) {
+                              el->drop(editData);
                               }
                         }
                   event->acceptProposedAction();
@@ -695,7 +671,7 @@ void ScoreView::dropEvent(QDropEvent* event)
             return;
             }
 
-      editData.element = 0;
+      editData.dropElement = 0;
       const QMimeData* md = event->mimeData();
       QByteArray dta;
       ElementType etype;
@@ -710,13 +686,13 @@ void ScoreView::dropEvent(QDropEvent* event)
       else {
             qDebug("cannot drop this object: unknown mime type");
             QStringList sl = md->formats();
-            foreach(QString s, sl)
+            for (const QString& s : sl)
                   qDebug("  %s", qPrintable(s));
             _score->update();
             return;
             }
 
-// qDebug("drop <%s>", data.data());
+qDebug("drop <%s>", dta.data());
 
       Element* el = elementAt(pos);
       if (el == 0 || el->type() != ElementType::MEASURE) {
@@ -752,10 +728,10 @@ void ScoreView::dropEvent(QDropEvent* event)
 
 void ScoreView::dragLeaveEvent(QDragLeaveEvent*)
       {
-      if (editData.element) {
+      if (editData.dropElement) {
             _score->setUpdateAll();
-            delete editData.element;
-            editData.element = 0;
+            delete editData.dropElement;
+            editData.dropElement = 0;
             _score->update();
             }
       setDropTarget(0);

@@ -196,7 +196,7 @@ bool StaffState::acceptDrop(EditData&) const
 
 Element* StaffState::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       score()->undoChangeElement(this, e);
       return e;
       }

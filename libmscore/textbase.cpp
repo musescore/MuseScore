@@ -1846,7 +1846,7 @@ void TextBase::layoutEdit()
 
 bool TextBase::acceptDrop(EditData& data) const
       {
-      ElementType type = data.element->type();
+      ElementType type = data.dropElement->type();
       return type == ElementType::SYMBOL || type == ElementType::FSYMBOL;
       }
 
@@ -2507,6 +2507,7 @@ void TextBase::editCopy(EditData& ed)
 TextCursor* TextBase::cursor(const EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+      Q_ASSERT(ted);
       return &ted->cursor;
       }
 

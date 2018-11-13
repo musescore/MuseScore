@@ -877,11 +877,9 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
             MScore::setError(NO_MIME);
             return;
             }
-printf("cmd paste\n");
       if ((_selection.isSingle() || _selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
             QByteArray data(ms->data(mimeSymbolFormat));
 
-printf("paste <%s>\n", data.data());
             XmlReader e(data);
             QPointF dragOffset;
             Fraction duration(1, 4);
@@ -919,7 +917,6 @@ printf("paste <%s>\n", data.data());
                   qDebug("cannot read type");
             }
       else if ((_selection.isRange() || _selection.isList()) && ms->hasFormat(mimeStaffListFormat)) {
-printf("cmd paste 2\n");
             ChordRest* cr = 0;
             if (_selection.isRange())
                   cr = _selection.firstChordRest();
@@ -953,7 +950,6 @@ printf("cmd paste 2\n");
                   }
             }
       else if (ms->hasFormat(mimeSymbolListFormat)) {
-printf("cmd paste 3\n");
             ChordRest* cr = 0;
             if (_selection.isRange())
                   cr = _selection.firstChordRest();

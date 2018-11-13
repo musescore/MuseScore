@@ -301,7 +301,7 @@ void Stem::reset()
 
 bool Stem::acceptDrop(EditData& data) const
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       if ((e->type() == ElementType::TREMOLO) && (toTremolo(e)->tremoloType() <= TremoloType::R64)) {
             return true;
             }
@@ -314,7 +314,7 @@ bool Stem::acceptDrop(EditData& data) const
 
 Element* Stem::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       Chord* ch  = chord();
 
       switch(e->type()) {
