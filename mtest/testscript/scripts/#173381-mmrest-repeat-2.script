@@ -1,0 +1,15 @@
+init init/Treble.mscx
+cmd note-input
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd escape
+cmd toggle-mmrest
+cmd note-input
+cmd escape
+cmd select-next-chord
+cmd select-next-chord
+cmd repeat-sel
+cmd repeat-sel
+test score #173381-mmrest-repeat-2.mscx
