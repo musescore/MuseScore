@@ -1104,8 +1104,10 @@ qreal System::minDistance(System* s2) const
                               dist = qMax(dist, sp->gap());
                         }
                   }
-            dist = qMax(dist, staff(lastStaff)->skyline().minDistance(s2->staff(firstStaff)->skyline()));
-            dist = dist - staff(lastStaff)->bbox().height() + minVerticalDistance;
+            qreal sld = staff(lastStaff)->skyline().minDistance(s2->staff(firstStaff)->skyline());
+            sld -=  staff(lastStaff)->bbox().height() + minVerticalDistance;
+            dist = qMax(dist, sld);
+//            dist = dist - staff(lastStaff)->bbox().height() + minVerticalDistance;
             }
       return dist;
       }
