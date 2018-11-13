@@ -1597,17 +1597,17 @@ bool GuitarPro2::read(QFile* fp)
 
             Channel* ch = instr->channel(0);
             if (midiChannel == int(StaffTypes::PERC_DEFAULT)) {
-                  ch->program = 0;
-                  ch->bank    = 128;
+                  ch->setProgram(0);
+                  ch->setBank(128);
                   }
             else {
-                  ch->program = patch;
-                  ch->bank    = 0;
+                  ch->setProgram(patch);
+                  ch->setBank(0);
                   }
-            ch->volume  = channelDefaults[midiChannel].volume;
-            ch->pan     = channelDefaults[midiChannel].pan;
-            ch->chorus  = channelDefaults[midiChannel].chorus;
-            ch->reverb  = channelDefaults[midiChannel].reverb;
+            ch->setVolume(channelDefaults[midiChannel].volume);
+            ch->setPan(channelDefaults[midiChannel].pan);
+            ch->setChorus(channelDefaults[midiChannel].chorus);
+            ch->setReverb(channelDefaults[midiChannel].reverb);
             // missing: phase, tremolo
             ch->updateInitList();
             }
@@ -2287,17 +2287,17 @@ bool GuitarPro3::read(QFile* fp)
 
             Channel* ch = instr->channel(0);
             if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
-                  ch->program = 0;
-                  ch->bank    = 128;
+                  ch->setProgram(0);
+                  ch->setBank(128);
                   }
             else {
-                  ch->program = patch;
-                  ch->bank    = 0;
+                  ch->setProgram(patch);
+                  ch->setBank(0);
                   }
-            ch->volume  = channelDefaults[midiChannel].volume;
-            ch->pan     = channelDefaults[midiChannel].pan;
-            ch->chorus  = channelDefaults[midiChannel].chorus;
-            ch->reverb  = channelDefaults[midiChannel].reverb;
+            ch->setVolume(channelDefaults[midiChannel].volume);
+            ch->setPan(channelDefaults[midiChannel].pan);
+            ch->setChorus(channelDefaults[midiChannel].chorus);
+            ch->setReverb(channelDefaults[midiChannel].reverb);
             // missing: phase, tremolo
             ch->updateInitList();
             }

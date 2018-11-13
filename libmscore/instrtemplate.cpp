@@ -501,18 +501,18 @@ void InstrumentTemplate::read(XmlReader& e)
             }
       if (channel.empty()) {
             Channel a;
-            a.chorus       = 0;
-            a.reverb       = 0;
-            a.name         = "normal";
-            a.program      = 0;
-            a.bank         = 0;
-            a.volume       = 100;
-            a.pan          = 64; // actually 63.5 for center
+            a.setChorus(0);
+            a.setReverb(0);
+            a.setName("normal");
+            a.setProgram(0);
+            a.setBank(0);
+            a.setVolume(90);
+            a.setPan(0);
             channel.append(a);
             }
       if (useDrumset) {
-            if (channel[0].bank == 0 && channel[0].synti.toLower() != "zerberus")
-                  channel[0].bank = 128;
+            if (channel[0].bank() == 0 && channel[0].synti().toLower() != "zerberus")
+                  channel[0].setBank(128);
             channel[0].updateInitList();
             }
       if (trackName.isEmpty() && !longNames.isEmpty())
@@ -790,7 +790,7 @@ ClefType defaultClef(int program)
 
       for (InstrumentGroup* g : instrumentGroups) {
             for (InstrumentTemplate* it : g->instrumentTemplates) {
-                  if (it->channel[0].bank == 0 && it->channel[0].program == program){
+                  if (it->channel[0].bank() == 0 && it->channel[0].program() == program){
                         return (it->clefTypes[0]._concertClef);
                         }
                   }

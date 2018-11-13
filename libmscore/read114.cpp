@@ -2478,18 +2478,18 @@ static void readInstrument(Instrument *i, Part* p, XmlReader& e)
             }
       if (i->channel().empty()) {      // for backward compatibility
             Channel* a = new Channel;
-            a->chorus  = chorus;
-            a->reverb  = reverb;
-            a->name    = "normal";
-            a->program = program;
-            a->bank    = bank;
-            a->volume  = volume;
-            a->pan     = pan;
+            a->setName(Channel::DEFAULT_NAME);
+            a->setProgram(program);
+            a->setBank(bank);
+            a->setVolume(volume);
+            a->setPan(pan);
+            a->setReverb(reverb);
+            a->setChorus(chorus);
             i->appendChannel(a);
             }
       if (i->useDrumset()) {
-            if (i->channel()[0]->bank == 0)
-                  i->channel()[0]->bank = 128;
+            if (i->channel()[0]->bank() == 0)
+                  i->channel()[0]->setBank(128);
             i->channel()[0]->updateInitList();
             }
       }
@@ -2517,7 +2517,7 @@ static void readPart(Part* part, XmlReader& e)
                   if (i->stringData()->strings() == 0
                      && i->channel().count() > 0
                      && i->drumset() == nullptr) {
-                        int program = i->channel(0)->program;
+                        int program = i->channel(0)->program();
                         if (program >= 24 && program <= 30)       // guitars
                               i->setStringData(StringData(19, 6, g_guitarStrings));
                         else if ( (program >= 32 && program <= 39) || program == 43)      // bass / double-bass
