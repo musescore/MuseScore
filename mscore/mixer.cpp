@@ -429,9 +429,6 @@ void MuseScore::showMixer(bool val)
       if (mixer == 0) {
             mixer = new Mixer(this);
             mscore->stackUnder(mixer);
-            if (synthControl)
-                  connect(synthControl, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
-            connect(synti, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
             connect(mixer, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             }
       mixer->setScore(cs->masterScore());
