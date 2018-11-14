@@ -2,7 +2,7 @@
 ccache.exe -s
 
 :: Test MuseScore stability
-IF "%UNSTABLE%" == "" (
+IF "%NIGHTLY_BUILD%" == "" (
   goto :STABLE_LABEL
 ) ELSE (
   goto :UNSTABLE_LABEL
@@ -80,6 +80,13 @@ echo ^</update^>
 
 @echo on
 type C:\MuseScore\update_win_nightly.xml
+
+@echo off
+
+REM WinSparkle staff
+REM ------------------------------------------
+"C:\cygwin64\bin\bash.exe" C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh "C:\MuseScore\%ARTIFACT_NAME%" "%BUILD_DATE%" "https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%" "%MUSESCORE_VERSION%" "%%APPVEYOR_BUILD_NUMBER%%"
+REM ------------------------------------------
 
 :UPLOAD
 SET SSH_IDENTITY=C:\MuseScore\build\appveyor\resources\osuosl_nighlies_rsa_nopp

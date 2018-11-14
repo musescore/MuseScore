@@ -1,3 +1,6 @@
+REM Test run. Check availability of cygwin.bash
+"C:\cygwin64\bin\bash.exe" C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh 1 2 3 4 5
+
 :: keep full PATH for later
 SET OLD_PATH=%PATH%
 mkdir archive
@@ -19,10 +22,10 @@ CD include
 CD C:\MuseScore
 
 :: is MuseScore stable? Check here, no grep in PATH later on
-for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:\MuseScore\CMakeLists.txt') do set UNSTABLE=%%i
+for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:\MuseScore\CMakeLists.txt') do set NIGHTLY_BUILD=%%i
 
 :: add stable keys for musescore.com
-IF "%UNSTABLE%" == "" (
+IF "%NIGHTLY_BUILD%" == "" (
 python build/add-mc-keys.py %MC_CONSUMER_KEY% %MC_CONSUMER_SECRET%
 )
 
