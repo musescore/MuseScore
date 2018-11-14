@@ -425,7 +425,7 @@ Channel::Channel()
       _solo     = false;
       _soloMute = false;
 
-      qDebug("construct Channel ");
+//      qDebug("construct Channel ");
       }
 
 Channel::~Channel()

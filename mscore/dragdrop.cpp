@@ -296,8 +296,8 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
       // convert window to canvas position
       QPointF pos(imatrix.map(QPointF(event->pos())));
 
-      if (editData.element) {
-            switch (editData.element->type()) {
+      if (editData.dropElement) {
+            switch (editData.dropElement->type()) {
                   case ElementType::IMAGE:
                   case ElementType::SYMBOL:
                         {
@@ -481,7 +481,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::HAIRPIN:
                   case ElementType::TEXTLINE:
                         {
-                        Spanner* spanner = static_cast<Spanner*>(editData.element);
+                        Spanner* spanner = static_cast<Spanner*>(editData.dropElement);
                         score()->cmdAddSpanner(spanner, pos);
                         score()->setUpdateAll();
                         event->acceptProposedAction();
@@ -572,7 +572,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                         Element* el = getDropTarget(editData);
                         if (!el) {
                               if (!dropCanvas(editData.dropElement)) {
-                                    qDebug("cannot drop %s(%p) to canvas", editData.dropElement->name(), editData.element);
+                                    qDebug("cannot drop %s(%p) to canvas", editData.dropElement->name(), editData.dropElement);
                                     delete editData.dropElement;
                                     }
                               break;

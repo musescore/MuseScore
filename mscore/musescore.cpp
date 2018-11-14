@@ -2573,7 +2573,7 @@ void MuseScore::dragEnterEvent(QDragEnterEvent* event)
       const QMimeData* dta = event->mimeData();
       if (dta->hasUrls()) {
             QList<QUrl>ul = event->mimeData()->urls();
-            foreach(const QUrl& u, ul) {
+            for (const QUrl& u : ul) {
                   if (MScore::debugMode)
                         qDebug("drag Url: %s scheme <%s>", qPrintable(u.toString()), qPrintable(u.scheme()));
                   if (u.scheme() == "file") {
