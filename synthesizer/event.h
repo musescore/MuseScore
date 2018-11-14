@@ -235,6 +235,8 @@ class PlayEvent : public MidiCoreEvent {
 
 class NPlayEvent : public PlayEvent {
       const Note* _note = 0;
+      int _origin = -1;
+      int _discard = 0;
 
    public:
       NPlayEvent() : PlayEvent() {}
@@ -242,8 +244,14 @@ class NPlayEvent : public PlayEvent {
          : PlayEvent(t, c, a, b) {}
       NPlayEvent(const MidiCoreEvent& e) : PlayEvent(e) {}
       NPlayEvent(BeatType beatType);
+
       const Note* note() const       { return _note; }
       void setNote(const Note* v)    { _note = v; }
+
+      int getOriginatingStaff() const { return _origin; }
+      void setOriginatingStaff(int i) { _origin = i; }
+      void setDiscard(int d) { _discard = d; }
+      int discard() const { return _discard; }
       };
 
 //---------------------------------------------------------
@@ -311,7 +319,12 @@ class EventList : public QList<Event> {
       void insertNote(int channel, Note*);
       };
 
-class EventMap : public std::multimap<int, NPlayEvent> {};
+class EventMap : public std::multimap<int, NPlayEvent> {
+      int _highestChannel = 15;
+   public:
+      void fixupMIDI();
+      void registerChannel(int c) { if (c > _highestChannel) _highestChannel = c; }
+      };
 
 typedef EventList::iterator iEvent;
 typedef EventList::const_iterator ciEvent;
