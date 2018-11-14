@@ -225,6 +225,7 @@ class TextBase : public Element {
       QString _text;
       QList<TextBlock> _layout;
       bool textInvalid              { true  };
+      bool layoutInvalid            { true  };
       Tid _tid;         // text style id
 
       QString preEdit;              // move to EditData?
@@ -238,8 +239,6 @@ class TextBase : public Element {
       virtual int getPropertyFlagsIdx(Pid id) const override;
 
    protected:
-      bool layoutInvalid            { true  };
-
       QColor textColor() const;
       QRectF frame;           // calculated in layout()
       void layoutFrame();
