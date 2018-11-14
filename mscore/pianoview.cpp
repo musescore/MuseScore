@@ -1104,7 +1104,9 @@ void PianoView::updateNotes()
       scene()->clear();
       clearNoteData();
 
-      int staffIdx   = _staff->idx();
+      int staffIdx = _staff->idx();
+      if (staffIdx == -1)
+            return;
 
       SegmentType st = SegmentType::ChordRest;
       for (Segment* s = _staff->score()->firstSegment(st); s; s = s->next1(st)) {
