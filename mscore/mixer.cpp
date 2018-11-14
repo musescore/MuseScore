@@ -325,24 +325,24 @@ void Mixer::updateTracks()
 
             if (expanded) {
                   //Add per channel tracks
-                  const InstrumentList* il = part->instruments();
-                  for (auto it = il->begin(); it != il->end(); ++it) {
+                  const InstrumentList* il1 = part->instruments();
+                  for (auto it = il1->begin(); it != il1->end(); ++it) {
                         Instrument* instr = it->second;
                         for (int i = 0; i < instr->channel().size(); ++i) {
                               Channel *chan = instr->channel()[i];
-                              MixerTrackItemPtr mti = std::make_shared<MixerTrackItem>(
+                              MixerTrackItemPtr mti1 = std::make_shared<MixerTrackItem>(
                                                 MixerTrackItem::TrackType::CHANNEL, part, instr, chan);
 //                              MixerTrackItemPtr mti = new MixerTrackItem(
 //                                                MixerTrackItem::TrackType::CHANNEL, part, instr, chan);
-                              MixerTrackChannel* track = new MixerTrackChannel(this, mti);
-                              track->setGroup(this);
-                              trackList.append(track);
-                              holderLayout->addWidget(track);
+                              MixerTrackChannel* track1 = new MixerTrackChannel(this, mti1);
+                              track1->setGroup(this);
+                              trackList.append(track1);
+                              holderLayout->addWidget(track1);
 
                               if (selPart == part &&
                                   selChan == chan) {
-                                    track->setSelected(true);
-                                    mixerDetails->setTrack(mti);
+                                    track1->setSelected(true);
+                                    mixerDetails->setTrack(mti1);
                                     }
                               }
                         }
