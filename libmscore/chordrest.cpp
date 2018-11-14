@@ -471,12 +471,28 @@ Element* ChordRest::drop(EditData& data)
                         return 0;
                         }
 
+            case ElementType::FERMATA:
+                  for (Element* el: segment()->annotations())
+                        if (el->isFermata() && (el->track() == track())) {
+                              if (el->subtype() == e->subtype()) {
+                                    delete e;
+                                    return el;
+                                    }
+                              else {
+                                    if (el->placeBelow())
+                                          e->setPlacement(Placement::BELOW);
+                                    e->setTrack(track());
+                                    e->setParent(segment());
+                                    score()->undoChangeElement(el, e);
+                                    return e;
+                                    }
+                              }
+                  // fall through
             case ElementType::TEMPO_TEXT:
             case ElementType::DYNAMIC:
             case ElementType::FRET_DIAGRAM:
             case ElementType::TREMOLOBAR:
             case ElementType::SYMBOL:
-            case ElementType::FERMATA:
                   e->setTrack(track());
                   e->setParent(segment());
                   score()->undoAddElement(e);

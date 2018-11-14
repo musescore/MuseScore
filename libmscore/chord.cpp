@@ -2667,7 +2667,7 @@ bool Chord::setProperty(Pid propertyId, const QVariant& v)
 Articulation* Chord::hasArticulation(const Articulation* aa)
       {
       for (Articulation* a : _articulations) {
-            if (a->articulationName() == aa->articulationName())
+            if (a->subtype() == aa->subtype())
                   return a;
             }
       return 0;
