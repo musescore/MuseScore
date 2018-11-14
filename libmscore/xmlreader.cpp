@@ -361,6 +361,9 @@ void XmlReader::checkTuplets()
                   tuplet->sanitizeTuplet();
                   }
             }
+      // This requires a separate pass in case of nested tuplets that required sanitizing
+      for (Tuplet* tuplet : tuplets())
+            tuplet->addMissingElements();
       }
 
 //---------------------------------------------------------

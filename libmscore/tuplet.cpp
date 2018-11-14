@@ -1167,5 +1167,92 @@ void Tuplet::sanitizeTuplet()
                   }
             }
       }
+
+//---------------------------------------------------------
+//   addMissingElement
+//     Add a rest with the given start and end ticks.
+//     Should only be called from Tuplet::addMissingElements().
+//     Needed for importing files that saved incomplete tuplets.
+//---------------------------------------------------------
+
+Fraction Tuplet::addMissingElement(int startTick, int endTick)
+      {
+      Fraction f = Fraction::fromTicks(endTick - startTick) * ratio();
+      TDuration d = TDuration(f, true);
+      if (!d.isValid()) {
+            qDebug("Tuplet::addMissingElement(): invalid duration: %d/%d", f.numerator(), f.denominator());
+            return Fraction::fromTicks(0);
+            }
+      f = d.fraction();
+      Rest* rest = new Rest(score());
+      rest->setDurationType(d);
+      rest->setDuration(f);
+      rest->setTrack(track());
+      rest->setVisible(false);
+      Segment* segment = measure()->getSegment(SegmentType::ChordRest, startTick);
+      segment->add(rest);
+      add(rest);
+      return f;
+      }
+
+//---------------------------------------------------------
+//   addMissingElements
+//     Make this tuplet complete by filling in holes where
+//     there ought to be rests. Needed for importing files
+//     that saved incomplete tuplets.
+//---------------------------------------------------------
+
+void Tuplet::addMissingElements()
+      {
+      if (tuplet())
+            return;     // do not correct nested tuplets
+      if (voice() == 0)
+            return;     // nothing to do for tuplets in voice 1
+      Fraction missingElementsDuration = duration() * ratio() - elementsDuration();
+      if (missingElementsDuration.isZero())
+            return;
+      // first, fill in any holes in the middle of the tuplet
+      int expectedTick = elements().front()->tick();
+      for (DurationElement* de : elements()) {
+            if (de->tick() != expectedTick) {
+                  missingElementsDuration -= addMissingElement(expectedTick, de->tick());
+                  if (missingElementsDuration.isZero())
+                        return;
+                  }
+            expectedTick += de->actualTicks();
+            }
+      // calculate the tick where we would expect a tuplet of this duration to start
+      expectedTick = elements().front()->tick() - elements().front()->tick() % duration().ticks();
+      if (expectedTick != elements().front()->tick()) {
+            // try to fill a hole at the beginning of the tuplet
+            int firstAvailableTick = measure()->tick();
+            Segment* segment = measure()->findSegment(SegmentType::ChordRest, elements().front()->tick());
+            ChordRest* prevChordRest = segment && segment->prev() ? segment->prev()->nextChordRest(track(), true) : nullptr;
+            if (prevChordRest && prevChordRest->measure() == measure())
+                  firstAvailableTick = prevChordRest->tick() + prevChordRest->actualTicks();
+            if (firstAvailableTick != elements().front()->tick()) {
+                  Fraction f = missingElementsDuration / ratio();
+                  int ticksRequired = f.ticks();
+                  int endTick = elements().front()->tick();
+                  int startTick = max(firstAvailableTick, endTick - ticksRequired);
+                  if (expectedTick > startTick)
+                        startTick = expectedTick;
+                  missingElementsDuration -= addMissingElement(startTick, endTick);
+                  if (missingElementsDuration.isZero())
+                        return;
+                  }
+            }
+      // now fill a hole at the end of the tuplet
+      int startTick = elements().back()->tick() + elements().back()->actualTicks();
+      int endTick = elements().front()->tick() + duration().ticks();
+      // just to be safe, find the next ChordRest in the track, and adjust endTick if necessary
+      Segment* segment = measure()->findSegment(SegmentType::ChordRest, elements().back()->tick());
+      ChordRest* nextChordRest = segment && segment->next() ? segment->next()->nextChordRest(track(), false) : nullptr;
+      if (nextChordRest && nextChordRest->tick() < endTick)
+            endTick = nextChordRest->tick();
+      missingElementsDuration -= addMissingElement(startTick, endTick);
+      if (!missingElementsDuration.isZero())
+            qDebug("Tuplet::addMissingElements(): still missing duration of %d/%d", missingElementsDuration.numerator(), missingElementsDuration.denominator());
+      }
 }  // namespace Ms
 

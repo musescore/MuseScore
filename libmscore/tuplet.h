@@ -134,6 +134,10 @@ class Tuplet final : public DurationElement {
       virtual Shape shape() const override;
 
       void sanitizeTuplet();
+      void addMissingElements();
+
+   private:
+      Fraction addMissingElement(int startTick, int endTick);
       };
 
 
