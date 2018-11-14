@@ -85,7 +85,7 @@ type C:\MuseScore\update_win_nightly.xml
 
 REM WinSparkle staff
 REM ------------------------------------------
-"C:\cygwin64\bin\bash.exe" C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh "C:\MuseScore\%ARTIFACT_NAME%" "%BUILD_DATE%" "https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%" "%MUSESCORE_VERSION%" "%%APPVEYOR_BUILD_NUMBER%%"
+bash C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh "C:\MuseScore\%ARTIFACT_NAME%" "%BUILD_DATE%" "https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%" "%MUSESCORE_VERSION%" "%%APPVEYOR_BUILD_NUMBER%%"
 REM ------------------------------------------
 
 :UPLOAD

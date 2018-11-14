@@ -1,6 +1,3 @@
-REM Test run. Check availability of cygwin.bash
-bash C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh 1 2 3 4 5
-
 :: keep full PATH for later
 SET OLD_PATH=%PATH%
 mkdir archive
