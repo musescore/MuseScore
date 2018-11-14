@@ -79,9 +79,9 @@ class Mixer : public QWidget, public Ui::Mixer, public MixerTrackGroup
       virtual bool eventFilter(QObject*, QEvent*) override;
       virtual void keyPressEvent(QKeyEvent*) override;
       void readSettings();
-      void updateTracks();
 
    public slots:
+      void updateTracks();
       void midiPrefsChanged(bool showMidiControls);
       void masterVolumeChanged(double val);
       void synthGainChanged(float val);
