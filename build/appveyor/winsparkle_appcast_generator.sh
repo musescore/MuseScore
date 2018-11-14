@@ -5,7 +5,7 @@
 # $5 - Build number
 export MSCORE_RELEASE_CHANNEL=$(grep '^[[:blank:]]*set *( *MSCORE_RELEASE_CHANNEL' CMakeLists.txt | awk -F \" '{print $2}')
 RSS_DATE="$2"
-FILESIZE="$(stat -f%z $1)"
+FILESIZE="$(wc -c $1 | awk '{print $1}')"
 APPCAST_URL="https://sparkle.musescore.org/$MSCORE_RELEASE_CHANNEL/3/macos/appcast.xml"
 GIT_LOG=$(C:/MuseScore/build/travis/job_macos/generateGitLog.sh)
 
