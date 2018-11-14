@@ -707,9 +707,7 @@ void Harmony::startEdit(EditData& ed)
       if (!textList.empty())
             setXmlText(harmonyName());
 
-      _needAutoplace = false;
       TextBase::startEdit(ed);
-      _needAutoplace = true;
       }
 
 //---------------------------------------------------------
@@ -739,9 +737,7 @@ bool Harmony::edit(EditData& ed)
 void Harmony::endEdit(EditData& ed)
       {
       TextBase::endEdit(ed);
-      _needAutoplace = false;
       layout();
-      _needAutoplace = true;
 
       if (links()) {
             for (ScoreElement* e : *links()) {
@@ -1059,8 +1055,7 @@ void Harmony::layout()
       if (hasFrame())
             layoutFrame();
 
-//      if (_needAutoplace)
-//          autoplaceSegmentElement(styleP(Sid::minHarmonyDistance));
+//    autoplaceSegmentElement(styleP(Sid::minHarmonyDistance));
       }
 
 //---------------------------------------------------------
