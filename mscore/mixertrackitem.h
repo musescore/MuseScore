@@ -29,7 +29,7 @@ namespace Ms {
 class Part;
 class Instrument;
 class Channel;
-class MidiMapping;
+struct MidiMapping;
 class MixerTrackItem;
 
 typedef std::shared_ptr<MixerTrackItem> MixerTrackItemPtr;
