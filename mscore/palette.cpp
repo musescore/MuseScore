@@ -259,9 +259,18 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
       if (action == clearAction) {
             PaletteCell* cell = cellAt(i);
             if (cell) {
-                  if(cell->tag == "ShowMore")
-                        _moreElements = false;
-                  delete cell;
+                  int ret = QMessageBox::warning(this, QWidget::tr("Delete palette cell"),
+                                                 QWidget::tr("Are you sure you want to delete palette cell %1 ?")
+                                                 .arg(cell->name), QMessageBox::Yes | QMessageBox::No,
+                                                 QMessageBox::Yes);
+                  if (ret == QMessageBox::Yes) {
+                        if(cell->tag == "ShowMore")
+                            _moreElements = false;
+                        delete cell;
+                        }
+                  else {
+                        return;
+                        }
             }
             cells[i] = 0;
             emit changed();
