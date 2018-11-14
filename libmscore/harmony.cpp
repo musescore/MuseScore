@@ -707,8 +707,9 @@ void Harmony::startEdit(EditData& ed)
       if (!textList.empty())
             setXmlText(harmonyName());
 
-      layoutInvalid = false;
+      _needAutoplace = false;
       TextBase::startEdit(ed);
+      _needAutoplace = true;
       }
 
 //---------------------------------------------------------
@@ -738,8 +739,10 @@ bool Harmony::edit(EditData& ed)
 void Harmony::endEdit(EditData& ed)
       {
       TextBase::endEdit(ed);
-      if (isLayoutInvalid())
-            layout();
+      _needAutoplace = false;
+      layout();
+      _needAutoplace = true;
+
       if (links()) {
             for (ScoreElement* e : *links()) {
                   if (e == this)
@@ -1056,7 +1059,8 @@ void Harmony::layout()
       if (hasFrame())
             layoutFrame();
 
-//      autoplaceSegmentElement(styleP(Sid::minHarmonyDistance));
+//      if (_needAutoplace)
+//          autoplaceSegmentElement(styleP(Sid::minHarmonyDistance));
       }
 
 //---------------------------------------------------------
@@ -1072,6 +1076,17 @@ void Harmony::calculateBoundingRect()
             for (const TextSegment* ts : textList)
                   bb |= ts->tightBoundingRect().translated(ts->x, ts->y);
             setbbox(bb);
+            for (int i = 0; i < rows(); ++i) {
+                  TextBlock& t = textBlockList()[i];
+
+                  // when MS switch to editing Harmony MS draws text defined by textBlockList(). 
+                  // When MS switches back to normal state it draws text from textList
+                  // To correct placement of text in editing we need to layout textBlockList() elements
+                  t.layout(this);
+                  for (auto& s : t.fragments()) {
+                        s.pos = { 0, 0 };
+                        }
+                  }
             }
       }
 
