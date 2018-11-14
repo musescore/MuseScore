@@ -65,86 +65,12 @@ HairpinSegment::HairpinSegment(Score* s)
       }
 
 //---------------------------------------------------------
-//   lookupDynamic
-//    return autoplace Dynamic at chord e position
-//---------------------------------------------------------
-
-Dynamic* lookupDynamic(Element* e)
-      {
-      Dynamic* d = 0;
-      Segment* s = 0;
-      if (e && e->isChord())
-            s = toChord(e)->segment();
-      if (s) {
-            for (Element* ee : s->annotations()) {
-                  if (ee->isDynamic() && ee->track() == e->track() && ee->placeBelow()) {
-                        d = toDynamic(ee);
-                        break;
-                        }
-                  }
-            }
-      if (d) {
-            if (!d->autoplace())
-                  d = 0;
-            }
-      return d;
-      }
-
-//---------------------------------------------------------
-//   moveDynamic
-//---------------------------------------------------------
-
-static void moveDynamic(Dynamic* d, qreal y)
-      {
-      if (d && d->autoplace()) {
-            d->ryoffset() = y;
-            Skyline& sk = d->measure()->system()->staff(d->staffIdx())->skyline();
-            Segment* s = d->segment();
-            sk.add(d->shape().translated(s->pos() + s->measure()->pos()));
-            }
-      }
-
-//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void HairpinSegment::layout()
       {
-      Dynamic* sd = 0;
-      Dynamic* ed = 0;
-      qreal _spatium = spatium();
-
-      if (isSingleType() || isBeginType()) {
-            sd = lookupDynamic(hairpin()->startElement());
-            if (sd) {
-                  if (autoplace()) {
-                        qreal dx        = sd->bbox().right() + sd->pos().x()
-                                             + sd->segment()->pos().x() + sd->measure()->pos().x();
-                        qreal dist      = dx - pos().x() + score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
-                        rxpos()  = dist;
-                        rxpos2() = -dist;
-                        }
-                  else
-                        sd->doAutoplace();
-                  }
-            }
-      if (isSingleType() || isEndType()) {
-            ed = lookupDynamic(hairpin()->endElement());
-            if (ed) {
-                  if (autoplace()) {
-                        rxpos2() -= ed->bbox().width();
-                        qreal dx = ed->bbox().left() + ed->pos().x()
-                                    + ed->segment()->pos().x() + ed->measure()->pos().x();
-                        ed->rxpos() = pos2().x() + pos().x() - dx + score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
-                        }
-                  else
-                        ed->doAutoplace();
-                  int si = ed->staffIdx();
-                  Segment* s = ed->segment();
-                  s->staffShape(si).add(ed->shape().translated(ed->pos()));
-                  }
-            }
-
+      qreal _spatium   = spatium();
       HairpinType type = hairpin()->hairpinType();
       if (type == HairpinType::DECRESC_LINE || type == HairpinType::CRESC_LINE) {
             twoLines = false;
@@ -260,25 +186,6 @@ void HairpinSegment::layout()
                   qreal d  = system()->bottomDistance(staffIdx(), sl);
                   if (d > -minDistance)
                         ymax += d + minDistance;
-
-                  qreal sdy = 0.0;
-                  if (sd) {
-                        sdy = -sd->bbox().top() * .4;
-                        sd->doAutoplace();
-                        if (sd->pos().y() - sdy > ymax)
-                              ymax = sd->pos().y() - sdy;
-                        }
-                  qreal edy = 0.0;
-                  if (ed) {
-                        edy = -ed->bbox().top() * .4;
-                        ed->doAutoplace();
-                        if (ed->pos().y() - edy > ymax)
-                              ymax = ed->pos().y() - edy;
-                        }
-                  if (sd)
-                        moveDynamic(sd, ymax - sd->ipos().y() + sdy);
-                  if (ed)
-                        moveDynamic(ed, ymax - ed->ipos().y() + edy);
                   }
             rypos() += ymax - pos().y();
             }

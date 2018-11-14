@@ -3294,6 +3294,8 @@ System* Score::collectSystem(LayoutContext& lc)
       std::vector<Spanner*> spanner;
       for (auto interval : spanners) {
             Spanner* sp = interval.value;
+            sp->computeStartElement();
+            sp->computeEndElement();
             if (sp->tick() < etick && sp->tick2() >= stick) {
                   if (sp->isSlur())
                         spanner.push_back(sp);
@@ -3320,27 +3322,8 @@ System* Score::collectSystem(LayoutContext& lc)
                         d->layout();
 
                         if (e->visible() && d->autoplace()) {
-                              // If dynamic is at start or end of a hairpin
-                              // don't autoplace. This is done later on layout of hairpin
-                              // and allows horizontal alignment of dynamic and hairpin.
-
-                              int tick = d->tick();
-                              auto si = score()->spannerMap().findOverlapping(tick, tick);
-                              bool doAutoplace = true;
-                              for (auto is : si) {
-                                    Spanner* sp = is.value;
-                                    sp->computeStartElement();
-                                    sp->computeEndElement();
-
-                                    if (sp->isHairpin()
-                                       && (lookupDynamic(sp->startElement()) == d
-                                       || lookupDynamic(sp->endElement()) == d))
-                                          doAutoplace = false;
-                                    }
-                              if (doAutoplace) {
-                                    d->doAutoplace();
-                                    dynamics.push_back(d);
-                                    }
+                              d->doAutoplace();
+                              dynamics.push_back(d);
                               }
                         }
                   else if (e->isFiguredBass())
