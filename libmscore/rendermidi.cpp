@@ -214,14 +214,17 @@ void MasterScore::updateChannel()
 //---------------------------------------------------------
 
 static void playNote(EventMap* events, const Note* note, int channel, int pitch,
-   int velo, int onTime, int offTime)
+   int velo, int onTime, int offTime, int staffIdx)
       {
       if (!note->play())
             return;
       velo = note->customizeVelocity(velo);
       NPlayEvent ev(ME_NOTEON, channel, pitch, velo);
+      ev.setOriginatingStaff(staffIdx);
       ev.setTuning(note->tuning());
       ev.setNote(note);
+      if (offTime < onTime)
+            offTime = onTime;
       events->insert(std::pair<int, NPlayEvent>(onTime, ev));
       ev.setVelo(0);
       events->insert(std::pair<int, NPlayEvent>(offTime, ev));
@@ -231,7 +234,7 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
 //   collectNote
 //---------------------------------------------------------
 
-static void collectNote(EventMap* events, int channel, const Note* note, int velo, int tickOffset)
+static void collectNote(EventMap* events, int channel, const Note* note, int velo, int tickOffset, int staffIdx)
       {
       if (!note->play() || note->hidden())      // do not play overlapping notes
             return;
@@ -263,7 +266,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                               }
                         else {
                               // recurse
-                              collectNote(events, channel, n, velo, tickOffset);
+                              collectNote(events, channel, n, velo, tickOffset, staffIdx);
                               break;
                               }
                         if (n->tieFor() && n != n->tieFor()->endNote())
@@ -298,7 +301,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
             int off = on + (ticks * e.len())/1000 - 1;
             if (tieFor && i == nels - 1)
                   off += tieLen;
-            playNote(events, note, channel, p, velo, on, off);
+            playNote(events, note, channel, p, velo, on, off, staffIdx);
             }
 
       // Bends
@@ -324,6 +327,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                         int msb = midiPitch / 128;
                         int lsb = midiPitch % 128;
                         NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
+                        ev.setOriginatingStaff(staffIdx);
                         events->insert(std::pair<int, NPlayEvent>(lastPointTick, ev));
                         lastPointTick = nextPointTick;
                         continue;
@@ -351,11 +355,13 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                         int msb = midiPitch / 128;
                         int lsb = midiPitch % 128;
                         NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
+                        ev.setOriginatingStaff(staffIdx);
                         events->insert(std::pair<int, NPlayEvent>(i, ev));
                         }
                   lastPointTick = nextPointTick;
                   }
             NPlayEvent ev(ME_PITCHBEND, channel, 0, 64); // 0:64 is 8192 - no pitch bend
+            ev.setOriginatingStaff(staffIdx);
             events->insert(std::pair<int, NPlayEvent>(tick1+int(noteLen), ev));
             }
       }
@@ -410,9 +416,11 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
 
                   Chord* chord = toChord(cr);
                   Staff* st1   = chord->staff();
+                  int staffIdx = st1->idx();
                   int velocity = st1->velocities().velo(seg->tick());
                   Instrument* instr = chord->part()->instrument(tick);
                   int channel = instr->channel(chord->upNote()->subchannel())->channel();
+                  events->registerChannel(channel);
 
                   for (Articulation* a : chord->articulations())
                         instr->updateVelocity(&velocity,channel, a->articulationName());
@@ -420,15 +428,15 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   if ( !graceNotesMerged(chord))
                       for (Chord* c : chord->graceNotesBefore())
                           for (const Note* note : c->notes())
-                              collectNote(events, channel, note, velocity, tickOffset);
+                              collectNote(events, channel, note, velocity, tickOffset, staffIdx);
 
                   for (const Note* note : chord->notes())
-                        collectNote(events, channel, note, velocity, tickOffset);
+                        collectNote(events, channel, note, velocity, tickOffset, staffIdx);
 
                   if ( !graceNotesMerged(chord))
                       for (Chord* c : chord->graceNotesAfter())
                           for (const Note* note : c->notes())
-                              collectNote(events, channel, note, velocity, tickOffset);
+                              collectNote(events, channel, note, velocity, tickOffset, staffIdx);
                  }
             }
 
@@ -453,6 +461,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                               for (MidiCoreEvent event : nel->events) {
                                     event.setChannel(channel);
                                     NPlayEvent e1(event);
+                                    e1.setOriginatingStaff(firstStaffIdx);
                                     if (e1.dataA() == CTRL_PROGRAM)
                                           events->insert(std::pair<int, NPlayEvent>(tick-1, e1));
                                     else
@@ -697,45 +706,44 @@ void Score::renderStaff(EventMap* events, Staff* staff)
 //   renderSpanners
 //---------------------------------------------------------
 
-void Score::renderSpanners(EventMap* events, int staffIdx)
+void Score::renderSpanners(EventMap* events)
       {
       for (const RepeatSegment* rs : *repeatList()) {
             int tickOffset = rs->utick - rs->tick;
             int utick1 = rs->utick;
             int tick1 = repeatList()->utick2tick(utick1);
             int tick2 = tick1 + rs->len();
-            std::map<int, std::vector<std::pair<int, bool>>> channelPedalEvents = std::map<int, std::vector<std::pair<int, bool>>>();
+            std::map<int, std::vector<std::pair<int, std::pair<bool, int>>>> channelPedalEvents;
             for (const auto& sp : _spanner.map()) {
                   Spanner* s = sp.second;
-                  if (staffIdx != -1 && s->staffIdx() != staffIdx)
-                        continue;
 
+                  int staff = s->staffIdx();
                   int idx = s->staff()->channel(s->tick(), 0);
                   int channel = s->part()->instrument(s->tick())->channel(idx)->channel();
 
                   if (s->isPedal() || s->isLetRing()) {
-                        channelPedalEvents.insert({channel, std::vector<std::pair<int, bool>>()});
-                        std::vector<std::pair<int, bool>> pedalEventList = channelPedalEvents.at(channel);
-                        std::pair<int, bool> lastEvent;
+                        channelPedalEvents.insert({channel, std::vector<std::pair<int, std::pair<bool, int>>>()});
+                        std::vector<std::pair<int, std::pair<bool, int>>> pedalEventList = channelPedalEvents.at(channel);
+                        std::pair<int, std::pair<bool, int>> lastEvent;
 
                         if (!pedalEventList.empty())
                               lastEvent = pedalEventList.back();
                         else
-                              lastEvent = std::pair<int, bool>(0, true);
+                              lastEvent = std::pair<int, std::pair<bool, int>>(0, std::pair<bool, int>(true, staff));
 
                         if (s->tick() >= tick1 && s->tick() < tick2) {
                               // Handle "overlapping" pedal segments (usual case for connected pedal line)
-                              if (lastEvent.second == false && lastEvent.first >= (s->tick() + tickOffset + 2)) {
+                              if (lastEvent.second.first == false && lastEvent.first >= (s->tick() + tickOffset + 2)) {
                                     channelPedalEvents.at(channel).pop_back();
-                                    channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick() + tickOffset + 1, false));
+                                    channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int>>(s->tick() + tickOffset + 1, std::pair<bool, int>(false, staff)));
                                     }
-                              channelPedalEvents.at(channel).push_back(std::pair<int, bool>(s->tick() + tickOffset + 2, true));
+                              channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int>>(s->tick() + tickOffset + 2, std::pair<bool, int>(true, staff)));
                               }
                         if (s->tick2() >= tick1 && s->tick2() <= tick2) {
                               int t = s->tick2() + tickOffset + 1;
                               if (t > repeatList()->last()->utick + repeatList()->last()->len())
                                     t = repeatList()->last()->utick + repeatList()->last()->len();
-                              channelPedalEvents.at(channel).push_back(std::pair<int, bool>(t, false));
+                              channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int>>(t, std::pair<bool, int>(false, staff)));
                               }
                         }
                   else if (s->isVibrato()) {
@@ -772,12 +780,14 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                                     int msb = midiPitch / 128;
                                     int lsb = midiPitch % 128;
                                     NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
+                                    ev.setOriginatingStaff(staff);
                                     events->insert(std::pair<int, NPlayEvent>(i, ev));
                                     }
                               lastPointTick = nextPointTick;
                               j++;
                               }
                         NPlayEvent ev(ME_PITCHBEND, channel, 0, 64); // no pitch bend
+                        ev.setOriginatingStaff(staff);
                         events->insert(std::pair<int, NPlayEvent>(s->tick2(), ev));
                         }
                   else
@@ -788,10 +798,11 @@ void Score::renderSpanners(EventMap* events, int staffIdx)
                   int channel = pedalEvents.first;
                   for (const auto& pe : pedalEvents.second) {
                         NPlayEvent event;
-                        if (pe.second == true)
+                        if (pe.second.first == true)
                               event = NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 127);
                         else
                               event = NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0);
+                        event.setOriginatingStaff(pe.second.second);
                         events->insert(std::pair<int,NPlayEvent>(pe.first, event));
                         }
                   }
@@ -1828,22 +1839,29 @@ void Score::renderMetronome(EventMap* events, Measure* m, int tickOffset)
 
 void Score::renderMidi(EventMap* events)
       {
+      renderMidi(events, true, MScore::playRepeats);
+      }
+
+void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats)
+      {
       updateSwing();
       updateCapo();
       createPlayEvents();
 
-      updateRepeatList(MScore::playRepeats);
-      _foundPlayPosAfterRepeats = false;
+      updateRepeatList(expandRepeats);
       masterScore()->updateChannel();
       updateVelo();
 
       // create note & other events
       for (Staff* part : _staves)
             renderStaff(events, part);
+      events->fixupMIDI();
 
       // create sustain pedal events
-      renderSpanners(events, -1);
+      renderSpanners(events);
 
+      if (!metronome)
+            return;
       // add metronome ticks
       for (const RepeatSegment* rs : *repeatList()) {
             int startTick  = rs->tick;
