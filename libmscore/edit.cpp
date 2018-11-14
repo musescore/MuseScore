@@ -4048,6 +4048,7 @@ void Score::undoAddElement(Element* element)
          && et != ElementType::SYMBOL
          && et != ElementType::TREMOLOBAR
          && et != ElementType::FRET_DIAGRAM
+         && et != ElementType::FERMATA
          && et != ElementType::HARMONY)
             ) {
             undo(new AddElement(element));
@@ -4183,6 +4184,7 @@ void Score::undoAddElement(Element* element)
                      || element->isDynamic()
                      || element->isStaffText()
                      || element->isFretDiagram()
+                     || element->isFermata()
                      || element->isHarmony()) {
                         Segment* segment = toSegment(element->parent());
                         int tick         = segment->tick();
