@@ -51,7 +51,7 @@ struct LayoutContext {
 
       void layout();
       int adjustMeasureNo(MeasureBase*);
-      void getEmptyPage();
+      void getNextPage();
       void collectPage();
       };
 
