@@ -1,5 +1,5 @@
 REM Test run. Check availability of cygwin.bash
-"C:\cygwin64\bin\bash.exe" C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh 1 2 3 4 5
+bash C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh 1 2 3 4 5
 
 :: keep full PATH for later
 SET OLD_PATH=%PATH%
