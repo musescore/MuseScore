@@ -127,7 +127,7 @@ Mixer::Mixer(QWidget* parent)
 //   synthGainChanged
 //---------------------------------------------------------
 
-void Mixer::synthGainChanged(float val)
+void Mixer::synthGainChanged(float)
       {
       float decibels = qBound(minDecibels, log10f(synti->gain()), 0.0f);
 
@@ -391,8 +391,6 @@ void Mixer::notifyTrackSelected(MixerTrack* track)
                   }
             }
       mixerDetails->setTrack(track->mti());
-//      selPart = track->mti()->part();
-//      selChan = track->mti()->chan();
       }
 
 
@@ -430,8 +428,8 @@ void MuseScore::showMixer(bool val)
             mixer = new Mixer(this);
             mscore->stackUnder(mixer);
             if (synthControl)
-                  connect(synthControl, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
-            connect(synti, SIGNAL(soundFontChanged()), mixer, SLOT(patchListChanged()));
+                  connect(synthControl, SIGNAL(soundFontChanged()), mixer, SLOT(updateTrack()));
+            connect(synti, SIGNAL(soundFontChanged()), mixer, SLOT(updateTracks()));
             connect(mixer, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             }
       mixer->setScore(cs->masterScore());

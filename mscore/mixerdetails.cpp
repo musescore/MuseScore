@@ -276,9 +276,6 @@ void MixerDetails::partNameChanged()
 
 void MixerDetails::trackColorChanged(QColor col)
       {
-      Part* part = _mti->midiMap()->part;
-      Channel* channel = _mti->midiMap()->articulation;
-
       if (trackColorLabel->color() != col) {
             trackColorLabel->blockSignals(true);
             trackColorLabel->setColor(col);
@@ -359,6 +356,16 @@ void MixerDetails::propertyChanged(Channel::Prop property)
                   trackColorChanged(chan->color());
                   break;
                   }
+            case Channel::Prop::NAME: {
+                  partNameLineEdit->blockSignals(true);
+                  Part* part = _mti->part();
+                  QString partName = part->partName();
+                  partNameLineEdit->setText(partName);
+                  partNameLineEdit->blockSignals(false);
+                  break;
+                  }
+            default:
+                  break;
             }
       }
 
@@ -448,7 +455,6 @@ void MixerDetails::drumkitToggled(bool val)
       if (_mti == 0)
             return;
 
-      MidiMapping* midiMap = _mti->midiMap();
       Part* part = _mti->part();
       Channel* channel = _mti->focusedChan();
 

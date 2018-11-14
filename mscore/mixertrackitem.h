@@ -50,8 +50,6 @@ private:
 
       Instrument* _instr;
       Channel* _chan;
-//      int _instrIdx;
-//      int _chanIdx;  //If -1, this track handles all channels attached to this part
 
 public:
       MixerTrackItem(TrackType tt, Part* part, Instrument* _instr, Channel* _chan);
@@ -61,7 +59,6 @@ public:
       Instrument* instrument() { return _instr; }
       Channel* chan() { return _chan; }
       Channel* focusedChan();
-//      int chanIdx() { return _chanIdx; }
       MidiMapping *midiMap();
       int color();
 

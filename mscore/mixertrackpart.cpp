@@ -84,6 +84,15 @@ MixerTrackPart::MixerTrackPart(QWidget *parent, MixerTrackItemPtr mti, bool expa
       {
       setupUi(this);
 
+      int numChannels = 0;
+      Part* part = _mti->part();
+      const InstrumentList* il = part->instruments();
+      for (auto it = il->begin(); it != il->end(); ++it) {
+            Instrument* instr = it->second;
+            numChannels += instr->channel().size();
+            }
+
+      expandBn->setEnabled(numChannels > 1);
       expandBn->setChecked(expanded);
 
       connect(expandBn, SIGNAL(toggled(bool)), SLOT(expandToggled(bool)));
@@ -218,7 +227,7 @@ void MixerTrackPart::updateNameLabel()
 //   paintEvent
 //---------------------------------------------------------
 
-void MixerTrackPart::paintEvent(QPaintEvent* evt)
+void MixerTrackPart::paintEvent(QPaintEvent*)
       {
       applyStyle();
       }
@@ -329,7 +338,7 @@ void MixerTrackPart::controlSelected()
 //   mouseReleaseEvent
 //---------------------------------------------------------
 
-void MixerTrackPart::mouseReleaseEvent(QMouseEvent * event)
+void MixerTrackPart::mouseReleaseEvent(QMouseEvent*)
       {
       setSelected(true);
       }

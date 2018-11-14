@@ -226,7 +226,7 @@ void MixerTrackChannel::updateNameLabel()
 //   paintEvent
 //---------------------------------------------------------
 
-void MixerTrackChannel::paintEvent(QPaintEvent* evt)
+void MixerTrackChannel::paintEvent(QPaintEvent*)
       {
       applyStyle();
       }
@@ -337,7 +337,7 @@ void MixerTrackChannel::controlSelected()
 //   mouseReleaseEvent
 //---------------------------------------------------------
 
-void MixerTrackChannel::mouseReleaseEvent(QMouseEvent * event)
+void MixerTrackChannel::mouseReleaseEvent(QMouseEvent*)
       {
       setSelected(true);
       }
