@@ -159,10 +159,12 @@ void MixerTrackChannel::updateNameLabel()
       Instrument* instr = _mti->instrument();
       Channel* chan = _mti->chan();
 
-      //instr->trackName();
-      QString shortName = instr->shortNames().first().name();
-      QString text = QString("%1-%2")
-                  .arg(shortName, chan->name());
+      QString shortName;
+      if (instr->shortNames().count())
+            shortName = instr->shortNames().first().name() + "-";
+      else
+            shortName = "";
+      QString text = QString("%1%2").arg(shortName, chan->name());
       trackLabel->setText(text);
 
       MidiPatch* mp = synti->getPatchInfo(chan->synti(), chan->bank(), chan->program());
