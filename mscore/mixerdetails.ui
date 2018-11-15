@@ -213,7 +213,7 @@
             <item row="2" column="2">
              <widget class="QDoubleSpinBox" name="chorusSpinBox">
               <property name="toolTip">
-               <string>MIDI OUT reverb</string>
+               <string>MIDI OUT chorus</string>
               </property>
               <property name="decimals">
                <number>0</number>
