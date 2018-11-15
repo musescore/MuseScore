@@ -231,7 +231,7 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articMarcatoStaccatoBelow</subtype>
+              <subtype>articMarcatoStaccatoAbove</subtype>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -282,7 +282,7 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articMarcatoTenutoBelow</subtype>
+              <subtype>articMarcatoTenutoAbove</subtype>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -536,7 +536,7 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articMarcatoTenutoBelow</subtype>
+              <subtype>articMarcatoTenutoAbove</subtype>
               <linkedMain/>
               <color r="255" g="0" b="0" a="255"/>
               </Articulation>
@@ -2000,7 +2000,7 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articMarcatoStaccatoBelow</subtype>
+                <subtype>articMarcatoStaccatoAbove</subtype>
                 <linked>
                   </linked>
                 </Articulation>
@@ -2058,7 +2058,7 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articMarcatoTenutoBelow</subtype>
+                <subtype>articMarcatoTenutoAbove</subtype>
                 <linked>
                   </linked>
                 </Articulation>
@@ -2360,7 +2360,7 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articMarcatoTenutoBelow</subtype>
+                <subtype>articMarcatoTenutoAbove</subtype>
                 <linked>
                   </linked>
                 <color r="255" g="0" b="0" a="255"/>
