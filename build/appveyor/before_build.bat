@@ -1,5 +1,6 @@
 REM install "artifacts" utility test
-curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash
+curl -sL -o "C:\artifacts\bin\artifacts.exe" https://s3.amazonaws.com/travis-ci-gmbh/artifacts/stable/build/windows/amd64/artifacts.exe
+SET PATH=C:\artifacts\bin;%PATH%
 artifacts -v
 
 
