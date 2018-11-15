@@ -55,7 +55,9 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             { Pid::BEGIN_FONT_SIZE,      0, h.fontSize,            h.resetFontSize          },
             { Pid::BEGIN_FONT_BOLD,      0, h.fontBold,            h.resetFontBold          },
             { Pid::BEGIN_FONT_ITALIC,    0, h.fontItalic,          h.resetFontItalic        },
-            { Pid::BEGIN_FONT_UNDERLINE, 0, h.fontUnderline,       h.resetFontUnderline     }
+            { Pid::BEGIN_FONT_UNDERLINE, 0, h.fontUnderline,       h.resetFontUnderline     },
+            { Pid::BEGIN_TEXT,           0, h.beginText,           h.resetBeginText         },
+            { Pid::END_TEXT,             0, h.endText,             h.resetEndText           }
             };
       const std::vector<InspectorPanel> ppList = {
             { l.title, l.panel },
