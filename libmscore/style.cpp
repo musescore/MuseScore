@@ -112,13 +112,13 @@ static const StyleType styleTypes[] {
       { Sid::systemFrameDistance,     "systemFrameDistance",     Spatium(7.0) },
       { Sid::frameSystemDistance,     "frameSystemDistance",     Spatium(7.0) },
       { Sid::minMeasureWidth,         "minMeasureWidth",         Spatium(5.0) },
-      { Sid::barWidth,                "barWidth",                Spatium(0.16) },      // 0.1875
+      { Sid::barWidth,                "barWidth",                Spatium(0.16) },
       { Sid::doubleBarWidth,          "doubleBarWidth",          Spatium(0.16) },
 
-      { Sid::endBarWidth,             "endBarWidth",             Spatium(0.5) },       // 0.5
-      { Sid::doubleBarDistance,       "doubleBarDistance",       Spatium(0.46) },      // 0.3
-      { Sid::endBarDistance,          "endBarDistance",          Spatium(.40 + (.5) * .5) },     // 0.3
-      { Sid::repeatBarlineDotSeparation, "repeatBarlineDotSeparation", Spatium(.40 + .16 * .5) },
+      { Sid::endBarWidth,             "endBarWidth",             Spatium(0.5) },
+      { Sid::doubleBarDistance,       "doubleBarDistance",       Spatium(.40 + .16) },
+      { Sid::endBarDistance,          "endBarDistance",          Spatium(.40 + (.16 + .50) * .5) },
+      { Sid::repeatBarlineDotSeparation, "repeatBarlineDotSeparation", Spatium(.40 + .46 * .5) },
       { Sid::repeatBarTips,           "repeatBarTips",           QVariant(false) },
       { Sid::startBarlineSingle,      "startBarlineSingle",      QVariant(false) },
       { Sid::startBarlineMultiple,    "startBarlineMultiple",    QVariant(true) },
