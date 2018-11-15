@@ -1565,6 +1565,25 @@ void renderChordArticulation(Chord* chord, QList<NoteEventList> & ell, int & gat
       }
 
 //---------------------------------------------------------
+//   shouldRenderNote
+//---------------------------------------------------------
+
+static bool shouldRenderNote(Note* n)
+      {
+      int dist = 0;
+      while (n->tieBack()) {
+            n = n->tieBack()->startNote();
+            ++dist;
+            if (n && n->playEvents().offtime() > (dist * NoteEvent::NOTE_LENGTH)) {
+                  // The previous tied note probably has events for this note too.
+                  // That is, we don't need to render this note separately.
+                  return false;
+                  }
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
 //   renderChord
 //    ontime and trailtime in 1/1000 of duration
 //    ontime signifies how much gap to leave, i.e., how late the note should start because of graceNotesBefore which have already been rendered
@@ -1581,21 +1600,29 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, 
       for (size_t i = 0; i < notes; ++i)
             ell.append(NoteEventList());
 
+      bool arpeggio = false;
       if (chord->tremolo()) {
             renderTremolo(chord, ell);
             }
       else if (chord->arpeggio() && chord->arpeggio()->playArpeggio()) {
             renderArpeggio(chord, ell);
-            return ell;  // dont apply gateTime to arpeggio events
+            arpeggio = true;
             }
       else
             renderChordArticulation(chord, ell, gateTime);
 
-      //
-      //    apply gateTime
-      //
+      // Check each note and apply gateTime
       for (int i = 0; i < int(notes); ++i) {
             NoteEventList* el = &ell[i];
+            if (!shouldRenderNote(chord->notes()[i])) {
+                  el->clear();
+                  continue;
+                  }
+            if (arpeggio)
+                  continue; // don't add extra events and apply gateTime to arpeggio
+
+            // If we are here then we still need to render the note.
+            // Render its body if necessary and apply gateTime.
             if (el->size() == 0 && chord->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
                   el->append(NoteEvent(0, ontime, 1000 - ontime - trailtime));
                   }
