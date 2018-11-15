@@ -3708,6 +3708,9 @@ void Score::doLayoutRange(int stick, int etick)
             _systems.clear();
             qDeleteAll(pages());
             pages().clear();
+            LayoutContext lc;
+            lc.score = this;
+            lc.getNextPage();
             return;
             }
 // qDebug("%p %d-%d %s systems %d", this, stick, etick, isMaster() ? "Master" : "Part", int(_systems.size()));
