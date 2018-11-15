@@ -95,7 +95,7 @@ MixerTrackChannel::MixerTrackChannel(QWidget *parent, MixerTrackItemPtr mti) :
 
       chan->addListener(this);
       volumeSlider->setValue(chan->volume());
-      volumeSlider->setToolTip("Volume: " + QString::number(chan->volume()));
+      volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(chan->volume())));
       volumeSlider->setMaxValue(127);
       volumeSlider->setNumMajorTicks(10);
       volumeSlider->setNumMinorTicks(5);
@@ -105,15 +105,15 @@ MixerTrackChannel::MixerTrackChannel(QWidget *parent, MixerTrackItemPtr mti) :
       volumeSlider->setSliderHeadIcon(iconSliderHead);
 
       panSlider->setValue(chan->pan());
-      panSlider->setToolTip("Pan: " + QString::number(chan->pan()));
+      panSlider->setToolTip(tr("Pan: %1").arg(QString::number(chan->pan())));
       panSlider->setMaxValue(127);
       panSlider->setMinValue(0);
 
       connect(volumeSlider, SIGNAL(valueChanged(double)),      SLOT(volumeChanged(double)));
       connect(panSlider,    SIGNAL(valueChanged(double, int)), SLOT(panChanged(double)));
 
-      connect(volumeSlider, SIGNAL(sliderPressed()), SLOT(controlSelected()));
-      connect(panSlider, SIGNAL(sliderPressed(int)), SLOT(controlSelected()));
+      connect(volumeSlider, SIGNAL(sliderPressed()),    SLOT(controlSelected()));
+      connect(panSlider,    SIGNAL(sliderPressed(int)), SLOT(controlSelected()));
 
       applyStyle();
       }
@@ -164,23 +164,23 @@ void MixerTrackChannel::updateNameLabel()
             shortName = instr->shortNames().first().name() + "-";
       else
             shortName = "";
-      QString text = QString("%1%2").arg(shortName, chan->name());
+      QString text = QString("%1%2").arg(shortName, qApp->translate("InstrumentsXML", chan->name().toUtf8().data()));
       trackLabel->setText(text);
 
       MidiPatch* mp = synti->getPatchInfo(chan->synti(), chan->bank(), chan->program());
 
-      QString tooltip = QString("Part Name: %1\n"
-                                "Instrument: %2\n"
-                                "Channel: %3\n"
-                                "Bank: %4\n"
-                                "Program: %5\n"
-                                "Patch: %6")
+      QString tooltip = tr("Part Name: %1\n"
+                           "Instrument: %2\n"
+                           "Channel: %3\n"
+                           "Bank: %4\n"
+                           "Program: %5\n"
+                           "Patch: %6")
                   .arg(part->partName(),
                        instr->trackName(),
-                       chan->name(),
+                       qApp->translate("InstrumentsXML", chan->name().toUtf8().data()),
                        QString::number(chan->bank()),
                        QString::number(chan->program()),
-                       mp ? mp->name : "~no patch~");
+                       mp ? mp->name : tr("~no patch~"));
 
       trackLabel->setToolTip(tooltip);
 
@@ -212,7 +212,7 @@ void MixerTrackChannel::updateNameLabel()
              "}").arg(partColorName, val > 128 ? "black" : "white");
 
       partLabel->setStyleSheet(partStyle);
-      partLabel->setToolTip(QString("This channel is a child of part %1").arg(part->partName()));
+      partLabel->setToolTip(tr("This channel is a child of part %1").arg(part->partName()));
 
 
 
@@ -256,14 +256,14 @@ void MixerTrackChannel::propertyChanged(Channel::Prop property)
             case Channel::Prop::VOLUME: {
                   volumeSlider->blockSignals(true);
                   volumeSlider->setValue(chan->volume());
-                  volumeSlider->setToolTip("Volume: " + QString::number(chan->volume()));
+                  volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(chan->volume())));
                   volumeSlider->blockSignals(false);
                   break;
                   }
             case Channel::Prop::PAN: {
                   panSlider->blockSignals(true);
                   panSlider->setValue(chan->pan());
-                  panSlider->setToolTip("Pan: " + QString::number(chan->pan()));
+                  panSlider->setToolTip(tr("Pan: %1").arg(QString::number(chan->pan())));
                   panSlider->blockSignals(false);
                   break;
                   }
@@ -295,7 +295,7 @@ void MixerTrackChannel::propertyChanged(Channel::Prop property)
 void MixerTrackChannel::volumeChanged(double value)
       {
       _mti->setVolume(value);
-      volumeSlider->setToolTip("Volume: " + QString::number(value));
+      volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(value)));
       }
 
 //---------------------------------------------------------
@@ -305,7 +305,7 @@ void MixerTrackChannel::volumeChanged(double value)
 void MixerTrackChannel::panChanged(double value)
       {
       _mti->setPan(value);
-      panSlider->setToolTip("Pan: " + QString::number(value));
+      panSlider->setToolTip(tr("Pan: %1").arg(QString::number(value)));
       }
 
 //---------------------------------------------------------
