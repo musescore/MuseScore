@@ -86,12 +86,23 @@ REM WinSparkle staff
 REM ------------------------------------------
 mkdir C:\artifacts
 mkdir C:\artifacts\bin
-SET ARTIFACTS_PATH="%C:\artifacts\bin%\artifacts.exe"
+SET ARTIFACTS_PATH="C:\artifacts\bin\artifacts.exe"
 curl -sL -o %ARTIFACTS_PATH% https://s3.amazonaws.com/travis-ci-gmbh/artifacts/stable/build/windows/amd64/artifacts.exe
 SET PATH=C:\artifacts\bin;%PATH%
 artifacts -v
 
-bash C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh "C:\MuseScore\%ARTIFACT_NAME%" "%BUILD_DATE%" "https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%" "%MUSESCORE_VERSION%" "%APPVEYOR_BUILD_NUMBER%" "%ARTIFACTS_PATH%"
+bash C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh "C:\MuseScore\%ARTIFACT_NAME%" "%BUILD_DATE%" "https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%" "%MUSESCORE_VERSION%" "%APPVEYOR_BUILD_NUMBER%"
+
+SET ARTIFACTS_KEY=k68f3wMKIC5AzrfNMuC4kdPaxzvKdFVkRsietUKqc+E=
+SET ARTIFACTS_SECRET=IbpdpiHzGfMasaSA6uGrskE4xu9wE+HzElW7tIDOUww+ivHj+gN+mPgUHKCcV9Cn
+SET ARTIFACTS_REGION=us-east-1
+SET ARTIFACTS_BUCKET=sparkle.musescore.org
+SET ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
+SET ARTIFACTS_PERMISSIONS=public-read
+SET ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3/macos/"
+SET ARTIFACTS_PATHS=appcast.xml
+artifacts upload
+
 REM ------------------------------------------
 @echo on
 

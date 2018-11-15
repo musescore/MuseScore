@@ -3,7 +3,6 @@
 # $3 - artifact ftp path
 # $4 - MuseScore version
 # $5 - Build number
-# $6 - path to artifacts executable
 
 export MSCORE_RELEASE_CHANNEL=$(grep '^[[:blank:]]*set *( *MSCORE_RELEASE_CHANNEL' CMakeLists.txt | awk -F \" '{print $2}')
 RSS_DATE="$2"
@@ -32,13 +31,3 @@ ${GIT_LOG}
 </item>
 </channel>
 </rss>" >> appcast.xml
-
-export ARTIFACTS_KEY=k68f3wMKIC5AzrfNMuC4kdPaxzvKdFVkRsietUKqc+E=
-export ARTIFACTS_SECRET=IbpdpiHzGfMasaSA6uGrskE4xu9wE+HzElW7tIDOUww+ivHj+gN+mPgUHKCcV9Cn
-export ARTIFACTS_REGION=us-east-1
-export ARTIFACTS_BUCKET=sparkle.musescore.org
-export ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
-export ARTIFACTS_PERMISSIONS=public-read
-export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3/macos/"
-export ARTIFACTS_PATHS=appcast.xml
-$6 upload
