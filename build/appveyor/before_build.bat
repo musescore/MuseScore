@@ -1,3 +1,8 @@
+REM install "artifacts" utility test
+curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash
+artifacts -v
+
+
 :: keep full PATH for later
 SET OLD_PATH=%PATH%
 mkdir archive
