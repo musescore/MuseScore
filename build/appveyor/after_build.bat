@@ -84,7 +84,14 @@ type C:\MuseScore\update_win_nightly.xml
 @echo off
 REM WinSparkle staff
 REM ------------------------------------------
-bash C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh "C:\MuseScore\%ARTIFACT_NAME%" "%BUILD_DATE%" "https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%" "%MUSESCORE_VERSION%" "%%APPVEYOR_BUILD_NUMBER%%"
+mkdir C:\artifacts
+mkdir C:\artifacts\bin
+SET ARTIFACTS_PATH="%C:\artifacts\bin%\artifacts.exe"
+curl -sL -o %ARTIFACTS_PATH% https://s3.amazonaws.com/travis-ci-gmbh/artifacts/stable/build/windows/amd64/artifacts.exe
+SET PATH=C:\artifacts\bin;%PATH%
+artifacts -v
+
+bash C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh "C:\MuseScore\%ARTIFACT_NAME%" "%BUILD_DATE%" "https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%" "%MUSESCORE_VERSION%" "%APPVEYOR_BUILD_NUMBER%" "%ARTIFACTS_PATH%"
 REM ------------------------------------------
 @echo on
 

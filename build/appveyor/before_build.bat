@@ -1,11 +1,3 @@
-REM install "artifacts" utility test
-mkdir C:\artifacts
-mkdir C:\artifacts\bin
-curl -sL -o "C:\artifacts\bin\artifacts.exe" https://s3.amazonaws.com/travis-ci-gmbh/artifacts/stable/build/windows/amd64/artifacts.exe
-SET PATH=C:\artifacts\bin;%PATH%
-artifacts -v
-
-
 :: keep full PATH for later
 SET OLD_PATH=%PATH%
 mkdir archive

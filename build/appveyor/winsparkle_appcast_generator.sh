@@ -3,6 +3,8 @@
 # $3 - artifact ftp path
 # $4 - MuseScore version
 # $5 - Build number
+# $6 - path to artifacts executable
+
 export MSCORE_RELEASE_CHANNEL=$(grep '^[[:blank:]]*set *( *MSCORE_RELEASE_CHANNEL' CMakeLists.txt | awk -F \" '{print $2}')
 RSS_DATE="$2"
 FILESIZE="$(wc -c $1 | awk '{print $1}')"
@@ -31,9 +33,6 @@ ${GIT_LOG}
 </channel>
 </rss>" >> appcast.xml
 
-#install artifacts
-curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash
-
 export ARTIFACTS_KEY=k68f3wMKIC5AzrfNMuC4kdPaxzvKdFVkRsietUKqc+E=
 export ARTIFACTS_SECRET=IbpdpiHzGfMasaSA6uGrskE4xu9wE+HzElW7tIDOUww+ivHj+gN+mPgUHKCcV9Cn
 export ARTIFACTS_REGION=us-east-1
@@ -42,4 +41,4 @@ export ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
 export ARTIFACTS_PERMISSIONS=public-read
 export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3/macos/"
 export ARTIFACTS_PATHS=appcast.xml
-artifacts upload
+$6 upload
