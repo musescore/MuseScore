@@ -1246,8 +1246,8 @@ void EditStyle::valueChanged(int i)
       QVariant val  = getValue(idx);
       bool setValue = false;
       if (idx == Sid::MusicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
-              ScoreFont* scoreFont = ScoreFont::fontFactory(val.toString());
-              if (scoreFont) {
+            ScoreFont* scoreFont = ScoreFont::fontFactory(val.toString());
+            if (scoreFont) {
                   for (auto j : scoreFont->engravingDefaults()) {
 #if 0  // debug
                         if (cs->styleV(j.first) != j.second) {
@@ -1267,20 +1267,23 @@ void EditStyle::valueChanged(int i)
                   cs->undo(new ChangeStyleVal(cs, Sid::endBarDistance,
                     cs->styleV(Sid::endBarDistance).toDouble()
                     + (cs->styleV(Sid::barWidth).toDouble() + cs->styleV(Sid::endBarWidth).toDouble()) * .5));
+                  cs->undo(new ChangeStyleVal(cs, Sid::doubleBarDistance,
+                    cs->styleV(Sid::doubleBarDistance).toDouble()
+                    + (cs->styleV(Sid::barWidth).toDouble() + cs->styleV(Sid::barWidth).toDouble()) * .5));
 
                   // guess the repeat dot width = spatium * .3
                   cs->undo(new ChangeStyleVal(cs, Sid::repeatBarlineDotSeparation,
                     cs->styleV(Sid::repeatBarlineDotSeparation).toDouble()
                     + (cs->styleV(Sid::barWidth).toDouble() + .3) * .5));
 
-                    if (scoreFont->textEnclosureThickness()) {
-//                           TextStyle ts = cs->textStyle(TextStyleType::REHEARSAL_MARK);
-//                           ts.setFrameWidth(Spatium(scoreFont->textEnclosureThickness()));
-//TODO                           cs->undo(new ChangeTextStyle(cs, ts));
-                           }
-                    }
-              setValue = true;
-              }
+//                  if (scoreFont->textEnclosureThickness()) {
+//                        TextStyle ts = cs->textStyle(TextStyleType::REHEARSAL_MARK);
+//                        ts.setFrameWidth(Spatium(scoreFont->textEnclosureThickness()));
+//TODO                        cs->undo(new ChangeTextStyle(cs, ts));
+//                        }
+                  }
+            setValue = true;
+            }
       cs->undo(new ChangeStyleVal(cs, idx, val));
       cs->update();
       if (setValue)
