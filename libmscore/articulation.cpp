@@ -284,6 +284,7 @@ QLineF Articulation::dragAnchor() const
 QVariant Articulation::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
+            case Pid::SYMBOL:              return QVariant::fromValue(_symId);
             case Pid::DIRECTION:           return QVariant::fromValue<Direction>(direction());
             case Pid::ARTICULATION_ANCHOR: return int(anchor());
             case Pid::ORNAMENT_STYLE:      return int(ornamentStyle());
@@ -300,6 +301,9 @@ QVariant Articulation::getProperty(Pid propertyId) const
 bool Articulation::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case Pid::SYMBOL:
+                  setSymId(v.value<SymId>());
+                  break;
             case Pid::DIRECTION:
                   setDirection(v.value<Direction>());
                   break;
@@ -458,6 +462,17 @@ const char* Articulation::symId2ArticulationName(SymId symId)
             default:
                   return "---";
             }
+      }
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid Articulation::propertyId(const QStringRef& xmlName) const
+      {
+      if (xmlName == "subtype")
+            return Pid::SYMBOL;
+      return Element::propertyId(xmlName);
       }
 
 //---------------------------------------------------------

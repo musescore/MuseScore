@@ -448,6 +448,10 @@ QString ScoreElement::propertyUserValue(Pid id) const
                   QPointF p = val.toPointF();
                   return QString("(%1, %2)").arg(p.x()).arg(p.y());
                   }
+            case P_TYPE::DIRECTION:
+                  return toUserString(val.value<Direction>());
+            case P_TYPE::SYMID:
+                  return Sym::id2userName(val.value<SymId>());
             default:
                   break;
             }

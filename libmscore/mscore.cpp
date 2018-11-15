@@ -198,15 +198,34 @@ const char* toString(Direction val)
       }
 
 //---------------------------------------------------------
+//   Direction::toUserString
+//---------------------------------------------------------
+
+QString toUserString(Direction val)
+      {
+      switch (val) {
+            case Direction::AUTO: return qApp->translate("Direction", "Auto");
+            case Direction::UP:   return qApp->translate("Direction", "Up");
+            case Direction::DOWN: return qApp->translate("Direction", "Down");
+            }
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+      __builtin_unreachable();
+#else
+      // The MSVC __assume() optimizer hint is similar, though not identical, to __builtin_unreachable()
+      __assume(0);
+#endif
+      }
+
+//---------------------------------------------------------
 //   fillComboBox
 //---------------------------------------------------------
 
 void fillComboBoxDirection(QComboBox* cb)
       {
       cb->clear();
-      cb->addItem(qApp->translate("Direction", "Auto"), QVariant::fromValue<Direction>(Direction::AUTO));
-      cb->addItem(qApp->translate("Direction", "Up"),   QVariant::fromValue<Direction>(Direction::UP));
-      cb->addItem(qApp->translate("Direction", "Down"), QVariant::fromValue<Direction>(Direction::DOWN));
+      cb->addItem(toUserString(Direction::AUTO), QVariant::fromValue<Direction>(Direction::AUTO));
+      cb->addItem(toUserString(Direction::UP),   QVariant::fromValue<Direction>(Direction::UP));
+      cb->addItem(toUserString(Direction::DOWN), QVariant::fromValue<Direction>(Direction::DOWN));
       }
 
 //---------------------------------------------------------

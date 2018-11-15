@@ -258,6 +258,8 @@ QLineF Fermata::dragAnchor() const
 QVariant Fermata::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
+            case Pid::SYMBOL:
+                  return QVariant::fromValue(_symId);
             case Pid::TIME_STRETCH:
                   return timeStretch();
             case Pid::PLAY:
@@ -274,6 +276,9 @@ QVariant Fermata::getProperty(Pid propertyId) const
 bool Fermata::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case Pid::SYMBOL:
+                  setSymId(v.value<SymId>());
+                  break;
             case Pid::PLACEMENT: {
                   Placement p = Placement(v.toInt());
                   if (p != placement()) {
@@ -335,6 +340,17 @@ void Fermata::resetProperty(Pid id)
                   break;
             }
       Element::resetProperty(id);
+      }
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid Fermata::propertyId(const QStringRef& xmlName) const
+      {
+      if (xmlName == "subtype")
+            return Pid::SYMBOL;
+      return Element::propertyId(xmlName);
       }
 
 //---------------------------------------------------------
