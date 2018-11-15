@@ -92,11 +92,14 @@ void TextLineBaseSegment::draw(QPainter* painter) const
             return;
 
       // color for line (text color comes from the text properties)
+#if 0
       QColor color;
       if ((selected() && !(score() && score()->printing())) || !tl->visible() || !tl->lineVisible())
             color = curColor(tl->visible() && tl->lineVisible());
       else
             color = tl->lineColor();
+#endif
+      QColor color = curColor(tl->visible(), tl->lineColor());
 
       qreal textlineLineWidth = tl->lineWidth();
       QPen pen(color, textlineLineWidth, tl->lineStyle());

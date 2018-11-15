@@ -330,7 +330,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                   case ElementType::LET_RING:
                   case ElementType::VIBRATO:
                   case ElementType::PALM_MUTE:
-                  case ElementType::DYNAMIC:
                   case ElementType::OTTAVA:
                   case ElementType::TRILL:
                   case ElementType::HAIRPIN:
@@ -340,6 +339,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
                         else
                               event->ignore();
                         break;
+                  case ElementType::DYNAMIC:
                   case ElementType::KEYSIG:
                   case ElementType::CLEF:
                   case ElementType::TIMESIG:

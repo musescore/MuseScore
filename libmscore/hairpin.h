@@ -49,6 +49,9 @@ class HairpinSegment final : public TextLineBaseSegment {
       virtual void draw(QPainter*) const override;
       virtual Sid getPropertyStyle(Pid) const override;
 
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&);
+
    public:
       HairpinSegment(Score* s);
       virtual HairpinSegment* clone() const override { return new HairpinSegment(*this);    }
@@ -87,7 +90,6 @@ class Hairpin final : public TextLineBase {
 
       HairpinType hairpinType() const           { return _hairpinType; }
       void setHairpinType(HairpinType val);
-      void undoSetHairpinType(HairpinType);
 
       Segment* segment() const                  { return (Segment*)parent(); }
       virtual void layout() override;
@@ -98,11 +100,9 @@ class Hairpin final : public TextLineBase {
 
       int veloChange() const                    { return _veloChange; }
       void setVeloChange(int v)                 { _veloChange = v;    }
-      void undoSetVeloChange(int v);
 
       Dynamic::Range dynRange() const           { return _dynRange; }
       void setDynRange(Dynamic::Range t)        { _dynRange = t;    }
-      void undoSetDynRange(Dynamic::Range t);
 
       Spatium hairpinHeight() const             { return _hairpinHeight; }
       void setHairpinHeight(Spatium val)        { _hairpinHeight = val; }

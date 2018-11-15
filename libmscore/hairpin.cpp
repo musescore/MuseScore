@@ -64,6 +64,24 @@ HairpinSegment::HairpinSegment(Score* s)
       {
       }
 
+bool HairpinSegment::acceptDrop(EditData& data) const
+      {
+      Element* e = data.dropElement;
+      if (e->isDynamic())
+            return true;
+      return false;
+      }
+
+Element* HairpinSegment::drop(EditData& data)
+      {
+      Element* e = data.dropElement;
+      if (e->isDynamic()) {
+            Dynamic* d = toDynamic(e);
+            hairpin()->undoChangeProperty(Pid::END_TEXT, d->xmlText());
+            }
+      return 0;
+      }
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -81,10 +99,13 @@ void HairpinSegment::layout()
       else {
             twoLines  = true;
 
+            hairpin()->setBeginTextAlign(Align::LEFT | Align::VCENTER);
+            hairpin()->setEndTextAlign(Align::RIGHT | Align::VCENTER);
+
             qreal x1 = 0.0;
             TextLineBaseSegment::layout();
             if (!_text->empty())
-                  x1 = _text->width();
+                  x1 = _text->width() + _spatium * .5;
 
             QTransform t;
             qreal h1 = hairpin()->hairpinHeight().val()     * spatium() * .5;
@@ -92,6 +113,8 @@ void HairpinSegment::layout()
 
             qreal len;
             qreal x = pos2().x();
+            if (!_endText->empty())
+                  x -= (_endText->width() + _spatium * .5);       // 0.5 spatium distance
             if (x < _spatium)             // minimum size of hairpin
                   x = _spatium;
             qreal y = pos2().y();
@@ -110,7 +133,7 @@ void HairpinSegment::layout()
                               case SpannerSegmentType::BEGIN:
                                     l1.setLine(x1 + circledTipRadius * 2.0, 0.0, len, h1);
                                     l2.setLine(x1 + circledTipRadius * 2.0, 0.0, len, -h1);
-                                    circledTip.setX(circledTipRadius );
+                                    circledTip.setX(x1 + circledTipRadius );
                                     circledTip.setY(0.0);
                                     break;
 
@@ -160,6 +183,8 @@ void HairpinSegment::layout()
             QRectF r = QRectF(l1.p1(), l1.p2()).normalized() | QRectF(l2.p1(), l2.p2()).normalized();
             if (!_text->empty())
                   r |= _text->bbox();
+            if (!_endText->empty())
+                  r |= _endText->bbox().translated(x + _endText->bbox().width(), 0.0);
             qreal w  = score()->styleP(Sid::hairpinLineWidth);
             setbbox(r.adjusted(-w*.5, -w*.5, w, w));
             }
@@ -297,11 +322,14 @@ void HairpinSegment::draw(QPainter* painter) const
       {
       TextLineBaseSegment::draw(painter);
 
+#if 0
       QColor color;
       if ((selected() && !(score() && score()->printing())) || !hairpin()->visible())
             color = curColor();
       else
             color = hairpin()->lineColor();
+#endif
+      QColor color = curColor(hairpin()->visible(), hairpin()->lineColor());
       QPen pen(color, hairpin()->lineWidth(), hairpin()->lineStyle());
       painter->setPen(pen);
 
@@ -322,7 +350,10 @@ Element* HairpinSegment::propertyDelegate(Pid pid)
          || pid == Pid::HAIRPIN_CIRCLEDTIP
          || pid == Pid::HAIRPIN_HEIGHT
          || pid == Pid::HAIRPIN_CONT_HEIGHT
-         || pid == Pid::DYNAMIC_RANGE)
+         || pid == Pid::DYNAMIC_RANGE
+         || pid == Pid::BEGIN_TEXT
+         || pid == Pid::END_TEXT
+            )
             return spanner();
       return TextLineBaseSegment::propertyDelegate(pid);
       }
@@ -357,7 +388,6 @@ Hairpin::Hairpin(Score* s)
       resetProperty(Pid::BEGIN_TEXT_PLACE);
       resetProperty(Pid::HAIRPIN_TYPE);
       resetProperty(Pid::LINE_VISIBLE);
-//      resetProperty(Pid::LINE_WITH);
 
       _hairpinCircledTip     = false;
       _veloChange            = 0;
@@ -435,6 +465,7 @@ void Hairpin::write(XmlWriter& xml) const
       writeProperty(xml, Pid::HAIRPIN_CIRCLEDTIP);
       writeProperty(xml, Pid::DYNAMIC_RANGE);
       writeProperty(xml, Pid::BEGIN_TEXT);
+      writeProperty(xml, Pid::END_TEXT);
       writeProperty(xml, Pid::CONTINUE_TEXT);
 
       for (const StyledProperty& spp : *styledProperties()) {
@@ -477,33 +508,6 @@ void Hairpin::read(XmlReader& e)
             else if (!TextLineBase::readProperties(e))
                   e.unknown();
             }
-      }
-
-//---------------------------------------------------------
-//   undoSetHairpinType
-//---------------------------------------------------------
-
-void Hairpin::undoSetHairpinType(HairpinType val)
-      {
-      undoChangeProperty(Pid::HAIRPIN_TYPE, int(val));
-      }
-
-//---------------------------------------------------------
-//   undoSetVeloChange
-//---------------------------------------------------------
-
-void Hairpin::undoSetVeloChange(int val)
-      {
-      undoChangeProperty(Pid::VELO_CHANGE, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetDynType
-//---------------------------------------------------------
-
-void Hairpin::undoSetDynRange(Dynamic::Range val)
-      {
-      undoChangeProperty(Pid::DYNAMIC_RANGE, int(val));
       }
 
 //---------------------------------------------------------
@@ -585,6 +589,7 @@ QVariant Hairpin::propertyDefault(Pid id) const
                   return int(Qt::CustomDashLine);
 
             case Pid::BEGIN_TEXT:
+            case Pid::END_TEXT:
             case Pid::CONTINUE_TEXT:
                   return QString("");
 
