@@ -417,10 +417,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
             s->connectTies();
 
       if (pasted) {                       //select only if we pasted something
-//TODO?            if (styleB(Sid::createMultiMeasureRests))
-//                  createMMRests();
-            Segment* s1 = tick2segmentMM(dstTick);
-            Segment* s2 = tick2segmentMM(dstTick + tickLen);
             int endStaff = dstStaff + staves;
             if (endStaff > nstaves())
                   endStaff = nstaves();
@@ -432,13 +428,13 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                   for (Measure* m = dstM; m && m != endM->nextMeasureMM(); m = m->nextMeasureMM())
                         m->checkMeasure(i);
                   }
-            _selection.setRange(s1, s2, dstStaff, endStaff);
-            _selection.updateSelectedElements();
+            _selection.setRangeTicks(dstTick, dstTick + tickLen, dstStaff, endStaff);
 
             //finding the first element that has a track
             //the canvas position will be set to this element
             Element* el = 0;
-            Segment* s  = s1;
+            Segment* s = tick2segmentMM(dstTick);
+            Segment* s2 = tick2segmentMM(dstTick + tickLen);
             bool found = false;
             if (s2)
                   s2 = s2->next1MM();

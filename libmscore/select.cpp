@@ -450,6 +450,22 @@ void Selection::appendChord(Chord* chord)
 
 void Selection::updateSelectedElements()
       {
+      if (_state == SelState::RANGE && _plannedTick1 != -1 && _plannedTick2 != -1) {
+            const int staffStart = _staffStart;
+            const int staffEnd = _staffEnd;
+            deselectAll();
+            Segment* s1 = _score->tick2segmentMM(_plannedTick1);
+            Segment* s2 = _score->tick2segmentMM(_plannedTick2, /* first */ true);
+            if (s2 && s2->measure()->isMMRest())
+                  s2 = s2->prev1MM(); // HACK both this and the previous "true"
+                                      // are needed to prevent bug #173381.
+                                      // This should exclude any segments belonging
+                                      // to MM-rest range from the selection.
+            setRange(s1, s2, staffStart, staffEnd);
+            _plannedTick1 = -1;
+            _plannedTick2 = -1;
+            }
+
       for (Element* e : _el)
             e->setSelected(false);
       _el.clear();
@@ -542,6 +558,26 @@ void Selection::setRange(Segment* startSegment, Segment* endSegment, int staffSt
       _startSegment  = startSegment;
       _endSegment    = endSegment;
       _activeSegment = endSegment;
+      _staffStart    = staffStart;
+      _staffEnd      = staffEnd;
+      setState(SelState::RANGE);
+      }
+
+//---------------------------------------------------------
+//   setRangeTicks
+//    sets the range to be selected on next
+//    updateSelectedElements() call. Can be used if some
+//    segment structure changes are expected (e.g. if
+//    creating MM rests is pending).
+//---------------------------------------------------------
+
+void Selection::setRangeTicks(int tick1, int tick2, int staffStart, int staffEnd)
+      {
+      Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= _score->nstaves());
+
+      _plannedTick1 = tick1;
+      _plannedTick2 = tick2;
+      _startSegment = _endSegment = _activeSegment = nullptr;
       _staffStart    = staffStart;
       _staffEnd      = staffEnd;
       setState(SelState::RANGE);
