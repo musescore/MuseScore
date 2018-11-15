@@ -582,10 +582,10 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
                         Fraction len  = rest > mlen ? mlen : rest;
                         std::vector<TDuration> dl = toRhythmicDurationList(len, true, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, MAX_DOTS);
                         TDuration d = dl[0];
-                        r2->setDuration(d.fraction());
                         r2->setDurationType(d);
+                        r2->setDuration(d.isMeasure() ? measure->len() : d.fraction());
                         undoAddCR(r2, measure, tick);
-                        rest -= d.fraction();
+                        rest -= r2->duration();
                         tick += r2->actualTicks();
                         firstpart = false;
                         }
