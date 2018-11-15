@@ -82,11 +82,11 @@ echo ^</update^>
 type C:\MuseScore\update_win_nightly.xml
 
 @echo off
-
 REM WinSparkle staff
 REM ------------------------------------------
 bash C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh "C:\MuseScore\%ARTIFACT_NAME%" "%BUILD_DATE%" "https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%" "%MUSESCORE_VERSION%" "%%APPVEYOR_BUILD_NUMBER%%"
 REM ------------------------------------------
+@echo on
 
 :UPLOAD
 SET SSH_IDENTITY=C:\MuseScore\build\appveyor\resources\osuosl_nighlies_rsa_nopp
