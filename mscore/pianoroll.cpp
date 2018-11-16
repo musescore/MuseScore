@@ -131,7 +131,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tuplet->setValue(1);
       tb->addWidget(tuplet);
 
-      tb->addWidget(new QLabel(tr("Bar Pattern:")));
+      tb->addWidget(new QLabel(tr("Stripe Pattern:")));
       barPattern = new QComboBox;
       barPattern->setToolTip(tr("White key lines show the tones of this chord."));
       for (int i = 0; !PianoView::barPatterns[i].name.isEmpty(); ++i) {

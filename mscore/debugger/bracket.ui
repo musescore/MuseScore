@@ -17,7 +17,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Bracket</string>
+      <string notr="true">Bracket</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="1">
@@ -36,7 +36,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>braceSymbol</string>
+         <string notr="true">braceSymbol</string>
         </property>
        </widget>
       </item>
@@ -50,7 +50,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>lastStaff</string>
+         <string notr="true">lastStaff</string>
         </property>
        </widget>
       </item>
@@ -94,7 +94,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>type</string>
+         <string notr="true">type</string>
         </property>
        </widget>
       </item>
@@ -115,28 +115,28 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>firstStaff</string>
+         <string notr="true">firstStaff</string>
         </property>
        </widget>
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>span</string>
+         <string notr="true">span</string>
         </property>
        </widget>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>column</string>
+         <string notr="true">column</string>
         </property>
        </widget>
       </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>magx</string>
+         <string notr="true">magx</string>
         </property>
        </widget>
       </item>
