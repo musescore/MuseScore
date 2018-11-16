@@ -111,7 +111,7 @@ MixerTrackPart::MixerTrackPart(QWidget *parent, MixerTrackItemPtr mti, bool expa
 
       chan->addListener(this);
       volumeSlider->setValue(chan->volume());
-      volumeSlider->setToolTip("Volume: " + QString::number(chan->volume()));
+      volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(chan->volume())));
       volumeSlider->setMaxValue(127);
       volumeSlider->setNumMajorTicks(10);
       volumeSlider->setNumMinorTicks(4);
@@ -121,15 +121,15 @@ MixerTrackPart::MixerTrackPart(QWidget *parent, MixerTrackItemPtr mti, bool expa
       volumeSlider->setSliderHeadIcon(iconSliderHead);
 
       panSlider->setValue(chan->pan());
-      panSlider->setToolTip("Pan: " + QString::number(chan->pan()));
+      panSlider->setToolTip(tr("Pan: %1").arg(QString::number(chan->pan())));
       panSlider->setMaxValue(127);
       panSlider->setMinValue(0);
 
-      connect(volumeSlider, SIGNAL(valueChanged(double)),         SLOT(volumeChanged(double)));
+      connect(volumeSlider, SIGNAL(valueChanged(double)),      SLOT(volumeChanged(double)));
       connect(panSlider,    SIGNAL(valueChanged(double, int)), SLOT(panChanged(double)));
 
-      connect(volumeSlider, SIGNAL(sliderPressed()), SLOT(controlSelected()));
-      connect(panSlider, SIGNAL(sliderPressed(int)), SLOT(controlSelected()));
+      connect(volumeSlider, SIGNAL(sliderPressed()),    SLOT(controlSelected()));
+      connect(panSlider,    SIGNAL(sliderPressed(int)), SLOT(controlSelected()));
 
       applyStyle();
       }
@@ -182,14 +182,12 @@ void MixerTrackPart::updateNameLabel()
       {
       Part* part = _mti->part();
       Channel* chan = _mti->focusedChan();
-      QString text = QString("%1")
-                  .arg(part->partName());
-      trackLabel->setText(text);
+      trackLabel->setText(part->partName());
 
       MidiPatch* mp = synti->getPatchInfo(chan->synti(), chan->bank(), chan->program());
 
 
-      QString tooltip = QString("Part Name: %1\n"
+      QString tooltip = tr("Part Name: %1\n"
                                 "Primary Instrument: %2\n"
                                 "Bank: %3\n"
                                 "Program: %4\n"
@@ -198,7 +196,7 @@ void MixerTrackPart::updateNameLabel()
                        part->longName(),
                        QString::number(chan->bank()),
                        QString::number(chan->program()),
-                       mp ? mp->name : "~no patch~");
+                       mp ? mp->name : tr("~no patch~"));
 
       trackLabel->setToolTip(tooltip);
 
@@ -255,14 +253,14 @@ void MixerTrackPart::propertyChanged(Channel::Prop property)
             case Channel::Prop::VOLUME: {
                   volumeSlider->blockSignals(true);
                   volumeSlider->setValue(chan->volume());
-                  volumeSlider->setToolTip("Volume: " + QString::number(chan->volume()));
+                  volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(chan->volume())));
                   volumeSlider->blockSignals(false);
                   break;
                   }
             case Channel::Prop::PAN: {
                   panSlider->blockSignals(true);
                   panSlider->setValue(chan->pan());
-                  panSlider->setToolTip("Pan: " + QString::number(chan->pan()));
+                  panSlider->setToolTip(tr("Pan: %1").arg(QString::number(chan->pan())));
                   panSlider->blockSignals(false);
                   break;
                   }
@@ -294,7 +292,7 @@ void MixerTrackPart::propertyChanged(Channel::Prop property)
 void MixerTrackPart::volumeChanged(double value)
       {
       _mti->setVolume(value);
-      volumeSlider->setToolTip("Volume: " + QString::number(value));
+      volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(value)));
       }
 
 //---------------------------------------------------------
@@ -304,7 +302,7 @@ void MixerTrackPart::volumeChanged(double value)
 void MixerTrackPart::panChanged(double value)
       {
       _mti->setPan(value);
-      panSlider->setToolTip("Pan: " + QString::number(value));
+      panSlider->setToolTip(tr("Pan: %1").arg(QString::number(value)));
       }
 
 //---------------------------------------------------------
