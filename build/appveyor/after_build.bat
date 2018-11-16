@@ -82,30 +82,12 @@ echo ^</update^>
 type C:\MuseScore\update_win_nightly.xml
 
 @echo off
-REM WinSparkle staff
+REM WinSparkle staff. Generate appcast.xml
 REM ------------------------------------------
-mkdir C:\artifacts
-mkdir C:\artifacts\bin
-SET ARTIFACTS_PATH="C:\artifacts\bin\artifacts.exe"
-curl -sL -o %ARTIFACTS_PATH% https://s3.amazonaws.com/travis-ci-gmbh/artifacts/stable/build/windows/amd64/artifacts.exe
-SET PATH=C:\artifacts\bin;%PATH%
-artifacts -v
-
 bash C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh "C:\MuseScore\%ARTIFACT_NAME%" "%BUILD_DATE%" "https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%" "%MUSESCORE_VERSION%" "%APPVEYOR_BUILD_NUMBER%"
-
-SET ARTIFACTS_KEY=k68f3wMKIC5AzrfNMuC4kdPaxzvKdFVkRsietUKqc+E=
-SET ARTIFACTS_SECRET=IbpdpiHzGfMasaSA6uGrskE4xu9wE+HzElW7tIDOUww+ivHj+gN+mPgUHKCcV9Cn
-SET ARTIFACTS_REGION=us-east-1
-SET ARTIFACTS_BUCKET=sparkle.musescore.org
-SET ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
-SET ARTIFACTS_PERMISSIONS=public-read
-REM add correct extracting of SPARKLE_CHANNEL
-SET ARTIFACTS_TARGET_PATHS="/devel/3/win/"
-SET ARTIFACTS_PATHS=appcast.xml
-artifacts upload
-
 REM ------------------------------------------
 @echo on
+type C:\MuseScore\appcast.xml
 
 :UPLOAD
 SET SSH_IDENTITY=C:\MuseScore\build\appveyor\resources\osuosl_nighlies_rsa_nopp

@@ -57,6 +57,8 @@ artifacts:
     name: musescore-binary
   - path: update_win_nightly.xml
     name: update_win_nightly.xml
+  - path: appcast.xml
+    name: appcast.xml
 
 deploy:
   provider: S3
@@ -68,4 +70,15 @@ deploy:
   region: us-east-1
   set_public: true
   artifact: update_win_nightly.xml
+
+deploy:
+  provider: S3
+  access_key_id:
+    secure: k68f3wMKIC5AzrfNMuC4kdPaxzvKdFVkRsietUKqc+E=
+  secret_access_key:
+    secure: IbpdpiHzGfMasaSA6uGrskE4xu9wE+HzElW7tIDOUww+ivHj+gN+mPgUHKCcV9Cn
+  bucket: sparkle.musescore.org
+  region: us-east-1
+  set_public: true
+  artifact: appcast.xml
 
