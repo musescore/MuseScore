@@ -3315,6 +3315,8 @@ static bool doConvert(Score* cs, QString fn, QString plugin = "")
             }
       else if (fn.endsWith(".mlog"))
             return cs->sanityCheck(fn);
+      else if (fn.endsWith(".metajson"))
+            rv = mscore->saveMetadataJSON(cs, fn);
       else if (plugin.isEmpty()) {
             qDebug("don't know how to convert to %s", qPrintable(outFileName));
             return false;
