@@ -129,7 +129,7 @@ option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
 option(BUILD_64 "Build 64 bit version of editor" ON)
-option(BUILD_AUTOUPDATE "Build with autoupdate support" ON)
+option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
