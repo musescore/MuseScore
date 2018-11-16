@@ -2629,6 +2629,8 @@ static bool doConvert(Score* cs, QString fn, QString plugin = "")
             }
       else if (fn.endsWith(".mlog"))
             return cs->sanityCheck(fn);
+      else if (fn.endsWith(".metajson"))
+            rv = mscore->saveMetadataJSON(cs, fn);
       else if (plugin.isEmpty()) {
             qDebug("don't know how to convert to %s", qPrintable(outFileName));
             return false;
@@ -2962,6 +2964,9 @@ static bool experimentalMediaScore(const QString& inFilePath)
       res &= saveMxl(score, &mxmlDevice);
       QJsonValue mxmlJson(QString::fromLatin1(mxmlData.toBase64()));
 
+      //export metadata
+      QJsonObject mdJson = mscore->saveMetadataJSON(score);
+
       //// JSON specification ///////////////////////////
       jsonForMedia["mp3"] = mp3Json;
       jsonForMedia["pngs"] = pngsJsonArray;
@@ -2971,6 +2976,7 @@ static bool experimentalMediaScore(const QString& inFilePath)
       jsonForMedia["svgs"] = svgsJsonArray;
       jsonForMedia["midi"] = midiJson;
       jsonForMedia["mxml"] = mxmlJson;
+      jsonForMedia["metadata"] = mdJson;
       ///////////////////////////////////////////////////
 
       QJsonDocument jsonDoc(jsonForMedia);

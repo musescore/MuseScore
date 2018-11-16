@@ -621,6 +621,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 //      bool saveLilypond(Score*, const QString& name);
       bool saveMidi(Score* score, const QString& name);
       bool saveMidi(Score* score, QIODevice* device);
+      bool saveMetadataJSON(Score* score, const QString& name);
+      QJsonObject saveMetadataJSON(Score* score);
 
       virtual void closeScore(Score* score);
 
