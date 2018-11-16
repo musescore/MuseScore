@@ -3253,8 +3253,7 @@ void Chord::layoutArticulations()
                   else
                         a->setUp(a->anchor() == ArticulationAnchor::TOP_STAFF || a->anchor() == ArticulationAnchor::TOP_CHORD);
                   }
-            bool isStaccato = a->isStaccato();
-            if (!(isStaccato || a->isTenuto()))
+            if (!a->layoutCloseToNote())
                   continue;
 
             ArticulationAnchor aa = a->anchor();
@@ -3386,7 +3385,7 @@ void Chord::layoutArticulations2()
             if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD)
                   continue;
 
-            if (a->isStaccato() || a->isTenuto())
+            if (a->layoutCloseToNote())
                   continue;
             a->layout();
             dy += distance1;
