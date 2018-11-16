@@ -440,14 +440,14 @@
         <item row="2" column="0">
          <widget class="QCheckBox" name="autoplace">
           <property name="text">
-           <string>autoplace</string>
+           <string notr="true">autoplace</string>
           </property>
          </widget>
         </item>
         <item row="2" column="1">
          <widget class="QCheckBox" name="enabled">
           <property name="text">
-           <string>enabled</string>
+           <string notr="true">enabled</string>
           </property>
          </widget>
         </item>
