@@ -1993,6 +1993,9 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
       else if (ext == "mlog") {
             rv = cs_->sanityCheck(fn);
             }
+      else if (ext == "metajson") {
+            rv = saveMetadataJSON(cs, fn);
+            }
       else {
             qDebug("Internal error: unsupported extension <%s>",
                qPrintable(ext));
@@ -2929,6 +2932,133 @@ QPixmap MuseScore::extractThumbnail(const QString& name)
             return createThumbnail(name);
       pm.loadFromData(ba, "PNG");
       return pm;
+      }
+
+bool MuseScore::saveMetadataJSON(Score* score, const QString& name)
+      {
+      auto boolToString = [](bool b) { return b ? "true" : "false"; };
+      QJsonObject json;
+
+      // title
+      QString title;
+      Text* t = score->getText(Tid::TITLE);
+      if (t)
+            title = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+      if (title.isEmpty())
+            title = score->metaTag("workTitle");
+      if (title.isEmpty())
+            title = score->title();
+      title = title.simplified();
+      json.insert("title", title);
+
+      // subtitle
+      QString subtitle;
+      t = score->getText(Tid::SUBTITLE);
+      if (t)
+            subtitle = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+      subtitle = subtitle.simplified();
+      json.insert("subtitle", subtitle);
+
+      // composer
+      QString composer;
+      t = score->getText(Tid::COMPOSER);
+      if (t)
+            composer = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+      if (composer.isEmpty())
+            composer = score->metaTag("composer");
+      composer = composer.simplified();
+      json.insert("composer", composer);
+
+      // poet
+      QString poet;
+      t = score->getText(Tid::POET);
+      if (t)
+            poet = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+      if (poet.isEmpty())
+            poet = score->metaTag("lyricist");
+      poet = poet.simplified();
+      json.insert("poet", poet);
+
+      json.insert("mscoreVersion", score->mscoreVersion());
+
+      json.insert("pages", score->npages());
+      json.insert("measures", score->nmeasures());
+      json.insert("hasLyrics", boolToString(score->hasLyrics()));
+      json.insert("hasHarmonies", boolToString(score->hasHarmonies()));
+      json.insert("keysig", score->keysig());
+
+      // timeSig
+      QString timeSig;
+      int staves = score->nstaves();
+      int tracks = staves * VOICES;
+      Segment* tss = score->firstSegmentMM(SegmentType::TimeSig);
+      if (tss) {
+            Element* e = nullptr;
+            for (int track = 0; track < tracks; ++track) {
+                  e = tss->element(track);
+                  if (e) break;
+                  }
+            if (e && e->isTimeSig()) {
+                  TimeSig* ts = toTimeSig(e);
+                  timeSig = QString("%1/%2").arg(ts->numerator()).arg(ts->denominator());
+                  }
+            }
+      json.insert("timesig", timeSig);
+
+      json.insert("duration", score->duration());
+      json.insert("lyrics", score->extractLyrics());
+
+      // tempo
+       int tempo = 0;
+       QString tempoText;
+       for (Segment* seg = score->firstSegmentMM(SegmentType::All); seg; seg = seg->next1MM()) {
+             auto annotations = seg->annotations();
+             for (Element* a : annotations) {
+                   if (a && a->isTempoText()) {
+                         TempoText* tt = toTempoText(a);
+                         tempo = round(tt->tempo() * 60);
+                         tempoText = tt->xmlText();
+                         }
+                   }
+             }
+      json.insert("tempo", tempo);
+      json.insert("tempoText", tempoText);
+
+      // parts
+      QJsonArray jsonPartsArray;
+      for (Part* p : score->parts()) {
+            QJsonObject jsonPart;
+            jsonPart.insert("name", p->longName().replace("\n", ""));
+            int midiProgram = p->midiProgram();
+            if (p->midiChannel() == 9)
+                midiProgram = 128;
+            jsonPart.insert("program", midiProgram);
+            jsonPart.insert("instrumentId", p->instrumentId());
+            jsonPart.insert("lyricCount", p->lyricCount());
+            jsonPart.insert("harmonyCount", p->harmonyCount());
+            jsonPart.insert("hasPitchedStaff", boolToString(p->hasPitchedStaff()));
+            jsonPart.insert("hasTabStaff", boolToString(p->hasTabStaff()));
+            jsonPart.insert("hasDrumStaff", boolToString(p->hasDrumStaff()));
+            jsonPartsArray.append(jsonPart);
+            }
+      json.insert("parts", jsonPartsArray);
+
+      // pageFormat
+      QJsonObject jsonPageformat;
+      jsonPageformat.insert("height",round(score->styleD(Sid::pageHeight) * INCH));
+      jsonPageformat.insert("width", round(score->styleD(Sid::pageWidth) * INCH));
+      jsonPageformat.insert("twosided", boolToString(score->styleB(Sid::pageTwosided)));
+      json.insert("pageFormat", jsonPageformat);
+
+      QFile f(name);
+      if (!f.open(QIODevice::WriteOnly))
+            return false;
+
+      QJsonDocument saveDoc(json);
+      f.write(saveDoc.toJson());
+      f.close();
+
+      return true;
       }
 
 }
