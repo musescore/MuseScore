@@ -852,7 +852,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       Q_INVOKABLE bool isInstalledExtension(QString extensionId);
 
       bool runTestScripts(const QStringList& scripts);
-      friend class Script;
       };
 
 extern MuseScore* mscore;

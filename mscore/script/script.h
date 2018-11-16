@@ -57,10 +57,6 @@ class ScriptContext {
 class Script final {
       std::vector<std::unique_ptr<ScriptEntry>> _entries;
 
-      // FIXME: do something better?
-      friend class CommandScriptEntry;
-      static void execCmd(MuseScore* mscore, QAction* a, const QString& cmd);
-
    public:
       const ScriptEntry& entry(size_t n) const { return *_entries[n]; }
       const ScriptEntry& lastEntry() const { return *_entries.back(); }
@@ -70,12 +66,12 @@ class Script final {
       bool execute(ScriptContext& ctx) const;
 
       void clear() { _entries.clear(); }
-      void addEntry(std::unique_ptr<ScriptEntry>&& e) { _entries.push_back(std::move(e)); }
+      void addEntry(std::unique_ptr<ScriptEntry>&& e) { if (e) _entries.push_back(std::move(e)); }
       void addEntry(ScriptEntry* e) { _entries.emplace_back(e); }
       void addCommand(const QByteArray& cmd) { _entries.emplace_back(new CommandScriptEntry(cmd)); }
       void addCommand(const QString& cmd) { addCommand(cmd.toLatin1()); }
 
-      void addFromLine(const QString& line) { _entries.push_back(ScriptEntry::deserialize(line)); }
+      void addFromLine(const QString& line);
 
       static std::unique_ptr<Script> fromFile(QString fileName);
       void writeToFile(QString fileName) const;

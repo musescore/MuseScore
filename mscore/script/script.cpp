@@ -65,14 +65,15 @@ bool Script::execute(ScriptContext& ctx) const
       }
 
 //---------------------------------------------------------
-//   Script::execCmd
+//   Script::addFromLine
 //---------------------------------------------------------
 
-void Script::execCmd(MuseScore* score, QAction* a, const QString& cmd)
+void Script::addFromLine(const QString& line)
       {
-      score->cmd(a, cmd);
+      std::unique_ptr<ScriptEntry> e = ScriptEntry::deserialize(line);
+      if (e)
+            _entries.push_back(std::move(e));
       }
-
 //---------------------------------------------------------
 //   Script::fromFile
 //---------------------------------------------------------
