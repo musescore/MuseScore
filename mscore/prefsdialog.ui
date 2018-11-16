@@ -3272,6 +3272,38 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_14">
+         <property name="toolTip">
+          <string>Causes the audio engine to restart.  This can allow you to connect to MIDI devices that have been started since you started MuseScore.</string>
+         </property>
+         <property name="title">
+          <string>Audio Engine</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_11">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="rescanDrivers">
+            <property name="text">
+             <string>Restart Audio &amp;&amp; MIDI Devices</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <spacer name="horizontalSpacer_20">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="restartWarning">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">

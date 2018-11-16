@@ -562,6 +562,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void editWorkspace();
       void changeWorkspace(Workspace* p, bool first=false);
       void mixerPreferencesChanged(bool showMidiControls);
+      void restartAudioEngine();
 
    public:
       MuseScore();
