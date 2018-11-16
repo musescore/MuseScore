@@ -380,6 +380,7 @@ extern Pid propertyIdQml(const QStringRef& qmlName);
 extern Pid propertyIdName(const QString& name);
 extern Pid propertyIdName(const QStringRef& name);
 extern QString propertyUserName(Pid);
+extern QString propertyWritableValue(Pid, QVariant value);
 
 }     // namespace Ms
 #endif

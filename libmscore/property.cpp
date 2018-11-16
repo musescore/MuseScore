@@ -584,5 +584,139 @@ QVariant readProperty(Pid id, XmlReader& e)
       return QVariant();
       }
 
+//---------------------------------------------------------
+//   propertyWritableValue
+//    Originally extracted from XmlWriter
+//---------------------------------------------------------
+
+QString propertyWritableValue(Pid id, QVariant value)
+      {
+      if (value == QVariant())
+            return QString();
+      switch (propertyType(id)) {
+            case P_TYPE::BOOL:
+            case P_TYPE::INT:
+            case P_TYPE::ZERO_INT:
+                  return QString::number(value.toInt());
+            case P_TYPE::REAL:
+                  return QString::number(value.value<double>());
+            case P_TYPE::SPATIUM:
+                  return QString::number(value.value<Spatium>().val());
+            case P_TYPE::DIRECTION:
+                  return toString(value.value<Direction>());
+            case P_TYPE::STRING:
+            case P_TYPE::FRACTION:
+                  return value.toString();
+            case P_TYPE::ORNAMENT_STYLE:
+                  switch (MScore::OrnamentStyle(value.toInt())) {
+                        case MScore::OrnamentStyle::BAROQUE:
+                              return "baroque";
+                        case MScore::OrnamentStyle::DEFAULT:
+                              return "default";
+                        }
+                  break;
+            case P_TYPE::GLISSANDO_STYLE:
+                  switch (GlissandoStyle(value.toInt())) {
+                        case GlissandoStyle::BLACK_KEYS:
+                              return "blackkeys";
+                        case GlissandoStyle::WHITE_KEYS:
+                              return "whitekeys";
+                        case GlissandoStyle::DIATONIC:
+                              return "diatonic";
+                        case GlissandoStyle::CHROMATIC:
+                              return "Chromatic";
+                        }
+                  break;
+            case P_TYPE::DIRECTION_H:
+                  switch (MScore::DirectionH(value.toInt())) {
+                        case MScore::DirectionH::LEFT:
+                              return "left";
+                        case MScore::DirectionH::RIGHT:
+                              return "right";
+                        case MScore::DirectionH::AUTO:
+                              return "auto";
+                        }
+                  break;
+            case P_TYPE::LAYOUT_BREAK:
+                  switch (LayoutBreak::Type(value.toInt())) {
+                        case LayoutBreak::LINE:
+                              return "line";
+                        case LayoutBreak::PAGE:
+                              return "page";
+                        case LayoutBreak::SECTION:
+                              return "section";
+                        case LayoutBreak::NOBREAK:
+                              return "nobreak";
+                        }
+                  break;
+            case P_TYPE::VALUE_TYPE:
+                  switch (Note::ValueType(value.toInt())) {
+                        case Note::ValueType::OFFSET_VAL:
+                              return "offset";
+                        case Note::ValueType::USER_VAL:
+                              return "user";
+                        }
+                  break;
+            case P_TYPE::PLACEMENT:
+                  switch (Placement(value.toInt())) {
+                        case Placement::ABOVE:
+                              return "above";
+                        case Placement::BELOW:
+                              return "below";
+                        }
+                  break;
+            case P_TYPE::TEXT_PLACE:
+                  switch (PlaceText(value.toInt())) {
+                        case PlaceText::AUTO:
+                              return "auto";
+                        case PlaceText::ABOVE:
+                              return "above";
+                        case PlaceText::BELOW:
+                              return "below";
+                        case PlaceText::LEFT:
+                              return "left";
+                        }
+                  break;
+            case P_TYPE::SYMID:
+                  return Sym::id2name(SymId(value.toInt()));
+            case P_TYPE::BARLINE_TYPE:
+                  return BarLine::barLineTypeName(BarLineType(value.toInt()));
+            case P_TYPE::HEAD_GROUP:
+                  return NoteHead::group2name(NoteHead::Group(value.toInt()));
+            case P_TYPE::HEAD_TYPE:
+                  return NoteHead::type2name(NoteHead::Type(value.toInt()));
+            case P_TYPE::SUB_STYLE:
+                  return textStyleName(Tid(value.toInt()));
+            case P_TYPE::POINT_MM:
+                  qFatal("unknown: POINT_MM");
+            case P_TYPE::SIZE_MM:
+                  qFatal("unknown: SIZE_MM");
+            case P_TYPE::TDURATION:
+                  qFatal("unknown: TDURATION");
+            case P_TYPE::BEAM_MODE:
+                  qFatal("unknown: BEAM_MODE");
+            case P_TYPE::TEMPO:
+                  qFatal("unknown: TEMPO");
+            case P_TYPE::GROUPS:
+                  qFatal("unknown: GROUPS");
+            case P_TYPE::INT_LIST:
+                  qFatal("unknown: INT_LIST");
+
+            default: {
+                  switch(value.type()) {
+                        case QVariant::Bool:
+                        case QVariant::Char:
+                        case QVariant::Int:
+                        case QVariant::UInt:
+                              return QString::number(value.toInt());
+                        case QVariant::Double:
+                              return QString::number(value.value<double>());
+                        default:
+                              break;
+                        }
+                  }
+            }
+      return QString();
+      }
 }
 
