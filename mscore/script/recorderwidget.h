@@ -57,6 +57,7 @@ class ScriptRecorderWidget : public QDockWidget {
       ~ScriptRecorderWidget();
 
       void recordCommand(const QString& cmd) { _recorder.recordCommand(cmd); }
+      void recordPaletteElement(Element* e) { _recorder.recordPaletteElement(e); }
       };
 
 }     // namespace Ms

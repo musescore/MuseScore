@@ -13,6 +13,8 @@
 #ifndef __SCRIPTENTRY_H__
 #define __SCRIPTENTRY_H__
 
+#include "libmscore/element.h"
+
 namespace Ms {
 
 class ScriptContext;
@@ -25,6 +27,7 @@ class ScriptEntry {
    protected:
       static constexpr const char* SCRIPT_INIT = "init";
       static constexpr const char* SCRIPT_CMD = "cmd";
+      static constexpr const char* SCRIPT_PALETTE = "palette";
       static constexpr const char* SCRIPT_TEST = "test";
 
       static QString entryTemplate(const char* entryType) { return QString("%1 %2").arg(entryType); }
@@ -63,6 +66,23 @@ class CommandScriptEntry : public ScriptEntry {
       explicit CommandScriptEntry(const char* cmd) : _command(cmd) {}
       bool execute(ScriptContext& ctx) const override;
       QString serialize() const override { return entryTemplate(SCRIPT_CMD).arg(_command.constData()); };
+      };
+
+//---------------------------------------------------------
+//   PaletteElementScriptEntry
+//---------------------------------------------------------
+
+class PaletteElementScriptEntry : public ScriptEntry {
+      ElementType _type;
+      QString _subtype;
+
+      static QString getElementSubtype(Element* e);
+   public:
+      PaletteElementScriptEntry(ElementType type, QString subtype) : _type(type), _subtype(subtype) {}
+      explicit PaletteElementScriptEntry(Element* e) : _type(e->type()), _subtype(getElementSubtype(e)) {}
+      bool execute(ScriptContext& ctx) const override;
+      QString serialize() const override;
+      static std::unique_ptr<ScriptEntry> deserialize(const QStringList& tokens);
       };
 
 }     // namespace Ms

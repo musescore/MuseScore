@@ -3032,6 +3032,7 @@ void MuseScore::removeTab(int i)
 
 bool MuseScore::runTestScripts(const QStringList& scriptFiles)
       {
+      setDefaultPalette();
       ScriptContext ctx(this);
       bool allPassed = true;
       int passed = 0;

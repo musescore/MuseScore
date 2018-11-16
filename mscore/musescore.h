@@ -851,6 +851,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool uninstallExtension(QString extensionId);
       Q_INVOKABLE bool isInstalledExtension(QString extensionId);
 
+#ifdef MSCORE_UNSTABLE
+      ScriptRecorderWidget* getScriptRecorder() { return scriptRecorder; }
+#endif
       bool runTestScripts(const QStringList& scripts);
       };
 

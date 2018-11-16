@@ -161,6 +161,17 @@ void ScriptRecorder::recordCommand(const QString& name)
       }
 
 //---------------------------------------------------------
+//   ScriptRecorder::recordPaletteElement
+//---------------------------------------------------------
+
+void ScriptRecorder::recordPaletteElement(Element* e)
+      {
+      if (_recording)
+            _script.addEntry(new PaletteElementScriptEntry(e));
+      syncRecord();
+      }
+
+//---------------------------------------------------------
 //   ScriptRecorder::recordScoreTest
 //---------------------------------------------------------
 

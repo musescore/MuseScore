@@ -45,6 +45,7 @@
 #include "paletteBoxButton.h"
 #include "palettebox.h"
 #include "shortcut.h"
+#include "script/recorderwidget.h"
 
 namespace Ms {
 
@@ -467,6 +468,14 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
             element = cell->element;
       if (element == 0)
             return;
+
+#ifdef MSCORE_UNSTABLE
+      // TODO: replace with ScriptRecorder?
+      if (ScriptRecorderWidget* rec = mscore->getScriptRecorder()) {
+            if (modifiers == 0)
+                  rec->recordPaletteElement(element);
+            }
+#endif
 
       ScoreView* viewer = mscore->currentScoreView();
       if (viewer->mscoreState() != STATE_EDIT
