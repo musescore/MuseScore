@@ -62,9 +62,9 @@ class Script final {
       static void execCmd(MuseScore* mscore, QAction* a, const QString& cmd);
 
    public:
-      const ScriptEntry& entry(int n) const { return *_entries[n]; }
+      const ScriptEntry& entry(size_t n) const { return *_entries[n]; }
       const ScriptEntry& lastEntry() const { return *_entries.back(); }
-      int nentries() const { return _entries.size(); }
+      size_t nentries() const { return _entries.size(); }
       bool empty() const { return _entries.empty(); }
 
       bool execute(ScriptContext& ctx) const;
@@ -96,7 +96,7 @@ class ScriptRecorder {
       ScriptContext _ctx;
 
       bool _recording = false;
-      int _recorded = 0;
+      size_t _recorded = 0;
 
       bool ensureFileOpen();
       void syncRecord();
