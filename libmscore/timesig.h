@@ -126,6 +126,8 @@ class TimeSig final : public Element {
       virtual Element* nextSegmentElement();
       virtual Element* prevSegmentElement();
       virtual QString accessibleInfo() const override;
+
+      Pid subtypePid() const override { return Pid::TIMESIG; }
       };
 
 }     // namespace Ms

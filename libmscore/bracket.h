@@ -52,6 +52,9 @@ class Bracket final : public Element {
       BracketItem* bracketItem() const          { return _bi;          }
 
       BracketType bracketType() const           { return _bi->bracketType(); }
+      static const char* bracketTypeName(BracketType type);
+
+      Pid subtypePid() const override           { return Pid::SYSTEM_BRACKET;   }
 
       int firstStaff() const                    { return _firstStaff; }
       int lastStaff() const                     { return _lastStaff; }

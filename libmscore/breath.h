@@ -67,6 +67,8 @@ class Breath final : public Element {
       bool isCaesura() const;
 
       static const std::vector<BreathType> breathList;
+
+      Pid subtypePid() const override { return Pid::SYMBOL; }
       };
 
 

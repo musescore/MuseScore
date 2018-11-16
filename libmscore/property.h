@@ -141,6 +141,7 @@ enum class Pid {
       TEMPO,
       TEMPO_FOLLOW_TEXT,
       ACCIDENTAL_BRACKET,
+      ACCIDENTAL_TYPE,
       NUMERATOR_STRING,
       DENOMINATOR_STRING,
       FBPREFIX,             // used for FiguredBassItem
@@ -168,8 +169,8 @@ enum class Pid {
       VELOCITY,
       JUMP_TO,
       PLAY_UNTIL,
-      CONTINUE_AT,
 //100
+      CONTINUE_AT,
       LABEL,
       MARKER_TYPE,
       ARP_USER_LEN1,
@@ -278,8 +279,8 @@ enum class Pid {
       FONT_STYLE,
 
       FRAME_TYPE,
-      FRAME_WIDTH,
 //200
+      FRAME_WIDTH,
       FRAME_PADDING,
       FRAME_ROUND,
       FRAME_FG_COLOR,

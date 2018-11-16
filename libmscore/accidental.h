@@ -184,6 +184,7 @@ class Accidental final : public Element {
 
       virtual int subtype() const override         { return (int)_accidentalType; }
       virtual QString subtypeName() const override { return QString(subtype2name(_accidentalType)); }
+      Pid subtypePid() const override              { return Pid::ACCIDENTAL_TYPE; }
 
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
@@ -211,7 +212,8 @@ class Accidental final : public Element {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid propertyId) const override;
-      virtual QString propertyUserValue(Pid) const;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
+      virtual QString propertyUserValue(Pid) const override;
 
       static AccidentalVal subtype2value(AccidentalType);             // return effective pitch offset
       static const char* subtype2name(AccidentalType);

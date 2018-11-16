@@ -11,6 +11,8 @@
 //=============================================================================
 
 #include "property.h"
+#include "accidental.h"
+#include "bracket.h"
 #include "mscore.h"
 #include "layoutbreak.h"
 #include "groups.h"
@@ -124,6 +126,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::TEMPO,                   "tempo",                   true,  "tempo",                 P_TYPE::TEMPO,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "tempo")            },
       { Pid::TEMPO_FOLLOW_TEXT,       "tempo_follow_text",       true,  "followText",            P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "following text")   },
       { Pid::ACCIDENTAL_BRACKET,      "accidental_bracket",      false, "bracket",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "bracket")          },
+      { Pid::ACCIDENTAL_TYPE,         "accidental_type",         true,  "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "type")             },
       { Pid::NUMERATOR_STRING,        "numerator_string",        false, "textN",                 P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "numerator string") },
       { Pid::DENOMINATOR_STRING,      "denominator_string",      false, "textD",                 P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "denominator string") },
       { Pid::FBPREFIX,                "fbprefix",                false, "prefix",                P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "prefix")           },
@@ -151,8 +154,8 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::VELOCITY,                "velocity",                false, "velocity",              P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "velocity")         },
       { Pid::JUMP_TO,                 "jump_to",                 true,  "jumpTo",                P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "jump to")          },
       { Pid::PLAY_UNTIL,              "play_until",              true,  "playUntil",             P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "play until")       },
-      { Pid::CONTINUE_AT,             "continue_at",             true,  "continueAt",            P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue at")       },
 //100
+      { Pid::CONTINUE_AT,             "continue_at",             true,  "continueAt",            P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue at")       },
       { Pid::LABEL,                   "label",                   true,  "label",                 P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "label")            },
       { Pid::MARKER_TYPE,             "marker_type",             true,  0,                       P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "marker type")      },
       { Pid::ARP_USER_LEN1,           "arp_user_len1",           false, 0,                       P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "length 1")         },
@@ -593,6 +596,16 @@ QString propertyWritableValue(Pid id, QVariant value)
       {
       if (value == QVariant())
             return QString();
+
+      switch(id) {
+            case Pid::SYSTEM_BRACKET: // system bracket type
+                  return Bracket::bracketTypeName(BracketType(value.toInt()));
+            case Pid::ACCIDENTAL_TYPE:
+                  return Accidental::subtype2name(AccidentalType(value.toInt()));
+            default:
+                  break;
+            }
+
       switch (propertyType(id)) {
             case P_TYPE::BOOL:
             case P_TYPE::INT:

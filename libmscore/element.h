@@ -15,6 +15,7 @@
 
 #include "spatium.h"
 #include "fraction.h"
+#include "property.h"
 #include "scoreElement.h"
 #include "shape.h"
 
@@ -34,7 +35,6 @@ class ConnectorInfoReader;
 class XmlReader;
 class XmlWriter;
 enum class SymId;
-enum class Pid;
 enum class OffsetType : char;
 
 //---------------------------------------------------------
@@ -253,6 +253,7 @@ class Element : public ScoreElement {
       virtual qreal baseLine() const              { return -height();       }
 
       virtual int subtype() const                 { return -1; }  // for select gui
+      virtual Pid subtypePid() const              { return Pid::SUBTYPE; }
 
       virtual void draw(QPainter*) const {}
       void drawAt(QPainter*p, const QPointF& pt) const { p->translate(pt); draw(p); p->translate(-pt);}

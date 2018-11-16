@@ -156,6 +156,37 @@ void Symbol::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   Symbol::getProperty
+//---------------------------------------------------------
+
+QVariant Symbol::getProperty(Pid propertyId) const
+      {
+      switch (propertyId) {
+            case Pid::SYMBOL:
+                  return QVariant::fromValue(_sym);
+            default:
+                  break;
+            }
+      return BSymbol::getProperty(propertyId);
+      }
+
+//---------------------------------------------------------
+//   Symbol::setProperty
+//---------------------------------------------------------
+
+bool Symbol::setProperty(Pid propertyId, const QVariant& v)
+      {
+      switch (propertyId) {
+            case Pid::SYMBOL:
+                  _sym = v.value<SymId>();
+                  break;
+            default:
+                  break;
+            }
+      return BSymbol::setProperty(propertyId, v);
+      }
+
+//---------------------------------------------------------
 //   FSymbol
 //---------------------------------------------------------
 

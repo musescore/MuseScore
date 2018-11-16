@@ -41,6 +41,7 @@ class Symbol : public BSymbol {
 
       virtual Symbol* clone() const      { return new Symbol(*this); }
       virtual ElementType type() const   { return ElementType::SYMBOL; }
+      Pid subtypePid() const override    { return Pid::SYMBOL;       }
 
       void setSym(SymId s, const ScoreFont* sf = nullptr) { _sym  = s; _scoreFont = sf;    }
       SymId sym() const                  { return _sym;  }
@@ -50,6 +51,9 @@ class Symbol : public BSymbol {
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void layout() override;
+
+      virtual QVariant getProperty(Pid) const override;
+      virtual bool setProperty(Pid, const QVariant&) override;
 
       virtual qreal baseLine() const     { return 0.0; }
       virtual Segment* segment() const   { return (Segment*)parent(); }

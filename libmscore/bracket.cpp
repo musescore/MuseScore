@@ -456,6 +456,26 @@ void Bracket::setSelected(bool f)
       }
 
 //---------------------------------------------------------
+//   Bracket::bracketTypeName
+//---------------------------------------------------------
+
+const char* Bracket::bracketTypeName(BracketType type)
+      {
+      switch(type) {
+            case BracketType::BRACE:
+                  return "Brace";
+            case BracketType::NORMAL:
+                  return "Normal";
+            case BracketType::SQUARE:
+                  return "Square";
+            case BracketType::LINE:
+                  return "Line";
+            case BracketType::NO_BRACKET:
+                  return "NoBracket";
+            }
+      }
+
+//---------------------------------------------------------
 //   Bracket::write
 //    used only for palettes
 //---------------------------------------------------------
@@ -464,16 +484,15 @@ void Bracket::write(XmlWriter& xml) const
       {
       switch (_bi->bracketType()) {
             case BracketType::BRACE:
-                  xml.stag(this, "type=\"Brace\"");
+            case BracketType::SQUARE:
+            case BracketType::LINE:
+                  {
+                  const char* type = bracketTypeName(_bi->bracketType());
+                  xml.stag(this, QString("type=\"%1\"").arg(type));
+                  }
                   break;
             case BracketType::NORMAL:
                   xml.stag(this);
-                  break;
-            case BracketType::SQUARE:
-                  xml.stag(this, "type=\"Square\"");
-                  break;
-            case BracketType::LINE:
-                  xml.stag(this, "type=\"Line\"");
                   break;
             case BracketType::NO_BRACKET:
                   break;

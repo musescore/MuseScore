@@ -308,6 +308,7 @@ class Note final : public Element {
       void setHeadType(NoteHead::Type t);
 
       virtual int subtype() const override { return (int) _headGroup; }
+      Pid subtypePid() const override      { return Pid::HEAD_GROUP;  }
       virtual QString subtypeName() const override;
 
       void setPitch(int val);

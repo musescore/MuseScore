@@ -90,6 +90,7 @@ class Hairpin final : public TextLineBase {
 
       HairpinType hairpinType() const           { return _hairpinType; }
       void setHairpinType(HairpinType val);
+      Pid subtypePid() const override           { return Pid::HAIRPIN_TYPE;  }
 
       Segment* segment() const                  { return (Segment*)parent(); }
       virtual void layout() override;
