@@ -85,6 +85,7 @@ class Articulation final : public Element {
       static const char* symId2ArticulationName(SymId symId);
 
       virtual void layout() override;
+      bool layoutCloseToNote() const;
 
       virtual void read(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
@@ -123,6 +124,7 @@ class Articulation final : public Element {
 
       QString accessibleInfo() const override;
 
+      bool isDouble() const;
       bool isTenuto() const;
       bool isStaccato() const;
       bool isAccent() const;

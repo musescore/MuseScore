@@ -258,6 +258,18 @@ void Articulation::layout()
       }
 
 //---------------------------------------------------------
+//   layoutCloseToNote
+//    Needed to figure out the layout policy regarding
+//    distance to the note and placement in relation to
+//    slur.
+//---------------------------------------------------------
+
+bool Articulation::layoutCloseToNote() const
+      {
+      return (isStaccato() || isTenuto()) && !isDouble();
+      }
+
+//---------------------------------------------------------
 //   dragAnchor
 //---------------------------------------------------------
 
@@ -519,6 +531,12 @@ bool Articulation::isMarcato() const
       {
       return _symId == SymId::articMarcatoAbove         || _symId == SymId::articMarcatoBelow
           || _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
+          || _symId == SymId::articMarcatoTenutoAbove   || _symId == SymId::articMarcatoTenutoBelow;
+      }
+
+bool Articulation::isDouble() const {
+      return _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
+          || _symId == SymId::articAccentStaccatoAbove  || _symId == SymId::articAccentStaccatoBelow
           || _symId == SymId::articMarcatoTenutoAbove   || _symId == SymId::articMarcatoTenutoBelow;
       }
 
