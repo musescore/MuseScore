@@ -185,6 +185,8 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
             staffStart = staffIdx(sPart);
             staffEnd = staffIdx(ePart) + ePart->nstaves();
             measureStart = _selection.startSegment()->measure();
+            if (measureStart->isMeasure() && toMeasure(measureStart)->isMMRest())
+                  measureStart = toMeasure(measureStart)->mmRestFirst();
             if (_selection.endSegment())
                   measureEnd   = _selection.endSegment()->measure()->next();
             else
