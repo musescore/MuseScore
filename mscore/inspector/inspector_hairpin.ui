@@ -453,7 +453,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Font size' value</string>
+         <string>Reset 'Begin text' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -470,7 +470,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Font size' value</string>
+         <string>Reset 'End text' value</string>
         </property>
         <property name="text">
          <string notr="true"/>

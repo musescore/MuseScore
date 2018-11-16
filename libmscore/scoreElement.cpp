@@ -28,7 +28,7 @@ ElementStyle const ScoreElement::emptyStyle;
 //
 static const ElementName elementNames[] = {
       { ElementType::INVALID,              "invalid",              QT_TRANSLATE_NOOP("elementName", "invalid") },
-      { ElementType::BRACKET_ITEM,         "BracketItem",          QT_TRANSLATE_NOOP("elementName", "BracketItem") },
+      { ElementType::BRACKET_ITEM,         "BracketItem",          QT_TRANSLATE_NOOP("elementName", "Bracket") },
       { ElementType::PART,                 "Part",                 QT_TRANSLATE_NOOP("elementName", "Part") },
       { ElementType::STAFF,                "Staff",                QT_TRANSLATE_NOOP("elementName", "Staff") },
       { ElementType::SCORE,                "Score",                QT_TRANSLATE_NOOP("elementName", "Score") },

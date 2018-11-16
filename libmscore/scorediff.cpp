@@ -1366,7 +1366,7 @@ QString ElementDiff::toString() const
             case DiffType::INSERT:
                   return QObject::tr("%1: inserted element %2", "scorediff").arg(ctxDescr).arg(el[1]->userName());
             case DiffType::REPLACE:
-                  return QObject::tr("%1: replaced element %2 to element %3", "scorediff").arg(ctxDescr).arg(el[0]->userName()).arg(el[1]->userName());
+                  return QObject::tr("%1: replaced element %2 with element %3", "scorediff").arg(ctxDescr).arg(el[0]->userName()).arg(el[1]->userName());
             case DiffType::EQUAL:
                   Q_ASSERT(el[0]->type() == el[1]->type());
                   return QObject::tr("%1: equal element %2", "scorediff").arg(ctxDescr).arg(el[0]->userName());

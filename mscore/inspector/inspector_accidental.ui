@@ -113,7 +113,7 @@
       <item row="1" column="2">
        <widget class="QComboBox" name="bracket">
         <property name="accessibleName">
-         <string>Brackt type</string>
+         <string>Bracket type</string>
         </property>
        </widget>
       </item>
