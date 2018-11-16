@@ -40,7 +40,7 @@ QVector<ScoreFont> ScoreFont::_scoreFonts {
       ScoreFont("MuseJazz",   "MuseJazz",     ":/fonts/musejazz/", "MuseJazz.otf" ),
       };
 
-QJsonObject ScoreFont::_glyphnamesJson;
+std::array<uint, size_t(SymId::lastSym)+1> ScoreFont::_mainSymCodeTable { 0 };
 
 //---------------------------------------------------------
 //   table of symbol names
@@ -5781,13 +5781,22 @@ const char* Sym::id2name(SymId id)
 
 void initScoreFonts()
       {
-      ScoreFont::initGlyphNamesJson();
+      QJsonObject glyphNamesJson(ScoreFont::initGlyphNamesJson());
+      if (glyphNamesJson.empty())
+            qFatal("initGlyphNamesJson failed");
       int error = FT_Init_FreeType(&ftlib);
       if (!ftlib || error)
             qFatal("init freetype library failed");
-      int index = 0;
-      for (auto i : Sym::symNames)
-            Sym::lnhash.insert(i, SymId(index++));
+      for (size_t i = 0; i < Sym::symNames.size(); ++i) {
+            const char* name = Sym::symNames[i];
+            Sym::lnhash.insert(name, SymId(i));
+            bool ok;
+            uint code = glyphNamesJson.value(name).toObject().value("codepoint").toString().mid(2).toUInt(&ok, 16);
+            if (ok)
+                  ScoreFont::_mainSymCodeTable[i] = code;
+            else
+                  qDebug("codepoint not recognized for glyph %s", qPrintable(name));
+            }
       for (oldName i : oldNames)
             Sym::lonhash.insert(i.name, SymId(i.symId));
       QFont::insertSubstitution("MScore Text",    "Bravura Text");
@@ -5812,7 +5821,15 @@ static QString codeToString(uint code)
 
 QString ScoreFont::toString(SymId id) const
       {
-      return codeToString(sym(id).code());
+      const Sym& s = sym(id);
+      int code;
+      if (s.isValid())
+            code = s.code();
+      else {
+            // fallback: search in the common SMuFL table
+            code = _mainSymCodeTable[size_t(id)];
+            }
+      return codeToString(code);
       }
 
 //---------------------------------------------------------
@@ -5865,18 +5882,13 @@ void ScoreFont::load()
       qreal pixelSize = 200.0;
       FT_Set_Pixel_Sizes(face, 0, int(pixelSize+.5));
 
-      for (auto i : ScoreFont::glyphNamesJson().keys()) {
-            bool ok;
-            int code = ScoreFont::glyphNamesJson().value(i).toObject().value("codepoint").toString().mid(2).toInt(&ok, 16);
-            if (!ok)
-                  qDebug("codepoint not recognized for glyph %s", qPrintable(i));
-            if (Sym::lnhash.contains(i)) {
-                  SymId symId = Sym::lnhash.value(i);
-                  Sym* sym    = &_symbols[int(symId)];
-                  computeMetrics(sym, code);
-                  }
-            else
-                  qDebug("unknown glyph: %s", qPrintable(i));
+      for (size_t id = 0; id < _mainSymCodeTable.size(); ++id) {
+            uint code = _mainSymCodeTable[id];
+            if (code == 0)
+                  continue;
+            SymId symId = SymId(id);
+            Sym* sym    = &_symbols[int(symId)];
+            computeMetrics(sym, code);
             }
 
       QJsonParseError error;
@@ -6209,22 +6221,22 @@ const char* ScoreFont::fallbackTextFont()
 //   initGlyphNamesJson
 //---------------------------------------------------------
 
-bool ScoreFont::initGlyphNamesJson()
+QJsonObject ScoreFont::initGlyphNamesJson()
       {
       QFile fi(":fonts/smufl/glyphnames.json");
       if (!fi.open(QIODevice::ReadOnly)) {
             qDebug("ScoreFont: open glyph names file <%s> failed", qPrintable(fi.fileName()));
-            return false;
+            return QJsonObject();
             }
       QJsonParseError error;
-      _glyphnamesJson = QJsonDocument::fromJson(fi.readAll(), &error).object();
+      QJsonObject glyphNamesJson = QJsonDocument::fromJson(fi.readAll(), &error).object();
       if (error.error != QJsonParseError::NoError) {
             qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
                error.offset, qPrintable(error.errorString()));
-            return false;
+            return QJsonObject();
             }
       fi.close();
-      return true;
+      return glyphNamesJson;
       }
 
 //---------------------------------------------------------
