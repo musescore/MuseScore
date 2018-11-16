@@ -1917,8 +1917,8 @@ static constexpr std::array<TextStyleName, int(Tid::TEXT_STYLES)> textStyles { {
       { QT_TRANSLATE_NOOP("TextStyle", "Composer"),                &composerTextStyle,          Tid::COMPOSER },
       { QT_TRANSLATE_NOOP("TextStyle", "Lyricist"),                &lyricistTextStyle,          Tid::POET },
 
-      { QT_TRANSLATE_NOOP("TextStyle", "LyricsOdd"),               &lyricsOddTextStyle,         Tid::LYRICS_ODD },
-      { QT_TRANSLATE_NOOP("TextStyle", "LyricsEven"),              &lyricsEvenTextStyle,        Tid::LYRICS_EVEN },
+      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Odd Lines"),        &lyricsOddTextStyle,         Tid::LYRICS_ODD },
+      { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Even Lines"),       &lyricsEvenTextStyle,        Tid::LYRICS_EVEN },
       { QT_TRANSLATE_NOOP("TextStyle", "Fingering"),               &fingeringTextStyle,         Tid::FINGERING },
       { QT_TRANSLATE_NOOP("TextStyle", "LH Guitar Fingering"),     &lhGuitarFingeringTextStyle, Tid::LH_GUITAR_FINGERING },
       { QT_TRANSLATE_NOOP("TextStyle", "RH Guitar Fingering"),     &rhGuitarFingeringTextStyle, Tid::RH_GUITAR_FINGERING },
@@ -1951,8 +1951,8 @@ static constexpr std::array<TextStyleName, int(Tid::TEXT_STYLES)> textStyles { {
       { QT_TRANSLATE_NOOP("TextStyle", "Ottava"),                  &ottavaTextStyle,            Tid::OTTAVA },
       { QT_TRANSLATE_NOOP("TextStyle", "Volta"),                   &voltaTextStyle,             Tid::VOLTA },
       { QT_TRANSLATE_NOOP("TextStyle", "Pedal"),                   &pedalTextStyle,             Tid::PEDAL },
-      { QT_TRANSLATE_NOOP("TextStyle", "LetRing"),                 &letRingTextStyle,           Tid::LET_RING },
-      { QT_TRANSLATE_NOOP("TextStyle", "PalmMute"),                &palmMuteTextStyle,          Tid::PALM_MUTE },
+      { QT_TRANSLATE_NOOP("TextStyle", "Let Ring"),                &letRingTextStyle,           Tid::LET_RING },
+      { QT_TRANSLATE_NOOP("TextStyle", "Palm Mute"),               &palmMuteTextStyle,          Tid::PALM_MUTE },
 
       { QT_TRANSLATE_NOOP("TextStyle", "Hairpin"),                 &hairpinTextStyle,           Tid::HAIRPIN },
       { QT_TRANSLATE_NOOP("TextStyle", "Bend"),                    &bendTextStyle,              Tid::BEND },

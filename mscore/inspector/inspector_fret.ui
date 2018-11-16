@@ -200,7 +200,7 @@
       <item row="5" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Barre:</string>
+         <string>Barré:</string>
         </property>
         <property name="buddy">
          <cstring>barre</cstring>
@@ -257,7 +257,7 @@
       <item row="5" column="1">
        <widget class="QSpinBox" name="barre">
         <property name="accessibleName">
-         <string>Barre</string>
+         <string>Barré</string>
         </property>
        </widget>
       </item>
@@ -284,7 +284,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Barre' value</string>
+         <string>Reset 'Barré' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
