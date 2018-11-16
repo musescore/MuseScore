@@ -808,9 +808,9 @@ include(Packaging)
 
 add_custom_target(lupdate
    COMMAND ${PROJECT_SOURCE_DIR}/build/gen-qt-projectfile ${PROJECT_SOURCE_DIR} > mscore.pro
-   COMMAND Qt5::lupdate ${PROJECT_BINARY_DIR}/mscore.pro
+   COMMAND Qt5::lupdate -no-obsolete ${PROJECT_BINARY_DIR}/mscore.pro
    COMMAND ${PROJECT_SOURCE_DIR}/build/gen-instruments-projectfile ${PROJECT_SOURCE_DIR}/share/instruments > instruments.pro
-   COMMAND Qt5::lupdate ${PROJECT_BINARY_DIR}/instruments.pro
+   COMMAND Qt5::lupdate -no-obsolete ${PROJECT_BINARY_DIR}/instruments.pro
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
 
