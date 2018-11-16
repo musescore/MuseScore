@@ -63,6 +63,7 @@ class TestCopyPaste : public QObject, public MTest
       void copypaste22() { copypaste("22"); }       // cross-staff slur
       void copypaste23() { copypaste("23"); }       // full measure tuplet 10/8
       void copypaste24() { copypaste("24"); }       // more complex non reduced tuplet
+      void copypaste25() { copypaste("25"); }       // copy full measure rest
 
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 
