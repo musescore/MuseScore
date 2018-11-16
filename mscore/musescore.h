@@ -700,6 +700,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveSvg(Score*, const QString& name);
       bool savePng(Score*, const QString& name);
       bool saveMidi(Score* score, const QString& name);
+      bool saveMetadataXML(Score* score, const QString& name);
 
       virtual void closeScore(Score* score);
 

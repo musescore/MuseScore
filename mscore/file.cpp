@@ -1993,6 +1993,9 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
       else if (ext == "mlog") {
             rv = cs_->sanityCheck(fn);
             }
+      else if (ext == "metaxml") {
+            rv = saveMetadataXML(cs, fn);
+            }
       else {
             qDebug("Internal error: unsupported extension <%s>",
                qPrintable(ext));
@@ -2929,6 +2932,133 @@ QPixmap MuseScore::extractThumbnail(const QString& name)
             return createThumbnail(name);
       pm.loadFromData(ba, "PNG");
       return pm;
+      }
+
+bool MuseScore::saveMetadataXML(Score* score, const QString& name)
+      {
+      auto boolToString = [](bool b) { return b ? "true" : "false"; };
+      XmlWriter _xml(score);
+      QFile f(name);
+      if (!f.open(QIODevice::WriteOnly))
+            return false;
+      _xml.setDevice(&f);
+      _xml.setCodec("UTF-8");
+      _xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+      _xml.stag("metadata xmlns=\"http://musescore.com/doc/2010-02-20/\"");
+
+      // title
+      QString title;
+      Text* t = score->getText(Tid::TITLE);
+      if (t)
+            title = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+      if (title.isEmpty())
+            title = score->metaTag("workTitle");
+      if (title.isEmpty())
+            title = score->title();
+      title = title.simplified();
+      _xml.tag("title", title);
+
+      // subtitle
+      QString subtitle;
+      t = score->getText(Tid::SUBTITLE);
+      if (t)
+            subtitle = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+      subtitle = subtitle.simplified();
+      _xml.tag("subtitle", subtitle);
+
+      // composer
+      QString composer;
+      t = score->getText(Tid::COMPOSER);
+      if (t)
+            composer = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+      if (composer.isEmpty())
+            composer = score->metaTag("composer");
+      composer = composer.simplified();
+      _xml.tag("composer", composer);
+
+      // poet
+      QString poet;
+      t = score->getText(Tid::POET);
+      if (t)
+            poet = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
+      if (poet.isEmpty())
+            poet = score->metaTag("lyricist");
+      poet = poet.simplified();
+      _xml.tag("poet", poet);
+
+      _xml.tag("mscoreVersion", score->mscoreVersion());
+
+      _xml.tag("pages", score->npages());
+      _xml.tag("measures", score->nmeasures());
+      _xml.tag("hasLyrics", boolToString(score->hasLyrics()));
+      _xml.tag("hasHarmonies", boolToString(score->hasHarmonies()));
+      _xml.tag("keysig", score->keysig());
+
+      // timeSig
+      QString timeSig;
+      int staves = score->nstaves();
+      int tracks = staves * VOICES;
+      Segment* tss = score->firstSegmentMM(SegmentType::TimeSig);
+      if (tss) {
+            Element* e = nullptr;
+            for (int track = 0; track < tracks; ++track) {
+                  e = tss->element(track);
+                  if (e) break;
+                  }
+            if (e && e->isTimeSig()) {
+                  TimeSig* ts = toTimeSig(e);
+                  timeSig = QString("%1/%2").arg(ts->numerator()).arg(ts->denominator());
+                  }
+            }
+      _xml.tag("timesig", timeSig);
+
+      _xml.tag("duration", score->duration());
+      _xml.tag("lyrics", score->extractLyrics());
+
+      // tempo
+       int tempo = 0;
+       QString tempoText;
+       for (Segment* seg = score->firstSegmentMM(SegmentType::All); seg; seg = seg->next1MM()) {
+             auto annotations = seg->annotations();
+             for (Element* a : annotations) {
+                   if (a && a->isTempoText()) {
+                         TempoText* tt = toTempoText(a);
+                         tempo = round(tt->tempo() * 60);
+                         tempoText = tt->xmlText();
+                         }
+                   }
+             }
+      _xml.tag("tempo", tempo);
+      _xml.tag("tempoText", tempoText);
+
+      // parts
+      _xml.stag("parts");
+      for (Part* p : score->parts()) {
+            _xml.stag("part");
+            _xml.tag("name", p->longName().replace("\n", ""));
+            int midiProgram = p->midiProgram();
+            if (p->midiChannel() == 9)
+                midiProgram = 128;
+            _xml.tag("program", midiProgram);
+            _xml.tag("instrumentId", p->instrumentId());
+            _xml.tag("lyricCount", p->lyricCount());
+            _xml.tag("harmonyCount", p->harmonyCount());
+            _xml.tag("hasPitchedStaff", boolToString(p->hasPitchedStaff()));
+            _xml.tag("hasTabStaff", boolToString(p->hasTabStaff()));
+            _xml.tag("hasDrumStaff", boolToString(p->hasDrumStaff()));
+            _xml.etag();
+            }
+      _xml.etag();
+
+      // pageFormat
+      _xml.stag("pageFormat");
+      _xml.tag("height",round(score->styleD(Sid::pageHeight) * INCH));
+      _xml.tag("width", round(score->styleD(Sid::pageWidth) * INCH));
+      _xml.tag("twosided", boolToString(score->styleB(Sid::pageTwosided)));
+      _xml.etag();
+
+      _xml.etag(); // metadata
+      return true;
       }
 
 }
