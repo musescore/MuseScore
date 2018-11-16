@@ -29,7 +29,7 @@
 
 namespace Ms {
 
-class MidiMapping;
+struct MidiMapping;
 class MixerTrackItem;
 
 //---------------------------------------------------------

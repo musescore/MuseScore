@@ -123,7 +123,7 @@ void StyledSlider::paintEvent(QPaintEvent *ev)
 
     double barLength = h - _margin * 2;
     double x0 = (w - _barThickness) / 2;
-    double valueSpan = _maxValue - _minValue;
+//    double valueSpan = _maxValue - _minValue;
     double span = (_value - _minValue) / (_maxValue - _minValue);
     span = qMin(qMax(span, 0.0), 1.0);
     double y1 = (1 - span) * barLength;
@@ -164,8 +164,8 @@ void StyledSlider::paintEvent(QPaintEvent *ev)
                 for (int j = 1; j < _numMinorTicks; ++j) {
                       qreal yyVal = yVal + j * (yValNext - yVal) / _numMinorTicks;
 
-                      QLineF line(midPtPix - _minorTickWidth, yyVal, midPtPix + _minorTickWidth, yyVal);
-                      p.drawLine(line);
+                      QLineF line1(midPtPix - _minorTickWidth, yyVal, midPtPix + _minorTickWidth, yyVal);
+                      p.drawLine(line1);
                   }
               }
           }

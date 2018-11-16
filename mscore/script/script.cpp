@@ -68,9 +68,9 @@ bool Script::execute(ScriptContext& ctx) const
 //   Script::execCmd
 //---------------------------------------------------------
 
-void Script::execCmd(MuseScore* mscore, QAction* a, const QString& cmd)
+void Script::execCmd(MuseScore* score, QAction* a, const QString& cmd)
       {
-      mscore->cmd(a, cmd);
+      score->cmd(a, cmd);
       }
 
 //---------------------------------------------------------
