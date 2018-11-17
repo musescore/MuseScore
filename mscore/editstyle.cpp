@@ -797,7 +797,6 @@ void EditStyle::on_buttonTogglePagelist_clicked()
       {
 
       if (pageList->isVisible()) {
-            pageList->setVisible(false);
             setMaximumWidth(pageStack->minimumWidth() + 15);
             setMinimumWidth(pageStack->minimumWidth() + 15);
             move(pos().x() + (pageList->minimumWidth() + 5), pos().y());
