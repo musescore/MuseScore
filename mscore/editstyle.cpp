@@ -45,6 +45,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       cs = s;
       buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
       buttonApplyToAllParts->setEnabled(!cs->isMaster());
+      buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goNext_ICON)]));
       setModal(true);
 
       // create button groups for every set of radio button widgets
@@ -789,6 +790,27 @@ void EditStyle::on_comboFBFont_currentIndexChanged(int index)
       }
 
 //---------------------------------------------------------
+//    On buttonTogglePagelist clicked
+//---------------------------------------------------------
+
+void EditStyle::on_buttonTogglePagelist_clicked()
+      {
+
+      if (pageList->isVisible()) {
+            setMaximumWidth(pageStack->minimumWidth() + 15);
+            setMinimumWidth(pageStack->minimumWidth() + 15);
+            move(pos().x() + (pageList->minimumWidth() + 5), pos().y());
+            buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goPrevious_ICON)]));
+            }
+      else {
+            setMaximumWidth((pageList->minimumWidth() + 5) + pageStack->minimumWidth() + 15);
+            setMinimumWidth((pageList->minimumWidth() + 5) + pageStack->minimumWidth() + 15);
+            move(pos().x() - (pageList->minimumWidth() + 5), pos().y());
+            pageList->setVisible(true);
+            buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goNext_ICON)]));
+            }
+      }		  
+//---------------------------------------------------------
 //   applyToAllParts
 //---------------------------------------------------------
 
@@ -1429,5 +1451,5 @@ void EditStyle::resetTextStyle(Pid pid)
       textStyleChanged(textStyles->currentRow());     // update GUI
       cs->update();
       }
-}
+} //namespace Ms
 
